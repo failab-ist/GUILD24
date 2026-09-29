@@ -24,6 +24,10 @@ let preRunReturn=false;
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): the ending's `다음 점포 열기` shows the preparation scene over a Run
    that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
 let prepOpen=false;
+/* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
+   screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */
+function audioPhase(){const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
+ return s.phase==='end'?(s.win?'end-win':'end-fail'):s.phase;}
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -44,7 +48,7 @@ function toast(msg){const t=$('#toast'),m=String(msg);
   t.innerHTML='<b class="toast-label">'+E(UNLOCK_LABEL)+'</b><span class="toast-name">'+E(m.slice(UNLOCK_LABEL.length+3))+'</span>';}
  else{t.classList.remove('unlock');t.textContent=m;}
  $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
-function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind);}
+function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,audioPhase(),st);Sound.play(kind);}
 /* the heal accent sits behind the arrival's own cue, the same way `rescue` sits behind an Outcome */
 function healCue(){const s=game.run,n=s?.phase==='sell'&&game.current();if(n?.healedBy)Sound.play('heal',.22);}
 /* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. There are two ways
@@ -179,7 +183,10 @@ function clashScene(){
  at(t+C.wait,()=>drain(level,edge,C.run,'cubic-bezier(.25,.8,.35,1)'));
  at(t+C.wait+C.run,()=>tremble(C.hesitate));
  t+=C.wait+C.run+C.hesitate;
- at(t,()=>{if(s.win){drain(edge,0,C.snap,'ease-in');Sound.play('collapse');
+ // a clear: the red runs out first, and only then does the crack show and the Boss fall (v3.0 prep §2-4-5 - the crack
+ // used to start with the snap and showed while 5% of the red was still there)
+ if(s.win)at(t,()=>drain(edge,0,C.snap,'ease-in'));
+ at(s.win?t+C.snap:t,()=>{if(s.win){Sound.play('collapse');
    go(boss.querySelector('.crack'),[{opacity:0},{opacity:1}],{duration:120});
    go(boss,[{transform:'none',filter:'none',opacity:1},{transform:'translateX(-4px)',offset:.08},{transform:'translateX(4px)',offset:.16},
     {transform:'translateX(-2px)',filter:'brightness(.8)',opacity:1,offset:.26},{transform:'translateY(6px) rotate(-1.5deg)',offset:.4,easing:'cubic-bezier(.5,0,1,.5)'},
@@ -537,13 +544,27 @@ const KEY_PRESS={y:3,down:60,up:60};
    writes (and A6's shake with it), so the key drops it for the rest of its life - it is redrawn on the next render */
 const keyPress=(A,key,more={})=>(key.style.transition='none',A(key,{translateY:[{from:0,to:KEY_PRESS.y,duration:KEY_PRESS.down,ease:'out(2)'},{to:0,duration:KEY_PRESS.up,ease:'outQuad'}],...more}));
 // the approval stamp lands before the phase advances
+/* UI_UX §MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11): arriving at a new Day's MORNING within the session, the
+   sign's number rolls - yesterday's rises out as today's rises in, one curve for both so they stay one line apart and
+   never overlap - inside the sign (its own overflow), 300 ms, no sound (the MORNING shutter already sounds). A reload
+   lands on the still sign; reduced motion never starts it. The number's own text is put back when it lands, so the DOM
+   ends as it began. Presentation only: it reads s.day and writes nothing. */
+function dayFlip(day){
+ const b=$('.daysign b');if(!b||!motionOK()||day<1)return;
+ const now=b.textContent,prev=String(day-1).padStart(2,'0');
+ b.classList.add('flip');b.innerHTML='<span class="old" aria-hidden="true">'+prev+'</span><span class="new">'+now+'</span>';
+ const ease='cubic-bezier(.45,0,.2,1)',o=b.querySelector('.old'),n=b.querySelector('.new');
+ o.animate([{transform:'translateY(0)'},{transform:'translateY(-100%)'}],{duration:300,easing:ease,fill:'forwards'});
+ n.animate([{transform:'translateY(100%)'},{transform:'translateY(0)'}],{duration:300,easing:ease,fill:'forwards'})
+  .finished.then(()=>{if(b.isConnected){b.classList.remove('flip');b.textContent=now;}},()=>{});
+}
 function stampPress(el){
  if(!motionOK()||!el)return;
  anime.animate(el,{scale:[1.08,1],duration:180,ease:'outQuad'});
 }
 function render(){
  if(clash)return finishClash(); // a redraw during the FINAL clash lands on the ending it was playing toward
- const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
+ const s=game.run;Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
  /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
@@ -571,7 +592,8 @@ function render(){
  const focusHold=holdFocus($('#app'));
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
  if(phase!=='final')finalOrdered=false;
- const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
+ const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
+ if(phase==='morning'&&arrived)dayFlip(s.day);
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to
@@ -972,7 +994,9 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  /* META §DECORATION 의무실 현판: an Injury healed at the door says so once, in the customer's own
     state strip, under the bag where no speech balloon or menu pin sits - one line, no modal,
     nothing to dismiss. `healedBy` is reset on every arrival. */
- const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
+ const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>'
+  :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대 덕분에 부상이 나았다.</p>'
+  :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단 덕분에 부상이 나았다.</p>':'';
  /* DUNGEON_HAZARD §Preparation / Level Death reduction / UI_UX §만반의 준비 TUTORIAL (v2.9.1
     balance): a state class only, no visible style of its own - it exists so the coach mark
     below can anchor to it the first time this customer's confirmed Bag actually reaches 만반의
@@ -1007,7 +1031,7 @@ function nightScreen(){
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
   +taskLine('night')+rail
   +'<div class="beat-room">'
-   +(s.pilgrimage?'<p class="event-note">게이트 순례주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
+   +(s.pilgrimage?'<p class="event-note">게이트 순례 주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
    +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
   +'</div>'
  +'</main><div class="dock">'+dock+'</div></div>';}
@@ -1162,8 +1186,10 @@ const coachSteps={
  morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
  /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself.
     Seen state is keyed by step id alone, so ORDER's gates step is `order-gates`: sharing MORNING's `gates` id marked it seen
-    before the first ORDER ever opened (fixed 2026-09-26). */
- order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
+    before the first ORDER ever opened (fixed 2026-09-26).
+    v2.9.11 (User 2026-09-29): `order-stock` after the gates - the Day 1 warehouse already holds the opening stock nobody ordered,
+    and nothing said so; the mark sits on the 창고 summary the ORDER screen already shows. */
+ order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['order-stock','.stock-brief summary','창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
@@ -1485,7 +1511,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
    +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
  }).join('')+'</ol>'
- +'<button class="rubber" data-action="reroll" '+(price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
+ +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
 /* v2.9.10 (User 2026-09-27): every Item names its category (음식 / 음료 / 포션 / 야외장비 / 보험), the words the Events and
@@ -1537,7 +1563,7 @@ function shelf(isFinal=false){
    keeps one effect line: a longer line takes one or two type steps down instead of wrapping or being cut. */
 /* User 2026-09-25: the two utility Items read their core on the shelf only - the approved line's own words, the
    condition in brackets left to the tray's 특수 효과 and the codex, which keep the full line */
-const SHELF_CORE={aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소비품 효과 2회'};
+const SHELF_CORE={aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소모품 효과 2회'};
 function shelfEffects(rows){const t=rows.map(r=>SHELF_CORE[r.key]||(r.utility?r.label.replace(/ \([^)]*\)$/,''):(r.label+' '+r.text).trim())).join(' · '),len=[...t].length;
  return '<span'+(len>28?' class="densest"':len>24?' class="dense"':len>19?' class="tight"':'')+'>'+E(t)+'</span>';}
 const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
@@ -1549,7 +1575,8 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
       ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
    const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
    const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
-   const blocked=q.debit>spendable(n)?'손님 소지금 부족'
+   const blocked=mode==='overcharge'&&game.run.event?.effects.noOvercharge?'오늘 가격 단속'
+    :q.debit>spendable(n)?'손님 소지금 부족'
     :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
     :full?'가방 가득':'';
    /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
@@ -1680,7 +1707,7 @@ function relicsModal(){
    return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
 function relicTakeover(){const s=game.run,w=s.relicWindow;
- if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 5일 단위 영업일에 도착한다.</p></div></div><div class="close">'+btn('닫기','dismiss','stamp')+'</div></div>';
+ if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5·10·15·20·25·30에 도착한다.</p></div></div><div class="close">'+btn('닫기','dismiss','stamp')+'</div></div>';
  if(!w.focusedRevealSeen){w.focusedRevealSeen=true;game.save();}
  const first=w.milestoneDay===0,until=w.expiryDay===31?'마왕성 출발 전까지':'DAY '+(w.expiryDay-1)+'까지';
  return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll">'
@@ -1916,7 +1943,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
      and 구급키트 is Aftercare on the next expedition's result, not a cure sold to a resting
      adventurer. Both readings state what actually clears the state. */
   cond.push(n.injury===2?'회복 방법: '+n.recovery+'일 대기'
-                        :'회복 방법: 다음 원정에서 성공·대성공으로 귀환 또는 구급키트 애프터케어');
+                        :'회복 방법: 원정 성공·대성공 · 퇴각 귀환 때 확률 회복 · 구급키트');
  }
  if(n.fatigue||n.fatigue===0){
   /* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, one owner; COPY_AUDIT §4-14 for the recovery line */
@@ -2090,7 +2117,7 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -2294,7 +2321,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   const before=Object.fromEntries(groupStock().map(st=>[st.item,st.count])),used=s.inventory.length,gold=s.money,
    skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))];
   orderCueAt.forEach(clearTimeout);orderCueAt=[];game.confirmOrder();
-  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,s.phase,game.account.settings);}else sound('order');
+  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);}else sound('order');
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
@@ -2428,7 +2455,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
  case'boss-go':sound('final');game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
  case'retire':setModal('retireConfirm');break;
- case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');sound('close');setModal(null);render();break;
+ case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}
  case'import':setModal('importConfirm');break;
  case'reset':setModal('resetConfirm');break;
@@ -2451,7 +2478,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
-const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.'};
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
+ /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
+ cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
  /* H2: a price key has its own press (KEY_PRESS, playCue) - the 정가 key's `stamp` class must not add a second one */
@@ -2490,14 +2519,14 @@ document.addEventListener('focusout',ev=>{
  t.open=false;});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
-window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
+window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
    would replace the control under the pointer and end the drag. */
 document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  const key=el.dataset.mix,v=Math.min(100,Math.max(0,Number(el.value)||0))/100;
  game.account.settings[key]=v;
- Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);
+ Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
  const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
 document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  game.save();if(el.dataset.mix==='sfx')sound('button');});

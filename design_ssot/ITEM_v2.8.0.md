@@ -2,8 +2,8 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/ITEM_v2.8.0-patch.md,history/ITEM_v2.7.0.md,history/ITEM_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/ITEM.md
@@ -877,7 +877,10 @@ Do not move another Item solely to alter these approved Common/Uncommon counts.
 ## SHELF LIFE — EXACT
 
 (User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
-stocking day, and is discarded at the morning it runs out. The rule behind the table:
+stocking day. A unit that is still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) is discarded that
+Night and counts as that Day's waste (`오늘 폐기` on its CLOSING receipt) (User 2026-09-28, v2.9.11; it used to go the
+next morning and reach the next Day's receipt, so the receipt named stock the player had last seen a Day earlier). The
+rule behind the table:
 
 - Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 is 2
 - Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 중화 탄산수 3, 용사의 곡주 4, 쿨링 이온음료 5)

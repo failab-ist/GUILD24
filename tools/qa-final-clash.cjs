@@ -36,7 +36,7 @@ async function finalSave(browser){
  await p.click('#modal-root [data-action="buy-relic"]');
  await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();});
  for(let i=0;i<800;i++){if(await p.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;await p.evaluate(`(${STEP})()`);}
- const ok=await p.evaluate(()=>{const g=Guild24.game,s=g.run;s.day=30;g.morning();if(s.event)s.eventSeen=true;s.bossReveal=s.bossReveal||{};
+ const ok=await p.evaluate(()=>{const g=Guild24.game,s=g.run;s.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();if(s.event)s.eventSeen=true;s.bossReveal=s.bossReveal||{};
   for(const k of ['d0Seen','identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])s.bossReveal[k]=true;
   if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;g.save();return s.phase==='final'&&g.finalEligible().length>=3;});
  const save=await p.evaluate(()=>JSON.stringify(Object.entries(localStorage)));await c.close();return ok?save:null;}
@@ -58,7 +58,8 @@ async function depart(p,k,outcome){
   /* the cue log and a per-frame reading of the bar, both on the page clock */
   window.__cues=[];const play=Sound.play;Sound.play=(kind,d)=>{window.__cues.push([kind,performance.now()]);return play(kind,d);};
   window.__bar=[];const tick=()=>{const hp=document.querySelector('.clash-bar .hp'),bar=document.querySelector('.clash-bar');
-   if(hp&&bar)window.__bar.push([performance.now(),hp.getBoundingClientRect().width/(bar.getBoundingClientRect().width-2)]);requestAnimationFrame(tick);};tick();
+   const ck=document.querySelector('.clash .crack');
+   if(hp&&bar)window.__bar.push([performance.now(),hp.getBoundingClientRect().width/(bar.getBoundingClientRect().width-2),ck?+getComputedStyle(ck).opacity:0]);requestAnimationFrame(tick);};tick();
   Guild24.render();},[k,OUTCOME[outcome],bag]);
  await p.click('.dock [data-action="boss"]');await p.click('#modal-root [data-action="boss-go"]');
  await p.evaluate(()=>{window.__t0=performance.now();});return bag;}
@@ -95,7 +96,7 @@ const SIZES=[[360,640],[390,844],[1280,880],[1920,1080]];
    await p.waitForTimeout(600);
    // the capture is of the ending it lands on: a capture mid-scene would hold its frames back and skew the readings
    if(OUT&&!vid)await p.screenshot({path:path.join(OUT,`clash-end-${size.join('x')}-${k}-${o}.png`)});
-   const r=await p.evaluate(()=>({cues:window.__cues.map(([k,t])=>[k,Math.round(t-window.__t0)]),bar:window.__bar.map(([t,v])=>[Math.round(t-window.__t0),v]),
+   const r=await p.evaluate(()=>({cues:window.__cues.map(([k,t])=>[k,Math.round(t-window.__t0)]),bar:window.__bar.map(([t,v,ck])=>[Math.round(t-window.__t0),v,ck]),
     end:!!document.querySelector('.stage.p-end'),seal:!!document.querySelector('.end-tape .seal'),scene:!!document.querySelector('.clash'),
     win:Guild24.game.run.win,d:Guild24.game.run.bossDebug}));
    const names=r.cues.map(x=>x[0]).filter(x=>x!=='final'&&x!=='unlock');   // the press's own cues (an unlock is sounded when credited)
@@ -113,6 +114,9 @@ const SIZES=[[360,640],[390,844],[1280,880],[1920,1080]];
    // the verdict hesitates near the bottom: 5% on a clear, where the roll left it on a failure
    const edge=o==='clear'?C.edge:left,mid=counters[k-1]+(C.counter-C.strikeAt)+C.wait+C.run+C.hesitate/2;
    check(tag+' the verdict hesitates near the bottom before it breaks or stays',Math.abs(at(mid)-edge)<.015,at(mid).toFixed(3)+'/'+edge.toFixed(3));
+   // v3.0 prep §2-4-5: on a clear the crack shows only once the red has run out, never a frame before it
+   if(o==='clear'){const f=r.bar.find(([,,ck])=>ck>.05);
+    check(tag+' the crack shows only after the bar is empty',!!f&&f[1]<.01,f?'bar '+f[1].toFixed(3)+' at the first crack frame':'no crack');}
    const rise=r.bar.findIndex(([,v],i)=>i&&v>r.bar[i-1][1]+.003);
    check(tag+' the bar only ever falls',rise<0,rise<0?'':JSON.stringify(r.bar.slice(rise-1,rise+1)));
    const last=r.bar.length?r.bar[r.bar.length-1][1]:NaN;

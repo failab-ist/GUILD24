@@ -3,6 +3,135 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
+
+- **Waste leaves the night it is due** - ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, EVENT §20,
+  RELIC 새벽 회수 계약: stock was discarded the morning after its last sale Day, so the Night receipt that said `오늘 폐기`
+  named stock the player had last seen a Day earlier - the opening stock, never ordered, made it look like waste from nowhere
+  (User play, 2026-09-28). Stock still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) now leaves that
+  Night and is that Day's `오늘 폐기`; nothing is discarded in the morning. How long an Item can be sold, warehouse room at
+  ORDER, 본사 폐기 유예 and the shelf wording are unchanged. What moves with it: 새벽 회수 계약's refund reaches the same
+  Night's Gold (before the Closing's bankruptcy check, a Day earlier than before); stock due tonight can no longer be sold off
+  in a short Closing's 재고 정리 (it has already gone); cumulative waste (본사 재고 감사) counts it a Day sooner. A save from an
+  earlier build that still holds stock past its day lets it go with that Night's waste.
+- **Early Gate slope 1.50 → 1.45** - DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA (User 2026-09-28): the User's
+  play read as 부상 → 못 이김 → 돈 없음 → 못 들려줌. Measured on the `reader` bot (`reports/growth-injury-v2911.md`, same seeds,
+  3000 Runs): at 1.50 45% of healthy D11~20 departures left below readiness 0.8 and healthy D11~20 success was 27.9%; at 1.40 it
+  is 39% and 32.6%, D30 reach 13.8 → 19.6%, clear 9.6 → 13.5% (above the Difficulty Curve reference; the User chose it knowing
+  that). The Day term is 0.90 lower from D9 on (D9 12.60, D29 31.60). Visitor Wallets barely move (injured D11~20 176 → 179G).
+  After the combined v2.9.11 re-measure (`reports/remeasure-v2911.md` §8: new Events, supports, 40%) the User set 1.45, Boss
+  Power kept: reader D30 16.2%, clear 11.7% (1.40: 19.6 / 14.8; v2.9.10: 13.8 / 9.6); the Day term is 0.45 lower than v2.9.10's
+  from D9 on (D9 13.05, D29 32.05).
+- **Customer names** (User 2026-09-28, before a paid release): 35 of the 200 names in the customer pool read as real people
+  (athletes, actors, pro gamers). Each is replaced in place - same gender and portrait slot, no new glyphs - in the shipped pool
+  and in the production name pool (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the two NAME_INDEX files, the id mapping,
+  their checksums). The replacement table is `reports/v2.9.11-drafts.md` §A. A Run saved earlier keeps its old names; such an
+  adventurer shows the placeholder portrait.
+- **Rare Reference customers removed** - COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25 (User 2026-09-28, before a paid
+  release): 요화니우스, 상혀크 and 진호르 evoked real people. Their names, portraits (source and shipped), own lines, the 1% roll,
+  the measurement counter and the manifest entry are gone; both owner sections now record the removal and forbid a new real-person
+  reference. The roll's one draw per customer created is kept, so a seeded Run keeps its stream unless its roster had dealt one of
+  them (the revision anchor `sig-0` moves for that reason alone). A Run saved with one of them keeps the name and shows the
+  placeholder portrait.
+- **Two Expedition Store Supports** - RELIC 31 / 32, POOL ARCHITECTURE, D30 exclusions, PRICE; RELIC_QA; COPY_AUDIT §11-30b /
+  §11-30c / §9-4b (User 2026-09-28): the injury spiral (부상 → 못 이김 → 돈 없음) is met by two optional supports, not by an easier
+  economy. 야전 들것 (Foundation, 80G): an ordinary Injury costs 투력 8% instead of 15%. 응급 처치대 (Keystone, 300G): an injured
+  SALE arrival recovers with 20%; the Expedition line now holds two Keystones. Measured on the `reader` bot, each owned from D10
+  (reports/v2.9.11-drafts.md §C): 야전 들것 D30 19.6 → 21.1%; 응급 처치대 D30 19.6 → 25.2%, at or just above the strongest Keystone.
+  The pool is 32 (Foundation 13, Keystone 7); any seeded Run's Store Support windows draw from the larger pool.
+- **Events: 40%, never twice in a Run** - EVENT §발생 확률 / §EVENT SELECTION / §23 / §RANDOMNESS GUARDRAIL / QA (User
+  2026-09-28): the daily chance on an eligible Day is 40% (was 35%; about 7.6-8.0 Events per Run), and an Event already met this
+  Run leaves the pool - 길드 합동 위령제 included (it used to recur and add +1 each time). The Run keeps its Event log (an optional
+  save field; a save without it reads as an empty log, the save version is unchanged). Seeded Runs' Event days and picks move.
+- **32 new Events (23 → 55)** - EVENT §CANONICAL EVENT CATALOG 24~55 / §EVENT MIX, COPY_AUDIT §13-24~§13-55 (User 2026-09-28,
+  third draft in `reports/v2.9.11-drafts.md` §B): Opportunity +12 (길드 의료단 순회 · 길드 의무관 당직 · 길드 위로금 ease an injury;
+  길드 연회 · 원정 교대 근무 · 길드 휴양일 ease Fatigue; 길드 특별 수당, 본사 물류 지원, 보험 공동 구매, 본사 원정용품 지원, 단골의 날,
+  길드 현상금), Pressure +11, Mixed +9 - 23 / 16 / 16 in all. The User's rule: opposites, shared channels and opposite combinations
+  are fine, only a strict superset / subset is not (five pairs were retuned for it). Each Event is automatic, lasts the Day, meets
+  a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
+  the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
+  line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **평생 단골제 next-visit weight +50% → +100%** - RELIC 22, RELIC_QA REL-Q-v28-6, COPY_AUDIT §11-22 (User 2026-09-29,
+  `reports/remeasure-v2911.md` §13-2): the Keystone read D30 +0.3%p; the trial at +100% read +2.7%p. The +50G is unchanged.
+  (지역 거점점 계약 stays as it is for now - no number moved it past +1%p, User 2026-09-29.)
+- **희귀상품 입고 계약: HQ pays the +10%** - RELIC 5, RELIC_QA, COPY_AUDIT §11-5 (User 2026-09-29, `reports/remeasure-v2911.md`
+  §13-2): the Rare+ price +10% the customer paid made Rare+ offers harder to sell and left the card below zero (D30 −2.0%p,
+  Store Capital −40G). A Rare+ sale is now charged at the ordinary price and HQ pays the store 10% of the charged price on top
+  (trial +0.3%p / +7G). The Rare+ ORDER weight +70% is unchanged.
+- **즉석식품 코너 loses its operating-cost clause** - RELIC 10, RELIC_QA, COPY_AUDIT §11-10 (User 2026-09-29,
+  `reports/remeasure-v2911.md` §13-2): the +10% of overheadBase from the next Day left the card below zero (D30 −1.0%p, Store
+  Capital −21G); without it the trial read +4.0%p / +79G. The +25% Food/Drink Stat bonus is unchanged.
+- **물류 본부계약 remade** - RELIC 21, RELIC_QA REL-Q-v28-15, COPY_AUDIT §11-21 / §11-32 (User 2026-09-29,
+  `reports/remeasure-v2911.md` §12-2 / §13-1): its trigger (previous Day 6+ sales) and scope (same-SKU 3+ orders) kept it at
+  the Keystone floor whatever the numbers (D30 +0.3%p; 4 or 3 sales, or −35%, barely moved it). Name, Keystone tier, rotation
+  tag and 300G are kept; it now takes 3% off every ORDER purchase price per previous-Day sale, at most 30% (trial D30 +4.0%p,
+  Store Capital +69G). The quick-view line reads `전날 판매 N건 · 오늘 매입가 -X%`. The bot no longer rounds orders up to 3
+  for it.
+- **The two weakest Decorations lifted** - META §display / §wall, NPC_TRAIT_QA NPC-Q-v28-10, COPY_AUDIT decoration lines (User
+  2026-09-28, `reports/remeasure-v2911.md` §10-3): at the 1.45 slope 길드 추천 매대 read D30 +5.3%p and 명예 모험가 액자 +4.2%p
+  beside the two signs' +25 / +31. 길드 추천 매대's Morning visitor +1 chance 30% → 45% (trial +6.5%p); 명예 모험가 액자's
+  rarity weights [35, 30, 22, 9, 4] → [25, 30, 26, 13, 6], above 평범 65% → 75% (trial +8.2%p).
+- **원정 도시락 코너 and 왕도 프리미엄 인증 retuned** - RELIC 17 / 23, RELIC_QA, COPY_AUDIT §11-17 / §11-23 (User 2026-09-28,
+  `reports/remeasure-v2911.md` §9 / §10): 원정 도시락 코너 led every Store Support (D30 +13.7%p at the 1.45 slope, the second
+  +8.0), mostly through Drink fatigue recovery; per Item it now gives Food Supply +2, Drink Supply +1 and +2 on every Hazard of
+  the Gate (was +2 / +2 / +4; trial D30 +12.0%p - the User kept the Food identity knowingly). 왕도 프리미엄 인증 paid 40% of
+  the 150% sale price and sat at the Keystone floor (D30 +1.0%p); it pays 60% (trial at 1.40: +5.0%p).
+- **24시간 신선체계 buy-price penalty +25% → +15%** - RELIC 25, RELIC_QA REL-Q75, COPY_AUDIT §11-25 (User 2026-09-28): the
+  Keystone's Food/Drink ORDER price x1.25 left it below zero (Store Capital −92G a Run, D30 −0.3%p, `reports/remeasure-v2911.md`
+  §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
+  (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
+  Food/Drink Stat bonus is unchanged.
+- **The DAY sign rolls** - UI_UX §MORNING — DAY SIGN FLIP, UI-Q-v29-48 (User 2026-09-29): arriving at a new Day's MORNING,
+  the ceiling DAY sign's number rolls once from yesterday's to today's (300 ms, inside the sign, no sound; reload, redraw
+  and reduced motion show the still sign). The full-screen DAY transition stays unadopted.
+- **The opening stock is named** - UI_UX §TUTORIAL — FIRST-ORDER COACH ORDER, COPY_AUDIT §3-7 STOCK, UI-Q-v29-11 (User 2026-09-29):
+  the first Day's warehouse holds the opening stock nobody ordered, and no screen said so. The first-ORDER coach now teaches it
+  second, on the 창고 summary: `창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.`
+- **Customer dialogue proofread, batch 4** - COPY_AUDIT §16-1 / §17-6 / §17-9 / §19-1 / §19-2 / §19-3 / §19-6 / §19-7 / §20-1
+  (User 2026-09-29, `reports/copy-proofread-v2911.md` 4-1~4-14):
+  - Eleven lines space `-아/어 + 주다 · 보다 · 오다` like the rest of the dialogue already did (`와 봤습니다`, `가 보죠`,
+    `챙겨 와야죠`, `알려 주세요`, `따라 줬네요`, `챙겨 준`, `버텨 줬어요`), and `잘됐어요` is one word.
+  - The three death narrations that said `그는 / 그의 / 그가` - read for women customers too - drop the pronoun
+    (`오늘 산 물건이 마지막 구매가 됐다.`).
+  - The 겁쟁이 line `중요한 건 꺾이지 않는 마음이라던데…` stays (User decision): a common idiom, no name or likeness.
+- **Screen copy proofread, batch 3** (User 2026-09-29, `reports/copy-proofread-v2911.md` 3-1~3-5): the guide's 단골 line showed
+  raw backticks and now reads ‘단골’; the empty Store Support window says `다음 지원은 DAY 5·10·15·20·25·30에 도착한다.`; the
+  coupon's `다음 소비품 효과 2회` is `다음 소모품 효과 2회` (COPY_AUDIT §4, UI_UX); the adventurer's injury line names every way
+  it clears (`회복 방법: 원정 성공·대성공 · 퇴각 귀환 때 확률 회복 · 구급키트`, where it omitted retreat healing); the chosen-closure
+  end reason uses the same `-다` voice as the others.
+- **Store Support and Decoration copy proofread, batch 2** (User 2026-09-29, `reports/copy-proofread-v2911.md` 2-1~2-7): 희귀상품
+  입고 계약 reads `희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.`; the three 단골 cards say `단골` (the
+  screen term) instead of `단골 손님`; 단체 주문 창구 says `매일 아침`, 야전 들것 `부상 모험가`, 대형 냉장고 `(보유 재고도 1회
+  연장)` like its peers; 길드 납품 인증's condition is shorter; 구급품 진열장 reads `한 영업 동안 부상 최대 10회 → 무사.` (the
+  cap is per Run, not per Day). Effects unchanged.
+- **Item and Event copy proofread, batch 1** (User 2026-09-29, `reports/copy-proofread-v2911.md` #1~#10): 게이트 순례주간 is
+  `게이트 순례 주간` (like 길드 훈련 주간; every owner, screen line and test that names it); spacing in 에너지드링크's, 길드
+  급여일's and 단골의 날's text; 포스기 먹통 reads `…바꿔 달라고 전화할 수도 없다.`; 한파, 독안개 and 본사 1+1 행사's Function
+  lines start with `오늘` like every other one-Day Event; 본사 재고 감사 reads `오늘 누적 폐기 6건 이상이면 운영비 +폐기 수 ×5G ·
+  최대 100G`; 본사 폐기 유예 drops `에 한하여`. Effects unchanged.
+- **Event copy proofread** - COPY_AUDIT §13-24 / §13-26 / §13-45 / §13-48 / §13-54 (User 2026-09-28): 길드 의료단 순회 and
+  길드 위로금 read `오늘 방문 부상 모험가 · …` like the other visitor lines; 길드 소집령 reads `실력자 한 명이 길드에 급히 불려
+  갔다.` and `오늘 방문 예정이었던 최고 레벨 모험가 대신 다른 모험가 방문`; 원정 징발령 reads `길드가 모험가 몇 명을 징발해
+  갔다.`; 유통기한 임박 특가 reads `오늘 모든 발주 매입가 -40% · …` like the other order-price Events. Effects unchanged; the
+  font subsets take the new glyph.
+- **Korean text breaks between words everywhere** (User 2026-09-28): `word-break:keep-all` was set screen by screen; Events,
+  Store Support text, the guide, settings and the Night lines still broke inside words (297 cases over every screen and width,
+  e.g. `최 / 대 100G`, `포 / 션`; `reports/text-audit-v2911.md`). The page now keeps words whole (`overflow-wrap:break-word`
+  still splits a token too long for its box); no text spills, clips or scrolls sideways where it did not before.
+- **Phase BGM, recorded** - PRESENTATION §AUDIO PRESENTATION (AI-generated music), UI_UX §AUDIO FEEDBACK — PHASE BGM,
+  UI_UX_QA UI-Q-v29-47 (User 2026-09-29, v3.0 sound).
+  - The synthesised phase beds give way to the User's Gemini (Lyria) tracks, one per screen: TITLE, MORNING, ORDER, SALE,
+    NIGHT, CLOSE, BOSS (FINAL). The ending splits into SUCC for a cleared Run and FAIL for any failed one.
+  - Each loop keeps the whole track: Start moves only past a short intro, and End only drops the ending chord and tail
+    (`reports/bgm-loops.md`). Joins use a short fade; BOSS alone crossfades for 1 s.
+  - Every track plays at one loudness. The synthesised bed stays as the fallback when a file cannot load.
+  - Provenance, including each track's account (free / Plus): `reports/ASSETS.md`.
+  - BOSS2 was evaluated and not adopted.
+  - Web build (User 2026-09-29): 128 kb/s copies (33 -> 22 MB), sample-aligned with the originals so the loop points
+    hold; the next phase's file is fetched ahead. The copies lose the originals' C2PA manifest, so the credits and the
+    store text must disclose the AI music. The app ships the originals.
+- **Build marker** 2.9.11.
+
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
 
 From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.

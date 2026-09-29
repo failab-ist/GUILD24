@@ -33,7 +33,7 @@ function step(g){
   case'closing':{
    if(g.closeDay()!==false)return true;
    if(s.inventory.length){g.liquidate(s.inventory[0].id);return true;}
-   g.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');return true;}
+   g.end(false,'운영비를 충당하지 못해 이번 점포를 마감했다.');return true;}
   case'final':{
    const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort((a,b)=>b.level-a.level).slice(0,g.finalRequired());
    for(const n of team)g.selectFinal(n.id);

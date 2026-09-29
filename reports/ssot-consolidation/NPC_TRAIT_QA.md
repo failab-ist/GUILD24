@@ -227,7 +227,7 @@ With the `프리미엄 쇼케이스` Decoration active, the ordinary NPC rarity 
 ```
 
 ```new
-[35, 30, 22, 9, 4]
+[25, 30, 26, 13, 6]
 ```
 
 ## AMENDMENT — v2.9.8 Decoration ids (User 2026-09-27)

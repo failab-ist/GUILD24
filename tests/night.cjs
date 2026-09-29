@@ -503,10 +503,11 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
     term may bend - a post-hoc multiplier on the finished Gate Power would move the Tier and
     Family terms with it. v2.9.2 balance (User 2026-09-25): early 1.20 -> 1.50, late 0.80 kept. */
  /* v2.9.2 third pass (User 2026-09-26): DAY 11~20 at 1.10, DAY 21+ back to the late 0.80 */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.50,late:0.80,mid:1.10,midFrom:10,midTo:20},'the shipped slope is the canonical one');
+ /* v2.9.11 (User 2026-09-28): early 1.50 -> 1.40, then 1.45 after the combined re-measure */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.45,late:0.80,mid:1.10,midFrom:10,midTo:20},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
-  assert.equal(Dungeon.gateDayTerm(day),day*1.50,'D'+day+' is the single early slope');
- for(const [day,term] of [[10,14.3],[11,15.4],[12,16.5],[20,25.3],[21,26.1],[24,28.5],[29,32.5],[30,33.3]])
+  assert.ok(Math.abs(Dungeon.gateDayTerm(day)-day*1.45)<1e-9,'D'+day+' is the single early slope');
+ for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.65],[24,28.05],[29,32.05],[30,32.85]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
  /* The coefficients are named so a harness can measure a candidate without editing the

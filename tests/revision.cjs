@@ -25,12 +25,12 @@ test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',(
  or Trait. The Lv10+ third slot is removed, not disabled or hidden. */
  for(const level of [1,5,9,10,11,30])assert.equal(Adventurer.slots({level,rarity:3,job:'warrior',traits:['eater']}),2,'Lv.'+level+' has two slots');
  assert.ok(!/level>=10/.test(require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/adventurer.js'),'utf8')),'no Level threshold survives in the slot rule');
- /* rice: D1 + 2 shelf days + 대형 냉장고 +2 -> gone on the D5 Morning */
- g.run.day=5;g.morning();assert.equal(g.run.inventory.length,0);});
+ /* rice: D1 + 2 shelf days + 대형 냉장고 +2 -> last sale Day D4, gone that Night (ITEM §SHELF LIFE, v2.9.11; was the D5 Morning) */
+ g.run.day=4;g.morning();assert.equal(g.run.inventory.length,2,'still on the shelf on its last sale Day');g.nightDiscard();assert.equal(g.run.inventory.length,0,'gone that Night');});
 test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.match(h.run.regionReport,/없었다/);});
 test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,9);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
 test('seed and mid-day save replay deterministic',()=>{let a=fresh('replay2'),b=fresh('replay2');a.order(0);b.order(0);b.save();const state=Save.import(Save.export(b.account,b.run));b=new Game(state.account,state.run);b.autosave=false;a.open();b.open();while(a.run.phase==='sell'){a.depart();b.depart();}assert.deepEqual(a.run,b.run);});
-test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.stock("lowpotion",1);
+test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.run.inventory=[];/* the jump to D30 skipped the Nights that discard the opening stock (v2.9.11) */g.stock("lowpotion",1);
  /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a Final transfer is a real paid transaction at
     the fixed 50% amount, so the participant has to be able to afford it and the receipt
     records that price rather than the retired free-equipment mode. */
@@ -54,7 +54,7 @@ test('window deferral and expiration; purchases blocked during sale',()=>{const 
    is both: no facility, and no extension already recorded on the stock. */
 test('fridge existing stock only once, future stock and expiry finite',()=>{const g=fresh();g.run.facilities=[];for(const x of g.run.inventory)delete x.extensions;const st=g.run.inventory.find(x=>x.item==='water'),before=st.expires;g.run.relicWindow={milestoneDay:5,candidateIds:['fridge'],candidatePrices:[0],purchased:null,expiryDay:10};g.buyRelic('fridge');assert.equal(st.expires,before+DATA.relicParams.fridge.shelfDays);assert.equal(DATA.relicParams.fridge.shelfDays,2,'대형 냉장고 is +2 days');g.run.day=2;g.morning();assert.equal(st.expires,before+2);g.stock('water',1);assert.equal(g.run.inventory.at(-1).expires,2+DATA.itemBy.water.days+2);});
 test('no pre-reveal; dead NPCs release active capacity; contradictory traits absent',()=>{const g=fresh();assert.ok(g.run.npcs.every(n=>!n.introduced));g.open();assert.equal(g.run.npcs.filter(n=>n.introduced).length,1);while(g.run.npcs.filter(n=>n.alive).length<22)g.addNPC();g.run.npcs[0].alive=false;assert.ok(g.addNPC());for(const n of g.run.npcs)for(const pair of DATA.traitExclusions)assert.ok(!pair.every(t=>n.traits.includes(t)));});
-test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const g=fresh('tier-'+seed);assert.ok(g.run.dungeons.every(d=>d.tier===1));assert.equal(g.run.familyOrder.length,5);g.run.day=29;g.morning();assert.ok(g.run.dungeons.every(d=>d.tier>=2));if(!g.run.event?.effects.unknown)assert.equal(new Set(g.run.dungeons.map(d=>d.family)).size,g.run.dungeons.length);}});
+test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const g=fresh('tier-'+seed);assert.ok(g.run.dungeons.every(d=>d.tier===1));assert.equal(g.run.familyOrder.length,5);g.run.day=29;g.morning();/* EVENT 55 게이트 안정화 작업 (v2.9.11) sets every Gate to Tier 1 for the Day */if(!g.run.event?.effects.tierOne)assert.ok(g.run.dungeons.every(d=>d.tier>=2));if(!g.run.event?.effects.unknown)assert.equal(new Set(g.run.dungeons.map(d=>d.family)).size,g.run.dungeons.length);}});
 test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','rerollTicket'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
 test('empty provisioning cannot grind knowledge',()=>{const g=fresh();g.open();while(g.run.phase==='sell')g.depart();assert.deepEqual(g.account.knowledge,{});});
 test('same SKU bulk across separate offers; board does not change rookie level',()=>{const g=fresh();g.run.facilities=['bulk'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:2},{item:'water',price:25,quantity:2}];g.setQuantity(0,2);g.setQuantity(1,1);/* 25 + 25 + round(25 x (1 - 20%)) */assert.equal(g.cartTotal(),70);g.confirmOrder();assert.equal(g.run.inventory.reduce((a,x)=>a+x.cost,0),70);const a=fresh('board-level'),b=fresh('board-level');a.run.facilities=[];b.run.facilities=['board'];assert.equal(a.addNPC().level,b.addNPC().level);});
@@ -137,8 +137,11 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
     stocked item draws an id from the run stream, so two draws that used to happen before the
     roster is built no longer do. Any future move here without a change to point at means
     something leaked into the run stream. */
+ /* v2.9.11 (User 2026-09-28): the Rare Reference customers were removed. The roll's own draw stays, but a Run whose roster
+    once dealt one of them also drew the pick among them, and no longer does. Of these seeds only sig-0 did (one in its
+    opening roster), so only sig-0 moves; sig-1 / sig-2 are untouched. */
  for(const [seed,order,intro] of [
-  ['sig-0',['snow','spider','golem','slime','crypt'],[4,10]],
+  ['sig-0',['snow','crypt','slime','golem','spider'],[4,9]],
   ['sig-1',['slime','spider','snow','golem','crypt'],[6,10]],
   ['sig-2',['crypt','slime','spider','golem','snow'],[6,10]]]){
   const g=new Game();g.autosave=false;g.start(seed);
@@ -302,7 +305,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  assert.equal(eff.counter.id,'thriftSafe');
  assert.equal(DATA.decorationParams.thriftSafe.dailyGold,50,'counter pays 50G every morning (User 2026-09-25, v2.9.1 balance; was 40G)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,.30,'wall is the approved Morning chance (User 2026-09-25, v2.9.1 balance; was 25%)');
+ assert.equal(DATA.balance.wallVisitorChance,.45,'길드 추천 매대 is the approved Morning chance (User 2026-09-28, v2.9.11; 30% from v2.9.1, was 25%)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
@@ -317,7 +320,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 평범 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[35,30,22,9,4],'평범 60% -> 35%, so above 평범 40% -> 65%');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[25,30,26,13,6],'평범 60% -> 25%, so above 평범 40% -> 75% (v2.9.11; 65% in v2.9.7)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -
@@ -408,40 +411,13 @@ test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide 
 });
 
 test('v0.1 fixture intentionally rejected without reinterpretation',()=>{const fs=require('node:fs');const old=fs.readFileSync(require('node:path').join(__dirname,'fixtures/v01-sale.json'),'utf8');assert.throws(()=>Save.import(old));});
-test('COPY §9: a Rare Reference identity turns up rarely, once per Run, and changes nothing but the name',()=>{
- const EASTER=Adventurer.EASTER.map(e=>e.name),seen=new Set();
- let runs=0,visits=0,dupRuns=0;
- for(let i=0;i<250;i++){
-  const g=new Game();g.autosave=false;g.start('easter-'+i);
-  for(let step=0;step<45&&g.run.phase!=='end';step++){const s=g.run;
-   if(s.phase==='morning')g.beginOrder();else if(s.phase==='order')g.open();
-   else if(s.phase==='sell')g.depart();else if(s.phase==='night')g.finishNight();
-   else if(s.phase==='closing'){if(g.closeDay()===false)break;}else break;}
-  const found=g.run.npcs.filter(n=>EASTER.includes(n.name)).map(n=>n.name);
-  found.forEach(n=>seen.add(n));
-  if(new Set(found).size!==found.length)dupRuns++;
-  runs++;visits+=found.length;
- }
- assert.equal(dupRuns,0,'the same identity never appears twice in one Run');
- assert.ok(visits>0,'the identities are reachable at all');
- assert.equal(seen.size,3,'all three are reachable across Runs, not just the first');
- // rare, and rare because of the chance rather than because it is nearly impossible
- assert.ok(visits/runs<1,'a Rare Reference visitor stays rare: '+(visits/runs).toFixed(3)+' per Run');
- assert.equal(DATA.balance.easterChance,.01,'the approved starting chance, unchanged by Work');
-
- // Only the name differs. The identity is the whole easter egg: no stat, trait, rarity or
- // level rides on it, so a player who misses the reference loses nothing.
- const build=chance=>{const g=new Game();g.autosave=false;g.start('easter-shape');
-  DATA.balance.easterChance=chance;const n=g.addNPC();DATA.balance.easterChance=.01;return n;};
- const plain=build(0),rare=build(1);
- assert.ok(EASTER.includes(rare.name),'forcing the roll produces a Rare Reference visitor');
- assert.ok(!EASTER.includes(plain.name),'not forcing it produces an ordinary one');
- for(const k of ['job','rarity','level','traits','stats','potential','traitSlots'])
-  assert.deepEqual(rare[k],plain[k],'the identity changes nothing but the name: '+k);
-
- // it is a name, not a system: no phase, currency or unlock came with it
+test('COPY §9 (v2.9.11): the Rare Reference roll is gone, its one draw is kept',()=>{
+ assert.equal(Adventurer.EASTER,undefined,'no Rare Reference identity ships');
+ assert.equal(DATA.balance.easterChance,undefined,'no Rare Reference chance is left');
  const src=require('node:fs').readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
- assert.ok(!/easterPhase|easterCurrency|easterUnlock/.test(src),'no Easter subsystem was introduced');
+ const add=src.slice(src.indexOf(' addNPC('),src.indexOf('s.npcs.push(n);return n;}'));
+ assert.ok(/this\.rng\.next\(\);/.test(add),'addNPC still draws the value the removed roll used, so seeded Runs keep their stream');
+ assert.ok(!/EASTER|easter/.test(add),'and reads nothing of the removed identities');
 });
 
 /* ECONOMY_ORDER §PURCHASE INTENT. The judged price is 정가's mechanism and only 정가's: the

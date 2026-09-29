@@ -10,10 +10,8 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 test('bulk engines require quantity/traffic/previous-day sales, and affect actual cost',()=>{
  const g=fresh(),s=g.run;g.beginOrder();s.offers=[{item:'rice',price:100,quantity:8}];s.cart={0:3};
  const base=g.cartTotal();s.facilities=['bulk'];assert.ok(g.cartTotal()<base);s.cart={0:2};assert.equal(g.cartTotal(),200);
- /* REL-Q-v28-15: the logistics keystone triggers at 6 previous-Day sales (2026-09-23 rebalance),
-    and it is the only bulk engine on previous-Day sales - REL-Q-v28-14 took 회전 진열대 off the
-    discount path entirely, so it must not move the quote at any sales figure. */
- for(const [id,threshold]of [['logisticsHQ',6]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.ok(g.cartTotal()<base,'not only the first bulk order');s.bulkUsed=false;}
+ /* REL-Q-v28-14 took 회전 진열대 off the discount path entirely, so it must not move the quote at any
+    sales figure (물류 본부계약's per-sale discount has its own test since the v2.9.11 remake). */
  s.facilities=['rotation'];s.cart={0:3};for(const sales of [0,5,6,7,12]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'rotation never discounts, at '+sales+' previous sales');}
  s.previousSales=0;
  /* 2026-09-23 remakes: 단체 주문 창구 and 새벽 회수 계약 no longer discount an order */
@@ -56,6 +54,10 @@ test('return points excludes first visit, no-sale and free transfer',()=>{
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
  const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,25);
 });
+test('RELIC 22 / REL-Q-v28-6: 평생 단골제 doubles the next-visit weight (v2.9.11, User 2026-09-29; was +50%)',()=>{
+ assert.equal(DATA.relicParams.lifetime.revisitMult,2.0,'next-visit weight +100%');
+ assert.ok(/includes\('lifetime'\)\?D\.relicParams\.lifetime\.revisitMult:1/.test(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8')),'and visitor selection reads it');
+});
 test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
  const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
  /* 2026-09-23 rebalance: the condition is 단골 (Loyalty >= 51, the NPC_TRAIT owner), not 60 */
@@ -81,8 +83,8 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
                  'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime',
-                 'royalCert','hub','efficiency'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16)');
+                 'royalCert','hub','efficiency','firstAidDesk'];
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (17; 응급 처치대 joined in v2.9.11)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
@@ -159,20 +161,19 @@ test('REL-Q-v28-14: 회전 진열대 adds +2 supply quantity to every offer on a
  assert.equal(g.cartTotal(),plainQuote,'and the support discounts nothing');
 });
 
-test('REL-Q-v28-15: 물류 본부계약 takes 25% off every same-SKU 3+ order, from 6 previous sales',()=>{
+test('REL-Q-v28-15: 물류 본부계약 takes 3% off every ORDER per previous-Day sale, at most 30% (v2.9.11 remake)',()=>{
  const g=fresh('logistics-hq'),s=g.run;g.beginOrder();
  s.offers=[{item:'rice',price:100,quantity:8},{item:'rice',price:100,quantity:8},{item:'water',price:40,quantity:8}];
- s.facilities=[];s.cart={0:3};const base=g.cartTotal();
+ s.facilities=[];s.cart={0:1};const base=g.cartTotal();assert.equal(base,100);
  s.facilities=['logisticsHQ'];
- for(const sales of [0,4,5]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'no discount at '+sales+' previous sales');}
- s.previousSales=6;assert.equal(g.cartTotal(),Math.round(100*.75)*3,'exactly -25% at 6');
- s.cart={0:2};assert.equal(g.cartTotal(),200,'a 2-unit order is not a bulk order');
- // every bulk SKU of the Day, not only the first, and after an earlier bulk order
- s.cart={0:3,2:3};assert.equal(g.cartTotal(),Math.round(100*.75)*3+Math.round(40*.75)*3,'both 3+ SKUs are discounted');
- s.bulkUsed=true;s.cart={0:3};assert.equal(g.cartTotal(),Math.round(100*.75)*3,'an earlier bulk order today does not use it up');
- // with 묶음발주 계약 the two stack and the internal 45% floor is not reached
- s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),75+75+Math.round(100*.75*.8));
- assert.equal(DATA.relicBy.logisticsHQ.price,300,'the rebalanced price');
+ s.previousSales=0;assert.equal(g.cartTotal(),base,'no discount after a Day without sales');
+ for(const [sales,mult] of [[1,.97],[4,.88],[6,.82],[9,.73],[10,.70],[15,.70]]){s.previousSales=sales;
+  assert.equal(g.cartTotal(),Math.round(100*mult),sales+' previous sales -> x'+mult);}
+ // no quantity, SKU or rarity condition: a single unit and a second SKU are both discounted
+ s.previousSales=5;s.cart={0:1,2:2};assert.equal(g.cartTotal(),Math.round(100*.85)+2*Math.round(40*.85),'every ORDER line');
+ // with 묶음발주 계약 the two multiply and the internal 45% floor is not reached
+ s.previousSales=10;s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),70+70+Math.round(100*.7*.8));
+ assert.equal(DATA.relicBy.logisticsHQ.price,300,'the price is kept');
 });
 
 /* REL-Q-v28-17. The three outcomes are one roll and mutually exclusive, so the boundaries are
@@ -191,6 +192,31 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
  assert.ok(Math.abs((.45*1+.15*2+.40*0)-0.75)<1e-12,'+0.75 visitors per applicable Day');
  assert.equal(DATA.relicBy.hub.price,340);
  assert.equal(DATA.balance.hubOverheadRate,.10,'the operating modifier stays overheadBase +10%');
+});
+
+/* RELIC 31 / 32 (User 2026-09-28, v2.9.11): 야전 들것 and 응급 처치대 ease an injury. */
+test('RELIC 31 야전 들것: an ordinary Injury costs 투력 8% instead of 15%, and only while owned',()=>{
+ const g=fresh('stretcher'),s=g.run,n=s.npcs.find(x=>!x.traits.length)||s.npcs[0],d=s.dungeons[0];n.traits=[];n.pack=[];n.fatigue=0;
+ const combat=(inj,fac)=>{n.injury=inj;return Dungeon.prepare(n,d,fac).effects.combat;};
+ const base=n.stats.combat+n.equipment.power;
+ assert.ok(Math.abs(combat(1,[])-base*.85)<1e-9,'without it an Injury is 투력 -15%');
+ assert.ok(Math.abs(combat(1,['fieldStretcher'])-base*.92)<1e-9,'with it the Injury is 투력 -8%');
+ assert.equal(combat(0,['fieldStretcher']),combat(0,[]),'a healthy adventurer is untouched');
+ n.injury=1;const src=Dungeon.prepare(n,d,['fieldStretcher']).sources.combat.find(x=>x.name==='부상');
+ assert.equal(src.v,-8,'the SALE / NPC source line reads the same -8%');
+ assert.equal(DATA.relicBy.fieldStretcher.kind,'foundation');assert.deepEqual(DATA.relicBy.fieldStretcher.tags,['expedition']);
+ assert.ok(!DATA.relicD30NoEffect.includes('fieldStretcher'),'the D30 Final reads preparation too, so it stays D30-eligible');
+});
+
+test('RELIC 32 응급 처치대: an injured arrival recovers at 20%, only while owned, and says so',()=>{
+ const run=(fac,seed)=>{const g=fresh(seed),s=g.run,n=s.npcs[0];n.traits=[];n.injury=1;n.status='부상';s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n;};
+ let healed=0;const N=4000;for(let i=0;i<N;i++){const n=run(['firstAidDesk'],'aid-'+i);if(n.injury===0){healed++;assert.equal(n.healedBy,'firstAidDesk');assert.equal(n.status,'건강');}}
+ assert.ok(Math.abs(healed/N-.20)<.025,'about 20% of injured arrivals: '+(healed/N).toFixed(3));
+ for(let i=0;i<200;i++)assert.equal(run([],'aid-'+i).injury,1,'without it nothing heals at the door');
+ assert.equal(DATA.relicBy.firstAidDesk.kind,'keystone');assert.deepEqual(DATA.relicBy.firstAidDesk.tags,['expedition']);
+ assert.equal(DATA.relicBy.firstAidDesk.price,300);
+ const app=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/ui/app.js'),'utf8');
+ assert.ok(app.includes("n.healedBy==='firstAidDesk'?'<p class=\"heal-note\" role=\"status\">응급 처치대 덕분에 부상이 나았다.</p>'"),'COPY_AUDIT §9-4b on the state strip');
 });
 
 /* 2026-09-23 remake: 첫 방문 쿠폰 replaces 신입 모집 게시판 (REL-Q-v28-3 seating retired with it).
@@ -232,7 +258,7 @@ test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sal
 test('REMAKE 새벽 회수 계약: 50% recovery of expiring Food/Drink, and +1 Food/Drink slot on the first generation',()=>{
  const g=fresh('dawn-recovery'),s=g.run;s.facilities=['dawnRecovery'];s.inventory=[];
  g.stock('rice',2,40);g.stock('rope',1,50);for(const st of s.inventory)st.expires=s.day+1;
- const money=s.money,waste=s.stats.waste;s.day++;g.morningReset();
+ const money=s.money,waste=s.stats.waste;g.nightDiscard(); // v2.9.11: the Night of the last sale day, not the next morning
  assert.equal(s.money-money,40,'2 x 50% of 40G');assert.equal(s.daily.subsidy,40);
  assert.equal(s.daily.waste,1,'only the non-Food is waste');assert.equal(s.stats.waste-waste,1);assert.equal(s.daily.wasteCost,50);
  assert.equal(s.inventory.length,0,'all of it left the shelf');
@@ -277,7 +303,7 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the charged 150% price (royalCert)',()=>{
+test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 60% of the charged 150% price (royalCert, v2.9.11; was 40%)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -293,8 +319,8 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the 
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const common=DATA.items.find(i=>i.rarity===0);
  assert.ok(plain&&insured,'the catalogue has both a plain Rare+ and a Rare+ insurance role');
- assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.40),'royalCert pays 40% of the charged 150% price');
- assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.40),'at any rarity');
+ assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.60),'royalCert pays 60% of the charged 150% price');
+ assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.60),'at any rarity');
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.20),'supplyCert pays 20% of list');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
@@ -313,7 +339,8 @@ test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the cata
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
                           ['supplyCert',220],['dawnRecovery',190],['logisticsHQ',300],['lifetime',310],
                           ['royalCert',320],['expeditionCert',290],['fresh24',360],['hub',340],
-                          ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130]])
+                          ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130],
+                          ['fieldStretcher',80],['firstAidDesk',300]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
 });
 
@@ -345,25 +372,24 @@ test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ 
  assert.equal(r.store,300,'the store still receives the full charged price');assert.equal(r.paid,210,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
-test('REWORK 즉석식품 코너: overheadBase +10% from the next Day, beside hub and never compounded',()=>{
+test('즉석식품 코너 costs no operating cost (v2.9.11, User 2026-09-29; was overheadBase +10%); hub still takes its 10%',()=>{
  const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','hub']);
  const b=base.g.overheadBase(),charged=x=>Math.round((b+x)/10)*10;
- assert.equal(kitchen.g.run.daily.operating,charged(b*.10));
- assert.equal(both.g.run.daily.operating,charged(b*.10+b*.10),'kitchen and hub each take 10% of the base');
- const g=fresh();g.run.dayFacilities=[];g.run.facilities=['kitchen'];
- assert.equal(g.expectedOperatingCost(),charged(0),'bought today: no overhead until the next Day');
+ assert.equal(kitchen.g.run.daily.operating,charged(0),'kitchen adds nothing');
+ assert.equal(both.g.run.daily.operating,charged(b*.10),'only hub takes 10% of the base');
+ assert.ok(!('overheadRate' in DATA.relicParams.kitchen),'no dormant operating-cost lever is left on the card');
 });
-test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.25, no shelf life, no overhead',()=>{
+test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x1.25), no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
  for(const id of ['rice','guildlunch','lowpotion','rope']){const it=DATA.itemBy[id];s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['fresh24'];
-  assert.equal(g.offerFor(it).price,['food','drink'].includes(it.category)?Math.round(it.buy*1.25):plain,id+' order price');}
+  assert.equal(g.offerFor(it).price,['food','drink'].includes(it.category)?Math.round(it.buy*1.15):plain,id+' order price');}
  assert.equal(Relics.shelf(g,DATA.itemBy.rice),0,'no shelf-life effect');
  s.inventory=[];g.stock('rice',1);assert.equal(s.inventory[0].expires,s.day+DATA.itemBy.rice.days);
  assert.equal(nightWith(['fresh24']).g.run.daily.operating,nightWith([]).g.run.daily.operating,'no overhead');
  // acquisition reprices the Food/Drink offers already on the table, once
  s.facilities=[];s.phase='order';s.money=9999;s.offers=[{item:'rice',price:35,quantity:3},{item:'rope',price:50,quantity:3}];
  s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['fresh24'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
- g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.25),50]);
+ g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.15),50]);
 });
 test('REWORK 냉장 유통 계약: Uncommon+ Food/Drink purchase intent +16%p, no stat effect',()=>{
  const g=fresh('coldcase-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
@@ -420,22 +446,21 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
 
 console.log(count+' Relic effect groups passed');
 
-/* 2026-09-24 tuning (User): 희귀상품 입고 계약 raises a Rare+ Item's sale price 10% in every mode.
-   The customer pays it from their own Wallet - no HQ subsidy, no commission - and is judged on it. */
-test('희귀상품 입고 계약: Rare+ sale price +10%, paid by the customer, nothing from HQ',()=>{
+/* v2.9.11 (User 2026-09-29): 희귀상품 입고 계약 no longer raises the price the customer sees. A Rare+ sale is charged at
+   the ordinary price and HQ pays the store 10% of the charged price on top (it was a +10% the customer paid, 2026-09-24). */
+test('희귀상품 입고 계약: Rare+ sale at the ordinary price, HQ pays +10% of it',()=>{
  const g=fresh('showcase-price'),n=g.run.npcs[0];n.traits=[];n.money=9999;
  const rare=DATA.items.find(i=>i.rarity>=2),common=DATA.items.find(i=>i.rarity===0);
  const q=(it,mode,fac)=>{g.run.facilities=fac;return g.interest(n,it,mode);};
- const list=Math.round(rare.sell*1.1);
  for(const mode of ['half','full','overcharge']){
   const plain=q(rare,mode,[]),lifted=q(rare,mode,['rareContract']);
-  assert.equal(lifted.price,Math.round(list*DATA.pricing[mode].mult),mode+' charges 110% of list');
-  assert.equal(lifted.debit,lifted.price,mode+': the customer pays all of it');
-  assert.ok(lifted.chance<=plain.chance,mode+': a dearer offer is never easier to accept');}
- assert.equal(q(common,'full',['rareContract']).price,common.sell,'below Rare nothing changes');
+  assert.equal(lifted.price,plain.price,mode+': the customer is charged the ordinary price');
+  assert.equal(lifted.chance,plain.chance,mode+': and judges it the same');}
  const r=sellOnce(['rareContract'],'full',rare.id);
- assert.equal(r.store,list,'the store receives the lifted price');assert.equal(r.paid,list,'all of it from the customer');
- assert.equal(r.last.subsidy||0,0,'HQ fills nothing');assert.equal(r.s.daily.commission||0,0,'and pays no commission');
+ assert.equal(r.paid,rare.sell,'the customer pays list');
+ assert.equal(r.s.daily.commission,Math.round(rare.sell*.10),'HQ pays 10% of the charged price');
+ const c=sellOnce(['rareContract'],'full',common.id);
+ assert.equal(c.s.daily.commission||0,0,'below Rare nothing is paid');
 });
 
 test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관련 준비, and the 기동 exception is gone',()=>{
@@ -467,7 +492,7 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
 test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime truth, COPY_AUDIT §11-32 exact',()=>{
  const g=fresh('status'),s=g.run;s.facilities=['rotation','logisticsHQ','guarantee','groupOrder','rerollTicket','bulk','memberBundle','fieldRepair'];
  s.previousSales=3;assert.equal(Relics.status(g,'rotation'),'전날 판매 3건 · 오늘 미적용');s.previousSales=4;assert.equal(Relics.status(g,'rotation'),'전날 판매 4건 · 오늘 적용 중');
- assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 미적용');s.previousSales=6;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 6건 · 오늘 적용 중');
+ assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 매입가 -12%');s.previousSales=12;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 12건 · 오늘 매입가 -30%');s.previousSales=0;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 0건 · 오늘 미적용');s.previousSales=6;
  s.guaranteeUsed=false;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 1회 남음');s.guaranteeUsed=true;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 사용함');
  s.daily.sales=2;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 2건 · 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 4건 · 판매마다 +15G 지급 중');
  s.rerollCount=0;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 남음');s.rerollCount=1;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 사용함');

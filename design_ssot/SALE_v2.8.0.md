@@ -221,7 +221,7 @@ Canonical uncertainty:
 - claimed / expected destination remains the original destination
 - no additional Power condition
 
-On `게이트 순례주간`:
+On `게이트 순례 주간`:
 - Sale still shows the NPC's expected destination
 - affected NPC identity and changed actual destination remain hidden
 - Night reveals actual changed destination for affected NPCs

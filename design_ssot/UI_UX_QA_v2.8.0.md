@@ -1244,13 +1244,13 @@ Player reads effects and makes the judgment.
 
 ### UI-Q33 — DESTINATION UNCERTAINTY / PILGRIMAGE RESULT
 SETUP:
-Trigger the destination reliability tutorial, 허세, and 게이트 순례주간.
+Trigger the destination reliability tutorial, 허세, and 게이트 순례 주간.
 
 EXPECT:
 - Tutorial says: `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.`
 - Tutorial does not frame 허세 as the whole destination system
 - Sale label uses 예상 목적지 where uncertainty is possible
-- 게이트 순례주간 Morning reveal states 1–3 affected range
+- 게이트 순례 주간 Morning reveal states 1–3 affected range
 - actual N / affected identity / changed Gate remain hidden until Night
 - Night shows actual changed count and expected -> actual destination on affected NPC results
 
@@ -2342,11 +2342,12 @@ SETUP:
 Fresh account, first ORDER at 360 and 1280; step through the coach.
 
 EXPECT:
-The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
+The ORDER coach group runs `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
 
 PASS:
 - the steps appear in exactly that order and nothing else is in the group
 - `gates` (step id `order-gates`, apart from MORNING's `gates`, so seeing one never marks the other seen) highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
+- `stock` (step id `order-stock`) highlights the ORDER 창고 summary and reads the COPY_AUDIT §3-7 STOCK line (User 2026-09-29, v2.9.11)
 - `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
 - `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH COPY); `reroll` is last
 - no `gold` mark: `#order-register` carries no coach step
@@ -2378,7 +2379,7 @@ FAIL:
 (User 2026-09-24, v2.9.0)
 
 SETUP:
-ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례주간 reroute where available.
+ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
 
 EXPECT:
 The ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21.
@@ -2709,3 +2710,46 @@ FAIL:
 - one full new music track is treated as mandatory for every phase
 - a parallel audio framework is introduced without need
 - audio presentation changes gameplay truth or uses Gameplay RNG
+
+### UI-Q-v29-47 — PHASE BGM (v3.0, User 2026-09-29)
+
+Verify UI_UX §AUDIO FEEDBACK — PHASE BGM on a real phone and on desktop.
+
+Listen to at least:
+- the store about to open → 첫 점포지원 → MORNING → ORDER → SALE → NIGHT → CLOSING
+- FINAL through at least one loop join
+- a cleared ending and a failed ending
+
+PASS:
+- each screen plays the track the mapping names; a cleared Run ends on SUCC and any failed Run ends on FAIL
+- a loop join is not heard as a cut, click or gap (BOSS: its 1 s crossfade)
+- the tracks sound equally loud, and at BGM 100% / SFX 100% the music is clearly audible while decision cues still read above
+  it (UI-Q114)
+- a phase change does not overlap two tracks for longer than its fade
+- mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
+- no audio-related console or runtime error
+- runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)
+
+FAIL:
+- a loop that plays an excerpt from the middle of a track instead of the track
+- an audible click, gap or double-play at a join or a phase change
+- a phase that goes silent because a file failed to load
+- music that masks a decision or result cue
+
+### UI-Q-v29-48 — MORNING DAY SIGN FLIP (User 2026-09-29, v2.9.11)
+
+Verify UI_UX §MORNING — DAY SIGN FLIP at 390 and 1280.
+
+PASS:
+- pressing `다음 날` and arriving at the next MORNING rolls the sign once, from yesterday's number to today's
+- the two numbers never overlap mid-roll, and nothing moves outside the sign
+- the sign lands on the plain number
+- a redraw of the same MORNING and a reload show the still sign
+- reduced motion shows the still sign
+- no console or runtime error
+- runtime evidence: `tools/qa-day-flip.cjs` (in `npm run qa:runtime`)
+
+FAIL:
+- the roll plays on every redraw or on a reload
+- the numbers overlap, or the sign's size jumps
+- the roll runs longer than 320 ms or plays a sound of its own

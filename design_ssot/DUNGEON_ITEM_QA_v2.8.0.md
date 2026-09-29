@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
-DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_ITEM_QA.md
@@ -238,9 +238,9 @@ PASS:
 Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2; DAY 11~20 at 1.10 in the v2.9.2 third pass, User 2026-09-26)
+- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2; DAY 11~20 at 1.10 in the v2.9.2 third pass, User 2026-09-26; early 1.50 → 1.40 → 1.45 in v2.9.11, User 2026-09-28)
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
-- the Day term reads D9 13.50, D10 14.30, D12 16.50, D18 23.10, D20 25.30, D24 28.50, D29 32.50 (User 2026-09-26, v2.9.2 third pass)
+- the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 28.05, D29 32.05 (v2.9.11, User 2026-09-28; each 0.45 under the v2.9.2 third pass)
 
 FAIL:
 - a single slope applied across all Days

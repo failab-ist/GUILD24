@@ -107,6 +107,8 @@ function progressOk(r,ids,D){
    && Number.isFinite(rep.xp))) return false;
  if(r.event && !D.events.some(e=>e.id===r.event.id)) return false;
  if(r.eventSeen!==undefined && typeof r.eventSeen!=='boolean') return false;
+ /* EVENT §EVENT SELECTION (v2.9.11): the Run's Event log, optional (a save from before it reads as empty) */
+ if(r.eventLog!==undefined && (!Array.isArray(r.eventLog) || !r.eventLog.every(id=>D.events.some(e=>e.id===id)))) return false;
  if(r.finalCommitted!==undefined && typeof r.finalCommitted!=='boolean') return false;
  if(r.phase==='end' && typeof r.win!=='boolean') return false;
  if(r.say && (typeof r.say.text!=='string' || !ids.includes(r.say.npc))) return false;

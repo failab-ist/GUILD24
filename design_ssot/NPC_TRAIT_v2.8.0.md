@@ -885,7 +885,7 @@ Player-facing destination is generally presented as `예상 목적지`.
 By default it matches the actual assigned destination.
 Only an explicitly authoritative Trait/Event may make expected/reported destination differ from actual destination.
 
-게이트 순례주간:
+게이트 순례 주간:
 - EVENT may change the actual destination of 1–3 visitors after their expected destination exists
 - affected identity/new destination remain hidden until Night as defined in `EVENT_v2.8.0.md`
 

@@ -609,11 +609,11 @@ longer belongs to has that Slot empty; ownership is kept.
 each visiting adventurer: an extra purchase budget of 25% of their current purse, that visit only    (User 2026-09-26, v2.9.7; replaces ORDER offer candidates +3)
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never taken
 from it, and is gone at the end of the Day, so nothing compounds. On a Day whose Event also grants 추가 구매, the two shares add.
-rare-NPC rarity weights = [35, 30, 22, 9, 4]    (User 2026-09-26, v2.9.7; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 65%, 영웅 and 전설 the most. This reuses the
+rare-NPC rarity weights = [25, 30, 26, 13, 6]    (User 2026-09-28, v2.9.11; v2.9.7 [35, 30, 22, 9, 4]; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 75% (v2.9.11; 65% in v2.9.7), 영웅 and 전설 the most. This reuses the
 existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn rarity draw when the
 Decoration is active. It adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
-each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%. On the display Slot from v2.9.7, User 2026-09-26)
+each Morning, 45% chance of visitors +1    (User 2026-09-28, v2.9.11; 30% from v2.9.1, was 25%. On the display Slot from v2.9.7, User 2026-09-26)
 up to ten times per Run, an expedition that would leave an ordinary Injury (부상) leaves none (무사)    (User 2026-09-26, v2.9.7; was: up to three Deaths -> 중상)
 It is 구급키트's `부상 -> 무사` step (ITEM §INSURANCE HIERARCHY), taken in order and counted per Run. A carried 구급키트 settles first,
 and an expedition it already acted on spends nothing; 중상 and 사망 are not touched. The RESULT-PROOF counterfactual reads

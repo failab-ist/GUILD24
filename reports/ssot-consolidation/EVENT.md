@@ -219,7 +219,6 @@ Any Event filter/copy that still uses `Medical` to mean the v2.7 Potion line is 
 
 ```new
 Mechanic:
-At 35%:
 - targets `Potion` category only
 Any Event filter/copy that still uses `Medical` to mean the Potion line is stale.
 ```
@@ -406,7 +405,7 @@ hold the v2.5 HAZARD EVENT QA, the Deep-Day embedded QA and the v2.8 numeric acc
 ## CANONICAL EVENT CATALOG
 ### 01. 물류대란
 ### 02. 본사 1+1 행사
-### 03. 게이트 순례주간
+### 03. 게이트 순례 주간
 ### 04. 몬스터 범람
 ### 06. 한파
 ### 07. 포션 공급 중단
@@ -474,7 +473,7 @@ Stage 9 measures actual Event count; any later chance rebalance requires approva
 ```
 
 ```new
-실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
+실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 40%를 자동으로 바꾸지 않는다.
 Full-run balance measurement measures actual Event count; any later chance rebalance requires approval.
 ```
 
@@ -526,10 +525,8 @@ User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditi
 
 ```new
 TYPE: Run / Opportunity
-발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 35% 발생 Roll, 같은 Weight 기반 선택.
-따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않고, 다른 Event처럼 한 Run에 다시 나올 수 있으며
-나올 때마다 +1이 더해진다.
-23종은 다음 역할을 가진다.
+발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 40% 발생 Roll, 같은 Weight 기반 선택.
+따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않는다. 다른 Event처럼 한 Run에 한 번만 나온다
 ```
 
 ## AMENDMENT — v2.9.1: approved copy pointers (User decision 2026-09-25)
@@ -537,7 +534,7 @@ TYPE: Run / Opportunity
 User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; its reveal copy and the 만반의 준비 tutorial line are approved in COPY_AUDIT §13-23 / §3-7. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```new
-총 23종 (23. 길드 합동 위령제 — User 2026-09-25, v2.9.1 balance).
+총 55종 (23. 길드 합동 위령제 — User 2026-09-25, v2.9.1 balance; 24~55 — User 2026-09-28, v2.9.11).
 ### 23. 길드 합동 위령제
 Exact reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-23.
 - 길드 합동 위령제
@@ -572,8 +569,223 @@ The Event's refund of the overnight waste cost, which no player could see or act
 ### 20. 본사 폐기 유예
 (User 2026-09-28, v2.9.10 quick patch. 이전 이름 `본사 폐기 지원`: 그날 아침 폐기된 재고의 매입가를 돌려줬다. 게임에 따로 보이는
 폐기 비용이 없었고, 폐기는 사건이 뜨기 전에 이미 끝나 있어 플레이어가 볼 수도, 대응할 수도 없었다.)
-사건이 뜬 날 아침, 판매 마지막 날이 오늘인 재고(진열대 `오늘까지`, 다음 날 아침 폐기될 재고)만 유통기한 +1일.
+사건이 뜬 날 아침, 판매 마지막 날이 오늘인 재고(진열대 `오늘까지`, 오늘 밤 폐기될 재고 — ITEM §SHELF LIFE, v2.9.11)만 유통기한 +1일.
 그날 나중에 들어온 재고와 다른 재고는 그대로다. 유예된 재고도 늘어난 날이 지나면 평소처럼 폐기되고, 그때 폐기 수와
 누적 폐기(본사 재고 감사의 조건)에 정상적으로 들어간다. 해당 재고가 없는 날에는 효과가 없다.
 - 본사 폐기 유예
+```
+
+
+## v2.9.11 — Event chance 40%, no repeat in a Run (User 2026-09-28)
+
+Dropped (the removal itself):
+
+```text
+dailyEventChance = 35%
+19–20 × 0.35 ≈ 6.65–7.0 Events / Run
+심층원정 통합 후 정상적인 30일 Run에서 약 6.7–7.0회의 Normal Event 기대값을 시작값으로 한다.
+- use ordinary EVENT eligibility / 35% roll
+expected Normal Events become approximately **6.65–7.0 per Run** before other
+- `dailyEventChance` remains 35% until later approved rebalance
+3. Event Eligible Day라면 35% 발생 Roll을 한다.
+4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다.
+콘텐츠를 더 자주 보여주기 위해 Event Chance를 올리지 않는다.
+```
+
+New:
+
+```new
+dailyEventChance = 40%
+(User 2026-09-28, v2.9.11: 35% → 40%, 사건 풀이 23종에서 늘어난 것과 함께.)
+19–20 × 0.40 ≈ 7.6–8.0 Events / Run
+심층원정 통합 후 정상적인 30일 Run에서 약 7.6–8.0회의 Normal Event 기대값을 시작값으로 한다.
+- use ordinary EVENT eligibility / 40% roll
+At 40% (v2.9.11):
+expected Normal Events become approximately **7.6–8.0 per Run** before other
+3. Event Eligible Day라면 40% 발생 Roll을 한다.
+4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다. **이번 Run에 이미 나온 Event는 Pool에서 빠진다**
+(User 2026-09-28, v2.9.11: 한 Run에 같은 Event는 한 번만. 발생 기록은 Run에 저장된다).
+(User 2026-09-28, v2.9.11; 이전에는 다시 나올 때마다 +1이 더해졌다).
+콘텐츠를 더 자주 보여주기 위해 Event Chance를 올리지 않는다. 예외: User 2026-09-28(v2.9.11)이 사건 풀 확장과 함께
+35% → 40%로 올렸다. 같은 사건이 한 Run에 두 번 나오지 않으므로 늘어난 발생은 다른 사건으로 채워진다.
+- `dailyEventChance` is 40% (User 2026-09-28, v2.9.11) until a later approved rebalance
+- an Event already met this Run never fires again that Run; a save carries the Run's Event log
+```
+
+
+## v2.9.11 — Event catalogue 24~55 (User 2026-09-28)
+
+Dropped (the removal itself):
+
+```text
+현재 Canonical Event 22종은 모두 **자동 적용형 Day Event**다.
+22-event catalog.
+- 22종 Event Catalog
+```
+
+New:
+
+```new
+현재 Canonical Event 55종은 모두 **자동 적용형 Day Event**다 (v2.9.11: 23종 → 55종).
+Event catalog.
+### 24. 길드 의료단 순회
+TYPE: Opportunity
+(User 2026-09-28, v2.9.11. 한 Run에 한 번, 당일만.)
+방문 순간 부상(1단계, 중상 제외)인 모험가는 부상이 풀린다. SALE 손님 상태에 한 줄로 알린다(COPY_AUDIT §13-24 보조 줄).
+오늘 올 수 있는 모험가 중 부상자가 있을 때만.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-24.
+### 25. 길드 의무관 당직
+오늘 밤 결과가 `부상`인 원정 최대 2회를 무사로 바꾼다(구급품 진열장과 같은 자리, 그보다 먼저 쓰인다). 사망·중상은 그대로. 밤 결과에 한 줄로 알린다.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-25.
+### 26. 길드 위로금
+방문 순간 부상인 모험가는 오늘 60G를 더 쓸 수 있다(당일 추가 예산, 급여일과 같은 채널).
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-26.
+### 27. 길드 특별 수당
+오늘 방문하는 모든 모험가가 40G를 더 쓸 수 있다(당일 추가 예산).
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-27.
+### 28. 본사 물류 지원
+오늘 모든 발주 매입가 ×0.85.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-28.
+### 29. 보험 공동 구매
+오늘 보험 발주 매입가 ×0.70.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-29.
+### 30. 본사 원정용품 지원
+오늘 야외장비 발주 매입가 ×0.70.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-30.
+### 31. 길드 연회
+오늘 방문한 모험가가 들고 가는 음식의 피로 회복이 2배다(음료는 그대로). SALE 준비 표시와 밤 결과가 같은 값을 읽는다.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-31.
+### 32. 원정 교대 근무
+오늘 원정 결과로 쌓이는 피로가 절반(올림)이다: 성공 +4 → +2, 퇴각 +7 → +4, 부상 +9 → +5. 중상·사망은 원래 0.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-32.
+### 33. 길드 휴양일
+방문 순간 피로 -8(0 아래로 내려가지 않음).
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-33.
+### 34. 단골의 날
+오늘 오지 않기로 된 신뢰 단골 1명이 방문객에 더해진다.
+오늘 올 수 있는 신뢰 단골이 있을 때만.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-34.
+### 35. 길드 현상금
+오늘 원정 보상 ×1.20. 요구 전력은 그대로.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-35.
+### 36. 마왕의 징조
+TYPE: Pressure
+오늘 게이트 요구 전력 ×1.08. 보상은 그대로.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-36.
+### 37. 입고 지연
+오늘 발주 후보 -2(최소 3개 유지).
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-37.
+### 38. 가뭄
+오늘 음료 발주 매입가 ×1.30.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-38.
+### 39. 길드 세금 징수
+오늘 운영비 +50G.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-39.
+### 40. 장맛비
+오늘 음식·음료 구매 의사 -15%p.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-40.
+### 41. 본사 발주 제한
+오늘 한 번의 발주에서 같은 상품은 최대 2개까지(1+1 입고분은 따로 세지 않음). 막힌 수량 버튼은 이유를 알린다.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-41.
+### 42. 포스기 먹통
+오늘 발주 후보 교환을 할 수 없다. 교환 버튼은 이유를 알린다.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-42.
+### 43. 가격 단속
+오늘 바가지(150%) 판매를 할 수 없다. 바가지 가격 버튼은 `오늘 가격 단속`으로 닫힌다.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-43.
+### 44. 퇴각로 붕괴
+오늘 원정의 전투 퇴각 확률 -10%p(귀환석의 두 번째 굴림은 그대로). 결과 증명도 같은 값을 읽는다.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-44.
+### 45. 길드 소집령
+오늘 올 수 있는 모험가 중 레벨이 가장 높은 1명이 오지 않는다. 방문객 수는 나머지에서 그대로 뽑는다.
+오늘 올 수 있는 모험가가 2명 이상일 때만.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-45.
+### 46. 냉장고 고장
+오늘 아침 음식·음료 재고의 유통기한 -1일. 오늘까지가 된 재고는 오늘 밤 평소처럼 폐기된다.
+음식·음료 재고가 있을 때만.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-46.
+### 47. 야시장
+TYPE: Mixed
+오늘 방문객 +3, 운영비 +60G.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-47.
+### 48. 원정 징발령
+오늘 원정 보상 ×1.40, 방문객 -1.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-48.
+### 49. 본사 재고 떨이
+오늘 모든 발주 매입가 ×0.75, 발주 후보 -3(최소 3개 유지).
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-49.
+### 50. 정예 토벌령
+오늘 게이트 요구 전력 ×1.15, 원정 경험치 ×1.50.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-50.
+### 51. 폭염
+오늘 음료 구매 의사 +25%p, 음료 발주 매입가 ×1.35.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-51.
+### 52. 게이트 임시 폐쇄
+오늘 아침 열린 게이트(임시 게이트 제외) 1곳이 닫힌다. 방문객 목적지는 남은 게이트에서 정한다. 전날의 게이트 수 예보와 달라지는 유일한 사건이며, 공지가 그 사실을 알린다.
+임시가 아닌 게이트가 2곳 이상일 때만.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-52.
+### 53. 길드 훈련 주간
+오늘 원정 경험치 ×1.50, 원정 보상 ×0.70.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-53.
+### 54. 유통기한 임박 특가
+오늘 모든 발주 매입가 ×0.60. 오늘 발주로 들어온 재고는 유통기한이 오늘까지다(오늘 밤 팔리지 않으면 폐기).
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-54.
+### 55. 게이트 안정화 작업
+오늘 아침 모든 게이트(임시 게이트 제외)가 1단계로 다시 열린다(계열 그대로, 위험은 1단계). 원정 보상 ×0.60.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-55.
+55종은 다음 역할을 가진다 (v2.9.11: 기회 23 · 압박 16 · 혼합 16).
+- 길드 의료단 순회
+- 길드 의무관 당직
+- 길드 위로금
+- 길드 특별 수당
+- 본사 물류 지원
+- 보험 공동 구매
+- 본사 원정용품 지원
+- 길드 연회
+- 원정 교대 근무
+- 길드 휴양일
+- 단골의 날
+- 길드 현상금
+- 마왕의 징조
+- 입고 지연
+- 가뭄
+- 길드 세금 징수
+- 장맛비
+- 본사 발주 제한
+- 포스기 먹통
+- 가격 단속
+- 퇴각로 붕괴
+- 길드 소집령
+- 냉장고 고장
+- 야시장
+- 원정 징발령
+- 본사 재고 떨이
+- 정예 토벌령
+- 폭염
+- 게이트 임시 폐쇄
+- 길드 훈련 주간
+- 유통기한 임박 특가
+- 게이트 안정화 작업
+- 55종 Event Catalog
+```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+`게이트 순례주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
+- Night displays `게이트 순례주간 · 실제 변경 N명`
+- 게이트 순례주간
+- 게이트 순례주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
+```
+
+New:
+
+```new
+`게이트 순례 주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
+- Night displays `게이트 순례 주간 · 실제 변경 N명`
+- 게이트 순례 주간
+- 게이트 순례 주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
 ```

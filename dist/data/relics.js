@@ -11,32 +11,35 @@ const rows=[
 ['rotation','회전 진열대','foundation',['rotation'],80,'전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.'],
 ['member','회원 관리대장','foundation',['vip'],130,'다음 날부터 · 이미 만난 손님의 재방문 가중치 +70%.'],
-['rareContract','희귀상품 입고 계약','foundation',['premium'],140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10%, 인상분은 손님 부담.'],
+['rareContract','희귀상품 입고 계약','foundation',['premium'],140,'희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.'],
 ['guarantee','길드 보증 진열대','foundation',['premium'],140,'하루 첫 '+GUARANTEE_MIN_PRICE+'G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
 ['fieldRepair','야전 정비대','foundation',['expedition'],80,'판매한 야외장비의 위험 대응 수치 +40%.'],
-['fridge','대형 냉장고','foundation',['fresh'],60,'음식·음료 유통기한 +2일 · 확보 시 보유 재고도 1회 연장.'],
-['kitchen','즉석식품 코너','foundation',['fresh'],170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.'],
+['fridge','대형 냉장고','foundation',['fresh'],60,'음식·음료 유통기한 +2일 (보유 재고도 1회 연장).'],
+['kitchen','즉석식품 코너','foundation',['fresh'],170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).'],
 ['board','길드 전광판','foundation',['customer'],110,'하루 기본 최소 방문객 4명 (기존 3명).'],
 ['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
-['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,'아침마다 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
-['memberBundle','단골 묶음혜택','hybrid',['rotation','vip'],190,'단골 손님의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
-['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,'단골 손님 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
+['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
+['memberBundle','단골 묶음혜택','hybrid',['rotation','vip'],190,'단골의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
+['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,'단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
 ['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +25G.'],
-['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,'음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.'],
+['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,'음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.'],
 ['coldcase','냉장 유통 계약','hybrid',['fresh','premium'],180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
-['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,'오늘 위험에 대응하는 희귀 이상 상품이나 희귀 이상 보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
+['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,'오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
 ['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
-['logisticsHQ','물류 본부계약','keystone',['rotation'],300,'전날 6건 이상 팔았을 때 · 같은 상품 3개 이상 발주 매입가 -25%.'],
-['lifetime','평생 단골제','keystone',['vip'],310,'단골 손님 생환 시 · 소지금 +50G · 다음 방문 가중치 +50%.'],
-['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +16%p.'],
+['logisticsHQ','물류 본부계약','keystone',['rotation'],300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
+['lifetime','평생 단골제','keystone',['vip'],310,'단골 생환 시 · 소지금 +50G · 다음 방문 가중치 +100%.'],
+['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 60% 추가 지급 · 바가지 구매 의사 +16%p.'],
 ['expeditionCert','원정 전문 인증','keystone',['expedition'],290,'위험 대응 상품의 대응 수치 +60% · 그 상품을 산 손님의 다음 방문 시 소지금 +50G.'],
-['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.'],
+['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
 ['hub','지역 거점점 계약','keystone',['customer'],340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
 ['warehouse','후방 창고 증설','utility',[],130,'창고 용량 +5칸.'],
 ['extraOrder','본사 추가발주권','utility',[],130,'다음 후보 생성부터 · 발주 후보 +2개.'],
 ['rerollTicket','발주 교환권','utility',[],120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
-['efficiency','운영 효율 매뉴얼','utility',[],130,'다음 날부터 · 기본 운영비 -30G.']
+['efficiency','운영 효율 매뉴얼','utility',[],130,'다음 날부터 · 기본 운영비 -30G.'],
+/* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
+['fieldStretcher','야전 들것','foundation',['expedition'],80,'부상 모험가 · 투력 페널티 -15% → -8%.'],
+['firstAidDesk','응급 처치대','keystone',['expedition'],300,'부상 모험가가 방문하면 · 20% 확률로 부상 회복.']
 ];
 D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})}));
@@ -50,27 +53,29 @@ D.relicParams={
  rotation:{supplyBonus:1},
  stamp:{loyaltyMult:1.75},
  member:{revisitMult:1.7},
- rareContract:{rareWeightMult:1.7,saleMult:1.1},
+ rareContract:{rareWeightMult:1.7,hqBonus:.10}, /* v2.9.11 (User 2026-09-29): was saleMult 1.1 paid by the customer */
  guarantee:{subsidyRate:.3},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},
+ fieldStretcher:{injuredCombatPenalty:.08},
+ firstAidDesk:{healChance:.20},
  fridge:{shelfDays:2},
- kitchen:{statBonus:.25,overheadRate:.10},
+ kitchen:{statBonus:.25}, /* v2.9.11 (User 2026-09-29): the +10% operating-cost clause is gone */
  board:{minVisitors:4},
  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},
  memberBundle:{payShare:.5},
  premiumMember:{rareIntentBonus:.15,arrivalGold:40},
  returnPoints:{loyaltyBonus:5,goldBonus:25},
- expeditionMeal:{supplyPerItem:2,hazardDefense:4},
+ expeditionMeal:{supplyPerItem:2,drinkSupplyPerItem:1,hazardDefense:2},
  coldcase:{weightMult:1.8,shelfDays:1,intentBonus:.16},
  supplyCert:{commissionRate:.20,goldBonus:30},
  dawnRecovery:{refundRate:.5,extraOffers:1},
- logisticsHQ:{discount:.25},
- lifetime:{goldBonus:50,revisitMult:1.5},
- royalCert:{commissionRate:.40},
+ logisticsHQ:{perSale:.03,maxDiscount:.30}, /* v2.9.11 remake (User 2026-09-29): was same-SKU 3+ -25% after 6 sales */
+ lifetime:{goldBonus:50,revisitMult:2.0}, /* v2.9.11 (User 2026-09-29): was 1.5 */
+ royalCert:{commissionRate:.60},
  expeditionCert:{counterMult:1.6,nextVisitGold:50},
- fresh24:{statBonus:.50,orderPriceMult:1.25},
+ fresh24:{statBonus:.50,orderPriceMult:1.15},
  hub:{p1:.45,p2:.15,overheadRate:.10},
  warehouse:{slots:5}, /* v2.9.2 fourth pass (User 2026-09-26): +10 -> +5 */
  extraOrder:{extraOffers:2},
@@ -88,7 +93,7 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
    acquisition and the Final Lock through which it could change anything - not merely when it
    looks weak that late. A future support joins D30 by existing; it leaves only by being added
    here after its own D30-to-Final review. */
-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime','royalCert','hub','efficiency'];
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime','royalCert','hub','efficiency','firstAidDesk'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not

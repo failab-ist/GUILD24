@@ -553,11 +553,11 @@ from it, and is gone at the end of the Day, so nothing compounds. On a Day whose
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [35, 30, 22, 9, 4]    (User 2026-09-26, v2.9.7; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
+rare-NPC rarity weights = [25, 30, 26, 13, 6]    (User 2026-09-28, v2.9.11; v2.9.7 [35, 30, 22, 9, 4]; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 65%, 영웅 and 전설 the most. This reuses the
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 75% (v2.9.11; 65% in v2.9.7), 영웅 and 전설 the most. This reuses the
 existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn rarity draw when the
 Decoration is active. It adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
@@ -568,7 +568,7 @@ every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%. On the display Slot from v2.9.7, User 2026-09-26)
+each Morning, 45% chance of visitors +1    (User 2026-09-28, v2.9.11; 30% from v2.9.1, was 25%. On the display Slot from v2.9.7, User 2026-09-26)
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent

@@ -15,6 +15,9 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),vm=r
 const root=path.resolve(__dirname,'..');
 const FILES=['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'];
 const ARMS=[
+ /* weak-decoration trials (User 2026-09-28, v2.9.11): 길드 추천 매대 visitor chance, 명예 모험가 액자 rarity weights */
+ ['shelf 45','guildShelf',{wall:.45}],['shelf 60','guildShelf',{wall:.60}],['shelf 100','guildShelf',{wall:1}],
+ ['frame A','honorFrame',{hw:[30,30,24,11,5]}],['frame B','honorFrame',{hw:[25,30,26,13,6]}],['frame C','honorFrame',{hw:[20,30,28,15,7]}],
  ['none',null,{}],['sponsorSign','sponsorSign',{}],['trainingSign','trainingSign',{}],['guildShelf','guildShelf',{}],
  ['infirmaryPlaque','infirmaryPlaque',{}],['thriftSafe','thriftSafe',{}],['memorialBook','memorialBook',{}],
  ['honorFrame (cur)','honorFrame',{}],['honorFrame P2','honorFrame',{weights:[40,30,20,7.5,2.5]}],
@@ -38,6 +41,8 @@ function load(p){for(const f of FILES){let src=fs.readFileSync(path.join(root,'d
   if(f==='systems/shop'&&p.daily)src=one(src,'s.bulkUsed=false;s.guaranteeUsed=false;','s.bulkUsed=false;s.guaranteeUsed=false;s.aidKitSaves=0;');
   vm.runInThisContext(src,{filename:f+'.js'});}
  if(p.saves)globalThis.DATA.decorationParams.aidCabinet.saves=p.saves;
+ if(p.wall)globalThis.DATA.balance.wallVisitorChance=p.wall;
+ if(p.hw)globalThis.DATA.decorationParams.honorFrame.weights=p.hw;
  if(p.dawn)globalThis.DATA.decorationParams.sponsorSign.extraOffers=0;}
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 if(process.env.DECO_WORKER){

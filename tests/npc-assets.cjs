@@ -39,31 +39,16 @@ test('NORMAL: every portrait binds to exactly one name, and every name to one po
  assert.equal(new Set(ids).size,200,'the legacy N001-N200 ids stay unique and traceable');
 });
 
-test('EASTER: three fixed identities, named on the file, never in the random pool',()=>{
- const files=list('03_EASTER');
- assert.equal(files.length,3,'exactly three Easter portraits');
- for(const e of pool.easter){
-  assert.equal(e.random_eligible,false,e.name+' is never drawn from the normal pool');
-  assert.ok(files.includes(e.id+'_'+e.name+'.png'),'fixed portrait exists: '+e.id+' '+e.name);
- }
- const normal=new Set([...pool.normal.M,...pool.normal.F].map(e=>e.name));
- for(const e of pool.easter)assert.ok(!normal.has(e.name),e.name+' is not also a normal name');
-
- // The shipped identities are the production ones, and each addresses its own fixed asset -
- // never one of the 200 normal slots, so an Easter visitor consumes no normal binding.
+test('EASTER (v2.9.11): the Rare Reference identities and their art are gone',()=>{
+ assert.deepEqual(pool.easter,[],'the production pool holds no Easter identity');
+ assert.equal(pool.package.easter_count,0,'and counts none');
+ assert.ok(!fs.existsSync(path.resolve(__dirname,'..','GUILD24_NPC_PRODUCTION/03_EASTER'))||list('03_EASTER').length===0,'no Easter source art');
+ const shipped=path.resolve(__dirname,'..','dist/ui/assets/npc/easter');
+ assert.ok(!fs.existsSync(shipped)||fs.readdirSync(shipped).length===0,'no Easter portrait ships');
  require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/systems/rng.js');
- require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');
- require('../dist/ui/assets/npc/manifest.js');require('../dist/ui/art.js');require('../dist/ui/scene.js');
- const A=globalThis.Adventurer;
- assert.deepEqual(A.EASTER,pool.easter.map(e=>({id:e.id,name:e.name})),
-  'the shipped identities are the production ones, ids and names, in order');
- for(const e of pool.easter){
-  assert.deepEqual(A.portraitOf(e.name),{easter:e.id},e.name+' resolves to its own fixed asset id');
-  assert.equal(globalThis.Scene.npcArt({id:'npc-e',name:e.name}),'ui/assets/npc/easter/'+e.id+'.webp',
-   'and the shipped build addresses that file: '+e.id);
-  assert.ok(fs.existsSync(path.resolve(__dirname,'..','dist/ui/assets/npc/easter',e.id+'.webp')),
-   'the shipped asset exists: '+e.id);
- }
+ require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');require('../dist/ui/assets/npc/manifest.js');
+ assert.equal(globalThis.Adventurer.EASTER,undefined,'the runtime has no Easter identity');
+ assert.equal(globalThis.NPCAssets.easter,undefined,'and the manifest addresses no Easter art');
 });
 
 test('NORMAL: the shipped name pool is the production pool, in the order that binds it',()=>{
@@ -85,17 +70,13 @@ test('NORMAL: the shipped name pool is the production pool, in the order that bi
    'ui/assets/npc/normal/'+g+'/'+e.slot+'.webp','and the shipped build addresses that file: '+e.name);
  }
 
- // random_eligible:false means exactly that - the three fixed identities are not in the pool
- // a visitor is drawn from, and the runtime has no slot to give them.
- for(const e of pool.easter){
-  assert.ok(!A.names.includes(e.name),e.name+' is never drawn from the normal pool');
-  assert.ok(!A.portraitOf(e.name).slot,e.name+' holds no normal slot; it carries its own asset id');
- }
- // a fixed identity is still bindable, by NPC id through the manifest, not by name
- globalThis.Scene.manifest['npc.npc-easter']='ui/assets/npc/easter/E001.webp';
- assert.equal(globalThis.Scene.npcArt({id:'npc-easter',name:A.names[0]}),'ui/assets/npc/easter/E001.webp',
+ // a name that left the pool (a removed Rare Reference customer, a renamed one in an older save) has no slot
+ assert.equal(A.portraitOf('요화니우스'),null,'a name outside the pool resolves to nothing');
+ // a portrait is still bindable by NPC id through the manifest, not by name
+ globalThis.Scene.manifest['npc.npc-bound']='ui/assets/npc/normal/F/001.webp';
+ assert.equal(globalThis.Scene.npcArt({id:'npc-bound',name:A.names[0]}),'ui/assets/npc/normal/F/001.webp',
   'the id override still wins over the derived address');
- delete globalThis.Scene.manifest['npc.npc-easter'];
+ delete globalThis.Scene.manifest['npc.npc-bound'];
 });
 
 test('BOSS: every state the runtime can derive has a file, and no file is unreachable',()=>{
@@ -163,7 +144,6 @@ test('the shipped build carries a derived portrait for every production image',(
  const webp=d=>fs.readdirSync(path.join(dist,d)).filter(f=>f.endsWith('.webp')).sort();
  for(const g of ['M','F'])
   assert.deepEqual(webp('normal/'+g),SLOTS.map(s=>s+'.webp'),'shipped normal/'+g+' mirrors the 100 slots');
- assert.deepEqual(webp('easter'),pool.easter.map(e=>e.id+'.webp'),'shipped Easter is addressed by id, ASCII only');
  assert.deepEqual(webp('boss'),list('04_BOSS').map(f=>f.replace(/\.png$/,'.webp')),
   'shipped Boss keeps every production state filename');
  // the placeholder pool the current build still draws from must survive regeneration

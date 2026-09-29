@@ -81,6 +81,24 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
  for(const it of DATA.items){g.stock(it.id,1);const st=g.run.inventory.at(-1);assert.equal(st.expires,g.run.day+it.days,it.id+' expires on stocking day + shelf life');}
 });
 
+test('ITEM §SHELF LIFE (User 2026-09-28, v2.9.11): unsold stock leaves on the Night of its last sale day, on that Day\'s receipt',()=>{
+ const g=new Game();g.autosave=false;g.start('night-discard');g.buyRelic(g.run.relicWindow.candidateIds[0]);const s=g.run;
+ s.facilities=[];s.inventory=[];
+ g.stock('rice',2);g.stock('ramen',1);                    // rice: 2 days, ramen: 3 days from today
+ const rice=s.inventory.filter(x=>x.item==='rice').map(x=>x.id),ramen=s.inventory.find(x=>x.item==='ramen').id;
+ const run=()=>{g.beginOrder();g.finishOrder();s.queue=[];s.cursor=0;g.night();};
+ // DAY 1: rice's last sale day is tomorrow - nothing leaves tonight
+ run();assert.equal(s.daily.waste,0,'nothing is due on DAY 1');g.finishNight();g.closeDay();
+ // the next morning discards nothing: rice is still there on its last sale day (the shelf's `오늘까지`)
+ assert.ok(rice.every(id=>s.inventory.some(x=>x.id===id)),'no morning discard');
+ assert.equal(s.daily.waste,0,'the morning reports no waste');
+ const last=s.inventory.find(x=>x.id===rice[0]);assert.equal(last.expires-s.day,1,'today is its last sale day');
+ // that Night the unsold rice goes, on today's receipt, by name; ramen still has a day
+ run();assert.equal(s.daily.waste,2,'오늘 폐기 2개 - today');assert.deepEqual(s.daily.wasteItems,{rice:2});
+ assert.ok(!s.inventory.some(x=>rice.includes(x.id)),'gone tonight');assert.ok(s.inventory.some(x=>x.id===ramen),'ramen keeps its last day');
+ assert.equal(s.reportHistory.at(-1).waste,2,'the Day\'s ledger holds it');
+});
+
 test('ITEM SUPPLY MODEL: every active Food/Drink has Supply > 0',()=>{
  const fd=DATA.items.filter(i=>['food','drink'].includes(i.category));
  assert.ok(fd.length>=12);

@@ -802,7 +802,7 @@ On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial
 - the one User-approved exception to "tutorial does not add page height" (exactly one line)
 Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0.md §3.
 ### TUTORIAL — FIRST-ORDER COACH ORDER
-The first-ORDER coach group is, in this order: `gates` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0).
+The first-ORDER coach group is, in this order: `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0;
 - `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
 - `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
 - the `gold` mark is retired (the register reads itself)
@@ -1154,7 +1154,7 @@ is dropped rather than heard over the next screen
 User 2026-09-25 (phone capture of 불룡볶음면): the shelf row stopped at two effects; it now states all of them on one line.
 
 ```new
-- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
+- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
 ```
 
 ## AMENDMENT — v2.9.2: SALE counter tray fold (User decision 2026-09-25)
@@ -1842,4 +1842,94 @@ A small 접기 key at the seal plate's top right says the plate folds. Lines dec
 
 ```new
 - a small `접기 ▼` key at the seal plate's top right says it folds (User 2026-09-28); that key, or a tap on the seal plate anywhere but its `봉인 해제` key, folds it to a chip `봉인 해제 {N} / 3 ▲` (so the last candidate is not
+```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+- on 게이트 순례주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+```
+
+New:
+
+```new
+- on 게이트 순례 주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+```
+
+
+## v3.0 PHASE BGM (User 2026-09-29)
+
+New:
+
+```new
+- AI-generated music the User made for this project is allowed under PRESENTATION §AUDIO PRESENTATION (User 2026-09-29)
+### PHASE BGM (v3.0, User 2026-09-29)
+Every phase plays a recorded track (`dist/ui/assets/bgm/`, provenance in `reports/ASSETS.md`):
+| screen | track |
+| --- | --- |
+| no Run · 첫 점포지원 · the store about to open (NEW STORE PREPARATION) | TITLE |
+| MORNING | MORNING |
+| ORDER | ORDER |
+| SALE | SALE |
+| NIGHT | NIGHT |
+| CLOSING | CLOSE |
+| FINAL | BOSS |
+| the ending of a cleared Run | SUCC |
+| the ending of any failed Run (bankruptcy, the death limit, a failed Final) | FAIL |
+Loop rule: a loop keeps the whole track. It is never a section taken from the middle.
+- Start stays at the first sound, and moves only past a short, clearly different intro (at most 15 s).
+- End stays near the original end (within its last 25 s; BOSS 40 s) and drops only the ending chord, tail or fade.
+- Both cuts sit on a beat.
+- The chosen points per track and how they were found are in `reports/bgm-loops.md`; the live values are in
+`dist/ui/audio.js`.
+Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (User 2026-09-29). A long crossfade is
+never the default fix for a join that does not fit.
+Playback:
+- Every track plays at the same loudness.
+- BGM stays under the decision and result cues, and the existing ducking applies.
+- A phase change fades the old track out.
+- Mute or a hidden page stops the music, and coming back resumes it.
+- A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
+- Playback changes no gameplay state and consumes no Gameplay RNG.
+```
+
+
+## v2.9.11 ORDER STOCK COACH (User 2026-09-29)
+
+New:
+
+```new
+`stock` User 2026-09-29, v2.9.11).
+- `stock` anchors the 창고 summary: the first Day's warehouse already holds the opening stock, which no screen named before
+```
+
+
+## v3.0 WEB BGM 128 kb/s (User 2026-09-29)
+
+New:
+
+```new
+- The web build ships 128 kb/s copies and fetches the next phase's file ahead, so a phase change does not wait on the
+network; the app ships the originals (User 2026-09-29).
+```
+
+
+## v2.9.11 MORNING DAY SIGN FLIP (User 2026-09-29)
+
+New:
+
+```new
+### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
+Arriving at a new Day's MORNING within the session, the ceiling DAY sign's number rolls once: yesterday's number rises
+out as today's rises in.
+- One easing curve for both numbers, so they stay one line apart and never overlap.
+- 300 ms, inside the number's own box, no sound (the MORNING shutter already sounds). It keeps PRESENTATION §GAME FEEL
+BEAT's general contract: at most 320 ms, inside its panel, never blocks input.
+- A reload or a redraw of the same MORNING shows the still sign; reduced motion never starts it.
+- When it lands, the number is plain text again (the DOM ends as it began).
+- Presentation only: it reads the Day and writes nothing.
+- The full-screen DAY transition stays unadopted (it would need a GAME FEEL contract exception).
 ```

@@ -1706,9 +1706,10 @@ test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fas
  const code=audio.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(!/Math\.random/.test(code),'no cue draws a random number');
  assert.ok(!/XMLHttpRequest|new Audio\(|<audio/i.test(code),'no second playback path was introduced');
- // one fetch, of this build's own vendored files, and never of a remote host
- assert.equal((code.match(/fetch\(/g)||[]).length,1,'there is exactly one loader');
- assert.ok(/SAMPLE_DIR='ui\/assets\/audio\/'/.test(code)&&!/https?:\/\//.test(code),'and it only reads this build');
+ // two fetches - the cue samples and, since v3.0 (User 2026-09-29), the phase music - both of this build's own vendored
+ // files, and never of a remote host
+ assert.equal((code.match(/fetch\(/g)||[]).length,2,'one loader for the cue samples, one for the phase music');
+ assert.ok(/SAMPLE_DIR='ui\/assets\/audio\/'/.test(code)&&/BGM_DIR='ui\/assets\/bgm\/'/.test(code)&&!/https?:\/\//.test(code),'and they only read this build');
  assert.ok(/if\(loaded\|\|!ctx/.test(code),'it runs once, and never before there is a context');
  const shp=audio.slice(audio.indexOf('const shape={'),audio.indexOf('function play('));
  const spec=name=>{const i=shp.indexOf('\n '+name+':{');assert.ok(i>0,name+' names its own shape');
@@ -1824,10 +1825,10 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  assert.ok(/shelfEffects\(Presentation\.rows\(/.test(sh),'the row hands every row to one owner');
  assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'a longer line steps down instead of wrapping');
  for(const [c,px] of [['tight',13],['dense',12],['densest',11]])assert.ok(new RegExp('\\.good \\.what span\\.'+c+'\\{font-size:'+px+'px').test(css),c+' is '+px+'px');
- assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소비품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
+ assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소모품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
  // the core is the approved line's own words, not new copy
  const rowsFor=k=>Presentation.rows({[k]:1}).map(r=>r.label).join('');
- assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소비품 효과 2회'),'both cores are cut from the approved lines');
+ assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소모품 효과 2회'),'both cores are cut from the approved lines');
 });
 
 /* UI-Q-v29-32 (v2.9.2 H3, UI_UX §ORDER — WAREHOUSE DISCLOSURE): one crate per SKU, capped cascade, three hits at most */
@@ -2032,7 +2033,7 @@ test('UI-Q-v29-46: the FINAL clash - after the resolution, the carried items, th
  assert.ok(/const left=s\.win\?0:Math\.max\(\.03,1-Math\.max\(0,Math\.min\(1,d\.assault\/d\.bossPower\)\)\),share=\(1-left\)\/n;/.test(cs),'the bar is the resolved ratio split evenly; a failure keeps 3%');
  assert.ok(!/game\.(save|boss|end)|\.rng|localStorage|s\.[a-zA-Z]+=(?!=)/.test(cs),'the scene reads the Run and writes nothing');
  assert.ok(/if\(!last\)at\(t\+C\.lunge\+C\.counter,\(\)=>drain\(from,to,C\.drain\)\)/.test(cs)&&/const edge=s\.win\?Math\.min\(CLASH_EDGE,level\):left;/.test(cs)
-  &&/drain\(level,edge,C\.run,/.test(cs)&&/if\(s\.win\)\{drain\(edge,0,C\.snap,/.test(cs),'the red drops after each counter; the last share is held for the verdict, which hesitates near the bottom');
+  &&/drain\(level,edge,C\.run,/.test(cs)&&/if\(s\.win\)at\(t,\(\)=>drain\(edge,0,C\.snap,/.test(cs)&&/at\(s\.win\?t\+C\.snap:t,/.test(cs),'the red drops after each counter; the last share is held for the verdict, which hesitates near the bottom');
  assert.ok(/const CLASH_EDGE=\.05;/.test(app)&&!/class="mark"/.test(cs),'a clear hesitates at 5%; no amount is marked on the bar');
  assert.ok(/items=m\.items\|\|\[\]/.test(cs)&&/Art\.itemIcon\(items\[i\],22\)/.test(cs)&&/got\.forEach\(\(icon,i\)=>/.test(cs)&&/t\+i\*C\.item/.test(cs),'each member is handed what they carried, one item at a time');
  assert.ok(/el\.addEventListener\('click',finishClash\)/.test(cs)&&/document\.addEventListener\('keydown',clashKey\)/.test(cs),'a tap or a key skips it');
@@ -2515,7 +2516,7 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  assert.ok(/isTrustedRegular\(n\)&&this\.has\('lifetime'\)/.test(shop),'평생 단골제 asks the 단골 owner');
  assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&G\.Adventurer\.isTrustedRegular\(n\)/.test(shop),'so does 프리미엄 멤버십');
  for(const id of ['lifetime','premiumMember','memberBundle'])
-  assert.ok(DATA.relicBy[id].description.startsWith('단골 손님'),id+' says 단골 in its copy');
+  assert.ok(DATA.relicBy[id].description.startsWith('단골'),id+' says 단골 in its copy');
 
  // the compact state: Injury, Fatigue, Loyalty - and no progress bar
  const kit=fn('kitLine');
@@ -3458,9 +3459,10 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const scr of ['morningScreen','orderScreen','saleScreen','nightScreen','closingScreen'])assert.ok(fn(scr).includes('taskLine('),scr+' places the line');
  assert.ok(/\.task-line\{[^}]*font-size:clamp\(12px,3\.3vw,13px\)[^}]*white-space:nowrap/.test(css),'one line, never two at 360 (size follows width, no breakpoint)');
  assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
- // first-ORDER coach: gates -> offer -> quantity -> confirm -> reroll, no gold mark
+ // first-ORDER coach: gates -> stock (v2.9.11) -> offer -> quantity -> confirm -> reroll, no gold mark
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
- assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
+ assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['order-stock','.stock-brief summary'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the six steps in order, on their anchors');
+ assert.ok(order.includes("'창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'"),'the stock line is the approved one (COPY_AUDIT §3-7 STOCK)');
  assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)
@@ -3525,5 +3527,58 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
+
+// v3.0 BGM (User 2026-09-29): a recorded track per phase, played between measured loop points from the decoded buffer.
+// The contract: every music key has its own shipped file, byte-identical to the User's source, the ending splits into
+// success and failure, the loop points stay inside the full-track rule the User set, only BOSS joins with a long
+// crossfade, the recorded music goes through the player's BGM bus, and a failed load still has a synthesised bed.
+test('v3.0 BGM: one recorded track per phase, looped between its measured points',()=>{
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ const phases={prep:'title',foundation:'title',morning:'morning',order:'order',sell:'sale',night:'night',closing:'close',final:'boss','end-win':'succ','end-fail':'fail'};
+ for(const [ph,key] of Object.entries(phases))assert.equal(Sound.trackFor(ph),key,ph+' plays '+key);
+ assert.equal(Sound.trackFor(undefined),'title','no Run plays the title');
+ const src={title:'TITLE_beneath_the_root',morning:'MORNING_the_sunken_courtyard',order:'ORDER_before_the_next_turn',sale:'SALE_copper_key',
+  night:'NIGHT_valley_of_sunken_bells',close:'CLOSE_the_stone_path',boss:'BOSS_beneath_the_stone_floor',succ:'SUCC_step_into_the_canopy',fail:'FAIL_late_shift_at_the_dungeon_gate'};
+ // the web build ships 128 kb/s CBR re-encodes with no tags (User 2026-09-29); the app ships the originals. The first MPEG
+ // frame header says the bitrate: MPEG-1 Layer III, bitrate index 9 = 128 kb/s.
+ const kbps=f=>{const b=fs.readFileSync(path.join(__dirname,'..',f));let i=0;
+  if(b.slice(0,3).toString()==='ID3')i=10+((b[6]&127)<<21|(b[7]&127)<<14|(b[8]&127)<<7|(b[9]&127));
+  while(i<b.length-4&&!(b[i]===0xff&&(b[i+1]&0xe0)===0xe0))i++;
+  return {tagged:b.slice(0,3).toString()==='ID3',v1:(b[i+1]>>3&3)===3,l3:(b[i+1]>>1&3)===1,rate:[0,32,40,48,56,64,80,96,112,128,160,192,224,256,320][b[i+2]>>4]};};
+ assert.deepEqual(Object.keys(Sound.music).sort(),Object.keys(src).sort(),'every music key has a loop entry');
+ for(const [key,name] of Object.entries(src)){
+  assert.ok(fs.existsSync(path.join(__dirname,'..','assets-src/bgm/'+name+'.mp3')),key+': the User\'s original stays in assets-src');
+  const h=kbps('dist/ui/assets/bgm/'+key+'.mp3');
+  assert.ok(h.v1&&h.l3&&h.rate===128&&!h.tagged,key+'.mp3 is the 128 kb/s web copy with no tags ('+JSON.stringify(h)+')');
+  const t=Sound.music[key];
+  assert.ok(t.s>=0&&t.s<=15,key+': Start stays within the first 15 s');
+  assert.ok(t.e>t.s+60,key+': the loop keeps the track, not an excerpt');
+  assert.ok(Number.isFinite(t.lufs),key+': a measured loudness to trim against');
+  assert.equal(!!t.cross,key==='boss',key+(key==='boss'?': BOSS alone crossfades':': short join'));
+  assert.ok(t.cross?t.xf===1:t.xf<=.06,key+': the join fade');}
+ assert.ok(!fs.existsSync(path.join(__dirname,'..','dist/ui/assets/bgm/boss2.mp3')),'BOSS2 was not adopted and does not ship');
+ assert.ok(/out\.connect\(bgmBus\)/.test(audio),'the recorded music goes through the player-owned BGM bus');
+ // the next phase's file is fetched ahead as bytes only - never a second decoded track in memory
+ assert.ok(/bgmStart\(next,buf\);bgmAhead\(next\);/.test(audio)&&/ahead=\{key:k,bytes\}/.test(audio)&&!/bgmAhead[^\n]*bgmDecode/.test(audio),'the next track is fetched ahead, not decoded ahead');
+ assert.ok(/bedStart\(next\)/.test(audio)&&/tunes\[bedFor\[key\]\|\|key\]/.test(audio),'a failed load falls back to the synthesised bed');
+ assert.ok(!/https?:\/\//.test(audio.match(/BGM_DIR='([^']*)'/)[1]),'the music is read from this build, never a host');
+ const app=read('dist/ui/app.js');
+ assert.ok(/s\.phase==='end'\?\(s\.win\?'end-win':'end-fail'\)/.test(app),'the ending hands in success or failure');
+ assert.ok(!/Sound\.sync\([^)]*\?\.phase/.test(app)&&!/Sound\.sync\([^)]*s\.phase/.test(app),'every sync goes through audioPhase()');
+});
+
+// UI_UX §MORNING — DAY SIGN FLIP (User 2026-09-29): a roll inside the sign when a new Day's MORNING is reached in the
+// session - never on a reload or a redraw, never under reduced motion, within the game-feel beat length, and it lands on
+// the plain number.
+test('UI-Q-v29-48: the DAY sign rolls once on arriving at a MORNING, inside the sign, and lands plain',()=>{
+ const f=fn('dayFlip'),r=fn('render'),css=read('dist/ui/ui.css');
+ assert.ok(/arrived=lastPhase!==null&&changed/.test(r)&&/if\(phase==='morning'&&arrived\)dayFlip\(s\.day\)/.test(r),'only on arriving, never on a reload or a redraw');
+ assert.ok(/!motionOK\(\)/.test(f),'reduced motion never starts it');
+ const d=[...f.matchAll(/duration:(\d+)/g)].map(m=>+m[1]);assert.ok(d.length===2&&d.every(x=>x<=320),'within the beat length: '+d);
+ assert.equal(new Set([...f.matchAll(/easing:(\w+)/g)].map(m=>m[1])).size,1,'one curve for both numbers, so they never overlap');
+ assert.ok(/\.daysign b\.flip\{[^}]*overflow:hidden/.test(css),'the roll stays inside the number box');
+ assert.ok(/b\.textContent=now/.test(f)&&/aria-hidden="true"/.test(f),'it lands on the plain number; the outgoing one is hidden from readers');
+ assert.ok(!/Sound\.|sound\(/.test(f)&&!/game\.|s\.[a-z]+=/.test(f),'no sound of its own and nothing written');
+});
 
 console.log(count+' ui guard groups passed');

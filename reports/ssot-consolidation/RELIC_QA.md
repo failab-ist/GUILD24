@@ -192,7 +192,7 @@ Example:
 ### REL-Q-v28-1 — NAME COLLISION CLEANUP
 ### REL-Q26 — PRICE BAND
 ### REL-Q-v28-14 — ROTATION DISPLAY SUPPLY ENGINE
-### REL-Q-v28-15 — LOGISTICS HQ TRIGGER
+### REL-Q-v28-15 — LOGISTICS HQ PER-SALE DISCOUNT (remade User 2026-09-29, v2.9.11)
 ### REL-Q35 — ROTATION LOW-RARITY VIABILITY
 ### REL-Q-v28-4 — RETURN POINTS
 ### REL-Q-v28-6 — LIFETIME
@@ -563,22 +563,22 @@ Use 원정 위험 게시판 / 원정 도시락 코너 / 길드24 원정전문점
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> returning revisit weight +70% from next Day
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale price +10% in every mode, paid by the customer (no HQ fill); no operating-cost modifier
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price (v2.9.11, User 2026-09-29); no operating-cost modifier
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
 the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; from next Day operating cost + overheadBase × 0.10
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect (v2.9.11, User 2026-09-29; was overheadBase × 0.10)
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
 price, store receives the full charged price
 - 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 (피로 회복 +2) and flat +4 on every Hazard of the actual Gate (User 2026-09-24, v2.9.0)
+- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28: was +2 for both and +4)
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
 the Day's first offer generation
-- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
+- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15 (v2.9.11); no shelf life
 bulk 130
 stamp 130
 member 130
@@ -595,22 +595,19 @@ warehouse 130
 If previous Day sales >= 4:
 - each newly generated ORDER offer, of every rarity, gets quantity +1
 If previous Day sales < 4:
-previous Day sales >= 6
--> today every same-SKU 3+ order -25%
+previous Day sales N
 Price 300G.
-- trigger differs from previous Day sales >= 6
-- only the first bulk order of the Day is discounted
 paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
 단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
 Reads the Trusted Regular owner judgement; no second threshold.
 eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wallet +30G
-150% sale of any rarity -> HQ commission = 40% of the charged sale price
+150% sale of any rarity -> HQ commission = 60% of the charged sale price (v2.9.11; was 40%)
 the flat 150% purchase-intent penalty (-0.16) is lifted for the owner
 the 1.5x price burden and Loyalty -3 are unchanged
 Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
 - an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
 - with `야전 정비대` on Field Gear: x1.40 x1.60
-- the flat `원정 도시락 코너` +4 is not multiplied
+- the flat `원정 도시락 코너` +2 is not multiplied
 - the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
 No ORDER offer guarantee and no unknown hazard reveal.
 Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
@@ -630,7 +627,7 @@ Per Food/Drink Item in the Bag:
 - no matching-Counter multiplier
 - a non-Food/Drink Item takes nothing
 - no shelf-life effect and no operating-cost effect
-- Food/Drink ORDER price x1.25
+- Food/Drink ORDER price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 - 즉석식품 코너 native Core-Stat +25%
 - 원정 도시락 코너 adds no native Core-Stat bonus
 - kitchen + fresh24 => ×1.75 native positive Stat
@@ -730,4 +727,42 @@ groupOrder 200
 dawnRecovery 190
 extraOrder 130
 rerollTicket 120
+```
+
+
+## v2.9.11 — Expedition Store Supports (User 2026-09-28)
+
+New:
+
+```new
+- 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read (User 2026-09-28, v2.9.11)
+- 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so (v2.9.11)
+```
+
+
+## v2.9.11 물류 본부계약 remake (User 2026-09-29)
+
+New:
+
+```new
+-> today every ORDER purchase price x (1 - min(30%, 3% x N))
+N = 0 -> no discount; N >= 10 -> -30%
+- the discount needs a quantity, SKU or rarity condition
+- the discount exceeds 30%
+- the internal 45% purchase-price floor is bypassed
+```
+
+
+## v2.9.11 평생 단골제 next-visit weight +100% (User 2026-09-29)
+
+Dropped (the removal itself):
+
+```text
+revisit weight +50% unchanged
+```
+
+New:
+
+```new
+revisit weight +100% (v2.9.11, User 2026-09-29; was +50%)
 ```

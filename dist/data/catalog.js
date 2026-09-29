@@ -30,7 +30,7 @@ item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','�
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:21}),
 item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:8,supply:2}),
 item('dragonramen','불룡볶음면',2,95,190,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:21,supply:3}),
-item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:17,supply:2}),
+item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:17,supply:2}),
 item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:18,mobility:-4,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */
@@ -157,28 +157,61 @@ bosses:[
 facilities:[],
 events:[
 ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 발주 매입가 +15%',{price:1.15}],
-['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','지정 발주 상품 1종 · 1개 발주 시 2개 입고',{double:1}],
-['pilgrimage','게이트 순례주간','성지 순례 깃발이 게이트 거리를 메웠다. 행렬을 따라 길을 바꾸는 모험가도 있다.','오늘 방문객 중 1~3명의 목적지가 다른 열린 게이트로 바뀔 수 있음',{pilgrimage:1}],
+['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','오늘 지정 발주 상품 1종 · 1개 발주 시 2개 입고',{double:1}],
+['pilgrimage','게이트 순례 주간','성지 순례 깃발이 게이트 거리를 메웠다. 행렬을 따라 길을 바꾸는 모험가도 있다.','오늘 방문객 중 1~3명의 목적지가 다른 열린 게이트로 바뀔 수 있음',{pilgrimage:1}],
 ['overflow','몬스터 범람','경비병들이 게이트 앞 울타리를 한 겹 더 둘렀다. 안쪽 울음소리가 오늘따라 가깝다.','오늘 게이트 요구 전력 +12% · 원정 보상 +30%',{danger:1.12,reward:1.3}],
 ['potionPrice','포션 가격 폭등','연금술사 조합의 새 가격표가 붙었다. 어제 붙인 종이 위에.','오늘 포션 매입가 +35%',{potionPrice:1.35}],
-['coldwave','한파','아침부터 진열대 유리가 서렸다. 게이트 쪽 바닥에는 얇은 얼음이 잡혔다.','적용 가능한 게이트에 냉기 위험 추가',{cold:1}],
+['coldwave','한파','아침부터 진열대 유리가 서렸다. 게이트 쪽 바닥에는 얇은 얼음이 잡혔다.','오늘 적용 가능한 게이트에 냉기 위험 추가',{cold:1}],
 ['shortage','포션 공급 중단','배송 마차에서 포션 칸만 비어 있었다.','오늘 포션 발주 등장률 대폭 감소',{potionWeight:0.08}],
 ['rookie','신입 모험가 시즌','길드 등록대 앞에 새 장비 냄새가 난다. 이름표가 아직 빳빳한 모험가들이 줄을 섰다.','오늘 신규 모험가 1명 방문',{rookie:1}],
 ['royal','왕립 기사단 방문','왕립 문장이 박힌 마차가 길드 앞에 섰다. 주변 모험가들이 슬쩍 길을 비킨다.','오늘 신규 모험가 1명 방문 · 레벨·희귀도 상향',{royal:1}],
 ['blackmarket','암시장 상인','개점 전, 뒷문 앞에 주인 없는 상자가 놓여 있었다. 가격표만은 또박또박 붙어 있다.','오늘 희귀 이상 특별 발주 1건 · 매입가 +35%',{blackmarket:1}],
-['audit','본사 재고 감사','본사 감사관은 인사보다 장부를 먼저 찾았다.','누적 폐기 6건 이상이면 총 폐기 수 ×5G 운영비 추가 · 최대 100G',{audit:1}],
+['audit','본사 재고 감사','본사 감사관은 인사보다 장부를 먼저 찾았다.','오늘 누적 폐기 6건 이상이면 운영비 +폐기 수 ×5G · 최대 100G',{audit:1}],
 ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 음식·음료 구매 의사 +20%p',{foodDemand:0.2}],
 ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 방문객 -1',{visitors:-1}],
 ['unknown','미확인 게이트','새벽 순찰대가 지도에 없는 게이트를 발견했다. 아직 이름도 없다.','오늘 고위험·고보상 임시 게이트 +1',{unknown:1}],
 ['halfPrice','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G',{halfPrice:1}],
-['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','적용 가능한 게이트에 독 위험 추가',{poison:1}],
+['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','오늘 적용 가능한 게이트에 독 위험 추가',{poison:1}],
 ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2',{offers:2}],
-['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능',{wallet:1.2}],
+['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전 주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능',{wallet:1.2}],
 ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 보험 상품 구매 의사 +20%p',{medicalDemand:0.2}],
-['wastecover','본사 폐기 유예','유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.','오늘 밤 폐기될 상품에 한하여 유통기한 +1일',{wasteDelay:1}],
+['wastecover','본사 폐기 유예','유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.','오늘 밤 폐기될 상품 유통기한 +1일',{wasteDelay:1}],
 ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2',{visitors:2},.35],
 ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G',{overheadFree:1},.35],
-['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1',{deathLimit:1}]
+['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1',{deathLimit:1}],
+/* EVENT 24~55 (User 2026-09-28, v2.9.11): the third-draft pool, strict superset / subset pairs removed - COPY_AUDIT §13-24~§13-55 */
+['medcorps','길드 의료단 순회','길드 의료단 마차가 게이트 거리를 돈다. 줄 선 모험가들의 붕대가 하나둘 풀린다.','오늘 방문 부상 모험가 · 부상 회복',{healVisitors:1}],
+['medicshift','길드 의무관 당직','의무관이 오늘 밤은 길드에 남는다고 했다. 붕대 상자가 접수대 옆에 놓였다.','오늘 밤 원정 결과 부상 최대 2회 · 무사로',{nightSaves:2}],
+['consolation','길드 위로금',"길드가 다친 조합원에게 위로금 봉투를 돌렸다. 봉투에는 '몸조심'이라고만 적혀 있다.",'오늘 방문 부상 모험가 · 60G 추가 구매 가능',{injuredBudget:60}],
+['guildbonus','길드 특별 수당','길드가 원정 수당을 앞당겨 풀었다. 봉투가 생각보다 얇지는 않다.','오늘 방문 모험가 · 40G 추가 구매 가능',{flatBudget:40}],
+['hqlogistics','본사 물류 지원','본사 트럭이 운임을 받지 않고 돌아갔다. 기사도 이유는 모른다.','오늘 모든 발주 매입가 -15%',{price:.85}],
+['insurebuy','보험 공동 구매','길드 보험 창구가 공동 구매를 돌렸다. 상자마다 할인 도장이 찍혀 있다.','오늘 보험 매입가 -30%',{categoryPrice:{insurance:.7}}],
+['gearaid','본사 원정용품 지원','본사가 원정용품 창고를 정리한다며 장비 상자를 싸게 넘겼다.','오늘 야외장비 매입가 -30%',{categoryPrice:{gear:.7}}],
+['banquet','길드 연회','길드가 연회를 연다며 음식을 챙겨 가라고 했다. 오늘은 한 입이 두 입만큼 든든하다.','오늘 음식의 피로 회복 ×2',{feast:2}],
+['shiftrest','원정 교대 근무','길드가 원정대를 두 조로 나눠 교대로 쉬게 했다. 돌아오는 발걸음이 덜 무겁다.','오늘 원정으로 쌓이는 피로 절반',{outcomeFatigue:.5}],
+['spaday','길드 휴양일','길드가 온천 이용권을 돌렸다. 오늘 오는 손님들은 어깨가 한결 가볍다.','오늘 방문 모험가 · 피로 -8',{arrivalFatigue:8}],
+['regularday','단골의 날','단골손님이 오늘 들르겠다는 쪽지를 친구 편에 보냈다.','오늘 단골 1명 추가 방문',{regularVisit:1}],
+['bounty','길드 현상금','게시판에 현상금 종이가 새로 붙었다. 액수 앞에서 발걸음이 느려진다.','오늘 원정 보상 +20%',{reward:1.2}],
+['omen','마왕의 징조','새벽 하늘이 붉게 물들었다. 게이트 안쪽이 조용해서 더 불안하다.','오늘 게이트 요구 전력 +8%',{danger:1.08}],
+['latedelivery','입고 지연','배송 마차 바퀴가 빠졌다. 오늘 들어온 건 사과 편지 한 장.','오늘 발주 후보 -2',{offers:-2}],
+['drought','가뭄','우물 앞 줄이 길다. 생수 상자 값이 아침마다 오른다.','오늘 음료 매입가 +30%',{categoryPrice:{drink:1.3}}],
+['guildtax','길드 세금 징수','징수원이 영업 시작 전에 왔다. 영수증은 주지 않았다.','오늘 운영비 +50G',{overheadAdd:50}],
+['monsoon','장맛비','비가 그치지 않는다. 우산 든 손님은 봉지를 들 손이 없다.','오늘 음식·음료 구매 의사 -15%p',{foodDemand:-.15}],
+['ordercap','본사 발주 제한',"본사 공문: 오늘은 품목당 두 상자까지만. 이유는 '사정상'.",'오늘 같은 상품 발주 최대 2개',{orderCap:2}],
+['noreroll','포스기 먹통','포스기가 멈췄다. 오늘은 발주서를 바꿔 달라고 전화할 수도 없다.','오늘 발주 교환 불가',{noReroll:1}],
+['pricewatch','가격 단속','길드 감시관이 가격표를 하나씩 들여다보고 있다.','오늘 바가지(150%) 판매 불가',{noOvercharge:1}],
+['collapse','퇴각로 붕괴','게이트 뒤편 샛길이 무너졌다. 오늘은 돌아 나올 길이 하나뿐이다.','오늘 원정 퇴각 확률 -10%p',{escapeCut:.1}],
+['summons','길드 소집령','실력자 한 명이 길드에 급히 불려 갔다. 행선지는 비밀이라고 한다.','오늘 방문 예정이었던 최고 레벨 모험가 대신 다른 모험가 방문',{summons:1}],
+['fridgebreak','냉장고 고장','냉장고 모터가 새벽부터 덜컹거린다. 수리 기사는 내일 온다고 했다.','오늘 음식·음료 재고 유통기한 -1일',{shelfCut:1}],
+['nightmarket','야시장','게이트 거리에 야시장이 열렸다. 사람도 많고 자릿세도 붙었다.','오늘 방문객 +3 · 운영비 +60G',{visitors:3,overheadAdd:60}],
+['draft','원정 징발령','길드가 모험가 몇 명을 징발해 갔다. 남은 사람 몫이 커졌다.','오늘 원정 보상 +40% · 방문객 -1',{reward:1.4,visitors:-1}],
+['clearance','본사 재고 떨이','본사 창고 정리 날이다. 싸게 주지만 고를 수는 없다.','오늘 모든 발주 매입가 -25% · 발주 후보 -3',{price:.75,offers:-3}],
+['eliteorder','정예 토벌령','왕도가 정예 토벌령을 내렸다. 게이트가 험해진 만큼 배우는 것도 많다.','오늘 게이트 요구 전력 +15% · 원정 경험치 +50%',{danger:1.15,xpMult:1.5}],
+['heatwave','폭염','진열대 유리가 뜨겁다. 음료 칸 앞에서만 사람들이 오래 서 있다.','오늘 음료 구매 의사 +25%p · 음료 매입가 +35%',{drinkDemand:.25,categoryPrice:{drink:1.35}}],
+['gateclosed','게이트 임시 폐쇄','경비대가 게이트 하나에 밧줄을 쳤다. 그쪽으로 가려던 모험가들이 다른 줄에 선다.','오늘 열린 게이트 1곳 폐쇄',{closeGate:1}],
+['trainingweek','길드 훈련 주간','교관들이 게이트 앞에 진을 쳤다. 배우는 건 많은데 챙겨 오는 건 적다.','오늘 원정 경험치 +50% · 원정 보상 -30%',{xpMult:1.5,reward:.7}],
+['nearexpiry','유통기한 임박 특가','본사가 날짜 임박 상품을 싸게 돌렸다. 스티커 날짜가 오늘이다.','오늘 모든 발주 매입가 -40% · 오늘 들어온 재고는 오늘까지',{price:.6,sameDayStock:1}],
+['safegates','게이트 안정화 작업','길드 공병대가 밤새 게이트를 다졌다. 안쪽이 조용해진 만큼 챙길 것도 적다.','오늘 모든 게이트 1단계 · 원정 보상 -40%',{tierOne:1,reward:.6}]
 ].map(([id,name,reveal,description,effects,weight=1])=>({id,name,reveal,description,effects,weight})),
 /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Start Contract table is retired and lives at
    archive/inactive/v2_7_franchise/contracts.js. Nothing active read it any more. A stale v8
@@ -239,8 +272,6 @@ G.DATA.bossTuning={
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
  slothBossPower:[200,189,171,149] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.9.1 balance, User 2026-09-25; were 225/210/190/165, 1-3 breaks scaled with WRATH 200 -> 180, 0 breaks set to 200 by decision)
 };
-/* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
-   Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
    the harness without editing production. The value is unchanged by that move. */
@@ -257,7 +288,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,golemCombat:.90,
+G.DATA.balance={wallVisitorChance:.45,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

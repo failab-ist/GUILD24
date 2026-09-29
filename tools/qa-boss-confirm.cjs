@@ -52,7 +52,7 @@ const SPY=`(()=>{const g=Guild24.game;window.__qa={boss:0,draws:0,cues:[],locks:
    await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
    await p.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
    for(let i=0;i<800;i++){if(await p.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;await p.evaluate(`(${STEP})()`);}
-   await p.evaluate(`(()=>{const g=Guild24.game,s=g.run;s.day=30;g.morning();if(s.event)s.eventSeen=true;s.bossReveal=s.bossReveal||{};
+   await p.evaluate(`(()=>{const g=Guild24.game,s=g.run;s.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();if(s.event)s.eventSeen=true;s.bossReveal=s.bossReveal||{};
     for(const k of ['d0Seen','identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])s.bossReveal[k]=true;
     if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;
     for(const it of DATA.items.filter(x=>x.sell>0).slice(0,40))s.inventory.push({id:'qa-'+it.id,item:it.id,cost:Math.round(it.sell*.5),expires:null});

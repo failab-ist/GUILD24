@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/RELIC_v2.8.0-patch.md,history/RELIC_v2.7.0.md,history/RELIC_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/RELIC.md
@@ -181,6 +181,7 @@ Current explicit D30 no-effect exclusions:
 - 왕도 프리미엄 인증 (royalCert)
 - 지역 거점점 계약 (hub)
 - 운영 효율 매뉴얼 (efficiency)
+- 응급 처치대 (firstAidDesk) (v2.9.11: no SALE arrival on D30)
 
 All other current supports are D30-eligible when they satisfy ordinary acquisition eligibility.
 
@@ -329,10 +330,10 @@ Keystone:
 
 ## POOL ARCHITECTURE
 
-total=30
+total=32 (User 2026-09-28, v2.9.11: 야전 들것 and 응급 처치대 joined the Expedition line)
 
-Foundation=12
-- 6 Primary Build × 2
+Foundation=13
+- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3)
 - early direction setters
 - D0 eligible
 
@@ -340,8 +341,8 @@ Hybrid=8
 - connects 2 Build axes
 - pivot/flex value
 
-Keystone=6
-- 1 per Primary Build
+Keystone=7
+- 1 per Primary Build, plus 응급 처치대 (Expedition holds 2)
 - build engine/completion piece
 - eligible from D10
 
@@ -519,7 +520,7 @@ identityPreReveal=NO
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약
 tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; Rare+ sale price +10% in every mode, paid by the customer from their own Wallet (no HQ fill); no operating-cost modifier
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store 10% of the charged price on top, in every mode (User 2026-09-29, v2.9.11; was +10% paid by the customer); no operating-cost modifier
 
 6. 길드 보증 진열대
 tag=Premium
@@ -541,6 +542,13 @@ tag=Expedition
 - 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
 - it changes no ORDER offer weight and no offer quantity
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
+
+31. 야전 들것 (User 2026-09-28, v2.9.11)
+tag=Expedition
+- 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
+- it applies wherever preparation is read: SALE outlook, NIGHT resolution and the D30 Final (so it is D30-eligible)
+- 악바리's injured 투력 bonus replaces the penalty as before; the support changes nothing for that Trait
+- measured (reports/v2.9.11-drafts.md §C, owned from D10, upper bound): D30 19.6 → 21.1%, clear 13.5 → 14.7%
 
 ### FRESH — Foundation
 9. 대형 냉장고
@@ -575,10 +583,10 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
+no operating-cost effect (User 2026-09-29, v2.9.11; was overheadBase × 0.10 from the next Day)
 ```
 
-Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).` (User 2026-09-24, v2.9.0; operating cost clause removed v2.9.11)
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 newCombatSystem=NO
@@ -659,14 +667,15 @@ tags=[Fresh,Expedition]
 `원정 도시락 코너`:
 
 ```text
-per Food/Drink Item in the Bag:
-  Supply +2 (피로 회복 +2)
-  +4 defence on every Hazard of the Gate the adventurer actually goes to
+per Food/Drink Item in the Bag (User 2026-09-28, v2.9.11; was Supply +2 for both and +4):
+  Food:  Supply +2 (피로 회복 +2)
+  Drink: Supply +1 (피로 회복 +1)
+  +2 defence on every Hazard of the Gate the adventurer actually goes to
 ```
 
-Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28)
 
-The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
+The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 
 18. 냉장 유통 계약
@@ -702,7 +711,8 @@ effect=Rare+ expedition-response items gain premium-economy viability
 20. 새벽 회수 계약
 tags=[Fresh,Rotation]
 - 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
-  being wasted (it is not counted as waste)
+  being wasted (it is not counted as waste); it is taken back that Night, with the discard (ITEM §SHELF LIFE, v2.9.11),
+  so the refund is on that Day's receipt
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
 - it discounts no ORDER
 
@@ -712,10 +722,10 @@ tag=Rotation
 
 `DIRECTOR DOCUMENT BASELINE`
 
-물류 본부계약:
+물류 본부계약 (remade User 2026-09-29, v2.9.11; was previous Day sales >= 6 -> same-SKU 3+ orders -25%):
     Price = 300G
-    trigger = previous Day sales >= 6
-    effect = today every same-SKU 3+ order purchase price -25% (not only the first)
+    effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
+    no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
 
 The internal purchase-price floor (45% of list) is unchanged.
 
@@ -730,7 +740,7 @@ snowballCap=required
     Price = 310G
     단골 (Trusted Regular, Loyalty >= 51) survival condition
     NPC Wallet +50G
-    next-visit weight +50%
+    next-visit weight +100% (User 2026-09-29, v2.9.11; was +50%)
 
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 
@@ -743,7 +753,7 @@ refusal/inventoryRisk=REMAINS
 
 왕도 프리미엄 인증:
     Price = 320G
-    HQ commission = 40% of the charged (150%) sale price
+    HQ commission = 60% of the charged (150%) sale price (User 2026-09-28, v2.9.11; was 40%)
     the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
     the 1.5x price burden and Loyalty -3 are unchanged
 
@@ -756,9 +766,25 @@ tag=Expedition
     Price = 290G
 
 - an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat Item does not qualify; (User 2026-09-24, v2.9.0)): its Hazard Counter values x1.60
-- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
+- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
+
+32. 응급 처치대 (User 2026-09-28, v2.9.11)
+tag=Expedition
+
+`DIRECTOR DOCUMENT BASELINE`
+
+응급 처치대:
+    Price = 300G
+
+- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn after it;
+  only for an injured arrival and only while owned)
+- the SALE state strip says so once (COPY_AUDIT §9-4b)
+- the Expedition line holds two Keystones (원정 전문 인증 and this one), User 2026-09-28
+- D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
+- measured against the six Keystones (reports/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
+  clear 13.5 → 16.8% - at or just above the strongest Keystones (물류 본부계약, 원정 전문 인증: D30 24.0%)
 
 25. 24시간 신선체계
 tag=Fresh
@@ -770,7 +796,7 @@ notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 
 ```text
 no shelf-life effect and no operating-cost effect
-Food/Drink ORDER (purchase) price x1.25
+Food/Drink ORDER (purchase) price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 Food/Drink positive native Core-Stat contribution +50%
 Supply (피로 회복) unchanged
 Hazard Counter unchanged
@@ -778,7 +804,7 @@ Insurance unchanged
 RiskReward penalty unchanged
 ```
 
-Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
 
 26. 지역 거점점 계약
 tag=Customer
@@ -951,7 +977,7 @@ priceFixedForWindow=YES
 relative direction:
 Foundation < Hybrid < Keystone; Utility is priced as a cheap support (User decision 2026-09-23)
 
-The following 20 Store Support base prices are the approved baseline.
+The following 21 Store Support base prices are the approved baseline.
 
 | ID | Store Support | Base Price |
 |---|---|---:|
@@ -975,8 +1001,9 @@ The following 20 Store Support base prices are the approved baseline.
 | warehouse | 후방 창고 증설 | 130G |
 | extraOrder | 본사 추가발주권 | 130G |
 | rerollTicket | 발주 교환권 | 120G |
+| fieldStretcher | 야전 들것 | 80G |
 
-The other 10 active support prices are exact in their Store Support entries above.
+The other 11 active support prices are exact in their Store Support entries above.
 
 Price should follow actual ROI, not label alone.
 

@@ -993,8 +993,9 @@ D29 = 23.30
 
 ```new
 Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.1 balance).
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss; v2.9.2 third pass, User 2026-09-26: DAY 11~20 climb at 1.10 per Day — the NPC-growth check of GAME_VISION's Run Progression Arc — DAY 1~10 unchanged; DAY 21+ returns to the existing 0.80 slope while keeping the offset accumulated by D20, so its absolute Day term is higher than before):
-= min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss; v2.9.2 third pass, User 2026-09-26: DAY 11~20 climb at 1.10 per Day — the NPC-growth check of GAME_VISION's Run Progression Arc — DAY 1~10 unchanged; DAY 21+ returns to the existing 0.80 slope while keeping the offset accumulated by D20, so its absolute Day term is higher than before;
+v2.9.11, User 2026-09-28: early slope 1.50 → 1.40 — too few healthy adventurers were ready for D11~20 (reports/growth-injury-v2911.md); then 1.40 → 1.45 after the combined v2.9.11 re-measure, Boss Power kept (reports/remeasure-v2911.md §8)):
+= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
 D9  = 13.50
 D10 = 14.30
 D12 = 16.50

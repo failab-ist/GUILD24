@@ -19,7 +19,7 @@ class Game{
  const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  /* 알뜰 금고 is paid by morningReset, which DAY 1 also runs once the DAY 0 pick is made */
  const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
- this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','golem','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
@@ -58,13 +58,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  expectedOperatingCost({day=this.run.day,facilities=this.run.dayFacilities,event=this.run.event}={}){const s=this.run,ev=event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
-  const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0)+(ev.overheadAdd||0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
   const base=this.overheadBase(day),hub=facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
-  /* 즉석식품 코너 costs the same way as hub: a share of overheadBase alone, from the next Day. */
-  const kitchen=facilities?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0;
-  return ev.overheadFree?0:Math.round((base+hub+kitchen+extras)/10)*10;}
+  return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
     next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */
  tomorrowOperatingCost(){const s=this.run;return this.expectedOperatingCost({day:s.day+1,facilities:[...s.facilities],event:null});}
@@ -73,12 +71,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     Relic question and the two never answer for each other. */
  wears(id){return Object.values(this.run.loadout||{}).includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
- stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.day+it.days+G.Relics.shelf(this,it),/* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */cost:cost??it.buy});}
- /* COPY_WORLD_VOICE 9: rarely the visitor is a Rare Reference identity instead of an ordinary
-    one. Only the name changes - no stat, trait, rarity or reward differs, so the reference is
-    the whole easter egg and a player who misses it loses nothing. The roll is always drawn so
-    the draw count of creating a customer does not depend on who is left; a given identity is
-    offered once per Run, dead or alive, because it is a fixed identity rather than a name. */
+ stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.event?.effects.sameDayStock&&['order','final'].includes(this.run.phase)?this.run.day+1:this.run.day+it.days+G.Relics.shelf(this,it),/* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */cost:cost??it.buy});}
  /* The Gate a customer actually walks into. A Deep nominee keeps the base Gate's Family, Tier
     and Hazard set - only the required Combat Power rises, by one global factor - and this is the
     single object the forecast and the night result both read, so what the player was shown is
@@ -128,9 +121,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   n.outlook=this.outlookFor(n);
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
  addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:this.wears('honorFrame'),levelBonus:this.wears('trainingSign')&&this.rng.next()<D.decorationParams.trainingSign.chance?D.decorationParams.trainingSign.levelBonus:0,...opts});
-  const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));
-  if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
-  else for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
+  /* The Rare Reference roll is gone (v2.9.11, User 2026-09-28: removed before a paid release); its one draw stays, so a
+     seeded Run keeps the stream it had whenever that roll missed. */
+  this.rng.next();
+  for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
   s.npcs.push(n);return n;}
  /* v2.9.0 (User 2026-09-24): no Gate requires Supply - the Supply Burden modifier is gone. The one
     draw it used to make is kept as a dead draw so every seeded stream and fixture stays identical. */
@@ -155,6 +149,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.pilgrimage)return s.dungeons.length>=2&&s.expectedVisitors>=3;
   if(fx.audit)return s.stats.waste>=6;
   if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22;
+  /* EVENT 24~55 (v2.9.11): an Event whose subject is absent today is out of the pool (NO FALSE ATTRIBUTION) */
+  const ready=s.npcs.filter(n=>n.alive&&!n.recovery);
+  if(fx.healVisitors||fx.injuredBudget)return ready.some(n=>n.injury===1);
+  if(fx.regularVisit)return ready.some(n=>n.introduced&&G.Adventurer.isTrustedRegular(n));
+  if(fx.summons)return ready.length>=2;
+  if(fx.closeGate)return s.dungeons.filter(d=>!d.temporary).length>=2;
+  if(fx.shelfCut)return s.inventory.some(x=>x.expires!==null&&['food','drink'].includes(D.itemBy[x.item].category));
   return true;}
  /* EVENT §DEEP EXPEDITION DAY EXCLUSION: a Day this Run actually holds a 심층원정 produces no
     Normal Event, whether or not the player later nominates anyone. rollEvent draws before it
@@ -162,8 +163,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     compensated for the days this removes - Stage 9 measures the real count. */
  eventEligibleDay(day){return day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day);}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
- rollEvent(){const s=this.run,fired=this.rng.next()<.35;if(!this.eventEligibleDay(s.day)||!fired)return null;
-  const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
+ /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
+    Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),
+    so rolling alone records nothing; a save from before the log reads as an empty one. */
+ rollEvent(){const s=this.run,fired=this.rng.next()<.40;if(!this.eventEligibleDay(s.day)||!fired)return null;
+  const seen=s.eventLog||[],pool=D.events.filter(e=>!seen.includes(e.id)&&this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
  /* The Morning is an orchestration of six things that each belong to a different system, and
     it had them all inline: the Day's state reset, the Gates, the Final state, how many people
     are coming, the Event, and who actually arrives. Each is a method below now, in the order
@@ -182,19 +186,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.save();
  }
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
-    Day's flags, what spoiled overnight, and each adventurer's own per-Day state. */
+    Day's flags, and each adventurer's own per-Day state (spoiled stock left the night before - nightDiscard). */
  morningReset(){const s=this.run;
   s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};if(this.wears('thriftSafe')){const g=D.decorationParams.thriftSafe.dailyGold;s.money+=g;s.daily.safeGold=g;}s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.halfPriceUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
-  let expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);
-  /* 새벽 회수 계약: Food/Drink whose shelf life ends is taken back at 50% of what it cost instead
-     of being wasted - it leaves the shelf all the same, but it is not waste. */
-  if(this.has('dawnRecovery')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round((Number(x.cost)||0)*D.relicParams.dawnRecovery.refundRate),0);
-   s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
-  s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);
-  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
-  s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
+  /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11): nothing is discarded in the morning any more - see nightDiscard(). */
   /* v2.9.0 rest recovery (DUNGEON_HAZARD §SUPPLY -> FATIGUE 6): a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
-  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
+  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;n.feast=0;});
  }
  /* The milestone window, the Final state, and today's Gates. Returns the Family id pool the
     Event's unknown Gate draws from, or null on the Final Day, which has no more Morning left. */
@@ -230,15 +227,20 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
  /* Today's Event, and everything it does to a Day that is otherwise already decided. */
  morningEvent(ids){const s=this.run;
-  s.event=this.rollEvent();s.eventSeen=!s.event;s.pilgrimage=0;const ev=s.event?.effects||{};
+  s.event=this.rollEvent();s.eventSeen=!s.event;if(s.event)(s.eventLog??=[]).push(s.event.id);s.pilgrimage=0;const ev=s.event?.effects||{};
   if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
+  /* EVENT 52 게이트 임시 폐쇄 / 55 게이트 안정화 작업 (v2.9.11): before the day's multipliers, so they read the final Gates */
+  if(ev.closeGate){const open=s.dungeons.map((d,i)=>i).filter(i=>!s.dungeons[i].temporary);if(open.length>=2)s.dungeons.splice(this.rng.pick(open),1);}
+  if(ev.tierOne)s.dungeons=s.dungeons.map(d=>d.temporary||d.tier===1?d:this.makeDungeon(d.family,1));
   s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
   /* EVENT §20 본사 폐기 유예 (User 2026-09-28, v2.9.10 quick patch; was a refund of the overnight waste's cost, which the
-     player never saw and could not act on): stock whose last sale day is today - the shelf's `오늘까지`, discarded at the
-     next morning - gets one more day. Only that stock; nothing bought later today is touched. */
+     player never saw and could not act on): stock whose last sale day is today - the shelf's `오늘까지`, discarded tonight
+     (nightDiscard, v2.9.11) - gets one more day. Only that stock; nothing bought later today is touched. */
   if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=1;
+  /* EVENT 46 냉장고 고장 (v2.9.11): Food/Drink shelf life -1 Day; what becomes due today leaves tonight as usual */
+  if(ev.shelfCut)for(const st of s.inventory)if(st.expires!==null&&['food','drink'].includes(D.itemBy[st.item].category))st.expires=Math.max(s.day,st.expires-1);
   if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
@@ -267,6 +269,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.generateOffers();
   let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
   let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
+  /* EVENT 45 길드 소집령 (v2.9.11): the highest-Level adventurer does not come today; the headcount is drawn from the rest */
+  if(ev.summons&&available.length>=2){const top=available.reduce((a,b)=>b.level>a.level?b:a);available=available.filter(n=>n!==top);}
   /* SA-Q45. A force-seated newcomer takes an EXISTING slot, so they must not create one. They
      are a body in `available`, and on a Day whose roster is smaller than the intake the slot
      count is that roster - so counting them would let the Day fill one more slot than it could
@@ -290,6 +294,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      on recovery days) would seat nobody - the newcomer is then that Day's only visitor. The one case the Event
      adds a visitor, on a Day that would otherwise have none. */
   else if((ev.rookie||ev.royal)&&arrival&&!selected.length)selected.push(arrival);
+  /* EVENT 34 단골의 날 (v2.9.11): one trusted regular not already coming joins today's visitors */
+  if(ev.regularVisit){const reg=available.filter(n=>!selected.includes(n)&&n.introduced&&G.Adventurer.isTrustedRegular(n));if(reg.length)selected.push(this.rng.pick(reg));}
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
   for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49 re-measure amendment: visit income
     narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the
@@ -304,7 +310,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
    if(selected.some(n=>n.claimedDestination===g))continue;
    const movable=selected.filter(n=>n.destination===n.claimedDestination&&selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1);
    if(!movable.length)continue;const n=this.rng.pick(movable);n.destination=n.claimedDestination=g;}
-  /* EVENT §03 게이트 순례주간: "actual destination changes to a different currently open Gate"
+  /* EVENT §03 게이트 순례 주간: "actual destination changes to a different currently open Gate"
      reads against the expected/reported destination (claimedDestination) - the one thing the
      Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may
      already have secretly diverted. Filtering on n.destination let a 거짓말쟁이's own reroute
@@ -346,7 +352,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     Final transfer each read their own price and are untouched. */
  /* ECONOMY_ORDER §ORDER OFFER QUANTITY (User 2026-09-27, v2.9.7): Common / Uncommon 2~4, Rare 1~3 (it was 1), Epic /
     Legendary 1 - the Rare mid-Run Counters could not be stocked for more than one customer. */
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)),quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)),quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
  rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it)));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
@@ -381,16 +387,22 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;if(n.certGoldDay!=null&&n.certGoldDay<this.run.day){n.money+=D.relicParams.expeditionCert.nextVisitGold;n.certGoldDay=null;}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
     door. The roll is drawn only while the Decoration is worn and only for an injured arrival. */
- n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}const ev=this.run.event?.effects||{};
+ n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}
+ /* RELIC 응급 처치대 (User 2026-09-28, v2.9.11): the same door heal as the 의무실 현판, at 20%, drawn only for an injured arrival
+    and only while the support is owned (after the plaque, so one heal is never rolled twice). */
+ if(n.injury===1&&this.has('firstAidDesk')&&this.rng.next()<D.relicParams.firstAidDesk.healChance){n.injury=0;n.status='건강';n.healedBy='firstAidDesk';this.run.daily.firstAidHeals=(this.run.daily.firstAidHeals||0)+1;}
+ /* EVENT 24 길드 의료단 순회 / 33 길드 휴양일 / 31 길드 연회 (v2.9.11): at the door, from today's Event */
+ {const dv=this.run.event?.effects||{};
+  if(n.injury===1&&dv.healVisitors){n.injury=0;n.status='건강';n.healedBy='medcorps';}
+  if(dv.arrivalFatigue)n.fatigue=Math.max(0,(n.fatigue||0)-dv.arrivalFatigue);
+  n.feast=dv.feast||0;}const ev=this.run.event?.effects||{};
   /* META §sign — 원정 지원금 간판 (User 2026-09-26, v2.9.7): the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
-  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)));const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
+  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0);const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
- /* 희귀상품 입고 계약: a Rare+ Item's sale price is 10% higher in every mode. The customer pays and
-    is judged on it out of their own Wallet - HQ fills nothing (User decision 2026-09-24). */
- const list=Math.round(it.sell*(this.has('rareContract')&&it.rarity>=2?D.relicParams.rareContract.saleMult:1));
+ const list=it.sell;
  const price=Math.round(list*rule.mult),d=this.gateFor(n)||this.run.dungeons[0],p=it.effects;
  /* What the customer weighs the offer against. Identical to `price` for 할인 and 바가지; for
     정가 it is the lower judged price the approved threshold sets. It never changes what is
@@ -419,6 +431,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  if(this.has('firstVisitCoupon')&&n.newToday&&n.visits<=1)need+=D.relicParams.firstVisitCoupon.intentBonus;
  if(this.run.event?.effects.foodDemand&&['food','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
  if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
+ if(this.run.event?.effects.drinkDemand&&it.category==='drink')need+=this.run.event.effects.drinkDemand;
  /* 길드 보증 진열대 reads the CHARGED price, both for the threshold and for the 20%. */
  const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
@@ -449,6 +462,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  sell(stockId,mode='full'){
  const s=this.run;if(s.phase!=='sell')return false;const n=this.current();if(!n)throw Error('현재 손님이 없습니다.');if(n.pack.length>=G.Adventurer.slots(n))throw Error('원정 소모품 슬롯이 가득 찼습니다.');const selectedUnit=s.inventory.find(x=>x.id===stockId);const earliest=selectedUnit?s.inventory.filter(x=>x.item===selectedUnit.item).sort((a,b)=>(a.expires??Infinity)-(b.expires??Infinity))[0]:null;const i=s.inventory.findIndex(x=>x===earliest);if(i<0)throw Error('재고가 없습니다.');const st=s.inventory[i],it=D.itemBy[st.item],key=it.id+':'+mode;
  if(n.refused.includes(key))throw Error('이미 거절한 조건입니다. 다른 가격이나 상품을 골라 주세요.');
+ /* EVENT 44 가격 단속 (v2.9.11): 바가지 is closed today - the price key is disabled; a scripted call records it as closed and sells nothing */
+ if(mode==='overcharge'&&s.event?.effects.noOvercharge){if(!n.refused.includes(key))n.refused.push(key);return false;}
  const intent=this.interest(n,it,mode);if(n.money+(n.eventBudget||0)<intent.debit)throw Error('손님의 소지금이 부족합니다.');
  const accepted=this.rng.next()<intent.chance;
  if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
@@ -463,6 +478,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
  if(s.event?.effects.halfPrice&&mode==='half'&&!s.halfPriceUsed){s.money+=D.balance.halfPriceSupport;s.daily.subsidy+=D.balance.halfPriceSupport;s.halfPriceUsed=true;}
  let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
+ /* 희귀상품 입고 계약 (v2.9.11, User 2026-09-29): a Rare+ sale is charged at the ordinary price and HQ pays the store 10%
+    of the charged price on top - the customer is never asked for it (it was a +10% the customer paid). */
+ if(this.has('rareContract')&&it.rarity>=2)commission+=Math.round(intent.price*D.relicParams.rareContract.hqBonus);
  if(this.has('groupOrder')&&s.daily.sales>=D.relicParams.groupOrder.commissionFrom)commission+=D.relicParams.groupOrder.commission;
  /* 원정 전문 인증: the buyer of a Counter for their own Gate collects +50G on the next visit, once per purchase Day */
  if(this.has('expeditionCert')&&G.Relics.directCounter(it,(this.gateFor(n)||s.dungeons[0]).hazards))n.certGoldDay=s.day;s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
@@ -479,6 +497,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
  validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))food+=q;}
+ const cap=s.event?.effects.orderCap;if(cap){const per={};for(const [i,q]of Object.entries(cart)){const it=s.offers[i]?.item;if(it)per[it]=(per[it]||0)+q;}if(Object.values(per).some(v=>v>cap))throw Error('오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.');}
  if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
@@ -486,7 +505,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     the next one - `supply` (the offer's own count), `money` (with the Gold still missing for one more) or `space` (warehouse).
     The reason is what the blocked dial control says when tapped (COPY_AUDIT §3-9); maxQuantity keeps its old contract. */
  quantityLimit(i){const s=this.run,o=s.offers[i];let q=0,reason='supply',lack=0;
-  for(let n=1;n<=o.quantity;n++){const cart={...(s.cart||{}),[i]:n};try{this.validateCart(cart);q=n;}catch(e){reason=e.message==='발주 자금이 부족합니다.'?'money':'space';if(reason==='money')lack=this.cartTotal(cart)-s.money;break;}}
+  for(let n=1;n<=o.quantity;n++){const cart={...(s.cart||{}),[i]:n};try{this.validateCart(cart);q=n;}catch(e){reason=e.message==='발주 자금이 부족합니다.'?'money':/까지만 발주/.test(e.message)?'cap':'space';if(reason==='money')lack=this.cartTotal(cart)-s.money;break;}}
   return {max:q,reason,lack};}
  maxQuantity(i){return this.quantityLimit(i).max;}
  confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?2:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
@@ -494,6 +513,18 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase
     today still adds +1 on departure; a visit without one adds nothing. Survival is +1. */
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
+ /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11; was the next morning): stock whose last sale day is today - the shelf's
+    `오늘까지` - and that did not sell is discarded tonight, when SALE closes, so it lands on today's receipt as `오늘 폐기`.
+    A save from an earlier build may still hold stock past its day; it goes with tonight's. */
+ nightDiscard(){const s=this.run;
+  let expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day+1);
+  /* 새벽 회수 계약: Food/Drink whose shelf life ends is taken back at 50% of what it cost instead
+     of being wasted - it leaves the shelf all the same, but it is not waste. */
+  if(this.has('dawnRecovery')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round((Number(x.cost)||0)*D.relicParams.dawnRecovery.refundRate),0);
+   s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
+  s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);
+  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
+  s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
  night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden, User 2026-09-25, v2.9.1 balance): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
@@ -517,6 +548,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,1);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}if(G.Adventurer.isTrustedRegular(n)&&this.has('lifetime'))n.money+=D.relicParams.lifetime.goldBonus;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+ this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }

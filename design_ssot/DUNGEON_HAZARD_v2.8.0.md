@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_HAZARD_v2.8.0-patch.md,history/DUNGEON_HAZARD_v2.7.0.md,history/DUNGEON_HAZARD_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_HAZARD.md
@@ -321,11 +321,12 @@ Rules:
 
 ## GATE POWER — LATE-DAY SLOPE
 
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss; v2.9.2 third pass, User 2026-09-26: DAY 11~20 climb at 1.10 per Day — the NPC-growth check of GAME_VISION's Run Progression Arc — DAY 1~10 unchanged; DAY 21+ returns to the existing 0.80 slope while keeping the offset accumulated by D20, so its absolute Day term is higher than before):
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss; v2.9.2 third pass, User 2026-09-26: DAY 11~20 climb at 1.10 per Day — the NPC-growth check of GAME_VISION's Run Progression Arc — DAY 1~10 unchanged; DAY 21+ returns to the existing 0.80 slope while keeping the offset accumulated by D20, so its absolute Day term is higher than before;
+v2.9.11, User 2026-09-28: early slope 1.50 → 1.40 — too few healthy adventurers were ready for D11~20 (reports/growth-injury-v2911.md); then 1.40 → 1.45 after the combined v2.9.11 re-measure, Boss Power kept (reports/remeasure-v2911.md §8)):
 
 ```text
 Day term
-= min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
+= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
 ```
 
 Full required Power (Source-exact):

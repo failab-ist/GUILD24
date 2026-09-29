@@ -37,7 +37,7 @@ FACES=['Mulmaru','MulmaruMono']
 # copied at native size; nothing is ever enlarged.
 ART=os.path.join(ROOT,'GUILD24_NPC_PRODUCTION')
 NPC=os.path.join(ROOT,'dist','ui','assets','npc')
-CAP={'normal':492,'easter':492,'boss':1280}
+CAP={'normal':492,'boss':1280}
 QUALITY=90
 # encoder effort: 6 costs 5.1s an image for 4% fewer bytes than 4, which costs 0.08s.
 # 64x the build time is not worth 4% on a 12MB set, so the whole drop encodes in seconds.
@@ -65,6 +65,24 @@ AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set
        ('hover','soft'),         # utility navigation, deliberately the quietest file here
        ('select','key'),         # ordinary pick
        ('send','door')]          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
+
+# v3.0 BGM (User 2026-09-29): the Gemini (Lyria) tracks the User generated for this project, kept untouched under
+# assets-src/bgm/. dist is the web build, so it gets 128 kb/s re-encodes under the ROLE name (User 2026-09-29: 33 MB -> 22 MB
+# for the web; the app ships the originals). LAME's gapless header keeps the decoded audio sample-aligned with the original
+# (0-sample shift and the same length, measured in ffmpeg and Chromium), so the loop points in dist/ui/audio.js - measured
+# on the originals by tools/bgm-loop.py (reports/bgm-loops.md) - hold. BOSS2 was evaluated and not adopted, so it never
+# reaches dist.
+BGM_SRC=os.path.join(ROOT,'assets-src','bgm')
+BGM_OUT=os.path.join(ROOT,'dist','ui','assets','bgm')
+BGM=[('TITLE_beneath_the_root','title'),                   # no Run / 첫 점포지원 / the store about to open
+     ('MORNING_the_sunken_courtyard','morning'),
+     ('ORDER_before_the_next_turn','order'),
+     ('SALE_copper_key','sale'),
+     ('NIGHT_valley_of_sunken_bells','night'),
+     ('CLOSE_the_stone_path','close'),
+     ('BOSS_beneath_the_stone_floor','boss'),               # FINAL
+     ('SUCC_step_into_the_canopy','succ'),                  # the ending, a cleared Run
+     ('FAIL_late_shift_at_the_dungeon_gate','fail')]        # the ending, any failed Run
 
 def glyphs():
     chars=set()
@@ -122,6 +140,7 @@ def main():
     shutil.copyfile(os.path.join(ROOT,'node_modules','animejs','LICENSE.md'),os.path.join(VEN,'anime.LICENSE.md'))
     print(f'  anime.umd.min.js  {os.path.getsize(anime)//1024}K')
     audio()
+    bgm()
     portraits()
 
 def audio():
@@ -142,6 +161,25 @@ def audio():
     shutil.copyfile(os.path.join(SFX,'LICENSE-AUDIO'),os.path.join(AUD,'LICENSE-CC0.txt'))
     print(f'  audio  {len(AUDIO)} cues  {total//1024}K')
 
+def bgm():
+    """Re-encode the adopted BGM sources out of assets-src/bgm/ for the web build: MP3 128 kb/s CBR, 44.1 kHz stereo, no
+    tags. Nothing is trimmed - the loop is played from the decoded buffer. The app build ships the originals instead."""
+    import subprocess, imageio_ffmpeg
+    ff=imageio_ffmpeg.get_ffmpeg_exe()
+    os.makedirs(BGM_OUT,exist_ok=True)
+    total=0
+    for src_name,role in BGM:
+        src=os.path.join(BGM_SRC,src_name+'.mp3')
+        if not os.path.exists(src):
+            sys.exit('assets-src/bgm is missing %s.mp3'%src_name)
+        dst=os.path.join(BGM_OUT,role+'.mp3')
+        # no ID3 tag (the gapless LAME header stays). The source's C2PA manifest is bound to the source bytes and cannot
+        # carry over; the web copies go without it and the AI disclosure rides the credits (User 2026-09-29, ASSETS.md)
+        subprocess.run([ff,'-v','error','-y','-i',src,'-map_metadata','-1','-id3v2_version','0','-c:a','libmp3lame',
+                        '-b:a','128k','-ar','44100','-ac','2',dst],check=True)
+        total+=os.path.getsize(dst)
+    print(f'  bgm  {len(BGM)} tracks  {total//1024}K (128 kb/s)')
+
 def portraits():
     """Derive the shipped portrait set. Source filenames are the binding, so the output
     keeps them; only the container changes."""
@@ -157,16 +195,12 @@ def portraits():
         for f in sorted(os.listdir(os.path.join(ART,'02_NORMAL_WORK',g))):
             if f.endswith('.png'):jobs.append(('normal',os.path.join(ART,'02_NORMAL_WORK',g,f),
                                                os.path.join(NPC,'normal',g,f[:-4]+'.webp')))
-    for f in sorted(os.listdir(os.path.join(ART,'03_EASTER'))):
-        # the shipped path stays ASCII: the name lives in the name pool, not in a URL
-        if f.endswith('.png'):jobs.append(('easter',os.path.join(ART,'03_EASTER',f),
-                                           os.path.join(NPC,'easter',f.split('_')[0]+'.webp')))
     for f in sorted(os.listdir(os.path.join(ART,'04_BOSS'))):
         if f.endswith('.png'):jobs.append(('boss',os.path.join(ART,'04_BOSS',f),
                                            os.path.join(NPC,'boss',f[:-4]+'.webp')))
     # Regenerate wholly, but only what this step owns: dist/ui/assets/npc also holds
     # hand-kept placeholder art that Scene.npcPool still draws from.
-    for sub in ('normal','easter','boss'):
+    for sub in ('normal','easter','boss'):  # 'easter' only clears the folder the removed Rare Reference art (v2.9.11) left
         if os.path.isdir(os.path.join(NPC,sub)):shutil.rmtree(os.path.join(NPC,sub))
     src_bytes=out_bytes=0;shrunk=0
     for kind,src,dst in jobs:
@@ -188,7 +222,6 @@ MANIFEST='''(function(G){
 G.NPCAssets={
  base:'ui/assets/npc/',ext:'.webp',
  normal:{M:100,F:100},                       /* normal/<M|F>/<001..100> */
- easter:['E001','E002','E003'],              /* easter/<id> */
  boss:{WRATH:'B001',PRIDE:'B002',ENVY:'B003',GREED:'B004',
        GLUTTONY:'B005',LUST:'B006',SLOTH:'B007'},
  /* boss/<prefix>_<ID>_D05-D15 | _D30; SLOTH is <prefix>_SLOTH_D05-D15_SB0 for zero

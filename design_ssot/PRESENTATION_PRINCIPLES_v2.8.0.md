@@ -525,6 +525,16 @@ New audio may be newly authored / synthesized / edited, layered or transformed c
 external free asset whose license permits the shipped use (provenance recorded outside Canonical,
 vendored locally, no runtime hotlinking, no unclear rights).
 
+AI-generated music (User 2026-09-29, v3.0): phase BGM may be music the User generated for this project with an AI
+music tool (Gemini / Lyria), a free account's output included. Conditions:
+- its provenance is recorded outside Canonical (`reports/ASSETS.md`)
+- its watermark (SynthID) is never stripped or defeated
+- no track closely imitates an existing song
+- the music is never presented as human-composed
+- where a shipped copy cannot carry the source's AI provenance (the web build's re-encodes lose its C2PA manifest), the
+  game's credits and the store text disclose the AI-generated music (User 2026-09-29)
+Phase BGM mapping, loop and join rules -> UI_UX §AUDIO FEEDBACK — PHASE BGM.
+
 ### Voice
 
     late-night convenience-store tactility

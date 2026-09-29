@@ -416,7 +416,6 @@ Price = 760G unchanged
 
 ```new
 Price = 310G
-next-visit weight +50%
 ```
 
 ## REWORD — price-table framing (version tag / "already ... current v2.8 owner sections" removed)
@@ -428,8 +427,8 @@ unchanged.
 ```
 
 ```new
-The following 20 Store Support base prices are the approved baseline.
-The other 10 active support prices are exact in their Store Support entries above.
+The following 21 Store Support base prices are the approved baseline.
+The other 11 active support prices are exact in their Store Support entries above.
 ```
 
 ## REWORD — version tag removed
@@ -628,7 +627,6 @@ effect = next generated ORDER offers for every Item rarity get supply quantity +
 - if previous Day sales < 4, this support adds no quantity
 - 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 - 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; Rare+ sale price +10% in every mode, paid by the customer from their own Wallet (no HQ fill); no operating-cost modifier
 - 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
 of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
@@ -638,7 +636,6 @@ of that charged price for the customer while the Player receives the full chosen
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
 base Price = 60G
 Food/Drink positive native Core-Stat contribution +25%
-from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 12. 첫 방문 쿠폰
 첫 방문 쿠폰 exact rule:
 - on an adventurer's first-ever visit: NPC Wallet +30G on arrival
@@ -657,10 +654,11 @@ Item purchase intent +15%p
 Price = 240G
 condition = paid returning customer today survives (no Loyalty threshold)
 Loyalty +5
-per Food/Drink Item in the Bag:
-Supply +2 (피로 회복 +2)
-+4 defence on every Hazard of the Gate the adventurer actually goes to
-The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
+per Food/Drink Item in the Bag (User 2026-09-28, v2.9.11; was Supply +2 for both and +4):
+Food:  Supply +2 (피로 회복 +2)
+Drink: Supply +1 (피로 회복 +1)
++2 defence on every Hazard of the Gate the adventurer actually goes to
+The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 - Uncommon+ Food/Drink purchase intent +16%p
 - no Stat effect
@@ -668,26 +666,26 @@ Price = 220G
 buyer NPC Wallet +30G
 20. 새벽 회수 계약
 - 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
-being wasted (it is not counted as waste)
+being wasted (it is not counted as waste); it is taken back that Night, with the discard (ITEM §SHELF LIFE, v2.9.11),
+so the refund is on that Day's receipt
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
 Price = 300G
-effect = today every same-SKU 3+ order purchase price -25% (not only the first)
 The internal purchase-price floor (45% of list) is unchanged.
 단골 (Trusted Regular, Loyalty >= 51) survival condition
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 effect=successful 150% sale of any rarity -> extra premium commission
 Price = 320G
-HQ commission = 40% of the charged (150%) sale price
+HQ commission = 60% of the charged (150%) sale price (User 2026-09-28, v2.9.11; was 40%)
 the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
 the 1.5x price burden and Loyalty -3 are unchanged
 24. 원정 전문 인증
 원정 전문 인증:
 Price = 290G
-- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
+- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 no shelf-life effect and no operating-cost effect
-Food/Drink ORDER (purchase) price x1.25
+Food/Drink ORDER (purchase) price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 Price = 340G
 freeUseConsumesFirstRerollStep=NO
 - after the free first use, same-Day Reroll follows the normal curve from its first step
@@ -771,9 +769,9 @@ Supply efficiency / shelf-life control / broad usability / flexible prep
 identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation (User 2026-09-24, v2.9.0)
 Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
 Supply (피로 회복) unchanged
-Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
-Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
-Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).` (User 2026-09-24, v2.9.0; operating cost clause removed v2.9.11)
+Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28)
+Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
 - Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
 ```
 
@@ -858,4 +856,86 @@ The Event 본사 반값 행사 is `halfPrice` (was `tasting`, with its effect ke
 | dawnRecovery | 새벽 회수 계약 | 190G |
 | extraOrder | 본사 추가발주권 | 130G |
 | rerollTicket | 발주 교환권 | 120G |
+```
+
+
+## v2.9.11 — Expedition Store Supports (User 2026-09-28)
+
+Dropped (the removal itself):
+
+```text
+total=30
+- 6 Primary Build × 2
+- 1 per Primary Build
+```
+
+New:
+
+```new
+- 응급 처치대 (firstAidDesk) (v2.9.11: no SALE arrival on D30)
+total=32 (User 2026-09-28, v2.9.11: 야전 들것 and 응급 처치대 joined the Expedition line)
+Foundation=13
+- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3)
+Keystone=7
+- 1 per Primary Build, plus 응급 처치대 (Expedition holds 2)
+31. 야전 들것 (User 2026-09-28, v2.9.11)
+- 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
+- it applies wherever preparation is read: SALE outlook, NIGHT resolution and the D30 Final (so it is D30-eligible)
+- 악바리's injured 투력 bonus replaces the penalty as before; the support changes nothing for that Trait
+- measured (reports/v2.9.11-drafts.md §C, owned from D10, upper bound): D30 19.6 → 21.1%, clear 13.5 → 14.7%
+32. 응급 처치대 (User 2026-09-28, v2.9.11)
+응급 처치대:
+- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn after it;
+only for an injured arrival and only while owned)
+- the SALE state strip says so once (COPY_AUDIT §9-4b)
+- the Expedition line holds two Keystones (원정 전문 인증 and this one), User 2026-09-28
+- D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
+- measured against the six Keystones (reports/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
+clear 13.5 → 16.8% - at or just above the strongest Keystones (물류 본부계약, 원정 전문 인증: D30 24.0%)
+| fieldStretcher | 야전 들것 | 80G |
+```
+
+
+## v2.9.11 물류 본부계약 remake (User 2026-09-29)
+
+Dropped (the removal itself):
+
+```text
+trigger = previous Day sales >= 6
+물류 본부계약:
+```
+
+New:
+
+```new
+물류 본부계약 (remade User 2026-09-29, v2.9.11; was previous Day sales >= 6 -> same-SKU 3+ orders -25%):
+effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
+no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
+```
+
+
+## v2.9.11 즉석식품 코너 operating-cost clause removed (User 2026-09-29)
+
+New:
+
+```new
+no operating-cost effect (User 2026-09-29, v2.9.11; was overheadBase × 0.10 from the next Day)
+```
+
+
+## v2.9.11 희귀상품 입고 계약 HQ-paid +10% (User 2026-09-29)
+
+New:
+
+```new
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store 10% of the charged price on top, in every mode (User 2026-09-29, v2.9.11; was +10% paid by the customer); no operating-cost modifier
+```
+
+
+## v2.9.11 평생 단골제 next-visit weight +100% (User 2026-09-29)
+
+New:
+
+```new
+next-visit weight +100% (User 2026-09-29, v2.9.11; was +50%)
 ```

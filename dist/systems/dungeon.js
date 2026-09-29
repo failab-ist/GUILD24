@@ -83,6 +83,8 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
    if(k==='potion')continue;
    let value=v*power;
    if(k==='supply')value=supplyContribution(item,value,foodSupplyDelta,supplyPerItem);
+   /* EVENT 31 길드 연회 (v2.9.11): today's Food recovers double - read off the adventurer, so SALE and NIGHT agree */
+   if(k==='supply'&&item.category==='food'&&n.feast>1)value*=n.feast;
    value*=nativeStatFactor(item,k,v,mult,facilities,d);
    value*=counterFactor(item,k,v,facilities,d);
    if(k==='supply')finalSupply+=value;else if(STAT_KEYS.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
@@ -90,10 +92,11 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
       retreat roll reads only the Traits and the stone's second roll reads both */
    if(k==='escape')e.itemEscape+=value;
   }
-  /* 원정 도시락 코너: per Food/Drink Item in the Bag, a flat Supply +2 and a flat +4 on every
-     Hazard of the Gate the adventurer actually goes to. Flat, so no Counter multiplier reads it. */
+  /* 원정 도시락 코너: per Food Item in the Bag a flat Supply +2, per Drink +1, and per Food/Drink a flat +2 on every
+     Hazard of the Gate the adventurer actually goes to (v2.9.11, User 2026-09-28; was +2 for both and +4). Flat, so no
+     Counter multiplier reads it. */
   if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)){
-   const p=D.relicParams.expeditionMeal;finalSupply+=p.supplyPerItem;
+   const p=D.relicParams.expeditionMeal;finalSupply+=item.category==='drink'?p.drinkSupplyPerItem:p.supplyPerItem;
    for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
@@ -130,12 +133,12 @@ function fatigueBand(f){const b=FATIGUE_BANDS.find(x=>(f||0)>=x.min)||FATIGUE_BA
 /* ---- 5. Condition modifiers -----------------------------------------------------------
    What the adventurer's own condition does to their own base Stats - percentages on the
    person, never on what the bag contributed. */
-function conditionModifiers(n,effectiveFatigue,traitSum,why){
+function conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty){
  let combatMod=1+traitSum('combatPercent'),survivalMod=1+traitSum('survivalPercent'),mobilityMod=1,spiritMod=1;
  if(n.injury===1){
   /* NPC_TRAIT §INJURY: this branch is injury===1 only. 중상 carries no Stat penalty - it
      keeps the adventurer home instead - so the line may not claim one on its behalf. */
-  const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=0.15;why.push('부상 페널티: 투력 -15%');}
+  const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=injuryPenalty;why.push('부상 페널티: 투력 -'+Math.round(injuryPenalty*100)+'%');}
   survivalMod-=0.20;why.push('부상 페널티: 강인함 -20%');
  }
  const band=fatigueBand(effectiveFatigue);
@@ -148,7 +151,7 @@ function conditionModifiers(n,effectiveFatigue,traitSum,why){
 /* ---- 6. Presentation provenance -------------------------------------------------------
    Where each Core Stat came from, for the screen. Reads the state the calculation already
    produced and contributes nothing back to it. */
-function statSources(n,itemStats,effectiveFatigue,traitSum){
+function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
  const sources={combat:[],survival:[],mobility:[],spirit:[]};
  if(n.equipment&&n.equipment.power)sources.combat.push({name:'장비 ('+n.equipment.name+')',v:n.equipment.power});
  for(const tid of n.traits){
@@ -159,7 +162,7 @@ function statSources(n,itemStats,effectiveFatigue,traitSum){
   if(n.injury===1&&eff.injuredCombatPercent)sources.combat.push({name:D.traitBy[tid].name,v:eff.injuredCombatPercent*100,isPct:true});
  }
  if(n.injury===1){
-  if(!traitSum('injuredCombatPercent'))sources.combat.push({name:'부상',v:-15,isPct:true});
+  if(!traitSum('injuredCombatPercent'))sources.combat.push({name:'부상',v:-Math.round(injuryPenalty*100),isPct:true});
   sources.survival.push({name:'부상',v:-20,isPct:true});
  }
  for(const st of itemStats)for(const k of STAT_KEYS)
@@ -182,10 +185,12 @@ function prepare(n,d,facilities=[]){
  const sup=supplyState(n,finalSupply);
  const {effectiveFatigue}=sup;
  e.supply=finalSupply;
- const mod=conditionModifiers(n,effectiveFatigue,traitSum,why);
+ /* NPC_TRAIT §INJURY: an ordinary Injury costs 투력 15%; RELIC 야전 들것 (v2.9.11) makes it 8% */
+ const injuryPenalty=facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
+ const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
- const sources=statSources(n,itemStats,effectiveFatigue,traitSum);
+ const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
@@ -292,10 +297,11 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    out of reach than the one before it. Only this term changes (User 2026-09-25, v2.9.1 balance:
    early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
    D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
-   a fresh first Run cleared the Boss); every other Gate Power term is what it was. */
+   a fresh first Run cleared the Boss; v2.9.11, User 2026-09-28: early 1.50 -> 1.40 - the D11~20 readiness cliff, measured in
+   reports/growth-injury-v2911.md - then 1.45 after the combined re-measure, reports/remeasure-v2911.md §8); every other Gate Power term is what it was. */
 /* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in archive/v2.9.2/v292-bot-harness.md §9-10): DAY 11~20
    climb at `mid` 1.10 per Day (the NPC-growth check of the Run Progression Arc); DAY 1~10 and DAY 21+ keep their slopes. */
-const GATE={knee:9,early:1.50,late:0.80,mid:1.10,midFrom:10,midTo:20};
+const GATE={knee:9,early:1.45,late:0.80,mid:1.10,midFrom:10,midTo:20};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.late
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; the Level
@@ -357,7 +363,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
  const sCombatSuccess=sAbility*(1+sAssist)*sNoise>=d.power;
  const sEnvironment=clamp(.06+sp.hazard*.012-se.survival*.001,.02,.48)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
- const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-se.itemEscape-(d.scale||1)*.024,.15,.94);
+ const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-se.itemEscape-(d.scale||1)*.024-(ev.escapeCut||0),.15,.94);
  /* mirrors resolve()'s real order exactly: SUCCESS-vs-FAILURE first (never escape/injury
     evidence to decide THAT), then one Death roll immediately on entering failure, and only a
     Death miss goes on to settle which non-Death tier. Any evidence the actual expedition
@@ -513,7 +519,10 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,bandRoll,rescued=false,deathChance=0,avoidedDeath=false;
- const aidKitReady=!!run&&(run.aidKitSaves||0)<D.decorationParams.aidCabinet.saves&&Object.values(run.loadout||{}).includes('aidCabinet');
+ /* Today's Event, read once for the resolution (EVENT 24~55, v2.9.11): escapeCut / outcomeFatigue / xpMult / nightSaves */
+ const dayFx=run?.event?.effects||{},dayEv={escapeCut:dayFx.escapeCut||0,outcomeFatigue:dayFx.outcomeFatigue||1,xpMult:dayFx.xpMult||1};
+ const medicReady=!!run&&(run.daily?.medicSaves||0)<(dayFx.nightSaves||0);
+ const aidKitReady=medicReady||(!!run&&(run.aidKitSaves||0)<D.decorationParams.aidCabinet.saves&&Object.values(run.loadout||{}).includes('aidCabinet'));
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
@@ -560,7 +569,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     p.events.push({id:'prepared',text:G.Copy.josa(n.name,'은','는')+' 만반의 준비 덕분에 목숨을 건졌다.'});
    }
   }else if(!combatSuccess){
-   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.005+e.escape-e.itemEscape-(d.scale||1)*.024,.15,.94);
+   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.005+e.escape-e.itemEscape-(d.scale||1)*.024-dayEv.escapeCut,.15,.94);
    outcome=escapeRoll<escapeChance?'퇴각':'부상';
    if(outcome==='부상'){
     injuryRoll=r.next();
@@ -603,8 +612,11 @@ function resolve(n,d,r,facilities=[],run,assist=0){
    p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),text:kit.from===2?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.'});}
   /* META §display — 구급품 진열장 (User 2026-09-26, v2.9.7): up to ten times per Run, an ordinary Injury the expedition would
      leave is not left - 구급키트's 부상 -> 무사 step. A carried 구급키트 settles first, so an expedition it acted on spends nothing. */
-  else if(outcome==='부상'&&aidKitReady){aftercare={from:1,to:0,outcomeFrom:outcome};run.aidKitSaves=(run.aidKitSaves||0)+1;
-   p.why.push('구급품 진열장이 남을 부상을 제거');p.events.push({id:'aidKit',items:[],text:'구급품 진열장이 남을 부상을 없앴다.'});}}
+  else if(outcome==='부상'&&aidKitReady){aftercare={from:1,to:0,outcomeFrom:outcome};
+   if(medicReady){run.daily.medicSaves=(run.daily.medicSaves||0)+1;
+    p.why.push('길드 의무관이 남을 부상을 제거');p.events.push({id:'medic',items:[],text:'길드 의무관이 남을 부상을 없앴다.'});}
+   else{run.aidKitSaves=(run.aidKitSaves||0)+1;
+    p.why.push('구급품 진열장이 남을 부상을 제거');p.events.push({id:'aidKit',items:[],text:'구급품 진열장이 남을 부상을 없앴다.'});}}}
  /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
     after combat let a later environmental injury overwrite it, and judging it on the post-noise
     score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,
@@ -654,14 +666,14 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     Injury, records) is untouched. */
  const severeOrDead=dead||outcome==='중상';
  const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?7:outcome==='부상'?9:4;
- const rawOutcomeFatigueGain=severeOrDead?0:Math.max(0,outcomeBaseline+(e.fatigue||0));
+ const rawOutcomeFatigueGain=severeOrDead?0:Math.ceil(Math.max(0,outcomeBaseline+(e.fatigue||0))*dayEv.outcomeFatigue);
  const remainingSupplyBuffer=e.remainingSupplyBuffer||0;
  const actualOutcomeFatigueGain=Math.max(0,rawOutcomeFatigueGain-remainingSupplyBuffer);
  const outcomeBufferUsed=rawOutcomeFatigueGain-actualOutcomeFatigueGain;
  const beforeFatigue=e.beforeFatigue!==undefined?e.beforeFatigue:(n.fatigue||0);
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
- const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult):0;
+ const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward (User 2026-09-25, v2.9.0): keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
@@ -674,7 +686,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,strain,assist},severeEscalation,outcome,aftercare);
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,escapeCut:dayEv.escapeCut,strain,assist},severeEscalation,outcome,aftercare);
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */

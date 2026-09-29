@@ -13,11 +13,11 @@ G.DATA.decorations=[
     and display economy Decorations swap Slots, names and art following the Slot. Ids are kept, so ownership carries over. */
  {id:'sponsorSign', kind:'economy', slot:'sign',    name:'원정 지원금 간판',  price:1250, effect:'방문 모험가마다 현재 소지금의 25%만큼 추가 구매 가능.',
   text:'길드 원정 지원금이 되는 가게. 모험가들이 하나씩 더 집어 간다.'},
- {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:'평범보다 높은 등급의 모험가 등장 확률 65%로 증가 (기존 40%).',
+ {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:'평범보다 높은 등급의 모험가 등장 확률 75%로 증가 (기존 40%).',
   text:'이름난 모험가의 초상. 저 벽에 걸리고 싶은 사람이 문을 연다.'},
  {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:750, effect:'매일 아침 영업 자금 +50G.',
   text:'카운터 아래 작은 금고. 아침마다 조금씩 여유가 생긴다.'},
- {id:'guildShelf', kind:'economy', slot:'display', name:'길드 추천 매대',   price:500, effect:'매일 아침 30% 확률로 방문객 +1명.',
+ {id:'guildShelf', kind:'economy', slot:'display', name:'길드 추천 매대',   price:500, effect:'매일 아침 45% 확률로 방문객 +1명.',
   text:'길드 추천 딱지가 붙은 매대. 가끔 이걸 보고 한 명이 더 들른다.'},
  /* Survival / combat alternatives, one per Slot (User decision 2026-09-24). A Slot still wears
     ONE Decoration, so each Slot is a choice between running the store and keeping people alive.
@@ -29,13 +29,13 @@ G.DATA.decorations=[
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
  {id:'memorialBook', kind:'survival', slot:'counter', name:'추모 방명록',   price:750, effect:'사망 한도 +2명.',
   text:'계산대 옆 방명록과 초. 사람들은 이 점포가 잊지 않는다는 걸 안다.'},
- {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:'영업마다 부상 최대 10회를 무사로 바꿈.',
+ {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:'한 영업 동안 부상 최대 10회 → 무사.',
   text:'붉은 상자가 놓인 유리장. 붕대 한 번이면 다음 원정이 가벼워진다.'}];
 /* The numbers the four alternatives read. Presentation copy above states the same values. */
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance). Presentation copy above states the same values. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={sponsorSign:{budgetShare:.25},thriftSafe:{dailyGold:50},honorFrame:{weights:[35,30,22,9,4]},
+G.DATA.decorationParams={sponsorSign:{budgetShare:.25},thriftSafe:{dailyGold:50},honorFrame:{weights:[25,30,26,13,6]},
  memorialBook:{deathLimitBonus:2},infirmaryPlaque:{healChance:.45},trainingSign:{levelBonus:1,chance:.65},aidCabinet:{saves:10}};
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */

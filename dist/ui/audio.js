@@ -17,13 +17,15 @@
    reports/ASSETS.md). They ship with the build the way the fonts do, so the game still needs
    no network, which the page promises in its <noscript>. Every sampled cue keeps a synthesised
    shape behind it, so a cold first press, a blocked load or a decode failure is thinner, never
-   silent. The tonal families - NIGHT outcomes, the Boss motif, the phase beds - stay
-   synthesised, because those have to stay in tune with each other. */
+   silent. The tonal families - NIGHT outcomes, the Boss motif - stay synthesised, because those
+   have to stay in tune with each other. v3.0 (User 2026-09-29): the phase music is a recorded track
+   per phase (see `bgm` below); the synthesised beds stay only as its fallback. */
 let ctx,timer=null,track='',beat=0,enabled=false,master=null,bgmBus=null,sfxBus=null,noiseBuf=null,loaded=false;
 let appliedBgm=null,appliedSfx=null;
 const DEFAULT={bgm:1,sfx:1},level={bgm:DEFAULT.bgm,sfx:DEFAULT.sfx};
 const clamp=v=>Number.isFinite(v)?Math.min(1,Math.max(0,v)):null;
-/* UI_UX_v2.8: MORNING / ORDER / SALE / NIGHT / FINAL each get their own bed. Canonical does
+/* The synthesised beds - since v3.0 only the fallback for a recorded track that cannot load (`bedFor`).
+   UI_UX_v2.8: MORNING / ORDER / SALE / NIGHT / FINAL each get their own bed. Canonical does
    not ask for a unique full track per phase, so identity comes from arrangement - tempo, lead
    voice, how often the bass lands, whether a drone sits under it - over the one sequencer that
    was already here. MORNING / ORDER / SALE stay in the same key so the store still sounds like
@@ -37,8 +39,38 @@ const tunes={
 /* USER 2026-09-24: every phase plays at the same loudness. `level` is each track's gain trim,
    measured by rendering the track offline through this sequencer (K-weighted RMS) and matched to
    the five tracks' mean - waveform, bass and drone made them differ by up to ~5 dB. */
-const trackFor=phase=>phase==='final'||phase==='end'?'boss'
- :phase==='night'?'night':phase==='order'?'order':phase==='sell'?'sale':'morning';
+/* v3.0 BGM (User 2026-09-29): one recorded track per phase. The app hands the ending in as `end-win` / `end-fail`,
+   and anything without a phase of its own - no Run, 첫 점포지원, the store about to open - is the title. */
+const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='end-fail'?'fail'
+ :phase==='night'?'night':phase==='order'?'order':phase==='sell'?'sale':phase==='closing'?'close'
+ :phase==='morning'?'morning':'title';
+/* The recorded set: dist/ui/assets/bgm, the User's Gemini (Lyria) tracks (reports/ASSETS.md). An MP3 cut at a loop point
+   would carry encoder padding into the seam, so a track is decoded once and played between its measured points
+   s -> e (tools/bgm-loop.py, reports/bgm-loops.md). At e the next pass starts at s while the old one runs on for `xf`
+   and fades out under it. s sits 5 ms before its onset, so a 5 ms fade-in keeps the attack whole; BOSS alone joins
+   with a 1 s equal-power crossfade (`cross`, User 2026-09-29). `lufs` is each file's measured integrated loudness,
+   trimmed to BGM_LUFS so every phase plays at the same loudness (USER 2026-09-24). One track is decoded at a time, at
+   BGM_RATE to keep a three-minute track in memory on a phone. A file that cannot load falls back to the synthesised
+   bed below (`bedFor`), so a phase is never silent because of a network or decode failure.
+   The web build ships 128 kb/s copies (User 2026-09-29; tools/vendor-assets.py): they decode sample-aligned with the
+   originals the points were measured on, and `lufs` is measured on these copies. While a phase plays, the next phase's
+   file is fetched ahead (`nextOf`) - the bytes only, never a second decoded track - so a phase change does not wait on
+   the network. */
+const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-24,BGM_RATE=32000,BGM_SWAP=.6;
+const bgm={
+ title:{s:.069,e:116.704,xf:.01,lufs:-13.8},
+ morning:{s:9.748,e:162.88,xf:.01,lufs:-11.8},
+ order:{s:.045,e:176.014,xf:.01,lufs:-12.8},
+ sale:{s:.069,e:171.966,xf:.01,lufs:-12.3},
+ night:{s:.055,e:168.168,xf:.01,lufs:-12.9},
+ close:{s:.047,e:118.137,xf:.06,lufs:-12.1},
+ boss:{s:9.535,e:171.492,xf:1,cross:true,lufs:-12.8},
+ succ:{s:.043,e:176.741,xf:.01,lufs:-13.2},
+ fail:{s:.043,e:90.696,xf:.01,lufs:-13.5}};
+const bedFor={title:'morning',close:'morning',succ:'boss',fail:'boss'};
+const nextOf={title:'morning',morning:'order',order:'sale',sale:'night',night:'close',close:'morning',succ:'title',fail:'title'};
+const curve=f=>{const c=new Float32Array(64);for(let i=0;i<64;i++)c[i]=f(i/63*Math.PI/2);return c;};
+const RISE=curve(Math.sin),FALL=curve(Math.cos);
 /* Music used to be mixed a quarter as loud as the smallest button click, which is why it
    read as missing rather than as quiet. These are its design maximum now; the slider
    scales down from here.
@@ -254,15 +286,58 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
     whole run moves, so the 70 ms spacing that states the count is kept. */
  if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',sfxBus,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
-function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(!enabled||document.hidden){if(timer)clearInterval(timer);timer=null;track='';return;}if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
- buses();preload();
- const next=trackFor(phase);if(track===next&&timer)return;if(timer)clearInterval(timer);track=next;beat=0;
- const tune=tunes[track];
+let music=null,pending='',decoded={key:'',buf:null},ahead={key:'',bytes:null};const resumeAt={};
+function bgmDecode(bytes){const Off=window.OfflineAudioContext||window.webkitOfflineAudioContext;let dc=ctx;
+ try{if(Off)dc=new Off(2,1,BGM_RATE);}catch(e){dc=ctx;}
+ return new Promise((ok,no)=>{const p=dc.decodeAudioData(bytes,ok,no);if(p&&p.catch)p.catch(no);});}
+const bgmFetch=key=>fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status));
+function bgmLoad(key){if(decoded.key===key)return Promise.resolve(decoded.buf);
+ const bytes=ahead.key===key&&ahead.bytes?ahead.bytes:bgmFetch(key);ahead={key:'',bytes:null};
+ return bytes.then(bgmDecode).then(buf=>{decoded={key,buf};return buf;});}
+/* the next phase's file, fetched while this one plays; a failed fetch is dropped, the phase change fetches again */
+function bgmAhead(key){const k=nextOf[key];if(!k||ahead.key===k||typeof fetch!=='function')return;
+ const bytes=bgmFetch(k);ahead={key:k,bytes};bytes.catch(()=>{if(ahead.bytes===bytes)ahead={key:'',bytes:null};});}
+/* One pass from `from` to e. Scheduled on the audio clock; the next pass is queued 2 s ahead of the join. */
+function bgmPass(m,at,from,fadeIn){const t=bgm[m.key],src=ctx.createBufferSource(),g=ctx.createGain();
+ src.buffer=m.buf;src.connect(g);g.connect(m.out);
+ g.gain.setValueCurveAtTime(RISE,at,fadeIn);
+ const end=at+(t.e-from);g.gain.setValueCurveAtTime(FALL,end,t.xf);
+ src.start(at,from);src.stop(end+t.xf+.05);
+ m.passes.push({at,from});if(m.passes.length>2)m.passes.shift();m.srcs.push(src);src.onended=()=>{const i=m.srcs.indexOf(src);if(i>=0)m.srcs.splice(i,1);};
+ clearTimeout(m.timer);
+ m.timer=setTimeout(()=>{if(music===m)bgmPass(m,end,t.s,t.cross?t.xf:.005);},Math.max(0,(end-ctx.currentTime-2)*1000));}
+function bgmStart(key,buf){const t=bgm[key],now=ctx.currentTime,out=ctx.createGain();
+ out.gain.setValueAtTime(0,now);out.gain.linearRampToValueAtTime(Math.pow(10,(BGM_LUFS-t.lufs)/20),now+BGM_SWAP);out.connect(bgmBus);
+ const m={key,buf,out,srcs:[],timer:null,passes:[]};music=m;
+ let from=resumeAt[key];if(!(from>=t.s&&from<t.e))from=t.s;delete resumeAt[key];
+ bgmPass(m,now+.02,from,.005);}
+/* `keep` remembers where the loop was, so hiding the page or muting resumes the track rather than restarting it.
+   A phase change starts the next track from its own loop start. */
+function bgmStop(fade,keep){const m=music;if(!m||!ctx)return;music=null;clearTimeout(m.timer);const now=ctx.currentTime;
+ /* the pass playing now - the next one may already be queued for the join */
+ const cur=m.passes.filter(q=>q.at<=now).pop();
+ if(keep&&cur){const t=bgm[m.key];let p=cur.from+(now-cur.at);if(p>=t.e)p=t.s+(p-t.e);resumeAt[m.key]=p;}
+ m.out.gain.cancelScheduledValues(now);m.out.gain.setValueAtTime(m.out.gain.value,now);m.out.gain.linearRampToValueAtTime(0,now+fade);
+ for(const src of m.srcs.slice()){try{src.stop(now+fade+.05);}catch(e){}}
+ setTimeout(()=>{try{m.out.disconnect();}catch(e){}},(fade+.3)*1000);}
+/* The synthesised bed: the fallback when a recorded track is not there. */
+function bedStop(){if(timer)clearInterval(timer);timer=null;}
+function bedStart(key){bedStop();beat=0;const tune=tunes[bedFor[key]||key]||tunes.morning;
  timer=setInterval(()=>{if(!enabled||document.hidden||ctx.state!=='running')return;const melody=tune.notes,hz=melody[beat%melody.length];
   const lv=tune.level??1;
   tone(hz,ctx.currentTime,tune.ms/1000*.9,BGM_VOICE*lv,tune.wave,bgmBus);
   if(beat%tune.bass===0)tone(hz/2,ctx.currentTime,tune.ms/1000*1.35,BGM_BASS*lv,tune.bassWave,bgmBus);
   if(tune.drone&&beat%4===0)tone(tune.drone,ctx.currentTime,tune.ms/1000*4.2,BGM_BASS*.7*lv,'sine',bgmBus);
   beat++;},tune.ms);}
-G.Sound={play,sync,mix,cues:Object.keys(sfx),tracks:Object.keys(tunes),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
+ if(!enabled||document.hidden){bedStop();bgmStop(.1,true);track='';pending='';return;}
+ if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
+ buses();preload();
+ const next=trackFor(phase);if(track===next)return;
+ track=next;bedStop();bgmStop(BGM_SWAP,false);
+ if(!bgm[next]||typeof fetch!=='function'){bedStart(next);return;}
+ pending=next;
+ bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);bgmAhead(next);})
+  .catch(()=>{if(pending===next&&track===next){pending='';bedStart(next);}});}
+G.Sound={play,sync,mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

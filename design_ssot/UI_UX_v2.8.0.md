@@ -231,6 +231,18 @@ not only in the 도감.
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
 - ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
 
+### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
+
+Arriving at a new Day's MORNING within the session, the ceiling DAY sign's number rolls once: yesterday's number rises
+out as today's rises in.
+- One easing curve for both numbers, so they stay one line apart and never overlap.
+- 300 ms, inside the number's own box, no sound (the MORNING shutter already sounds). It keeps PRESENTATION §GAME FEEL
+  BEAT's general contract: at most 320 ms, inside its panel, never blocks input.
+- A reload or a redraw of the same MORNING shows the still sign; reduced motion never starts it.
+- When it lands, the number is plain text again (the DOM ends as it began).
+- Presentation only: it reads the Day and writes nothing.
+- The full-screen DAY transition stays unadopted (it would need a GAME FEEL contract exception).
+
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
@@ -654,7 +666,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
 - COUNTER TRAY FOLD (User 2026-09-25; the User's own suggestion; confirmed as built, User 2026-09-26, v2.9.3): on a phone a filled tray folds to its header line (Item, customer, wallet, a small ▲) when the player scrolls the shelf past 32px or taps outside the tray, a shelf row, the dock or an overlay; tapping the folded strip or any shelf row (the one already on the tray included) opens it again. The selected Item never changes by folding, nothing is saved, and a desk (≥1024) never folds
-- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
+- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
 - on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
 - COUNTER FEEL (User 2026-09-25, v2.9.2 H2; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H2;
   acceptance -> UI_UX_QA UI-Q-v29-31): the pressed price key travels down 3px in 60 ms and returns in 60 ms (일반 intensity,
@@ -1216,7 +1228,7 @@ Hierarchy:
 Importance hierarchy:
 - routine success=compact
 - meaningful growth/injury/death/decisive Item/callback=stronger visual emphasis
-- on 게이트 순례주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+- on 게이트 순례 주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
 
 Avoid:
 - debug log layout
@@ -2347,8 +2359,10 @@ Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0
 
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 
-The first-ORDER coach group is, in this order: `gates` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0).
+The first-ORDER coach group is, in this order: `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0;
+`stock` User 2026-09-29, v2.9.11).
 - `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
+- `stock` anchors the 창고 summary: the first Day's warehouse already holds the opening stock, which no screen named before
 - `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
 - the `gold` mark is retired (the register reads itself)
 - one concept per step still holds
@@ -2652,6 +2666,43 @@ External audio, if used:
 - retain source/license attribution in the repository
 - keep file size and mobile load cost reasonable
 - preserve day / night / boss mood separation rather than one generic loop
+- AI-generated music the User made for this project is allowed under PRESENTATION §AUDIO PRESENTATION (User 2026-09-29)
+
+### PHASE BGM (v3.0, User 2026-09-29)
+
+Every phase plays a recorded track (`dist/ui/assets/bgm/`, provenance in `reports/ASSETS.md`):
+
+| screen | track |
+| --- | --- |
+| no Run · 첫 점포지원 · the store about to open (NEW STORE PREPARATION) | TITLE |
+| MORNING | MORNING |
+| ORDER | ORDER |
+| SALE | SALE |
+| NIGHT | NIGHT |
+| CLOSING | CLOSE |
+| FINAL | BOSS |
+| the ending of a cleared Run | SUCC |
+| the ending of any failed Run (bankruptcy, the death limit, a failed Final) | FAIL |
+
+Loop rule: a loop keeps the whole track. It is never a section taken from the middle.
+- Start stays at the first sound, and moves only past a short, clearly different intro (at most 15 s).
+- End stays near the original end (within its last 25 s; BOSS 40 s) and drops only the ending chord, tail or fade.
+- Both cuts sit on a beat.
+- The chosen points per track and how they were found are in `reports/bgm-loops.md`; the live values are in
+  `dist/ui/audio.js`.
+
+Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (User 2026-09-29). A long crossfade is
+never the default fix for a join that does not fit.
+
+Playback:
+- Every track plays at the same loudness.
+- BGM stays under the decision and result cues, and the existing ducking applies.
+- A phase change fades the old track out.
+- Mute or a hidden page stops the music, and coming back resumes it.
+- A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
+- The web build ships 128 kb/s copies and fetches the next phase's file ahead, so a phase change does not wait on the
+  network; the app ships the originals (User 2026-09-29).
+- Playback changes no gameplay state and consumes no Gameplay RNG.
 
 ### SFX coverage
 

@@ -2,8 +2,8 @@
 
 DOC=COPY_WORLD_VOICE
 OWNER=copy,world_voice,player_terms,help_copy,boss_report_copy,result_copy,event_copy
-DOC_VERSION=2.9.7
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/COPY_WORLD_VOICE_v2.8.0-patch.md,history/COPY_WORLD_VOICE_v2.7.0.md,history/COPY_WORLD_VOICE_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/COPY_WORLD_VOICE.md
@@ -154,7 +154,7 @@ COPY_WORLD_VOICE가 소유하는 것은:
 - NPC Dialogue의 Voice와 Variant
 - 기존 Rule로 발생한 NPC Result의 Flavor Variant
 - 기존 데이터로 가능한 Callback의 실제 Copy와 Copy 밀도
-- Player-facing NPC Name Voice와 승인된 Rare Reference Name/Copy
+- Player-facing NPC Name Voice
 - Culture / Easter Egg Copy의 표현 방식
 - Global Copy QA
 
@@ -700,35 +700,10 @@ Existing flavor such as `용 그림은 장식이 아니다.` may remain only as 
 독립형 Rare Easter Egg Event의 Trigger / Effect / Event-specific Reveal Copy는 EVENT가 소유한다.
 COPY_WORLD_VOICE는 그 Event의 전역 Voice / Context 원칙만 제공하며, 이 문서만으로 새 Event를 추가하지 않는다.
 
-## RARE REFERENCE NPC
+## RARE REFERENCE NPC — REMOVED (User 2026-09-28, v2.9.11)
 
-Player-facing Name Voice는 COPY_WORLD_VOICE가 소유한다.
-NPC의 Gameplay generation / stats / traits / progression은 NPC_TRAIT가 소유한다.
-
-다음 Exact Name은 Rare Reference NPC로 유지한다.
-
-초기 승인:
-- 요화니우스
-- 상혀크
-- 진호르
-
-중요:
-normal Name Pool의 기본 Voice 자체도 `한국식 + 판타지 + 유쾌한 비틀기`다.
-따라서 Rare Reference와 일반 이름이 완전히 다른 언어권처럼 느껴지면 안 된다.
-
-`요화니우스`는 일반 Name Voice의 강한 Tone Anchor이기도 하지만,
-이 Exact Name의 전용 Easter Egg 조건은 아래 Rare Reference 규칙을 따른다.
-
-모르는 Player에게는 그냥 이 세계의 자연스러운 NPC 이름처럼 보여야 한다.
-
-Reference NPC 이름 자체가 첫 번째 Easter Egg다.
-관련 Special Copy는 해당 NPC가 실제 Run에 존재할 때만 Eligible하다.
-
-관련 NPC가 없는 Run에서 전용 Meme을 일반 System Message나 다른 NPC에게 출력하지 않는다.
-
-전용 대사 (User 2026-09-28, v2.9.10): 세 이름은 각자 방문 대사 2줄과 밤 결과 대사 2줄(성공 계열 1 · 실패 계열 1)을 가진다.
-방문과 살아 돌아온 밤 결과에서 약 절반의 확률로 일반 대사 대신 나오고, 사망에는 쓰지 않는다. 밈을 직접 설명하지 않는다 —
-아는 사람은 알아보고, 모르는 사람에게는 말버릇이 조금 다른 손님이다. Exact lines -> COPY_AUDIT_APPROVED §25.
+The three Rare Reference NPCs (their names, portraits and own lines) evoked real people and were removed before a paid
+release; the game has none. Do not add a name, portrait or line that points at a real person.
 
 ## CULTURAL REFERENCE CONTEXT CHECK
 
@@ -1004,7 +979,7 @@ System은 계속 해설하지 않는다.
 
 > 재고가 가득 찼다.
 
-> 진호르 중상.
+> 도하르 중상.
 
 > 세아린 Lv.8.
 
@@ -1135,7 +1110,6 @@ normal Name Pool의 중심은:
 한국어 Player가 읽자마자 기억하고 피식할 수 있는 생활형 Fantasy 이름.
 
 Tone Anchor 예시:
-- 요화니우스
 - 지오니아
 - 민자이
 - 고쉬스앵
@@ -1173,9 +1147,6 @@ Reject:
 - 모든 이름이 `-우스 / -엘 / -리온` 계열
 - 서양 High-Fantasy 이름이 normal pool의 대부분
 - 모든 이름이 억지 Meme이라 세계가 개그 명단처럼 보이는 상태
-
-Rare Reference Name도 모르는 Player에게는
-normal Name Voice 안에서 자연스럽게 섞여 보여야 한다.
 
 ## GLOBAL COPY SCOPE
 
@@ -1686,8 +1657,6 @@ Player가:
 가끔 현실 편의점 같은 생활감이 보인다.
 
 더 드물게 재치 있는 상품 패러디가 보인다.
-
-아주 드물게 Rare Reference NPC를 발견한다.
 
 모르면 그냥 세계 속의 일이다.
 알면 한 겹 더 재미있다.

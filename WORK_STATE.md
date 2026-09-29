@@ -1,7 +1,7 @@
 # WORK_STATE
 
-DATE: 2026-09-28
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+DATE: 2026-09-29
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28, User 컨펌 2026-09-29) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
@@ -10,6 +10,36 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
+
+## v2.9.11 — v3.0 준비 1차 (머지됨, PR #28) (User 2026-09-28~29)
+
+브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.11. 빌드 표시 2.9.11.
+
+| 묶음 | 내용 |
+|---|---|
+| 1차 (09-28) | 밤 폐기 · 이름 35개 교체 · Rare Reference 제거 · 원정 점포지원 2장(야전 들것 · 응급 처치대) · 사건 40% · 중복 금지 · 새 사건 32종 |
+| 곡선 | 초반 게이트 기울기 1.50 → 1.40 → **1.45**(`9c6bd1c`), 마왕 전력 유지 |
+| 점포지원 | 신선체계 매입가 +15% · 도시락 코너 음식 +2 / 음료 +1 / 위험 +2 · 왕도 인증 60% · 물류 본부계약 리메이크(전날 판매 1건당 발주 −3%, 최대 −30%) · 즉석식품 코너 운영비 절 삭제 · 희귀상품 입고 계약 본사 +10% · 평생 단골제 재방문 +100% |
+| 장식 | 길드 추천 매대 45% · 명예 모험가 액자 가중치 [25, 30, 26, 13, 6] |
+| 화면 · 문구 | 전역 keep-all(단어 중간 줄바꿈 297 → 0) · 문구 교정 1~4배치 · 첫 발주 튜토리얼 `창고` 단계 · 아침 DAY 간판 넘김 · FINAL 균열 NIT |
+| 사운드 | 녹음 BGM(페이즈별 · 결말 성공/실패, 원곡 전체 루프, BOSS 1초 크로스페이드) · 웹 128 kb/s + 다음 곡 미리 받기 |
+
+측정 기록: `reports/remeasure-v2911.md` §1~§14
+- v2.9.10 대비 전체는 §12
+- 마지막 확인은 §14
+- 도구: `tools/remeasure-v2911.cjs`(REMEASURE_EARLY / REMEASURE_BALANCE 메모리 시안), `tools/deco-impact.cjs`(약한 장식 팔)
+
+줄바꿈 점검: `tools/qa-text.cjs`, `reports/text-audit-v2911.md`.
+
+문구 교정: `reports/copy-proofread-v2911.md`
+- 1배치(상품 · 사건) · 2배치(점포지원 · 장식) · 3배치(화면)를 모두 반영했다(`f762b85` · `9d9a4d9` · `5ff4d6e`).
+- 4배치(NPC 대사, 14개)도 반영했다. 겁쟁이 유행어 대사는 User 결정으로 유지.
+
+최종 QA (2026-09-29, HEAD `897425c`, PR #28)
+- 전체 `npm test` PASS · `tests/revision.cjs` 39 · `ssot:check` 21/21
+- `qa:runtime` 15/15(`qa-bgm` 35 · `qa-day-flip` 12 · `qa-final-clash` 222) · `qa:visual` clean(126장)
+- 이전 최종 QA(HEAD `5ff4d6e`): `qa:runtime` 13/13
+- `tools/qa-text.cjs`: 단어 중간 줄바꿈 0 · 한 글자 줄 0. 넘침 · 잘림은 이전과 같은 오탐 두 항목(SALE 칩, FINAL 이름표)뿐이다.
 
 ## v2.9.10 퀵패치 2차 (머지됨, PR #24) (User 2026-09-28, v2.9.10 플레이 뒤)
 
@@ -75,13 +105,53 @@ closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:v
 게이트 방문 최소 1명(NPC_TRAIT destinationCoverage), D30 흐름(FINAL_EXPEDITION §D30 PLAYER FLOW, COPY_AUDIT §14-9), 진열대 요약 문구,
 H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(CHANGELOG §v2.9.3).
 
+## v3.0 사운드 — 녹음 BGM 연결 (User 2026-09-29)
+
+- 곡: User가 제미나이(Lyria)로 만든 곡이다. 원본은 `assets-src/bgm/`, 배포본은 `dist/ui/assets/bgm/`(바이트 동일, 9곡 33 MB)다. 출처는 `reports/ASSETS.md`에 있다.
+- 루프 선택: `reports/bgm-loops.md`(원곡 전체 보존 방식, `tools/bgm-loop.py`)
+  - TITLE · SALE · NIGHT · CLOSE = S1E1
+  - MORNING = S1E3
+  - ORDER = S1E2
+  - SUCC · FAIL = S1E2
+  - BOSS = BOSS1 S3R2 + 1초 크로스페이드(BOSS만 예외). BOSS2는 미채택.
+- 엔진(`dist/ui/audio.js`)
+  - 한 번에 한 곡만 32 kHz로 디코드하고, 오디오 시계로 s → e를 반복한다.
+  - 페이즈별 곡은 `audioPhase()`로 고른다. 결말은 SUCC / FAIL로 나뉜다.
+  - 곡마다 음량을 BGM_LUFS −24로 맞춘다. 페이즈 전환은 0.6초 페이드다.
+  - 로드에 실패하면 신스로 대체한다.
+- 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, CHANGELOG §v2.9.11
+- 최종 QA (2026-09-29, HEAD `4c2704b`)
+  - 전체 `npm test` PASS · revision 39 · `ssot:check` 21/21
+  - `qa:runtime` 14/14(`qa-bgm` 29/29 새로 추가) · `qa:visual` clean(126장)
+- 남은 것(User)
+  - 실기기 청취: UI-Q114 · UI-Q-v29-47. 음량 −24 LUFS와 이음새를 확인해야 한다.
+- 웹 BGM(User 2026-09-29)
+  - 128 kb/s 사본으로 22 MB이고, 다음 페이즈 곡을 미리 받는다.
+  - 웹 사본에는 C2PA가 빠지므로, 크레딧과 스토어 설명에 AI 음악 고지가 필수다(출시 작업의 크레딧 항목).
+  - 앱은 원본(C2PA 포함)을 쓴다. 앱으로 옮길 때 음량 기준값을 다시 잰다(원본이 약 0.4 dB 크다).
+
 ## Next
 
 **User 규칙 (2026-09-26~27):**
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-다음 작업: v3.0 준비(`reports/v3.0-prep.md`). 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
+- 검증 리듬 (User 2026-09-28): 배치마다 바뀐 영역의 테스트만 돌리고, 전체 `npm test`·`ssot:check`·`qa:runtime`·`qa:visual`은 모든 배치 뒤 PR 전에 한 번.
+- 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
+
+다음 작업:
+1. v2.9.11은 PR #28로 머지했다(User 2026-09-29). User 플레이로 확인한다: 1.45 곡선, 새 사건, 점포지원 변경, BGM 실기기 청취, DAY 간판, 창고 안내. 태그 `v2.9.11`은 User가 건다.
+2. 문구 교정 4배치(NPC 대사)는 끝났다: 14개 전부 반영, 겁쟁이 유행어 대사는 User 결정으로 유지. FINAL 교전 NIT(균열이 바가 0이 된 뒤)도 끝났다(`d635c00`).
+3. 보류 · 결정 대기
+   - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, §13-2) — User 플레이 뒤 판단(2026-09-29)
+   - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
+   - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
+4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
+   - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
+   - 출시 준비 외 작업은 §8.
+5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
+
+연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
 ### User 할 일
 

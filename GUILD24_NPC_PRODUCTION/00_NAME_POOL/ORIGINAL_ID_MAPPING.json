@@ -63,22 +63,22 @@
     {
       "original_id": "N013",
       "slot": "013",
-      "name": "파크지송"
+      "name": "도바름"
     },
     {
       "original_id": "N014",
       "slot": "014",
-      "name": "봉쥬노"
+      "name": "알바른"
     },
     {
       "original_id": "N015",
       "slot": "015",
-      "name": "지드라고니아"
+      "name": "편도르"
     },
     {
       "original_id": "N016",
       "slot": "016",
-      "name": "유제삭"
+      "name": "한결로"
     },
     {
       "original_id": "N017",
@@ -148,7 +148,7 @@
     {
       "original_id": "N055",
       "slot": "030",
-      "name": "이제도르"
+      "name": "적리반"
     },
     {
       "original_id": "N056",
@@ -158,17 +158,17 @@
     {
       "original_id": "N057",
       "slot": "032",
-      "name": "원비노"
+      "name": "다올찬"
     },
     {
       "original_id": "N058",
       "slot": "033",
-      "name": "정우센"
+      "name": "영수안"
     },
     {
       "original_id": "N059",
       "slot": "034",
-      "name": "마돈세크"
+      "name": "고사리오"
     },
     {
       "original_id": "N060",
@@ -178,7 +178,7 @@
     {
       "original_id": "N061",
       "slot": "036",
-      "name": "박테민"
+      "name": "야간도"
     },
     {
       "original_id": "N062",
@@ -188,7 +188,7 @@
     {
       "original_id": "N063",
       "slot": "038",
-      "name": "구마유샤"
+      "name": "바코린"
     },
     {
       "original_id": "N064",
@@ -253,7 +253,7 @@
     {
       "original_id": "N101",
       "slot": "051",
-      "name": "데프틴"
+      "name": "진렐도"
     },
     {
       "original_id": "N102",
@@ -263,12 +263,12 @@
     {
       "original_id": "N103",
       "slot": "053",
-      "name": "카니온"
+      "name": "봉투라크"
     },
     {
       "original_id": "N104",
       "slot": "054",
-      "name": "피네트"
+      "name": "석바르"
     },
     {
       "original_id": "N105",
@@ -283,12 +283,12 @@
     {
       "original_id": "N107",
       "slot": "057",
-      "name": "오네르"
+      "name": "포스탄"
     },
     {
       "original_id": "N108",
       "slot": "058",
-      "name": "스메브"
+      "name": "새벽찬"
     },
     {
       "original_id": "N109",
@@ -298,7 +298,7 @@
     {
       "original_id": "N110",
       "slot": "060",
-      "name": "바이페르"
+      "name": "택배르"
     },
     {
       "original_id": "N111",
@@ -378,22 +378,22 @@
     {
       "original_id": "N151",
       "slot": "076",
-      "name": "룰레인"
+      "name": "계산도"
     },
     {
       "original_id": "N152",
       "slot": "077",
-      "name": "스코렌"
+      "name": "한우람"
     },
     {
       "original_id": "N153",
       "slot": "078",
-      "name": "프레이든"
+      "name": "삼각진"
     },
     {
       "original_id": "N154",
       "slot": "079",
-      "name": "택욘"
+      "name": "우직산"
     },
     {
       "original_id": "N155",
@@ -408,7 +408,7 @@
     {
       "original_id": "N157",
       "slot": "082",
-      "name": "제스틴"
+      "name": "만두르"
     },
     {
       "original_id": "N158",
@@ -423,7 +423,7 @@
     {
       "original_id": "N160",
       "slot": "085",
-      "name": "도란테"
+      "name": "문고리오"
     },
     {
       "original_id": "N161",
@@ -443,7 +443,7 @@
     {
       "original_id": "N164",
       "slot": "089",
-      "name": "쵸베른"
+      "name": "마감로"
     },
     {
       "original_id": "N165",
@@ -600,7 +600,7 @@
     {
       "original_id": "N045",
       "slot": "020",
-      "name": "수지엘"
+      "name": "다오네아"
     },
     {
       "original_id": "N046",
@@ -625,57 +625,57 @@
     {
       "original_id": "N050",
       "slot": "025",
-      "name": "김고웬"
+      "name": "솔레안"
     },
     {
       "original_id": "N076",
       "slot": "026",
-      "name": "킴연느"
+      "name": "벨하리"
     },
     {
       "original_id": "N077",
       "slot": "027",
-      "name": "전지엔"
+      "name": "은설리아"
     },
     {
       "original_id": "N078",
       "slot": "028",
-      "name": "송헤이오"
+      "name": "신상아"
     },
     {
       "original_id": "N079",
       "slot": "029",
-      "name": "소네진"
+      "name": "가오렌"
     },
     {
       "original_id": "N080",
       "slot": "030",
-      "name": "킴타리"
+      "name": "할리네"
     },
     {
       "original_id": "N081",
       "slot": "031",
-      "name": "박시네아"
+      "name": "매실라"
     },
     {
       "original_id": "N082",
       "slot": "032",
-      "name": "배두니아"
+      "name": "보라미에"
     },
     {
       "original_id": "N083",
       "slot": "033",
-      "name": "하지웬"
+      "name": "동벨리나"
     },
     {
       "original_id": "N084",
       "slot": "034",
-      "name": "정유메"
+      "name": "포인세라"
     },
     {
       "original_id": "N085",
       "slot": "035",
-      "name": "박은비나"
+      "name": "라오니엔"
     },
     {
       "original_id": "N086",

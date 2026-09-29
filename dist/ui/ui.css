@@ -88,6 +88,9 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-webkit-text-size-adjust:100%}
+/* v2.9.11 (User 2026-09-28): Korean breaks between words everywhere - 297 mid-word breaks across Events, Store Supports, the
+   guide and settings (reports/text-audit-v2911.md); break-word still splits a token too long for its box. */
+body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
@@ -334,6 +337,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .daysign{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;white-space:nowrap;color:#eafaf0}
 .daysign i{font:500 12px/1 var(--f-sign);font-style:normal;letter-spacing:.26em;color:#a9e8c4;-webkit-font-smoothing:none}
 .daysign b{font:500 24px/1 var(--f-led);color:#f4fff8;-webkit-font-smoothing:none}
+/* UI_UX §MORNING — DAY SIGN FLIP: the two numbers roll inside the number's own box */
+.daysign b.flip{display:inline-block;position:relative;overflow:hidden;height:1em}
+.daysign b.flip .old{position:absolute;left:0;top:0}
+.daysign b.flip .new{display:inline-block}
 .branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:2px 5px;font:500 12px/1 var(--f-plate);
  color:#5a5040;background:#c4b48c;opacity:.62;-webkit-font-smoothing:none}
 /* ---- notice board: the day's gates, pinned to cork ----
