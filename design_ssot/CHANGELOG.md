@@ -81,6 +81,11 @@ the owner headers and in the git tag.
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
   (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
   Food/Drink Stat bonus is unchanged.
+- **Screen copy proofread, batch 3** (User 2026-09-29, `reports/copy-proofread-v2911.md` 3-1~3-5): the guide's 단골 line showed
+  raw backticks and now reads ‘단골’; the empty Store Support window says `다음 지원은 DAY 5·10·15·20·25·30에 도착한다.`; the
+  coupon's `다음 소비품 효과 2회` is `다음 소모품 효과 2회` (COPY_AUDIT §4, UI_UX); the adventurer's injury line names every way
+  it clears (`회복 방법: 원정 성공·대성공 · 퇴각 귀환 때 확률 회복 · 구급키트`, where it omitted retreat healing); the chosen-closure
+  end reason uses the same `-다` voice as the others.
 - **Store Support and Decoration copy proofread, batch 2** (User 2026-09-29, `reports/copy-proofread-v2911.md` 2-1~2-7): 희귀상품
   입고 계약 reads `희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.`; the three 단골 cards say `단골` (the
   screen term) instead of `단골 손님`; 단체 주문 창구 says `매일 아침`, 야전 들것 `부상 모험가`, 대형 냉장고 `(보유 재고도 1회

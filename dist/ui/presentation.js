@@ -37,7 +37,7 @@ function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];i
    that leak. The player-visible '포션' identity is drawn elsewhere, off the same marker, as
    the item-kind badge, not as an effect row. */
 /* v2.9.0 (User 2026-09-24): the three numberless utility lines are compact - exact strings COPY_AUDIT §4-22 */
-const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)',duplicate:'다음 소비품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망·중상 → 무사 퇴각 1회'};
+const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)',duplicate:'다음 소모품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망·중상 → 무사 퇴각 1회'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e)){
