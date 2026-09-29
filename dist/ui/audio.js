@@ -56,14 +56,22 @@ const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='e
    originals the points were measured on, and `lufs` is measured on these copies. While a phase plays, the next phase's
    file is fetched ahead (`nextOf`) - the bytes only, never a second decoded track - so a phase change does not wait on
    the network. */
-/* Mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): at -24 LUFS most decision and result cues landed under the music,
-   against PRESENTATION §Mix (decision / result > action > utility > BGM). The music comes down 3 dB and the effects bus goes
-   up 6 dB (SFX_GAIN) rather than either alone: -9 dB of music alone would leave the game too quiet on a phone (UI-Q114),
-   +9 dB of effects alone would run the loudest cues into the ceiling. NIGHT sits a further 3 dB under (`trim`): it is the
-   densest track - the same integrated loudness with no quiet passages - and read as the loudest in play.
+/* Mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): the music at -30 LUFS - NIGHT a further 3 dB under (`trim`), the
+   densest track, which read as the loudest in play - and every effect at its own tier level (LEVEL below), so decision and
+   result cues read clearly above it (PRESENTATION §Mix). The effects bus is the player's slider alone.
    A phase change fades the old track out over BGM_SWAP; the next one starts only after it (two keys never overlap) and
    rises over BGM_IN on a squared curve, so it does not start on a hard downbeat. */
-const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-27,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5,SFX_GAIN=2;
+const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5;
+/* UI_UX §AUDIO FEEDBACK — SFX LEVELS (User 2026-09-29): each cue's own level, fitted by tools/qa-sfx-mix.cjs so every cue
+   sits within 1.5 dB of its tier's target (K-weighted 100 ms peak: result -17 / decision -19 / action -23 / utility -27 /
+   rapid repeat -29) and clears the music it is heard over. The cues were authored at levels 24 dB apart; this flattens
+   them without touching a timbre. Refit after changing a cue's shape or sample. */
+const LEVEL={
+ /* result */ great:6.592,retreat:6.533,injury:9.365,severe:7.736,death:5.245,sealwin:6.776,sealfail:7.666,endwin:4.811,endfail:4.365,bossmajor:8.124,final:1.998,boss:7.337,collapse:10.574,
+ /* decision */ order:2.074,sale:1.49,overcharge:1.49,half:1.494,refusal:1.378,purchase:1.894,support:1.527,unlock:1.776,open:1.601,close:1.54,begin:7.705,newstore:10.811,bosscompact:14.77,rescue:6.091,
+ /* action */ depart:1.324,return:4.141,gold:5.086,spend:5.08,crate:6.634,receipt:13.496,heal:5.746,fixture:4.621,rumble:4.678,clash:4.238,counter:5.852,supply:13.818,
+ /* utility */ button:0.863,ui:3.513,
+ /* repeat */ quantity:3.722,quantset:4.802,};
 const bgm={
  title:{s:.069,e:116.704,xf:.01,lufs:-13.8},
  morning:{s:9.748,e:162.88,xf:.01,lufs:-11.8},
@@ -150,9 +158,9 @@ function preload(){if(loaded||!ctx||typeof fetch!=='function')return;loaded=true
  for(const file of new Set(Object.values(sample)))
   fetch(SAMPLE_DIR+file+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status))
    .then(b=>ctx.decodeAudioData(b)).then(buf=>buffers.set(file,buf)).catch(()=>{});}
-function sampleVoice(file,when,volume){const buf=buffers.get(file);if(!buf)return false;
+function sampleVoice(file,when,volume,bus){const buf=buffers.get(file);if(!buf)return false;
  const src=ctx.createBufferSource();src.buffer=buf;
- const g=ctx.createGain();g.gain.value=volume;src.connect(g);g.connect(sfxBus||ctx.destination);
+ const g=ctx.createGain();g.gain.value=volume;src.connect(g);g.connect(bus||sfxBus||ctx.destination);
  src.start(when);return true;}
 function buses(force){if(!ctx)return;
  if(!master){master=ctx.createGain();master.gain.value=1;master.connect(ctx.destination);
@@ -160,7 +168,7 @@ function buses(force){if(!ctx)return;
  /* Only written when the player actually moved a slider. render() syncs on every redraw, and
     assigning .value there would cancel a ducking ramp mid-flight on every frame of a redraw. */
  if(force||appliedBgm!==level.bgm){bgmBus.gain.cancelScheduledValues(ctx.currentTime);bgmBus.gain.value=level.bgm;appliedBgm=level.bgm;}
- if(force||appliedSfx!==level.sfx){sfxBus.gain.value=level.sfx*SFX_GAIN;appliedSfx=level.sfx;}}
+ if(force||appliedSfx!==level.sfx){sfxBus.gain.value=level.sfx;appliedSfx=level.sfx;}}
 function tone(hz,when,duration,volume,type='triangle',bus=null,opt){const o=ctx.createOscillator(),gain=ctx.createGain();o.type=type;o.frequency.setValueAtTime(hz,when);
  if(opt&&opt.glide)o.frequency.exponentialRampToValueAtTime(Math.max(20,hz*opt.glide),when+duration);
  const atk=opt&&opt.attack!==undefined?opt.attack:.018;
@@ -170,14 +178,14 @@ function tone(hz,when,duration,volume,type='triangle',bus=null,opt){const o=ctx.
    is generated once from a fixed integer sequence rather than Math.random, so a cue is the
    same sound every time and nothing here can be mistaken for - or drift into - a draw from
    the seeded Gameplay RNG, which lives in systems/rng.js and is never touched from this file. */
-function noiseVoice(when,duration,volume,spec){
+function noiseVoice(when,duration,volume,spec,bus){
  if(!noiseBuf){const n=Math.floor(ctx.sampleRate*.4);noiseBuf=ctx.createBuffer(1,n,ctx.sampleRate);
   const d=noiseBuf.getChannelData(0);let seed=1;
   for(let i=0;i<n;i++){seed=(seed*1103515245+12345)&0x7fffffff;d[i]=seed/0x3fffffff-1;}}
  const src=ctx.createBufferSource();src.buffer=noiseBuf;src.loop=true;
  const f=ctx.createBiquadFilter();f.type=spec.filter||'bandpass';f.frequency.value=spec.hz??1200;f.Q.value=spec.q??1;
  const g=ctx.createGain();g.gain.setValueAtTime(0,when);g.gain.linearRampToValueAtTime(volume,when+.008);g.gain.exponentialRampToValueAtTime(.0001,when+duration);
- src.connect(f);f.connect(g);g.connect(sfxBus||ctx.destination);src.start(when);src.stop(when+duration+.02);}
+ src.connect(f);f.connect(g);g.connect(bus||sfxBus||ctx.destination);src.start(when);src.stop(when+duration+.02);}
 /* A decision cue has to be readable over its own phase bed on a phone speaker. Pulling the
    music down for half a second is the one thing the master stage was left here for, and it is
    cheaper and quieter than raising every effect. The ramp returns to the player's own level,
@@ -286,18 +294,21 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
  const notes=sfx[kind]||sfx.button,sh=shape[kind]||{},t0=ctx.currentTime+(Number(delay)||0);
  /* MIX / RUNTIME: a rapid-repeat control must not build into harsh overlapping sound */
  if(sh.repeat){if(t0-(lastAt.get(kind)||-1)<sh.repeat)return;lastAt.set(kind,t0);}
+ /* the cue's own level (LEVEL): every voice of it - sample, notes, noise, ticks - goes through one gain on its way to the
+    effects bus, so the cue's loudness is set in one place without touching its timbre */
+ const out=ctx.createGain();out.gain.value=LEVEL[kind]??1;out.connect(sfxBus);
  const file=sample[kind];
- const body=file?sampleVoice(file,t0,SAMPLE_VOICE*(sh.sampleGain??1)):false;
+ const body=file?sampleVoice(file,t0,SAMPLE_VOICE*(sh.sampleGain??1),out):false;
  /* The notes are the accent when a recorded body carried the cue, and the whole cue when it
     did not - so a cue is never silent because a file has not arrived yet. */
  if(!body||sh.accent)notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07),hit=sh.hit&&!i;
-  tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',sfxBus,hit?{...sh,attack:.002}:sh);
-  if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',sfxBus);});
- if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise);
+  tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',out,hit?{...sh,attack:.002}:sh);
+  if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',out);});
+ if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise,out);
  /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is
     the register's impact (x1.3, like `hit`); 바가지's run starts `tickLate` later on a lower first tick (`tickLow`) - the
     whole run moves, so the 70 ms spacing that states the count is kept. */
- if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',sfxBus,{attack:.002});
+ if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',out,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
 let swapEnd=0,music=null,pending='',decoded={key:'',buf:null},ahead={key:'',bytes:null};const resumeAt={};
 function bgmDecode(bytes){const Off=window.OfflineAudioContext||window.webkitOfflineAudioContext;let dc=ctx;
@@ -357,5 +368,5 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
 /* Coming back to the page (a call, another app) tries to resume the context at once rather than waiting for the next tap:
    iOS Safari leaves it `interrupted` (User 2026-09-29). A browser that refuses without a gesture resumes on the next tap (play). */
 function wake(){if(ctx&&enabled&&!document.hidden&&ctx.state!=='running')ctx.resume().catch(()=>{});}
-G.Sound={play,sync,wake,fades:{out:BGM_SWAP,in:BGM_IN},mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+G.Sound={play,sync,wake,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

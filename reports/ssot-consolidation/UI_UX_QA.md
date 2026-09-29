@@ -1905,3 +1905,13 @@ New:
 - the Final and its clash play BOSS to the end; the ending track and the ending cue (`endwin` / `endfail`) come in only as
 the result lands - also after a bankruptcy (CLOSE until then) and the Death limit (NIGHT until then)
 ```
+
+
+## v2.9.11 quick patch — SFX levels (User 2026-09-29)
+
+New:
+
+```new
+- cues of one tier sound as one loudness (§SFX LEVELS) - none jumps out, none disappears; runtime evidence
+`tools/qa-sfx-mix.cjs`
+```

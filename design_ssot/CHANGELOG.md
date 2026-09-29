@@ -167,15 +167,13 @@ the owner headers and in the git tag.
   tap moves, nearest the rows being tapped. The box is tightened to one type ladder: `사망` / `오늘` / `발주 후` as labels in
   one column, every value in one face and size. Each copy is now measured against the stuck box's real lower edge and set again
   when the box grows, which also closes a 10~20 px stretch where the `오늘` block sat under the box with no copy.
-- **BGM / SFX mix** - UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47 (User 2026-09-29, from play): measured on the page's own
-  output (`reports/bgm-sfx-mix-v2911.md`), most decision and result cues landed under the music, against PRESENTATION §Mix.
-  The music comes down 3 dB (-24 → -27 LUFS) and the effects bus goes up 6 dB; NIGHT, the densest track, a further 3 dB. A
-  phase change now fades the old track out over 1 s, starts the next one after it and raises it over 1.5 s (was 0.6 s each,
-  overlapping). The sliders, ducking, loop points and joins are unchanged.
-
-## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
-
-From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.
+- **BGM / SFX mix** - UI_UX §AUDIO FEEDBACK — PHASE BGM / SFX LEVELS, PRESENTATION §Mix, UI-Q-v29-47 (User 2026-09-29, from
+  play, two rounds): most decision and result cues landed under the music, and the cues themselves were authored 24 dB
+  apart - some jumped out, some vanished. The music comes down to -30 LUFS (NIGHT, the densest track, -33), and every cue
+  gets its own fitted level by tier - result -17 / decision -19 / action -23 / utility -27 / rapid repeat -29 - measured
+  offline through the real engine and checked against the music it is heard over (`tools/qa-sfx-mix.cjs`, in
+  qa:runtime). No timbre changed. `ui` and the quantity ticks reach their tier's ceiling still masked: a User decision on
+  their sound. A phase change fades the old track out over 1 s, starts the next one after it and raises it over 1.5 s.
 - **One effect order for every Item** - ITEM §PRESENTATION ORDER — EXACT, UI_UX §ORDER — ITEM INFORMATION HIERARCHY: a Food led
   with 피로 회복 and a Drink ended with it, so `피로 회복 3 · 냉기 대응 +10` and `화염 대응 +8 · 피로 회복 1` sat on neighbouring
   rows. Every Item now reads Hazard Counter → 피로 회복 → Core Stat (투력 · 강인함 · 기동 · 정신) → the rest, the shelf's own kind

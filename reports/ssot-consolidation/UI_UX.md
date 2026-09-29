@@ -1889,7 +1889,7 @@ Loop rule: a loop keeps the whole track. It is never a section taken from the mi
 Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (User 2026-09-29). A long crossfade is
 never the default fix for a join that does not fit.
 Playback:
-- BGM stays under the decision and result cues, and the existing ducking applies. The level that holds PRESENTATION §Mix
+- BGM stays under the decision and result cues, and the existing ducking applies: the music at -30 LUFS and every cue at
 - Mute or a hidden page stops the music, and coming back resumes it.
 - A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
 - Playback changes no gameplay state and consumes no Gameplay RNG.
@@ -1956,7 +1956,7 @@ New:
 ```new
 - Every track plays at the same loudness, except NIGHT, which plays 3 dB under the rest: it is the densest track and read
 as the loudest in play (User 2026-09-29).
-and its measurement are in `reports/bgm-sfx-mix-v2911.md` (User 2026-09-29).
+its §SFX LEVELS tier (User 2026-09-29; measurement `reports/bgm-sfx-mix-v2911.md`).
 - A phase change fades the old track out (1 s). The next track starts only after it, never over it, and rises over 1.5 s,
 so a phase never starts on a hard downbeat (User 2026-09-29).
 ```
@@ -2038,4 +2038,29 @@ Every ending carries its own result cue as the result lands, clearer than the mu
 - `endfail` - every failed ending (a failed Final, bankruptcy, the Death limit): a falling minor line onto a low held root
 - on the Final ending it follows the seal's own landing cue by 150 ms; reduced motion plays it at once
 - it ducks the music under it; it is presentation only and consumes no Gameplay RNG
+```
+
+
+## v2.9.11 quick patch — SFX levels (User 2026-09-29)
+
+New:
+
+```new
+### SFX LEVELS (User 2026-09-29)
+The cues were authored 24 dB apart; each now has its own level so a tier sounds as one loudness and every tier sits where
+PRESENTATION §Mix puts it. Measured as the cue's loudest K-weighted 100 ms window; audibility as its best 1/3-octave band
+over the music it is heard with (that music's loud 90th percentile, less the cue's own ducking). The music plays at
+-30 LUFS (NIGHT -33).
+| tier | cues | level | clears its music by |
+| --- | --- | --- | --- |
+| result | the NIGHT outcomes, the seal and ending cues, the Boss beats, `final`, `collapse` | -17 | 8 dB |
+| decision | ORDER / SALE commits (`order`, the price modes, `refusal`), purchases, open / close, `begin` / `newstore`, `rescue` | -19 | 8 dB |
+| action | `depart` / `return`, Gold, the ORDER crate, the receipt, `heal`, `fixture`, the clash beats, `supply` | -23 | 5 dB |
+| utility | `button`, `ui` | -27 | 3 dB |
+| rapid repeat | `quantity`, `quantset` | -29 | 3 dB |
+- each cue lands from 1.5 dB under its level to 3 dB over it (a cue may be lifted up to 3 dB to be heard over its music)
+- a cue lifted to that ceiling and still masked is its sound, not its level: it is reported for a User decision, never
+lifted further past its tier
+- the loudest cue over the loudest music peak stays under -3 dBFS
+- the fitted levels live in `dist/ui/audio.js` (`LEVEL`); the measurement is `tools/qa-sfx-mix.cjs` (in `npm run qa:runtime`)
 ```

@@ -567,6 +567,7 @@ A unique full track for every phase is not required.
 
 Existing mute / BGM / SFX ownership remains authoritative.
 - critical decision / result cues > ordinary action cues > utility cues > BGM / ambience
+  (the levels that hold this, cue by cue: UI_UX §AUDIO FEEDBACK — SFX LEVELS, User 2026-09-29)
 - rapid-repeat controls must not build into harsh overlapping sound
 - background / visibility transitions must not leak or duplicate playback
 - audio changes do not mutate gameplay state and consume no Gameplay RNG

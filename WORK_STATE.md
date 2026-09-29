@@ -117,7 +117,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - 엔진(`dist/ui/audio.js`)
   - 한 번에 한 곡만 32 kHz로 디코드하고, 오디오 시계로 s → e를 반복한다.
   - 페이즈별 곡은 `audioPhase()`로 고른다. 결말은 SUCC / FAIL로 나뉜다.
-  - 곡마다 음량을 BGM_LUFS −27로 맞춘다(NIGHT는 3 dB 더 작게). 효과음 버스는 +6 dB다. 페이즈 전환은 1초 페이드아웃 뒤 1.5초 페이드인이다(퀵패치, User 2026-09-29).
+  - 곡마다 음량을 BGM_LUFS −30으로 맞춘다(NIGHT는 3 dB 더 작게). 효과음은 큐마다 등급 레벨(LEVEL, tools/qa-sfx-mix.cjs)이다. 페이즈 전환은 1초 페이드아웃 뒤 1.5초 페이드인이다(퀵패치, User 2026-09-29).
   - 로드에 실패하면 신스로 대체한다.
 - 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, CHANGELOG §v2.9.11
 - 최종 QA (2026-09-29, HEAD `4c2704b`)

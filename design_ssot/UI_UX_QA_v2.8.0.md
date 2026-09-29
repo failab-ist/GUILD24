@@ -2758,6 +2758,8 @@ PASS:
   the result lands - also after a bankruptcy (CLOSE until then) and the Death limit (NIGHT until then)
 - decision and result cues (a sale, a refusal, a NIGHT outcome, the Boss seal) read clearly above the music; NIGHT does not
   feel louder than the other phases
+- cues of one tier sound as one loudness (§SFX LEVELS) - none jumps out, none disappears; runtime evidence
+  `tools/qa-sfx-mix.cjs`
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
 - no audio-related console or runtime error
 - runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)

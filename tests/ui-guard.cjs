@@ -3605,10 +3605,17 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
 // v2.9.11 quick patch mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): decision and result cues read above the music
 // (PRESENTATION §Mix) - the music 3 dB down, the effects bus 6 dB up, NIGHT a further 3 dB down; a phase change fades
 // the old track out, then the next one rises.
-test('v2.9.11 mix: effects over music, NIGHT under, a phase change fades out then in',()=>{
+test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a phase change fades out then in',()=>{
  const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
- assert.ok(/BGM_LUFS=-27,/.test(audio),'the music is trimmed to -27 LUFS');
- assert.ok(/SFX_GAIN=2;/.test(audio)&&/sfxBus\.gain\.value=level\.sfx\*SFX_GAIN;/.test(audio),'the effects bus carries +6 dB under the player\'s slider');
+ assert.ok(/BGM_LUFS=-30,/.test(audio),'the music is trimmed to -30 LUFS (User 2026-09-29: lower again)');
+ assert.ok(/sfxBus\.gain\.value=level\.sfx;/.test(audio)&&!/SFX_GAIN/.test(audio),'the effects bus is the player\'s slider alone');
+ // SFX LEVELS: every cue has its own fitted level and goes through it; tools/qa-sfx-mix.cjs holds the measurement
+ assert.deepEqual(Object.keys(Sound.levels).sort(),[...Sound.cues].sort(),'a level for every cue, and no stray one');
+ assert.ok(Object.values(Sound.levels).every(v=>v>0&&v<20),'levels are gains, not dB');
+ assert.ok(/const out=ctx\.createGain\(\);out\.gain\.value=LEVEL\[kind\]\?\?1;out\.connect\(sfxBus\);/.test(audio)
+  &&/sampleVoice\(file,t0,SAMPLE_VOICE\*\(sh\.sampleGain\?\?1\),out\)/.test(audio)&&/SFX_VOICE\*\(sh\.noise\.gain\?\?1\),sh\.noise,out\);/.test(audio)
+  &&!/play\([\s\S]{0,1500}'sine',sfxBus/.test(audio.slice(audio.indexOf('function play('),audio.indexOf('function play(')+2000)),'every voice of a cue goes through its level');
+ assert.ok(read('tools/qa-runtime.cjs').includes("'qa-sfx-mix'"),'the measurement runs in qa:runtime');
  for(const [k,t] of Object.entries(Sound.music))assert.equal(t.trim||0,k==='night'?-3:0,k+(k==='night'?': NIGHT 3 dB under':': no extra trim'));
  assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\)\/20\)/.test(audio),'the trim is applied');
  assert.deepEqual(Sound.fades,{out:1,in:1.5},'1 s out, 1.5 s in');
