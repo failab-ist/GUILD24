@@ -3,18 +3,22 @@
 // that copy only. The card replaces the bot's own pick in the first Store Support window from DAY 10 on in which the
 // bot actually buys, under the bot's own reserve (reader 380G), at the base price 320G - never an extra purchase.
 //   node tools/measure-royalcert-v2911.cjs verify [runs=300]          patched copy at the current values == original dist
-//   node tools/measure-royalcert-v2911.cjs arm <intentBonus|none> <commissionRate> [runs=3000] <out.json>
+//   node tools/measure-royalcert-v2911.cjs arm <intentBonus|none> <commissionRate> <overheadRate> [runs=3000] <out.json>
+//   intentBonus is added to the 바가지 intent (-0.16) while owned: 0.16 = current (0), 0 = removed, 0.10 = -0.06
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
 const REPO=path.resolve(__dirname,'..');
 const FILES=['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'];
-const LINE="const flat=mode==='overcharge'&&this.has('royalCert')?0:rule.intent;";
-const PATCHED="const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+(D.relicParams.royalCert.intentBonus??-rule.intent):rule.intent;";
+const LINES=[["const flat=mode==='overcharge'&&this.has('royalCert')?0:rule.intent;",
+ "const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+(D.relicParams.royalCert.intentBonus??-rule.intent):rule.intent;"],
+ // operating cost: the same share-of-overheadBase rule 지역 거점점 계약 uses, from the next Day (dayFacilities); 0 when unset
+ ["const base=this.overheadBase(day),hub=facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;",
+ "const base=this.overheadBase(day),hub=(facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0)+(facilities?.includes('royalCert')?base*(D.relicParams.royalCert.overheadRate||0):0);"]];
 function scratchDist(){
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'g24-royal-'));
  fs.cpSync(path.join(REPO,'dist'),dir,{recursive:true});
- const p=path.join(dir,'systems/shop.js'),src=fs.readFileSync(p,'utf8');
- if(src.split(LINE).length!==2)throw Error('expected exactly one royalCert intent line in shop.js');
- fs.writeFileSync(p,src.replace(LINE,PATCHED));return dir;
+ const p=path.join(dir,'systems/shop.js');let src=fs.readFileSync(p,'utf8');
+ for(const [a,b] of LINES){if(src.split(a).length!==2)throw Error('expected exactly one line in shop.js: '+a.slice(0,50));src=src.replace(a,b);}
+ fs.writeFileSync(p,src);return dir;
 }
 function load(root){for(const f of FILES)require(path.join(root,f+'.js'));}
 function summary(s){const R=s.npcs.flatMap(n=>n.records||[]),H=s.npcs.flatMap(n=>n.history||[]),rh=s.reportHistory||[];
@@ -32,15 +36,15 @@ if(mode==='verify'){
 }
 if(mode==='__raw'){ // child for verify: plain bot, no card forcing
  const root=process.argv[3]==='copy'?scratchDist():path.join(REPO,'dist');load(root);
- if(process.argv[3]==='copy'&&!Game.prototype.interest.toString().includes('intentBonus'))throw Error('scratch copy not loaded');
+ if(process.argv[3]==='copy'&&!(Game.prototype.interest.toString().includes('intentBonus')&&Game.prototype.expectedOperatingCost.toString().includes('royalCert')))throw Error('scratch copy not loaded');
  const rows=[],end=Game.prototype.end;Game.prototype.end=function(w,why){const s=this.run,r=end.call(this,w,why);rows.push(summary(s));return r;};
  Debug.simulate(Number(process.argv[4]),'reader',null,'adaptive','hybrid',{});process.stdout.write(JSON.stringify(rows));return;
 }
-if(mode!=='arm')throw Error('usage: verify | arm <intentBonus|none> <commissionRate> [runs] <out.json>');
-const bonusArg=process.argv[3],rate=Number(process.argv[4]),runs=Number(process.argv[5]||3000),out=process.argv[6];
+if(mode!=='arm')throw Error('usage: verify | arm <intentBonus|none> <commissionRate> <overheadRate> [runs] <out.json>');
+const bonusArg=process.argv[3],rate=Number(process.argv[4]),overhead=Number(process.argv[5]),runs=Number(process.argv[6]||3000),out=process.argv[7];
 const NONE=bonusArg==='none',PRICE=320,RESERVE=380;
-load(scratchDist());if(!Game.prototype.interest.toString().includes('intentBonus'))throw Error('scratch copy not loaded');
-if(!NONE){DATA.relicParams.royalCert.intentBonus=Number(bonusArg);DATA.relicParams.royalCert.commissionRate=rate;}
+load(scratchDist());if(!(Game.prototype.interest.toString().includes('intentBonus')&&Game.prototype.expectedOperatingCost.toString().includes('royalCert')))throw Error('scratch copy not loaded');
+if(!NONE){DATA.relicParams.royalCert.intentBonus=Number(bonusArg);DATA.relicParams.royalCert.commissionRate=rate;DATA.relicParams.royalCert.overheadRate=overhead;}
 const P=Game.prototype;let replaced=0,charged=0,ownSkips=0;const offers={n:0,accepted:0,chance:0,chanceNoCard:0};
 if(!NONE){const br=P.buyRelic;P.buyRelic=function(id){const s=this.run,w=s.relicWindow;
   if(this.has('royalCert')&&id==='royalCert'){w.purchased=id;ownSkips++;return;}   // already owned: the window is spent, nothing bought
@@ -56,6 +60,6 @@ const sell=P.sell;P.sell=function(stockId,m='full'){
  return sell.apply(this,arguments);};
 const rows=[],end=P.end;P.end=function(w,why){const s=this.run,r=end.call(this,w,why);const m=summary(s);m.owned=s.facilities.includes('royalCert');rows.push(m);return r;};
 Debug.simulate(runs,'reader',null,'adaptive','hybrid',{});
-const meta={arm:NONE?'none':{intentBonus:Number(bonusArg),commissionRate:rate},runs,replaced,charged,chargedCheck:charged===replaced*PRICE,ownSkips,
+const meta={arm:NONE?'none':{intentBonus:Number(bonusArg),commissionRate:rate,overheadRate:overhead},runs,replaced,charged,chargedCheck:charged===replaced*PRICE,ownSkips,
  offers:{n:offers.n,acceptedRate:offers.n?offers.accepted/offers.n:null,meanChance:offers.n?offers.chance/offers.n:null,meanChanceNoCard:offers.n?offers.chanceNoCard/offers.n:null}};
 fs.writeFileSync(out,JSON.stringify({meta,rows}));console.error(JSON.stringify(meta));
