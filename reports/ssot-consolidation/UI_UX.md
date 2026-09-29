@@ -2021,3 +2021,21 @@ New:
 - one exception (User 2026-09-29, v2.9.11 quick patch): on ORDER the player may fold the floating box, Death line included,
 to a `요약` chip (ORDER — FLOATING TODAY LINE); the count is back with one tap
 ```
+
+
+## v2.9.11 quick patch — the ending waits for its result (User 2026-09-29)
+
+New:
+
+```new
+The ending track never tells the result before the screen does (User 2026-09-29): arriving at the ending, the music of the
+screen it came from (BOSS through the Final and its clash, CLOSE after a bankruptcy, NIGHT after the Death limit) plays on
+until the result lands - the Final seal's landing frame, or one short beat on an ending with no seal - and only then does
+SUCC / FAIL come in, with the ending cue (§ENDING CUE). A reload of the ending plays SUCC / FAIL at once.
+### ENDING CUE (User 2026-09-29)
+Every ending carries its own result cue as the result lands, clearer than the music alone:
+- `endwin` - a cleared Run: a rising line to a held major chord
+- `endfail` - every failed ending (a failed Final, bankruptcy, the Death limit): a falling minor line onto a low held root
+- on the Final ending it follows the seal's own landing cue by 150 ms; reduced motion plays it at once
+- it ducks the music under it; it is presentation only and consumes no Gameplay RNG
+```

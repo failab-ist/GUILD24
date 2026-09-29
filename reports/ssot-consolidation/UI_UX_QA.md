@@ -1895,3 +1895,13 @@ New:
 and a reload keep it folded; the key and the chip clear the menu pin on a phone (User 2026-09-29)
 발주서's paper, with no decorative stripe or stacked frame (PRESENTATION §Edge / material); one cell per slot,
 ```
+
+
+## v2.9.11 quick patch — the ending waits for its result (User 2026-09-29)
+
+New:
+
+```new
+- the Final and its clash play BOSS to the end; the ending track and the ending cue (`endwin` / `endfail`) come in only as
+the result lands - also after a bankruptcy (CLOSE until then) and the Death limit (NIGHT until then)
+```

@@ -119,10 +119,17 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   await p.waitForTimeout(2500);
   check('a file that cannot load falls back to the synthesised bed',await p.evaluate(o=>__bgm.osc>o,osc0));
   await p.unroute('**/assets/bgm/night.mp3');blocking=false;
-  // the real app key through render(): a failed ending on the ending screen
+  // the real app key through render(): arriving at a failed ending from NIGHT holds NIGHT until the result lands, then the
+  // ending cue and FAIL (User 2026-09-29) - the music never tells the result before the screen does
+  await p.evaluate(()=>{Guild24.game.run.phase='night';Guild24.render();});await p.waitForTimeout(600);
+  await p.evaluate(()=>{window.__cues=[];const pl=Sound.play;Sound.play=(k,d)=>{__cues.push(k);return pl(k,d);};});
   const fe=fetched.length;
   await p.evaluate(()=>{const s=Guild24.game.run;s.phase='end';s.win=false;s.endReason='qa';Guild24.render();});
-  await p.waitForTimeout(800);
+  await p.waitForTimeout(120);
+  check('arriving at the ending, the music of the screen before plays on (no ending track, no ending cue yet)',
+   !fetched.slice(fe).some(k=>k==='fail'||k==='succ')&&await p.evaluate(()=>!__cues.includes('endfail')&&!__cues.includes('endwin')),fetched.slice(fe).join(','));
+  await p.waitForTimeout(700);
+  check('when the result lands, the ending cue plays and FAIL comes in',await p.evaluate(()=>__cues.includes('endfail'))&&fetched.slice(fe).includes('fail'),fetched.slice(fe).join(','));
   check('render() on a failed ending asks for fail.mp3 (and the title ahead) or keeps it decoded',fetched.slice(fe).every(k=>k==='fail'||k==='title'));
   check('no page or console error',errors.length===0,errors.slice(0,3).join(' | '));
  }finally{await browser.close();server.kill();}

@@ -117,6 +117,10 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
  /* v2.9.2 H5: the Final seal on the ending tape - a clear rings up out of the Boss motif's root, a failure falls
     under it. Both land on the stamp's frame with the NIGHT `hit`; neither plays anywhere else. */
  sealwin:[165,247,330,494],sealfail:[165,147],
+ /* User 2026-09-29: the ending's own result cue, played as the result lands on every ending (UI_UX §AUDIO FEEDBACK — ENDING
+    CUE) - a clear rises through the Boss motif's root to a held major chord; every failure (the Final lost, bankruptcy, the
+    Death limit) falls through a minor line onto a low held root. Longer than a decision cue because it closes the Run. */
+ endwin:[330,392,494,659,988],endfail:[330,277,220,165],
  /* v2.9.2 H3: the second and third crate of an ORDER cascade - the `order` stamp's root, short and dry */
  crate:[110],
  /* v2.9.2 H4: the CLOSING receipt prints as one pass, never a tick per row - a single dry paper
@@ -260,6 +264,8 @@ const shape={
     no information - D25 already revealed everything it stands on. */
  sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
  sealfail:{hit:1,gain:1,dur:.5,type:'sawtooth',step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
+ endwin:{gain:1.15,dur:.9,type:'triangle',step:.12,attack:.01,layer:{ratio:2,at:.04,dur:1.6,gain:.34},noise:{at:.48,dur:.8,gain:.18,hz:6000,q:1,filter:'highpass'},duck:.85},
+ endfail:{gain:1.1,dur:1.1,type:'sine',step:.26,attack:.04,glide:.985,layer:{ratio:.5,at:0,dur:2.2,gain:.5},noise:{at:0,dur:1.2,gain:.22,hz:180,q:.6,filter:'lowpass'},duck:.85},
  crate:{hit:1,gain:.8,dur:.07,type:'square',step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.45,hz:2600,q:.6,filter:'highpass'},duck:.3},
  /* v2.9.2 H4: one quiet dry tick for the whole receipt body - lighter and shorter than `crate`,
     never repeated per row */

@@ -27,7 +27,18 @@ let prepOpen=false;
 /* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
    screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */
 function audioPhase(){const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
+ if(s.phase==='end'&&!endRevealed)return endFrom;
  return s.phase==='end'?(s.win?'end-win':'end-fail'):s.phase;}
+/* UI_UX §AUDIO FEEDBACK — PHASE BGM (User 2026-09-29): arriving at the ending, the music of the screen it came from (BOSS
+   after the Final, CLOSE after a bankruptcy, NIGHT after the Death limit) plays on until the result lands - the Final seal's
+   landing frame, or a short hold on any other ending - and only then do the ending cue (`endwin` / `endfail`) and the
+   SUCC / FAIL track come in, so neither can tell the result before the screen does. A reload of the ending is already
+   revealed. */
+let endRevealed=true,endFrom='final',endAt=null;
+function endReveal(){const s=game.run;clearTimeout(endAt);
+ const land=!motionOK()?0:s?.finalReport?FINAL_SEAL.hold+STAMP_FALL:ENDING_HOLD;
+ endAt=setTimeout(()=>{if(game.run?.phase!=='end'||endRevealed)return;endRevealed=true;const st=game.account.settings;
+  Sound.play(game.run.win?'endwin':'endfail',game.run.finalReport?.15:0);Sound.sync(st.muted,audioPhase(),st);},land);}
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -76,6 +87,7 @@ const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_ST
 /* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
 const FINAL_SEAL={hold:200,won:{from:2,dip:6},lost:{from:1.6,dip:3}};
+const ENDING_HOLD=320;   // an ending with no seal (bankruptcy, the Death limit) lands its result after one beat
 let sealCueAt=null;
 /* v2.9.2 H3 ORDER confirm: one crate per ordered SKU lands on the warehouse list in a cascade capped at ORDER_BEAT.total ms
    (the step shrinks as SKUs grow; ORDER_BEAT.step is its ceiling); only the first ORDER_BEAT.hits landings are audible - the
@@ -567,7 +579,10 @@ function stampPress(el){
 }
 function render(){
  if(clash)return finishClash(); // a redraw during the FINAL clash lands on the ending it was playing toward
- const s=game.run;Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
+ const s=game.run;
+ /* arriving at the ending from a live screen: hold its music until the result lands (endReveal) */
+ if(s?.phase==='end'&&lastPhase!==null&&!String(lastPhase).startsWith('end:')){endRevealed=false;endFrom=String(lastPhase).split(':')[0];}
+ Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
  /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
@@ -597,6 +612,7 @@ function render(){
  if(phase!=='final')finalOrdered=false;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
+ if(phase==='end'&&arrived)endReveal();
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to

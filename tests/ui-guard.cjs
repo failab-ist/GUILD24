@@ -3639,4 +3639,15 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  assert.ok(/\.stock-side\{display:block;position:sticky;top:46px;margin-top:46px;/.test(css)&&/\.p-order \.dock \.stock-handle,\.p-order \.dock \.stock-sheet\{display:none\}/.test(css),'desk: open, following the scroll, below the menu pin, no handle');
  assert.ok(/\['order-stock','\.stock-handle,\.stock-side \.stock-head',/.test(app),'the stock lesson points at whichever is on screen');
 });
+// UI_UX §AUDIO FEEDBACK — ENDING CUE (User 2026-09-29): the ending's music and cue wait for the result to land
+test('ending: the music before holds until the result lands, then the ending cue and SUCC / FAIL',()=>{
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ assert.ok(Sound.cues.includes('endwin')&&Sound.cues.includes('endfail'),'a clear and a failure cue of their own');
+ assert.ok(/if\(s\.phase==='end'&&!endRevealed\)return endFrom;/.test(fn('audioPhase')),'until then the ending plays the screen it came from');
+ assert.ok(/if\(s\?\.phase==='end'&&lastPhase!==null&&!String\(lastPhase\)\.startsWith\('end:'\)\)\{endRevealed=false;endFrom=String\(lastPhase\)\.split\(':'\)\[0\];\}/.test(fn('render')),'only on arriving - a reload of the ending is already revealed');
+ const r=fn('endReveal');
+ assert.ok(/!motionOK\(\)\?0:s\?\.finalReport\?FINAL_SEAL\.hold\+STAMP_FALL:ENDING_HOLD/.test(r),'the Final seal\'s landing frame, or one beat on any other ending');
+ assert.ok(/Sound\.play\(game\.run\.win\?'endwin':'endfail'/.test(r)&&/Sound\.sync\(st\.muted,audioPhase\(\),st\)/.test(r),'then the cue and the ending track');
+ assert.ok(/if\(phase==='end'&&arrived\)endReveal\(\);/.test(fn('render')),'armed on arrival');
+});
 console.log(count+' ui guard groups passed');

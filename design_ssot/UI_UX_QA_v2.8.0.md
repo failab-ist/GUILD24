@@ -2754,6 +2754,8 @@ PASS:
 - the tracks sound equally loud, and at BGM 100% / SFX 100% the music is clearly audible while decision cues still read above
   it (UI-Q114)
 - a phase change does not overlap two tracks: the old one fades out, then the next one rises without a hard start
+- the Final and its clash play BOSS to the end; the ending track and the ending cue (`endwin` / `endfail`) come in only as
+  the result lands - also after a bankruptcy (CLOSE until then) and the Death limit (NIGHT until then)
 - decision and result cues (a sale, a refusal, a NIGHT outcome, the Boss seal) read clearly above the music; NIGHT does not
   feel louder than the other phases
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
