@@ -1888,9 +1888,7 @@ Loop rule: a loop keeps the whole track. It is never a section taken from the mi
 Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (User 2026-09-29). A long crossfade is
 never the default fix for a join that does not fit.
 Playback:
-- Every track plays at the same loudness.
-- BGM stays under the decision and result cues, and the existing ducking applies.
-- A phase change fades the old track out.
+- BGM stays under the decision and result cues, and the existing ducking applies. The level that holds PRESENTATION §Mix
 - Mute or a hidden page stops the music, and coming back resumes it.
 - A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
 - Playback changes no gameplay state and consumes no Gameplay RNG.
@@ -1947,4 +1945,17 @@ iPhone Safari (User 2026-09-29):
 (iOS Safari leaves the audio suspended); otherwise the next tap resumes it (User 2026-09-29).
 - The iPhone silent switch keeps Safari's default: while it is on, the game is silent, and it never stops another app's
 music (User 2026-09-29).
+```
+
+
+## v2.9.11 quick patch — BGM / SFX mix (User 2026-09-29)
+
+New:
+
+```new
+- Every track plays at the same loudness, except NIGHT, which plays 3 dB under the rest: it is the densest track and read
+as the loudest in play (User 2026-09-29).
+and its measurement are in `reports/bgm-sfx-mix-v2911.md` (User 2026-09-29).
+- A phase change fades the old track out (1 s). The next track starts only after it, never over it, and rises over 1.5 s,
+so a phase never starts on a hard downbeat (User 2026-09-29).
 ```

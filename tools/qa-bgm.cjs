@@ -4,7 +4,7 @@
 //   - the join is scheduled on the audio clock: the next pass starts at s exactly when the current one reaches e,
 //     the old pass fades out over `xf` and the new one fades in (5 ms, BOSS 1 s) - checked by releasing the
 //     2 s-ahead pass timer early instead of waiting three minutes
-//   - one track at a time; a phase change fades the old track out
+//   - one track at a time; a phase change fades the old track out, and the next one starts only after that fade
 //   - the next phase's file is fetched ahead (bytes only), so the day's chain never waits on the network
 //   - mute and a hidden page stop the music; coming back resumes the same track
 //   - coming back to the page resumes a suspended context without waiting for a tap (iOS `interrupted`)
@@ -46,7 +46,7 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   p.on('console',m=>{if(m.type()==='error'&&!(blocking&&/Failed to load resource/.test(m.text())))errors.push(m.text());});
   p.on('request',r=>{const m=r.url().match(/assets\/bgm\/(\w+)\.mp3/);if(m)fetched.push(m[1]);});
   await p.goto(`http://127.0.0.1:${PORT}/index.html`);
-  const music=await p.evaluate(()=>Sound.music);
+  const music=await p.evaluate(()=>Sound.music),fades=await p.evaluate(()=>Sound.fades);
   // a new account starts muted (META settings); the player turns sound on
   check('a new account starts muted and plays nothing',await p.evaluate(()=>Guild24.game.account.settings.muted&&__bgm.starts.length===0));
   await p.evaluate(()=>{Guild24.game.account.settings.muted=false;Guild24.render();});
@@ -65,7 +65,7 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   const keys=[['foundation','title'],['morning','morning'],['order','order'],['sell','sale'],['night','night'],['closing','close'],['final','boss'],['end-win','succ'],['end-fail','fail']];
   await p.evaluate(()=>Guild24.game.start('qa-bgm-1'));
   for(const [phase,key] of keys){
-   const before=await p.evaluate(()=>__bgm.starts.length),fetchedBefore=fetched.length;
+   const before=await p.evaluate(()=>__bgm.starts.length),fetchedBefore=fetched.length,swapAt=await p.evaluate(()=>__bgm.ctx?__bgm.ctx.currentTime:0);
    await p.evaluate(ph=>{const s=Guild24.game.run;if(ph.startsWith('end')){s.phase='end';s.win=ph==='end-win';}else s.phase=ph;
     Sound.sync(false,ph==='foundation'?'prep':ph,Guild24.game.account.settings);},phase);
    if(key==='title'){check('첫 점포지원 keeps the title playing (no refetch, no restart)',fetched.length===fetchedBefore&&await p.evaluate(b=>__bgm.starts.length===b,before));continue;}
@@ -74,6 +74,8 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
    // the day's chain (morning -> order -> sale -> night -> close) is fetched ahead, once; the rest when the phase comes
    const chain=['morning','order','sale','night','close'].includes(key);
    if(chain)check(`${key}.mp3 was fetched ahead of its phase, and only once`,fetched.slice(0,fetchedBefore).includes(key)&&fetched.filter(k=>k===key).length===1,fetched.join(','));
+   check(`${phase}: ${key} starts after the old track's ${fades.out} s fade-out (never two keys at once)`,ok&&s.when>=swapAt+fades.out-.05,
+    ok?`starts ${(s.when-swapAt).toFixed(2)} s after the change`:'no start');
    check(`${phase} plays ${key}.mp3 from its loop start`,ok&&fetched.includes(key)&&Math.abs(s.offset-music[key].s)<.002,
     ok?`offset ${s.offset.toFixed(3)} / s ${music[key].s}`:'no start');
   }

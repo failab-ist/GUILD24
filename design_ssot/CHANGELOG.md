@@ -138,6 +138,11 @@ the owner headers and in the git tag.
   checked for iPhone Safari (`reports/ios-safari-v2911.md`). A quick second tap no longer zooms the page (pinch zoom stays), a
   long press on art opens no save-image menu, and coming back from a call or another app resumes the sound without waiting for
   a tap. The silent switch keeps Safari's default (the game is silent; another app's music is never stopped). No gameplay change.
+- **BGM / SFX mix** - UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47 (User 2026-09-29, from play): measured on the page's own
+  output (`reports/bgm-sfx-mix-v2911.md`), most decision and result cues landed under the music, against PRESENTATION §Mix.
+  The music comes down 3 dB (-24 → -27 LUFS) and the effects bus goes up 6 dB; NIGHT, the densest track, a further 3 dB. A
+  phase change now fades the old track out over 1 s, starts the next one after it and raises it over 1.5 s (was 0.6 s each,
+  overlapping). The sliders, ducking, loop points and joins are unchanged.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
 

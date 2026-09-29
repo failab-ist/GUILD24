@@ -2725,7 +2725,9 @@ PASS:
 - a loop join is not heard as a cut, click or gap (BOSS: its 1 s crossfade)
 - the tracks sound equally loud, and at BGM 100% / SFX 100% the music is clearly audible while decision cues still read above
   it (UI-Q114)
-- a phase change does not overlap two tracks for longer than its fade
+- a phase change does not overlap two tracks: the old one fades out, then the next one rises without a hard start
+- decision and result cues (a sale, a refusal, a NIGHT outcome, the Boss seal) read clearly above the music; NIGHT does not
+  feel louder than the other phases
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
 - no audio-related console or runtime error
 - runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)

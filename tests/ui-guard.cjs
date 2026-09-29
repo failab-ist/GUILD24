@@ -3591,4 +3591,17 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  assert.ok(/addEventListener\('visibilitychange',[^\n]*Sound\.sync\([^\n]*\);Sound\.wake\(\);\}\)/.test(app),'coming back to the page wakes it');
  assert.ok(!/audioSession/.test(audio),'the silent switch keeps the Safari default (User 2026-09-29)');
 });
+// v2.9.11 quick patch mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): decision and result cues read above the music
+// (PRESENTATION §Mix) - the music 3 dB down, the effects bus 6 dB up, NIGHT a further 3 dB down; a phase change fades
+// the old track out, then the next one rises.
+test('v2.9.11 mix: effects over music, NIGHT under, a phase change fades out then in',()=>{
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ assert.ok(/BGM_LUFS=-27,/.test(audio),'the music is trimmed to -27 LUFS');
+ assert.ok(/SFX_GAIN=2;/.test(audio)&&/sfxBus\.gain\.value=level\.sfx\*SFX_GAIN;/.test(audio),'the effects bus carries +6 dB under the player\'s slider');
+ for(const [k,t] of Object.entries(Sound.music))assert.equal(t.trim||0,k==='night'?-3:0,k+(k==='night'?': NIGHT 3 dB under':': no extra trim'));
+ assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\)\/20\)/.test(audio),'the trim is applied');
+ assert.deepEqual(Sound.fades,{out:1,in:1.5},'1 s out, 1.5 s in');
+ assert.ok(/at=Math\.max\(now,swapEnd\)/.test(audio)&&/swapEnd=now\+fade;/.test(audio),'the next track waits for the old fade');
+ assert.ok(/linearRampToValueAtTime\(full\*\(i\/8\)\*\*2,at\+BGM_IN\*i\/8\)/.test(audio),'the rise is a squared curve, never a hard start');
+});
 console.log(count+' ui guard groups passed');

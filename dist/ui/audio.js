@@ -49,20 +49,27 @@ const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='e
    s -> e (tools/bgm-loop.py, reports/bgm-loops.md). At e the next pass starts at s while the old one runs on for `xf`
    and fades out under it. s sits 5 ms before its onset, so a 5 ms fade-in keeps the attack whole; BOSS alone joins
    with a 1 s equal-power crossfade (`cross`, User 2026-09-29). `lufs` is each file's measured integrated loudness,
-   trimmed to BGM_LUFS so every phase plays at the same loudness (USER 2026-09-24). One track is decoded at a time, at
+   trimmed to BGM_LUFS so every phase plays at the same loudness (USER 2026-09-24; NIGHT 3 dB under, below). One track is decoded at a time, at
    BGM_RATE to keep a three-minute track in memory on a phone. A file that cannot load falls back to the synthesised
    bed below (`bedFor`), so a phase is never silent because of a network or decode failure.
    The web build ships 128 kb/s copies (User 2026-09-29; tools/vendor-assets.py): they decode sample-aligned with the
    originals the points were measured on, and `lufs` is measured on these copies. While a phase plays, the next phase's
    file is fetched ahead (`nextOf`) - the bytes only, never a second decoded track - so a phase change does not wait on
    the network. */
-const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-24,BGM_RATE=32000,BGM_SWAP=.6;
+/* Mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): at -24 LUFS most decision and result cues landed under the music,
+   against PRESENTATION §Mix (decision / result > action > utility > BGM). The music comes down 3 dB and the effects bus goes
+   up 6 dB (SFX_GAIN) rather than either alone: -9 dB of music alone would leave the game too quiet on a phone (UI-Q114),
+   +9 dB of effects alone would run the loudest cues into the ceiling. NIGHT sits a further 3 dB under (`trim`): it is the
+   densest track - the same integrated loudness with no quiet passages - and read as the loudest in play.
+   A phase change fades the old track out over BGM_SWAP; the next one starts only after it (two keys never overlap) and
+   rises over BGM_IN on a squared curve, so it does not start on a hard downbeat. */
+const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-27,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5,SFX_GAIN=2;
 const bgm={
  title:{s:.069,e:116.704,xf:.01,lufs:-13.8},
  morning:{s:9.748,e:162.88,xf:.01,lufs:-11.8},
  order:{s:.045,e:176.014,xf:.01,lufs:-12.8},
  sale:{s:.069,e:171.966,xf:.01,lufs:-12.3},
- night:{s:.055,e:168.168,xf:.01,lufs:-12.9},
+ night:{s:.055,e:168.168,xf:.01,lufs:-12.9,trim:-3},
  close:{s:.047,e:118.137,xf:.06,lufs:-12.1},
  boss:{s:9.535,e:171.492,xf:1,cross:true,lufs:-12.8},
  succ:{s:.043,e:176.741,xf:.01,lufs:-13.2},
@@ -149,7 +156,7 @@ function buses(force){if(!ctx)return;
  /* Only written when the player actually moved a slider. render() syncs on every redraw, and
     assigning .value there would cancel a ducking ramp mid-flight on every frame of a redraw. */
  if(force||appliedBgm!==level.bgm){bgmBus.gain.cancelScheduledValues(ctx.currentTime);bgmBus.gain.value=level.bgm;appliedBgm=level.bgm;}
- if(force||appliedSfx!==level.sfx){sfxBus.gain.value=level.sfx;appliedSfx=level.sfx;}}
+ if(force||appliedSfx!==level.sfx){sfxBus.gain.value=level.sfx*SFX_GAIN;appliedSfx=level.sfx;}}
 function tone(hz,when,duration,volume,type='triangle',bus=null,opt){const o=ctx.createOscillator(),gain=ctx.createGain();o.type=type;o.frequency.setValueAtTime(hz,when);
  if(opt&&opt.glide)o.frequency.exponentialRampToValueAtTime(Math.max(20,hz*opt.glide),when+duration);
  const atk=opt&&opt.attack!==undefined?opt.attack:.018;
@@ -286,7 +293,7 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
     whole run moves, so the 70 ms spacing that states the count is kept. */
  if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',sfxBus,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
-let music=null,pending='',decoded={key:'',buf:null},ahead={key:'',bytes:null};const resumeAt={};
+let swapEnd=0,music=null,pending='',decoded={key:'',buf:null},ahead={key:'',bytes:null};const resumeAt={};
 function bgmDecode(bytes){const Off=window.OfflineAudioContext||window.webkitOfflineAudioContext;let dc=ctx;
  try{if(Off)dc=new Off(2,1,BGM_RATE);}catch(e){dc=ctx;}
  return new Promise((ok,no)=>{const p=dc.decodeAudioData(bytes,ok,no);if(p&&p.catch)p.catch(no);});}
@@ -306,14 +313,16 @@ function bgmPass(m,at,from,fadeIn){const t=bgm[m.key],src=ctx.createBufferSource
  m.passes.push({at,from});if(m.passes.length>2)m.passes.shift();m.srcs.push(src);src.onended=()=>{const i=m.srcs.indexOf(src);if(i>=0)m.srcs.splice(i,1);};
  clearTimeout(m.timer);
  m.timer=setTimeout(()=>{if(music===m)bgmPass(m,end,t.s,t.cross?t.xf:.005);},Math.max(0,(end-ctx.currentTime-2)*1000));}
-function bgmStart(key,buf){const t=bgm[key],now=ctx.currentTime,out=ctx.createGain();
- out.gain.setValueAtTime(0,now);out.gain.linearRampToValueAtTime(Math.pow(10,(BGM_LUFS-t.lufs)/20),now+BGM_SWAP);out.connect(bgmBus);
+function bgmStart(key,buf){const t=bgm[key],now=ctx.currentTime,at=Math.max(now,swapEnd),out=ctx.createGain(),
+ full=Math.pow(10,(BGM_LUFS-t.lufs+(t.trim||0))/20);
+ out.gain.setValueAtTime(0,now);out.gain.setValueAtTime(0,at);
+ for(let i=1;i<=8;i++)out.gain.linearRampToValueAtTime(full*(i/8)**2,at+BGM_IN*i/8);out.connect(bgmBus);
  const m={key,buf,out,srcs:[],timer:null,passes:[]};music=m;
  let from=resumeAt[key];if(!(from>=t.s&&from<t.e))from=t.s;delete resumeAt[key];
- bgmPass(m,now+.02,from,.005);}
+ bgmPass(m,at+.02,from,.005);}
 /* `keep` remembers where the loop was, so hiding the page or muting resumes the track rather than restarting it.
    A phase change starts the next track from its own loop start. */
-function bgmStop(fade,keep){const m=music;if(!m||!ctx)return;music=null;clearTimeout(m.timer);const now=ctx.currentTime;
+function bgmStop(fade,keep){const m=music;if(!m||!ctx)return;music=null;clearTimeout(m.timer);const now=ctx.currentTime;swapEnd=now+fade;
  /* the pass playing now - the next one may already be queued for the join */
  const cur=m.passes.filter(q=>q.at<=now).pop();
  if(keep&&cur){const t=bgm[m.key];let p=cur.from+(now-cur.at);if(p>=t.e)p=t.s+(p-t.e);resumeAt[m.key]=p;}
@@ -342,5 +351,5 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
 /* Coming back to the page (a call, another app) tries to resume the context at once rather than waiting for the next tap:
    iOS Safari leaves it `interrupted` (User 2026-09-29). A browser that refuses without a gesture resumes on the next tap (play). */
 function wake(){if(ctx&&enabled&&!document.hidden&&ctx.state!=='running')ctx.resume().catch(()=>{});}
-G.Sound={play,sync,wake,mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+G.Sound={play,sync,wake,fades:{out:BGM_SWAP,in:BGM_IN},mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

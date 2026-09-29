@@ -1757,7 +1757,7 @@ Listen to at least:
 - a loop join is not heard as a cut, click or gap (BOSS: its 1 s crossfade)
 - the tracks sound equally loud, and at BGM 100% / SFX 100% the music is clearly audible while decision cues still read above
 it (UI-Q114)
-- a phase change does not overlap two tracks for longer than its fade
+- a phase change does not overlap two tracks: the old one fades out, then the next one rises without a hard start
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
 - no audio-related console or runtime error
 - runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)
@@ -1814,4 +1814,14 @@ Verify UI_UX §TOUCH / INTERACTION (iPhone Safari) and §AUDIO FEEDBACK — PHAS
 - the save-image menu opens on art
 - the sound stays off after coming back and tapping
 - the game stops another app's music
+```
+
+
+## v2.9.11 quick patch — BGM / SFX mix (User 2026-09-29)
+
+New:
+
+```new
+- decision and result cues (a sale, a refusal, a NIGHT outcome, the Boss seal) read clearly above the music; NIGHT does not
+feel louder than the other phases
 ```

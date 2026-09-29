@@ -2699,9 +2699,12 @@ Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (
 never the default fix for a join that does not fit.
 
 Playback:
-- Every track plays at the same loudness.
-- BGM stays under the decision and result cues, and the existing ducking applies.
-- A phase change fades the old track out.
+- Every track plays at the same loudness, except NIGHT, which plays 3 dB under the rest: it is the densest track and read
+  as the loudest in play (User 2026-09-29).
+- BGM stays under the decision and result cues, and the existing ducking applies. The level that holds PRESENTATION §Mix
+  and its measurement are in `reports/bgm-sfx-mix-v2911.md` (User 2026-09-29).
+- A phase change fades the old track out (1 s). The next track starts only after it, never over it, and rises over 1.5 s,
+  so a phase never starts on a hard downbeat (User 2026-09-29).
 - Mute or a hidden page stops the music, and coming back resumes it.
 - Coming back from a call or another app resumes the sound without waiting for a tap where the browser allows it
   (iOS Safari leaves the audio suspended); otherwise the next tap resumes it (User 2026-09-29).
