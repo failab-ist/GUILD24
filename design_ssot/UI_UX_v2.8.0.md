@@ -231,6 +231,21 @@ not only in the 도감.
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
 - ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button. v2.9.11 quick patch (User 2026-09-29): the ledger's `발주 후` joins the box the same way, last (under `오늘`), once the ledger line has gone under it - the same value, moving with every quantity tap, in the ledger's short color when below zero; the Death line stays first. Each copy appears only while its own source is under the rail. The box has one type ladder (User 2026-09-29): every line is a small label - `사망`, `오늘`, `발주 후` - in one shared column, and its value in one face and size (the Death line's own words, split into label and value); tight padding and a hairline between lines
 
+### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
+
+The warehouse is held apart from the 발주서, like an inventory, so it can be read against the offer rows while ordering.
+- Desk (1024 px and wider): a column beside the form, always open, following the scroll; the form's own `창고` block is
+  not shown there (one copy). It sits below the menu pin.
+- Phone: a slim `창고 N / M칸 · K종` handle on top of the dock. It is a row of the dock, so it never covers an offer row. Like
+  the floating Death box's copies, it shows only once the form's own `창고` block has scrolled up under the rail (one copy
+  on screen), and stays while its sheet is open.
+  It opens the same list as a sheet rising from the dock, at most 45% of the screen, with its own scroll.
+  - The sheet does not dim or lock the form: the rows above it still scroll and take taps, and the rows under it can be
+    scrolled above it. Only the handle (`열기` / `닫기`) or Escape closes it; a quantity tap keeps it open.
+  - Leaving ORDER closes it. The form's own `창고` block stays (the first-ORDER stock lesson points at it).
+- The list is the `창고` block's own: icon, name, count, days left (1 day or less in the warning color). The same type
+  ladder as the floating Death box: 11 px labels, 13 px values, on the same brown. No new copy.
+
 ### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
 
 Arriving at a new Day's MORNING within the session, the ceiling DAY sign's number rolls once: yesterday's number rises

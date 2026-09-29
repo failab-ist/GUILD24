@@ -430,7 +430,7 @@ let cue=null,handoff=null;
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
-let pinFolded=false,pinWatch=null,orderWatch=null,railShown='';
+let pinFolded=false,pinWatch=null,orderWatch=null,railShown='',handleShown='',stockSheet=false;
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
@@ -467,9 +467,12 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     the landing frame (one crate per SKU, never one per unit); a SKU new to the warehouse brings its row in with it. A folded list
     shows the `N / M칸` summary only, which moves on the last landing. The till's 보유 골드 counts down to the resolved value. */
  if(c==='order'){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_BEAT.total-STAMP_FALL)/Math.max(1,k.length-1));
-  const brief=$('.p-order .stock-brief'),sum=brief?.querySelector('summary b'),open=!!brief?.open;
+  /* the list on screen takes the crates: the desk's column, the phone's open 창고 sheet, or the form's open block (UI_UX
+     §ORDER — WAREHOUSE PANEL); every `N / M칸` and `N종` figure moves on the last landing */
+  const brief=$('.p-order .form .stock-brief'),side=$('.p-order .stock-side'),sheet=$('#stock-sheet'),
+   list=side?.getClientRects().length?side:sheet&&!sheet.hidden?sheet:brief?.open?brief:null;
   k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
-   const row=open?brief.querySelector('li[data-item="'+item+'"]'):null,icon=row?.firstElementChild,cnt=row?.querySelector('span');
+   const row=list?list.querySelector('li[data-item="'+item+'"]'):null,icon=row?.firstElementChild,cnt=row?.querySelector('span');
    if(row&&icon&&cnt){const now=cnt.textContent,was=h.before?.[item];
     if(was===undefined)A(row,{opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});else cnt.textContent=was+'개';
     A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'},
@@ -477,9 +480,11 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
    if(i<ORDER_BEAT.hits)orderCueAt.push(setTimeout(()=>Sound.play(i?'crate':'order'),land));});
   if(!k.length)Sound.play('order');
   /* the warehouse figures - the summary's `N / M칸` and `N종`, and the register's 창고 잔여 칸 - are one fact; all three move on the last landing */
-  if(k.length){const last=Math.round((k.length-1)*step)+STAMP_FALL,kinds=brief?.querySelector('summary i'),
+  if(k.length){const last=Math.round((k.length-1)*step)+STAMP_FALL,
     room=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='창고 잔여 칸')?.querySelector('b'),
-    held=[[sum,h.used+' / '+game.capacity()+'칸'],[kinds,Object.keys(h.before||{}).length+'종'],[room,(game.capacity()-h.used)+' / '+game.capacity()]].filter(([el])=>el);
+    held=[...[...document.querySelectorAll('.p-order .stock-brief summary b,.p-order .stock-head b')].map(el=>[el,h.used+' / '+game.capacity()+'칸']),
+     ...[...document.querySelectorAll('.p-order .stock-brief summary i,.p-order .stock-head em')].map(el=>[el,Object.keys(h.before||{}).length+'종']),
+     [room,(game.capacity()-h.used)+' / '+game.capacity()]].filter(([el])=>el);
    const now=held.map(([el])=>el.textContent);held.forEach(([el,was])=>{el.textContent=was;});
    A({t:0},{t:1,duration:last,onComplete:()=>{held.forEach(([el],i)=>{el.textContent=now[i];});}});}
   const gold=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='보유 골드')?.querySelector('b');
@@ -630,7 +635,7 @@ function render(){
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';}
+ if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';handleShown='';stockSheet=false;}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -1192,7 +1197,7 @@ const coachSteps={
     before the first ORDER ever opened (fixed 2026-09-26).
     v2.9.11 (User 2026-09-29): `order-stock` after the gates - the Day 1 warehouse already holds the opening stock nobody ordered,
     and nothing said so; the mark sits on the 창고 summary the ORDER screen already shows. */
- order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['order-stock','.stock-brief summary','창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
+ order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['order-stock','.stock-brief summary,.stock-side .stock-head','창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
@@ -1409,11 +1414,28 @@ function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.leng
  /* UI-Q-v29-17 (User 2026-09-24, v2.9.0): the held-stock list starts collapsed; opening it is the account's presentation choice */
  const opened=game.account.settings.stockBriefOpen===true;
  return '<details class="stock-brief" '+(opened?'open':'')+'><summary><span class="k">창고</span>'
- +'<b>'+used+' / '+cap+'칸</b>'+(stocks.length?'<i>'+stocks.length+'종</i>':'')+'</summary>'
- +(stocks.length?'<ul>'+stocks.map(st=>{const it=D.itemBy[st.item],left=st.expires-s.day;
+ +'<b>'+used+' / '+cap+'칸</b>'+(stocks.length?'<i>'+stocks.length+'종</i>':'')+'</summary>'+stockList()+'</details>';}
+/* the held stock, one list for the 발주서 block, the desk's side column and the phone's 창고 sheet */
+function stockList(){const s=game.run,stocks=groupStock();
+ return stocks.length?'<ul>'+stocks.map(st=>{const it=D.itemBy[st.item],left=st.expires-s.day;
    return '<li data-item="'+it.id+'">'+Art.itemIcon(it.id,20)+'<b>'+E(it.name)+'</b><span>'+st.count+'개</span>'
     +'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em></li>';}).join('')+'</ul>'
-  :'<p class="none">창고가 비어 있다.</p>')+'</details>';}
+  :'<p class="none">창고가 비어 있다.</p>';}
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse held apart from the 발주서, like an inventory, so it can
+   be read against the offer rows while ordering. On a desk it is a column beside the form, always open. On a phone it is
+   a slim handle on top of the dock - part of the dock, so it never covers an offer row - that opens the list as a sheet
+   rising from it, up to 45% of the screen. Like the floating Death box's copies, the handle shows only once the form's own
+   창고 block has scrolled up under the rail (one copy on screen). The sheet does not dim or lock the form - the rows above it still scroll and
+   take taps - and only the handle or Escape closes it (a quantity tap must not). */
+function stockHead(){const s=game.run,n=groupStock().length;
+ return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+n+'종</em>':'');}
+function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockList()+'</aside>';}
+function stockSheetKey(){
+ return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(stockSheet?'':' hidden')+'>'+stockList()+'</section>'
+  +'<button type="button" class="stock-handle stock-head'+handleShown+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+stockSheet+'">'
+  +stockHead()+'<span class="stock-toggle">'+(stockSheet?'닫기':'열기')+'</span></button>';}
+function syncStockSheet(){const sh=$('#stock-sheet'),k=$('.stock-handle');if(!sh)return;sh.hidden=!stockSheet;
+ k?.setAttribute('aria-expanded',String(stockSheet));const t=k?.querySelector('.stock-toggle');if(t)t.textContent=stockSheet?'닫기':'열기';}
 /* UI-Q-v28-26 / UI-Q-v28-29. The dock is the phase's primary action, and every other phase
    gives it the dock's full width - MORNING's 문 열기, SALE's 손님 보내기, NIGHT's 다음. ORDER wrapped
    its two buttons in an extra `.row wrap` box, and that box, not the buttons, became the dock's
@@ -1426,8 +1448,8 @@ function orderScreen(){
  /* UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT: committing the order is an
     inked impression on the 발주서 - the material and the press, with no repeated seal mark and
     no tilt. Leaving the desk is a different kind of act, so it takes the steel `.leave` plate. */
- return stage('order','발주',taskLine('order'),orderForm(),
-  (cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
+ return stage('order','발주',taskLine('order'),'<div class="order-desk">'+orderForm()+'</div>'+stockSide(),
+  stockSheetKey()+(cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
   +'<button class="stamp leave" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
 /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, User 2026-09-24): with two or more open Gates the ORDER 오늘 line carries the
@@ -1443,15 +1465,19 @@ function todayLine(counts,tag='em'){const s=game.run;
    could sit hidden under a grown rail without being counted as gone. What is shown is carried across the redraw a
    quantity tap makes (`railShown`), so the rail does not blink on every tap. */
 function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
- const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),out=$('.p-order #order-register .out'),sc=$('.p-order .stage-scroll');
+ const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),out=$('.p-order #order-register .out'),sc=$('.p-order .stage-scroll'),
+  stock=$('.p-order .form .stock-brief'),handle=$('.p-order .stock-handle');
  if(!rail||!brief||!sc||typeof IntersectionObserver!=='function')return;
  /* the stuck rail sits under the scroll box's top padding, so its lower edge is that padding plus its own height */
  const h=rail.offsetHeight,edge=(parseFloat(getComputedStyle(sc).paddingTop)||0)+h;
- orderWatch=new IntersectionObserver(es=>{for(const e of es)rail.classList.toggle(e.target===brief?'show-today':'show-gold',!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+edge);
+ orderWatch=new IntersectionObserver(es=>{for(const e of es){const gone=!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+edge;
+   /* the phone's 창고 handle (UI_UX §ORDER — WAREHOUSE PANEL) */
+   if(e.target===stock){handle?.classList.toggle('show',gone);handleShown=gone?' show':'';}
+   else rail.classList.toggle(e.target===brief?'show-today':'show-gold',gone);}
   railShown=['show-today','show-gold'].filter(c=>rail.classList.contains(c)).map(c=>' '+c).join('');
   if(rail.offsetHeight!==h)watchOrderToday();},
   {root:sc,rootMargin:'-'+edge+'px 0px 0px 0px',threshold:0});
- orderWatch.observe(brief);if(out)orderWatch.observe(out);}
+ orderWatch.observe(brief);if(out)orderWatch.observe(out);if(stock)orderWatch.observe(stock);}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  const counts=s.dungeons.length>=2?gateCounts():null;
@@ -2383,6 +2409,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   game.save();renderModal();render();break;}
  /* UI_UX_v2.8 §ORDER: `.set` holds the 1 / 3 / 최대 shortcuts, so they take the stepper's own
     tick one step quieter and never outrank it; audio.js holds both to a minimum retrigger gap. */
+ case'stock-sheet':stockSheet=!stockSheet;syncStockSheet();sound('ui');break;
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}
@@ -2530,7 +2557,7 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&stockSheet){stockSheet=false;syncStockSheet();}if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a

@@ -1959,3 +1959,32 @@ and its measurement are in `reports/bgm-sfx-mix-v2911.md` (User 2026-09-29).
 - A phase change fades the old track out (1 s). The next track starts only after it, never over it, and rises over 1.5 s,
 so a phase never starts on a hard downbeat (User 2026-09-29).
 ```
+
+
+## v2.9.11 quick patch — ORDER warehouse panel (User 2026-09-29)
+
+New:
+
+```new
+### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
+The warehouse is held apart from the 발주서, like an inventory, so it can be read against the offer rows while ordering.
+- Desk (1024 px and wider): a column beside the form, always open, following the scroll; the form's own `창고` block is
+not shown there (one copy). It sits below the menu pin.
+- Phone: a slim `창고 N / M칸 · K종` handle on top of the dock. It is a row of the dock, so it never covers an offer row. Like
+It opens the same list as a sheet rising from the dock, at most 45% of the screen, with its own scroll.
+- The sheet does not dim or lock the form: the rows above it still scroll and take taps, and the rows under it can be
+scrolled above it. Only the handle (`열기` / `닫기`) or Escape closes it; a quantity tap keeps it open.
+- Leaving ORDER closes it. The form's own `창고` block stays (the first-ORDER stock lesson points at it).
+- The list is the `창고` block's own: icon, name, count, days left (1 day or less in the warning color). The same type
+ladder as the floating Death box: 11 px labels, 13 px values, on the same brown. No new copy.
+```
+
+
+## v2.9.11 quick patch — ORDER warehouse panel, handle rule (User 2026-09-29)
+
+New:
+
+```new
+the floating Death box's copies, it shows only once the form's own `창고` block has scrolled up under the rail (one copy
+on screen), and stays while its sheet is open.
+```

@@ -138,6 +138,11 @@ the owner headers and in the git tag.
   checked for iPhone Safari (`reports/ios-safari-v2911.md`). A quick second tap no longer zooms the page (pinch zoom stays), a
   long press on art opens no save-image menu, and coming back from a call or another app resumes the sound without waiting for
   a tap. The silent switch keeps Safari's default (the game is silent; another app's music is never stopped). No gameplay change.
+- **ORDER warehouse panel** - UI_UX §ORDER — WAREHOUSE PANEL, UI-Q-v29-50 (User 2026-09-29): scrolling down the offers, the
+  player compares them with the warehouse, which sat above them in the form. It is now held apart like an inventory: a
+  column beside the form on a desk, and on a phone a `창고` handle on top of the dock - shown once the form's own block has
+  scrolled away - that opens the list as a sheet rising from it (45% of the screen at most) without locking the form. The
+  ORDER confirm crates land in whichever list is on screen.
 - **1+1 ends on a Reroll** - EVENT §02 / §10 (User 2026-09-29, bug report): a Reroll named a new 1+1 SKU on every new
   sheet, so the player could roll until the wanted SKU carried it. HQ now names it on the Day's first sheet only; a Reroll
   ends the promotion. 암시장 keeps its special slot through a Reroll (its Item is drawn again), by the User's call. The

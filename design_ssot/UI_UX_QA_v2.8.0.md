@@ -1630,6 +1630,23 @@ FAIL:
 - the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
 - `발주 후` in the box differs from the ledger, lags a tap, or sits above the Death line
 
+### UI-Q-v29-50 — ORDER WAREHOUSE PANEL (User 2026-09-29)
+
+Verify UI_UX §ORDER — WAREHOUSE PANEL at 360 / 390 / 375×548 and 1280, with stock held.
+
+PASS:
+- desk: the list is open beside the form and stays in view while the form scrolls; the form's own `창고` block is not shown;
+  the column clears the menu pin
+- phone: the `창고` handle is absent while the form's `창고` block is on screen, then sits on top of the dock and covers no offer row; it opens the list rising from the dock, at most
+  45% of the screen; the rows above it scroll and take taps; a quantity tap keeps it open; the handle or Escape closes it;
+  leaving ORDER closes it
+- the list equals the form's `창고` block; no console or runtime error
+
+FAIL:
+- the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a
+  quantity tap closes it
+- two copies of the list on a desk
+
 ### UI-Q-v29-32 — ORDER CONFIRM CASCADE
 
 (User 2026-09-25, v2.9.2 H3; owner `UI_UX_v2.8.0.md` §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM.)
