@@ -184,7 +184,8 @@ function playRun(g,out,ctx){
  /* `expert` (User 2026-09-30, measurement only): the skilled-human lens. `skilled` above is not one - it only reads hidden
     Hazards and measures weaker than `reader` (counter-ladder-v297.md). `expert` is `reader` plus two things the User's
     0930 D30-clear save shows and `reader` does not do: a cheap meal at 150% to a customer who can easily pay it, from
-    DAY 1, and a Final party picked and supplied by what each adventurer adds to the Final rather than by Level.
+    DAY 1, and a Final party picked by what each adventurer adds to the Final rather than by Level (the Final supply by
+    contribution is shared with `reader` since 2026-09-30).
     Tried and dropped in calibration (no gain or worse): spending brakes loosened to `spender`'s, rerolling until every
     visitor Hazard has a Counter, Counters ordered right after the meals, 50% to the top roster in D1-10.
     Calibrated with tools/calibrate-bot-v292.cjs --account (reports/expert-bot-calibration-v2912.md). */
@@ -534,8 +535,11 @@ function playRun(g,out,ctx){
        rule rather than bypassing it. Nothing affordable left means the slot stays empty. */
     const afford=s.inventory.filter(x=>!g.finalNoEffect(x.item)&&n.money>=g.finalPrice(x.item));
     if(!afford.length)break;
+    /* reader / expert (User 2026-09-30): the Item that raises this adventurer's Final contribution most. itemValue scores a
+       Counter by its raw points even where the Hazard is already answered, which handed Counters the Final slots over
+       potions and lowered the party (reports/balance-proposal-v2912.md §3); `balanced` keeps itemValue. */
     const gain=x=>contribution(G.Dungeon.prepare({...copy(n),pack:[...n.pack,x.item]},s.dungeons[0],s.facilities));
-    const st=afford.slice().sort(expert?(a,b)=>gain(b)-gain(a):(a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
+    const st=afford.slice().sort(reader?(a,b)=>gain(b)-gain(a):(a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
     g.supplyFinal(n.id,st.id);act();}}
    if(team.length){g.boss();act();}else g.end(false,'출전 가능한 모험가 없음');}
  }
