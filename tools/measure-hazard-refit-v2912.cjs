@@ -1,6 +1,6 @@
 // v2.9.12 measurement (User 2026-09-30): D21~29 Gate slope with DAY 1~10 kept, and a Hazard Threat / Counter re-fit.
 // MEASUREMENT ONLY - every value below is an in-memory patch; the files on disk are untouched. Same seeds per arm.
-//   node tools/measure-hazard-refit-v2912.cjs [--late 1.10] [--mid 1.10] [--refit none|full|half|v2k|v2] [--policy reader]
+//   node tools/measure-hazard-refit-v2912.cjs [--late 1.10] [--mid 1.10] [--refit none|full|half|v2k|v2|v3] [--policy reader]
 //        [--runs 300] [--account account.json]
 // --late / --mid: DAY 21+ / DAY 11~20 slopes. DAY 1~9 (1.45) and the DAY 9~10 step (0.80) stay as shipped.
 // --refit: Hazard Threat x a Stat-group factor (강인함 / 기동 / 정신), Counter values re-set per Ladder rung, Trait Counters
@@ -21,7 +21,11 @@ const REFITS={
  /* User 2026-09-30: v2k with the Ladder changed so 초반 대응 stays the T1 answer - 초반 하이브리드 sits below it on the
     Gate's first Hazard (강인함 12 -> 9, 정신 kept 9 under 초반 대응 11) */
  v2:{factor:{survival:1.05,mobility:1.2,spirit:1.35},
-  counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:11,14:16,21:22},spirit:{8:11,9:9,12:18,18:25}}}};
+  counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:11,14:16,21:22},spirit:{8:11,9:9,12:18,18:25}}},
+ /* User 2026-09-30: a milder v2 - Threat x 1.0 / 1.1 / 1.2; Counters kept except the v2 Ladder (초반 하이브리드 under
+    초반 대응 on the first Hazard) and 정신 rungs above the 대현자 허브엘릭서 natural value (14) */
+ v3:{factor:{survival:1.0,mobility:1.1,spirit:1.2},
+  counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:9,14:14,21:21},spirit:{8:10,9:9,12:15,18:20}}}};
 const R=REFITS[REFIT]||null;globalThis.__HF=R?R.factor:{};
 /* --final-plain: the Final keeps the shipped Threat (no Stat-group factor), so a re-fit can be read apart from its Final effect */
 globalThis.__FINAL_PLAIN=args.includes('--final-plain');
