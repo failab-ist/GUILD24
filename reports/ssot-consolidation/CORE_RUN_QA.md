@@ -430,5 +430,7 @@ that counters the first Gate's Hazard
 - the measurement harness (`lessons=false`) plays the ordinary Run
 - `tests/revision.cjs`
 FAIL:
-- the extra Item on a later Run, a non-Common or non-countering Item, or any change to the Run's stream
+- a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
+- the extra Item on a later Run, a non-Common or non-countering Item, a lesson that adds a draw, or a Death on DAY 1~2 of
+the first Run
 ```

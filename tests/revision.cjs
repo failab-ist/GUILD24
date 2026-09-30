@@ -563,5 +563,18 @@ test('first-Run lesson: DAY 1 warehouse holds one Common Counter for the first G
  const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-probe');
  assert.equal(sim.run.firstRun,false,'measurement harnesses switch the lessons off');
 });
+test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death settles as 중상',()=>{
+ const g=fresh('lesson-death'),base=g.run.npcs[0];
+ const weak={...copy(base),traits:[],injury:0,fatigue:0,pack:[],level:1,stats:{combat:1,survival:1,mobility:1,spirit:1},equipment:{...base.equipment,power:0}};
+ const d={...DATA.dungeonBy.spider,family:'spider',hazards:['poison'],tier:3,day:1,scale:3,power:200,reward:1};
+ const roll=()=>{let k=0;return {next:()=>(k++,0),int:a=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0,count:()=>k};};
+ const out=(run,day)=>{const r=roll();const rep=Dungeon.resolve(copy(weak),{...d,day},r,[],run);return {o:rep.outcome,draws:r.count()};};
+ const ordinary=out({firstRun:false,day:1},1);assert.equal(ordinary.o,'사망','sanity: the fixture dies on an ordinary Run');
+ const lesson=out({firstRun:true,day:1},1);assert.equal(lesson.o,'중상','DAY 1 of the first Run: 중상 instead');
+ // the Death decision itself draws nothing extra; the survivor then goes through the draws a living adventurer takes
+ assert.ok(lesson.draws>=ordinary.draws,'the survivor takes the living path\'s draws');
+ assert.equal(out({firstRun:true,day:2},2).o,'중상','DAY 2 too');
+ assert.equal(out({firstRun:true,day:3},3).o,'사망','DAY 3 is an ordinary Day');
+});
 
 console.log(checks+' revision groups passed');

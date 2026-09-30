@@ -565,7 +565,9 @@ function resolve(n,d,r,facilities=[],run,assist=0){
   const prepared=fullyPrepared(n,e.fatigueBeforeExpedition)?PREPARED.factor:1;
   const rolledDeathChance=deathChance*prepared;
   if(deathRoll<rolledDeathChance){
-   outcome='사망';
+   /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): on the account's first Run no one dies on DAY 1~2 - the Death settles
+      as 중상, with no extra draw, so the stream is the one the Run would have had */
+   outcome=run?.firstRun&&(run.day??d.day)<=2?'중상':'사망';
   }else if(deathRoll<deathChance){
    bandRoll=r.next();
    outcome=bandRoll<PREPARED.bandSevere?'중상':'부상';

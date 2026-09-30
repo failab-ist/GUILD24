@@ -5,9 +5,11 @@ the owner headers and in the git tag.
 
 ## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
 
-- **First-Run lessons, DAY 1 Counter** (balance review session, User 2026-09-30; from a talk on teaching by level design -
-  learn by play, not text): the account's first Run finds one Common Item that counters the first Gate's Hazard in the DAY 1
-  warehouse, so the first sales can find the Counter rule and the Night shows it working. Later Runs are unchanged; the Run's
+- **First-Run lessons, DAY 1 Counter and no Death on DAY 1~2** (balance review session, User 2026-09-30; from a talk on
+  teaching by level design - learn by play, not text): the account's first Run finds one Common Item that counters the first
+  Gate's Hazard in the DAY 1 warehouse, so the first sales can find the Counter rule and the Night shows it working; on its
+  DAY 1~2 a Death roll settles as 중상. Measured with every Run as a first Run (`reader` 3,000, same seeds): DAY 1~2 Deaths
+  0.21 → 0 a Run, D1~10 Death-limit endings 20.0 → 17.2%, D10 reach 85.4 → 89.3%, D30 17.2 → 18.0%, clear unchanged 11.7%. Later Runs are unchanged; the Run's
   stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
   (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
 

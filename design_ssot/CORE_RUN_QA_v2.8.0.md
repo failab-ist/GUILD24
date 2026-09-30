@@ -676,12 +676,14 @@ PASS:
 - a fresh account's first Run: after the DAY 0 pick the warehouse holds the four opening Items and exactly one Common Item
   that counters the first Gate's Hazard
 - an account with a settled Run: the four opening Items only
+- a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
 - the same seed gives the same Gates, visitors and stream on both
 - the measurement harness (`lessons=false`) plays the ordinary Run
 - `tests/revision.cjs`
 
 FAIL:
-- the extra Item on a later Run, a non-Common or non-countering Item, or any change to the Run's stream
+- the extra Item on a later Run, a non-Common or non-countering Item, a lesson that adds a draw, or a Death on DAY 1~2 of
+  the first Run
 
 ## BALANCE QA
 
