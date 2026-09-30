@@ -82,7 +82,7 @@ test('TRAIT-Q17: condition, supply and hazard Traits resolve through existing sy
  const fx=t=>Dungeon.prepare({...base,traits:t},d).effects;
  assert.equal(fx(['prepared']).supply,0,'준비성 only adds Supply to actual Food/Drink');
  assert.equal(Dungeon.prepare({...base,traits:['prepared'],pack:['rice']},d).effects.supply,DATA.itemBy.rice.effects.supply+1);
- assert.equal(fx(['sharpeye']).dark,4);assert.equal(fx(['sharpeye']).whiteout,4);
+ assert.equal(fx(['sharpeye']).dark,4);assert.equal(fx(['sharpeye']).whiteout,5); // 화이트아웃 x1.2 with its Threat (User 2026-09-30, v2.9.13)
  assert.equal(fx(['antitoxin']).poison,6);assert.equal(fx(['coldhand']).cold,-6);
  assert.equal(fx(['stamina']).fatigue,-1);assert.equal(fx(['weary']).fatigue,1);
  const hurt={...base,injury:1};

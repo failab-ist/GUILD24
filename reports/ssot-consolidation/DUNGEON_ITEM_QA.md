@@ -986,3 +986,18 @@ User 2026-09-28: 퇴각 / 부상 / 중상 Wallet multipliers 0.40 / 0.25 / 0.15 
 ```new
 - Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch; were 0.35 / 0.20 / 0.10 since v2.9.1)
 ```
+
+## AMENDMENT — v2.9.13 Hazard Threat by Stat group · Counter Ladder · Final gap 2.50 (User decision 2026-09-30)
+
+User 2026-09-30 (`reports/balance-proposal-v2912.md` §7-§9): the Hazard Threat is scaled by the Stat it presses (강인함 1.0 ·
+기동 1.1 · 정신 1.2), every Counter rose with its Hazard's factor, the Counter Ladder puts 초반 하이브리드 under 초반 대응 on a
+Gate's first Hazard, Hazard Trait values follow the same factor, and the Final mean-gap penalty is 2.50 (was 1.70). Lines
+declared in earlier fences that changed are edited in place and removed from them.
+
+```text
+Threat = 12 + Day*.35 + (Tier-1)*6
+```
+
+```new
+Threat = (12 + Day*.35 + (Tier-1)*6) × Stat-group factor (강인함 1.0 · 기동 1.1 · 정신 1.2; User 2026-09-30, v2.9.13)
+```

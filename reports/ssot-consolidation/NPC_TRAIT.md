@@ -525,3 +525,30 @@ New:
 ```new
 게이트 순례 주간:
 ```
+
+## AMENDMENT — v2.9.13 Hazard Threat by Stat group · Counter Ladder · Final gap 2.50 (User decision 2026-09-30)
+
+User 2026-09-30 (`reports/balance-proposal-v2912.md` §7-§9): the Hazard Threat is scaled by the Stat it presses (강인함 1.0 ·
+기동 1.1 · 정신 1.2), every Counter rose with its Hazard's factor, the Counter Ladder puts 초반 하이브리드 under 초반 대응 on a
+Gate's first Hazard, Hazard Trait values follow the same factor, and the Final mean-gap penalty is 2.50 (was 1.70). Lines
+declared in earlier fences that changed are edited in place and removed from them.
+
+```text
+- [benefit] fear 대응 +6
+- [cost] fear 대응 -6
+- [cost] fire 대응 -6
+- [benefit] whiteout 대응 +4
+- [benefit] fire 대응 +6
+- [cost] dark 대응 -4, whiteout 대응 -4
+```
+
+```new
+- [benefit] fear 대응 +7
+- [cost] fear 대응 -7
+- [cost] fire 대응 -7
+- [benefit] whiteout 대응 +5
+- [benefit] fire 대응 +7
+- [cost] dark 대응 -4, whiteout 대응 -5
+Hazard Trait values (User 2026-09-30, v2.9.13) follow the Stat-group factor of their Hazard's Threat (`DUNGEON_HAZARD_v2.8.0.md`
+§HAZARD THREAT), rounded: 공포 · 화염 · 화이트아웃 × 1.2 (6 → 7, 4 → 5), 속박 · 진창 · 어둠 × 1.1 (4 stays 4), 강인함 Hazards unchanged.
+```

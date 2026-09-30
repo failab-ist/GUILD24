@@ -22,6 +22,20 @@ the owner headers and in the git tag.
   alone is commonly a little short" could not hold with the ITEM §COUNTER LADDER order (초반 하이브리드 above 초반 대응 on
   each Hazard) - no number satisfies both. The Ladder owns per-rung roles: at T1 초반 하이브리드 also reaches 충분, its limit
   shows at T2. Text only. DUNGEON_HAZARD §NEUTRAL-FIT PREPARATION INTENT; ledger.
+- **Hazard Threat by Stat group, Counters with it, 초반 대응 back on top at T1, Final gap 2.50** (User 2026-09-30):
+  - Threat × 강인함 1.0 · 기동 1.1 · 정신 1.2 (the ÷3 / ÷2 conversion unchanged). An average adventurer's own share at Tier 1
+    was 0.43 on 강인함 and 0.70 on 정신; a 정신 Gate showed 충분 with nothing bought for 13~21% of Tier 1 Hazards, now 4~6%.
+  - Counters rose with their Hazard's factor: 기동 9 / 14 / 21 → 10 / 15 / 23, 정신 8 / 12 / 18 → 10 / 15 / 22 (방한 두건 화이트아웃
+    9 → 11); 강인함 kept. The Counter Ladder now puts 초반 하이브리드 under 초반 대응 on a Gate's first Hazard (강인함 12 → 9, 정신 9
+    kept) - the User carried the hybrid on a third of D1~5 expeditions; 초반 대응 still reads 충분 on a Tier 1 Gate on D15~20.
+    The DUNGEON_HAZARD NEUTRAL-FIT T1 line "hybrid alone is commonly a little short" holds again.
+  - Hazard Traits follow the factor (공포 · 화염 · 화이트아웃 6 → 7, 4 → 5; 기동 4 kept).
+  - FINAL-Q72 mean-gap penalty 1.70 → 2.50: a D30 party cleared with no Item at all about one Run in five.
+  - Measured on this tree (300 seeds): `reader` D10 85.3 → 79.0%, D30 17.0 → 11.7%, clear 12.3 → 7.0%, no-Item sure Final
+    21.6 → 5.7%; `expert` (0930 account) D30 36.3 → 30.0%, clear 27.7 → 17.0%, no-Item sure Final 19.3 → 10.0%
+    (`reports/balance-proposal-v2912.md` §7-§9). DUNGEON_HAZARD §HAZARD THREAT / §NEUTRAL-FIT, ITEM §COUNTER LADDER and
+    catalog table, NPC_TRAIT Hazard Traits, FINAL_EXPEDITION §INDIVIDUAL FINAL POWER / FINAL-Q72, DUNGEON_ITEM_QA DUN-Q71;
+    ledgers; tests traits / final.
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 

@@ -321,7 +321,6 @@ Every player-facing Hazard row (SALE destination plate, D25 scouting report, FIN
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```new
-Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×1.70 term stays hidden (User 2026-09-24, v2.9.0).
 ```
 
 ## AMENDMENT — v2.9.2: D30 flow opens on the last order; the muster picks from the notebook (User decision 2026-09-25)
@@ -369,4 +368,26 @@ After the User reviewed the videos: the supply beat (one item at a time, a fixed
 Before the ending (User 2026-09-27, v2.9.9 H7) the resolved Final is played out once as a card fight - each member is
 handed what they carried, each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap
 skips it; it decides nothing. ->
+```
+
+## AMENDMENT — v2.9.13 Hazard Threat by Stat group · Counter Ladder · Final gap 2.50 (User decision 2026-09-30)
+
+User 2026-09-30 (`reports/balance-proposal-v2912.md` §7-§9): the Hazard Threat is scaled by the Stat it presses (강인함 1.0 ·
+기동 1.1 · 정신 1.2), every Counter rose with its Hazard's factor, the Counter Ladder puts 초반 하이브리드 under 초반 대응 on a
+Gate's first Hazard, Hazard Trait values follow the same factor, and the Final mean-gap penalty is 2.50 (was 1.70). Lines
+declared in earlier fences that changed are edited in place and removed from them.
+
+```text
+= FinalMeanHazardGap × 1.70
+- FinalMeanHazardGap × 1.70
+FinalHazardPenalty = FinalMeanHazardGap × 1.70
+투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*1.70
+```
+
+```new
+Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×2.50 term stays hidden (User 2026-09-24, v2.9.0).
+= FinalMeanHazardGap × 2.50   (User 2026-09-30, v2.9.13; was 1.70)
+- FinalMeanHazardGap × 2.50
+FinalHazardPenalty = FinalMeanHazardGap × 2.50   (User 2026-09-30, v2.9.13; was 1.70)
+투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*2.50
 ```

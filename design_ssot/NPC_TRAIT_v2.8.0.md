@@ -404,13 +404,13 @@ Rules:
 
 1. **용감함**
    - internalDirection=MIXED
-   - [benefit] fear 대응 +6
+   - [benefit] fear 대응 +7
    - [cost] escape -6%p
 
 2. **겁쟁이**
    - internalDirection=MIXED
    - [benefit] escape +19%p
-   - [cost] fear 대응 -6
+   - [cost] fear 대응 -7
    - [cost] loot -15%
 
 3. **대식가**
@@ -476,7 +476,7 @@ Rules:
 
 15. **화염공포증**
     - internalDirection=NEGATIVE
-    - [cost] fire 대응 -6
+    - [cost] fire 대응 -7
 
 16. **수집가**
     - internalDirection=MIXED
@@ -512,7 +512,7 @@ Rules:
 23. **눈썰미**
     - internalDirection=POSITIVE
     - [benefit] dark 대응 +4
-    - [benefit] whiteout 대응 +4
+    - [benefit] whiteout 대응 +5
 
 24. **해독가**
     - internalDirection=POSITIVE
@@ -568,11 +568,14 @@ Rules:
 
 36. **내열성** (heatproof)
     - internalDirection=POSITIVE
-    - [benefit] fire 대응 +6
+    - [benefit] fire 대응 +7
 
 37. **약시** (nearsight)
     - internalDirection=NEGATIVE
-    - [cost] dark 대응 -4, whiteout 대응 -4
+    - [cost] dark 대응 -4, whiteout 대응 -5
+
+Hazard Trait values (User 2026-09-30, v2.9.13) follow the Stat-group factor of their Hazard's Threat (`DUNGEON_HAZARD_v2.8.0.md`
+§HAZARD THREAT), rounded: 공포 · 화염 · 화이트아웃 × 1.2 (6 → 7, 4 → 5), 속박 · 진창 · 어둠 × 1.1 (4 stays 4), 강인함 Hazards unchanged.
 
 ### HONEST
 

@@ -881,41 +881,25 @@ Rare 5
 Every Gate family carries the same four rungs; 화염 골렘 광산 has one Hazard, so it has no early hybrid. A Tier 1 Gate
 shows only its family's first Hazard (독 / 부식 / 냉기 / 공포 / 화염), so only those need an early Counter; the second
 Hazards (속박 / 진창 / 어둠 / 화이트아웃) start at Tier 2. Per Hazard the order is 중반 대응 > 후반 하이브리드 >
-초반 하이브리드 > 초반 대응. Each rung's role, read with the adventurer's own pressed-Stat share
 (`DUNGEON_HAZARD_v2.8.0.md` Hazard defense):
 - 초반 대응 (Common, one Hazard): clears a Tier 1 Hazard on its own
-- 초반 하이브리드 (Uncommon, both Hazards of a Gate): well short of Tier 2; only a well-grown adventurer clears Tier 2
-with it from mid-Run
 - 중반 대응 (Rare, one Hazard): clears Tier 2 surely; from about D20 an average adventurer clears Tier 3 with it
 - 후반 하이브리드 (Epic, both Hazards): just short of Tier 2; late in the Run a top adventurer can try Tier 3 with it alone
 Values by the pressed Stat (강인함 ÷3 for 독 · 부식 · 냉기; 기동 ÷2 for 속박 · 진창 · 어둠; 정신 ÷2 for 공포 · 화이트아웃 · 화염):
 | Rung | 강인함 | 기동 | 정신 |
 |---|---:|---:|---:|
-| 초반 대응 | 10 | — | 8 |
-| 초반 하이브리드 | 12 | 9 | 9 |
-| 후반 하이브리드 | 16 | 14 | 12 |
-| 중반 대응 | 23 | 21 | 18 |
 A Food / Drink Counter keeps its Supply and reads one step lower where it also raises the pressed Stat: 불룡볶음면 냉기 21
 with 강인함 +6 (its own Stat is worth 냉기 +2).
 | Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
 |---|---|---|---|---|
-| 화염 골렘 광산 (화염) | 얼음컵 화염 8 | — | 쿨링 이온음료 화염 18 | 마그마 냉각장비 화염 12 · 투력 10 |
 Superseded: the v2.9.1 by-Rarity Counter values (Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22) and
 the v2.9.6 불룡볶음면 냉기 +12 line.
 | 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold 초반 대응 |
-| 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +8, Supply 1 | Fire 초반 대응 |
-| 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +21 | Dark 중반 대응 |
-| 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +21 | Bind 중반 대응 |
-| 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +8, Supply 2 | Fear 초반 대응 |
 | 13 | 불룡볶음면 | Food R | 95 / 190 | 강인함 +6, 냉기 +21, Supply 3 | Cold 중반 대응 |
-| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +18, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +10 | Poison 초반 대응 |
 | 20 | 부식 방지 코팅제 | Field Gear R | 95 / 190 | 부식 +23 | Corrosion 중반 대응 |
-| 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +21 | Mire 중반 대응 |
-| 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +18 | Whiteout 중반 대응 |
 | 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +20 | — |
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +23 | Poison 중반 대응 |
-| 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +18, Supply 1 | Fire 중반 대응 |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
 Rare 12
 (User 2026-09-27, v2.9.7: the Counter ladder moves 방진마스크 to Common and 경량 로프 / 랜턴 건전지 / 부식 방지 코팅제 /
@@ -934,12 +918,6 @@ User 2026-09-27 price review: 초반 하이브리드 75G, 후반 하이브리드
 ```new
 Prices by rung (User 2026-09-27 price review): 초반 대응 30~45G, 초반 하이브리드 75G, 중반 대응 95G, 후반 하이브리드
 135G (마그마 냉각장비 145G, its 투력 +10 included). A 후반 하이브리드 at 135G sells at 270G, inside the D25 median wallet.
-| 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +12, 진창 +9 | Slime 초반 하이브리드 |
-| 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +16, 속박 +14 | Spider 후반 하이브리드 |
-| 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +16, 진창 +14 | Slime 후반 하이브리드 |
-| 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +12, 어둠 +14 | Crypt 후반 하이브리드 |
-| 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +16, 화이트아웃 +12 | Snow 후반 하이브리드 |
-| 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +12, 투력 +10 | Fire 후반 하이브리드 |
 ```
 
 ## AMENDMENT — v2.9.7 Counter ladder new Items (User 2026-09-27)
@@ -981,14 +959,7 @@ identity=strong Poison specialist
 ```
 
 ```new
-| 독거미 동굴 (독 · 속박) | 방진마스크 독 10 | 방독 작업장갑 독 12 · 속박 9 | 농축 해독제 독 23 · 경량 로프 속박 21 | 거미줄 방호세트 16 · 14 |
-| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 | 방수망토 부식 12 · 진창 9 | 부식 방지 코팅제 23 · 원정용 장화 21 | 연금 방수슈트 16 · 14 |
-| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 8 | 축성 손전등 공포 9 · 어둠 9 | 용사의 곡주 공포 18 · 랜턴 건전지 어둠 21 | 성화 랜턴 공포 12 · 어둠 14 |
-| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
 | 41 | 중화 탄산수 | Drink C | 35 / 70 | 부식 +10, Supply 1 | Corrosion 초반 대응 |
-| 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +12, 화이트아웃 +9 | Snow 초반 하이브리드 |
-| 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +12, 속박 +9 | Spider 초반 하이브리드 |
-| 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +9, 어둠 +9 | Crypt 초반 하이브리드 |
 Active catalog count is exactly 43 (40 until the v2.9.7 Counter ladder, User 2026-09-27).
 The active 43-Item distribution is therefore:
 Uncommon 8
@@ -1151,4 +1122,52 @@ Insurance / Special: its one function line
 e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +18 · 피로 회복 1 · 기동 -4`, `피로 회복 2 · 기동 +17`,
 `화염 대응 +12 · 투력 +10`. (v2.9.0 led a Food with 피로 회복 and ended a Drink with it, so the same two effects read in
 opposite orders on neighbouring rows - User 2026-09-28.)
+```
+
+## AMENDMENT — v2.9.13 Hazard Threat by Stat group · Counter Ladder · Final gap 2.50 (User decision 2026-09-30)
+
+User 2026-09-30 (`reports/balance-proposal-v2912.md` §7-§9): the Hazard Threat is scaled by the Stat it presses (강인함 1.0 ·
+기동 1.1 · 정신 1.2), every Counter rose with its Hazard's factor, the Counter Ladder puts 초반 하이브리드 under 초반 대응 on a
+Gate's first Hazard, Hazard Trait values follow the same factor, and the Final mean-gap penalty is 2.50 (was 1.70). Lines
+declared in earlier fences that changed are edited in place and removed from them.
+
+```new
+초반 대응 > 초반 하이브리드 on a Gate's first Hazard, and 중반 대응 > 후반 하이브리드 > 초반 하이브리드 on its second
+(User 2026-09-30, v2.9.13; was 초반 하이브리드 > 초반 대응 - the hybrid answered the Tier 1 Hazard better than the rung built for it
+and the User carried it on a third of D1~5 expeditions). Each rung's role, read with the adventurer's own pressed-Stat share
+- 초반 하이브리드 (Uncommon, both Hazards of a Gate): a little under 초반 대응 on the first Hazard (commonly just 충분 or a
+little short at Tier 1); well short of Tier 2; only a well-grown adventurer clears Tier 2 with it from mid-Run
+| 초반 대응 | 10 | — | 10 |
+| 초반 하이브리드 | 9 | 10 | 9 (first Hazard) · 11 (화이트아웃, second) |
+| 후반 하이브리드 | 16 | 15 | 15 |
+| 중반 대응 | 23 | 23 | 22 |
+(User 2026-09-30, v2.9.13): the Hazard Threat is scaled by its Stat group (강인함 1.0 · 기동 1.1 · 정신 1.2,
+`DUNGEON_HAZARD_v2.8.0.md` §HAZARD THREAT) and every Counter rose as far as its Hazard's Threat did (기동 9 / 14 / 21 → 10 / 15 / 23,
+정신 8 / 12 / 18 → 10 / 15 / 22); 초반 하이브리드 sits under 초반 대응 on the first Hazard (강인함 12 → 9, 정신 9 kept). For an
+average adventurer 초반 대응 still reads 충분 on a Tier 1 Gate on D15~20 and 대응 (about 0.8) at Tier 2; 중반 대응 reads about 1.0
+at Tier 3 (`reports/balance-proposal-v2912.md` §8).
+| 독거미 동굴 (독 · 속박) | 방진마스크 독 10 | 방독 작업장갑 독 9 · 속박 10 | 농축 해독제 독 23 · 경량 로프 속박 23 | 거미줄 방호세트 16 · 15 |
+| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 | 방수망토 부식 9 · 진창 10 | 부식 방지 코팅제 23 · 원정용 장화 23 | 연금 방수슈트 16 · 15 |
+| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 10 | 축성 손전등 공포 9 · 어둠 10 | 용사의 곡주 공포 22 · 랜턴 건전지 어둠 23 | 성화 랜턴 공포 15 · 어둠 15 |
+| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 9 · 화이트아웃 11 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 22 | 백설 방한고글 16 · 15 |
+| 화염 골렘 광산 (화염) | 얼음컵 화염 10 | — | 쿨링 이온음료 화염 22 | 마그마 냉각장비 화염 15 · 투력 10 |
+The prices and values in this block are the v2.9.0 layer; the current ones are §COUNTER LADDER and the catalog table
+(v2.9.7 / v2.9.13).
+| 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +10, Supply 1 | Fire 초반 대응 |
+| 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +23 | Dark 중반 대응 |
+| 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +23 | Bind 중반 대응 |
+| 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +10, Supply 2 | Fear 초반 대응 |
+| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +22, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
+| 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +9, 화이트아웃 +11 | Snow 초반 하이브리드 |
+| 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +9, 속박 +10 | Spider 초반 하이브리드 |
+| 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +9, 어둠 +10 | Crypt 초반 하이브리드 |
+| 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +9, 진창 +10 | Slime 초반 하이브리드 |
+| 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +23 | Mire 중반 대응 |
+| 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +22 | Whiteout 중반 대응 |
+| 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +22, Supply 1 | Fire 중반 대응 |
+| 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +16, 속박 +15 | Spider 후반 하이브리드 |
+| 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +16, 진창 +15 | Slime 후반 하이브리드 |
+| 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +15, 어둠 +15 | Crypt 후반 하이브리드 |
+| 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +16, 화이트아웃 +15 | Snow 후반 하이브리드 |
+| 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +15, 투력 +10 | Fire 후반 하이브리드 |
 ```

@@ -1,6 +1,6 @@
 // v2.9.12 measurement (User 2026-09-30): D21~29 Gate slope with DAY 1~10 kept, and a Hazard Threat / Counter re-fit.
 // MEASUREMENT ONLY - every value below is an in-memory patch; the files on disk are untouched. Same seeds per arm.
-//   node tools/measure-hazard-refit-v2912.cjs [--late 1.10] [--mid 1.10] [--refit none|full|half|v2k|v2|v3|v3b] [--final-tier 3] [--final-gap 1.70] [--policy reader]
+//   node tools/measure-hazard-refit-v2912.cjs [--late 1.10] [--mid 1.10] [--refit none|full|half|v2k|v2|v3|v3b] [--final-tier 3] [--final-gap 2.50] [--policy reader]
 //        [--runs 300] [--account account.json]
 // --late / --mid: DAY 21+ / DAY 11~20 slopes. DAY 1~9 (1.45) and the DAY 9~10 step (0.80) stay as shipped.
 // --refit: Hazard Threat x a Stat-group factor (강인함 / 기동 / 정신), Counter values re-set per Ladder rung, Trait Counters
@@ -32,20 +32,23 @@ const REFITS={
   counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:10,14:15,21:23},spirit:{8:10,9:9,12:15,18:22}},
   item:{hood:{whiteout:11}}}};
 const R=REFITS[REFIT]||null;globalThis.__HF=R?R.factor:{};
+/* v2.9.13 ships v3b (Threat x 1.0 / 1.1 / 1.2, its Counters, Final gap 2.50). The arms above map the v2.9.12 Counter values,
+   so they are the measurement record (reports/balance-proposal-v2912.md) and only `none` (= shipped) runs on this tree. */
+if(R)throw Error('--refit '+REFIT+' maps the v2.9.12 Counter values; v2.9.13 ships v3b - run it on a v2.9.12 tree');
 /* --final-plain: the Final keeps the shipped Threat (no Stat-group factor), so a re-fit can be read apart from its Final effect */
 globalThis.__FINAL_PLAIN=args.includes('--final-plain');
 /* --final-tier 3: the Final reads its Hazards at that Tier instead of T2 (User 2026-09-30: the Final's environment only) */
 globalThis.__FINAL_TIER=Number(flag('--final-tier',0))||0;
-/* --final-gap K: the Final's mean Hazard gap penalty coefficient (shipped 1.70, FINAL-Q72), in run.js and the harness alike */
+/* --final-gap K: the Final's mean Hazard gap penalty coefficient (shipped 2.50 since v2.9.13, FINAL-Q72), in run.js and the harness alike */
 const GAP=Number(flag('--final-gap',0))||0;
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation']){
  const file=path.join(ROOT,'dist',f+'.js');
- if(f==='systems/dungeon'){let src=fs.readFileSync(file,'utf8');const at='threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,';
+ if(f==='systems/dungeon'){let src=fs.readFileSync(file,'utf8');const at='threat=(12+(d.day||1)*.35+((d.tier||1)-1)*6)*(HAZARD_THREAT_FACTOR[rule[0]]||1),';
   if(src.split(at).length!==2)throw Error('threat patch point x'+(src.split(at).length-1));
-  src=src.replace(at,'threat=(12+(d.day||1)*.35+(((d.family===\'final\'&&globalThis.__FINAL_TIER)||d.tier||1)-1)*6)*(d.family===\'final\'&&globalThis.__FINAL_PLAIN?1:((globalThis.__HF||{})[rule[0]]||1)),');vm.runInThisContext(src,{filename:file});}
+  src=src.replace(at,'threat=(12+(d.day||1)*.35+(((d.family===\'final\'&&globalThis.__FINAL_TIER)||d.tier||1)-1)*6)*(d.family===\'final\'&&globalThis.__FINAL_PLAIN?1:((globalThis.__HF||{})[rule[0]]||HAZARD_THREAT_FACTOR[rule[0]]||1)),');vm.runInThisContext(src,{filename:file});}
  else if(GAP&&(f==='systems/run'||f==='systems/simulation')){let src=fs.readFileSync(file,'utf8');
-  const at=f==='systems/run'?'-meanGap*1.70;':':0)*1.70;';if(src.split(at).length!==2)throw Error('gap patch point '+f);
-  src=src.replace(at,at.replace('1.70',String(GAP)));vm.runInThisContext(src,{filename:file});}
+  const at=f==='systems/run'?'-meanGap*2.50;':':0)*2.50;';if(src.split(at).length!==2)throw Error('gap patch point '+f);
+  src=src.replace(at,at.replace('2.50',String(GAP)));vm.runInThisContext(src,{filename:file});}
  else require(file);}
 /* the shipped slopes unless --late / --mid is given (v2.9.13 ships late 1.10 with its own DAY 9~10 step) */
 const LATE=LATE_ARG===null?Dungeon.GATE.late:Number(LATE_ARG),MID=MID_ARG===null?Dungeon.GATE.mid:Number(MID_ARG);

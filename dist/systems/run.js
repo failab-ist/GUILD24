@@ -139,7 +139,9 @@ const finalMeanHazardGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/
 /* The same four coefficients Forecast and Resolve read, so they are read from the one helper
    rather than written out a third time - a copy of them is what let the balance harness drift
    a whole Stage behind the game. */
-const individualPower=(e,meanGap)=>G.Dungeon.preparedPower(e)-meanGap*1.70;
+/* FINAL-Q72 (User 2026-09-30, v2.9.13): the mean-gap penalty 1.70 -> 2.50 - a D30 party could clear with no Item at all
+   about one Run in six; a prepared party keeps its edge, an unprepared one no longer walks through. */
+const individualPower=(e,meanGap)=>G.Dungeon.preparedPower(e)-meanGap*2.50;
 
 const STATS=['combat','survival','mobility','spirit'];
 

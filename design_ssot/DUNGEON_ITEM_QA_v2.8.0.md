@@ -252,7 +252,7 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = 12 + Day*.35 + (Tier-1)*6
+Threat = (12 + Day*.35 + (Tier-1)*6) × Stat-group factor (강인함 1.0 · 기동 1.1 · 정신 1.2; User 2026-09-30, v2.9.13)
 ```
 
 Exact anchors:

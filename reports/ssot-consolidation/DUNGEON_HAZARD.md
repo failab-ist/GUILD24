@@ -1172,8 +1172,28 @@ satisfy both; the Ladder owns per-rung roles. Dropped, superseded:
 ```
 
 ```new
-- 초반 하이브리드 also reaches 충분 at T1 (it sits above 초반 대응 on every Hazard it covers; its limit shows at T2)
-User 2026-09-30 (v2.9.13): the earlier T1 line "hybrid alone is commonly a little short" cannot hold together with the
-`ITEM_v2.8.0.md` §COUNTER LADDER order (중반 대응 > 후반 하이브리드 > 초반 하이브리드 > 초반 대응, User 2026-09-27): a
-초반 대응 that reaches 충분 puts every higher rung there too. The Ladder is the owner of per-rung roles; this intent follows it.
+```
+
+## AMENDMENT — v2.9.13 Hazard Threat by Stat group · Counter Ladder · Final gap 2.50 (User decision 2026-09-30)
+
+User 2026-09-30 (`reports/balance-proposal-v2912.md` §7-§9): the Hazard Threat is scaled by the Stat it presses (강인함 1.0 ·
+기동 1.1 · 정신 1.2), every Counter rose with its Hazard's factor, the Counter Ladder puts 초반 하이브리드 under 초반 대응 on a
+Gate's first Hazard, Hazard Trait values follow the same factor, and the Final mean-gap penalty is 2.50 (was 1.70). Lines
+declared in earlier fences that changed are edited in place and removed from them.
+
+```text
+= 12 + Day × 0.35 + (Tier - 1) × 6
+```
+
+```new
+= (12 + Day × 0.35 + (Tier - 1) × 6) × Stat-group factor
+Stat-group factor: 강인함 (독 · 냉기 · 부식) 1.0 · 기동 (속박 · 진창 · 어둠) 1.1 · 정신 (공포 · 화염 · 화이트아웃) 1.2
+User 2026-09-30 (v2.9.13): the factor follows the Stat the Hazard presses. 기동 and 정신 convert at ÷2 and 강인함 at ÷3,
+so without it an average adventurer answered a 정신 Hazard far more on their own (Tier 1 bare share 0.70 against 강인함
+0.43) and a 사제 showed 충분 on a Tier 1 Gate with nothing bought. The ÷3 / ÷2 conversion is unchanged; the Counter values
+rose with their Hazard's factor (`ITEM_v2.8.0.md` §COUNTER LADDER; `reports/balance-proposal-v2912.md` §7-§9). The anchors
+below are the 강인함 values; 기동 and 정신 read them × 1.1 / × 1.2 (e.g. D29 T3 = 34.15 / 37.57 / 40.98).
+User 2026-09-30 (v2.9.13): the `ITEM_v2.8.0.md` §COUNTER LADDER now puts 초반 하이브리드 under 초반 대응 on a Gate's first
+Hazard, so 초반 대응 stays the Tier 1 answer through the late Days a Tier 1 Gate still appears (D15~20) and the hybrid's
+worth arrives with the second Hazard at Tier 2. The Ladder owns per-rung roles; this intent and it agree again.
 ```

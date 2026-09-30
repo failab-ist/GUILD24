@@ -460,7 +460,7 @@ Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
 No separate Final-only Hazard defense table.
 No standalone `scale=4.6` path is used in Final resolution.
 
-Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×1.70 term stays hidden (User 2026-09-24, v2.9.0).
+Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×2.50 term stays hidden (User 2026-09-24, v2.9.0).
 
 기존 v1 Boss의 고정 scale 5.5는 Final Hazard 계산에 사용하지 않는다.
 
@@ -482,7 +482,7 @@ FinalMeanHazardGap
 = sum(each Final Hazard gap) / Final Hazard Count
 
 Final Hazard Penalty
-= FinalMeanHazardGap × 1.70
+= FinalMeanHazardGap × 2.50   (User 2026-09-30, v2.9.13; was 1.70)
 ```
 
 Final uses this mean-gap penalty path.
@@ -501,7 +501,7 @@ Individual Final Power
 + 강인함 × 0.34
 + 기동 × 0.27
 + 정신 × 0.20
-- FinalMeanHazardGap × 1.70
+- FinalMeanHazardGap × 2.50
 ```
 
 이 계산에서:
@@ -736,7 +736,7 @@ For each participant:
 PASS exact:
 ```text
 FinalMeanHazardGap = sum(gaps) / hazardCount
-FinalHazardPenalty = FinalMeanHazardGap × 1.70
+FinalHazardPenalty = FinalMeanHazardGap × 2.50   (User 2026-09-30, v2.9.13; was 1.70)
 ```
 
 No `환경피해 ×0.35` path contributes in parallel.
@@ -744,7 +744,7 @@ No `환경피해 ×0.35` path contributes in parallel.
 ### FINAL-Q73 — INDIVIDUAL FINAL POWER
 PASS exact:
 ```text
-투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*1.70
+투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*2.50
 ```
 using the Boss modifier ordering owned by current BOSS.
 

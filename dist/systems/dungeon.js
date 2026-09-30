@@ -231,11 +231,15 @@ function tierWeights(day){const w=tierWeights0(day);if(day<LATE_T3.from||day>LAT
    One owner: the readiness calculation below and the player-facing Gate sentence (`{능력치} {n}당 대응 1 제공`) read it. */
 const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/2],mire:['mobility',1/2],fire:['spirit',1/2],fear:['spirit',1/2],dark:['mobility',1/2],whiteout:['spirit',1/2]};
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
+/* DUNGEON_HAZARD §HAZARD THREAT (User 2026-09-30, v2.9.13): the Threat is scaled by the Stat the Hazard presses, so an
+   average adventurer's own share answers each Stat group alike (기동 and 정신 convert at ÷2, 강인함 at ÷3 - without it a
+   정신 NPC showed 충분 on a Tier 1 Gate with nothing bought). The ÷3 / ÷2 conversion itself is unchanged. */
+const HAZARD_THREAT_FACTOR={survival:1.0,mobility:1.1,spirit:1.2};
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
     Hazard means the same thing wherever it appears on that Day at that Tier. */
- const rule=rules[h]||['survival',.2],threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
+ const rule=rules[h]||['survival',.2],threat=(12+(d.day||1)*.35+((d.tier||1)-1)*6)*(HAZARD_THREAT_FACTOR[rule[0]]||1),defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */
@@ -717,5 +721,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

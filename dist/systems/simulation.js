@@ -45,7 +45,7 @@ const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-b
    the Final all read. A copy of them is exactly how this harness came to report every Final
    contribution against the pre-Stage-10 .58/.32/.24/.16 formula the game had already left. */
 const contribution=p=>G.Dungeon.preparedPower(p.effects)
- -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*1.70;
+ -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*2.50;
 
 function blank(runs,policy,pricing,build){
  return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,
