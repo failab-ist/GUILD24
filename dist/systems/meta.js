@@ -126,11 +126,12 @@ function observe(a,report,n){
  report.discoveries=[];
  for(const e of report.events||[])
   if(!a.discoveries.some(x=>x.id===e.id)){a.discoveries.push({...e,day:report.day});report.discoveries.push(e);}
- /* NIGHT_CLOSING §DISCOVERY LINE: the first time each rule acts on a returning expedition, its line rides that record
-    and is kept in the notebook. A Death record is closed (NIGHT_CLOSING §DEATH), so nothing is learned - or spent - on it. */
+ /* NIGHT_CLOSING §DISCOVERY LINE: the first time each rule acts on an expedition, its line rides that record and is kept
+    in the notebook. A Death record carries only the Death-limit line (the one exception to its closed payload, User
+    2026-09-30), so no other rule is learned - or spent - on it. */
  report.learned=[];
- if(report.outcome!=='사망'){const ev=id=>(report.events||[]).some(e=>e.id===id);
-  const acted={injured:!!report.departedInjured,fatigue:(report.fatigueBeforeExpedition||0)>=10,counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
+ {const ev=id=>(report.events||[]).some(e=>e.id===id),dead=report.outcome==='사망';
+  const acted=dead?{death:true}:{injured:!!report.departedInjured,fatigue:(report.fatigueBeforeExpedition||0)>=10,counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
   for(const [k,text] of G.Copy.learned){const id='learn-'+k;
    if(acted[k]&&!a.discoveries.some(x=>x.id===id)){a.discoveries.push({id,text,day:report.day});report.learned.push(text);}}}
  const d=D.dungeonBy[report.dungeon]||D.dungeonBy.spider;

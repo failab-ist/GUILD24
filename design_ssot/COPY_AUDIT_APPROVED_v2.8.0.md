@@ -2905,7 +2905,7 @@ The three Rare Reference customers and their lines were removed before a paid re
 **노출 위치**
 > 계정에서 그 규칙이 처음 작용한 원정의 NIGHT 기록, WHY 아래 한 줄. 표식 `발견`. 계정당 한 번이며 발견 수첩에도 남는다
 > (rule owner: NIGHT_CLOSING §DISCOVERY LINE). 한 기록에 여럿이면 아래 순서: 부상 출발 · 피로 10 이상 출발 ·
-> 대응 상품이 위험을 줄임 · 만반의 준비로 생존 · 대성공(가게 보너스 골드).
+> 대응 상품이 위험을 줄임 · 만반의 준비로 생존 · 대성공(가게 보너스 골드) · 첫 사망(사망 기록에는 이 줄만, User 2026-09-30).
 
 **현재**
 > 다친 채 떠나면 투력·강인함이 깎인 채로 싸운다.
@@ -2913,3 +2913,4 @@ The three Rare Reference customers and their lines were removed before a paid re
 > 위험에 맞는 상품은 그 위험의 압박을 줄인다.
 > 건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.
 > 준비가 넉넉하면 대성공이 난다. 대성공은 가게에도 보너스 골드를 남긴다.
+> 사망이 쌓여 한도에 닿으면 소문이 퍼져 영업이 끝난다.

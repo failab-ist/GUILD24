@@ -177,7 +177,8 @@ const Copy={
   ['fatigue','피로가 10을 넘으면 기동·정신이 떨어진다. 음식·음료가 피로를 덜어 준다.'],
   ['counter','위험에 맞는 상품은 그 위험의 압박을 줄인다.'],
   ['prepared','건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.'],
-  ['great','준비가 넉넉하면 대성공이 난다. 대성공은 가게에도 보너스 골드를 남긴다.']],
+  ['great','준비가 넉넉하면 대성공이 난다. 대성공은 가게에도 보너스 골드를 남긴다.'],
+  ['death','사망이 쌓여 한도에 닿으면 소문이 퍼져 영업이 끝난다.']],
  arrive(n,day,hasCallback,run){
   const ex=exclusionFor(run,n,'arrival'),emit=line=>{remember(run,n,'arrival',line);return line;};
   if(run?.firstRun&&n.lessonPayday===day)return emit(Copy.lessonPayday);

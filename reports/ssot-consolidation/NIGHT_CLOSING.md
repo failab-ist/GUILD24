@@ -567,5 +567,7 @@ New lines only.
 acted on - taught after it happened, not before. One line per rule under the record's WHY, marked `발견`, and kept in the
 발견 수첩. Triggers (proof, not presence): departed with an ordinary Injury; departed at Fatigue 10 or more; a Hazard
 Item actually lowered a Hazard (the `hazard` resolution event); 만반의 준비 turned away a Death; a 대성공 that paid the
-store bonus. A Death record is closed (§DEATH), so no line is shown or spent on it. Exact copy -> COPY_AUDIT §26-2.
+store bonus. On a Death record only the Death-limit line, on the account's first Death - the one exception to its closed
+payload (User 2026-09-30); no other line is shown or spent there. Exact copy -> COPY_AUDIT §26-2.
+Exception (User 2026-09-30, v2.9.11): the account's first Death record also carries the §DISCOVERY LINE for the Death limit.
 ```
