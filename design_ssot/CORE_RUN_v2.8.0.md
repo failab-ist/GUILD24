@@ -31,28 +31,14 @@ externalAPIRequired=NO
 
 30일 동안 던전 앞 GUILD24를 운영한다.
 
-하루의:
-발주
-→ 판매
-→ 원정 결과
-→ 점포 결산
+하루의 발주 → 판매 → 원정 결과 → 점포 결산이 누적되어 Store Build · Inventory Strategy · NPC 성장 ·
+Wallet/Loyalty/Revisit · Final Expedition 전력을 만든다.
 
-이 누적되어:
-
-- Store Build
-- Inventory Strategy
-- NPC 성장
-- Wallet/Loyalty/Revisit
-- Final Expedition 전력
-
-을 만든다.
-
-D30은 별개의 미니게임이 아니라
-앞선 29일의 판단을 시험하는 Run 결산이다.
+D30은 별개의 미니게임이 아니라 앞선 29일의 판단을 시험하는 Run 결산이다.
 
 ## PRE-RUN FLOW
 
-There is no Start Contract selection in the current pre-Run flow.
+The pre-Run flow has no Start Contract selection.
 
     new Run preparation
     -> inspect/equip owned Decoration loadout
@@ -65,18 +51,13 @@ There is no Start Contract selection in the current pre-Run flow.
 Decoration loadout is frozen after Run start.
 The pre-Run management screen must have a valid return path to new-Run preparation.
 
-The D0 Boss objective is not embedded above/inside the first Store Support decision.
-The first Store Support decision resolves first. The Run then enters DAY 1 MORNING, and the D0
-briefing is the first presentation step of that Morning before ordinary Morning information or
-decisions.
+The D0 Boss objective is not embedded above/inside the first Store Support decision (→ §D0 FIRST-MORNING BOSS BRIEFING — EXACT).
+"D0" is the Boss-information cadence name; it does not mean the briefing is displayed on a separate playable DAY 0 phase.
 
-"D0" remains the Boss-information cadence name. It does not mean the briefing is displayed on a
-separate playable DAY 0 phase.
 ## D0 FIRST-MORNING BOSS BRIEFING — EXACT
 
-Purpose:
-bridge the opening / first-support setup into the actual 30-Day Run objective before the Player
-makes the first ordinary Morning decision.
+Purpose: bridge the opening / first-support setup into the actual 30-Day Run objective before the Player makes the
+first ordinary Morning decision.
 
 Trigger:
 - only after the first DAY 0 점포지원 choice has resolved;
@@ -84,9 +65,7 @@ Trigger:
 - before the ordinary DAY 1 Morning Event, Gate detail, ORDER entry or any other ordinary Morning
   information / decision surface.
 
-This is an information beat, not a new gameplay Phase.
-
-Opening the D0 briefing:
+This is an information beat, not a new gameplay Phase. Opening the D0 briefing:
 - advances no time;
 - consumes no Gameplay RNG;
 - spends no Gold / Store Capital;
@@ -101,8 +80,7 @@ Presentation -> UI_UX_v2.8.0.md.
 Acknowledgement:
 - one `확인` action completes the beat;
 - ordinary DAY 1 Morning flow must not advance past this beat until it is acknowledged;
-- closing / escaping the presentation, if the shell technically permits it, does not consume the
-  beat;
+- closing / escaping the presentation, if the shell technically permits it, does not consume the beat;
 - acknowledgement marks the D0 beat seen and persists that state before ordinary Morning resumes.
 
 Save / Load:
@@ -127,88 +105,58 @@ MORNING
 → CLOSING
 → next Day
 
-Phase는 턴 기반으로 진행한다.
-시간 경과를 요구하는 Real-time Gameplay는 없다.
+Phase는 턴 기반으로 진행한다. 시간 경과를 요구하는 Real-time Gameplay는 없다.
 
 ### MORNING
 question=`오늘 어떤 날인가?`
 
-Purpose:
-- 오늘 상황 파악
-- 방문 예상
-- 열린 Gate / 알려진 위험 확인
-- Event 확인
+Purpose: 오늘 상황 파악 · 방문 예상 · 열린 Gate / 알려진 위험 확인 · Event 확인.
 
-Morning은 상황 읽기 단계다.
-발주/판매/결산을 한 화면에 섞지 않는다.
+Morning은 상황 읽기 단계다. 발주/판매/결산을 한 화면에 섞지 않는다.
 
 ### ORDER
 question=`무엇을 준비할까?`
 
-Purpose:
-- 상품 선택
-- 수량 선택
-- Gold 배분
-- 재고 공간 판단
-- Reroll 판단
-- 오늘 Gate/Hazard에 맞춘 즉시 준비
-- 다음날 Tier 확률을 미래 보조 정보로 활용
+Purpose: 상품 선택 · 수량 선택 · Gold 배분 · 재고 공간 판단 · Reroll 판단 · 오늘 Gate/Hazard에 맞춘 즉시 준비 ·
+다음날 Tier 확률을 미래 보조 정보로 활용.
 
 Order timing:
 - Order is same-day replenishment
 - confirmed stock enters Inventory before the current Day SALE
 - current-day Gate/Hazard information is already known before Order commitment
-- no next-day forecast is shown; today's Gates are the whole planning context (User 2026-09-24, v2.9.0)
+- no next-day forecast is shown; today's Gates are the whole planning context
 
 Within ORDER, confirming a purchase does **not** advance the phase.
 The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.8.0.md`.
 
-Canonical economy/order:
--> ECONOMY_ORDER_v2.8.0.md
+Canonical economy/order -> ECONOMY_ORDER_v2.8.0.md
 
 ### SALE
 question=`이 손님에게 무엇을, 얼마에 팔까?`
 
-Purpose:
-- 한 명의 NPC를 관찰
-- Item 선택
-- Price 선택
-- 현재 이익 vs NPC 투자 판단
+Purpose: 한 명의 NPC를 관찰 · Item 선택 · Price 선택 · 현재 이익 vs NPC 투자 판단.
 
-Canonical:
--> SALE_v2.8.0.md
+Canonical -> SALE_v2.8.0.md
 
 ### NIGHT
 question=`내 선택이 어떻게 됐을까?`
 
-Purpose:
-- NPC별 원정 결과
-- 실제 준비 영향
-- 성장/부상/사망 확인
+Purpose: NPC별 원정 결과 · 실제 준비 영향 · 성장/부상/사망 확인.
 
-Canonical:
--> NIGHT_CLOSING_v2.8.0.md
+Canonical -> NIGHT_CLOSING_v2.8.0.md
 
 ### CLOSING
 question=`오늘 장사는 어땠을까?`
 
-Purpose:
-- Revenue
-- COGS
-- Margin
-- Overhead
-- Waste
-- Relic spend
-- Final Gold
+Purpose: Revenue · COGS · Margin · Overhead · Waste · Relic spend · Final Gold.
 
-Canonical:
--> NIGHT_CLOSING_v2.8.0.md
+Canonical -> NIGHT_CLOSING_v2.8.0.md
 
 ## START STATE
 
 At new run:
 
-Gold=700G    (User 2026-09-25, v2.9.1 balance; was 1000G)
+Gold=700G
 InventoryCapacity=18
 
 Stock:
@@ -219,8 +167,7 @@ Stock:
 하급 포션 ×1
 ```
 
-`bandage` is retired and is not an active Item ID.
-No legacy Bandage stock is silently converted into 진정 허브티.
+`bandage` is not an active Item ID. No legacy Bandage stock is silently converted into 진정 허브티.
 
 No hidden extra starting resources.
 
@@ -228,10 +175,10 @@ Item identity/prices/effects -> `ITEM_v2.8.0.md`.
 
 ## FIRST-RUN LESSONS
 
-(User 2026-09-30, v2.9.11.) The account's first Run - no Run settled yet (`account.runs` 0) - teaches by play, not by text:
-the situation leaves one sensible move, and the Night shows why it worked. Every later Run is the ordinary Run. Nothing here
-is shown as a tutorial, and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then
-takes the draws a living adventurer takes).
+The account's first Run - no Run settled yet (`account.runs` 0) - teaches by play, not by text: the situation leaves one
+sensible move, and the Night shows why it worked. Every later Run is the ordinary Run. Nothing here is shown as a
+tutorial, and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then takes the
+draws a living adventurer takes).
 
 - DAY 1: one Common Item that counters the first Gate's Hazard joins the warehouse after the DAY 0 pick (독 방진마스크 ·
   부식 중화 탄산수 · 냉기 컵라면 · 화염 얼음컵 · 공포 집중 사탕). It is ordinary visible stock, not a hidden resource.
@@ -256,110 +203,65 @@ Run-start effects come only from the frozen active Decoration loadout; no contra
 
 baseCapacity=18
 
-Inventory stores physical stock units.
-Shelf-life/expiry behavior is Item/stock data.
+Inventory stores physical stock units. Shelf-life/expiry behavior is Item/stock data.
+When multiple units of same Item exist, UI may stack them, but physical stock state remains preservable.
 
-When multiple units of same Item exist:
-UI may stack them,
-but physical stock state remains preservable.
-
-Sale depletion:
-nearest-expiry unit first
-
-Canonical:
--> ITEM_v2.8.0.md
--> SALE_v2.8.0.md
+Sale depletion: nearest-expiry unit first.
 
 Capacity modifiers may come from explicit Relic effects.
+
+Canonical -> ITEM_v2.8.0.md / SALE_v2.8.0.md
 
 ## DAILY ECONOMIC BASE
 
 dailyOverhead follows the Day AND the roster the Store has actually built:
 
-`overhead = (90 + 5 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)` (User 2026-09-24, v2.9.0)
+`overhead = (90 + 5 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)`
 charged rounded to 10G.
 
-Core Roster = the six best living adventurers, by Level then Rarity (all of them if fewer).
-Averaging the whole pool would pay the Store to hoard Level-1 bodies to dilute the figure.
+Core Roster = the six best living adventurers, by Level then Rarity (all of them if fewer). Do not average the whole
+pool (that would pay the Store to hoard Level-1 bodies to dilute the figure).
 Nothing is persisted; both averages derive from the roster as it stands.
-
-A Store that grows good adventurers keeps having to sell well to hold on to them.
 
 Any later base-overhead change requires:
 - integrated v2.5 multi-seed evidence
 - minimal-engagement vs normal-play comparison
 - Designer approval
 
-Base order offers:
-6/day
+Base order offers: 6/day. Base visitors: 3–6/day.
 
-Base visitors:
-3–6/day
+Visitors may be modified by Relics, Events and Living NPC Cap. Visitor modifiers must respect Living NPC Cap rules.
 
-Visitors may be modified by:
-- Relics
-- Events
-- Living NPC Cap
-
-Visitor modifiers must respect Living NPC Cap rules.
-
-Canonical:
--> ECONOMY_ORDER_v2.8.0.md
--> NPC_TRAIT_v2.8.0.md
--> RELIC_v2.8.0.md
+Canonical -> ECONOMY_ORDER_v2.8.0.md / NPC_TRAIT_v2.8.0.md / RELIC_v2.8.0.md
 
 ## PERSISTENT NPC ROSTER
 
-NPCs persist within a Run.
+NPCs persist within a Run. Persistent state may include: identity · Job · level/stats · Traits · Wallet · Loyalty ·
+injuries · fatigue/conditions · alive/dead state · visit/history state.
 
-Persistent state may include:
-- identity
-- Job
-- level/stats
-- Traits
-- Wallet
-- Loyalty
-- injuries
-- fatigue/conditions
-- alive/dead state
-- visit/history state
+Dead NPC remains dead for the Run and does not return as a normal visitor.
 
-Dead NPC:
-- remains dead for the Run
-- does not return as a normal visitor
-
-Living NPC capacity, recovery/death slot semantics, newcomer/revisit behavior:
--> NPC_TRAIT_v2.8.0.md
-
+Living NPC capacity, recovery/death slot semantics, newcomer/revisit behavior -> NPC_TRAIT_v2.8.0.md.
 CORE_RUN does not redefine the NPC cap or visitor-pool algorithm.
 
 ## GATE / DUNGEON STATE
 
-Dungeon generation follows:
--> DUNGEON_HAZARD_v2.8.0.md
+Dungeon generation follows -> DUNGEON_HAZARD_v2.8.0.md
 
 Generated Day/Gate state must remain stable for that Day.
 
-Save/Load must not become:
-- Gate reroll
-- Family reroll
-- Tier reroll
-- Relic offer reroll
-- Order-state exploit
+Save/Load must not become a Gate reroll, Family reroll, Tier reroll, Relic offer reroll or Order-state exploit.
 
-Random results that are meant to be fixed before player choice
-must be persisted or deterministically reproducible.
+Random results that are meant to be fixed before player choice must be persisted or deterministically reproducible.
 
 ## RELIC WINDOWS
 
 Relic windows:
 [D0,D5,D10,D15,D20,D25,D30]
 
-Canonical acquisition/state:
--> RELIC_v2.8.0.md
+Canonical acquisition/state -> RELIC_v2.8.0.md
 
 D0 relic choice occurs before first normal business flow.
-
 D30 relic purchase closes before Final Expedition lock.
 
 ## FINAL TIMELINE — EXACT
@@ -399,18 +301,12 @@ Run presentation order includes:
     D25 exact Final Family/Hazard report
     D30 no new report
 
-D0:
-- first Store Support choice resolves first
-- the Run enters DAY 1 MORNING
-- the D0 Boss briefing is the first Morning presentation step
-- only after acknowledgement does the ordinary DAY 1 Morning sequence continue
-- D0 is informational and does not become a permanent Phase
+D0: the first Store Support choice resolves first, then the D0 Boss briefing is the first DAY 1 MORNING presentation
+step; D0 is informational, does not become a permanent Phase, and does not replay after consumption
+(→ §D0 FIRST-MORNING BOSS BRIEFING — EXACT).
 
-On D5/D10/D15/D20/D25:
-Boss information occurs before the same-Day Store Support decision.
-
+On D5/D10/D15/D20/D25: Boss information occurs before the same-Day Store Support decision.
 D10/D20 each persist a consumed/seen state so reload cannot replay them.
-D0 likewise must not replay after consumption.
 
 Exact content -> BOSS_v2.8.0.md / COPY_WORLD_VOICE_v2.8.0.md.
 
@@ -441,22 +337,13 @@ Rules:
 
 ## D30 FINAL
 
-D30=Final Expedition / Boss Day.
+D30=Final Expedition / Boss Day. It is the Run culmination and must reuse the systems built during the Run rather than
+introducing a separate combat minigame.
 
-D30 is the Run culmination and must reuse the systems built during the Run rather than introducing a separate combat minigame.
+Final Family selection / disclosure · Final Hazard Pool · Final party size / survivor fallback · Final Power / Roll /
+clear comparison · Run Clear / Fail · Final-specific balance and QA -> FINAL_EXPEDITION_v2.8.0.md
 
-Detailed Final resolution ownership:
-- Final Family selection / disclosure
-- Final Hazard Pool
-- Final party size / survivor fallback
-- Final Power / Roll / clear comparison
-- Run Clear / Fail
-- Final-specific balance and QA
-
--> FINAL_EXPEDITION_v2.8.0.md
-
-Boss identity / Boss Trait / Sloth Seal state:
--> BOSS_v2.8.0.md
+Boss identity / Boss Trait / Sloth Seal state -> BOSS_v2.8.0.md
 
 After the already-known D25 Final state and the D30 Relic/SLOTH decision are resolved:
 
@@ -484,12 +371,9 @@ Normal management actions may not retroactively change Final state after lock.
 
 ## SAVE / LOAD
 
-Storage:
-localStorage
+Storage: localStorage
 
-Save must preserve enough Run state to resume without changing already-generated choices/results.
-
-At minimum preserve:
+Save must preserve enough Run state to resume without changing already-generated choices/results. At minimum preserve:
 - Day
 - Phase
 - Gold
@@ -510,8 +394,6 @@ Save schema may invalidate incompatible local saves when schema changes.
 Do not maintain compatibility branches solely for unsupported save formats.
 
 ### SAVE v9 — EXACT
-
-(v8 until v2.9.8: the id cleanup renamed saved ids, User 2026-09-27.)
 
 ```text
 KEY = guild24.save.v9
@@ -534,18 +416,14 @@ Rules:
 - v1~v8 **Run state** cannot continue as a current v9 Run.
 - v1~v8 **Account/Meta state** is not migrated into v9.
 - Do not add compatibility conversion merely to preserve internal-test progression.
-- When only legacy v1~v8 data exists, initialize a fresh current v9 Account/Meta + fresh current v9 Run rather than importing legacy progression.
-- legacy bytes are not required to be destructively deleted merely to reject migration; storage cleanup remains under the existing reset/storage policy.
+- When only legacy v1~v8 data exists, show old-version/fresh-start guidance and initialize a fresh current v9 Account/Meta + fresh current v9 Run rather than importing legacy progression.
+- Do not automatically delete original legacy bytes; they need not be destructively deleted merely to reject migration. Storage cleanup remains under the existing reset/storage policy.
 - Full Data Reset remains the explicit game-owned current-data deletion action.
-
-Legacy v1~v8:
-- show old-version/fresh-start guidance
-- do not automatically delete original legacy bytes
 
 ### SAVE BOUNDARY
 
-Current internal save generation is v9: the v2.9.8 id cleanup (User 2026-09-27) renamed saved Item, Decoration,
-Store Support, Event and Family ids, so the schema moved and no migration is kept.
+Current internal save generation is v9; saved Item, Decoration, Store Support, Event and Family ids are the v9 ids, and
+no migration from earlier generations is kept.
 
 Do not choose a new save generation merely because player-facing names/effects changed.
 
@@ -568,10 +446,9 @@ Reload must not:
 
 ## CURRENT RUN ABANDON
 
-Player-facing action:
-`현재 지점 포기`
+Player-facing action: `현재 지점 포기`
 
-Confirming `현재 지점 포기` means (User 2026-09-24, v2.9.0):
+Confirming `현재 지점 포기` means:
 **abandon the current Run with no settlement, at once: `run = null`, and return to 새 점포 준비 (no Run).**
 No new Run starts by itself. On that screen Decorations can be bought and equipped (META §DECORATION COLLECTION / LOADOUT); the next Run starts only when the player chooses `첫 점포지원 고르기`, on the ordinary fresh-Run start path.
 
@@ -586,29 +463,16 @@ Abandoned Run must NOT trigger:
 - `runs` / `wins` progress
 - any other benefit derived from the abandoned Run
 
-Account-scoped state is preserved:
-- `account.matrix`
-- derived Meta progression
-- Monster Knowledge
-- earned unlocks and unlock-toast state
-- Tutorial completion
-- Settings
-- other account-scoped persistent state
+Account-scoped state is preserved: `account.matrix` · derived Meta progression · Monster Knowledge · earned unlocks and
+unlock-toast state · Tutorial completion · Settings · other account-scoped persistent state.
 
-Run-scoped state is discarded:
-- Day / Phase / Gold / Inventory
-- Run NPC roster
-- Run Relics / facilities
-- Gate / Event / Order state
-- Deep Expedition schedule / assignment / sponsorship / result
-- Boss / Final state
-- all other run-scoped state
+Run-scoped state is discarded: Day / Phase / Gold / Inventory · Run NPC roster · Run Relics / facilities ·
+Gate / Event / Order state · Deep Expedition schedule / assignment / sponsorship / result · Boss / Final state ·
+all other run-scoped state.
 
-The next Run uses the ordinary fresh-Run start path.
-Do not add a reset-only initialization path.
+The next Run uses the ordinary fresh-Run start path. Do not add a reset-only initialization path.
 
-Full game-data reset remains a separate action and still deletes account-scoped
-progress, Knowledge, unlocks, Tutorial and Settings.
+Full game-data reset is a separate action and deletes account-scoped progress, Knowledge, unlocks, Tutorial and Settings.
 
 ## FULL RESET
 
@@ -645,17 +509,14 @@ Rules:
 - stale legacy tutorial flags must not suppress tutorial on a fresh v9 initialization
 - Run Abandon / ordinary new Run does **not** by itself reset tutorial completion while the same current Account/Meta remains
 - do not create a second tutorial system; reuse the existing tutorial implementation if it exists
-- implementation adoption must audit the current tutorial trigger/persistence path because current internal testing has observed fresh/reset states where the tutorial did not appear
+- implementation adoption must audit the current tutorial trigger/persistence path
 - if the existing tutorial is present but its reset/trigger path is broken, fix that path rather than replacing the tutorial wholesale
 
 Exact tutorial content/presentation -> `UI_UX_v2.8.0.md`.
 
 ## RUN-END STORE CAPITAL SETTLEMENT
 
-Normal Run end settles Store Capital exactly once from:
-- accumulated actual Gross Sales
-- reached-Day band
-
+Normal Run end settles Store Capital exactly once from accumulated actual Gross Sales and the reached-Day band.
 Exact formula/rates -> META_v2.8.0.md.
 
 Bankruptcy, Death-limit closure, Final failure and Boss CLEAR are eligible normal endings.
@@ -665,12 +526,8 @@ Ending Gold / remaining Inventory are not Store Capital inputs.
 
 ## RUN RANDOMNESS
 
-Randomness should create:
-- different early Family mixes
-- different customer histories
-- different Item availability
-- different Relic Build opportunities
-- different but playable Runs
+Randomness should create different early Family mixes, customer histories, Item availability and Relic Build
+opportunities: different but playable Runs.
 
 Randomness should not make:
 - one required Build Piece mandatory
@@ -679,13 +536,11 @@ Randomness should not make:
 - reload the optimal strategy
 
 Seeded reproduction should be possible for QA/debug if the project supports a seed input.
-
 Seed UI/debug controls are not core player progression.
 
 ## DEATH LIMIT — SEGMENTED
 
-(User 2026-09-25, v2.9.1 balance.) A Run ends at Closing when the Run's cumulative Death count reaches the limit of the
-segment the current Day is in:
+A Run ends at Closing when the Run's cumulative Death count reaches the limit of the segment the current Day is in:
 
 ```text
 D1~D10   5
@@ -698,40 +553,31 @@ D21~D30  11
 - the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
 - the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.8.0.md`)
 - death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
-- checked at Closing before the money branch, as today; the ending copy is unchanged
+- checked at Closing before the money branch; it uses the existing ending copy
 
 ## FAILURE / LOSS PRINCIPLE
 
-Weak NPCs may be ignored or lost.
-The game does not need a separate punishment subsystem merely to force care.
+Weak NPCs may be ignored or lost. The game does not need a separate punishment subsystem merely to force care.
 
-Their loss should matter through existing long-term systems:
-- lost growth
-- lost Wallet
-- lost Loyalty/Revisit
-- lost future sales
-- lost Final roster value
+Their loss should matter through existing long-term systems: lost growth · lost Wallet · lost Loyalty/Revisit ·
+lost future sales · lost Final roster value.
 
-Canonical NPC value:
--> NPC_TRAIT_v2.8.0.md
+Canonical NPC value -> NPC_TRAIT_v2.8.0.md
 
 ## META / CROSS-RUN BOUNDARY
 
 Core Run identity resets each Run.
 
-Cross-run progression / Knowledge / unlock truth is owned by:
--> META_v2.8.0.md
+Cross-run progression / Knowledge / unlock truth is owned by -> META_v2.8.0.md
 
-Legacy Global Meta XP is removed.
-Run Day advancement itself grants no Job Mastery or Boss-clear progress.
+There is no Global Meta XP. Run Day advancement itself grants no Job Mastery or Boss-clear progress.
 
-Explicit exception to the old blanket power ban:
+No cross-run power carries over, with one explicit exception:
 - visible Job Mastery adjustment may affect that Job's Base Stats / Growth only when defined by NPC_TRAIT / META
 - no hidden account-wide combat multiplier is allowed
 
 Boss-generated run state is Run state and must be persisted without reroll.
-Boss identity / reveal / trait / Sloth state ownership:
--> BOSS_v2.8.0.md
+Boss identity / reveal / trait / Sloth state ownership -> BOSS_v2.8.0.md
 
 ## PRODUCT / TECH CONSTRAINTS
 
@@ -754,16 +600,7 @@ Do not add as core gameplay:
 - Tiny Guild combat module
 - flavor-only standalone subsystems
 
-Flavor should use existing:
-- phase
-- event
-- dialogue
-- item
-- trait
-- relic
-- result
-
-systems where possible.
+Flavor should use existing phase / event / dialogue / item / trait / relic / result systems where possible.
 
 ## QA — ACCEPTANCE
 
@@ -777,7 +614,7 @@ Start a new run.
 
 EXPECT:
 - Day=1 normal flow starts after D0 setup
-- current Run baseline remains `Gold=700G`, `InventoryCapacity=18` (v2.9.1 balance, User 2026-09-25)
+- current Run baseline is `Gold=700G`, `InventoryCapacity=18`
 - start stock is owned by `CORE_RUN_v2.8.0.md` / `RUN-Q72`
 - no unintended extra resources
 
@@ -786,7 +623,7 @@ All starting values match canonical state.
 
 #### RUN-Q-v29-DL — SEGMENTED DEATH LIMIT
 
-(User 2026-09-25, v2.9.1 balance; owner `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.)
+Rule -> §DEATH LIMIT — SEGMENTED.
 
 Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20, 10 / 11 on D30; each with and without
 추모 방명록, and with a 위령제 on an earlier Day.
@@ -1079,8 +916,6 @@ PASS:
 
 #### RUN-Q70 — SAVE V9 EXACT
 
-(v8 until v2.9.8, User 2026-09-27.)
-
 EXPECT:
 - key `guild24.save.v9`
 - envelope 9
@@ -1119,8 +954,7 @@ current v9 starts clean without compatibility logic for older internal-test prog
 
 #### RUN-Q-v28-6 — ITEM ID REUSE / SAVE
 
-Superseded by v2.9.8 (User 2026-09-27): the meal / water ids were renamed (`bar` → `lunchbox`, `herobar` → `kingwater`)
-with the v9 schema, so no reused id remains to test.
+The meal / water ids are `lunchbox` / `kingwater`; no reused id remains to test.
 
 PASS:
 - no active Item carries a v2.8-reused id (`bar`, `herobar`)
@@ -1428,7 +1262,7 @@ PASS:
 
 #### RUN-Q81 — FIRST-RUN LESSONS
 
-(User 2026-09-30, v2.9.11; owner `CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS.)
+Rule -> §FIRST-RUN LESSONS.
 
 PASS:
 - a fresh account's first Run: after the DAY 0 pick the warehouse holds the four opening Items and exactly one Common Item
