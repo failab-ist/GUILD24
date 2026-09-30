@@ -1701,6 +1701,20 @@ PASS:
 FAIL:
 - a retired mark still shows, a mark names an Item, or a price lesson shows before its situation
 
+### UI-Q-v29-54 — END THIS RUN BLOCK (User 2026-09-30)
+
+Verify UI_UX §END — THIS RUN BLOCK on END (Run Fail, bankruptcy, Final loss / clear) at 390 and 1280.
+
+PASS:
+- `이 점포의 기록` sits between `지금까지 연 점포` and `점포 자본 정산`, five rows in order, COPY_AUDIT §10-4 wording
+- the figures are the Run's: its Day, visited customers and regulars made, Deaths (0 printed), the highest-Level customer
+  (tie -> higher Loyalty, the dead included), all expedition records and their 대성공 count
+- a Run with no expedition prints no `원정` row; a reload prints the same block
+- the settlement block and the replay line read as before
+
+FAIL:
+- a lost adventurer named in the block, a new save field, or the block after the settlement
+
 ### UI-Q-v29-32 — ORDER CONFIRM CASCADE
 
 (User 2026-09-25, v2.9.2 H3; owner `UI_UX_v2.8.0.md` §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM.)

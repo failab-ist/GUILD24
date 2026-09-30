@@ -286,7 +286,7 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   The v3.0 prep quick patches (User 2026-09-29~30) join it: iPhone Safari and short phones (iPhone SE, Galaxy 360x597), the
   BGM / SFX mix, the ORDER floating box and warehouse panel, the desk's own SALE and wider stage, a closed Gate kept as
   `오늘 폐쇄`, the best 총매출 replay line, D30 candidates while ordering and a notebook in FINAL 준비, stale Hazard Stat lines,
-  the II / FIRE Gate lessons, a FIRE pair's Boss +18
+  the II / FIRE Gate lessons, a FIRE pair's Boss +18, the coach diet, the END `이 점포의 기록` block
   -> the same CHANGELOG section (owners UI_UX, UI_UX_QA, PRESENTATION, META §BEST DAY, EVENT, FINAL_EXPEDITION §D30 PLAYER
   FLOW / §FAMILY-PAIR BALANCE AUDIT, BOSS, DUNGEON_HAZARD, DUNGEON_ITEM_QA, COPY_AUDIT §3-10, COPY_WORLD_VOICE).
 - v2.9.11 (User 2026-09-28~29, merged by PR #28): the v3.0 prep line - unsold stock leaves on the Night of its last sale Day, on

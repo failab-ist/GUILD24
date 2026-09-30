@@ -2298,3 +2298,25 @@ New:
 sale, and the returning-customer mark stays contextual on the first returning customer (no screen says that tapping the
 customer opens the notebook).
 ```
+
+
+## v2.9.12 END this run block (User 2026-09-30)
+
+New:
+
+```new
+### END — THIS RUN BLOCK (v2.9.12)
+(User 2026-09-30, A안; acceptance -> UI_UX_QA UI-Q-v29-54; review `reports/v3.0-prep.md` §9-7 F1 / F2, §9-8-1-A.) GAME_VISION
+Design Pillar: when a Run ends, "이번 판은 이런 가게였다" has to stay. The END tape carries one block for it, `이 점포의 기록`,
+between the `지금까지 연 점포` block and `점포 자본 정산` - read as the story, then the settlement, then 본사 해금, then the
+replay line.
+- five rows, in this order: `버틴 날` (`DAY {N}`), `손님` (the customers who visited · `단골 {N}`, the regulars the Run
+made), `돌아오지 못한 사람` (the Run's Deaths, 0 printed as 0 - a Run that lost no one is a fact of this Run), `가장
+성장한 손님` (`{이름} Lv.{N}`, the highest Level among the customers who visited, the dead included; a tie goes to the
+higher Loyalty), `원정` (`{N}건 · 대성공 {N}`, every expedition record of the Run's customers)
+- a Run with no expedition (a DAY 1 bankruptcy) prints no `원정` row; names of the lost are not listed (the notebook's
+`돌아오지 못한 사람` list holds them)
+- read from what the Run already holds - no new save field; the settlement block (META §Run-end settlement structure)
+and the replay line (§END — REPLAY NUDGE) are unchanged
+- exact copy -> COPY_AUDIT §10-4
+```

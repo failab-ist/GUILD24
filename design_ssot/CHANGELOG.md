@@ -38,6 +38,10 @@ the owner headers and in the git tag.
   없어지던데 ... 폐쇄됐다는 정보가 전달되도록"): the Gate 게이트 임시 폐쇄 closes was simply gone, so the player could not
   tell which one. It stays on the MORNING board, in the `위험 보기` window and on ORDER's `오늘` line, faded with its name
   struck and one `오늘 폐쇄` stamp, no Hazard rows. It still takes no visitor, expedition or order (simulation unchanged).
+- **END: `이 점포의 기록`** - UI_UX §END — THIS RUN BLOCK, COPY_AUDIT §10-4, UI-Q-v29-54 (User 2026-09-30, A안; `reports/v3.0-prep.md`
+  §9-7 F1 / F2): the END tape now says what kind of store this Run was - one five-row block before the settlement: 버틴 날,
+  손님 · 단골, 돌아오지 못한 사람 (a number, 0 included), 가장 성장한 손님, 원정 · 대성공. No new save field; the
+  settlement and the replay line are unchanged.
 - **Coach diet** - UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS / FIRST-ORDER COACH ORDER / FIRST STORE SUPPORT,
   COPY_AUDIT §3-4 / §3-7 / §26-3, COPY_WORLD_VOICE §TUTORIAL COACH COPY, UI-Q-v29-53 (User 2026-09-30, from the §9-6 review in
   `reports/v3.0-prep.md`): one rule, one place. 12 marks the screen already says are retired (MORNING 방문객 · 게이트, DAY 0
