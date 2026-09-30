@@ -596,7 +596,7 @@ New:
 
 ```new
 dailyEventChance = 40%
-(User 2026-09-28, v2.9.11: 35% → 40%, 사건 풀이 23종에서 늘어난 것과 함께.)
+(User 2026-09-28, v2.9.11: 사건 풀이 23종에서 늘어난 것과 함께.)
 19–20 × 0.40 ≈ 7.6–8.0 Events / Run
 심층원정 통합 후 정상적인 30일 Run에서 약 7.6–8.0회의 Normal Event 기대값을 시작값으로 한다.
 - use ordinary EVENT eligibility / 40% roll
