@@ -4,7 +4,7 @@
 //        [--runs 300] [--account account.json]
 // --late / --mid: DAY 21+ / DAY 11~20 slopes. DAY 1~9 (1.45) and the DAY 9~10 step (0.80) stay as shipped.
 // --refit: Hazard Threat x a Stat-group factor (강인함 / 기동 / 정신), Counter values re-set per Ladder rung, Trait Counters
-//   x the same factor. The ÷3 / ÷2 Stat conversion is unchanged (User 2026-09-30).
+//   x the same factor. The ÷3 / ÷2 Stat conversion is unchanged (User 2026-09-30). --final-plain keeps the Final's Threat as shipped.
 const path=require('node:path'),fs=require('node:fs'),vm=require('node:vm');const ROOT=path.resolve(__dirname,'..');
 const args=process.argv.slice(2),flag=(k,d)=>{const i=args.indexOf(k);return i>=0?args[i+1]:d;};
 const LATE=Number(flag('--late',.8)),MID=Number(flag('--mid',1.1)),REFIT=flag('--refit','none'),policy=flag('--policy','reader'),runs=Number(flag('--runs',300));
@@ -16,11 +16,13 @@ const REFITS={
  half:{factor:{survival:1.05,mobility:1.2,spirit:1.35},
   counter:{survival:{10:10,12:11,16:15,21:20,23:21},mobility:{9:11,14:16,21:22},spirit:{8:11,9:12,12:18,18:25}}}};
 const R=REFITS[REFIT]||null;globalThis.__HF=R?R.factor:{};
+/* --final-plain: the Final keeps the shipped Threat (no Stat-group factor), so a re-fit can be read apart from its Final effect */
+globalThis.__FINAL_PLAIN=args.includes('--final-plain');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation']){
  const file=path.join(ROOT,'dist',f+'.js');
  if(f==='systems/dungeon'){let src=fs.readFileSync(file,'utf8');const at='threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,';
   if(src.split(at).length!==2)throw Error('threat patch point x'+(src.split(at).length-1));
-  src=src.replace(at,'threat=(12+(d.day||1)*.35+((d.tier||1)-1)*6)*((globalThis.__HF||{})[rule[0]]||1),');vm.runInThisContext(src,{filename:file});}
+  src=src.replace(at,'threat=(12+(d.day||1)*.35+((d.tier||1)-1)*6)*(d.family===\'final\'&&globalThis.__FINAL_PLAIN?1:((globalThis.__HF||{})[rule[0]]||1)),');vm.runInThisContext(src,{filename:file});}
  else require(file);}
 Dungeon.gateDayTerm=day=>Math.min(day,9)*1.45+Math.max(0,Math.min(day,10)-9)*.80+Math.max(0,Math.min(day,20)-10)*MID+Math.max(0,day-20)*LATE;
 const HZ=Object.keys(DATA.hazards);
@@ -41,7 +43,7 @@ const end=P.end;P.end=function(w,why){const s=this.run;const r=end.call(this,w,w
 Debug.simulate(runs,policy,account,'adaptive','hybrid',{});
 const N=rows.length,pc=(a,b=N)=>b?+(100*a/b).toFixed(1):null,q=(a,p)=>{const v=a.filter(x=>x!=null).sort((x,y)=>x-y);return v.length?+v[Math.floor((v.length-1)*p)].toFixed(2):null;};
 const F=rows.filter(r=>r.fin).map(r=>r.fin),sum=(k,i)=>rows.reduce((a,r)=>a+r.bySeg[k][i],0);
-console.log(JSON.stringify({late:LATE,mid:MID,refit:REFIT,policy,account:!!account,runs:N,
+console.log(JSON.stringify({late:LATE,mid:MID,refit:REFIT,finalPlain:globalThis.__FINAL_PLAIN,policy,account:!!account,runs:N,
  d10:pc(rows.filter(r=>r.day>=10).length),d20:pc(rows.filter(r=>r.day>=20).length),d30:pc(rows.filter(r=>r.day>=30).length),clear:pc(rows.filter(r=>r.win).length),
  deathEnd:pc(rows.filter(r=>r.deathEnd).length),
  seg:[0,1,2].map(k=>({exp:sum(k,0),win:pc(sum(k,3),sum(k,0)),hurt:pc(sum(k,2),sum(k,0)),death:pc(sum(k,1),sum(k,0))})),
