@@ -1603,7 +1603,7 @@ stamp landing and through the settlement count.
 
 PASS:
 - every receipt row is on screen together within 200 ms behind one printer tick; nothing prints row by row
-- only the `보유 자금` figure (the purse box; the `영업 손익` row until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+- only the `보유 자금` figure (the purse box) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
 - the `영업 손익` figure is green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and figures at once
 - no `어제보다 +N` line anywhere on the receipt
 - the END `현재 점포 자본` row counts from the account's prior total to the resolved one in 320 ms, with one `ui`

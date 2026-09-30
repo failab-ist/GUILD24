@@ -1423,7 +1423,7 @@ The Day's change prints as its own 오늘 변화 row under 오늘 끝. Lines dec
 User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보유 자금 / 영업 손익; the stamp sits on 보유 자금, only 영업 손익 is coloured (green / red, gold at 0); 창고 재고 and 오늘 폐기 take separate lines and the waste line names the Items. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-- only the `보유 자금` figure (the purse box; the `영업 손익` row until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+- only the `보유 자금` figure (the purse box) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
 - the `영업 손익` figure is green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and figures at once
 영업 전 자금 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 보유 자금 box (stamped) with 영업 손익 ±N (green / red, gold at 0);
 창고 재고 and 오늘 폐기 on separate lines, 오늘 폐기 naming up to three Items (×n from two) then 외 N종; 내일 운영비 예상 (not on DAY 29);
