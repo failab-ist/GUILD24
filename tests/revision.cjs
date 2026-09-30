@@ -597,4 +597,18 @@ test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급�
  assert.equal(later.s.inventory.filter(u=>u.item==='kit').length,later.kits,'and no 구급키트');
 });
 
+test('NIGHT_CLOSING §DISCOVERY LINE: a rule is named once per account, on the first record it acted on, never on a Death',()=>{
+ const M=Meta,acc={knowledge:{},discoveries:[]};
+ const rep=o=>({day:4,dungeon:'spider',items:[],events:[],outcome:'성공',storeBonus:0,...o});
+ const r1=rep({departedInjured:true,fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:[]}]});M.observe(acc,r1);
+ assert.deepEqual(r1.learned,[Copy.learned[0][1],Copy.learned[1][1],Copy.learned[2][1]],'injured, fatigue, counter - in reading order');
+ const r2=rep({departedInjured:true,fatigueBeforeExpedition:15});M.observe(acc,r2);assert.deepEqual(r2.learned,[],'once per account');
+ const r3=rep({outcome:'대성공',storeBonus:0});M.observe(acc,r3);assert.deepEqual(r3.learned,[],'a 대성공 without the store bonus (Deep) proves nothing about it');
+ const r4=rep({outcome:'사망',events:[{id:'prepared',text:'x'}]});M.observe(acc,r4);assert.deepEqual(r4.learned,[],'a Death record is closed');
+ assert.ok(!acc.discoveries.some(x=>x.id==='learn-prepared'),'and nothing is spent on it');
+ const r5=rep({outcome:'대성공',storeBonus:50,events:[{id:'prepared',text:'x'}],fatigueBeforeExpedition:9});M.observe(acc,r5);
+ assert.deepEqual(r5.learned,[Copy.learned[3][1],Copy.learned[4][1]],'prepared and great; Fatigue 9 is below the line');
+ assert.equal(acc.discoveries.filter(x=>/^learn-/.test(x.id)).length,5,'all five are in the notebook');
+});
+
 console.log(checks+' revision groups passed');

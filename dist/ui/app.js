@@ -1079,6 +1079,8 @@ function beat(r){
      that speaks for itself. The fight verdict sentence is no longer among them - UI_UX §NIGHT
      LAYOUT — COMBAT FACT retires it from the player-facing record at every hierarchy. */
   +(!gone&&why?'<p class="why">'+E(why)+'</p>':'')
+  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule this expedition showed for the first time on this account */
+  +(!gone&&r.learned?.length?r.learned.map(t=>'<p class="learned"><b>발견</b>'+E(t)+'</p>').join(''):'')
  +'</div>'
  +(gone?'':'<div class="changed">'+changedRows(r)+'</div>')
  +'</article>';}

@@ -555,3 +555,17 @@ New:
 ```new
 게이트 순례 주간:
 ```
+
+
+## v2.9.11 DISCOVERY LINE (User 2026-09-30): coach rules taught after the fact on the NIGHT record
+
+New lines only.
+
+```new
+## DISCOVERY LINE
+(User 2026-09-30, v2.9.11.) A rule is named once per account, on the NIGHT record of the first returning expedition it
+acted on - taught after it happened, not before. One line per rule under the record's WHY, marked `발견`, and kept in the
+발견 수첩. Triggers (proof, not presence): departed with an ordinary Injury; departed at Fatigue 10 or more; a Hazard
+Item actually lowered a Hazard (the `hazard` resolution event); 만반의 준비 turned away a Death; a 대성공 that paid the
+store bonus. A Death record is closed (§DEATH), so no line is shown or spent on it. Exact copy -> COPY_AUDIT §26-2.
+```

@@ -15,6 +15,10 @@ the owner headers and in the git tag.
   `“오늘 보수 받았어요. 값은 신경 안 써요.”` (85% of those Runs). COPY_AUDIT §26-1. Later Runs are unchanged; the Run's
   stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
   (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
+- **NIGHT discovery lines** (balance review session, User 2026-09-30): five rules are named once per account on the NIGHT
+  record of the first returning expedition they acted on, marked `발견` and kept in the 발견 수첩 - 부상 출발, 피로 10 이상,
+  a Hazard Item that lowered a Hazard, 만반의 준비 turning away a Death, a 대성공 that paid the store bonus. Never on a Death
+  record. NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §26-2; ledger; tests revision. Balance unchanged (`reader` 300 identical).
 
 - **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear
   `reports/fresh-run-d23-review-v299.md` §7-8): 왕도 프리미엄 인증 becomes a 꾸준형 card - commission 60% → 45% of the charged
