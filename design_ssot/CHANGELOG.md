@@ -3,6 +3,14 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## Docs / hygiene after v2.9.12 (User 2026-09-30, no build change)
+
+- **Versions closed**: v2.9.11 and v2.9.12 heads and SPEC_INDEX status marked closed; tags stay the User's.
+- **Archive**: closed-version reports and finished-question tools moved from `reports/` · `tools/` to `archive/v2.9.x/`, live
+  references follow. Then the archive kept only what carries a decision or an insight, or what a live file points at; raw
+  result JSON, unrunnable old tools, the legacy harness, finished handoffs and applied checklists were removed (git history
+  keeps them; `archive/README.md` lists what stays).
+
 ## v2.9.12 — balance review line, v3.0 prep quick patches (User 2026-09-29 ~ 2026-09-30; CLOSED, merged by PR #31 and PR #32)
 
 - **First-Run lessons, DAY 1 Counter and no Death on DAY 1~2** (balance review session, User 2026-09-30; from a talk on

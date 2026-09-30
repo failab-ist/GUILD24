@@ -12,28 +12,29 @@
 
 ## 목록
 
+2026-09-30 정리(User): 판단 근거와 인사이트가 있는 문서, 현행 문서·테스트가 가리키는 파일만 남겼다. 원시 측정 결과 JSON,
+실행 못 하는 옛 도구, 옛 하네스, 끝난 핸드오프, 반영이 끝난 점검 목록은 지웠다(필요하면 git 기록에서 꺼낸다 — 지운 커밋은 CHANGELOG
+위생 항목).
+
 | 폴더 | 내용 | 옛 위치 |
 |---|---|---|
 | `WORK_HISTORY_v2.8.md` | v2.8 작업 이력 | (원래 여기) |
-| `inactive/legacy_harness/` | 2026-09-23 정리 때 뺀 일회성·실행 불가 하네스 | `tools/`, `tests/` |
-| `inactive/v2_7_franchise/` | 폐기된 v2.7 프랜차이즈 코드 | `dist/systems/` |
+| `inactive/v2_7_franchise/` | 폐기된 v2.7 프랜차이즈 코드(`tests/revision.cjs`가 읽고, `dist/systems/meta.js` · META가 가리킨다) | `dist/systems/` |
 | `v2.8/GUILD24_v2.8_RELEASE_VISION.md` | v2.8 방향 문서(비Canonical) | 루트 |
-| `v2.8/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md` | v2.8 문구·대사 채택 감사 | `reports/` |
-| `v2.8/tools/remeasure-v28*` | v2.8 재측정 도구와 결과 | `tools/` |
-| `v2.8/tools/qa-presentation-batch1~4, qa-closing-states, qa-end-states, qa-night-outcomes` | v2.8 연출 배치 캡처 도구(연출 기준은 `design_ssot/history/PRESENTATION_*`) | `tools/` |
-| `v2.9.1-balance/*.md` | v2.9.0 BALANCE FINDING, v2.9.1 합의값·측정·구현 핸드오프 | `reports/` |
-| `v2.9.1-balance/tools/`, `results/` | `remeasure-v29*` 측정 도구와 결과 JSON | `tools/` |
-| `v2.9.2/v292-bot-harness.md` 외 `v292-*.json`, `v292-balance-review.md` | v2.9.2 밸런스 1~4차 근거(`reader` 봇, D10 fork 측정, User 런 프로필) | `reports/` |
+| `v2.8/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md` | v2.8 문구·대사 채택 감사(SSOT_AUDIT · `tests/copy.cjs`가 가리킨다) | `reports/` |
+| `v2.8/tools/qa-end-states.cjs` | v2.8 END 상태 캡처 도구(`qa-final-end` · `qa-final-prep`가 기준 시드로 가리킨다) | `tools/` |
+| `v2.9.1-balance/*.md` | v2.9.0 BALANCE FINDING, v2.9.1 합의값 · 이상안 · 옵션 · 측정 요약 · 구현 핸드오프 | `reports/` |
+| `v2.9.1-balance/results/remeasure-v29-closing-results.json` | v2.9.1 마감 측정(SPEC_INDEX가 가리킨다) | `tools/` |
+| `v2.9.2/v292-bot-harness.md`, `v292-balance-review.md` | v2.9.2 밸런스 1~4차 근거(`reader` 봇, D10 fork 측정, User 런 프로필) | `reports/` |
 | `v2.9.2/v292-h6-transitions.md` | H6 장면 전환 캡처 보고 | `reports/` |
-| `v2.9.2/tools/` | `measure-arms`, `measure-late-slope`, `measure-late-fork`, `measure-package`, `calibrate-human`, `remeasure-v292` (끝난 질문의 측정 도구) | `tools/` |
+| `v2.9.2/tools/measure-package-v292.cjs` | D10 fork 쌍 비교 틀의 가장 최근 본(새 측정 도구의 본보기) | `tools/` |
 | `v2.9.6/dungeon-monster-identity.md` | 도감 몬스터 지식 탭과 함께 화면에서 사라진 던전 몬스터 이름·약점 데이터 | `dist/data/catalog.js` |
 | `v2.9.6/deco-balance-v296.md`, `item-balance-v296.md` | v2.9.6 장식 · 상품 밸런스 측정 | `reports/` |
 | `v2.9.7/counter-ladder-v297.md`, `hazard-coverage-v297.md` | v2.9.7~8 대응 사다리 · 위험 대응 범위 근거 | `reports/` |
-| `v2.9.9/fresh-run-d23-review-v299.md`, `v2.9.9-review-packet.md` | v2.9.9 새 계정 D23 리뷰 · 연출 리뷰 패킷 | `reports/` |
+| `v2.9.9/fresh-run-d23-review-v299.md` | v2.9.9 새 계정 D23 리뷰 | `reports/` |
+| `v2.9.9/tools/measure-wallet-v299.cjs` | v2.9.9 실패 보상 배율 측정(CHANGELOG가 가리킨다) | `tools/` |
 | `v2.9.11/*.md` | v2.9.11 재측정(`remeasure-v2911`), 부상 · 성장, 문구 교정, 줄바꿈 점검, iPhone Safari, BGM · 효과음 믹스, 초안(`v2.9.11-drafts`) | `reports/` |
-| `v2.9.9/tools/measure-wallet-v299.cjs` | v2.9.9 실패 보상 배율 측정 | `tools/` |
-| `v2.9.11/tools/measure-{curve,injury,keystone,royalcert,survival}-v2911.cjs` | v2.9.11 곡선 · 부상 · 키스톤 · 왕도 인증 · 생존 장식 측정(끝난 질문). 곡선 재측정 `remeasure-v2911.cjs`는 현행이라 `tools/`에 남김 | `tools/` |
-| `v2.9.12/handoff-*.md` | v2.9.12에 끝난 핸드오프(사전 코치 정리 · END `이 점포의 기록`) | `reports/` |
+| `v2.9.11/tools/measure-royalcert-v2911.cjs` | 왕도 프리미엄 인증 측정(CHANGELOG가 가리킨다). 곡선 재측정 `remeasure-v2911.cjs`는 현행이라 `tools/`에 남김 | `tools/` |
 
 ## 규칙
 
