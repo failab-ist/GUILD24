@@ -18,6 +18,10 @@ the owner headers and in the git tag.
   `balanced` Run 6 / 7 / 8 / 9 → 6 / 8 / 10 / 12, `reader` 2 / 3 / 4 / 5 → 4 / 5 / 6 / 8, `expert` 3 / 3 / 5 / 5 → 4 / 5 / 6 / 8
   (`reports/balance-proposal-v2912.md` §4). META §Day-reach conversion rate, §sign, §Approved progression expectation (by-bot
   reading); COPY_AUDIT decoration line; ledger; tests integration.
+- **NEUTRAL-FIT T1 follows the Counter Ladder** (User 2026-09-30, DESIGN ISSUE closed): DUNGEON_HAZARD's T1 line "hybrid
+  alone is commonly a little short" could not hold with the ITEM §COUNTER LADDER order (초반 하이브리드 above 초반 대응 on
+  each Hazard) - no number satisfies both. The Ladder owns per-rung roles: at T1 초반 하이브리드 also reaches 충분, its limit
+  shows at T2. Text only. DUNGEON_HAZARD §NEUTRAL-FIT PREPARATION INTENT; ledger.
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 

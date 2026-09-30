@@ -1161,3 +1161,19 @@ D20 = 24.85
 D24 = 29.25
 D29 = 34.75
 ```
+
+## AMENDMENT — v2.9.13 NEUTRAL-FIT T1 follows the Counter Ladder (User decision 2026-09-30)
+
+User 2026-09-30: the T1 hybrid line conflicted with the `ITEM` §COUNTER LADDER order (User 2026-09-27) and no number can
+satisfy both; the Ladder owns per-rung roles. Dropped, superseded:
+
+```text
+- hybrid alone is commonly a little short
+```
+
+```new
+- 초반 하이브리드 also reaches 충분 at T1 (it sits above 초반 대응 on every Hazard it covers; its limit shows at T2)
+User 2026-09-30 (v2.9.13): the earlier T1 line "hybrid alone is commonly a little short" cannot hold together with the
+`ITEM_v2.8.0.md` §COUNTER LADDER order (중반 대응 > 후반 하이브리드 > 초반 하이브리드 > 초반 대응, User 2026-09-27): a
+초반 대응 that reaches 충분 puts every higher rung there too. The Ladder is the owner of per-rung roles; this intent follows it.
+```

@@ -416,7 +416,11 @@ Neutral-fit target:
 ```text
 T1
 - lower/basic response can reach 충분
-- hybrid alone is commonly a little short
+- 초반 하이브리드 also reaches 충분 at T1 (it sits above 초반 대응 on every Hazard it covers; its limit shows at T2)
+
+User 2026-09-30 (v2.9.13): the earlier T1 line "hybrid alone is commonly a little short" cannot hold together with the
+`ITEM_v2.8.0.md` §COUNTER LADDER order (중반 대응 > 후반 하이브리드 > 초반 하이브리드 > 초반 대응, User 2026-09-27): a
+초반 대응 that reaches 충분 puts every higher rung there too. The Ladder is the owner of per-rung roles; this intent follows it.
 
 T2
 - upper/main specialist can reach 충분
