@@ -1,6 +1,6 @@
 // v2.9.12 measurement (User 2026-09-30): D21~29 Gate slope with DAY 1~10 kept, and a Hazard Threat / Counter re-fit.
 // MEASUREMENT ONLY - every value below is an in-memory patch; the files on disk are untouched. Same seeds per arm.
-//   node tools/measure-hazard-refit-v2912.cjs [--late 1.10] [--mid 1.10] [--refit none|full|half|v2k|v2|v3] [--policy reader]
+//   node tools/measure-hazard-refit-v2912.cjs [--late 1.10] [--mid 1.10] [--refit none|full|half|v2k|v2|v3|v3b] [--final-tier 3] [--policy reader]
 //        [--runs 300] [--account account.json]
 // --late / --mid: DAY 21+ / DAY 11~20 slopes. DAY 1~9 (1.45) and the DAY 9~10 step (0.80) stay as shipped.
 // --refit: Hazard Threat x a Stat-group factor (강인함 / 기동 / 정신), Counter values re-set per Ladder rung, Trait Counters
@@ -25,22 +25,29 @@ const REFITS={
  /* User 2026-09-30: a milder v2 - Threat x 1.0 / 1.1 / 1.2; Counters kept except the v2 Ladder (초반 하이브리드 under
     초반 대응 on the first Hazard) and 정신 rungs above the 대현자 허브엘릭서 natural value (14) */
  v3:{factor:{survival:1.0,mobility:1.1,spirit:1.2},
-  counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:9,14:14,21:21},spirit:{8:10,9:9,12:15,18:20}}}};
+  counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:9,14:14,21:21},spirit:{8:10,9:9,12:15,18:20}}},
+ /* User 2026-09-30: v3 with every Counter raised as far as its Hazard's Threat rose (강인함 x1.0, 기동 x1.1, 정신 x1.2),
+    the v2 Ladder kept (초반 하이브리드 under 초반 대응 on a Gate's first Hazard - 방한 두건's 화이트아웃 is a second Hazard) */
+ v3b:{factor:{survival:1.0,mobility:1.1,spirit:1.2},
+  counter:{survival:{10:10,12:9,16:16,21:21,23:23},mobility:{9:10,14:15,21:23},spirit:{8:10,9:9,12:15,18:22}},
+  item:{hood:{whiteout:11}}}};
 const R=REFITS[REFIT]||null;globalThis.__HF=R?R.factor:{};
 /* --final-plain: the Final keeps the shipped Threat (no Stat-group factor), so a re-fit can be read apart from its Final effect */
 globalThis.__FINAL_PLAIN=args.includes('--final-plain');
+/* --final-tier 3: the Final reads its Hazards at that Tier instead of T2 (User 2026-09-30: the Final's environment only) */
+globalThis.__FINAL_TIER=Number(flag('--final-tier',0))||0;
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation']){
  const file=path.join(ROOT,'dist',f+'.js');
  if(f==='systems/dungeon'){let src=fs.readFileSync(file,'utf8');const at='threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,';
   if(src.split(at).length!==2)throw Error('threat patch point x'+(src.split(at).length-1));
-  src=src.replace(at,'threat=(12+(d.day||1)*.35+((d.tier||1)-1)*6)*(d.family===\'final\'&&globalThis.__FINAL_PLAIN?1:((globalThis.__HF||{})[rule[0]]||1)),');vm.runInThisContext(src,{filename:file});}
+  src=src.replace(at,'threat=(12+(d.day||1)*.35+(((d.family===\'final\'&&globalThis.__FINAL_TIER)||d.tier||1)-1)*6)*(d.family===\'final\'&&globalThis.__FINAL_PLAIN?1:((globalThis.__HF||{})[rule[0]]||1)),');vm.runInThisContext(src,{filename:file});}
  else require(file);}
 /* the shipped slopes unless --late / --mid is given (v2.9.13 ships late 1.10 with its own DAY 9~10 step) */
 const LATE=LATE_ARG===null?Dungeon.GATE.late:Number(LATE_ARG),MID=MID_ARG===null?Dungeon.GATE.mid:Number(MID_ARG);
 Dungeon.gateDayTerm=day=>Math.min(day,9)*1.45+Math.max(0,Math.min(day,10)-9)*.80+Math.max(0,Math.min(day,20)-10)*MID+Math.max(0,day-20)*LATE;
 const HZ=Object.keys(DATA.hazards);
 if(R){for(const it of DATA.items)for(const h of HZ){const v=it.effects[h]||0;if(v<=0)continue;const st=Dungeon.hazardRule(h).stat,nv=R.counter[st][v];
-  if(nv===undefined)throw Error('no rung for '+it.id+' '+h+' '+v);it.effects[h]=nv;}
+  if(nv===undefined)throw Error('no rung for '+it.id+' '+h+' '+v);it.effects[h]=R.item?.[it.id]?.[h]??nv;}
  for(const t of DATA.traits){const e=t.effects||{};for(const h of HZ)if(e[h])e[h]=Math.round(e[h]*R.factor[Dungeon.hazardRule(h).stat]);}}
 /* ITEM §COUNTER LADDER rungs a DAY 1~5 Bag can carry */
 const BASIC=['mask','soda','ramen','candy','ice'],HYBRID=['webgloves','cloak','holylight','hood'];
@@ -59,7 +66,7 @@ const end=P.end;P.end=function(w,why){const s=this.run;const r=end.call(this,w,w
 Debug.simulate(runs,policy,account,'adaptive','hybrid',{});
 const N=rows.length,pc=(a,b=N)=>b?+(100*a/b).toFixed(1):null,q=(a,p)=>{const v=a.filter(x=>x!=null).sort((x,y)=>x-y);return v.length?+v[Math.floor((v.length-1)*p)].toFixed(2):null;};
 const F=rows.filter(r=>r.fin).map(r=>r.fin),sum=(k,i)=>rows.reduce((a,r)=>a+r.bySeg[k][i],0);
-console.log(JSON.stringify({late:LATE,mid:MID,refit:REFIT,finalPlain:globalThis.__FINAL_PLAIN,policy,account:!!account,runs:N,
+console.log(JSON.stringify({late:LATE,mid:MID,refit:REFIT,finalPlain:globalThis.__FINAL_PLAIN,finalTier:globalThis.__FINAL_TIER||2,policy,account:!!account,runs:N,
  d10:pc(rows.filter(r=>r.day>=10).length),d20:pc(rows.filter(r=>r.day>=20).length),d30:pc(rows.filter(r=>r.day>=30).length),clear:pc(rows.filter(r=>r.win).length),
  deathEnd:pc(rows.filter(r=>r.deathEnd).length),
  seg:[0,1,2].map(k=>({exp:sum(k,0),win:pc(sum(k,3),sum(k,0)),hurt:pc(sum(k,2),sum(k,0)),death:pc(sum(k,1),sum(k,0))})),
