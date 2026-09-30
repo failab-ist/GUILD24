@@ -1244,12 +1244,9 @@ const coachSteps={
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
- /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself.
-    Seen state is keyed by step id alone, so ORDER's gates step is `order-gates`: sharing MORNING's `gates` id marked it seen
-    before the first ORDER ever opened (fixed 2026-09-26).
-    v2.9.11 (User 2026-09-29): `order-stock` after the gates - the Day 1 warehouse already holds the opening stock nobody ordered,
-    and nothing said so; the mark sits on the 창고 summary the ORDER screen already shows. */
- order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['order-stock','.stock-handle,.stock-side .stock-head','창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
+ /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
+    effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
+ order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
@@ -1477,8 +1474,10 @@ function stockSlots(){const s=game.run,cap=game.capacity(),order=groupStock().ma
    rows above it still scroll and take taps - and only the handle or Escape closes it (a quantity tap must not). Open or
    folded is still the account's presentation choice (UI-Q-v29-17, `stockBriefOpen`): it starts folded and stays as the
    player last left it. A steel rack of 칸, apart from the brown floating box and the 발주서's paper. */
-function stockHead(){const s=game.run,n=groupStock().length;
- return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+n+'종</em>':'');}
+/* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the retired 창고 mark's one fact - on DAY 1, before anything is ordered, the
+   warehouse holds only what HQ put there, and the head says so */
+function stockHead(){const s=game.run,n=groupStock().length,hq=s.day===1&&!(s.daily?.spent>0);
+ return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+(hq?'본사 기본 상품 ':'')+n+'종</em>':'');}
 function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots()+'</aside>';}
 const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
 function stockSheetKey(){const open=sheetOpen();

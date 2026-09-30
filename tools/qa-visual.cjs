@@ -689,7 +689,9 @@ async function coachProbe(page,label){
      notice, leave the Deep step unseen, and the NEXT phase's lessons still have to appear */
   await page.evaluate(`(()=>{const g=Guild24.game;g.run.deep.today=null;
    delete g.account.tutorial['coach-deep'];g.account.tutorial['coach-visitors']=true;
-   g.account.tutorial['coach-gates']=true;g.save();g.beginOrder();Guild24.render();
+   g.account.tutorial['coach-gates']=true;g.save();g.beginOrder();
+   /* COACH DIET (User 2026-09-30): ORDER's one lesson sits on 발주 확정, which is on screen once the cart holds something */
+   const i=g.run.offers.findIndex(o=>o.quantity);if(i>=0)g.setQuantity(i,1);Guild24.render();
    window.__coachSteps=window.__coachTable[g.run.phase]||[];})()`);
   await page.waitForTimeout(250);
   const after=await page.evaluate(`(()=>{const b=document.querySelector('#coach-root .coach-bubble');

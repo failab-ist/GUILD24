@@ -1795,7 +1795,9 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
- for(const id of ['visitors','gates','relic-card','relic-buy'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll'])assert.ok(!ids.has(id),'retired: '+id);
+ /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
+ assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  for(const id of ['relic-what','deep','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
   assert.ok(ids.has(id),'kept before the fact: '+id);
 });
@@ -1916,7 +1918,10 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
    (ORDER's gates lesson never appeared after MORNING's, fixed 2026-09-26) */
 test('coach step ids are unique across phases',()=>{
  const body=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),ids={};
- for(const m of body.matchAll(/^ (\w+):\[(.*)\],?$/gm))for(const x of m[2].matchAll(/\['([a-z-]+)',/g))(ids[x[1]]??=[]).push(m[1]);
+ /* a phase's steps may span several lines (COACH DIET, 2026-09-30, left some groups short): read each phase to the next one */
+ const heads=[...body.matchAll(/^ (\w+):\[/gm)];
+ heads.forEach((m,i)=>{const seg=body.slice(m.index,i+1<heads.length?heads[i+1].index:body.length);
+  for(const x of seg.matchAll(/\['([a-z-]+)',/g))(ids[x[1]]??=[]).push(m[1]);});
  assert.ok(Object.keys(ids).length>=10,'the step table was read');
  for(const [id,phases] of Object.entries(ids))assert.equal(phases.length,1,'coach id '+id+' is used by '+phases.join(' / '));
 });
@@ -2380,14 +2385,13 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const [id,text] of [
    ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
-   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
-   ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
+   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
  assert.ok(!hazard.includes('현재 대응'),'and the Hazard lesson names no label the screen no longer shows');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
- const EXACT=['pricing','hazard','stats','quantity'];
+ const EXACT=['pricing','hazard','stats'];
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
@@ -3525,11 +3529,10 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const scr of ['morningScreen','orderScreen','saleScreen','nightScreen','closingScreen'])assert.ok(fn(scr).includes('taskLine('),scr+' places the line');
  assert.ok(/\.task-line\{[^}]*font-size:clamp\(12px,3\.3vw,13px\)[^}]*white-space:nowrap/.test(css),'one line, never two at 360 (size follows width, no breakpoint)');
  assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
- // first-ORDER coach: gates -> stock (v2.9.11; the desk's warehouse column when the form's block is not shown) -> offer -> quantity -> confirm -> reroll, no gold mark
+ // first-ORDER coach (UI_UX §TUTORIAL — COACH DIET, User 2026-09-30): 발주 확정 alone; the gold mark stays retired
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
- assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['order-stock','.stock-handle,.stock-side .stock-head'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the six steps in order, on their anchors');
- assert.ok(order.includes("'창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'"),'the stock line is the approved one (COPY_AUDIT §3-7 STOCK)');
- assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
+ assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['confirm','[data-action="confirm-order"]']],'one step, on the confirm key');
+ assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)
  const rate={survival:3,mobility:2,spirit:2};
@@ -3745,7 +3748,7 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  assert.ok(/@media\(min-width:1024px\)\{\n \.p-order \.stage-scroll\{display:grid;grid-template-columns:minmax\(0,1\.45fr\) minmax\(300px,1fr\)/.test(css)
   &&/\.p-order \.order-desk \.form\{max-width:none;margin:0\}/.test(css),'desk: the form set left, a large warehouse column on its right');
  assert.ok(/\.stock-side\{display:block;position:sticky;top:46px;margin-top:46px;/.test(css)&&/\.p-order \.dock \.stock-handle,\.p-order \.dock \.stock-sheet\{display:none\}/.test(css),'desk: open, following the scroll, below the menu pin, no handle');
- assert.ok(/\['order-stock','\.stock-handle,\.stock-side \.stock-head',/.test(app),'the stock lesson points at whichever is on screen');
+ assert.ok(/'<em>'\+\(hq\?'본사 기본 상품 ':''\)/.test(fn('stockHead'))&&/stockHead\(\)/.test(fn('stockSide'))&&/stockHead\(\)/.test(fn('stockSheetKey')),'the retired stock lesson\'s fact is on the head the handle and the column both print (COACH DIET)');
 });
 // UI_UX §AUDIO FEEDBACK — ENDING CUE (User 2026-09-29): the ending's music and cue wait for the result to land
 test('ending: the music before holds until the result lands, then the ending cue and SUCC / FAIL',()=>{
