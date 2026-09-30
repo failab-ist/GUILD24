@@ -590,6 +590,9 @@ test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급�
  assert.equal(t.g.interest(pay,it,'full').chance,(t.s.firstRun=false,t.g.interest(pay,it,'full').chance),'정가 untouched');t.s.firstRun=true;
  t.s.cursor=t.s.queue.indexOf(pay.id);t.s.event=null;t.g.arrive();
  assert.ok(pay.eventBudget>=200,'200G to spend this visit (the nightly-cleared channel)');assert.equal(t.s.say.text,Copy.lessonPayday,'the payday line');
+ const mixed=(()=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=true;s.day=3;delete s.lessonDay3;const [a,b,c]=s.npcs;
+  for(const n of [a,b,c]){n.alive=true;n.introduced=true;n.visits=2;delete n.lessonPayday;}a.injury=1;b.injury=1;c.injury=0;s.queue=[a.id,b.id,c.id];g.firstRunLessons();return {s,c};})();
+ assert.equal(mixed.s.lessonPayday,mixed.c.id,'the payday customer is a healthy returning visitor when one is coming (User 2026-09-30)');
  const later=setup(false);assert.deepEqual(later.s.queue,[later.a.id,later.b.id,later.c.id],'a later Run: nothing moves');
  assert.equal(later.s.inventory.filter(u=>u.item==='kit').length,later.kits,'and no 구급키트');
 });

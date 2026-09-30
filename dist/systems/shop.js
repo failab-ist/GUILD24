@@ -210,7 +210,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      cand.money=Math.min(2000,Math.round(cand.money+cand.level*8+lr.int(0,80)));cand.newToday=false;s.queue[s.queue.indexOf(out.id)]=cand.id;inj=cand;}}
    if(inj){s.queue=[inj.id,...s.queue.filter(id=>id!==inj.id)];s.lessonInjured=inj.id;
     const main=this.rng;this.rng=lr;try{this.stock('kit',1);}finally{this.rng=main;}}
-   const pay=s.queue.map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.introduced&&n.id!==s.lessonInjured);
+   /* a healthy returning visitor first (User 2026-09-30), so the payday lesson never reads as a second injury lesson */
+   const back=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.introduced&&n.id!==s.lessonInjured),pay=back.find(n=>!n.injury)||back[0];
    if(pay){pay.lessonPayday=s.day;s.lessonPayday=pay.id;}}
  }
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the

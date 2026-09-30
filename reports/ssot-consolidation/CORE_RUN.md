@@ -440,7 +440,7 @@ sits out and recovers). DAY 3 on is the ordinary Run.
 last returning visitor's place (its Gate and visit income as that visitor's; a new face seated today is never the one
 replaced) - and one 구급키트 joins the warehouse (HQ's, like the opening stock). With no one injured, nothing moves and
 no 구급키트 comes.
-- DAY 3: a returning visitor (not the injured one) comes on payday: +200G to spend this visit only (the nightly-cleared
-extra-purchase channel), 150% purchase intent +20%p this visit, and the arrival line COPY_AUDIT §26-1. The Day's count of
-visitors is unchanged.
+- DAY 3: a returning visitor (not the injured one; a healthy one first) comes on payday: +200G to spend this visit
+only (the nightly-cleared extra-purchase channel), 150% purchase intent +20%p this visit, and the arrival line
+COPY_AUDIT §26-1. The Day's count of visitors is unchanged.
 ```
