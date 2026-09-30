@@ -519,7 +519,7 @@ For affordable 50% 할인 / 정가, if the Item is 관련 준비 for this custom
 them presses; (User 2026-09-24, v2.9.0)):
 Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
 The legacy 기동-for-속박/진창 Counter exception is retired: 기동 on those Gates is 관련 준비, not a Counter (User 2026-09-24, v2.9.0).
-Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72 (was 0.80), lowered so that 관련 준비 (the 0.97 floor) is a visible
+Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72, set so that 관련 준비 (the 0.97 floor) is a visible
 difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
 fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
 - if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)) -> its missing count resets
@@ -538,7 +538,7 @@ dayBase = 170 + 1 × (Day - 1) + 12 × max(0, Day - 15)
 (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
 store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term;
 User 2026-09-26, v2.9.2: +12 per Day after DAY 15 — the late store sat on ~5,000G by D29)
-× (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance; was 0.02)
+× (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance)
 ```
 
 ## AMENDMENT — v2.9.2 balance: 정가 final purchase chance x 0.90 (User decision 2026-09-25)
@@ -567,7 +567,7 @@ User 2026-09-27: the Counter ladder (초반 대응 / 초반 하이브리드 / �
 | Rarity | Units |
 |---|---|
 | Common · Uncommon | 2~4 |
-| Rare | 1~3 (was 1; the mid-Run Hazard Counters sit here since v2.9.7) |
+| Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 Store Support that adds supply quantity (`RELIC_v2.8.0.md`) adds on top, unchanged.
 ```

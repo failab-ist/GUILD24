@@ -361,7 +361,7 @@ No new Counter floor is added to 바가지.
 Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
 The legacy 기동-for-속박/진창 Counter exception is retired: 기동 on those Gates is 관련 준비, not a Counter (User 2026-09-24, v2.9.0).
 
-Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72 (was 0.80), lowered so that 관련 준비 (the 0.97 floor) is a visible
+Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72, set so that 관련 준비 (the 0.97 floor) is a visible
 difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
 fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
 
@@ -491,7 +491,7 @@ The purpose is to make late-Run high-slot-efficiency preparation actually appear
 | Rarity | Units |
 |---|---|
 | Common · Uncommon | 2~4 |
-| Rare | 1~3 (was 1; the mid-Run Hazard Counters sit here since v2.9.7) |
+| Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 
 Store Support that adds supply quantity (`RELIC_v2.8.0.md`) adds on top, unchanged.
@@ -672,7 +672,7 @@ Let:
 
     overheadBase
     = dayBase
-      × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance; was 0.02)
+      × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance)
       × (1 + 0.06 × avgRarity)
 
 Current Store Support/Event flat or percentage modifiers apply only through their own owner rules.

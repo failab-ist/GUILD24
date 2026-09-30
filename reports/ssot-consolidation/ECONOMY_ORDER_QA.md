@@ -425,7 +425,7 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 ```
 
 ```new
-- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0; was 0.80)
+- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0)
 - affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> final chance 0.97
 - no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
 ```

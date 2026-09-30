@@ -114,7 +114,7 @@ PASS:
   - 100% = 1.00 / 0.65
   - 150% = 1.50 / 1.50
 - judgedPrice uses the mode intent multiplier and never changes the actual charged amount
-- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0; was 0.80)
+- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0)
 - 150% uses the owner-defined fit-based need calculation
 - flat mode intent remains +0.18 / 0 / -0.16
 - one occupied Bag slot applies no purchase penalty
