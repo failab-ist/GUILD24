@@ -2143,7 +2143,16 @@ screen: the panel never jumps back to its top, so the row just bought is the row
 New:
 
 ```new
-- SALE keeps its sale-first order (§MOBILE SALE PLAYABILITY); under 640 high a filled counter tray leaves fewer than
-the three shelf rows UI-Q-v29-18 asks for (2 / 1 / 0 rows at 640 / 597 / 548) and 548 shows half a row at entry - an
-open finding, the fix undecided (`reports/v3-prep-measure-v2911.md` §4, User 2026-09-30); the tray folds on a scroll
+- SALE keeps its sale-first order (§MOBILE SALE PLAYABILITY). On a portrait stage under 700 high the filled counter tray
+```
+
+
+## short phone tray (User 2026-09-30)
+
+New:
+
+```new
+takes one tighter step - the same lines, keys and order, less air, a smaller icon, keys still 44 px or more - so it
+leaves 3 / 2 / 1 shelf rows above it at 640 / 597 / 548 (was 2 / 1 / 1; User 2026-09-30, `reports/v3-prep-measure-v2911.md`
+§4). The three-row floor of UI-Q-v29-18 holds from 640 up; below it the tray folds on a scroll, as everywhere
 ```

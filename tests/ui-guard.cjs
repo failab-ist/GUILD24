@@ -3626,6 +3626,9 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
   &&/\.p-prep \.prep-slot\.sign\.empty \.slot-tag\{left:auto;right:0;top:0;transform:none\}/.test(pb)
   &&/\.p-prep \.decoplate\.sign\{top:max\(calc\(env\(safe-area-inset-top\) \+ 26px\)/.test(pb),'the title a step smaller, the empty 간판 tag grows away from it and under the build mark');
  assert.ok(/\['375x548','360x597'\]/.test(read('tools/qa-visual.cjs')),'the visual gate runs the SE stage and the Galaxy stage');
+ // User 2026-09-30: under 700 high the filled counter tray takes one tighter step, its keys still 44 px or more
+ const tb=css.slice(css.indexOf('@media (max-height:699px) and (orientation:portrait){'),css.indexOf('.p-prep .slot-tag i{'));
+ assert.ok(/\.p-sale \.counter-tray \.tills button\{min-height:48px;/.test(tb)&&/\.p-sale \.tray-icon\{width:30px;height:30px\}/.test(tb),'short SALE: the tighter tray');
 });
 // v2.9.11 quick patch mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): decision and result cues read above the music
 // (PRESENTATION §Mix) - the music 3 dB down, the effects bus 6 dB up, NIGHT a further 3 dB down; a phase change fades

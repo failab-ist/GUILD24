@@ -2502,6 +2502,8 @@ PASS:
 - tapping a row fills the tray (header line, `판매 후 변화`, `특수 효과` when any, three price keys) and the shelf list does not move: no row changes height, scrollTop is unchanged
 - tapping a second row swaps the tray contents; both rows stay where they were
 - the filled tray is ≤ 200px at 360 and at least three shelf rows remain visible above it
+- on a portrait stage under 700 high the filled tray is the tighter step (about 124px at 360) and at least three shelf
+  rows remain above it from 640 high up (UI_UX §SHORT PHONE, User 2026-09-30)
 - the price keys are at the same place for every Item; the hand-over icon starts from the tray icon and lands on the Bag slot; a successful sale clears the tray
 - a refusal keeps the Item on the tray with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
 - on 1280 the tray sits above the dock with its contents aligned under the shelf column

@@ -1958,3 +1958,13 @@ New:
 - scrolled down the panel, 구매 · 구매 확정 · 취소 · 적용 · 해제 each keep the pressed row where it was on screen (User
 2026-09-29); runtime evidence `tools/qa-deco-seating.cjs` (360x597, 1280x880)
 ```
+
+
+## short phone tray (User 2026-09-30)
+
+New:
+
+```new
+- on a portrait stage under 700 high the filled tray is the tighter step (about 124px at 360) and at least three shelf
+rows remain above it from 640 high up (UI_UX §SHORT PHONE, User 2026-09-30)
+```

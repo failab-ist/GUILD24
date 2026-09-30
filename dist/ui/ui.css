@@ -2537,6 +2537,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* and it hangs under the build mark, not over it, where the crop takes the painted ceiling off the top */
  .p-prep .decoplate.sign{top:max(calc(env(safe-area-inset-top) + 26px),calc(50cqh + (var(--y) - .5) * var(--ph)))}
 }
+@media (max-height:699px) and (orientation:portrait){
+ /* SALE (User 2026-09-30, reports/v3-prep-measure-v2911.md §4): a filled counter tray left 2 / 1 / 0 shelf rows above it
+    at 640 / 597 / 548. On a portrait stage under 700 high the tray takes one tighter step - the same lines, keys and
+    order, less air and a smaller icon - so the shelf keeps more of the column; the keys stay 44 px or more */
+ .p-sale .counter-tray{padding-top:5px;padding-bottom:6px}
+ .p-sale .tray-item{gap:8px}
+ .p-sale .tray-icon{width:30px;height:30px}
+ .p-sale .tray-what b{font-size:14px;line-height:1.2}
+ .p-sale .tray-what>span,.p-sale .tray-who{font-size:11px;line-height:1.25}
+ .p-sale .tray-delta{margin-top:3px;font-size:13px;line-height:1.35}
+ .p-sale .counter-tray .tills{margin-top:5px;gap:6px}
+ .p-sale .counter-tray .tills button{min-height:48px;padding:4px 2px;gap:2px}
+ .p-sale .counter-tray .tills em,.p-sale .counter-tray .tills small{font-size:11px;line-height:1.15}
+ .p-sale .counter-tray .tills strong{font-size:18px}
+}
 .p-prep .slot-tag i{font-style:normal;color:#b99b6a}
 .p-prep .slot-tag b{font-weight:600}
 .p-prep .slot-tag .can-buy{margin-top:2px;padding:.27em .55em;font:600 min(20px,max(11px,1.72cqh,1.4cqw))/1 var(--ui);font-style:normal;color:#e0c89c;
