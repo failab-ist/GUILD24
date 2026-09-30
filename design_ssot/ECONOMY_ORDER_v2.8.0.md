@@ -11,16 +11,9 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 ECONOMY / ORDER =
 `제한된 Gold로 오늘과 미래 사이에서 무엇을 준비할 것인가`
 
-핵심 긴장:
-- 현재 재고 확보
-- 현금 보유
-- NPC 투자
-- Relic 투자
-- 발주 RNG 대응
-- 미래 난이도 대비
+핵심 긴장: 현재 재고 확보 · 현금 보유 · NPC 투자 · Relic 투자 · 발주 RNG 대응 · 미래 난이도 대비
 
-Gold는 단순 구매 자원이 아니라
-현재/미래 의사결정의 공통 자원이다.
+Gold는 단순 구매 자원이 아니라 현재/미래 의사결정의 공통 자원이다.
 
 ## KEY
 
@@ -37,7 +30,7 @@ rerollSameDayCost=escalating
 rerollDailyReset=YES
 rerollAdvancesPity=NO
 
-nextDayTierForecast=EXACT_PERCENT
+nextDayTierForecast=NONE (→ §NEXT-DAY FORECAST — RETIRED)
 nextDayFamilyForecast=HIDDEN
 
 economyGoal:
@@ -51,52 +44,28 @@ currentCash vs NPCInvestment vs StoreInvestment
 100% = 정가×1.0
 150% = 정가×1.5
 
-역할:
-
 ### 50%
-identity=NPC investment
-
-- 현재 Margin 감소
-- 구매 허들 완화
-- 장기 고객가치 투자
+identity=NPC investment — 현재 Margin 감소 · 구매 허들 완화 · 장기 고객가치 투자
 
 ### 100%
-identity=stable trade
-
-- 기본 안정 거래
-- 기준 가격
+identity=stable trade — 기본 안정 거래 · 기준 가격
 
 ### 150%
-identity=current profit / risk
+identity=current profit / risk — 높은 현재 Gold · 높은 거절 Risk · 관계/구매저항 부담 가능
 
-- 높은 현재 Gold
-- 높은 거절 Risk
-- 관계/구매저항 부담 가능
-
-Rule:
-어느 가격도 항상 정답이면 안 된다.
+Rule: 어느 가격도 항상 정답이면 안 된다.
 
 ## GOLD ROUNDING
 
 Gold values=Integer
-
-Canonical rule:
 
 ```text
 roundingRule = nearest integer, half-up for nonnegative Gold
 implementationReference = Math.round
 ```
 
-The same rounded integer must be used for:
-- UI display
-- affordability check
-- actual payment
-- history
-- settlement / Closing
-
-Examples:
-- 37.4G -> 37G
-- 37.5G -> 38G
+The same rounded integer is used for UI display, affordability check, actual payment, history and settlement / Closing.
+Examples: 37.4G -> 37G; 37.5G -> 38G.
 
 No subsystem may use a different floor/ceil rule for the same Gold amount.
 
@@ -106,33 +75,17 @@ Free/service는 정상 판매 Price Mode가 아니다.
 
 Zero-price transfer is allowed only when another Canonical Event/Final rule explicitly defines it.
 Normal Sale does not expose an implicit Free button.
-
-If an explicit zero-price action exists, it must not become repeatable Loyalty farming.
+An explicit zero-price action must not become repeatable Loyalty farming.
 
 ## ITEM ECONOMY
 
-Item별 경제 역할은 다를 수 있다.
+Item별 경제 역할은 다를 수 있다: low-cost high-turnover · stable margin · expensive high-margin · NPC investment item ·
+insurance item · build-dependent item.
 
-Possible identities:
-- low-cost high-turnover
-- stable margin
-- expensive high-margin
-- NPC investment item
-- insurance item
-- build-dependent item
+Rule: listPrice≈buyCost×2 를 모든 Item에 강제하지 않는다.
 
-Rule:
-listPrice≈buyCost×2 를 모든 Item에 강제하지 않는다.
-
-Item balance considers:
-- buy cost
-- sale price 50/100/150
-- margin
-- rarity
-- effect role
-- expected usable day
-- NPC wallet burden
-- Relic synergy
+Item balance considers buy cost, sale price 50/100/150, margin, rarity, effect role, expected usable day,
+NPC wallet burden and Relic synergy.
 
 Canonical item role -> `ITEM_v2.8.0.md`
 
@@ -162,38 +115,23 @@ Boss consumer -> `BOSS_v2.8.0.md`
 For each sale:
 margin = actualSalePrice - acquisitionCost
 
-Closing/economy reporting should distinguish:
-- revenue
-- COGS
-- gross margin
-- overhead
-- waste
-- Relic spend
-- final Gold
+Closing/economy reporting distinguishes revenue, COGS, gross margin, overhead, waste, Relic spend and final Gold.
 
 Canonical presentation -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## NPC WALLET
 
-Early/midgame customers should not frequently face:
-`현실적으로 살 수 있는 상품이 하나도 없음`
-
-Target:
-most normal customers have >=1 plausible low-cost option.
+Early/midgame customers should not frequently face `현실적으로 살 수 있는 상품이 하나도 없음`.
+Target: most normal customers have >=1 plausible low-cost option.
 
 150%:
 - not universally affordable
 - must still be a real option from early game for some low-price items / richer NPCs
 - should not be a dead button for the first third of the run
 
-Wallet growth should support long-term NPC value.
-
+Wallet growth should support long-term NPC value, so that from early game the default 2 purchase slots more often
+support a real decision between enough preparation, extra preparation to chase Great Success, and conserving stock/cash.
 Do not add a new Day-based Wallet inflation system or a separate Wallet-growth subsystem.
-
-Purpose:
-from early game, the default 2 purchase slots should more often support a real
-decision between enough preparation, extra preparation to chase Great Success,
-and conserving stock/cash.
 
 ### Ordinary NPC Wallet on visit — exact
 
@@ -207,47 +145,29 @@ Returning NPC:
 
 Rules:
 - random range is inclusive 0..80 under the existing integer RNG convention
-- Level ×8 remains
 - persistent Wallet carries between visits
-- 2000 cap remains
-- explicit Trait / Event / Store Support Wallet effects remain separate under their owners
-- re-measure the failure -> low Wallet -> under-supplied -> failure loop before further reward tuning
+- explicit Trait / Event / Store Support Wallet effects stay separate under their owners
 - successful purchases reduce Persistent Wallet normally
 - every permanent increase path clamps final Persistent Wallet to **2000G**
+- re-measure the failure -> low Wallet -> under-supplied -> failure loop before further reward tuning; further Wallet tuning is a separate balance finding and must not be auto-applied during QA
 
-`rich` remains separate:
-- actual visit +50G exactly once
-- first/revisit both
-- applied on actual arrival, not Morning formula
-- cap 2000 after application
+`rich` is separate (`NPC_TRAIT_v2.8.0.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
+actual arrival, not Morning formula; cap 2000 after application.
 
 - **Event temporary purchase budget**: Persistent Wallet과 완전 분리(Cap 미포함, 이월 안됨).
 
-Further Wallet tuning is a separate balance finding and must not be auto-applied during QA.
-
-Related:
--> `NPC_TRAIT_v2.8.0.md`
-
 ## PURCHASE / REFUSAL LOGIC
 
-Refusal must reflect actual reason.
-
-Canonical reasons:
+Refusal must reflect actual reason. Canonical reasons:
 - insufficient wallet
 - price too high
 - item not wanted/needed
 - other explicit system reason if visible and real
 
 Logical retry behavior:
-
-If 50% fails because unaffordable:
-100/150 same Item are not meaningful retries.
-
-If 150% fails because price is too high:
-100/50 may remain valid.
-
-If Item itself is unwanted:
-lower price does not guarantee purchase.
+- if 50% fails because unaffordable, 100/150 same Item are not meaningful retries
+- if 150% fails because price is too high, 100/50 may remain valid
+- if the Item itself is unwanted, lower price does not guarantee purchase
 
 Refusal state must not incorrectly lock/unlock unrelated price choices.
 
@@ -261,17 +181,18 @@ Accessible modes:
     50% 할인 / 정가
 
 Accessible-mode base need:
-    need = 0.80
+    need = 0.72
 
 For 바가지:
 
     fit
-    = sum of positive Item Counter values for this customer's actual Gate Hazards
+    = sum, over this customer's actual Gate Hazards, of the Item's positive direct Counter value
+      plus its positive value of the Core Stat that Hazard presses (관련 준비)
 
     need
     = 0.53 + min(0.29, fit × 0.012)
 
-Mode values remain:
+Mode values:
 
 | Mode | charged multiplier | intent multiplier | flat intent |
 |---|---:|---:|---:|
@@ -279,16 +200,15 @@ Mode values remain:
 | 정가 | 1.00 | 0.65 | 0 |
 | 바가지 | 1.50 | 1.50 | -0.16 |
 
-정가 is judged below what it charges so a properly prepared product at list price stops failing
-on intent alone. This is a threshold, not an acceptance rate - 정가 is not fixed at 65%.
+정가 is judged below what it charges. This is a threshold, not an acceptance rate - 정가 is not fixed at 65%.
 
 For every mode:
 
     judgedPrice
     = round(Item list sell price × mode intent multiplier)
 
-This judgedPrice is the same existing hidden comparison value used by the owned price-sensitive
-Trait logic. It does not change the charged amount.
+This judgedPrice is the same hidden comparison value used by the owned price-sensitive Trait logic.
+It does not change the charged amount.
 
 Apply current owned modifiers:
 - injured customer + Insurance: +0.25
@@ -299,10 +219,9 @@ Apply current owned modifiers:
 - applicable Store Support modifier
 - applicable Event demand modifier
 
-The former one-Bag-slot-filled -0.10 purchase modifier is retired.
-The two-slot Bag is the capacity decision by itself.
+Bag occupancy applies no purchase modifier; the two-slot Bag is the capacity decision by itself.
 
-Loyalty remains:
+Loyalty:
     +0.002 purchase chance per current Loyalty point
 
 Affordability:
@@ -341,12 +260,11 @@ For every affordable mode:
 
 For affordable 50% 할인 / 정가, if the Item is 관련 준비 for this customer's actual Gate (RELIC
 §COUNTER JUDGEMENT: a direct Counter for one of its Hazards, or a positive value of the Core Stat one of
-them presses; (User 2026-09-24, v2.9.0)):
+them presses):
 
     purchaseChance = 0.97
 
-This final Counter floor/cap applies even when a negative purchase Trait would otherwise lower
-rawChance.
+This final Counter floor/cap applies even when a negative purchase Trait would otherwise lower rawChance.
 
 For non-Counter 50% 할인 / 정가:
     purchaseChance = clamp(rawChance, 0.08, 0.97)
@@ -354,18 +272,14 @@ For non-Counter 50% 할인 / 정가:
 For 바가지:
     purchaseChance = clamp(rawChance, 0.08, 0.97)
 
-No new Counter floor is added to 바가지.
+바가지 has no Counter floor.
 
 Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
-The legacy 기동-for-속박/진창 Counter exception is retired: 기동 on those Gates is 관련 준비, not a Counter (User 2026-09-24, v2.9.0).
+기동 on 속박/진창 Gates is 관련 준비, not a Counter.
 
-Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72, set so that 관련 준비 (the 0.97 floor) is a visible
-difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
-fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
-
-정가 final scale (User 2026-09-25, v2.9.2 balance): the FINAL 정가 purchaseChance above — the 0.97 관련 준비 case
-included — is multiplied by 0.90 (a ~10% relative cut, not percentage points). 50% 할인 and 바가지 carry no scale, and the
-shared accessible-mode base need is not lowered for it:
+정가 final scale: the FINAL 정가 purchaseChance above — the 0.97 관련 준비 case included — is multiplied by 0.90
+(a ~10% relative cut, not percentage points). 50% 할인 and 바가지 carry no scale, and the shared accessible-mode
+base need is not lowered for it:
 
     정가 purchaseChance = (the 0.97 floor or the clamped rawChance) × 0.90
 
@@ -373,27 +287,16 @@ Exact acceptance probability remains hidden from the Player.
 
 ## ORDER ARRIVAL / DAY INFORMATION
 
-Order is same-day replenishment.
+Order is same-day replenishment:
+Morning reveals current-day Gate/Hazard information → player places Order → confirmed stock is added immediately
+→ same-day Sale can sell that stock.
 
-Flow:
-Morning reveals current-day Gate/Hazard information
-→ player places Order
-→ confirmed stock is added immediately
-→ same-day Sale can sell that stock
-
-Rule:
 - confirmed Order stock becomes usable before the current Day SALE begins
 - Order is NOT next-day delivery
 - inventory capacity is checked against the stock state created by that same-day arrival
 
-Information timing:
-
-Current Day:
-- actual open Gate information is known before Order commitment
-- known Hazard information is available as the primary preparation context
-
-Next Day:
-- nothing about the next Day is shown; Family / actual Gate result remain hidden (User 2026-09-24, v2.9.0: the next-day forecast surface is retired)
+Current Day: actual open Gate information is known before Order commitment; known Hazard information is the primary preparation context.
+Next Day: nothing is shown; Family / actual Gate result remain hidden.
 
 Canonical Gate generation/reveal -> `DUNGEON_HAZARD_v2.8.0.md`
 Canonical phase flow -> `CORE_RUN_v2.8.0.md`
@@ -420,9 +323,7 @@ final:
 -> SALE
 ```
 
-`confirmOrder` semantics:
-- purchase commit only
-- never advances to SALE
+`confirmOrder` semantics: purchase commit only; never advances to SALE.
 
 `영업 시작` semantics:
 - phase advance only
@@ -433,20 +334,14 @@ final:
 
 ## ORDER OFFERS
 
-Base daily offer count:
-6
+Base daily offer count: 6
 
-Each Offer follows current:
-- Day eligibility
-- unlock rules
-- rarity rules
-- coverage rules
-
+Each Offer follows current Day eligibility, unlock rules, rarity rules and coverage rules.
 Offer system should create uncertainty without making preparation pure blind luck.
 
 ## ORDER RARITY PROGRESSION
 
-ORDER offer Rarity shifts by Day band so the catalog itself communicates progression without a separate D20 hard-unlock rule for the new Epic preparation Items.
+ORDER offer Rarity shifts by Day band so the catalog itself communicates progression, with no separate D20 hard-unlock rule for the Epic preparation Items.
 
 Exact normalized weights:
 
@@ -462,13 +357,13 @@ Exact normalized weights:
 
 Rules:
 - every row sums to exactly 100%
-- new Epic preparation Items use the ordinary Epic pool; they do **not** receive a separate D20 hard unlock
+- Epic preparation Items use the ordinary Epic pool; they do **not** receive a separate D20 hard unlock
 - early Epic appearance is intentionally possible but rare
 - D20+ is where Epic becomes a normal late-Run preparation consideration because the shared Epic weight rises materially
 - Legendary remains exceptional and does not scale with late-Run danger beyond the exact 1% rows above
 - existing unlock/meta eligibility still applies before Rarity selection where another current owner explicitly requires it
 - Reroll uses the same current-Day Rarity band; it does not bypass Day progression
-- pity/guarantee systems must operate on top of this current Day-band truth rather than restoring the old fixed table
+- pity/guarantee systems operate on top of this Day-band table; no fixed all-Run Rarity table is used
 
 Design intent:
 
@@ -479,12 +374,11 @@ Design intent:
 Final = 고급 준비물이 자주 보이지만 Legendary는 여전히 예외
 ```
 
-The purpose is not to make Epic mandatory.
-The purpose is to make late-Run high-slot-efficiency preparation actually appear often enough to become a decision.
+Epic is not mandatory; late-Run high-slot-efficiency preparation should appear often enough to become a decision.
 
 ### ORDER OFFER QUANTITY
 
-(User 2026-09-27, v2.9.7.) The most one ORDER offer lets the store stock, rolled when the offer is made:
+The most one ORDER offer lets the store stock, rolled when the offer is made:
 
 | Rarity | Units |
 |---|---|
@@ -502,28 +396,18 @@ After 5 consecutive qualifying offer sets without Rare+:
 
     Rare Rarity weight +3
 
-for the next qualifying offer generation.
+for the next qualifying offer generation. If that set contains Rare+, Rare pity resets to 0; otherwise pity continues.
 
-If that generated set contains Rare+:
-- Rare pity resets to 0
+This modifier sits on top of the current Day-band Rarity table; it does not replace or renormalize the table into a second progression system.
 
-Otherwise:
-- pity continues
-
-This modifier sits on top of the current Day-band Rarity table.
-It does not replace or renormalize the table into a second progression system.
-
-Canonical Full-offer Reroll:
-- does not advance pity
-- cannot be used to farm pity
-- retains the same current-Day eligibility/Rarity rules
+Canonical Full-offer Reroll does not advance pity, cannot be used to farm pity, and retains the same current-Day eligibility/Rarity rules.
 
 ### Known-Hazard Counter pity — exact
 
 Track each currently known Hazard independently.
 
 For each qualifying normal offer-set generation:
-- if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)) -> its missing count resets
+- if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT) -> its missing count resets
 - otherwise -> its missing count +1
 
 When any known Hazard reaches 3 consecutive missing sets:
@@ -539,15 +423,8 @@ No Store Support adds a further Counter-offer guarantee (RELIC).
 
 ## ORDER QUANTITY
 
-Player decides:
-- which offered SKU
-- quantity
-- total spend
-- remaining cash
-
-Order decision must make:
-inventory risk + cash reserve
-both visible/meaningful.
+Player decides which offered SKU, quantity, total spend and remaining cash.
+Order decision must make inventory risk + cash reserve both visible/meaningful.
 
 Inventory capacity canonical -> `CORE_RUN_v2.8.0.md` / relevant Store rule.
 
@@ -563,45 +440,31 @@ Before order commitment show/readably expose:
 - **today expected operating cost**
 - warehouse usage / remaining capacity
 - current-day Gate / known Hazard
-- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 대응 1 제공` (Gate detail; User 2026-09-24 revision, v2.9.0)
-- visitor count per open Gate, only when two or more Gates are open (counted by the destination each customer claims; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
+- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 대응 1 제공` (Gate detail)
+- visitor count per open Gate, only when two or more Gates are open (→ §VISITOR FORECAST)
 - current Reroll cost/state
-- each offer's rarity name under the Item name (User 2026-09-24, v2.9.0)
-- the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap (User 2026-09-24, v2.9.0)
+- each offer's rarity name under the Item name
+- the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap
 
-Today-fit emphasis (User 2026-09-24, v2.9.0): in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY.
+Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY.
 
-Expected operating cost must be derived from the same current-day rules used by Closing.
+Expected operating cost is derived from the same current-day rules used by Closing.
 It is decision information, not a separate charge.
 
 Detailed visual layout -> `UI_UX_v2.8.0.md`
 
 ## REROLL
 
-Paid Full-offer reroll is a base Order system.
+Paid Full-offer reroll is a base Order system. Each use regenerates the entire current Order offer list; it is not a single-offer swap.
 
-Each use regenerates the entire current Order offer list.
-It is not a single-offer swap.
-
-Same-day cost:
-escalating
-
-Curve:
+Same-day cost curve (escalating):
 50G -> 100G -> 200G -> 400G -> 800G -> x2 thereafter
 
 next day:
 cost/resetCount=RESET
 
-Reroll preserves:
-- current Day eligibility
-- unlock rules
-- rarity rules
-- coverage rules
-
-Reroll:
-- does not advance pity
-- cannot farm pity
-- does not bypass eligibility
+Reroll preserves current Day eligibility, unlock rules, rarity rules and coverage rules.
+Reroll does not advance pity, cannot farm pity and does not bypass eligibility.
 
 With an unconfirmed cart:
 - Reroll is still usable
@@ -618,34 +481,33 @@ Canonical Relic rule -> `RELIC_v2.8.0.md`
 
 ## NEXT-DAY FORECAST — RETIRED
 
-(User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER. The seeded generation rules (`DUNGEON_HAZARD_v2.8.0.md`) are unchanged and remain internal; no forecast is drawn at all, so Save/Load cannot create a forecast-only RNG path.
+No next-day Gate-count or Tier forecast is shown at MORNING or ORDER. The seeded generation rules (`DUNGEON_HAZARD_v2.8.0.md`) remain internal; no forecast is drawn at all, so Save/Load cannot create a forecast-only RNG path.
 
-Keep hidden (unchanged):
+Keep hidden:
 - next-day Family
 - exact next-day Gate composition
 - next-day Hazard set
 - individual future visitor identities
-- individual future NPC destination (the visitor count per open Gate of the current day is public at MORNING and ORDER; User 2026-09-24, v2.9.0)
+- individual future NPC destination (the current day's visitor count per open Gate is public → §VISITOR FORECAST)
 - expedition success/death probability
 - recommended SKU/category/quantity
 
 ## MORNING / ORDER PRESENTATION CONTRACT
 
-MORNING shows today's Gates and Hazards; ORDER repeats today's Gate / Hazard context, the per-Gate visitor count and the offer rows. No next-day block (User 2026-09-24, v2.9.0).
+MORNING shows today's Gates and Hazards; ORDER repeats today's Gate / Hazard context, the per-Gate visitor count and the offer rows. No next-day block.
 Exact visual layout is owned by `UI_UX_v2.8.0.md`.
 
 ## VISITOR FORECAST
 
-Before Sale:
-show expected visitor count.
-With two or more open Gates, also the count per open Gate, by the destination each customer claims (User 2026-09-24, v2.9.0).
+Before Sale (MORNING and ORDER): show expected visitor count.
+With two or more open Gates, also the count per open Gate, by the destination each customer claims.
 
 Do not reveal before customer appearance:
 - name
 - Job
 - Trait
 - Wallet
-- individual destination (the count per Gate is public; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
+- individual destination (a liar's or a pilgrimage-rerouted customer's true Gate stays hidden)
 
 Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.8.0.md`
 
@@ -664,13 +526,10 @@ Let:
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
     dayBase = 170 + 1 × (Day - 1) + 12 × max(0, Day - 15)
-                                     (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
-                                      store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term;
-                                      User 2026-09-26, v2.9.2: +12 per Day after DAY 15 — the late store sat on ~5,000G by D29)
 
     overheadBase
     = dayBase
-      × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance)
+      × (1 + 0.03 × (avgLevel - 1))
       × (1 + 0.06 × avgRarity)
 
 Current Store Support/Event flat or percentage modifiers apply only through their own owner rules.
@@ -681,29 +540,22 @@ Final daily operating cost:
 
 An Event that explicitly sets operating cost to 0 overrides the final charge for that Day.
 
-The stale standalone fixed `operating=60` data value is not an alternate operating-cost truth.
+A standalone fixed `operating=60` data value is not an alternate operating-cost truth.
 
 ## RELIC GOLD SINK
 
 D5+ Relics use Gold.
 
-Economic choice:
-current inventory
-vs
-NPC investment through pricing
-vs
-store investment through Relic
+Economic choice: current inventory vs NPC investment through pricing vs store investment through Relic.
 
-D30:
-final Item preparation vs last Relic
-must be a meaningful final Gold Sink decision.
+D30: final Item preparation vs last Relic must be a meaningful final Gold Sink decision.
 
 Canonical Relic pricing/window -> `RELIC_v2.8.0.md`
 
 ## GREAT SUCCESS STORE GOLD
 
-Great Success remains a deliberate reward for strong preparation, but its direct Store-Gold reward
-is reduced so NPC growth and Store economy do not compound too aggressively in already-strong Runs.
+Great Success is a deliberate reward for strong preparation; its direct Store-Gold reward stays small so NPC growth
+and Store economy do not compound too aggressively in already-strong Runs.
 
 Exact ordinary-expedition bonus:
 
@@ -724,16 +576,14 @@ Deep Expedition exception:
 - normal Great Success Store Gold bonus is suppressed
 - no separate Deep/Guild cash prize
 
-Great Success probability and NPC growth reward are not reduced by this Store-Gold rule.
-Those remain owned by DUNGEON_HAZARD_v2.8.0.md and NPC_TRAIT_v2.8.0.md.
+Great Success probability and NPC growth reward are not reduced by this Store-Gold rule;
+they are owned by DUNGEON_HAZARD_v2.8.0.md and NPC_TRAIT_v2.8.0.md.
 
 ## DEEP EXPEDITION SPONSORSHIP COST
 
 The sponsorship is priced by **the adventurer being sent**, not by the trip: a rarer or more
 experienced NPC costs more, so choosing who to invest in is the decision.
 There are no selectable payment tiers and no Day/Tier multiplier.
-
-The sponsorship formula is:
 
     sponsorship
     = 200G
@@ -742,8 +592,8 @@ The sponsorship formula is:
 
 Round to nearest 10G under the existing rule.
 
-The sponsorship itself grants no Stat, Fatigue recovery, Counter, Insurance or other expedition effect (User 2026-09-24, v2.9.0).
-It only commits the Store to the Deep Expedition opportunity.
+The sponsorship itself grants no Stat, Fatigue recovery, Counter, Insurance or other expedition effect;
+it only commits the Store to the Deep Expedition opportunity.
 
 If the Store cannot afford the sponsorship, nomination cannot be confirmed.
 If no NPC is nominated, no sponsorship is charged.
@@ -768,10 +618,7 @@ Rules:
 - no purchase/refusal probability roll is performed during Final preparation
 - NPC Wallet affordability remains real
 - if `NPC Wallet < fixed Final transfer price`, that Item cannot be committed to that NPC
-- if affordable and committed, NPC Wallet decreases by exactly the fixed Final transfer price
 - actual inventory stock decreases by one for the committed Item
-- Player Gold increases by exactly the same fixed Final transfer price
-- Gross Sales increases by exactly the same fixed Final transfer price once
 - this is not free equipment
 - ordinary SALE pricing/refusal outside Final is unchanged
 
@@ -792,22 +639,8 @@ No separate exclusion or duplicate-count path exists.
 
 ## ECONOMY REBASELINE
 
-Economy rebalancing must jointly balance:
-
-- Item buy cost
-- sale prices
-- margins
-- NPC wallet
-- wallet growth
-- loot Gold
-- purchase intent
-- price resistance
-- loyalty
-- revisit
-- overhead
-- Relic prices
-- Relic ROI
-- waste
+Economy rebalancing must jointly balance Item buy cost, sale prices, margins, NPC wallet, wallet growth, loot Gold,
+purchase intent, price resistance, loyalty, revisit, overhead, Relic prices, Relic ROI and waste.
 
 Do not tune one multiplier in isolation.
 
@@ -816,9 +649,7 @@ Do not tune one multiplier in isolation.
 Primary economy KPI:
 `D29 Closing End Gold = D30 Prep Start Gold`
 
-Definition:
-Gold after D29 settlement/overhead and before any D30 Relic, Order, reroll,
-or other D30 preparation spend.
+Definition: Gold after D29 settlement/overhead and before any D30 Relic, Order, reroll, or other D30 preparation spend.
 
 Normal engaged-play target center:
 `median ≈ 1,500G`
@@ -829,12 +660,9 @@ separately and do not define the 1,500G center.
 
 This is a balance center, not a forced per-Run value.
 
-Full-run balance measurement reports at minimum:
-P10 / P25 / median / P75 / P90
-plus Gold In / Gold Out decomposition.
+Full-run balance measurement reports at minimum P10 / P25 / median / P75 / P90 plus Gold In / Gold Out decomposition.
 
-Do not default to Day-based Item price inflation, broad inflation, arbitrary
-taxes or excessive overhead escalation to hit the target.
+Do not default to Day-based Item price inflation, broad inflation, arbitrary taxes or excessive overhead escalation to hit the target.
 
 First tune the active economy through:
 - Wallet baseline
@@ -845,38 +673,11 @@ First tune the active economy through:
 
 ## ECONOMY METRICS
 
-By Day:
-- Gold
-- order spend
-- revenue
-- COGS
-- margin
-- overhead
-- waste
-- Relic spend
-
-NPC Wallet:
-- mean
-- median
-- distribution
-
-Price mode:
-- conversion
-- margin
-- refusal reason
-- loyalty/revisit effect
-- long-term ROI
-
-Reroll:
-- use rate
-- spend
-- resulting offer quality
-- pity integrity
-- strategy dependence
-
-Relic:
-- purchase timing
-- opportunity cost vs inventory
+- By Day: Gold, order spend, revenue, COGS, margin, overhead, waste, Relic spend
+- NPC Wallet: mean, median, distribution
+- Price mode: conversion, margin, refusal reason, loyalty/revisit effect, long-term ROI
+- Reroll: use rate, spend, resulting offer quality, pity integrity, strategy dependence
+- Relic: purchase timing, opportunity cost vs inventory
 
 ## STRATEGY CHECK
 
@@ -914,41 +715,31 @@ Acceptance criteria for this owner. Status values are not stored here; FAIL is v
 ### PRICE MODES / ROUNDING
 
 #### ECO-Q01 — NORMAL PRICE MODES
-SETUP:
-Open Sale pricing.
+SETUP: Open Sale pricing.
 
-EXPECT:
-Only:
+EXPECT: Only:
 - 50%
 - 100%
 - 150%
 
-PASS:
-No normal Free/25% mode exists.
+PASS: No normal Free/25% mode exists.
 
 #### ECO-Q02 — PRICE ROUNDING CONSISTENCY
-SETUP:
-Use items whose percentage price creates fractional values if applicable.
+SETUP: Use items whose percentage price creates fractional values if applicable.
 
-EXPECT:
-UI price, affordability check, payment, history, Closing use canonical nearest-integer half-up (`Math.round` for nonnegative Gold).
+EXPECT: UI price, affordability check, payment, history, Closing use canonical nearest-integer half-up (`Math.round` for nonnegative Gold).
 
-PASS:
-No 1G mismatch between displayed and charged values; x.5 rounds upward.
+PASS: No 1G mismatch between displayed and charged values; x.5 rounds upward.
 
 #### ECO-Q03 — 50% ROLE
-SETUP:
-Compare 50% vs 100% sale on same valid customer/item.
+SETUP: Compare 50% vs 100% sale on same valid customer/item.
 
-EXPECT:
-50% produces lower current Margin and lower purchase hurdle.
+EXPECT: 50% produces lower current Margin and lower purchase hurdle.
 
-PASS:
-It behaves as NPC-investment pricing, not universally optimal free value.
+PASS: It behaves as NPC-investment pricing, not universally optimal free value.
 
 #### ECO-Q04 — 150% ROLE
-SETUP:
-Try 150% across early/mid/late customers.
+SETUP: Try 150% across early/mid/late customers.
 
 EXPECT:
 - higher Margin when accepted
@@ -956,53 +747,40 @@ EXPECT:
 - not universally accepted
 - not universally dead early
 
-PASS:
-150% remains a real risk/reward option.
+PASS: 150% remains a real risk/reward option.
 
 ### PURCHASE / REFUSAL
 
 #### ECO-Q05 — UNAFFORDABLE RETRY LOGIC
-SETUP:
-Customer cannot afford same item even at 50%.
+SETUP: Customer cannot afford same item even at 50%.
 
-EXPECT:
-100% and 150% are not presented as meaningful successful retries.
+EXPECT: 100% and 150% are not presented as meaningful successful retries.
 
-PASS:
-Retry state respects Wallet logic.
+PASS: Retry state respects Wallet logic.
 
 #### ECO-Q06 — PRICE RESISTANCE RETRY
-SETUP:
-150% rejected specifically for price resistance.
+SETUP: 150% rejected specifically for price resistance.
 
-EXPECT:
-100%/50% may remain valid.
+EXPECT: 100%/50% may remain valid.
 
-PASS:
-Lower-price retry is possible where logically applicable.
+PASS: Lower-price retry is possible where logically applicable.
 
 #### ECO-Q07 — ITEM UNWANTED LOGIC
-SETUP:
-Customer does not want/need an item.
+SETUP: Customer does not want/need an item.
 
-EXPECT:
-Lowering price does not automatically guarantee purchase.
+EXPECT: Lowering price does not automatically guarantee purchase.
 
-PASS:
-Interest and price remain distinct causes.
+PASS: Interest and price remain distinct causes.
 
 #### ECO-Q08 — REFUSAL COPY
-SETUP:
-Trigger each major refusal reason.
+SETUP: Trigger each major refusal reason.
 
-EXPECT:
-Player-facing copy corresponds to actual cause:
+EXPECT: Player-facing copy corresponds to actual cause:
 - insufficient wallet
 - price too high
 - item unwanted/unneeded
 
-PASS:
-No misleading generic reason.
+PASS: No misleading generic reason.
 
 #### ECO-Q-v28-3 — ORDINARY PURCHASE ACCEPTANCE BASELINE
 
@@ -1014,7 +792,7 @@ PASS:
   - 100% = 1.00 / 0.65
   - 150% = 1.50 / 1.50
 - judgedPrice uses the mode intent multiplier and never changes the actual charged amount
-- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0)
+- 50% / 100% base need = 0.72
 - 150% uses the owner-defined fit-based need calculation
 - flat mode intent remains +0.18 / 0 / -0.16
 - one occupied Bag slot applies no purchase penalty
@@ -1024,10 +802,10 @@ PASS:
 - effective Wallet includes temporary Event purchase budget
 - unaffordable debit -> chance 0
 - affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> final chance 0.97
-- no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
+- no separate purchase-only Counter definition; 기동 on 속박/진창 is 관련 준비, not a Counter
 - non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
 - 150% receives no new Counter floor
-- 100% only: the final chance above (0.97 관련 준비 included) is × 0.90 (User 2026-09-25, v2.9.2); 50% / 150% carry no scale;
+- 100% only: the final chance above (0.97 관련 준비 included) is × 0.90; 50% / 150% carry no scale;
   accessible base need 0.72 is not lowered for it
 
 FAIL:
@@ -1066,49 +844,38 @@ PASS: no Morning double-application.
 ### ORDER FLOW
 
 #### ORD-Q01 — BASE OFFER COUNT
-SETUP:
-Enter normal Order phase without offer-count modifiers.
+SETUP: Enter normal Order phase without offer-count modifiers.
 
-EXPECT:
-6 offers.
+EXPECT: 6 offers.
 
-PASS:
-Exactly 6.
+PASS: Exactly 6.
 
 #### ORD-Q02 — ORDER TOTAL
-SETUP:
-Select quantities across multiple offers.
+SETUP: Select quantities across multiple offers.
 
-EXPECT:
-UI shows:
+EXPECT: UI shows:
 - current Gold
 - selected spend
 - Gold after order
 
-PASS:
-Values update correctly before confirmation.
+PASS: Values update correctly before confirmation.
 
 #### ORD-Q03 — INVENTORY CAPACITY
-SETUP:
-Attempt order beyond available inventory capacity.
+SETUP: Attempt order beyond available inventory capacity.
 
-EXPECT:
-Invalid over-capacity purchase is blocked or adjusted clearly.
+EXPECT: Invalid over-capacity purchase is blocked or adjusted clearly.
 
-PASS:
-Inventory cannot silently exceed capacity.
+PASS: Inventory cannot silently exceed capacity.
 
 #### ORD-Q13 — SAME-DAY ORDER ARRIVAL
-SETUP:
-Enter Order with an Item not currently in Inventory, purchase it, then proceed directly to the same Day Sale.
+SETUP: Enter Order with an Item not currently in Inventory, purchase it, then proceed directly to the same Day Sale.
 
 EXPECT:
 - confirmed Order stock is added immediately
 - the purchased Item is available in the current Day Sale
 - capacity/Gold state reflects the confirmed same-day arrival
 
-PASS:
-Order does not behave as next-day delivery and no extra day advance is required before use.
+PASS: Order does not behave as next-day delivery and no extra day advance is required before use.
 
 #### ORD-Q61 — ORDER CONFIRM SEPARATION
 
@@ -1172,50 +939,39 @@ PASS:
 ### REROLL
 
 #### ORD-Q04 — PAID FULL-OFFER REROLL
-SETUP:
-Use reroll repeatedly same day.
+SETUP: Use reroll repeatedly same day.
 
 EXPECT:
 - each use regenerates the entire current Order offer list
 - cost increases each use
 - no single-slot-only replacement behavior remains
 
-PASS:
-Full-offer regeneration and same-day escalation both work.
+PASS: Full-offer regeneration and same-day escalation both work.
 
 #### ORD-Q05 — REROLL DAILY RESET
-SETUP:
-Use reroll, advance to next Day.
+SETUP: Use reroll, advance to next Day.
 
-EXPECT:
-Reroll count/cost returns to daily base.
+EXPECT: Reroll count/cost returns to daily base.
 
-PASS:
-No prior-day escalation remains.
+PASS: No prior-day escalation remains.
 
 #### ORD-Q06 — REROLL PITY INTEGRITY
-SETUP:
-Reroll repeatedly.
+SETUP: Reroll repeatedly.
 
-EXPECT:
-Reroll itself does not advance rarity pity.
+EXPECT: Reroll itself does not advance rarity pity.
 
-PASS:
-No pity farming by spending Gold.
+PASS: No pity farming by spending Gold.
 
 #### ORD-Q07 — REROLL ELIGIBILITY
-SETUP:
-Reroll at several Days/unlock states.
+SETUP: Reroll at several Days/unlock states.
 
-EXPECT:
-Rerolled offers still obey:
+EXPECT: Rerolled offers still obey:
 - Day eligibility
 - unlocks
 - rarity rules
 - coverage rules
 
-PASS:
-Reroll cannot bypass progression.
+PASS: Reroll cannot bypass progression.
 
 #### ORD-Q65 — REROLL COST
 
@@ -1230,8 +986,7 @@ PASS:
 - Reroll itself does not advance pity
 
 #### ORD-Q12 — RELIC REROLL INTERACTION
-SETUP:
-Own `발주 교환권`, begin a fresh Day, and use the canonical Full-offer Reroll repeatedly.
+SETUP: Own `발주 교환권`, begin a fresh Day, and use the canonical Full-offer Reroll repeatedly.
 
 EXPECT:
 - first Full-offer Reroll costs 0G
@@ -1240,8 +995,7 @@ EXPECT:
 - eligibility / coverage / rarity rules remain intact
 - Reroll does not advance pity
 
-PASS:
-`발주 교환권` waives the first canonical Reroll cost rather than adding a single-slot swap or an extra hidden pity path.
+PASS: `발주 교환권` waives the first canonical Reroll cost rather than adding a single-slot swap or an extra hidden pity path.
 
 #### ORD-Q88 — REROLL RESPECTS CURRENT-DAY RARITY BAND
 
@@ -1306,11 +1060,11 @@ The stronger Store Support guarantee remains owned separately by RELIC.
 
 #### ORD-Q09 / Q10 / Q14 / Q80 / Q81 / Q82 / Q83 — NEXT-DAY FORECAST — RETIRED
 
-(User 2026-09-24, v2.9.0) The next-day forecast surface is gone: nothing to time, display or keep consistent. The generation rules themselves are covered by DUNGEON_HAZARD / ITEM §QA. Still FAIL anywhere on MORNING / ORDER if it newly exposes next-day Family, exact Gate composition, Hazard set, an individual future customer's identity or destination, exact success/death probability, or a recommended SKU/category/quantity.
+No next-day forecast surface exists (→ §NEXT-DAY FORECAST — RETIRED); the generation rules are covered by DUNGEON_HAZARD / ITEM §QA. FAIL anywhere on MORNING / ORDER if it newly exposes next-day Family, exact Gate composition, Hazard set, an individual future customer's identity or destination, exact success/death probability, or a recommended SKU/category/quantity.
 
 #### ORD-Q84 — PER-GATE VISITOR COUNTS
 
-PASS (per-Gate visitor counts; User 2026-09-24, v2.9.0):
+PASS:
 - with two or more open Gates, MORNING / ORDER show the current-day visitor count per open Gate
 - the per-Gate counts sum to the expected visitor count
 - each count follows the destination the customer claims; a liar's or a pilgrimage-rerouted customer's true Gate is not revealed
@@ -1327,11 +1081,9 @@ PASS:
 ### GOLD ACCOUNTING
 
 #### ECO-Q10 — CLOSING ECONOMICS
-SETUP:
-Complete day with purchases/sales/overhead/waste/relic spend.
+SETUP: Complete day with purchases/sales/overhead/waste/relic spend.
 
-EXPECT:
-Closing distinguishes:
+EXPECT: Closing distinguishes:
 - revenue
 - COGS
 - margin
@@ -1340,18 +1092,14 @@ Closing distinguishes:
 - Relic spend
 - final Gold
 
-PASS:
-Final Gold reconciles.
+PASS: Final Gold reconciles.
 
 #### ECO-Q META/BOSS — CUMULATIVE GROSS SALES CONSISTENCY
-SETUP:
-Create a known sequence of rounded committed sales and inspect Closing plus GREED input metric.
+SETUP: Create a known sequence of rounded committed sales and inspect Closing plus GREED input metric.
 
-EXPECT:
-Cumulative Gross Sales equals the sum of the exact same actual rounded sale values used by payment/history/Closing.
+EXPECT: Cumulative Gross Sales equals the sum of the exact same actual rounded sale values used by payment/history/Closing.
 
-PASS:
-GREED does not read a duplicate or differently rounded revenue counter.
+PASS: GREED does not read a duplicate or differently rounded revenue counter.
 
 #### ECO-Q-v28-4 — BASE OPERATING COST EXACT
 
@@ -1363,7 +1111,7 @@ Core Roster:
 
 Expected:
 
-    dayBase = 170 + 1×(Day-1) + 12×max(0, Day-15)    (v2.9.1 balance, User 2026-09-25; late term v2.9.2, User 2026-09-26)
+    dayBase = 170 + 1×(Day-1) + 12×max(0, Day-15)
     base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 
 Then apply only current owned modifiers and round final daily operating cost to nearest 10G under
@@ -1404,7 +1152,7 @@ PASS:
 - no compensating Deep reward/difficulty rebalance
 - sponsorship is priced from the nominated NPC's rarity and current Level
 - no payment tiers / Day/Tier scaling
-- no Stat / Fatigue-recovery effect from sponsorship (User 2026-09-24, v2.9.0)
+- no Stat / Fatigue-recovery effect from sponsorship
 - unaffordable sponsorship cannot be confirmed
 - skip charges 0
 
@@ -1429,21 +1177,16 @@ PASS:
 ### BALANCE QA
 
 #### ECO-Q09 — EARLY WALLET PLAYABILITY
-SETUP:
-Sample early/mid customers.
+SETUP: Sample early/mid customers.
 
-EXPECT:
-Most normal customers have at least one plausible affordable option.
+EXPECT: Most normal customers have at least one plausible affordable option.
 
-PASS:
-Frequent `nothing affordable at all` states do not dominate normal play.
+PASS: Frequent `nothing affordable at all` states do not dominate normal play.
 
 #### ECO-Q11 — STRATEGY DIVERSITY
-SETUP:
-Simulation/playtest multiple pricing/order strategies.
+SETUP: Simulation/playtest multiple pricing/order strategies.
 
-EXPECT:
-No single strategy dominates all contexts:
+EXPECT: No single strategy dominates all contexts:
 - 50% spam
 - 100% only
 - 150% only
@@ -1452,12 +1195,10 @@ No single strategy dominates all contexts:
 - always buy Relic
 - never buy Relic
 
-PASS:
-At least several adaptive strategies remain viable.
+PASS: At least several adaptive strategies remain viable.
 
 #### ECO-Q12 — MINIMAL-ENGAGEMENT ECONOMY
-SETUP:
-Simulate repeated:
+SETUP: Simulate repeated:
 - zero sale
 - zero order
 - zero expedition supply
@@ -1469,8 +1210,7 @@ EXPECT:
 - normal engaged play produces materially better cash/future value
 - no standalone inactivity tax/meter is added
 
-PASS:
-A player cannot efficiently reach late Day bands simply by spending almost nothing and advancing turns.
+PASS: A player cannot efficiently reach late Day bands simply by spending almost nothing and advancing turns.
 
 #### ORD-Q89 — LATE-RUN OFFER MIX MEASUREMENT
 
