@@ -8,7 +8,7 @@ WORK 측정 기록이다. 수치 조정은 없다. 판정은 기준을 적어 �
   - `node tools/measure-v3prep.cjs curve <balanced|reader> 3000 <none|economy|survival>`
   - `node tools/measure-v3prep.cjs nudge 120 20 <strong|weak|all>`
 - 봇 두 개
-  - `reader`: 재측정(`reports/remeasure-v2911.md`)의 주 렌즈
+  - `reader`: 재측정(`archive/v2.9.11/remeasure-v2911.md`)의 주 렌즈
   - `balanced`: 더 약한 봇
   - GAME_VISION 표의 "균형 / 숙련"과 일대일로 대응하지 않는다. 그래서 두 봇 값을 모두 싣는다.
 - 교차 확인: 새 계정 값이 재측정 §11(1.45 채택 뒤)과 맞는다.

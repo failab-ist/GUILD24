@@ -56,7 +56,7 @@ const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='e
    originals the points were measured on, and `lufs` is measured on these copies. While a phase plays, the next phase's
    file is fetched ahead (`nextOf`) - the bytes only, never a second decoded track - so a phase change does not wait on
    the network. */
-/* Mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): the music at -30 LUFS - NIGHT a further 3 dB under (`trim`), the
+/* Mix (User 2026-09-29, archive/v2.9.11/bgm-sfx-mix-v2911.md): the music at -30 LUFS - NIGHT a further 3 dB under (`trim`), the
    densest track, which read as the loudest in play - and every effect at its own tier level (LEVEL below), so decision and
    result cues read clearly above it (PRESENTATION §Mix). The effects bus is the player's slider alone.
    A phase change fades the old track out over BGM_SWAP; the next one starts only after it (two keys never overlap) and

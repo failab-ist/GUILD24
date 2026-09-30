@@ -548,7 +548,7 @@ tag=Expedition
 - 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
 - it applies wherever preparation is read: SALE outlook, NIGHT resolution and the D30 Final (so it is D30-eligible)
 - 악바리's injured 투력 bonus replaces the penalty as before; the support changes nothing for that Trait
-- measured (reports/v2.9.11-drafts.md §C, owned from D10, upper bound): D30 19.6 → 21.1%, clear 13.5 → 14.7%
+- measured (archive/v2.9.11/v2.9.11-drafts.md §C, owned from D10, upper bound): D30 19.6 → 21.1%, clear 13.5 → 14.7%
 
 ### FRESH — Foundation
 9. 대형 냉장고
@@ -789,7 +789,7 @@ tag=Expedition
 - the SALE state strip says so once (COPY_AUDIT §9-4b)
 - the Expedition line holds two Keystones (원정 전문 인증 and this one), User 2026-09-28
 - D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
-- measured against the six Keystones (reports/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
+- measured against the six Keystones (archive/v2.9.11/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
   clear 13.5 → 16.8% - at or just above the strongest Keystones (물류 본부계약, 원정 전문 인증: D30 24.0%)
 
 25. 24시간 신선체계

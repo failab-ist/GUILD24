@@ -27,6 +27,11 @@
 | `v2.9.2/v292-h6-transitions.md` | H6 장면 전환 캡처 보고 | `reports/` |
 | `v2.9.2/tools/` | `measure-arms`, `measure-late-slope`, `measure-late-fork`, `measure-package`, `calibrate-human`, `remeasure-v292` (끝난 질문의 측정 도구) | `tools/` |
 | `v2.9.6/dungeon-monster-identity.md` | 도감 몬스터 지식 탭과 함께 화면에서 사라진 던전 몬스터 이름·약점 데이터 | `dist/data/catalog.js` |
+| `v2.9.6/deco-balance-v296.md`, `item-balance-v296.md` | v2.9.6 장식 · 상품 밸런스 측정 | `reports/` |
+| `v2.9.7/counter-ladder-v297.md`, `hazard-coverage-v297.md` | v2.9.7~8 대응 사다리 · 위험 대응 범위 근거 | `reports/` |
+| `v2.9.9/fresh-run-d23-review-v299.md`, `v2.9.9-review-packet.md` | v2.9.9 새 계정 D23 리뷰 · 연출 리뷰 패킷 | `reports/` |
+| `v2.9.11/*.md` | v2.9.11 재측정(`remeasure-v2911`), 부상 · 성장, 문구 교정, 줄바꿈 점검, iPhone Safari, BGM · 효과음 믹스, 초안(`v2.9.11-drafts`) | `reports/` |
+| `v2.9.12/handoff-*.md` | v2.9.12에 끝난 핸드오프(사전 코치 정리 · END `이 점포의 기록`) | `reports/` |
 
 ## 규칙
 

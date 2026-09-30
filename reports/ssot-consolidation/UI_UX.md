@@ -1933,7 +1933,7 @@ New:
 ```new
 - Every track plays at the same loudness, except NIGHT, which plays 3 dB under the rest: it is the densest track and read
 as the loudest in play (User 2026-09-29).
-its §SFX LEVELS tier (User 2026-09-29; measurement `reports/bgm-sfx-mix-v2911.md`).
+its §SFX LEVELS tier (User 2026-09-29; measurement `archive/v2.9.11/bgm-sfx-mix-v2911.md`).
 - A phase change fades the old track out (1 s). The next track starts only after it, never over it, and rises over 1.5 s,
 so a phase never starts on a hard downbeat (User 2026-09-29).
 ```

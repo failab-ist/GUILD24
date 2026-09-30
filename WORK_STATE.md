@@ -9,7 +9,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.10). 닫힌 버전의 보고서·측정 도구는 `archive/`.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
-  근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
+  근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
 
 ## v2.9.11 — v3.0 준비 1차 (머지됨, PR #28) (User 2026-09-28~29)
 
@@ -24,14 +24,14 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 | 화면 · 문구 | 전역 keep-all(단어 중간 줄바꿈 297 → 0) · 문구 교정 1~4배치 · 첫 발주 튜토리얼 `창고` 단계 · 아침 DAY 간판 넘김 · FINAL 균열 NIT |
 | 사운드 | 녹음 BGM(페이즈별 · 결말 성공/실패, 원곡 전체 루프, BOSS 1초 크로스페이드) · 웹 128 kb/s + 다음 곡 미리 받기 |
 
-측정 기록: `reports/remeasure-v2911.md` §1~§14 · v3.0 준비 §8 측정(장식 전부 보유 곡선 · 넛지 공백 · RUN-Q15 · 360 SALE): `reports/v3-prep-measure-v2911.md`
+측정 기록: `archive/v2.9.11/remeasure-v2911.md` §1~§14 · v3.0 준비 §8 측정(장식 전부 보유 곡선 · 넛지 공백 · RUN-Q15 · 360 SALE): `reports/v3-prep-measure-v2911.md`
 - v2.9.10 대비 전체는 §12
 - 마지막 확인은 §14
 - 도구: `tools/remeasure-v2911.cjs`(REMEASURE_EARLY / REMEASURE_BALANCE 메모리 시안), `tools/deco-impact.cjs`(약한 장식 팔)
 
-줄바꿈 점검: `tools/qa-text.cjs`, `reports/text-audit-v2911.md`.
+줄바꿈 점검: `tools/qa-text.cjs`, `archive/v2.9.11/text-audit-v2911.md`.
 
-문구 교정: `reports/copy-proofread-v2911.md`
+문구 교정: `archive/v2.9.11/copy-proofread-v2911.md`
 - 1배치(상품 · 사건) · 2배치(점포지원 · 장식) · 3배치(화면)를 모두 반영했다(`f762b85` · `9d9a4d9` · `5ff4d6e`).
 - 4배치(NPC 대사, 14개)도 반영했다. 겁쟁이 유행어 대사는 User 결정으로 유지.
 
@@ -68,7 +68,7 @@ closeout(2026-09-28): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 1
 
 ## v2.9.9 퀵패치 (머지됨, PR #21) (User 2026-09-28, 프레쉬런 D23 검수에서 나옴)
 
-브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `reports/fresh-run-d23-review-v299.md`, 내용 `design_ssot/CHANGELOG.md` §v2.9.9 quick patch.
+브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `archive/v2.9.9/fresh-run-d23-review-v299.md`, 내용 `design_ssot/CHANGELOG.md` §v2.9.9 quick patch.
 - 실패 보상 배율 퇴각 0.40 · 부상 0.25 · 중상 0.15 (`395de5f`). 측정 `tools/measure-wallet-v299.cjs`.
 - SALE 폰 플로팅 줄에 `연속 부상 출발 {n}회` (조건·문구는 판독 줄과 같음). 360/390 캡처 User 확인.
 - 남은 BALANCE FINDING 후보(결정 안 됨): D11~20 준비도 절벽, 부상 → 가난 → 회복이 느린 고리(부상은 성공 또는 퇴각 회복 25~100%로 풀림). 보고서 §2. 퀵패치 후 첫 런(D16) 검수: 보고서 §5. v2.9.11 클리어 런 검수와 왕도 프리미엄 인증 · 원정 도시락 코너 조정(User 2026-09-29): 보고서 §7~8.
@@ -149,7 +149,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
 4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
 5. ~~사전 코치 → 사후 안내 이전~~ **끝남 (v2.9.12, 브랜치 `claude/v3-0-prep-planning-g42z7y`)** — User 결정과 결과는 `reports/v3.0-prep.md` §9-6 끝. 코치 12개 은퇴, 가격 사후 안내 2개, 첫 판매 24탭 → 12탭. 다른 세션은 스토어 1위 루브릭(§9-4) 나머지 칸을 이어 간다.
-6. **다른 세션**: END 영수증 `이 점포의 기록` 블록(A안). 핸드오프 `reports/handoff-end-record.md`(초안 `reports/v3.0-prep.md` §9-8-1-A). 이 세션은 기획(1위 인터뷰, `reports/interview-1st-place.md`).
+6. **다른 세션**: END 영수증 `이 점포의 기록` 블록(A안). 핸드오프 `archive/v2.9.12/handoff-end-record.md`(초안 `reports/v3.0-prep.md` §9-8-1-A). 이 세션은 기획(1위 인터뷰, `reports/interview-1st-place.md`).
    - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
    - 출시 준비 외 작업은 §8.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).

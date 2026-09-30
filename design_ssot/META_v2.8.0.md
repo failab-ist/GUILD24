@@ -541,7 +541,7 @@ Decoration effect must not inject a Relic id into the Run's facilities, mark a R
 remove a Relic from a purchase window, or consume one of the Run's Relic slots. A Decoration and
 a Relic that touch the same quantity simply both apply.
 
-v2.9.7 (User 2026-09-26, after the decoration re-measure in reports/deco-balance-v296.md): the sign economy Decoration is remade as
+v2.9.7 (User 2026-09-26, after the decoration re-measure in archive/v2.9.6/deco-balance-v296.md): the sign economy Decoration is remade as
 원정 지원금 간판; the wall and display economy Decorations swap Slots, names and art following the Slot (길드 제휴 현판 -> 길드 추천 매대
 on display, 프리미엄 쇼케이스 -> 명예 모험가 액자 on wall); ids are kept. An Account whose loadout holds a Decoration on a Slot it no
 longer belongs to has that Slot empty; ownership is kept.
