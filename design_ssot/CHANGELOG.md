@@ -15,6 +15,8 @@ the owner headers and in the git tag.
   `“오늘 보수 받았어요. 값은 신경 안 써요.”` (85% of those Runs). COPY_AUDIT §26-1. Later Runs are unchanged; the Run's
   stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
   (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
+- **END replay line above 도감에서 보기, in bold** (User 2026-09-30): what the Run left behind (`점포 자본으로 새 장식을 들일 수
+  있다.` / the best-Day line) reads before the codex link, 15px bold. UI_UX §END — REPLAY NUDGE; ledger; tests ui-guard.
 - **NIGHT discovery lines** (balance review session, User 2026-09-30): rules are named once per account by a `점주 안내`
   coach mark on the NIGHT record of the first expedition they acted on (shown like the tutorial, no inline line; User
   2026-09-30), and kept in the 발견 수첩 - 부상 출발, 피로 10 이상,

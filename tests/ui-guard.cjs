@@ -1882,6 +1882,9 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/const openedNames=\[\.\.\.\(s\.unlocked\|\|\[\]\),\.\.\.\(s\.dayUnlocked\|\|\[\]\)\];/.test(l),'본사 해금 lists the distinct-Boss unlocks and the D10 / D14 opens');
  assert.ok(/const nudge=opened\?'':replayLine\(\);/.test(l),'no line beside 본사 해금');
  const r=fn('replayLine');
+ /* User 2026-09-30: the line reads before the codex link, in bold */
+ {const l=fn('ledger');assert.ok(l.indexOf('<p class="replay">')>0&&l.indexOf('<p class="replay">')<l.indexOf("btn('도감에서 보기'"),'the replay line sits above 도감에서 보기');
+  assert.ok(/\.end-tape \.replay\{[^}]*font:700 /.test(css),'and is bold');}
  assert.ok(r.indexOf("'점포 자본으로 새 장식을 들일 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '"),'a Decoration newly in reach comes before a best Day');
  const run=read('dist/systems/run.js');
  assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 들일 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');

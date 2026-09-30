@@ -1802,8 +1802,9 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
  const nudge=opened?'':replayLine();
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
-  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'')
-  +(nudge?'<p class="replay">'+E(nudge)+'</p>':'');}
+  /* User 2026-09-30: what the Run left behind reads before the link to the codex, and reads as the point */
+  +(nudge?'<p class="replay">'+E(nudge)+'</p>':'')
+  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
 /* UI_UX §END — REPLAY NUDGE: when the Run opened nothing, at most one fact it left behind - the settlement crossed the price
    of a Decoration the account did not own at that settlement (judged once, in settleStoreCapital), else a new best Day
    (META §BEST DAY) - else nothing. Both are recorded on the Run, so a reload or a purchase from the ending prints the same
