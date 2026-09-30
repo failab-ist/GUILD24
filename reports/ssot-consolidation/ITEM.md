@@ -986,14 +986,13 @@ identity=strong Poison specialist
 | 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 8 | 축성 손전등 공포 9 · 어둠 9 | 용사의 곡주 공포 18 · 랜턴 건전지 어둠 21 | 성화 랜턴 공포 12 · 어둠 14 |
 | 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
 | 41 | 중화 탄산수 | Drink C | 35 / 70 | 부식 +10, Supply 1 | Corrosion 초반 대응 |
-| 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +12, 화이트아웃 +9 | Snow 초반 하이브리드 |
+| 18 | 방한 두건 | Field Gear U | 75 / 150 | 냉기 +12, 화이트아웃 +9 | Snow 초반 하이브리드 |
 | 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +12, 속박 +9 | Spider 초반 하이브리드 |
 | 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +9, 어둠 +9 | Crypt 초반 하이브리드 |
 Active catalog count is exactly 43 (40 until the v2.9.7 Counter ladder, User 2026-09-27).
 The active 43-Item distribution is therefore:
 Uncommon 8
 원정용 장화 / 설원 고글 / 용사의 곡주 / 불룡볶음면 to Rare and adds 중화 탄산수 (Common), 방독 작업장갑 and 축성 손전등
-(Uncommon); it was C11 / U12 / R5 / E11 / L1.)
 - Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 중화 탄산수 3, 용사의 곡주 4, 쿨링 이온음료 5)
 | soda | 중화 탄산수 | Drink | 3d |
 | webgloves | 방독 작업장갑 | Field Gear | 4d |
@@ -1008,7 +1007,7 @@ identity=Corrosion 초반 대응 with Supply
 counter=fear
 identity=Fear 초반 대응 with Supply
 identity=Poison 초반 대응
-18. 방한 두건 (was 핫팩)
+18. 방한 두건
 counters=[cold,whiteout]
 identity=Snow 초반 하이브리드
 42. 방독 작업장갑
@@ -1151,4 +1150,13 @@ Insurance / Special: its one function line
 e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +18 · 피로 회복 1 · 기동 -4`, `피로 회복 2 · 기동 +17`,
 `화염 대응 +12 · 투력 +10`. (v2.9.0 led a Food with 피로 회복 and ended a Drink with it, so the same two effects read in
 opposite orders on neighbouring rows - User 2026-09-28.)
+```
+
+
+## Consolidation 2026-09-30 — superseded values out of the parentheticals (User 2026-09-30)
+
+New:
+
+```new
+(Uncommon).)
 ```

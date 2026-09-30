@@ -816,7 +816,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +18, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +10 | Poison 초반 대응 |
-| 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +12, 화이트아웃 +9 | Snow 초반 하이브리드 |
+| 18 | 방한 두건 | Field Gear U | 75 / 150 | 냉기 +12, 화이트아웃 +9 | Snow 초반 하이브리드 |
 | 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +12, 속박 +9 | Spider 초반 하이브리드 |
 | 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +9, 어둠 +9 | Crypt 초반 하이브리드 |
 | 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +12, 진창 +9 | Slime 초반 하이브리드 |
@@ -870,7 +870,7 @@ The active 43-Item distribution is therefore:
 
 (User 2026-09-27, v2.9.7: the Counter ladder moves 방진마스크 to Common and 경량 로프 / 랜턴 건전지 / 부식 방지 코팅제 /
 원정용 장화 / 설원 고글 / 용사의 곡주 / 불룡볶음면 to Rare and adds 중화 탄산수 (Common), 방독 작업장갑 and 축성 손전등
-(Uncommon); it was C11 / U12 / R5 / E11 / L1.)
+(Uncommon).)
 
 Do not move another Item solely to alter these approved Common/Uncommon counts.
 
@@ -989,7 +989,7 @@ roles=[Insurance]
 subrole=InjuryInsurance
 identity=strong injury protection
 
-18. 방한 두건 (was 핫팩)
+18. 방한 두건
 roles=[HybridCounter]
 counters=[cold,whiteout]
 identity=Snow 초반 하이브리드
