@@ -2638,8 +2638,9 @@ It runs in the visual gate beside the 780-high widths, with the User's Galaxy st
   down onto its painted spot). The title is a step smaller there (180 px at most) and an empty 간판's tag - wider than
   the piece once it carries `들일 수 있음` - runs from the piece's edge nearest the title toward the screen's edge and
   hangs from the top of its spot, under the build mark: it never covers the title (User 2026-09-29, a Galaxy at 360x597)
-- every other screen already holds at this height: SALE keeps its sale-first order (the shelf under the fold),
-  §MOBILE SALE PLAYABILITY
+- SALE keeps its sale-first order (§MOBILE SALE PLAYABILITY); under 640 high a filled counter tray leaves fewer than
+  the three shelf rows UI-Q-v29-18 asks for (2 / 1 / 0 rows at 640 / 597 / 548) and 548 shows half a row at entry - an
+  open finding, the fix undecided (`reports/v3-prep-measure-v2911.md` §4, User 2026-09-30); the tray folds on a scroll
 
 ## TOUCH / INTERACTION
 

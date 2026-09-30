@@ -2114,8 +2114,6 @@ where §LIVE STORE DECORATION SEATING puts them; a 벽면 piece hanging there is
 it - the situation reads before the room (§MORNING; User 2026-09-29)
 - 새 점포 준비: the note takes the tighter step of the short desk (same type, less air), so the status line stays on the
 board, and the 간판 keeps the gap from the title as it does on the wide framing (the cropped ceiling brings the title
-- every other screen already holds at this height: SALE keeps its sale-first order (the shelf under the fold),
-§MOBILE SALE PLAYABILITY
 ```
 
 
@@ -2137,4 +2135,15 @@ New:
 ```new
 Each step of buying or fitting a Decoration (구매, 구매 확정, 취소, 적용, 해제) keeps the pressed row where it was on
 screen: the panel never jumps back to its top, so the row just bought is the row the player is looking at (User 2026-09-29).
+```
+
+
+## SHORT PHONE SALE finding (User 2026-09-30)
+
+New:
+
+```new
+- SALE keeps its sale-first order (§MOBILE SALE PLAYABILITY); under 640 high a filled counter tray leaves fewer than
+the three shelf rows UI-Q-v29-18 asks for (2 / 1 / 0 rows at 640 / 597 / 548) and 548 shows half a row at entry - an
+open finding, the fix undecided (`reports/v3-prep-measure-v2911.md` §4, User 2026-09-30); the tray folds on a scroll
 ```

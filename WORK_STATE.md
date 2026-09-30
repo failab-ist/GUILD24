@@ -24,7 +24,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 | 화면 · 문구 | 전역 keep-all(단어 중간 줄바꿈 297 → 0) · 문구 교정 1~4배치 · 첫 발주 튜토리얼 `창고` 단계 · 아침 DAY 간판 넘김 · FINAL 균열 NIT |
 | 사운드 | 녹음 BGM(페이즈별 · 결말 성공/실패, 원곡 전체 루프, BOSS 1초 크로스페이드) · 웹 128 kb/s + 다음 곡 미리 받기 |
 
-측정 기록: `reports/remeasure-v2911.md` §1~§14
+측정 기록: `reports/remeasure-v2911.md` §1~§14 · v3.0 준비 §8 측정(장식 전부 보유 곡선 · 넛지 공백 · RUN-Q15 · 360 SALE): `reports/v3-prep-measure-v2911.md`
 - v2.9.10 대비 전체는 §12
 - 마지막 확인은 §14
 - 도구: `tools/remeasure-v2911.cjs`(REMEASURE_EARLY / REMEASURE_BALANCE 메모리 시안), `tools/deco-impact.cjs`(약한 장식 팔)
