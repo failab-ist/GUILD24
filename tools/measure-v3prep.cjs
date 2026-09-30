@@ -5,7 +5,7 @@
 //       and RUN-Q15 (CORE_RUN_QA): the invested regulars against the newcomers at D30, from Debug.simulate's own q15.
 //   nudge <trajectories> <runs> [order=strong|weak|all]
 //       v3.0-prep §3-1: on a fresh account played Run after Run, how often the END replay line is empty (the Run opened
-//       nothing, the settlement crossed no unowned Decoration's price, no new best Day - UI_UX §END — REPLAY NUDGE, the
+//       nothing, the settlement crossed no unowned Decoration's price, no new best Day, no new best 총매출 - UI_UX §END — REPLAY NUDGE, the
 //       same conditions as app.js ledger() / replayLine()), and the longest runs of empty endings.
 const path=require('node:path');const ROOT=path.resolve(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
@@ -44,15 +44,16 @@ if(mode==='curve'){
   all:['sponsorSign','guildShelf','thriftSafe','honorFrame','aidCabinet','memorialBook','infirmaryPlaque','trainingSign']}[order];
  const seen=new WeakSet(),log=[];const P=Game.prototype,end=P.end;
  P.end=function(w,why){const s=this.run;const r=end.call(this,w,why);
-  if(!seen.has(s)){seen.add(s);const opened=[...(s.unlocked||[]),...(s.dayUnlocked||[])].length>0,reach=!!s.settlement?.reach,best=s.bestBefore>0&&s.day>s.bestBefore;
-   log.push(opened?'opened':reach?'reach':best?'best':'empty');}
+  if(!seen.has(s)){seen.add(s);const opened=[...(s.unlocked||[]),...(s.dayUnlocked||[])].length>0,reach=!!s.settlement?.reach,best=s.bestBefore>0&&s.day>s.bestBefore,
+    sales=s.salesBefore>0&&s.settlement?.sales>s.salesBefore;
+   log.push(opened?'opened':reach?'reach':best?'best':sales?'sales':'empty');}
   return r;};
  const t=Debug.trajectory({trajectories:Number(T),runs:Number(R),policy:'balanced',prefix:'nudge',purchaseOrder:ORDER});
  const n=Number(T),m=Number(R);if(log.length!==n*m)throw Error('logged '+log.length+' endings, expected '+n*m);
- const byRun=Array.from({length:m},(_,i)=>{const c={opened:0,reach:0,best:0,empty:0};for(let k=0;k<n;k++)c[log[k*m+i]]++;return c;});
+ const byRun=Array.from({length:m},(_,i)=>{const c={opened:0,reach:0,best:0,sales:0,empty:0};for(let k=0;k<n;k++)c[log[k*m+i]]++;return c;});
  const longest=[],first=[];
  for(let k=0;k<n;k++){let run=0,max=0;const row=log.slice(k*m,k*m+m);for(const x of row){run=x==='empty'?run+1:0;max=Math.max(max,run);}longest.push(max);}
- const all={opened:0,reach:0,best:0,empty:0};for(const x of log)all[x]++;
+ const all={opened:0,reach:0,best:0,sales:0,empty:0};for(const x of log)all[x]++;
  console.log(JSON.stringify({trajectories:n,runs:m,order,
   share:Object.fromEntries(Object.entries(all).map(([k,v])=>[k,pc(v,log.length)])),
   emptyByRun:byRun.map(c=>pc(c.empty,n)),
