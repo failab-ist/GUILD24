@@ -939,7 +939,6 @@ Design intent:
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
 Still hidden:
 - next-day Family / exact Gate composition / Hazard set
-4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 ```
 
@@ -974,7 +973,7 @@ User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned
 ```
 
 ```new
-- tapping a Slot row opens 점포 장식 (the codex tab formerly labelled 점포 관리; (User 2026-09-24, v2.9.0)) focused/scrolled to that exact Slot
+- tapping a Slot row opens 점포 장식 (the codex tab; User 2026-09-24, v2.9.0) focused/scrolled to that exact Slot
 - 이번 영업의 장식
 Menu row behavior (User 2026-09-24, v2.9.0):
 - 점포지원: while a Store Support window is open and purchasable (RELIC §reopenAllowed, `canBuyRelic`) it opens the selection surface; otherwise it opens the owned list `보유 점포지원` (a closable modal), never the selection surface with nothing to choose
@@ -1368,8 +1367,8 @@ RECEIPT — EXACT).
 User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보유 자금 / 영업 손익; the stamp sits on 보유 자금, only 영업 손익 is coloured (green / red, gold at 0); 창고 재고 and 오늘 폐기 take separate lines and the waste line names the Items. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `보유 자금` figure (the Day's end Gold, in the box that also holds `영업 손익`; the stamp sat on the
-`영업 손익` row until v2.9.7) lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
+one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `보유 자금` figure (the Day's end Gold, in the box that also holds `영업 손익`)
+lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
 gives 4 px and settles. The figure stays cream; only the `영업 손익` figure beneath it is coloured - green up, red down,
 gold at exactly 0 (User 2026-09-26) - each colour stated in CSS so reduced motion matches it exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
 ```
@@ -1538,7 +1537,7 @@ The deferred tablet finding is fixed: the counter band follows the painting, lan
 ```new
 - the till housing stands on the painted counter top under any crop (User 2026-09-27, v2.9.9 tablet batch): the counter
 band is sized by the drawn painting and moved down by the height the crop takes off its top, so on a portrait tablet the
-housing no longer floats above the counter; with no crop the band is the stage percentage it always was
+housing never floats above the counter; with no crop the band keeps its stage percentage
 - where the crop takes the painted ceiling off the top of the stage, the 간판 hangs the gap below the stage's top edge
 - the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
 - covered: phone 360~430 at the heights a browser leaves (640~932), and the iPhone SE stage 375x548 (§SHORT PHONE), portrait
@@ -1652,7 +1651,7 @@ Material direction:
 Strong GUILD24 Sign Green is store-sign / environment material and a beneficial semantic colour; it is not a primary-action
 treatment (v2.9.9: no dock Action uses it, `영업 시작` included). Do not use it as the repeated primary treatment for:
 - 영업 시작 / 발주 확정
-Material direction (the dock Actions follow §PRIMARY ACTION GRAMMAR, which owns them since v2.9.9):
+Material direction (the dock Actions follow §PRIMARY ACTION GRAMMAR, which owns them):
 | MORNING 문 열기 | Wood shutter |
 | 영업 시작 / 발주 확정 | ORDER steel on the paper, frost lit edge (one face) |
 | SALE 손님 보내기 | Quiet dark counter key |
@@ -1680,8 +1679,8 @@ The resolved Final is played out as a card fight before the ending (UI_UX §FINA
 ### FINAL — CLASH SCENE (v2.9.9 H7)
 (User 2026-09-27, v2.9.9; the exception to the per-beat contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT H7;
 acceptance -> UI_UX_QA UI-Q-v29-46.)
-The Final used to resolve in one cut: 발주 -> 원정대 -> the ending. After `마왕성으로 출발` the result the Final has already
-resolved is now played out as a card fight over the FINAL stage, then the ending follows as before (§FINAL RESULT — SEAL
+After `마왕성으로 출발` the result the Final has already
+resolved is played out as a card fight over the FINAL stage, then the ending follows as before (§FINAL RESULT — SEAL
 STAMP). Nothing is decided by the scene.
 - cast: the Boss card above (the Boss's art and name, one health bar) and the party's cards below in one row (portrait,
 - the bar is the resolved Final: it loses min(1, rolled Party Power / effective Boss Power) in all, in equal shares per
@@ -1731,7 +1730,6 @@ the words the Events and Store Supports already use; User 2026-09-27, v2.9.10) a
 v2.9.0)
 - every shelf row and the tray name the Item's category in the same small tag after its name (`음식 / 음료 / 포션 / 야외장비 /
 보험 / 특수`, User 2026-09-27, v2.9.10); the icon tile's bottom edge is the Item's rarity colour on the shelf row and on the
-tray alike (the tray's had been a fixed gold)
 ```
 
 ## AMENDMENT — v2.9.10 shelf life wording, sold out, customer arrival, dossier entry (User 2026-09-28)
@@ -1748,10 +1746,9 @@ in. A newcomer's portrait is fetched only when they arrive (they do not exist be
 card holds a plain silhouette (head and shoulders, no art) and the portrait rises into it when ready, at most 1.5 s later;
 every other customer of the Day is fetched the moment SALE opens, so theirs is ready. No loading screen, no copy. Under
 reduced motion the card is simply there.
-- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the stock's shelf life - `폐기까지 N일`, then `내일까지` / `오늘까지` on its last two days (User 2026-09-27/28, v2.9.10;
-it was `폐기 N일`, which left open whether today counted; the tray and the 재고 정리 list read the same) - emphasized (the warehouse list's `.soon` color) on its last day; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the stock's shelf life - `폐기까지 N일`, then `내일까지` / `오늘까지` on its last two days (User 2026-09-27/28, v2.9.10;
+the tray and the 재고 정리 list read the same) - emphasized (the warehouse list's `.soon` color) on its last day; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
 A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 200 ms hold after the screen
-appears (v2.9.10, User 2026-09-28: it was 420 ms, the shutter's length, and the dossier then cut in and read as a stutter),
 then the dossier arrives - the shade at once, the sheet rising 18 px into place in 260 ms with the Boss's art on it (no
 separate, later settle of the art). It applies to every reveal stage (the D0 briefing
 path can do either), it ends at once. No new sound or copy. Under reduced motion the reveal opens at once, as before.
@@ -1783,7 +1780,6 @@ One effect order for every Item (Hazard Counter, 피로 회복, Core Stat, the r
 2. exact actual effect, in the ITEM §PRESENTATION ORDER — EXACT order (Hazard Counter → 피로 회복 → Core Stat → the rest;
 User 2026-09-28, v2.9.10 quick patch); an explicit penalty keeps its place in that order and its cost colour
 - the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the corner of its `매입` tag, as a store marks a 1+1 shelf
-(User 2026-09-28, v2.9.10 quick patch; it had been a `· 1+1` fragment inside the muted metadata line and went unseen); the
 metadata line carries no `1+1`
 ```
 
@@ -1969,7 +1965,7 @@ New:
 
 ```new
 ordering. It is a steel rack of 칸 with an orange beam, apart from the floating Death box's brown and the 발주서's paper:
-- Desk (1024 px and wider): the 발주서 is set left, no longer centred, and the warehouse is a large rack on its right,
+- Desk (1024 px and wider): the 발주서 is set left and the warehouse is a large rack on its right,
 - Open or folded follows ORDER — WAREHOUSE DISCLOSURE: folded on a fresh account, then as the player last left it.
 - ORDER CONFIRM's crates drop into the new cells of the rack on screen (the desk column or the open sheet); with the sheet
 folded, the handle's figures move on the last landing.
@@ -2131,7 +2127,7 @@ New:
 
 ```new
 takes one tighter step - the same lines, keys and order, less air, a smaller icon, keys still 44 px or more - so it
-leaves 3 / 2 / 1 shelf rows above it at 640 / 597 / 548 (was 2 / 1 / 1; User 2026-09-30, `reports/v3-prep-measure-v2911.md`
+leaves 3 / 2 / 1 shelf rows above it at 640 / 597 / 548 (User 2026-09-30, `reports/v3-prep-measure-v2911.md`
 §4). The three-row floor of UI-Q-v29-18 holds from 640 up; below it the tray folds on a scroll, as everywhere
 ```
 
@@ -2142,8 +2138,8 @@ New:
 
 ```new
 ### DESK STAGE WIDTH (User 2026-09-30)
-On a desk the stage is at most 1440 px wide (was 1120), and never wider than 1.65 times its own height - the widest shape
-the painted rooms were checked at - so a 1366 x 680 laptop browser keeps a 1120 stage. Two painted rooms keep the old
+On a desk the stage is at most 1440 px wide, and never wider than 1.65 times its own height - the widest shape
+the painted rooms were checked at - so a 1366 x 680 laptop browser keeps a 1120 stage. Two painted rooms keep a 1120
 width because they are drawn at the width they are given:
 - FINAL's Boss room stays 1120 wide: wider, it grew taller and pushed the hazards and the last order under the fold
 - NIGHT's window band stays 1120 wide, centred on the wider stage, its sides the band's own edge colour
@@ -2319,4 +2315,26 @@ higher Loyalty), `원정` (`{N}건 · 대성공 {N}`, every expedition record of
 - read from what the Run already holds - no new save field; the settlement block (META §Run-end settlement structure)
 and the replay line (§END — REPLAY NUDGE) are unchanged
 - exact copy -> COPY_AUDIT §10-4
+```
+
+
+## Consolidation 2026-09-30 — history parentheticals and a retired list item out (User 2026-09-30)
+
+Dropped (the removal itself):
+
+```text
+5. offer list + quantity (base=6; authoritative modifiers may increase count)
+6. Full-offer reroll + current cost/state
+7. sticky confirm
+```
+
+New:
+
+```new
+4. offer list + quantity (base=6; authoritative modifiers may increase count)
+5. Full-offer reroll + current cost/state
+6. sticky confirm
+(User 2026-09-28, v2.9.10 quick patch); the
+tray alike
+appears (v2.9.10, User 2026-09-28),
 ```
