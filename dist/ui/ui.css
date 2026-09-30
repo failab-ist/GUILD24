@@ -2676,7 +2676,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .end-tape .closed{margin:12px 0 0;font:500 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 .end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
 /* UI_UX §END — REPLAY NUDGE (v2.9.4): one quiet line at the foot of the tape, printed with the body */
-.end-tape .replay{margin:12px 0 2px;font:400 13px/1.55 var(--ui);color:#5f5847;text-align:center}
+.end-tape .replay{margin:14px 0 4px;font:700 15px/1.55 var(--ui);color:#2a2118;text-align:center}
 /* BATCH 3 END: 도감에서 보기 was a full-width grey box inside the tape - a second, web-style
    button competing with the Action under it. It is a quiet printed line on the tape now, with
    its 44px target intact: the one next Action stays the only control that reads as one. */

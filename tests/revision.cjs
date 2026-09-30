@@ -547,4 +547,74 @@ test('정가 final purchase chance is x 0.90 of the unscaled one; 50% / 150% unc
  assert.equal(DATA.balance.accessibleNeed,.72,'the shared accessible need is untouched');
 });
 
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run finds one Common Counter for the first Gate's Hazard
+   in the DAY 1 warehouse; a later Run does not, and the Run's own stream is the same either way. */
+test('first-Run lesson: DAY 1 warehouse holds one Common Counter for the first Gate, first Run only, stream untouched',()=>{
+ const run=runs=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start('lesson-probe');g.buyRelic(g.run.relicWindow.candidateIds[0]);return g.run;};
+ const first=run(0),later=run(1),h=first.dungeons[0].hazards[0];
+ assert.equal(first.firstRun,true);assert.equal(later.firstRun,false);
+ const extra=first.inventory.filter(u=>!later.inventory.some(v=>v.id===u.id));
+ assert.equal(extra.length,1,'exactly one extra unit on the first Run');
+ const it=DATA.itemBy[extra[0].item];
+ assert.ok(it.rarity===0&&(it.effects[h]||0)>0,'a Common that counters the first Gate\'s Hazard ('+h+')');
+ assert.equal(first.lessonCounter,it.id);
+ assert.deepEqual(JSON.stringify(first.dungeons),JSON.stringify(later.dungeons),'the same Gates');
+ assert.deepEqual(first.queue,later.queue,'the same visitors');assert.equal(first.rngState,later.rngState,'the same stream');
+ const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-probe');
+ assert.equal(sim.run.firstRun,false,'measurement harnesses switch the lessons off');
+});
+test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death settles as 중상',()=>{
+ const g=fresh('lesson-death'),base=g.run.npcs[0];
+ const weak={...copy(base),traits:[],injury:0,fatigue:0,pack:[],level:1,stats:{combat:1,survival:1,mobility:1,spirit:1},equipment:{...base.equipment,power:0}};
+ const d={...DATA.dungeonBy.spider,family:'spider',hazards:['poison'],tier:3,day:1,scale:3,power:200,reward:1};
+ const roll=()=>{let k=0;return {next:()=>(k++,0),int:a=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0,count:()=>k};};
+ const out=(run,day)=>{const r=roll();const rep=Dungeon.resolve(copy(weak),{...d,day},r,[],run);return {o:rep.outcome,draws:r.count()};};
+ const ordinary=out({firstRun:false,day:1},1);assert.equal(ordinary.o,'사망','sanity: the fixture dies on an ordinary Run');
+ const lesson=out({firstRun:true,day:1},1);assert.equal(lesson.o,'중상','DAY 1 of the first Run: 중상 instead');
+ // the Death decision itself draws nothing extra; the survivor then goes through the draws a living adventurer takes
+ assert.ok(lesson.draws>=ordinary.draws,'the survivor takes the living path\'s draws');
+ assert.equal(out({firstRun:true,day:2},2).o,'중상','DAY 2 too');
+ assert.equal(out({firstRun:true,day:3},3).o,'사망','DAY 3 is an ordinary Day');
+});
+test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급키트, and a payday customer for 150%',()=>{
+ const setup=first=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=first;s.day=3;delete s.lessonDay3;
+  const [a,b,c,hurt]=s.npcs;for(const n of [a,b,c,hurt]){n.alive=true;n.injury=0;n.introduced=true;n.visits=2;delete n.lessonPayday;}
+  hurt.injury=1;s.queue=[a.id,b.id,c.id];const kits=s.inventory.filter(u=>u.item==='kit').length;g.firstRunLessons();return {g,s,a,b,c,hurt,kits};};
+ const t=setup(true);
+ assert.equal(t.s.queue[0],t.hurt.id,'the injured adventurer comes first');assert.equal(t.s.queue.length,3,'the Day\'s count of visitors is unchanged');
+ assert.equal(t.s.inventory.filter(u=>u.item==='kit').length,t.kits+1,'one 구급키트 joins the warehouse');
+ const pay=t.s.npcs.find(n=>n.id===t.s.lessonPayday);assert.ok(pay&&pay.id!==t.hurt.id&&pay.lessonPayday===3,'a returning visitor is the payday customer');
+ const it=DATA.items.find(i=>i.rarity===0&&i.category==='food');pay.loyalty=0;pay.traits=[];
+ const on=t.g.interest(pay,it,'overcharge').chance;t.s.firstRun=false;const off=t.g.interest(pay,it,'overcharge').chance;t.s.firstRun=true;
+ assert.ok(on<.97&&Math.abs(on-off-.20)<1e-9,'+20%p on a 150% offer, that visit');
+ assert.equal(t.g.interest(pay,it,'full').chance,(t.s.firstRun=false,t.g.interest(pay,it,'full').chance),'정가 untouched');t.s.firstRun=true;
+ t.s.cursor=t.s.queue.indexOf(pay.id);t.s.event=null;t.g.arrive();
+ assert.ok(pay.eventBudget>=200,'200G to spend this visit (the nightly-cleared channel)');assert.equal(t.s.say.text,Copy.lessonPayday,'the payday line');
+ const mixed=(()=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=true;s.day=3;delete s.lessonDay3;const [a,b,c]=s.npcs;
+  for(const n of [a,b,c]){n.alive=true;n.introduced=true;n.visits=2;delete n.lessonPayday;}a.injury=1;b.injury=1;c.injury=0;s.queue=[a.id,b.id,c.id];g.firstRunLessons();return {s,c};})();
+ assert.equal(mixed.s.lessonPayday,mixed.c.id,'the payday customer is a healthy returning visitor when one is coming (User 2026-09-30)');
+ const later=setup(false);assert.deepEqual(later.s.queue,[later.a.id,later.b.id,later.c.id],'a later Run: nothing moves');
+ assert.equal(later.s.inventory.filter(u=>u.item==='kit').length,later.kits,'and no 구급키트');
+});
+
+test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted on it; the notebook keeps each once; a Death carries only the Death limit',()=>{
+ const M=Meta,acc={knowledge:{},discoveries:[]},K=Copy.learned.map(([k])=>k),T=k=>Copy.learned.find(x=>x[0]===k)[1];
+ const rep=o=>({day:4,dungeon:'spider',items:[],events:[],outcome:'성공',storeBonus:0,...o});
+ const notebook=()=>acc.discoveries.filter(x=>/^learn-/.test(x.id)).map(x=>x.id);
+ const r1=rep({departedInjured:true,fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:[]}]});M.observe(acc,r1);
+ assert.deepEqual(r1.acted,['injured','fatigue','counter'],'injured, fatigue, counter - in coach order');
+ assert.deepEqual(notebook(),['learn-injured','learn-fatigue','learn-counter'],'each kept in the notebook with its line');
+ assert.equal(acc.discoveries.find(x=>x.id==='learn-injured').text,T('injured'));
+ const r2=rep({departedInjured:true,fatigueBeforeExpedition:15});M.observe(acc,r2);
+ assert.deepEqual(r2.acted,['injured','fatigue'],'a later record still carries its class (the coach seen-state keeps the mark to once)');
+ assert.equal(notebook().length,3,'and the notebook does not repeat');
+ const r3=rep({outcome:'대성공',storeBonus:0});M.observe(acc,r3);assert.deepEqual(r3.acted,[],'a 대성공 without the store bonus (Deep) proves nothing about it');
+ const r4=rep({outcome:'사망',departedInjured:true,events:[{id:'prepared',text:'x'}]});M.observe(acc,r4);
+ assert.deepEqual(r4.acted,['death'],'a Death record carries only the Death limit (User 2026-09-30)');
+ assert.ok(!notebook().includes('learn-prepared'),'and no other rule is kept from it');
+ const r5=rep({outcome:'대성공',storeBonus:50,events:[{id:'prepared',text:'x'}],fatigueBeforeExpedition:9});M.observe(acc,r5);
+ assert.deepEqual(r5.acted,['prepared','great'],'prepared and great; Fatigue 9 is below the line');
+ assert.deepEqual(notebook().sort(),K.map(k=>'learn-'+k).sort(),'all six are in the notebook');
+});
+
 console.log(checks+' revision groups passed');

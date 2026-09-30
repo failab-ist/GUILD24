@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -2620,9 +2620,9 @@ FAIL:
 
 ### GREAT SUCCESS TUTORIAL
 PASS:
-- explicitly teaches Great Success exists
-- extra preparation can raise its chance
-- Great Success has additional reward
+- no SALE coach mark on the signal (User 2026-09-30, v2.9.11)
+- the first store-bonus 대성공 names it on its NIGHT record, once per account (NIGHT_CLOSING §DISCOVERY LINE):
+  extra preparation can raise its chance, and it leaves the Store an additional Gold bonus
 
 ### FIRST DEEP TUTORIAL
 PASS:
