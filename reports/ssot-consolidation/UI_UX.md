@@ -801,7 +801,6 @@ On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial
 Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0.md §3.
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 `gold` mark stays retired (the register reads itself).
-sale; the returning-customer mark is retired (the card reads `다시 온 손님`).
 Exact strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
 ```
 
@@ -2274,10 +2273,10 @@ place. A mark stays only where the rule has to be known before the decision and 
 already says is retired; a rule that can be named after it acts is taught then.
 - kept before the fact: DAY 0 `점포지원` (what a Store Support is); MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL) and
 the II / FIRE Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정`; SALE destination and Stats; SALE Bag (after
-the first sale); FINAL `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (its first clause only - the warehouse
+the first sale) and returning customer (the tap to the notebook); FINAL `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (its first clause only - the warehouse
 clause is dropped and the receipt gains no row)
 - retired, the screen says it: MORNING 방문객 and 게이트; DAY 0 card and key; ORDER gates, stock, offer, quantity, 후보 교환;
-SALE Hazard, outlook, returning customer; NIGHT `한 명씩 …` (the `전체 건너뛰기` key says it)
+SALE Hazard, outlook; NIGHT `한 명씩 …` (the `전체 건너뛰기` key says it)
 - two words added so a retired mark is not missed: the DAY 1 창고 head `창고 · 본사 기본 상품 N종` while it holds only the
 opening stock, and the SALE readout title `도착 시 전투 전망`
 - taught after the fact: price (§SALE PRICE LESSONS), beside the NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
@@ -2288,4 +2287,14 @@ with the other marks:
 - the first 50% sale: on that sale's change line (`단골도 +N · 소지금 A → B`), which stays up while the mark is open
 - words only; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §26-3
 key marks are retired; each card prints its effect and price, and the key, the later windows and `점포지원 N / 7` say
+```
+
+
+## v2.9.12 coach diet: returning kept (User 2026-09-30)
+
+New:
+
+```new
+sale, and the returning-customer mark stays contextual on the first returning customer (no screen says that tapping the
+customer opens the notebook).
 ```

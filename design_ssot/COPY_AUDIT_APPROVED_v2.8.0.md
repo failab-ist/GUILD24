@@ -169,8 +169,8 @@
 
 The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-30, v2.9.12 — UI_UX
 §TUTORIAL — COACH DIET: the first SALE teaches two marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY) and STATS; 가방
-(§3-6) appears after the first sale. PRICING moves after the fact (§26-3); HAZARD, 전망 (§3-4) and RETURNING are retired,
-as SUPPLY, 대성공 and 만반의 준비 were (§26-2)).
+(§3-6) appears after the first sale and RETURNING on the first returning customer. PRICING moves after the fact (§26-3);
+HAZARD and 전망 (§3-4) are retired, as SUPPLY, 대성공 and 만반의 준비 were (§26-2)).
 
 The first ORDER keeps 발주 확정 (§3-2) alone (User 2026-09-30, v2.9.12); GATES, STOCK, OFFER, QUANTITY and 후보 교환 are
 retired, and the `gold` mark stays retired.
@@ -182,8 +182,10 @@ Retired 2026-09-30 (kept here as the superseded wording):
 ### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
 > 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
 
+### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0; kept 2026-09-30)
+> 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.
+
 Also retired 2026-09-30 (superseded wording; the §8-0 category sentence stays where §8-0 puts it):
-> 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다. (RETURNING)  
 > 오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다. (GATES)  
 > 창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다. (STOCK)  
 > 음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화. (OFFER)  
