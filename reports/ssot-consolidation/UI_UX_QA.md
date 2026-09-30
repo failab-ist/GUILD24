@@ -1948,3 +1948,13 @@ tag - `들일 수 있음` included - and the status line on the board; MORNING s
 `tools/qa-visual.cjs` runs every screen at 375x548 and 360x597
 - on an iPhone SE, a tag or a line over the title or off the board, or the Event's effect line cut on MORNING
 ```
+
+
+## Decoration panel keeps the pressed row (User 2026-09-29)
+
+New:
+
+```new
+- scrolled down the panel, 구매 · 구매 확정 · 취소 · 적용 · 해제 each keep the pressed row where it was on screen (User
+2026-09-29); runtime evidence `tools/qa-deco-seating.cjs` (360x597, 1280x880)
+```

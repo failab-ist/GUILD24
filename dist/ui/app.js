@@ -229,6 +229,12 @@ function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!r
    identity, then put the keyboard back on its replacement. Used by #app and by
    #modal-root, which had no restore at all: a redraw under an open modal dropped focus
    to <body> and made a keyboard user tab back from the top of the document. */
+/* UI_UX §PURCHASE / EQUIP FLOW (User 2026-09-29): every step of a purchase or an equip redraws the Decoration panel, and the
+   redraw put its scroll back at the top - the row just bought left the screen and read as something else. The pressed row
+   goes back on the pixel it was on (as a SALE shelf row does), whatever the step added to or took from it. */
+function keepDecoRow(el){const rows=()=>[...document.querySelectorAll('#modal-root .slot-option')],row=el.closest('.slot-option'),
+  i=rows().indexOf(row),y0=row?row.getBoundingClientRect().top:0;
+ return ()=>{const sc=$('#modal-root .modal-body'),back=rows()[i];if(sc&&back&&i>=0)sc.scrollTop+=back.getBoundingClientRect().top-y0;};}
 function holdFocus(container){const el=document.activeElement;
  if(!container||!el||el===document.body||!container.contains(el))return null;
  const a=el.dataset.action,id=el.dataset.id;
@@ -2408,9 +2414,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
- case'deco-buy':decoPending=id;renderModal();break;
- case'deco-cancel':decoPending=null;renderModal();break;
- case'deco-confirm':case'deco-equip':case'deco-unequip':{
+ case'deco-buy':{const back=keepDecoRow(el);decoPending=id;renderModal();back();break;}
+ case'deco-cancel':{const back=keepDecoRow(el);decoPending=null;renderModal();back();break;}
+ case'deco-confirm':case'deco-equip':case'deco-unequip':{const back=keepDecoRow(el);
   if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 장식을 바꿀 수 없습니다.');
   const d=D.decorationBy[id];
   if(a==='deco-confirm'){
@@ -2422,7 +2428,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   /* fitting something already owned into a Slot, or taking it out. Deliberately not the
      purchase fanfare above: it costs nothing and nothing was acquired. */
   else {Meta.equipDecoration(game.account,d.slot,a==='deco-equip'?id:null);sound('fixture');}
-  game.save();renderModal();render();break;}
+  game.save();renderModal();render();back();break;}
  /* UI_UX_v2.8 §ORDER: `.set` holds the 1 / 3 / 최대 shortcuts, so they take the stepper's own
     tick one step quieter and never outrank it; audio.js holds both to a minimum retrigger gap. */
  case'stock-sheet':setStockSheet(!sheetOpen());sound('ui');break;

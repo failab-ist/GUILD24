@@ -2069,6 +2069,8 @@ Show:
 - equipped Decoration
 
 Purchase requires explicit confirmation and spends once.
+Each step of buying or fitting a Decoration (구매, 구매 확정, 취소, 적용, 해제) keeps the pressed row where it was on
+screen: the panel never jumps back to its top, so the row just bought is the row the player is looking at (User 2026-09-29).
 Loadout is editable only outside an active Run and frozen after Run start.
 
 On a pre-Run/foundation store-management screen, an explicit way back to the new-Run preparation

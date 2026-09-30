@@ -142,6 +142,9 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **Buying a Decoration keeps the panel where it was** - UI_UX §STORE MANAGEMENT, UI-Q-v28-1 (User 2026-09-29: "구매 누르면
+  스크롤이 위로 올라감 ... 이게 바로 산 건가 헷갈리게 됨"): every step of a purchase or an equip redrew the panel and put its
+  scroll back at the top. The pressed row now stays on the pixel it was on (구매, 구매 확정, 취소, 적용, 해제).
 - **The 간판 tag clears the title on a Galaxy** - UI_UX §SHORT PHONE, UI-Q-v29-49 (User 2026-09-29, screenshot at 360x597):
   an empty 간판's tag carrying `들일 수 있음` is wider than the piece and still ran over the title logo. On a short stage the
   title is a step smaller (180 px), that tag runs from the piece's edge nearest the title toward the screen's edge and hangs

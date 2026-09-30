@@ -1162,7 +1162,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!/800|700|650|550|10%|300G/.test(store),'and hardcodes none of the numeric truth');
  /* Purchase and equip are Account actions: both refuse during a Run, and the Capital is
     deducted inside Meta so it cannot be spent twice by a second screen. */
- const deco=app.slice(app.indexOf("case'deco-buy'"),app.indexOf("case'deco-buy'")+700);
+ const deco=app.slice(app.indexOf("case'deco-buy'"),app.indexOf("case'deco-buy'")+900);
  assert.ok(/if\(game\.run&&game\.run\.phase!=='end'\)throw/.test(deco),'both refuse during a Run');
  assert.ok(/Meta\.buyDecoration\(game\.account,id\)/.test(deco)&&!/capital-=|capital =/.test(deco),
   'the purchase goes through Meta rather than adjusting Capital in the UI');
@@ -1526,12 +1526,12 @@ test('UI-Q-v28-21: the trace is presentation only and owns no state of its own',
 // UI_UX_v2.8 §PURCHASE CONFIRMATION. Spending permanent Capital is a two-step action, and the
 // step that spends is one place in Source, so a repeated click cannot reach Meta twice.
 test('UI_UX_v2.8 §PURCHASE CONFIRMATION: the buy button asks, and only the confirmation spends',()=>{
- assert.ok(/case'deco-buy':decoPending=id/.test(app),'the buy button only records what is being asked about');
+ assert.ok(/case'deco-buy':\{const back=keepDecoRow\(el\);decoPending=id;renderModal\(\);back\(\);break;\}/.test(app),'the buy button only records what is being asked about (and keeps its row in place)');
  assert.equal((app.match(/Meta\.buyDecoration\(/g)||[]).length,1,'exactly one call site spends Capital');
  const confirm=app.slice(app.indexOf("case'deco-confirm'"),app.indexOf("case'qty'"));
  assert.ok(confirm.indexOf('decoPending=null')<confirm.indexOf('Meta.buyDecoration('),
   'the pending purchase is cleared before the Capital is spent, so a second click has nothing to confirm');
- assert.ok(/case'deco-cancel':decoPending=null/.test(app),'cancel clears it and spends nothing');
+ assert.ok(/case'deco-cancel':\{const back=keepDecoRow\(el\);decoPending=null;renderModal\(\);back\(\);break;\}/.test(app),'cancel clears it and spends nothing');
  // a reload must not resume a half-finished purchase, so it is never written to the save
  assert.ok(!/decoPending/.test(read('dist/systems/save.js'))&&!/decoPending/.test(read('dist/systems/meta.js')),
   'the pending state never reaches the Account or the save');
@@ -3598,6 +3598,14 @@ test('UI-Q-v29-48: the DAY sign rolls once on arriving at a MORNING, inside the 
 });
 
 // UI-Q-v29-49 (User 2026-09-29): iPhone Safari - no double-tap zoom, no save-image menu, a suspended context resumes on return.
+// UI_UX §STORE MANAGEMENT, UI-Q-v28-1 (User 2026-09-29): buying or fitting a Decoration keeps the pressed row on screen
+test('Decoration panel: a purchase or an equip keeps the pressed row where it was',()=>{
+ assert.ok(/case'deco-buy':\{const back=keepDecoRow\(el\);decoPending=id;renderModal\(\);back\(\);break;\}/.test(app)
+  &&/case'deco-cancel':\{const back=keepDecoRow\(el\);decoPending=null;renderModal\(\);back\(\);break;\}/.test(app)
+  &&/case'deco-unequip':\{const back=keepDecoRow\(el\);[\s\S]{0,1400}game\.save\(\);renderModal\(\);render\(\);back\(\);break;\}/.test(app),'every step anchors the row');
+ assert.ok(/sc\.scrollTop\+=back\.getBoundingClientRect\(\)\.top-y0/.test(fn('keepDecoRow')),'the row goes back on its pixel');
+ assert.ok(/purchase[\s\S]*keeps the pressed row where it was/.test(read('tools/qa-deco-seating.cjs')),'runtime evidence');
+});
 test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  const css=read('dist/ui/ui.css'),audio=read('dist/ui/audio.js'),app=read('dist/ui/app.js');
  assert.ok(/(^|\n)html\{touch-action:manipulation\}/.test(css),'a quick second tap does not zoom the page');

@@ -2128,3 +2128,13 @@ down onto its painted spot). The title is a step smaller there (180 px at most) 
 the piece once it carries `들일 수 있음` - runs from the piece's edge nearest the title toward the screen's edge and
 hangs from the top of its spot, under the build mark: it never covers the title (User 2026-09-29, a Galaxy at 360x597)
 ```
+
+
+## Decoration panel keeps the pressed row (User 2026-09-29)
+
+New:
+
+```new
+Each step of buying or fitting a Decoration (구매, 구매 확정, 취소, 적용, 해제) keeps the pressed row where it was on
+screen: the panel never jumps back to its top, so the row just bought is the row the player is looking at (User 2026-09-29).
+```

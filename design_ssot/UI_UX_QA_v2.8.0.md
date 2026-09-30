@@ -2036,6 +2036,8 @@ PASS:
 - owned/unowned/equipped distinguishable
 - purchase confirmation spends exactly once
 - loadout read-only during active Run
+- scrolled down the panel, 구매 · 구매 확정 · 취소 · 적용 · 해제 each keep the pressed row where it was on screen (User
+  2026-09-29); runtime evidence `tools/qa-deco-seating.cjs` (360x597, 1280x880)
 
 ### UI-Q-v28-2 — PRE-RUN RETURN PATH
 
