@@ -1,0 +1,2429 @@
+{
+ "runs": 150,
+ "per": 60,
+ "k": 30,
+ "share": {
+  "T1": {
+   "departures": 15891,
+   "strong": 21.7,
+   "mid": 14.5,
+   "weak": 63.8
+  },
+  "T2": {
+   "departures": 7563,
+   "strong": 15.4,
+   "mid": 7.5,
+   "weak": 77.1
+  },
+  "T3": {
+   "departures": 2471,
+   "strong": 17.4,
+   "mid": 6.3,
+   "weak": 76.3
+  }
+ },
+ "gaps": {
+  "T1:survival:strong": {
+   "n": 2307,
+   "p25": 4.4,
+   "p50": 6.8,
+   "p75": 8.5,
+   "p90": 9.5
+  },
+  "T1:survival:weak": {
+   "n": 5679,
+   "p25": 7.2,
+   "p50": 8.9,
+   "p75": 10.4,
+   "p90": 11.9
+  },
+  "T1:mobility:strong": {
+   "n": 0,
+   "p25": null,
+   "p50": null,
+   "p75": null,
+   "p90": null
+  },
+  "T1:mobility:weak": {
+   "n": 0,
+   "p25": null,
+   "p50": null,
+   "p75": null,
+   "p90": null
+  },
+  "T1:spirit:strong": {
+   "n": 1162,
+   "p25": 1,
+   "p50": 6.1,
+   "p75": 8.3,
+   "p90": 9.2
+  },
+  "T1:spirit:weak": {
+   "n": 4527,
+   "p25": 4.8,
+   "p50": 8.8,
+   "p75": 10.9,
+   "p90": 12.6
+  },
+  "T2:survival:strong": {
+   "n": 783,
+   "p25": 8.5,
+   "p50": 12.1,
+   "p75": 14.7,
+   "p90": 16.1
+  },
+  "T2:survival:weak": {
+   "n": 3370,
+   "p25": 13.7,
+   "p50": 15.7,
+   "p75": 17.6,
+   "p90": 19.4
+  },
+  "T2:mobility:strong": {
+   "n": 772,
+   "p25": 7.7,
+   "p50": 12.5,
+   "p75": 14.1,
+   "p90": 15.6
+  },
+  "T2:mobility:weak": {
+   "n": 3236,
+   "p25": 14.4,
+   "p50": 17,
+   "p75": 18.7,
+   "p90": 20.4
+  },
+  "T2:spirit:strong": {
+   "n": 646,
+   "p25": 3.7,
+   "p50": 10.4,
+   "p75": 14.9,
+   "p90": 16.5
+  },
+  "T2:spirit:weak": {
+   "n": 3736,
+   "p25": 12.6,
+   "p50": 17,
+   "p75": 19.7,
+   "p90": 22.1
+  },
+  "T3:survival:strong": {
+   "n": 296,
+   "p25": 13,
+   "p50": 16.7,
+   "p75": 20.5,
+   "p90": 22.1
+  },
+  "T3:survival:weak": {
+   "n": 1089,
+   "p25": 20.3,
+   "p50": 22.6,
+   "p75": 25,
+   "p90": 26.6
+  },
+  "T3:mobility:strong": {
+   "n": 305,
+   "p25": 14,
+   "p50": 18.1,
+   "p75": 20.1,
+   "p90": 21.7
+  },
+  "T3:mobility:weak": {
+   "n": 1093,
+   "p25": 21.5,
+   "p50": 24.8,
+   "p75": 26.6,
+   "p90": 28.6
+  },
+  "T3:spirit:strong": {
+   "n": 216,
+   "p25": 8.5,
+   "p50": 16.9,
+   "p75": 21.6,
+   "p90": 23.5
+  },
+  "T3:spirit:weak": {
+   "n": 1128,
+   "p25": 20,
+   "p50": 25.1,
+   "p75": 28.5,
+   "p90": 30.7
+  }
+ },
+ "res": {
+  "spider:T1:strong": {
+   "samples": 60,
+   "bags": {
+    "mask": {
+     "cost": 45,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    },
+    "antidote": {
+     "cost": 95,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    },
+    "energy": {
+     "cost": 80,
+     "win": 28.8,
+     "hurt": -13.3,
+     "death": -0.7
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 26.7,
+     "hurt": -12.4,
+     "death": -0.6
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 35.7,
+     "hurt": -20.2,
+     "death": -0.7
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 35.7,
+     "hurt": -20.2,
+     "death": -0.7
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 35.6,
+     "hurt": -20.1,
+     "death": -0.7
+    },
+    "mask+rope": {
+     "cost": 140,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    },
+    "webgloves+rope": {
+     "cost": 170,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    },
+    "rope": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "antidote+rope": {
+     "cost": 190,
+     "win": 2.8,
+     "hurt": -3.6,
+     "death": -0.7
+    }
+   }
+  },
+  "spider:T1:weak": {
+   "samples": 60,
+   "bags": {
+    "mask": {
+     "cost": 45,
+     "win": 0,
+     "hurt": 0.8,
+     "death": -5.6
+    },
+    "antidote": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 1,
+     "death": -5.8
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 1,
+     "death": -5.8
+    },
+    "energy": {
+     "cost": 80,
+     "win": 16.2,
+     "hurt": -14.7,
+     "death": -2.7
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 12.9,
+     "hurt": -8.7,
+     "death": -1.9
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 16.6,
+     "hurt": -14.8,
+     "death": -9.1
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 16.6,
+     "hurt": -14.8,
+     "death": -9.1
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 0.6,
+     "death": -5.4
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 16.6,
+     "hurt": -15.1,
+     "death": -8.6
+    },
+    "mask+rope": {
+     "cost": 140,
+     "win": 0,
+     "hurt": 1,
+     "death": -5.8
+    },
+    "webgloves+rope": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 0.9,
+     "death": -5.7
+    },
+    "rope": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "antidote+rope": {
+     "cost": 190,
+     "win": 0,
+     "hurt": 1.4,
+     "death": -6.3
+    }
+   }
+  },
+  "spider:T2:strong": {
+   "samples": 60,
+   "bags": {
+    "mask": {
+     "cost": 45,
+     "win": 9.1,
+     "hurt": -8.5,
+     "death": -1.1
+    },
+    "antidote": {
+     "cost": 95,
+     "win": 11.6,
+     "hurt": -10.8,
+     "death": -1.2
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 14.9,
+     "hurt": -15.7,
+     "death": -1.4
+    },
+    "energy": {
+     "cost": 80,
+     "win": 25.2,
+     "hurt": -15.9,
+     "death": -1.4
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 11.9,
+     "hurt": -5,
+     "death": -0.6
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 35.1,
+     "hurt": -26.2,
+     "death": -1.7
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 35.6,
+     "hurt": -26.8,
+     "death": -1.7
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 13.9,
+     "hurt": -14.6,
+     "death": -1.3
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 34.6,
+     "hurt": -25.6,
+     "death": -1.7
+    },
+    "mask+rope": {
+     "cost": 140,
+     "win": 14.6,
+     "hurt": -15.4,
+     "death": -1.4
+    },
+    "webgloves+rope": {
+     "cost": 170,
+     "win": 14.4,
+     "hurt": -15.2,
+     "death": -1.4
+    },
+    "rope": {
+     "cost": 95,
+     "win": 10.2,
+     "hurt": -10.2,
+     "death": -1.1
+    },
+    "antidote+rope": {
+     "cost": 190,
+     "win": 14.9,
+     "hurt": -15.8,
+     "death": -1.4
+    }
+   }
+  },
+  "spider:T2:weak": {
+   "samples": 60,
+   "bags": {
+    "mask": {
+     "cost": 45,
+     "win": 0,
+     "hurt": 1.8,
+     "death": -2.9
+    },
+    "antidote": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 2.2,
+     "death": -3.7
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 0,
+     "hurt": -0.8,
+     "death": -5.9
+    },
+    "energy": {
+     "cost": 80,
+     "win": 5.4,
+     "hurt": -9,
+     "death": -4
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 3,
+     "hurt": -0.6,
+     "death": -1.7
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 5.6,
+     "hurt": -13.3,
+     "death": -7
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 5.6,
+     "hurt": -13.8,
+     "death": -7.9
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 0.3,
+     "death": -4.5
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 5.6,
+     "hurt": -13.5,
+     "death": -7.1
+    },
+    "mask+rope": {
+     "cost": 140,
+     "win": 0,
+     "hurt": -0.4,
+     "death": -5.8
+    },
+    "webgloves+rope": {
+     "cost": 170,
+     "win": 0,
+     "hurt": -0.6,
+     "death": -5.6
+    },
+    "rope": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 1.7,
+     "death": -3.7
+    },
+    "antidote+rope": {
+     "cost": 190,
+     "win": 0,
+     "hurt": -0.2,
+     "death": -6.6
+    }
+   }
+  },
+  "spider:T3:strong": {
+   "samples": 60,
+   "bags": {
+    "mask": {
+     "cost": 45,
+     "win": 11.6,
+     "hurt": -9.8,
+     "death": -1.9
+    },
+    "antidote": {
+     "cost": 95,
+     "win": 16,
+     "hurt": -14,
+     "death": -2.2
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 24.8,
+     "hurt": -23.8,
+     "death": -2.4
+    },
+    "energy": {
+     "cost": 80,
+     "win": 16.8,
+     "hurt": -10.8,
+     "death": -1.8
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 6.8,
+     "hurt": -3.2,
+     "death": -0.1
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 35.9,
+     "hurt": -29.5,
+     "death": -2.5
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 37.6,
+     "hurt": -31.3,
+     "death": -2.5
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 20.8,
+     "hurt": -19.2,
+     "death": -2.3
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 35.7,
+     "hurt": -29.4,
+     "death": -2.4
+    },
+    "mask+rope": {
+     "cost": 140,
+     "win": 24.2,
+     "hurt": -23.3,
+     "death": -2.3
+    },
+    "webgloves+rope": {
+     "cost": 170,
+     "win": 23.9,
+     "hurt": -22.9,
+     "death": -2.3
+    },
+    "rope": {
+     "cost": 95,
+     "win": 15.4,
+     "hurt": -13.4,
+     "death": -2.2
+    },
+    "antidote+rope": {
+     "cost": 190,
+     "win": 25.3,
+     "hurt": -24.6,
+     "death": -2.4
+    }
+   }
+  },
+  "spider:T3:weak": {
+   "samples": 60,
+   "bags": {
+    "mask": {
+     "cost": 45,
+     "win": 0.1,
+     "hurt": 2.1,
+     "death": -2.6
+    },
+    "antidote": {
+     "cost": 95,
+     "win": 0.1,
+     "hurt": 3.9,
+     "death": -4.8
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 0.1,
+     "hurt": 3.2,
+     "death": -6.7
+    },
+    "energy": {
+     "cost": 80,
+     "win": 2.6,
+     "hurt": -4.1,
+     "death": -4.5
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 1.2,
+     "hurt": 0.6,
+     "death": -1.4
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 3.3,
+     "hurt": -5,
+     "death": -8
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 3.3,
+     "hurt": -6.9,
+     "death": -9.2
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 0.1,
+     "hurt": 2.9,
+     "death": -4.4
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 3.3,
+     "hurt": -4.8,
+     "death": -7.9
+    },
+    "mask+rope": {
+     "cost": 140,
+     "win": 0.1,
+     "hurt": 3.6,
+     "death": -6.8
+    },
+    "webgloves+rope": {
+     "cost": 170,
+     "win": 0.1,
+     "hurt": 3.7,
+     "death": -6.8
+    },
+    "rope": {
+     "cost": 95,
+     "win": 0.1,
+     "hurt": 3.9,
+     "death": -4.6
+    },
+    "antidote+rope": {
+     "cost": 190,
+     "win": 0.1,
+     "hurt": 1.6,
+     "death": -8
+    }
+   }
+  },
+  "slime:T1:strong": {
+   "samples": 60,
+   "bags": {
+    "soda": {
+     "cost": 35,
+     "win": 3.4,
+     "hurt": -3.8,
+     "death": -0.8
+    },
+    "coating": {
+     "cost": 95,
+     "win": 3.1,
+     "hurt": -3.7,
+     "death": -0.8
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 3.1,
+     "hurt": -3.7,
+     "death": -0.8
+    },
+    "energy": {
+     "cost": 80,
+     "win": 25.7,
+     "hurt": -12.1,
+     "death": -0.8
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 23,
+     "hurt": -11.2,
+     "death": -0.8
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 32.4,
+     "hurt": -18.7,
+     "death": -0.8
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 32.4,
+     "hurt": -18.7,
+     "death": -0.8
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 3.1,
+     "hurt": -3.6,
+     "death": -0.8
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 32.3,
+     "hurt": -18.6,
+     "death": -0.8
+    },
+    "soda+boots": {
+     "cost": 130,
+     "win": 3.4,
+     "hurt": -3.8,
+     "death": -0.8
+    },
+    "cloak+boots": {
+     "cost": 170,
+     "win": 3.1,
+     "hurt": -3.6,
+     "death": -0.8
+    },
+    "boots": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "coating+boots": {
+     "cost": 190,
+     "win": 3.1,
+     "hurt": -3.7,
+     "death": -0.8
+    }
+   }
+  },
+  "slime:T1:weak": {
+   "samples": 60,
+   "bags": {
+    "soda": {
+     "cost": 35,
+     "win": 0,
+     "hurt": -0.1,
+     "death": -4.9
+    },
+    "coating": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0.3,
+     "death": -5.2
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 0.3,
+     "death": -5.2
+    },
+    "energy": {
+     "cost": 80,
+     "win": 13.8,
+     "hurt": -12.9,
+     "death": -2.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 10.9,
+     "hurt": -6.4,
+     "death": -2.1
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 13.9,
+     "hurt": -13.6,
+     "death": -8.1
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 13.9,
+     "hurt": -13.6,
+     "death": -8.1
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 0,
+     "hurt": -0.2,
+     "death": -4.7
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 13.9,
+     "hurt": -14,
+     "death": -7.3
+    },
+    "soda+boots": {
+     "cost": 130,
+     "win": 0,
+     "hurt": 0.3,
+     "death": -5.3
+    },
+    "cloak+boots": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 0.2,
+     "death": -5.1
+    },
+    "boots": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "coating+boots": {
+     "cost": 190,
+     "win": 0,
+     "hurt": 0.6,
+     "death": -5.6
+    }
+   }
+  },
+  "slime:T2:strong": {
+   "samples": 60,
+   "bags": {
+    "soda": {
+     "cost": 35,
+     "win": 9.8,
+     "hurt": -9.4,
+     "death": -1
+    },
+    "coating": {
+     "cost": 95,
+     "win": 10.8,
+     "hurt": -10.2,
+     "death": -1.2
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 12.8,
+     "hurt": -13.7,
+     "death": -1.4
+    },
+    "energy": {
+     "cost": 80,
+     "win": 22.3,
+     "hurt": -14.3,
+     "death": -1.1
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 10.9,
+     "hurt": -4.5,
+     "death": -0.6
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 31.6,
+     "hurt": -24.1,
+     "death": -1.6
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 31.9,
+     "hurt": -24.4,
+     "death": -1.6
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 12.4,
+     "hurt": -13,
+     "death": -1.4
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 31.3,
+     "hurt": -23.4,
+     "death": -1.6
+    },
+    "soda+boots": {
+     "cost": 130,
+     "win": 12.8,
+     "hurt": -13.8,
+     "death": -1.3
+    },
+    "cloak+boots": {
+     "cost": 170,
+     "win": 12.5,
+     "hurt": -13.4,
+     "death": -1.4
+    },
+    "boots": {
+     "cost": 95,
+     "win": 8.3,
+     "hurt": -7.8,
+     "death": -1
+    },
+    "coating+boots": {
+     "cost": 190,
+     "win": 12.8,
+     "hurt": -13.7,
+     "death": -1.4
+    }
+   }
+  },
+  "slime:T2:weak": {
+   "samples": 60,
+   "bags": {
+    "soda": {
+     "cost": 35,
+     "win": 0.2,
+     "hurt": 2.9,
+     "death": -4
+    },
+    "coating": {
+     "cost": 95,
+     "win": 0.1,
+     "hurt": 2.9,
+     "death": -4.4
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 0.1,
+     "hurt": 0.5,
+     "death": -6.3
+    },
+    "energy": {
+     "cost": 80,
+     "win": 4.9,
+     "hurt": -5.9,
+     "death": -4.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 2.5,
+     "hurt": 0.1,
+     "death": -2.3
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 5.2,
+     "hurt": -9.1,
+     "death": -7.6
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 5.2,
+     "hurt": -8.6,
+     "death": -9
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 0.1,
+     "hurt": 1.7,
+     "death": -4.9
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 5.2,
+     "hurt": -9.1,
+     "death": -7.8
+    },
+    "soda+boots": {
+     "cost": 130,
+     "win": 0.2,
+     "hurt": 0.6,
+     "death": -6.4
+    },
+    "cloak+boots": {
+     "cost": 170,
+     "win": 0.1,
+     "hurt": 1,
+     "death": -6
+    },
+    "boots": {
+     "cost": 95,
+     "win": 0.1,
+     "hurt": 3.6,
+     "death": -4.4
+    },
+    "coating+boots": {
+     "cost": 190,
+     "win": 0.1,
+     "hurt": 1.1,
+     "death": -6.9
+    }
+   }
+  },
+  "slime:T3:strong": {
+   "samples": 60,
+   "bags": {
+    "soda": {
+     "cost": 35,
+     "win": 13,
+     "hurt": -10.1,
+     "death": -2.6
+    },
+    "coating": {
+     "cost": 95,
+     "win": 15.3,
+     "hurt": -12.6,
+     "death": -2.7
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 24.5,
+     "hurt": -22.8,
+     "death": -3.1
+    },
+    "energy": {
+     "cost": 80,
+     "win": 20.3,
+     "hurt": -11.9,
+     "death": -2.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 7.4,
+     "hurt": -2.8,
+     "death": -0.2
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 37.6,
+     "hurt": -29.2,
+     "death": -3.1
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 40.2,
+     "hurt": -31.6,
+     "death": -3.2
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 21.9,
+     "hurt": -19.5,
+     "death": -2.9
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 39.1,
+     "hurt": -30.3,
+     "death": -3.2
+    },
+    "soda+boots": {
+     "cost": 130,
+     "win": 24.6,
+     "hurt": -22.6,
+     "death": -3.1
+    },
+    "cloak+boots": {
+     "cost": 170,
+     "win": 23.8,
+     "hurt": -21.9,
+     "death": -3
+    },
+    "boots": {
+     "cost": 95,
+     "win": 17.6,
+     "hurt": -14.7,
+     "death": -2.8
+    },
+    "coating+boots": {
+     "cost": 190,
+     "win": 24.5,
+     "hurt": -22.9,
+     "death": -3.1
+    }
+   }
+  },
+  "slime:T3:weak": {
+   "samples": 60,
+   "bags": {
+    "soda": {
+     "cost": 35,
+     "win": 0.1,
+     "hurt": 2.6,
+     "death": -3.3
+    },
+    "coating": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 4,
+     "death": -4.9
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 1.9,
+     "death": -6.4
+    },
+    "energy": {
+     "cost": 80,
+     "win": 1.9,
+     "hurt": -5.1,
+     "death": -4.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 0.7,
+     "hurt": 0.7,
+     "death": -1.3
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 2.6,
+     "hurt": -7.8,
+     "death": -7.5
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 2.6,
+     "hurt": -10.9,
+     "death": -8.3
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 2.9,
+     "death": -4.7
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 2.6,
+     "hurt": -7.6,
+     "death": -7.4
+    },
+    "soda+boots": {
+     "cost": 130,
+     "win": 0.1,
+     "hurt": 2.1,
+     "death": -6.9
+    },
+    "cloak+boots": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 2.2,
+     "death": -6.7
+    },
+    "boots": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 3.7,
+     "death": -4.8
+    },
+    "coating+boots": {
+     "cost": 190,
+     "win": 0,
+     "hurt": 0.2,
+     "death": -7.5
+    }
+   }
+  },
+  "crypt:T1:strong": {
+   "samples": 60,
+   "bags": {
+    "candy": {
+     "cost": 35,
+     "win": 2.5,
+     "hurt": -3.7,
+     "death": -0.6
+    },
+    "wine": {
+     "cost": 95,
+     "win": -4.7,
+     "hurt": 1.1,
+     "death": -0.6
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 1.7,
+     "hurt": -3.3,
+     "death": -0.6
+    },
+    "energy": {
+     "cost": 80,
+     "win": 28.2,
+     "hurt": -13.5,
+     "death": -0.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 25.1,
+     "hurt": -12.4,
+     "death": -0.6
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 28.7,
+     "hurt": -17.3,
+     "death": -0.6
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 33.2,
+     "hurt": -18.7,
+     "death": -0.6
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 1.7,
+     "hurt": -3.1,
+     "death": -0.6
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 33,
+     "hurt": -18.4,
+     "death": -0.6
+    },
+    "candy+battery": {
+     "cost": 130,
+     "win": 2.5,
+     "hurt": -3.7,
+     "death": -0.6
+    },
+    "holylight+battery": {
+     "cost": 170,
+     "win": 1.7,
+     "hurt": -3.1,
+     "death": -0.6
+    },
+    "battery": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "wine+battery": {
+     "cost": 190,
+     "win": -4.7,
+     "hurt": 1.1,
+     "death": -0.6
+    }
+   }
+  },
+  "crypt:T1:weak": {
+   "samples": 60,
+   "bags": {
+    "candy": {
+     "cost": 35,
+     "win": 0.1,
+     "hurt": -0.1,
+     "death": -3.4
+    },
+    "wine": {
+     "cost": 95,
+     "win": -0.7,
+     "hurt": 4.9,
+     "death": -3.3
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 0.2,
+     "death": -3.6
+    },
+    "energy": {
+     "cost": 80,
+     "win": 15.3,
+     "hurt": -14.1,
+     "death": -1.8
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 11.2,
+     "hurt": -7.4,
+     "death": -1.5
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 10.8,
+     "hurt": -10.6,
+     "death": -5.5
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 15.6,
+     "hurt": -14.7,
+     "death": -5.8
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 0,
+     "hurt": -0.2,
+     "death": -2.9
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 15.6,
+     "hurt": -15,
+     "death": -5.4
+    },
+    "candy+battery": {
+     "cost": 130,
+     "win": 0.1,
+     "hurt": 0.3,
+     "death": -3.9
+    },
+    "holylight+battery": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 0.3,
+     "death": -3.4
+    },
+    "battery": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "wine+battery": {
+     "cost": 190,
+     "win": -0.7,
+     "hurt": 5.2,
+     "death": -3.7
+    }
+   }
+  },
+  "crypt:T2:strong": {
+   "samples": 60,
+   "bags": {
+    "candy": {
+     "cost": 35,
+     "win": 9.8,
+     "hurt": -9.4,
+     "death": -0.4
+    },
+    "wine": {
+     "cost": 95,
+     "win": 6.6,
+     "hurt": -6.9,
+     "death": -0.4
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 13.2,
+     "hurt": -14.3,
+     "death": -0.5
+    },
+    "energy": {
+     "cost": 80,
+     "win": 22.6,
+     "hurt": -15,
+     "death": -0.5
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 11.1,
+     "hurt": -5.1,
+     "death": -0.3
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 26.8,
+     "hurt": -21.4,
+     "death": -0.5
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 30.3,
+     "hurt": -23,
+     "death": -0.5
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 12.4,
+     "hurt": -13.4,
+     "death": -0.5
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 29.8,
+     "hurt": -22.4,
+     "death": -0.5
+    },
+    "candy+battery": {
+     "cost": 130,
+     "win": 13.9,
+     "hurt": -14.8,
+     "death": -0.5
+    },
+    "holylight+battery": {
+     "cost": 170,
+     "win": 12.7,
+     "hurt": -13.8,
+     "death": -0.5
+    },
+    "battery": {
+     "cost": 95,
+     "win": 9.1,
+     "hurt": -9.3,
+     "death": -0.5
+    },
+    "wine+battery": {
+     "cost": 190,
+     "win": 10.4,
+     "hurt": -12.4,
+     "death": -0.5
+    }
+   }
+  },
+  "crypt:T2:weak": {
+   "samples": 60,
+   "bags": {
+    "candy": {
+     "cost": 35,
+     "win": 0.3,
+     "hurt": 2.1,
+     "death": -3.3
+    },
+    "wine": {
+     "cost": 95,
+     "win": -0.1,
+     "hurt": 4.2,
+     "death": -3.9
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 0.4,
+     "death": -5.7
+    },
+    "energy": {
+     "cost": 80,
+     "win": 3.9,
+     "hurt": -5.2,
+     "death": -4.9
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 1.9,
+     "hurt": 0.3,
+     "death": -2.1
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 3.6,
+     "hurt": -7.7,
+     "death": -6.9
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 4.2,
+     "hurt": -9.5,
+     "death": -8.3
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 1.9,
+     "death": -4.8
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 4.2,
+     "hurt": -8.7,
+     "death": -7.3
+    },
+    "candy+battery": {
+     "cost": 130,
+     "win": 0.3,
+     "hurt": 0.7,
+     "death": -6.1
+    },
+    "holylight+battery": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 1.4,
+     "death": -5.8
+    },
+    "battery": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 3.2,
+     "death": -4.3
+    },
+    "wine+battery": {
+     "cost": 190,
+     "win": -0.1,
+     "hurt": 2.3,
+     "death": -6.6
+    }
+   }
+  },
+  "crypt:T3:strong": {
+   "samples": 60,
+   "bags": {
+    "candy": {
+     "cost": 35,
+     "win": 10.8,
+     "hurt": -8.6,
+     "death": -1.6
+    },
+    "wine": {
+     "cost": 95,
+     "win": 10.1,
+     "hurt": -8.1,
+     "death": -1.8
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 21.1,
+     "hurt": -20.4,
+     "death": -2
+    },
+    "energy": {
+     "cost": 80,
+     "win": 16.7,
+     "hurt": -11.9,
+     "death": -1.3
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 6.2,
+     "hurt": -3,
+     "death": -0.2
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 29.3,
+     "hurt": -24.9,
+     "death": -1.9
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 33.1,
+     "hurt": -28.2,
+     "death": -2
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 17.7,
+     "hurt": -16.4,
+     "death": -1.9
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 31.9,
+     "hurt": -26.8,
+     "death": -2
+    },
+    "candy+battery": {
+     "cost": 130,
+     "win": 22.4,
+     "hurt": -21.1,
+     "death": -2
+    },
+    "holylight+battery": {
+     "cost": 170,
+     "win": 20.7,
+     "hurt": -19.9,
+     "death": -1.9
+    },
+    "battery": {
+     "cost": 95,
+     "win": 14.1,
+     "hurt": -12.7,
+     "death": -1.8
+    },
+    "wine+battery": {
+     "cost": 190,
+     "win": 19.4,
+     "hurt": -19,
+     "death": -2
+    }
+   }
+  },
+  "crypt:T3:weak": {
+   "samples": 60,
+   "bags": {
+    "candy": {
+     "cost": 35,
+     "win": 0.3,
+     "hurt": 1.5,
+     "death": -2.8
+    },
+    "wine": {
+     "cost": 95,
+     "win": 0.1,
+     "hurt": 3.2,
+     "death": -3.6
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 0.1,
+     "hurt": 1.5,
+     "death": -5.2
+    },
+    "energy": {
+     "cost": 80,
+     "win": 1.9,
+     "hurt": -5.4,
+     "death": -4.1
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 0.7,
+     "hurt": 1.1,
+     "death": -1.8
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 1.8,
+     "hurt": -6.3,
+     "death": -6.2
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 2.6,
+     "hurt": -9.8,
+     "death": -7.6
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 0.1,
+     "hurt": 2.4,
+     "death": -4.1
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 2.6,
+     "hurt": -7.2,
+     "death": -6.7
+    },
+    "candy+battery": {
+     "cost": 130,
+     "win": 0.4,
+     "hurt": 2.2,
+     "death": -6.1
+    },
+    "holylight+battery": {
+     "cost": 170,
+     "win": 0.1,
+     "hurt": 2.6,
+     "death": -5.8
+    },
+    "battery": {
+     "cost": 95,
+     "win": 0.1,
+     "hurt": 3.2,
+     "death": -4.2
+    },
+    "wine+battery": {
+     "cost": 190,
+     "win": 0.1,
+     "hurt": 0.9,
+     "death": -6.3
+    }
+   }
+  },
+  "snow:T1:strong": {
+   "samples": 60,
+   "bags": {
+    "ramen": {
+     "cost": 45,
+     "win": 3.3,
+     "hurt": -3.3,
+     "death": -1.2
+    },
+    "dragonramen": {
+     "cost": 95,
+     "win": 17.6,
+     "hurt": -11.4,
+     "death": -1.2
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 2.4,
+     "hurt": -3.2,
+     "death": -1.2
+    },
+    "energy": {
+     "cost": 80,
+     "win": 29.4,
+     "hurt": -14.9,
+     "death": -1.1
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 24.8,
+     "hurt": -12.6,
+     "death": -1.1
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 42.4,
+     "hurt": -23.6,
+     "death": -1.2
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 35.1,
+     "hurt": -20.9,
+     "death": -1.2
+    },
+    "hood": {
+     "cost": 75,
+     "win": 2.4,
+     "hurt": -3.2,
+     "death": -1.1
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 35,
+     "hurt": -20.8,
+     "death": -1.2
+    },
+    "ramen+snowgoggles": {
+     "cost": 140,
+     "win": 3.3,
+     "hurt": -3.3,
+     "death": -1.2
+    },
+    "hood+snowgoggles": {
+     "cost": 170,
+     "win": 2.4,
+     "hurt": -3.1,
+     "death": -1.2
+    },
+    "snowgoggles": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "dragonramen+snowgoggles": {
+     "cost": 190,
+     "win": 17.6,
+     "hurt": -11.4,
+     "death": -1.2
+    }
+   }
+  },
+  "snow:T1:weak": {
+   "samples": 60,
+   "bags": {
+    "ramen": {
+     "cost": 45,
+     "win": 0.2,
+     "hurt": 0.4,
+     "death": -5.2
+    },
+    "dragonramen": {
+     "cost": 95,
+     "win": 3.6,
+     "hurt": -1.2,
+     "death": -6.6
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 1,
+     "death": -5.6
+    },
+    "energy": {
+     "cost": 80,
+     "win": 11.1,
+     "hurt": -10.2,
+     "death": -3.1
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 8.2,
+     "hurt": -4.6,
+     "death": -2.3
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 21.8,
+     "hurt": -17.1,
+     "death": -8.8
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 11.7,
+     "hurt": -11,
+     "death": -8.2
+    },
+    "hood": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 0.6,
+     "death": -5.1
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 11.7,
+     "hurt": -11.2,
+     "death": -7.8
+    },
+    "ramen+snowgoggles": {
+     "cost": 140,
+     "win": 0.2,
+     "hurt": 0.9,
+     "death": -5.7
+    },
+    "hood+snowgoggles": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 1.2,
+     "death": -5.7
+    },
+    "snowgoggles": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0,
+     "death": 0
+    },
+    "dragonramen+snowgoggles": {
+     "cost": 190,
+     "win": 3.6,
+     "hurt": -0.8,
+     "death": -7.1
+    }
+   }
+  },
+  "snow:T2:strong": {
+   "samples": 60,
+   "bags": {
+    "ramen": {
+     "cost": 45,
+     "win": 10.2,
+     "hurt": -9.4,
+     "death": -0.8
+    },
+    "dragonramen": {
+     "cost": 95,
+     "win": 19.9,
+     "hurt": -16.2,
+     "death": -1.1
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 13,
+     "hurt": -14.4,
+     "death": -1.1
+    },
+    "energy": {
+     "cost": 80,
+     "win": 16.5,
+     "hurt": -8.1,
+     "death": -0.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 11.8,
+     "hurt": -5.3,
+     "death": -0.4
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 34.7,
+     "hurt": -22.7,
+     "death": -1.1
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 33.1,
+     "hurt": -24.7,
+     "death": -1.1
+    },
+    "hood": {
+     "cost": 75,
+     "win": 12.4,
+     "hurt": -13.6,
+     "death": -0.9
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 31.9,
+     "hurt": -23.3,
+     "death": -1
+    },
+    "ramen+snowgoggles": {
+     "cost": 140,
+     "win": 14.2,
+     "hurt": -14.8,
+     "death": -0.9
+    },
+    "hood+snowgoggles": {
+     "cost": 170,
+     "win": 12.8,
+     "hurt": -14.1,
+     "death": -0.9
+    },
+    "snowgoggles": {
+     "cost": 95,
+     "win": 8.5,
+     "hurt": -8.8,
+     "death": -0.7
+    },
+    "dragonramen+snowgoggles": {
+     "cost": 190,
+     "win": 23,
+     "hurt": -19.9,
+     "death": -1.1
+    }
+   }
+  },
+  "snow:T2:weak": {
+   "samples": 60,
+   "bags": {
+    "ramen": {
+     "cost": 45,
+     "win": 0.4,
+     "hurt": 2.2,
+     "death": -3.6
+    },
+    "dragonramen": {
+     "cost": 95,
+     "win": 1.1,
+     "hurt": 1.8,
+     "death": -5
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 0,
+     "hurt": -0.4,
+     "death": -5.6
+    },
+    "energy": {
+     "cost": 80,
+     "win": 2.2,
+     "hurt": -5.2,
+     "death": -2.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 1.5,
+     "hurt": 0.2,
+     "death": -1.7
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 6.8,
+     "hurt": -8.2,
+     "death": -6.4
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 2.9,
+     "hurt": -9.2,
+     "death": -7.3
+    },
+    "hood": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 1.2,
+     "death": -4.9
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 2.9,
+     "hurt": -7.3,
+     "death": -6.2
+    },
+    "ramen+snowgoggles": {
+     "cost": 140,
+     "win": 0.4,
+     "hurt": -1.1,
+     "death": -5.6
+    },
+    "hood+snowgoggles": {
+     "cost": 170,
+     "win": 0,
+     "hurt": -0.2,
+     "death": -5.5
+    },
+    "snowgoggles": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 2.9,
+     "death": -4.1
+    },
+    "dragonramen+snowgoggles": {
+     "cost": 190,
+     "win": 1.1,
+     "hurt": -0.4,
+     "death": -7.3
+    }
+   }
+  },
+  "snow:T3:strong": {
+   "samples": 60,
+   "bags": {
+    "ramen": {
+     "cost": 45,
+     "win": 10.1,
+     "hurt": -8.4,
+     "death": -1.7
+    },
+    "dragonramen": {
+     "cost": 95,
+     "win": 20.5,
+     "hurt": -16.9,
+     "death": -2
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 22.1,
+     "hurt": -22.5,
+     "death": -2
+    },
+    "energy": {
+     "cost": 80,
+     "win": 9.8,
+     "hurt": -5.7,
+     "death": -0.1
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 6.5,
+     "hurt": -3.5,
+     "death": 0
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 32.7,
+     "hurt": -23.4,
+     "death": -2.1
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 36.6,
+     "hurt": -31.2,
+     "death": -2.1
+    },
+    "hood": {
+     "cost": 75,
+     "win": 20.3,
+     "hurt": -18.9,
+     "death": -2
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 33.1,
+     "hurt": -27,
+     "death": -2.1
+    },
+    "ramen+snowgoggles": {
+     "cost": 140,
+     "win": 21.7,
+     "hurt": -21.8,
+     "death": -2
+    },
+    "hood+snowgoggles": {
+     "cost": 170,
+     "win": 21.5,
+     "hurt": -21.5,
+     "death": -2
+    },
+    "snowgoggles": {
+     "cost": 95,
+     "win": 15.9,
+     "hurt": -14.2,
+     "death": -1.9
+    },
+    "dragonramen+snowgoggles": {
+     "cost": 190,
+     "win": 28.8,
+     "hurt": -26.3,
+     "death": -2
+    }
+   }
+  },
+  "snow:T3:weak": {
+   "samples": 60,
+   "bags": {
+    "ramen": {
+     "cost": 45,
+     "win": 0,
+     "hurt": 1.7,
+     "death": -2.8
+    },
+    "dragonramen": {
+     "cost": 95,
+     "win": 0.3,
+     "hurt": 3.6,
+     "death": -6
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 0,
+     "hurt": 1.3,
+     "death": -6.3
+    },
+    "energy": {
+     "cost": 80,
+     "win": 0.7,
+     "hurt": -4.7,
+     "death": -1.9
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 0.5,
+     "hurt": 0.8,
+     "death": -1.2
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 2.7,
+     "hurt": -4.2,
+     "death": -7.5
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 1.3,
+     "hurt": -6.1,
+     "death": -8.1
+    },
+    "hood": {
+     "cost": 75,
+     "win": 0,
+     "hurt": 1.6,
+     "death": -4.2
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 1.2,
+     "hurt": -4.4,
+     "death": -7.1
+    },
+    "ramen+snowgoggles": {
+     "cost": 140,
+     "win": 0,
+     "hurt": 1.9,
+     "death": -6.9
+    },
+    "hood+snowgoggles": {
+     "cost": 170,
+     "win": 0,
+     "hurt": 1.5,
+     "death": -6.3
+    },
+    "snowgoggles": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 2.6,
+     "death": -3.8
+    },
+    "dragonramen+snowgoggles": {
+     "cost": 190,
+     "win": 0.3,
+     "hurt": -0.4,
+     "death": -8.1
+    }
+   }
+  },
+  "golem:T1:strong": {
+   "samples": 60,
+   "bags": {
+    "ice": {
+     "cost": 30,
+     "win": 1.6,
+     "hurt": -2.5,
+     "death": -0.7
+    },
+    "ion": {
+     "cost": 95,
+     "win": 1.6,
+     "hurt": -2.5,
+     "death": -0.7
+    },
+    "magmagear": {
+     "cost": 145,
+     "win": 34.6,
+     "hurt": -20,
+     "death": -0.7
+    },
+    "energy": {
+     "cost": 80,
+     "win": 30,
+     "hurt": -16.8,
+     "death": -0.7
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 25.2,
+     "hurt": -14,
+     "death": -0.7
+    },
+    "ion+energy": {
+     "cost": 175,
+     "win": 34.2,
+     "hurt": -20.9,
+     "death": -0.7
+    },
+    "magmagear+energy": {
+     "cost": 225,
+     "win": 40.8,
+     "hurt": -23.6,
+     "death": -0.7
+    }
+   }
+  },
+  "golem:T1:weak": {
+   "samples": 60,
+   "bags": {
+    "ice": {
+     "cost": 30,
+     "win": 0,
+     "hurt": 0.2,
+     "death": -4.2
+    },
+    "ion": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0.6,
+     "death": -4.6
+    },
+    "magmagear": {
+     "cost": 145,
+     "win": 9.9,
+     "hurt": -5.7,
+     "death": -6.9
+    },
+    "energy": {
+     "cost": 80,
+     "win": 9.7,
+     "hurt": -10.3,
+     "death": -2.2
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 7.1,
+     "hurt": -3.9,
+     "death": -1.8
+    },
+    "ion+energy": {
+     "cost": 175,
+     "win": 9.7,
+     "hurt": -11.6,
+     "death": -6.8
+    },
+    "magmagear+energy": {
+     "cost": 225,
+     "win": 34.8,
+     "hurt": -26.1,
+     "death": -8.3
+    }
+   }
+  },
+  "golem:T2:strong": {
+   "samples": 60,
+   "bags": {
+    "ice": {
+     "cost": 30,
+     "win": 4.2,
+     "hurt": -5.6,
+     "death": -0.5
+    },
+    "ion": {
+     "cost": 95,
+     "win": 4.4,
+     "hurt": -5.9,
+     "death": -0.6
+    },
+    "magmagear": {
+     "cost": 145,
+     "win": 21.2,
+     "hurt": -15.7,
+     "death": -0.6
+    },
+    "energy": {
+     "cost": 80,
+     "win": 15.8,
+     "hurt": -9.4,
+     "death": -0.5
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 11.4,
+     "hurt": -6,
+     "death": -0.5
+    },
+    "ion+energy": {
+     "cost": 175,
+     "win": 22.4,
+     "hurt": -17,
+     "death": -0.6
+    },
+    "magmagear+energy": {
+     "cost": 225,
+     "win": 37.1,
+     "hurt": -22.3,
+     "death": -0.6
+    }
+   }
+  },
+  "golem:T2:weak": {
+   "samples": 60,
+   "bags": {
+    "ice": {
+     "cost": 30,
+     "win": 0,
+     "hurt": 0.3,
+     "death": -5.2
+    },
+    "ion": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 0.1,
+     "death": -6.3
+    },
+    "magmagear": {
+     "cost": 145,
+     "win": 1.9,
+     "hurt": -0.7,
+     "death": -6.9
+    },
+    "energy": {
+     "cost": 80,
+     "win": 2.2,
+     "hurt": -5.7,
+     "death": -2.4
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 1.4,
+     "hurt": 0.3,
+     "death": -1.6
+    },
+    "ion+energy": {
+     "cost": 175,
+     "win": 2.3,
+     "hurt": -8.6,
+     "death": -7.4
+    },
+    "magmagear+energy": {
+     "cost": 225,
+     "win": 6.6,
+     "hurt": -10.5,
+     "death": -8.4
+    }
+   }
+  },
+  "golem:T3:strong": {
+   "samples": 48,
+   "bags": {
+    "ice": {
+     "cost": 30,
+     "win": 8.2,
+     "hurt": -9,
+     "death": -0.7
+    },
+    "ion": {
+     "cost": 95,
+     "win": 9,
+     "hurt": -11.5,
+     "death": -0.8
+    },
+    "magmagear": {
+     "cost": 145,
+     "win": 23.2,
+     "hurt": -18.1,
+     "death": -0.8
+    },
+    "energy": {
+     "cost": 80,
+     "win": 14.5,
+     "hurt": -9.7,
+     "death": -0.6
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 9.7,
+     "hurt": -4.3,
+     "death": -0.5
+    },
+    "ion+energy": {
+     "cost": 175,
+     "win": 25.8,
+     "hurt": -22.5,
+     "death": -0.8
+    },
+    "magmagear+energy": {
+     "cost": 225,
+     "win": 38.4,
+     "hurt": -25.8,
+     "death": -0.8
+    }
+   }
+  },
+  "golem:T3:weak": {
+   "samples": 60,
+   "bags": {
+    "ice": {
+     "cost": 30,
+     "win": 0,
+     "hurt": 3.7,
+     "death": -5.4
+    },
+    "ion": {
+     "cost": 95,
+     "win": 0,
+     "hurt": 1.9,
+     "death": -8.1
+    },
+    "magmagear": {
+     "cost": 145,
+     "win": 0.6,
+     "hurt": 3.2,
+     "death": -7.7
+    },
+    "energy": {
+     "cost": 80,
+     "win": 0.6,
+     "hurt": -4.7,
+     "death": -2.3
+    },
+    "lowpotion": {
+     "cost": 70,
+     "win": 0.4,
+     "hurt": 0.8,
+     "death": -1.2
+    },
+    "ion+energy": {
+     "cost": 175,
+     "win": 0.7,
+     "hurt": -6.4,
+     "death": -9.1
+    },
+    "magmagear+energy": {
+     "cost": 225,
+     "win": 1.8,
+     "hurt": -5.2,
+     "death": -9.4
+    }
+   }
+  }
+ }
+}

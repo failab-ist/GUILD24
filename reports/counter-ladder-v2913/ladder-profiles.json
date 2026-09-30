@@ -1,0 +1,1086 @@
+{
+ "runs": 150,
+ "per": 80,
+ "k": 30,
+ "share": {
+  "T1": {
+   "departures": 15891,
+   "strong": 21.7,
+   "mid": 14.5,
+   "weak": 63.8
+  },
+  "T2": {
+   "departures": 7563,
+   "strong": 15.4,
+   "mid": 7.5,
+   "weak": 77.1
+  },
+  "T3": {
+   "departures": 2471,
+   "strong": 17.4,
+   "mid": 6.3,
+   "weak": 76.3
+  }
+ },
+ "gaps": {
+  "T1:survival:strong": {
+   "n": 2307,
+   "p25": 4.4,
+   "p50": 6.8,
+   "p75": 8.5,
+   "p90": 9.5
+  },
+  "T1:survival:weak": {
+   "n": 5679,
+   "p25": 7.2,
+   "p50": 8.9,
+   "p75": 10.4,
+   "p90": 11.9
+  },
+  "T1:mobility:strong": {
+   "n": 0,
+   "p25": null,
+   "p50": null,
+   "p75": null,
+   "p90": null
+  },
+  "T1:mobility:weak": {
+   "n": 0,
+   "p25": null,
+   "p50": null,
+   "p75": null,
+   "p90": null
+  },
+  "T1:spirit:strong": {
+   "n": 1162,
+   "p25": 1,
+   "p50": 6.1,
+   "p75": 8.3,
+   "p90": 9.2
+  },
+  "T1:spirit:weak": {
+   "n": 4527,
+   "p25": 4.8,
+   "p50": 8.8,
+   "p75": 10.9,
+   "p90": 12.6
+  },
+  "T2:survival:strong": {
+   "n": 783,
+   "p25": 8.5,
+   "p50": 12.1,
+   "p75": 14.7,
+   "p90": 16.1
+  },
+  "T2:survival:weak": {
+   "n": 3370,
+   "p25": 13.7,
+   "p50": 15.7,
+   "p75": 17.6,
+   "p90": 19.4
+  },
+  "T2:mobility:strong": {
+   "n": 772,
+   "p25": 7.7,
+   "p50": 12.5,
+   "p75": 14.1,
+   "p90": 15.6
+  },
+  "T2:mobility:weak": {
+   "n": 3236,
+   "p25": 14.4,
+   "p50": 17,
+   "p75": 18.7,
+   "p90": 20.4
+  },
+  "T2:spirit:strong": {
+   "n": 646,
+   "p25": 3.7,
+   "p50": 10.4,
+   "p75": 14.9,
+   "p90": 16.5
+  },
+  "T2:spirit:weak": {
+   "n": 3736,
+   "p25": 12.6,
+   "p50": 17,
+   "p75": 19.7,
+   "p90": 22.1
+  },
+  "T3:survival:strong": {
+   "n": 296,
+   "p25": 13,
+   "p50": 16.7,
+   "p75": 20.5,
+   "p90": 22.1
+  },
+  "T3:survival:weak": {
+   "n": 1089,
+   "p25": 20.3,
+   "p50": 22.6,
+   "p75": 25,
+   "p90": 26.6
+  },
+  "T3:mobility:strong": {
+   "n": 305,
+   "p25": 14,
+   "p50": 18.1,
+   "p75": 20.1,
+   "p90": 21.7
+  },
+  "T3:mobility:weak": {
+   "n": 1093,
+   "p25": 21.5,
+   "p50": 24.8,
+   "p75": 26.6,
+   "p90": 28.6
+  },
+  "T3:spirit:strong": {
+   "n": 216,
+   "p25": 8.5,
+   "p50": 16.9,
+   "p75": 21.6,
+   "p90": 23.5
+  },
+  "T3:spirit:weak": {
+   "n": 1128,
+   "p25": 20,
+   "p50": 25.1,
+   "p75": 28.5,
+   "p90": 30.7
+  }
+ },
+ "res": {},
+ "prof": {
+  "T2": {
+   "both": 84.5,
+   "first": 3,
+   "second": 1,
+   "partial": 11.5,
+   "none": 0.1
+  },
+  "T3": {
+   "both": 94.8,
+   "first": 1.7,
+   "second": 0.4,
+   "partial": 3.1,
+   "none": 0
+  }
+ },
+ "profJob": {
+  "T2:priest": {
+   "both": 82.4,
+   "first": 1.3,
+   "second": 2.4,
+   "partial": 13.6,
+   "none": 0.1
+  },
+  "T2:mage": {
+   "both": 88.6,
+   "first": 1.1,
+   "second": 1.1,
+   "partial": 9.1,
+   "none": 0
+  },
+  "T2:warrior": {
+   "both": 95.1,
+   "first": 0,
+   "second": 0.4,
+   "partial": 4.5,
+   "none": 0
+  },
+  "T2:archer": {
+   "both": 70.7,
+   "first": 9.8,
+   "second": 0,
+   "partial": 19.4,
+   "none": 0.1
+  },
+  "T3:mage": {
+   "both": 96.1,
+   "first": 0.6,
+   "second": 0.6,
+   "partial": 2.6,
+   "none": 0
+  },
+  "T3:archer": {
+   "both": 87.4,
+   "first": 6.6,
+   "second": 0,
+   "partial": 6.1,
+   "none": 0
+  },
+  "T3:warrior": {
+   "both": 99,
+   "first": 0,
+   "second": 0,
+   "partial": 1,
+   "none": 0
+  },
+  "T3:priest": {
+   "both": 95.4,
+   "first": 0.4,
+   "second": 0.9,
+   "partial": 3.3,
+   "none": 0
+  }
+ },
+ "profRes": {
+  "spider:T2:first-open(poison)": {
+   "samples": 43,
+   "strongShare": 84,
+   "bags": {
+    "antidote": {
+     "cost": 95,
+     "win": 5.3,
+     "hurt": -7,
+     "death": -1
+    },
+    "webgloves": {
+     "cost": 75,
+     "win": 5.3,
+     "hurt": -6.8,
+     "death": -0.9
+    },
+    "spiderkit": {
+     "cost": 135,
+     "win": 5.3,
+     "hurt": -6.8,
+     "death": -1.2
+    },
+    "water": {
+     "cost": 40,
+     "win": 12.1,
+     "hurt": -8.7,
+     "death": -0.7
+    },
+    "antidote+energy": {
+     "cost": 175,
+     "win": 17.5,
+     "hurt": -17.8,
+     "death": -1.5
+    },
+    "spiderkit+energy": {
+     "cost": 215,
+     "win": 17.5,
+     "hurt": -17.8,
+     "death": -1.5
+    },
+    "webgloves+energy": {
+     "cost": 155,
+     "win": 17.4,
+     "hurt": -17.1,
+     "death": -1.3
+    },
+    "antidote+coffee": {
+     "cost": 135,
+     "win": 13.6,
+     "hurt": -15,
+     "death": -1.5
+    },
+    "mask": {
+     "cost": 45,
+     "win": 5.3,
+     "hurt": -6.9,
+     "death": -0.7
+    }
+   }
+  },
+  "slime:T2:first-open(corrosion)": {
+   "samples": 59,
+   "strongShare": 93,
+   "bags": {
+    "coating": {
+     "cost": 95,
+     "win": 5.8,
+     "hurt": -7.2,
+     "death": -0.6
+    },
+    "cloak": {
+     "cost": 75,
+     "win": 5.6,
+     "hurt": -7.1,
+     "death": -0.5
+    },
+    "slimesuit": {
+     "cost": 135,
+     "win": 5.8,
+     "hurt": -7.2,
+     "death": -0.6
+    },
+    "water": {
+     "cost": 40,
+     "win": 15.5,
+     "hurt": -10,
+     "death": -0.4
+    },
+    "coating+energy": {
+     "cost": 175,
+     "win": 21.8,
+     "hurt": -16.7,
+     "death": -0.8
+    },
+    "slimesuit+energy": {
+     "cost": 215,
+     "win": 21.8,
+     "hurt": -16.6,
+     "death": -0.8
+    },
+    "cloak+energy": {
+     "cost": 155,
+     "win": 21.2,
+     "hurt": -15.4,
+     "death": -0.8
+    },
+    "coating+coffee": {
+     "cost": 135,
+     "win": 17.7,
+     "hurt": -15.1,
+     "death": -0.7
+    },
+    "soda": {
+     "cost": 35,
+     "win": 5.6,
+     "hurt": -7.1,
+     "death": -0.4
+    }
+   }
+  },
+  "crypt:T2:first-open(fear)": {
+   "samples": 38,
+   "strongShare": 87,
+   "bags": {
+    "wine": {
+     "cost": 95,
+     "win": 2.5,
+     "hurt": -6.4,
+     "death": -0.3
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 6.3,
+     "hurt": -9,
+     "death": -0.4
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 6.7,
+     "hurt": -9.3,
+     "death": -0.4
+    },
+    "herbtea": {
+     "cost": 40,
+     "win": 17.7,
+     "hurt": -13.4,
+     "death": -0.3
+    },
+    "wine+energy": {
+     "cost": 175,
+     "win": 21.7,
+     "hurt": -18.8,
+     "death": -0.5
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 24.2,
+     "hurt": -19.9,
+     "death": -0.5
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 23.2,
+     "hurt": -18.3,
+     "death": -0.5
+    },
+    "wine+coffee": {
+     "cost": 135,
+     "win": 16.5,
+     "hurt": -16.8,
+     "death": -0.4
+    },
+    "candy": {
+     "cost": 35,
+     "win": 6.9,
+     "hurt": -9.6,
+     "death": -0.4
+    }
+   }
+  },
+  "crypt:T2:second-open(dark)": {
+   "samples": 49,
+   "strongShare": 80,
+   "bags": {
+    "battery": {
+     "cost": 95,
+     "win": 4,
+     "hurt": -5,
+     "death": -0.6
+    },
+    "holylight": {
+     "cost": 75,
+     "win": 4,
+     "hurt": -5,
+     "death": -0.5
+    },
+    "cryptlantern": {
+     "cost": 135,
+     "win": 4,
+     "hurt": -4.9,
+     "death": -0.7
+    },
+    "coffee": {
+     "cost": 40,
+     "win": 10.3,
+     "hurt": -9.3,
+     "death": -0.6
+    },
+    "battery+energy": {
+     "cost": 175,
+     "win": 13.7,
+     "hurt": -12.1,
+     "death": -1.1
+    },
+    "cryptlantern+energy": {
+     "cost": 215,
+     "win": 13.7,
+     "hurt": -12.1,
+     "death": -1.1
+    },
+    "holylight+energy": {
+     "cost": 155,
+     "win": 13.7,
+     "hurt": -12.1,
+     "death": -1.1
+    },
+    "battery+herbtea": {
+     "cost": 135,
+     "win": 11.2,
+     "hurt": -9.3,
+     "death": -1.1
+    }
+   }
+  },
+  "snow:T2:first-open(cold)": {
+   "samples": 36,
+   "strongShare": 83,
+   "bags": {
+    "dragonramen": {
+     "cost": 95,
+     "win": 12.4,
+     "hurt": -10.2,
+     "death": -0.9
+    },
+    "hood": {
+     "cost": 75,
+     "win": 6.5,
+     "hurt": -7.1,
+     "death": -0.7
+    },
+    "snowvisor": {
+     "cost": 135,
+     "win": 6.9,
+     "hurt": -7.6,
+     "death": -0.7
+    },
+    "water": {
+     "cost": 40,
+     "win": 13.9,
+     "hurt": -9.4,
+     "death": -0.6
+    },
+    "dragonramen+energy": {
+     "cost": 175,
+     "win": 24.2,
+     "hurt": -15.8,
+     "death": -1.1
+    },
+    "snowvisor+energy": {
+     "cost": 215,
+     "win": 19.4,
+     "hurt": -13.7,
+     "death": -1.1
+    },
+    "hood+energy": {
+     "cost": 155,
+     "win": 18.9,
+     "hurt": -13.1,
+     "death": -1.1
+    },
+    "dragonramen+herbtea": {
+     "cost": 135,
+     "win": 20.5,
+     "hurt": -14,
+     "death": -1.1
+    },
+    "ramen": {
+     "cost": 45,
+     "win": 6.4,
+     "hurt": -7.1,
+     "death": -0.6
+    }
+   }
+  }
+ },
+ "cover": {
+  "spider:T2:water covers poison, open bind": {
+   "samples": 80,
+   "bags": {
+    "water": {
+     "cost": 40,
+     "win": 5.6,
+     "hurt": -2.3,
+     "death": -2.3
+    },
+    "water+rope": {
+     "cost": 135,
+     "win": 7.5,
+     "hurt": -4.8,
+     "death": -4.6
+    },
+    "water+spiderkit": {
+     "cost": 175,
+     "win": 7.9,
+     "hurt": -5.8,
+     "death": -6.5
+    },
+    "water+webgloves": {
+     "cost": 115,
+     "win": 7.9,
+     "hurt": -6.1,
+     "death": -5.3
+    },
+    "rope+webgloves": {
+     "cost": 170,
+     "win": 2.2,
+     "hurt": -3.1,
+     "death": -4.4
+    }
+   }
+  },
+  "spider:T2:coffee covers bind, open poison": {
+   "samples": 80,
+   "bags": {
+    "coffee": {
+     "cost": 40,
+     "win": 5.9,
+     "hurt": -5.9,
+     "death": -2.8
+    },
+    "coffee+antidote": {
+     "cost": 135,
+     "win": 7.8,
+     "hurt": -9.7,
+     "death": -5.1
+    },
+    "coffee+spiderkit": {
+     "cost": 175,
+     "win": 7.9,
+     "hurt": -10.5,
+     "death": -6.3
+    },
+    "coffee+webgloves": {
+     "cost": 115,
+     "win": 7.9,
+     "hurt": -10.7,
+     "death": -5.3
+    },
+    "antidote+webgloves": {
+     "cost": 170,
+     "win": 2.2,
+     "hurt": -3,
+     "death": -4.7
+    }
+   }
+  },
+  "slime:T2:water covers corrosion, open mire": {
+   "samples": 80,
+   "bags": {
+    "water": {
+     "cost": 40,
+     "win": 6,
+     "hurt": -2,
+     "death": -2.8
+    },
+    "water+boots": {
+     "cost": 135,
+     "win": 8.5,
+     "hurt": -5.2,
+     "death": -5.3
+    },
+    "water+slimesuit": {
+     "cost": 175,
+     "win": 8.7,
+     "hurt": -5.9,
+     "death": -6.9
+    },
+    "water+cloak": {
+     "cost": 115,
+     "win": 8.7,
+     "hurt": -6.3,
+     "death": -5.9
+    },
+    "boots+cloak": {
+     "cost": 170,
+     "win": 2.5,
+     "hurt": -2.9,
+     "death": -5.1
+    }
+   }
+  },
+  "slime:T2:coffee covers mire, open corrosion": {
+   "samples": 80,
+   "bags": {
+    "coffee": {
+     "cost": 40,
+     "win": 5.9,
+     "hurt": -6.3,
+     "death": -3.2
+    },
+    "coffee+coating": {
+     "cost": 135,
+     "win": 8.3,
+     "hurt": -10.4,
+     "death": -5.6
+    },
+    "coffee+slimesuit": {
+     "cost": 175,
+     "win": 8.3,
+     "hurt": -11.2,
+     "death": -7.1
+    },
+    "coffee+cloak": {
+     "cost": 115,
+     "win": 8.3,
+     "hurt": -11.4,
+     "death": -5.9
+    },
+    "coating+cloak": {
+     "cost": 170,
+     "win": 2.6,
+     "hurt": -3,
+     "death": -5
+    }
+   }
+  },
+  "crypt:T2:herbtea covers fear, open dark": {
+   "samples": 80,
+   "bags": {
+    "herbtea": {
+     "cost": 40,
+     "win": 3,
+     "hurt": 1.3,
+     "death": -3.5
+    },
+    "herbtea+battery": {
+     "cost": 135,
+     "win": 3.9,
+     "hurt": -1,
+     "death": -6.3
+    },
+    "herbtea+cryptlantern": {
+     "cost": 175,
+     "win": 3.9,
+     "hurt": -2,
+     "death": -7.3
+    },
+    "herbtea+holylight": {
+     "cost": 115,
+     "win": 3.8,
+     "hurt": -1.5,
+     "death": -6.5
+    },
+    "battery+holylight": {
+     "cost": 170,
+     "win": 1.1,
+     "hurt": -0.4,
+     "death": -5.7
+    }
+   }
+  },
+  "crypt:T2:coffee covers dark, open fear": {
+   "samples": 80,
+   "bags": {
+    "coffee": {
+     "cost": 40,
+     "win": 3.2,
+     "hurt": -3.5,
+     "death": -3.5
+    },
+    "coffee+wine": {
+     "cost": 135,
+     "win": 2.8,
+     "hurt": -4,
+     "death": -5.6
+    },
+    "coffee+cryptlantern": {
+     "cost": 175,
+     "win": 4.1,
+     "hurt": -6.9,
+     "death": -7.3
+    },
+    "coffee+holylight": {
+     "cost": 115,
+     "win": 4.1,
+     "hurt": -6.4,
+     "death": -6.5
+    },
+    "wine+holylight": {
+     "cost": 170,
+     "win": 0.4,
+     "hurt": 2,
+     "death": -5.7
+    }
+   }
+  },
+  "snow:T2:water covers cold, open whiteout": {
+   "samples": 80,
+   "bags": {
+    "water": {
+     "cost": 40,
+     "win": 5.9,
+     "hurt": -2.5,
+     "death": -2.5
+    },
+    "water+snowgoggles": {
+     "cost": 135,
+     "win": 7.4,
+     "hurt": -4.3,
+     "death": -4.7
+    },
+    "water+snowvisor": {
+     "cost": 175,
+     "win": 7.6,
+     "hurt": -5.3,
+     "death": -6
+    },
+    "water+hood": {
+     "cost": 115,
+     "win": 7.6,
+     "hurt": -5.2,
+     "death": -5.3
+    },
+    "snowgoggles+hood": {
+     "cost": 170,
+     "win": 2.3,
+     "hurt": -2.4,
+     "death": -4.8
+    }
+   }
+  },
+  "snow:T2:herbtea covers whiteout, open cold": {
+   "samples": 80,
+   "bags": {
+    "herbtea": {
+     "cost": 40,
+     "win": 5.7,
+     "hurt": -1.8,
+     "death": -3.2
+    },
+    "herbtea+dragonramen": {
+     "cost": 135,
+     "win": 11.9,
+     "hurt": -7.8,
+     "death": -5.5
+    },
+    "herbtea+snowvisor": {
+     "cost": 175,
+     "win": 7,
+     "hurt": -4.8,
+     "death": -6
+    },
+    "herbtea+hood": {
+     "cost": 115,
+     "win": 6.9,
+     "hurt": -5,
+     "death": -5.3
+    },
+    "dragonramen+hood": {
+     "cost": 170,
+     "win": 6.1,
+     "hurt": -4.9,
+     "death": -5.2
+    }
+   }
+  },
+  "spider:T3:water covers poison, open bind": {
+   "samples": 80,
+   "bags": {
+    "water": {
+     "cost": 40,
+     "win": 4.9,
+     "hurt": -0.4,
+     "death": -3
+    },
+    "water+rope": {
+     "cost": 135,
+     "win": 9.6,
+     "hurt": -3.4,
+     "death": -6.1
+    },
+    "water+spiderkit": {
+     "cost": 175,
+     "win": 10.9,
+     "hurt": -7,
+     "death": -6.8
+    },
+    "water+webgloves": {
+     "cost": 115,
+     "win": 10.3,
+     "hurt": -5,
+     "death": -6.2
+    },
+    "rope+webgloves": {
+     "cost": 170,
+     "win": 5.3,
+     "hurt": -3.2,
+     "death": -5.8
+    }
+   }
+  },
+  "spider:T3:coffee covers bind, open poison": {
+   "samples": 80,
+   "bags": {
+    "coffee": {
+     "cost": 40,
+     "win": 5,
+     "hurt": -5,
+     "death": -3.4
+    },
+    "coffee+antidote": {
+     "cost": 135,
+     "win": 10,
+     "hurt": -10.7,
+     "death": -6.3
+    },
+    "coffee+spiderkit": {
+     "cost": 175,
+     "win": 10.5,
+     "hurt": -13.5,
+     "death": -6.8
+    },
+    "coffee+webgloves": {
+     "cost": 115,
+     "win": 10,
+     "hurt": -10.6,
+     "death": -6.3
+    },
+    "antidote+webgloves": {
+     "cost": 170,
+     "win": 5.4,
+     "hurt": -3.4,
+     "death": -6
+    }
+   }
+  },
+  "slime:T3:water covers corrosion, open mire": {
+   "samples": 80,
+   "bags": {
+    "water": {
+     "cost": 40,
+     "win": 3.4,
+     "hurt": 0,
+     "death": -2.4
+    },
+    "water+boots": {
+     "cost": 135,
+     "win": 7.8,
+     "hurt": -2.3,
+     "death": -5.3
+    },
+    "water+slimesuit": {
+     "cost": 175,
+     "win": 9.3,
+     "hurt": -5.7,
+     "death": -6.8
+    },
+    "water+cloak": {
+     "cost": 115,
+     "win": 9,
+     "hurt": -4.1,
+     "death": -5.7
+    },
+    "boots+cloak": {
+     "cost": 170,
+     "win": 5.4,
+     "hurt": -3.2,
+     "death": -5.4
+    }
+   }
+  },
+  "slime:T3:coffee covers mire, open corrosion": {
+   "samples": 80,
+   "bags": {
+    "coffee": {
+     "cost": 40,
+     "win": 3.6,
+     "hurt": -5,
+     "death": -2.8
+    },
+    "coffee+coating": {
+     "cost": 135,
+     "win": 8.5,
+     "hurt": -9,
+     "death": -5.6
+    },
+    "coffee+slimesuit": {
+     "cost": 175,
+     "win": 9.1,
+     "hurt": -11.7,
+     "death": -6.9
+    },
+    "coffee+cloak": {
+     "cost": 115,
+     "win": 8.8,
+     "hurt": -9.7,
+     "death": -5.8
+    },
+    "coating+cloak": {
+     "cost": 170,
+     "win": 5.5,
+     "hurt": -3,
+     "death": -5.3
+    }
+   }
+  },
+  "crypt:T3:herbtea covers fear, open dark": {
+   "samples": 80,
+   "bags": {
+    "herbtea": {
+     "cost": 40,
+     "win": 4.7,
+     "hurt": -1.4,
+     "death": -2.9
+    },
+    "herbtea+battery": {
+     "cost": 135,
+     "win": 8.6,
+     "hurt": -4.5,
+     "death": -5.5
+    },
+    "herbtea+cryptlantern": {
+     "cost": 175,
+     "win": 9,
+     "hurt": -6.8,
+     "death": -6.3
+    },
+    "herbtea+holylight": {
+     "cost": 115,
+     "win": 8.6,
+     "hurt": -5.1,
+     "death": -5.6
+    },
+    "battery+holylight": {
+     "cost": 170,
+     "win": 4.6,
+     "hurt": -2.3,
+     "death": -5
+    }
+   }
+  },
+  "crypt:T3:coffee covers dark, open fear": {
+   "samples": 80,
+   "bags": {
+    "coffee": {
+     "cost": 40,
+     "win": 4.4,
+     "hurt": -5.7,
+     "death": -2.7
+    },
+    "coffee+wine": {
+     "cost": 135,
+     "win": 7.3,
+     "hurt": -8.3,
+     "death": -5
+    },
+    "coffee+cryptlantern": {
+     "cost": 175,
+     "win": 9.1,
+     "hurt": -12.7,
+     "death": -6.2
+    },
+    "coffee+holylight": {
+     "cost": 115,
+     "win": 8.5,
+     "hurt": -9.7,
+     "death": -5.4
+    },
+    "wine+holylight": {
+     "cost": 170,
+     "win": 4,
+     "hurt": -1.5,
+     "death": -5.2
+    }
+   }
+  },
+  "snow:T3:water covers cold, open whiteout": {
+   "samples": 80,
+   "bags": {
+    "water": {
+     "cost": 40,
+     "win": 3.7,
+     "hurt": -0.5,
+     "death": -2.2
+    },
+    "water+snowgoggles": {
+     "cost": 135,
+     "win": 8.3,
+     "hurt": -3.1,
+     "death": -5.8
+    },
+    "water+snowvisor": {
+     "cost": 175,
+     "win": 9.2,
+     "hurt": -6.8,
+     "death": -6.8
+    },
+    "water+hood": {
+     "cost": 115,
+     "win": 9,
+     "hurt": -5,
+     "death": -6.1
+    },
+    "snowgoggles+hood": {
+     "cost": 170,
+     "win": 4.9,
+     "hurt": -3.5,
+     "death": -5.9
+    }
+   }
+  },
+  "snow:T3:herbtea covers whiteout, open cold": {
+   "samples": 80,
+   "bags": {
+    "herbtea": {
+     "cost": 40,
+     "win": 3.8,
+     "hurt": -0.5,
+     "death": -2.9
+    },
+    "herbtea+dragonramen": {
+     "cost": 135,
+     "win": 11.3,
+     "hurt": -6.2,
+     "death": -6.7
+    },
+    "herbtea+snowvisor": {
+     "cost": 175,
+     "win": 8.8,
+     "hurt": -6.9,
+     "death": -6.8
+    },
+    "herbtea+hood": {
+     "cost": 115,
+     "win": 8.6,
+     "hurt": -5,
+     "death": -6.1
+    },
+    "dragonramen+hood": {
+     "cost": 170,
+     "win": 7.6,
+     "hurt": -5.6,
+     "death": -6.4
+    }
+   }
+  }
+ }
+}
