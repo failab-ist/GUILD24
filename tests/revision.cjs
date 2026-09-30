@@ -576,5 +576,22 @@ test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death sett
  assert.equal(out({firstRun:true,day:2},2).o,'중상','DAY 2 too');
  assert.equal(out({firstRun:true,day:3},3).o,'사망','DAY 3 is an ordinary Day');
 });
+test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급키트, and a payday customer for 150%',()=>{
+ const setup=first=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=first;s.day=3;delete s.lessonDay3;
+  const [a,b,c,hurt]=s.npcs;for(const n of [a,b,c,hurt]){n.alive=true;n.injury=0;n.introduced=true;n.visits=2;delete n.lessonPayday;}
+  hurt.injury=1;s.queue=[a.id,b.id,c.id];const kits=s.inventory.filter(u=>u.item==='kit').length;g.firstRunLessons();return {g,s,a,b,c,hurt,kits};};
+ const t=setup(true);
+ assert.equal(t.s.queue[0],t.hurt.id,'the injured adventurer comes first');assert.equal(t.s.queue.length,3,'the Day\'s count of visitors is unchanged');
+ assert.equal(t.s.inventory.filter(u=>u.item==='kit').length,t.kits+1,'one 구급키트 joins the warehouse');
+ const pay=t.s.npcs.find(n=>n.id===t.s.lessonPayday);assert.ok(pay&&pay.id!==t.hurt.id&&pay.lessonPayday===3,'a returning visitor is the payday customer');
+ const it=DATA.items.find(i=>i.rarity===0&&i.category==='food');pay.loyalty=0;pay.traits=[];
+ const on=t.g.interest(pay,it,'overcharge').chance;t.s.firstRun=false;const off=t.g.interest(pay,it,'overcharge').chance;t.s.firstRun=true;
+ assert.ok(on<.97&&Math.abs(on-off-.20)<1e-9,'+20%p on a 150% offer, that visit');
+ assert.equal(t.g.interest(pay,it,'full').chance,(t.s.firstRun=false,t.g.interest(pay,it,'full').chance),'정가 untouched');t.s.firstRun=true;
+ t.s.cursor=t.s.queue.indexOf(pay.id);t.s.event=null;t.g.arrive();
+ assert.ok(pay.eventBudget>=200,'200G to spend this visit (the nightly-cleared channel)');assert.equal(t.s.say.text,Copy.lessonPayday,'the payday line');
+ const later=setup(false);assert.deepEqual(later.s.queue,[later.a.id,later.b.id,later.c.id],'a later Run: nothing moves');
+ assert.equal(later.s.inventory.filter(u=>u.item==='kit').length,later.kits,'and no 구급키트');
+});
 
 console.log(checks+' revision groups passed');

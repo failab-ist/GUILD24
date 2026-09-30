@@ -1,4 +1,6 @@
 (function(G){
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer - +200G to spend this visit only, +20%p on 150% */
+const LESSON={paydayBudget:200,paydayOvercharge:.20};
 /* Stage 10, approved (§O). Stage 9 measured FIRE as the hardest Family for all six Jobs and by
    a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
    Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
@@ -196,6 +198,20 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(s.day===1&&!s.lessonCounter){const h=s.dungeons[0]?.hazards?.[0],it=h&&D.items.find(i=>i.rarity===0&&!i.metaUnlock&&(i.effects[h]||0)>0);
    /* the stock id draws from a stream of its own, so the Run's stream - every later Gate, visitor and roll - is untouched */
    if(it){const main=this.rng;this.rng=new G.RNG(s.seed+':lesson');try{this.stock(it.id,1);}finally{this.rng=main;}s.lessonCounter=it.id;}}
+  /* DAY 3: an injured adventurer comes first, with a 구급키트 in the warehouse (HQ's, like the opening stock); a returning
+     customer comes on payday - an extra 200G for this visit and a readier ear for 바가지 (arrive / interest). Draws come from
+     a stream of their own; the Day's count of visitors is unchanged. */
+  if(s.day===3&&!s.lessonDay3){s.lessonDay3=true;const lr=new G.RNG(s.seed+':lesson3');
+   let inj=s.queue.map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.alive&&n.injury===1);
+   if(!inj&&s.queue.length){const cand=s.npcs.find(n=>n.alive&&n.injury===1&&n.introduced&&!s.queue.includes(n.id));
+    /* the swap takes the last returning visitor's seat - a new face the Day (or an Event) seated is never the one sent home */
+    const out=cand&&[...s.queue].reverse().map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.introduced);
+    if(out){cand.destination=out.destination;cand.claimedDestination=out.claimedDestination;cand.destinationFinal=true;
+     cand.money=Math.min(2000,Math.round(cand.money+cand.level*8+lr.int(0,80)));cand.newToday=false;s.queue[s.queue.indexOf(out.id)]=cand.id;inj=cand;}}
+   if(inj){s.queue=[inj.id,...s.queue.filter(id=>id!==inj.id)];s.lessonInjured=inj.id;
+    const main=this.rng;this.rng=lr;try{this.stock('kit',1);}finally{this.rng=main;}}
+   const pay=s.queue.map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.introduced&&n.id!==s.lessonInjured);
+   if(pay){pay.lessonPayday=s.day;s.lessonPayday=pay.id;}}
  }
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
     Day's flags, and each adventurer's own per-Day state (spoiled stock left the night before - nightDiscard). */
@@ -410,7 +426,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   n.feast=dv.feast||0;}const ev=this.run.event?.effects||{};
   /* META §sign — 원정 지원금 간판 (User 2026-09-26, v2.9.7): the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
-  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0);const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
+  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0)+(this.run.firstRun&&n.lessonPayday===this.run.day?LESSON.paydayBudget:0);const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
@@ -438,6 +454,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   if(n.injury&&it.category==='insurance')need+=.25;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&G.Adventurer.isTrustedRegular(n))need+=D.relicParams.premiumMember.rareIntentBonus;
+ /* CORE_RUN §FIRST-RUN LESSONS: the DAY 3 payday customer of the account's first Run takes a 150% offer more readily */
+ if(mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===this.run.day)need+=LESSON.paydayOvercharge;
  if(this.has('coldcase')&&G.Relics.food(it)&&it.rarity>=1)need+=D.relicParams.coldcase.intentBonus;
  /* 첫 방문 쿠폰: the whole of an adventurer's first-ever visit */
  if(this.has('firstVisitCoupon')&&n.newToday&&n.visits<=1)need+=D.relicParams.firstVisitCoupon.intentBonus;

@@ -433,4 +433,7 @@ FAIL:
 - a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
 - the extra Item on a later Run, a non-Common or non-countering Item, a lesson that adds a draw, or a Death on DAY 1~2 of
 the first Run
+- DAY 3 of the first Run with someone injured: the injured adventurer is the first visitor, one 구급키트 joined the
+warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, +20%p on
+150% only, the §26-1 line; a later Run: none of it
 ```

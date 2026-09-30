@@ -677,6 +677,9 @@ PASS:
   that counters the first Gate's Hazard
 - an account with a settled Run: the four opening Items only
 - a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
+- DAY 3 of the first Run with someone injured: the injured adventurer is the first visitor, one 구급키트 joined the
+  warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, +20%p on
+  150% only, the §26-1 line; a later Run: none of it
 - the same seed gives the same Gates, visitors and stream on both
 - the measurement harness (`lessons=false`) plays the ordinary Run
 - `tests/revision.cjs`

@@ -9,7 +9,10 @@ the owner headers and in the git tag.
   teaching by level design - learn by play, not text): the account's first Run finds one Common Item that counters the first
   Gate's Hazard in the DAY 1 warehouse, so the first sales can find the Counter rule and the Night shows it working; on its
   DAY 1~2 a Death roll settles as 중상. Measured with every Run as a first Run (`reader` 3,000, same seeds): DAY 1~2 Deaths
-  0.21 → 0 a Run, D1~10 Death-limit endings 20.0 → 17.2%, D10 reach 85.4 → 89.3%, D30 17.2 → 18.0%, clear unchanged 11.7%. Later Runs are unchanged; the Run's
+  0.21 → 0 a Run, D1~10 Death-limit endings 20.0 → 17.2%, D10 reach 85.4 → 89.3%, D30 17.2 → 18.0%, clear unchanged 11.7%.
+  DAY 3: an injured adventurer comes first with one 구급키트 in the warehouse (73% of 40 fresh first Runs had someone
+  injured), and a returning customer comes on payday - +200G this visit, 150% intent +20%p, the line
+  `“오늘 보수 받았어요. 값은 신경 안 써요.”` (85% of those Runs). COPY_AUDIT §26-1. Later Runs are unchanged; the Run's
   stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
   (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
 

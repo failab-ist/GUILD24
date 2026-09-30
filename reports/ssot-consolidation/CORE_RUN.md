@@ -436,4 +436,11 @@ is shown as a tutorial, and no lesson adds a draw to the Run's own random stream
 takes the draws a living adventurer takes).
 - DAY 1~2: no one dies. An expedition whose Death roll lands settles as 중상 instead (the ordinary 중상: the adventurer
 sits out and recovers). DAY 3 on is the ordinary Run.
+- DAY 3: an adventurer with an ordinary Injury comes first - one already coming moves to the front, else one takes the
+last returning visitor's place (its Gate and visit income as that visitor's; a new face seated today is never the one
+replaced) - and one 구급키트 joins the warehouse (HQ's, like the opening stock). With no one injured, nothing moves and
+no 구급키트 comes.
+- DAY 3: a returning visitor (not the injured one) comes on payday: +200G to spend this visit only (the nightly-cleared
+extra-purchase channel), 150% purchase intent +20%p this visit, and the arrival line COPY_AUDIT §26-1. The Day's count of
+visitors is unchanged.
 ```

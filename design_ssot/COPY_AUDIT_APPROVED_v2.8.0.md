@@ -2894,3 +2894,15 @@ Player-facing Copy에서 내부 시스템 용어 `Final`을 사용하지 않는�
 # 25. RARE REFERENCE DIALOGUE — REMOVED (User 2026-09-28, v2.9.11)
 
 The three Rare Reference customers and their lines were removed before a paid release (COPY_WORLD_VOICE §RARE REFERENCE NPC).
+
+---
+
+# 26. FIRST-RUN LESSONS (User 2026-09-30, v2.9.11)
+
+## 26-1. DAY 3 보수날 손님 도착 대사
+
+**노출 위치**
+> 계정 첫 판 DAY 3의 보수날 손님이 계산대에 도착할 때 한 번. 다른 도착 대사보다 먼저 (rule owner: CORE_RUN §FIRST-RUN LESSONS).
+
+**현재**
+> “오늘 보수 받았어요. 값은 신경 안 써요.”

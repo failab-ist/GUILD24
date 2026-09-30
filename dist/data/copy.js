@@ -169,8 +169,11 @@ const key=(n,tag,day)=>n.id+':'+tag+':'+day;
 const Copy={
  pick,pools:{visit,sale,night},
  /* 카운터에 도착한 손님의 한마디. Callback > Trait > 상태 > 일반 순으로 고른다. */
+ /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer of the account's first Run */
+ lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
  arrive(n,day,hasCallback,run){
   const ex=exclusionFor(run,n,'arrival'),emit=line=>{remember(run,n,'arrival',line);return line;};
+  if(run?.firstRun&&n.lessonPayday===day)return emit(Copy.lessonPayday);
   if(hasCallback)return emit(pick(visit.helped,key(n,'callback',day),ex));
   for(const id of n.traits||[]){const pool=visit.trait[id];
    if(pool&&fnv(key(n,'traitgate',day))%3===0)return emit(pick(pool,key(n,'trait'+id,day),ex));}
