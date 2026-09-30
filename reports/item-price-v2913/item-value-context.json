@@ -1,0 +1,3696 @@
+{
+ "runs": 150,
+ "per": 150,
+ "k": 30,
+ "freq": {
+  "reader": {
+   "D1-10": {
+    "departures": 6398,
+    "strong": 14.5,
+    "mid": 14.1,
+    "weak": 71.4,
+    "hazard": {
+     "poison": 23.5,
+     "bind": 1.9,
+     "corrosion": 16.9,
+     "mire": 2.4,
+     "fire": 20.6,
+     "fear": 19.8,
+     "dark": 1.8,
+     "cold": 20.1,
+     "whiteout": 2.3
+    }
+   },
+   "D11-20": {
+    "departures": 3471,
+    "strong": 15.2,
+    "mid": 7.2,
+    "weak": 77.6,
+    "hazard": {
+     "poison": 22,
+     "bind": 10.5,
+     "corrosion": 17.1,
+     "mire": 9.9,
+     "fire": 22,
+     "fear": 19.6,
+     "dark": 10.9,
+     "cold": 20,
+     "whiteout": 11.3
+    }
+   },
+   "D21-29": {
+    "departures": 1051,
+    "strong": 22.8,
+    "mid": 5.6,
+    "weak": 71.6,
+    "hazard": {
+     "poison": 20.1,
+     "bind": 17.5,
+     "corrosion": 20.8,
+     "mire": 19.6,
+     "fire": 21.8,
+     "fear": 19.3,
+     "dark": 16.8,
+     "cold": 19.6,
+     "whiteout": 17
+    }
+   }
+  },
+  "expert": {
+   "D1-10": {
+    "departures": 6601,
+    "strong": 22.5,
+    "mid": 16.6,
+    "weak": 60.8,
+    "hazard": {
+     "poison": 20.2,
+     "bind": 2,
+     "corrosion": 17.9,
+     "mire": 1.9,
+     "fire": 22.4,
+     "fear": 21.4,
+     "dark": 2.3,
+     "cold": 18.9,
+     "whiteout": 2.3
+    }
+   },
+   "D11-20": {
+    "departures": 5404,
+    "strong": 21.3,
+    "mid": 9.7,
+    "weak": 69,
+    "hazard": {
+     "poison": 21,
+     "bind": 10.8,
+     "corrosion": 17.3,
+     "mire": 9.9,
+     "fire": 20.7,
+     "fear": 20.6,
+     "dark": 12.2,
+     "cold": 21,
+     "whiteout": 10.8
+    }
+   },
+   "D21-29": {
+    "departures": 3000,
+    "strong": 23.6,
+    "mid": 6.8,
+    "weak": 69.6,
+    "hazard": {
+     "poison": 20.5,
+     "bind": 18.7,
+     "corrosion": 20.2,
+     "mire": 19,
+     "fire": 20.6,
+     "fear": 18.4,
+     "dark": 16.1,
+     "cold": 21.1,
+     "whiteout": 18.5
+    }
+   }
+  },
+  "both": {
+   "D1-10": {
+    "departures": 12999,
+    "strong": 18.6,
+    "mid": 15.4,
+    "weak": 66.1,
+    "hazard": {
+     "poison": 21.8,
+     "bind": 1.9,
+     "corrosion": 17.4,
+     "mire": 2.2,
+     "fire": 21.5,
+     "fear": 20.6,
+     "dark": 2.1,
+     "cold": 19.5,
+     "whiteout": 2.3
+    }
+   },
+   "D11-20": {
+    "departures": 8875,
+    "strong": 18.9,
+    "mid": 8.7,
+    "weak": 72.4,
+    "hazard": {
+     "poison": 21.4,
+     "bind": 10.7,
+     "corrosion": 17.2,
+     "mire": 9.9,
+     "fire": 21.2,
+     "fear": 20.2,
+     "dark": 11.7,
+     "cold": 20.6,
+     "whiteout": 11
+    }
+   },
+   "D21-29": {
+    "departures": 4051,
+    "strong": 23.4,
+    "mid": 6.5,
+    "weak": 70.1,
+    "hazard": {
+     "poison": 20.4,
+     "bind": 18.4,
+     "corrosion": 20.4,
+     "mire": 19.2,
+     "fire": 20.9,
+     "fear": 18.6,
+     "dark": 16.3,
+     "cold": 20.7,
+     "whiteout": 18.1
+    }
+   }
+  }
+ },
+ "rows": [
+  {
+   "id": "rice",
+   "name": "삼각김밥",
+   "rarity": 0,
+   "category": "food",
+   "buy": 35,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 19.91,
+      "hurt": -11.24,
+      "death": -0.93,
+      "fatigue": -4.98
+     },
+     "mid": {
+      "samples": 150,
+      "win": 15.87,
+      "hurt": -10.13,
+      "death": -1.58,
+      "fatigue": -4.84
+     },
+     "weak": {
+      "samples": 150,
+      "win": 4.69,
+      "hurt": -3.33,
+      "death": -2.09,
+      "fatigue": -4.41
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 11.49,
+      "hurt": -6.67,
+      "death": -0.58,
+      "fatigue": -5.13
+     },
+     "mid": {
+      "samples": 150,
+      "win": 11.84,
+      "hurt": -8.04,
+      "death": -1.11,
+      "fatigue": -5.21
+     },
+     "weak": {
+      "samples": 150,
+      "win": 2.07,
+      "hurt": -0.96,
+      "death": -1.93,
+      "fatigue": -4.54
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 8.69,
+      "hurt": -5.31,
+      "death": -0.49,
+      "fatigue": -5.34
+     },
+     "mid": {
+      "samples": 150,
+      "win": 10.22,
+      "hurt": -7,
+      "death": -1.24,
+      "fatigue": -5.31
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.02,
+      "hurt": 0.42,
+      "death": -2.22,
+      "fatigue": -4.89
+     }
+    }
+   }
+  },
+  {
+   "id": "water",
+   "name": "생수",
+   "rarity": 0,
+   "category": "drink",
+   "buy": 40,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 31.24,
+      "hurt": -17.22,
+      "death": -1,
+      "fatigue": -2.92
+     },
+     "mid": {
+      "samples": 150,
+      "win": 26.04,
+      "hurt": -16.02,
+      "death": -2.53,
+      "fatigue": -2.43
+     },
+     "weak": {
+      "samples": 150,
+      "win": 8.78,
+      "hurt": -6.11,
+      "death": -2.91,
+      "fatigue": -1.83
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 16.13,
+      "hurt": -9.27,
+      "death": -0.69,
+      "fatigue": -2.58
+     },
+     "mid": {
+      "samples": 150,
+      "win": 17.71,
+      "hurt": -11.09,
+      "death": -1.89,
+      "fatigue": -2.42
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.49,
+      "hurt": -1.56,
+      "death": -2.64,
+      "fatigue": -1.79
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 11.11,
+      "hurt": -6.93,
+      "death": -0.67,
+      "fatigue": -2.52
+     },
+     "mid": {
+      "samples": 150,
+      "win": 13.22,
+      "hurt": -8.16,
+      "death": -1.44,
+      "fatigue": -2.39
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.24,
+      "hurt": 0.84,
+      "death": -2.6,
+      "fatigue": -1.94
+     }
+    }
+   }
+  },
+  {
+   "id": "ramen",
+   "name": "컵라면",
+   "rarity": 0,
+   "category": "food",
+   "buy": 45,
+   "counter": true,
+   "use": {
+    "D1-10": 19.5,
+    "D11-20": 20.6,
+    "D21-29": 20.7
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.09,
+      "hurt": -2.67,
+      "death": -1.24,
+      "fatigue": -3
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.67,
+      "hurt": -0.62,
+      "death": -3.49,
+      "fatigue": -2.7
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.18,
+      "death": -5.49,
+      "fatigue": -2.39
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 6.78,
+      "hurt": -6.58,
+      "death": -0.78,
+      "fatigue": -3.49
+     },
+     "mid": {
+      "samples": 150,
+      "win": 3.16,
+      "hurt": -2.82,
+      "death": -2.69,
+      "fatigue": -3.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.09,
+      "hurt": 1.98,
+      "death": -4.62,
+      "fatigue": -2.8
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 9.84,
+      "hurt": -8.89,
+      "death": -0.87,
+      "fatigue": -3.71
+     },
+     "mid": {
+      "samples": 51,
+      "win": 6.21,
+      "hurt": -5.75,
+      "death": -2.22,
+      "fatigue": -3.45
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.38,
+      "hurt": 1.56,
+      "death": -3.89,
+      "fatigue": -3.03
+     }
+    }
+   }
+  },
+  {
+   "id": "lunchbox",
+   "name": "간단 도시락",
+   "rarity": 1,
+   "category": "food",
+   "buy": 100,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 35.84,
+      "hurt": -19.36,
+      "death": -1,
+      "fatigue": -5.81
+     },
+     "mid": {
+      "samples": 150,
+      "win": 33.29,
+      "hurt": -20.33,
+      "death": -2.87,
+      "fatigue": -5.78
+     },
+     "weak": {
+      "samples": 150,
+      "win": 12.31,
+      "hurt": -8.42,
+      "death": -3.53,
+      "fatigue": -5.29
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 19.67,
+      "hurt": -11.38,
+      "death": -0.73,
+      "fatigue": -6.06
+     },
+     "mid": {
+      "samples": 150,
+      "win": 22.31,
+      "hurt": -13.76,
+      "death": -2.31,
+      "fatigue": -6.19
+     },
+     "weak": {
+      "samples": 150,
+      "win": 5.22,
+      "hurt": -2.98,
+      "death": -3.31,
+      "fatigue": -5.36
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 13.53,
+      "hurt": -8.58,
+      "death": -0.76,
+      "fatigue": -6.22
+     },
+     "mid": {
+      "samples": 150,
+      "win": 16.73,
+      "hurt": -10.38,
+      "death": -1.91,
+      "fatigue": -6.27
+     },
+     "weak": {
+      "samples": 150,
+      "win": 2.09,
+      "hurt": 0.29,
+      "death": -3.27,
+      "fatigue": -5.73
+     }
+    }
+   }
+  },
+  {
+   "id": "choco",
+   "name": "초코바",
+   "rarity": 0,
+   "category": "food",
+   "buy": 30,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 19.24,
+      "hurt": -10.04,
+      "death": -0.82,
+      "fatigue": -3.51
+     },
+     "mid": {
+      "samples": 150,
+      "win": 15.64,
+      "hurt": -9.69,
+      "death": -1.16,
+      "fatigue": -3.23
+     },
+     "weak": {
+      "samples": 150,
+      "win": 4.82,
+      "hurt": -4.96,
+      "death": -1.53,
+      "fatigue": -2.72
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 10.18,
+      "hurt": -6.09,
+      "death": -0.6,
+      "fatigue": -3.43
+     },
+     "mid": {
+      "samples": 150,
+      "win": 11.96,
+      "hurt": -8.93,
+      "death": -1.02,
+      "fatigue": -3.39
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.84,
+      "hurt": -3.78,
+      "death": -1.76,
+      "fatigue": -2.82
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 7.91,
+      "hurt": -4.91,
+      "death": -0.49,
+      "fatigue": -3.59
+     },
+     "mid": {
+      "samples": 150,
+      "win": 9.89,
+      "hurt": -7.91,
+      "death": -1.31,
+      "fatigue": -3.39
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.04,
+      "hurt": -3.62,
+      "death": -2.29,
+      "fatigue": -3.07
+     }
+    }
+   }
+  },
+  {
+   "id": "coffee",
+   "name": "캔커피",
+   "rarity": 0,
+   "category": "drink",
+   "buy": 40,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 27.31,
+      "hurt": -14.13,
+      "death": -0.89,
+      "fatigue": -2.76
+     },
+     "mid": {
+      "samples": 150,
+      "win": 23.31,
+      "hurt": -14.42,
+      "death": -2.09,
+      "fatigue": -2.35
+     },
+     "weak": {
+      "samples": 150,
+      "win": 8.11,
+      "hurt": -7.44,
+      "death": -2.13,
+      "fatigue": -1.84
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 13.82,
+      "hurt": -8.07,
+      "death": -0.69,
+      "fatigue": -2.49
+     },
+     "mid": {
+      "samples": 150,
+      "win": 16.49,
+      "hurt": -11.91,
+      "death": -1.8,
+      "fatigue": -2.35
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.2,
+      "hurt": -4.84,
+      "death": -2.29,
+      "fatigue": -1.8
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 10.07,
+      "hurt": -6.2,
+      "death": -0.58,
+      "fatigue": -2.49
+     },
+     "mid": {
+      "samples": 150,
+      "win": 12.82,
+      "hurt": -9.87,
+      "death": -1.51,
+      "fatigue": -2.32
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.13,
+      "hurt": -4.31,
+      "death": -2.8,
+      "fatigue": -1.89
+     }
+    }
+   }
+  },
+  {
+   "id": "herbtea",
+   "name": "진정 허브티",
+   "rarity": 0,
+   "category": "drink",
+   "buy": 40,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 26.56,
+      "hurt": -14.18,
+      "death": -0.89,
+      "fatigue": -2.75
+     },
+     "mid": {
+      "samples": 150,
+      "win": 21.93,
+      "hurt": -12.71,
+      "death": -2.33,
+      "fatigue": -2.34
+     },
+     "weak": {
+      "samples": 150,
+      "win": 7.53,
+      "hurt": -4.62,
+      "death": -3.56,
+      "fatigue": -1.76
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 13.82,
+      "hurt": -7.96,
+      "death": -0.58,
+      "fatigue": -2.51
+     },
+     "mid": {
+      "samples": 150,
+      "win": 14.93,
+      "hurt": -9.27,
+      "death": -1.96,
+      "fatigue": -2.34
+     },
+     "weak": {
+      "samples": 150,
+      "win": 2.91,
+      "hurt": -1.2,
+      "death": -3.07,
+      "fatigue": -1.76
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 10.69,
+      "hurt": -6.76,
+      "death": -0.62,
+      "fatigue": -2.53
+     },
+     "mid": {
+      "samples": 150,
+      "win": 12.07,
+      "hurt": -8.07,
+      "death": -1.47,
+      "fatigue": -2.37
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.98,
+      "hurt": 0.87,
+      "death": -3.16,
+      "fatigue": -1.91
+     }
+    }
+   }
+  },
+  {
+   "id": "lowpotion",
+   "name": "하급 포션",
+   "rarity": 0,
+   "category": "potion",
+   "buy": 70,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 30.29,
+      "hurt": -14.58,
+      "death": -0.89,
+      "fatigue": -0.75
+     },
+     "mid": {
+      "samples": 150,
+      "win": 28.13,
+      "hurt": -15.78,
+      "death": -2.38,
+      "fatigue": -0.42
+     },
+     "weak": {
+      "samples": 150,
+      "win": 10.6,
+      "hurt": -6.27,
+      "death": -2.22,
+      "fatigue": 0
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 13.4,
+      "hurt": -6.16,
+      "death": -0.53,
+      "fatigue": -0.28
+     },
+     "mid": {
+      "samples": 150,
+      "win": 14.93,
+      "hurt": -8,
+      "death": -1.31,
+      "fatigue": -0.21
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.47,
+      "hurt": -0.96,
+      "death": -1.93,
+      "fatigue": 0.15
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 5.84,
+      "hurt": -2.58,
+      "death": -0.16,
+      "fatigue": -0.1
+     },
+     "mid": {
+      "samples": 150,
+      "win": 10.91,
+      "hurt": -6.18,
+      "death": -0.76,
+      "fatigue": -0.19
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.98,
+      "hurt": 0.58,
+      "death": -1.58,
+      "fatigue": 0.12
+     }
+    }
+   }
+  },
+  {
+   "id": "ice",
+   "name": "얼음컵",
+   "rarity": 0,
+   "category": "drink",
+   "buy": 30,
+   "counter": true,
+   "use": {
+    "D1-10": 21.5,
+    "D11-20": 21.2,
+    "D21-29": 20.9
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.13,
+      "hurt": -2.18,
+      "death": -0.69,
+      "fatigue": -1.08
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.2,
+      "hurt": -0.69,
+      "death": -1.87,
+      "fatigue": -0.87
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.09,
+      "hurt": 0.62,
+      "death": -4.78,
+      "fatigue": -0.66
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 2.49,
+      "hurt": -3.49,
+      "death": -0.53,
+      "fatigue": -1.32
+     },
+     "mid": {
+      "samples": 148,
+      "win": 0.92,
+      "hurt": -2.48,
+      "death": -2.03,
+      "fatigue": -1.08
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.58,
+      "death": -4.71,
+      "fatigue": -0.8
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 136,
+      "win": 6.25,
+      "hurt": -6.81,
+      "death": -0.47,
+      "fatigue": -1.52
+     },
+     "mid": {
+      "samples": 55,
+      "win": 1.88,
+      "hurt": -4.61,
+      "death": -1.88,
+      "fatigue": -1.3
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.27,
+      "hurt": 1.02,
+      "death": -4.71,
+      "fatigue": -0.88
+     }
+    }
+   }
+  },
+  {
+   "id": "soda",
+   "name": "중화 탄산수",
+   "rarity": 0,
+   "category": "drink",
+   "buy": 35,
+   "counter": true,
+   "use": {
+    "D1-10": 17.4,
+    "D11-20": 17.2,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.62,
+      "hurt": -3.27,
+      "death": -0.82,
+      "fatigue": -1.16
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.56,
+      "hurt": -0.53,
+      "death": -3.27,
+      "fatigue": -0.85
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.47,
+      "death": -5.42,
+      "fatigue": -0.66
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 6.67,
+      "hurt": -6.31,
+      "death": -0.62,
+      "fatigue": -1.44
+     },
+     "mid": {
+      "samples": 131,
+      "win": 3.08,
+      "hurt": -2.6,
+      "death": -2.44,
+      "fatigue": -1.09
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.24,
+      "hurt": 1.87,
+      "death": -4.6,
+      "fatigue": -0.84
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 11.16,
+      "hurt": -9.62,
+      "death": -1.6,
+      "fatigue": -1.64
+     },
+     "mid": {
+      "samples": 49,
+      "win": 3.33,
+      "hurt": -2.86,
+      "death": -2.18,
+      "fatigue": -1.17
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 2.02,
+      "death": -2.93,
+      "fatigue": -0.96
+     }
+    }
+   }
+  },
+  {
+   "id": "battery",
+   "name": "랜턴 건전지",
+   "rarity": 2,
+   "category": "gear",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 2.1,
+    "D11-20": 11.7,
+    "D21-29": 16.3
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 22,
+      "win": 7.88,
+      "hurt": -8.03,
+      "death": -0.61,
+      "fatigue": -0.36
+     },
+     "mid": {
+      "samples": 18,
+      "win": 2.59,
+      "hurt": -2.59,
+      "death": -2.41,
+      "fatigue": 0.03
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 3.27,
+      "death": -4.6,
+      "fatigue": 0.33
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 9.82,
+      "hurt": -9.91,
+      "death": -0.64,
+      "fatigue": -0.44
+     },
+     "mid": {
+      "samples": 84,
+      "win": 3.85,
+      "hurt": -3.61,
+      "death": -2.22,
+      "fatigue": -0.03
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 2.44,
+      "death": -3.71,
+      "fatigue": 0.27
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 11.6,
+      "hurt": -10.78,
+      "death": -1.11,
+      "fatigue": -0.48
+     },
+     "mid": {
+      "samples": 45,
+      "win": 4.3,
+      "hurt": -3.48,
+      "death": -2.52,
+      "fatigue": -0.06
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 3.18,
+      "death": -4.09,
+      "fatigue": 0.3
+     }
+    }
+   }
+  },
+  {
+   "id": "rope",
+   "name": "경량 로프",
+   "rarity": 2,
+   "category": "gear",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 1.9,
+    "D11-20": 10.7,
+    "D21-29": 18.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 14,
+      "win": 10.95,
+      "hurt": -11.19,
+      "death": -1.19,
+      "fatigue": -0.49
+     },
+     "mid": {
+      "samples": 21,
+      "win": 3.65,
+      "hurt": -4.44,
+      "death": -1.43,
+      "fatigue": -0.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 3.31,
+      "death": -4.76,
+      "fatigue": 0.35
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 11.13,
+      "hurt": -11,
+      "death": -1.2,
+      "fatigue": -0.46
+     },
+     "mid": {
+      "samples": 83,
+      "win": 4.3,
+      "hurt": -4.42,
+      "death": -2.25,
+      "fatigue": -0.07
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 3.29,
+      "death": -4.49,
+      "fatigue": 0.33
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 12.53,
+      "hurt": -11.49,
+      "death": -1.49,
+      "fatigue": -0.5
+     },
+     "mid": {
+      "samples": 49,
+      "win": 5.1,
+      "hurt": -5.03,
+      "death": -1.7,
+      "fatigue": -0.15
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 2.84,
+      "death": -3.98,
+      "fatigue": 0.28
+     }
+    }
+   }
+  },
+  {
+   "id": "candy",
+   "name": "집중 사탕",
+   "rarity": 0,
+   "category": "food",
+   "buy": 35,
+   "counter": true,
+   "use": {
+    "D1-10": 20.6,
+    "D11-20": 20.2,
+    "D21-29": 18.6
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.53,
+      "hurt": -3.2,
+      "death": -0.8,
+      "fatigue": -2.08
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.42,
+      "hurt": -2.11,
+      "death": -2.13,
+      "fatigue": -1.97
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 0,
+      "death": -4.11,
+      "fatigue": -1.65
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 5.42,
+      "hurt": -5.4,
+      "death": -0.56,
+      "fatigue": -2.44
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2.78,
+      "hurt": -3.07,
+      "death": -1.98,
+      "fatigue": -2.23
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 1.22,
+      "death": -3.16,
+      "fatigue": -1.89
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 8.91,
+      "hurt": -8,
+      "death": -0.93,
+      "fatigue": -2.93
+     },
+     "mid": {
+      "samples": 51,
+      "win": 3.86,
+      "hurt": -3.53,
+      "death": -1.83,
+      "fatigue": -2.45
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.18,
+      "hurt": 1.69,
+      "death": -2.87,
+      "fatigue": -2.12
+     }
+    }
+   }
+  },
+  {
+   "id": "dragonramen",
+   "name": "불룡볶음면",
+   "rarity": 2,
+   "category": "food",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 19.5,
+    "D11-20": 20.6,
+    "D21-29": 20.7
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 19.96,
+      "hurt": -12.73,
+      "death": -1.29,
+      "fatigue": -3.49
+     },
+     "mid": {
+      "samples": 150,
+      "win": 15.51,
+      "hurt": -10.22,
+      "death": -3.73,
+      "fatigue": -3.14
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.29,
+      "hurt": -0.44,
+      "death": -7.2,
+      "fatigue": -2.35
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 18.02,
+      "hurt": -13.31,
+      "death": -0.84,
+      "fatigue": -3.81
+     },
+     "mid": {
+      "samples": 150,
+      "win": 13.22,
+      "hurt": -9.82,
+      "death": -3.49,
+      "fatigue": -3.33
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.22,
+      "hurt": 2.22,
+      "death": -6.38,
+      "fatigue": -2.72
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 17.04,
+      "hurt": -14.64,
+      "death": -1,
+      "fatigue": -3.97
+     },
+     "mid": {
+      "samples": 51,
+      "win": 14.97,
+      "hurt": -11.24,
+      "death": -4.44,
+      "fatigue": -3.57
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.09,
+      "hurt": 2.18,
+      "death": -5.62,
+      "fatigue": -2.94
+     }
+    }
+   }
+  },
+  {
+   "id": "energy",
+   "name": "에너지드링크",
+   "rarity": 1,
+   "category": "drink",
+   "buy": 80,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 34.11,
+      "hurt": -16.49,
+      "death": -0.98,
+      "fatigue": -2.93
+     },
+     "mid": {
+      "samples": 150,
+      "win": 36.13,
+      "hurt": -21.91,
+      "death": -2.71,
+      "fatigue": -2.69
+     },
+     "weak": {
+      "samples": 150,
+      "win": 13.98,
+      "hurt": -11.49,
+      "death": -3.18,
+      "fatigue": -1.85
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 18.49,
+      "hurt": -10.29,
+      "death": -0.71,
+      "fatigue": -2.63
+     },
+     "mid": {
+      "samples": 150,
+      "win": 22.78,
+      "hurt": -15.8,
+      "death": -2.4,
+      "fatigue": -2.41
+     },
+     "weak": {
+      "samples": 150,
+      "win": 5.42,
+      "hurt": -7.49,
+      "death": -3.04,
+      "fatigue": -1.75
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 13.16,
+      "hurt": -8.49,
+      "death": -0.78,
+      "fatigue": -2.59
+     },
+     "mid": {
+      "samples": 150,
+      "win": 16.24,
+      "hurt": -12.2,
+      "death": -1.93,
+      "fatigue": -2.37
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.84,
+      "hurt": -5.6,
+      "death": -3.53,
+      "fatigue": -1.83
+     }
+    }
+   }
+  },
+  {
+   "id": "wine",
+   "name": "용사의 곡주",
+   "rarity": 2,
+   "category": "drink",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 20.6,
+    "D11-20": 20.2,
+    "D21-29": 18.6
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": -7.29,
+      "hurt": 2.89,
+      "death": -0.82,
+      "fatigue": -0.82
+     },
+     "mid": {
+      "samples": 150,
+      "win": -8.82,
+      "hurt": 8.6,
+      "death": -2.18,
+      "fatigue": -0.72
+     },
+     "weak": {
+      "samples": 150,
+      "win": -0.8,
+      "hurt": 4.49,
+      "death": -3.87,
+      "fatigue": -0.73
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 1.22,
+      "hurt": -2.29,
+      "death": -0.58,
+      "fatigue": -1.2
+     },
+     "mid": {
+      "samples": 150,
+      "win": -3.69,
+      "hurt": 3.33,
+      "death": -1.58,
+      "fatigue": -1.01
+     },
+     "weak": {
+      "samples": 150,
+      "win": -0.11,
+      "hurt": 3.56,
+      "death": -3.36,
+      "fatigue": -0.88
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 7.62,
+      "hurt": -7.62,
+      "death": -0.98,
+      "fatigue": -1.64
+     },
+     "mid": {
+      "samples": 51,
+      "win": 0.85,
+      "hurt": 0.78,
+      "death": -1.96,
+      "fatigue": -1.26
+     },
+     "weak": {
+      "samples": 150,
+      "win": -0.04,
+      "hurt": 3.84,
+      "death": -3.6,
+      "fatigue": -0.95
+     }
+    }
+   }
+  },
+  {
+   "id": "kit",
+   "name": "구급키트",
+   "rarity": 1,
+   "category": "insurance",
+   "buy": 80,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 0.49
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 1.05
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 1.96
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 0.32
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 1.06
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 1.97
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 0.23
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 1.16
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0,
+      "death": 0,
+      "fatigue": 2.02
+     }
+    }
+   }
+  },
+  {
+   "id": "mask",
+   "name": "방진마스크",
+   "rarity": 0,
+   "category": "gear",
+   "buy": 45,
+   "counter": true,
+   "use": {
+    "D1-10": 21.8,
+    "D11-20": 21.4,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.07,
+      "hurt": -2.82,
+      "death": -0.96,
+      "fatigue": -0.05
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.24,
+      "hurt": -0.64,
+      "death": -3.71,
+      "fatigue": 0.22
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.29,
+      "death": -5.31,
+      "fatigue": 0.32
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 5.91,
+      "hurt": -5.93,
+      "death": -0.82,
+      "fatigue": -0.24
+     },
+     "mid": {
+      "samples": 150,
+      "win": 1.64,
+      "hurt": -2.07,
+      "death": -3,
+      "fatigue": 0.09
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.24,
+      "death": -3.78,
+      "fatigue": 0.24
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 9.56,
+      "hurt": -8.73,
+      "death": -1.22,
+      "fatigue": -0.38
+     },
+     "mid": {
+      "samples": 58,
+      "win": 3.33,
+      "hurt": -3.51,
+      "death": -1.95,
+      "fatigue": -0.05
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 2.09,
+      "death": -2.84,
+      "fatigue": 0.2
+     }
+    }
+   }
+  },
+  {
+   "id": "hood",
+   "name": "방한 두건",
+   "rarity": 1,
+   "category": "gear",
+   "buy": 75,
+   "counter": true,
+   "use": {
+    "D1-10": 19.5,
+    "D11-20": 20.6,
+    "D21-29": 20.7
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.8,
+      "hurt": -2.8,
+      "death": -1.2,
+      "fatigue": -0.03
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.4,
+      "hurt": -0.69,
+      "death": -3.51,
+      "fatigue": 0.21
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.09,
+      "death": -5.51,
+      "fatigue": 0.34
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 7.31,
+      "hurt": -8.16,
+      "death": -0.8,
+      "fatigue": -0.33
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2.22,
+      "hurt": -3.49,
+      "death": -3.2,
+      "fatigue": 0.06
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 1.82,
+      "death": -5.16,
+      "fatigue": 0.32
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 14.82,
+      "hurt": -14.78,
+      "death": -0.96,
+      "fatigue": -0.67
+     },
+     "mid": {
+      "samples": 51,
+      "win": 5.1,
+      "hurt": -6.47,
+      "death": -3.86,
+      "fatigue": -0.04
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 1.87,
+      "death": -4.98,
+      "fatigue": 0.33
+     }
+    }
+   }
+  },
+  {
+   "id": "webgloves",
+   "name": "방독 작업장갑",
+   "rarity": 1,
+   "category": "gear",
+   "buy": 75,
+   "counter": true,
+   "use": {
+    "D1-10": 21.8,
+    "D11-20": 21.4,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.16,
+      "hurt": -2.91,
+      "death": -0.96,
+      "fatigue": -0.06
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.24,
+      "hurt": -0.87,
+      "death": -3.76,
+      "fatigue": 0.22
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.98,
+      "death": -5.4,
+      "fatigue": 0.33
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 8.49,
+      "hurt": -8.78,
+      "death": -0.98,
+      "fatigue": -0.36
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2,
+      "hurt": -3.33,
+      "death": -3.58,
+      "fatigue": 0.09
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.76,
+      "death": -4.38,
+      "fatigue": 0.26
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 15.42,
+      "hurt": -15.04,
+      "death": -1.42,
+      "fatigue": -0.66
+     },
+     "mid": {
+      "samples": 58,
+      "win": 4.66,
+      "hurt": -6.38,
+      "death": -3.39,
+      "fatigue": -0.06
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 2.24,
+      "death": -4.22,
+      "fatigue": 0.27
+     }
+    }
+   }
+  },
+  {
+   "id": "holylight",
+   "name": "축성 손전등",
+   "rarity": 1,
+   "category": "gear",
+   "buy": 75,
+   "counter": true,
+   "use": {
+    "D1-10": 20.6,
+    "D11-20": 20.2,
+    "D21-29": 18.6
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.49,
+      "hurt": -3.13,
+      "death": -0.78,
+      "fatigue": -0.05
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.2,
+      "hurt": -2.02,
+      "death": -2.2,
+      "fatigue": 0.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -0.13,
+      "death": -4.22,
+      "fatigue": 0.25
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 6.96,
+      "hurt": -7.91,
+      "death": -0.67,
+      "fatigue": -0.32
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2.4,
+      "hurt": -4.24,
+      "death": -2.53,
+      "fatigue": 0.02
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 1.33,
+      "death": -3.8,
+      "fatigue": 0.24
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 12.8,
+      "hurt": -12.64,
+      "death": -1.16,
+      "fatigue": -0.55
+     },
+     "mid": {
+      "samples": 51,
+      "win": 4.05,
+      "hurt": -4.44,
+      "death": -3.14,
+      "fatigue": -0.05
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 1.73,
+      "death": -3.82,
+      "fatigue": 0.24
+     }
+    }
+   }
+  },
+  {
+   "id": "cloak",
+   "name": "방수망토",
+   "rarity": 1,
+   "category": "gear",
+   "buy": 75,
+   "counter": true,
+   "use": {
+    "D1-10": 17.4,
+    "D11-20": 17.2,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.49,
+      "hurt": -3.18,
+      "death": -0.82,
+      "fatigue": -0.08
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.47,
+      "hurt": -0.69,
+      "death": -3.47,
+      "fatigue": 0.2
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.64,
+      "death": -5.67,
+      "fatigue": 0.34
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 7.53,
+      "hurt": -8.07,
+      "death": -0.8,
+      "fatigue": -0.33
+     },
+     "mid": {
+      "samples": 131,
+      "win": 2.82,
+      "hurt": -3.99,
+      "death": -3.38,
+      "fatigue": 0.04
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 1.51,
+      "death": -5.29,
+      "fatigue": 0.3
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 16.49,
+      "hurt": -15.4,
+      "death": -1.84,
+      "fatigue": -0.67
+     },
+     "mid": {
+      "samples": 49,
+      "win": 4.9,
+      "hurt": -6.39,
+      "death": -3.47,
+      "fatigue": -0.07
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 1.93,
+      "death": -4.33,
+      "fatigue": 0.29
+     }
+    }
+   }
+  },
+  {
+   "id": "coating",
+   "name": "부식 방지 코팅제",
+   "rarity": 2,
+   "category": "gear",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 17.4,
+    "D11-20": 17.2,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.51,
+      "hurt": -3.18,
+      "death": -0.82,
+      "fatigue": -0.08
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.47,
+      "hurt": -0.38,
+      "death": -3.47,
+      "fatigue": 0.2
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.51,
+      "death": -5.78,
+      "fatigue": 0.36
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 6.51,
+      "hurt": -6.47,
+      "death": -0.78,
+      "fatigue": -0.27
+     },
+     "mid": {
+      "samples": 131,
+      "win": 2.88,
+      "hurt": -2.29,
+      "death": -2.7,
+      "fatigue": 0.04
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 2.73,
+      "death": -5.4,
+      "fatigue": 0.33
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 12.6,
+      "hurt": -11.29,
+      "death": -1.69,
+      "fatigue": -0.5
+     },
+     "mid": {
+      "samples": 49,
+      "win": 4.9,
+      "hurt": -4.15,
+      "death": -3.06,
+      "fatigue": -0.04
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 3.22,
+      "death": -4.38,
+      "fatigue": 0.31
+     }
+    }
+   }
+  },
+  {
+   "id": "boots",
+   "name": "원정용 장화",
+   "rarity": 2,
+   "category": "gear",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 2.2,
+    "D11-20": 9.9,
+    "D21-29": 19.2
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 13,
+      "win": 7.69,
+      "hurt": -7.44,
+      "death": -1.03,
+      "fatigue": -0.31
+     },
+     "mid": {
+      "samples": 29,
+      "win": 4.37,
+      "hurt": -4.71,
+      "death": -1.26,
+      "fatigue": -0.15
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 3.31,
+      "death": -4.29,
+      "fatigue": 0.32
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 9.8,
+      "hurt": -9.27,
+      "death": -1.04,
+      "fatigue": -0.41
+     },
+     "mid": {
+      "samples": 75,
+      "win": 4.84,
+      "hurt": -5.07,
+      "death": -2.09,
+      "fatigue": -0.12
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 3.64,
+      "death": -4.73,
+      "fatigue": 0.37
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 12.93,
+      "hurt": -11.47,
+      "death": -1.6,
+      "fatigue": -0.51
+     },
+     "mid": {
+      "samples": 45,
+      "win": 5.19,
+      "hurt": -4.89,
+      "death": -2.15,
+      "fatigue": -0.11
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.09,
+      "hurt": 2.89,
+      "death": -4.27,
+      "fatigue": 0.3
+     }
+    }
+   }
+  },
+  {
+   "id": "snowgoggles",
+   "name": "설원 고글",
+   "rarity": 2,
+   "category": "gear",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 2.3,
+    "D11-20": 11,
+    "D21-29": 18.1
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 14,
+      "win": 8.33,
+      "hurt": -7.86,
+      "death": -1.9,
+      "fatigue": -0.27
+     },
+     "mid": {
+      "samples": 22,
+      "win": 4.39,
+      "hurt": -4.09,
+      "death": -1.52,
+      "fatigue": -0.11
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 3.56,
+      "death": -4.82,
+      "fatigue": 0.35
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 144,
+      "win": 9.38,
+      "hurt": -9.28,
+      "death": -0.97,
+      "fatigue": -0.4
+     },
+     "mid": {
+      "samples": 75,
+      "win": 4.22,
+      "hurt": -4.93,
+      "death": -2.09,
+      "fatigue": -0.08
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 3.04,
+      "death": -4.22,
+      "fatigue": 0.31
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 11.98,
+      "hurt": -11.29,
+      "death": -0.96,
+      "fatigue": -0.52
+     },
+     "mid": {
+      "samples": 45,
+      "win": 5.19,
+      "hurt": -5.93,
+      "death": -2.44,
+      "fatigue": -0.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 3.56,
+      "death": -4.56,
+      "fatigue": 0.32
+     }
+    }
+   }
+  },
+  {
+   "id": "highpotion",
+   "name": "상급 포션",
+   "rarity": 2,
+   "category": "potion",
+   "buy": 195,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 36.24,
+      "hurt": -16.8,
+      "death": -1.02,
+      "fatigue": -0.86
+     },
+     "mid": {
+      "samples": 150,
+      "win": 65.36,
+      "hurt": -32.56,
+      "death": -3.22,
+      "fatigue": -1.36
+     },
+     "weak": {
+      "samples": 150,
+      "win": 44.02,
+      "hurt": -24.18,
+      "death": -6.2,
+      "fatigue": -0.3
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 22.18,
+      "hurt": -9.84,
+      "death": -0.67,
+      "fatigue": -0.51
+     },
+     "mid": {
+      "samples": 150,
+      "win": 47.87,
+      "hurt": -24.71,
+      "death": -2.62,
+      "fatigue": -0.9
+     },
+     "weak": {
+      "samples": 150,
+      "win": 16.31,
+      "hurt": -8.11,
+      "death": -4.44,
+      "fatigue": 0.21
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 11.11,
+      "hurt": -4.62,
+      "death": -0.4,
+      "fatigue": -0.21
+     },
+     "mid": {
+      "samples": 150,
+      "win": 25.78,
+      "hurt": -13.36,
+      "death": -1.98,
+      "fatigue": -0.21
+     },
+     "weak": {
+      "samples": 150,
+      "win": 4.33,
+      "hurt": -0.13,
+      "death": -3.56,
+      "fatigue": 0.25
+     }
+    }
+   }
+  },
+  {
+   "id": "antidote",
+   "name": "농축 해독제",
+   "rarity": 2,
+   "category": "gear",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 21.8,
+    "D11-20": 21.4,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.09,
+      "hurt": -2.82,
+      "death": -0.98,
+      "fatigue": -0.05
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.24,
+      "hurt": -0.64,
+      "death": -3.78,
+      "fatigue": 0.22
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.47,
+      "death": -5.69,
+      "fatigue": 0.35
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 7.07,
+      "hurt": -6.98,
+      "death": -1,
+      "fatigue": -0.29
+     },
+     "mid": {
+      "samples": 150,
+      "win": 1.93,
+      "hurt": -2.31,
+      "death": -3.44,
+      "fatigue": 0.11
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.71,
+      "death": -4.49,
+      "fatigue": 0.28
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 12.27,
+      "hurt": -11.33,
+      "death": -1.38,
+      "fatigue": -0.5
+     },
+     "mid": {
+      "samples": 58,
+      "win": 4.77,
+      "hurt": -5.34,
+      "death": -2.7,
+      "fatigue": -0.07
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 3.13,
+      "death": -4.29,
+      "fatigue": 0.29
+     }
+    }
+   }
+  },
+  {
+   "id": "stone",
+   "name": "귀환석",
+   "rarity": 2,
+   "category": "insurance",
+   "buy": 200,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -20.2,
+      "death": -0.98,
+      "fatigue": -0.24
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -32.96,
+      "death": -2.96,
+      "fatigue": -0.02
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -42.47,
+      "death": -7.11,
+      "fatigue": 0.83
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -17.36,
+      "death": -0.76,
+      "fatigue": -0.24
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -34.69,
+      "death": -2.87,
+      "fatigue": -0.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -42.67,
+      "death": -7.16,
+      "fatigue": 0.84
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -20.27,
+      "death": -1.13,
+      "fatigue": -0.26
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -37.84,
+      "death": -3.73,
+      "fatigue": 0.02
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -41.18,
+      "death": -8.33,
+      "fatigue": 0.91
+     }
+    }
+   }
+  },
+  {
+   "id": "midpotion",
+   "name": "중급 포션",
+   "rarity": 1,
+   "category": "potion",
+   "buy": 125,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 36.11,
+      "hurt": -16.73,
+      "death": -1,
+      "fatigue": -0.86
+     },
+     "mid": {
+      "samples": 150,
+      "win": 56.51,
+      "hurt": -29.42,
+      "death": -3,
+      "fatigue": -1.18
+     },
+     "weak": {
+      "samples": 150,
+      "win": 26.11,
+      "hurt": -15.31,
+      "death": -4.4,
+      "fatigue": -0.08
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 20.22,
+      "hurt": -9.18,
+      "death": -0.62,
+      "fatigue": -0.48
+     },
+     "mid": {
+      "samples": 150,
+      "win": 28.67,
+      "hurt": -15.69,
+      "death": -2.36,
+      "fatigue": -0.37
+     },
+     "weak": {
+      "samples": 150,
+      "win": 8.87,
+      "hurt": -4.04,
+      "death": -3.11,
+      "fatigue": 0.17
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 9.13,
+      "hurt": -4.04,
+      "death": -0.29,
+      "fatigue": -0.18
+     },
+     "mid": {
+      "samples": 150,
+      "win": 16.33,
+      "hurt": -7.91,
+      "death": -1.44,
+      "fatigue": -0.12
+     },
+     "weak": {
+      "samples": 150,
+      "win": 2.44,
+      "hurt": 0.33,
+      "death": -2.62,
+      "fatigue": 0.19
+     }
+    }
+   }
+  },
+  {
+   "id": "guildlunch",
+   "name": "길드 특제 도시락",
+   "rarity": 2,
+   "category": "food",
+   "buy": 185,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 40.8,
+      "hurt": -21.76,
+      "death": -1.07,
+      "fatigue": -6.18
+     },
+     "mid": {
+      "samples": 150,
+      "win": 49.02,
+      "hurt": -28.58,
+      "death": -3.07,
+      "fatigue": -6.58
+     },
+     "weak": {
+      "samples": 150,
+      "win": 20,
+      "hurt": -13.27,
+      "death": -4.84,
+      "fatigue": -6.06
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 23.84,
+      "hurt": -13.71,
+      "death": -0.76,
+      "fatigue": -6.81
+     },
+     "mid": {
+      "samples": 150,
+      "win": 30.67,
+      "hurt": -18.76,
+      "death": -3.07,
+      "fatigue": -7.12
+     },
+     "weak": {
+      "samples": 150,
+      "win": 8.11,
+      "hurt": -4.84,
+      "death": -3.98,
+      "fatigue": -6.2
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 16.51,
+      "hurt": -10.64,
+      "death": -0.93,
+      "fatigue": -7.01
+     },
+     "mid": {
+      "samples": 150,
+      "win": 21.42,
+      "hurt": -13.02,
+      "death": -2.51,
+      "fatigue": -7.18
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.31,
+      "hurt": 0.04,
+      "death": -4.24,
+      "fatigue": -6.57
+     }
+    }
+   }
+  },
+  {
+   "id": "ion",
+   "name": "쿨링 이온음료",
+   "rarity": 2,
+   "category": "drink",
+   "buy": 95,
+   "counter": true,
+   "use": {
+    "D1-10": 21.5,
+    "D11-20": 21.2,
+    "D21-29": 20.9
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.16,
+      "hurt": -2.2,
+      "death": -0.69,
+      "fatigue": -1.09
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.2,
+      "hurt": -0.58,
+      "death": -2,
+      "fatigue": -0.86
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.09,
+      "hurt": 0.56,
+      "death": -5.09,
+      "fatigue": -0.64
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 2.49,
+      "hurt": -3.58,
+      "death": -0.53,
+      "fatigue": -1.32
+     },
+     "mid": {
+      "samples": 148,
+      "win": 0.92,
+      "hurt": -2.45,
+      "death": -2.21,
+      "fatigue": -1.08
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.11,
+      "death": -5.64,
+      "fatigue": -0.75
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 136,
+      "win": 6.74,
+      "hurt": -7.97,
+      "death": -0.49,
+      "fatigue": -1.56
+     },
+     "mid": {
+      "samples": 55,
+      "win": 2,
+      "hurt": -5.64,
+      "death": -2.3,
+      "fatigue": -1.3
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.27,
+      "hurt": 0.24,
+      "death": -6.69,
+      "fatigue": -0.78
+     }
+    }
+   }
+  },
+  {
+   "id": "worldcharm",
+   "name": "세계수 생환부적",
+   "rarity": 3,
+   "category": "insurance",
+   "buy": 400,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -5.47,
+      "death": -1.09,
+      "fatigue": 0.46
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -11.69,
+      "death": -3.44,
+      "fatigue": 1.06
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -21.84,
+      "death": -11.96,
+      "fatigue": 2.37
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -3.56,
+      "death": -0.89,
+      "fatigue": 0.31
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -11.84,
+      "death": -4,
+      "fatigue": 1.11
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -22.29,
+      "death": -12.78,
+      "fatigue": 2.43
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -2.53,
+      "death": -1.38,
+      "fatigue": 0.28
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -12.89,
+      "death": -5.04,
+      "fatigue": 1.27
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -22.93,
+      "death": -17.42,
+      "fatigue": 2.77
+     }
+    }
+   }
+  },
+  {
+   "id": "spiderkit",
+   "name": "거미줄 방호세트",
+   "rarity": 3,
+   "category": "gear",
+   "buy": 135,
+   "counter": true,
+   "use": {
+    "D1-10": 21.8,
+    "D11-20": 21.4,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.18,
+      "hurt": -2.93,
+      "death": -0.98,
+      "fatigue": -0.06
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.24,
+      "hurt": -0.82,
+      "death": -3.84,
+      "fatigue": 0.22
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.09,
+      "death": -6.09,
+      "fatigue": 0.36
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 8.89,
+      "hurt": -9.42,
+      "death": -1.04,
+      "fatigue": -0.38
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2,
+      "hurt": -3.91,
+      "death": -3.98,
+      "fatigue": 0.11
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.44,
+      "death": -5.42,
+      "fatigue": 0.3
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 17.69,
+      "hurt": -17.64,
+      "death": -1.49,
+      "fatigue": -0.77
+     },
+     "mid": {
+      "samples": 58,
+      "win": 5,
+      "hurt": -8.33,
+      "death": -3.91,
+      "fatigue": -0.07
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.07,
+      "hurt": 1.07,
+      "death": -5.69,
+      "fatigue": 0.32
+     }
+    }
+   }
+  },
+  {
+   "id": "slimesuit",
+   "name": "연금 방수슈트",
+   "rarity": 3,
+   "category": "gear",
+   "buy": 135,
+   "counter": true,
+   "use": {
+    "D1-10": 17.4,
+    "D11-20": 17.2,
+    "D21-29": 20.4
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 2.58,
+      "hurt": -3.29,
+      "death": -0.82,
+      "fatigue": -0.09
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.47,
+      "hurt": -0.71,
+      "death": -3.58,
+      "fatigue": 0.21
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 0.42,
+      "death": -6.13,
+      "fatigue": 0.36
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 7.89,
+      "hurt": -8.6,
+      "death": -0.84,
+      "fatigue": -0.35
+     },
+     "mid": {
+      "samples": 131,
+      "win": 2.98,
+      "hurt": -4.53,
+      "death": -3.72,
+      "fatigue": 0.05
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 0.73,
+      "death": -6.29,
+      "fatigue": 0.34
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 18.31,
+      "hurt": -17.64,
+      "death": -1.91,
+      "fatigue": -0.76
+     },
+     "mid": {
+      "samples": 49,
+      "win": 5.37,
+      "hurt": -7.69,
+      "death": -4.35,
+      "fatigue": -0.05
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 0.84,
+      "death": -5.73,
+      "fatigue": 0.34
+     }
+    }
+   }
+  },
+  {
+   "id": "cryptlantern",
+   "name": "성화 랜턴",
+   "rarity": 3,
+   "category": "gear",
+   "buy": 135,
+   "counter": true,
+   "use": {
+    "D1-10": 20.6,
+    "D11-20": 20.2,
+    "D21-29": 18.6
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.49,
+      "hurt": -3.47,
+      "death": -0.82,
+      "fatigue": -0.06
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.2,
+      "hurt": -2.27,
+      "death": -2.33,
+      "fatigue": 0.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": -0.31,
+      "death": -4.69,
+      "fatigue": 0.27
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 7.33,
+      "hurt": -8.38,
+      "death": -0.67,
+      "fatigue": -0.34
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2.42,
+      "hurt": -5.18,
+      "death": -2.78,
+      "fatigue": 0.01
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 0.11,
+      "death": -4.49,
+      "fatigue": 0.27
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 14.56,
+      "hurt": -14.8,
+      "death": -1.18,
+      "fatigue": -0.64
+     },
+     "mid": {
+      "samples": 51,
+      "win": 4.64,
+      "hurt": -6.73,
+      "death": -4.18,
+      "fatigue": -0.04
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.04,
+      "hurt": 0.49,
+      "death": -5.07,
+      "fatigue": 0.29
+     }
+    }
+   }
+  },
+  {
+   "id": "snowvisor",
+   "name": "백설 방한고글",
+   "rarity": 3,
+   "category": "gear",
+   "buy": 135,
+   "counter": true,
+   "use": {
+    "D1-10": 19.5,
+    "D11-20": 20.6,
+    "D21-29": 20.7
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 1.8,
+      "hurt": -2.82,
+      "death": -1.24,
+      "fatigue": -0.03
+     },
+     "mid": {
+      "samples": 150,
+      "win": 0.4,
+      "hurt": -0.6,
+      "death": -3.69,
+      "fatigue": 0.22
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0,
+      "hurt": 1.04,
+      "death": -6.02,
+      "fatigue": 0.36
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 7.69,
+      "hurt": -8.8,
+      "death": -0.87,
+      "fatigue": -0.34
+     },
+     "mid": {
+      "samples": 150,
+      "win": 2.24,
+      "hurt": -4.04,
+      "death": -3.42,
+      "fatigue": 0.06
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 1.07,
+      "death": -5.84,
+      "fatigue": 0.34
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 15.8,
+      "hurt": -16.33,
+      "death": -0.96,
+      "fatigue": -0.73
+     },
+     "mid": {
+      "samples": 51,
+      "win": 5.36,
+      "hurt": -8.69,
+      "death": -4.64,
+      "fatigue": -0.05
+     },
+     "weak": {
+      "samples": 150,
+      "win": 0.02,
+      "hurt": 0.8,
+      "death": -6.04,
+      "fatigue": 0.37
+     }
+    }
+   }
+  },
+  {
+   "id": "magmagear",
+   "name": "마그마 냉각장비",
+   "rarity": 3,
+   "category": "gear",
+   "buy": 145,
+   "counter": true,
+   "use": {
+    "D1-10": 21.5,
+    "D11-20": 21.2,
+    "D21-29": 20.9
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 41.64,
+      "hurt": -22.93,
+      "death": -0.69,
+      "fatigue": -1.19
+     },
+     "mid": {
+      "samples": 150,
+      "win": 36.62,
+      "hurt": -23.96,
+      "death": -2.24,
+      "fatigue": -0.7
+     },
+     "weak": {
+      "samples": 150,
+      "win": 11.53,
+      "hurt": -6.87,
+      "death": -6.67,
+      "fatigue": 0.25
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 23.29,
+      "hurt": -14.87,
+      "death": -0.53,
+      "fatigue": -0.67
+     },
+     "mid": {
+      "samples": 148,
+      "win": 21.8,
+      "hurt": -15.32,
+      "death": -2.55,
+      "fatigue": -0.4
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.6,
+      "hurt": -1.53,
+      "death": -6.56,
+      "fatigue": 0.36
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 136,
+      "win": 20.83,
+      "hurt": -14.88,
+      "death": -0.49,
+      "fatigue": -0.66
+     },
+     "mid": {
+      "samples": 55,
+      "win": 16.85,
+      "hurt": -14.24,
+      "death": -2.36,
+      "fatigue": -0.44
+     },
+     "weak": {
+      "samples": 150,
+      "win": 1.84,
+      "hurt": 0.29,
+      "death": -6.49,
+      "fatigue": 0.38
+     }
+    }
+   }
+  },
+  {
+   "id": "battlelunch",
+   "name": "영웅 결전 도시락",
+   "rarity": 3,
+   "category": "food",
+   "buy": 210,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 41.84,
+      "hurt": -22.47,
+      "death": -1.07,
+      "fatigue": -6.58
+     },
+     "mid": {
+      "samples": 150,
+      "win": 56.56,
+      "hurt": -31.8,
+      "death": -3.16,
+      "fatigue": -7.33
+     },
+     "weak": {
+      "samples": 150,
+      "win": 23.96,
+      "hurt": -15.24,
+      "death": -5.64,
+      "fatigue": -7.2
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 25.58,
+      "hurt": -14.87,
+      "death": -0.76,
+      "fatigue": -7.87
+     },
+     "mid": {
+      "samples": 150,
+      "win": 35.78,
+      "hurt": -21.64,
+      "death": -3.22,
+      "fatigue": -8.59
+     },
+     "weak": {
+      "samples": 150,
+      "win": 10.58,
+      "hurt": -6.36,
+      "death": -4.49,
+      "fatigue": -7.58
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 17.89,
+      "hurt": -11.67,
+      "death": -0.98,
+      "fatigue": -8.3
+     },
+     "mid": {
+      "samples": 150,
+      "win": 25.4,
+      "hurt": -15.76,
+      "death": -2.84,
+      "fatigue": -8.8
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.93,
+      "hurt": -0.2,
+      "death": -4.67,
+      "fatigue": -8.16
+     }
+    }
+   }
+  },
+  {
+   "id": "kingwater",
+   "name": "왕도 천연암반수",
+   "rarity": 3,
+   "category": "drink",
+   "buy": 185,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 42.8,
+      "hurt": -23.29,
+      "death": -1.09,
+      "fatigue": -3.27
+     },
+     "mid": {
+      "samples": 150,
+      "win": 69.18,
+      "hurt": -37.76,
+      "death": -3.33,
+      "fatigue": -3.69
+     },
+     "weak": {
+      "samples": 150,
+      "win": 37.44,
+      "hurt": -22.76,
+      "death": -6.89,
+      "fatigue": -2.24
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 28.47,
+      "hurt": -16.29,
+      "death": -0.82,
+      "fatigue": -2.98
+     },
+     "mid": {
+      "samples": 150,
+      "win": 47.96,
+      "hurt": -28.13,
+      "death": -3.47,
+      "fatigue": -3.1
+     },
+     "weak": {
+      "samples": 150,
+      "win": 14.22,
+      "hurt": -7.71,
+      "death": -5.33,
+      "fatigue": -1.8
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 20.42,
+      "hurt": -13.27,
+      "death": -1.11,
+      "fatigue": -2.85
+     },
+     "mid": {
+      "samples": 150,
+      "win": 28.93,
+      "hurt": -17.27,
+      "death": -3.27,
+      "fatigue": -2.57
+     },
+     "weak": {
+      "samples": 150,
+      "win": 4.96,
+      "hurt": -0.44,
+      "death": -4.89,
+      "fatigue": -1.84
+     }
+    }
+   }
+  },
+  {
+   "id": "hyperenergy",
+   "name": "초고속 에너지드링크",
+   "rarity": 3,
+   "category": "drink",
+   "buy": 175,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 37,
+      "hurt": -17.62,
+      "death": -1,
+      "fatigue": -2.99
+     },
+     "mid": {
+      "samples": 150,
+      "win": 59.13,
+      "hurt": -31.24,
+      "death": -3.04,
+      "fatigue": -3.33
+     },
+     "weak": {
+      "samples": 150,
+      "win": 27.87,
+      "hurt": -21.18,
+      "death": -4.6,
+      "fatigue": -2.01
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 23.73,
+      "hurt": -12.36,
+      "death": -0.8,
+      "fatigue": -2.78
+     },
+     "mid": {
+      "samples": 150,
+      "win": 38.11,
+      "hurt": -24.78,
+      "death": -3.22,
+      "fatigue": -2.79
+     },
+     "weak": {
+      "samples": 150,
+      "win": 10.84,
+      "hurt": -13.4,
+      "death": -4.09,
+      "fatigue": -1.71
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 17.27,
+      "hurt": -11.22,
+      "death": -0.91,
+      "fatigue": -2.73
+     },
+     "mid": {
+      "samples": 150,
+      "win": 23.93,
+      "hurt": -18.04,
+      "death": -2.96,
+      "fatigue": -2.44
+     },
+     "weak": {
+      "samples": 150,
+      "win": 3.64,
+      "hurt": -8.76,
+      "death": -4.6,
+      "fatigue": -1.72
+     }
+    }
+   }
+  },
+  {
+   "id": "sageelixir",
+   "name": "대현자 허브엘릭서",
+   "rarity": 3,
+   "category": "drink",
+   "buy": 175,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 37.4,
+      "hurt": -18.51,
+      "death": -1,
+      "fatigue": -3.04
+     },
+     "mid": {
+      "samples": 150,
+      "win": 48.36,
+      "hurt": -26.87,
+      "death": -3.11,
+      "fatigue": -3.07
+     },
+     "weak": {
+      "samples": 150,
+      "win": 19.56,
+      "hurt": -11.84,
+      "death": -5.44,
+      "fatigue": -1.87
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 21.89,
+      "hurt": -12.04,
+      "death": -0.64,
+      "fatigue": -2.75
+     },
+     "mid": {
+      "samples": 150,
+      "win": 28.2,
+      "hurt": -16.91,
+      "death": -2.82,
+      "fatigue": -2.54
+     },
+     "weak": {
+      "samples": 150,
+      "win": 7.58,
+      "hurt": -3.91,
+      "death": -4.73,
+      "fatigue": -1.74
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 15.22,
+      "hurt": -9.96,
+      "death": -0.78,
+      "fatigue": -2.67
+     },
+     "mid": {
+      "samples": 150,
+      "win": 18.8,
+      "hurt": -11.42,
+      "death": -2.24,
+      "fatigue": -2.44
+     },
+     "weak": {
+      "samples": 150,
+      "win": 2.58,
+      "hurt": 0.2,
+      "death": -4.71,
+      "fatigue": -1.82
+     }
+    }
+   }
+  },
+  {
+   "id": "toppotion",
+   "name": "최상급 포션",
+   "rarity": 3,
+   "category": "potion",
+   "buy": 235,
+   "counter": false,
+   "use": {
+    "D1-10": 100,
+    "D11-20": 100,
+    "D21-29": 100
+   },
+   "ctx": {
+    "D1-10": {
+     "strong": {
+      "samples": 150,
+      "win": 36.24,
+      "hurt": -16.8,
+      "death": -1.02,
+      "fatigue": -0.86
+     },
+     "mid": {
+      "samples": 150,
+      "win": 66.09,
+      "hurt": -32.89,
+      "death": -3.27,
+      "fatigue": -1.37
+     },
+     "weak": {
+      "samples": 150,
+      "win": 62.78,
+      "hurt": -33.62,
+      "death": -8.09,
+      "fatigue": -0.53
+     }
+    },
+    "D11-20": {
+     "strong": {
+      "samples": 150,
+      "win": 22.36,
+      "hurt": -9.96,
+      "death": -0.69,
+      "fatigue": -0.51
+     },
+     "mid": {
+      "samples": 150,
+      "win": 57.67,
+      "hurt": -28.44,
+      "death": -2.89,
+      "fatigue": -1.07
+     },
+     "weak": {
+      "samples": 150,
+      "win": 29.51,
+      "hurt": -15.04,
+      "death": -6.04,
+      "fatigue": 0.14
+     }
+    },
+    "D21-29": {
+     "strong": {
+      "samples": 150,
+      "win": 11.89,
+      "hurt": -4.89,
+      "death": -0.47,
+      "fatigue": -0.21
+     },
+     "mid": {
+      "samples": 150,
+      "win": 44.53,
+      "hurt": -21.07,
+      "death": -2.49,
+      "fatigue": -0.65
+     },
+     "weak": {
+      "samples": 150,
+      "win": 8.49,
+      "hurt": -1.76,
+      "death": -4.91,
+      "fatigue": 0.35
+     }
+    }
+   }
+  }
+ ]
+}
