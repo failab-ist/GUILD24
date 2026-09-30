@@ -845,7 +845,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
-- on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
+- on a desk (≥1024) the tray lies in the middle area on the counter, between the customer's ledger and the shelf, and never covers the shelf (§SALE — DESK LAYOUT; User 2026-09-30)
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field
 The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:
@@ -1031,11 +1031,7 @@ User decision 2026-09-25: on a desk the SALE dossier column is its own area down
 
 ```new
 ### SALE — DESK LAYOUT
-(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band is two areas, not one scrolled column.
-- the dossier column (Stat grid, Traits) is its own area on the wood, running down to the dock
-- the shelf column holds the shelf on the wood and, under it, the counter tray: the tray takes only the shelf column's width, and the wood above it stays clearly apart from the tray's dark band
-- each column scrolls on its own; scrolling the shelf never moves or empties the dossier column
-- a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
+- the ledger and the shelf each scroll on their own; a redraw of the same customer keeps both positions, a new customer
 - phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
 ```
 
@@ -2169,4 +2165,22 @@ the painted rooms were checked at - so a 1366 x 680 laptop browser keeps a 1120 
 width because they are drawn at the width they are given:
 - FINAL's Boss room stays 1120 wide: wider, it grew taller and pushed the hazards and the last order under the fold
 - NIGHT's window band stays 1120 wide, centred on the wider stage, its sides the band's own edge colour
+```
+
+
+## desk SALE (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30, "PC판 전용으로 분리"; supersedes the two-area desk of 2026-09-25.) A desk (≥1024) draws its own SALE - not
+the phone's column re-flowed - from the same pieces, so every text, key and action is the phone's:
+- above the counter: the customer stands large behind the counter (the card as tall as the band allows over a lower area
+of at least 300 px), with the state and Bag, the outlook and the destination beside them and the waiting line at the far end
+- the counter top: one band, a hard edge and one cast shadow (PRESENTATION §Edge / material)
+- under it, the player's side, three areas: the customer's ledger (the last expedition, the four stats, the Traits), the
+counter tray in the middle on the counter (an empty counter is the bare counter), and the shelf
+starts both at the top; the tray never covers the shelf, and a desk never folds it
+- the phone's second readout in the column and its forecast pin are phone pieces and are not drawn on a desk
+- crossing 1024 while SALE is open draws the other layout
 ```

@@ -344,8 +344,8 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
   &&/\.p-sale \.dossier\.traits\{order:3\}/.test(css)&&!/\.p-sale \.owned-relics/.test(css),
   'the restored mobile order is stat dossier, then shelf, then Trait rows; no owned-Relic block in SALE at any width (UI-Q-v29-16, v2.9.0)');
  assert.ok(!fn('saleScreen').includes('ownedRelicView()')&&fn('finalScreen').includes('ownedRelicView()'),'SALE keeps only the shelf-head control; FINAL keeps its list');
- assert.ok(/\.p-sale \.dossier-col\{display:block;grid-column:1;margin:0\}/.test(css),
-  'the desktop grid reverts the wrapper to one real box - a single column, exactly as tall as its own content');
+ assert.ok(/\.sale-desk \.dossier-col\{display:block;margin:0\}/.test(css),
+  'the desk SALE reverts the wrapper to one real box - the ledger, exactly as tall as its own content (User 2026-09-30)');
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
  assert.ok(!/\.figure\{[^}]*object-fit:cover/.test(css),'the NPC payload is never cover-cropped');
@@ -2189,11 +2189,11 @@ test('D-30 / D-35: the notebook says what happened, or says nothing, and the win
 test('D-1 / UI-Q38: a desk is not a wide phone, and the decision gets the width',()=>{
  const desk=css.slice(css.indexOf('/* ============ 1024px+ : a desk, not a wide phone ============'));
  assert.ok(css.includes('@media(min-width:1024px)'),'the sheet has a desktop tier at all');
- assert.ok(/\.p-sale \.stage-scroll\{[^}]*display:grid/.test(desk)
-        && /\.p-sale \.stage-scroll\{[^}]*grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,1fr\)/.test(desk),
-  'the Sale decision surface is two columns there');
- assert.ok(/\.p-sale \.shelf\{grid-column:2/.test(desk),'the shelf takes the second column');
- assert.ok(/\.p-sale \.dossier-col\{display:block;grid-column:1/.test(desk),'and who this is stays beside it, not above it');
+ // User 2026-09-30: the desk SALE is its own screen - ledger | tray | shelf side by side under the counter (UI-Q-v29-25)
+ assert.ok(/\.stage\.p-sale\.sale-desk\{display:grid;grid-template-columns:minmax\(0,1fr\) minmax\(0,1\.08fr\) minmax\(0,1fr\)/.test(desk),
+  'the Sale decision surface is three columns there');
+ assert.ok(/\.sale-desk \.shelf-col\{display:block;grid-area:shelf/.test(desk),'the shelf takes its own column');
+ assert.ok(/\.sale-desk \.dossier-col\{display:block;margin:0\}/.test(desk)&&/\.sale-desk \.dossier-col\{grid-area:left/.test(desk),'and who this is stays beside it, not above it');
  // the tier is additive: nothing here may reach a phone
  assert.ok(!/@media/.test(desk.slice(desk.indexOf('{')+1,desk.indexOf('/* ---- Boss reveal'))),
   'the desktop tier is one block and does not nest another query');
@@ -3427,11 +3427,18 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
 /* v2.9.0 SALE — COUNTER TRAY (User-approved composition change 2026-09-24; UI_UX §SALE — COUNTER TRAY,
    UI-Q-v29-18). The per-row price panel is gone from the ordinary SALE: the chosen Item sits on one
    fixed tray above the dock, the shelf rows never change height, and FINAL keeps its own panel. */
-test('UI-Q-v29-25: on a desk the SALE dossier column runs to the dock, the tray sits under the shelf only, and the columns scroll apart',()=>{
- const desk=css.slice(css.indexOf('@media(min-width:1024px){\n /* The stat/forecast column'));
- assert.ok(/grid-template-areas:"task task" "front front" "edge edge" "left shelf" "left tray" "dock dock"/.test(desk),'two areas below the counter band: the dossier beside the shelf and the tray');
- assert.ok(/\.p-sale>\.stage-scroll\{display:contents\}/.test(desk)&&/\.p-sale \.dossier-col\{grid-area:left/.test(desk)&&/\.p-sale \.shelf-col\{display:block;grid-area:shelf/.test(desk)&&/\.p-sale>\.counter-tray\{grid-area:tray/.test(desk),'the dossier runs to the dock; the tray is only the shelf column wide');
- assert.ok(/\.p-sale \.dossier-col,\.p-sale \.shelf-col\{min-height:0;overflow-y:auto/.test(desk),'each column scrolls on its own');
+test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, then ledger / tray / shelf, the ledger and shelf scrolling apart',()=>{
+ /* User 2026-09-30 ("PC판 전용으로 분리"): saleScreen hands a desk to saleDesk, which reuses the phone's pieces */
+ const desk=fn('saleDesk');
+ assert.ok(/if\(deskSale\(\)\)return saleDesk\(n,st,waiting,preloadHtml\);/.test(fn('saleScreen')),'a desk draws its own SALE');
+ assert.ok(/matchMedia\('\(min-width:1024px\)'\)/.test(app)&&/deskWas!==null&&d!==deskWas&&game\.run\?\.phase==='sell'\)render\(\)/.test(app),'crossing 1024 mid-SALE redraws the other layout');
+ for(const piece of ['speech(n)','standee(n)','kitLine(n)',"readout(n,st?st.item:null,'core-desk')",'destPlate(n)','waitingLine(waiting)','returningSummary(n)','statGrid(n)','deepOfferUI(n)','traitRows(n)','shelf()','tray()'])
+  assert.ok(desk.includes(piece),'the desk reuses '+piece);
+ assert.ok(!/core-mob|forecastPin/.test(desk),'the phone-only readout copy and forecast pin are not drawn on a desk');
+ assert.ok(/grid-template-areas:"task task task" "front front front" "edge edge edge" "left tray shelf" "dock dock dock"/.test(css),'three areas under the counter band: ledger, tray, shelf');
+ assert.ok(/\.sale-desk>\.stage-scroll\{display:contents\}/.test(css)&&/\.sale-desk \.dossier-col\{grid-area:left/.test(css)&&/\.sale-desk \.shelf-col\{display:block;grid-area:shelf/.test(css)&&/\.sale-desk>\.counter-tray\{grid-area:tray/.test(css),'the tray lies in the middle, on the counter, never over the shelf');
+ assert.ok(/\.sale-desk \.dossier-col,\.sale-desk \.shelf-col\{min-height:0;overflow-y:auto/.test(css),'the ledger and the shelf scroll on their own');
+ assert.ok(/\.stage\.sale-desk \.front\{--cardw:max\(200px,min\(400px,calc\(100dvh - 490px\)\)\)/.test(css),'the customer stands large, as tall as the band allows');
  assert.ok(/\.p-sale \.shelf-col\{display:contents\}/.test(css)&&/'<div class="shelf-col">'\+shelf\(\)\+'<\/div>'/.test(fn('saleScreen')),'the shelf column is no box on a phone');
  assert.ok(/const previousCols=\['\.p-sale \.dossier-col','\.p-sale \.shelf-col'\]/.test(app)&&/el\.scrollTop=changed\?0:previousCols\[i\]/.test(app),'a redraw keeps both column positions; a new view starts at the top');
 });
@@ -3456,7 +3463,7 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
  assert.ok(fn('till').includes(':priceKeys(n,it,st);'),'the FINAL panel and the tray share the one price-key owner');
  assert.ok(/\.p-sale \.counter-tray\{flex:0 0 auto;/.test(css)&&/\.tray-empty\{margin:0;min-height:44px/.test(css),'fixed band, 44px when empty');
  assert.ok(/\.counter-tray \.tills button\{min-height:64px/.test(css)&&/\.good\{[^}]*padding:8px 0/.test(css)&&/\.good \.tile\{width:38px/.test(css),'compact keys and rows keep the 360 budget');
- assert.ok(/@media\(min-width:1024px\)\{\.p-sale \.counter-tray\{display:grid;grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,1fr\);gap:0 24px\}\.p-sale \.counter-tray>\*\{grid-column:2\}\}/.test(css),'on a desk the tray aligns under the shelf column');
+ assert.ok(/\.sale-desk>\.counter-tray\{grid-area:tray;align-self:start;display:block;/.test(css)&&/\.sale-desk>\.counter-mat\{grid-area:tray;/.test(css),'on a desk the tray lies in the middle area on the counter (User 2026-09-30)');
  assert.ok(/\.good \.what span\{font:600 14px/.test(css),'the effect line keeps its Function class (UI_UX §FUNCTION / FLAVOR)');
 });
 

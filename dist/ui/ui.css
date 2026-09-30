@@ -1245,7 +1245,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:2px 3px 0 #00000066,inset 0 0 0 1px #c6b894;transform-origin:left bottom;
  clip-path:polygon(0 0,100% 0,100% calc(100% - 4px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 4px))}
 .receipt-stub::before{content:'';display:inline-block;width:8px;height:8px;margin:0 7px 0 0;background:var(--gold);box-shadow:inset 0 0 0 2px #2c2418;vertical-align:-1px}
-@media(min-width:1024px){.receipt-stub{left:calc(50% + 12px)}}
+/* on the desk SALE (User 2026-09-30) the stub lands on the counter in the middle area, where the tray was pressed */
+@media(min-width:1024px){.receipt-stub{left:calc(50% - 110px)}}
 .tray-empty{margin:0;min-height:44px;display:flex;align-items:center;font:400 14px/1.3 var(--ui);color:#a2947c}
 .tray-item{display:flex;align-items:center;gap:10px}
 .tray-icon{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;
@@ -1265,7 +1266,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .next-decision{margin:4px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
 .counter-tray .tills{margin-top:8px;padding:0;position:static;background:none}
 .counter-tray .tills button{min-height:64px;padding:8px 2px}
-@media(min-width:1024px){.p-sale .counter-tray{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 24px}.p-sale .counter-tray>*{grid-column:2}}
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): folded, the tray keeps only its header line - the Item and the
    customer - so the shelf gets the room back; the whole folded strip is one button that opens it again. A desk never folds. */
 .p-sale .counter-tray{position:relative}
@@ -2984,16 +2984,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    1048px of width spent on a single column. The two halves sit side by side here, so the
    shelf is in view while the forecast it answers is still on screen. */
 @media(min-width:1024px){
- /* The stat/forecast column and the shelf column are independent content, so each stays
-    exactly as tall as its own content instead of being stretched to match the other - a
-    stat grid + Trait rows column no wider (taller) than it needs, and no forced gap
-    between the stat grid and the Trait rows to make the two columns line up. */
- .p-sale .stage-scroll{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-  gap:24px;align-content:start;align-items:start}
- /* Reverts the mobile `display:contents` unwrap: on the desktop grid this column is one
-    real box (one grid cell) holding the stat/forecast dossier and the Trait rows stacked
-    in their own normal document order, which is what keeps them exactly as tall as their
-    own content - the `order` values above are flex-only and do nothing here. */
  /* CLOSING / the two endings on a desk. The result here IS an object - a receipt, 344px of
     paper - and the dock is a bar pinned to the floor of a 880px stage. At a phone width those
     two measures nearly agree, so the day's last control reads as the receipt's own next step.
@@ -3062,26 +3052,36 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* a short till still names its own way out, under the same paper */
  .p-closing .dock{flex-wrap:wrap}
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
- .p-sale .dossier-col{display:block;grid-column:1;margin:0}
- .p-sale .shelf{grid-column:2;margin:0}
- /* UI_UX §SALE — DESK LAYOUT (User 2026-09-25, v2.9.0): below the counter band the desk is two areas. The dossier
-    column is its own area running down to the dock; the shelf column holds the shelf on the wood and, under it, the
-    counter tray - the tray takes only the shelf column's width. Each column scrolls on its own, so working down the
-    shelf never moves or empties the dossier side. The scrolled column of the phone is no box here. */
- .stage.p-sale{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-  grid-template-rows:auto auto auto minmax(0,1fr) auto auto;
-  grid-template-areas:"task task" "front front" "edge edge" "left shelf" "left tray" "dock dock"}
- .p-sale>.task-line{grid-area:task}
- .p-sale>.front{grid-area:front}
- .p-sale>.counter-edge{grid-area:edge}
- .p-sale>.dock{grid-area:dock}
- .p-sale>.stage-scroll{display:contents}
- .p-sale .dossier-col,.p-sale .shelf-col{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+ /* the desk SALE's ledger is one real box (the phone unwraps it), its Traits under its stats in document order */
+ .sale-desk .dossier-col{display:block;margin:0}
+ .sale-desk .shelf{margin:0}
+ /* PC SALE (User 2026-09-30, UI_UX §SALE — DESK LAYOUT): the desk's own SALE (app.js saleDesk). The customer stands
+    large behind the counter; under the counter top the player's side is three areas - the customer's ledger, the counter
+    tray in the middle on the counter, the shelf - each its own height, the ledger and the shelf scrolling on their own. */
+ .stage.p-sale.sale-desk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr) minmax(0,1fr);
+  grid-template-rows:auto auto auto minmax(0,1fr) auto;
+  grid-template-areas:"task task task" "front front front" "edge edge edge" "left tray shelf" "dock dock dock"}
+ .sale-desk>.task-line{grid-area:task}
+ .sale-desk>.front{grid-area:front}
+ .sale-desk>.counter-edge{grid-area:edge}
+ .sale-desk>.dock{grid-area:dock}
+ .sale-desk>.stage-scroll{display:contents}
+ .sale-desk .dossier-col,.sale-desk .shelf-col{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
   background:var(--tex-wood),#2b2013}
- .p-sale .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
- .p-sale .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
- .p-sale>.counter-tray{grid-area:tray;display:block;padding-left:12px}
- .p-sale>.counter-tray>*{grid-column:auto}
+ .sale-desk .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
+ .sale-desk .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
+ /* the counter itself: the mat the tray lies on, the same dark well as the tray, so an empty counter reads as the counter */
+ .sale-desk>.counter-mat{grid-area:tray;background:#15100a;box-shadow:inset 0 4px 0 #000000b3,inset 4px 0 0 #00000066,inset -4px 0 0 #00000066}
+ .sale-desk>.counter-tray{grid-area:tray;align-self:start;display:block;padding:14px 16px 16px;box-shadow:none;background:none}
+ .sale-desk>.counter-tray>*{grid-column:auto}
+ .sale-desk>.counter-tray .tills{margin-top:14px}
+ /* the customer about 1.3x the old desk card (390 px at 1280 x 880, 400 at most), as tall as the band allows over a
+    ledger / tray / shelf that keeps at least 300 px (a 1024 x 768 desk included) */
+ .stage.sale-desk .front{--cardw:max(200px,min(400px,calc(100dvh - 490px)));grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:end;column-gap:20px}
+ .sale-desk .front-side{max-width:640px}
+ .sale-desk .front>.line-up{grid-column:3;grid-row:1;align-self:end;padding-bottom:12px}
+ .sale-desk .front>.line-up .wait:first-child{margin-left:0}
  
 }
 

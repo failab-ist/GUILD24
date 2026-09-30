@@ -864,7 +864,7 @@ PASS:
 - the filled tray is ≤ 200px at 360 and at least three shelf rows remain visible above it
 - the price keys are at the same place for every Item; the hand-over icon starts from the tray icon and lands on the Bag slot; a successful sale clears the tray
 - a refusal keeps the Item on the tray with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
-- on 1280 the tray sits above the dock with its contents aligned under the shelf column
+- on 1280 the tray lies in the middle area on the counter, between the ledger and the shelf (User 2026-09-30)
 - FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
 FAIL:
 - the shelf list moves or changes height when a row is tapped
@@ -1067,11 +1067,10 @@ User decision 2026-09-25: on a desk the SALE dossier column is its own area down
 ```new
 ### UI-Q-v29-25 — SALE DESK LAYOUT
 (User 2026-09-25, v2.9.0)
-SALE with a customer at 1024 and 1280 with a shelf taller than the column; scroll the shelf to its end with the wheel over it, then pick a row.
-- the dossier column runs on the wood down to the dock; the counter tray is only as wide as the shelf column and sits under the shelf
-- the shelf scrolls alone and the dossier column does not move; after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
+SALE with a customer at 1024×768, 1280 and 1920×1080 with a shelf taller than its area; scroll the shelf to its end with the
+- the shelf scrolls alone and the ledger does not move; after the pick (a redraw) the shelf keeps its scroll position; the
 - at 360 / 390 / 412 the single scrolled column and the full-width tray are unchanged
-- a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
+- the tray over the shelf, the ledger scrolling with the shelf, a shelf that jumps to the top after a pick, the phone's
 ```
 
 ## AMENDMENT — v2.9.1 balance: UI-Q-v29-26 (User decision 2026-09-25)
@@ -1967,4 +1966,19 @@ New:
 ```new
 - on a portrait stage under 700 high the filled tray is the tighter step (about 124px at 360) and at least three shelf
 rows remain above it from 640 high up (UI_UX §SHORT PHONE, User 2026-09-30)
+```
+
+
+## desk SALE (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-25, v2.9.0; the desk's own SALE, User 2026-09-30.)
+wheel over it, pick a row, sell; then narrow the window to 1023 and widen it back.
+- the customer stands large behind the counter, the state / outlook / destination beside them, the waiting line at the end
+- under the counter: the ledger, the tray in the middle on the counter, the shelf; the tray never covers a shelf row
+next customer starts at the top
+- at 1023 the phone SALE is drawn, at 1024 the desk SALE again, with no error
+forecast pin or second readout on a desk, or a layout that stays the other one after crossing 1024
 ```

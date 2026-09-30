@@ -142,6 +142,11 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **The desk draws its own SALE** - UI_UX §SALE — DESK LAYOUT, UI-Q-v29-25 / UI-Q-v29-18 (User 2026-09-30, "설계안으로 가되
+  PC판 전용으로 분리해서"): on a desk SALE is its own screen, built from the phone's pieces - the customer about 1.3x larger (card 300 -> 390 px at 1280)
+  behind the counter with the state, outlook and destination beside them, then under the counter top the ledger, the tray
+  in the middle on the counter, and the shelf. The tray no longer covers the shelf (1280: 4 rows beside a filled tray, was
+  3). Phones unchanged; crossing 1024 mid-SALE draws the other layout.
 - **A wider desk stage** - UI_UX §DESK STAGE WIDTH (User 2026-09-30, "상한은 넓혀", every desk screen): the stage cap goes
   1120 -> 1440 px, and never past 1.65 times the stage's height (a 1366 x 680 laptop keeps 1120: wider, the new-store
   scene cropped until the Capital plate sat on the Action). FINAL's Boss room and NIGHT's window band keep 1120 - both are

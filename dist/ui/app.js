@@ -880,6 +880,7 @@ function saleScreen(){
    const preloadArt = nextNpc ? Scene.npcArt(nextNpc) : null;
    const preloadHtml = preloadArt ? '<img src="'+preloadArt+'" style="display:none" aria-hidden="true">' : '';
    const st=s.inventory.find(x=>x.id===selected);
+   if(deskSale())return saleDesk(n,st,waiting,preloadHtml);
    return '<div class="stage p-sale">'+menuFab()+preloadHtml+taskLine('sell')
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
@@ -915,6 +916,35 @@ function saleScreen(){
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
+/* UI_UX §SALE — DESK LAYOUT (User 2026-09-30, "PC판 전용으로 분리"): a desk draws its own SALE, not the phone's column
+   re-flowed. The customer stands large behind the counter with the state, the outlook and the destination beside them and
+   the waiting line at the far end; under the counter top the player's side is three areas - the customer's ledger (the
+   stats, Traits and last expedition), the counter tray in the middle on the counter, and the shelf. The pieces are the
+   phone's own (the same functions, so the same text, keys and actions); what the phone needs only on a phone - its second
+   readout in the column and the forecast pin - is not drawn here. */
+const deskSale=()=>typeof matchMedia==='function'&&matchMedia('(min-width:1024px)').matches;
+function saleDesk(n,st,waiting,preloadHtml){const s=game.run;
+ return '<div class="stage p-sale sale-desk">'+menuFab()+preloadHtml+taskLine('sell')
+ +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
+  +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
+  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+'</div>'
+  +waitingLine(waiting)
+ +'</section>'
+ +'<div class="counter-edge" aria-hidden="true"></div>'
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
+  +'<div class="dossier-col">'
+   +'<div class="dossier">'+returningSummary(n)+statGrid(n)+deepOfferUI(n)+'</div>'
+   +'<div class="dossier traits">'+traitRows(n)+'</div>'
+  +'</div>'
+  +'<div class="shelf-col">'+shelf()+'</div>'
+ +'</main>'
+ +'<div class="counter-mat" aria-hidden="true"></div>'+tray()
+ +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
+ +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';}
+/* crossing the desk breakpoint mid-SALE draws the other layout */
+let deskWas=deskSale();
+window.addEventListener('resize',()=>{const d=deskSale();if(deskWas!==null&&d!==deskWas&&game.run?.phase==='sell')render();deskWas=d;});
 // The waiting line. Every customer still outside is the same back — no face, silhouette,
 // colour, rarity or name leaks out of it. Only how many are left is public.
 function waitingLine(waiting){
