@@ -1271,21 +1271,21 @@ const coachSteps={
  ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.'],
  ['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']],
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
-    it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it) */
- night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.'],
-  ...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
+    it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it).
+    COACH DIET (User 2026-09-30): the `한 명씩` result mark is retired - the record and its 전체 건너뛰기 key say it */
+ night:[...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
     purse box that carries both 보유 자금 and 영업 손익. */
  /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
  final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
- closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.']],
+ /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
+ closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
-    it used to open with no word of what a Store Support is. These three marks read the takeover
-    - what it is, how a card reads, what the key does and when more arrive - and never name a
-    pick. They run on the DAY 0 takeover only (see showCoach); account-scoped like every mark. */
- /* COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
+    it used to open with no word of what a Store Support is. The mark reads the takeover and never
+    names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
+    COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
  relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.']]
 };
 let activeCoach=null;

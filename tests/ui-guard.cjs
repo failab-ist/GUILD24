@@ -1795,9 +1795,10 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
- for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','forecast','pricing'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','forecast','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
+ assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
  for(const id of ['relic-what','deep','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
   assert.ok(ids.has(id),'kept before the fact: '+id);
 });
@@ -2374,7 +2375,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/'fatigue'/.test(fn('tray'))&&!/' prepared'/.test(fn('kitLine')),'and no anchor class is left for them');
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): they are taught after they act - a NIGHT coach mark per taught rule,
     anchored to the class the returning record carries, in Copy.learned order, after the NIGHT result mark */
- assert.ok(/night:\[\['result','\.beat',[^\]]*\],\n\s*\.\.\.Copy\.learned\.map\(\(\[k,text\]\)=>\['learn-'\+k,'\.beat \.told\.learn-'\+k,text\]\)\]/.test(steps),'the NIGHT marks follow the result mark, one per taught rule');
+ assert.ok(/night:\[\.\.\.Copy\.learned\.map\(\(\[k,text\]\)=>\['learn-'\+k,'\.beat \.told\.learn-'\+k,text\]\)\]/.test(steps),'the NIGHT marks are the taught rules alone, one per rule (the result mark is retired, COACH DIET)');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  assert.ok(!/class="learned"|<b>발견<\/b>/.test(app),'no inline 발견 line on the record (User 2026-09-30: shown like the tutorial)');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
@@ -2940,7 +2941,8 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
                     '손님이 계산대에 왔을 때의 원정 전망','50% 할인은 단골도를 크게 올리고','이 손님이 갈 게이트의 위험. 위험마다',
                     '오늘 올 손님 수. 점포지원','열린 게이트의 위험을 보고 오늘 필요한','오늘 열린 게이트와 위험. 위험 보기를',
                     '창고에 있는 재고. 첫날에는','‘최대’는 이 후보에서 지금 발주할 수 있는',
-                    '후보 전체를 교환한다. 같은 날','카드마다 효과와 가격이 적혀','누르면 바로 확보된다. 이후 DAY'])
+                    '후보 전체를 교환한다. 같은 날','카드마다 효과와 가격이 적혀','누르면 바로 확보된다. 이후 DAY',
+                    '한 명씩 원정 결과와 변화를 확인한다','줄어든 날도 창고에 물건으로'])
   assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
  // §4-8
  assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');
