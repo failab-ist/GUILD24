@@ -102,8 +102,7 @@ QA:
 - UI_UX_QA_v2.8.0.md
 - SOURCE_ADOPTION_QA_v2.8.0.md
 
-Audit:
-- SSOT_AUDIT_v2.8.0.md
+The v2.8 Canonical audit record (closed 2026-09-23) is `archive/v2.8/SSOT_AUDIT_v2.8.0.md`.
 
 ## ROUTING
 

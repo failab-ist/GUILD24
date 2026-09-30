@@ -21,6 +21,7 @@
 | `WORK_HISTORY_v2.8.md` | v2.8 작업 이력 | (원래 여기) |
 | `inactive/v2_7_franchise/` | 폐기된 v2.7 프랜차이즈 코드(`tests/revision.cjs`가 읽고, `dist/systems/meta.js` · META가 가리킨다) | `dist/systems/` |
 | `v2.8/GUILD24_v2.8_RELEASE_VISION.md` | v2.8 방향 문서(비Canonical) | 루트 |
+| `v2.8/SSOT_AUDIT_v2.8.0.md` | v2.8 Canonical 감사 기록(닫힘). 통합 방법 · 레이아웃 결정의 근거(SPEC_INDEX가 가리킨다) | `design_ssot/` |
 | `v2.8/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md` | v2.8 문구·대사 채택 감사(SSOT_AUDIT · `tests/copy.cjs`가 가리킨다) | `reports/` |
 | `v2.8/tools/qa-end-states.cjs` | v2.8 END 상태 캡처 도구(`qa-final-end` · `qa-final-prep`가 기준 시드로 가리킨다) | `tools/` |
 | `v2.9.1-balance/*.md` | v2.9.0 BALANCE FINDING, v2.9.1 합의값 · 이상안 · 옵션 · 측정 요약 · 구현 핸드오프 | `reports/` |

@@ -30,6 +30,11 @@ Every closed version, where it landed on `main` and its tag. Tags are set by the
   the per-version NEXT VERSIONS routing) and the per-version header status history leave the index; the status history is
   §RELEASE RECORD above, the per-version routing is each version's section below, and the game feel contract keeps its
   routing as SPEC_INDEX §GAME FEEL CONTRACT — ROUTING.
+- **Pre-change wording out of the owners**: COPY_AUDIT drops its 이전 / 기존 / 삭제 blocks (only `현재` is copy truth);
+  UI_UX, UI_UX_QA, DUNGEON_HAZARD, DUNGEON_ITEM_QA, ECONOMY_ORDER(_QA) and ITEM drop the superseded values and
+  "it was / used to / since v2.9.x" clauses from their decision parentheticals. Rules and current values are unchanged;
+  each ledger accounts every line (`npm run ssot:check`).
+- **SSOT_AUDIT** (the closed v2.8 audit record) moves unchanged to `archive/v2.8/`.
 - **Archive**: closed-version reports and finished-question tools moved from `reports/` · `tools/` to `archive/v2.9.x/`, live
   references follow. Then the archive kept only what carries a decision or an insight, or what a live file points at; raw
   result JSON, unrunnable old tools, the legacy harness, finished handoffs and applied checklists were removed (git history
