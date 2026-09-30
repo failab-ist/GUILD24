@@ -2204,3 +2204,16 @@ New:
 3. the Run beat the account's best 총매출 (META §BEST DAY; User 2026-09-30): `지금까지 가장 많이 판 점포다 · 총매출 {N}G` -
 N is the settlement's `총매출` row as the tape prints it
 ```
+
+
+## v2.9.11 D30 candidates while ordering, FINAL 준비 notebook (User 2026-09-30)
+
+New:
+
+```new
+- (User 2026-09-30) the last order carries `원정대 후보 보기` beside `원정대 선택`, the same bar: a read-only sheet of the
+same candidates, each opening the notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW); on a phone both bars share
+one row at a smaller face, on a desk they keep the full face
+- (User 2026-09-30) FINAL 준비 carries `자세히 보기` under the supplied member's Stat grid - a quiet text control that
+opens that member's notebook read only
+```

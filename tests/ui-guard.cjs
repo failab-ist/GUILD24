@@ -1800,6 +1800,13 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
  assert.ok(/case'final-team':game\.selectFinal\(id\)/.test(app),'and goes through the one selection rule');
  assert.ok(/'<div class="final-stats">'\+statGrid\(/.test(f)&&!/details class="final-order"/.test(f),'FINAL 준비 shows the Stat grid and no second order form');
  assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
+ /* User 2026-09-30: the candidates can be read while ordering (view only), and a confirmed member's notebook from the prep */
+ assert.ok(/btn\('원정대 후보 보기','final-roster','stamp'\)\+btn\('원정대 선택','final-ordered'/.test(f),'원정대 후보 보기 sits beside 원정대 선택, the same bar');
+ const m=app.slice(app.indexOf("else if(modal==='finalRoster')"),app.indexOf("else if(modal.startsWith('npc:'))"));
+ assert.ok(/npcCard\(n,'final-view'\)/.test(m)&&/n\.alive&&n\.introduced/.test(m)&&!/final-npc|final-team|selectFinal/.test(m),'the candidates are the muster\'s own list, with no pick on it');
+ assert.ok(/case'final-view':case'final-detail':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'each opens the ordinary notebook');
+ assert.ok(/s\?\.phase==='final'&&!s\.finalCommitted&&n&&\(finalOrdered\|\|s\.team\.length\)\)/.test(app),'the notebook picks only on the muster step, never while ordering');
+ assert.ok(/btn\('자세히 보기','final-detail','bare more','data-id="'\+supplyNPC\+'"'\)/.test(f),'FINAL 준비: 자세히 보기 opens the supplied member\'s notebook');
 });
 
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */

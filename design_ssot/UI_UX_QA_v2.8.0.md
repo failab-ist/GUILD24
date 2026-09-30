@@ -1655,6 +1655,22 @@ FAIL:
   quantity tap closes it
 - a second copy of the warehouse on screen
 
+### UI-Q-v29-51 — D30 CANDIDATES / FINAL 준비 NOTEBOOK (User 2026-09-30)
+
+Verify FINAL_EXPEDITION §D30 PLAYER FLOW and UI_UX §PARTY SELECTION at 360 / 390 and 1280.
+
+PASS:
+- the last order's dock carries `원정대 후보 보기` beside `원정대 선택`, the same bar; on a phone both sit on one row,
+  neither label wraps
+- it opens `원정대 후보`: the muster's candidates (alive, visited), each card opening the notebook; the notebook's footer is
+  `원정대 후보 보기`, never `원정대 선택` / `원정대에서 빼기`; nothing about the party changes
+- on the muster step the notebook still picks and releases as before
+- FINAL 준비: `자세히 보기` under the Stat grid opens the supplied member's notebook with `돌아가기`
+- no console or runtime error
+
+FAIL:
+- a pick or release possible while ordering, or a second muster on the order step
+
 ### UI-Q-v29-32 — ORDER CONFIRM CASCADE
 
 (User 2026-09-25, v2.9.2 H3; owner `UI_UX_v2.8.0.md` §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM.)

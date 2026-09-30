@@ -1916,6 +1916,11 @@ The Final roster is a selection surface, not a rarity gallery.
 - selected cards alone own the strong selection frame;
 - rarity text may gain one restrained size/weight step if needed, but never outranks the NPC name or causes overflow;
 - the party count stays fully readable and is never covered by the floating menu pin.
+- (User 2026-09-30) the last order carries `원정대 후보 보기` beside `원정대 선택`, the same bar: a read-only sheet of the
+  same candidates, each opening the notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW); on a phone both bars share
+  one row at a smaller face, on a desk they keep the full face
+- (User 2026-09-30) FINAL 준비 carries `자세히 보기` under the supplied member's Stat grid - a quiet text control that
+  opens that member's notebook read only
 
 No ordinary expedition `전투 전망` is shown while the party is provisional.
 Use the exact selection guidance owned by COPY_AUDIT_APPROVED.

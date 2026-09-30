@@ -2105,6 +2105,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;
  box-shadow:inset 0 4px 0 #d4695b,inset 0 -6px 0 #45150f,
   inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16}
+/* the last order carries two bars (User 2026-09-30: 원정대 후보 보기 beside 원정대 선택, the same bar): on a phone they share
+   one row at a smaller face rather than stacking two 64px bars over the order form; the desk keeps the full face */
+@media (max-width:1023px){.p-final .dock:has(.stamp+.stamp) .stamp{flex:1 1 auto;min-width:0;padding:0 8px;font-size:16px;letter-spacing:.02em;white-space:nowrap}}
 .p-final .dock .stamp:hover{background:#98342a;
  box-shadow:inset 0 4px 0 #e07a6b,inset 0 -6px 0 #4f1912,
   inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a}
@@ -2244,6 +2247,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .pfp.fallback{display:grid;place-items:center}
 /* the loadout: who is carrying what through the gate */
 .final-team{display:grid;gap:9px;margin-bottom:20px}
+/* 자세히 보기 under the supplied member's Stats: the notebook, a quiet text control (the END `도감에서 보기` weight) */
+.final-stats{display:grid}
+.final-stats .more{justify-self:end;min-height:44px;text-decoration:underline;text-underline-offset:3px}
 .final-member{display:block;width:100%;text-align:left;padding:11px 12px;background:#1c1512;border-radius:0;
  box-shadow:inset 0 0 0 2px #ffffff12}
 .final-member.active{background:#2a2116;box-shadow:inset 0 0 0 2px var(--gold)}

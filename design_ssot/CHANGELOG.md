@@ -146,6 +146,10 @@ the owner headers and in the git tag.
   없어지던데 ... 폐쇄됐다는 정보가 전달되도록"): the Gate 게이트 임시 폐쇄 closes was simply gone, so the player could not
   tell which one. It stays on the MORNING board, in the `위험 보기` window and on ORDER's `오늘` line, faded with its name
   struck and one `오늘 폐쇄` stamp, no Hazard rows. It still takes no visitor, expedition or order (simulation unchanged).
+- **D30: read the candidates while ordering, a notebook in FINAL 준비** - FINAL_EXPEDITION §D30 PLAYER FLOW, UI_UX §PARTY
+  SELECTION, COPY_AUDIT §14-9, UI-Q-v29-51 (User 2026-09-30: "누구 있는지 알아야 템을 선택하니"): the last order now carries
+  `원정대 후보 보기` beside `원정대 선택` - the candidates and their notebooks, read only; the pick and 원정대 확정 stay on the
+  next step. FINAL 준비 carries `자세히 보기` under the Stat grid, the supplied member's notebook (Traits, records).
 - **END replay line: a best 총매출** - META §BEST DAY, UI_UX §END — REPLAY NUDGE, COPY_AUDIT §10-3, UI-Q-v29-37 (User
   2026-09-30, "최고 총매출만"): half the endings printed no replay line, most of them after the Decorations were collected,
   when a best Day was the only line left (`reports/v3-prep-measure-v2911.md` §2). The account now also keeps its best 총매출

@@ -381,3 +381,16 @@ The D30 ORDER sheet never offers these, on its first sheet or after a Reroll (Us
 cannot go in a Final Bag, so buying one was spending with no possible use. Same explicit no-effect exclusion D30 Store
 Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
 ```
+
+
+## v2.9.11 D30 candidates while ordering, FINAL 준비 notebook (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30, v2.9.11.) The last order is chosen for the people who can go, so they can be read while ordering:
+`원정대 후보 보기`, beside `원정대 선택` and the same bar, opens the muster's own candidates read only - each card opens the
+notebook, whose footer returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on
+출전 NPC 선택. In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits,
+records), footer `돌아가기`.
+```

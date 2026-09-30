@@ -144,6 +144,12 @@ ordinary order form, optional, confirmed on its own 발주 확정; `원정대 �
 or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
 form is not repeated there.
 
+(User 2026-09-30, v2.9.11.) The last order is chosen for the people who can go, so they can be read while ordering:
+`원정대 후보 보기`, beside `원정대 선택` and the same bar, opens the muster's own candidates read only - each card opens the
+notebook, whose footer returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on
+출전 NPC 선택. In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits,
+records), footer `돌아가기`.
+
 Purpose:
 Final must remain the culmination of the shop-management decisions learned during the Run rather than switching to an opaque separate combat interaction.
 
