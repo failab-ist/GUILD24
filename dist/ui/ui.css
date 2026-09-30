@@ -1647,6 +1647,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-closing .dock .stamp,.p-end .dock .stamp{margin:0 auto;width:min(100%,344px);min-width:0;
  min-height:64px;font:600 20px/1 var(--ui);white-space:nowrap}
 .p-closing .dock .stamp,.p-end .dock .stamp{text-shadow:0 2px 0 #5a221a}
+/* its own layer (v2.9.12): these screens centre a receipt whose rows are not whole pixels, so the Action often lands on a
+   half pixel; as a layer it is still drawn on whole pixels, and its pixel-art edge and 1px pressed cast stay hard (UI-Q-v29-44) */
+.p-closing .dock .stamp,.p-end .dock .stamp{will-change:transform}
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 /* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
