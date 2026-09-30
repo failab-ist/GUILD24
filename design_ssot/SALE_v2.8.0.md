@@ -5,8 +5,6 @@ OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loya
 DOC_VERSION=2.9.2
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/SALE_v2.8.0-patch.md,history/SALE_v2.7.0.md,history/SALE_v2.6.1.md,history/SALE_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/SALE.md
 
 ## KEY
 

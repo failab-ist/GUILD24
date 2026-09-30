@@ -66,7 +66,7 @@ files.
 - `design_ssot/CHANGELOG.md` records what each version changed, per owner, with the User decision date.
 - A release is closed by a git tag (`v2.9.0`) on the commit where SPEC_INDEX, CHANGELOG, owners and
   Source agree; the tag, not a filename, is the version.
-- history/ keeps pre-consolidation files as audit evidence only; a version bump copies nothing there.
+- Owners state the current spec only; what changed and why is CHANGELOG's, older wording is in git history.
 
 ## CURRENT CANONICAL FILE SET
 
@@ -126,12 +126,9 @@ FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.
 
 ## HISTORICAL / SUPERSEDED FILE POLICY
 
-Every owner in CURRENT CANONICAL FILE SET is self-contained: the 2026-09-23 consolidation merged each
-owner's former inheritance chain into the owner itself, keeping current rules only (ledgers:
-reports/ssot-consolidation/). No current owner inherits from an older file.
-
-design_ssot/history/ holds legacy only: older versions and each owner's pre-consolidation v2.8 patch
-(`*_v2.8.0-patch.md`). Do not search or open history/ for current rules; it is audit evidence.
+Every owner in CURRENT CANONICAL FILE SET is self-contained and inherits from no older file. The pre-v2.8
+owner versions, their 2026-09-23 consolidation ledgers and the ledger check were removed 2026-09-30 (User);
+git history keeps them. Do not restore them as a second current truth.
 
 Unreferenced historical navigation/decision snapshots may be removed.
 Historical/base files must not be opened as a second current truth.

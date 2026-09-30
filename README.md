@@ -33,7 +33,6 @@ Detailed Rule / Numeric / UX / QA truth is intentionally not duplicated in this 
 Use the scripts currently defined in `package.json`:
 
 - `npm test` - the suite (also the deploy gate)
-- `npm run ssot:check` - SSOT ledger line accounting (`reports/ssot-consolidation/`)
 - `npm run audit` - regenerates the Source-derived reports (`reports/COVERAGE.md`, `ITEM-PRICES.md`, `TRAITS.md`)
 - `npm run qa:runtime` - pass/fail browser harnesses
 - `npm run qa:visual` - the full visual / mobile gate (captures to `reports/ui/`, ignored)

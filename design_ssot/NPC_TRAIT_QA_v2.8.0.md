@@ -5,8 +5,6 @@ OWNER=qa,npc,trait,roster,living_npc_cap,wallet,destination,condition,growth,rev
 DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
-CONSOLIDATED_FROM=history/NPC_TRAIT_QA_v2.8.0-patch.md,history/NPC_TRAIT_QA_v2.7.0.md,history/NPC_TRAIT_QA_v2.6.1.md,history/NPC_TRAIT_QA_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/NPC_TRAIT_QA.md
 
 Status values are not stored here.
 This file defines acceptance criteria only.

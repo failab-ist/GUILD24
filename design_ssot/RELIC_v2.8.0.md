@@ -5,8 +5,6 @@ OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,slo
 DOC_VERSION=2.9.11
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/RELIC_v2.8.0-patch.md,history/RELIC_v2.7.0.md,history/RELIC_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/RELIC.md
 
 ## PLAYER-FACING SYSTEM NAME
 

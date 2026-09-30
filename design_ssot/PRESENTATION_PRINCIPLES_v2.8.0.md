@@ -5,7 +5,6 @@ OWNER=presentation_system,presentation_principles,visual_construction,asset_qual
 DOC_VERSION=2.9.12
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/PRESENTATION_SYSTEM_v2.8.0.md,history/PRESENTATION_POLISH_v2.8.0.md,history/PRESENTATION_POLISH_BATCH1_v2.8.0.md,history/PRESENTATION_POLISH_BATCH2_v2.8.0.md,history/PRESENTATION_POLISH_BATCH3_v2.8.0.md,history/PRESENTATION_POLISH_BATCH4_v2.8.0.md,history/PRESENTATION_POLISH_BATCH5_v2.8.0.md
 
 ## ROLE
 
@@ -491,8 +490,7 @@ General contract, every game feel beat (extends §TRANSACTION BEAT):
 
 Execution order: H1 → H5 → H2 → H3 → H4 → H6 (User 2026-09-25: H5 follows H1 directly because it reuses
 H1's stamp language and cue shape, and the two heaviest landings are then authored in one hand; the
-remaining batches copy those patterns and invent no new ones). One batch per turn: owner amendment (UI_UX / QA with their
-ledgers; this owner has no ledger) → Source → ui-guard pins → npm test / ssot:check / qa:runtime →
+remaining batches copy those patterns and invent no new ones). One batch per turn: owner amendment (UI_UX / QA) → Source → ui-guard pins → npm test / qa:runtime →
 before / after capture at 390 and 1280 with reduced-motion → commit → report → STOP. A row's status
 flips to ADOPTED when its batch is committed; §VISUAL REVIEW PROCESS decides quality, not the
 implementer's reading.

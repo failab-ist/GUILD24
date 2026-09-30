@@ -5,8 +5,6 @@ OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death
 DOC_VERSION=2.9.12
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/DUNGEON_HAZARD_v2.8.0-patch.md,history/DUNGEON_HAZARD_v2.7.0.md,history/DUNGEON_HAZARD_v2.6.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_HAZARD.md
 
 ## KEY
 families=[SPIDER,SLIME,FIRE,CRYPT,SNOW]

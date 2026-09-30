@@ -5,8 +5,6 @@ OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal
 DOC_VERSION=2.9.12
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/FINAL_EXPEDITION_v2.8.0-patch.md,history/FINAL_EXPEDITION_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/FINAL_EXPEDITION.md
 
 ## ROLE / NON-NEGOTIABLE
 

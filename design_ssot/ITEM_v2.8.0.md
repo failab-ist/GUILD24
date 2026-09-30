@@ -5,8 +5,6 @@ OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,
 DOC_VERSION=2.9.11
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/ITEM_v2.8.0-patch.md,history/ITEM_v2.7.0.md,history/ITEM_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/ITEM.md
 
 ## KEY
 

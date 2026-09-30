@@ -5,8 +5,6 @@ OWNER=qa,run,phase,save,abandon,runtime_progression,final_timeline,fresh_init,tu
 DOC_VERSION=2.9.12
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=DESIGN_QA_SPEC
-CONSOLIDATED_FROM=history/CORE_RUN_QA_v2.8.0-patch.md,history/CORE_RUN_QA_v2.7.0.md,history/CORE_RUN_QA_v2.6.1.md,history/CORE_RUN_QA_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/CORE_RUN_QA.md
 
 Status values are not stored here. FAIL is valid evidence.
 This file defines acceptance criteria only.

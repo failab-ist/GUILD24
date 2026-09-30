@@ -5,8 +5,6 @@ OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast,rarity_pr
 DOC_VERSION=2.9.2
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=DESIGN_QA_SPEC
-CONSOLIDATED_FROM=history/ECONOMY_ORDER_QA_v2.8.0-patch.md,history/ECONOMY_ORDER_QA_v2.7.0.md,history/ECONOMY_ORDER_QA_v2.6.1.md,history/ECONOMY_ORDER_QA_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/ECONOMY_ORDER_QA.md
 
 Status values are not stored here. FAIL is valid evidence.
 This file defines acceptance criteria only.

@@ -5,8 +5,6 @@ OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handlin
 DOC_VERSION=2.9.12
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=DESIGN_QA_SPEC
-CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
 
 ## SCOPE
 

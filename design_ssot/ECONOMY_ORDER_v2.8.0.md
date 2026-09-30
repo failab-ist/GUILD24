@@ -5,8 +5,6 @@ OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,r
 DOC_VERSION=2.9.7
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/ECONOMY_ORDER_v2.8.0-patch.md,history/ECONOMY_ORDER_v2.7.0.md,history/ECONOMY_ORDER_v2.6.1.md,history/ECONOMY_ORDER_v2.6.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/ECONOMY_ORDER.md
 
 ## ROLE
 
