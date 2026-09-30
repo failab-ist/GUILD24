@@ -142,8 +142,7 @@
 
 ## 3-3. 대성공 안내
 
-**현재** (User 2026-09-24: contextual mark, first time the signal is lit)
-> 대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.
+**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 발견 줄 §26-2가 가르친다)
 
 ---
 
@@ -156,8 +155,7 @@
 
 ## 3-5. 보급 안내
 
-**현재** (User 2026-09-25: contextual mark, the first time the counter tray's `판매 후 변화` shows the `피로 회복` row of a Food/Drink chosen for a fatigued customer; the same line is the §3-7 SUPPLY step. It sat on the retired `피로 A → 출발 B` row before)
-> 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
+**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 발견 줄 §26-2가 가르친다)
 
 ---
 
@@ -172,7 +170,8 @@
 
 The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-24: the
 first SALE teaches five marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, STATS (능력치, User 2026-09-24), 전망 (§3-4), PRICING;
-SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time their situation exists).
+RETURNING and 가방 (§3-6) appear the first time their situation exists. SUPPLY, 대성공 and 만반의 준비 are retired
+(User 2026-09-30): the NIGHT discovery lines §26-2 teach them after they first act).
 
 ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY → 발주 확정 (§3-2) → 후보 교환
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY). The `gold` mark (`보유 골드와 현재 발주 후 잔액을 확인한다.` on
@@ -186,9 +185,6 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 
 ### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
 > 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
-
-### SUPPLY (User 2026-09-25: contextual on the counter tray's `피로 회복` row, the first time a Food/Drink is chosen for a fatigued customer)
-> 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
 ### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0)
 > 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.
@@ -204,9 +200,6 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 
 ### QUANTITY
 > 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
-
-### 만반의 준비 (User 2026-09-25, v2.9.1: contextual on the Bag slots, the first time both slots of an uninjured customer departing below Fatigue 20 are filled — UI_UX §만반의 준비 TUTORIAL)
-> 건강한 손님의 가방을 가득 채웠다. 만반의 준비를 하면 실패해도 살아 돌아올 가능성이 커진다.
 
 ---
 

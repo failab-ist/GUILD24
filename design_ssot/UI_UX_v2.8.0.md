@@ -2401,25 +2401,19 @@ If the tutorial already exists, reuse it and fix its trigger/persistence/reset p
 
 ### GREAT SUCCESS TUTORIAL
 
-Contextual Tutorial explicitly teaches:
-- `대성공` exists
-- it is above ordinary Success
-- extra preparation can raise its chance
-- Great Success has an additional reward
-- on a **normal expedition**, Great Success gives the Store an additional Gold bonus
+(User 2026-09-30, v2.9.11.) No coach mark before the fact: the first normal-expedition 대성공 that pays the Store its
+Gold bonus names it on its NIGHT record (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE) - extra preparation raises its
+chance, and it leaves the Store an additional Gold bonus. The SALE signal carries no mark.
 
 Player should understand why another useful Item can matter even when ordinary
 Success already looks likely.
 
 ### 만반의 준비 TUTORIAL
 
-(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
-the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
-below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
-- anchor: the customer's Bag slots on the SALE counter
-- teaches the condition and the effect in words only; no number, no percentage
-- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
-- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
+(User 2026-09-30, v2.9.11.) No coach mark before the fact: the first time 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md`
+§Preparation / Level Death reduction) turns away a Death, that NIGHT record names the condition and the effect in words
+only (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE). The same holds for Fatigue (the SUPPLY mark is retired too): the
+SALE counter carries no anchor for either.
 
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 

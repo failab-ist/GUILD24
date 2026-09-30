@@ -19,6 +19,10 @@ the owner headers and in the git tag.
   record of the first returning expedition they acted on, marked `발견` and kept in the 발견 수첩 - 부상 출발, 피로 10 이상,
   a Hazard Item that lowered a Hazard, 만반의 준비 turning away a Death, a 대성공 that paid the store bonus. Never on a Death
   record. NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §26-2; ledger; tests revision. Balance unchanged (`reader` 300 identical).
+- **Pre-sale coaches retired for 피로 · 대성공 · 만반의 준비** (User 2026-09-30: one place teaches each rule): the SALE marks
+  `supply`, `great` and `prepared` and their anchors (the tray's `.fatigue`, the Bag's `.prepared`) are gone; the NIGHT
+  discovery lines teach them. UI_UX §GREAT SUCCESS / §만반의 준비 TUTORIAL, UI_UX_QA, COPY_AUDIT §3-3 / §3-5 / §3-7,
+  COPY_WORLD_VOICE §TUTORIAL COACH COPY; ledgers; tests ui-guard; qa-visual drops the Great Success coach capture.
 
 - **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear
   `reports/fresh-run-d23-review-v299.md` §7-8): 왕도 프리미엄 인증 becomes a 꾸준형 card - commission 60% → 45% of the charged

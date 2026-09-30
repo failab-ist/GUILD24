@@ -1030,7 +1030,7 @@ Tutorial may point to the relevant UI value without selecting the answer for the
 
 Keep each coach step short: one system-reading job, usually one or two sentences.
 
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 능력치 (STATS) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3. The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
+Exact copy for the 심층원정 / 수량 / 발주 확정 / 환경 대응 (HAZARD) / 능력치 (STATS) / 전망 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record instead (COPY_AUDIT §26-2, User 2026-09-30). The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
 
 ```text
 점포지원 (DAY 0, User 2026-09-24)
