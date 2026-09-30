@@ -40,9 +40,9 @@ EXPECT (User 2026-09-24, v2.9.0):
 - bind -> 기동
 - corrosion -> 강인함
 - mire -> 기동
-- fire -> 기동
+- fire -> 정신 (revision 5)
 - fear -> 정신
-- dark -> 정신
+- dark -> 기동 (revision 3)
 - cold -> 강인함
 - whiteout -> 정신
 

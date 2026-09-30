@@ -57,7 +57,7 @@ wet=flavorOnly
 theme=[fire,highCombatPower]
 hazards=[fire]
 
-fire -> 기동 (User 2026-09-24, v2.9.0)
+fire -> 정신 (User 2026-09-24 revision 5, v2.9.0)
 secondAxis=higher Dungeon Combat Power
 secondAxisIsHazard=NO
 
@@ -76,7 +76,7 @@ theme=[fear,dark]
 familyTag=undead
 
 fear -> 정신
-dark -> 정신 (User 2026-09-24, v2.9.0)
+dark -> 기동 (User 2026-09-24 revision 3, v2.9.0)
 
 T1=fear
 T2=fear+dark
