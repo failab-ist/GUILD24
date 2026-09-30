@@ -142,6 +142,11 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **The 간판 tag clears the title on a Galaxy** - UI_UX §SHORT PHONE, UI-Q-v29-49 (User 2026-09-29, screenshot at 360x597):
+  an empty 간판's tag carrying `들일 수 있음` is wider than the piece and still ran over the title logo. On a short stage the
+  title is a step smaller (180 px), that tag runs from the piece's edge nearest the title toward the screen's edge and hangs
+  from its spot's top, under the build mark; an equipped 간판 keeps the full title's gap so its name tag clears the branch
+  plate. The visual gate adds 360x597.
 - **iPhone SE supported** - UI_UX §SHORT PHONE, §LIVE STORE DECORATION SEATING, UI-Q-v29-49 (User 2026-09-29, "SE까지
   지원"; `reports/ios-safari-v2911.md` batch 2): at 375x548 (an SE with Safari's bars) the cropped painting brought the title
   down onto the 간판's spot, so its tag covered the logo; the 새 점포 준비 status line fell off the board; MORNING cut the

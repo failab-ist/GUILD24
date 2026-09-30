@@ -3,16 +3,17 @@
 // from the outside through tools/preview.cjs. Never part of `npm test`.
 // Chromium is preinstalled at /opt/pw-browsers — never run `playwright install`.
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
-// The gate runs 360 / 390 / 430 x 780 (and 375 x 548, below). QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
+// The gate runs 360 / 390 / 430 x 780 (and 375 x 548 / 360 x 597, below). QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
 // hand — e.g. a landscape phone, a 320 handset, a tablet — without editing this file.
 const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
 /* UI-Q-v28-26 minimum: 360 / 390 / 412 phone class, the 1024 breakpoint and a 1280-class
    desktop. 430 stays in the gate as an extra phone; it does not stand in for 412, and 1280
    does not stand in for 1024. */
 const WIDTHS=list(process.env.QA_WIDTHS,[360,390,412,430,1024,1280]).map(Number);
-/* UI_UX §SHORT PHONE (User 2026-09-29): the shortest supported phone stage, an iPhone SE with Safari's bars (375x548), runs
-   in the gate at its own height; a hand sweep (QA_WIDTHS / QA_HEIGHT) leaves it out unless QA_SHORT names it */
-const SHORT=list(process.env.QA_SHORT,process.env.QA_WIDTHS||process.env.QA_HEIGHT?[]:['375x548']).map(s=>s.split('x').map(Number));
+/* UI_UX §SHORT PHONE (User 2026-09-29): the short phone stages run in the gate at their own height - the shortest
+   supported, an iPhone SE with Safari's bars (375x548), and the User's Galaxy with its bars (360x597); a hand sweep
+   (QA_WIDTHS / QA_HEIGHT) leaves them out unless QA_SHORT names them */
+const SHORT=list(process.env.QA_SHORT,process.env.QA_WIDTHS||process.env.QA_HEIGHT?[]:['375x548','360x597']).map(s=>s.split('x').map(Number));
 const HEIGHT=Number(process.env.QA_HEIGHT||780),PORT=Number(process.env.QA_PORT||5199);
 const CAPTURE_ONLY=process.env.QA_CAPTURE_ONLY==='1';
 const FIXED_NOW=Number(process.env.QA_FIXED_NOW||1790112000000);

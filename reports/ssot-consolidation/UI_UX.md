@@ -2107,14 +2107,24 @@ New:
 tablet 768~912, landscape tablet 900~1023 and desk 1024~1920
 ### SHORT PHONE (User 2026-09-29)
 The shortest supported phone stage is an iPhone SE with Safari's bars showing: 375x548 (the User's call: "SE까지 지원").
-It runs in the visual gate beside the 780-high widths. On a portrait stage under 640 high:
+It runs in the visual gate beside the 780-high widths, with the User's Galaxy stage (360x597, bars showing). On a portrait stage under 640 high:
 - MORNING: the board may run down to 8 px above the till's label, over the painted wall, so the day's Event (its effect line
 included) reads whole and the first Gate plate shows under it. The till, the branch plate and the Decoration pieces stay
 where §LIVE STORE DECORATION SEATING puts them; a 벽면 piece hanging there is behind the board on a day the board fills
 it - the situation reads before the room (§MORNING; User 2026-09-29)
 - 새 점포 준비: the note takes the tighter step of the short desk (same type, less air), so the status line stays on the
 board, and the 간판 keeps the gap from the title as it does on the wide framing (the cropped ceiling brings the title
-down onto its painted spot)
 - every other screen already holds at this height: SALE keeps its sale-first order (the shelf under the fold),
 §MOBILE SALE PLAYABILITY
+```
+
+
+## 간판 tag clears the title (User 2026-09-29)
+
+New:
+
+```new
+down onto its painted spot). The title is a step smaller there (180 px at most) and an empty 간판's tag - wider than
+the piece once it carries `들일 수 있음` - runs from the piece's edge nearest the title toward the screen's edge and
+hangs from the top of its spot, under the build mark: it never covers the title (User 2026-09-29, a Galaxy at 360x597)
 ```

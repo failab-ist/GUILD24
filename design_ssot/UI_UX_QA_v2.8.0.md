@@ -2803,11 +2803,11 @@ PASS:
 - `소리 켜기` starts the sound on the first tap
 - after a phone call or another app, the music comes back on return or at the latest on the next tap
 - with the silent switch on, the game is silent and music from another app keeps playing
-- on an iPhone SE (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its tag, and the status line on
-  the board; MORNING shows the Event whole (its effect line included) and the top of the first Gate without scrolling
+- on an iPhone SE and a Galaxy with its bars (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its
+  tag - `들일 수 있음` included - and the status line on the board; MORNING shows the Event whole (its effect line included) and the top of the first Gate without scrolling
 - no console or runtime error
 - runtime evidence (Chromium): `tools/qa-bgm.cjs` resumes a suspended context on return; `tests/ui-guard.cjs` UI-Q-v29-49;
-  `tools/qa-visual.cjs` runs every screen at 375x548
+  `tools/qa-visual.cjs` runs every screen at 375x548 and 360x597
 
 FAIL:
 - the page zooms on a quick double tap

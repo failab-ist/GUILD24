@@ -1943,8 +1943,8 @@ heard at their tier, and no cue buzzes, tears or crackles - alone or landing tog
 New:
 
 ```new
-- on an iPhone SE (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its tag, and the status line on
-the board; MORNING shows the Event whole (its effect line included) and the top of the first Gate without scrolling
-`tools/qa-visual.cjs` runs every screen at 375x548
+- on an iPhone SE and a Galaxy with its bars (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its
+tag - `들일 수 있음` included - and the status line on the board; MORNING shows the Event whole (its effect line included) and the top of the first Gate without scrolling
+`tools/qa-visual.cjs` runs every screen at 375x548 and 360x597
 - on an iPhone SE, a tag or a line over the title or off the board, or the Event's effect line cut on MORNING
 ```

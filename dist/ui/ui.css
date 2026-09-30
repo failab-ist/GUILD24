@@ -2525,7 +2525,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-morning.p-prep .prep-note{padding:5px 12px 3px}
  .p-prep .prep-note .welcome-title{margin-bottom:2px}
  .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.4}
- .p-prep .deco-layer{--sign-l:calc(50cqw - min(210px,58vw) / 2)}
+ /* the title a step smaller, so an empty 간판's tag - wider than the piece once it carries `들일 수 있음` - has room beside
+    it on a 360 phone (User 2026-09-29, a Galaxy at 360x597); that tag runs from the piece's edge nearest the title out
+    toward the screen's edge, so however wide it grows it never reaches the title, and hangs from its spot's top (as the
+    empty plaque's does), so it grows down toward the board rather than up over the build mark */
+ .p-prep .opening-logo{width:min(180px,50vw)}
+ .p-prep .deco-layer{--sign-l:calc(50cqw - min(180px,50vw) / 2)}
+ .p-prep .prep-slot.sign.empty .slot-tag{left:auto;right:0;top:0;transform:none}
+ /* an equipped 간판's tag runs right under it, level with the branch plate, so the piece keeps the full title's gap */
+ .p-prep .decoplate.sign:not(.empty){--sign-l:calc(50cqw - min(210px,58vw) / 2)}
+ /* and it hangs under the build mark, not over it, where the crop takes the painted ceiling off the top */
+ .p-prep .decoplate.sign{top:max(calc(env(safe-area-inset-top) + 26px),calc(50cqh + (var(--y) - .5) * var(--ph)))}
 }
 .p-prep .slot-tag i{font-style:normal;color:#b99b6a}
 .p-prep .slot-tag b{font-weight:600}

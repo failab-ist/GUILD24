@@ -3611,9 +3611,13 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  const mb=review.slice(review.indexOf(short),review.indexOf('}\n}',review.indexOf(short))+3),pb=css.slice(css.indexOf(short),css.indexOf('}\n}',css.indexOf(short))+3);
  assert.ok(/\.p-morning:not\(\.p-prep\) \.band\.counter\{margin-top:calc\(-1 \* max\(0px,calc\(\(var\(--ph\) - 100cqh\) \/ 2 \+ var\(--cap-top\) \* var\(--band-c\) \* var\(--ph\) - 14px\)\)\)\}/.test(mb)&&!/transform/.test(mb),
   'MORNING: the counter band lends the board the room down to the till label, and does not move');
- assert.ok(/\.p-morning\.p-prep \.prep-note\{padding:5px 12px 3px\}/.test(pb)&&/\.p-prep \.deco-layer\{--sign-l:calc\(50cqw - min\(210px,58vw\) \/ 2\)\}/.test(pb)
-  &&/\.opening-logo\{display:block;width:min\(210px,58vw\)/.test(css),'새 점포 준비: the tighter note, and the 간판 keeps the gap from the title (the logo\'s own width)');
- assert.ok(/\['375x548'\]/.test(read('tools/qa-visual.cjs')),'the visual gate runs the SE stage');
+ assert.ok(/\.p-morning\.p-prep \.prep-note\{padding:5px 12px 3px\}/.test(pb)&&/\.p-prep \.decoplate\.sign:not\(\.empty\)\{--sign-l:calc\(50cqw - min\(210px,58vw\) \/ 2\)\}/.test(pb)
+  &&/\.opening-logo\{display:block;width:min\(210px,58vw\)/.test(css),'새 점포 준비: the tighter note, and an equipped 간판 keeps the gap from the full title');
+ // User 2026-09-29 (Galaxy 360x597): an empty 간판's tag carries `들일 수 있음` and is wider than the piece
+ assert.ok(/\.p-prep \.opening-logo\{width:min\(180px,50vw\)\}/.test(pb)&&/\.p-prep \.deco-layer\{--sign-l:calc\(50cqw - min\(180px,50vw\) \/ 2\)\}/.test(pb)
+  &&/\.p-prep \.prep-slot\.sign\.empty \.slot-tag\{left:auto;right:0;top:0;transform:none\}/.test(pb)
+  &&/\.p-prep \.decoplate\.sign\{top:max\(calc\(env\(safe-area-inset-top\) \+ 26px\)/.test(pb),'the title a step smaller, the empty 간판 tag grows away from it and under the build mark');
+ assert.ok(/\['375x548','360x597'\]/.test(read('tools/qa-visual.cjs')),'the visual gate runs the SE stage and the Galaxy stage');
 });
 // v2.9.11 quick patch mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): decision and result cues read above the music
 // (PRESENTATION §Mix) - the music 3 dB down, the effects bus 6 dB up, NIGHT a further 3 dB down; a phase change fades
