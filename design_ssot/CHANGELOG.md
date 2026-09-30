@@ -3,7 +3,7 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
+## v2.9.12 — balance review line (User 2026-09-30)
 
 - **First-Run lessons, DAY 1 Counter and no Death on DAY 1~2** (balance review session, User 2026-09-30; from a talk on
   teaching by level design - learn by play, not text): the account's first Run finds one Common Item that counters the first
@@ -26,6 +26,8 @@ the owner headers and in the git tag.
   `supply`, `great` and `prepared` and their anchors (the tray's `.fatigue`, the Bag's `.prepared`) are gone; the NIGHT
   discovery lines teach them. UI_UX §GREAT SUCCESS / §만반의 준비 TUTORIAL, UI_UX_QA, COPY_AUDIT §3-3 / §3-5 / §3-7,
   COPY_WORLD_VOICE §TUTORIAL COACH COPY; ledgers; tests ui-guard; qa-visual drops the Great Success coach capture.
+
+## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
 
 - **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear
   `reports/fresh-run-d23-review-v299.md` §7-8): 왕도 프리미엄 인증 becomes a 꾸준형 card - commission 60% → 45% of the charged
