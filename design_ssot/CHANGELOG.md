@@ -38,6 +38,14 @@ the owner headers and in the git tag.
   없어지던데 ... 폐쇄됐다는 정보가 전달되도록"): the Gate 게이트 임시 폐쇄 closes was simply gone, so the player could not
   tell which one. It stays on the MORNING board, in the `위험 보기` window and on ORDER's `오늘` line, faded with its name
   struck and one `오늘 폐쇄` stamp, no Hazard rows. It still takes no visitor, expedition or order (simulation unchanged).
+- **II Gate and FIRE Gate lessons** - UI_UX §GATE TIER / FIRE GATE TUTORIAL, COPY_AUDIT §3-10, UI-Q-v29-52 (User 2026-09-30):
+  two contextual MORNING marks on the Gate plate, once per account - the first two-Hazard Gate (`II 게이트부터는 위험이 두
+  가지다. 위험마다 버티는 능력치가 다르다.`) and the first FIRE Gate (`화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더
+  높다.`). The rule only, never an Item. Tests ui-guard.
+- **A FIRE pair's Boss stands stronger** - FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (FIRE PAIR), BOSS (User 2026-09-30,
+  "다른 위험과 동일하게"): a Final pair that holds FIRE has 3 Hazards, not 4, and cleared more often (`reader` 3,000: 74.3 ±6.3%
+  against 65.5 ±5.1%). Such a pair now adds 18 to every Boss's effective Boss Power - the amount that levels the two on the
+  same recorded Finals. The Hazard Pool and the mean-gap penalty are unchanged. Tests final.
 - **D30: read the candidates while ordering, a notebook in FINAL 준비** - FINAL_EXPEDITION §D30 PLAYER FLOW, UI_UX §PARTY
   SELECTION, COPY_AUDIT §14-9, UI-Q-v29-51 (User 2026-09-30: "누구 있는지 알아야 템을 선택하니"): the last order now carries
   `원정대 후보 보기` beside `원정대 선택` - the candidates and their notebooks, read only; the pick and 원정대 확정 stay on the

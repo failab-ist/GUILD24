@@ -2030,3 +2030,18 @@ SUPERSEDED (the coach-mark acceptance):
 - the first store-bonus 대성공 names it on its NIGHT record, once per account (NIGHT_CLOSING §DISCOVERY LINE):
   extra preparation can raise its chance, and it leaves the Store an additional Gold bonus
 ```
+
+
+## v2.9.12 Gate tier / FIRE Gate tutorial (User 2026-09-30)
+
+New:
+
+```new
+### UI-Q-v29-52 — GATE TIER / FIRE GATE TUTORIAL (User 2026-09-30)
+Verify UI_UX §GATE TIER / FIRE GATE TUTORIAL on MORNING at 390 and 1280, tutorial on.
+- the first board with a two-Hazard Gate shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.` on that
+plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
+- each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks
+- neither names an Item
+- the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mark on a closed Gate
+```

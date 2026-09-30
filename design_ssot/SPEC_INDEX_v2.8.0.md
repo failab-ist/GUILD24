@@ -285,9 +285,10 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   SUCCESS / §만반의 준비 TUTORIAL / §END — REPLAY NUDGE, UI_UX_QA, COPY_WORLD_VOICE §TUTORIAL COACH COPY).
   The v3.0 prep quick patches (User 2026-09-29~30) join it: iPhone Safari and short phones (iPhone SE, Galaxy 360x597), the
   BGM / SFX mix, the ORDER floating box and warehouse panel, the desk's own SALE and wider stage, a closed Gate kept as
-  `오늘 폐쇄`, the best 총매출 replay line, D30 candidates while ordering and a notebook in FINAL 준비, stale Hazard Stat lines
+  `오늘 폐쇄`, the best 총매출 replay line, D30 candidates while ordering and a notebook in FINAL 준비, stale Hazard Stat lines,
+  the II / FIRE Gate lessons, a FIRE pair's Boss +18
   -> the same CHANGELOG section (owners UI_UX, UI_UX_QA, PRESENTATION, META §BEST DAY, EVENT, FINAL_EXPEDITION §D30 PLAYER
-  FLOW, DUNGEON_HAZARD, DUNGEON_ITEM_QA, COPY_AUDIT).
+  FLOW / §FAMILY-PAIR BALANCE AUDIT, BOSS, DUNGEON_HAZARD, DUNGEON_ITEM_QA, COPY_AUDIT §3-10, COPY_WORLD_VOICE).
 - v2.9.11 (User 2026-09-28~29, merged by PR #28): the v3.0 prep line - unsold stock leaves on the Night of its last sale Day, on
   that Day's receipt; the early Gate slope 1.50 -> 1.45; 35 customer names replaced; the Rare Reference customers removed; two Expedition Store
   Supports; Events at 40%, once per Run, 55 in all; recorded phase BGM (User 2026-09-29) -> CHANGELOG §v2.9.11 (owners RELIC 31 / 32, EVENT 24~55, COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25, ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING

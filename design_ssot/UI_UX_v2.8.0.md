@@ -2493,6 +2493,16 @@ Tutorial must clearly teach:
 Tutorial appears before the first nomination decision and must not leave
 actionable Morning/Order information obscured after dismissal.
 
+### GATE TIER / FIRE GATE TUTORIAL
+
+(User 2026-09-30, v2.9.12; acceptance -> UI_UX_QA UI-Q-v29-52.) Two contextual MORNING marks, like the Deep mark: each shows
+the first time the board holds such a Gate, once per account, persisted and reset with the other marks.
+- a two-Hazard Gate (tier II and III; `DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, and each Hazard
+  presses its own Stat
+- a FIRE Gate: one Hazard only, but a higher required Combat Power (`DUNGEON_HAZARD` §FIRE second axis)
+- anchor: that Gate's plate on the MORNING board; the rule only, never which Item answers it (§READ THE SYSTEM)
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-10
+
 ## COPY HIERARCHY
 
 UI text should be:

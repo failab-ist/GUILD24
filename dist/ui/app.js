@@ -686,7 +686,8 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
    MORNING calls it with the Gate alone: handed to .map directly, the array index arrived as `full`
    and every Gate after the first printed the Gate-detail sentence (User 2026-09-25). */
 function gatePlate(d,full=false){const b=sigilOf(d);
- return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
+ /* data-hazards / data-family: the anchors of the two Gate lessons (a two-Hazard Gate, a FIRE Gate); no style reads them */
+ return '<article class="slip gate" data-hazards="'+d.hazards.length+'" data-family="'+E(d.family||'')+'" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
    +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game),d).map(h=>full
@@ -1238,7 +1239,10 @@ const coachSteps={
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
     clears it and the next first occurrence teaches it again. No new persistence was added. */
- morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
+ morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
+  /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
+  ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
+  ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself.
     Seen state is keyed by step id alone, so ORDER's gates step is `order-gates`: sharing MORNING's `gates` id marked it seen
     before the first ORDER ever opened (fixed 2026-09-26).
