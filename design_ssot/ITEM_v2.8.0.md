@@ -1211,6 +1211,578 @@ Reject:
 - Fresh Relic making specialist Counter obsolete
 - build Relic with too few usable SKUs
 
+## QA — ACCEPTANCE
+
+Acceptance criteria for this owner. Status values are not stored here; FAIL is valid evidence.
+
+### ITEM CATEGORY / CATALOG
+
+#### ITEM-Q70 — PLAYER CATEGORY EXACT
+
+Every active Item maps to exactly one of:
+```text
+Food / Drink / Potion / Field Gear / Insurance / Special
+```
+
+PASS:
+- no active Medical category
+- Potion line is not Special
+- 농축 해독제 = Field Gear
+- 구급키트 = Insurance
+
+#### ITEM-Q71 — ACTIVE CATALOG EXACT 43
+
+PASS:
+- exactly 43 active Items (v2.9.7 Counter ladder: + 중화 탄산수, 방독 작업장갑, 축성 손전등; 핫팩 is now 방한 두건)
+- 붕대 inactive/retired
+- 마석 보조배터리 inactive/retired
+- 진정 허브티 active
+- 중급 포션 active
+- exactly 10 Epic preparation Items from `ITEM_v2.8.0.md` are active
+- no retired ID leaks into Order/Sale generation
+
+#### ITEM-Q09 — ACTIVE CATALOG BOUNDARY
+
+SETUP:
+Inspect all sellable/generated Item IDs.
+
+EXPECT:
+Active sellable catalog matches ITEM canonical catalog exactly.
+No extra source-only Item enters Order/Sale/Expedition resolution.
+
+PASS:
+Catalog count/identity is stable and no omitted strict-superior item leaks into play.
+
+#### ITEM-Q19 — ACTIVE CATALOG STRUCTURE
+
+SETUP:
+Audit canonical active catalog by Category/Rarity/Role.
+
+EXPECT:
+- each has exactly one player-facing Category
+- low-rarity specialists remain meaningful
+- new Items fill documented Hazard/build coverage gaps
+
+PASS:
+Catalog supports preparation and Relic builds without filler or strict universal upgrades.
+
+#### ITEM-Q02 — FUNCTIONAL ROLE
+
+SETUP:
+Audit catalog.
+
+EXPECT:
+Items have understandable gameplay role:
+Stat/Supply (Fatigue recovery, shown `피로 회복 N`)/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility (User 2026-09-24, v2.9.0)
+
+PASS:
+No item exists only as unexplained modifier bundle.
+
+#### ITEM-Q03 — MATERIAL EFFECT VISIBILITY
+
+SETUP:
+Inspect Sale/Order item details.
+
+EXPECT:
+Important effect/penalty is player-readable.
+
+PASS:
+Material hidden behavior absent.
+
+#### ITEM-Q16 — NEW ITEM JUSTIFICATION
+
+SETUP:
+Review any newly added catalog item.
+
+EXPECT:
+It fills a proven coverage/price/role gap.
+
+PASS:
+No addition exists only to increase item count.
+
+#### ITEM-Q77 — FOOD/DRINK BASELINE VALUES
+
+Audit the exact active table in `ITEM_v2.8.0.md`, including:
+- Choco mobility +8 / Supply3
+- Coffee mobility +12 / Supply2
+- Herb Tea spirit +15 / Supply2
+- Energy mobility +17 / Supply2
+- Lava survival +8 / cold6 / Supply3
+- Ramen cold10 / Supply3
+- Ice fire10 / Supply1
+- Candy fear10 / Supply2
+(v2.9.1 balance values, User 2026-09-25)
+
+Supply N is displayed as `피로 회복 N` (User 2026-09-24, v2.9.0).
+
+PASS: no stale Stat bundle survives.
+
+#### ITEM-Q81 — REBALANCED PRICE TABLE
+
+PASS (User 2026-09-25, v2.9.1 balance):
+- every Item's Sell = Buy × 2 exactly
+- Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
+
+```text
+간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 175 · 대현자 허브엘릭서 175
+(v2.9.7 Counter ladder and price review, User 2026-09-27 - ITEM §COUNTER LADDER:)
+방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
+농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
+거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
+```
+
+PASS:
+- no stale pre-close price or a Sell other than Buy × 2 survives
+- Main Hazard specialist price bands remain practically comparable rather than rarity-only inflated
+
+#### ITEM-Q78 — GOLDEN COUPON PRICE
+
+PASS:
+`황금 1+1 쿠폰` canonical buy/sell = 500/1000 and existing explicit duplication interaction remains intact.
+
+#### ITEM-Q META — GOLDEN 1+1 UNLOCK
+
+SETUP:
+Inspect Item offer/acquisition eligibility before and after first distinct Boss clear.
+
+EXPECT:
+- 황금 1+1 쿠폰 remains canonical Item ID 30
+- before META unlock it does not appear through normal acquisition
+- after first distinct Boss clear it becomes eligible under its normal Item rules
+- Item effect itself is unchanged by the unlock system
+
+PASS:
+META gates availability only; ITEM continues to own the effect.
+
+### MEAL / WATER LINE
+
+#### DI-Q-v28-1 — ITEM BASELINE
+
+Expect exactly:
+
+| Item | Rarity | Buy/Sell | 강인함 | Supply (`피로 회복 N`) | Extra |
+|---|---|---:|---:|---:|---|
+| 삼각김밥 | C | 35/70 | +6 | 5 | — |
+| 생수 | C | 40/80 | +10 | 2 | — |
+| 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
+| 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
+| 영웅 결전 도시락 | E | 210/420 | +18 | 9 | — |
+| 왕도 천연암반수 | E | 185/370 | +24 | 2 | — |
+
+PASS:
+- active catalog count remains 40
+- active Rarity distribution is C11 / U12 / R5 / E11 / L1
+- no unrelated Item Rarity is moved from the approved active distribution
+- Hotbar names are not active player Items
+- meal shelf life 2, water shelf life 5
+- Supply is the direct Fatigue reduction (`피로 회복 N`, current Fatigue first, remainder buffers this expedition's gain); no replacement carries any other Fatigue effect (User 2026-09-24, v2.9.0)
+
+#### DI-Q-v28-2 — WALLET GAIN SCOPE
+
+PASS:
+- U meal adds +0.20 to ordinary expedition loot modifier
+- R meal adds +0.40
+- modifiers add with existing ordinary loot modifiers
+- Deep bonusWallet is not multiplied
+- Store Support/Event/direct Wallet grants are not multiplied
+- player copy says 원정 소지금 획득
+
+#### DI-Q-v28-3 — MEAL VS WATER IDENTITY
+
+PASS direction (User 2026-09-24, v2.9.0):
+- meal is materially higher Fatigue recovery (Supply): Food = large recovery + lower Core Stat
+- water is materially more Stat-concentrated for its stage: Drink = small recovery + sharper Stat/Counter
+- Water does not become a meal substitute through Fatigue recovery
+- Meal does not become a raw-Stat Potion substitute
+
+This is a design-shape check, not permission to auto-tune numbers.
+
+#### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
+
+PASS:
+- `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
+- `kingwater` reads visually as 왕도 천연암반수 / bottled water
+- neither retains the retired Hotbar/skewered-stick silhouette
+- icon change does not alter ID, Category, Rarity, price, effect or save compatibility
+
+#### DI-Q-v28-9 — REPLACEMENT FLAVOR
+
+Expected:
+- 간단 도시락 -> \`반찬은 단출하지만 빈칸은 없다.\`
+- 왕도 천연암반수 -> \`왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.\`
+
+FAIL:
+- skewer/Hotbar Flavor survives on either replacement ID
+
+#### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
+
+SETUP:
+Compare across multiple contexts.
+
+EXPECT:
+Useful premium expedition/economy option.
+
+PASS:
+Does not dominate survival+Fatigue recovery+loot+stats simultaneously (User 2026-09-24, v2.9.0).
+
+### POTION / STAT ITEMS
+
+#### ITEM-Q72 — POTION LADDER
+
+EXPECT:
+- 하급: 70/140, 투력 +8
+- 중급: 125/250, 투력 +14
+- 상급: 175/350, 투력 +20
+- 최상급: 210/420, 투력 +28
+
+All:
+- Potion category
+- Supply 0 (no `피로 회복` row; User 2026-09-24, v2.9.0)
+- Counter 0
+- Insurance 0
+- same ordinary Potion-family shelf-life behavior unless explicitly overridden
+
+PASS:
+- no hidden generic success bonus beyond Core Stat contribution
+- 중급 포션 does not inherit retired 마석 보조배터리의 non-expiring/tool-like shelf behavior merely from slot reuse
+
+#### ITEM-Q74 — SPIRIT STAT ROUTE
+
+`진정 허브티`:
+- Drink Common
+- 40/80
+- 정신 +15
+- Supply 2, displayed `피로 회복 2` (User 2026-09-24, v2.9.0)
+- no explicit fear/dark/whiteout Counter
+
+PASS: it is a natural-Stat alternative, not a hidden multi-Hazard specialist.
+
+#### ITEM-Q82 — DIRECT STAT ITEM RELEVANCE
+
+Controlled representative mid/late-Run NPCs around a marginal Forecast state.
+
+PASS direction:
+- selling one appropriate direct-Stat Item produces a perceptible current Core-Stat change
+- representative marginal cases can cross a qualitative Forecast boundary because of one appropriate Item
+- NPC long-term Growth remains the main body of strength rather than being replaced by Item scaling
+- no Day/Level percentage-scaling Item system exists
+- Fresh/Potionbody can increase the owned Item contribution, but Counter/Supply/Insurance channels remain outside that native-Stat amplification
+
+Exact base Item values must match the current active catalog; Supply is displayed `피로 회복 N` (User 2026-09-24, v2.9.0).
+
+### HAZARD COUNTER ITEMS
+
+#### ITEM-Q73 — HAZARD COUNTER VALUES
+
+Exact pre-Epic Main/Lower/Hybrid Item Counter values:
+- antidote poison +30
+- mask poison +24
+- rope bind +16
+- coating corrosion +24
+- cloak corrosion +6 / mire +6
+- boots mire +20
+- ion fire +26
+- ice fire +10
+- wine fear +20
+- candy fear +10
+- battery dark +16
+- heat cold +24
+- ramen cold +10
+- lava cold +6
+- goggles whiteout +20
+(v2.9.1 balance values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
+
+PASS:
+- specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
+- Hybrid remains weaker per target than any dedicated specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1)
+
+#### ITEM-Q15 — HAZARD ITEM MATRIX
+
+SETUP:
+Build the 9-Hazard × Item/Stat route matrix.
+
+EXPECT:
+For every canonical Hazard:
+- 1 Main specialist
+- >=2 meaningful Alternatives
+- Main remains the most reliable dedicated response
+
+PASS:
+No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1).
+
+#### ITEM-Q07 — HOT PACK VS LAVA NOODLE
+
+SETUP:
+Compare pure Cold response.
+
+EXPECT:
+Hot Pack > Lava Noodle for Cold specialization.
+
+PASS:
+Lava Noodle retains Food/Hybrid identity.
+
+#### ITEM-Q79 — ANTIDOTE ROLE BOUNDARY
+
+`농축 해독제`:
+- Field Gear Rare
+- 95 / 190
+- poison Counter +30
+
+PASS:
+- no generic positive Core Stat
+- no hidden poison Condition/cure subsystem
+- its gameplay identity is the dedicated Poison Hazard specialist
+
+### EPIC PREPARATION ITEMS
+
+#### ITEM-Q83 — EPIC FAMILY HYBRIDS
+
+EXPECT exact new Epic Field Gear:
+
+```text
+거미줄 방호세트   165/330  독+22 / 속박+18
+연금 방수슈트     165/330  부식+22 / 진창+18
+성화 랜턴         165/330  공포+18 / 어둠+18
+백설 방한고글     165/330  냉기+22 / 화이트아웃+18
+마그마 냉각장비   175/350  화염+18 / 투력+10
+```
+
+PASS:
+- each dual-Hazard value remains below every dedicated specialist of the same or a higher Rarity for that Hazard
+  (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16)
+- FIRE item does not invent a second FIRE Hazard
+- `마그마 냉각장비 투력+10` is an explicit exception only (User 2026-09-26, v2.9.6: +6 → +10)
+
+#### ITEM-Q84 — EPIC TOP-END STAT/SUPPLY ITEMS
+
+EXPECT:
+
+```text
+초고속 에너지드링크    Drink E   175/350  기동+26 / Supply2
+대현자 허브엘릭서      Drink E   175/350  정신+28 / Supply2
+최상급 포션            Potion E  210/420  투력+28
+```
+
+Supply2 is displayed `피로 회복 2` (User 2026-09-24, v2.9.0).
+
+PASS:
+- ordinary category modifier rules apply
+- no Epic-only hidden multiplier
+- these Items improve one-slot late-Run value without adding Bag slots
+
+#### ITEM-Q85 — NO D20 HARD UNLOCK FOR NEW EPICS
+
+PASS:
+- all 10 Epic preparation Items use the ordinary Epic pool
+- no per-Item `day>=20` hard eligibility gate exists for them
+- practical late-Run frequency comes only from current `ECONOMY_ORDER_v2.8.0.md` Day-band Rarity progression plus existing general eligibility rules
+
+### ITEM INTERACTION / MODIFIER SCOPE
+
+#### ITEM-Q04 — NO GENERAL HIDDEN COMBO
+
+SETUP:
+Audit item resolution and multi-item use.
+
+EXPECT:
+No hidden:
+- pair synergy
+- threshold combo
+- order-dependent combo
+- penalty cancellation
+
+PASS:
+Only explicit described Special interactions may cross-reference items.
+
+#### ITEM-Q05 — EXPLICIT SPECIAL INTERACTION
+
+SETUP:
+Use 황금 1+1 coupon or equivalent explicit item.
+
+EXPECT:
+Interaction is stated in item description and resolves predictably.
+
+PASS:
+No hidden combo knowledge required.
+
+#### ITEM-Q14 — CATEGORY AFFINITY SCOPE
+
+SETUP:
+Apply Food affinity to multi-effect Food item.
+
+EXPECT:
+Food-native core effect may increase.
+Unrelated hazard counter does not auto-scale.
+
+PASS:
+Whole-item multiplier absent.
+
+#### ITEM-Q18 — FRESH CORE-EFFECT SCOPE
+
+SETUP:
+Apply generic Food/Drink category boosts to multi-role Items.
+
+EXPECT:
+Hazard Counter/Insurance/RiskReward penalty does not auto-scale unless explicitly stated by the Relic/effect.
+
+PASS:
+Fresh-category multipliers do not become blanket whole-item multipliers.
+
+#### ITEM-Q80 — FOOD TRAIT × FRESH STACKING
+
+Use a Food Item with a positive native Core Stat and controlled Trait/Relic state.
+
+EXPECT base-additive modifier composition from `ITEM_v2.8.0.md`:
+
+```text
+대식가 + 즉석식품 코너 + 24시간 신선체계
+= base ×2.05
+
+소식가 + 즉석식품 코너 + 24시간 신선체계
+= base ×1.55
+```
+
+PASS:
+- Trait and Relic native-Stat percentages are summed from Item base
+- no sequential Trait×Relic multiplicative layer
+- Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalty do not enter the native-Stat modifier pool
+- the Supply value (`피로 회복 N`) is unchanged by Fresh / Relic native-Stat percentages (User 2026-09-24, v2.9.0)
+- GLUTTONY, when present in Final, applies after the Item-side positive Core-Stat contribution is resolved
+
+#### ITEM-Q17 — SUPPLY = FATIGUE RECOVERY / NO THIRST
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+Audit all Food/Drink effects and expedition resolution.
+
+EXPECT:
+- every active Food/Drink has visible Supply > 0, shown as `피로 회복 N` (never `보급 +N`)
+- catalog Supply values match the `ITEM_v2.8.0.md` active catalog
+- Supply reduces the customer's Fatigue only: current Fatigue first, remainder against this expedition's gain, leftover discarded
+- no Gate requires Supply; no Supply Deficit, deficit penalty or excess-Supply concept exists
+- no Item creates/cleanses thirst
+- no hidden Food+Drink pairing
+- no caffeine stacking
+- no hunger/thirst gauge
+
+PASS:
+`음식·음료는 피로를 줄인다.` is the whole Supply rule; no long-expedition requirement resource exists.
+
+### INSURANCE
+
+#### ITEM-Q11 — RETURN STONE
+
+SETUP:
+Use in losing expeditions.
+
+EXPECT:
+Uses approved escapeBonus +20%p (User 2026-09-28, v2.9.10): a 부상 / 중상 / 사망 Outcome rolls once more for 퇴각 at
+the adventurer's own escapeChance + 20%p (clamp 0.15~0.94); the combat-failure retreat roll itself carries no stone
+bonus; combat success is not increased.
+
+PASS:
+Acts as probabilistic lower-tier insurance, not a success item or Death->Severe conversion.
+
+#### ITEM-Q12 — RETREAT REWARD
+
+SETUP:
+Trigger Return Stone retreat.
+
+EXPECT:
+EXP reduced but >0.
+Loot nearly none.
+
+PASS:
+Hierarchy feels distinct from success and death.
+
+#### ITEM-Q13 — WORLD TREE INSURANCE
+
+SETUP:
+Trigger lethal outcome with Epic World Tree insurance active.
+
+EXPECT:
+Death or Severe Injury converts to 퇴각 with no injury (User 2026-09-28, v2.9.10; was Death -> Severe Injury); a 부상 stays 부상.
+
+PASS:
+Clearly stronger survival tier than Return Stone and not treated as Food.
+
+#### ITEM-Q75 — FIRST AID AFTERCARE
+
+Controlled final ordinary outcomes:
+
+부상 + 구급키트 (User 2026-09-25, v2.9.0):
+- Outcome stays 부상
+- XP/Loot/Fatigue follow 부상
+- persistent injury=0/recovery=0
+
+중상 + 구급키트:
+- Outcome becomes 부상 (NIGHT verdict 부상, event `구급키트가 중상을 부상으로 낮췄다.`)
+- XP/Loot/Fatigue follow 부상
+- persistent injury=1/recovery=0
+
+사망:
+- kit no effect
+
+PASS:
+- no hidden injury-risk %
+- no Retreat conversion
+- natural Severe-Injury recovery rule itself is unchanged
+
+#### ITEM-Q76 — INSURANCE ORDER
+
+With overlapping Insurance, PASS only if:
+1. ordinary outcome resolves
+2. Return Stone second retreat roll may convert a 부상 / 중상 / 사망
+3. remaining Death or Severe Injury may be converted to 퇴각 by World Tree
+4. First Aid Aftercare applies to final non-death Injury state
+
+No second full resolve after Aftercare.
+
+### RESULT PROOF / ATTRIBUTION
+
+#### DI-Q-v28-5 — COUNTERFACTUAL DOES NOT ALTER RESOLVE
+
+For a proof-enabled result:
+- actual expedition outcome/state equals ordinary resolve with proof disabled
+- gameplay RNG state after the expedition is identical
+- no extra Gold/XP/Loot/Loyalty/state mutation occurs from shadow evaluation
+
+#### DI-Q-v28-6 — UNPROVEN BRANCH
+
+Construct a case where removing an Item would require a random branch not drawn by the actual
+expedition.
+
+PASS:
+- comparison is UNPROVEN
+- no replacement RNG is drawn
+- no Hero Item claim is authored
+
+#### DI-Q-v28-7 — OVERLAP ATTRIBUTION
+
+Cover:
+- only A necessary -> A credited
+- A and B independently necessary -> A+B credited
+- only combination provable -> generic committed-preparation credit
+- different proven severity -> strongest Hero line only
+
+No category-priority shortcut is allowed.
+
+#### DI-Q-v28-8 — SPECIAL DUPLICATION
+
+When 황금 1+1 actually changes a provable resolved result, it participates in attribution.
+Its Special category does not exclude it from proof.
+
+#### DI-Q-v28-8B — HERO ATTRIBUTION BOUNDARY
+
+PASS:
+- Fatigue-only differences do not produce Hero Item feedback
+- Wallet-only differences do not produce Hero Item feedback
+- a hidden risk reduction without a proven resolved Outcome/state difference does not produce Hero feedback
+- avoided-death WHAT_HAPPENED uses the non-causal outcome sentence
+- a named Item WHY line appears only when sold-Item proof exists
+- proof ordering never creates more than the strongest allowed Hero line
+
 ## RELATED
 
 Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)

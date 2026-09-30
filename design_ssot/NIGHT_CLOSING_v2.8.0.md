@@ -843,15 +843,15 @@ Embedded result acceptance:
 ### QA OWNERS
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.8.0.md
-- DUNGEON_ITEM_QA_v2.8.0.md
-- NPC_TRAIT_QA_v2.8.0.md
-- ECONOMY_ORDER_QA_v2.8.0.md
-- UI_UX_QA_v2.8.0.md
+- CORE_RUN §QA
+- DUNGEON_HAZARD / ITEM §QA
+- NPC_TRAIT §QA
+- ECONOMY_ORDER §QA
+- UI_UX §QA
 
 ## RELATED
 
-game philosophy -> `00_GAME_CORE_v2.8.0.md`
+game philosophy -> SPEC_INDEX §GAME CORE
 run/save -> `CORE_RUN_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.8.0.md`

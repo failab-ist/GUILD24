@@ -850,7 +850,7 @@ Removed XP/Grade direct bonuses do not remain as hidden modifiers.
 
 ## RELATED
 
-Core identity -> `00_GAME_CORE_v2.8.0.md`
+Core identity -> SPEC_INDEX §GAME CORE
 Run timing -> `CORE_RUN_v2.8.0.md`
 Run/save -> `CORE_RUN_v2.8.0.md`
 Decoration UX -> `UI_UX_v2.8.0.md`

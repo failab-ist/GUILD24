@@ -470,7 +470,7 @@ Preview must not expose:
 - fake master safety score
 
 Canonical information principle:
--> 00_GAME_CORE_v2.8.0.md
+-> SPEC_INDEX §GAME CORE
 
 ## NO RELATIVE ANSWER GRADER
 
@@ -1020,10 +1020,10 @@ Normal SALE behavior for the same Item remains unchanged.
 ## QA
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.8.0.md
-- ECONOMY_ORDER_QA_v2.8.0.md
-- NPC_TRAIT_QA_v2.8.0.md
-- UI_UX_QA_v2.8.0.md
+- CORE_RUN §QA
+- ECONOMY_ORDER §QA
+- NPC_TRAIT §QA
+- UI_UX §QA
 
 Deep Expedition nomination acceptance:
 - one nominee maximum
@@ -1036,7 +1036,7 @@ Deep Expedition nomination acceptance:
 
 ## RELATED
 
-game philosophy -> `00_GAME_CORE_v2.8.0.md`
+game philosophy -> SPEC_INDEX §GAME CORE
 NPC / Trait / destination / growth / recent snapshot -> `NPC_TRAIT_v2.8.0.md`
 Item / inventory / Item effects -> `ITEM_v2.8.0.md`
 price / Economy / Wallet -> `ECONOMY_ORDER_v2.8.0.md`

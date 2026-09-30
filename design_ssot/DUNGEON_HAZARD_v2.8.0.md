@@ -1333,6 +1333,804 @@ Reject outcomes where:
 - proper Counter feels meaningless
 - RNG erases NPC growth
 
+## QA — ACCEPTANCE
+
+Acceptance criteria for this owner. Status values are not stored here; FAIL is valid evidence.
+
+### FAMILY / HAZARD IDENTITY
+
+#### DUN-Q01 — FAMILY IDENTITIES
+
+SETUP:
+Inspect all 5 Families.
+
+EXPECT:
+SPIDER=poison+bind
+SLIME=corrosion+mire
+FIRE=fire+highCombatPower
+CRYPT=fear+dark
+SNOW=cold+whiteout
+
+PASS:
+Each Family is mechanically distinct.
+
+#### DUN-Q02 — STAT MAPPING
+
+SETUP:
+Inspect hazard contributions.
+
+EXPECT (User 2026-09-24, v2.9.0):
+- poison -> 강인함
+- bind -> 기동
+- corrosion -> 강인함
+- mire -> 기동
+- fire -> 정신 (revision 5)
+- fear -> 정신
+- dark -> 기동 (revision 3)
+- cold -> 강인함
+- whiteout -> 정신
+
+PASS:
+Player-facing stat roles match actual resolution.
+
+#### DUN-Q03 — SPIRIT RELEVANCE
+
+SETUP:
+Play Crypt and Snow content.
+
+EXPECT:
+정신 matters meaningfully in both.
+
+PASS:
+Spirit is not a one-Family stat.
+
+#### DUN-Q04 — FAMILY HAZARD BOUNDARIES
+
+SETUP:
+Inspect Family data.
+
+EXPECT:
+- canonical hazards are exactly poison/bind/corrosion/mire/fire/fear/dark/cold/whiteout
+- wet is not an independent Slime hazard
+- slow, if retained internally, is only an implementation alias of mire
+- armor is not a Fire-family hazard
+- undead is a Family Tag, not direct hazard
+- long is not a Hazard
+- thirst is not a Condition/Hazard/resource system
+- fatigue is NPC condition
+- no Supply Burden Gate modifier or required Supply exists; Food/Drink Supply is Fatigue recovery only (User 2026-09-24, v2.9.0)
+- Fire second axis is higher Dungeon Combat Power, not a separate Hazard
+
+PASS:
+No contradictory extra hazard layer or dead key affects resolution.
+
+#### DUN-Q19 — NONCANONICAL KEY ISOLATION
+
+SETUP:
+Search runtime resolution paths for wet/armor/undead/long/thirst and Job-specific hazard keys.
+
+EXPECT:
+None changes expedition resolution as an independent Hazard or hidden Job solution.
+
+PASS:
+Only canonical Hazard systems and Supply -> Fatigue recovery affect gameplay (User 2026-09-24, v2.9.0).
+
+#### DUN-Q21 — HAZARD EXPLANATION CONSISTENCY
+
+SETUP:
+Inspect all 9 canonical Hazards in Gate/preparation UI on desktop and touch/mobile.
+
+EXPECT (User 2026-09-24, v2.9.0):
+Every Hazard exposes the numbered short row, the same on every surface:
+- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 대응 1 제공` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / dark · 정신: fear / whiteout / fire)
+- Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> <n>당 대응 1 제공 · <Hazard> 대응 상품이 막는다`
+- no `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` label row and no destination-plate `?` help survive (User 2026-09-24 revision 2, v2.9.0)
+- no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
+
+Desktop:
+hover/focus access works where tooltip is used.
+
+Mobile:
+tap or inline access provides the same information.
+
+PASS:
+- no canonical Hazard is name-only while another receives a detailed effect line
+- no hover-only information
+- `slow` is not presented as a separate canonical Hazard
+- exact hidden formula remains hidden
+
+#### DUN-Q-v29-2 — ONE NON-투력 STAT PER HAZARD (3 / 3 / 3, NO GATE SHARES A STAT)
+
+(User 2026-09-24, v2.9.0)
+
+Controlled prepared states: vary one Core Stat at a time and read each Hazard's Defense.
+
+EXPECT:
+- 독 / 냉기 / 부식 Defense moves only with 강인함 (×1/3)
+- 속박 / 진창 / 어둠 Defense moves only with 기동 (×1/2)
+- 공포 / 화이트아웃 / 화염 Defense moves only with 정신 (×1/2)
+- no Hazard Defense moves with 투력
+- no Hazard reads a second Core Stat (no 정신 + 기동 split for 어둠 / 화이트아웃, no 강인함 for 화염)
+- every Family Tier Hazard set presses two different Stats (독거미 강인함 + 기동, 슬라임 강인함 + 기동, 설원 강인함 + 정신, 지하묘지 정신 + 기동), so no Gate is answered by one Stat (User 2026-09-24 revision 3)
+
+PASS:
+- 강인함 3 · 기동 3 · 정신 3 Hazards, 투력 never pressed, no Gate's Hazard set sharing a Stat (User 2026-09-24 revision 5: 화염 -> 정신)
+- Counter keys, Item Counter values, readiness labels 충분 / 대응 / 불안 / 취약 and thresholds are unchanged
+- pressure label shown per Hazard matches the Stat that actually moves its Defense
+
+#### DUN-Q16 — FINAL FAMILY DATA OWNERSHIP
+
+SETUP:
+Use a Final Expedition that selects canonical Dungeon Families.
+
+EXPECT:
+Final reads each selected Family's existing T2 Hazard definition from `DUNGEON_HAZARD_v2.8.0.md`.
+No alternate/duplicated Final-only Family Hazard table exists here.
+
+PASS:
+Dungeon Family data has one owner.
+Detailed Final combination/power/clear QA -> `FINAL_EXPEDITION_v2.8.0.md`.
+
+### GATE COUNT / TIER GENERATION
+
+#### DUN-Q12 — FAMILY INTRODUCTION
+
+SETUP:
+Run multiple seeds.
+
+EXPECT:
+Start with ~3/5 Families.
+Additional Families enter within canonical early/mid windows.
+
+PASS:
+Early mix varies across runs without late impossible surprise.
+
+#### DUN-Q13 — TIER DAY PROGRESSION
+
+SETUP:
+Sample generated days across bands.
+
+EXPECT:
+Higher Tier availability/weight rises over Run.
+
+PASS:
+No impossible early T3 and no flat same-difficulty run.
+
+#### DUN-Q14 — INTRA-BAND CURVE
+
+SETUP:
+Compare early vs late days inside same band.
+
+EXPECT:
+Higher-tier weight gradually increases.
+
+PASS:
+Day13 and Day18 are not necessarily identical distributions.
+
+#### DUN-Q15 — MULTI-GATE VARIETY
+
+SETUP:
+Generate multi-Gate days.
+
+EXPECT:
+Distinct Families preferred where practical.
+
+PASS:
+Repeated identical prep demand is not dominant unless intentional.
+
+#### DI-Q-v28-12 — GATE COUNT / TIER DISTRIBUTION EXACT
+
+Gate count PASS:
+- D1–3 exactly 1
+- D4–7 1/2 at 50% / 50%
+- D8–18 exactly 2
+- D19–24 3 at 70%, otherwise 2 (User 2026-09-26, v2.9.2 fourth pass)
+- D25–29 exactly 3, no draw (User 2026-09-26, v2.9.2 fourth pass)
+- D30 does not run ordinary Gate-count generation
+
+Tier PASS:
+- exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
+- all in-between Days use linear interpolation between surrounding anchors
+- DAY 21~29 then move 0.10 of T2 to T3 (D24 10 / 50 / 40 · D29 0 / 35 / 65); no other Day shifts (User 2026-09-26, v2.9.2 third pass)
+- D30 does not run ordinary Tier generation
+- no player-facing next-Day forecast exists (User 2026-09-24, v2.9.0)
+
+FAIL:
+- a forecast-only probability table
+- a different Save/Load forecast roll
+- any alternate approximate band percentages acting as exact truth
+
+### PREPARED POWER / GATE POWER / HAZARD THREAT / FORECAST
+
+#### DUN-Q70 — PREPARED POWER WEIGHTS
+
+Controlled Stats with no other modifiers.
+
+EXPECT ordinary expedition prepared ability:
+```text
+투력 .50 + 강인함 .34 + 기동 .27 + 정신 .20
+```
+
+PASS:
+- Forecast uses these weights
+- Resolve uses these weights
+- Great Success prepared margin/signal uses the same weights
+- no stale `.58/.32/.24/.16` ordinary path remains
+
+#### DUN-Q-v27-GATE-SLOPE — LATE-DAY GATE POWER
+
+Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
+
+PASS:
+- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80` (early 1.45: v2.9.11, User 2026-09-28; DAY 11~20 at 1.10: v2.9.2 third pass, User 2026-09-26; 0.80: v2.9.1 balance, User 2026-09-25)
+- the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
+- the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 28.05, D29 32.05 (v2.9.11, User 2026-09-28; each 0.45 under the v2.9.2 third pass)
+
+FAIL:
+- a single slope applied across all Days
+- an early-Day Gate Power that moved
+- the slope implemented as a post-hoc multiplier on the finished Gate Power rather than on the
+  Day term
+
+#### DUN-Q71 — HAZARD THREAT CURVE
+
+EXPECT:
+```text
+Threat = 12 + Day*.35 + (Tier-1)*6
+```
+
+Exact anchors:
+- D1 T1 = 12.35
+- D12 T1 = 16.20
+- D18 T2 = 24.30
+- D24 T2 = 26.40
+- D29 T3 = 34.15
+- D30 T2 = 28.50
+
+PASS: runtime threat matches.
+
+#### DI-Q-v28-13 — FORECAST / HAZARD LABEL BOUNDARIES
+
+Combat ratio:
+- >1.20 -> 우세
+- >=0.80 -> 접전
+- otherwise -> 불리
+
+Hazard readiness ratio:
+- >=1.00 -> 충분
+- >=0.75 -> 대응
+- >=0.40 -> 불안
+- otherwise -> 취약
+
+PASS:
+- Hazard Defense uses the exact Core-Stat coefficients in DUNGEON_HAZARD_v2.8.0.md
+- displayed label and actual underlying preparation state read the same calculation
+- exact hidden formula is not exposed merely because QA knows it
+
+### TIER PREPARATION / COUNTER ROUTES
+
+#### DUN-Q05 — T1 LEARNING / GROWTH OVERRIDE
+
+SETUP:
+Test T1 with:
+- a well-grown suitable NPC without exact Counter
+- the same/similar case with basic Direct Counter
+
+EXPECT:
+- strong growth can often make T1 viable even without exact Counter
+- basic correct prep materially increases reliability
+- T1 does not behave like a mandatory Item tax
+
+PASS:
+Growth matters and correct prep still feels useful.
+
+#### DUN-Q06 — T2 JUDGMENT ROUTE
+
+SETUP:
+Test T2 across grown NPCs with:
+- primary Direct Counter
+- Hybrid/Insurance/flex alternatives
+- strong relevant Stats with lighter prep
+
+EXPECT:
+- Counter/Item coverage is materially valuable
+- at least one normal route exists without two dedicated Direct Counters
+- some strong-NPC cases create a real `cover it or trust growth?` decision
+- T2 is not balanced as an automatic hard-counter tax in every case
+
+PASS:
+Preparation matters without eliminating judgment.
+
+#### DUN-Q07 — T3 SLOT CONTRACT
+
+SETUP:
+Test all Family T3 variants with appropriately grown NPCs.
+
+EXPECT:
+Viable clear route exists within <=2 meaningful required prep slots.
+
+#### DUN-Q72 — TIER PREPARATION TARGET
+
+Representative neutral-fit NPCs:
+- T1 lower/basic response can reach 충분; hybrid commonly slightly short
+- T2 upper/main specialist can reach 충분; lower remains useful but commonly short
+- T3 upper alone commonly 대응/slightly short; upper + secondary/natural/trait/hybrid can reach 충분
+
+PASS:
+- strong natural Stat/growth can reduce Item needs
+- weak-fit NPC may need more
+- no viable route requires a third normal Bag slot
+- drawing one exact Epic SKU is never required for a viable T3 route
+
+#### DUN-Q08 — DIRECT VS HYBRID
+
+SETUP:
+Compare specialist Direct vs multi-hazard Hybrid.
+
+EXPECT:
+Direct is more reliable on its specific target.
+Hybrid is more flexible across uncertainty.
+
+PASS:
+Hybrid is not strict superior to a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may
+exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16).
+
+#### DUN-Q09 — NO SINGLE ITEM FAMILY DELETE
+
+SETUP:
+Test strongest relevant item in each Family.
+
+EXPECT:
+One item cannot erase entire Family challenge.
+
+PASS:
+Stats/secondary pressure/insurance decisions remain relevant.
+
+#### DUN-Q10 — RESIDUAL RISK
+
+SETUP:
+Use proper Direct Counter repeatedly.
+
+EXPECT:
+- T1/T2 very reliable
+- T3 may retain small residual risk
+- no item-specific hidden defect RNG
+
+PASS:
+Risk comes from canonical expedition resolution.
+
+#### DUN-Q18 — HAZARD ROUTE COVERAGE
+
+SETUP:
+Audit all 9 canonical Hazards against ITEM matrix.
+
+EXPECT:
+Each Hazard has:
+- 1 Main specialist route
+- >=2 meaningful Alternative routes
+
+Alternative routes may use Hybrid/secondary Counter/relevant Stat/Stat-support Item.
+Insurance does not automatically count.
+
+PASS:
+No canonical Hazard depends on one mandatory SKU and alternatives are not duplicate copies.
+
+#### DUN-Q20 — PREPARATION NECESSITY / NAKED RUN
+
+SETUP:
+- representative multi-seed runs
+- normal NPC progression
+- no deliberate exploit
+- compare:
+  - A. repeated minimal/no preparation
+  - B. reasonable Hazard-aware preparation
+
+EXPECT:
+- early game tolerates weak preparation
+- preparation value increases with progression
+- prepared play produces clearly better expedition outcomes
+- naked/minimal-prep play must not remain a stable strategy into mid/late game
+
+PASS:
+- D1–3: weak/no prep usually survivable
+- D4–7: repeated no-prep begins producing visible injury/retreat/failure cost
+- D8–12: no-prep is materially worse than appropriate preparation
+- D13–18: repeated naked play is not a reliable progression strategy
+- D19+: reliable naked progression is exceptional, not normal
+- T3 requires grown NPC + meaningful preparation for reliable outcomes
+
+FAIL:
+- player can routinely progress to mid/late game while ignoring Order/Item preparation
+- NPC stat growth alone makes Hazard preparation largely irrelevant
+- prepared vs unprepared outcome difference is too small to affect player decisions
+
+NOTE:
+Do not solve by adding arbitrary naked-run punishment.
+Tune Dungeon pressure / Stat-route efficiency / growth / Item counter value so preparation naturally matters.
+
+### SUPPLY / FATIGUE
+
+#### DUN-Q73 — FATIGUE OUTCOME TABLE
+
+EXPECT base result Fatigue (User 2026-09-24, v2.9.0):
+```text
+성공 +4
+대성공 +4
+퇴각 +7
+부상 +9
+중상 0
+사망 0
+```
+
+PASS: exact table before Trait/Supply modifications.
+
+#### DUN-Q74 — FATIGUE PENALTY
+
+EXPECT five bands on the 0~40 scale (User 2026-09-24, v2.9.0):
+```text
+0~9   정상 none
+10~19 지침 mobility/spirit -15%
+20~29 과로 mobility/spirit -40%
+30~39 소진 mobility/spirit -40% + combat/survival -20%
+40    탈진 all four Core Stats -40% + failure-conditioned Death risk +10%p
+```
+
+PASS:
+- applies to NPC Base+Equipment-side Stats
+- Item Stat contribution is not multiplied by this NPC-side percentage
+- the band is judged on `fatigueBeforeExpedition`
+- Fatigue never exceeds 40; no stale 20 cap or -25% value survives
+- Fatigue 40 adds the +10%p failure-Death term exactly like an injured departure (cap raised the same way)
+
+#### DUN-Q75 — SUPPLY ORDER / OUTCOME BUFFER
+
+Controlled cases must verify exact order (User 2026-09-24, v2.9.0):
+1. Supply reduces current Fatigue 1:1 before departure (`preRecovery`)
+2. remaining Supply then reduces actual outcome Fatigue 1:1
+3. unused remainder is discarded
+4. no morning changes Fatigue, a Severe-Injury rest day included (User 2026-09-25, v2.9.0)
+
+PASS:
+- `preparedSupply`, `preRecovery`, `fatigueBeforeExpedition`, `remainingSupplyBuffer`, `rawOutcomeFatigueGain`, `outcomeBufferUsed`, `actualOutcomeFatigueGain`, `finalFatigue`, `netFatigueDelta` match the current owner arithmetic
+- no `requiredSupply` / `excessSupply` field or Supply payment step exists
+- no duplicate `postOutcomeFatigueGain` truth is used for the same result
+- no Supply Power/success/Loot/Hazard bonus
+- no next-expedition buffer persistence
+- no morning natural recovery
+- Death raw outcome Fatigue remains 0; 중상 takes the 부상 gain (User 2026-09-25, v2.9.0)
+
+#### DUN-Q-v29-1 — FATIGUE BANDS / NO REST RECOVERY
+
+(User 2026-09-24, v2.9.0)
+
+Controlled NPCs at departure Fatigue 9 / 10 / 19 / 20 / 29 / 30 / 39 / 40, then a Severe-Injury recovery period.
+
+EXPECT:
+- 9 -> 정상, no penalty; 10 and 19 -> 지침 -15% 기동/정신; 20 and 29 -> 과로 -40% 기동/정신
+- 30 and 39 -> 소진 -40% 기동/정신 and -20% 투력/강인함
+- 40 -> 탈진 -40% on all four Core Stats and `실패 시 사망 위험` +10%p over the same state at 39
+- a 성공 at 36 with no Supply ends at 40, not 41 (clamp)
+- Supply 3 at current Fatigue 22 departs at 19 (지침), not 22 (과로): the band is judged after preRecovery
+- no morning changes Fatigue, a Severe-Injury rest day included (User 2026-09-25, v2.9.0)
+- NIGHT main line names the band from 20 up (`귀환 후 피로 22 · 과로`); 정상 / 지침 are not named
+
+PASS:
+- five bands, 0~40, applied to NPC Base+Equipment-side Stats only
+- no rest recovery exists; Fatigue falls only through Food/Drink (User 2026-09-25, v2.9.0)
+
+#### DUN-Q-v29-3 — REPEATED-STRAIN DEATH ESCALATION
+
+(User 2026-09-25, v2.9.0)
+
+Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
+chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.1 balance).
+
+EXPECT:
+- the first injured departure adds nothing beyond the existing injured term
+- every further CONSECUTIVE injured departure adds +8%p to the conditional failure Death chance and to its cap, capped at +30%p
+- one healthy departure resets the chain; Fatigue 20+ departures add nothing to this term
+- the count comes from the adventurer's own records (this departure included); no new NPC field
+- NPC detail shows `연속 부상 출발 {n}회` (the current chain of consecutive injured departures; 0 after a healthy one) as an information row, no verdict (User 2026-09-25, v2.9.1)
+
+PASS:
+- strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
+
+#### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
+
+SALE must not display separate 성공/퇴각/부상 future Fatigue rows.
+SALE shows no Fatigue arithmetic line: the counter tray lists a Food/Drink's own `피로 회복` row only; no `피로 {A} → 출발 {B}`, no always-on Fatigue line and no `보급 회복` / `보급 부족` / `남은 보급` tail (User 2026-09-25; the v2.9.0 line is retired).
+
+Supply/Fatigue runtime arithmetic follows the current owner truth.
+
+### ORDINARY RESOLVE / DEATH / INJURY / CAUSALITY
+
+#### DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
+
+Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit row):
+- environment incident chance uses the exact closure formula and 2%–48% clamp
+- escape chance uses the exact closure formula and 15%–94% clamp
+- failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.1 balance)
+- environment/other Severe branch uses 11% base before current modifiers
+- injured departure adds the existing +15%p Severe escalation exactly once
+- failure-conditioned Death still follows the separate current Death owner formula exactly once
+
+Reward PASS:
+- EXP base = 22 + Day×4.6
+- EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance)
+- Wallet base = 35 + Day×8
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch)
+- explicit XP/Loot/Gate reward modifiers compose once
+- living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
+- equipment gain on hit is seeded integer +2 through +5
+
+FAIL:
+- a second alternative ordinary-resolve formula survives
+- QA retunes any value to improve pass rate
+
+#### DUN-Q-v29-BC1 — 만반의 준비 / LEVEL DEATH REDUCTION
+
+(User 2026-09-25, v2.9.1 balance; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
+
+Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 만반의 준비 (healthy, Fatigue < 20, 2+ Items),
+and the three near misses (injured / Fatigue 20 / one Item).
+
+PASS:
+- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 only when all three hold
+- Level never changes the Death roll or the SALE snapshot: Lv1 / Lv2 / Lv10 / Lv20 read the same chance (User 2026-09-26, v2.9.2 fourth pass; the Level factor is removed)
+- a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
+- the SALE `실패 시 사망 위험` never includes preparedFactor
+- the Night report shows the 만반의 준비 save line once, only when the band was hit
+
+#### DUN-Q-v29-BC2 — RETREAT HEALING
+
+(User 2026-09-25, v2.9.1 balance; owner §RETREAT HEALING.)
+
+PASS:
+- only an injured departure ending 퇴각 can heal; chance 25% / 50% / 75% / 100% for 0 / 1 / 2 / 3+ preceding consecutive injured 퇴각
+- a 부상 / 중상 result resets the chain; 구급키트 does not change the chance
+- one extra draw only on this path; the Night line appears only on a heal and never shows the chance
+
+#### DUN-Q-v29-BC3 — HIDDEN BAD-LUCK ASSIST
+
+(User 2026-09-25, v2.9.1 balance; owner §BAD-LUCK PREPARATION ASSIST.)
+
+Controlled Night queues: 3 / 4 / 5 carried failures in a row, a bare-handed expedition inside the chain, a success inside the
+chain, a Deep expedition inside the chain.
+
+PASS:
+- no assist before the chain reaches 3; then assist 0.10 and +0.05 per further failure
+- the assist multiplies prepared ability for the combat check by (1 + assist) and environmentIncidentChance by (1 − assist)
+- bare-handed expeditions neither count nor reset; a success resets; Deep and Final are neither counted nor assisted
+- no screen, forecast or report shows it
+
+#### DUN-Q77 — ORDINARY FAILURE DEATH BASELINE
+
+Controlled prepared states with known Combat and Hazard deficits.
+
+EXPECT:
+
+```text
+CombatDeficit
+= clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
+
+CombatDeathContribution
+= CombatDeficit * 0.18
+
+HazardDeficit_i
+= clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)
+
+EnvironmentDeficit
+= average(HazardDeficit_i)
+
+EnvironmentDeathContribution
+= EnvironmentDeficit * 0.12
+
+healthyFailureDeathChance
+= clamp(
+    CombatDeathContribution + EnvironmentDeathContribution,
+    0.00,
+    0.30
+)
+```
+
+If no canonical Hazard is present:
+```text
+EnvironmentDeficit = 0
+```
+
+PASS:
+- Combat contribution uses the same current prepared-combat truth as Forecast/Resolve before hidden combat variance
+- Environment contribution uses the same current Hazard Threat/Defense truth as readiness
+- healthy minimum may reach exactly 0%
+- healthy conditional cap is exactly 30%
+- an expedition that resolves as `성공 / 대성공` performs zero Death rolls
+- an expedition that enters the ordinary failure path performs exactly one Death roll
+- that failure Death roll is not additionally gated behind a separate failed-escape requirement
+- no second Death roll survives inside escape/injury/severe handling
+- a 0% `실패 시 사망 위험` does not imply guaranteed Success
+- the displayed percentage is not treated as unconditional whole-expedition Death probability
+
+#### DUN-Q78 — INJURED RE-EXPEDITION RISK / PRE-SUPPLY DISCLOSURE
+
+Controlled identical NPC/Gate state except departure Injury state.
+
+EXPECT when departure `injury=1`:
+- ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
+- failure Death chance adds +10%p to the healthy conditional formula and caps at 40%
+- Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
+- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 50% (User 2026-09-24, v2.9.0)
+- no extra independent Death/Severe roll is created
+- `성공 / 대성공` still performs no Death roll
+
+Pre-supply SALE check:
+- exact `실패 시 사망 위험` % includes the +10%p injured modifier
+- qualitative Combat Forecast / Hazard Readiness and exact `실패 시 사망 위험` are captured before any new Item commit
+- after purchase commits, those displayed outlook values remain frozen
+- actual `failureDeathChance` is recalculated internally from the final prepared state
+- post-supply/final actual failure Death % is not exposed during the remaining-slot decision
+- UI does not present the conditional percentage as unconditional whole-expedition Death probability
+
+PASS:
+- injured departure is materially riskier than healthy departure when an expedition fails
+- healthy conditional cap remains 30%
+- injured conditional cap remains 40%
+- exact pre-supply `실패 시 사망 위험` is player-visible while the post-supply actual conditional probability remains hidden
+
+#### DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY
+
+Start at `injury=1`.
+
+EXPECT:
+```text
+성공 -> injury 0
+대성공 -> injury 0
+퇴각 -> injury 1
+부상 -> injury 1
+```
+
+PASS:
+- Retreat does not clear ordinary Injury
+- generic completion/non-Injury result does not clear it
+- Severe recovery remains its separate rule in `NPC_TRAIT_v2.8.0.md`
+- First Aid Aftercare may still override persistent Injury exactly as ITEM owns
+
+#### DUN-Q11 — CAUSALITY
+
+SETUP:
+Block one hazard but fail due to another/combat.
+
+EXPECT:
+Result copy names actual cause.
+
+PASS:
+Blocked hazard is not falsely blamed.
+
+### GREAT SUCCESS / DEEP EXPEDITION
+
+#### GREAT SUCCESS
+PASS:
+- failed expedition cannot become Great Success
+- ordinary combat/environment/injury/escape resolution occurs first without Great Success
+- only final ordinary `성공` may upgrade to `대성공`
+- injury/retreat/severe injury/death cannot coexist with Great Success
+- margin uses prepared pre-noise Combat ability rather than lucky combat noise
+- larger prepared Combat margin never lowers Great Success chance
+- Great Success remains below 100% certainty
+- signal threshold matches actual Great Success calculation
+- no new hidden master-readiness Stat
+
+#### DI-Q-v28-10 — GREAT SUCCESS NUMERIC BASELINE
+
+Expected:
+    signal margin 0.26
+    chance slope 0.80
+    chance cap 0.30
+
+PASS:
+- small positive margin may produce Great Success even below the signal threshold
+- signal threshold only controls presentation
+- probability never exceeds 30%
+- repeated Great Success by a well-grown NPC is not itself a failure
+
+#### DEEP SCHEDULE
+PASS:
+- only D7/D14/D21/D28 candidate windows
+- exactly 2 or 3 actual occurrences
+- at least one D7/D14
+- at least one D21/D28
+- Save/Load does not reroll
+
+#### DI-Q-v28-11 — DEEP OCCURRENCE / DIFFICULTY BASELINE
+
+Expected:
+- occurrence windows remain D7 / D14 / D21 / D28
+- each Run has exactly 2 or 3 occurrences
+- P(3 occurrences) = 50%
+- P(2 occurrences) = 50%
+- Deep required Combat Power = selected base Gate Power ×1.50
+- no Deep Hazard inflation is added
+
+#### DEEP GATE
+PASS:
+- base is one of today's highest-Tier actual Gates
+- tie is deterministic/seeded
+- Family unchanged
+- Tier unchanged
+- Hazard set unchanged
+- required Combat Power = base Gate Power × one Deep factor
+- no additive / Day-specific Deep Power curve
+- ordinary Item/Supply resolution used once
+- one expedition / one result
+- no T4 / extra Hazard / second roll
+
+#### EVENT EXCLUSION
+PASS:
+- actual Deep Day produces no Normal Event
+- Deep is not selected from Event catalog
+- no automatic 35% chance compensation
+
+### SIMULATION / BALANCE QA
+
+#### SIM-Q01 — COMBAT VARIANCE
+
+SETUP:
+Run full-run simulations/playtests with canonical baseNoise ±17.5%.
+
+EXPECT:
+Borderline outcomes can swing.
+Strong invested NPC remains trustworthy.
+The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
+
+PASS:
+±17.5% is used as the baseline and any later retune is supported by outcome evidence.
+
+#### SIM-Q02 — ROLE USAGE
+
+SETUP:
+Full-run simulation/playtest.
+
+EXPECT:
+Supply, Direct, Hybrid, Stat, Insurance, RiskReward and explicit Utility all receive meaningful use where applicable.
+
+PASS:
+No role is effectively dead or always mandatory.
+
+#### SIM-Q70 — THREE PREPARATION AXES
+
+Full-run simulation/playtest must demonstrate that common rational Bag decisions can trade among:
+- direct combat/stat preparation
+- Hazard response
+- Fatigue/Condition management
+
+PASS direction:
+no one axis is universally ignorable or universally mandatory.
+
+#### SIM-Q71 — ITEM / GROWTH HIERARCHY
+
+Track Item direct contribution against NPC Level/Growth/Equipment.
+
+PASS direction:
+- NPC growth remains the main long-term body of strength
+- one appropriate Item can change an expedition decision
+- late-game Stat Items are not decorative dead picks
+- generic Potion is not the universal best answer over Counter/Food choices
+- Epic improves slot efficiency but does not become mandatory for T3 viability
+
+#### SIM-Q72 — REQUIRED METRICS
+
+Record at minimum:
+- Job × Level × Family × Tier outcomes
+- four-Stat/equipment distribution
+- departure Fatigue distribution and time at 10+/20+/30+/40 (User 2026-09-24, v2.9.0)
+- Food/Drink pick rate by current Fatigue
+- Supply use split: preRecovery / outcomeBuffer / waste
+- Potion tier offer/order/sale/use
+- Counter lower/upper/hybrid use
+- Epic offer/order/sale/use by Day band and category
+- healthy vs injured re-expedition outcome distribution
+- healthy vs injured expedition Death/Severe rates by CombatDeficit and EnvironmentDeficit band
+- Item dead-pick / universal-best rates
+
 ## RELATED
 
 item counters -> `ITEM_v2.8.0.md`
