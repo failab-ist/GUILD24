@@ -24,7 +24,7 @@
 | `v2.8/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md` | v2.8 문구·대사 채택 감사(SSOT_AUDIT · `tests/copy.cjs`가 가리킨다) | `reports/` |
 | `v2.8/tools/qa-end-states.cjs` | v2.8 END 상태 캡처 도구(`qa-final-end` · `qa-final-prep`가 기준 시드로 가리킨다) | `tools/` |
 | `v2.9.1-balance/*.md` | v2.9.0 BALANCE FINDING, v2.9.1 합의값 · 이상안 · 옵션 · 측정 요약 · 구현 핸드오프 | `reports/` |
-| `v2.9.1-balance/results/remeasure-v29-closing-results.json` | v2.9.1 마감 측정(SPEC_INDEX가 가리킨다) | `tools/` |
+| `v2.9.1-balance/results/remeasure-v29-closing-results.json` | v2.9.1 마감 측정(`v29-balance-ideal` · 구현 핸드오프가 가리킨다) | `tools/` |
 | `v2.9.2/v292-bot-harness.md`, `v292-balance-review.md` | v2.9.2 밸런스 1~4차 근거(`reader` 봇, D10 fork 측정, User 런 프로필) | `reports/` |
 | `v2.9.2/v292-h6-transitions.md` | H6 장면 전환 캡처 보고 | `reports/` |
 | `v2.9.2/tools/measure-package-v292.cjs` | D10 fork 쌍 비교 틀의 가장 최근 본(새 측정 도구의 본보기) | `tools/` |

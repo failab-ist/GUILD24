@@ -5,8 +5,8 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.9.9
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) ; V2_9_2_CLOSED_2026-09-26 (main d6fcfbd; tag v2.9.2 pending, set by the User); V2_9_3_CLOSED_2026-09-26 (main; tag v2.9.3 pending, set by the User) ; V2_9_4_TO_V2_9_10_CLOSED (each merged to main - dates, PRs and commits in SOURCE_ADOPTION_STATUS; tags v2.9.4 and v2.9.8 pending, set by the User) ; V2_9_11_CLOSED_2026-09-29 (merged to main by PR #28; tag v2.9.11 pending, set by the User) ; V2_9_12_CLOSED_2026-09-30 (merged to main by PR #31 and PR #32, main f02eb8d; tag v2.9.12 pending, set by the User) (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3); V2_9_4_ADOPTED (replay nudge — CHANGELOG §v2.9.4); V2_9_5_ADOPTED (SALE strain line — CHANGELOG §v2.9.5); V2_9_6_ADOPTED (codex and Item Flavor cleanup — CHANGELOG §v2.9.6); V2_9_7_ADOPTED (decorations and Rarity — CHANGELOG §v2.9.7); V2_9_8_ADOPTED (ids read as the current names, save v9 — CHANGELOG §v2.9.8, main `621d007`, PR #19); V2_9_9_ADOPTED (presentation: store scene, dock Actions, SALE, FINAL clash — CHANGELOG §v2.9.9, merged to main by PR #20 on User confirmation 2026-09-27); V2_9_9_QUICK_PATCH (Wallet multipliers 0.40 / 0.25 / 0.15, the strain line in the SALE forecast pin — CHANGELOG §v2.9.9 quick patch, merged to main by PR #21, User 2026-09-28); V2_9_10_ADOPTED (quick patch — CHANGELOG §v2.9.10, merged to main by PR #22 on User confirmation 2026-09-28); V2_9_10_QUICK_PATCH (effect order, 1+1 sticker, 본사 폐기 유예, SLOTH seal window / count / fold — CHANGELOG §v2.9.10 quick patch, merged to main by PR #24 and its follow-up on User confirmation 2026-09-28); V2_9_11_ADOPTED (v3.0 prep line, branch claude/v3-0-prep-planning-g42z7y — CHANGELOG §v2.9.11, merged to main by PR #28 on User confirmation 2026-09-29); V2_9_12_ADOPTED (balance review line PR #31 + v3.0 prep quick patches, coach diet, END record, FIRE pair PR #32 — CHANGELOG §v2.9.12, User confirmation 2026-09-30)
+FREEZE_STATUS=V2_9_12_CLOSED_2026-09-30 (merged to main by PR #31 and PR #32, main f02eb8d; tag v2.9.12 pending, set by the User). Every earlier version is closed - dates, commits, PRs and tags in CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_9_12_ADOPTED (every version through v2.9.12 is adopted in Source on main - CHANGELOG §RELEASE RECORD)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -67,35 +67,6 @@ files.
 - A release is closed by a git tag (`v2.9.0`) on the commit where SPEC_INDEX, CHANGELOG, owners and
   Source agree; the tag, not a filename, is the version.
 - history/ keeps pre-consolidation files as audit evidence only; a version bump copies nothing there.
-
-## v2.8 PURPOSE (CLOSED 2026-09-24)
-
-v2.8 is the project-wide current Design SSOT for the focused Core Readability / Playtest Response
-release.
-
-It improves the current loop:
-
-    observe
-    -> infer
-    -> choose
-    -> see the actual change
-    -> see the resolved result
-    -> remember it for the next decision
-
-Priority:
-- current correctness and runtime UX
-- Copy / Information Trust
-- SALE -> NIGHT causal readability
-- Fatigue salience
-- Store Support salience and truth
-- Item role clarity
-- Boss information cadence
-- mobile density
-- audiovisual consequence / Run-identity polish using existing state
-- full-surface functional-design polish
-- evidence-gated balance follow-up
-
-Structural P2+ expansion remains routed to GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md.
 
 ## CURRENT CANONICAL FILE SET
 
@@ -222,100 +193,15 @@ Current resolution status comes from WORK_STATE + current Source + reviewed comm
 
 If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
 
-## v2.9.0 RELEASE ACCEPTANCE — HIGH LEVEL
+## VERSION HISTORY
 
-v2.9.0 is ready to close when:
-- a new player can say what to do on DAY 1 from the screens alone (task line, coach order, Hazard rows)
-- selling an Item to a customer is visible as an act (hand-over into the Bag, reaction)
-- the first SALE teaches four marks; the rest are contextual
-- Supply is one sentence (`음식·음료는 피로를 줄인다`) and Fatigue bands 0~40 are adopted and measured
-- every Hazard presses one non-투력 Stat and every non-투력 Stat is pressed by three Hazards
-- ORDER shows per-Gate visitor counts without a new badge, hint or fit emphasis (F6 retired the emphasis; the judgement is the player's)
-- Store Build effects are understood from the cards; SALE -> NIGHT causality is legible (the former
-  v2.9+ entry gate)
-- no unapproved 3.0+ structural expansion is pulled into v2.9.0
+What each version changed, with its owners, User decision dates, commits, PRs and tags: `design_ssot/CHANGELOG.md`
+(§RELEASE RECORD lists every closed version). This index keeps only the current routing.
 
-Close-out state 2026-09-25: every item above is adopted in Source (F2 … F7, I-4; CHANGELOG lists the commits).
-The release stays OPEN on one gate: the BALANCE FINDING recorded in `archive/v2.9.1-balance/v29-balance-finding-handoff.md`
-(F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
-session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
+## GAME FEEL CONTRACT — ROUTING
 
-User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). `v2.9.0` is tagged (User 2026-09-25) on the last
-v2.9.0 Source commit on `main`, `3d0ddc6` (the close-out `3f18ceb` plus the D0 briefing fix); the tag is on the remote.
-
-## v2.9.1 — BALANCE
-
-User decisions 2026-09-25. Every value: `archive/v2.9.1-balance/v29-balance-agreements.md`; measurements and the accepted gaps:
-`archive/v2.9.1-balance/v29-balance-ideal.md`; owner amendments: CHANGELOG §v2.9.1. 7-b is closed (the remaining-Supply buffer stays).
-
-v2.9.1 is ready to close when:
-- every v2.9.1 owner amendment is in Source (`archive/v2.9.1-balance/v291-implementation-handoff.md` lists the batches)
-- `npm test`, `npm run ssot:check`, `npm run qa:runtime` PASS and the UI batch passes its screenshot review
-- the native build reproduces the closing measurement (`archive/v2.9.1-balance/results/remeasure-v29-closing-results.json`) within sampling error
-- `reports/deco-balance` is regenerated
-
-Closed 2026-09-25: merged to `main` (`d23d076`, PR #2) and tagged `v2.9.1` there (User 2026-09-25).
-
-## v2.9.1 / v2.9.2 / v2.9.3 — NEXT VERSIONS (User 2026-09-25/26; v2.9.1, v2.9.2 and v2.9.3 CLOSED)
-
-Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
-batches are **v2.9.2**. Each is docs-first and touches Source only after the User authorizes that batch.
-v2.9.2 starts only after v2.9.1 is closed on `main` (User 2026-09-25: the two sessions touched the same UI owners,
-ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met at tag `v2.9.1`.
-
-- v2.9.1 BALANCE: CLOSED 2026-09-25 — §v2.9.1 — BALANCE above; merged to `main` `d23d076`, tagged `v2.9.1`.
-- v2.9.2 GAME FEEL: CLOSED 2026-09-26 — merged to `main` `d6fcfbd` (H1~H6 all adopted); tag `v2.9.2` goes on that commit (set by the User).
-- v2.9.3 (User 2026-09-26): balance fourth pass, Boss reveal after MORNING lands, reset-seed fix, build marker -> CHANGELOG §v2.9.3;
-  CLOSED 2026-09-26 on `main`; tag `v2.9.3` goes on that merge (set by the User).
-- v2.9.4 (User 2026-09-26): the replay nudge (END one line, 본사 해금 with the D10 / D14 opens, the pre-Run Slot mark, account
-  best Day) -> CHANGELOG §v2.9.4.
-- v2.9.5 (User 2026-09-26): the SALE strain line `연속 부상 출발 {n}회` under the readout -> CHANGELOG §v2.9.5.
-- v2.9.6 (User 2026-09-26): Monster Knowledge leaves the codex; Item Flavor cleanup -> CHANGELOG §v2.9.6.
-- v2.9.7 (User 2026-09-26): decorations remade / swapped, 구급품 진열장 injury rework, Rarity growth 0.10 -> CHANGELOG §v2.9.7.
-- v2.9.8 (User 2026-09-27): ids read as the current names (Items, Decorations, Store Support, the 반값 Event, the 골렘 Family)
-  and the save schema moves to v9 -> CHANGELOG §v2.9.8.
-- v2.9.10 (User 2026-09-27): quick patch - every Item's category on ORDER / SALE, one rarity colour per Item, shelf life as the
-  shelf life wording, sold-out offers, the customer walking up, the Boss dossier's entry, the Rare Reference customers' lines
-  -> CHANGELOG §v2.9.10 (owners UI_UX §ORDER — ITEM INFORMATION HIERARCHY, §SALE — COUNTER TRAY / SHELF ORDER / CUSTOMER
-  ARRIVAL, §BOSS REVEAL; UI_UX_QA UI-Q-v29-20 / 35; COPY_AUDIT §4-10 / §8-0 / §25; COPY_WORLD_VOICE §RARE REFERENCE NPC; SALE; ITEM).
-- v2.9.12 (User 2026-09-30, balance review line; CLOSED 2026-09-30, merged by PR #31 and PR #32, main `f02eb8d`): first-Run lessons (DAY 1 Counter, no Death on DAY 1~2, DAY 3 injured
-  customer with a 구급키트 and a payday customer), rules taught after they first act by NIGHT coach marks (the pre-sale
-  피로 / 대성공 / 만반의 준비 marks retired), the END replay line above 도감에서 보기 in bold -> CHANGELOG §v2.9.12 (owners
-  CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81, NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §3 / §26, UI_UX §GREAT
-  SUCCESS / §만반의 준비 TUTORIAL / §END — REPLAY NUDGE, UI_UX_QA, COPY_WORLD_VOICE §TUTORIAL COACH COPY).
-  The v3.0 prep quick patches (User 2026-09-29~30) join it: iPhone Safari and short phones (iPhone SE, Galaxy 360x597), the
-  BGM / SFX mix, the ORDER floating box and warehouse panel, the desk's own SALE and wider stage, a closed Gate kept as
-  `오늘 폐쇄`, the best 총매출 replay line, D30 candidates while ordering and a notebook in FINAL 준비, stale Hazard Stat lines,
-  the II / FIRE Gate lessons, a FIRE pair's Boss +18, the coach diet, the END `이 점포의 기록` block
-  -> the same CHANGELOG section (owners UI_UX, UI_UX_QA, PRESENTATION, META §BEST DAY, EVENT, FINAL_EXPEDITION §D30 PLAYER
-  FLOW / §FAMILY-PAIR BALANCE AUDIT, BOSS, DUNGEON_HAZARD, DUNGEON_ITEM_QA, COPY_AUDIT §3-10, COPY_WORLD_VOICE).
-- v2.9.11 (User 2026-09-28~29, merged by PR #28): the v3.0 prep line - unsold stock leaves on the Night of its last sale Day, on
-  that Day's receipt; the early Gate slope 1.50 -> 1.45; 35 customer names replaced; the Rare Reference customers removed; two Expedition Store
-  Supports; Events at 40%, once per Run, 55 in all; recorded phase BGM (User 2026-09-29) -> CHANGELOG §v2.9.11 (owners RELIC 31 / 32, EVENT 24~55, COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25, ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING
-  §CLOSING — CASH FLOW RECEIPT, EVENT §20, RELIC 새벽 회수 계약, DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA,
-  PRESENTATION §AUDIO PRESENTATION, UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47).
-- v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
-  새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two
-  new cues), SALE's outlook plate, shelf lip and head, the FINAL clash scene (H7, the one exception to the per-beat game
-  feel contract) -> CHANGELOG §v2.9.9 (owners UI_UX §LIVE STORE DECORATION SEATING, §NEW STORE PREPARATION — STORE SCENE,
-  §OPENING TITLE LOGO, §PRIMARY ACTION GRAMMAR, §SALE — MOBILE AUTHORITY / SHELF LIP / SHELF HEAD, §FINAL — CLASH SCENE;
-  PRESENTATION §GAME FEEL BEAT H7; UI_UX_QA UI-Q-v29-40 ~ 46). Merged to `main` (PR #20, User 2026-09-27).
-- v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
-  (principles table, contract, H1~H6 rows). Routing per batch, in execution order:
-
-      H1 NIGHT 판정 도장 (verdict stamp, per-Outcome weight, Hero Item cause beat, Insurance reversal overstamp) — ADOPTED
-                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §NIGHT LAYOUT / NIGHT_CLOSING (display order) / UI_UX_QA
-      H5 FINAL 최종 토벌 (one seal stamp on a win, one failure stamp on a loss; never the death tape, never a party count) — ADOPTED
-                                     -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
-      H2 SALE 계산대 (key press, first coin tick, stub after impact; no streak rhythm) — ADOPTED
-                                     -> PRESENTATION §TRANSACTION BEAT A5 / A8 / UI_UX §SALE — COUNTER TRAY / UI_UX_QA
-      H3 ORDER 확정 (crate cascade ≤ 320 ms, ≤ 3 audible hits, balance count-down) — ADOPTED
-                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
-      H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part on the v2.9.1 rates) — ADOPTED
-                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
-      H6 장면 전환 (the batch captured the four hard cuts and reported them; User picked FINAL alone,
-      CLOSING / END / DAY 0 already softened by H4 / H5 / MORNING's own entries) — ADOPTED
-                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §FINAL — BOSS REVEAL ENTRY / UI_UX_QA
+Game feel (타격감) beats H1~H7: design, contract and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
+(principles table, contract, H1~H7 rows).
 
   Contract: presentation-only, ≤ 320 ms per beat (사망 tape ≤ 500 ms), no input block, reduced-motion
   no-op, motion inside the card, no full-screen shake, no combo / streak UI, no praise word, no rule /
@@ -324,20 +210,5 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   (last verdict → CLOSING → next day; FINAL result → clear screen) -> PRESENTATION §GAME FEEL BEAT.
   v2.9.9 H7 FINAL 교전 (the resolved Final played out as a card fight before the ending) is the one scene exempt from the
   per-beat length and the inside-the-card rule -> PRESENTATION §GAME FEEL BEAT H7 / UI_UX §FINAL — CLASH SCENE / UI-Q-v29-46.
-  Not in v2.9.2: the `어제보다 +N` line (v3.0+ router), new copy, haptics (no iOS Safari support).
-
-## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
-
-v2.8 is ready to close when:
-- known current correctness/runtime UX findings are fixed
-- active Player information is current, truthful and non-contradictory
-- choice -> actual change -> resolved result is readable
-- sold-Item impact is surfaced only where causality is proven
-- Fatigue, Loyalty and Store Build effects appear at meaningful decision/result moments
-- mobile core-flow density does not duplicate or crowd essential information
-- Boss objective/information remains present through the owned cadence
-- approved current owner baselines are adopted
-- measurement-gated findings are either evidence-supported or explicitly carried forward
-- no unapproved v2.9+ structural expansion is pulled into v2.8
 
 Exact mechanics, numbers, copy, UX and pass/fail criteria live in the routed owner Specs / QA.

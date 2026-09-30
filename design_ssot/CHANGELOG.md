@@ -3,9 +3,33 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## RELEASE RECORD
+
+Every closed version, where it landed on `main` and its tag. Tags are set by the User (WORK sessions cannot push tags);
+`pending` means the User has not set it yet.
+
+| version | closed | on `main` | tag |
+|---|---|---|---|
+| v2.8.0 | 2026-09-24 | `8226c4c` | - |
+| v2.9.0 | 2026-09-25 | `3d0ddc6` (close-out `3f18ceb` + the D0 briefing fix); balance moved to v2.9.1 | `v2.9.0` |
+| v2.9.1 | 2026-09-25 | `d23d076` (PR #2) | `v2.9.1` |
+| v2.9.2 | 2026-09-26 | `d6fcfbd` (H1~H6) | pending |
+| v2.9.3 | 2026-09-26 | `229df97` | pending |
+| v2.9.4 | 2026-09-26 | `630b6d0` | pending |
+| v2.9.5 ~ v2.9.7 | 2026-09-26 | merged to `main` | - |
+| v2.9.8 | 2026-09-27 | `621d007` (PR #19) | pending |
+| v2.9.9 | 2026-09-27 | `8acc8dc` (PR #20); quick patch `5d32f79` (PR #21, 2026-09-28) | - |
+| v2.9.10 | 2026-09-28 | `8c1d4ae` (PR #22); quick patch `0fa6891` (PR #24) and its follow-up | - |
+| v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | pending |
+| v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | pending |
+
 ## Docs / hygiene after v2.9.12 (User 2026-09-30, no build change)
 
 - **Versions closed**: v2.9.11 and v2.9.12 heads and SPEC_INDEX status marked closed; tags stay the User's.
+- **SPEC_INDEX consolidated**: the closed-version sections (v2.8 PURPOSE, v2.8 / v2.9.0 RELEASE ACCEPTANCE, v2.9.1 BALANCE,
+  the per-version NEXT VERSIONS routing) and the per-version header status history leave the index; the status history is
+  §RELEASE RECORD above, the per-version routing is each version's section below, and the game feel contract keeps its
+  routing as SPEC_INDEX §GAME FEEL CONTRACT — ROUTING.
 - **Archive**: closed-version reports and finished-question tools moved from `reports/` · `tools/` to `archive/v2.9.x/`, live
   references follow. Then the archive kept only what carries a decision or an insight, or what a live file points at; raw
   result JSON, unrunnable old tools, the legacy harness, finished handoffs and applied checklists were removed (git history
@@ -596,7 +620,7 @@ bumps had not been made and are made here with the v2.9.3 ones).
 H1~H6 are all adopted in Source (entries below, in the order they happened). PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
 (execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
-SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
+SPEC_INDEX carried the routing then (now the owner column of PRESENTATION §GAME FEEL BEAT). No owner other than PRESENTATION and SPEC_INDEX changed.
 - Review against a game-feel talk (User 2026-09-25): intensity by event weight (일반 / 중요 / 클라이맥스)
   added to the contract; H6 phase entry beat for CLOSING / FINAL / END / DAY 0 (hard cuts today) registered
   last in the order; two sequence reviews and a pre-batch audit lens added. Excluded: screen shake, camera,
