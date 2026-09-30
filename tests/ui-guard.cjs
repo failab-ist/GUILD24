@@ -1927,6 +1927,20 @@ test('coach step ids are unique across phases',()=>{
  for(const [id,phases] of Object.entries(ids))assert.equal(phases.length,1,'coach id '+id+' is used by '+phases.join(' / '));
 });
 
+/* UI-Q-v29-54 (UI_UX §END — THIS RUN BLOCK, User 2026-09-30, A안): the END tape says what kind of store this Run was */
+test('UI-Q-v29-54: END 이 점포의 기록 - five rows, before the settlement, read off the Run',()=>{
+ const l=fn('ledger'),b=fn('runBlock');
+ assert.ok(/'<div class="block">'\+moved\+row\('지금까지 연 점포',a\.runs\)\+'<\/div>'\+runBlock\(row\)\+settle\+opened/.test(l),'after 지금까지 연 점포, before 점포 자본 정산 and 본사 해금');
+ assert.ok(b.includes("'<div class=\"block this-run\"><h4>이 점포의 기록</h4>'"),'the COPY_AUDIT §10-4 title');
+ const labels=[...b.matchAll(/row\('([^']+)'/g)].map(m=>m[1]);
+ assert.deepEqual(labels,['버틴 날','손님','돌아오지 못한 사람','가장 성장한 손님','원정'],'five rows in order, COPY_AUDIT §10-4 labels');
+ assert.ok(/row\('돌아오지 못한 사람',s\.stats\.deaths\|\|0\)/.test(b),'the lost as a number, 0 printed');
+ assert.ok(/\(recs\.length\?row\('원정'/.test(b)&&/r\.outcome==='대성공'/.test(b),'no 원정 row without an expedition; 대성공 counted from the records');
+ assert.ok(/n\.level>b\.level\|\|\(n\.level===b\.level&&n\.loyalty>b\.loyalty\)/.test(b)&&/s\.npcs\.filter\(n=>n\.introduced\)/.test(b),'the highest Level among the visited (dead included), a tie to the higher Loyalty');
+ assert.ok(!/run\.\w*record|account\.\w*record/.test(b)&&!/this-run|runBlock/.test(read('dist/systems/run.js')+read('dist/systems/meta.js')),'no save field: presentation only');
+ assert.ok(/'<div class="block settlement"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged');
+});
+
 /* UI-Q-v29-37 (UI_UX §END — REPLAY NUDGE, User 2026-09-26, v2.9.4): show, never assign - one line at most, only when the
    Run opened nothing, never a Decoration's name; 본사 해금 carries the D10 / D14 opens; the pre-Run Slot mark is a current state */
 test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goals',()=>{

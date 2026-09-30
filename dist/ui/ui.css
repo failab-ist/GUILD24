@@ -2727,7 +2727,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .store-capital .coin-mark{flex:0 0 auto;width:16px;height:13px;
  background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='16' height='13' shape-rendering='crispEdges'><g fill='%234a3410'><rect x='4' y='0' width='8' height='1'/><rect x='1' y='1' width='1' height='1'/><rect x='14' y='1' width='1' height='1'/><rect x='0' y='2' width='1' height='1'/><rect x='15' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='14' y='3' width='1' height='1'/><rect x='4' y='4' width='8' height='1'/><rect x='1' y='5' width='1' height='1'/><rect x='14' y='5' width='1' height='1'/><rect x='0' y='6' width='1' height='1'/><rect x='15' y='6' width='1' height='1'/><rect x='1' y='7' width='1' height='1'/><rect x='14' y='7' width='1' height='1'/><rect x='4' y='8' width='8' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='14' y='9' width='1' height='1'/><rect x='0' y='10' width='1' height='1'/><rect x='15' y='10' width='1' height='1'/><rect x='1' y='11' width='1' height='1'/><rect x='14' y='11' width='1' height='1'/><rect x='4' y='12' width='8' height='1'/></g><g fill='%23f2cf6b'><rect x='2' y='1' width='12' height='1'/></g><g fill='%23ffe79a'><rect x='1' y='2' width='3' height='1'/><rect x='8' y='2' width='7' height='1'/></g><g fill='%23fff6cf'><rect x='4' y='2' width='4' height='1'/></g><g fill='%23d0a134'><rect x='2' y='3' width='12' height='1'/><rect x='2' y='5' width='12' height='2'/><rect x='1' y='6' width='1' height='1'/><rect x='14' y='6' width='1' height='1'/><rect x='2' y='9' width='12' height='2'/><rect x='1' y='10' width='1' height='1'/><rect x='14' y='10' width='1' height='1'/></g><g fill='%2395681c'><rect x='2' y='7' width='12' height='1'/><rect x='2' y='11' width='12' height='1'/></g></svg>") center/16px 13px no-repeat}
 .decoration-panel .none{color:#7d7466}
-.settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
+/* the END `이 점포의 기록` block (UI_UX §END — THIS RUN BLOCK) heads the same way as the settlement below it */
+.settlement h4,.this-run h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}
 .unlocks h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 5px;
@@ -3057,7 +3058,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-end .print .block{padding:8px 0}
  .p-end .print .row{font-size:15px;line-height:1.45;padding:3px 0}
  .p-end .print .row b{font-size:18px}
- .p-end .settlement h4{font-size:12px;margin-bottom:9px}
+ .p-end .settlement h4,.p-end .this-run h4{font-size:12px;margin-bottom:9px}
  .p-end .end-tape .opened b{font-size:16px}
  .p-end .end-tape .bare{font-size:15px;margin-top:4px}
  .p-end .end-tape{margin-bottom:16px}

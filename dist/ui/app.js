@@ -1901,7 +1901,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
  const nudge=opened?'':replayLine();
- return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
+ return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+runBlock(row)+settle+opened
   /* User 2026-09-30: what the Run left behind reads before the link to the codex, and reads as the point */
   +(nudge?'<p class="replay">'+E(nudge)+'</p>':'')
   +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
@@ -1909,6 +1909,16 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
    of a Decoration the account did not own at that settlement (judged once, in settleStoreCapital), else a new best Day
    (META §BEST DAY) - else nothing. Both are recorded on the Run, so a reload or a purchase from the ending prints the same
    line. Never names a Decoration (two per Slot). */
+/* UI_UX §END — THIS RUN BLOCK (User 2026-09-30, A안): what kind of store this Run was, read off what the Run already holds -
+   no save field. The lost are a number (the notebook lists their names); a Run with no expedition prints no 원정 row. */
+function runBlock(row){const s=game.run,met=s.npcs.filter(n=>n.introduced),recs=s.npcs.flatMap(n=>n.records||[]);
+ const top=met.reduce((b,n)=>!b||n.level>b.level||(n.level===b.level&&n.loyalty>b.loyalty)?n:b,null);
+ return '<div class="block this-run"><h4>이 점포의 기록</h4>'
+  +row('버틴 날','DAY '+s.day)
+  +row('손님',met.length+' · 단골 '+(s.stats.regulars||0))
+  +row('돌아오지 못한 사람',s.stats.deaths||0)
+  +(top?row('가장 성장한 손님',E(top.name)+' Lv.'+top.level):'')
+  +(recs.length?row('원정',recs.length+'건 · 대성공 '+recs.filter(r=>r.outcome==='대성공').length):'')+'</div>';}
 function replayLine(){const s=game.run,st=s.settlement;
  if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
