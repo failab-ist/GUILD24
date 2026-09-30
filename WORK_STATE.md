@@ -149,6 +149,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
 4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
 5. ~~사전 코치 → 사후 안내 이전~~ **끝남 (v2.9.12, 브랜치 `claude/v3-0-prep-planning-g42z7y`)** — User 결정과 결과는 `reports/v3.0-prep.md` §9-6 끝. 코치 12개 은퇴, 가격 사후 안내 2개, 첫 판매 24탭 → 12탭. 다른 세션은 스토어 1위 루브릭(§9-4) 나머지 칸을 이어 간다.
+6. **다른 세션**: END 영수증 `이 점포의 기록` 블록(A안). 핸드오프 `reports/handoff-end-record.md`(초안 `reports/v3.0-prep.md` §9-8-1-A). 이 세션은 기획(1위 인터뷰, `reports/interview-1st-place.md`).
    - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
    - 출시 준비 외 작업은 §8.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
