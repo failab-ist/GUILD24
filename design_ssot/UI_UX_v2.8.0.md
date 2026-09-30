@@ -219,6 +219,9 @@ Do not:
 Store scene은 사용할 수 있으나
 상황 정보보다 방해되지 않게 한다.
 
+게이트 임시 폐쇄가 있는 날(User 2026-09-30): 닫힌 게이트는 열린 게이트 판 뒤에 흐린 판으로 남는다 — 이름에 취소선,
+`오늘 폐쇄` 도장 하나, 위험 줄 없음. `위험 보기` 창과 ORDER `오늘` 줄에도 같은 표시가 붙는다(EVENT §52, COPY_AUDIT §13-52 · §4-21).
+
 ### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
 
 (User 2026-09-25, v2.9.1 balance.) The Run's cumulative Death count and the current segment limit

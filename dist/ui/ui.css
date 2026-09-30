@@ -449,6 +449,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .stamp-line{display:inline-block;margin-top:8px;padding:4px 8px;font:600 12px/1.3 var(--ui);letter-spacing:.04em;
  color:#8a3f2c;box-shadow:inset 0 0 0 2px #8a3f2c;transform:rotate(-2deg)}
 .slip.event{padding-top:16px}
+/* User 2026-09-30: a Gate the day's Event closed - the same notice, faded, its edge grey, one red `오늘 폐쇄` stamp (the
+   stamp-line's own shape) where the Hazard rows would be; nothing else on it */
+.slip.gate.closed{--fam:#8a8170}
+.slip.gate.closed .crest{filter:grayscale(1);opacity:.55}
+.slip.gate.closed>b{margin-bottom:6px;color:#8a7d61;text-decoration:line-through;text-decoration-thickness:1px}
+.closed-stamp{display:inline-block;padding:4px 8px;font:600 12px/1.3 var(--ui);letter-spacing:.04em;color:#a8321f;
+ box-shadow:inset 0 0 0 2px #a8321f;transform:rotate(-2deg)}
 .slip.event .stamp-line{margin:0 0 6px;color:#2f7a4d;box-shadow:inset 0 0 0 2px #2f7a4d}
 .slip.event .body{display:block;font:400 13px/1.6 var(--ui);color:#5f5440}
 /* EVENT §3-1: what happened, then what it switched on. The situation keeps the line breaks

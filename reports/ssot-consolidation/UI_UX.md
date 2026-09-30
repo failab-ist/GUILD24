@@ -2184,3 +2184,13 @@ starts both at the top; the tray never covers the shelf, and a desk never folds 
 - the phone's second readout in the column and its forecast pin are phone pieces and are not drawn on a desk
 - crossing 1024 while SALE is open draws the other layout
 ```
+
+
+## closed Gate UI (User 2026-09-30)
+
+New:
+
+```new
+게이트 임시 폐쇄가 있는 날(User 2026-09-30): 닫힌 게이트는 열린 게이트 판 뒤에 흐린 판으로 남는다 — 이름에 취소선,
+`오늘 폐쇄` 도장 하나, 위험 줄 없음. `위험 보기` 창과 ORDER `오늘` 줄에도 같은 표시가 붙는다(EVENT §52, COPY_AUDIT §13-52 · §4-21).
+```

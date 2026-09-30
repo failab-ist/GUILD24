@@ -693,6 +693,11 @@ function gatePlate(d,full=false){const b=sigilOf(d);
      ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence(h.key,d))+'</span></li>'
      :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i>'+pressCell(h)+'</li>').join('')+'</ul>'
    +'</article>';}
+/* User 2026-09-30: a Gate the day's Event closed stays on the list, faded and stamped `오늘 폐쇄`, with no Hazard rows - no one
+   can go there today, so it carries no decision, only the fact of which Gate it was (EVENT 게이트 임시 폐쇄) */
+function closedPlates(){return (game.run.closedGates||[]).map(d=>{const b=sigilOf(d);
+ return '<article class="slip gate closed"><span class="pin"></span>'
+ +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span><b>'+E(d.name)+'</b><span class="closed-stamp">오늘 폐쇄</span></article>';}).join('');}
 /* v2.9.0 (User 2026-09-24): no next-day Gate / Tier forecast is shown anywhere - today's Gates, their numbered Hazard rows and
    the per-Gate visitor count are the whole planning context (ECONOMY_ORDER §NEXT-DAY FORECAST — RETIRED). */
 /* UI_UX §DEEP SALE UI. Offered only while a nomination is still legal, so it never appears as
@@ -748,7 +753,7 @@ function morningScreen(){
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
      +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b>'+deathLimitItem()+'</p>'
-   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(d=>gatePlate(d)).join('')+'</div></div>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(d=>gatePlate(d)).join('')+closedPlates()+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
      counter-band element and is placed in the counter's own coordinates. Presentation only -
@@ -1507,8 +1512,8 @@ function orderScreen(){
    hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
 function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
-function todayLine(counts,tag='em'){const s=game.run;
- return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')));}
+function todayLine(counts,tag='em'){const s=game.run,shut=(s.closedGates||[]).map(d=>E(d.name)+' 오늘 폐쇄');
+ return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).concat(shut).join(' · '):E(s.dungeons.map(d=>d.name).join(' / '))+(shut.length?' · '+shut.join(' · '):''));}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
@@ -2344,7 +2349,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
  }
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
-else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+'</div>';}
+else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
    /* UI_UX §MENU / SETTINGS — EXACT COMPOSITION (User 2026-09-24, v2.9.0): 점포지원 routes to the selection
       only while a window is purchasable; 이번 영업의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
       (§1-3) and then discards the Run at once. */

@@ -101,7 +101,12 @@ test('EVENT 24~55: every new Event effect moves its own channel',()=>{
  // the Morning, applied directly: a forced Event on a Morning whose Gates and shelf are set up by hand
  const apply=(id,prep)=>{const h=fresh('ev-m-'+id),t=h.run;t.day=6;prep(h,t);h.rollEvent=()=>E(id);h.morningEvent(t.dungeons.map(d=>d.family));return t;};
  {const t=apply('gateclosed',(h,t)=>{t.dungeons=['spider','slime','golem'].map(f=>h.makeDungeon(f,2));});
-  assert.equal(t.dungeons.length,2,'게이트 임시 폐쇄: one of three Gates closes');}
+  assert.equal(t.dungeons.length,2,'게이트 임시 폐쇄: one of three Gates closes');
+  /* User 2026-09-30: the closed Gate is kept aside for the screens (`오늘 폐쇄`), not among the open ones */
+  assert.equal(t.closedGates.length,1,'the closed Gate is recorded');
+  assert.ok(!t.dungeons.some(d=>d.id===t.closedGates[0].id)&&['spider','slime','golem'].includes(t.closedGates[0].family),'it is one of the three and no longer open');}
+ {const t=apply('safegates',(h,t)=>{t.dungeons=['spider','slime'].map(f=>h.makeDungeon(f,3));t.closedGates=[h.makeDungeon('golem',1)];});
+  assert.deepEqual(t.closedGates,[],'a Morning without the Event clears the record of the one before');}
  {const t=apply('safegates',(h,t)=>{t.dungeons=['spider','slime'].map(f=>h.makeDungeon(f,3));});
   assert.ok(t.dungeons.every(d=>d.tier===1),'게이트 안정화 작업: every Gate Tier 1');
   assert.deepEqual(t.dungeons.map(d=>d.family),['spider','slime'],'the Families stay');}

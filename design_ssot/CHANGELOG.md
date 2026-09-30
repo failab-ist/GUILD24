@@ -142,6 +142,10 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **A closed Gate stays on the list, `오늘 폐쇄`** - EVENT §52, COPY_AUDIT §13-52 (User 2026-09-30: "폐쇄됐을 때 그냥
+  없어지던데 ... 폐쇄됐다는 정보가 전달되도록"): the Gate 게이트 임시 폐쇄 closes was simply gone, so the player could not
+  tell which one. It stays on the MORNING board, in the `위험 보기` window and on ORDER's `오늘` line, faded with its name
+  struck and one `오늘 폐쇄` stamp, no Hazard rows. It still takes no visitor, expedition or order (simulation unchanged).
 - **The desk draws its own SALE** - UI_UX §SALE — DESK LAYOUT, UI-Q-v29-25 / UI-Q-v29-18 (User 2026-09-30, "설계안으로 가되
   PC판 전용으로 분리해서"): on a desk SALE is its own screen, built from the phone's pieces - the customer about 1.3x larger (card 300 -> 390 px at 1280)
   behind the counter with the state, outlook and destination beside them, then under the counter top the ledger, the tray

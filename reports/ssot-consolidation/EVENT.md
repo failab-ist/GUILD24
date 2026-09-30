@@ -801,3 +801,12 @@ New:
 - a Reroll keeps the one special slot and draws its Item again (User 2026-09-29: it takes an Order slot at +35%, so a
 fresh draw is a fair cost, not an exploit)
 ```
+
+
+## closed Gate (User 2026-09-30)
+
+New:
+
+```new
+닫힌 게이트는 그날 목록에서 사라지지 않는다(User 2026-09-30): MORNING 게이트 판 · ORDER `오늘` 줄 · `위험 보기` 창에 `오늘 폐쇄`로 남는다. 판은 흐리게, 이름에 취소선, 위험 줄 없이 도장 하나만 둔다. 방문 · 원정 · 발주 계산에는 들어가지 않는다.
+```
