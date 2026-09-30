@@ -1239,7 +1239,8 @@ const coachSteps={
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
     clears it and the next first occurrence teaches it again. No new persistence was added. */
- morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
+ /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): 방문객 and 게이트 are retired - the sign's 손님 N and the DAY 1~3 task line say them */
+ morning:[['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
@@ -1287,9 +1288,8 @@ const coachSteps={
     it used to open with no word of what a Store Support is. These three marks read the takeover
     - what it is, how a card reads, what the key does and when more arrive - and never name a
     pick. They run on the DAY 0 takeover only (see showCoach); account-scoped like every mark. */
- relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.'],
-  ['relic-card','.relic-choices .relic-plate','카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.'],
-  ['relic-buy','.relic-choices .relic-plate .stamp','누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.']]
+ /* COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
+ relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.']]
 };
 let activeCoach=null;
 let coachSettle=0,coachPainted=null,activeGroup=null;

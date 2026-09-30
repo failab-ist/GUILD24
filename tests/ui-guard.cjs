@@ -1790,6 +1790,16 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
    stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
    gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
 /* FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 출전 NPC 선택 (notebook) -> FINAL 준비 (Stat grid) */
+/* UI_UX §TUTORIAL — COACH DIET (UI-Q-v29-53, User 2026-09-30): one rule, one place - a retired mark stays retired and
+   the marks the User kept before the fact are still there */
+test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
+ const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
+ const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
+ for(const id of ['visitors','gates','relic-card','relic-buy'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['relic-what','deep','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
+  assert.ok(ids.has(id),'kept before the fact: '+id);
+});
+
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */
 test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verbatim, the rule only',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
@@ -3381,12 +3391,13 @@ test('의무실 현판: the heal note sits in the kit under the bag, wraps, and 
 });
 
 /* USER 2026-09-24 / UI_UX §FIRST STORE SUPPORT TUTORIAL (DAY 0): the first screen of a new store
-   teaches itself - three marks over the DAY 0 takeover, never over any other modal, never a pick. */
-test('DAY 0 Store Support tutorial: three marks over the takeover, DAY 0 only, no answer given',()=>{
+   teaches itself - one mark over the DAY 0 takeover (COACH DIET, User 2026-09-30), never over any other modal, never a pick. */
+test('DAY 0 Store Support tutorial: one mark over the takeover, DAY 0 only, no answer given',()=>{
  const steps=(app.match(/ relic:\[(\['relic-what'[\s\S]*?\]\])\n\};/)||[])[1];
  assert.ok(steps,'the relic lesson exists');
- for(const [id,sel] of [['relic-what','.relic-open'],['relic-card','.relic-choices .relic-plate'],['relic-buy','.relic-choices .relic-plate .stamp']])
-  assert.ok(steps.includes("['"+id+"','"+sel+"'"),id+' points at '+sel);
+ assert.ok(steps.includes("['relic-what','.relic-open'"),'relic-what points at .relic-open');
+ /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the card and key marks are retired */
+ assert.ok(!/relic-card|relic-buy/.test(steps),'the card and key marks are gone');
  for(const r of DATA.relics)assert.ok(!steps.includes(r.name),'no Store Support is named as the answer: '+r.name);
  const show=fn('showCoach');
  assert.ok(/const relicD0=modal==='relics'&&game\.run\?\.phase==='foundation';/.test(show),'the exception is the DAY 0 takeover alone');
