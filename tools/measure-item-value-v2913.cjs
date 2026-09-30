@@ -3,7 +3,7 @@
 // they were heading to, the store's Supports), then each sample is resolved K times with an empty Bag and with that one
 // Item, on the same random draws (common random numbers), so the difference is the Item's alone.
 // A Counter is only scored on Gates whose Hazards it answers (it is bought for them); every other Item on every sample.
-//   node tools/measure-item-value-v2913.cjs [--runs 60] [--per-band 150] [--k 30] [--full-use] [--out file.json]
+//   node tools/measure-item-value-v2913.cjs [--runs 60] [--per-band 150] [--k 30] [--full-use] [--context strong|weak] [--out file.json]
 const path=require('node:path'),fs=require('node:fs');const ROOT=path.resolve(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])require(path.join(ROOT,'dist',f+'.js'));
 const args=process.argv.slice(2),flag=(k,d)=>{const i=args.indexOf(k);return i>=0?args[i+1]:d;};
@@ -11,6 +11,10 @@ const RUNS=Number(flag('--runs',60)),PER=Number(flag('--per-band',150)),K=Number
 /* --full-use (User 2026-09-30): a Counter is scored only where nothing of it is wasted - every Hazard it answers on that Gate
    has a bare gap at least its value - so the measurement reads what a point of Counter does, not an overshoot */
 const FULL=args.includes('--full-use');
+/* --context strong|weak (User 2026-09-30): an Item's worth depends on who carries it - a Counter matters to an adventurer who
+   wins the fight and gets hurt by the Gate, a potion to one who loses it. strong = bare prepared Power at least the Gate's,
+   weak = under 0.9 of it. Omitted: every departure. */
+const CTX=flag('--context',null);
 const acct=JSON.parse(fs.readFileSync(path.join(ROOT,'reports/expert-bot/account-0930-run3-start.json'),'utf8'));
 const D=DATA,copy=x=>JSON.parse(JSON.stringify(x)),band=d=>d<=10?'D1-10':d<=20?'D11-20':'D21-29';
 const HZ=Object.keys(D.hazards);
@@ -19,8 +23,10 @@ const pool={'D1-10':[],'D11-20':[],'D21-29':[]};let tick=0;
 const P=Game.prototype,night=P.night;
 P.night=function(){const s=this.run;for(const id of s.queue||[]){const n=s.npcs.find(x=>x.id===id);if(!n||!n.alive)continue;
   const d=this.gateFor(n);if(!d||d.family==='final'||s.day>=30)continue;if(!FULL&&(tick++)%2)continue;
-  const gap=Object.fromEntries(Dungeon.prepare({...n,pack:[]},d,s.facilities).hazards.map(h=>[h.key,h.gap]));
-  pool[band(s.day)].push({n:{...copy(n),pack:[]},d:copy(d),fac:[...s.facilities],gap});}
+  const bare=Dungeon.prepare({...n,pack:[]},d,s.facilities),ratio=Dungeon.preparedPower(bare.effects)/(d.power||1);
+  if(CTX==='strong'&&ratio<1||CTX==='weak'&&ratio>=.9)continue;
+  const gap=Object.fromEntries(bare.hazards.map(h=>[h.key,h.gap]));
+  pool[band(s.day)].push({n:{...copy(n),pack:[]},d:copy(d),fac:[...s.facilities],gap,ratio});}
  return night.apply(this,arguments);};
 Debug.simulate(RUNS,'reader',null,'adaptive','hybrid',{});
 Debug.simulate(RUNS,'expert',acct,'adaptive','hybrid',{});
@@ -44,7 +50,7 @@ for(const it of items){const counters=HZ.filter(h=>(it.effects[h]||0)>0);const r
   row.bands[b]=acc.n?{samples:acc.n/K,win:+(100*acc.win/acc.n).toFixed(2),hurt:+(100*acc.hurt/acc.n).toFixed(2),death:+(100*acc.death/acc.n).toFixed(2),
    great:+(100*acc.great/acc.n).toFixed(2),fatigue:+(acc.fatigue/acc.n).toFixed(2),loot:+(acc.loot/acc.n).toFixed(1)}:null;}
  rows.push(row);}
-const out={runs:RUNS,perBand:PER,k:K,fullUse:FULL,samples:Object.fromEntries(Object.entries(pool).map(([b,a])=>[b,a.length])),departures:Object.fromEntries(Object.entries(all).map(([b,a])=>[b,a.length])),rows};
+const out={runs:RUNS,perBand:PER,k:K,fullUse:FULL,context:CTX,samples:Object.fromEntries(Object.entries(pool).map(([b,a])=>[b,a.length])),departures:Object.fromEntries(Object.entries(all).map(([b,a])=>[b,a.length])),rows};
 if(OUT)fs.writeFileSync(OUT,JSON.stringify(out,null,1));
 console.log(JSON.stringify(out.samples));
 for(const r of rows)console.log(r.id.padEnd(13),r.buy,Object.entries(r.bands).map(([b,x])=>b+' '+(x?`win ${x.win} hurt ${x.hurt} death ${x.death} fat ${x.fatigue}`:'-')).join(' | '));
