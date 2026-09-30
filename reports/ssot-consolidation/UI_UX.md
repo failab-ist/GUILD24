@@ -624,10 +624,9 @@ User decision: no `FINAL까지 N일` countdown signal (the five-day Boss beats c
 - `건너뛰기` skips the current screen's marks only; later screens still teach their own (User 2026-09-24)
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 User decision 2026-09-24. The first screen of a new store is the DAY 0 Store Support takeover, so
-the tutorial begins there: three marks read the takeover (what a Store Support is, how a card
-reads, what the key does and when more candidates arrive) and never name a pick. They are the one
-exception to "no mark over a modal", shown over the takeover itself, on DAY 0 only, and persisted
-per account like every other mark. Exact copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
+the tutorial begins there. One mark reads the takeover - what a Store Support is (User 2026-09-30, v2.9.12: the card and
+the rest) - and never names a pick. It is the one exception to "no mark over a modal", shown over the takeover itself, on
+DAY 0 only, and persisted per account like every other mark. Exact copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
 ```
 
 
@@ -646,8 +645,7 @@ Supply/Fatigue tutorial teaches:
 ```new
 Supply/Fatigue tutorial teaches one fact, on the counter tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer (User 2026-09-25; it sat on the retired `피로 A → 출발 B` row):
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
-First SALE (User 2026-09-24): five marks only — destination, Hazard, Stats (the customer's own 능력치: they differ by Job / rarity / Level, 투력 drives combat, the other three answer the Hazards; COPY_AUDIT §3-7 STATS), outlook, price. Great Success, Supply,
-returning customer and Bag marks are contextual and appear the first time their situation exists.
+능력치: they differ by Job / rarity / Level, 투력 drives combat, the other three answer the Hazards; COPY_AUDIT §3-7 STATS).
 ```
 
 
@@ -802,11 +800,8 @@ On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial
 - the one User-approved exception to "tutorial does not add page height" (exactly one line)
 Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0.md §3.
 ### TUTORIAL — FIRST-ORDER COACH ORDER
-The first-ORDER coach group is, in this order: `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0;
-- `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
-- `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
-- the `gold` mark is retired (the register reads itself)
-- one concept per step still holds
+`gold` mark stays retired (the register reads itself).
+sale; the returning-customer mark is retired (the card reads `다시 온 손님`).
 Exact strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
 ```
 
@@ -1886,8 +1881,6 @@ Playback:
 New:
 
 ```new
-`stock` User 2026-09-29, v2.9.11).
-- `stock` anchors the 창고 summary: the first Day's warehouse already holds the opening stock, which no screen named before
 ```
 
 
@@ -2261,4 +2254,38 @@ presses its own Stat
 - a FIRE Gate: one Hazard only, but a higher required Combat Power (`DUNGEON_HAZARD` §FIRE second axis)
 - anchor: that Gate's plate on the MORNING board; the rule only, never which Item answers it (§READ THE SYSTEM)
 - exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-10
+```
+
+
+## v2.9.12 coach diet (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30, v2.9.12, §TUTORIAL — COACH DIET.) The first ORDER keeps one mark, `confirm` (발주 확정). `gates`, `stock`,
+`offer`, `quantity` and `reroll` are retired: the 오늘 brief line and `위험 보기`, the 창고 head (on DAY 1 it reads
+`창고 · 본사 기본 상품 N종`), each offer row's effect line, the `최대` key and the priced 후보 교환 key say them. The
+First SALE (User 2026-09-30, v2.9.12, §TUTORIAL — COACH DIET): two marks — destination and Stats (the customer's own
+The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout title reads
+`도착 시 전투 전망`, and price is taught after the fact (§SALE PRICE LESSONS). The Bag mark stays contextual after the first
+### TUTORIAL — COACH DIET (v2.9.12)
+(User 2026-09-30; acceptance -> UI_UX_QA UI-Q-v29-53; review `reports/v3.0-prep.md` §9-6.) One rule is taught in one
+place. A mark stays only where the rule has to be known before the decision and no screen says it; a mark the screen
+already says is retired; a rule that can be named after it acts is taught then.
+- kept before the fact: DAY 0 `점포지원` (what a Store Support is); MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL) and
+the II / FIRE Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정`; SALE destination and Stats; SALE Bag (after
+the first sale); FINAL `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (its first clause only - the warehouse
+clause is dropped and the receipt gains no row)
+- retired, the screen says it: MORNING 방문객 and 게이트; DAY 0 card and key; ORDER gates, stock, offer, quantity, 후보 교환;
+SALE Hazard, outlook, returning customer; NIGHT `한 명씩 …` (the `전체 건너뛰기` key says it)
+- two words added so a retired mark is not missed: the DAY 1 창고 head `창고 · 본사 기본 상품 N종` while it holds only the
+opening stock, and the SALE readout title `도착 시 전투 전망`
+- taught after the fact: price (§SALE PRICE LESSONS), beside the NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
+### SALE PRICE LESSONS (v2.9.12)
+(User 2026-09-30.) Two contextual SALE marks replace the pre-sale price mark, each once per account, persisted and reset
+with the other marks:
+- the first 150% (바가지) refusal: on the refused key (`오늘 거절됨`)
+- the first 50% sale: on that sale's change line (`단골도 +N · 소지금 A → B`), which stays up while the mark is open
+- words only; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §26-3
+key marks are retired; each card prints its effect and price, and the key, the later windows and `점포지원 N / 7` say
 ```

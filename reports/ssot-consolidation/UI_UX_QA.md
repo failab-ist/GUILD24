@@ -2045,3 +2045,22 @@ plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하
 - neither names an Item
 - the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mark on a closed Gate
 ```
+
+
+## v2.9.12 coach diet (User 2026-09-30)
+
+New:
+
+```new
+### UI-Q-v29-53 — COACH DIET (User 2026-09-30)
+Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
+- DAY 0 shows one mark (`점포지원`); MORNING shows no 방문객 / 게이트 mark (Deep and the II / FIRE Gate marks still show in
+their situation); the first ORDER shows `발주 확정` only; the first SALE shows destination and Stats only, then Bag after
+the first sale; NIGHT shows no `한 명씩` mark; CLOSING shows the one-clause receipt mark
+- DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads
+`도착 시 전투 전망`
+- the first 150% refusal shows §26-3 line 1 on the refused key, the first 50% sale shows line 2 on its change line (the line
+stays until the mark is closed); neither shows a second time on the account
+- `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the v2.9.12 baseline (16)
+- a retired mark still shows, a mark names an Item, or a price lesson shows before its situation
+```

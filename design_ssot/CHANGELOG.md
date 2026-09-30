@@ -38,6 +38,13 @@ the owner headers and in the git tag.
   없어지던데 ... 폐쇄됐다는 정보가 전달되도록"): the Gate 게이트 임시 폐쇄 closes was simply gone, so the player could not
   tell which one. It stays on the MORNING board, in the `위험 보기` window and on ORDER's `오늘` line, faded with its name
   struck and one `오늘 폐쇄` stamp, no Hazard rows. It still takes no visitor, expedition or order (simulation unchanged).
+- **Coach diet** - UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS / FIRST-ORDER COACH ORDER / FIRST STORE SUPPORT,
+  COPY_AUDIT §3-4 / §3-7 / §26-3, COPY_WORLD_VOICE §TUTORIAL COACH COPY, UI-Q-v29-53 (User 2026-09-30, from the §9-6 review in
+  `reports/v3.0-prep.md`): one rule, one place. 13 marks the screen already says are retired (MORNING 방문객 · 게이트, DAY 0
+  card · key, ORDER gates · stock · offer · quantity · 후보 교환, SALE Hazard · outlook · returning, NIGHT); two words replace
+  two of them (`창고 · 본사 기본 상품 N종`, `도착 시 전투 전망`); price is taught after the first 150% refusal and the first
+  50% sale; the CLOSING mark keeps its first clause. Kept before the fact: 점포지원, Deep, II / FIRE Gate, 발주 확정,
+  destination, Stats, Bag, 토벌 전망 (User: what is paid for or decided must be known first).
 - **II Gate and FIRE Gate lessons** - UI_UX §GATE TIER / FIRE GATE TUTORIAL, COPY_AUDIT §3-10, UI-Q-v29-52 (User 2026-09-30):
   two contextual MORNING marks on the Gate plate, once per account - the first two-Hazard Gate (`II 게이트부터는 위험이 두
   가지다. 위험마다 버티는 능력치가 다르다.`) and the first FIRE Gate (`화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더
