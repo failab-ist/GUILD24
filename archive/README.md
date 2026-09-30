@@ -31,6 +31,8 @@
 | `v2.9.7/counter-ladder-v297.md`, `hazard-coverage-v297.md` | v2.9.7~8 대응 사다리 · 위험 대응 범위 근거 | `reports/` |
 | `v2.9.9/fresh-run-d23-review-v299.md`, `v2.9.9-review-packet.md` | v2.9.9 새 계정 D23 리뷰 · 연출 리뷰 패킷 | `reports/` |
 | `v2.9.11/*.md` | v2.9.11 재측정(`remeasure-v2911`), 부상 · 성장, 문구 교정, 줄바꿈 점검, iPhone Safari, BGM · 효과음 믹스, 초안(`v2.9.11-drafts`) | `reports/` |
+| `v2.9.9/tools/measure-wallet-v299.cjs` | v2.9.9 실패 보상 배율 측정 | `tools/` |
+| `v2.9.11/tools/measure-{curve,injury,keystone,royalcert,survival}-v2911.cjs` | v2.9.11 곡선 · 부상 · 키스톤 · 왕도 인증 · 생존 장식 측정(끝난 질문). 곡선 재측정 `remeasure-v2911.cjs`는 현행이라 `tools/`에 남김 | `tools/` |
 | `v2.9.12/handoff-*.md` | v2.9.12에 끝난 핸드오프(사전 코치 정리 · END `이 점포의 기록`) | `reports/` |
 
 ## 규칙

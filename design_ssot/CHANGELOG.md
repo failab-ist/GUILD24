@@ -147,7 +147,7 @@ the owner headers and in the git tag.
 - **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear
   `archive/v2.9.9/fresh-run-d23-review-v299.md` §7-8): 왕도 프리미엄 인증 becomes a 꾸준형 card - commission 60% → 45% of the charged
   150% price, the owner's 바가지 intent +16%p → +10%p (-0.16 → -0.06), and base operating cost +10% of overheadBase from the
-  next Day (the 지역 거점점 계약 rule, added to it). Measured (`tools/measure-royalcert-v2911.cjs`, `reader` 3,000 each, the card
+  next Day (the 지역 거점점 계약 rule, added to it). Measured (`archive/v2.9.11/tools/measure-royalcert-v2911.cjs`, `reader` 3,000 each, the card
   replacing the bot's own D10+ pick): 바가지 acceptance with the card 65.3% (55.4% without; 71.9% before), commission per owning
   Run median 948G (1,881G before). 원정 도시락 코너 keeps its effect; at the 마왕성 each Food/Drink's +2 lands on the adventurer's
   most 취약 Hazard only (it counted four times on the Final's four Hazards). RELIC §17 / §23, RELIC_QA REL-Q-v28-7, COPY_AUDIT
@@ -367,7 +367,7 @@ stays 2.9.9.
   touching combat: `reader` 5,000 seeds, before → after (native): D20 29.4 → 32.9%, D30 12.2 → 13.6%, clear 8.3 → 9.4%, D11~20
   bankruptcy 24.8 → 21.5%, D29 Gold median 3,345 → 3,340; skilled-start D30 unchanged. The clear rate sits about 1%p above the
   GAME_VISION fresh / balanced reference (2~8%), accepted by the User. DUNGEON_HAZARD §expeditionWalletReward, DUNGEON_ITEM_QA
-  (Reward PASS); ledgers; tests revision; `tools/measure-wallet-v299.cjs`.
+  (Reward PASS); ledgers; tests revision; `archive/v2.9.9/tools/measure-wallet-v299.cjs`.
 - SALE forecast pin strain line (User 2026-09-28): the strain line was hard to notice, and on a phone it scrolled away with the
   readout. The pin now carries `연속 부상 출발 {n}회` under its two readings - the same condition (an injured departure with a chain
   of 1 or more; the User kept the threshold), words, number and small muted type; the folded chip stays `전망`; a desk has no pin.
