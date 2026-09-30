@@ -100,9 +100,9 @@ QA:
 - DUNGEON_ITEM_QA_v2.8.0.md
 - RELIC_QA_v2.8.0.md
 - UI_UX_QA_v2.8.0.md
-- SOURCE_ADOPTION_QA_v2.8.0.md
 
-The v2.8 Canonical audit record (closed 2026-09-23) is `archive/v2.8/SSOT_AUDIT_v2.8.0.md`.
+The closed v2.8 audit records are in `archive/v2.8/`: SSOT_AUDIT (the Canonical audit) and SOURCE_ADOPTION_QA (the
+audit-HEAD Source defect record, every SA-Q adopted at the v2.8 release; Source and test comments cite its SA-Q ids).
 
 ## ROUTING
 
@@ -181,9 +181,6 @@ A single-run perception is not enough to change an approved baseline.
     -> exact routed owner
     -> related current QA
     -> Current Source
-
-SOURCE_ADOPTION_QA_v2.8.0.md is an audit-HEAD defect record. Its `Current Source` descriptions refer
-to that file's recorded `AUDIT_SOURCE_HEAD`; resolved findings are not rewritten as a live tracker.
 
 Current resolution status comes from WORK_STATE + current Source + reviewed commits.
 

@@ -29,7 +29,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 
 ## v2.9.11 — v3.0 준비 1차 (머지됨, PR #28) (User 2026-09-28~29)
 
-브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.11. 빌드 표시 2.9.11.
+브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.11. 빌드 표시 2.9.11.
 
 | 묶음 | 내용 |
 |---|---|
@@ -59,7 +59,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 
 ## v2.9.10 퀵패치 2차 (머지됨, PR #24) (User 2026-09-28, v2.9.10 플레이 뒤)
 
-- `b9d89e4` 효과 줄 순서 통일(대응 → 피로 회복 → 능력치 → 기타), 본사 1+1 행사 발주 행에 빨간 `1+1` 딱지. CHANGELOG §v2.9.10 quick patch.
+- `b9d89e4` 효과 줄 순서 통일(대응 → 피로 회복 → 능력치 → 기타), 본사 1+1 행사 발주 행에 빨간 `1+1` 딱지. archive CHANGELOG §v2.9.10 quick patch.
 - `52de75c` `qa:visual` 코치 확인 간헐 실패 수정(점검 도구만). 빌드 표시는 2.9.10 그대로.
 - 후속 PR(User 컨펌 2026-09-28): `본사 폐기 유예`(오늘 밤 폐기될 상품만 유통기한 +1일, 환급 폐지), 슬로스 봉인 해제 창이 닫힘·`닫기`,
   보유 점포지원 목록의 `슬로스 봉인 해제 N / 3`(D15부터), 봉인 칸 보라 판·`접기`·칩 접기.
@@ -69,7 +69,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 ## v2.9.10 퀵패치 (머지됨, PR #22) (User 2026-09-27~28, v2.9.9 플레이 뒤)
 
 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`(main `8acc8dc`에서 다시 시작, v2.9.9 퀵패치 main을 머지해 둠). 내용과 근거는
-`design_ssot/CHANGELOG.md` §v2.9.10. 빌드 표시 2.9.10.
+`archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.10. 빌드 표시 2.9.10.
 
 | 커밋 | 내용 | 검사 |
 |---|---|---|
@@ -84,14 +84,14 @@ closeout(2026-09-28): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 1
 
 ## v2.9.9 퀵패치 (머지됨, PR #21) (User 2026-09-28, 프레쉬런 D23 검수에서 나옴)
 
-브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `archive/v2.9.9/fresh-run-d23-review-v299.md`, 내용 `design_ssot/CHANGELOG.md` §v2.9.9 quick patch.
+브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `archive/v2.9.9/fresh-run-d23-review-v299.md`, 내용 `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.9 quick patch.
 - 실패 보상 배율 퇴각 0.40 · 부상 0.25 · 중상 0.15 (`395de5f`). 측정 `archive/v2.9.9/tools/measure-wallet-v299.cjs`.
 - SALE 폰 플로팅 줄에 `연속 부상 출발 {n}회` (조건·문구는 판독 줄과 같음). 360/390 캡처 User 확인.
 - 남은 BALANCE FINDING 후보(결정 안 됨): D11~20 준비도 절벽, 부상 → 가난 → 회복이 느린 고리(부상은 성공 또는 퇴각 회복 25~100%로 풀림). 보고서 §2. 퀵패치 후 첫 런(D16) 검수: 보고서 §5. v2.9.11 클리어 런 검수와 왕도 프리미엄 인증 · 원정 도시락 코너 조정(User 2026-09-29): 보고서 §7~8.
 
 ## v2.9.9 화면 개선 (머지됨) (User 2026-09-27, 레퍼런스 리뷰에서 나온 배치)
 
-내용 요약은 `design_ssot/CHANGELOG.md` §v2.9.9(화면별로 정리됨). 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`에서 PR #20으로 머지됨(User 컨펌 2026-09-27).
+내용 요약은 `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.9(화면별로 정리됨). 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`에서 PR #20으로 머지됨(User 컨펌 2026-09-27).
 
 | 커밋 | 내용 | 검사 |
 |---|---|---|
@@ -119,7 +119,7 @@ closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:v
 
 2026-09-25에 User 부재 중 추천안으로 들어간 6건을 현재 구현대로 확정했다. SALE 트레이 접기(UI-Q-v29-28), 발주 플로팅 오늘 줄(UI-Q-v29-29),
 게이트 방문 최소 1명(NPC_TRAIT destinationCoverage), D30 흐름(FINAL_EXPEDITION §D30 PLAYER FLOW, COPY_AUDIT §14-9), 진열대 요약 문구,
-H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(CHANGELOG §v2.9.3).
+H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(archive CHANGELOG §v2.9.3).
 
 ## v3.0 사운드 — 녹음 BGM 연결 (User 2026-09-29)
 
@@ -135,7 +135,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
   - 페이즈별 곡은 `audioPhase()`로 고른다. 결말은 SUCC / FAIL로 나뉜다.
   - 곡마다 음량을 BGM_LUFS −30으로 맞춘다(NIGHT는 3 dB 더 작게). 효과음은 큐마다 등급 레벨(LEVEL, tools/qa-sfx-mix.cjs, 폰 스피커 기준 · 출력 리미터 −3 dBFS)이다. 페이즈 전환은 1초 페이드아웃 뒤 1.5초 페이드인이다(퀵패치, User 2026-09-29).
   - 로드에 실패하면 신스로 대체한다.
-- 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, CHANGELOG §v2.9.11
+- 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, archive CHANGELOG §v2.9.11
 - 최종 QA (2026-09-29, HEAD `4c2704b`)
   - 전체 `npm test` PASS · revision 39 · `ssot:check` 21/21
   - `qa:runtime` 14/14(`qa-bgm` 29/29 새로 추가) · `qa:visual` clean(126장)
