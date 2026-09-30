@@ -868,7 +868,7 @@ User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Go
 ```
 
 ```new
- - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance; Great was 1.10, 1.40 before; combat-success was 1.00)
+ - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance)
 ```
 
 ## AMENDMENT — v2.9.2 balance: Gate early slope 1.20 -> 1.50 (User decision 2026-09-25)
@@ -982,7 +982,7 @@ Death or Severe Injury converts to 퇴각 with no injury (User 2026-09-28, v2.9.
 User 2026-09-28: 퇴각 / 부상 / 중상 Wallet multipliers 0.40 / 0.25 / 0.15 (owner DUNGEON_HAZARD). The line declared earlier is edited in place and removed from its fence above.
 
 ```new
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch; were 0.35 / 0.20 / 0.10 since v2.9.1)
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch)
 ```
 
 
