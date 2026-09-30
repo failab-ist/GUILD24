@@ -1144,7 +1144,7 @@ User 2026-09-28 (after the D23 fresh-Run review and the paired `reader` measurem
 and removed from it.
 
 ```new
-퇴각 = 0.40   (User 2026-09-28, v2.9.9 quick patch; was 0.35)
-부상 = 0.25   (User 2026-09-28, v2.9.9 quick patch; was 0.20)
-중상 = 0.15   (User 2026-09-28, v2.9.9 quick patch; was 0.10)
+퇴각 = 0.40   (User 2026-09-28, v2.9.9 quick patch)
+부상 = 0.25   (User 2026-09-28, v2.9.9 quick patch)
+중상 = 0.15   (User 2026-09-28, v2.9.9 quick patch)
 ```

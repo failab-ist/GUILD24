@@ -812,9 +812,9 @@ Ordinary expedition Wallet reward:
 Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공; 대성공 / 성공 back to 1.00 in v2.9.1):
 
     대성공 / 성공 = 1.00
-    퇴각 = 0.40   (User 2026-09-28, v2.9.9 quick patch; was 0.35)
-    부상 = 0.25   (User 2026-09-28, v2.9.9 quick patch; was 0.20)
-    중상 = 0.15   (User 2026-09-28, v2.9.9 quick patch; was 0.10)
+    퇴각 = 0.40   (User 2026-09-28, v2.9.9 quick patch)
+    부상 = 0.25   (User 2026-09-28, v2.9.9 quick patch)
+    중상 = 0.15   (User 2026-09-28, v2.9.9 quick patch)
     사망 = 0
 
 Then:
