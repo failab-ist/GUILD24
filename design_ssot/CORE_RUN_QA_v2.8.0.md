@@ -668,6 +668,21 @@ PASS:
 - no phase blocker
 - no save-version/reference error
 
+### RUN-Q81 — FIRST-RUN LESSONS
+
+(User 2026-09-30, v2.9.11; owner `CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS.)
+
+PASS:
+- a fresh account's first Run: after the DAY 0 pick the warehouse holds the four opening Items and exactly one Common Item
+  that counters the first Gate's Hazard
+- an account with a settled Run: the four opening Items only
+- the same seed gives the same Gates, visitors and stream on both
+- the measurement harness (`lessons=false`) plays the ordinary Run
+- `tests/revision.cjs`
+
+FAIL:
+- the extra Item on a later Run, a non-Common or non-countering Item, or any change to the Run's stream
+
 ## BALANCE QA
 
 ### RUN-Q15 — FINAL INVESTMENT VALUE

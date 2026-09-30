@@ -547,4 +547,21 @@ test('정가 final purchase chance is x 0.90 of the unscaled one; 50% / 150% unc
  assert.equal(DATA.balance.accessibleNeed,.72,'the shared accessible need is untouched');
 });
 
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run finds one Common Counter for the first Gate's Hazard
+   in the DAY 1 warehouse; a later Run does not, and the Run's own stream is the same either way. */
+test('first-Run lesson: DAY 1 warehouse holds one Common Counter for the first Gate, first Run only, stream untouched',()=>{
+ const run=runs=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start('lesson-probe');g.buyRelic(g.run.relicWindow.candidateIds[0]);return g.run;};
+ const first=run(0),later=run(1),h=first.dungeons[0].hazards[0];
+ assert.equal(first.firstRun,true);assert.equal(later.firstRun,false);
+ const extra=first.inventory.filter(u=>!later.inventory.some(v=>v.id===u.id));
+ assert.equal(extra.length,1,'exactly one extra unit on the first Run');
+ const it=DATA.itemBy[extra[0].item];
+ assert.ok(it.rarity===0&&(it.effects[h]||0)>0,'a Common that counters the first Gate\'s Hazard ('+h+')');
+ assert.equal(first.lessonCounter,it.id);
+ assert.deepEqual(JSON.stringify(first.dungeons),JSON.stringify(later.dungeons),'the same Gates');
+ assert.deepEqual(first.queue,later.queue,'the same visitors');assert.equal(first.rngState,later.rngState,'the same stream');
+ const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-probe');
+ assert.equal(sim.run.firstRun,false,'measurement harnesses switch the lessons off');
+});
+
 console.log(checks+' revision groups passed');

@@ -419,3 +419,18 @@ Store Support, Event and Family ids, so the schema moved and no migration is kep
 - only legacy v1~v8 internal-test state exists and current policy rejects migration, causing fresh v9 initialization
 - stale legacy tutorial flags must not suppress tutorial on a fresh v9 initialization
 ```
+
+## AMENDMENT — v2.9.11 First-Run lessons (User decision 2026-09-30)
+
+User 2026-09-30 (balance review session): the account's first Run teaches by play; DAY 1 Counter in the warehouse. New lines only.
+
+```new
+## FIRST-RUN LESSONS
+(User 2026-09-30, v2.9.11.) The account's first Run - no Run settled yet (`account.runs` 0) - teaches by play, not by text:
+the situation leaves one sensible move, and the Night shows why it worked. Every later Run is the ordinary Run. Nothing here
+is shown as a tutorial, and nothing draws from the Run's own random stream.
+- DAY 1: one Common Item that counters the first Gate's Hazard joins the warehouse after the DAY 0 pick (독 방진마스크 ·
+부식 중화 탄산수 · 냉기 컵라면 · 화염 얼음컵 · 공포 집중 사탕). It is ordinary visible stock, not a hidden resource.
+- measurement harnesses (`reader` and the other bots, the multi-Run trajectory) switch the lessons off, so balance
+measurements stay on the ordinary Run.
+```

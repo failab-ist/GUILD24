@@ -608,7 +608,7 @@ function playRun(g,out,ctx){
 function simulate(count=100,policy='balanced',account=null,pricing='adaptive',build='hybrid',opts={}){
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
-  const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.start('revision-'+seed);
+  const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start('revision-'+seed);
   playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware});
  }
  return derive(out,count);
@@ -661,7 +661,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
     decorations:(account.store?.owned||[]).length,capital:G.Meta.storeCapital(account),
     loadout:{...G.Meta.storeLoadout(account)}};
    const g=new G.Game(account);g.autosave=false;
-   g.start(prefix+'-'+t+'-'+i);
+   g.lessons=false;g.start(prefix+'-'+t+'-'+i);
    playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware});
    /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
       carries its own once-only guard, so a Run playRun already ended is not settled twice. */

@@ -5,6 +5,12 @@ the owner headers and in the git tag.
 
 ## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
 
+- **First-Run lessons, DAY 1 Counter** (balance review session, User 2026-09-30; from a talk on teaching by level design -
+  learn by play, not text): the account's first Run finds one Common Item that counters the first Gate's Hazard in the DAY 1
+  warehouse, so the first sales can find the Counter rule and the Night shows it working. Later Runs are unchanged; the Run's
+  stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
+  (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
+
 - **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear
   `reports/fresh-run-d23-review-v299.md` §7-8): 왕도 프리미엄 인증 becomes a 꾸준형 card - commission 60% → 45% of the charged
   150% price, the owner's 바가지 intent +16%p → +10%p (-0.16 → -0.06), and base operating cost +10% of overheadBase from the

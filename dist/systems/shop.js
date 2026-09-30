@@ -21,6 +21,8 @@ class Game{
  const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
  this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
+  /* CORE_RUN §FIRST-RUN LESSONS: the account's first Run (no Run settled yet). Measurement harnesses set `lessons=false`. */
+  this.run.firstRun=this.lessons!==false&&!(this.account.runs>0);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','golem','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
     stream derived from the run seed, so it costs the run stream nothing and a reload cannot
@@ -185,7 +187,15 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.morningEvent(ids);
   this.morningDeep();
   this.morningQueue(visitors);
+  this.firstRunLessons();
   this.save();
+ }
+ /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run only - lessons met by play, not told. DAY 1: one
+    Common Item that counters the first Gate's Hazard joins the warehouse, so the first sale can find the rule itself. */
+ firstRunLessons(){const s=this.run;if(!s.firstRun)return;
+  if(s.day===1&&!s.lessonCounter){const h=s.dungeons[0]?.hazards?.[0],it=h&&D.items.find(i=>i.rarity===0&&!i.metaUnlock&&(i.effects[h]||0)>0);
+   /* the stock id draws from a stream of its own, so the Run's stream - every later Gate, visitor and roll - is untouched */
+   if(it){const main=this.rng;this.rng=new G.RNG(s.seed+':lesson');try{this.stock(it.id,1);}finally{this.rng=main;}s.lessonCounter=it.id;}}
  }
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
     Day's flags, and each adventurer's own per-Day state (spoiled stock left the night before - nightDiscard). */
