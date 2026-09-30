@@ -31,7 +31,7 @@ item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보�
 item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:2}),
 item('dragonramen','불룡볶음면',2,95,190,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:21,supply:3}),
 item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:17,supply:2}),
-item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:22,mobility:-4,supply:1}),
+item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:22,survival:-3,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),

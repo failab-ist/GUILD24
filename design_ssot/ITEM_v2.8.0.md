@@ -824,7 +824,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +10, Supply 2 | Fear 초반 대응 |
 | 13 | 불룡볶음면 | Food R | 95 / 190 | 강인함 +6, 냉기 +21, Supply 3 | Cold 중반 대응 |
 | 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +17, Supply 2 | Stat route |
-| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +22, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
+| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +22, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +10 | Poison 초반 대응 |
 | 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +9, 화이트아웃 +11 | Snow 초반 하이브리드 |
@@ -1035,7 +1035,7 @@ identity=Cold 중반 대응; one step under the 강인함 rung because its 강�
 15. 용사의 곡주
 roles=[Supply,DirectCounter,RiskReward]
 counter=fear
-identity=Fear 중반 대응 with an explicit Mobility trade-off
+identity=Fear 중반 대응 with an explicit 강인함 trade-off (User 2026-09-30, v2.9.13: was 기동 -4, which widened the 어둠 gap of its own Gate - 망자역 지하묘지 pairs 공포 with 어둠, a 기동 Hazard; 강인함 presses neither)
 
 28. 쿨링 이온음료
 roles=[Supply,DirectCounter]
@@ -1155,7 +1155,7 @@ as effects:
 Insurance / Special: its one function line
 ```
 
-e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +18 · 피로 회복 1 · 기동 -4`, `피로 회복 2 · 기동 +17`,
+e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +22 · 피로 회복 1 · 강인함 -3`, `피로 회복 2 · 기동 +17`,
 `화염 대응 +12 · 투력 +10`. (v2.9.0 led a Food with 피로 회복 and ended a Drink with it, so the same two effects read in
 opposite orders on neighbouring rows - User 2026-09-28.)
 

@@ -994,7 +994,6 @@ rule=stays under the Slime 후반 하이브리드 and each 중반 대응 on its 
 identity=중반 대응 of its Hazard (§COUNTER LADDER)
 roles=[Supply,Stat,DirectCounter]
 identity=Cold 중반 대응; one step under the 강인함 rung because its 강인함 +6 also defends Cold
-identity=Fear 중반 대응 with an explicit Mobility trade-off
 identity=Fire 중반 대응 with Supply
 ```
 
@@ -1119,7 +1118,6 @@ as effects:
 3. Core Stat       (투력 · 강인함 · 기동 · 정신 — the stat panel's order)
 4. anything else   (e.g. 원정 소지금 획득; catalog order)
 Insurance / Special: its one function line
-e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +18 · 피로 회복 1 · 기동 -4`, `피로 회복 2 · 기동 +17`,
 `화염 대응 +12 · 투력 +10`. (v2.9.0 led a Food with 피로 회복 and ended a Drink with it, so the same two effects read in
 opposite orders on neighbouring rows - User 2026-09-28.)
 ```
@@ -1157,7 +1155,6 @@ The prices and values in this block are the v2.9.0 layer; the current ones are �
 | 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +23 | Dark 중반 대응 |
 | 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +23 | Bind 중반 대응 |
 | 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +10, Supply 2 | Fear 초반 대응 |
-| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +22, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
 | 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +9, 화이트아웃 +11 | Snow 초반 하이브리드 |
 | 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +9, 속박 +10 | Spider 초반 하이브리드 |
 | 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +9, 어둠 +10 | Crypt 초반 하이브리드 |
@@ -1170,4 +1167,16 @@ The prices and values in this block are the v2.9.0 layer; the current ones are �
 | 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +15, 어둠 +15 | Crypt 후반 하이브리드 |
 | 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +16, 화이트아웃 +15 | Snow 후반 하이브리드 |
 | 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +15, 투력 +10 | Fire 후반 하이브리드 |
+```
+
+## AMENDMENT — v2.9.13 용사의 곡주 trade-off (User decision 2026-09-30)
+
+User 2026-09-30: 용사의 곡주's trade-off 기동 -4 → 강인함 -3. 기동 -4 widened the 어둠 gap of its own Gate (망자역 지하묘지 pairs 공포
+with 어둠, a 기동 Hazard); 강인함 presses neither of that Gate's Hazards. Lines declared in earlier fences are edited in place and
+removed from them.
+
+```new
+| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +22, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
+identity=Fear 중반 대응 with an explicit 강인함 trade-off (User 2026-09-30, v2.9.13: was 기동 -4, which widened the 어둠 gap of its own Gate - 망자역 지하묘지 pairs 공포 with 어둠, a 기동 Hazard; 강인함 presses neither)
+e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +22 · 피로 회복 1 · 강인함 -3`, `피로 회복 2 · 기동 +17`,
 ```

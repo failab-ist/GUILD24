@@ -36,6 +36,11 @@ the owner headers and in the git tag.
     (`reports/balance-proposal-v2912.md` §7-§9). DUNGEON_HAZARD §HAZARD THREAT / §NEUTRAL-FIT, ITEM §COUNTER LADDER and
     catalog table, NPC_TRAIT Hazard Traits, FINAL_EXPEDITION §INDIVIDUAL FINAL POWER / FINAL-Q72, DUNGEON_ITEM_QA DUN-Q71;
     ledgers; tests traits / final.
+- **용사의 곡주 trade-off 기동 -4 → 강인함 -3** (User 2026-09-30): 기동 -4 widened the 어둠 gap of its own Gate (망자역 지하묘지
+  pairs 공포 with 어둠, a 기동 Hazard), so it was the weakest Item in every situation measured
+  (`reports/counter-ladder-v2913/README.md` §6). 강인함 presses neither of that Gate's Hazards. Price 95 kept; every other
+  Counter value, the Ladder and the Counter prices stay after the context-aware price review (`reports/item-price-v2913/`).
+  ITEM catalog row / §15 identity / §PRESENTATION ORDER example; ledger; tests ui-guard.
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 

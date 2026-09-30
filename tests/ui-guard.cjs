@@ -3509,7 +3509,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
  // v2.9.10 quick patch (User 2026-09-28): one order for every Item - Hazard Counter, 피로 회복, Core Stats, the rest
  assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'피로 회복, then the stat, then the rest');
- assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','mobility'],'Counter first, then 피로 회복, then the stat');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','survival'],'Counter first, then 피로 회복, then the stat');
  assert.deepEqual(Presentation.rows(DATA.itemBy.dragonramen.effects,undefined,'food').map(r=>r.key),['cold','supply','survival'],'a Food Counter leads too');
  assert.deepEqual(Presentation.rows(DATA.itemBy.energy.effects,undefined,'drink').map(r=>r.key),['supply','mobility'],'a Drink stat follows 피로 회복');
  assert.deepEqual(Presentation.rows(DATA.itemBy.magmagear.effects,undefined,'gear').map(r=>r.key),['fire','combat'],'gear keeps Counter then stat');
