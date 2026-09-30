@@ -142,7 +142,7 @@
 
 ## 3-3. 대성공 안내
 
-**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 발견 줄 §26-2가 가르친다)
+**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 사후 안내 §26-2가 가르친다)
 
 ---
 
@@ -155,7 +155,7 @@
 
 ## 3-5. 보급 안내
 
-**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 발견 줄 §26-2가 가르친다)
+**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 사후 안내 §26-2가 가르친다)
 
 ---
 
@@ -171,7 +171,7 @@
 The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-24: the
 first SALE teaches five marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, STATS (능력치, User 2026-09-24), 전망 (§3-4), PRICING;
 RETURNING and 가방 (§3-6) appear the first time their situation exists. SUPPLY, 대성공 and 만반의 준비 are retired
-(User 2026-09-30): the NIGHT discovery lines §26-2 teach them after they first act).
+(User 2026-09-30): the NIGHT coach marks §26-2 teach them after they first act).
 
 ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY → 발주 확정 (§3-2) → 후보 교환
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY). The `gold` mark (`보유 골드와 현재 발주 후 잔액을 확인한다.` on
@@ -2900,12 +2900,13 @@ The three Rare Reference customers and their lines were removed before a paid re
 **현재**
 > “오늘 보수 받았어요. 값은 신경 안 써요.”
 
-## 26-2. NIGHT 발견 줄 (User 2026-09-30)
+## 26-2. NIGHT 사후 안내 (User 2026-09-30)
 
 **노출 위치**
-> 계정에서 그 규칙이 처음 작용한 원정의 NIGHT 기록, WHY 아래 한 줄. 표식 `발견`. 계정당 한 번이며 발견 수첩에도 남는다
-> (rule owner: NIGHT_CLOSING §DISCOVERY LINE). 한 기록에 여럿이면 아래 순서: 부상 출발 · 피로 10 이상 출발 ·
-> 대응 상품이 위험을 줄임 · 만반의 준비로 생존 · 대성공(가게 보너스 골드) · 첫 사망(사망 기록에는 이 줄만, User 2026-09-30).
+> 계정에서 그 규칙이 처음 작용한 원정의 NIGHT 기록 위에 `점주 안내` 코치 말풍선으로 (튜토리얼과 같은 방식, 기록에 줄은
+> 붙지 않음). 계정당 한 번이며 발견 수첩에도 남는다 (rule owner: NIGHT_CLOSING §DISCOVERY LINE). 한 기록에 여럿이면
+> 아래 순서: 부상 출발 · 피로 10 이상 출발 · 대응 상품이 위험을 줄임 · 만반의 준비로 생존 · 대성공(가게 보너스 골드) ·
+> 사망(사망 기록에는 이것만, User 2026-09-30).
 
 **현재**
 > 다친 채 떠나면 투력·강인함이 깎인 채로 싸운다.

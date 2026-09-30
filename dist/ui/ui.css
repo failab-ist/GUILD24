@@ -1517,9 +1517,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .cause li+li{margin-top:3px;color:#b9b193;font-weight:400}
 /* the expedition fact, lowest tier of the group: on most Outcomes it restates the Outcome */
 .beat .why{margin:11px 0 0;font:400 13px/1.55 var(--ui);color:#8f94a6}
-/* NIGHT_CLOSING §DISCOVERY LINE: the notebook's own mark (.discovery), inline on the record */
-.beat .learned{margin:11px 0 0;padding:7px 10px;font:400 13px/1.5 var(--ui);color:#e8d9b0;background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
-.beat .learned b{margin-right:8px;font-weight:600;color:var(--gold)}
 /* WHAT CHANGED — UI_UX §NIGHT LAYOUT — RESULT DATA TYPOGRAPHY (USER AMENDMENT 2026-09-22).
    This is an information region, not a row of headline cards and not a badge collection. So:
    the ordinary UI type family throughout - the pixel / LED display face is reserved for a real
@@ -2841,7 +2838,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-night .beat .cause{margin-top:10px;padding-left:16px}
  .p-night .beat .cause li{font-size:18px}
  .p-night .beat .why{font-size:16px;margin-top:13px}
- .p-night .beat .learned{font-size:16px;margin-top:13px}
  .p-night .beat .changed{padding:18px 22px 19px}
  .p-night .changed .grew{gap:6px 20px}
  .p-night .changed .after{margin-top:13px;padding-top:12px}

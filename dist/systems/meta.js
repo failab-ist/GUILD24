@@ -126,14 +126,14 @@ function observe(a,report,n){
  report.discoveries=[];
  for(const e of report.events||[])
   if(!a.discoveries.some(x=>x.id===e.id)){a.discoveries.push({...e,day:report.day});report.discoveries.push(e);}
- /* NIGHT_CLOSING §DISCOVERY LINE: the first time each rule acts on an expedition, its line rides that record and is kept
-    in the notebook. A Death record carries only the Death-limit line (the one exception to its closed payload, User
-    2026-09-30), so no other rule is learned - or spent - on it. */
- report.learned=[];
+ /* NIGHT_CLOSING §DISCOVERY LINE: which taught rules acted on this record (report.acted - the NIGHT coach mark anchors to
+    it, and its own seen-state keeps it to once per account), and the notebook keeps each rule the first time. A Death
+    record carries only the Death-limit rule (the one exception to its closed payload, User 2026-09-30). */
  {const ev=id=>(report.events||[]).some(e=>e.id===id),dead=report.outcome==='사망';
   const acted=dead?{death:true}:{injured:!!report.departedInjured,fatigue:(report.fatigueBeforeExpedition||0)>=10,counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
+  report.acted=G.Copy.learned.map(([k])=>k).filter(k=>acted[k]);
   for(const [k,text] of G.Copy.learned){const id='learn-'+k;
-   if(acted[k]&&!a.discoveries.some(x=>x.id===id)){a.discoveries.push({id,text,day:report.day});report.learned.push(text);}}}
+   if(acted[k]&&!a.discoveries.some(x=>x.id===id))a.discoveries.push({id,text,day:report.day});}}
  const d=D.dungeonBy[report.dungeon]||D.dungeonBy.spider;
  if(report.items.length && report.outcome!=='사망')a.knowledge[d.id]=(a.knowledge[d.id]||0)+1;
 }

@@ -15,10 +15,11 @@ the owner headers and in the git tag.
   `“오늘 보수 받았어요. 값은 신경 안 써요.”` (85% of those Runs). COPY_AUDIT §26-1. Later Runs are unchanged; the Run's
   stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
   (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
-- **NIGHT discovery lines** (balance review session, User 2026-09-30): five rules are named once per account on the NIGHT
-  record of the first returning expedition they acted on, marked `발견` and kept in the 발견 수첩 - 부상 출발, 피로 10 이상,
+- **NIGHT discovery lines** (balance review session, User 2026-09-30): rules are named once per account by a `점주 안내`
+  coach mark on the NIGHT record of the first expedition they acted on (shown like the tutorial, no inline line; User
+  2026-09-30), and kept in the 발견 수첩 - 부상 출발, 피로 10 이상,
   a Hazard Item that lowered a Hazard, 만반의 준비 turning away a Death, a 대성공 that paid the store bonus; and the first Death
-  record carries the Death-limit line, the one exception to its closed payload (User 2026-09-30). NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §26-2; ledger; tests revision. Balance unchanged (`reader` 300 identical).
+  record carries the Death-limit mark, the one exception to its closed payload (User 2026-09-30). NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §26-2; ledger; tests revision. Balance unchanged (`reader` 300 identical).
 - **Pre-sale coaches retired for 피로 · 대성공 · 만반의 준비** (User 2026-09-30: one place teaches each rule): the SALE marks
   `supply`, `great` and `prepared` and their anchors (the tray's `.fatigue`, the Bag's `.prepared`) are gone; the NIGHT
   discovery lines teach them. UI_UX §GREAT SUCCESS / §만반의 준비 TUTORIAL, UI_UX_QA, COPY_AUDIT §3-3 / §3-5 / §3-7,

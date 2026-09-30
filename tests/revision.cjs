@@ -597,20 +597,24 @@ test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급�
  assert.equal(later.s.inventory.filter(u=>u.item==='kit').length,later.kits,'and no 구급키트');
 });
 
-test('NIGHT_CLOSING §DISCOVERY LINE: a rule is named once per account, on the first record it acted on; a Death carries only the Death-limit line',()=>{
- const M=Meta,acc={knowledge:{},discoveries:[]};
+test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted on it; the notebook keeps each once; a Death carries only the Death limit',()=>{
+ const M=Meta,acc={knowledge:{},discoveries:[]},K=Copy.learned.map(([k])=>k),T=k=>Copy.learned.find(x=>x[0]===k)[1];
  const rep=o=>({day:4,dungeon:'spider',items:[],events:[],outcome:'성공',storeBonus:0,...o});
+ const notebook=()=>acc.discoveries.filter(x=>/^learn-/.test(x.id)).map(x=>x.id);
  const r1=rep({departedInjured:true,fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:[]}]});M.observe(acc,r1);
- assert.deepEqual(r1.learned,[Copy.learned[0][1],Copy.learned[1][1],Copy.learned[2][1]],'injured, fatigue, counter - in reading order');
- const r2=rep({departedInjured:true,fatigueBeforeExpedition:15});M.observe(acc,r2);assert.deepEqual(r2.learned,[],'once per account');
- const r3=rep({outcome:'대성공',storeBonus:0});M.observe(acc,r3);assert.deepEqual(r3.learned,[],'a 대성공 without the store bonus (Deep) proves nothing about it');
+ assert.deepEqual(r1.acted,['injured','fatigue','counter'],'injured, fatigue, counter - in coach order');
+ assert.deepEqual(notebook(),['learn-injured','learn-fatigue','learn-counter'],'each kept in the notebook with its line');
+ assert.equal(acc.discoveries.find(x=>x.id==='learn-injured').text,T('injured'));
+ const r2=rep({departedInjured:true,fatigueBeforeExpedition:15});M.observe(acc,r2);
+ assert.deepEqual(r2.acted,['injured','fatigue'],'a later record still carries its class (the coach seen-state keeps the mark to once)');
+ assert.equal(notebook().length,3,'and the notebook does not repeat');
+ const r3=rep({outcome:'대성공',storeBonus:0});M.observe(acc,r3);assert.deepEqual(r3.acted,[],'a 대성공 without the store bonus (Deep) proves nothing about it');
  const r4=rep({outcome:'사망',departedInjured:true,events:[{id:'prepared',text:'x'}]});M.observe(acc,r4);
- assert.deepEqual(r4.learned,[Copy.learned[5][1]],'a Death record carries only the Death-limit line (User 2026-09-30)');
- assert.ok(!acc.discoveries.some(x=>x.id==='learn-prepared'),'and no other rule is spent on it');
- const r4b=rep({outcome:'사망'});M.observe(acc,r4b);assert.deepEqual(r4b.learned,[],'the second Death: nothing');
+ assert.deepEqual(r4.acted,['death'],'a Death record carries only the Death limit (User 2026-09-30)');
+ assert.ok(!notebook().includes('learn-prepared'),'and no other rule is kept from it');
  const r5=rep({outcome:'대성공',storeBonus:50,events:[{id:'prepared',text:'x'}],fatigueBeforeExpedition:9});M.observe(acc,r5);
- assert.deepEqual(r5.learned,[Copy.learned[3][1],Copy.learned[4][1]],'prepared and great; Fatigue 9 is below the line');
- assert.equal(acc.discoveries.filter(x=>/^learn-/.test(x.id)).length,6,'all six are in the notebook');
+ assert.deepEqual(r5.acted,['prepared','great'],'prepared and great; Fatigue 9 is below the line');
+ assert.deepEqual(notebook().sort(),K.map(k=>'learn-'+k).sort(),'all six are in the notebook');
 });
 
 console.log(checks+' revision groups passed');

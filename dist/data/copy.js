@@ -171,8 +171,8 @@ const Copy={
  /* 카운터에 도착한 손님의 한마디. Callback > Trait > 상태 > 일반 순으로 고른다. */
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer of the account's first Run */
  lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
- /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule, named once per account on the NIGHT record of the first
-    expedition it acted on - taught after it happened rather than before. Order = reading order on one record. */
+ /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule, named once per account by a coach mark on the NIGHT record
+    of the first expedition it acted on - taught after it happened rather than before. Order = coach order on one record. */
  learned:[['injured','다친 채 떠나면 투력·강인함이 깎인 채로 싸운다.'],
   ['fatigue','피로가 10을 넘으면 기동·정신이 떨어진다. 음식·음료가 피로를 덜어 준다.'],
   ['counter','위험에 맞는 상품은 그 위험의 압박을 줄인다.'],

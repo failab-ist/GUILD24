@@ -1064,16 +1064,15 @@ function beat(r){
    +(!gone&&r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
    +(!gone&&r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
  +'</div>'
- +'<div class="told">'
+ /* NIGHT_CLOSING §DISCOVERY LINE: the taught rules that acted on this record are state classes only - the NIGHT
+    coach marks anchor to them (coachSteps.night) */
+ +'<div class="told'+(r.acted||[]).map(k=>' learn-'+k).join('')+'">'
   +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
   +(gone?'':causeLines(r))
   /* what the Outcome and its summary do NOT already say: an attributed incident, or an event
      that speaks for itself. The fight verdict sentence is no longer among them - UI_UX §NIGHT
      LAYOUT — COMBAT FACT retires it from the player-facing record at every hierarchy. */
   +(!gone&&why?'<p class="why">'+E(why)+'</p>':'')
-  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule this expedition showed for the first time on this account;
-     on a Death record, only the Death-limit line - the one exception to its closed payload */
-  +(r.learned?.length?r.learned.map(t=>'<p class="learned"><b>발견</b>'+E(t)+'</p>').join(''):'')
  +'</div>'
  +(gone?'':'<div class="changed">'+changedRows(r)+'</div>')
  +'</article>';}
@@ -1208,7 +1207,10 @@ const coachSteps={
  /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
- night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
+ /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
+    it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it) */
+ night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.'],
+  ...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
