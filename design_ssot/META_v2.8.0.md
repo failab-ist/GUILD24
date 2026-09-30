@@ -311,6 +311,14 @@ The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX
 - the Run keeps the value it replaced, so a reload of the ended Run reads the same comparison
 - Full Data Reset clears it; a save without it reads 0
 
+(User 2026-09-30, v2.9.11.) A second record of the same kind: the highest 총매출 a Run has ended with, `bestSales` (0 on a fresh
+account) - the END settlement's own `총매출` (the Run's Gross Sales).
+
+- set when a Run ends naturally, the same way: `bestSales = max(bestSales, the Run's 총매출)`; a manual 현재 지점 포기 never moves it
+- a personal record for the END replay line only, like `bestDay`: no Power, unlock, price or reward reads it
+- the Run keeps the value it replaced, so a reload of the ended Run reads the same comparison
+- Full Data Reset clears it; a save without it reads 0; when present it is a whole Gold amount, 0 or more
+
 ---
 
 ## MONSTER KNOWLEDGE
@@ -759,7 +767,7 @@ Cross-run account persistence must preserve:
 - 7 Boss-cleared flags or equivalent derived set
 - approved unlock state derivable from Distinct Boss Clear Count
 - Monster Knowledge progress
-- the best Day (§BEST DAY)
+- the best Day and the best 총매출 (§BEST DAY)
 
 Run save and account Meta state may use separate storage structures.
 

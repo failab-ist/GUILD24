@@ -1915,6 +1915,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
 function replayLine(){const s=game.run,st=s.settlement;
  if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
+ if(s.salesBefore>0&&st?.sales>s.salesBefore)return '지금까지 가장 많이 판 점포다 · 총매출 '+st.sales.toLocaleString()+'G';
  return '';}
 /* UI_UX §CONTROL / FEEDBACK HYGIENE: a muster row that cannot be sent used to keep offering
    원정대 선택 - a dead promise on an unavailable control, the same defect the approved Store

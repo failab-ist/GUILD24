@@ -1537,7 +1537,9 @@ so the next store reads as a little closer - no task, checklist, progress bar, r
   1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
      (before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
   2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
-  3. otherwise nothing
+  3. the Run beat the account's best 총매출 (META §BEST DAY; User 2026-09-30): `지금까지 가장 많이 판 점포다 · 총매출 {N}G` -
+     N is the settlement's `총매출` row as the tape prints it
+  4. otherwise nothing
 - no new motion or sound: the line prints with the receipt body; exact copy -> COPY_AUDIT §10-3
 
 ## RELIC UI

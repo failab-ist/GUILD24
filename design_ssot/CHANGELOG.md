@@ -146,6 +146,11 @@ the owner headers and in the git tag.
   없어지던데 ... 폐쇄됐다는 정보가 전달되도록"): the Gate 게이트 임시 폐쇄 closes was simply gone, so the player could not
   tell which one. It stays on the MORNING board, in the `위험 보기` window and on ORDER's `오늘` line, faded with its name
   struck and one `오늘 폐쇄` stamp, no Hazard rows. It still takes no visitor, expedition or order (simulation unchanged).
+- **END replay line: a best 총매출** - META §BEST DAY, UI_UX §END — REPLAY NUDGE, COPY_AUDIT §10-3, UI-Q-v29-37 (User
+  2026-09-30, "최고 총매출만"): half the endings printed no replay line, most of them after the Decorations were collected,
+  when a best Day was the only line left (`reports/v3-prep-measure-v2911.md` §2). The account now also keeps its best 총매출
+  (`bestSales`, recorded like the best Day), and a Run that beats it prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G` -
+  third, after a Decoration newly in reach and a best Day; still one line at most, only when the Run opened nothing.
 - **The desk draws its own SALE** - UI_UX §SALE — DESK LAYOUT, UI-Q-v29-25 / UI-Q-v29-18 (User 2026-09-30, "설계안으로 가되
   PC판 전용으로 분리해서"): on a desk SALE is its own screen, built from the phone's pieces - the customer about 1.3x larger (card 300 -> 390 px at 1280)
   behind the counter with the state, outlook and destination beside them, then under the counter top the ledger, the tray

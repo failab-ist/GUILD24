@@ -1,7 +1,8 @@
 // REPLAY NUDGE (UI_UX §END — REPLAY NUDGE, §Pre-Run Decoration empty-slot interaction; UI-Q-v29-37) - runtime regression.
-// Dev-only. One account through five endings on a real page, 390 and 1280, reduced motion; the Day, the Gross Sales and the
+// Dev-only. One account through six endings on a real page, 390 and 1280, reduced motion; the Day, the Gross Sales and the
 // D10 record are set before the real ending so each END states one case (end() itself settles and records):
 //   1 first ending, small settlement            -> no line
+//   1b a tie with the best Day, a higher 총매출 -> 지금까지 가장 많이 판 점포다 · 총매출 1,500G   (and a reload prints it again)
 //   2 settlement crosses 500 (unowned 500s)      -> 점포 자본으로 새 장식을 들일 수 있다.  (and a purchase from END keeps it)
 //   3 no crossing, a higher Day                  -> 지금까지 가장 오래 버틴 점포다 · DAY 18   (and a reload prints it again)
 //   4 a tie with the best Day                    -> no line
@@ -31,6 +32,10 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
     if(OUT)await p.screenshot({path:path.join(OUT,`nudge-${width}-${i}.png`),fullPage:true});
     return p.evaluate(()=>({line:document.querySelector('.end-tape .replay')?.textContent||'',opened:document.querySelector('.end-tape .opened b')?.textContent||''}));};
    let r=await ending(1,12,1000);check(width+' 1 the first ending prints no line',r.line===''&&r.opened==='',JSON.stringify(r));
+   // User 2026-09-30: the best 총매출 is the third line - here with no crossing (capital 20 + 30) and the best Day only tied
+   r=await ending('1b',12,1500);check(width+' 1b a new best 총매출',r.line==='지금까지 가장 많이 판 점포다 · 총매출 1,500G',r.line);
+   await p.reload({waitUntil:'load'});await p.waitForSelector('.p-end');
+   const kept=await p.evaluate(()=>document.querySelector('.end-tape .replay')?.textContent||'');check(width+' 1b a reload of the ended Run prints the same line',kept===r.line,kept);
    r=await ending(2,15,30000);check(width+' 2 a settlement that crosses an unowned price names no Decoration',r.line==='점포 자본으로 새 장식을 들일 수 있다.',r.line);
    // a Decoration bought from the ending does not rewrite the receipt (judged once at the settlement); the purchase is undone
    // after so the rest of the account story is unchanged

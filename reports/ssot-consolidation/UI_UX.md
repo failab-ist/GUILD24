@@ -1320,7 +1320,7 @@ D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run record
 1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
 (before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
 2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
-3. otherwise nothing
+4. otherwise nothing
 - no new motion or sound: the line prints with the receipt body; exact copy -> COPY_AUDIT §10-3
 - a Slot row whose Slot holds a Decoration the account does not own and can afford now carries a small `들일 수 있음` mark at its
 end (a current state, not a "new" flag; no Decoration named); exact copy -> COPY_AUDIT §1-8 (User 2026-09-26, v2.9.4)
@@ -2193,4 +2193,14 @@ New:
 ```new
 게이트 임시 폐쇄가 있는 날(User 2026-09-30): 닫힌 게이트는 열린 게이트 판 뒤에 흐린 판으로 남는다 — 이름에 취소선,
 `오늘 폐쇄` 도장 하나, 위험 줄 없음. `위험 보기` 창과 ORDER `오늘` 줄에도 같은 표시가 붙는다(EVENT §52, COPY_AUDIT §13-52 · §4-21).
+```
+
+
+## v2.9.11 END replay line: a best 총매출 (User 2026-09-30)
+
+New:
+
+```new
+3. the Run beat the account's best 총매출 (META §BEST DAY; User 2026-09-30): `지금까지 가장 많이 판 점포다 · 총매출 {N}G` -
+N is the settlement's `총매출` row as the tape prints it
 ```

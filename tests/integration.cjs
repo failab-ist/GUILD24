@@ -1415,6 +1415,22 @@ test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estim
  assert.ok(t>0);
 });
 
+test('UI-Q-v29-37 / META §BEST DAY: the ending records the best 총매출 the same way, an abandon never does',()=>{
+ const g=new Game();g.autosave=false;
+ assert.equal(g.account.bestSales,0,'a fresh account has no record');
+ g.start('best-sales-a');g.run.stats.revenue=4000;g.end(false,'qa');
+ assert.equal(g.run.salesBefore,0,'the first ending had no record to beat');assert.equal(g.account.bestSales,4000);
+ assert.equal(g.run.settlement.sales,4000,'the record is the END receipt\'s own 총매출');
+ g.run.stats.revenue=9000;g.end(false,'qa again');assert.equal(g.account.bestSales,4000,'an ended Run is not recorded twice');
+ g.start('best-sales-b');g.run.stats.revenue=4000;g.end(false,'qa');assert.equal(g.run.salesBefore,4000,'a tie keeps the old record');assert.equal(g.account.bestSales,4000);
+ g.start('best-sales-c');g.run.stats.revenue=8000;g.abandon();assert.equal(g.account.bestSales,4000,'a manual abandon never moves the best 총매출');
+ g.start('best-sales-d');g.run.stats.revenue=2500;g.end(false,'qa');assert.equal(g.account.bestSales,4000,'a lower 총매출 keeps the record');
+ g.start('best-sales-e');g.run.stats.revenue=6200;g.end(false,'qa');assert.equal(g.run.salesBefore,4000);assert.equal(g.account.bestSales,6200);
+ const acc=copy(g.account);delete acc.bestSales;assert.ok(Save.import(Save.export(acc,null)),'no bestSales reads as 0');
+ for(const v of [-1,12.5,'900'])
+  {const bad=copy(g.account);bad.bestSales=v;assert.throws(()=>Save.import(Save.export(bad,null)),'bestSales '+JSON.stringify(v)+' is not a Gold amount');}
+});
+
 test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon never does; D10 / D14 opens are on the Run',()=>{
  const g=new Game();g.autosave=false;
  assert.equal(g.account.bestDay,0,'a fresh account has no record');

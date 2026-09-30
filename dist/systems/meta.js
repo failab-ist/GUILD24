@@ -27,7 +27,7 @@ function freshStore(){
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,bestDay:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false},
+  runs:0,wins:0,bestDay:0,bestSales:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false},
   store:freshStore(),
   /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
@@ -163,10 +163,12 @@ function finish(a,run,win){
    nothing else. Recorded by the ending only, so a manual abandon (which never reaches it) cannot move it; the Run keeps
    the value it replaced so a reload reads the same comparison. */
 function recordBestDay(a,run){if(run.bestBefore!==undefined)return;run.bestBefore=a.bestDay||0;a.bestDay=Math.max(run.bestBefore,run.day);}
+/* META §BEST DAY — best 총매출 (User 2026-09-30): the same kind of record, on the ending's 총매출 (the END tape's own row) */
+function recordBestSales(a,run,sales){if(run.salesBefore!==undefined)return;run.salesBefore=a.bestSales||0;a.bestSales=Math.max(run.salesBefore,sales);}
 const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
-G.Meta={fresh,freshFranchise,observe,finish,recordBestDay,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
+G.Meta={fresh,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

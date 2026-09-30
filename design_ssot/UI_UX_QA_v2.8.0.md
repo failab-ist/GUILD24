@@ -1403,7 +1403,10 @@ PASS:
   capital that was already above that price, or an owned Decoration's price, prints nothing
 - with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
   account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
-- at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
+- with none of those, a Run that beats the account's best 총매출 prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G`, N the
+  tape's own `총매출` figure; a tie, the account's first ending and a manual abandon print nothing and an abandon never moves
+  the record; a Run that beats both records prints the best Day line (User 2026-09-30)
+- at most one of the three lines, never beside `본사 해금`; a reload of the ended Run prints the same line
 - 새 점포 준비: exactly the Slot places (rows before v2.9.9) with an affordable unowned Decoration carry `들일 수 있음`
 - no new motion, sound, screen or button
 

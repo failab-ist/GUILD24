@@ -1347,7 +1347,7 @@ distinct-Boss unlock; the Day toast still fires once; a later Run that reaches D
 capital that was already above that price, or an owned Decoration's price, prints nothing
 - with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
 account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
-- at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
+- at most one of the three lines, never beside `본사 해금`; a reload of the ended Run prints the same line
 - no new motion, sound, screen or button
 - a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot
 whose unowned Decorations cost more than the capital
@@ -1981,4 +1981,15 @@ wheel over it, pick a row, sell; then narrow the window to 1023 and widen it bac
 next customer starts at the top
 - at 1023 the phone SALE is drawn, at 1024 the desk SALE again, with no error
 forecast pin or second readout on a desk, or a layout that stays the other one after crossing 1024
+```
+
+
+## v2.9.11 END replay line: a best 총매출 (User 2026-09-30)
+
+New:
+
+```new
+- with none of those, a Run that beats the account's best 총매출 prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G`, N the
+tape's own `총매출` figure; a tie, the account's first ending and a manual abandon print nothing and an abandon never moves
+the record; a Run that beats both records prints the best Day line (User 2026-09-30)
 ```

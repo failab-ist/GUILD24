@@ -86,7 +86,7 @@ P.settleStoreCapital=function(){const s=this.run;
  const reach=D.decorations.some(d=>!G.Meta.decorationOwned(this.account,d.id)&&before<d.price&&d.price<=after);
  s.settlement={day:s.day,sales,rate,gain,capitalAfter:after,reach};
  return s.settlement;};
-P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);this.settleStoreCapital();this.save();};
+P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);G.Meta.recordBestSales(this.account,s,s.stats.revenue);this.settleStoreCapital();this.save();};
 /* FINAL_EXPEDITION v2.8 party rule: the CAP of the party. Any 1..cap may be committed - a 1- or
    2-person challenge is a valid choice even with 3+ eligible - and 0 eligible is a Run Fail.
    No participant-count bonus, penalty, multiplier or auto-fill exists anywhere. */

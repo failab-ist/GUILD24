@@ -1902,6 +1902,10 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  const run=read('dist/systems/run.js');
  assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 들일 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
  assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
+ /* User 2026-09-30: the best 총매출 is the third line, after the best Day, on the END receipt's own 총매출 */
+ assert.ok(r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '")<r.indexOf("'지금까지 가장 많이 판 점포다 · 총매출 '"),'a best Day comes before a best 총매출');
+ assert.ok(/s\.salesBefore>0&&st\?\.sales>s\.salesBefore\)return '지금까지 가장 많이 판 점포다 · 총매출 '\+st\.sales\.toLocaleString\(\)\+'G';/.test(r),'strictly above an existing record, in the receipt\'s own 총매출 format');
+ assert.ok(/G\.Meta\.recordBestSales\(this\.account,s,s\.stats\.revenue\)/.test(read('dist/systems/run.js')),'the ending records the best 총매출 from the settlement\'s Gross Sales');
  assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
  assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('prepScreen'))&&/x\.price<=capital/.test(fn('prepScreen')),'the pre-Run Slot mark reads the current capital');
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
