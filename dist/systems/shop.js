@@ -230,7 +230,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      ordinary D25 management decisions that can use it. D30 consumes this exact persisted state
      and never generates a new Pair. D25 grants no Counter Items, no free stock and no shop. */
   if(s.day>=25&&!s.final)s.final=this.makeFinal();
-  if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];return null;}
+  if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.closedGates=[];s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];return null;}
   s.familyOrder??=this.rng.shuffle(['spider','slime','golem','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),odds=G.Dungeon.gateCountOdds(s.day),count=counts.length===1?counts[0]:odds[0]===odds[1]?this.rng.int(counts[0],counts.at(-1)):(this.rng.next()<odds[1]?counts[1]:counts[0]);s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
   return ids;
  }
@@ -256,10 +256,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
  /* Today's Event, and everything it does to a Day that is otherwise already decided. */
  morningEvent(ids){const s=this.run;
-  s.event=this.rollEvent();s.eventSeen=!s.event;if(s.event)(s.eventLog??=[]).push(s.event.id);s.pilgrimage=0;const ev=s.event?.effects||{};
+  s.event=this.rollEvent();s.eventSeen=!s.event;if(s.event)(s.eventLog??=[]).push(s.event.id);s.pilgrimage=0;s.closedGates=[];const ev=s.event?.effects||{};
   if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
   /* EVENT 52 게이트 임시 폐쇄 / 55 게이트 안정화 작업 (v2.9.11): before the day's multipliers, so they read the final Gates */
-  if(ev.closeGate){const open=s.dungeons.map((d,i)=>i).filter(i=>!s.dungeons[i].temporary);if(open.length>=2)s.dungeons.splice(this.rng.pick(open),1);}
+  /* User 2026-09-30: the closed Gate is kept aside for the screens (`오늘 폐쇄`); it takes no visitor and no expedition */
+  if(ev.closeGate){const open=s.dungeons.map((d,i)=>i).filter(i=>!s.dungeons[i].temporary);if(open.length>=2)s.closedGates.push(...s.dungeons.splice(this.rng.pick(open),1));}
   if(ev.tierOne)s.dungeons=s.dungeons.map(d=>d.temporary||d.tier===1?d:this.makeDungeon(d.family,1));
   s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
@@ -351,7 +352,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   s.special=null;
  }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
- if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
+ /* EVENT §02 (User 2026-09-29): HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
+    again for a 1+1 on the SKU the player wanted is not the Event's play. Same rule as 새벽 회수 계약's extra slot below. */
+ if(ev.double&&advancePity){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
     which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired.
@@ -382,7 +385,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  /* ECONOMY_ORDER §ORDER OFFER QUANTITY (User 2026-09-27, v2.9.7): Common / Uncommon 2~4, Rare 1~3 (it was 1), Epic /
     Legendary 1 - the Rare mid-Run Counters could not be stocked for more than one customer. */
  offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)),quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
- rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it)));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
+ rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary (User 2026-09-29): D30 has no SALE, and an Item with no Final effect
+   cannot go in a Final Bag, so the D30 sheet never offers one - the same explicit no-effect exclusion D30 Store Supports use */
+ let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it))&&!(s.day>=30&&this.finalNoEffect(it.id)));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);

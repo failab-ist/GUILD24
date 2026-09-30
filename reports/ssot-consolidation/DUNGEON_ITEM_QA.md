@@ -545,8 +545,6 @@ Every Hazard exposes the canonical short pressure explanation:
 
 ```new
 EXPECT (User 2026-09-24, v2.9.0):
-- fire -> 기동
-- dark -> 정신
 - whiteout -> 정신
 - no Supply Burden Gate modifier or required Supply exists; Food/Drink Supply is Fatigue recovery only (User 2026-09-24, v2.9.0)
 Only canonical Hazard systems and Supply -> Fatigue recovery affect gameplay (User 2026-09-24, v2.9.0).
@@ -985,4 +983,14 @@ User 2026-09-28: 퇴각 / 부상 / 중상 Wallet multipliers 0.40 / 0.25 / 0.15 
 
 ```new
 - Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch; were 0.35 / 0.20 / 0.10 since v2.9.1)
+```
+
+
+## v2.9.11 stale Hazard Stat lines: fire -> 정신, dark -> 기동 (User 2026-09-30)
+
+New:
+
+```new
+- fire -> 정신 (revision 5)
+- dark -> 기동 (revision 3)
 ```

@@ -219,6 +219,9 @@ Do not:
 Store scene은 사용할 수 있으나
 상황 정보보다 방해되지 않게 한다.
 
+게이트 임시 폐쇄가 있는 날(User 2026-09-30): 닫힌 게이트는 열린 게이트 판 뒤에 흐린 판으로 남는다 — 이름에 취소선,
+`오늘 폐쇄` 도장 하나, 위험 줄 없음. `위험 보기` 창과 ORDER `오늘` 줄에도 같은 표시가 붙는다(EVENT §52, COPY_AUDIT §13-52 · §4-21).
+
 ### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
 
 (User 2026-09-25, v2.9.1 balance.) The Run's cumulative Death count and the current segment limit
@@ -226,10 +229,30 @@ Store scene은 사용할 수 있으나
 not only in the 도감.
 - one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
 - warning color when one more Death ends the Run (count = limit − 1)
+- one exception (User 2026-09-29, v2.9.11 quick patch): on ORDER the player may fold the floating box, Death line included,
+  to a `요약` chip (ORDER — FLOATING TODAY LINE); the count is back with one tap
 - the limit shown already includes 추모 방명록 and 위령제
 - no extra popover, badge or explanation text; the same line on both screens
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
-- ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
+- ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button. v2.9.11 quick patch (User 2026-09-29): the ledger's `발주 후` joins the box the same way, last (under `오늘`), once the ledger line has gone under it - the same value, moving with every quantity tap, in the ledger's short color when below zero; the Death line stays first. Each copy appears only while its own source is under the rail. The box has one type ladder (User 2026-09-29): every line is a small label - `사망`, `오늘`, `발주 후` - in one shared column, and its value in one face and size (the Death line's own words, split into label and value); tight padding and a hairline between lines. Fold (User 2026-09-29): a key at the box's top-right folds the whole box - the Death line too - to a small `요약` chip on its right and back; folded is an account-level presentation choice kept across Days and reloads until the player opens it again; on a phone the key and the chip keep clear of the menu pin
+
+### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
+
+The warehouse is off the 발주서 and held apart, like a game's storage, so it can be read against the offer rows while
+ordering. It is a steel rack of 칸 with an orange beam, apart from the floating Death box's brown and the 발주서's paper:
+one cell per slot the store has, each held unit in its own cell (its icon and days left, 1 day or less in the warning
+color), grouped by Item; the empty cells are the room left. The icon is the one the offer rows show; the Item's name is the
+cell's reader label (nothing is hover-only).
+- Desk (1024 px and wider): the 발주서 is set left, no longer centred, and the warehouse is a large rack on its right,
+  always open, following the scroll, below the menu pin.
+- Phone: a slim `창고 N / M칸 · K종` handle on top of the dock, always there. It is a row of the dock, so it never covers an
+  offer row. It opens the rack as a sheet rising from the dock, at most 45% of the screen, with its own scroll.
+  - The sheet does not dim or lock the form: the rows above it still scroll and take taps, and the rows under it can be
+    scrolled above it. Only the handle (`열기` / `닫기`) or Escape closes it; a quantity tap keeps it open.
+  - Open or folded follows ORDER — WAREHOUSE DISCLOSURE: folded on a fresh account, then as the player last left it.
+- The header: small `창고` label, `N / M칸`, `K종` - the floating Death box's label / value ladder. No new copy.
+- ORDER CONFIRM's crates drop into the new cells of the rack on screen (the desk column or the open sheet); with the sheet
+  folded, the handle's figures move on the last landing.
 
 ### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
 
@@ -389,13 +412,17 @@ Example:
 ```
 
 The individual held-stock list is collapsible at every width and starts collapsed; opening it is an account-level presentation choice that persists across Days and reloads until the player folds it again (User 2026-09-24, v2.9.0).
+Since the v2.9.11 quick patch the summary and the list live in the ORDER — WAREHOUSE PANEL (the phone's handle and sheet, the
+desk's column), not on the 발주서; the collapse rule above is the phone sheet's.
 - the collapsed summary line still states the held-stock summary
 - used/remaining capacity is never hidden inside the collapsed detail
 - ORDER CONFIRM (User 2026-09-25, v2.9.2 H3; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H3;
   acceptance -> UI_UX_QA UI-Q-v29-32): on 발주 확정 one crate per ordered SKU - its warehouse row's icon - falls onto its row
   (the NIGHT stamp's 90 ms fall) in a cascade whose step is at most 70 ms and shrinks so the last landing is within 320 ms;
   each row's count goes from its prior value straight to the resolved one on its crate's landing (never a unit at a time), and
-  a SKU new to the warehouse brings its row in with its crate. The warehouse figures - the summary `N / M칸` and `N종` and the
+  a SKU new to the warehouse brings its row in with its crate. v2.9.11 quick patch (User 2026-09-29, §ORDER — WAREHOUSE
+  PANEL): the warehouse is a rack of 칸, so the SKU's new cells - the ones past its prior count - drop in together on its one
+  landing; the beat per SKU, its step and its budget are unchanged. The warehouse figures - the summary `N / M칸` and `N종` and the
   register's 창고 잔여 칸 - move together on the last landing (a folded list shows only those). At most three landings are audible (the `order` stamp, then the short `crate` of the same family); the rest
   are silent. The till's 보유 골드 counts down to the resolved value in 220 ms. The `발주 완료.` line is unchanged. 일반
   intensity: no hold. Under reduced motion the `order` stamp plays once and every value is resolved at once
@@ -667,7 +694,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
 - COUNTER TRAY FOLD (User 2026-09-25; the User's own suggestion; confirmed as built, User 2026-09-26, v2.9.3): on a phone a filled tray folds to its header line (Item, customer, wallet, a small ▲) when the player scrolls the shelf past 32px or taps outside the tray, a shelf row, the dock or an overlay; tapping the folded strip or any shelf row (the one already on the tray included) opens it again. The selected Item never changes by folding, nothing is saved, and a desk (≥1024) never folds
 - the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
-- on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
+- on a desk (≥1024) the tray lies in the middle area on the counter, between the customer's ledger and the shelf, and never covers the shelf (§SALE — DESK LAYOUT; User 2026-09-30)
 - COUNTER FEEL (User 2026-09-25, v2.9.2 H2; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H2;
   acceptance -> UI_UX_QA UI-Q-v29-31): the pressed price key travels down 3px in 60 ms and returns in 60 ms (일반 intensity,
   no hold). On a successful sale the tray that was pressed stays in place, inert, for that press only (its Item icon hidden:
@@ -691,12 +718,17 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 
 ### SALE — DESK LAYOUT
 
-(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band is two areas, not one scrolled column.
-
-- the dossier column (Stat grid, Traits) is its own area on the wood, running down to the dock
-- the shelf column holds the shelf on the wood and, under it, the counter tray: the tray takes only the shelf column's width, and the wood above it stays clearly apart from the tray's dark band
-- each column scrolls on its own; scrolling the shelf never moves or empties the dossier column
-- a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
+(User 2026-09-30, "PC판 전용으로 분리"; supersedes the two-area desk of 2026-09-25.) A desk (≥1024) draws its own SALE - not
+the phone's column re-flowed - from the same pieces, so every text, key and action is the phone's:
+- above the counter: the customer stands large behind the counter (the card as tall as the band allows over a lower area
+  of at least 300 px), with the state and Bag, the outlook and the destination beside them and the waiting line at the far end
+- the counter top: one band, a hard edge and one cast shadow (PRESENTATION §Edge / material)
+- under it, the player's side, three areas: the customer's ledger (the last expedition, the four stats, the Traits), the
+  counter tray in the middle on the counter (an empty counter is the bare counter), and the shelf
+- the ledger and the shelf each scroll on their own; a redraw of the same customer keeps both positions, a new customer
+  starts both at the top; the tray never covers the shelf, and a desk never folds it
+- the phone's second readout in the column and its forecast pin are phone pieces and are not drawn on a desk
+- crossing 1024 while SALE is open draws the other layout
 - phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
 
 ### SALE SELECTED-ITEM INFORMATION
@@ -1494,6 +1526,22 @@ in 320 ms; a quiet `ui` cue marks each Decoration price (500 / 750 / 1000 / 1250
 count passes on the way, read from the same price list rather than a second copy of the numbers. 일반 intensity: no
 hold. Under reduced motion the receipt prints and stamps at once and the settlement figure resolves at once.
 
+### END — THIS RUN BLOCK (v2.9.12)
+
+(User 2026-09-30, A안; acceptance -> UI_UX_QA UI-Q-v29-54; review `reports/v3.0-prep.md` §9-7 F1 / F2, §9-8-1-A.) GAME_VISION
+Design Pillar: when a Run ends, "이번 판은 이런 가게였다" has to stay. The END tape carries one block for it, `이 점포의 기록`,
+between the `지금까지 연 점포` block and `점포 자본 정산` - read as the story, then the settlement, then 본사 해금, then the
+replay line.
+- five rows, in this order: `버틴 날` (`DAY {N}`), `손님` (the customers who visited · `단골 {N}`, the regulars the Run
+  made), `돌아오지 못한 사람` (the Run's Deaths, 0 printed as 0 - a Run that lost no one is a fact of this Run), `가장
+  성장한 손님` (`{이름} Lv.{N}`, the highest Level among the customers who visited, the dead included; a tie goes to the
+  higher Loyalty), `원정` (`{N}건 · 대성공 {N}`, every expedition record of the Run's customers)
+- a Run with no expedition (a DAY 1 bankruptcy) prints no `원정` row; names of the lost are not listed (the notebook's
+  `돌아오지 못한 사람` list holds them)
+- read from what the Run already holds - no new save field; the settlement block (META §Run-end settlement structure)
+  and the replay line (§END — REPLAY NUDGE) are unchanged
+- exact copy -> COPY_AUDIT §10-4
+
 ### END — REPLAY NUDGE (v2.9.4)
 
 (User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-37.) Show, never assign: the END tape tells what this Run left behind,
@@ -1505,7 +1553,9 @@ so the next store reads as a little closer - no task, checklist, progress bar, r
   1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
      (before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
   2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
-  3. otherwise nothing
+  3. the Run beat the account's best 총매출 (META §BEST DAY; User 2026-09-30): `지금까지 가장 많이 판 점포다 · 총매출 {N}G` -
+     N is the settlement's `총매출` row as the tape prints it
+  4. otherwise nothing
 - no new motion or sound: the line prints with the receipt body; exact copy -> COPY_AUDIT §10-3
 
 ## RELIC UI
@@ -1882,6 +1932,11 @@ The Final roster is a selection surface, not a rarity gallery.
 - selected cards alone own the strong selection frame;
 - rarity text may gain one restrained size/weight step if needed, but never outranks the NPC name or causes overflow;
 - the party count stays fully readable and is never covered by the floating menu pin.
+- (User 2026-09-30) the last order carries `원정대 후보 보기` beside `원정대 선택`, the same bar: a read-only sheet of the
+  same candidates, each opening the notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW); on a phone both bars share
+  one row at a smaller face, on a desk they keep the full face
+- (User 2026-09-30) FINAL 준비 carries `자세히 보기` under the supplied member's Stat grid - a quiet text control that
+  opens that member's notebook read only
 
 No ordinary expedition `전투 전망` is shown while the party is provisional.
 Use the exact selection guidance owned by COPY_AUDIT_APPROVED.
@@ -2045,6 +2100,8 @@ Show:
 - equipped Decoration
 
 Purchase requires explicit confirmation and spends once.
+Each step of buying or fitting a Decoration (구매, 구매 확정, 취소, 적용, 해제) keeps the pressed row where it was on
+screen: the panel never jumps back to its top, so the row just bought is the row the player is looking at (User 2026-09-29).
 Loadout is editable only outside an active Run and frozen after Run start.
 
 On a pre-Run/foundation store-management screen, an explicit way back to the new-Run preparation
@@ -2081,8 +2138,8 @@ sides on a stage narrower than the file, at the top and bottom on one wider than
 - the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
   down behind the dock (a portrait tablet, a short desk) it rises to just above the Action instead; it takes its larger
   desk size only on a stage 760 px high or more, so on a 700-high stage it still clears the counter pieces above it
-- covered: phone 360~430 at the heights a browser leaves (640~932), portrait tablet 768~912, landscape tablet 900~1023 and
-  desk 1024~1920
+- covered: phone 360~430 at the heights a browser leaves (640~932), and the iPhone SE stage 375x548 (§SHORT PHONE), portrait
+  tablet 768~912, landscape tablet 900~1023 and desk 1024~1920
 
 ### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
 
@@ -2101,7 +2158,7 @@ Decoration seating -> §LIVE STORE DECORATION SEATING), shown whenever there is 
   the first step. An empty plaque's tag hangs from the top of its spot, so a grown tag never reaches up into the board; on
   the wide framing the 간판's tag, which runs left from it toward the stage's edge under the painted ceiling fixture,
   stacks its two lines, sits level with the sign's plate rather than its hangers and grows only with the stage's height, at
-  most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1120 px wide) and clear of the fixture
+  most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1440 px wide, §RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the fixture
 - the board is titled `새 점포 준비` and carries the three lines of the game as one pinned note, then one status line
   (`보유 장식 없음` / `영업이 시작되면 이번 영업에는 고정됩니다.`); a save error, when there is one, is pinned above the note.
   It ends at least 6 px above the Slot places under it: on the wide framing under 800 px high (a laptop browser, a
@@ -2248,6 +2305,8 @@ it, vary where the Phase is recognised).
   wraps); a step across a Day or Run boundary (`다음 날`, `다음 점포 열기`, the FINAL gate bar) is 64 / 72 px (label 20 / 22 px;
   the gate bar keeps its sign face at 21 px); `첫 점포지원 고르기` is 64 px / 20 px at every width, because the counter-front
   plates of the preparation scene sit directly above the dock
+- (User 2026-09-30) the one pair: on D30's last order the gate bar `원정대 선택` shares the dock with `원정대 후보 보기`, the same
+  bar (a view, not a second flow Action); on a phone both step down to a 16 px face on one row, the desk keeps 21 px
 - depth: 5 px across a boundary, 4 px inside the Day; `손님 보내기` 3 px, below the price keys it must not outrank
   (§SALE — COUNTER TRAY); ORDER's `발주 확정` and `영업 시작` are never enabled together and share the 4 px
 - edges in two tiers, like the sizes: a step inside the Day is its face, a 3 px lit edge at the top and a 4 px deep edge at the
@@ -2359,13 +2418,10 @@ Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0
 
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 
-The first-ORDER coach group is, in this order: `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0;
-`stock` User 2026-09-29, v2.9.11).
-- `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
-- `stock` anchors the 창고 summary: the first Day's warehouse already holds the opening stock, which no screen named before
-- `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
-- the `gold` mark is retired (the register reads itself)
-- one concept per step still holds
+(User 2026-09-30, v2.9.12, §TUTORIAL — COACH DIET.) The first ORDER keeps one mark, `confirm` (발주 확정). `gates`, `stock`,
+`offer`, `quantity` and `reroll` are retired: the 오늘 brief line and `위험 보기`, the 창고 head (on DAY 1 it reads
+`창고 · 본사 기본 상품 N종`), each offer row's effect line, the `최대` key and the priced 후보 교환 key say them. The
+`gold` mark stays retired (the register reads itself).
 Exact strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
@@ -2378,10 +2434,37 @@ Hazard tutorial teaches:
 Supply/Fatigue tutorial teaches one fact, on the counter tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer (User 2026-09-25; it sat on the retired `피로 A → 출발 B` row):
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 
-First SALE (User 2026-09-24): five marks only — destination, Hazard, Stats (the customer's own 능력치: they differ by Job / rarity / Level, 투력 drives combat, the other three answer the Hazards; COPY_AUDIT §3-7 STATS), outlook, price. Great Success, Supply,
-returning customer and Bag marks are contextual and appear the first time their situation exists.
+First SALE (User 2026-09-30, v2.9.12, §TUTORIAL — COACH DIET): two marks — destination and Stats (the customer's own
+능력치: they differ by Job / rarity / Level, 투력 drives combat, the other three answer the Hazards; COPY_AUDIT §3-7 STATS).
+The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout title reads
+`도착 시 전투 전망`, and price is taught after the fact (§SALE PRICE LESSONS). The Bag mark stays contextual after the first
+sale, and the returning-customer mark stays contextual on the first returning customer (no screen says that tapping the
+customer opens the notebook).
 
 Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
+
+### TUTORIAL — COACH DIET (v2.9.12)
+
+(User 2026-09-30; acceptance -> UI_UX_QA UI-Q-v29-53; review `reports/v3.0-prep.md` §9-6.) One rule is taught in one
+place. A mark stays only where the rule has to be known before the decision and no screen says it; a mark the screen
+already says is retired; a rule that can be named after it acts is taught then.
+- kept before the fact: DAY 0 `점포지원` (what a Store Support is); MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL) and
+  the II / FIRE Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정`; SALE destination and Stats; SALE Bag (after
+  the first sale) and returning customer (the tap to the notebook); FINAL `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (its first clause only - the warehouse
+  clause is dropped and the receipt gains no row)
+- retired, the screen says it: MORNING 방문객 and 게이트; DAY 0 card and key; ORDER gates, stock, offer, quantity, 후보 교환;
+  SALE Hazard, outlook; NIGHT `한 명씩 …` (the `전체 건너뛰기` key says it)
+- two words added so a retired mark is not missed: the DAY 1 창고 head `창고 · 본사 기본 상품 N종` while it holds only the
+  opening stock, and the SALE readout title `도착 시 전투 전망`
+- taught after the fact: price (§SALE PRICE LESSONS), beside the NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
+
+### SALE PRICE LESSONS (v2.9.12)
+
+(User 2026-09-30.) Two contextual SALE marks replace the pre-sale price mark, each once per account, persisted and reset
+with the other marks:
+- the first 150% (바가지) refusal: on the refused key (`오늘 거절됨`)
+- the first 50% sale: on that sale's change line (`단골도 +N · 소지금 A → B`), which stays up while the mark is open
+- words only; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §26-3
 
 ### TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED
 
@@ -2418,10 +2501,10 @@ SALE counter carries no anchor for either.
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 
 User decision 2026-09-24. The first screen of a new store is the DAY 0 Store Support takeover, so
-the tutorial begins there: three marks read the takeover (what a Store Support is, how a card
-reads, what the key does and when more candidates arrive) and never name a pick. They are the one
-exception to "no mark over a modal", shown over the takeover itself, on DAY 0 only, and persisted
-per account like every other mark. Exact copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
+the tutorial begins there. One mark reads the takeover - what a Store Support is (User 2026-09-30, v2.9.12: the card and
+key marks are retired; each card prints its effect and price, and the key, the later windows and `점포지원 N / 7` say
+the rest) - and never names a pick. It is the one exception to "no mark over a modal", shown over the takeover itself, on
+DAY 0 only, and persisted per account like every other mark. Exact copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
 
 ### FIRST-EVER DEEP EXPEDITION TUTORIAL
 
@@ -2449,6 +2532,16 @@ Tutorial must clearly teach:
 
 Tutorial appears before the first nomination decision and must not leave
 actionable Morning/Order information obscured after dismissal.
+
+### GATE TIER / FIRE GATE TUTORIAL
+
+(User 2026-09-30, v2.9.12; acceptance -> UI_UX_QA UI-Q-v29-52.) Two contextual MORNING marks, like the Deep mark: each shows
+the first time the board holds such a Gate, once per account, persisted and reset with the other marks.
+- a two-Hazard Gate (tier II and III; `DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, and each Hazard
+  presses its own Stat
+- a FIRE Gate: one Hazard only, but a higher required Combat Power (`DUNGEON_HAZARD` §FIRE second axis)
+- anchor: that Gate's plate on the MORNING board; the rule only, never which Item answers it (§READ THE SYSTEM)
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-10
 
 ## COPY HIERARCHY
 
@@ -2593,6 +2686,32 @@ At each width verify with actual browser screenshot/manual inspection:
 - no clipped sticky action / safe-area overlap
 - game scene remains useful, not a space-consuming poster above the decision
 
+### DESK STAGE WIDTH (User 2026-09-30)
+
+On a desk the stage is at most 1440 px wide (was 1120), and never wider than 1.65 times its own height - the widest shape
+the painted rooms were checked at - so a 1366 x 680 laptop browser keeps a 1120 stage. Two painted rooms keep the old
+width because they are drawn at the width they are given:
+- FINAL's Boss room stays 1120 wide: wider, it grew taller and pushed the hazards and the last order under the fold
+- NIGHT's window band stays 1120 wide, centred on the wider stage, its sides the band's own edge colour
+
+### SHORT PHONE (User 2026-09-29)
+
+The shortest supported phone stage is an iPhone SE with Safari's bars showing: 375x548 (the User's call: "SE까지 지원").
+It runs in the visual gate beside the 780-high widths, with the User's Galaxy stage (360x597, bars showing). On a portrait stage under 640 high:
+- MORNING: the board may run down to 8 px above the till's label, over the painted wall, so the day's Event (its effect line
+  included) reads whole and the first Gate plate shows under it. The till, the branch plate and the Decoration pieces stay
+  where §LIVE STORE DECORATION SEATING puts them; a 벽면 piece hanging there is behind the board on a day the board fills
+  it - the situation reads before the room (§MORNING; User 2026-09-29)
+- 새 점포 준비: the note takes the tighter step of the short desk (same type, less air), so the status line stays on the
+  board, and the 간판 keeps the gap from the title as it does on the wide framing (the cropped ceiling brings the title
+  down onto its painted spot). The title is a step smaller there (180 px at most) and an empty 간판's tag - wider than
+  the piece once it carries `들일 수 있음` - runs from the piece's edge nearest the title toward the screen's edge and
+  hangs from the top of its spot, under the build mark: it never covers the title (User 2026-09-29, a Galaxy at 360x597)
+- SALE keeps its sale-first order (§MOBILE SALE PLAYABILITY). On a portrait stage under 700 high the filled counter tray
+  takes one tighter step - the same lines, keys and order, less air, a smaller icon, keys still 44 px or more - so it
+  leaves 3 / 2 / 1 shelf rows above it at 640 / 597 / 548 (was 2 / 1 / 1; User 2026-09-30, `reports/v3-prep-measure-v2911.md`
+  §4). The three-row floor of UI-Q-v29-18 holds from 640 up; below it the tray folds on a scroll, as everywhere
+
 ## TOUCH / INTERACTION
 
 Repeated or primary actions:
@@ -2616,6 +2735,10 @@ Mobile QA must include:
 - safe area
 - sticky footer overlap
 - clipped header/action bar
+
+iPhone Safari (User 2026-09-29):
+- a quick second tap on a control (quantity +, a repeated price step) never zooms the page; pinch zoom stays available
+- a long press on a portrait or a painting opens no save-image menu
 
 ## ACCESSIBILITY / SIGNALS
 
@@ -2678,6 +2801,11 @@ Every phase plays a recorded track (`dist/ui/assets/bgm/`, provenance in `report
 | the ending of a cleared Run | SUCC |
 | the ending of any failed Run (bankruptcy, the death limit, a failed Final) | FAIL |
 
+The ending track never tells the result before the screen does (User 2026-09-29): arriving at the ending, the music of the
+screen it came from (BOSS through the Final and its clash, CLOSE after a bankruptcy, NIGHT after the Death limit) plays on
+until the result lands - the Final seal's landing frame, or one short beat on an ending with no seal - and only then does
+SUCC / FAIL come in, with the ending cue (§ENDING CUE). A reload of the ending plays SUCC / FAIL at once.
+
 Loop rule: a loop keeps the whole track. It is never a section taken from the middle.
 - Start stays at the first sound, and moves only past a short, clearly different intro (at most 15 s).
 - End stays near the original end (within its last 25 s; BOSS 40 s) and drops only the ending chord, tail or fade.
@@ -2689,14 +2817,70 @@ Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (
 never the default fix for a join that does not fit.
 
 Playback:
-- Every track plays at the same loudness.
-- BGM stays under the decision and result cues, and the existing ducking applies.
-- A phase change fades the old track out.
+- Every track plays at the same loudness, except NIGHT, which plays 3 dB under the rest: it is the densest track and read
+  as the loudest in play (User 2026-09-29).
+- BGM stays under the decision and result cues, and the existing ducking applies: the music at -30 LUFS and every cue at
+  its §SFX LEVELS tier (User 2026-09-29; measurement `reports/bgm-sfx-mix-v2911.md`).
+- A phase change fades the old track out (1 s). The next track starts only after it, never over it, and rises over 1.5 s,
+  so a phase never starts on a hard downbeat (User 2026-09-29).
 - Mute or a hidden page stops the music, and coming back resumes it.
+- Coming back from a call or another app resumes the sound without waiting for a tap where the browser allows it
+  (iOS Safari leaves the audio suspended); otherwise the next tap resumes it (User 2026-09-29).
+- The iPhone silent switch keeps Safari's default: while it is on, the game is silent, and it never stops another app's
+  music (User 2026-09-29).
 - A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
 - The web build ships 128 kb/s copies and fetches the next phase's file ahead, so a phase change does not wait on the
   network; the app ships the originals (User 2026-09-29).
 - Playback changes no gameplay state and consumes no Gameplay RNG.
+
+### SFX LEVELS (User 2026-09-29)
+
+The cues were authored 24 dB apart; each now has its own level so a tier sounds as one loudness and every tier sits where
+PRESENTATION §Mix puts it. Measured as a phone speaker plays the cue (User 2026-09-29, round 4): its loudest 100 ms window
+with nothing under 300 Hz counted (the BS.1770 shelf and a 300 Hz high-pass); audibility as its best 1/3-octave band from
+280 Hz up over the music it is heard with (that music's loud 90th percentile, less the cue's own ducking). The music plays
+at -30 LUFS (NIGHT -33).
+
+| tier | cues | level | clears its music by |
+| --- | --- | --- | --- |
+| result | the NIGHT outcomes, the seal and ending cues, the Boss beats, `final`, `collapse` | -19 | 8 dB |
+| decision | ORDER / SALE commits (`order`, the price modes, `refusal`), purchases, open / close, `begin` / `newstore`, `rescue` | -21 | 8 dB |
+| action | `depart` / `return`, Gold, the ORDER crate, the receipt, `heal`, `fixture`, the clash beats, `supply` | -25 | 5 dB |
+| utility | `button`, `ui` | -29 | 3 dB |
+| rapid repeat | `quantity`, `quantset` | -31 | 3 dB |
+
+- each cue lands from 1.5 dB under its level to 3 dB over it (a cue may be lifted up to 3 dB to be heard over its music)
+- a cue lifted to that ceiling and still masked is its sound, not its level: it is reported for a User decision, never
+  lifted further past its tier
+- no cue is mostly bass a phone cannot play: its full-range (K-weighted) loudness stays within 6 dB over its level. A low
+  cue is heard on a phone through its own overtones at the same pitch and loses what is under its own low cut; the
+  effects bus drops everything under 120 Hz (User 2026-09-29: the round-3 fit raised the low cues until they tore)
+- the output has a limiter at -3 dBFS, transparent under it; no cue alone peaks over -4.5 dBFS, and the worst moments of
+  cues landing together (a sale and its Gold, quantity taps into the ORDER commit, NIGHT outcomes in a row, the clash
+  scene, the seal into the ending cue) stay under -1 dBFS over their phase's music at full sliders
+- the fitted levels live in `dist/ui/audio.js` (`LEVEL`); the measurement is `tools/qa-sfx-mix.cjs` (in `npm run qa:runtime`)
+
+### DISTINCT CUES (User 2026-09-29)
+
+Cues that mean different things do not sound alike; a shared sound is kept only where sharing is the point.
+- apart: the Decoration `fixture` (a wooden double knock) from the FINAL `clash` and from the Store Support `support`; the
+  SLOTH seal-break `boss` (shattering glass over a low thud) from the Boss information motif and from the Boss's `counter`;
+  the CLOSING `receipt` (one short printer pass) from the ORDER `crate`; the `ui` click (a two-note blip) from the
+  `quantity` tick (a bright noise tick)
+- shared on purpose: the three SALE price modes (PRESENTATION §TRANSACTION BEAT A5), the quantity stepper and its quick-set
+  (one act, the quick-set one step down), the Boss information motif across its strengths
+- `ui` and the quantity ticks are synthesised, bright and short, so they are heard over the music at their utility level
+  (the recorded ones were masked); the retired files are listed in `reports/ASSETS.md`
+- measured by `tools/qa-sfx-mix.cjs` (spectrum shape x loudness contour): every `apart` pair below 0.6; the shared families
+  are reported
+
+### ENDING CUE (User 2026-09-29)
+
+Every ending carries its own result cue as the result lands, clearer than the music alone:
+- `endwin` - a cleared Run: a rising line to a held major chord
+- `endfail` - every failed ending (a failed Final, bankruptcy, the Death limit): a falling minor line onto a low held root
+- on the Final ending it follows the seal's own landing cue by 150 ms; reduced motion plays it at once
+- it ducks the music under it; it is presentation only and consumes no Gameplay RNG
 
 ### SFX coverage
 

@@ -86,7 +86,7 @@ P.settleStoreCapital=function(){const s=this.run;
  const reach=D.decorations.some(d=>!G.Meta.decorationOwned(this.account,d.id)&&before<d.price&&d.price<=after);
  s.settlement={day:s.day,sales,rate,gain,capitalAfter:after,reach};
  return s.settlement;};
-P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);this.settleStoreCapital();this.save();};
+P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);G.Meta.recordBestSales(this.account,s,s.stats.revenue);this.settleStoreCapital();this.save();};
 /* FINAL_EXPEDITION v2.8 party rule: the CAP of the party. Any 1..cap may be committed - a 1- or
    2-person challenge is a valid choice even with 3+ eligible - and 0 eligible is a Run Fail.
    No participant-count bonus, penalty, multiplier or auto-fill exists anywhere. */
@@ -187,19 +187,22 @@ P.envyTarget=function(team,preparations){
    for all seven. */
 P.effectiveBossPower=function(partyPower,lock){
  const t=D.bossTuning,s=this.run,base=D.balance.bossPower;
+ /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair that holds FIRE has one Hazard fewer (3, not 4) and
+    measured easier (reader 3,000: 74.3% vs 65.5%), so its Boss stands that much stronger - on every Boss, on top of its own rule */
+ const fire=s.final?.families?.includes('golem')?t.firePairPower:0;
  /* Stage 10, approved. Measured as a SHARE of the target rather than per Gold of shortfall, so
     the penalty means the same thing whatever the target is set to: a Run that sold nothing takes
     the full cap, a Run at target takes none, and it is linear between. */
  if(s.bossId==='GREED'&&t.greedRevenueTarget>0&&t.greedShortfallCap!=null){
   const revenue=lock?lock.revenue:s.stats.revenue;
   const shortfallRatio=Math.max(0,(t.greedRevenueTarget-revenue)/t.greedRevenueTarget);
-  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap);
+  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire;
  }
  if(s.bossId==='SLOTH'&&Array.isArray(t.slothBossPower)){
   const v=t.slothBossPower[lock?lock.sealBreakCount:s.sealBreakCount];
-  if(v!=null)return v;
+  if(v!=null)return v+fire;
  }
- return base;
+ return base+fire;
 };
 
 /* The shared Final order (BOSS / FINAL_EXPEDITION), steps 1-7: everything before the Roll.

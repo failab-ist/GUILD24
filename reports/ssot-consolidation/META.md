@@ -571,7 +571,7 @@ The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX
 - a personal record for the END replay line (UI_UX §END — REPLAY NUDGE) only: no Power, unlock, price or reward reads it
 - the Run keeps the value it replaced, so a reload of the ended Run reads the same comparison
 - Full Data Reset clears it; a save without it reads 0
-- the best Day (§BEST DAY)
+- the best Day and the best 총매출 (§BEST DAY)
 ```
 
 ## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
@@ -638,4 +638,17 @@ to v9, so no Account carries an old id.
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ### counter — 추모 방명록 (id memorialBook)
 ### display — 구급품 진열장 (id aidCabinet)
+```
+
+
+## v2.9.11 END replay line: a best 총매출 (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30, v2.9.11.) A second record of the same kind: the highest 총매출 a Run has ended with, `bestSales` (0 on a fresh
+account) - the END settlement's own `총매출` (the Run's Gross Sales).
+- set when a Run ends naturally, the same way: `bestSales = max(bestSales, the Run's 총매출)`; a manual 현재 지점 포기 never moves it
+- a personal record for the END replay line only, like `bestDay`: no Power, unlock, price or reward reads it
+- Full Data Reset clears it; a save without it reads 0; when present it is a whole Gold amount, 0 or more
 ```

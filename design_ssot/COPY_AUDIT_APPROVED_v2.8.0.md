@@ -148,8 +148,7 @@
 
 ## 3-4. 전망 안내
 
-**현재** (User 2026-09-24)
-> 손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.
+**폐지** (User 2026-09-30, v2.9.12: 읽기 판 제목이 `도착 시 전투 전망`으로 말한다 — UI_UX §TUTORIAL — COACH DIET)
 
 ---
 
@@ -168,38 +167,33 @@
 
 ## 3-7. TUTORIAL / COACH — USER APPROVED EXACT COPY
 
-The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-24: the
-first SALE teaches five marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, STATS (능력치, User 2026-09-24), 전망 (§3-4), PRICING;
-RETURNING and 가방 (§3-6) appear the first time their situation exists. SUPPLY, 대성공 and 만반의 준비 are retired
-(User 2026-09-30): the NIGHT coach marks §26-2 teach them after they first act).
+The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-30, v2.9.12 — UI_UX
+§TUTORIAL — COACH DIET: the first SALE teaches two marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY) and STATS; 가방
+(§3-6) appears after the first sale and RETURNING on the first returning customer. PRICING moves after the fact (§26-3);
+HAZARD and 전망 (§3-4) are retired, as SUPPLY, 대성공 and 만반의 준비 were (§26-2)).
 
-ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY → 발주 확정 (§3-2) → 후보 교환
-(COPY_WORLD_VOICE §TUTORIAL COACH COPY). The `gold` mark (`보유 골드와 현재 발주 후 잔액을 확인한다.` on
-`#order-register`) is retired; the register reads itself.
+The first ORDER keeps 발주 확정 (§3-2) alone (User 2026-09-30, v2.9.12); GATES, STOCK, OFFER, QUANTITY and 후보 교환 are
+retired, and the `gold` mark stays retired.
 
-### PRICING (User 2026-09-24, v2.9.0)
-> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.
-
-### HAZARD
-> 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
+Retired 2026-09-30 (kept here as the superseded wording):
+> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. (PRICING)  
+> 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다. (HAZARD)
 
 ### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
 > 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
 
-### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0)
+### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0; kept 2026-09-30)
 > 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.
 
-### GATES (User 2026-09-24, v2.9.0: anchor = the ORDER 오늘 brief block)
-> 오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.
+Also retired 2026-09-30 (superseded wording; the §8-0 category sentence stays where §8-0 puts it):
+> 오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다. (GATES)  
+> 창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다. (STOCK)  
+> 음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화. (OFFER)  
+> 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다. (QUANTITY)
 
-### STOCK (User 2026-09-29, v2.9.11: anchor = the ORDER 창고 summary, right after GATES — the first Day's opening stock)
-> 창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.
-
-### OFFER (User 2026-09-24, v2.9.0: anchor = the first offer row; the category grammar, taught once — the same sentence as §8-0)
-> 음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.
-
-### QUANTITY
-> 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
+### 표기 두 곳 (User 2026-09-30, v2.9.12 — 은퇴한 코치 대신 화면이 말한다)
+> 창고 · 본사 기본 상품 {N}종 (DAY 1 ORDER 창고 머리, 본사 기본 재고만 있을 때)  
+> 도착 시 전투 전망 (SALE 읽기 판 제목)
 
 ---
 
@@ -240,6 +234,16 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 > 발주 자금이 부족합니다. {N}G 부족.
 > 창고 칸이 부족합니다.
 > 오늘 공급 최대 수량입니다.
+
+---
+
+## 3-10. 게이트 등급 · 화염 게이트 (User 2026-09-30, v2.9.12)
+
+(규칙 owner UI_UX §GATE TIER / FIRE GATE TUTORIAL. 아침 게이트 판, 처음 그런 게이트가 나올 때 한 번씩)
+
+**현재**
+> II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.  
+> 화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.
 
 ---
 
@@ -451,6 +455,11 @@ SALE 목적지 판(폰, User 2026-09-25): 첫 줄은 `{위험}`과 `대응 {N} �
 > {N}명 · {Gate}
 
 게이트별 수는 손님이 밝힌 목적지 기준이며 이름·직업·특성·소지금은 붙지 않는다 (rule owner: ECONOMY_ORDER / UI_UX).
+
+**게이트 임시 폐쇄가 있는 날** (User 2026-09-30)
+> … · {닫힌 Gate} 오늘 폐쇄
+
+닫힌 게이트는 열린 게이트 뒤에 붙고, 인원은 붙지 않는다 (§13-52).
 
 ## 4-23. 사망 한도 — MORNING / ORDER 상단 정보줄
 
@@ -934,11 +943,26 @@ User 2026-09-28, v2.9.11: 명예 모험가 액자 65% → 75%, 길드 추천 매
 
 ## 10-3. END — 다회차 한 줄
 
-(User 2026-09-26, v2.9.4; 규칙 owner UI_UX §END — REPLAY NUDGE. 둘 중 하나만, 해금이 없을 때만)
+(User 2026-09-26, v2.9.4; 규칙 owner UI_UX §END — REPLAY NUDGE. 셋 중 하나만, 해금이 없을 때만. 세 번째 줄 User 2026-09-30)
 
 **현재**
 > 점포 자본으로 새 장식을 들일 수 있다.  
-> 지금까지 가장 오래 버틴 점포다 · DAY {N}
+> 지금까지 가장 오래 버틴 점포다 · DAY {N}  
+> 지금까지 가장 많이 판 점포다 · 총매출 {N}G
+
+---
+
+## 10-4. END — 이 점포의 기록
+
+(User 2026-09-30, v2.9.12, A안; 규칙 owner UI_UX §END — THIS RUN BLOCK. `지금까지 연 점포` 다음, `점포 자본 정산` 앞)
+
+**현재** (첫 줄은 블록 제목, 나머지는 라벨 · 값)
+> 이 점포의 기록  
+> 버틴 날 · DAY {N}  
+> 손님 · {N} · 단골 {N}  
+> 돌아오지 못한 사람 · {N}  
+> 가장 성장한 손님 · {이름} Lv.{N}  
+> 원정 · {N}건 · 대성공 {N} (원정이 없으면 행 없음)
 
 ---
 
@@ -1937,6 +1961,11 @@ User 2026-09-28, v2.9.11: 명예 모험가 액자 65% → 75%, 길드 추천 매
 **현재 Function**
 > 오늘 열린 게이트 1곳 폐쇄
 
+**닫힌 게이트 표시** (User 2026-09-30)
+> 오늘 폐쇄
+
+MORNING 게이트 판의 도장, `위험 보기` 창의 판, ORDER `오늘` 줄의 `{게이트 이름} 오늘 폐쇄`.
+
 ---
 
 ## 13-53. 길드 훈련 주간
@@ -2841,6 +2870,11 @@ The D0 Boss objective appears after the first support choice as a separate Boss-
 > 원정대 선택 (발주 단계 → 명단 단계로 넘어가는 도크 버튼, 그리고 수첩 하단의 편성 버튼)  
 > 원정대에서 빼기 (이미 편성된 모험가의 수첩 하단 버튼)
 
+**D30 원정대 후보 · 자세히 보기** (User 2026-09-30, v2.9.11)
+> 원정대 후보 보기 (마지막 발주의 도크 버튼, 그리고 발주 중 연 수첩 하단의 돌아가기 버튼)  
+> 원정대 후보 (보기 전용 후보 창 제목, 안내는 `최대 3명까지 출전할 수 있다.` 그대로)  
+> 자세히 보기 (마왕성 준비에서 보급 중인 모험가의 수첩을 여는 버튼, 수첩 하단은 `돌아가기`)
+
 **3명 미만 확정 확인**
 > **3명보다 적은 인원으로 출전할까요?**  
 > 선택한 {N}명만 마왕성으로 향합니다.
@@ -2915,3 +2949,13 @@ The three Rare Reference customers and their lines were removed before a paid re
 > 건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.
 > 준비가 넉넉하면 대성공이 난다. 대성공은 가게에도 보너스 골드를 남긴다.
 > 사망이 쌓여 한도에 닿으면 소문이 퍼져 영업이 끝난다.
+
+## 26-3. SALE 가격 사후 안내 (User 2026-09-30, v2.9.12)
+
+**노출 위치**
+> SALE에서 그 일이 계정에서 처음 일어났을 때 `점주 안내` 코치 말풍선으로, 한 번씩 (rule owner: UI_UX §SALE PRICE
+> LESSONS). 첫 바가지 거절은 거절된 가격 키 위, 첫 50% 판매는 그 판매의 변화 줄(`단골도 +N · 소지금 A → B`) 위.
+
+**현재**
+> 바가지는 거절될 수 있고 단골도가 깎인다.  
+> 할인은 단골도를 크게 올린다.

@@ -2,8 +2,8 @@
 
 DOC=PRESENTATION_PRINCIPLES
 OWNER=presentation_system,presentation_principles,visual_construction,asset_quality,ornament_budget,audio_presentation,visual_review
-DOC_VERSION=2.9.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/PRESENTATION_SYSTEM_v2.8.0.md,history/PRESENTATION_POLISH_v2.8.0.md,history/PRESENTATION_POLISH_BATCH1_v2.8.0.md,history/PRESENTATION_POLISH_BATCH2_v2.8.0.md,history/PRESENTATION_POLISH_BATCH3_v2.8.0.md,history/PRESENTATION_POLISH_BATCH4_v2.8.0.md,history/PRESENTATION_POLISH_BATCH5_v2.8.0.md
 
@@ -567,6 +567,7 @@ A unique full track for every phase is not required.
 
 Existing mute / BGM / SFX ownership remains authoritative.
 - critical decision / result cues > ordinary action cues > utility cues > BGM / ambience
+  (the levels that hold this, cue by cue: UI_UX §AUDIO FEEDBACK — SFX LEVELS, User 2026-09-29)
 - rapid-repeat controls must not build into harsh overlapping sound
 - background / visibility transitions must not leak or duplicate playback
 - audio changes do not mutate gameplay state and consume no Gameplay RNG

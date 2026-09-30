@@ -4,9 +4,11 @@
 //   - the join is scheduled on the audio clock: the next pass starts at s exactly when the current one reaches e,
 //     the old pass fades out over `xf` and the new one fades in (5 ms, BOSS 1 s) - checked by releasing the
 //     2 s-ahead pass timer early instead of waiting three minutes
-//   - one track at a time; a phase change fades the old track out
+//   - one track at a time; a phase change fades the old track out, and the next one starts only after that fade
+//   - leaving the ending for the next store (다음 점포 열기) does the same: the title comes in after the ending track's fade
 //   - the next phase's file is fetched ahead (bytes only), so the day's chain never waits on the network
 //   - mute and a hidden page stop the music; coming back resumes the same track
+//   - coming back to the page resumes a suspended context without waiting for a tap (iOS `interrupted`)
 //   - a file that cannot load falls back to the synthesised bed, never silence
 //   - no page error, no console error
 //   node tools/qa-bgm.cjs [out-dir]
@@ -21,7 +23,7 @@ function serve(){
 // them at once; nothing about the engine itself is changed.
 const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
  const st=AudioBufferSourceNode.prototype.start;
- AudioBufferSourceNode.prototype.start=function(when,offset){const b=this.buffer;
+ AudioBufferSourceNode.prototype.start=function(when,offset){const b=this.buffer;__bgm.ctx=this.context;
   if(b&&b.duration>30)__bgm.starts.push({when,offset,dur:b.duration,rate:b.sampleRate,ctxNow:this.context.currentTime});
   return st.apply(this,arguments);};
  const cv=AudioParam.prototype.setValueCurveAtTime;
@@ -45,7 +47,7 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   p.on('console',m=>{if(m.type()==='error'&&!(blocking&&/Failed to load resource/.test(m.text())))errors.push(m.text());});
   p.on('request',r=>{const m=r.url().match(/assets\/bgm\/(\w+)\.mp3/);if(m)fetched.push(m[1]);});
   await p.goto(`http://127.0.0.1:${PORT}/index.html`);
-  const music=await p.evaluate(()=>Sound.music);
+  const music=await p.evaluate(()=>Sound.music),fades=await p.evaluate(()=>Sound.fades);
   // a new account starts muted (META settings); the player turns sound on
   check('a new account starts muted and plays nothing',await p.evaluate(()=>Guild24.game.account.settings.muted&&__bgm.starts.length===0));
   await p.evaluate(()=>{Guild24.game.account.settings.muted=false;Guild24.render();});
@@ -64,7 +66,7 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   const keys=[['foundation','title'],['morning','morning'],['order','order'],['sell','sale'],['night','night'],['closing','close'],['final','boss'],['end-win','succ'],['end-fail','fail']];
   await p.evaluate(()=>Guild24.game.start('qa-bgm-1'));
   for(const [phase,key] of keys){
-   const before=await p.evaluate(()=>__bgm.starts.length),fetchedBefore=fetched.length;
+   const before=await p.evaluate(()=>__bgm.starts.length),fetchedBefore=fetched.length,swapAt=await p.evaluate(()=>__bgm.ctx?__bgm.ctx.currentTime:0);
    await p.evaluate(ph=>{const s=Guild24.game.run;if(ph.startsWith('end')){s.phase='end';s.win=ph==='end-win';}else s.phase=ph;
     Sound.sync(false,ph==='foundation'?'prep':ph,Guild24.game.account.settings);},phase);
    if(key==='title'){check('첫 점포지원 keeps the title playing (no refetch, no restart)',fetched.length===fetchedBefore&&await p.evaluate(b=>__bgm.starts.length===b,before));continue;}
@@ -73,6 +75,8 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
    // the day's chain (morning -> order -> sale -> night -> close) is fetched ahead, once; the rest when the phase comes
    const chain=['morning','order','sale','night','close'].includes(key);
    if(chain)check(`${key}.mp3 was fetched ahead of its phase, and only once`,fetched.slice(0,fetchedBefore).includes(key)&&fetched.filter(k=>k===key).length===1,fetched.join(','));
+   check(`${phase}: ${key} starts after the old track's ${fades.out} s fade-out (never two keys at once)`,ok&&s.when>=swapAt+fades.out-.05,
+    ok?`starts ${(s.when-swapAt).toFixed(2)} s after the change`:'no start');
    check(`${phase} plays ${key}.mp3 from its loop start`,ok&&fetched.includes(key)&&Math.abs(s.offset-music[key].s)<.002,
     ok?`offset ${s.offset.toFixed(3)} / s ${music[key].s}`:'no start');
   }
@@ -102,6 +106,11 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   check('unmuting resumes BOSS from the decoded buffer (no refetch)',await waitStart(n0+1)&&fetched.length===f0);
   s=await p.evaluate(n=>__bgm.starts[n],n0);
   check('and from where it was (past s, inside the loop)',s&&s.offset>music.boss.s+.5&&s.offset<music.boss.e,s&&s.offset.toFixed(3));
+  // a call or another app leaves the context suspended (iOS Safari: `interrupted`); coming back resumes it at once
+  await p.evaluate(()=>__bgm.ctx.suspend());
+  const woke=await p.evaluate(async()=>{const before=__bgm.ctx.state;document.dispatchEvent(new Event('visibilitychange'));
+   for(let i=0;i<20&&__bgm.ctx.state!=='running';i++)await new Promise(r=>setTimeout(r,50));return [before,__bgm.ctx.state];});
+  check('coming back to the page resumes a suspended context without a tap',woke[0]==='suspended'&&woke[1]==='running',woke.join(' -> '));
   // a phase change fades the old one out: the out gain ramps to 0 over BGM_SWAP; only one track is audible afterwards
   // (checked indirectly: the new start happens and no second track is started for the same key)
   // fallback: a file that cannot load plays the synthesised bed
@@ -111,11 +120,27 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   await p.waitForTimeout(2500);
   check('a file that cannot load falls back to the synthesised bed',await p.evaluate(o=>__bgm.osc>o,osc0));
   await p.unroute('**/assets/bgm/night.mp3');blocking=false;
-  // the real app key through render(): a failed ending on the ending screen
+  // the real app key through render(): arriving at a failed ending from NIGHT holds NIGHT until the result lands, then the
+  // ending cue and FAIL (User 2026-09-29) - the music never tells the result before the screen does
+  await p.evaluate(()=>{Guild24.game.run.phase='night';Guild24.render();});await p.waitForTimeout(600);
+  await p.evaluate(()=>{window.__cues=[];const pl=Sound.play;Sound.play=(k,d)=>{__cues.push(k);return pl(k,d);};});
   const fe=fetched.length;
   await p.evaluate(()=>{const s=Guild24.game.run;s.phase='end';s.win=false;s.endReason='qa';Guild24.render();});
-  await p.waitForTimeout(800);
+  await p.waitForTimeout(120);
+  check('arriving at the ending, the music of the screen before plays on (no ending track, no ending cue yet)',
+   !fetched.slice(fe).some(k=>k==='fail'||k==='succ')&&await p.evaluate(()=>!__cues.includes('endfail')&&!__cues.includes('endwin')),fetched.slice(fe).join(','));
+  await p.waitForTimeout(700);
+  check('when the result lands, the ending cue plays and FAIL comes in',await p.evaluate(()=>__cues.includes('endfail'))&&fetched.slice(fe).includes('fail'),fetched.slice(fe).join(','));
   check('render() on a failed ending asks for fail.mp3 (and the title ahead) or keeps it decoded',fetched.slice(fe).every(k=>k==='fail'||k==='title'));
+  // User 2026-09-29 ("클리어하고 타이틀로 넘어오는데 브금 시작이 이상한데"): leaving the ending for the next store, the title
+  // comes in only after the ending track's fade-out - the two never sound at once (the deployed v2.9.11 started it on decode)
+  {await waitStart(await p.evaluate(()=>__bgm.starts.length));await p.waitForTimeout(400);
+   const n=await p.evaluate(()=>__bgm.starts.length);
+   const at=await p.evaluate(()=>{const b=document.querySelector('[data-action="new"]');const t=__bgm.ctx.currentTime;b&&b.click();return b?t:null;});
+   const ok=at!==null&&await waitStart(n+1),s=ok&&await p.evaluate(k=>__bgm.starts[k],n);
+   check(`다음 점포 열기: the title starts after the ending track's ${fades.out} s fade-out (never both at once)`,
+    !!s&&s.when>=at+fades.out-.05,s?`starts ${(s.when-at).toFixed(2)} s after the press`:'no start');
+   check('and at its loop start',!!s&&Math.abs(s.offset-music.title.s)<.002,s&&s.offset.toFixed(3));}
   check('no page or console error',errors.length===0,errors.slice(0,3).join(' | '));
  }finally{await browser.close();server.kill();}
  const failed=results.filter(x=>!x).length;

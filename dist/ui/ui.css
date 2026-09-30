@@ -87,6 +87,10 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
+/* iOS Safari (User 2026-09-29): a quick second tap (quantity +) must not zoom the page - pinch zoom stays - and a long
+   press on a portrait or painting does not open the save-image menu. */
+html{touch-action:manipulation}
+img{-webkit-touch-callout:none}
 body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-webkit-text-size-adjust:100%}
 /* v2.9.11 (User 2026-09-28): Korean breaks between words everywhere - 297 mid-word breaks across Events, Store Supports, the
    guide and settings (reports/text-audit-v2911.md); break-word still splits a token too long for its box. */
@@ -386,12 +390,33 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .board-rail.death-limit-row{margin:10px 16px 0}
 .board-rail.death-limit-row b{margin-left:0}
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the 오늘 line joins the floating rail only while its own block
-   is out of view; a rule and its own small label keep it apart from the Death count above it */
-.rail-today{display:none;flex:1 0 100%;margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #f0dcb24d;
- font:400 13px/1.4 var(--ui);letter-spacing:0;color:#f0dcb2;-webkit-font-smoothing:antialiased}
-.rail-today i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.12em;color:#c9ad7c;margin-right:8px}
-.rail-today em{font-style:normal;font-weight:600;color:#fff0c9}
-.board-rail.show-today .rail-today{display:block}
+   is out of view, and the ledger's 발주 후 last (v2.9.11 quick patch, User 2026-09-29) - the Death count and 오늘 are what
+   the order is read against, 발주 후 is the number each tap moves, so it sits nearest the rows being tapped.
+   User 2026-09-29: one type ladder for the whole box - every line is a small label (사망 / 오늘 / 발주 후) in one column and
+   its value in one face and size - on a tight box, a hairline between lines. */
+.board-rail.death-limit-row{display:block;padding:6px 12px}
+.death-limit-row .rail-line{display:grid;grid-template-columns:44px 1fr;column-gap:8px;align-items:baseline}
+.death-limit-row .rail-line i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.08em;color:#c9ad7c;-webkit-font-smoothing:antialiased}
+.death-limit-row .rail-line b{margin:0;font:500 13px/1.35 var(--ui);letter-spacing:0;color:#fff0c9;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.death-limit-row .rail-line b em{font-style:normal}
+.death-limit-row .rail-today,.death-limit-row .rail-gold{display:none;margin-top:4px;padding-top:4px;box-shadow:inset 0 1px 0 #f0dcb233}
+.board-rail.show-today .rail-today,.board-rail.show-gold .rail-gold{display:grid}
+.death-limit-row .rail-gold.short b{color:#e8907c}
+/* v2.9.11 quick patch (User 2026-09-29): the whole box - the Death line too - folds to a `요약` chip on its right and back;
+   the fold key sits at the box's top-right corner (a 44 px target through an invisible margin) */
+.death-limit-row .rail-fold{position:absolute;top:0;right:0;min-width:44px;min-height:34px;padding:0 10px;border:0;background:none;box-shadow:none;filter:none;
+ color:#c9ad7c;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.death-limit-row .rail-fold:after{content:'';border:5px solid transparent;border-bottom-color:currentColor;border-top-width:0}
+.death-limit-row .rail-chip{display:none}
+.death-limit-row.folded{width:max-content;margin-left:auto;padding:0}
+.death-limit-row.folded .rail-line{display:none}
+.death-limit-row.folded .rail-fold{position:static;min-height:40px;padding:0 12px}
+.death-limit-row.folded .rail-fold:after{border-bottom-width:0;border-top-width:5px;border-top-color:currentColor;border-bottom-color:transparent}
+.death-limit-row.folded .rail-chip{display:block;font:600 12px/1 var(--ui);letter-spacing:.08em;color:#f0dcb2}
+/* on a phone the menu pin sits over the stuck box's top-right corner, so the key and the folded chip keep clear of it
+   (a desk puts the pin outside the form; see the ORDER desk block) */
+.death-limit-row .rail-fold{right:26px}
+.death-limit-row.folded{margin-right:42px}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;
@@ -424,6 +449,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .stamp-line{display:inline-block;margin-top:8px;padding:4px 8px;font:600 12px/1.3 var(--ui);letter-spacing:.04em;
  color:#8a3f2c;box-shadow:inset 0 0 0 2px #8a3f2c;transform:rotate(-2deg)}
 .slip.event{padding-top:16px}
+/* User 2026-09-30: a Gate the day's Event closed - the same notice, faded, its edge grey, one red `오늘 폐쇄` stamp (the
+   stamp-line's own shape) where the Hazard rows would be; nothing else on it */
+.slip.gate.closed{--fam:#8a8170}
+.slip.gate.closed .crest{filter:grayscale(1);opacity:.55}
+.slip.gate.closed>b{margin-bottom:6px;color:#8a7d61;text-decoration:line-through;text-decoration-thickness:1px}
+.closed-stamp{display:inline-block;padding:4px 8px;font:600 12px/1.3 var(--ui);letter-spacing:.04em;color:#a8321f;
+ box-shadow:inset 0 0 0 2px #a8321f;transform:rotate(-2deg)}
 .slip.event .stamp-line{margin:0 0 6px;color:#2f7a4d;box-shadow:inset 0 0 0 2px #2f7a4d}
 .slip.event .body{display:block;font:400 13px/1.6 var(--ui);color:#5f5440}
 /* EVENT §3-1: what happened, then what it switched on. The situation keeps the line breaks
@@ -1220,7 +1252,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:2px 3px 0 #00000066,inset 0 0 0 1px #c6b894;transform-origin:left bottom;
  clip-path:polygon(0 0,100% 0,100% calc(100% - 4px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 4px))}
 .receipt-stub::before{content:'';display:inline-block;width:8px;height:8px;margin:0 7px 0 0;background:var(--gold);box-shadow:inset 0 0 0 2px #2c2418;vertical-align:-1px}
-@media(min-width:1024px){.receipt-stub{left:calc(50% + 12px)}}
+/* on the desk SALE (User 2026-09-30) the stub lands on the counter in the middle area, where the tray was pressed */
+@media(min-width:1024px){.receipt-stub{left:calc(50% - 110px)}}
 .tray-empty{margin:0;min-height:44px;display:flex;align-items:center;font:400 14px/1.3 var(--ui);color:#a2947c}
 .tray-item{display:flex;align-items:center;gap:10px}
 .tray-icon{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;
@@ -1240,7 +1273,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .next-decision{margin:4px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
 .counter-tray .tills{margin-top:8px;padding:0;position:static;background:none}
 .counter-tray .tills button{min-height:64px;padding:8px 2px}
-@media(min-width:1024px){.p-sale .counter-tray{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 24px}.p-sale .counter-tray>*{grid-column:2}}
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): folded, the tray keeps only its header line - the Item and the
    customer - so the shelf gets the room back; the whole folded strip is one button that opens it again. A desk never folds. */
 .p-sale .counter-tray{position:relative}
@@ -1615,6 +1647,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-closing .dock .stamp,.p-end .dock .stamp{margin:0 auto;width:min(100%,344px);min-width:0;
  min-height:64px;font:600 20px/1 var(--ui);white-space:nowrap}
 .p-closing .dock .stamp,.p-end .dock .stamp{text-shadow:0 2px 0 #5a221a}
+/* its own layer (v2.9.12): these screens centre a receipt whose rows are not whole pixels, so the Action often lands on a
+   half pixel; as a layer it is still drawn on whole pixels, and its pixel-art edge and 1px pressed cast stay hard (UI-Q-v29-44) */
+.p-closing .dock .stamp,.p-end .dock .stamp{will-change:transform}
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 /* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
@@ -2073,6 +2108,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;
  box-shadow:inset 0 4px 0 #d4695b,inset 0 -6px 0 #45150f,
   inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16}
+/* the last order carries two bars (User 2026-09-30: 원정대 후보 보기 beside 원정대 선택, the same bar): on a phone they share
+   one row at a smaller face rather than stacking two 64px bars over the order form; the desk keeps the full face */
+@media (max-width:1023px){.p-final .dock:has(.stamp+.stamp) .stamp{flex:1 1 auto;min-width:0;padding:0 8px;font-size:16px;letter-spacing:.02em;white-space:nowrap}}
 .p-final .dock .stamp:hover{background:#98342a;
  box-shadow:inset 0 4px 0 #e07a6b,inset 0 -6px 0 #4f1912,
   inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a}
@@ -2212,6 +2250,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .pfp.fallback{display:grid;place-items:center}
 /* the loadout: who is carrying what through the gate */
 .final-team{display:grid;gap:9px;margin-bottom:20px}
+/* 자세히 보기 under the supplied member's Stats: the notebook, a quiet text control (the END `도감에서 보기` weight) */
+.final-stats{display:grid}
+.final-stats .more{justify-self:end;min-height:44px;text-decoration:underline;text-underline-offset:3px}
 .final-member{display:block;width:100%;text-align:left;padding:11px 12px;background:#1c1512;border-radius:0;
  box-shadow:inset 0 0 0 2px #ffffff12}
 .final-member.active{background:#2a2116;box-shadow:inset 0 0 0 2px var(--gold)}
@@ -2290,23 +2331,57 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-list button.danger{margin-top:13px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .menu-list button.danger:hover{background:#6b322b}
-/* what is already on the shelf, on the form that decides what to add to it */
-/* BATCH 2A. The warehouse was a ringed grey panel dropped onto the paper. It is a section of
-   the same document now - full-bleed between two printed rules, on the form's own gutter. */
-.stock-brief{margin:0 0 2px;background:#2c241808;
- box-shadow:inset 0 2px 0 var(--paper-rule),inset 0 -2px 0 var(--paper-rule)}
-.stock-brief summary{display:flex;align-items:baseline;gap:9px;padding:9px 11px;cursor:pointer;
- font:600 12px/1 var(--ui);letter-spacing:.1em;color:#6b6350;list-style:none}
-.stock-brief summary::-webkit-details-marker{display:none}
-.stock-brief summary b{margin-left:auto;font:500 15px/1 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418;letter-spacing:0}
-.stock-brief summary i{font:400 12px/1 var(--ui);font-style:normal;color:#8a7d61;letter-spacing:0}
-.stock-brief ul{display:grid;gap:2px;padding:0 11px 10px}
-.stock-brief li{display:flex;align-items:center;gap:8px;font:400 13px/1.5 var(--ui);color:#5f5847}
-.stock-brief li b{font-weight:400;color:#2c2418}
-.stock-brief li span{margin-left:auto;font-variant-numeric:tabular-nums}
-.stock-brief li em{min-width:4.2em;text-align:right;font-style:normal;color:#8a7d61}
-.stock-brief li em.soon{color:#a8442f;font-weight:600}
-.stock-brief .none{padding:0 11px 10px;font:400 13px/1.5 var(--ui);color:#8a7d61}
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is off the 발주서, held apart like a game's storage - a
+   steel rack of 칸, one cell per slot the store has, a held unit in each (icon, days left), the empty cells the room left.
+   It reads apart from the 발주서 by material and value - the existing steel texture, dark against the paper - with one hard
+   cast edge and recessed read-only cells, no decorative stripe or stacked frame (PRESENTATION §Edge / material). Phone: a slim handle on top of
+   the dock (a row of the dock, so it covers no offer row) opening the rack as a sheet that rises from it, 45% of the
+   screen at most with its own scroll; the form above keeps scrolling and taking taps. Desk: a large rack beside the form. */
+.p-order{--rack:#4d5760;--cell:#252b31;--rack-ink:#eef2f4;--rack-mute:#b3bec7;--rack-soon:#ff9e82}
+.stock-side{display:none}
+.stock-head{display:flex;align-items:baseline;gap:8px;margin:0}
+.stock-head i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.08em;color:var(--rack-mute)}
+.stock-head b{font:500 13px/1.35 var(--ui);color:var(--rack-ink);font-variant-numeric:tabular-nums;letter-spacing:0}
+.stock-head em{font-style:normal;font:400 13px/1.35 var(--ui);color:var(--rack-mute)}
+.p-order .dock .stock-handle{display:flex;flex:1 0 100%;order:-1;align-items:center;min-height:44px;margin-top:-6px;padding:0 12px;
+ border:0;background:var(--tex-metal),var(--rack);color:var(--rack-ink);cursor:pointer;text-align:left;box-shadow:0 3px 0 #00000073}
+.p-order .dock .stock-handle:active{transform:translateY(2px);box-shadow:0 1px 0 #00000073}
+.stock-toggle{margin-left:auto;font:500 13px/1 var(--ui);color:var(--rack-ink)}
+.stock-toggle:after{content:'';display:inline-block;margin-left:7px;border:5px solid transparent;border-bottom-color:currentColor;
+ border-top-width:0;vertical-align:2px}
+.stock-handle[aria-expanded="true"] .stock-toggle:after{border-bottom-width:0;border-top-width:5px;border-top-color:currentColor;border-bottom-color:transparent}
+.stock-sheet{position:absolute;left:0;right:0;bottom:100%;z-index:7;max-height:45dvh;overflow-y:auto;overscroll-behavior:contain;
+ padding:10px var(--gutter) 12px;background:var(--tex-metal),var(--rack);box-shadow:0 -4px 0 #00000059}
+.stock-sheet[hidden]{display:none}
+/* the rack: square cells, a held unit's icon centred, its days left in the corner */
+.wh-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:5px;margin:0;padding:0;list-style:none}
+.wh-slot{position:relative;aspect-ratio:1;display:grid;place-items:center;background:var(--cell);box-shadow:inset 2px 2px 0 #00000080}
+.wh-slot.empty{background:#30383f;box-shadow:inset 1px 1px 0 #0000004d}
+.wh-slot>svg,.wh-slot>.item-art{width:62%;height:auto}
+.wh-slot em{position:absolute;right:2px;bottom:1px;font:600 10px/1 var(--ui);font-style:normal;color:var(--rack-mute);
+ text-shadow:0 1px 0 #000}
+.wh-slot em.soon{color:var(--rack-soon)}
+/* the rows under an open sheet can still be scrolled up above it */
+.p-order:has(#stock-sheet:not([hidden])) .stage-scroll{padding-bottom:calc(45dvh + 30px)}
+/* desk: the 발주서 is no longer centred; it takes the left, and the warehouse is a large rack on its right */
+@media(min-width:1024px){
+ .p-order .stage-scroll{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);column-gap:24px;align-items:start}
+ .p-order .order-desk{min-width:0}
+ .p-order .order-desk .form{max-width:none;margin:0}
+ .death-limit-row .rail-fold{right:0}
+ .death-limit-row.folded{margin-right:16px}
+ /* set below the menu pin, which sits over the stage's top-right corner */
+ .stock-side{display:block;position:sticky;top:46px;margin-top:46px;padding:12px 16px 16px;background:var(--tex-metal),var(--rack);
+  box-shadow:0 4px 0 #00000080}
+ .stock-side .stock-head{padding:4px 0 10px;margin-bottom:10px;box-shadow:inset 0 -1px 0 #ffffff1a}
+ .stock-side .stock-head i{font-size:12px}
+ .stock-side .stock-head b{font-size:18px}
+ .stock-side .stock-head em{font-size:15px}
+ .stock-side .wh-slots{grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:6px}
+ .stock-side .wh-slot em{font-size:11px;right:3px;bottom:2px}
+ .p-order .dock .stock-handle,.p-order .dock .stock-sheet{display:none}
+}
+}
 .lost-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:11px;
  padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;
  font:400 15px/1.4 var(--ui);color:#efe3c8}
@@ -2457,6 +2532,42 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-prep .prep-note .welcome-title{margin-bottom:6px}
  .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.6}
 }
+/* UI_UX §SHORT PHONE (User 2026-09-29, iPhone SE: a 375x548 stage with Safari's bars). The painting is cropped top and
+   bottom, its ceiling comes up under the title and the board keeps only the wall between the ceiling and the counter:
+   the note takes the tighter step the short desk takes (same type, less air), so the status line stays on the board, and
+   the 간판 keeps the gap from the title as it does on the wide framing - the title is where its painted spot lands */
+@media (max-height:639px) and (orientation:portrait){
+ .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
+ .p-morning.p-prep .prep-note{padding:5px 12px 3px}
+ .p-prep .prep-note .welcome-title{margin-bottom:2px}
+ .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.4}
+ /* the title a step smaller, so an empty 간판's tag - wider than the piece once it carries `들일 수 있음` - has room beside
+    it on a 360 phone (User 2026-09-29, a Galaxy at 360x597); that tag runs from the piece's edge nearest the title out
+    toward the screen's edge, so however wide it grows it never reaches the title, and hangs from its spot's top (as the
+    empty plaque's does), so it grows down toward the board rather than up over the build mark */
+ .p-prep .opening-logo{width:min(180px,50vw)}
+ .p-prep .deco-layer{--sign-l:calc(50cqw - min(180px,50vw) / 2)}
+ .p-prep .prep-slot.sign.empty .slot-tag{left:auto;right:0;top:0;transform:none}
+ /* an equipped 간판's tag runs right under it, level with the branch plate, so the piece keeps the full title's gap */
+ .p-prep .decoplate.sign:not(.empty){--sign-l:calc(50cqw - min(210px,58vw) / 2)}
+ /* and it hangs under the build mark, not over it, where the crop takes the painted ceiling off the top */
+ .p-prep .decoplate.sign{top:max(calc(env(safe-area-inset-top) + 26px),calc(50cqh + (var(--y) - .5) * var(--ph)))}
+}
+@media (max-height:699px) and (orientation:portrait){
+ /* SALE (User 2026-09-30, reports/v3-prep-measure-v2911.md §4): a filled counter tray left 2 / 1 / 0 shelf rows above it
+    at 640 / 597 / 548. On a portrait stage under 700 high the tray takes one tighter step - the same lines, keys and
+    order, less air and a smaller icon - so the shelf keeps more of the column; the keys stay 44 px or more */
+ .p-sale .counter-tray{padding-top:5px;padding-bottom:6px}
+ .p-sale .tray-item{gap:8px}
+ .p-sale .tray-icon{width:30px;height:30px}
+ .p-sale .tray-what b{font-size:14px;line-height:1.2}
+ .p-sale .tray-what>span,.p-sale .tray-who{font-size:11px;line-height:1.25}
+ .p-sale .tray-delta{margin-top:3px;font-size:13px;line-height:1.35}
+ .p-sale .counter-tray .tills{margin-top:5px;gap:6px}
+ .p-sale .counter-tray .tills button{min-height:48px;padding:4px 2px;gap:2px}
+ .p-sale .counter-tray .tills em,.p-sale .counter-tray .tills small{font-size:11px;line-height:1.15}
+ .p-sale .counter-tray .tills strong{font-size:18px}
+}
 .p-prep .slot-tag i{font-style:normal;color:#b99b6a}
 .p-prep .slot-tag b{font-weight:600}
 .p-prep .slot-tag .can-buy{margin-top:2px;padding:.27em .55em;font:600 min(20px,max(11px,1.72cqh,1.4cqw))/1 var(--ui);font-style:normal;color:#e0c89c;
@@ -2474,7 +2585,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* under the title, in the opening's own column - not placed on the counter like MORNING's */
 .p-morning.p-prep .opening .branchplate{position:static;top:auto;right:auto;bottom:auto;left:auto;transform:none;white-space:nowrap;
  font-size:12px;padding:.25em .75em}
-/* the two pixel-face plates step with the stage (the store is the size container, at most 1120 wide on a desk): 12 -> 18 px
+/* the two pixel-face plates step with the stage (the store is the size container, at most the stage cap wide on a desk): 12 -> 18 px
    (crisp on a 2x screen) on a stage 800 high or 1000 wide, 24 px on a stage 1000 by 1000; the Capital plate 17 -> 24 px on
    the same stages as the first step */
 @container (min-height:800px) or (min-width:1000px){
@@ -2619,7 +2730,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .store-capital .coin-mark{flex:0 0 auto;width:16px;height:13px;
  background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='16' height='13' shape-rendering='crispEdges'><g fill='%234a3410'><rect x='4' y='0' width='8' height='1'/><rect x='1' y='1' width='1' height='1'/><rect x='14' y='1' width='1' height='1'/><rect x='0' y='2' width='1' height='1'/><rect x='15' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='14' y='3' width='1' height='1'/><rect x='4' y='4' width='8' height='1'/><rect x='1' y='5' width='1' height='1'/><rect x='14' y='5' width='1' height='1'/><rect x='0' y='6' width='1' height='1'/><rect x='15' y='6' width='1' height='1'/><rect x='1' y='7' width='1' height='1'/><rect x='14' y='7' width='1' height='1'/><rect x='4' y='8' width='8' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='14' y='9' width='1' height='1'/><rect x='0' y='10' width='1' height='1'/><rect x='15' y='10' width='1' height='1'/><rect x='1' y='11' width='1' height='1'/><rect x='14' y='11' width='1' height='1'/><rect x='4' y='12' width='8' height='1'/></g><g fill='%23f2cf6b'><rect x='2' y='1' width='12' height='1'/></g><g fill='%23ffe79a'><rect x='1' y='2' width='3' height='1'/><rect x='8' y='2' width='7' height='1'/></g><g fill='%23fff6cf'><rect x='4' y='2' width='4' height='1'/></g><g fill='%23d0a134'><rect x='2' y='3' width='12' height='1'/><rect x='2' y='5' width='12' height='2'/><rect x='1' y='6' width='1' height='1'/><rect x='14' y='6' width='1' height='1'/><rect x='2' y='9' width='12' height='2'/><rect x='1' y='10' width='1' height='1'/><rect x='14' y='10' width='1' height='1'/></g><g fill='%2395681c'><rect x='2' y='7' width='12' height='1'/><rect x='2' y='11' width='12' height='1'/></g></svg>") center/16px 13px no-repeat}
 .decoration-panel .none{color:#7d7466}
-.settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
+/* the END `이 점포의 기록` block (UI_UX §END — THIS RUN BLOCK) heads the same way as the settlement below it */
+.settlement h4,.this-run h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}
 .unlocks h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 5px;
@@ -2741,7 +2853,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     base sits at ~83%), and the name takes the open wall to the left, clear of the axis. One
     rule for every Boss. */
  .p-final[data-boss] .stage-scroll{--room-size:100% auto;
-  --room-h:calc(min(100vw,1120px) * .5628);--room-clear:calc(var(--room-h) * .8);--room-end:var(--room-h)}
+  --room-h:calc(min(100vw,var(--stage-max,1440px)) * .5628);--room-clear:calc(var(--room-h) * .8);--room-end:var(--room-h)}
  .p-final[data-boss] .gate-zero{display:block;position:relative;text-align:center;
   padding-top:max(16px,calc(var(--room-h) * .83 - min(42vh,360px)));padding-bottom:22px}
  .p-final[data-boss] .gate-zero .boss-face{display:flex;justify-content:center;margin:0}
@@ -2789,7 +2901,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   .mobile-only { display: none; }
 }
 :root{--gutter:36px}
- .stage{max-width:1120px;margin:0 auto;box-shadow:0 0 0 1px #ffffff0f}
+ /* the desk stage's width cap (User 2026-09-30: 1120 -> 1440, every desk screen) - one token, read wherever a desk
+    layout sizes itself by the stage. It never runs wider than 1.65 times the stage's height - the widest shape the painted
+    rooms were checked at (1120 x 680): a 1366 x 680 laptop browser keeps the 1120 stage, where a wider one cropped the room
+    until the Capital plate sat on the Action */
+ :root{--stage-max:min(1440px,165dvh)}
+ .stage{max-width:var(--stage-max);margin:0 auto;box-shadow:0 0 0 1px #ffffff0f}
+ /* the one exception: the Boss room of FINAL is drawn at the stage's width, so a wider stage drew it taller and pushed the
+    hazards and the last order under the fold (1280 and 1920 captures) - it keeps the old cap */
+ .p-final[data-boss]{--stage-max:1120px}
+ /* and NIGHT's window band is drawn at the width it is given against a fixed sky line: wider, it grew taller and the rail
+    covered its moon and lamp - the band keeps the old width, centred, on the wider stage */
+ .p-night .nightband{max-width:1120px;margin:0 auto}
+ .p-night{background:#0e0a06} /* the band's own edge colour, so its sides read as the same dark room */
  .room{max-height:50dvh}
  .notices{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
  .form{max-width:860px;margin:0 auto}
@@ -2877,16 +3001,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    1048px of width spent on a single column. The two halves sit side by side here, so the
    shelf is in view while the forecast it answers is still on screen. */
 @media(min-width:1024px){
- /* The stat/forecast column and the shelf column are independent content, so each stays
-    exactly as tall as its own content instead of being stretched to match the other - a
-    stat grid + Trait rows column no wider (taller) than it needs, and no forced gap
-    between the stat grid and the Trait rows to make the two columns line up. */
- .p-sale .stage-scroll{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-  gap:24px;align-content:start;align-items:start}
- /* Reverts the mobile `display:contents` unwrap: on the desktop grid this column is one
-    real box (one grid cell) holding the stat/forecast dossier and the Trait rows stacked
-    in their own normal document order, which is what keeps them exactly as tall as their
-    own content - the `order` values above are flex-only and do nothing here. */
  /* CLOSING / the two endings on a desk. The result here IS an object - a receipt, 344px of
     paper - and the dock is a bar pinned to the floor of a 880px stage. At a phone width those
     two measures nearly agree, so the day's last control reads as the receipt's own next step.
@@ -2947,7 +3061,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-end .print .block{padding:8px 0}
  .p-end .print .row{font-size:15px;line-height:1.45;padding:3px 0}
  .p-end .print .row b{font-size:18px}
- .p-end .settlement h4{font-size:12px;margin-bottom:9px}
+ .p-end .settlement h4,.p-end .this-run h4{font-size:12px;margin-bottom:9px}
  .p-end .end-tape .opened b{font-size:16px}
  .p-end .end-tape .bare{font-size:15px;margin-top:4px}
  .p-end .end-tape{margin-bottom:16px}
@@ -2955,26 +3069,36 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* a short till still names its own way out, under the same paper */
  .p-closing .dock{flex-wrap:wrap}
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
- .p-sale .dossier-col{display:block;grid-column:1;margin:0}
- .p-sale .shelf{grid-column:2;margin:0}
- /* UI_UX §SALE — DESK LAYOUT (User 2026-09-25, v2.9.0): below the counter band the desk is two areas. The dossier
-    column is its own area running down to the dock; the shelf column holds the shelf on the wood and, under it, the
-    counter tray - the tray takes only the shelf column's width. Each column scrolls on its own, so working down the
-    shelf never moves or empties the dossier side. The scrolled column of the phone is no box here. */
- .stage.p-sale{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-  grid-template-rows:auto auto auto minmax(0,1fr) auto auto;
-  grid-template-areas:"task task" "front front" "edge edge" "left shelf" "left tray" "dock dock"}
- .p-sale>.task-line{grid-area:task}
- .p-sale>.front{grid-area:front}
- .p-sale>.counter-edge{grid-area:edge}
- .p-sale>.dock{grid-area:dock}
- .p-sale>.stage-scroll{display:contents}
- .p-sale .dossier-col,.p-sale .shelf-col{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+ /* the desk SALE's ledger is one real box (the phone unwraps it), its Traits under its stats in document order */
+ .sale-desk .dossier-col{display:block;margin:0}
+ .sale-desk .shelf{margin:0}
+ /* PC SALE (User 2026-09-30, UI_UX §SALE — DESK LAYOUT): the desk's own SALE (app.js saleDesk). The customer stands
+    large behind the counter; under the counter top the player's side is three areas - the customer's ledger, the counter
+    tray in the middle on the counter, the shelf - each its own height, the ledger and the shelf scrolling on their own. */
+ .stage.p-sale.sale-desk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr) minmax(0,1fr);
+  grid-template-rows:auto auto auto minmax(0,1fr) auto;
+  grid-template-areas:"task task task" "front front front" "edge edge edge" "left tray shelf" "dock dock dock"}
+ .sale-desk>.task-line{grid-area:task}
+ .sale-desk>.front{grid-area:front}
+ .sale-desk>.counter-edge{grid-area:edge}
+ .sale-desk>.dock{grid-area:dock}
+ .sale-desk>.stage-scroll{display:contents}
+ .sale-desk .dossier-col,.sale-desk .shelf-col{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
   background:var(--tex-wood),#2b2013}
- .p-sale .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
- .p-sale .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
- .p-sale>.counter-tray{grid-area:tray;display:block;padding-left:12px}
- .p-sale>.counter-tray>*{grid-column:auto}
+ .sale-desk .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
+ .sale-desk .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
+ /* the counter itself: the mat the tray lies on, the same dark well as the tray, so an empty counter reads as the counter */
+ .sale-desk>.counter-mat{grid-area:tray;background:#15100a;box-shadow:inset 0 4px 0 #000000b3,inset 4px 0 0 #00000066,inset -4px 0 0 #00000066}
+ .sale-desk>.counter-tray{grid-area:tray;align-self:start;display:block;padding:14px 16px 16px;box-shadow:none;background:none}
+ .sale-desk>.counter-tray>*{grid-column:auto}
+ .sale-desk>.counter-tray .tills{margin-top:14px}
+ /* the customer about 1.3x the old desk card (390 px at 1280 x 880, 400 at most), as tall as the band allows over a
+    ledger / tray / shelf that keeps at least 300 px (a 1024 x 768 desk included) */
+ .stage.sale-desk .front{--cardw:max(200px,min(400px,calc(100dvh - 490px)));grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:end;column-gap:20px}
+ .sale-desk .front-side{max-width:640px}
+ .sale-desk .front>.line-up{grid-column:3;grid-row:1;align-self:end;padding-bottom:12px}
+ .sale-desk .front>.line-up .wait:first-child{margin-left:0}
  
 }
 

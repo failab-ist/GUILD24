@@ -789,3 +789,24 @@ New:
 - 게이트 순례 주간
 - 게이트 순례 주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
 ```
+
+
+## v2.9.11 quick patch — 1+1 ends on a Reroll (User 2026-09-29)
+
+New:
+
+```new
+행사 상품은 그날 첫 발주 후보에서만 지정한다. 발주 교환을 하면 행사가 끝나고, 새 후보에는 1+1이 없다 (User 2026-09-29:
+교환을 반복해 원하는 상품에 1+1을 붙이는 것은 이 이벤트의 노림수가 아니다).
+- a Reroll keeps the one special slot and draws its Item again (User 2026-09-29: it takes an Order slot at +35%, so a
+fresh draw is a fair cost, not an exploit)
+```
+
+
+## closed Gate (User 2026-09-30)
+
+New:
+
+```new
+닫힌 게이트는 그날 목록에서 사라지지 않는다(User 2026-09-30): MORNING 게이트 판 · ORDER `오늘` 줄 · `위험 보기` 창에 `오늘 폐쇄`로 남는다. 판은 흐리게, 이름에 취소선, 위험 줄 없이 도장 하나만 둔다. 방문 · 원정 · 발주 계산에는 들어가지 않는다.
+```

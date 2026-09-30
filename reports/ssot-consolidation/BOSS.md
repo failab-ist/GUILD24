@@ -455,3 +455,13 @@ to 200 by decision.)
 2 = 171
 3 = 149
 ```
+
+
+## v2.9.12 FIRE pair pointer (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30, v2.9.12.) Every Boss's effective Boss Power takes `+18` when the Final Family Pair holds FIRE, on top of
+its own rule -> `FINAL_EXPEDITION_v2.8.0.md` §FAMILY-PAIR BALANCE AUDIT (FIRE PAIR).
+```

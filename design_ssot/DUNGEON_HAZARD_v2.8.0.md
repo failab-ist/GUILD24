@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.11
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_HAZARD_v2.8.0-patch.md,history/DUNGEON_HAZARD_v2.7.0.md,history/DUNGEON_HAZARD_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_HAZARD.md
@@ -57,7 +57,7 @@ wet=flavorOnly
 theme=[fire,highCombatPower]
 hazards=[fire]
 
-fire -> 기동 (User 2026-09-24, v2.9.0)
+fire -> 정신 (User 2026-09-24 revision 5, v2.9.0)
 secondAxis=higher Dungeon Combat Power
 secondAxisIsHazard=NO
 
@@ -76,7 +76,7 @@ theme=[fear,dark]
 familyTag=undead
 
 fear -> 정신
-dark -> 정신 (User 2026-09-24, v2.9.0)
+dark -> 기동 (User 2026-09-24 revision 3, v2.9.0)
 
 T1=fear
 T2=fear+dark

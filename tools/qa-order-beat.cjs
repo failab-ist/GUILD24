@@ -1,5 +1,6 @@
 // v2.9.2 H3 ORDER confirm evidence. Capture-only (not in qa:runtime): a seeded Run is played to a Day-2 ORDER, the till is
-// funded and the cart holds K SKUs (1 / 3 / 6), with the warehouse list open or folded; the real 발주 확정 key is pressed.
+// funded and the cart holds K SKUs (1 / 3 / 6), with the warehouse list open or folded (v2.9.11 quick patch: the list is the
+// ORDER — WAREHOUSE PANEL - the desk column, always open, or the phone sheet); the real 발주 확정 key is pressed.
 // Without QA_FRAMES: a settled reduced-motion capture 500 ms after the press (plus the pre-press sheet); with QA_FRAMES the
 // press itself with motion on (anime slowed QA_SLOW times, default 10; the clock runs from before the press).
 //   QA_FRAMES=0,90,160,230,320,400 node tools/qa-order-beat.cjs <out-dir> [widths] [cases]   cases: k1-open,k3-open,k6-open,k3-fold
@@ -38,7 +39,6 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
     if(n<k)throw Error('only '+n+' distinct SKUs on the sheet for '+k);
     g.save();Guild24.render();},[k,open]);
    await p.waitForTimeout(400);
-   await p.evaluate(()=>{const b=document.querySelector('.p-order .stock-brief');if(b)b.scrollIntoView({block:'center'});});
    await p.waitForTimeout(200);
    if(motion)await p.evaluate(`(()=>{window.__live=true;anime.engine.speed=1/${SLOW};})()`);
    if(!motion)await p.screenshot({path:path.join(OUT,`order-${kind}-${width}-pre.png`)});
@@ -47,7 +47,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    if(motion&&!process.env.QA_DOM){for(const ms of FRAMES){await p.waitForFunction(([t,x])=>performance.now()-t>=x,[t0,ms*SLOW]);
      await p.screenshot({path:path.join(OUT,`order-${kind}-${width}-f${String(ms).padStart(4,'0')}.png`)});}
     console.log('FRAMES '+kind+' @'+width);}
-   if(process.env.QA_DOM){await p.waitForTimeout(motion?FRAMES.at(-1)*SLOW+300:500);console.log('DOM '+kind+' @'+width+' motion='+motion+' '+await p.evaluate(()=>{const f=document.querySelector('.p-order .form');return JSON.stringify([f.querySelector('.stock-brief').innerText,f.querySelector('#order-register').innerText,[...f.querySelectorAll('.stock-brief li')].map(li=>getComputedStyle(li).opacity+'/'+getComputedStyle(li.firstElementChild).opacity+'/'+getComputedStyle(li.firstElementChild).transform).join(',')]);}));}
+   if(process.env.QA_DOM){await p.waitForTimeout(motion?FRAMES.at(-1)*SLOW+300:500);console.log('DOM '+kind+' @'+width+' motion='+motion+' '+await p.evaluate(()=>{const f=document.querySelector('.p-order .form'),side=document.querySelector('.p-order .stock-side'),w=side&&side.getClientRects().length?side:document.querySelector('#stock-sheet');return JSON.stringify([document.querySelector('.p-order .stock-head').innerText+' / '+w.innerText,f.querySelector('#order-register').innerText,[...w.querySelectorAll('li')].map(li=>getComputedStyle(li).opacity+'/'+getComputedStyle(li.firstElementChild).opacity+'/'+getComputedStyle(li.firstElementChild).transform).join(',')]);}));}
    else if(!motion){await p.waitForTimeout(500);await p.screenshot({path:path.join(OUT,`order-${kind}-${width}.png`)});console.log('CAPTURE '+kind+' @'+width);}
    await ctx.close();}
  }finally{await browser.close();server.kill();}

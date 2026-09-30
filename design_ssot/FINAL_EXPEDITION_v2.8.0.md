@@ -2,8 +2,8 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.9.3
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/FINAL_EXPEDITION_v2.8.0-patch.md,history/FINAL_EXPEDITION_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/FINAL_EXPEDITION.md
@@ -84,6 +84,7 @@ D25 does not grant guaranteed Counter Items, free stock, or a special Final shop
 Final Hazard Pool에는 각 Family의 authoritative **Hazard key**만 들어간다.
 Family의 non-Hazard second axis는 별도 Final modifier로 중복 추가하지 않는다.
 예: FIRE의 higher Dungeon Combat Power는 Final Hazard Pool에 들어가지 않으며, 마왕 자체의 강함 축은 effective Boss Power가 소유한다.
+(User 2026-09-30) 대신 FIRE가 든 Pair는 effective Boss Power에 `+18`을 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
 
 Family의 T2 정의 자체는 이 문서에서 재정의하지 않는다.
 
@@ -143,6 +144,12 @@ ordinary order form, optional, confirmed on its own 발주 확정; `원정대 �
 선택 a roster card opens that adventurer's notebook (Stats, Traits, equipment, condition, expedition records) and the pick
 or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
 form is not repeated there.
+
+(User 2026-09-30, v2.9.11.) The last order is chosen for the people who can go, so they can be read while ordering:
+`원정대 후보 보기`, beside `원정대 선택` and the same bar, opens the muster's own candidates read only - each card opens the
+notebook, whose footer returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on
+출전 NPC 선택. In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits,
+records), footer `돌아가기`.
 
 Purpose:
 Final must remain the culmination of the shop-management decisions learned during the Run rather than switching to an opaque separate combat interaction.
@@ -309,6 +316,10 @@ Current no-effect Insurance:
 - 구급키트
 - 귀환석
 - 세계수 생환부적
+
+The D30 ORDER sheet never offers these, on its first sheet or after a Reroll (User 2026-09-29): D30 has no SALE and they
+cannot go in a Final Bag, so buying one was spending with no possible use. Same explicit no-effect exclusion D30 Store
+Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
 
 Player-facing copy must not use the internal term `Final`.
 Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
@@ -636,6 +647,17 @@ Full-run/Final simulation must record:
 
 FIRE's ordinary `higher Combat Power` second axis is not automatically inserted as a new Hazard.
 If Final Family Pair itself becomes a larger RNG difficulty source than intended Boss differentiation, treat it as a `BALANCE FINDING` in FINAL_EXPEDITION and make the smallest owner-level adjustment after approval.
+
+FIRE PAIR (User 2026-09-30, v2.9.12): a pair that holds FIRE has 3 Hazards instead of 4, and measured easier - `reader`
+3,000 Runs, Final clear 74.3 ±6.3% (187 Finals) against 65.5 ±5.1% (333) for every other pair. Its Boss stands stronger by
+the amount that levels the two on the same recorded Finals:
+
+```text
+FIRE-containing pair -> effective Boss Power + 18   (every Boss, on top of its own rule: WRATH 198, GREED 198~209, SLOTH seal table + 18)
+any other pair       -> + 0
+```
+
+The Hazard Pool, the mean-gap penalty and the forecast rules are unchanged (the 토벌 전망 reads the same effective Boss Power).
 
 ## BALANCE QA
 

@@ -24,7 +24,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 | 화면 · 문구 | 전역 keep-all(단어 중간 줄바꿈 297 → 0) · 문구 교정 1~4배치 · 첫 발주 튜토리얼 `창고` 단계 · 아침 DAY 간판 넘김 · FINAL 균열 NIT |
 | 사운드 | 녹음 BGM(페이즈별 · 결말 성공/실패, 원곡 전체 루프, BOSS 1초 크로스페이드) · 웹 128 kb/s + 다음 곡 미리 받기 |
 
-측정 기록: `reports/remeasure-v2911.md` §1~§14
+측정 기록: `reports/remeasure-v2911.md` §1~§14 · v3.0 준비 §8 측정(장식 전부 보유 곡선 · 넛지 공백 · RUN-Q15 · 360 SALE): `reports/v3-prep-measure-v2911.md`
 - v2.9.10 대비 전체는 §12
 - 마지막 확인은 §14
 - 도구: `tools/remeasure-v2911.cjs`(REMEASURE_EARLY / REMEASURE_BALANCE 메모리 시안), `tools/deco-impact.cjs`(약한 장식 팔)
@@ -117,7 +117,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - 엔진(`dist/ui/audio.js`)
   - 한 번에 한 곡만 32 kHz로 디코드하고, 오디오 시계로 s → e를 반복한다.
   - 페이즈별 곡은 `audioPhase()`로 고른다. 결말은 SUCC / FAIL로 나뉜다.
-  - 곡마다 음량을 BGM_LUFS −24로 맞춘다. 페이즈 전환은 0.6초 페이드다.
+  - 곡마다 음량을 BGM_LUFS −30으로 맞춘다(NIGHT는 3 dB 더 작게). 효과음은 큐마다 등급 레벨(LEVEL, tools/qa-sfx-mix.cjs, 폰 스피커 기준 · 출력 리미터 −3 dBFS)이다. 페이즈 전환은 1초 페이드아웃 뒤 1.5초 페이드인이다(퀵패치, User 2026-09-29).
   - 로드에 실패하면 신스로 대체한다.
 - 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, CHANGELOG §v2.9.11
 - 최종 QA (2026-09-29, HEAD `4c2704b`)
@@ -148,6 +148,8 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
 4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
+5. ~~사전 코치 → 사후 안내 이전~~ **끝남 (v2.9.12, 브랜치 `claude/v3-0-prep-planning-g42z7y`)** — User 결정과 결과는 `reports/v3.0-prep.md` §9-6 끝. 코치 12개 은퇴, 가격 사후 안내 2개, 첫 판매 24탭 → 12탭. 다른 세션은 스토어 1위 루브릭(§9-4) 나머지 칸을 이어 간다.
+6. **다른 세션**: END 영수증 `이 점포의 기록` 블록(A안). 핸드오프 `reports/handoff-end-record.md`(초안 `reports/v3.0-prep.md` §9-8-1-A). 이 세션은 기획(1위 인터뷰, `reports/interview-1st-place.md`).
    - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
    - 출시 준비 외 작업은 §8.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).

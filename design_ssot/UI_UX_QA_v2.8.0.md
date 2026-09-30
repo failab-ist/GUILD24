@@ -1403,7 +1403,10 @@ PASS:
   capital that was already above that price, or an owned Decoration's price, prints nothing
 - with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
   account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
-- at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
+- with none of those, a Run that beats the account's best 총매출 prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G`, N the
+  tape's own `총매출` figure; a tie, the account's first ending and a manual abandon print nothing and an abandon never moves
+  the record; a Run that beats both records prints the best Day line (User 2026-09-30)
+- at most one of the three lines, never beside `본사 해금`; a reload of the ended Run prints the same line
 - 새 점포 준비: exactly the Slot places (rows before v2.9.9) with an affordable unowned Decoration carry `들일 수 있음`
 - no new motion, sound, screen or button
 
@@ -1621,9 +1624,96 @@ ORDER on a Day with two or more Gates at 360 / 390 / 412 and 1280: at the top, t
 PASS:
 - at the top the floating box holds the Death line only; scrolled past the `오늘` block it adds the same `오늘` line under a rule
 - the two facts read apart (rule, its own `오늘` label); the counts equal the block's; nothing covers the offer controls
+- scrolled past the ledger, `발주 후` joins last, under its own rule and label; it equals the ledger's value, follows every
+  quantity tap without the box blinking, and turns the short color below zero (v2.9.11 quick patch, User 2026-09-29)
+- no scroll position where a source is hidden under the box without its copy, or shown twice
+- one tap on the key folds the whole box, Death line included, to a `요약` chip and back; a quantity tap, the next Day's ORDER
+  and a reload keep it folded; the key and the chip clear the menu pin on a phone (User 2026-09-29)
+- the three labels share one column and one style, the three values one size; the box stays tight
 
 FAIL:
 - the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
+- `발주 후` in the box differs from the ledger, lags a tap, or sits above the Death line
+
+### UI-Q-v29-50 — ORDER WAREHOUSE PANEL (User 2026-09-29)
+
+Verify UI_UX §ORDER — WAREHOUSE PANEL at 360 / 390 / 375×548 and 1280, with stock held.
+
+PASS:
+- the 발주서 carries no warehouse block at any width
+- desk: the form is set left; the warehouse rack is large, open, stays in view while the form scrolls and clears the menu pin
+- phone: the `창고` handle sits on top of the dock from the top of the form and covers no offer row; it opens the list rising
+  from the dock, at most 45% of the screen; the rows above it scroll and take taps; a quantity tap keeps it open; the handle
+  or Escape closes it; a fresh account starts folded and the next Day keeps the player's choice
+- handle, sheet and column read as a steel storage rack - material and value apart from the floating box's brown and the
+  발주서's paper, with no decorative stripe or stacked frame (PRESENTATION §Edge / material); one cell per slot,
+  a held unit per filled cell, the empty cells equal the room left
+- the rack equals the warehouse; no console or runtime error
+
+FAIL:
+- the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a
+  quantity tap closes it
+- a second copy of the warehouse on screen
+
+### UI-Q-v29-51 — D30 CANDIDATES / FINAL 준비 NOTEBOOK (User 2026-09-30)
+
+Verify FINAL_EXPEDITION §D30 PLAYER FLOW and UI_UX §PARTY SELECTION at 360 / 390 and 1280.
+
+PASS:
+- the last order's dock carries `원정대 후보 보기` beside `원정대 선택`, the same bar; on a phone both sit on one row,
+  neither label wraps
+- it opens `원정대 후보`: the muster's candidates (alive, visited), each card opening the notebook; the notebook's footer is
+  `원정대 후보 보기`, never `원정대 선택` / `원정대에서 빼기`; nothing about the party changes
+- on the muster step the notebook still picks and releases as before
+- FINAL 준비: `자세히 보기` under the Stat grid opens the supplied member's notebook with `돌아가기`
+- no console or runtime error
+
+FAIL:
+- a pick or release possible while ordering, or a second muster on the order step
+
+### UI-Q-v29-52 — GATE TIER / FIRE GATE TUTORIAL (User 2026-09-30)
+
+Verify UI_UX §GATE TIER / FIRE GATE TUTORIAL on MORNING at 390 and 1280, tutorial on.
+
+PASS:
+- the first board with a two-Hazard Gate shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.` on that
+  plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
+- each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks
+- neither names an Item
+
+FAIL:
+- the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mark on a closed Gate
+
+### UI-Q-v29-53 — COACH DIET (User 2026-09-30)
+
+Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
+
+PASS:
+- DAY 0 shows one mark (`점포지원`); MORNING shows no 방문객 / 게이트 mark (Deep and the II / FIRE Gate marks still show in
+  their situation); the first ORDER shows `발주 확정` only; the first SALE shows destination and Stats only, then Bag after
+  the first sale and the returning-customer mark on the first returning customer; NIGHT shows no `한 명씩` mark; CLOSING shows the one-clause receipt mark
+- DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads
+  `도착 시 전투 전망`
+- the first 150% refusal shows §26-3 line 1 on the refused key, the first 50% sale shows line 2 on its change line (the line
+  stays until the mark is closed); neither shows a second time on the account
+- `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the v2.9.12 baseline (16)
+
+FAIL:
+- a retired mark still shows, a mark names an Item, or a price lesson shows before its situation
+
+### UI-Q-v29-54 — END THIS RUN BLOCK (User 2026-09-30)
+
+Verify UI_UX §END — THIS RUN BLOCK on END (Run Fail, bankruptcy, Final loss / clear) at 390 and 1280.
+
+PASS:
+- `이 점포의 기록` sits between `지금까지 연 점포` and `점포 자본 정산`, five rows in order, COPY_AUDIT §10-4 wording
+- the figures are the Run's: its Day, visited customers and regulars made, Deaths (0 printed), the highest-Level customer
+  (tie -> higher Loyalty, the dead included), all expedition records and their 대성공 count
+- a Run with no expedition prints no `원정` row; a reload prints the same block
+- the settlement block and the replay line read as before
+
+FAIL:
+- a lost adventurer named in the block, a new save field, or the block after the settlement
 
 ### UI-Q-v29-32 — ORDER CONFIRM CASCADE
 
@@ -2009,6 +2099,8 @@ PASS:
 - owned/unowned/equipped distinguishable
 - purchase confirmation spends exactly once
 - loadout read-only during active Run
+- scrolled down the panel, 구매 · 구매 확정 · 취소 · 적용 · 해제 each keep the pressed row where it was on screen (User
+  2026-09-29); runtime evidence `tools/qa-deco-seating.cjs` (360x597, 1280x880)
 
 ### UI-Q-v28-2 — PRE-RUN RETURN PATH
 
@@ -2454,7 +2546,8 @@ Fresh account, first ORDER at 360 and 1280; open the list; reload; next Day's OR
 
 PASS:
 - the held-stock list is collapsed on first ORDER and the summary line (used / total slots, kinds) is visible
-- at 360 the first offer row is reachable without scrolling past an open list
+- at 360 the first offer row is reachable without scrolling past an open list (v2.9.11 quick patch: the list is the phone's
+  warehouse sheet, which never pushes the rows - UI-Q-v29-50)
 - opening it persists across the reload and the next Day until the player folds it
 
 FAIL:
@@ -2472,9 +2565,11 @@ PASS:
 - tapping a row fills the tray (header line, `판매 후 변화`, `특수 효과` when any, three price keys) and the shelf list does not move: no row changes height, scrollTop is unchanged
 - tapping a second row swaps the tray contents; both rows stay where they were
 - the filled tray is ≤ 200px at 360 and at least three shelf rows remain visible above it
+- on a portrait stage under 700 high the filled tray is the tighter step (about 124px at 360) and at least three shelf
+  rows remain above it from 640 high up (UI_UX §SHORT PHONE, User 2026-09-30)
 - the price keys are at the same place for every Item; the hand-over icon starts from the tray icon and lands on the Bag slot; a successful sale clears the tray
 - a refusal keeps the Item on the tray with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
-- on 1280 the tray sits above the dock with its contents aligned under the shelf column
+- on 1280 the tray lies in the middle area on the counter, between the ledger and the shelf (User 2026-09-30)
 - FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
 
 FAIL:
@@ -2588,18 +2683,23 @@ FAIL:
 
 ### UI-Q-v29-25 — SALE DESK LAYOUT
 
-(User 2026-09-25, v2.9.0)
+(User 2026-09-25, v2.9.0; the desk's own SALE, User 2026-09-30.)
 
 SETUP:
-SALE with a customer at 1024 and 1280 with a shelf taller than the column; scroll the shelf to its end with the wheel over it, then pick a row.
+SALE with a customer at 1024×768, 1280 and 1920×1080 with a shelf taller than its area; scroll the shelf to its end with the
+wheel over it, pick a row, sell; then narrow the window to 1023 and widen it back.
 
 PASS:
-- the dossier column runs on the wood down to the dock; the counter tray is only as wide as the shelf column and sits under the shelf
-- the shelf scrolls alone and the dossier column does not move; after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
+- the customer stands large behind the counter, the state / outlook / destination beside them, the waiting line at the end
+- under the counter: the ledger, the tray in the middle on the counter, the shelf; the tray never covers a shelf row
+- the shelf scrolls alone and the ledger does not move; after the pick (a redraw) the shelf keeps its scroll position; the
+  next customer starts at the top
+- at 1023 the phone SALE is drawn, at 1024 the desk SALE again, with no error
 - at 360 / 390 / 412 the single scrolled column and the full-width tray are unchanged
 
 FAIL:
-- a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
+- the tray over the shelf, the ledger scrolling with the shelf, a shelf that jumps to the top after a pick, the phone's
+  forecast pin or second readout on a desk, or a layout that stays the other one after crossing 1024
 
 ### UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE
 
@@ -2725,7 +2825,17 @@ PASS:
 - a loop join is not heard as a cut, click or gap (BOSS: its 1 s crossfade)
 - the tracks sound equally loud, and at BGM 100% / SFX 100% the music is clearly audible while decision cues still read above
   it (UI-Q114)
-- a phase change does not overlap two tracks for longer than its fade
+- a phase change does not overlap two tracks: the old one fades out, then the next one rises without a hard start
+- the Final and its clash play BOSS to the end; the ending track and the ending cue (`endwin` / `endfail`) come in only as
+  the result lands - also after a bankruptcy (CLOSE until then) and the Death limit (NIGHT until then)
+- decision and result cues (a sale, a refusal, a NIGHT outcome, the Boss seal) read clearly above the music; NIGHT does not
+  feel louder than the other phases
+- cues of one tier sound as one loudness (§SFX LEVELS) - none jumps out, none disappears; runtime evidence
+  `tools/qa-sfx-mix.cjs`
+- on a phone speaker (User 2026-09-29, Galaxy): the low cues (사망, the Boss beats, the clash scene, the FAIL ending) are
+  heard at their tier, and no cue buzzes, tears or crackles - alone or landing together
+- cues that mean different things are told apart by ear (§DISTINCT CUES): a Decoration fitted is not a FINAL hit, a SLOTH
+  seal breaking is not a Boss reveal, the CLOSING receipt is not an ORDER crate, a menu click is not a quantity tick
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
 - no audio-related console or runtime error
 - runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)
@@ -2735,6 +2845,7 @@ FAIL:
 - an audible click, gap or double-play at a join or a phase change
 - a phase that goes silent because a file failed to load
 - music that masks a decision or result cue
+- a cue that tears or buzzes on a phone speaker, or clips when cues land together
 
 ### UI-Q-v29-48 — MORNING DAY SIGN FLIP (User 2026-09-29, v2.9.11)
 
@@ -2753,3 +2864,26 @@ FAIL:
 - the roll plays on every redraw or on a reload
 - the numbers overlap, or the sign's size jumps
 - the roll runs longer than 320 ms or plays a sound of its own
+
+### UI-Q-v29-49 — IPHONE SAFARI (User 2026-09-29)
+
+Verify UI_UX §TOUCH / INTERACTION (iPhone Safari) and §AUDIO FEEDBACK — PHASE BGM on a real iPhone (iOS 16 or later).
+
+PASS:
+- tapping quantity + quickly several times changes the quantity and never zooms the page; pinch zoom still works
+- a long press on a customer portrait or the FINAL Boss opens no save-image menu
+- `소리 켜기` starts the sound on the first tap
+- after a phone call or another app, the music comes back on return or at the latest on the next tap
+- with the silent switch on, the game is silent and music from another app keeps playing
+- on an iPhone SE and a Galaxy with its bars (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its
+  tag - `들일 수 있음` included - and the status line on the board; MORNING shows the Event whole (its effect line included) and the top of the first Gate without scrolling
+- no console or runtime error
+- runtime evidence (Chromium): `tools/qa-bgm.cjs` resumes a suspended context on return; `tests/ui-guard.cjs` UI-Q-v29-49;
+  `tools/qa-visual.cjs` runs every screen at 375x548 and 360x597
+
+FAIL:
+- the page zooms on a quick double tap
+- the save-image menu opens on art
+- the sound stays off after coming back and tapping
+- the game stops another app's music
+- on an iPhone SE, a tag or a line over the title or off the board, or the Event's effect line cut on MORNING

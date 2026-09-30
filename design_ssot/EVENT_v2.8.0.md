@@ -2,8 +2,8 @@
 
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
-DOC_VERSION=2.9.11
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/EVENT_v2.8.0-patch.md,history/EVENT_v2.7.0.md,history/EVENT_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/EVENT.md
@@ -567,6 +567,9 @@ EFFECT:
 
 추가 입고분의 매입 비용은 0G다.
 
+행사 상품은 그날 첫 발주 후보에서만 지정한다. 발주 교환을 하면 행사가 끝나고, 새 후보에는 1+1이 없다 (User 2026-09-29:
+교환을 반복해 원하는 상품에 1+1을 붙이는 것은 이 이벤트의 노림수가 아니다).
+
 행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
 (User 2026-09-28, v2.9.10 quick patch; 모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
 
@@ -757,6 +760,8 @@ Mechanic:
 - exactly one special Rare+ Order offer
 - that offer buy price +35%
 - the special offer is an Event-origin slot, not a global Rare weighting
+- a Reroll keeps the one special slot and draws its Item again (User 2026-09-29: it takes an Order slot at +35%, so a
+  fresh draw is a fair cost, not an exploit)
 
 The Order row must be able to identify its source as 암시장.
 This is permitted existing special-offer presentation, not a new generic rarity-attribution UI.
@@ -1485,6 +1490,8 @@ WEIGHT: 1.0
 EFFECT:
 
 오늘 아침 열린 게이트(임시 게이트 제외) 1곳이 닫힌다. 방문객 목적지는 남은 게이트에서 정한다. 전날의 게이트 수 예보와 달라지는 유일한 사건이며, 공지가 그 사실을 알린다.
+
+닫힌 게이트는 그날 목록에서 사라지지 않는다(User 2026-09-30): MORNING 게이트 판 · ORDER `오늘` 줄 · `위험 보기` 창에 `오늘 폐쇄`로 남는다. 판은 흐리게, 이름에 취소선, 위험 줄 없이 도장 하나만 둔다. 방문 · 원정 · 발주 계산에는 들어가지 않는다.
 
 ELIGIBILITY:
 

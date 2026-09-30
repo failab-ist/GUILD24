@@ -548,7 +548,6 @@ Exact D15 Trait name:
 ```new
 Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.8.0.md` §1-3.
 **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.8.0.md`
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 환경 대응 (HAZARD) / 능력치 (STATS) / 전망 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record instead (COPY_AUDIT §26-2, User 2026-09-30). The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
 Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-5.
 Retained current copy (`COPY_AUDIT_APPROVED_v2.8.0.md` §14-2 / §14-4 / §23): the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below.
 Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-2.
@@ -611,10 +610,6 @@ Authoritative wording: the 목적지 tutorial coach step below.
 ```new
 점포지원 (DAY 0, User 2026-09-24)
 점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.
-점포지원 카드
-카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.
-점포지원 구매
-누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.
 ```
 
 
@@ -813,7 +808,7 @@ User 2026-09-26: the Closing receipt reads as the Day's cash (opening Gold, the 
 User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보유 자금 / 영업 손익; the stamp sits on 보유 자금, only 영업 손익 is coloured (green / red, gold at 0); 창고 재고 and 오늘 폐기 take separate lines and the waste line names the Items. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
+영업 전 자금과 보유 자금을 비교한다.
 ```
 
 ## AMENDMENT — v2.9.10 Rare Reference lines (User 2026-09-28)
@@ -868,4 +863,28 @@ New:
 The three Rare Reference NPCs (their names, portraits and own lines) evoked real people and were removed before a paid
 release; the game has none. Do not add a name, portrait or line that points at a real person.
 > 도하르 중상.
+```
+
+
+## v2.9.12 coach diet (User 2026-09-30)
+
+Dropped (the removal itself):
+
+```text
+방문객
+오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.
+게이트
+열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.
+후보 교환
+후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.
+NIGHT
+한 명씩 원정 결과와 변화를 확인한다. ‘전체 건너뛰기’로 바로 정산할 수 있다.
+CLOSING
+```
+
+New:
+
+```new
+Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 가방 (상품 사용) / 재방문 손님 / II 게이트 · 화염 게이트 (§3-10) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record (COPY_AUDIT §26-2) and 가격 after the first refusal / 50% sale (COPY_AUDIT §26-3). User 2026-09-30, v2.9.12 (UI_UX §TUTORIAL — COACH DIET): 방문객, 게이트 (MORNING and ORDER), 창고, 후보, 수량, 후보 교환, 환경 대응, 전망, 점포지원 카드 · 구매 and NIGHT marks are retired; the CLOSING mark keeps its first clause.
+CLOSING (User 2026-09-30, v2.9.12: first clause only)
 ```

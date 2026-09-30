@@ -740,8 +740,8 @@ A normal T2/T3 route with Supply Burden must still respect the canonical <=2 mea
 ```
 
 ```new
-fire -> 기동 (User 2026-09-24, v2.9.0)
-dark -> 정신 (User 2026-09-24, v2.9.0)
+fire -> 정신 (User 2026-09-24 revision 5, v2.9.0)
+dark -> 기동 (User 2026-09-24 revision 3, v2.9.0)
 whiteout -> 정신 (User 2026-09-24, v2.9.0)
 - 강인함: 독 · 냉기 · 부식
 - 투력 is never a Hazard-pressured Stat (it already carries the largest combat coefficient).

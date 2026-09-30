@@ -27,7 +27,18 @@ let prepOpen=false;
 /* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
    screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */
 function audioPhase(){const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
+ if(s.phase==='end'&&!endRevealed)return endFrom;
  return s.phase==='end'?(s.win?'end-win':'end-fail'):s.phase;}
+/* UI_UX §AUDIO FEEDBACK — PHASE BGM (User 2026-09-29): arriving at the ending, the music of the screen it came from (BOSS
+   after the Final, CLOSE after a bankruptcy, NIGHT after the Death limit) plays on until the result lands - the Final seal's
+   landing frame, or a short hold on any other ending - and only then do the ending cue (`endwin` / `endfail`) and the
+   SUCC / FAIL track come in, so neither can tell the result before the screen does. A reload of the ending is already
+   revealed. */
+let endRevealed=true,endFrom='final',endAt=null;
+function endReveal(){const s=game.run;clearTimeout(endAt);
+ const land=!motionOK()?0:s?.finalReport?FINAL_SEAL.hold+STAMP_FALL:ENDING_HOLD;
+ endAt=setTimeout(()=>{if(game.run?.phase!=='end'||endRevealed)return;endRevealed=true;const st=game.account.settings;
+  Sound.play(game.run.win?'endwin':'endfail',game.run.finalReport?.15:0);Sound.sync(st.muted,audioPhase(),st);},land);}
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -76,6 +87,7 @@ const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_ST
 /* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
 const FINAL_SEAL={hold:200,won:{from:2,dip:6},lost:{from:1.6,dip:3}};
+const ENDING_HOLD=320;   // an ending with no seal (bankruptcy, the Death limit) lands its result after one beat
 let sealCueAt=null;
 /* v2.9.2 H3 ORDER confirm: one crate per ordered SKU lands on the warehouse list in a cascade capped at ORDER_BEAT.total ms
    (the step shrinks as SKUs grow; ORDER_BEAT.step is its ceiling); only the first ORDER_BEAT.hits landings are audible - the
@@ -217,6 +229,12 @@ function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!r
    identity, then put the keyboard back on its replacement. Used by #app and by
    #modal-root, which had no restore at all: a redraw under an open modal dropped focus
    to <body> and made a keyboard user tab back from the top of the document. */
+/* UI_UX §PURCHASE / EQUIP FLOW (User 2026-09-29): every step of a purchase or an equip redraws the Decoration panel, and the
+   redraw put its scroll back at the top - the row just bought left the screen and read as something else. The pressed row
+   goes back on the pixel it was on (as a SALE shelf row does), whatever the step added to or took from it. */
+function keepDecoRow(el){const rows=()=>[...document.querySelectorAll('#modal-root .slot-option')],row=el.closest('.slot-option'),
+  i=rows().indexOf(row),y0=row?row.getBoundingClientRect().top:0;
+ return ()=>{const sc=$('#modal-root .modal-body'),back=rows()[i];if(sc&&back&&i>=0)sc.scrollTop+=back.getBoundingClientRect().top-y0;};}
 function holdFocus(container){const el=document.activeElement;
  if(!container||!el||el===document.body||!container.contains(el))return null;
  const a=el.dataset.action,id=el.dataset.id;
@@ -430,7 +448,7 @@ let cue=null,handoff=null;
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
-let pinFolded=false,pinWatch=null,orderWatch=null;
+let pinFolded=false,pinWatch=null,orderWatch=null,railShown='';
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
@@ -447,12 +465,15 @@ function watchTray(){const sc=$('.p-sale .stage-scroll');if(!sc)return;trayArm=p
   if(Math.abs(sc.scrollTop-trayBase)>32)foldTray();},{passive:true});}
 function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
- const el=document.createElement('div');el.className='receipt-stub';el.setAttribute('role','status');
+ /* `half`: the first 50% sale's lesson anchors to this line (UI_UX §SALE PRICE LESSONS) */
+ const el=document.createElement('div');el.className='receipt-stub'+(st.mode==='half'?' half':'');el.setAttribute('role','status');
  el.textContent='단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to;
  const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
  document.body.appendChild(el);
  /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
- stubTimer=setTimeout(()=>el.remove(),motionOK()?2800+KEY_PRESS.down:2500);}
+ /* while a coach mark is open the line stays - the 50% lesson may be waiting behind the Bag mark - and goes once they close */
+ const drop=()=>{if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
+ stubTimer=setTimeout(drop,motionOK()?2800+KEY_PRESS.down:2500);}
 function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(!c||!motionOK())return;
  const A=anime.animate;
@@ -467,19 +488,22 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     the landing frame (one crate per SKU, never one per unit); a SKU new to the warehouse brings its row in with it. A folded list
     shows the `N / M칸` summary only, which moves on the last landing. The till's 보유 골드 counts down to the resolved value. */
  if(c==='order'){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_BEAT.total-STAMP_FALL)/Math.max(1,k.length-1));
-  const brief=$('.p-order .stock-brief'),sum=brief?.querySelector('summary b'),open=!!brief?.open;
+  /* the list on screen takes the crates: the desk's column or the phone's open 창고 sheet (UI_UX §ORDER — WAREHOUSE PANEL;
+     a folded sheet shows the handle's figures only); every `N / M칸` and `N종` figure moves on the last landing */
+  const side=$('.p-order .stock-side'),sheet=$('#stock-sheet'),list=side?.getClientRects().length?side:sheet&&!sheet.hidden?sheet:null;
   k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
-   const row=open?brief.querySelector('li[data-item="'+item+'"]'):null,icon=row?.firstElementChild,cnt=row?.querySelector('span');
-   if(row&&icon&&cnt){const now=cnt.textContent,was=h.before?.[item];
-    if(was===undefined)A(row,{opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});else cnt.textContent=was+'개';
-    A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'},
-     onComplete:()=>{cnt.textContent=now;}});}
+   /* the SKU's new cells - the ones past what it held before - take its crate, all on the same fall */
+   const cells=list?[...list.querySelectorAll('li.wh-slot[data-item="'+item+'"]')].slice(h.before?.[item]||0):[];
+   for(const cell of cells){const icon=cell.firstElementChild;if(!icon)continue;
+    A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});}
    if(i<ORDER_BEAT.hits)orderCueAt.push(setTimeout(()=>Sound.play(i?'crate':'order'),land));});
   if(!k.length)Sound.play('order');
   /* the warehouse figures - the summary's `N / M칸` and `N종`, and the register's 창고 잔여 칸 - are one fact; all three move on the last landing */
-  if(k.length){const last=Math.round((k.length-1)*step)+STAMP_FALL,kinds=brief?.querySelector('summary i'),
+  if(k.length){const last=Math.round((k.length-1)*step)+STAMP_FALL,
     room=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='창고 잔여 칸')?.querySelector('b'),
-    held=[[sum,h.used+' / '+game.capacity()+'칸'],[kinds,Object.keys(h.before||{}).length+'종'],[room,(game.capacity()-h.used)+' / '+game.capacity()]].filter(([el])=>el);
+    held=[...[...document.querySelectorAll('.p-order .stock-head b')].map(el=>[el,h.used+' / '+game.capacity()+'칸']),
+     ...[...document.querySelectorAll('.p-order .stock-head em')].map(el=>[el,Object.keys(h.before||{}).length+'종']),
+     [room,(game.capacity()-h.used)+' / '+game.capacity()]].filter(([el])=>el);
    const now=held.map(([el])=>el.textContent);held.forEach(([el,was])=>{el.textContent=was;});
    A({t:0},{t:1,duration:last,onComplete:()=>{held.forEach(([el],i)=>{el.textContent=now[i];});}});}
   const gold=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='보유 골드')?.querySelector('b');
@@ -564,7 +588,10 @@ function stampPress(el){
 }
 function render(){
  if(clash)return finishClash(); // a redraw during the FINAL clash lands on the ending it was playing toward
- const s=game.run;Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
+ const s=game.run;
+ /* arriving at the ending from a live screen: hold its music until the result lands (endReveal) */
+ if(s?.phase==='end'&&lastPhase!==null&&!String(lastPhase).startsWith('end:')){endRevealed=false;endFrom=String(lastPhase).split(':')[0];}
+ Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
  /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
@@ -594,6 +621,7 @@ function render(){
  if(phase!=='final')finalOrdered=false;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
+ if(phase==='end'&&arrived)endReveal();
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to
@@ -603,9 +631,6 @@ function render(){
  /* The warehouse is a native disclosure, but its preference is an account-level presentation
     choice: it opens for a new player and, once folded, stays folded on later Days and reloads
     until the player opens it again. It is not progression and does not need another state owner. */
- const stock=$('.stock-brief');if(stock){stock.open=game.account.settings.stockBriefOpen===true;
-  stock.addEventListener('toggle',()=>{if(game.account.settings.stockBriefOpen===stock.open)return;
-   game.account.settings.stockBriefOpen=stock.open;game.save();});}
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
  /* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
     own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
@@ -630,7 +655,7 @@ function render(){
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;}
+ if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -664,13 +689,19 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
    MORNING calls it with the Gate alone: handed to .map directly, the array index arrived as `full`
    and every Gate after the first printed the Gate-detail sentence (User 2026-09-25). */
 function gatePlate(d,full=false){const b=sigilOf(d);
- return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
+ /* data-hazards / data-family: the anchors of the two Gate lessons (a two-Hazard Gate, a FIRE Gate); no style reads them */
+ return '<article class="slip gate" data-hazards="'+d.hazards.length+'" data-family="'+E(d.family||'')+'" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
    +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game),d).map(h=>full
      ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence(h.key,d))+'</span></li>'
      :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i>'+pressCell(h)+'</li>').join('')+'</ul>'
    +'</article>';}
+/* User 2026-09-30: a Gate the day's Event closed stays on the list, faded and stamped `오늘 폐쇄`, with no Hazard rows - no one
+   can go there today, so it carries no decision, only the fact of which Gate it was (EVENT 게이트 임시 폐쇄) */
+function closedPlates(){return (game.run.closedGates||[]).map(d=>{const b=sigilOf(d);
+ return '<article class="slip gate closed"><span class="pin"></span>'
+ +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span><b>'+E(d.name)+'</b><span class="closed-stamp">오늘 폐쇄</span></article>';}).join('');}
 /* v2.9.0 (User 2026-09-24): no next-day Gate / Tier forecast is shown anywhere - today's Gates, their numbered Hazard rows and
    the per-Gate visitor count are the whole planning context (ECONOMY_ORDER §NEXT-DAY FORECAST — RETIRED). */
 /* UI_UX §DEEP SALE UI. Offered only while a nomination is still legal, so it never appears as
@@ -707,8 +738,12 @@ function deepOfferUI(n){
 /* UI_UX §DEATH LIMIT — ALWAYS VISIBLE (MORNING/ORDER, v2.9.1 balance): one compact item, the
    same line on both screens - count / current segment limit / the Day it ends. The limit already
    includes 추모 방명록 and 위령제 (Meta.deathLimit). Warning color only at count = limit - 1. */
-function deathLimitItem(){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s);
- return '<b class="death-limit'+(n===limit-1?' warn':'')+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
+/* `labelled`: the ORDER floating box sets 사망 as its line label, in the column 오늘 and 발주 후 share (User 2026-09-29) -
+   the same words, split into label and value */
+const railFolded=()=>game.account.settings.orderRailFolded===true;
+function deathLimitItem(labelled){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s),warn=n===limit-1?' warn':'';
+ return labelled?'<i>사망</i><b class="death-limit'+warn+'">'+n+' / '+limit+' · D'+end+'까지</b>'
+  :'<b class="death-limit'+warn+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
 /* The board is hung high on the wall, directly under the day sign, because that is the
    order the morning is read in: DAY, then today's expedition, then the Gates and their
    Hazards, then the float on the counter, then the shutter. The scenery keeps whatever
@@ -722,7 +757,7 @@ function morningScreen(){
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
      +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b>'+deathLimitItem()+'</p>'
-   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(d=>gatePlate(d)).join('')+'</div></div>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(d=>gatePlate(d)).join('')+closedPlates()+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
      counter-band element and is placed in the counter's own coordinates. Presentation only -
@@ -794,7 +829,9 @@ function readout(n,extra=null,cls=''){
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
-  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
+  /* COACH DIET (User 2026-09-30): the title says when the reading was taken - the retired outlook mark's one fact */
+  /* on a phone the half cell wraps it: 전투 전망 stays together so the break falls after 도착 시 */
+  +'<span class="fore">도착 시 전투&nbsp;전망<b>'+o.combat+'</b>'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
@@ -854,6 +891,7 @@ function saleScreen(){
    const preloadArt = nextNpc ? Scene.npcArt(nextNpc) : null;
    const preloadHtml = preloadArt ? '<img src="'+preloadArt+'" style="display:none" aria-hidden="true">' : '';
    const st=s.inventory.find(x=>x.id===selected);
+   if(deskSale())return saleDesk(n,st,waiting,preloadHtml);
    return '<div class="stage p-sale">'+menuFab()+preloadHtml+taskLine('sell')
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
@@ -889,6 +927,35 @@ function saleScreen(){
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
+/* UI_UX §SALE — DESK LAYOUT (User 2026-09-30, "PC판 전용으로 분리"): a desk draws its own SALE, not the phone's column
+   re-flowed. The customer stands large behind the counter with the state, the outlook and the destination beside them and
+   the waiting line at the far end; under the counter top the player's side is three areas - the customer's ledger (the
+   stats, Traits and last expedition), the counter tray in the middle on the counter, and the shelf. The pieces are the
+   phone's own (the same functions, so the same text, keys and actions); what the phone needs only on a phone - its second
+   readout in the column and the forecast pin - is not drawn here. */
+const deskSale=()=>typeof matchMedia==='function'&&matchMedia('(min-width:1024px)').matches;
+function saleDesk(n,st,waiting,preloadHtml){const s=game.run;
+ return '<div class="stage p-sale sale-desk">'+menuFab()+preloadHtml+taskLine('sell')
+ +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
+  +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
+  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+'</div>'
+  +waitingLine(waiting)
+ +'</section>'
+ +'<div class="counter-edge" aria-hidden="true"></div>'
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
+  +'<div class="dossier-col">'
+   +'<div class="dossier">'+returningSummary(n)+statGrid(n)+deepOfferUI(n)+'</div>'
+   +'<div class="dossier traits">'+traitRows(n)+'</div>'
+  +'</div>'
+  +'<div class="shelf-col">'+shelf()+'</div>'
+ +'</main>'
+ +'<div class="counter-mat" aria-hidden="true"></div>'+tray()
+ +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
+ +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';}
+/* crossing the desk breakpoint mid-SALE draws the other layout */
+let deskWas=deskSale();
+window.addEventListener('resize',()=>{const d=deskSale();if(deskWas!==null&&d!==deskWas&&game.run?.phase==='sell')render();deskWas=d;});
 // The waiting line. Every customer still outside is the same back — no face, silhouette,
 // colour, rarity or name leaks out of it. Only how many are left is public.
 function waitingLine(waiting){
@@ -1177,54 +1244,49 @@ const coachSteps={
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
     clears it and the next first occurrence teaches it again. No new persistence was added. */
- morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
- /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself.
-    Seen state is keyed by step id alone, so ORDER's gates step is `order-gates`: sharing MORNING's `gates` id marked it seen
-    before the first ORDER ever opened (fixed 2026-09-26).
-    v2.9.11 (User 2026-09-29): `order-stock` after the gates - the Day 1 warehouse already holds the opening stock nobody ordered,
-    and nothing said so; the mark sits on the 창고 summary the ORDER screen already shows. */
- order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['order-stock','.stock-brief summary','창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
- /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
-    (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
-    through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
-    the screen reads. Everything else is contextual: showCoach() shows the first unfinished mark
-    whose target is VISIBLE, so a mark anchored to an element that only exists in its situation
-    (a returning customer's last-expedition line, a filled Bag slot) teaches itself the first time
-    that situation exists and never before. Fatigue, Great Success and 만반의 준비 are no longer
-    taught here: they are named after they first act, on the NIGHT record (NIGHT_CLOSING §DISCOVERY
-    LINE, User 2026-09-30).
-    Exact copy: COPY_AUDIT §3.
+ /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): 방문객 and 게이트 are retired - the sign's 손님 N and the DAY 1~3 task line say them */
+ morning:[['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
+  /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
+  ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
+  ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
+ /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
+    effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
+ order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
+ /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
+    §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
+    The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout title reads
+    `도착 시 전투 전망`, and price is taught after the fact. Everything else is contextual: showCoach() shows the first
+    unfinished mark whose target is VISIBLE, so a mark anchored to an element that only exists in its situation (a
+    returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
+    that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
- ['hazard','.dest-plate .hazards','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
  /* COPY_AUDIT §3-7 STATS (User 2026-09-24): the first time a customer's Stats are on screen - what they are, that they
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
- /* UI-Q-v28-27. `.top` is the frozen SALE-entry snapshot itself; `.ingredients` and
-    `.great-signal` below it move with the committed Bag, so the cutout stops above them. */
- ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
- ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
  /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
+ /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
+ ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.'],
+ ['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']],
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
-    it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it) */
- night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.'],
-  ...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
+    it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it).
+    COACH DIET (User 2026-09-30): the `한 명씩` result mark is retired - the record and its 전체 건너뛰기 key say it */
+ night:[...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
     purse box that carries both 보유 자금 and 영업 손익. */
  /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
  final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
- closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.']],
+ /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
+ closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
-    it used to open with no word of what a Store Support is. These three marks read the takeover
-    - what it is, how a card reads, what the key does and when more arrive - and never name a
-    pick. They run on the DAY 0 takeover only (see showCoach); account-scoped like every mark. */
- relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.'],
-  ['relic-card','.relic-choices .relic-plate','카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.'],
-  ['relic-buy','.relic-choices .relic-plate .stamp','누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.']]
+    it used to open with no word of what a Store Support is. The mark reads the takeover and never
+    names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
+    COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
+ relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.']]
 };
 let activeCoach=null;
 let coachSettle=0,coachPainted=null,activeGroup=null;
@@ -1395,15 +1457,36 @@ function statGrid(n){
    what else was in the warehouse or how much room was left. Same grouping the shelf and the
    stock modal already read. It opens the first time; after the player folds it, that preference
    survives later Days and reloads until they open it again. */
-function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.length,cap=game.capacity();
- /* UI-Q-v29-17 (User 2026-09-24, v2.9.0): the held-stock list starts collapsed; opening it is the account's presentation choice */
- const opened=game.account.settings.stockBriefOpen===true;
- return '<details class="stock-brief" '+(opened?'open':'')+'><summary><span class="k">창고</span>'
- +'<b>'+used+' / '+cap+'칸</b>'+(stocks.length?'<i>'+stocks.length+'종</i>':'')+'</summary>'
- +(stocks.length?'<ul>'+stocks.map(st=>{const it=D.itemBy[st.item],left=st.expires-s.day;
-   return '<li data-item="'+it.id+'">'+Art.itemIcon(it.id,20)+'<b>'+E(it.name)+'</b><span>'+st.count+'개</span>'
-    +'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em></li>';}).join('')+'</ul>'
-  :'<p class="none">창고가 비어 있다.</p>')+'</details>';}
+/* the warehouse as a rack of 칸 (User 2026-09-29): one cell per slot the store has, each held unit in its own cell - the
+   same `N / M칸` the ledger counts - grouped by Item in the order the shelf reads them, with its days left; the empty cells
+   are the room left. The icon is the one the offer rows show; the Item's name is the cell's reader label. */
+function stockSlots(){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];
+ for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
+ return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
+   label=E(it.name)+(left===null?'':' · '+left+'일');
+   return '<li class="wh-slot" data-item="'+it.id+'" aria-label="'+label+'">'+Art.itemIcon(it.id,32)
+    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')
+  +'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length))+'</ol>';}
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is not on the 발주서 any more; it is held apart like an
+   inventory, so it can be read against the offer rows while ordering. Desk: a large column beside the form, always open.
+   Phone: a slim handle on top of the dock - part of the dock, so it never covers an offer row - stating 창고 N / M칸 · K종,
+   that opens the list as a sheet rising from it, up to 45% of the screen. The sheet does not dim or lock the form - the
+   rows above it still scroll and take taps - and only the handle or Escape closes it (a quantity tap must not). Open or
+   folded is still the account's presentation choice (UI-Q-v29-17, `stockBriefOpen`): it starts folded and stays as the
+   player last left it. A steel rack of 칸, apart from the brown floating box and the 발주서's paper. */
+/* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the retired 창고 mark's one fact - on DAY 1, before anything is ordered, the
+   warehouse holds only what HQ put there, and the head says so */
+function stockHead(){const s=game.run,n=groupStock().length,hq=s.day===1&&!(s.daily?.spent>0);
+ return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+(hq?'본사 기본 상품 ':'')+n+'종</em>':'');}
+function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots()+'</aside>';}
+const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
+function stockSheetKey(){const open=sheetOpen();
+ return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(open?'':' hidden')+'>'+stockSlots()+'</section>'
+  +'<button type="button" class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+open+'">'
+  +stockHead()+'<span class="stock-toggle">'+(open?'닫기':'열기')+'</span></button>';}
+function setStockSheet(open){const st=game.account.settings;if((st.stockBriefOpen===true)!==open){st.stockBriefOpen=open;game.save();}
+ const sh=$('#stock-sheet'),k=$('.stock-handle');if(!sh)return;sh.hidden=!open;
+ k?.setAttribute('aria-expanded',String(open));const t=k?.querySelector('.stock-toggle');if(t)t.textContent=open?'닫기':'열기';}
 /* UI-Q-v28-26 / UI-Q-v28-29. The dock is the phase's primary action, and every other phase
    gives it the dock's full width - MORNING's 문 열기, SALE's 손님 보내기, NIGHT's 다음. ORDER wrapped
    its two buttons in an extra `.row wrap` box, and that box, not the buttons, became the dock's
@@ -1416,8 +1499,8 @@ function orderScreen(){
  /* UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT: committing the order is an
     inked impression on the 발주서 - the material and the press, with no repeated seal mark and
     no tilt. Leaving the desk is a different kind of act, so it takes the steel `.leave` plate. */
- return stage('order','발주',taskLine('order'),orderForm(),
-  (cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
+ return stage('order','발주',taskLine('order'),'<div class="order-desk">'+orderForm()+'</div>'+stockSide(),
+  stockSheetKey()+(cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
   +'<button class="stamp leave" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
 /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, User 2026-09-24): with two or more open Gates the ORDER 오늘 line carries the
@@ -1425,14 +1508,24 @@ function orderScreen(){
    hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
 function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
-function todayLine(counts,tag='em'){const s=game.run;
- return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')));}
+function todayLine(counts,tag='em'){const s=game.run,shut=(s.closedGates||[]).map(d=>E(d.name)+' 오늘 폐쇄');
+ return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).concat(shut).join(' · '):E(s.dungeons.map(d=>d.name).join(' / '))+(shut.length?' · '+shut.join(' · '):''));}
+/* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
+   ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
+   joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
+   could sit hidden under a grown rail without being counted as gone. What is shown is carried across the redraw a
+   quantity tap makes (`railShown`), so the rail does not blink on every tap. */
 function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
- const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),sc=$('.p-order .stage-scroll');
+ const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),out=$('.p-order #order-register .out'),sc=$('.p-order .stage-scroll');
  if(!rail||!brief||!sc||typeof IntersectionObserver!=='function')return;
- orderWatch=new IntersectionObserver(([e])=>{rail.classList.toggle('show-today',!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+rail.offsetHeight+4);},
-  {root:sc,rootMargin:'-'+(rail.offsetHeight+4)+'px 0px 0px 0px',threshold:0});
- orderWatch.observe(brief);}
+ /* the stuck rail sits under the scroll box's top padding, so its lower edge is that padding plus its own height */
+ const h=rail.offsetHeight,edge=(parseFloat(getComputedStyle(sc).paddingTop)||0)+h;
+ orderWatch=new IntersectionObserver(es=>{for(const e of es){const gone=!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+edge;
+   rail.classList.toggle(e.target===brief?'show-today':'show-gold',gone);}
+  railShown=['show-today','show-gold'].filter(c=>rail.classList.contains(c)).map(c=>' '+c).join('');
+  if(rail.offsetHeight!==h)watchOrderToday();},
+  {root:sc,rootMargin:'-'+edge+'px 0px 0px 0px',threshold:0});
+ orderWatch.observe(brief);if(out)orderWatch.observe(out);}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  const counts=s.dungeons.length>=2?gateCounts():null;
@@ -1444,8 +1537,15 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the rail floats while the order is scrolled; once the
       `오늘` block has gone under it, the same line rides in the rail's own box under a rule, so the Gates and their
       visitors stay in view while the player orders. Hidden while the block itself is on screen. */
-   +'<p class="board-rail death-limit-row">'+deathLimitItem()
-     +'<span class="rail-today" aria-hidden="true"><i>오늘</i>'+todayLine(counts)+'</span></p>'
+   /* v2.9.11 quick patch (User 2026-09-29): with the warehouse beside it the order rows can feel squeezed, so the whole box
+      folds to a small `요약` chip and back - the Death line folds with it, by the User's call (§DEATH LIMIT — ALWAYS VISIBLE
+      makes this one exception); folded is the account's choice, kept across Days and reloads until the player opens it */
+   +'<p class="board-rail death-limit-row'+railShown+(railFolded()?' folded':'')+'">'
+     +'<button type="button" class="rail-fold" data-action="rail-fold" aria-expanded="'+!railFolded()+'" aria-label="'+(railFolded()?'요약 열기':'요약 접기')+'">'
+     +'<span class="rail-chip">요약</span></button>'
+     +'<span class="rail-line">'+deathLimitItem(true)+'</span>'
+     +'<span class="rail-line rail-today" aria-hidden="true"><i>오늘</i><b>'+todayLine(counts)+'</b></span>'
+     +'<span class="rail-line rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'
@@ -1464,7 +1564,6 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
      +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards,s.final).map(h=>
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
-   +stockBrief()
    +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
     /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
     const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
@@ -1575,7 +1674,8 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
       바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
       extra depth; `pct` stays the mode's number, the word is what the coach already says. */
-   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
+   /* `refused`: the first 바가지 refusal's lesson anchors here (UI_UX §SALE PRICE LESSONS) */
+   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
     'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');}
 /* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): the chosen Item sits on a fixed tray above the dock,
    outside the scrolled column - header line, the one delta list on one wrapping line, 특수 효과, then
@@ -1801,7 +1901,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
  const nudge=opened?'':replayLine();
- return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
+ return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+runBlock(row)+settle+opened
   /* User 2026-09-30: what the Run left behind reads before the link to the codex, and reads as the point */
   +(nudge?'<p class="replay">'+E(nudge)+'</p>':'')
   +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
@@ -1809,9 +1909,20 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
    of a Decoration the account did not own at that settlement (judged once, in settleStoreCapital), else a new best Day
    (META §BEST DAY) - else nothing. Both are recorded on the Run, so a reload or a purchase from the ending prints the same
    line. Never names a Decoration (two per Slot). */
+/* UI_UX §END — THIS RUN BLOCK (User 2026-09-30, A안): what kind of store this Run was, read off what the Run already holds -
+   no save field. The lost are a number (the notebook lists their names); a Run with no expedition prints no 원정 row. */
+function runBlock(row){const s=game.run,met=s.npcs.filter(n=>n.introduced),recs=s.npcs.flatMap(n=>n.records||[]);
+ const top=met.reduce((b,n)=>!b||n.level>b.level||(n.level===b.level&&n.loyalty>b.loyalty)?n:b,null);
+ return '<div class="block this-run"><h4>이 점포의 기록</h4>'
+  +row('버틴 날','DAY '+s.day)
+  +row('손님',met.length+' · 단골 '+(s.stats.regulars||0))
+  +row('돌아오지 못한 사람',s.stats.deaths||0)
+  +(top?row('가장 성장한 손님',E(top.name)+' Lv.'+top.level):'')
+  +(recs.length?row('원정',recs.length+'건 · 대성공 '+recs.filter(r=>r.outcome==='대성공').length):'')+'</div>';}
 function replayLine(){const s=game.run,st=s.settlement;
  if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
+ if(s.salesBefore>0&&st?.sales>s.salesBefore)return '지금까지 가장 많이 판 점포다 · 총매출 '+st.sales.toLocaleString()+'G';
  return '';}
 /* UI_UX §CONTROL / FEEDBACK HYGIENE: a muster row that cannot be sent used to keep offering
    원정대 선택 - a dead promise on an unavailable control, the same defect the approved Store
@@ -1875,7 +1986,9 @@ function finalScreen(){
     +'<span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
     +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></button>';}).join('')+'</div>'
    /* the adventurer being supplied reads the same Stat grid SALE shows (User 2026-09-25) */
-   +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))+'</div>':'')
+   +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))
+    /* User 2026-09-30: Stats alone do not decide who carries what - the same notebook (Traits, records) opens here, read only */
+    +btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')
    +shelf(true))
  +ownedRelicView();
  /* UI_UX §PER-PHASE (FINAL) — DISABLED COMMIT CAUSE (USER AMENDMENT 2026-09-22): the fixed dock
@@ -1887,7 +2000,9 @@ function finalScreen(){
  const ready=s.team.length>0&&s.team.length<=need;
  const dock=relicWindowLink()+(need
   ?committed?btn('마왕성으로 출발','boss','stamp')
-   :!finalOrdered&&!s.team.length?btn('원정대 선택','final-ordered','stamp',Object.values(s.cart||{}).some(q=>q>0)?'disabled':'')
+   /* User 2026-09-30: the last order is chosen for the people who can go, so the candidates can be read from here - view
+      only (their notebooks, no pick); the pick and 원정대 확정 stay on the next step */
+   :!finalOrdered&&!s.team.length?btn('원정대 후보 보기','final-roster','stamp')+btn('원정대 선택','final-ordered','stamp',Object.values(s.cart||{}).some(q=>q>0)?'disabled':'')
    :btn('원정대 확정','final-commit','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
@@ -2246,7 +2361,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
  }
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
-else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+'</div>';}
+else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
    /* UI_UX §MENU / SETTINGS — EXACT COMPOSITION (User 2026-09-24, v2.9.0): 점포지원 routes to the selection
       only while a window is purchasable; 이번 영업의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
       (§1-3) and then discards the Run at once. */
@@ -2255,10 +2370,17 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
    else if(modal==='loadout'){title='이번 영업의 장식';body=loadoutModal();footer=btn('확인','dismiss','stamp');narrow=true;}
    else if(modal==='abandonConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','abandon-go','danger');narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}
+ /* D30 last order (User 2026-09-30): the muster's own candidates, read only - each card opens the notebook, nothing is picked */
+ else if(modal==='finalRoster'){const s=game.run;title='원정대 후보';
+  body='<p class="smalltext">'+E(Copy.finalPrep.cap)+'</p><div class="npc-grid">'
+   +s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level).map(n=>npcCard(n,'final-view')).join('')+'</div>';}
  else if(modal.startsWith('npc:')){const id=modal.slice(4),s=game.run,n=s?.npcs.find(x=>x.id===id);title='우리 점포의 모험가';body=npcDetail(id);
   /* FINAL muster (User 2026-09-25): the notebook is where a member is taken on or let go */
-  if(s?.phase==='final'&&!s.finalCommitted&&n){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
+  if(s?.phase==='final'&&!s.finalCommitted&&n&&(finalOrdered||s.team.length)){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
    footer=btn(inTeam?'원정대에서 빼기':'원정대 선택','final-team','stamp','data-id="'+id+'" '+(out||full?'disabled':''));}
+  /* read only on D30 before the muster (back to the candidates) and after the party is confirmed (back to the prep) */
+  else if(s?.phase==='final'&&!s.finalCommitted)footer=btn('원정대 후보 보기','final-roster');
+  else if(s?.phase==='final')footer=btn(Copy.finalPrep.back,'dismiss');
   else footer=btn('수첩으로','roster');}
  else if(modal==='codex'){title='도감';body=codex();if(preRunReturn)footer=btn('새 점포 준비로 돌아가기','store-return','stamp');}
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
@@ -2346,9 +2468,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
- case'deco-buy':decoPending=id;renderModal();break;
- case'deco-cancel':decoPending=null;renderModal();break;
- case'deco-confirm':case'deco-equip':case'deco-unequip':{
+ case'deco-buy':{const back=keepDecoRow(el);decoPending=id;renderModal();back();break;}
+ case'deco-cancel':{const back=keepDecoRow(el);decoPending=null;renderModal();back();break;}
+ case'deco-confirm':case'deco-equip':case'deco-unequip':{const back=keepDecoRow(el);
   if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 장식을 바꿀 수 없습니다.');
   const d=D.decorationBy[id];
   if(a==='deco-confirm'){
@@ -2360,9 +2482,13 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   /* fitting something already owned into a Slot, or taking it out. Deliberately not the
      purchase fanfare above: it costs nothing and nothing was acquired. */
   else {Meta.equipDecoration(game.account,d.slot,a==='deco-equip'?id:null);sound('fixture');}
-  game.save();renderModal();render();break;}
+  game.save();renderModal();render();back();break;}
  /* UI_UX_v2.8 §ORDER: `.set` holds the 1 / 3 / 최대 shortcuts, so they take the stepper's own
     tick one step quieter and never outrank it; audio.js holds both to a minimum retrigger gap. */
+ case'stock-sheet':setStockSheet(!sheetOpen());sound('ui');break;
+ case'rail-fold':{const st=game.account.settings,f=!railFolded();st.orderRailFolded=f;game.save();const r=$('.p-order .death-limit-row');
+  if(r){r.classList.toggle('folded',f);const b=r.querySelector('.rail-fold');b?.setAttribute('aria-expanded',String(!f));b?.setAttribute('aria-label',f?'요약 열기':'요약 접기');}
+  sound('ui');watchOrderToday();break;}
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}
@@ -2402,7 +2528,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   /* SALE §TRANSACTION RESULT — PER CUSTOMER (User 2026-09-24, v2.9.0): the customer's own Loyalty and Wallet
      before the commit, so the receipt stub can state the real result of this price choice. */
   const who=game.current(),wasM=who?who.money:0,wasL=who?who.loyalty:0;
-  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money};}else{sound('refusal');cue='refuse';}handoff=seen;showStub();render();break;}
+  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money,mode:el.dataset.mode};}else{sound('refusal');cue='refuse';}handoff=seen;showStub();render();break;}
  /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already
     displayed - so it owes that result its own Outcome cue. It used to play the generic return
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
@@ -2428,6 +2554,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
  case'final-npc':sound('ui');setModal('npc:'+id);break;
+ case'final-roster':sound('ui');setModal('finalRoster');break;
+ case'final-view':case'final-detail':sound('ui');setModal('npc:'+id);break;
  /* picked from the notebook, the choice is confirmed where the adventurer was read, and the muster shows it */
  case'final-team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');setModal(null);render();break;
  /* FINAL-Q75 v2.8: a sub-3 party is a valid choice, confirmed once before the boundary */
@@ -2510,9 +2638,9 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
-window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);});
+window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
    would replace the control under the pointer and end the drag. */

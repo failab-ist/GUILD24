@@ -370,3 +370,42 @@ Before the ending (User 2026-09-27, v2.9.9 H7) the resolved Final is played out 
 handed what they carried, each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap
 skips it; it decides nothing. ->
 ```
+
+
+## v2.9.11 quick patch — D30 sheet drops no-effect Insurance (User 2026-09-29)
+
+New:
+
+```new
+The D30 ORDER sheet never offers these, on its first sheet or after a Reroll (User 2026-09-29): D30 has no SALE and they
+cannot go in a Final Bag, so buying one was spending with no possible use. Same explicit no-effect exclusion D30 Store
+Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
+```
+
+
+## v2.9.11 D30 candidates while ordering, FINAL 준비 notebook (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30, v2.9.11.) The last order is chosen for the people who can go, so they can be read while ordering:
+`원정대 후보 보기`, beside `원정대 선택` and the same bar, opens the muster's own candidates read only - each card opens the
+notebook, whose footer returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on
+출전 NPC 선택. In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits,
+records), footer `돌아가기`.
+```
+
+
+## v2.9.12 FIRE pair: effective Boss Power +18 (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30) 대신 FIRE가 든 Pair는 effective Boss Power에 `+18`을 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
+FIRE PAIR (User 2026-09-30, v2.9.12): a pair that holds FIRE has 3 Hazards instead of 4, and measured easier - `reader`
+3,000 Runs, Final clear 74.3 ±6.3% (187 Finals) against 65.5 ±5.1% (333) for every other pair. Its Boss stands stronger by
+the amount that levels the two on the same recorded Finals:
+FIRE-containing pair -> effective Boss Power + 18   (every Boss, on top of its own rule: WRATH 198, GREED 198~209, SLOTH seal table + 18)
+any other pair       -> + 0
+The Hazard Pool, the mean-gap penalty and the forecast rules are unchanged (the 토벌 전망 reads the same effective Boss Power).
+```
