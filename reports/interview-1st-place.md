@@ -115,3 +115,16 @@
 
   **WORK 추천(결정 아님): 둘 다, 역할을 나눈다.** itch.io 페이지 = 로그라이트 팬을 만나는 "집"(데브로그 · 댓글 · 팔로우, PC 브라우저 플레이). Pages 주소 = itch 페이지와 스레드에 붙이는 **"폰에서 바로 하기"** 링크(정식판이 갈 자리와 같은 세로 화면). 빌드는 하나, 배포는 두 곳. → WORK: Pages 워크플로에 itch 업로드용 zip 산출 1단계(butler 자동 업로드는 API 키가 필요해 User가 한 번 설정).
   등급분류 쟁점은 두 곳 모두 같으니 채널 선택과 무관하다. 출시 전 확인 항목(§6-2)으로 그대로 둔다.
+
+### 체험판 자리 — 결정 수정 (User 2026-09-30): Pages 안 쓴다. 코드 보호.
+WORK 확인:
+- **저장소 `failab-ist/GUILD24`는 지금 public이다**(GitHub API `visibility: public`, `has_pages: true`). 코드뿐 아니라 design_ssot · reports 전부가 이미 열려 있다. 무료 계정의 GitHub Pages는 public 저장소에서만 되므로, 보호하려면 **저장소를 private으로 바꾸고 Pages는 끊는다**. 이건 User가 저장소 설정에서 한다(즉시).
+- **배포된 JS 자체가 설계 노트다.** `dist/ui/app.js` 229KB 중 주석 99KB(43%), `dist/systems/shop.js` 63KB 중 26KB(41%). 주석에 User 결정 날짜 · 규칙 근거가 그대로 있다. 웹 게임의 JS는 어디에 올려도 브라우저가 받아 가므로 완전한 보호는 없지만, **출고 빌드는 주석 제거 + 최소화(minify)** 해서 내야 한다. 지금 Pages 워크플로는 dist를 그대로 올린다.
+- 따라서 체험판은 **itch.io 하나로 간다**(User 결정). itch는 zip 업로드라 저장소가 private이어도 된다. 폰 세로 화면은 itch 프로젝트 설정의 `Mobile friendly` + 세로 방향으로 대응하고, 불편하면 그때 Cloudflare Pages(private 저장소 무료 배포)를 "폰에서 바로 하기" 링크로 붙인다.
+
+**User 할 일(오늘)에 추가**
+- [ ] 저장소 private 전환 → Pages 비활성. (과거에 받아 간 사본은 막을 수 없다.)
+- [ ] itch.io 계정 · 프로젝트 페이지 만들기(닉네임 `솔브리임`).
+
+**WORK 핸드오프 대기에 추가(우선 위로)**
+0. **출고 빌드 파이프라인**: `dist` → 주석 제거 · 최소화한 `build/` zip(에셋은 그대로) → itch 업로드용 산출. Pages 워크플로는 배포 단계를 떼고 검사(`npm test` 게이트)만 남긴다. QA 하네스는 원본 dist를 계속 쓴다. (esbuild 한 개를 devDependency로 — AGENTS §3 최소 의존.)
