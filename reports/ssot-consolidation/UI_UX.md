@@ -1621,7 +1621,7 @@ The desk 간판 tag sits level with the sign's plate and grows only with the sta
 ```new
 the wide framing the 간판's tag, which runs left from it toward the stage's edge under the painted ceiling fixture,
 stacks its two lines, sits level with the sign's plate rather than its hangers and grows only with the stage's height, at
-most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1120 px wide) and clear of the fixture
+most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1440 px wide, §RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the fixture
 ```
 
 ## AMENDMENT — SALE — DESTINATION SLIP / SHELF LIP (User 2026-09-27, v2.9.9)
@@ -2155,4 +2155,18 @@ New:
 takes one tighter step - the same lines, keys and order, less air, a smaller icon, keys still 44 px or more - so it
 leaves 3 / 2 / 1 shelf rows above it at 640 / 597 / 548 (was 2 / 1 / 1; User 2026-09-30, `reports/v3-prep-measure-v2911.md`
 §4). The three-row floor of UI-Q-v29-18 holds from 640 up; below it the tray folds on a scroll, as everywhere
+```
+
+
+## desk stage width (User 2026-09-30)
+
+New:
+
+```new
+### DESK STAGE WIDTH (User 2026-09-30)
+On a desk the stage is at most 1440 px wide (was 1120), and never wider than 1.65 times its own height - the widest shape
+the painted rooms were checked at - so a 1366 x 680 laptop browser keeps a 1120 stage. Two painted rooms keep the old
+width because they are drawn at the width they are given:
+- FINAL's Boss room stays 1120 wide: wider, it grew taller and pushed the hazards and the last order under the fold
+- NIGHT's window band stays 1120 wide, centred on the wider stage, its sides the band's own edge colour
 ```

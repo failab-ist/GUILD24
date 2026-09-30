@@ -2127,7 +2127,7 @@ Decoration seating -> §LIVE STORE DECORATION SEATING), shown whenever there is 
   the first step. An empty plaque's tag hangs from the top of its spot, so a grown tag never reaches up into the board; on
   the wide framing the 간판's tag, which runs left from it toward the stage's edge under the painted ceiling fixture,
   stacks its two lines, sits level with the sign's plate rather than its hangers and grows only with the stage's height, at
-  most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1120 px wide) and clear of the fixture
+  most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1440 px wide, §RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the fixture
 - the board is titled `새 점포 준비` and carries the three lines of the game as one pinned note, then one status line
   (`보유 장식 없음` / `영업이 시작되면 이번 영업에는 고정됩니다.`); a save error, when there is one, is pinned above the note.
   It ends at least 6 px above the Slot places under it: on the wide framing under 800 px high (a laptop browser, a
@@ -2624,6 +2624,14 @@ At each width verify with actual browser screenshot/manual inspection:
 - no desktop composition merely scaled down
 - no clipped sticky action / safe-area overlap
 - game scene remains useful, not a space-consuming poster above the decision
+
+### DESK STAGE WIDTH (User 2026-09-30)
+
+On a desk the stage is at most 1440 px wide (was 1120), and never wider than 1.65 times its own height - the widest shape
+the painted rooms were checked at - so a 1366 x 680 laptop browser keeps a 1120 stage. Two painted rooms keep the old
+width because they are drawn at the width they are given:
+- FINAL's Boss room stays 1120 wide: wider, it grew taller and pushed the hazards and the last order under the fold
+- NIGHT's window band stays 1120 wide, centred on the wider stage, its sides the band's own edge colour
 
 ### SHORT PHONE (User 2026-09-29)
 

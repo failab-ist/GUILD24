@@ -142,6 +142,10 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **A wider desk stage** - UI_UX §DESK STAGE WIDTH (User 2026-09-30, "상한은 넓혀", every desk screen): the stage cap goes
+  1120 -> 1440 px, and never past 1.65 times the stage's height (a 1366 x 680 laptop keeps 1120: wider, the new-store
+  scene cropped until the Capital plate sat on the Action). FINAL's Boss room and NIGHT's window band keep 1120 - both are
+  drawn at the width they are given and, wider, pushed decisions under the fold or ran under the rail.
 - **A tighter counter tray on a short phone** - UI_UX §SHORT PHONE, UI-Q-v29-18 (User 2026-09-30, "트레이 압축"): under 700
   high a filled tray left 2 / 1 / 1 shelf rows above it at 640 / 597 / 548. It takes one tighter step there - same lines,
   keys and order, less air, a smaller icon (165 -> 124 px) - and leaves 3 / 2 / 1 rows.

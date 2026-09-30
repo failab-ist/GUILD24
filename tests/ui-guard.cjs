@@ -3598,6 +3598,13 @@ test('UI-Q-v29-48: the DAY sign rolls once on arriving at a MORNING, inside the 
 });
 
 // UI-Q-v29-49 (User 2026-09-29): iPhone Safari - no double-tap zoom, no save-image menu, a suspended context resumes on return.
+// UI_UX §DESK STAGE WIDTH (User 2026-09-30): one cap token, height-bound; FINAL's room and NIGHT's band keep 1120
+test('desk stage width: 1440 at most, never past 1.65x its height; FINAL and NIGHT keep their painted width',()=>{
+ const css=read('dist/ui/ui.css');
+ assert.ok(/:root\{--stage-max:min\(1440px,165dvh\)\}/.test(css)&&/\.stage\{max-width:var\(--stage-max\);/.test(css),'the cap is one height-bound token');
+ assert.ok(!/max-width:1120px;margin:0 auto;box-shadow/.test(css),'no second stage cap');
+ assert.ok(/\.p-final\[data-boss\]\{--stage-max:1120px\}/.test(css)&&/\.p-night \.nightband\{max-width:1120px;margin:0 auto\}/.test(css),'the two painted rooms keep 1120');
+});
 // UI_UX §STORE MANAGEMENT, UI-Q-v28-1 (User 2026-09-29): buying or fitting a Decoration keeps the pressed row on screen
 test('Decoration panel: a purchase or an equip keeps the pressed row where it was',()=>{
  assert.ok(/case'deco-buy':\{const back=keepDecoRow\(el\);decoPending=id;renderModal\(\);back\(\);break;\}/.test(app)

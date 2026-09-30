@@ -2569,7 +2569,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* under the title, in the opening's own column - not placed on the counter like MORNING's */
 .p-morning.p-prep .opening .branchplate{position:static;top:auto;right:auto;bottom:auto;left:auto;transform:none;white-space:nowrap;
  font-size:12px;padding:.25em .75em}
-/* the two pixel-face plates step with the stage (the store is the size container, at most 1120 wide on a desk): 12 -> 18 px
+/* the two pixel-face plates step with the stage (the store is the size container, at most the stage cap wide on a desk): 12 -> 18 px
    (crisp on a 2x screen) on a stage 800 high or 1000 wide, 24 px on a stage 1000 by 1000; the Capital plate 17 -> 24 px on
    the same stages as the first step */
 @container (min-height:800px) or (min-width:1000px){
@@ -2836,7 +2836,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     base sits at ~83%), and the name takes the open wall to the left, clear of the axis. One
     rule for every Boss. */
  .p-final[data-boss] .stage-scroll{--room-size:100% auto;
-  --room-h:calc(min(100vw,1120px) * .5628);--room-clear:calc(var(--room-h) * .8);--room-end:var(--room-h)}
+  --room-h:calc(min(100vw,var(--stage-max,1440px)) * .5628);--room-clear:calc(var(--room-h) * .8);--room-end:var(--room-h)}
  .p-final[data-boss] .gate-zero{display:block;position:relative;text-align:center;
   padding-top:max(16px,calc(var(--room-h) * .83 - min(42vh,360px)));padding-bottom:22px}
  .p-final[data-boss] .gate-zero .boss-face{display:flex;justify-content:center;margin:0}
@@ -2884,7 +2884,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   .mobile-only { display: none; }
 }
 :root{--gutter:36px}
- .stage{max-width:1120px;margin:0 auto;box-shadow:0 0 0 1px #ffffff0f}
+ /* the desk stage's width cap (User 2026-09-30: 1120 -> 1440, every desk screen) - one token, read wherever a desk
+    layout sizes itself by the stage. It never runs wider than 1.65 times the stage's height - the widest shape the painted
+    rooms were checked at (1120 x 680): a 1366 x 680 laptop browser keeps the 1120 stage, where a wider one cropped the room
+    until the Capital plate sat on the Action */
+ :root{--stage-max:min(1440px,165dvh)}
+ .stage{max-width:var(--stage-max);margin:0 auto;box-shadow:0 0 0 1px #ffffff0f}
+ /* the one exception: the Boss room of FINAL is drawn at the stage's width, so a wider stage drew it taller and pushed the
+    hazards and the last order under the fold (1280 and 1920 captures) - it keeps the old cap */
+ .p-final[data-boss]{--stage-max:1120px}
+ /* and NIGHT's window band is drawn at the width it is given against a fixed sky line: wider, it grew taller and the rail
+    covered its moon and lamp - the band keeps the old width, centred, on the wider stage */
+ .p-night .nightband{max-width:1120px;margin:0 auto}
+ .p-night{background:#0e0a06} /* the band's own edge colour, so its sides read as the same dark room */
  .room{max-height:50dvh}
  .notices{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
  .form{max-width:860px;margin:0 auto}
