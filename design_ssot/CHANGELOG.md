@@ -3,6 +3,15 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30, in progress)
+
+- **DAY 21+ Gate slope 0.80 → 1.10** (User 2026-09-30): a D30 party grows about 1.9 prepared Power a Day in D21~29
+  against the 0.80 Gate climb. DAY 1~20 unchanged; the DAY 9~10 step that shared `late` is its own `step` (0.80).
+  Measured before adoption (`reports/balance-proposal-v2912.md` §1, 300 seeds): D21~29 expedition success −2~3%p,
+  D30 reach and clear inside the sampling error (`reader` 17.7 → 17.0% / 14.0 → 12.0%, `expert` 51.3 → 49.3% /
+  41.3 → 40.3%). The Day-term anchors are recomputed - they still read the retired 1.50 early slope. DUNGEON_HAZARD
+  §GATE POWER — LATE-DAY SLOPE; ledger; tests night.
+
 ## v2.9.12 — balance review line (User 2026-09-30)
 
 - **First-Run lessons, DAY 1 Counter and no Death on DAY 1~2** (balance review session, User 2026-09-30; from a talk on

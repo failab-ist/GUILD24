@@ -306,8 +306,11 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    reports/growth-injury-v2911.md - then 1.45 after the combined re-measure, reports/remeasure-v2911.md §8); every other Gate Power term is what it was. */
 /* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in archive/v2.9.2/v292-bot-harness.md §9-10): DAY 11~20
    climb at `mid` 1.10 per Day (the NPC-growth check of the Run Progression Arc); DAY 1~10 and DAY 21+ keep their slopes. */
-const GATE={knee:9,early:1.45,late:0.80,mid:1.10,midFrom:10,midTo:20};
-const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.late
+/* v2.9.13 (User 2026-09-30): DAY 21+ 0.80 -> 1.10 - the late Gates had fallen behind a grown roster
+   (reports/balance-proposal-v2912.md §1). The DAY 9~10 step, which shared `late`, is its own `step` and keeps 0.80, so
+   DAY 1~10 does not move. */
+const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
+const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; the Level
    factor removed User 2026-09-26, v2.9.2 fourth pass). The

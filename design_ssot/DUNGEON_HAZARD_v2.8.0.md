@@ -326,8 +326,13 @@ v2.9.11, User 2026-09-28: early slope 1.50 → 1.40 — too few healthy adventur
 
 ```text
 Day term
-= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
+= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10
 ```
+
+v2.9.13, User 2026-09-30: DAY 21+ slope 0.80 → 1.10 - the late Gates had fallen behind a grown roster (a D30 party grows
+about 1.9 prepared Power a Day in D21~29 against the 0.80 Gate climb); DAY 1~20 unchanged, the DAY 9~10 step keeps 0.80 on
+its own (`reports/balance-proposal-v2912.md` §1). The anchors below are recomputed; they still read the retired 1.50 early
+slope before this change.
 
 Full required Power (Source-exact):
 
@@ -349,13 +354,13 @@ familyReward: spider 1 · slime 1 · golem 1.15 · crypt 1.10 · snow 1.25 · Fi
 Day-term reference anchors:
 
 ```text
-D9  = 13.50
-D10 = 14.30
-D12 = 16.50
-D18 = 23.10
-D20 = 25.30
-D24 = 28.50
-D29 = 32.50
+D9  = 13.05
+D10 = 13.85
+D12 = 16.05
+D18 = 22.65
+D20 = 24.85
+D24 = 29.25
+D29 = 34.75
 ```
 
 ## HAZARD THREAT
