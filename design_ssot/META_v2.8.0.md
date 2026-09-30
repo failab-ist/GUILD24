@@ -462,9 +462,13 @@ answer.
 D1-9    = 1%
 D10-19  = 2%
 D20-24  = 3%
-D25-29  = 4%
-D30     = 5%
+D25-29  = 3%
+D30     = 3%
 ```
+
+(User 2026-09-30, v2.9.13): D25-29 4% → 3% and D30 5% → 3%. A player who reaches D30 every Run earned about 1,700 a Run
+and filled all four Slots by about Run 5; the longer Run still earns more through its larger Gross Sales
+(`reports/balance-proposal-v2912.md` §4).
 
 (User 2026-09-25, v2.9.1 balance): back to 1 / 2 / 3 / 4 / 5% with the cheaper Decoration prices below. Buying a Decoration inside the first Run is still not a goal.
 
@@ -482,6 +486,16 @@ all four Slots : around Run 9
 (User decision 2026-09-24: the first Decoration comes sooner, the four Slots fill by Run 10-11,
 and a Boss clear becomes worth attempting after that. Collecting both Decorations of every Slot
 is a longer tail beyond Run 11.)
+
+Read by bot (User 2026-09-30, v2.9.13; `reports/balance-proposal-v2912.md` §4): the lines above were measured with
+`balanced`, the weakest engaged bot (fresh D30 about 5%). A player who reaches D30 every Run - `reader` / `expert`, and the
+User's own account - bought the four at Run 2 / 3 / 4 / 5 under the v2.9.1 table. With the v2.9.13 table (1/2/3/3/3%) and
+훈련소 제휴 간판 at 40%, bought 훈련소 제휴 간판 first then cheapest first, 40 trajectories each:
+
+```text
+balanced        : Run 6 / 8 / 10 / 12
+reader / expert : Run 4 / 5 / 6 / 8
+```
 
 Requirements:
 - D30 / Boss CLEAR is not required to buy any Decoration
@@ -585,7 +599,7 @@ User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
 
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
-every adventurer created while it is worn: 65% chance of spawn Level +1    (User 2026-09-25, v2.9.1 balance; was 50%)
+every adventurer created while it is worn: 40% chance of spawn Level +1    (User 2026-09-30, v2.9.13; 65% from v2.9.1, was 50%)
 ```
 
 ### wall — 의무실 현판

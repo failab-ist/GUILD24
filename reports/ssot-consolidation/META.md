@@ -549,7 +549,6 @@ User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-a
 1st Decoration : around Run 4-6     (measured at the v2.9.1 balance; the 2026-09-24 expectation was Run 2-3)
 all four Slots : around Run 9
 every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.1 balance; was +40G)
-every adventurer created while it is worn: 65% chance of spawn Level +1    (User 2026-09-25, v2.9.1 balance; was 50%)
 an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance    (User 2026-09-25, v2.9.1 balance; was 35%)
 every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED; User 2026-09-25, v2.9.1 balance)
 `DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24; prices 2026-09-25, v2.9.1 balance — cheapest 500, dearest 2.5×, total 3,500)
@@ -638,4 +637,25 @@ to v9, so no Account carries an old id.
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ### counter — 추모 방명록 (id memorialBook)
 ### display — 구급품 진열장 (id aidCabinet)
+```
+
+## AMENDMENT — v2.9.13 Store Capital pace (User decision 2026-09-30)
+
+User 2026-09-30 (`reports/balance-proposal-v2912.md` §4): the rate table becomes 1 / 2 / 3 / 3 / 3% and 훈련소 제휴 간판 40%;
+the progression expectation gains the by-bot reading. The 훈련소 제휴 간판 line declared in the v2.9.1 fence above is
+edited in place and removed from it; the old D25-29 / D30 rows are already in the v2.9.0 F5 fence.
+
+```new
+D25-29  = 3%
+D30     = 3%
+(User 2026-09-30, v2.9.13): D25-29 4% → 3% and D30 5% → 3%. A player who reaches D30 every Run earned about 1,700 a Run
+and filled all four Slots by about Run 5; the longer Run still earns more through its larger Gross Sales
+(`reports/balance-proposal-v2912.md` §4).
+Read by bot (User 2026-09-30, v2.9.13; `reports/balance-proposal-v2912.md` §4): the lines above were measured with
+`balanced`, the weakest engaged bot (fresh D30 about 5%). A player who reaches D30 every Run - `reader` / `expert`, and the
+User's own account - bought the four at Run 2 / 3 / 4 / 5 under the v2.9.1 table. With the v2.9.13 table (1/2/3/3/3%) and
+훈련소 제휴 간판 at 40%, bought 훈련소 제휴 간판 first then cheapest first, 40 trajectories each:
+balanced        : Run 6 / 8 / 10 / 12
+reader / expert : Run 4 / 5 / 6 / 8
+every adventurer created while it is worn: 40% chance of spawn Level +1    (User 2026-09-30, v2.9.13; 65% from v2.9.1, was 50%)
 ```

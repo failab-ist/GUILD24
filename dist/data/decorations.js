@@ -23,7 +23,7 @@ G.DATA.decorations=[
     ONE Decoration, so each Slot is a choice between running the store and keeping people alive.
     Same price as the economy Decoration of the same Slot, and the stronger effect sits in the
     dearer Slot. Ids are kept from the first placement; names and Slots follow the effect. */
- {id:'trainingSign', kind:'survival', slot:'sign',   name:'훈련소 제휴 간판', price:1250, effect:'처음 찾아오는 모험가 65% 확률로 레벨 +1.',
+ {id:'trainingSign', kind:'survival', slot:'sign',   name:'훈련소 제휴 간판', price:1250, effect:'처음 찾아오는 모험가 40% 확률로 레벨 +1.',
   text:'길드 훈련소 문장을 건 간판. 조금 더 단련된 사람이 문을 연다.'},
  {id:'infirmaryPlaque', kind:'survival', slot:'wall', name:'의무실 현판',     price:1000, effect:'부상 모험가가 방문하면 45% 확률로 부상 회복.',
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
@@ -36,7 +36,7 @@ G.DATA.decorations=[
    balance). Presentation copy above states the same values. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
 G.DATA.decorationParams={sponsorSign:{budgetShare:.25},thriftSafe:{dailyGold:50},honorFrame:{weights:[25,30,26,13,6]},
- memorialBook:{deathLimitBonus:2},infirmaryPlaque:{healChance:.45},trainingSign:{levelBonus:1,chance:.65},aidCabinet:{saves:10}};
+ memorialBook:{deathLimitBonus:2},infirmaryPlaque:{healChance:.45},trainingSign:{levelBonus:1,chance:.40},aidCabinet:{saves:10}};
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */
 /* META_v2.8 §Day-reach conversion rate — DIRECTOR DOCUMENT BASELINE. The band is the Day the
@@ -44,6 +44,8 @@ G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
    why these are a fraction of the rates the retired net-asset formula used. */
 /* META §Day-reach conversion rate — EXACT (User 2026-09-25, v2.9.1 balance): back to the full
    1/2/3/4/5% now that the Decoration prices above are cheaper - the v2.9.0 half-rate table is
-   retired. A Decoration inside the first Run is still not a goal. */
-G.DATA.capitalRates=[{maxDay:9,rate:.01},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.04},{maxDay:30,rate:.05}];
+   retired. A Decoration inside the first Run is still not a goal.
+   v2.9.13 (User 2026-09-30): D25-29 4% -> 3% and D30 5% -> 3% - a player who reaches D30 every Run filled all four Slots
+   by about Run 5 (reports/balance-proposal-v2912.md §4). The longer Run still earns more through its Gross Sales. */
+G.DATA.capitalRates=[{maxDay:9,rate:.01},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.03},{maxDay:30,rate:.03}];
 })(globalThis);

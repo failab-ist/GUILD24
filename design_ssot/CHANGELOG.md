@@ -11,6 +11,13 @@ the owner headers and in the git tag.
   D30 reach and clear inside the sampling error (`reader` 17.7 → 17.0% / 14.0 → 12.0%, `expert` 51.3 → 49.3% /
   41.3 → 40.3%). The Day-term anchors are recomputed - they still read the retired 1.50 early slope. DUNGEON_HAZARD
   §GATE POWER — LATE-DAY SLOPE; ledger; tests night.
+- **Store Capital 1/2/3/3/3% and 훈련소 제휴 간판 40%** (User 2026-09-30): the v2.9.1 progression expectation was
+  measured with `balanced`, the weakest engaged bot; a player who reaches D30 every Run (`reader` / `expert`, and the User's
+  account - about 1,700 a Run) bought all four Decorations by about Run 5. D25-29 4% → 3%, D30 5% → 3%; 훈련소 제휴 간판
+  65% → 40% (it was the strongest Decoration, D30 +31%p). 40 trajectories each, 훈련소 제휴 간판 first then cheapest first:
+  `balanced` Run 6 / 7 / 8 / 9 → 6 / 8 / 10 / 12, `reader` 2 / 3 / 4 / 5 → 4 / 5 / 6 / 8, `expert` 3 / 3 / 5 / 5 → 4 / 5 / 6 / 8
+  (`reports/balance-proposal-v2912.md` §4). META §Day-reach conversion rate, §sign, §Approved progression expectation (by-bot
+  reading); COPY_AUDIT decoration line; ledger; tests integration.
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 
