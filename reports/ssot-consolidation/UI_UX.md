@@ -2217,3 +2217,13 @@ one row at a smaller face, on a desk they keep the full face
 - (User 2026-09-30) FINAL 준비 carries `자세히 보기` under the supplied member's Stat grid - a quiet text control that
 opens that member's notebook read only
 ```
+
+
+## v2.9.11 D30 last-order bar pair on a phone (User 2026-09-30)
+
+New:
+
+```new
+- (User 2026-09-30) the one pair: on D30's last order the gate bar `원정대 선택` shares the dock with `원정대 후보 보기`, the same
+bar (a view, not a second flow Action); on a phone both step down to a 16 px face on one row, the desk keeps 21 px
+```

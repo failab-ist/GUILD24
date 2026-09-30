@@ -2289,6 +2289,8 @@ it, vary where the Phase is recognised).
   wraps); a step across a Day or Run boundary (`다음 날`, `다음 점포 열기`, the FINAL gate bar) is 64 / 72 px (label 20 / 22 px;
   the gate bar keeps its sign face at 21 px); `첫 점포지원 고르기` is 64 px / 20 px at every width, because the counter-front
   plates of the preparation scene sit directly above the dock
+- (User 2026-09-30) the one pair: on D30's last order the gate bar `원정대 선택` shares the dock with `원정대 후보 보기`, the same
+  bar (a view, not a second flow Action); on a phone both step down to a 16 px face on one row, the desk keeps 21 px
 - depth: 5 px across a boundary, 4 px inside the Day; `손님 보내기` 3 px, below the price keys it must not outrank
   (§SALE — COUNTER TRAY); ORDER's `발주 확정` and `영업 시작` are never enabled together and share the 4 px
 - edges in two tiers, like the sizes: a step inside the Day is its face, a 3 px lit edge at the top and a 4 px deep edge at the
