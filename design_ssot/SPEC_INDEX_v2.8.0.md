@@ -3,7 +3,7 @@
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) ; V2_9_2_CLOSED_2026-09-26 (main d6fcfbd; tag v2.9.2 pending, set by the User); V2_9_3_CLOSED_2026-09-26 (main; tag v2.9.3 pending, set by the User) ; V2_9_4_TO_V2_9_10_CLOSED (each merged to main - dates, PRs and commits in SOURCE_ADOPTION_STATUS; tags v2.9.4 and v2.9.8 pending, set by the User) ; V2_9_11_CLOSED_2026-09-29 (merged to main by PR #28; tag v2.9.11 pending, set by the User) (v2.8 canonical baseline closed 2026-09-24)
 SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3); V2_9_4_ADOPTED (replay nudge — CHANGELOG §v2.9.4); V2_9_5_ADOPTED (SALE strain line — CHANGELOG §v2.9.5); V2_9_6_ADOPTED (codex and Item Flavor cleanup — CHANGELOG §v2.9.6); V2_9_7_ADOPTED (decorations and Rarity — CHANGELOG §v2.9.7); V2_9_8_ADOPTED (ids read as the current names, save v9 — CHANGELOG §v2.9.8, main `621d007`, PR #19); V2_9_9_ADOPTED (presentation: store scene, dock Actions, SALE, FINAL clash — CHANGELOG §v2.9.9, merged to main by PR #20 on User confirmation 2026-09-27); V2_9_9_QUICK_PATCH (Wallet multipliers 0.40 / 0.25 / 0.15, the strain line in the SALE forecast pin — CHANGELOG §v2.9.9 quick patch, merged to main by PR #21, User 2026-09-28); V2_9_10_ADOPTED (quick patch — CHANGELOG §v2.9.10, merged to main by PR #22 on User confirmation 2026-09-28); V2_9_10_QUICK_PATCH (effect order, 1+1 sticker, 본사 폐기 유예, SLOTH seal window / count / fold — CHANGELOG §v2.9.10 quick patch, merged to main by PR #24 and its follow-up on User confirmation 2026-09-28); V2_9_11_ADOPTED (v3.0 prep line, branch claude/v3-0-prep-planning-g42z7y — CHANGELOG §v2.9.11, merged to main by PR #28 on User confirmation 2026-09-29)
@@ -278,6 +278,16 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   shelf life wording, sold-out offers, the customer walking up, the Boss dossier's entry, the Rare Reference customers' lines
   -> CHANGELOG §v2.9.10 (owners UI_UX §ORDER — ITEM INFORMATION HIERARCHY, §SALE — COUNTER TRAY / SHELF ORDER / CUSTOMER
   ARRIVAL, §BOSS REVEAL; UI_UX_QA UI-Q-v29-20 / 35; COPY_AUDIT §4-10 / §8-0 / §25; COPY_WORLD_VOICE §RARE REFERENCE NPC; SALE; ITEM).
+- v2.9.12 (User 2026-09-30, balance review line): first-Run lessons (DAY 1 Counter, no Death on DAY 1~2, DAY 3 injured
+  customer with a 구급키트 and a payday customer), rules taught after they first act by NIGHT coach marks (the pre-sale
+  피로 / 대성공 / 만반의 준비 marks retired), the END replay line above 도감에서 보기 in bold -> CHANGELOG §v2.9.12 (owners
+  CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81, NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §3 / §26, UI_UX §GREAT
+  SUCCESS / §만반의 준비 TUTORIAL / §END — REPLAY NUDGE, UI_UX_QA, COPY_WORLD_VOICE §TUTORIAL COACH COPY).
+  The v3.0 prep quick patches (User 2026-09-29~30) join it: iPhone Safari and short phones (iPhone SE, Galaxy 360x597), the
+  BGM / SFX mix, the ORDER floating box and warehouse panel, the desk's own SALE and wider stage, a closed Gate kept as
+  `오늘 폐쇄`, the best 총매출 replay line, D30 candidates while ordering and a notebook in FINAL 준비, stale Hazard Stat lines
+  -> the same CHANGELOG section (owners UI_UX, UI_UX_QA, PRESENTATION, META §BEST DAY, EVENT, FINAL_EXPEDITION §D30 PLAYER
+  FLOW, DUNGEON_HAZARD, DUNGEON_ITEM_QA, COPY_AUDIT).
 - v2.9.11 (User 2026-09-28~29, merged by PR #28): the v3.0 prep line - unsold stock leaves on the Night of its last sale Day, on
   that Day's receipt; the early Gate slope 1.50 -> 1.45; 35 customer names replaced; the Rare Reference customers removed; two Expedition Store
   Supports; Events at 40%, once per Run, 55 in all; recorded phase BGM (User 2026-09-29) -> CHANGELOG §v2.9.11 (owners RELIC 31 / 32, EVENT 24~55, COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25, ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING

@@ -142,8 +142,7 @@
 
 ## 3-3. 대성공 안내
 
-**현재** (User 2026-09-24: contextual mark, first time the signal is lit)
-> 대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.
+**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 사후 안내 §26-2가 가르친다)
 
 ---
 
@@ -156,8 +155,7 @@
 
 ## 3-5. 보급 안내
 
-**현재** (User 2026-09-25: contextual mark, the first time the counter tray's `판매 후 변화` shows the `피로 회복` row of a Food/Drink chosen for a fatigued customer; the same line is the §3-7 SUPPLY step. It sat on the retired `피로 A → 출발 B` row before)
-> 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
+**폐지** (User 2026-09-30, v2.9.11: 사전 코치 폐지. 이 규칙은 처음 작용한 원정의 NIGHT 사후 안내 §26-2가 가르친다)
 
 ---
 
@@ -172,7 +170,8 @@
 
 The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-24: the
 first SALE teaches five marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, STATS (능력치, User 2026-09-24), 전망 (§3-4), PRICING;
-SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time their situation exists).
+RETURNING and 가방 (§3-6) appear the first time their situation exists. SUPPLY, 대성공 and 만반의 준비 are retired
+(User 2026-09-30): the NIGHT coach marks §26-2 teach them after they first act).
 
 ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY → 발주 확정 (§3-2) → 후보 교환
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY). The `gold` mark (`보유 골드와 현재 발주 후 잔액을 확인한다.` on
@@ -186,9 +185,6 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 
 ### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
 > 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
-
-### SUPPLY (User 2026-09-25: contextual on the counter tray's `피로 회복` row, the first time a Food/Drink is chosen for a fatigued customer)
-> 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
 ### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0)
 > 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.
@@ -204,9 +200,6 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 
 ### QUANTITY
 > 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
-
-### 만반의 준비 (User 2026-09-25, v2.9.1: contextual on the Bag slots, the first time both slots of an uninjured customer departing below Fatigue 20 are filled — UI_UX §만반의 준비 TUTORIAL)
-> 건강한 손님의 가방을 가득 채웠다. 만반의 준비를 하면 실패해도 살아 돌아올 가능성이 커진다.
 
 ---
 
@@ -1076,8 +1069,8 @@ User 2026-09-28, v2.9.11: 명예 모험가 액자 65% → 75%, 길드 추천 매
 
 ## 11-17. 원정 도시락 코너
 
-**현재** (User 2026-09-25, v2.9.0: 조건이 있으면 조건 · 효과 순, 2절 이내; 수치 User 2026-09-28, v2.9.11)
-> 음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.
+**현재** (User 2026-09-25, v2.9.0: 조건이 있으면 조건 · 효과 순, 2절 이내; 수치 User 2026-09-28, v2.9.11; 마왕성 괄호 User 2026-09-29, v2.9.11)
+> 음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나).
 
 ---
 
@@ -1123,8 +1116,8 @@ User 2026-09-28, v2.9.11: 명예 모험가 액자 65% → 75%, 길드 추천 매
 
 ## 11-23. 왕도 프리미엄 인증
 
-**현재** (User 2026-09-25, v2.9.0: 조건이 있으면 조건 · 효과 순, 2절 이내; 40% → 60% User 2026-09-28, v2.9.11)
-> 바가지(150%) 판매 시 · 판매가의 60% 추가 지급 · 바가지 구매 의사 +16%p.
+**현재** (User 2026-09-25, v2.9.0: 조건이 있으면 조건 · 효과 순, 2절 이내; 40% → 60% User 2026-09-28, v2.9.11; 45% · 구매 의사 +10%p · 운영비 +10% User 2026-09-29, v2.9.11)
+> 바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.
 
 ---
 
@@ -2910,3 +2903,31 @@ Player-facing Copy에서 내부 시스템 용어 `Final`을 사용하지 않는�
 # 25. RARE REFERENCE DIALOGUE — REMOVED (User 2026-09-28, v2.9.11)
 
 The three Rare Reference customers and their lines were removed before a paid release (COPY_WORLD_VOICE §RARE REFERENCE NPC).
+
+---
+
+# 26. FIRST-RUN LESSONS (User 2026-09-30, v2.9.11)
+
+## 26-1. DAY 3 보수날 손님 도착 대사
+
+**노출 위치**
+> 계정 첫 판 DAY 3의 보수날 손님이 계산대에 도착할 때 한 번. 다른 도착 대사보다 먼저 (rule owner: CORE_RUN §FIRST-RUN LESSONS).
+
+**현재**
+> “오늘 보수 받았어요. 값은 신경 안 써요.”
+
+## 26-2. NIGHT 사후 안내 (User 2026-09-30)
+
+**노출 위치**
+> 계정에서 그 규칙이 처음 작용한 원정의 NIGHT 기록 위에 `점주 안내` 코치 말풍선으로 (튜토리얼과 같은 방식, 기록에 줄은
+> 붙지 않음). 계정당 한 번이며 발견 수첩에도 남는다 (rule owner: NIGHT_CLOSING §DISCOVERY LINE). 한 기록에 여럿이면
+> 아래 순서: 부상 출발 · 피로 10 이상 출발 · 대응 상품이 위험을 줄임 · 만반의 준비로 생존 · 대성공(가게 보너스 골드) ·
+> 사망(사망 기록에는 이것만, User 2026-09-30).
+
+**현재**
+> 다친 채 떠나면 투력·강인함이 깎인 채로 싸운다.
+> 피로가 10을 넘으면 기동·정신이 떨어진다. 음식·음료가 피로를 덜어 준다.
+> 위험에 맞는 상품은 그 위험의 압박을 줄인다.
+> 건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.
+> 준비가 넉넉하면 대성공이 난다. 대성공은 가게에도 보너스 골드를 남긴다.
+> 사망이 쌓여 한도에 닿으면 소문이 퍼져 영업이 끝난다.

@@ -415,3 +415,25 @@ Use only a development fixture, development Save, or explicitly controlled migra
 - fresh v9 is created
 - tutorial is completed on a current v9 account
 ```
+
+## AMENDMENT — v2.9.11 First-Run lessons (User decision 2026-09-30)
+
+User 2026-09-30 (balance review session): the account's first Run teaches by play; DAY 1 Counter in the warehouse. New lines only.
+
+```new
+### RUN-Q81 — FIRST-RUN LESSONS
+(User 2026-09-30, v2.9.11; owner `CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS.)
+- a fresh account's first Run: after the DAY 0 pick the warehouse holds the four opening Items and exactly one Common Item
+that counters the first Gate's Hazard
+- an account with a settled Run: the four opening Items only
+- the same seed gives the same Gates, visitors and stream on both
+- the measurement harness (`lessons=false`) plays the ordinary Run
+- `tests/revision.cjs`
+FAIL:
+- a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
+- the extra Item on a later Run, a non-Common or non-countering Item, a lesson that adds a draw, or a Death on DAY 1~2 of
+the first Run
+- DAY 3 of the first Run with someone injured: the injured adventurer is the first visitor, one 구급키트 joined the
+warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, +20%p on
+150% only, the §26-1 line; a later Run: none of it
+```

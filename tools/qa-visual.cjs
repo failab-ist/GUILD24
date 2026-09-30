@@ -569,9 +569,9 @@ async function d25OrderProbe(page){
  return {fails};
 }
 
-/* UI-Q-v28-27 — the two CONTEXTUAL coach steps. Every other lesson is on a screen the gate
-   already opens, but a Deep notice and a Great Success signal exist only on some Days, so the
-   marks that teach them were never driven in a browser. Each is brought up the way a player
+/* UI-Q-v28-27 — the CONTEXTUAL coach step. Every other lesson is on a screen the gate
+   already opens, but a Deep notice exists only on some Days, so the mark that teaches it was
+   never driven in a browser (the Great Success mark is retired, User 2026-09-30). Each is brought up the way a player
    meets it, then the overlay is measured: what the text says, what is actually highlighted,
    what the cutout holds, and what the bubble is sitting on top of. */
 const COACH_READY=`(()=>{const el=document.querySelector('#coach-root .coach-focus');
@@ -700,55 +700,8 @@ async function coachProbe(page,label){
    fails.push(`${label}: an absent Deep target blocked the next lesson (ORDER showed "${after.copy.slice(0,24)}")`);
  }
 
- /* ---- Great Success coach: a counter where the signal is actually up.
-    Its own Run - the Deep segment above has already played this one out - and a CONTROLLED
-    SETUP, the same device the D30 captures use and for the same reason: the signal needs a
-    customer prepared well past their Gate, which this crude driver does not reliably reach
-    inside one Run. The NPC's own Stats are raised at a REAL counter and then a REAL sale is
-    committed, so the signal is still computed by the shipped Dungeon.greatSuccessSignal off a
-    real prepared snapshot. Nothing about the mark, its target or its copy is fabricated. */
- // a fresh Run, opened through the same real first-run flow the Deep segment used: start()
- // alone leaves the store on its DAY 0 support choice, which the step driver cannot advance
- await page.evaluate(`(()=>{const g=Guild24.game;g.run=null;g.save();})()`);
- await page.reload({waitUntil:'load'});
- await page.waitForFunction(`!!window.Guild24&&!!window.__coachTable`);
- await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-coach-great-'+label);
- await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
- await page.$('.p-prep [data-action="start"]').then(b=>b?b.click():page.evaluate('Guild24.render()'));
- await page.click('#modal-root [data-action="buy-relic"]');
- await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;g.save();Guild24.render();})()`);
- // walk counters until one of them raises the signal: which Items a Day happens to stock is a
- // property of the seed, and the lesson is not
- let signal=false;
- for(let i=0;i<400&&!signal;i++){
-  if(await page.evaluate(`Guild24.game.run.phase==='end'`))break;
-  if(await page.evaluate(`Guild24.game.run.phase==='sell'&&!!Guild24.game.current()&&!!Guild24.game.current().outlook`)){
-   signal=await page.evaluate(`(()=>{const g=Guild24.game,s=g.run,D=DATA,n=g.current();
-     for(const k of Adventurer.keys)n.stats[k]=Math.max(n.stats[k],90);
-     n.level=Math.max(n.level,12);
-     const st=s.inventory.find(st=>!n.refused.includes(st.item+':full')&&g.interest(n,D.itemBy[st.item],'full').debit<=n.money);
-     if(st){try{g.sell(st.id,'full');}catch(e){}}
-     Guild24.render();return !!g.current()?.outlook?.greatSignal;})()`);
-   if(signal)break;}
-  await page.evaluate(`${STEP}()`);
- }
- if(signal){
-  // the same takeovers the Deep capture clears, for the same reason: showCoach stands down
-  // while a modal owns the screen, so the mark would never paint under one
-  await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.event)s.eventSeen=true;
-   if(s.bossReveal)for(const k of ['d0Seen','identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])s.bossReveal[k]=true;
-   if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;
-   window.__coachIds={};for(const k of Object.keys(window.__coachTable))window.__coachIds[k]=window.__coachTable[k].map(x=>x[0]);
-   window.__coachSteps=window.__coachTable[s.phase]||[];Guild24.render();})()`);
-  await page.waitForTimeout(150);
-  await clearTakeovers(page);
- }
- if(!signal)fails.push(`${label}: no customer in this Run raised a Great Success signal to teach`);
- else{
-  await page.evaluate(`(()=>{window.__coachSteps=window.__coachTable[Guild24.game.run.phase]||[];})()`);
-  const info=await coachStep(page,'sell','great',label);
-  captured.push(info);judgeCoach(info,fails,warn);
- }
+ /* The Great Success coach this probe used to capture is retired (User 2026-09-30): the rule is named on the NIGHT
+    record after it first acts (NIGHT_CLOSING §DISCOVERY LINE), so there is no SALE mark left to judge here. */
  return {fails,warn,captured};
 }
 
@@ -877,7 +830,7 @@ async function focusProbe(page){
    await cctx.close();
   }
   /* the same step has to mean the same thing at both layouts: same target, same copy */
-  for(const id of ['deep','great']){
+  for(const id of ['deep']){
    const both=coachSeen.filter(x=>x.stepId===id&&!x.missing);
    if(both.length===2){
     if(both[0].copy!==both[1].copy)console.log(`FAIL contextual coach ${id}: the two layouts teach different copy`),failed++;

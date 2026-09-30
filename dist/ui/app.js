@@ -1058,20 +1058,12 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>'
   :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대 덕분에 부상이 나았다.</p>'
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단 덕분에 부상이 나았다.</p>':'';
- /* DUNGEON_HAZARD §Preparation / Level Death reduction / UI_UX §만반의 준비 TUTORIAL (v2.9.1
-    balance): a state class only, no visible style of its own - it exists so the coach mark
-    below can anchor to it the first time this customer's confirmed Bag actually reaches 만반의
-    준비 (healthy, departure Fatigue < 20, 2+ Items). fatigueBeforeExpedition mirrors what the
-    counter tray's own `출발 B` reads. */
- const gate=game.claimedGateFor(n);
- const fatigueBeforeExpedition=gate?Dungeon.prepare(n,gate,game.run.facilities).effects.fatigueBeforeExpedition:0;
- const prepared=!!gate&&Dungeon.fullyPrepared(n,fatigueBeforeExpedition);
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
  +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
- +'<span class="slots'+(prepared?' prepared':'')+'" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+ +'<span class="slots" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
   +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
@@ -1133,7 +1125,9 @@ function beat(r){
    +(!gone&&r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
    +(!gone&&r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
  +'</div>'
- +'<div class="told">'
+ /* NIGHT_CLOSING §DISCOVERY LINE: the taught rules that acted on this record are state classes only - the NIGHT
+    coach marks anchor to them (coachSteps.night) */
+ +'<div class="told'+(r.acted||[]).map(k=>' learn-'+k).join('')+'">'
   +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
   +(gone?'':causeLines(r))
   /* what the Outcome and its summary do NOT already say: an attributed incident, or an event
@@ -1256,8 +1250,10 @@ const coachSteps={
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
     the screen reads. Everything else is contextual: showCoach() shows the first unfinished mark
     whose target is VISIBLE, so a mark anchored to an element that only exists in its situation
-    (a Supply line, the Great Success signal, a returning customer's last-expedition line, a
-    filled Bag slot) teaches itself the first time that situation exists and never before.
+    (a returning customer's last-expedition line, a filled Bag slot) teaches itself the first time
+    that situation exists and never before. Fatigue, Great Success and 만반의 준비 are no longer
+    taught here: they are named after they first act, on the NIGHT record (NIGHT_CLOSING §DISCOVERY
+    LINE, User 2026-09-30).
     Exact copy: COPY_AUDIT §3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
@@ -1269,16 +1265,13 @@ const coachSteps={
     `.great-signal` below it move with the committed Bag, so the cutout stops above them. */
  ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
  ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
- /* contextual marks - the hidden Supply-deficit formula is not taught, only the visible consequence */
-['supply','.counter-tray .tray-delta .fatigue','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
- ['great','.great-signal','대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.'],
+ /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
- /* UI_UX §만반의 준비 TUTORIAL (v2.9.1 balance): contextual on kitLine()'s own `.slots.prepared`
-    state class - the first time a healthy, well-rested customer's Bag actually reaches 만반의
-    준비 (DUNGEON_HAZARD §Preparation / Level Death reduction). Words only, no number. */
- ['prepared','.slots.prepared','건강한 손님의 가방을 가득 채웠다. 만반의 준비를 하면 실패해도 살아 돌아올 가능성이 커진다.']],
- night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
+ /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
+    it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it) */
+ night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.'],
+  ...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
@@ -1708,9 +1701,8 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  if(!n||!st){trayFolded=false;const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
- /* User 2026-09-25: the Item's own effects only. A Food/Drink's `피로 회복` row for a customer who carries
-    Fatigue is the SUPPLY lesson's anchor (`.fatigue`), which replaced the retired `피로 A → 출발 B` line. */
- const parts=moved.direct.map(r=>'<b class="'+[r.bad?'effect-bad':'',r.key==='supply'&&n.fatigue>0?'fatigue':''].filter(Boolean).join(' ')+'">'
+ /* User 2026-09-25: the Item's own effects only (the retired `피로 A → 출발 B` line is not back). */
+ const parts=moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'
   +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life=lastSaleDay(st.expires-s.day);
@@ -1906,8 +1898,9 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
  const nudge=opened?'':replayLine();
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
-  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'')
-  +(nudge?'<p class="replay">'+E(nudge)+'</p>':'');}
+  /* User 2026-09-30: what the Run left behind reads before the link to the codex, and reads as the point */
+  +(nudge?'<p class="replay">'+E(nudge)+'</p>':'')
+  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
 /* UI_UX §END — REPLAY NUDGE: when the Run opened nothing, at most one fact it left behind - the settlement crossed the price
    of a Decoration the account did not own at that settlement (judged once, in settleStoreCapital), else a new best Day
    (META §BEST DAY) - else nothing. Both are recorded on the Run, so a reload or a purchase from the ending prints the same

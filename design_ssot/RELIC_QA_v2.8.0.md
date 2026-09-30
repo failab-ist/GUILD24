@@ -431,7 +431,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
 - 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28: was +2 for both and +4)
+- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28: was +2 for both and +4); at the 마왕성 the +2 lands on the adventurer's most 취약 Hazard only - the largest gap before the bonus, the Final's Hazard order on a tie (User 2026-09-29)
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
@@ -559,8 +559,9 @@ Expected:
 ### REL-Q-v28-7 — ROYAL PREMIUM
 
 Expected:
-    150% sale of any rarity -> HQ commission = 60% of the charged sale price (v2.9.11; was 40%)
-    the flat 150% purchase-intent penalty (-0.16) is lifted for the owner
+    150% sale of any rarity -> HQ commission = 45% of the charged sale price (v2.9.11, User 2026-09-29; was 60%, 40% before)
+    the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16; User 2026-09-29)
+    the next Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's (User 2026-09-29)
     the 1.5x price burden and Loyalty -3 are unchanged
 
 ### REL-Q36 — PREMIUM POOL SUPPORT

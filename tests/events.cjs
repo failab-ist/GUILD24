@@ -213,7 +213,8 @@ test('EVENT 18: 길드 급여일 is a today-only budget and never edits the pers
     const n = g.current();
     visitors.push(n);
     assert.ok(n.eventBudget>0,'visitors receive a temporary budget on arrival');
-    assert.equal(n.eventBudget,Math.round(n.money*.2));
+    // CORE_RUN §FIRST-RUN LESSONS DAY 3: the payday lesson's +200G stacks on the Event budget for that visit
+    assert.equal(n.eventBudget,Math.round(n.money*.2)+(g.run.firstRun&&n.lessonPayday===g.run.day?200:0));
     g.depart();
    }
    g.rollEvent=()=>null;
@@ -232,7 +233,7 @@ test('EVENT 18 + RICH: arrival order applies rich +50, cap 2000, then eventBudge
    g.run.cursor = 0;
    g.beginOrder(); g.open();
    assert.equal(n.money, 2000, 'rich +50 caps at 2000');
-   assert.equal(n.eventBudget, Math.round(2000 * 0.2), 'eventBudget is calculated on post-rich capped Wallet');
+   assert.equal(n.eventBudget, Math.round(2000 * 0.2)+(g.run.firstRun&&n.lessonPayday===g.run.day?200:0), 'eventBudget is calculated on post-rich capped Wallet');
    g.depart();
    g.rollEvent=()=>null;
    g.finishNight(); g.closeDay();

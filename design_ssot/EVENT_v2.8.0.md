@@ -2,8 +2,8 @@
 
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
-DOC_VERSION=2.9.11
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/EVENT_v2.8.0-patch.md,history/EVENT_v2.7.0.md,history/EVENT_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/EVENT.md

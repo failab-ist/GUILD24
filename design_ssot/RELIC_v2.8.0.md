@@ -671,9 +671,11 @@ per Food/Drink Item in the Bag (User 2026-09-28, v2.9.11; was Supply +2 for both
   Food:  Supply +2 (피로 회복 +2)
   Drink: Supply +1 (피로 회복 +1)
   +2 defence on every Hazard of the Gate the adventurer actually goes to
+  at the 마왕성 (the Final) the +2 goes to one Hazard only: the adventurer's most 취약 one - the largest gap before this
+    bonus, the Final's own Hazard order on a tie (User 2026-09-29, v2.9.11)
 ```
 
-Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28)
+Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나).` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28 / 2026-09-29)
 
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
@@ -753,9 +755,13 @@ refusal/inventoryRisk=REMAINS
 
 왕도 프리미엄 인증:
     Price = 320G
-    HQ commission = 60% of the charged (150%) sale price (User 2026-09-28, v2.9.11; was 40%)
-    the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
+    HQ commission = 45% of the charged (150%) sale price (User 2026-09-29, v2.9.11; was 60%, 40% before)
+    the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16; User 2026-09-29, v2.9.11; it did not apply before)
+    base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
+      (User 2026-09-29, v2.9.11)
     the 1.5x price burden and Loyalty -3 are unchanged
+
+Player card copy: `바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.` (User 2026-09-29, v2.9.11)
 
 24. 원정 전문 인증
 tag=Expedition

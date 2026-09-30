@@ -1060,23 +1060,13 @@ not only in the 도감.
 
 User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may recur, +1 each time); a contextual 만반의 준비 tutorial the first time both Bag slots of an uninjured customer departing below Fatigue 20 are filled; an Epic hybrid stays below every specialist of the same or a higher Rarity (it may exceed a Common Main). Earlier declarations this batch supersedes were removed from the fences above in place.
 
-```new
-### 만반의 준비 TUTORIAL
-(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
-the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
-below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
-- anchor: the customer's Bag slots on the SALE counter
-- teaches the condition and the effect in words only; no number, no percentage
-- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
-```
+(Its lines were retired 2026-09-30; see AMENDMENT — v2.9.11 NIGHT discovery lines below.)
 
 ## AMENDMENT — v2.9.1: approved copy pointers (User decision 2026-09-25)
 
 User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; its reveal copy and the 만반의 준비 tutorial line are approved in COPY_AUDIT §13-23 / §3-7. Earlier declarations this batch supersedes were removed from the fences above in place.
 
-```new
-- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
-```
+(The 만반의 준비 copy pointer was retired 2026-09-30 with the mark itself.)
 
 ## AMENDMENT — v2.9.1: 연속 부상 출발 row (User decision 2026-09-25)
 
@@ -1316,7 +1306,7 @@ User 2026-09-26: §END — REPLAY NUDGE is new; §Pre-Run Decoration empty-slot 
 so the next store reads as a little closer - no task, checklist, progress bar, remaining-count, mission or reward.
 - the `본사 해금` row lists every product / Job this Run opened: the distinct-Boss unlocks it already listed, and the D10 /
 D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run records when they open; their Day toast stays as it is
-- when the Run opened nothing, one line may sit at the foot of the tape, above `다음 점포 열기` - the first that applies:
+- when the Run opened nothing, one line may sit at the foot of the tape, above `도감에서 보기` and in bold (User 2026-09-30) - the first that applies:
 1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
 (before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
 2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
@@ -2226,4 +2216,33 @@ New:
 ```new
 - (User 2026-09-30) the one pair: on D30's last order the gate bar `원정대 선택` shares the dock with `원정대 후보 보기`, the same
 bar (a view, not a second flow Action); on a phone both step down to a 16 px face on one row, the desk keeps 21 px
+```
+
+
+## AMENDMENT — v2.9.11 NIGHT discovery lines (User decision 2026-09-30)
+
+The Great Success, 만반의 준비 and Fatigue (SUPPLY) coach marks are retired: each rule is named after it first acts, on the
+NIGHT record (NIGHT_CLOSING §DISCOVERY LINE), so a rule is taught in one place. The 만반의 준비 declaration above was
+removed from its fence in place.
+
+SUPERSEDED (the pre-sale Great Success mark):
+
+```text
+Contextual Tutorial explicitly teaches:
+- `대성공` exists
+- it is above ordinary Success
+- extra preparation can raise its chance
+- Great Success has an additional reward
+- on a **normal expedition**, Great Success gives the Store an additional Gold bonus
+```
+
+```new
+(User 2026-09-30, v2.9.11.) No coach mark before the fact: the first normal-expedition 대성공 that pays the Store its
+Gold bonus names it on its NIGHT record (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE) - extra preparation raises its
+chance, and it leaves the Store an additional Gold bonus. The SALE signal carries no mark.
+### 만반의 준비 TUTORIAL
+(User 2026-09-30, v2.9.11.) No coach mark before the fact: the first time 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md`
+§Preparation / Level Death reduction) turns away a Death, that NIGHT record names the condition and the effect in words
+only (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE). The same holds for Fatigue (the SUPPLY mark is retired too): the
+SALE counter carries no anchor for either.
 ```

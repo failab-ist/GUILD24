@@ -303,7 +303,7 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 60% of the charged 150% price (royalCert, v2.9.11; was 40%)',()=>{
+test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 45% of the charged 150% price (royalCert, v2.9.11 User 2026-09-29; was 60%, 40%)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -319,8 +319,8 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 60% of the 
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const common=DATA.items.find(i=>i.rarity===0);
  assert.ok(plain&&insured,'the catalogue has both a plain Rare+ and a Rare+ insurance role');
- assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.60),'royalCert pays 60% of the charged 150% price');
- assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.60),'at any rarity');
+ assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.45),'royalCert pays 45% of the charged 150% price');
+ assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.45),'at any rarity');
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.20),'supplyCert pays 20% of list');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
@@ -329,6 +329,37 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 60% of the 
  assert.ok(!/it\.sell\*\.08/.test(src),'the inherited 8% supplyCert rate is gone');
  assert.ok(!/mode==='overcharge'&&it\.rarity>=2\)commission\+=Math\.round\(it\.sell\*\.12\)/.test(src),
   'and so is the inherited 12% royalCert rate');
+});
+
+/* RELIC §23 (v2.9.11, User 2026-09-29): the owner's 바가지 intent penalty -0.16 becomes -0.06, and the card takes 10% of
+   overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded. */
+test('REL §23: 왕도 프리미엄 인증 - 바가지 intent +10%p and base operating cost +10%',()=>{
+ const g=fresh('royal-intent'),s=g.run,n=s.npcs[0];
+ n.traits=[];n.money=99999;n.loyalty=0;n.injury=0;n.pack=[];
+ const it=DATA.items.find(i=>i.rarity===0&&i.category==='food');
+ s.facilities=[];const without=g.interest(n,it,'overcharge').chance;
+ s.facilities=['royalCert'];const owned=g.interest(n,it,'overcharge').chance;
+ assert.ok(without>.08&&owned<.97,'sanity: neither reading is clamped');
+ assert.ok(Math.abs(owned-without-.10)<1e-9,'the owner reads +0.10 on a 150% offer (was +0.16)');
+ assert.equal(g.interest(n,it,'full').chance,(s.facilities=[],g.interest(n,it,'full').chance),'정가 is untouched');
+ const base=g.overheadBase(15),cost=f=>g.expectedOperatingCost({day:15,facilities:f,event:null});
+ assert.equal(cost(['royalCert']),Math.round(base*1.10/10)*10,'operating cost +10% of overheadBase');
+ assert.equal(cost(['royalCert','hub']),Math.round(base*1.20/10)*10,'with 지역 거점점 계약: the two shares add');
+ assert.equal(cost([]),Math.round(base/10)*10,'without it, unchanged');
+});
+
+/* RELIC §17 (v2.9.11, User 2026-09-29): at the 마왕성 each Food/Drink's +2 lands on the adventurer's most 취약 Hazard only;
+   an ordinary Gate still takes +2 on every Hazard. */
+test('REL §17: 원정 도시락 코너 - the 마왕성 takes the +2 on the most 취약 Hazard only',()=>{
+ const g=fresh('meal-final'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0,pack:['rice','water']};
+ const final={...DATA.dungeonBy.spider,family:'final',hazards:['poison','bind','cold','whiteout'],tier:2,day:30,scale:4.6,power:60,reward:2};
+ const gate={...DATA.dungeonBy.snow,family:'snow',hazards:['cold','whiteout'],tier:2,day:20,scale:3,power:40,reward:1};
+ const diff=(d)=>{const a=Dungeon.prepare(n,d,[]).effects,b=Dungeon.prepare(n,d,['expeditionMeal']).effects;
+  return d.hazards.map(h=>(b[h]||0)-(a[h]||0));};
+ const bare=Dungeon.prepare(n,final,[]),gaps=final.hazards.map(h=>Dungeon.hazardState(h,bare.effects,final).gap);
+ const worst=gaps.indexOf(Math.max(...gaps)),fin=diff(final);
+ assert.deepEqual(fin,final.hazards.map((h,i)=>i===worst?4:0),'two Food/Drink -> +4 on the largest gap, nothing elsewhere');
+ assert.deepEqual(diff(gate),[4,4],'an ordinary Gate: +2 per Food/Drink on every Hazard, as before');
 });
 
 test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the catalogue',()=>{
@@ -427,19 +458,19 @@ test('REWORK 프리미엄 멤버십: a 단골 arrives with +40G, and Rare+ inten
  const delta=l=>{n.loyalty=l;g.run.facilities=[];const a=g.interest(n,it,'overcharge').chance;g.run.facilities=['premiumMember'];return g.interest(n,it,'overcharge').chance-a;};
  assert.ok(Math.abs(delta(51)-.15)<1e-9,'단골 +15%p');assert.equal(delta(50),0,'Loyalty 50 is not 단골');
 });
-test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150% flat intent penalty lifted',()=>{
+test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150% flat intent penalty eased by +10%p',()=>{
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const plain=sellOnce([],'full',insured.id),cert=sellOnce(['supplyCert'],'full',insured.id);
  assert.equal(cert.n.money-plain.n.money,30,'the buyer of a qualifying sale gets +30G');
  assert.equal(cert.s.daily.commission,Math.round(insured.sell*.20));
  const common=sellOnce(['supplyCert'],'full','rice');assert.equal(common.n.money,sellOnce([],'full','rice').n.money,'a non-qualifying sale gives nothing');
- // 왕도 프리미엄 인증: +16%p back on 150% only; the price burden and Loyalty -3 stay
+ // 왕도 프리미엄 인증: +10%p on 150% only (v2.9.11, User 2026-09-29; was +16%p); the price burden and Loyalty -3 stay
  const g=fresh('royal-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
  for(const id of ['rice','rope','guildlunch']){const it=DATA.itemBy[id];
   g.run.facilities=[];const a=g.interest(n,it,'overcharge'),f=g.interest(n,it,'full').chance;
   g.run.facilities=['royalCert'];const b=g.interest(n,it,'overcharge');
-  assert.ok(Math.abs(b.chance-Math.min(.97,a.chance+.16))<1e-9,id+' 150% intent +16%p');assert.equal(b.price,a.price);assert.equal(b.debit,a.debit);
+  assert.ok(Math.abs(b.chance-Math.min(.97,a.chance+.10))<1e-9,id+' 150% intent +10%p');assert.equal(b.price,a.price);assert.equal(b.debit,a.debit);
   assert.equal(g.interest(n,it,'full').chance,f,id+' 100% unchanged');}
  const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-3,'Loyalty -3 unchanged');
 });
