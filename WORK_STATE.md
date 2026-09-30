@@ -1,15 +1,31 @@
 # WORK_STATE
 
-DATE: 2026-09-29
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28, User 컨펌 2026-09-29) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+DATE: 2026-09-30
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) — v2.9.2~v2.9.12 태그는 User가 걸어야 함
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.10 + 퀵패치(PR #22, PR #24, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
-- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.10). 닫힌 버전의 보고서·측정 도구는 `archive/`.
+- repository: `failab-ist/GUILD24`. main = v2.9.12(PR #31 · #32, `f02eb8d`, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.12). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
+
+## v2.9.12 — 밸런스 리뷰 + v3.0 준비 퀵패치 (머지됨, PR #31 · #32) (User 2026-09-29~30)
+
+내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.12. 빌드 표시 2.9.12. 머지 전 전체 검증(HEAD `4e226a2`): `npm test` · `audit` · `ssot:check` 21/21 ·
+`qa:runtime` 16/16 · `qa:visual` clean.
+
+| 묶음 | 내용 | 근거 |
+|---|---|---|
+| 밸런스 리뷰(PR #31, 다른 세션) | 첫 판 레슨(DAY 1 대응 상품 · DAY 1~2 사망 없음 · DAY 3 부상 · 보수날 손님), NIGHT 발견 안내, END 다회차 줄 위치 | CORE_RUN §FIRST-RUN LESSONS, NIGHT_CLOSING §DISCOVERY LINE |
+| 폰 · 소리 | iPhone Safari · SE · 갤럭시 360×597, BGM/효과음 폰 기준 평탄화 · 리미터, 페이즈 BGM 1초 페이드 뒤 시작 | `archive/v2.9.11/ios-safari-v2911.md`, `archive/v2.9.11/bgm-sfx-mix-v2911.md` |
+| 화면 | ORDER 떠 있는 박스 접기 · 창고 패널, 데스크 전용 SALE, 데스크 폭 1440, `오늘 폐쇄` 게이트, 장식 구매 스크롤 유지 | UI_UX 해당 절 |
+| END | 최고 총매출 다회차 줄, `이 점포의 기록` 블록 | UI_UX §END — THIS RUN BLOCK / REPLAY NUDGE |
+| D30 | 발주 중 `원정대 후보 보기`, 원정대 준비 `자세히 보기` | FINAL_EXPEDITION §D30 PLAYER FLOW |
+| 밸런스 | 화염 섞인 마왕전 +18(reader 3,000: 74.3/65.5 → 63.4/64.8%) | `reports/v3-prep-measure-v2911.md` §6, `tools/measure-firepair.cjs` |
+| 튜토리얼 | II · 화염 게이트 안내, 코치 정리(12개 은퇴 · 가격 사후 안내, 첫 판매 24 → 12탭) | `reports/v3.0-prep.md` §9-6 |
+| 위생 | `fire -> 정신` · `dark -> 기동` 옛 줄 정정, AGENTS 9-A(시뮬레이션은 User 컨펌 뒤), 닫힌 버전 보고서 · 도구 archive 이동 | `archive/README.md` |
 
 ## v2.9.11 — v3.0 준비 1차 (머지됨, PR #28) (User 2026-09-28~29)
 
@@ -141,24 +157,23 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
 
 다음 작업:
-1. v2.9.11은 PR #28로 머지했다(User 2026-09-29). User 플레이로 확인한다: 1.45 곡선, 새 사건, 점포지원 변경, BGM 실기기 청취, DAY 간판, 창고 안내. 태그 `v2.9.11`은 User가 건다.
-2. 문구 교정 4배치(NPC 대사)는 끝났다: 14개 전부 반영, 겁쟁이 유행어 대사는 User 결정으로 유지. FINAL 교전 NIT(균열이 바가 0이 된 뒤)도 끝났다(`d635c00`).
-3. 보류 · 결정 대기
-   - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, §13-2) — User 플레이 뒤 판단(2026-09-29)
+1. v2.9.12는 PR #31 · #32로 머지했다(User 2026-09-30). User 플레이로 확인한다: 코치 정리 뒤 첫 판, 가격 사후 안내, END `이 점포의 기록`, D30 후보 보기, 화염 게이트 안내.
+2. 보류 · 결정 대기
+   - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, `archive/v2.9.11/remeasure-v2911.md` §13-2) — User 플레이 뒤 판단(2026-09-29)
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
-4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
-5. ~~사전 코치 → 사후 안내 이전~~ **끝남 (v2.9.12, 브랜치 `claude/v3-0-prep-planning-g42z7y`)** — User 결정과 결과는 `reports/v3.0-prep.md` §9-6 끝. 코치 12개 은퇴, 가격 사후 안내 2개, 첫 판매 24탭 → 12탭. 다른 세션은 스토어 1위 루브릭(§9-4) 나머지 칸을 이어 간다.
-6. **다른 세션**: END 영수증 `이 점포의 기록` 블록(A안). 핸드오프 `archive/v2.9.12/handoff-end-record.md`(초안 `reports/v3.0-prep.md` §9-8-1-A). 이 세션은 기획(1위 인터뷰, `reports/interview-1st-place.md`).
+   - 화염 조합 +18은 v2.9.12 곡선에서 잰 값이다. 다른 세션의 v2.9.13(DAY 21+ 게이트 기울기 · Final T3 위험 제안)이 들어가면 다시 잰다(`tools/measure-firepair.cjs`, 실행 전 User 컨펌).
+3. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
    - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
-   - 출시 준비 외 작업은 §8.
+   - 출시 준비 외 작업은 §8, 1위 루브릭은 §9.
+4. 다른 세션(2026-09-30 기준): v2.9.13 밸런스(`ccr-7d937a8a`), 1위 인터뷰(`reports/interview-1st-place.md`). 그 세션이 main을 받을 때 `CHANGELOG.md` · META 원장 충돌은 양쪽 기록을 모두 남기면 풀린다.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
 ### User 할 일
 
-1. 태그: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`, `v2.9.8` → `621d007` (GitHub Releases에서 새 태그로 만들면 된다). v2.9.9는 머지 커밋에.
+1. 태그: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`, `v2.9.8` → `621d007`, `v2.9.11` → `e1ce51e`(PR #30, 마지막 2.9.11 머지), `v2.9.12` → `f02eb8d`(PR #32) (GitHub Releases에서 새 태그로 만들면 된다). v2.9.9는 머지 커밋에.
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
 
