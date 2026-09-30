@@ -1795,7 +1795,7 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
- for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','forecast','pricing'])assert.ok(!ids.has(id),'retired: '+id);
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  for(const id of ['relic-what','deep','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
@@ -2366,8 +2366,8 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
 
 test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
- /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
- assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
+ /* COACH DIET (User 2026-09-30): the Hazard rows say what answers them, so no mark teaches them before */
+ assert.ok(!/\['hazard',/.test(steps),'no Hazard coach mark');
  /* User 2026-09-30: Fatigue, Great Success and 만반의 준비 are named after they first act (NIGHT_CLOSING §DISCOVERY LINE), so
     no coach mark teaches them before, and their dead anchors are gone */
  for(const id of ['supply','great','prepared'])assert.ok(!new RegExp("\\['"+id+"','").test(steps),'no '+id+' coach mark');
@@ -2383,15 +2383,11 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
-   ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
    ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
- const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
- assert.ok(!hazard.includes('현재 대응'),'and the Hazard lesson names no label the screen no longer shows');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
- const EXACT=['pricing','hazard','stats'];
+ const EXACT=['stats'];
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
@@ -2402,22 +2398,18 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const hz of Object.values(DATA.hazards))
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
- /* The frozen outlook is described as frozen, since that is what the screen now does. */
- const forecast=/\['forecast',[^\]]*\]/.exec(steps)[0];
- /* It still has to say the reading does not move as products are sold, and it must not be
-    read as the Items not mattering: the run uses the final supply, so the lesson says the
-    real result is seen after the expedition rather than claiming nothing changed. */
- /* COPY_AUDIT §3-4: the lesson now says WHEN the reading was taken, which is the same fact
-    stated from the other side and is what makes it obviously frozen. */
- assert.ok(/계산대에 왔을 때의 원정 전망/.test(forecast),'the outlook lesson says when the reading was taken');
- assert.ok(/팔아도 이 칸은 그대로/.test(forecast),'and that selling does not move it');
- /* USER 2026-09-24 first-sale coach diet: four marks on the first SALE, the rest contextual. The
-    destination mark stays because COPY_WORLD_VOICE §Tutorial names it the authoritative wording of
-    the destination rule (tests/copy.cjs §18 holds the line itself). */
+ /* COACH DIET (User 2026-09-30): the retired outlook mark's fact is the readout's own title - WHEN the reading was taken */
+ assert.ok(!/\['forecast',/.test(steps)&&/'<span class="fore">도착 시 전투&nbsp;전망<b>'\+o\.combat/.test(fn('readout')),'the outlook reads 도착 시 전투 전망, no mark');
+ /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
+    COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
+    line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids.slice(0,5),['destination','hazard','stats','forecast','pricing'],'the first SALE reads destination, Hazard, Stats, outlook, price - in that order (User 2026-09-24)');
- assert.deepEqual(ids.slice(5).sort(),['bag','returning'],'the other two are contextual marks (User 2026-09-30: 피로 · 대성공 · 만반의 준비 moved to NIGHT discovery lines)');
+ const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
+ assert.deepEqual(ids,['destination','stats','returning','bag','price-refused','price-half'],'the first SALE reads destination and Stats; the rest are contextual');
+ assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.']`)
+  &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
+ assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
+ assert.ok(/el\.className='receipt-stub'\+\(st\.mode==='half'\?' half':''\)/.test(fn('showStub'))&&/if\(activeCoach\)\{stubTimer=setTimeout\(drop,400\);return;\}/.test(fn('showStub')),'the 50% line carries its class and stays while a mark is open');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
  for(const [id,sel] of [['returning','.who.returning'],['bag','.slots .full']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
@@ -2927,7 +2919,6 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  for(const line of [
   '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
   '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
-  '손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.',
   '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
   '다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
@@ -2944,7 +2935,12 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
                     '어떤 능력이 필요한지 여기서 확인한다','더 남으면 귀환 후 피로를 줄인다',
                     '구매 후 준비 상태에 따라 대성공 신호','판매한 상품은 오늘 원정에서 쓰고 사라진다',
                     // retired 2026-09-30: taught after the fact on the NIGHT record (COPY_AUDIT §26-2)
-                    '대성공 신호. 준비가 넉넉할 때 뜨지만','음식·음료는 피로를 줄인다. 피로가 10을','건강한 손님의 가방을 가득 채웠다.'])
+                    '대성공 신호. 준비가 넉넉할 때 뜨지만','음식·음료는 피로를 줄인다. 피로가 10을','건강한 손님의 가방을 가득 채웠다.',
+                    // retired 2026-09-30 (COACH DIET, COPY_AUDIT §3-4 / §3-7 superseded)
+                    '손님이 계산대에 왔을 때의 원정 전망','50% 할인은 단골도를 크게 올리고','이 손님이 갈 게이트의 위험. 위험마다',
+                    '오늘 올 손님 수. 점포지원','열린 게이트의 위험을 보고 오늘 필요한','오늘 열린 게이트와 위험. 위험 보기를',
+                    '창고에 있는 재고. 첫날에는','‘최대’는 이 후보에서 지금 발주할 수 있는',
+                    '후보 전체를 교환한다. 같은 날','카드마다 효과와 가격이 적혀','누르면 바로 확보된다. 이후 DAY'])
   assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
  // §4-8
  assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');
@@ -3578,7 +3574,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
   const ks=Presentation.rows(it.effects,undefined,it.category).map(r=>rank(r.key));
   assert.deepEqual(ks,[...ks].sort((a,b)=>a-b),it.name+' follows Counter -> 피로 회복 -> stat -> rest');}
  // §TRANSACTION RESULT STUB
- assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
+ assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money,mode:el\.dataset\.mode\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
  assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');

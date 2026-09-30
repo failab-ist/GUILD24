@@ -465,12 +465,15 @@ function watchTray(){const sc=$('.p-sale .stage-scroll');if(!sc)return;trayArm=p
   if(Math.abs(sc.scrollTop-trayBase)>32)foldTray();},{passive:true});}
 function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
- const el=document.createElement('div');el.className='receipt-stub';el.setAttribute('role','status');
+ /* `half`: the first 50% sale's lesson anchors to this line (UI_UX §SALE PRICE LESSONS) */
+ const el=document.createElement('div');el.className='receipt-stub'+(st.mode==='half'?' half':'');el.setAttribute('role','status');
  el.textContent='단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to;
  const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
  document.body.appendChild(el);
  /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
- stubTimer=setTimeout(()=>el.remove(),motionOK()?2800+KEY_PRESS.down:2500);}
+ /* while a coach mark is open the line stays - the 50% lesson may be waiting behind the Bag mark - and goes once they close */
+ const drop=()=>{if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
+ stubTimer=setTimeout(drop,motionOK()?2800+KEY_PRESS.down:2500);}
 function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(!c||!motionOK())return;
  const A=anime.animate;
@@ -826,7 +829,9 @@ function readout(n,extra=null,cls=''){
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
-  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
+  /* COACH DIET (User 2026-09-30): the title says when the reading was taken - the retired outlook mark's one fact */
+  /* on a phone the half cell wraps it: 전투 전망 stays together so the break falls after 도착 시 */
+  +'<span class="fore">도착 시 전투&nbsp;전망<b>'+o.combat+'</b>'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
@@ -1247,29 +1252,24 @@ const coachSteps={
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
- /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
-    (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
-    through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
-    the screen reads. Everything else is contextual: showCoach() shows the first unfinished mark
-    whose target is VISIBLE, so a mark anchored to an element that only exists in its situation
-    (a returning customer's last-expedition line, a filled Bag slot) teaches itself the first time
-    that situation exists and never before. Fatigue, Great Success and 만반의 준비 are no longer
-    taught here: they are named after they first act, on the NIGHT record (NIGHT_CLOSING §DISCOVERY
-    LINE, User 2026-09-30).
-    Exact copy: COPY_AUDIT §3.
+ /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
+    §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
+    The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout title reads
+    `도착 시 전투 전망`, and price is taught after the fact. Everything else is contextual: showCoach() shows the first
+    unfinished mark whose target is VISIBLE, so a mark anchored to an element that only exists in its situation (a
+    returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
+    that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
- ['hazard','.dest-plate .hazards','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
  /* COPY_AUDIT §3-7 STATS (User 2026-09-24): the first time a customer's Stats are on screen - what they are, that they
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
- /* UI-Q-v28-27. `.top` is the frozen SALE-entry snapshot itself; `.ingredients` and
-    `.great-signal` below it move with the committed Bag, so the cutout stops above them. */
- ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
- ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
  /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
+ /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
+ ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.'],
+ ['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']],
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
     it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it) */
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.'],
@@ -1674,7 +1674,8 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
       바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
       extra depth; `pct` stays the mode's number, the word is what the coach already says. */
-   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
+   /* `refused`: the first 바가지 refusal's lesson anchors here (UI_UX §SALE PRICE LESSONS) */
+   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
     'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');}
 /* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): the chosen Item sits on a fixed tray above the dock,
    outside the scrolled column - header line, the one delta list on one wrapping line, 특수 효과, then
@@ -2517,7 +2518,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   /* SALE §TRANSACTION RESULT — PER CUSTOMER (User 2026-09-24, v2.9.0): the customer's own Loyalty and Wallet
      before the commit, so the receipt stub can state the real result of this price choice. */
   const who=game.current(),wasM=who?who.money:0,wasL=who?who.loyalty:0;
-  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money};}else{sound('refusal');cue='refuse';}handoff=seen;showStub();render();break;}
+  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money,mode:el.dataset.mode};}else{sound('refusal');cue='refuse';}handoff=seen;showStub();render();break;}
  /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already
     displayed - so it owes that result its own Outcome cue. It used to play the generic return
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
