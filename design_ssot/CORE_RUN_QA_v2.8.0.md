@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN_QA
 OWNER=qa,run,phase,save,abandon,runtime_progression,final_timeline,fresh_init,tutorial_reset
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_QA_v2.8.0-patch.md,history/CORE_RUN_QA_v2.7.0.md,history/CORE_RUN_QA_v2.6.1.md,history/CORE_RUN_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/CORE_RUN_QA.md
@@ -667,6 +667,26 @@ PASS:
 - Console runtime error = 0
 - no phase blocker
 - no save-version/reference error
+
+### RUN-Q81 — FIRST-RUN LESSONS
+
+(User 2026-09-30, v2.9.11; owner `CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS.)
+
+PASS:
+- a fresh account's first Run: after the DAY 0 pick the warehouse holds the four opening Items and exactly one Common Item
+  that counters the first Gate's Hazard
+- an account with a settled Run: the four opening Items only
+- a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
+- DAY 3 of the first Run with someone injured: the injured adventurer is the first visitor, one 구급키트 joined the
+  warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, +20%p on
+  150% only, the §26-1 line; a later Run: none of it
+- the same seed gives the same Gates, visitors and stream on both
+- the measurement harness (`lessons=false`) plays the ordinary Run
+- `tests/revision.cjs`
+
+FAIL:
+- the extra Item on a later Run, a non-Common or non-countering Item, a lesson that adds a draw, or a Death on DAY 1~2 of
+  the first Run
 
 ## BALANCE QA
 

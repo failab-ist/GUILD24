@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_v2.8.0-patch.md,history/CORE_RUN_v2.7.0.md,history/CORE_RUN_v2.6.1.md,history/CORE_RUN_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/CORE_RUN.md
@@ -227,6 +227,27 @@ No legacy Bandage stock is silently converted into 진정 허브티.
 No hidden extra starting resources.
 
 Item identity/prices/effects -> `ITEM_v2.8.0.md`.
+
+## FIRST-RUN LESSONS
+
+(User 2026-09-30, v2.9.11.) The account's first Run - no Run settled yet (`account.runs` 0) - teaches by play, not by text:
+the situation leaves one sensible move, and the Night shows why it worked. Every later Run is the ordinary Run. Nothing here
+is shown as a tutorial, and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then
+takes the draws a living adventurer takes).
+
+- DAY 1: one Common Item that counters the first Gate's Hazard joins the warehouse after the DAY 0 pick (독 방진마스크 ·
+  부식 중화 탄산수 · 냉기 컵라면 · 화염 얼음컵 · 공포 집중 사탕). It is ordinary visible stock, not a hidden resource.
+- DAY 1~2: no one dies. An expedition whose Death roll lands settles as 중상 instead (the ordinary 중상: the adventurer
+  sits out and recovers). DAY 3 on is the ordinary Run.
+- DAY 3: an adventurer with an ordinary Injury comes first - one already coming moves to the front, else one takes the
+  last returning visitor's place (its Gate and visit income as that visitor's; a new face seated today is never the one
+  replaced) - and one 구급키트 joins the warehouse (HQ's, like the opening stock). With no one injured, nothing moves and
+  no 구급키트 comes.
+- DAY 3: a returning visitor (not the injured one; a healthy one first) comes on payday: +200G to spend this visit
+  only (the nightly-cleared extra-purchase channel), 150% purchase intent +20%p this visit, and the arrival line
+  COPY_AUDIT §26-1. The Day's count of visitors is unchanged.
+- measurement harnesses (`reader` and the other bots, the multi-Run trajectory) switch the lessons off, so balance
+  measurements stay on the ordinary Run.
 
 ## RUN START EFFECT APPLICATION
 

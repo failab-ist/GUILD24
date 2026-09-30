@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -1501,7 +1501,7 @@ so the next store reads as a little closer - no task, checklist, progress bar, r
 
 - the `본사 해금` row lists every product / Job this Run opened: the distinct-Boss unlocks it already listed, and the D10 /
   D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run records when they open; their Day toast stays as it is
-- when the Run opened nothing, one line may sit at the foot of the tape, above `다음 점포 열기` - the first that applies:
+- when the Run opened nothing, one line may sit at the foot of the tape, above `도감에서 보기` and in bold (User 2026-09-30) - the first that applies:
   1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
      (before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
   2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
@@ -2401,25 +2401,19 @@ If the tutorial already exists, reuse it and fix its trigger/persistence/reset p
 
 ### GREAT SUCCESS TUTORIAL
 
-Contextual Tutorial explicitly teaches:
-- `대성공` exists
-- it is above ordinary Success
-- extra preparation can raise its chance
-- Great Success has an additional reward
-- on a **normal expedition**, Great Success gives the Store an additional Gold bonus
+(User 2026-09-30, v2.9.11.) No coach mark before the fact: the first normal-expedition 대성공 that pays the Store its
+Gold bonus names it on its NIGHT record (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE) - extra preparation raises its
+chance, and it leaves the Store an additional Gold bonus. The SALE signal carries no mark.
 
 Player should understand why another useful Item can matter even when ordinary
 Success already looks likely.
 
 ### 만반의 준비 TUTORIAL
 
-(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
-the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
-below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
-- anchor: the customer's Bag slots on the SALE counter
-- teaches the condition and the effect in words only; no number, no percentage
-- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
-- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
+(User 2026-09-30, v2.9.11.) No coach mark before the fact: the first time 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md`
+§Preparation / Level Death reduction) turns away a Death, that NIGHT record names the condition and the effect in words
+only (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE). The same holds for Fatigue (the SUPPLY mark is retired too): the
+SALE counter carries no anchor for either.
 
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 

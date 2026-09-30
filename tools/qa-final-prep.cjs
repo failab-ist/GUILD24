@@ -223,8 +223,12 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
 
    // ---- Bag full: fill the first member's second slot through the real control, then focus a line
    await p.click(`.p-final [data-action="supply-target"][data-id="${tgt}"]`);
+   /* the fixture sets its own precondition: the member must be able to pay for the cheapest line, whatever Wallet the
+      fast-forward left (a first-Run lesson changes the Run's flow, and a member can reach D30 with 0G) */
    const fill=await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,n=s.npcs.find(x=>x.id==='${tgt}');if(n.pack.length>=2)return null;
-    const st=s.inventory.filter(x=>!${JSON.stringify(NOOP)}.includes(x.item)&&g.finalPrice(x.item)<=n.money).sort((a,b)=>g.finalPrice(a.item)-g.finalPrice(b.item))[0];return st&&st.id;})()`);
+    const lines=s.inventory.filter(x=>!${JSON.stringify(NOOP)}.includes(x.item)).sort((a,b)=>g.finalPrice(a.item)-g.finalPrice(b.item));
+    if(lines[0]&&n.money<g.finalPrice(lines[0].item)){n.money=g.finalPrice(lines[0].item);Guild24.render();}
+    const st=lines.find(x=>g.finalPrice(x.item)<=n.money);return st&&st.id;})()`);
    if(fill){await p.click(`.p-final [data-action="select"][data-id="${fill}"]`);await p.click('.p-final [data-action="supply"]');}
    const any=await p.evaluate(`(Guild24.game.run.inventory.find(x=>!${JSON.stringify(NOOP)}.includes(x.item))||{}).id`);
    await p.click(`.p-final [data-action="select"][data-id="${any}"]`);

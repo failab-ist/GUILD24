@@ -1795,3 +1795,23 @@ Verify UI_UX §MORNING — DAY SIGN FLIP at 390 and 1280.
 - the numbers overlap, or the sign's size jumps
 - the roll runs longer than 320 ms or plays a sound of its own
 ```
+
+
+## AMENDMENT — v2.9.11 NIGHT discovery lines (User decision 2026-09-30)
+
+The pre-sale Great Success coach mark is retired; the first store-bonus 대성공 names it on its NIGHT record
+(NIGHT_CLOSING §DISCOVERY LINE).
+
+SUPERSEDED (the coach-mark acceptance):
+
+```text
+- explicitly teaches Great Success exists
+- extra preparation can raise its chance
+- Great Success has additional reward
+```
+
+```new
+- no SALE coach mark on the signal (User 2026-09-30, v2.9.11)
+- the first store-bonus 대성공 names it on its NIGHT record, once per account (NIGHT_CLOSING §DISCOVERY LINE):
+  extra preparation can raise its chance, and it leaves the Store an additional Gold bonus
+```

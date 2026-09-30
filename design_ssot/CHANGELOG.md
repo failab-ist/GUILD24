@@ -3,6 +3,30 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.12 — balance review line (User 2026-09-30)
+
+- **First-Run lessons, DAY 1 Counter and no Death on DAY 1~2** (balance review session, User 2026-09-30; from a talk on
+  teaching by level design - learn by play, not text): the account's first Run finds one Common Item that counters the first
+  Gate's Hazard in the DAY 1 warehouse, so the first sales can find the Counter rule and the Night shows it working; on its
+  DAY 1~2 a Death roll settles as 중상. Measured with every Run as a first Run (`reader` 3,000, same seeds): DAY 1~2 Deaths
+  0.21 → 0 a Run, D1~10 Death-limit endings 20.0 → 17.2%, D10 reach 85.4 → 89.3%, D30 17.2 → 18.0%, clear unchanged 11.7%.
+  DAY 3: an injured adventurer comes first with one 구급키트 in the warehouse (73% of 40 fresh first Runs had someone
+  injured), and a returning customer comes on payday - +200G this visit, 150% intent +20%p, the line
+  `“오늘 보수 받았어요. 값은 신경 안 써요.”` (85% of those Runs). COPY_AUDIT §26-1. Later Runs are unchanged; the Run's
+  stream is untouched; the bots and the trajectory switch it off (`lessons=false`), so balance measurements do not move
+  (`reader` 300 seeds identical). CORE_RUN §FIRST-RUN LESSONS, CORE_RUN_QA RUN-Q81; ledgers; tests revision.
+- **END replay line above 도감에서 보기, in bold** (User 2026-09-30): what the Run left behind (`점포 자본으로 새 장식을 들일 수
+  있다.` / the best-Day line) reads before the codex link, 15px bold. UI_UX §END — REPLAY NUDGE; ledger; tests ui-guard.
+- **NIGHT discovery lines** (balance review session, User 2026-09-30): rules are named once per account by a `점주 안내`
+  coach mark on the NIGHT record of the first expedition they acted on (shown like the tutorial, no inline line; User
+  2026-09-30), and kept in the 발견 수첩 - 부상 출발, 피로 10 이상,
+  a Hazard Item that lowered a Hazard, 만반의 준비 turning away a Death, a 대성공 that paid the store bonus; and the first Death
+  record carries the Death-limit mark, the one exception to its closed payload (User 2026-09-30). NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT §26-2; ledger; tests revision. Balance unchanged (`reader` 300 identical).
+- **Pre-sale coaches retired for 피로 · 대성공 · 만반의 준비** (User 2026-09-30: one place teaches each rule): the SALE marks
+  `supply`, `great` and `prepared` and their anchors (the tray's `.fatigue`, the Bag's `.prepared`) are gone; the NIGHT
+  discovery lines teach them. UI_UX §GREAT SUCCESS / §만반의 준비 TUTORIAL, UI_UX_QA, COPY_AUDIT §3-3 / §3-5 / §3-7,
+  COPY_WORLD_VOICE §TUTORIAL COACH COPY; ledgers; tests ui-guard; qa-visual drops the Great Success coach capture.
+
 ## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
 
 - **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear

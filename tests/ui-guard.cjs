@@ -777,7 +777,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
 
  // both tutorials are ordinary coach marks, so they inherit the account-scoped persistence
  assert.ok(/\['deep','\.slip\.deep'/.test(app),'the first Deep Expedition teaches itself on the notice');
- assert.ok(/\['great','\.great-signal'/.test(app),'and Great Success on its own signal');
+ assert.ok(!/\['great',/.test(app)&&Copy.learned.some(([k])=>k==='great'),'Great Success is named on the NIGHT record once it pays, not coached before (NIGHT_CLOSING §DISCOVERY LINE, User 2026-09-30)');
  assert.ok(!/deepTutorial|tutorialDeep/.test(app),'no separate tutorial state was introduced');
 });
 
@@ -1882,6 +1882,9 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/const openedNames=\[\.\.\.\(s\.unlocked\|\|\[\]\),\.\.\.\(s\.dayUnlocked\|\|\[\]\)\];/.test(l),'본사 해금 lists the distinct-Boss unlocks and the D10 / D14 opens');
  assert.ok(/const nudge=opened\?'':replayLine\(\);/.test(l),'no line beside 본사 해금');
  const r=fn('replayLine');
+ /* User 2026-09-30: the line reads before the codex link, in bold */
+ {const l=fn('ledger');assert.ok(l.indexOf('<p class="replay">')>0&&l.indexOf('<p class="replay">')<l.indexOf("btn('도감에서 보기'"),'the replay line sits above 도감에서 보기');
+  assert.ok(/\.end-tape \.replay\{[^}]*font:700 /.test(css),'and is bold');}
  assert.ok(r.indexOf("'점포 자본으로 새 장식을 들일 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '"),'a Decoration newly in reach comes before a best Day');
  const run=read('dist/systems/run.js');
  assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 들일 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
@@ -2310,8 +2313,15 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
- assert.ok(/\['supply','\.counter-tray \.tray-delta \.fatigue'/.test(steps),'the Supply/Fatigue lesson is on the tray\'s 피로 회복 row for a fatigued customer (User 2026-09-25; the 피로 A → 출발 B row is retired)');
- assert.ok(/r\.key==='supply'&&n\.fatigue>0\?'fatigue'/.test(fn('tray')),'that row carries the anchor only when the customer has Fatigue to lose');
+ /* User 2026-09-30: Fatigue, Great Success and 만반의 준비 are named after they first act (NIGHT_CLOSING §DISCOVERY LINE), so
+    no coach mark teaches them before, and their dead anchors are gone */
+ for(const id of ['supply','great','prepared'])assert.ok(!new RegExp("\\['"+id+"','").test(steps),'no '+id+' coach mark');
+ assert.ok(!/'fatigue'/.test(fn('tray'))&&!/' prepared'/.test(fn('kitLine')),'and no anchor class is left for them');
+ /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): they are taught after they act - a NIGHT coach mark per taught rule,
+    anchored to the class the returning record carries, in Copy.learned order, after the NIGHT result mark */
+ assert.ok(/night:\[\['result','\.beat',[^\]]*\],\n\s*\.\.\.Copy\.learned\.map\(\(\[k,text\]\)=>\['learn-'\+k,'\.beat \.told\.learn-'\+k,text\]\)\]/.test(steps),'the NIGHT marks follow the result mark, one per taught rule');
+ assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
+ assert.ok(!/class="learned"|<b>발견<\/b>/.test(app),'no inline 발견 line on the record (User 2026-09-30: shown like the tutorial)');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
     reflects 보급 - it does not, `Game.arrive()` snapshots it with an empty pack (see
@@ -2321,14 +2331,13 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
    ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
    ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
-   ['supply','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
  assert.ok(!hazard.includes('현재 대응'),'and the Hazard lesson names no label the screen no longer shows');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
- const EXACT=['pricing','hazard','stats','supply','quantity'];
+ const EXACT=['pricing','hazard','stats','quantity'];
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
@@ -2354,9 +2363,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
  assert.deepEqual(ids.slice(0,5),['destination','hazard','stats','forecast','pricing'],'the first SALE reads destination, Hazard, Stats, outlook, price - in that order (User 2026-09-24)');
- assert.deepEqual(ids.slice(5).sort(),['bag','great','prepared','returning','supply'],'the other five are contextual marks (v2.9.1 balance adds 만반의 준비)');
+ assert.deepEqual(ids.slice(5).sort(),['bag','returning'],'the other two are contextual marks (User 2026-09-30: 피로 · 대성공 · 만반의 준비 moved to NIGHT discovery lines)');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
- for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue'],['prepared','.slots.prepared']])
+ for(const [id,sel] of [['returning','.who.returning'],['bag','.slots .full']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */
@@ -2864,10 +2873,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  for(const line of [
   '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
   '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
-  '대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.',
   '손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.',
-  // §3-5 / §3-7 SUPPLY: two facts, the hidden deficit formula and the second Fatigue stage untaught
-  '음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.',
   '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
   '다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
@@ -2882,7 +2888,9 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
                     // superseded 2026-09-24 (first-sale coach diet)
                     '손님이 처음 계산대에 왔을 때','판매 후에도 바뀌지 않는다','손님을 누르면 특성과 지난 원정 기록',
                     '어떤 능력이 필요한지 여기서 확인한다','더 남으면 귀환 후 피로를 줄인다',
-                    '구매 후 준비 상태에 따라 대성공 신호','판매한 상품은 오늘 원정에서 쓰고 사라진다'])
+                    '구매 후 준비 상태에 따라 대성공 신호','판매한 상품은 오늘 원정에서 쓰고 사라진다',
+                    // retired 2026-09-30: taught after the fact on the NIGHT record (COPY_AUDIT §26-2)
+                    '대성공 신호. 준비가 넉넉할 때 뜨지만','음식·음료는 피로를 줄인다. 피로가 10을','건강한 손님의 가방을 가득 채웠다.'])
   assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
  // §4-8
  assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');
