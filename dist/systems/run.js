@@ -187,19 +187,22 @@ P.envyTarget=function(team,preparations){
    for all seven. */
 P.effectiveBossPower=function(partyPower,lock){
  const t=D.bossTuning,s=this.run,base=D.balance.bossPower;
+ /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair that holds FIRE has one Hazard fewer (3, not 4) and
+    measured easier (reader 3,000: 74.3% vs 65.5%), so its Boss stands that much stronger - on every Boss, on top of its own rule */
+ const fire=s.final?.families?.includes('golem')?t.firePairPower:0;
  /* Stage 10, approved. Measured as a SHARE of the target rather than per Gold of shortfall, so
     the penalty means the same thing whatever the target is set to: a Run that sold nothing takes
     the full cap, a Run at target takes none, and it is linear between. */
  if(s.bossId==='GREED'&&t.greedRevenueTarget>0&&t.greedShortfallCap!=null){
   const revenue=lock?lock.revenue:s.stats.revenue;
   const shortfallRatio=Math.max(0,(t.greedRevenueTarget-revenue)/t.greedRevenueTarget);
-  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap);
+  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire;
  }
  if(s.bossId==='SLOTH'&&Array.isArray(t.slothBossPower)){
   const v=t.slothBossPower[lock?lock.sealBreakCount:s.sealBreakCount];
-  if(v!=null)return v;
+  if(v!=null)return v+fire;
  }
- return base;
+ return base+fire;
 };
 
 /* The shared Final order (BOSS / FINAL_EXPEDITION), steps 1-7: everything before the Roll.

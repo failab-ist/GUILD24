@@ -189,7 +189,8 @@ test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rol
   /* Stage 10 switched the approved Boss numerics on, so the Power a Final is judged against is
      no longer always the WRATH baseline: SLOTH reads its seal table and GREED adds a shortfall
      up to its cap. Everything else still faces the baseline exactly. */
-  const t=DATA.bossTuning,bp=k.run.bossDebug.bossPower;
+  /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair holding FIRE adds firePairPower on top */
+  const t=DATA.bossTuning,fire=k.run.final.families.includes('golem')?t.firePairPower:0,bp=k.run.bossDebug.bossPower-fire;
   if(k.run.bossId==='SLOTH')assert.equal(bp,t.slothBossPower[k.run.sealBreakCount],'SLOTH reads its seal table');
   else if(k.run.bossId==='GREED')assert.ok(bp>=DATA.balance.bossPower&&bp<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
   else assert.equal(bp,DATA.balance.bossPower,k.run.bossId+' faces the baseline');
@@ -233,11 +234,10 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
      band, assault = power x roll, and one CLEAR/FAIL read straight off the comparison. */
   if(s.bossId==='WRATH')
    assert.ok(Math.abs(s.bossDebug.power-expected)<1e-9,'party power is the plain sum of the prepared contributions');
-  const t=DATA.bossTuning;
-  if(s.bossId==='SLOTH')assert.equal(s.bossDebug.bossPower,t.slothBossPower[s.sealBreakCount],'SLOTH reads its seal table');
-  else if(s.bossId==='GREED')assert.ok(s.bossDebug.bossPower>=DATA.balance.bossPower
-   &&s.bossDebug.bossPower<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
-  else assert.equal(s.bossDebug.bossPower,DATA.balance.bossPower,s.bossId+' faces the baseline');
+  const t=DATA.bossTuning,fire=s.final.families.includes('golem')?t.firePairPower:0,bp=s.bossDebug.bossPower-fire;
+  if(s.bossId==='SLOTH')assert.equal(bp,t.slothBossPower[s.sealBreakCount],'SLOTH reads its seal table');
+  else if(s.bossId==='GREED')assert.ok(bp>=DATA.balance.bossPower&&bp<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
+  else assert.equal(bp,DATA.balance.bossPower,s.bossId+' faces the baseline');
   assert.ok(s.bossDebug.roll>=.88&&s.bossDebug.roll<=1.12,'the Final roll stays in its approved band');
   assert.equal(s.bossDebug.assault,s.bossDebug.power*s.bossDebug.roll);
   assert.equal(s.finalReport.cleared,s.bossDebug.assault>=s.bossDebug.bossPower,'one CLEAR/FAIL, read straight off the comparison');
@@ -296,7 +296,8 @@ test('BOSS-Q05/Q14: each Boss attaches on its approved side, and WRATH on neithe
  const BOSS_SIDE={SLOTH:1,GREED:1},PARTY_SIDE={PRIDE:1,ENVY:1,LUST:1,GLUTTONY:1};
  for(const b of DATA.bosses){
   const g=finalWith('base-'+b.id,b.id),plain=finalWith('base-'+b.id,'WRATH');
-  const bp=g.run.bossDebug.bossPower,power=g.run.bossDebug.power,ref=plain.run.bossDebug.power;
+  // a FIRE-containing pair adds firePairPower to every Boss (FAMILY-PAIR BALANCE AUDIT, User 2026-09-30) - read off here
+  const bp=g.run.bossDebug.bossPower-(g.run.final.families.includes('golem')?t.firePairPower:0),power=g.run.bossDebug.power,ref=plain.run.bossDebug.power;
   if(b.id==='SLOTH')assert.equal(bp,t.slothBossPower[0],'SLOTH at nought breaks reads its own table');
   else if(b.id==='GREED')assert.ok(bp>=base&&bp<=base+t.greedShortfallCap,'GREED adds a shortfall within its cap');
   else assert.equal(bp,base,b.id+' leaves the Boss side alone');
@@ -386,7 +387,7 @@ test('BOSS-Q10: LUST reads the existing 단골 state and leaves regulars alone',
 
 test('BOSS-Q08: GREED reads the committed sales the shop already keeps, capped',()=>{
  const g=finalWith('greed','GREED');
- const base=DATA.balance.bossPower,revenue=g.run.finalLock.revenue;
+ const base=DATA.balance.bossPower+(g.run.final.families.includes('golem')?DATA.bossTuning.firePairPower:0),revenue=g.run.finalLock.revenue;
  assert.equal(revenue,g.run.stats.revenue,'the figure is the one Economy keeps, not a second counter');
  /* Stage 10 approved the shortfall as a SHARE of the target rather than an amount per Gold, so
     the penalty means the same thing whatever the target is set to. A Run that sold nothing
@@ -701,6 +702,20 @@ test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exac
  assert.ok(sl[2]<DATA.balance.bossPower,'2 breaks drops below WRATH');
  assert.ok(sl[2]-sl[3]>sl[1]-sl[2],'3 breaks returns materially more stability than 2');
  for(let i=1;i<sl.length;i++)assert.ok(sl[i]<sl[i-1],'every break lowers it');
+});
+
+/* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair holding FIRE (3 Hazards, not 4) measured easier, so
+   its Boss stands firePairPower stronger - every Boss, on top of its own rule, and nothing else about the Final moves */
+test('FINAL: a FIRE-containing pair adds 18 to effective Boss Power, any other pair adds nothing',()=>{
+ assert.equal(DATA.bossTuning.firePairPower,18);
+ let fire=0,other=0;
+ for(let i=0;i<60&&(fire<3||other<3);i++){const g=atFinal('firepair-'+i),s=g.run,withFire=s.final.families.includes('golem');
+  for(const id of ['WRATH','SLOTH','GREED']){s.bossId=id;
+   const base=id==='SLOTH'?DATA.bossTuning.slothBossPower[0]:DATA.balance.bossPower;
+   const got=g.effectiveBossPower(0,{revenue:DATA.bossTuning.greedRevenueTarget,sealBreakCount:0});
+   assert.equal(got,base+(withFire?18:0),id+(withFire?' with':' without')+' FIRE');}
+  if(withFire){fire++;assert.equal(s.final.hazards.length,3,'a FIRE pair holds 3 Hazards');}else{other++;assert.equal(s.final.hazards.length,4);}}
+ assert.ok(fire>=3&&other>=3,'both kinds of pair were drawn');
 });
 
 console.log(count+' final groups passed');

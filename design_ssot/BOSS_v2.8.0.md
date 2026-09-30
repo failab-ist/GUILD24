@@ -2,8 +2,8 @@
 
 DOC=BOSS
 OWNER=boss,boss_identity,boss_trait,boss_information_cadence,sloth,lust
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/BOSS_v2.8.0-patch.md,history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/BOSS.md
@@ -295,6 +295,9 @@ Purpose:
 WRATH effective Boss Power=180 (User 2026-09-25, v2.9.1 balance; was 200 — the ~10th-Run clear rate is the target, the
 ratio Bosses (PRIDE / ENVY / GLUTTONY / LUST) follow it automatically and the absolute-number Bosses below are scaled with it).
 It is the unmodified baseline every other Boss is measured against.
+
+(User 2026-09-30, v2.9.12.) Every Boss's effective Boss Power takes `+18` when the Final Family Pair holds FIRE, on top of
+its own rule -> `FINAL_EXPEDITION_v2.8.0.md` §FAMILY-PAIR BALANCE AUDIT (FIRE PAIR).
 
 WRATH adds no special modifier.
 

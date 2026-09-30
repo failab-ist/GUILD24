@@ -394,3 +394,18 @@ notebook, whose footer returns to the candidates (`원정대 후보 보기`) ins
 출전 NPC 선택. In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits,
 records), footer `돌아가기`.
 ```
+
+
+## v2.9.12 FIRE pair: effective Boss Power +18 (User 2026-09-30)
+
+New:
+
+```new
+(User 2026-09-30) 대신 FIRE가 든 Pair는 effective Boss Power에 `+18`을 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
+FIRE PAIR (User 2026-09-30, v2.9.12): a pair that holds FIRE has 3 Hazards instead of 4, and measured easier - `reader`
+3,000 Runs, Final clear 74.3 ±6.3% (187 Finals) against 65.5 ±5.1% (333) for every other pair. Its Boss stands stronger by
+the amount that levels the two on the same recorded Finals:
+FIRE-containing pair -> effective Boss Power + 18   (every Boss, on top of its own rule: WRATH 198, GREED 198~209, SLOTH seal table + 18)
+any other pair       -> + 0
+The Hazard Pool, the mean-gap penalty and the forecast rules are unchanged (the 토벌 전망 reads the same effective Boss Power).
+```
