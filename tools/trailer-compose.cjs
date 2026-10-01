@@ -58,7 +58,7 @@ shot(E3,RES,'final',lin(E3,9.32),[[E3,607,1040,1.04]],{inset:[0.82,-80]});
 // S8 the result, one shot: the receipt lands with its seal, then one 0.6 s push centred on 마왕이 쓰러졌다. / 우리 점포에서 떠난
 // 원정대가 해냈다. (the header and the figures stay at the edge); on the stop a pale gold wash behind the two lines and a short burst of
 // gold pixels along the frame edge, with the game's settlement cue; 1 s to read, then the title
-const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+0.9,LOGO_LAND=LOGO+0.45+0.3,DUR=+(LOGO+3.8).toFixed(4);
+const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+0.9,LOGO_LAND=LOGO+0.45+0.18,DUR=+(LOGO+3.8).toFixed(4);
 const line1=[128,452,430,80];
 shot(RES,LOGO,'final',lin(RES,13.8),[[RES,631,600,1.18],[rIn,631,600,1.18],[rOut,445,600,1.75]],{glow:[rOut,line1],burst:[rOut,0.7,line1]});
 // S9 the logo, still
@@ -66,7 +66,7 @@ shot(LOGO,DUR,'logo',hold(0),[[LOGO,0,0,1]]);
 // ---- captions: one at a time, placed off the key UI ----------------------------------------------------------------
 const CAP=[
  {t0:0.32,t1:g(4)-0.12,font:'MUL',size:200,y:900,lines:[[['단',0],['30일.',1]]]},
- {t0:g(4)+0.12,t1:g(6)-0.02,font:'WSB',size:96,y:1440,band:1,lines:[[['편의점에서',0],['시작되는',0]]]},
+ {t0:g(4)+0.05,t1:g(6)-0.01,font:'WSB',size:96,y:1440,band:1,bandIn:0.2,lead:0.1,outDur:0.08,lines:[[['편의점에서',0],['시작되는',0]]]},
  {t0:g(6)+0.04,t1:g(8)-0.1,font:'MUL',size:210,y:1500,lines:[[['마왕',1],['토벌.',1]]],slam:true},
  {t0:g(8)+0.08,t1:oPrice-0.12,font:'WSB',size:84,y:1440,band:1,lines:[[['당신이',0],['건넨',0]],[['물건',1],['하나가',1]]]},
  {t0:oGreat+0.05,t1:ulT-0.08,font:'WSB',size:86,y:1440,band:1,lines:[[['그들의',0],['생사를',1],['가른다.',0]]]},
@@ -76,7 +76,7 @@ const CAP=[
 // the item tap's cue falls in the held frame, so it is placed from the tap
 const mapCue=(take,st)=>{for(const s of S){if(s.take!==take)continue;const a=s.src(s.t0),z=s.src(s.t1);if(z>a&&st>=a&&st<z)return s.t0+(st-a)*(s.t1-s.t0)/(z-a);}return null;};
 // the result's jingle is the game's run-start fanfare `begin` (G–D–G, triangle) — not `great`, which already carries the night stamp
-const CUES=[['button',oItem+(cue('sale','button')-tapItem)],['begin',rOut],['order',LOGO_LAND],   // `order` = the game's stamp sample
+const CUES=[['button',oItem+(cue('sale','button')-tapItem)],['begin',rOut],['order',LOGO_LAND-0.007],   // `order` = the game's stamp sample (its impact is 0.007 s in)
 
  ...['sale','night','final'].flatMap(k=>T[k].cues.filter(c=>c[0]!=='button').map(c=>[c[0],mapCue(k,c[1])]).filter(c=>c[1]!=null))];
 const DUCKS=[[rOut,0.8,0.5],[LOGO_LAND,0.5,0.3]];   // the music steps back under the result's jingle and the logo's stamp (on top of a cue's own duck)
@@ -85,6 +85,7 @@ const STEPS=[[0.867,0.55,'L'],[1.467,0.68,'R'],[2.067,0.84,'L'],[2.667,1,'R']]; 
 // with a short floor scuff ~0.1 s after and no click above 2 kHz (v7 §14); `hit` = the impact's offset inside the file
 const FOOT={L:{file:'footstep00.ogg',hit:0.028},R:{file:'footstep01.ogg',hit:0.038}},FOOT_DIR=path.join(ROOT,'assets-src/trailer/footsteps/kenney-rpg-audio');
 const STROKES=[[ulT,0.42]];   // the underline's swish (not a game cue)
+const THUDS=[[LOGO_LAND,1]];   // v8: a short low thud under the logo's stamp (the stamp sample alone is light); gone within 0.15 s
 const CONFIG={DUR,FPS,LOGO,shots:S,caps:CAP,room:'file://'+path.join(ROOT,'dist/ui/assets/presentation/final/B006_LUST_BACKDROP.png'),takes:Object.fromEntries(Object.entries(T).map(([k,t])=>[k,{dir:'file://'+t.dir,fps:t.fps,n:t.frames.length,w:t.size[0],h:t.size[1]}])),
  store:'file://'+path.join(ROOT,'dist/ui/assets/presentation/morning/store-bg-phone.png'),logo:'file://'+path.join(ROOT,'dist/ui/assets/presentation/start/title-logo.png'),
  mul:'file://'+path.join(ROOT,'vendor/mulmaru/Mulmaru.woff2'),wsb:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-Black.ttf'),
@@ -154,11 +155,11 @@ async function render(t){await fonts();x.setTransform(1,0,0,1,0,0);x.globalAlpha
  return true;}
 function vignette(){const g=x.createRadialGradient(W/2,H*0.48,H*0.28,W/2,H*0.5,H*0.78);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0.5)');x.fillStyle=g;x.fillRect(0,0,W,H);}
 function captions(t){for(const c of C.caps){if(t<c.t0||t>c.t1)continue;const fam=c.font==='MUL'?'MUL':'WSB';x.font=(fam==='MUL'?'400 ':'900 ')+c.size+'px '+fam;x.textBaseline='middle';
-  const lh=c.size*(fam==='MUL'?1.12:1.22),total=lh*c.lines.length;let wi=0;const out=(c.t1-t)<0.18?(c.t1-t)/0.18:1;
+  const lh=c.size*(fam==='MUL'?1.12:1.22),total=lh*c.lines.length;let wi=0;const od=c.outDur??0.18,out=(c.t1-t)<od?(c.t1-t)/od:1;
   // v7: a local dim behind the caption only — the footage under it blurred and pressed hard, feathered on all four sides — that
   // settles (0.25 s) before the words come in, so the eye goes to the words and the whole frame never darkens with them
-  const lead=c.band?0.2:0;
-  if(c.band){const fa=clamp((t-c.t0)/0.25,0,1)*out,pad=70,y0=Math.round(c.y-total/2-pad),hh=Math.round(total+2*pad);
+  const lead=c.lead??(c.band?0.2:0);
+  if(c.band){const fa=clamp((t-c.t0)/(c.bandIn??0.25),0,1)*out,pad=70,y0=Math.round(c.y-total/2-pad),hh=Math.round(total+2*pad);
    const o=document.createElement('canvas');o.width=W;o.height=hh;const g=o.getContext('2d');g.filter='blur(14px) brightness(0.3)';g.drawImage(cv,0,y0,W,hh,0,0,W,hh);g.filter='none';
    g.fillStyle='rgba(6,4,2,0.5)';g.fillRect(0,0,W,hh);g.globalCompositeOperation='destination-in';
    const gv=g.createLinearGradient(0,0,0,hh);gv.addColorStop(0,'rgba(0,0,0,0)');gv.addColorStop(0.34,'#000');gv.addColorStop(0.66,'#000');gv.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gv;g.fillRect(0,0,W,hh);
@@ -172,11 +173,15 @@ function captions(t){for(const c of C.caps){if(t<c.t0||t>c.t1)continue;const fam
     x.textAlign='center';x.strokeText(w[0],0,0);x.shadowColor='transparent';x.fillStyle=w[1]?(fam==='MUL'?'#ffcf4a':'#ffd36b'):'#fff6e6';x.fillText(w[0],0,0);x.restore();px+=ws[i]+sp;});});}}
 async function logo(t){const st=await img(C.store);const u0=clamp((t-C.LOGO)/0.5,0,1),br=0.16+0.26*ease(u0);
  x.save();x.filter='blur(18px) brightness('+br.toFixed(3)+') saturate(1.1)';x.drawImage(st,-60,-100,W+120,H+200);x.restore();
- // v7: the shop lights come up (0.5 s), then the whole logo lands once like a stamp — 0.3 s, 104 % → 100 % and a 16 px drop —
- // then 0.17 s later the genre line in the game's pixel body face; logo and line then hold still to the end
- const lg=await img(C.logo);const lw=940,lh=lw*lg.height/lg.width,tl=C.LOGO+0.45,u=clamp((t-tl)/0.3,0,1),eo=1-Math.pow(1-u,3);
- if(t>=tl){const sc=1.04-0.04*eo,dy=-16*(1-eo);x.save();x.globalAlpha=clamp((t-tl)/0.08,0,1);x.translate(W/2,860+dy);x.scale(sc,sc);x.shadowColor='rgba(0,0,0,.8)';x.shadowBlur=40;x.drawImage(lg,-lw/2,-lh/2,lw,lh);x.restore();}
- const ga=clamp((t-(tl+0.3+0.17))/0.15,0,1);if(ga>0){
+ // the shop lights come up (0.5 s), then the whole logo lands once like a stamp (below), then 0.17 s later the genre line in the
+ // game's pixel body face; logo and line then hold still to the end
+ const lg=await img(C.logo);const lw=900,lh=lw*lg.height/lg.width,tl=C.LOGO+0.45,LD=0.18,u=clamp((t-tl)/LD,0,1),ei=u*u;
+ // v8: 111 % → 100 % in 0.18 s, accelerating into the landing (so it lands, not floats), with a 10 px drop; then exactly still.
+ // At 111 % the logo is 999 px wide, so it and its shadow stay inside the frame.
+ if(t>=tl){const sc=1.11-0.11*ei,dy=-10*(1-ei);x.save();x.globalAlpha=clamp((t-tl)/0.06,0,1);x.translate(W/2,860+dy);x.scale(sc,sc);x.shadowColor='rgba(0,0,0,.8)';x.shadowBlur=40;x.drawImage(lg,-lw/2,-lh/2,lw,lh);x.restore();
+  const gl=t<tl+LD?0:1-clamp((t-tl-LD)/0.22,0,1);
+  if(gl>0){x.save();x.translate(W/2,860);x.globalAlpha=gl;x.shadowColor='rgba(255,190,80,1)';x.shadowBlur=34;for(let k=0;k<2;k++)x.drawImage(lg,-lw/2,-lh/2,lw,lh);x.restore();}}
+ const ga=clamp((t-(tl+LD+0.17))/0.15,0,1);if(ga>0){
  x.save();x.globalAlpha=ga;x.font='400 64px MUL';x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=18;x.shadowOffsetY=4;
  x.lineWidth=12;x.strokeStyle='rgba(20,12,6,0.95)';x.strokeText('턴제 경영 로그라이트',W/2,860+lh/2+56);x.shadowColor='transparent';
  x.lineWidth=2.2;x.strokeStyle='#f1e3c2';x.strokeText('턴제 경영 로그라이트',W/2,860+lh/2+56);x.fillStyle='#f1e3c2';x.fillText('턴제 경영 로그라이트',W/2,860+lh/2+56);x.restore();}}
@@ -196,7 +201,7 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
    AudioNode.prototype.connect=function(dst,...a){if(this instanceof AudioBufferSourceNode&&this.buffer&&this.buffer.duration>60&&!this.__env){const env=off.createGain();this.__env=env;window.__env=env;connect.call(env,dst,...a);return connect.call(this,env);}return connect.call(this,dst,...a);};
    AudioBufferSourceNode.prototype.start=function(at,from,...a){if(this.buffer&&this.buffer.duration>60)return start.call(this,0,SONG_IN);return start.call(this,at,from,...a);};},{DUR,SONG_IN});
   await page.goto(`http://127.0.0.1:${PORT}/__trailer-audio.html`);
-  const res=await page.evaluate(async({CUES,STEPS,DUR,DUCKS,FOOT,STROKES})=>{const off=window.__off;const S=window.Sound;
+  const res=await page.evaluate(async({CUES,STEPS,DUR,DUCKS,FOOT,STROKES,THUDS})=>{const off=window.__off;const S=window.Sound;
    S.sync(false,'title',{bgm:1,sfx:1});
    const t0=Date.now();while(!window.__env&&Date.now()-t0<15000)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1500));
    // a 2.2 s fade-in that stays low under the first steps (0.67 / 1.33 s) and reaches the full level as the customer arrives (2.67 s);
@@ -208,6 +213,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
    const nb=off.createBuffer(1,Math.round(off.sampleRate*0.6),off.sampleRate),d=nb.getChannelData(0);let q=12345;for(let i=0;i<d.length;i++){q=(q*1103515245+12345)&0x7fffffff;d[i]=q/0x3fffffff-1;}
    const foot={};for(const [k,f] of Object.entries(FOOT)){const bin=atob(f.b64),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);foot[k]={buf:await off.decodeAudioData(u8.buffer),hit:f.hit};}
    for(const [t,v,side] of STEPS){const f=foot[side],src=off.createBufferSource(),g=off.createGain();src.buffer=f.buf;g.gain.value=0.5*v;src.connect(g);g.connect(off.destination);src.start(Math.max(0,t-f.hit));}
+   for(const [t,v] of THUDS){const o=off.createOscillator();o.type='sine';o.frequency.setValueAtTime(92,t);o.frequency.exponentialRampToValueAtTime(46,t+0.11);const g=off.createGain();
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.32*v,t+0.004);g.gain.exponentialRampToValueAtTime(0.0001,t+0.12);o.connect(g);g.connect(off.destination);o.start(t);o.stop(t+0.15);
+    const n=off.createBufferSource();n.buffer=nb;const f=off.createBiquadFilter();f.type='lowpass';f.frequency.value=240;const gn=off.createGain();
+    gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(0.22*v,t+0.003);gn.gain.exponentialRampToValueAtTime(0.0001,t+0.06);n.connect(f);f.connect(gn);gn.connect(off.destination);n.start(t);n.stop(t+0.1);}
    // the underline's swish: soft noise through a band that rises with the stroke (a marker on paper), small under the music
    for(const [t,dur] of STROKES){const n=off.createBufferSource();n.buffer=nb;const f=off.createBiquadFilter();f.type='bandpass';f.Q.value=1.1;
     f.frequency.setValueAtTime(1400,t);f.frequency.exponentialRampToValueAtTime(2800,t+dur);const g=off.createGain();
@@ -220,7 +229,7 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
    const L=buf.getChannelData(0),Rr=buf.getChannelData(1),n=L.length,ab=new ArrayBuffer(44+n*4),v=new DataView(ab);const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
    ws(0,'RIFF');v.setUint32(4,36+n*4,true);ws(8,'WAVE');ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,2,true);v.setUint32(24,off.sampleRate,true);v.setUint32(28,off.sampleRate*4,true);v.setUint16(32,4,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,n*4,true);
    let peak=0;for(let i=0;i<n;i++){peak=Math.max(peak,Math.abs(L[i]),Math.abs(Rr[i]));v.setInt16(44+i*4,Math.max(-1,Math.min(1,L[i]))*32767,true);v.setInt16(46+i*4,Math.max(-1,Math.min(1,Rr[i]))*32767,true);}
-   const u8=new Uint8Array(ab);let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return {b64:btoa(bin),fired,peak};},{CUES,STEPS,DUR,DUCKS,STROKES,FOOT:Object.fromEntries(Object.entries(FOOT).map(([k,f])=>[k,{hit:f.hit,b64:fs.readFileSync(path.join(FOOT_DIR,f.file)).toString('base64')}]))});
+   const u8=new Uint8Array(ab);let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return {b64:btoa(bin),fired,peak};},{CUES,STEPS,DUR,DUCKS,STROKES,THUDS,FOOT:Object.fromEntries(Object.entries(FOOT).map(([k,f])=>[k,{hit:f.hit,b64:fs.readFileSync(path.join(FOOT_DIR,f.file)).toString('base64')}]))});
   fs.writeFileSync(outWav,Buffer.from(res.b64,'base64'));console.log('audio peak',res.peak.toFixed(3),'cues',JSON.stringify(res.fired));}
  finally{await browser.close();server.kill();}}
 (async()=>{
@@ -238,10 +247,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
  // is the game's; the cues fire at their kept times (CUES). Added for the edit only: the footsteps before the first customer
  // (no game cue exists for them), the music held low under them, and the closing fade.
  const wav=path.join(dir,'mix.wav');await renderAudio(wav);
- const mp4=path.join(dir,'trailer-v7-1080x1920.mp4');
+ const mp4=path.join(dir,'trailer-v8-1080x1920.mp4');
  execFileSync(FF,['-hide_banner','-loglevel','error','-y','-framerate',String(FPS),'-i',path.join(out,'%05d.jpg'),'-i',wav,
   '-af',`volume=${AUDIO_GAIN}dB,alimiter=limit=0.89:level=false`,'-map','0:v','-map','1:a','-t',String(DUR),'-r',String(FPS),'-c:v','libx264','-profile:v','high','-preset','slow','-crf','17','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',mp4]);
- execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v7-540.mp4')]);
+ execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v8-540.mp4')]);
  fs.writeFileSync(path.join(dir,'edl.json'),JSON.stringify({beat:b,bar:B,songIn:SONG_IN,shots:S.map(s=>({t0:+s.t0.toFixed(3),t1:+s.t1.toFixed(3),take:s.take,src:s.srcFn})),cues:CUES,steps:STEPS},null,1));
  console.log('done',mp4);
 })().catch(e=>{console.error(e);process.exit(1);});
