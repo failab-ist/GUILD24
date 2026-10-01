@@ -951,16 +951,15 @@ No addition exists only to increase item count.
 
 #### ITEM-Q77 — FOOD/DRINK BASELINE VALUES
 
-Audit the exact active table in `ITEM_v2.8.0.md`, including:
+Audit the exact §ACTIVE CATALOG values, including:
 - Choco mobility +8 / Supply3
 - Coffee mobility +12 / Supply2
 - Herb Tea spirit +15 / Supply2
 - Energy mobility +17 / Supply2
-- Lava survival +8 / cold6 / Supply3
+- 불룡볶음면 survival +6 / cold21 / Supply3
 - Ramen cold10 / Supply3
-- Ice fire10 / Supply1
-- Candy fear10 / Supply2
-(v2.9.1 balance values, User 2026-09-25)
+- Ice fire8 / Supply1
+- Candy fear8 / Supply2
 
 Supply N is displayed as `피로 회복 N` (User 2026-09-24, v2.9.0).
 
@@ -1018,11 +1017,11 @@ Expect exactly:
 | 왕도 천연암반수 | E | 185/370 | +24 | 2 | — |
 
 PASS:
-- active catalog count remains 40
-- active Rarity distribution is C11 / U12 / R5 / E11 / L1
+- active catalog count is 43
+- active Rarity distribution is C11 / U8 / R12 / E11 / L1
 - no unrelated Item Rarity is moved from the approved active distribution
 - Hotbar names are not active player Items
-- meal shelf life 2, water shelf life 5
+- meal shelf life 2; 생수 2, 왕도 천연암반수 3
 - Supply is the direct Fatigue reduction (`피로 회복 N`, current Fatigue first, remainder buffers this expedition's gain); no replacement carries any other Fatigue effect
 
 #### DI-Q-v28-2 — WALLET GAIN SCOPE
@@ -1080,8 +1079,8 @@ Does not dominate survival+Fatigue recovery+loot+stats simultaneously.
 EXPECT:
 - 하급: 70/140, 투력 +8
 - 중급: 125/250, 투력 +14
-- 상급: 175/350, 투력 +20
-- 최상급: 210/420, 투력 +28
+- 상급: 195/390, 투력 +20
+- 최상급: 235/470, 투력 +28
 
 All:
 - Potion category
@@ -1122,23 +1121,12 @@ Exact base Item values must match the current active catalog; Supply is displaye
 
 #### ITEM-Q73 — HAZARD COUNTER VALUES
 
-Exact pre-Epic Main/Lower/Hybrid Item Counter values:
-- antidote poison +30
-- mask poison +24
-- rope bind +16
-- coating corrosion +24
-- cloak corrosion +6 / mire +6
-- boots mire +20
-- ion fire +26
-- ice fire +10
-- wine fear +20
-- candy fear +10
-- battery dark +16
-- heat cold +24
-- ramen cold +10
-- lava cold +6
-- goggles whiteout +20
-(v2.9.1 balance values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
+Exact pre-Epic Counter values (§COUNTER LADDER / §ACTIVE CATALOG):
+- Common: mask poison +10 · soda corrosion +10 · ice fire +8 · candy fear +8 · ramen cold +10
+- Uncommon hybrids: webgloves poison +12 / bind +9 · cloak corrosion +12 / mire +9 · holylight fear +9 / dark +9 ·
+  hood cold +12 / whiteout +9
+- Rare: antidote poison +23 · rope bind +21 · coating corrosion +23 · boots mire +21 · ion fire +18 · wine fear +18 ·
+  battery dark +21 · dragonramen cold +21 · snowgoggles whiteout +18
 
 PASS:
 - specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
@@ -1164,17 +1152,17 @@ SETUP:
 Compare pure Cold response.
 
 EXPECT:
-Hot Pack > Lava Noodle for Cold specialization.
+불룡볶음면 (Rare, cold +21) > 방한 두건 (Uncommon hybrid, cold +12 / whiteout +9) for Cold specialization (`tests/delta.cjs`).
 
 PASS:
-Lava Noodle retains Food/Hybrid identity.
+불룡볶음면 keeps its Food identity (Supply 3, survival +6); 방한 두건 stays the Snow 초반 하이브리드.
 
 #### ITEM-Q79 — ANTIDOTE ROLE BOUNDARY
 
 `농축 해독제`:
 - Field Gear Rare
 - 95 / 190
-- poison Counter +30
+- poison Counter +23
 
 PASS:
 - no generic positive Core Stat
@@ -1188,18 +1176,17 @@ PASS:
 EXPECT exact new Epic Field Gear:
 
 ```text
-거미줄 방호세트   165/330  독+22 / 속박+18
-연금 방수슈트     165/330  부식+22 / 진창+18
-성화 랜턴         165/330  공포+18 / 어둠+18
-백설 방한고글     165/330  냉기+22 / 화이트아웃+18
-마그마 냉각장비   175/350  화염+18 / 투력+10
+거미줄 방호세트   135/270  독+16 / 속박+14
+연금 방수슈트     135/270  부식+16 / 진창+14
+성화 랜턴         135/270  공포+12 / 어둠+14
+백설 방한고글     135/270  냉기+16 / 화이트아웃+12
+마그마 냉각장비   145/290  화염+12 / 투력+10
 ```
 
 PASS:
-- each dual-Hazard value remains below every dedicated specialist of the same or a higher Rarity for that Hazard
-  (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16)
+- each dual-Hazard value stays below the Rare dedicated specialist for that Hazard (e.g. 독 +16 < 농축 해독제 +23)
 - FIRE item does not invent a second FIRE Hazard
-- `마그마 냉각장비 투력+10` is an explicit exception only (User 2026-09-26, v2.9.6: +6 → +10)
+- `마그마 냉각장비 투력+10` is an explicit exception only
 
 #### ITEM-Q84 — EPIC TOP-END STAT/SUPPLY ITEMS
 
@@ -1208,7 +1195,7 @@ EXPECT:
 ```text
 초고속 에너지드링크    Drink E   175/350  기동+26 / Supply2
 대현자 허브엘릭서      Drink E   175/350  정신+28 / Supply2
-최상급 포션            Potion E  210/420  투력+28
+최상급 포션            Potion E  235/470  투력+28
 ```
 
 Supply2 is displayed `피로 회복 2` (User 2026-09-24, v2.9.0).
