@@ -2,10 +2,9 @@
 
 DOC=PRESENTATION_PRINCIPLES
 OWNER=presentation_system,presentation_principles,visual_construction,asset_quality,ornament_budget,audio_presentation,visual_review
-DOC_VERSION=2.9.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/PRESENTATION_SYSTEM_v2.8.0.md,history/PRESENTATION_POLISH_v2.8.0.md,history/PRESENTATION_POLISH_BATCH1_v2.8.0.md,history/PRESENTATION_POLISH_BATCH2_v2.8.0.md,history/PRESENTATION_POLISH_BATCH3_v2.8.0.md,history/PRESENTATION_POLISH_BATCH4_v2.8.0.md,history/PRESENTATION_POLISH_BATCH5_v2.8.0.md
 
 ## ROLE
 
@@ -14,7 +13,7 @@ It holds no per-screen layout, pixel value or per-surface component spec.
 
 - implemented per-surface presentation detail lives in Current Source
 - exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
-- UI / UX / mobile / tutorial / layout rules -> UI_UX_v2.8.0.md; acceptance -> UI_UX_QA_v2.8.0.md
+- UI / UX / mobile / tutorial / layout rules -> UI_UX_v2.8.0.md; acceptance -> UI_UX §QA
 - mechanics and information cadence -> their routed owners (SPEC_INDEX_v2.8.0.md)
 
 Read path for presentation work: SPEC_INDEX -> this file -> the relevant current owners -> only the
@@ -28,12 +27,8 @@ readability.
 
 It must not add a gameplay rule, reward, probability or decision; a new required Save field; a new
 Gameplay RNG draw; a hidden-information leak; a second result system; or a large cutscene/cinematic
-framework.
-
-Presentation may only strengthen the existing resolved state. Do not rewrite outcome truth.
-Presentation work must not move, duplicate, pre-reveal or hide any owned information truth.
-It may not change the gameplay rule or hide required decision information merely to make a screen
-cleaner.
+framework. It only strengthens the existing resolved state: it never rewrites outcome truth, and never
+moves, duplicates, pre-reveals or hides owned information (not even to make a screen cleaner).
 
 Prefer the current Sound / animation / scene systems before adding a new presentation framework.
 Do not create a theme / skin framework.
@@ -45,43 +40,35 @@ Do not create a theme / skin framework.
     -> USE REAL GRAPHIC CRAFT WHEN IT EARNS ITS PLACE
     -> DO NOT REDESIGN THE SCREEN JUST TO MAKE IT FEEL NEW
 
-The standing Player-facing grammar is:
+The one shared Player-facing grammar (typography, spacing, interaction semantics included) is:
 
     DARK PIXEL + CONTROLLED POP
 
-The world / store / document layer stays dark, grounded and restrained.
-The interaction layer is allowed to become clearer, brighter and more saturated where the Player
-must act, confirm, notice a state change or read a major reveal.
+The world / store / document layer stays dark, grounded and restrained. The interaction layer may
+become clearer, brighter and more saturated where the Player must act, confirm, notice a state change
+or read a major reveal. Controlled Pop spends contrast and saturation deliberately on the few things
+that need immediate attention; it never turns the whole game into a candy-colour arcade UI.
 
-"Controlled Pop" does NOT mean turning the whole game into a candy-colour arcade UI.
-It means contrast and saturation are spent deliberately on the few things that need immediate
-attention.
-
-The final result must still sound and look like GUILD24: a dark convenience-store / guild world
-whose decisions are unusually clear and tactile.
-
-Keep one GUILD24 visual language. Typography, spacing, interaction semantics and the global
-DARK PIXEL + CONTROLLED POP grammar remain shared.
+The result must still sound and look like GUILD24: a dark convenience-store / guild world whose
+decisions are unusually clear and tactile.
 
 ### Quality references
 
 The current FINAL / BOSS-CONFIRM family and the User-provided current-vs-target pair
 (reports/reference/, review input only - not a shipped asset, not a skin, not a motif library) are
-QUALITY-BAR references. They are not a universal skin.
+QUALITY-BAR references, not a universal skin.
 
-Take from the quality references: authored frame construction rather than browser-default boxes;
-deliberate outer edge / inner seam / depth relationships; tactile pixel controls with a visible
-pressed state; exact alignment and optical spacing; material-specific finish; dense but intentional
-micro-detail; local hierarchy in which one object clearly owns the screen; the sense that every
-visible edge was designed, not inherited from CSS defaults.
+Take from them: authored frame construction rather than browser-default boxes; deliberate outer edge /
+inner seam / depth relationships; tactile pixel controls with a visible pressed state; exact alignment
+and optical spacing; material-specific finish; dense but intentional micro-detail; local hierarchy in
+which one object clearly owns the screen; every visible edge designed, not inherited from CSS defaults.
 
-Other surfaces inherit the references' CONSTRUCTION METHOD - frame build, edge grammar, control
-solidity, material finish - and never their motif set. Do not copy a motif merely because it exists
-in the reference.
+Other surfaces inherit the CONSTRUCTION METHOD (frame build, edge grammar, control solidity, material
+finish), never the motif set. Do not copy a motif merely because it exists in the reference.
 
-Pixel-game references are references to contrast discipline, hard outlines / hard depth, clear colour
-blocks, instant state recognition and compact game-control silhouettes. They are NOT instructions to
-copy a primary-RGB palette, candy colours everywhere, arcade-toy decoration or generic game icons.
+Pixel-game references mean contrast discipline, hard outlines / hard depth, clear colour blocks,
+instant state recognition and compact game-control silhouettes - NOT a primary-RGB palette, candy
+colours everywhere, arcade-toy decoration or generic game icons.
 
 If an external reference is unavailable later, do not reconstruct it from memory.
 
@@ -99,8 +86,8 @@ reorder a screen merely because another layout is possible.
 Composition change requires an existing Canonical requirement, runtime evidence that current
 composition fails owned UX / responsive QA, or explicit User approval.
 
-User-approved composition change (User 2026-09-24, v2.9.0): the SALE product area — the per-row price panel becomes a
-fixed counter tray above the dock (UI_UX_v2.8.0.md §SALE — COUNTER TRAY).
+Approved composition change: the SALE product area is a fixed counter tray above the dock
+(UI_UX_v2.8.0.md §SALE — COUNTER TRAY).
 
     SAME SCREEN
     + BETTER CRAFT / MATERIAL / EDGES / CONTROL FEEL / TYPOGRAPHY / SPACING
@@ -124,19 +111,16 @@ REMOVE / REUSE / MERGE before adding another box, panel, label or modal.
 
 ### Information / action fit
 
-A screen must allocate space according to decision importance, not component age.
+Space follows decision importance, not component age.
 - no horizontal overflow; fixed docks/headers do not cover current information or actions
-- the primary decision and its immediate input information should be reachable without unnecessary
-  scroll
-- long content may scroll, but the scroll order follows information -> comparison -> action
-- transient speech/toasts/coach marks do not reserve permanent empty height
-- a short message must not be presented in an oversized empty modal solely because the shell is
-  shared
-- a dense message must not be shrunk into unreadable type merely to avoid scrolling
+- the primary decision and its immediate input information are reachable without unnecessary scroll
+- long content may scroll, in the order information -> comparison -> action
+- transient speech/toasts/coach marks reserve no permanent empty height
+- a short message is not shown in an oversized empty modal just because the shell is shared; a dense
+  message is not shrunk into unreadable type just to avoid scrolling
 - repeated headings, duplicated counts and decorative blocks are removed before required
   information is compressed
-- a transient overlay may never become permission for persistent overlays to cover required
-  information
+- a transient overlay never becomes permission for persistent overlays to cover required information
 
 ### Tutorial / coach target truth
 
@@ -150,32 +134,30 @@ merely to hide a target/copy mismatch.
 
 ## VISUAL HIERARCHY
 
-DARK BASE: background / environmental surfaces stay visually quieter than the decision placed on
-them; information panels do not compete with the Primary Action merely by being equally bright; dark
-does not mean muddy: neighbouring planes still separate cleanly.
+DARK BASE: background / environmental surfaces stay quieter than the decision placed on them;
+information panels do not compete with the Primary Action by being equally bright; dark does not mean
+muddy: neighbouring planes still separate cleanly.
 
 CONTROLLED POP is spent primarily on the currently AVAILABLE / actionable choice, the Primary Decision
 Control, a newly changed state the Player must notice, and important reveal / result emphasis.
-
-Keep the rest quieter. Do not make every label, border and card equally loud.
-The Primary Action may gain presence, but never more presence than the information it acts on.
+Keep the rest quieter; not every label, border and card is equally loud.
+The Primary Action may gain presence, but never more than the information it acts on.
 
 ### Action hierarchy
 
-A Primary Decision Control must look more actionable than the surface around it, and must read as the
-Phase's own action, not as a generic web CTA. Do not solve this with colour alone. Use a combination
-of placement, silhouette / footprint, contrast, hard depth, press feedback and state-specific
-treatment.
+A Primary Decision Control looks more actionable than the surface around it and reads as the Phase's
+own action, not a generic web CTA - through placement, silhouette / footprint, contrast, hard depth,
+press feedback and state-specific treatment, not colour alone.
 
 Peer choices share geometry, depth language, type treatment and target size. No peer becomes visually
 recommended through accidental brighter fill, thicker outline or deeper shadow.
 
 Secondary / back / defer keep the same game language but reduce footprint, contrast, depth and
-isolation. They must not read as another Primary.
+isolation; they never read as another Primary.
 
-Not every button becomes an object. Utility Controls (close / back / settings / help / ordinary
-navigation) may stay plain. Object treatment is prioritised for the Primary Action that commits a
-choice, an important Reveal acknowledgement, and an action that is a turning point of the Run.
+Utility Controls (close / back / settings / help / ordinary navigation) may stay plain. Object
+treatment is for the Primary Action that commits a choice, an important Reveal acknowledgement, and an
+action that is a turning point of the Run.
 
 ### State grammar
 
@@ -195,7 +177,7 @@ Disabled / selected / completed state must be distinguishable without relying on
 Phase identity is not a fixed hue chart. A Phase reads differently through the smallest useful
 combination of material / surface language, information hierarchy and contrast, placement and
 silhouette of the Primary Decision Control, press / release feedback, and a local accent where it
-strengthens recognition. Do not solve the phases by recolouring the same web-style button.
+strengthens recognition - not by recolouring the same web-style button.
 
 No exact hex palette, phase hue table or saturation value is Canonical here. Colour is judged
 relationally at runtime and may be tuned when the Phase stays distinguishable by more than colour,
@@ -298,13 +280,13 @@ Budget is permission, not quota.
     GENERIC ORNAMENT = REJECT
     REPEATED ORNAMENT WITHOUT FUNCTION = REJECT
 
-Demon / rose / candle / gothic ornament applied to a MEDIUM or LOW surface is generic ornament and is
+Demon / rose / candle / gothic ornament on a MEDIUM or LOW surface is generic ornament and is
 rejected regardless of execution quality.
 
 Game-like interaction language is a materiality and affordance requirement, not permission to add
-ornament. It is not satisfied by decoration and it is failed by decoration. Do not add repeated logo /
-seal / stamp marks used only to fill space, repeated bolt / rivet / corner-bracket / badge / frame
-motifs, frame-inside-frame, or another decorative layer on top of an established material.
+ornament; decoration fails it. Do not add repeated logo / seal / stamp marks used only to fill space,
+repeated bolt / rivet / corner-bracket / badge / frame motifs, frame-inside-frame, or another
+decorative layer on top of an established material.
 
 Presence comes from size, weight, contrast, placement and the press, not from added marks.
 REMOVE before adding.
@@ -320,17 +302,16 @@ Minimal wrapper/class changes are allowed only where CSS cannot reliably target 
 
 Use the cheapest level that actually reaches the quality target. If CSS-only leaves the object generic
 after one focused construction pass, escalate: a real graphic asset is preferred to more layers of
-mediocre CSS. "CSS can technically draw it" is not a reason to reject an asset. Do not keep adding
-border/shadow layers merely to avoid using an asset.
+mediocre CSS. "CSS can technically draw it" is not a reason to reject an asset, and border/shadow
+layers are not added merely to avoid using one.
 
 No new UI framework, theme engine, JS presentation framework, large asset wave, or decorative markup
 layers that pseudo-elements already solve. Targeted graphic polish corrects existing art where
-silhouette, crop, scale or icon identity weakens the current decision; it is not permission for a
-large new art wave.
+silhouette, crop, scale or icon identity weakens the current decision.
 
 A new SVG is accepted only when the runtime screenshot clearly improves silhouette, material identity,
-hierarchy, phase identity or authored micro-detail. SVG should use robust silhouettes, integer-aligned
-major geometry and flat fills / stepped tonal planes; remain crisp at actual render size; avoid
+hierarchy, phase identity or authored micro-detail. SVG uses robust silhouettes, integer-aligned
+major geometry and flat fills / stepped tonal planes; stays crisp at actual render size; avoids
 hairline filigree, browser-icon / stock-vector / generic-clipart appearance, glossy vector gradients,
 and complexity that steals attention from gameplay information. Evaluate the rendered screenshot, not
 the SVG source. If SVG looks weaker, cheaper or more synthetic than the CSS-only version, remove it.
@@ -355,16 +336,16 @@ into an asset.
 
 ### Integration fit
 
-Using an asset is not itself an improvement. An adopted asset must preserve the authored value that
+Using an asset is not itself an improvement; an adopted asset preserves the authored value that
 justified making or selecting it.
 - do not crop away a meaningful authored zone merely to fit an existing CSS band
 - do not keep an older procedural layer that duplicates the same physical architecture
 - crop is allowed for responsive framing but must preserve the asset's intended architectural read
 - do not keep an asset because it is new when the BEFORE screenshot is more coherent
 
-A frame around dynamic live content must hug the content: interior height stays driven by live
-content plus intentional padding, with no purposeless empty cavity. If a frame fails this fit, reject
-its runtime adoption and restore the previous better construction.
+A frame around dynamic live content hugs the content: interior height stays driven by live content
+plus intentional padding, with no purposeless empty cavity. A frame that fails this fit is not adopted
+at runtime; the previous better construction stays.
 
 A strong stage/background does NOT by itself complete a surface. Background art is a stage
 improvement; frame / plate / row / control construction is a component improvement. Where the defect
@@ -400,7 +381,7 @@ measurement.
 
 ## TRANSACTION BEAT
 
-Purpose: selling an Item to a customer must be seen as an act (User 2026-09-24, v2.9.0).
+Selling an Item to a customer is seen as an act.
 
 General contract, every beat:
 - presentation-only; no gameplay rule, Save field, Gameplay RNG draw, minigame, required drag or
@@ -414,46 +395,37 @@ General contract, every beat:
 
 | id | beat | exact behaviour |
 |---|---|---|
-| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from the counter tray to the customer's Bag slot in the customer-state strip (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows do not vanish — the Stat cells that changed pulse once (300 ms) and keep the new value |
+| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from the counter tray to the customer's Bag slot in the customer-state strip (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows stay — the Stat cells that changed pulse once (300 ms) and keep the new value |
 | A2 | 손님 반응 customer reaction | purchase: the customer figure nods (translateY 4 px, 180 ms × 2); refusal: it shakes its head (translateX ±4 px, the existing bubble-shake timing). The reply line (Copy.buy / Copy.refuse) stays 5 seconds; the greeting keeps the 3-second rule |
-| A3 | 계산대 counter | the Bag keeps its place in the customer-state strip beside the status line at every width, one step larger than v2.8 and never overflowing (UI_UX §BAG PRESENTATION); the counter edge under the front is unchanged; the hand-over (A1) lands on that Bag slot. §COMPOSITION LOCK holds (User 2026-09-24 revision, v2.9.0) |
+| A3 | 계산대 counter | the Bag keeps its place in the customer-state strip beside the status line at every width, one step larger than the v2.8 Bag and never overflowing (UI_UX §BAG PRESENTATION); the counter edge under the front is unchanged; the hand-over (A1) lands on that Bag slot. §COMPOSITION LOCK holds |
 | A4 | 손님 교대 customer exit / entry | `손님 보내기`: the current customer exits left (240 ms), then the next arrives with the existing entry (240~340 ms); `depart` gets a recorded utility cue (door / step family). Entry may still start the view at the top (UI_UX §SALE — MOBILE AUTHORITY) |
 | A5 | 가격 소리 계열 price-mode sound family | 50% / 100% / 150% share the register family and differ by coin ticks (1 / 2 / 3); no mode sounds like the correct answer (§AUDIO PRESENTATION "peer choices") |
 | A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text; refusal reply stays 5 s (A2) |
-| A7 | first-sale price coach | retired (User 2026-09-24 revision): the PRICING coach keeps its two sentences and gains no hand-over clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
-| A8 | 영수증 조각 transaction result stub | on a price commit that succeeds, a paper receipt stub stamps in over the counter band (scale 1.12→1, ≤ 200 ms) reading `단골도 {±N} · 소지금 {A} → {B}` for that customer, stays about 2.5 s and fades (≤ 300 ms); replaced by the next sale's stub; no reserved height; under reduced motion it appears and disappears without motion. A refusal shows no stub — the reason-pool reply line (A2) is the result surface. Exact surface -> UI_UX §SALE — TRANSACTION RESULT STUB; copy -> COPY_AUDIT §4-24 (User 2026-09-24, v2.9.0) |
+| A7 | first-sale price coach | none: the PRICING coach keeps its two sentences and gains no hand-over clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
+| A8 | 영수증 조각 transaction result stub | on a price commit that succeeds, a paper receipt stub stamps in over the counter band (scale 1.12→1, ≤ 200 ms) reading `단골도 {±N} · 소지금 {A} → {B}` for that customer, stays about 2.5 s and fades (≤ 300 ms); the next sale's stub replaces it; no reserved height; under reduced motion it appears and disappears without motion. A refusal shows no stub — the reason-pool reply line (A2) is the result surface. Exact surface -> UI_UX §SALE — TRANSACTION RESULT STUB; copy -> COPY_AUDIT §4-24 |
 
-Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX_QA_v2.8.0.md.
+Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX §QA.
 
-## GAME FEEL BEAT (v2.9.2, H1 / H5 / H2 / H3 / H4 / H6 ADOPTED)
+## GAME FEEL BEAT
 
-Purpose (User 2026-09-25): the game has no visible enemy, so the moments where a decision comes back
-as a result must carry the weight a hit carries elsewhere. Principles were taken from a design talk
-and its comments, not copied: a card that has weight, sound and a landing (Hearthstone); repeated
-actions that stay tactile, taken without the combo escalation (DMC; User 2026-09-25, second review); "well done" said by a rising number, never by a word (mass-market
-games); the reversal at the brink and the weight of a death (Darkest Dungeon). Status: registered as
-the v2.9.2 presentation batches; each batch is docs-first and touches Source only after the User
-authorizes that batch. H1, H5, H2, H3, H4 and H6 are adopted in Source (exact surfaces -> UI_UX §NIGHT LAYOUT — VERDICT STAMP, §FINAL RESULT — SEAL
-STAMP, §SALE — COUNTER TRAY COUNTER FEEL, §ORDER — WAREHOUSE DISCLOSURE ORDER CONFIRM, §CLOSING — RECEIPT STAMP, §FINAL — BOSS REVEAL ENTRY). The `Source today` column below records the state before H1.
+The game has no visible enemy, so the moments where a decision comes back as a result carry the weight
+a hit carries elsewhere. The hit is the moment a choice comes back — what I sold at the counter → the
+NIGHT result landing → the line that says that Item actually changed it. A heavier verdict stamp alone
+only improves a result screen; the cause lands with it (NIGHT_CLOSING §HERO ITEM FEEDBACK, §INSURANCE
+CAUSALITY).
 
 Where the principles land:
 
-| principle | our beat | Source today (dist/ui) |
-|---|---|---|
-| a card with weight, sound, landing | NIGHT verdict stamp, SALE key impact / receipt stub, ORDER confirm | NIGHT: the beat slides in per tone (340~760 ms) and the verdict tag follows 160 ms later (scale 1.12→1 260 ms, or translateY -6→0); SALE: the receipt stub stamps in 1.12→1 200 ms, Gold counts up 320 ms; ORDER: the form slides in 280 ms and one `order` stamp sample plays. No wind-up, no landing after-motion |
-| repeated actions remain tactile without escalation | consecutive sales, consecutive returns in one night (a sale count never makes the game more excited — H2) | every sale plays the same beat; no rhythm, no acceleration |
-| "well done" as a rising number | receipt stub, Gold count-up, CLOSING receipt, Store Capital | the stub exists (2.5 s); CLOSING and Store Capital are static tables; no praise word (§LEARNING AFTER RESULT forbids a right-answer cue, so acknowledgement lives in the result only) |
-| the reversal at the brink | the night an Insurance (귀환석, 세계수, 구급키트, 강골) turns a death or Severe Injury into a return; 대성공; the final expedition | one proof sentence and the `rescue` cue behind the Outcome cue; the reversal is stated, not shown |
-| the weight of a death | the 사망 result | `gone` tone fades in 760 ms with the 1.4 s `death` cue; the direction is right, the weight is short |
+| principle | our beat |
+|---|---|
+| a card with weight, sound, landing | NIGHT verdict stamp, SALE key impact / receipt stub, ORDER confirm |
+| repeated actions remain tactile without escalation | consecutive sales, consecutive returns in one night (a sale count never makes the game more excited — H2) |
+| "well done" as a rising number, never a word | receipt stub, Gold count-up, CLOSING receipt, Store Capital (no praise word: §LEARNING AFTER RESULT forbids a right-answer cue, so acknowledgement lives in the result only) |
+| the reversal at the brink | the night an Insurance (귀환석, 세계수, 구급키트, 강골) turns a death or Severe Injury into a return; 대성공; the final expedition |
+| the weight of a death | the 사망 result |
 
 Three-part beat: wind-up (a held stillness or pull) → impact (one short, hard frame: press, flash,
-sound, ink) → after-motion (settle, number jump, bleed). Today the impact is soft and the wind-up and
-after-motion are missing.
-
-Where the hit of this game lives (User 2026-09-25, second review): there is no enemy to strike. The
-hit is the moment a choice comes back — what I sold at the counter → the NIGHT result landing → the
-line that says that Item actually changed it. A heavier verdict stamp alone only improves a result
-screen; the cause has to land with it (NIGHT_CLOSING §HERO ITEM FEEDBACK, §INSURANCE CAUSALITY).
+sound, ink) → after-motion (settle, number jump, bleed).
 
 General contract, every game feel beat (extends §TRANSACTION BEAT):
 - presentation-only; no gameplay rule, Save field, Gameplay RNG draw, proof or dialogue change; a beat
@@ -466,73 +438,71 @@ General contract, every game feel beat (extends §TRANSACTION BEAT):
   spread, no cinematic layer
 - no combo counter, no streak UI, no praise word, no fit or right-answer cue (§LEARNING AFTER RESULT)
 - all of it lives in the presentation layer (`playCue` / `playPhase`, ui.css, audio cue parameters)
-- intensity follows the event's weight, never the same level everywhere (User 2026-09-25, from a
-  game-feel talk): 일반 = a sale, an order, a button, a phase entry; 중요 = a NIGHT verdict, the CLOSING
-  profit stamp; 클라이맥스 = the Insurance reversal overstamp, 사망, the FINAL result. A 일반 beat is a
-  press and a settle; a 중요 beat adds wind-up and after-motion; only a 클라이맥스 beat may use the two-step
-  stamp or the tape
-- impact budget (User 2026-09-25): at one event's landing, at most one primary visual response, one
-  primary sound and, when the event carries one, one number / cause response are emphasised at the same
-  time. A motion, sound or stamp that repeats a meaning already carried by another response is not
-  added. A beat that would exceed the budget is cut, not layered
+- intensity follows the event's weight, never the same level everywhere: 일반 = a sale, an order, a
+  button, a phase entry; 중요 = a NIGHT verdict, the CLOSING profit stamp; 클라이맥스 = the Insurance
+  reversal overstamp, 사망, the FINAL result. A 일반 beat is a press and a settle; a 중요 beat adds
+  wind-up and after-motion; only a 클라이맥스 beat may use the two-step stamp or the tape
+- impact budget: at one event's landing, at most one primary visual response, one primary sound and,
+  when the event carries one, one number / cause response are emphasised at the same time. A motion,
+  sound or stamp that repeats a meaning already carried by another response is not added. A beat that
+  would exceed the budget is cut, not layered
 - a held stillness (wind-up) is not a beat and is never used at 일반 intensity; at 중요 / 클라이맥스 it is
   ≤ 200 ms and the whole run (hold + impact + after-motion) still keeps a result readable within the
-  time the current entry takes (NIGHT: 340~760 ms per tone today)
+  time the current entry takes (NIGHT: 340~760 ms per tone)
 
-| id | beat | planned behaviour | owners at execution | status |
-|---|---|---|---|---|
-| H1 | NIGHT 판정 도장 verdict stamp | the card stands, then the verdict tag lands from above (scale 1.6→1, 90 ms); on the landing frame the card dips 4 px and settles — that dip is the stamp's physicality and the only companion motion (no ink ring: it would repeat the same "it landed" meaning, impact budget). Hold before the landing: none for 성공 / 퇴각 (일반), ≤ 200 ms for 대성공 / 부상 / 중상 (중요) and for 사망 / a reversal (클라이맥스) — a NIGHT with several results must not slow down. Weight per Outcome: 대성공 one gold stamp (one landing, differentiated by colour and cue, never two — the two-step stamp is 클라이맥스-only), 성공 once, 퇴각 shallow, 부상 / 중상 land as a red-ink spread / a slightly misaligned stamp (paper language, not a wound), 사망 gets no stamp — a black tape lays across slowly (≤ 500 ms). After-motion has one owner: **with a verified Hero Item line** (NIGHT_CLOSING §HERO ITEM FEEDBACK — `{Item} 덕분에 …`) that line is the after-motion — it settles once inside its own area (120~180 ms) after the stamp, and the numbers (Gold, EXP, 단골도) only update to their values, no jump or count-up; **without one**, the numbers of the result group that changed count up after the stamp. The cause outranks the money because the hit of this game is "what I sold made that result", not "what I earned". Reversal night (`rescued` / `avoidedDeath` on the result): the stamp lands in two steps — the original Outcome's silhouette starts to print (≤ 200 ms) and the Insurance name cuts in, overstamping the actual Outcome; the `rescue` cue lands on that overstamp frame and the cause beat is that overstamp, not a second pulse. A Death 만반의 준비 turned away reverses the same way without the flags (User 2026-09-25: only a turned-away Death reverses; 강골 / 구급키트 never). Outcome cues keep their notes; the first note comes earlier and harder on the impact frame | PRESENTATION (this row), UI_UX §NIGHT LAYOUT, NIGHT_CLOSING (display order only), UI_UX_QA | ADOPTED (User 2026-09-25; UI_UX §NIGHT LAYOUT — VERDICT STAMP, UI-Q-v29-27) |
-| H2 | SALE 계산대 counter feel | a sale already answers in several places (A1 hand-over, Bag settle, Gold count-up, Stat pulse, A2 nod, A8 stub), so this batch adds only the press and the landing: the pressed price key travels 3 px for 60 ms and returns; A5 coin ticks keep 1 / 2 / 3 with the first tick harder; 바가지's first tick lands 40 ms later with a lower tone; the A8 stub lands right after the impact frame of the price-key commit / first register tick instead of on render. There is no separate "price stamp" object — the key press and the first tick are the impact, the A8 stub is the only stamp SALE has. No counter-band bump, no faster second stamp, no overtone from the fifth sale — a sale count must never make the game sound more excited (User 2026-09-25, second review: the judgement is the reward, not the streak). No combo number, no streak UI | PRESENTATION §TRANSACTION BEAT A5 / A8, UI_UX §SALE — COUNTER TRAY, UI_UX_QA | ADOPTED (User 2026-09-25; UI_UX §SALE — COUNTER TRAY, COUNTER FEEL, UI-Q-v29-31) |
-| H3 | ORDER 확정 confirm | on 발주 확정 the warehouse cells fill as crates land in a cascade, each warehouse count goes from its prior value straight to its resolved value on its crate's landing (one crate per SKU, never one per unit; neither the crate count nor the number motion may misstate the ordered quantity), the balance counts down to the resolved value. The whole cascade is capped at ≤ 320 ms whatever the SKU count (the stagger shrinks as SKUs grow; 70 ms is the ceiling per step, not a fixed value) and at most 3 audible `order`-family hits play — the rest of the cascade is silent. The `발주 완료.` line is unchanged | PRESENTATION (this row), UI_UX §ORDER — WAREHOUSE DISCLOSURE, ECONOMY_ORDER_QA or UI_UX_QA | ADOPTED (User 2026-09-25; UI_UX §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM, UI-Q-v29-32) |
-| H5 | FINAL 최종 토벌 | one final seal stamp on the Boss name for a win (클라이맥스 weight, the heaviest single landing in the game), one failure stamp for a loss. The stamp count never encodes the party (the expedition commits 1~3 members, so "three stamps" would misreport a one- or two-member run), and a loss does not use the H1 death tape — the FINAL failure is a run verdict, not a per-member death (FINAL_EXPEDITION §RUN CLEAR / FAILURE). No new copy; the existing result sentence follows the stamp | PRESENTATION (this row), FINAL_EXPEDITION §BOSS CLEAR / §RUN CLEAR (display order only), UI_UX_QA | ADOPTED (User 2026-09-25; UI_UX §FINAL RESULT — SEAL STAMP, UI-Q-v29-30) |
-| H4 | CLOSING 마감 receipt | the receipt body prints as one fast run (all rows within ≤ 200 ms, one printer tick, not a tick per row — this screen repeats every Day for 30 Days) and only the final profit / loss line lands as a stamp (gold for profit, red for loss). No `어제보다 +N` line (stays deferred in the v3.0+ router). Store Capital settlement: count-up with a click when a decoration price line is crossed — the v2.9.1 rates 1 / 2 / 3 / 4 / 5% are adopted (tag `v2.9.1`) | PRESENTATION (this row), UI_UX §CLOSING, UI_UX_QA | ADOPTED (User 2026-09-25; UI_UX §CLOSING — RECEIPT STAMP, UI-Q-v29-33) |
-| H7 | FINAL 교전 clash scene (v2.9.9) | the one exception to the per-beat contract (User 2026-09-27): after `마왕성으로 출발` the resolved Final is replayed as a short card fight over the FINAL stage before the ending - the Boss card above, the party's cards below; each member is first handed what they carried, one item at a time; then each member in party order lunges and the Boss counters every time, the last exchange included, so a clear and a failure look the same until the verdict. An impact marks no amount; the red drops by the member's share after the counter, the last member's share held for the verdict, where the bar runs down, hesitates near the bottom and breaks or stays. The bar only falls and ends at the resolved Final's own ratio (no new number, no damage figure, no party bar). It may use the whole stage, the cards may cross it, and it runs as long as the party and their items need - no ceiling (User 2026-09-27); a tap skips it to the ending, reduced motion drops it, and it adds no rule, Save field, RNG draw or copy. Every other screen keeps the contract above | PRESENTATION (this row), UI_UX §FINAL — CLASH SCENE, FINAL_EXPEDITION (display order only), UI_UX_QA | ADOPTED IN DESIGN (User 2026-09-27, v2.9.9; UI_UX §FINAL — CLASH SCENE, UI-Q-v29-46) |
-| H6 | 장면 전환 phase entry | the four candidate hard cuts (CLOSING, FINAL, END, the DAY 0 screen) were captured and reported (`archive/v2.9.2/v292-h6-transitions.md`); CLOSING and END already carry their own content entry (H4's receipt print, H5's seal stamp) once settled, and DAY 0 lands on MORNING's pre-existing entry, so the User picked **FINAL alone** (User 2026-09-25, after reviewing the capture) — the one screen with no `playPhase` branch at all. The `.gate-zero` boss art/name plate settles in as one movement (translateY 10px -> 0, opacity 0 -> 1, 220 ms, outQuad, 일반 intensity); CLOSING / END / DAY 0 stay a cut | PRESENTATION (this row), UI_UX §FINAL — BOSS REVEAL ENTRY, UI_UX_QA | ADOPTED (User 2026-09-25; UI_UX §FINAL — BOSS REVEAL ENTRY, UI-Q-v29-34) |
+| id | beat | behaviour | owners / acceptance |
+|---|---|---|---|
+| H1 | NIGHT 판정 도장 verdict stamp | the card stands, then the verdict tag lands from above (scale 1.6→1, 90 ms); on the landing frame the card dips 4 px and settles — that dip is the stamp's physicality and the only companion motion (no ink ring: it would repeat the same "it landed" meaning, impact budget). Hold before the landing: none for 성공 / 퇴각 (일반), ≤ 200 ms for 대성공 / 부상 / 중상 (중요) and for 사망 / a reversal (클라이맥스) — a NIGHT with several results must not slow down. Weight per Outcome: 대성공 one gold stamp (one landing, differentiated by colour and cue, never two — the two-step stamp is 클라이맥스-only), 성공 once, 퇴각 shallow, 부상 / 중상 land as a red-ink spread / a slightly misaligned stamp (paper language, not a wound), 사망 gets no stamp — a black tape lays across slowly (≤ 500 ms). After-motion has one owner: **with a verified Hero Item line** (NIGHT_CLOSING §HERO ITEM FEEDBACK — `{Item} 덕분에 …`) that line is the after-motion — it settles once inside its own area (120~180 ms) after the stamp, and the numbers (Gold, EXP, 단골도) only update to their values, no jump or count-up; **without one**, the numbers of the result group that changed count up after the stamp. The cause outranks the money: the hit is "what I sold made that result", not "what I earned". Reversal night (`rescued` / `avoidedDeath` on the result): the stamp lands in two steps — the original Outcome's silhouette starts to print (≤ 200 ms) and the Insurance name cuts in, overstamping the actual Outcome; the `rescue` cue lands on that overstamp frame and the cause beat is that overstamp, not a second pulse. A Death 만반의 준비 turned away reverses the same way without the flags; only a turned-away Death reverses (강골 / 구급키트 never). Outcome cues keep their notes; the first note comes earlier and harder on the impact frame | PRESENTATION (this row), UI_UX §NIGHT LAYOUT — VERDICT STAMP, NIGHT_CLOSING (display order only); UI-Q-v29-27 |
+| H2 | SALE 계산대 counter feel | a sale already answers in several places (A1 hand-over, Bag settle, Gold count-up, Stat pulse, A2 nod, A8 stub), so H2 is only the press and the landing: the pressed price key travels 3 px for 60 ms and returns; A5 coin ticks keep 1 / 2 / 3 with the first tick harder; 바가지's first tick lands 40 ms later with a lower tone; the A8 stub lands right after the impact frame of the price-key commit / first register tick. There is no separate "price stamp" object — the key press and the first tick are the impact, the A8 stub is the only stamp SALE has. No counter-band bump, no faster second stamp, no overtone from the fifth sale — a sale count never makes the game sound more excited (the judgement is the reward, not the streak). No combo number, no streak UI | PRESENTATION §TRANSACTION BEAT A5 / A8, UI_UX §SALE — COUNTER TRAY, COUNTER FEEL; UI-Q-v29-31 |
+| H3 | ORDER 확정 confirm | on 발주 확정 the warehouse cells fill as crates land in a cascade, each warehouse count goes from its prior value straight to its resolved value on its crate's landing (one crate per SKU, never one per unit; neither the crate count nor the number motion may misstate the ordered quantity), the balance counts down to the resolved value. The whole cascade is capped at ≤ 320 ms whatever the SKU count (the stagger shrinks as SKUs grow; 70 ms is the ceiling per step, not a fixed value) and at most 3 audible `order`-family hits play — the rest of the cascade is silent. The `발주 완료.` line is unchanged | PRESENTATION (this row), UI_UX §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM; UI-Q-v29-32 |
+| H4 | CLOSING 마감 receipt | the receipt body prints as one fast run (all rows within ≤ 200 ms, one printer tick, not a tick per row — this screen repeats every Day for 30 Days) and only the final profit / loss line lands as a stamp (gold for profit, red for loss). No `어제보다 +N` line (deferred to the v3.0+ router). Store Capital settlement: count-up with a click when a decoration price line is crossed, at the rates 1 / 2 / 3 / 4 / 5% | PRESENTATION (this row), UI_UX §CLOSING — RECEIPT STAMP; UI-Q-v29-33 |
+| H5 | FINAL 최종 토벌 | one final seal stamp on the Boss name for a win (클라이맥스 weight, the heaviest single landing in the game), one failure stamp for a loss. The stamp count never encodes the party (the expedition commits 1~3 members, so "three stamps" would misreport a one- or two-member run), and a loss does not use the H1 death tape — the FINAL failure is a run verdict, not a per-member death (FINAL_EXPEDITION §RUN CLEAR / FAILURE). No new copy; the existing result sentence follows the stamp | PRESENTATION (this row), UI_UX §FINAL RESULT — SEAL STAMP, FINAL_EXPEDITION §BOSS CLEAR / §RUN CLEAR (display order only); UI-Q-v29-30 |
+| H6 | 장면 전환 phase entry | FINAL alone gets an entry beat — the one screen with no `playPhase` branch of its own: the `.gate-zero` boss art/name plate settles in as one movement (translateY 10px -> 0, opacity 0 -> 1, 220 ms, outQuad, 일반 intensity). CLOSING / END / DAY 0 stay a cut: CLOSING and END carry their own content entry (H4's receipt print, H5's seal stamp) and DAY 0 lands on MORNING's entry | PRESENTATION (this row), UI_UX §FINAL — BOSS REVEAL ENTRY; UI-Q-v29-34 |
+| H7 | FINAL 교전 clash scene | the one exception to the per-beat contract: after `마왕성으로 출발` the resolved Final is replayed as a short card fight over the FINAL stage before the ending - the Boss card above, the party's cards below; each member is first handed what they carried, one item at a time; then each member in party order lunges and the Boss counters every time, the last exchange included, so a clear and a failure look the same until the verdict. An impact marks no amount; the red drops by the member's share after the counter, the last member's share held for the verdict, where the bar runs down, hesitates near the bottom and breaks or stays. The bar only falls and ends at the resolved Final's own ratio (no new number, no damage figure, no party bar). It may use the whole stage, the cards may cross it, and it runs as long as the party and their items need - no ceiling; a tap skips it to the ending, reduced motion drops it, and it adds no rule, Save field, RNG draw or copy. Every other screen keeps the contract above | PRESENTATION (this row), UI_UX §FINAL — CLASH SCENE, FINAL_EXPEDITION (display order only); UI-Q-v29-46 |
 
-Execution order: H1 → H5 → H2 → H3 → H4 → H6 (User 2026-09-25: H5 follows H1 directly because it reuses
-H1's stamp language and cue shape, and the two heaviest landings are then authored in one hand; the
-remaining batches copy those patterns and invent no new ones). One batch per turn: owner amendment (UI_UX / QA with their
-ledgers; this owner has no ledger) → Source → ui-guard pins → npm test / ssot:check / qa:runtime →
-before / after capture at 390 and 1280 with reduced-motion → commit → report → STOP. A row's status
-flips to ADOPTED when its batch is committed; §VISUAL REVIEW PROCESS decides quality, not the
-implementer's reading.
+A game feel batch runs one per turn: owner amendment (UI_UX / QA) → Source → ui-guard pins → npm test /
+qa:runtime → before / after capture at 390 and 1280 with reduced-motion → commit → report → STOP. A later
+batch reuses the H1 / H5 stamp language and cue shape and invents no new pattern. §VISUAL REVIEW PROCESS
+decides quality, not the implementer's reading.
 
-Sequence review (User 2026-09-25): two runs are reviewed as one continuous experience, not as separate
-effects — the last NIGHT verdict → `마감으로` → the CLOSING receipt printing → `다음 날` (H1 + H4), and
-the FINAL arrival → the result → the clear / failure screen (H6 + H5). The capture for the batch that
-completes a sequence covers the whole run, and the run must not grow long enough to hurt repeated play.
-H6's own capture-and-report batch (`archive/v2.9.2/v292-h6-transitions.md`) found CLOSING and END already
-softened by H4 / H5, so only FINAL's own arrival was adopted; the CLOSING sequence stays H1 + H4 alone.
+Sequence review: two runs are reviewed as one continuous experience, not as separate effects — the last
+NIGHT verdict → `마감으로` → the CLOSING receipt printing → `다음 날` (H1 + H4), and the FINAL arrival →
+the result → the clear / failure screen (H6 + H5). The capture for the batch that completes a sequence
+covers the whole run, and the run must not grow long enough to hurt repeated play. The CLOSING sequence
+is H1 + H4 alone.
 
-Audit lens before a batch (adapted from the talk's review prompt; screen shake, particles and camera
-items dropped as excluded above): read each event the batch touches as
-입력 → 예비 → 행동 → 충돌 / 변화 → 결과 → 정착, and look first for events whose logic already exists
-but whose expression is missing (a sale that works without feeling handed over, a death that is stated
-without a process, a win without an emotional full stop). Only what has a felt effect in this game is
-proposed; nothing is added to make it richer.
+Audit lens before a batch: read each event the batch touches as
+입력 → 예비 → 행동 → 충돌 / 변화 → 결과 → 정착 (screen shake, particles and camera excluded as above), and
+look first for events whose logic already exists but whose expression is missing (a sale that works
+without feeling handed over, a death that is stated without a process, a win without an emotional full
+stop). Only what has a felt effect in this game is proposed; nothing is added to make it richer.
 
 ## LEARNING AFTER RESULT
 
-(User 2026-09-24, v2.9.0): the game teaches through results the player already caused — the NIGHT proof system (verified causes, the Item that actually changed an Outcome) and the per-customer transaction result — never through a hint placed before the decision. No dynamic fit emphasis, no recommendation, no "right answer" cue is added ahead of a choice; the category grammar is explained once (COPY_AUDIT §8-0) as vocabulary, not as advice.
+The game teaches through results the player already caused — the NIGHT proof system (verified causes,
+the Item that actually changed an Outcome) and the per-customer transaction result — never through a
+hint placed before the decision. No dynamic fit emphasis, no recommendation, no "right answer" cue is
+added ahead of a choice; the category grammar is explained once (COPY_AUDIT §8-0) as vocabulary, not as
+advice.
 
 ## AUDIO PRESENTATION
 
 The current audio ARCHITECTURE is reused where it already solves playback, routing, settings and
-phase ownership. This does NOT require reuse of the current audio assets. Existing synthesized
-cues / loops may be replaced when they are weaker than the target presentation.
+phase ownership; the current audio assets are not. Existing synthesized cues / loops may be replaced
+when they are weaker than the target presentation.
 
 New audio may be newly authored / synthesized / edited, layered or transformed current sound, or an
 external free asset whose license permits the shipped use (provenance recorded outside Canonical,
 vendored locally, no runtime hotlinking, no unclear rights).
 
-AI-generated music (User 2026-09-29, v3.0): phase BGM may be music the User generated for this project with an AI
-music tool (Gemini / Lyria), a free account's output included. Conditions:
+Phase BGM may be music the User generated for this project with an AI music tool (Gemini / Lyria), a
+free account's output included, when:
 - its provenance is recorded outside Canonical (`reports/ASSETS.md`)
 - its watermark (SynthID) is never stripped or defeated
 - no track closely imitates an existing song
 - the music is never presented as human-composed
 - where a shipped copy cannot carry the source's AI provenance (the web build's re-encodes lose its C2PA manifest), the
-  game's credits and the store text disclose the AI-generated music (User 2026-09-29)
+  game's credits and the store text disclose the AI-generated music
 Phase BGM mapping, loop and join rules -> UI_UX §AUDIO FEEDBACK — PHASE BGM.
 
 ### Voice
@@ -554,9 +524,7 @@ navigation / light manipulation.
 Decision SFX outrank Utility SFX. BGM / ambience sits below information and decision cues.
 Utility controls use a quiet, short, low-importance family.
 A decision cue sounds like the act it commits, not a generic click. Peer choices do not sound like the
-correct answer.
-SALE price modes 50% / 100% / 150% share one register family and differ only by coin ticks (1 / 2 / 3);
-no mode sounds like the correct answer (§TRANSACTION BEAT A5; User 2026-09-24, v2.9.0).
+correct answer (SALE price modes -> §TRANSACTION BEAT A5).
 
 Outcomes that share a family must not collapse to one cue with only a pitch change.
 Audio emphasis must never change or overstate the resolved Outcome or proof.
@@ -567,6 +535,7 @@ A unique full track for every phase is not required.
 
 Existing mute / BGM / SFX ownership remains authoritative.
 - critical decision / result cues > ordinary action cues > utility cues > BGM / ambience
+  (levels per cue: UI_UX §AUDIO FEEDBACK — SFX LEVELS)
 - rapid-repeat controls must not build into harsh overlapping sound
 - background / visibility transitions must not leak or duplicate playback
 - audio changes do not mutate gameplay state and consume no Gameplay RNG

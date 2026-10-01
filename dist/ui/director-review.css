@@ -2,22 +2,6 @@
    Presentation-only overrides for the approved ORDER / SALE / END density corrections.
    No gameplay values, source-of-truth data, or decision rules live here. */
 
-/* ORDER — the warehouse is reference, not the page. It begins open, but the disclosure
-   state is persisted by app.js after the player folds/opens it. The contents use the width
-   before they use height: two compact columns on a phone, three on a wider form. */
-.stock-brief{margin-bottom:2px}
-.stock-brief summary{padding:9px 16px}
-.stock-brief ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 14px;padding:0 16px 10px}
-/* BATCH 2A §SHARED BATCH 2 FAILURES: "every row becomes a framed card". Each held Item was a
-   boxed cell with its own ring, so the warehouse read as a card grid pasted onto the form. It
-   is a stock list written on the same document: ruled entries in columns, no frame. */
-.stock-brief li{min-width:0;display:grid;grid-template-columns:20px minmax(0,1fr) auto;grid-template-rows:auto auto;
- gap:1px 6px;align-items:center;padding:5px 2px;background:none;box-shadow:inset 0 -1px 0 #2c241826}
-.stock-brief li>svg,.stock-brief li>.item-art{grid-row:1 / span 2}
-.stock-brief li b{min-width:0;line-height:1.25;overflow-wrap:anywhere}
-.stock-brief li span{grid-column:3;grid-row:1;margin-left:0;white-space:nowrap}
-.stock-brief li em{grid-column:2 / 4;grid-row:2;min-width:0;text-align:left;font-size:11px;line-height:1.2}
-.stock-brief .none{padding:0 16px 10px}
 
 /* SALE — the bag belongs beside the adventurer, in the space that was visually idle.
    Keeping it above the counter means the lower dossier no longer grows just to repeat
@@ -84,9 +68,6 @@
 
 /* END — a three-person final party should use desktop width instead of becoming a narrow
    vertical strip in the middle of an empty screen. Mobile stays a readable single column. */
-@media(min-width:600px){
- .stock-brief ul{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
 @media(min-width:760px){
  .sent-off{max-width:860px}
  .went{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -119,8 +100,6 @@
  .front-side{padding-left:5px;gap:6px 7px}
  .front-side .kit{padding:6px;font-size:11px;gap:2px 7px}
  .front-side .kit .slots{gap:3px;padding:3px}
- .stock-brief ul{gap:4px}
- .stock-brief li{padding:4px;font-size:12px}
 }
 
 /* The Core Decision column is wide on a desktop, and the bag was stacking into a tall
@@ -278,6 +257,15 @@
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
 .p-morning .store>.board{position:relative;z-index:2}
 .p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
+/* UI_UX §SHORT PHONE (User 2026-09-29, iPhone SE: a 375x548 stage). The painting is cropped top and bottom, so the counter
+   band hangs 59 px past its layout box and the board kept only the wall above it - the Event's effect line cut, the Gates
+   under the fold. On a stage under 640 high the counter band lends the board the room down to 8 px over the till's
+   label (past the board's own 6 px overlap): it gives up that much layout height at its top - the band itself stays
+   seated at the stage's foot, so the till, the plate and the pieces stay where they stand. The situation reads before the room (UI_UX §MORNING): a 벽면 piece
+   hanging there is behind the board. */
+@media (max-height:639px) and (orientation:portrait){
+ .p-morning:not(.p-prep) .band.counter{margin-top:calc(-1 * max(0px,calc((var(--ph) - 100cqh) / 2 + var(--cap-top) * var(--band-c) * var(--ph) - 14px)))}
+}
 
 /* DESKTOP / wide viewport takes the wide framing of the same store - and so does any landscape stage 768 wide or more, a phone turned sideways included (v2.9.9, UI_UX
    §LIVE STORE DECORATION SEATING: the tall file cropped to a landscape stage shows no counter at all). The switch is the sheet's

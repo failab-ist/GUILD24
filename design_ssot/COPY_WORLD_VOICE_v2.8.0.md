@@ -3,10 +3,8 @@
 DOC=COPY_WORLD_VOICE
 OWNER=copy,world_voice,player_terms,help_copy,boss_report_copy,result_copy,event_copy
 DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=history/COPY_WORLD_VOICE_v2.8.0-patch.md,history/COPY_WORLD_VOICE_v2.7.0.md,history/COPY_WORLD_VOICE_v2.5.0.md
-CONSOLIDATION_LEDGER=reports/ssot-consolidation/COPY_WORLD_VOICE.md
 
 ## ROLE
 
@@ -29,13 +27,7 @@ copy-system rules. Do not maintain a second exact-copy list here.
 
 ### Copy는 세 역할로 분리한다
 
-Player-facing Text는 기본적으로 다음 세 종류다.
-
-1. **DATA**
-2. **FUNCTION**
-3. **FLAVOR**
-
-규칙:
+Player-facing Text는 기본적으로 **DATA** / **FUNCTION** / **FLAVOR** 세 종류다.
 
 - DATA와 FUNCTION은 정확성을 우선한다.
 - FLAVOR는 세계 / Character / 사건을 기억하게 할 때만 사용한다.
@@ -47,22 +39,15 @@ Player-facing Text는 기본적으로 다음 세 종류다.
 
 ### 기본 Voice
 
-GUILD24의 Voice는:
-
-- 담담하다.
-- 명확하다.
-- 생활감이 있다.
-- 가끔 상황 자체가 웃긴다.
-
-목표는:
+GUILD24의 Voice는 담담하고, 명확하고, 생활감이 있고, 가끔 상황 자체가 웃긴다.
 
 > "작가가 계속 농담하는 게임"
 
-이 아니라:
+이 아니라
 
 > "이 세계가 원래 조금 이상한 게임."
 
-이다.
+이 목표다.
 
 판타지 세계의 사람들에게 던전 / 마왕 / 포션 / 부상 / 귀환석 / 몬스터는 일상이다.
 편의점도 그 일상의 일부다.
@@ -73,19 +58,10 @@ GUILD24의 Voice는:
 이 문서의 모든 예시보다 우선한다.
 
 Copy / Flavor / Joke / Meme 하나를 위해 현재 없는 Gameplay / UI / Dialogue System을 추가하지 않는다.
+금지 예: Dialogue Choice, 계산 중 NPC 티키타카 Step, 봉투 선택 Mechanic, 결제 Minigame, Meme 전용 History / Counter,
+Meme 전용 Save Schema / Migration, 상품 패러디용 새 Item Mechanic, Joke용 Event System 신설.
 
-금지 예:
-
-- Dialogue Choice 신설
-- 계산 중 NPC 티키타카 Step 신설
-- 봉투 선택 Mechanic 신설
-- 결제 Minigame 신설
-- Meme 전용 History / Counter 신설
-- Meme 전용 Save Schema / Migration 신설
-- 상품 패러디용 새 Item Mechanic 신설
-- Joke용 Event System 신설
-
-판매의 건네기 / 손님 반응 / 손님 교대 beat는 presentation-only이며 Dialogue Step을 추가하지 않는다 (User 2026-09-24, v2.9.0).
+판매의 건네기 / 손님 반응 / 손님 교대 beat는 presentation-only이며 Dialogue Step을 추가하지 않는다.
 
 **현재 존재하는 게임 위에서 표현을 개선한다.**
 
@@ -125,38 +101,20 @@ COPY_WORLD_VOICE는 Gameplay Content의 소유 문서가 아니다.
 
 다음 Rule은 기존 owning Authoritative Design Spec이 계속 소유한다.
 
-- Item Category / Functional Role / Effect / Counter / Insurance / Interaction / Item Pool
-  - -> ITEM
-- Job / Trait Function / Trait Direction / NPC Growth / Loyalty / Wallet / Revisit / Destination / Death permanence
-  - -> NPC_TRAIT
-- Sale customer flow / purchase / refusal / price behavior
-  - -> SALE
-- Expedition causality / Injury / Death / Growth Result
-  - -> NIGHT_CLOSING
-- Phase layout / information hierarchy / returning-history presentation / visual emphasis
-  - -> UI_UX
-- Event timing / eligibility / effect / Event-specific Reveal Copy
-  - -> EVENT
-- D30 Final mechanics / party / Power / clear
-  - -> FINAL_EXPEDITION
-- Boss Identity / Boss Trait / fixed Boss names / Sloth Seal rule
-  - -> BOSS
-- Job Mastery / Meta unlock / Monster Knowledge rule
-  - -> META
+- Item Category / Functional Role / Effect / Counter / Insurance / Interaction / Item Pool -> ITEM
+- Job / Trait Function / Trait Direction / NPC Growth / Loyalty / Wallet / Revisit / Destination / Death permanence -> NPC_TRAIT
+- Sale customer flow / purchase / refusal / price behavior -> SALE
+- Expedition causality / Injury / Death / Growth Result -> NIGHT_CLOSING
+- Phase layout / information hierarchy / returning-history presentation / visual emphasis -> UI_UX
+- Event timing / eligibility / effect / Event-specific Reveal Copy -> EVENT
+- D30 Final mechanics / party / Power / clear -> FINAL_EXPEDITION
+- Boss Identity / Boss Trait / fixed Boss names / Sloth Seal rule -> BOSS
+- Job Mastery / Meta unlock / Monster Knowledge rule -> META
 
-COPY_WORLD_VOICE가 소유하는 것은:
-
-- DATA / FUNCTION / FLAVOR의 표현 원칙
-- Player-facing terminology
-- Global Voice / Tone
-- Function과 Flavor의 언어적 분리
-- Item / Relic / Trait Flavor 작성 기준
-- NPC Dialogue의 Voice와 Variant
-- 기존 Rule로 발생한 NPC Result의 Flavor Variant
-- 기존 데이터로 가능한 Callback의 실제 Copy와 Copy 밀도
-- Player-facing NPC Name Voice
-- Culture / Easter Egg Copy의 표현 방식
-- Global Copy QA
+COPY_WORLD_VOICE가 소유하는 것: DATA / FUNCTION / FLAVOR의 표현 원칙, Player-facing terminology, Global Voice / Tone,
+Function과 Flavor의 언어적 분리, Item / Relic / Trait Flavor 작성 기준, NPC Dialogue의 Voice와 Variant, 기존 Rule로 발생한
+NPC Result의 Flavor Variant, 기존 데이터로 가능한 Callback의 실제 Copy와 Copy 밀도, Player-facing NPC Name Voice,
+Culture / Easter Egg Copy의 표현 방식, Global Copy QA.
 
 특정 Item / Trait / NPC Gameplay Rule이 변경되어야 하면 해당 소유 Spec을 수정한다.
 COPY에서 Gameplay Rule을 중복 정의하지 않는다.
@@ -165,16 +123,8 @@ COPY에서 Gameplay Rule을 중복 정의하지 않는다.
 
 Item의 실제 기능 정보는 ITEM을 따른다.
 
-특히 다음은 Flavor 때문에 숨기거나 약화하지 않는다.
-
-- Category
-- relevant Functional Role
-- actual Stat effect
-- Counter effect
-- Condition effect
-- Insurance behavior
-- explicit penalty / tradeoff
-- materially important explicit interaction
+특히 Category, relevant Functional Role, actual Stat effect, Counter effect, Condition effect, Insurance behavior,
+explicit penalty / tradeoff, materially important explicit interaction은 Flavor 때문에 숨기거나 약화하지 않는다.
 
 Function / Flavor 분리는 **의미와 표현의 분리**다.
 이를 위해 반드시 새 data field / 새 description architecture를 만들 필요는 없다.
@@ -187,12 +137,8 @@ COPY의 상품 예시는 새 Item 추가 지시가 아니다.
 
 NPC gameplay identity / Trait behavior / History / Revisit / Death / Injury Rule은 NPC_TRAIT 및 관련 Spec을 따른다.
 
-COPY는:
-
-- 무엇을 저장할지 새로 정하지 않는다.
-- 새 Relationship System을 만들지 않는다.
-- 가짜 History를 만들지 않는다.
-- 실제 사용할 수 있는 현재 데이터 안에서 문장만 선택한다.
+COPY는 무엇을 저장할지 새로 정하지 않고, 새 Relationship System이나 가짜 History를 만들지 않는다.
+실제 사용할 수 있는 현재 데이터 안에서 문장만 선택한다.
 
 Returning NPC의 history/change를 어디에 어떻게 보여줄지는 UI_UX가 소유한다.
 COPY는 그 안에서 사용되는 문장 Voice만 소유한다.
@@ -236,18 +182,13 @@ Source 내부 이름과 Player UI 용어를 구분한다.
 - `survival` = **강인함**
 - `mobility` = **기동**
 - `spirit` = **정신**
-- Monster Knowledge has no player-facing term: no screen shows it (User 2026-09-26, v2.9.6)
-- Item Supply value = **피로 회복 N** (User 2026-09-24, v2.9.0)
+- Monster Knowledge has no player-facing term: no screen shows it
+- Item Supply value = **피로 회복 N**
 - `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 상단 도착`)
 
 실제 싸움 / battle 자체는 **전투**라고 쓴다.
 
-내부 계산용:
-- Power
-- Party Power
-
-는 Director / Work 내부 표현으로 사용할 수 있다.
-Player에게 별도 능력치로 노출하지 않는다.
+내부 계산용 Power / Party Power는 Director / Work 내부 표현이며, Player에게 별도 능력치로 노출하지 않는다.
 
 ### LOCKED PLAYER TERMS
 
@@ -267,8 +208,7 @@ Do not expose:
 ### Deep Expedition
 Locked term=`심층원정`.
 
-Do not rename to `긴급의뢰`, `길드 긴급의뢰`, `특별원정`, `고난도 의뢰`
-without later User approval.
+Do not rename to `긴급의뢰`, `길드 긴급의뢰`, `특별원정`, `고난도 의뢰`.
 
 ### Sponsorship
 Preferred concept=`원정 후원금`.
@@ -356,13 +296,7 @@ DATA는 "쓰는 것"이 아니라 **표시하는 것**이다.
 
 ## FUNCTION — 기능은 정확하게 쓴다
 
-FUNCTION은:
-
-> "이게 무엇이고 Gameplay에 어떤 영향을 주는가"
-
-를 정확하게 전달한다.
-
-말맛보다 정확성이 우선이다.
+FUNCTION은 "이게 무엇이고 Gameplay에 어떤 영향을 주는가"를 정확하게 전달한다. 말맛보다 정확성이 우선이다.
 
 - Rule을 모호하게 만들지 않는다.
 - 효과를 문학적으로 표현하지 않는다.
@@ -390,18 +324,8 @@ Trait 기능 예시는 특정 한 Trait을 Tutorial 대표로 만들지 않는�
 
 ## FLAVOR — 설명이 아니라 기억
 
-FLAVOR는 없어도 Gameplay Rule 이해에는 문제가 없어야 한다.
-
-목적은 다음 중 하나다.
-
-- Character
-- 생활감
-- 작은 사건
-- 사용감
-- 세계의 문화
-- 재치
-
-Flavor는 Function과 분리한다.
+FLAVOR는 없어도 Gameplay Rule 이해에는 문제가 없어야 한다. 목적은 Character / 생활감 / 작은 사건 / 사용감 / 세계의
+문화 / 재치 중 하나다. Flavor는 Function과 분리한다.
 
 ### GOOD
 
@@ -427,39 +351,20 @@ Function을 다른 말로 반복했을 뿐이다.
 4. Trait — 선택적
 5. 중요한 NPC Result
 
-다음에는 Flavor를 거의 사용하지 않는다.
-
-- 능력치
-- Gold
-- 가격
-- 재고
-- Gate 확률
-- Forecast
-- 발주 수치
-- 일반 Button
-- 단순 상태표시
+능력치, Gold, 가격, 재고, Gate 확률, Forecast, 발주 수치, 일반 Button, 단순 상태표시에는 Flavor를 거의 사용하지 않는다.
 
 ### Trait Flavor
 
-Trait에는 Flavor가 필수가 아니다.
-
-Trait 이름 + 정확한 Function만으로 Character가 충분히 생길 수 있다.
+Trait에는 Flavor가 필수가 아니다. Trait 이름 + 정확한 Function만으로 Character가 충분히 생길 수 있다.
 좋은 문장이 있을 때만 추가한다.
 
-v2.9.0 (User 2026-09-24): Trait에 Flavor note는 없다. 남는 note는 거짓말쟁이의 기능 서술(`50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.`) 하나뿐이며, 효과 행으로 렌더된다. 구두쇠·악바리의 note는 삭제(효과 행이 같은 말을 한다).
+현재 Trait에 Flavor note는 없다. note는 거짓말쟁이의 기능 서술(`50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.`) 하나뿐이며, 효과 행으로 렌더된다.
 
 ### Item Flavor
 
 Item Flavor는 "판타지 세계의 편의점 상품"이라는 정체성을 강화한다.
 
-좋은 Item Flavor는:
-
-- 한 가지 사용감
-- 한 가지 상품 특징
-- 한 가지 생활 관찰
-- 한 가지 짧은 재치
-
-중 하나만 잡는다.
+좋은 Item Flavor는 한 가지 사용감 / 상품 특징 / 생활 관찰 / 짧은 재치 중 하나만 잡는다.
 
 Order / Sale의 핵심 판단 정보보다 앞서지 않는다.
 Flavor 때문에 실제 Effect / Counter / Penalty를 찾기 어려워지면 실패다.
@@ -532,18 +437,8 @@ BETTER:
 
 ### AI식 Copy 금지
 
-다음 Pattern을 반복하지 않는다.
-
-- 강력하다. 하지만 위험하다.
-- 단순히 A가 아니라 B
-- 핵심은
-- 중요한 것은
-- 결국
-- 전략적으로 활용
-- 효과적으로 대응
-- 다양한 상황에서
-- 특별한 경험
-- 강력한 선택지
+다음 Pattern을 반복하지 않는다: `강력하다. 하지만 위험하다.` / `단순히 A가 아니라 B` / `핵심은` / `중요한 것은` / `결국` /
+`전략적으로 활용` / `효과적으로 대응` / `다양한 상황에서` / `특별한 경험` / `강력한 선택지`.
 
 게임이 자신의 Design을 해설하지 않는다.
 
@@ -557,47 +452,18 @@ BAD:
 
 > 옵션을 선택해주세요.
 
-Button은 가능하면 실제 행동을 쓴다.
-
-- 발주 확정
-- 영업 시작
-- 손님 보내기
-- 밤 결과 보기
-- 마감하기
+Button은 실제 행동을 쓴다 (→ §Button).
 
 ## WIT / CULTURE PLAYBOOK
 
-재치를 추상적으로 "센스 있게" 쓰지 않는다.
-문화 표현은 밀도를 나눈다.
+재치를 추상적으로 "센스 있게" 쓰지 않는다. 문화 표현은 밀도를 나눈다.
 
 ### LEVEL 1 — 편의점 생활문화
 
-가장 자주 사용한다.
-Easter Egg라기보다 GUILD24 세계의 일상이다.
+가장 자주 사용한다. Easter Egg라기보다 GUILD24 세계의 일상이다.
+소재 예: 1+1, 2+1, 도시락, 폐기, 봉투 / 보따리, 결제, PB, 행사 POP, 재고 Box, 영수증, 진열, 품절, 유통기한, 계산대, 단골.
 
-소재 예:
-
-- 1+1
-- 2+1
-- 도시락
-- 폐기
-- 봉투 / 보따리
-- 결제
-- PB
-- 행사 POP
-- 재고 Box
-- 영수증
-- 진열
-- 품절
-- 유통기한
-- 계산대
-- 단골
-
-목표:
-
-> "편의점 알바 해본 사람이 쓴 것 같다."
-
-현재 시스템과 연결될 때만 사용한다.
+목표: "편의점 알바 해본 사람이 쓴 것 같다." 현재 시스템과 연결될 때만 사용한다.
 
 예:
 
@@ -677,33 +543,21 @@ Existing flavor such as `용 그림은 장식이 아니다.` may remain only as 
 이 예시는 새 Item 추가 지시가 아니다.
 실제 Item 이름 / Effect / 채택 여부는 ITEM을 따른다.
 
-금지:
-
-- 이름만 비슷하게 만들기
-- Effect와 상관없는 패러디
-- 패러디 때문에 Balance 변경
-- 실제 Logo 복제
-- 실제 Package 복제
-- 실제 Typeface / 고유 Visual Identity 복제
+금지: 이름만 비슷하게 만들기, Effect와 상관없는 패러디, 패러디 때문에 Balance 변경, 실제 Logo / Package /
+Typeface / 고유 Visual Identity 복제.
 
 ### LEVEL 3 — Game / eSports / Internet Easter Egg
 
-전체 체감 약 1–2% 이하.
-한 Run에 하나도 없어도 정상이다.
+전체 체감 약 1–2% 이하. 한 Run에 하나도 없어도 정상이다.
 
-이번 COPY_WORLD_VOICE Authoritative Design Spec에서 직접 다루는 LEVEL 3은:
-
-**희귀 Reference NPC + 해당 NPC 전용 Easter Egg**
-
-이다.
-
+이 문서는 LEVEL 3 NPC를 두지 않는다 (→ §RARE REFERENCE NPC — REMOVED).
 독립형 Rare Easter Egg Event의 Trigger / Effect / Event-specific Reveal Copy는 EVENT가 소유한다.
 COPY_WORLD_VOICE는 그 Event의 전역 Voice / Context 원칙만 제공하며, 이 문서만으로 새 Event를 추가하지 않는다.
 
-## RARE REFERENCE NPC — REMOVED (User 2026-09-28, v2.9.11)
+## RARE REFERENCE NPC — REMOVED
 
-The three Rare Reference NPCs (their names, portraits and own lines) evoked real people and were removed before a paid
-release; the game has none. Do not add a name, portrait or line that points at a real person.
+The game has no Rare Reference NPC (no name, portrait or own line of one). Do not add a name, portrait or line that
+points at a real person.
 
 ## CULTURAL REFERENCE CONTEXT CHECK
 
@@ -721,49 +575,18 @@ release; the game has none. Do not add a name, portrait or line that points at a
 
 하나라도 성립하지 않으면 제외한다.
 
-금지:
-
-- 유명하니까 넣기
-- 숫자가 우연히 같아서 넣기
-- 이름만 비슷하게 만들기
-- 원본 Context와 무관한 곳에 출력
-- 관련 Reference NPC가 없는데 전용 Meme 출력
-- Meme 때문에 새 Gameplay / History / Save System 만들기
+금지: 유명하니까 넣기, 숫자가 우연히 같아서 넣기, 이름만 비슷하게 만들기, 원본 Context와 무관한 곳에 출력, 관련
+Reference NPC가 없는데 전용 Meme 출력, Meme 때문에 새 Gameplay / History / Save System 만들기.
 
 ## NPC DIALOGUE & RESULT VARIATION
 
-Variation은 모든 Copy에 적용하지 않는다.
-
-대상은 딱 두 종류다.
-
-1. **NPC가 말하는 반복 Dialogue**
-2. **NPC에게 일어나는 반복 상황 Result / Flavor**
-
-Variation하지 않는 것:
-
-- DATA
-- FUNCTION
-- Button
-- Tutorial 핵심 설명
-- 능력치명
-- Forecast명
-- Item 고유 Flavor
-- Relic 고유 Flavor
+Variation 대상은 딱 두 종류다: **NPC가 말하는 반복 Dialogue**, **NPC에게 일어나는 반복 상황 Result / Flavor**.
+DATA, FUNCTION, Button, Tutorial 핵심 설명, 능력치명, Forecast명, Item 고유 Flavor, Relic 고유 Flavor는 Variation하지 않는다.
 
 ### NPC Dialogue Variation
 
 같은 상황에서 NPC가 항상 같은 한 문장만 반복하지 않는다.
-
-대상:
-
-- 일반 방문
-- Trait 기반 Dialogue
-- 구매
-- 구매 거절
-- 가격 반응
-- 재방문
-- Callback
-
+대상: 일반 방문, Trait 기반 Dialogue, 구매, 구매 거절, 가격 반응, 재방문, Callback.
 
 예: 절약 성향
 
@@ -799,28 +622,12 @@ BAD:
 
 ### NPC Result Variation
 
-반복해서 발생하는 중요한 NPC 상황은 동일 Flavor 한 줄을 계속 반복하지 않는다.
-
-대상:
-
-- 부상
-- 중상
-- 퇴각
-- Death Avoid
-- 사망
-- 중요한 귀환
+반복해서 발생하는 중요한 NPC 상황(부상, 중상, 퇴각, Death Avoid, 사망, 중요한 귀환)은 동일 Flavor 한 줄을 계속 반복하지 않는다.
 
 Result 발생 조건 / Severity / Gameplay Consequence는 NIGHT_CLOSING 및 관련 Spec을 따른다.
 COPY는 문장 Variant만 소유한다.
 
-예: 사망
-
-**DATA**
-
-사망
-
-**FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.8.0.md`
-
+예: 사망 — **DATA** `사망` / **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
 History가 필요한 문장은 실제 해당 History가 있을 때만 사용한다.
 가짜 과거를 만들지 않는다.
@@ -844,11 +651,7 @@ C. 기존 History 기반 Callback
 D. 반복되는 중요한 NPC Result  
 → 부상 / 중상 / 퇴각 / Death Avoid / 사망 Variant Pool
 
-목표:
-
-> "녹음된 한 줄을 다시 듣는 느낌"
-
-을 줄이는 것.
+목표: "녹음된 한 줄을 다시 듣는 느낌"을 줄이는 것.
 
 희귀 Callback은 1–3개여도 충분하다.
 좋은 문장이 없으면 개수를 채우기 위해 나쁜 문장을 추가하지 않는다.
@@ -911,19 +714,8 @@ This is a readability/content-density rule, not a relationship or personality me
 
 ## CALLBACK
 
-Callback은 현재 이미 존재하는 데이터 / History만 사용한다.
-
-가능한 예:
-
-- 방문
-- 구매
-- 원정 결과
-- 부상 / 회복
-- Loyalty
-- Dungeon
-- 실제 보급품 사용 결과
-
-새 History를 만들지 않는다.
+Callback은 현재 이미 존재하는 데이터 / History만 사용한다(방문, 구매, 원정 결과, 부상 / 회복, Loyalty, Dungeon, 실제 보급품
+사용 결과). 새 History를 만들지 않는다.
 
 Copy 예:
 
@@ -941,10 +733,7 @@ Copy 예:
 
 실제 해당 데이터가 있을 때만 사용한다.
 
-Copy density target:
-
-- Eligible 상황의 약 15–20%
-- NPC 방문당 최대 1개
+Copy density target: Eligible 상황의 약 15–20%, NPC 방문당 최대 1개.
 
 좋은 Callback이 없으면 일반 Dialogue를 사용하거나 아무것도 추가하지 않는다.
 
@@ -955,14 +744,8 @@ Returning NPC의 변화를 화면에서 어떻게 보여줄지는 UI_UX를 따�
 ### RETURN-VISIT HELPED CALLBACK
 
 The helped callback may be selected only when the immediately previous expedition has a proven
-sold-Item contribution under the current result-proof boundary.
-
-Do not use:
-- `events.length > 0`
-- Trait-only `injury-guard`
-- a generic Hazard/Result event with no sold-Item proof
-
-as sufficient evidence.
+sold-Item contribution under the current result-proof boundary. `events.length > 0`, Trait-only `injury-guard`, or a
+generic Hazard/Result event with no sold-Item proof is not sufficient evidence.
 
 The callback consumes no Gameplay RNG and creates no new proof system; it reads the persisted
 previous-result proof already needed for NIGHT.
@@ -991,22 +774,11 @@ Copy Polish 때문에 Rule 설명을 빼지 않는다.
 목적지 신뢰도는 특정 Trait 이름을 중심으로 가르치지 않는다.
 Authoritative wording: the 목적지 tutorial coach step below.
 
-App Onboarding 문체를 피한다.
-
-BAD:
-
-> 효율적인 플레이를 위해 게이트 정보를 확인해보세요!
+App Onboarding 문체를 피한다 (→ §SaaS / App 문체 금지).
 
 ### Button
 
-가능하면 실제 행동을 쓴다.
-
-- 발주 확정
-- 영업 시작
-- 손님 보내기
-- 밤 결과 보기
-- 마감하기
-
+가능하면 실제 행동을 쓴다: 발주 확정, 영업 시작, 손님 보내기, 밤 결과 보기, 마감하기.
 `확인 / 진행 / 다음`만 반복하지 않는다.
 
 ### TUTORIAL VOICE
@@ -1017,7 +789,7 @@ Allowed function:
 - Hazard presses a Core Stat
 - natural Stat and Item Counter both contribute
 - readiness labels summarize current preparation
-- Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0)
+- Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 
 Forbidden solution script:
 ```text
@@ -1030,62 +802,29 @@ Tutorial may point to the relevant UI value without selecting the answer for the
 
 Keep each coach step short: one system-reading job, usually one or two sentences.
 
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 환경 대응 (HAZARD) / 능력치 (STATS) / 전망 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record instead (COPY_AUDIT §26-2, User 2026-09-30). The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
+Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 가방 (상품 사용) / 재방문 손님 / II 게이트 · 화염 게이트 (§3-10) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record (COPY_AUDIT §26-2) and 가격 after the first refusal / 50% sale (COPY_AUDIT §26-3). There is no 방문객, 게이트 (MORNING and ORDER), 창고, 후보, 수량, 후보 교환, 환경 대응, 전망, 점포지원 카드 · 구매 or NIGHT mark (UI_UX §TUTORIAL — COACH DIET); the CLOSING mark is its first clause only.
 
 ```text
-점포지원 (DAY 0, User 2026-09-24)
+점포지원 (DAY 0)
 점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.
-
-
-점포지원 카드
-카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.
-
-
-점포지원 구매
-누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.
-
-
-방문객
-오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.
-
-게이트
-열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.
-
-
-후보 교환
-후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.
 
 
 목적지
 이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.
 
 
-NIGHT
-한 명씩 원정 결과와 변화를 확인한다. ‘전체 건너뛰기’로 바로 정산할 수 있다.
-
-CLOSING
-영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
+CLOSING (first clause only)
+영업 전 자금과 보유 자금을 비교한다.
 ```
 
-The `전망` step explains display behavior and uncertainty; it does not imply that purchased Items have no runtime effect. Actual Resolve still uses the final committed preparation.
+The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신.
 
-The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0).
-
-The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone (User 2026-09-24, v2.9.0).
+The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone.
 
 ## IMPORTANT RESULT
 
 Copy가 담담하다고 중요한 Result까지 평평하게 만들지 않는다.
-
-중요도는 필요하면 UI_UX의:
-
-- Typography
-- Frame / Icon
-- Contrast
-- 작은 Motion
-- Sound
-
-등으로 전달한다.
+중요도는 필요하면 UI_UX의 Typography / Frame / Icon / Contrast / 작은 Motion / Sound로 전달한다.
 
 Copy를 장황하게 써서 Severity를 표현하지 않는다.
 
@@ -1095,27 +834,10 @@ NPC 이름도 World Voice의 일부다.
 
 ### MAIN VOICE — 한국식 + 판타지 + 유쾌한 비틀기
 
-normal Name Pool의 중심은:
+normal Name Pool의 중심은 `한국어 어감` + `판타지식 변형` + `가끔 자연스러운 말장난`이다.
+목표는 정통 서양 High-Fantasy 인명록이 아니라, 한국어 Player가 읽자마자 기억하고 피식할 수 있는 생활형 Fantasy 이름.
 
-`한국어 어감`
-+
-`판타지식 변형`
-+
-`가끔 자연스러운 말장난`
-
-이다.
-
-목표:
-정통 서양 High-Fantasy 인명록이 아니라,
-한국어 Player가 읽자마자 기억하고 피식할 수 있는 생활형 Fantasy 이름.
-
-Tone Anchor 예시:
-- 지오니아
-- 민자이
-- 고쉬스앵
-
-이 예시는 방향 기준이다.
-모든 이름을 Meme/실존인물 패러디로 만들라는 뜻이 아니다.
+Tone Anchor 예시: 지오니아, 민자이, 고쉬스앵 — 방향 기준이며, 모든 이름을 Meme/실존인물 패러디로 만들라는 뜻이 아니다.
 
 Good pool mix:
 - 한국어 어감이 남아 있는 Fantasy 변형
@@ -1123,12 +845,8 @@ Good pool mix:
 - 말장난을 알아채도 되고 못 알아채도 자연스러운 이름
 - 드물게 더 정통 Fantasy스러운 이름
 
-Strong Western High-Fantasy names may exist,
-but they must not dominate the normal pool.
-
-Avoid a pool where:
-`노아 / 바엘 / 카엘 / 아몬 / 레온 ...`
-같은 서양/성서/정통 Fantasy 느낌이 연속적으로 주류를 이룬다.
+Strong Western High-Fantasy names may exist, but they must not dominate the normal pool. Avoid a pool where
+`노아 / 바엘 / 카엘 / 아몬 / 레온 ...` 같은 서양/성서/정통 Fantasy 느낌이 연속적으로 주류를 이룬다.
 
 ### READABILITY
 
@@ -1150,35 +868,9 @@ Reject:
 
 ## GLOBAL COPY SCOPE
 
-이 기준은 Item Flavor만 대상으로 하지 않는다.
-
-Player가 보는 전체 문자열에 적용한다.
-
-- 최초 실행
-- Title
-- New Game
-- DAY / Phase
-- Tutorial
-- HUD
-- Menu
-- Button
-- Tooltip
-- Item Name / Effect / Flavor
-- Trait
-- Dungeon
-- Event
-- System Message
-- 구매 / 거절
-- NPC Dialogue
-- Empty State
-- Warning
-- Level Up
-- Unlock
-- Night
-- Closing
-- Codex
-- Meta
-- Settings / Save
+이 기준은 Item Flavor만이 아니라 Player가 보는 전체 문자열에 적용한다: 최초 실행, Title, New Game, DAY / Phase, Tutorial,
+HUD, Menu, Button, Tooltip, Item Name / Effect / Flavor, Trait, Dungeon, Event, System Message, 구매 / 거절, NPC Dialogue,
+Empty State, Warning, Level Up, Unlock, Night, Closing, Codex, Meta, Settings / Save.
 
 단, 이미 명확하고 좋은 Copy를 변화 자체를 위해 다시 쓰지 않는다.
 
@@ -1188,20 +880,13 @@ Copy 수정 때문에 Source 구조를 먼저 Refactor하지 않는다.
 
 현재 문자열이 dungeon.js / shop.js / run.js / catalog.js 등 관련 로직에 있어도 Copy 작업만을 위해 별도 Dialogue Architecture를 만들지 않는다.
 
-현재 Source가 이미 하는 방식을 재사용하고 가장 작은 변경을 우선한다.
-
-별도 구조는 실제 필요가 생겼을 때만 검토한다.
-
-예:
-
-- Dialogue Variant가 관리 불가능할 정도로 증가
-- 여러 시스템의 공용 문자열 중복이 실제 문제화
-- 다국어 지원 시작
-- 현재 구조에서 유지보수 문제가 실제 발생
+현재 Source가 이미 하는 방식을 재사용하고 가장 작은 변경을 우선한다. 별도 구조는 실제 필요가 생겼을 때만 검토한다
+(예: Dialogue Variant가 관리 불가능할 정도로 증가, 여러 시스템의 공용 문자열 중복이 실제 문제화, 다국어 지원 시작, 현재
+구조에서 유지보수 문제가 실제 발생).
 
 ## MORNING / SUPPLY COPY
 
-The Morning / Order Gate plate carries no Supply line: `보급 N 필요`, `보급 부담 없음` and `필요 보급 0/3/5` are deleted (User 2026-09-24, v2.9.0).
+The Morning / Order Gate plate carries no Supply line (no `보급 N 필요`, `보급 부담 없음` or `필요 보급 0/3/5`).
 
 Do not add recommendation prose such as:
 - `오늘은 보급 준비가 중요합니다`
@@ -1211,7 +896,7 @@ unless an owning tutorial explicitly requires instructional text.
 
 ## FIRST AID KIT
 
-Concise player function (User 2026-09-25, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
+Concise player function (exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
 
     원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)
 
@@ -1227,7 +912,7 @@ Gate copy communicates:
 Item copy communicates exact owned values:
 - Stat +N
 - Counter +N
-- 피로 회복 N (User 2026-09-24, v2.9.0)
+- 피로 회복 N
 - explicit penalty
 - Insurance behavior
 
@@ -1247,7 +932,7 @@ Exact Death-risk label:
 실패 시 사망 위험
 ```
 
-`실패 시 사망 위험` is a help line, not a readout cell (User 2026-09-24, v2.9.0): the SALE readout shows 전투 전망 and 환경 대응 only; the exact % is the second line of the 전투 전망 `?` and an NPC detail line (exact lines -> COPY_AUDIT_APPROVED_v2.8.0.md §4-1 / §5-7).
+`실패 시 사망 위험` is a help line, not a readout cell: the SALE readout shows 전투 전망 and 환경 대응 only; the exact % is the second line of the 전투 전망 `?` and an NPC detail line (exact lines -> COPY_AUDIT_APPROVED_v2.8.0.md §4-1 / §5-7).
 
 This block covers:
 - qualitative Combat Forecast
@@ -1264,7 +949,7 @@ Do not rewrite the copy to imply the shown Forecast / Readiness / 실패 시 사
 Exact Player-facing SALE Help for 전투 전망 (two lines, the second is `실패 시 사망 위험 {N}%`) / 환경 대응 is owned by
 COPY_AUDIT_APPROVED_v2.8.0.md.
 
-피로 explanation (User 2026-09-24, v2.9.0):
+피로 explanation:
     음식·음료는 피로를 줄인다. 출발 전 피로부터 줄이고, 남으면 이번 원정에서 쌓이는 피로를 줄인다.
 
 ## LOYALTY COPY BOUNDARY
@@ -1304,7 +989,7 @@ Living reaction selection priority:
     -> ordinary living return
 
 Item presence alone is not a selector.
-Remove supplied as a Primary selector.
+`supplied` is not a Primary selector.
 
 Environment flavor may be used only where it does not override the actual Outcome priority.
 Death uses narration, not quoted living dialogue.
@@ -1325,13 +1010,13 @@ by COPY_AUDIT_APPROVED_v2.8.0.md.
 Direct and derived changed rows remain readable under the current single-heading structure.
 Internal markers such as `potion` are never Player effects.
 
-Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.8.0.md §4-19) (User 2026-09-24, v2.9.0).
+Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.8.0.md §4-19).
 The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.8.0.md §Customer speech).
 
 ## RESULT CAUSALITY COPY
 
 NIGHT may describe:
-- Food/Drink Fatigue recovery actually applied before departure (User 2026-09-24, v2.9.0)
+- Food/Drink Fatigue recovery actually applied before departure
 - Food/Drink outcome-Fatigue buffer actually consumed
 - First Aid Kit Aftercare actually changed persistent Injury state
 - existing proven Item/Trait/Event contributions
@@ -1349,17 +1034,12 @@ Exact approved Event Function / Flavor text -> COPY_AUDIT_APPROVED_v2.8.0.md
 
 ### EVENT 05
 
-Mechanic ownership -> `EVENT_v2.8.0.md`.
-
-
-Required mechanic truth:
+Mechanic ownership -> `EVENT_v2.8.0.md`. Required mechanic truth:
 - Potion-category buy-price pressure
 - current-day Potion buy price +35%
 - retired `마석 가격 폭등` / `Special 매입가 +35%` wording is forbidden
 
 Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-5.
-
-Do not maintain a second exact Event-copy list here.
 
 ## TRAIT / CURRENCY / SETTINGS COPY ROUTING
 
@@ -1384,17 +1064,8 @@ Boss reveal copy follows the same DATA / FUNCTION / FLAVOR split used elsewhere:
 Do not attach separate strategy advice to the D15 rule explanation.
 The game gives the ingredients; the Player decides the response.
 
-Player-facing Boss copy must not use internal design/runtime terms such as:
-- Run
-- Relic Window
-- Final Snapshot
-- Final Power
-- Factor
-- Modifier
-- sealBreakCount
-- effectiveBossPower
-
-when an approved world/player term exists.
+Player-facing Boss copy must not use internal design/runtime terms such as Run, Relic Window, Final Snapshot, Final Power,
+Factor, Modifier, sealBreakCount, effectiveBossPower when an approved world/player term exists.
 
 ### BOSS INFORMATION COPY ROUTING
 
@@ -1403,7 +1074,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md.
 
 Reveal timing and information ownership remain governed by BOSS_v2.8.0.md.
 
-Retained current copy (`COPY_AUDIT_APPROVED_v2.8.0.md` §14-2 / §14-4 / §23): the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below.
+This owner carries the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below (`COPY_AUDIT_APPROVED_v2.8.0.md` §14-2 / §14-4 / §23).
 
 ### Final Family / Hazard reveal timing
 
@@ -1445,10 +1116,7 @@ Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` �
 
 > 놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.
 
-D5 Flavor:
-- Trait을 암시할 수 있다
-- exact Function을 공개하지 않는다
-- 별도 전략 조언을 붙이지 않는다
+D5 Flavor는 Trait을 암시할 수 있지만 exact Function을 공개하지 않고, 별도 전략 조언을 붙이지 않는다.
 
 ### D15
 
@@ -1501,11 +1169,11 @@ Player-facing identity follows `BOSS_v2.8.0.md`:
 탐식의 마왕 글러트니
 ```
 
-All `폭식 / 폭식의 마왕 글러트니 / 폭식의 권능` wording is stale.
+Do not use `폭식 / 폭식의 마왕 글러트니 / 폭식의 권능` wording.
 
 Current mechanic truth is:
 - all positive Core-Stat contribution originating from Items is reduced to 50%
-- Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unaffected (User 2026-09-24, v2.9.0)
+- Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unaffected
 
 Exact D15 Trait name:
 
@@ -1513,7 +1181,7 @@ Exact D15 Trait name:
 탐식의 권능
 ```
 
-Do not reuse the old Rare+-based sentence.
+No Rare+-based Function sentence.
 
 #### 색욕의 마왕 러스트
 
@@ -1537,7 +1205,7 @@ Header / Intro -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-7.
 
 Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 29).
 
-Authoritative Hazard wording (User 2026-09-24 revision 2, v2.9.0; the MORNING short row with the Final's N):
+Authoritative Hazard wording (the MORNING short row with the Final's N):
 
 ```text
 독 · 대응 29 필요 · 강인함 3당 대응 1 제공
@@ -1564,17 +1232,12 @@ The information itself is the decision material.
 
 ### Meta copy
 
-Meta copy:
 - use Job Mastery / 직업 숙련 language consistently with META
 - do not present legacy Global Meta XP as current progression
 
-
 ## COPY QA
 
-문자열만 따로 읽고 끝내지 않는다.
-실제 Playthrough 화면 흐름에서 확인한다.
-
-확인:
+문자열만 따로 읽고 끝내지 않는다. 실제 Playthrough 화면 흐름에서 확인한다.
 
 - DATA를 불필요하게 문장으로 바꿨는가?
 - Function과 Flavor가 섞였는가?
@@ -1611,55 +1274,29 @@ Meta copy:
 새 Text마다 순서대로 묻는다.
 
 ### Q1. 반드시 알아야 하는 정보인가?
-
-YES  
-→ DATA / FUNCTION으로 명확하게 쓴다.
+YES → DATA / FUNCTION으로 명확하게 쓴다.
 
 ### Q2. 없어도 Rule 이해에는 문제가 없는가?
-
-YES  
-→ Flavor 후보.
+YES → Flavor 후보.
 
 ### Q3. 세계 / Character / 사건을 실제로 더 기억하게 만드는가?
-
-NO  
-→ 삭제.
+NO → 삭제.
 
 ### Q4. 기존 Function을 다른 말로 다시 설명하는가?
-
-YES  
-→ 삭제.
+YES → 삭제.
 
 ### Q5. 웃기려고 애쓰는 문장처럼 보이는가?
-
-YES  
-→ 정상 문장으로 되돌린다.
+YES → 정상 문장으로 되돌린다.
 
 ### Q6. 반복 NPC 상황에서 항상 같은 한 줄만 나오게 되는가?
-
-YES  
-→ NPC Dialogue / Result Variation 대상인지 확인한다.
+YES → NPC Dialogue / Result Variation 대상인지 확인한다.
 
 ## FINAL GOAL
 
-Player가:
+Player가 "게임 설명서를 읽은 느낌"보다 "길드24에서 며칠 일한 느낌"을 받아야 한다.
 
-> "게임 설명서를 읽은 느낌"
-
-보다:
-
-> "길드24에서 며칠 일한 느낌"
-
-을 받아야 한다.
-
-대부분은 정상적인 판타지 편의점이다.
-
-가끔 현실 편의점 같은 생활감이 보인다.
-
-더 드물게 재치 있는 상품 패러디가 보인다.
-
-모르면 그냥 세계 속의 일이다.
-알면 한 겹 더 재미있다.
+대부분은 정상적인 판타지 편의점이다. 가끔 현실 편의점 같은 생활감이 보인다. 더 드물게 재치 있는 상품 패러디가 보인다.
+모르면 그냥 세계 속의 일이다. 알면 한 겹 더 재미있다.
 
 **세계가 먼저다.**
 

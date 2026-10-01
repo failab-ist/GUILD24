@@ -25,7 +25,8 @@ const ACTION={
  sell:{sel:'.p-sale .dock [data-action="depart"]',step:'day',depth:3},
  night:{sel:'.p-night .dock .stamp',step:'day',depth:4},
  closing:{sel:'.p-closing .dock .stamp',step:'edge',depth:5},
- final:{sel:'.p-final .dock .stamp:not([disabled])',step:'edge',depth:5,font:21},
+ // the flow Action, never 원정대 후보 보기 beside it on the last order; with that pair a phone steps both to 16 px (User 2026-09-30)
+ final:{sel:'.p-final .dock .stamp:not([disabled]):not([data-action="final-roster"])',step:'edge',depth:5,font:21,pair:16},
  end:{sel:'.p-end .dock .stamp',step:'edge',depth:5}};
 const SIZE={day:{h:[56,60],font:[18,20]},edge:{h:[64,72],font:[20,22]}};
 // the cast a control throws: a filter drop when it is clipped (a clipped box-shadow never draws), else either
@@ -82,7 +83,8 @@ const READ=`((sel,label)=>{const e=document.querySelector(sel);if(!e)return null
     check(`${where} casts one ${d}px diagonal depth`,rest.cast[0]===d&&rest.cast[1]===d,`cast ${rest.cast}`);
     check(`${where} press moves ${d-1}px right and down`,Math.abs(held.move[0]-(d-1))<.01&&Math.abs(held.move[1]-(d-1))<.01,`move ${held.move.map(v=>+v.toFixed(2))}`);
     check(`${where} press keeps a 1px cast`,held.cast[0]===1&&held.cast[1]===1,`cast ${held.cast}`);
-    const H=desk&&A.desk?A.desk[0]:S.h[di],F=A.font||(desk&&A.desk?A.desk[1]:S.font[di]);
+    const paired=A.pair&&!desk&&await p.evaluate(sel=>document.querySelectorAll(sel).length>1,A.sel.split(':not(')[0]);
+    const H=desk&&A.desk?A.desk[0]:S.h[di],F=paired?A.pair:A.font||(desk&&A.desk?A.desk[1]:S.font[di]);
     check(`${where} is ${H}px tall`,Math.abs(rest.h-H)<.5,`h ${rest.h}`);
     const fits=A.fit&&!desk?rest.font>=16&&rest.font<=18&&Math.abs(rest.font-Math.min(18,Math.max(16,width*.0462)))<.05:rest.font===F;
     check(`${where} label ${A.fit&&!desk?'16-18':F}px, one line`,fits&&rest.lines===1,`font ${rest.font} lines ${rest.lines}`);

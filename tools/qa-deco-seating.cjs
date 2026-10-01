@@ -6,7 +6,7 @@
 // painting they are placed by (the sign never above the stage's top edge), the branch plate clears the dock Action, the display and
 // counter pieces stand on the till housing's base line at least the gap away from it, and no piece overlaps the housing, its
 // label, the DAY sign (and its hangers), the board, the branch plate, the dock or another piece, or leaves the screen; the sign
-// keeps the gap from the DAY sign. Reduced motion.
+// keeps the gap from the DAY sign. Reduced motion. And in the Decoration panel, buying and fitting a row keeps it where it was.
 //   node tools/qa-deco-seating.cjs [out-dir]
 const {spawn}=require('node:child_process'),path=require('node:path'),fs=require('node:fs');
 const PORT=Number(process.env.QA_PORT||5199),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',OUT=process.argv[2]?path.resolve(process.argv[2]):null;
@@ -71,6 +71,24 @@ const POINT={phone:{ar:941/1672,sign:[.15,.113],wall:[.76,.55],counter:[.742,.76
     check(tag+' '+s+' overlaps nothing',!hits.length,hits.join(' '));
     check(tag+' '+s+' is on screen',q.x>=0&&q.y>=0&&q.r<=m.vw&&q.b<=m.vh);}
    if(OUT)await p.screenshot({path:path.join(OUT,`morning-${width}x${height}-${set}.png`)});
+   await ctx.close();}
+  /* UI_UX §PURCHASE / EQUIP FLOW (User 2026-09-29: "구매 누르면 스크롤이 위로 올라감"): in the Decoration panel, scrolled to its
+     last row, every step of buying and fitting that row - 구매, 구매 확정, 해제, 적용 - keeps the row on the pixel it was on */
+  for(const [width,height] of [[360,597],[1280,880]]){const desktop=width>=1024,tag=width+'x'+height+' purchase';
+   const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:desktop?1:2,isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
+   await ctx.addInitScript(()=>{try{localStorage.clear();}catch(e){}});
+   const p=await ctx.newPage();p.on('pageerror',e=>check(tag+' no page error',false,e.message));
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.evaluate(()=>{(Guild24.game.account.tutorial??={}).skipped=true;Meta.addCapital(Guild24.game.account,5000);Guild24.render();});
+   await p.click('.p-prep [data-action="store-manage"][data-id="counter"]');await p.waitForTimeout(200);
+   const id=await p.evaluate(()=>{const b=[...document.querySelectorAll('#modal-root [data-action="deco-buy"]')].pop();b.scrollIntoView({block:'center'});return b.dataset.id;});
+   const rowY=()=>p.evaluate(id=>document.querySelector('#modal-root [data-id="'+id+'"]').closest('.slot-option').getBoundingClientRect().top,id);
+   const y0=await rowY();
+   check(tag+' the panel is scrolled down to the row',await p.evaluate(()=>document.querySelector('#modal-root .modal-body').scrollTop>0));
+   for(const a of ['deco-buy','deco-confirm','deco-unequip','deco-equip']){const q='#modal-root [data-action="'+a+'"][data-id="'+id+'"]';
+    if(!await p.$(q)){check(tag+' '+a+' is offered',false);continue;}
+    await p.click(q);await p.waitForTimeout(150);const y=await rowY();
+    check(tag+' '+a+' keeps the pressed row where it was',Math.abs(y-y0)<=2,`row ${y0.toFixed(1)} -> ${y.toFixed(1)}`);}
    await ctx.close();}
  }finally{await browser.close();server.kill();}
  const failed=results.filter(r=>!r.ok);console.log(`\n${results.length-failed.length}/${results.length} PASS`);process.exit(failed.length?1:0);

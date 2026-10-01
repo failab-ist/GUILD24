@@ -266,6 +266,18 @@ After User-approved Design change:
 - update only tests that represent the changed rule
 - do not preserve superseded values as alternate live expectations
 
+## 9-A. 시뮬레이션은 User 컨펌 뒤에 돌린다 (User 2026-09-30)
+
+측정·시뮬레이션을 돌리기 전에 User에게 먼저 알리고, 확인을 받은 뒤에만 실행한다.
+대상: `Debug.simulate` · `Debug.trajectory` · `tools/measure-*.cjs` · 재측정, 그리고 이와 같은 스크래치 스크립트.
+
+알릴 것:
+- 무엇을 왜 재는지
+- 명령 / 봇 정책 / 규모(Run 수 × 궤적 수, 비교 조건 수)
+- 예상 소요 시간(지난 실행 기록이나 작은 시험 실행으로 잰 값)
+
+`npm test` · `npm run audit` · `qa:*` 같은 정해진 검증 절차는 여기에 해당하지 않는다.
+
 ---
 
 # 10. DOCUMENT / VERSION HYGIENE
@@ -277,8 +289,7 @@ Do not:
 - duplicate current rules across multiple live documents
 - keep superseded discussion as another live expectation
 - mass-copy old specs into a new version
-  (exception: a User-approved consolidation that merges an owner's inheritance chain verbatim, with
-  every dropped line accounted in a ledger checked by `npm run ssot:check`; see reports/ssot-consolidation/)
+- keep old wording, superseded values or change history inside an owner (history belongs to CHANGELOG and git)
 
 Follow the current `SPEC_INDEX` routing and inheritance structure.
 Versioning / manifest changes must reflect the current project routing rather than historical examples in this file.

@@ -52,8 +52,8 @@ UI_FACES=[('WantedSans-Regular','WantedSans'),('WantedSans-SemiBold','WantedSans
 # dist/ui/audio.js moves. mp3 only: it is the one container every current mobile browser decodes.
 SFX=os.path.join(ROOT,'node_modules','uisfx')
 AUD=os.path.join(ROOT,'dist','ui','assets','audio')
-AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set, repeat-safe
-       ('press','stamp'),        # ORDER confirmation: a low knock under the paper layer
+# (User 2026-09-29: `typing` -> tick and `hover` -> soft retired - masked by the music; those cues are synthesised now)
+AUDIO=[('press','stamp'),        # ORDER confirmation: a low knock under the paper layer
        ('purchase','register'),  # SALE commit, shared by every price mode so none sounds correct
        ('cancel','refuse'),      # SALE refusal: restrained, not a failure buzzer
        ('lock','secure'),        # Store Support: securing a fixture, heavier than a purchase
@@ -62,7 +62,6 @@ AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set
        ('open','shutter'),       # MORNING opening
        ('close','settle'),       # CLOSING: the drawer/ledger settling the day
        ('blocked','gate'),       # FINAL commit: the heaviest mechanical close in the set
-       ('hover','soft'),         # utility navigation, deliberately the quietest file here
        ('select','key'),         # ordinary pick
        ('send','door')]          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
 

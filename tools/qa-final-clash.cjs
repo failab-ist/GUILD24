@@ -101,7 +101,11 @@ const SIZES=[[360,640],[390,844],[1280,880],[1920,1080]];
     win:Guild24.game.run.win,d:Guild24.game.run.bossDebug}));
    const names=r.cues.map(x=>x[0]).filter(x=>x!=='final'&&x!=='unlock');   // the press's own cues (an unlock is sounded when credited)
    const want=['rumble',...Array.from({length:items},()=>'supply'),...Array.from({length:k},()=>['clash','counter']).flat(),...(o==='clear'?['collapse']:[]),o==='clear'?'sealwin':'sealfail'];
-   check(tag+' the supply, one item at a time; each member lunges and the Boss counters every time; the verdict; the seal',JSON.stringify(names)===JSON.stringify(want),names.join(' '));
+   /* User 2026-09-29 (UI_UX §ENDING CUE): the ending's result cue rides the seal's landing, 150 ms behind it on the audio
+      clock - it is asked for in the same frame, so it may be logged just before or after the seal */
+   const endCue=o==='clear'?'endwin':'endfail',rest=names.filter(x=>x!==endCue);
+   check(tag+' the supply, one item at a time; each member lunges and the Boss counters every time; the verdict; the seal',JSON.stringify(rest)===JSON.stringify(want),names.join(' '));
+   check(tag+' the ending cue plays once, with the seal',names.filter(x=>x===endCue).length===1&&Math.abs(names.indexOf(endCue)-names.indexOf(want.at(-1)))===1,names.join(' '));
    check(tag+' the outcome is the fixture',r.win===(o==='clear')&&Math.abs(r.d.assault/r.d.bossPower-RATIO[o])<.002,(r.d.assault/r.d.bossPower).toFixed(3));
    const left=o==='clear'?0:Math.max(.03,1-RATIO[o]),share=(1-left)/k,at=t=>{let v=1;for(const [tt,x] of r.bar)if(tt<=t)v=x;return v;};
    const counters=r.cues.filter(x=>x[0]==='counter').map(x=>x[1]),clashes=r.cues.filter(x=>x[0]==='clash').map(x=>x[1]);

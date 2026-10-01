@@ -270,6 +270,7 @@ G.DATA.bossTuning={
     has produced that contribution. No Rarity threshold remains. */
  gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
+ firePairPower:18,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss (User 2026-09-30)
  slothBossPower:[200,189,171,149] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.9.1 balance, User 2026-09-25; were 225/210/190/165, 1-3 breaks scaled with WRATH 200 -> 180, 0 breaks set to 200 by decision)
 };
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
