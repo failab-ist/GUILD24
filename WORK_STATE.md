@@ -215,7 +215,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
    - DUN-Q75
 7. v2.9.13 병합(User 2026-10-01): main(PR #33)을 받아 `design_ssot` 변경을 새 owner 위치에 현재형으로 옮겼다(QA는 각 owner §QA, 원장 수정은 버림). 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`)은 지우고 결론 README만 남겼다. `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는 입력이라 남겼다.
    - SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
-8. 리팩터링 세션(`ccr-4a2ee33b-4r88nj`, "동작은 그대로" 정리, 진행 중)이 main을 받을 때: v2.9.13 퀵패치가 `dist/ui/app.js`의 `readout`, `coachSteps`, `paintCoach`, `stockSlots` · `stockSide`, `playCue`의 발주 연출, `action`의 `confirm-order`를 바꿨다. 옮기는 함수에 이 변경을 그대로 싣는다. `tests/ui-guard.cjs` UI-Q-v29-32는 `playCue`의 `if(c==='order')` 구간을 잘라 읽으므로(창고 시트 높이 연출 `h.sheetH` 포함), 발주 연출을 다른 함수로 옮기면 검사 위치도 같이 옮긴다. 2026-10-01 기준 두 브랜치를 시험으로 합쳐 보니 텍스트 충돌 없이 `npm test` 통과.
+8. 리팩터링(`ccr-4a2ee33b-4r88nj`, "동작은 그대로", User 2026-09-30 ~ 10-01): 끝남, v2.9.13 퀵패치를 받아 리뷰 대기. `dist/ui/app.js`의 큰 함수를 같은 파일 안 헬퍼로 나눴다: `playPhase` → `phaseMorning` ~ `phaseSell`, `playCue` → `cueSelect` · `cueOrder` · `cueSale` · `cueRefuse`, `render` → `phaseScreen` · `openOwedModal` · `syncWatchers`, `closingScreen` → `closingReceipt` · `closingDock`, `finalScreen` → `finalThreat` · `finalMuster` · `finalDock`, `orderForm` → `orderOffer`, `clashScene` → `clashMarkup`. `tests/ui-guard.cjs`의 소스 가드도 같은 함수를 읽도록 옮겼다(assertion 그대로). 이 구간을 고칠 때는 새 함수 이름으로 찾는다. 하지 않은 것: `saleScreen`, `clashScene` 시간축, `statGrid` · `readout` · `beat` · `till` · `bossReveal`, `systems/*`.
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
