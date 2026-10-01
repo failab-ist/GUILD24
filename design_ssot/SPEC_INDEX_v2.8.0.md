@@ -242,7 +242,7 @@ Scope (owner amendments are the truth; this list is routing):
        NIGHT -> next-decision line, shorter D1 briefing / guide              -> UI_UX / ECONOMY_ORDER / NIGHT_CLOSING / COPY
     C. SALE reads at a glance — today's pressure tag on the Stat grid, fixed per-category effect order on
        rows (no matching-effect emphasis), one delta list after a sale, the per-customer receipt stub, price-role words, no always-on Death %, folded last
-       expedition below Stats; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
+       expedition above the Stat grid; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
     D. simpler rules — Supply becomes Fatigue recovery only (no required Supply, Fatigue 0~40 with
        five bands), single-Stat Hazard pressure 3/3/3 without 투력 (no Gate shares a Stat), Store Support card copy in two
        clauses, presentation leftovers                                       -> DUNGEON_HAZARD / ITEM / NIGHT_CLOSING / NPC_TRAIT / RELIC
