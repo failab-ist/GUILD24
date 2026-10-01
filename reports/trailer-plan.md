@@ -337,3 +337,11 @@ Playwright 가짜 시계를 멈추고 1/30초씩 넘기면서, 웹 애니메이�
 - NIGHT: 게임의 파란 "다음" 버튼 영역(원본 [771,1956,397,168])만 이 영상에서 흑백 · 밝기 0.5로 눌렀다(`mute`). 게임은 바꾸지 않았다.
 - 그 밖에는 v9와 같다. 길이 29.07초.
 산출: `reports/ui/trailer-v4/trailer-v10-1080x1920.mp4` · `trailer-v10-540.mp4`.
+
+## 18. 최종본 확정 (User 2026-10-01: "이걸로 최종, 이전 버전은 폐기하고 최종본만 남겨")
+
+- **최종본 = v10**: `reports/trailer-final/guild24-trailer-final-1080x1920.mp4`(커밋됨). 29.07s · 1080×1920 · H.264 High · 30fps · AAC 48k · -16.2 LUFS · 피크 -1.0 dBFS.
+- 폐기: 이전 영상 v1(러프컷) ~ v9, 시험 캡처(`reports/ui/trailer-pick`, `trailer-rev52`, `trailer-v2`), 중간 렌더 프레임. 모두 gitignore 대상이라 저장소 기록에는 영향이 없다.
+- 남긴 것(로컬, gitignore): `reports/ui/trailer-v4/`의 최종본 1080 · 540과 재렌더용 테이크(`sale` · `night` · `revisit` · `final` · `shoot.json`), `edl.json`, `mix.wav`.
+- 재현: §11의 촬영 명령 → `node tools/trailer-compose.cjs reports/ui/trailer-v4`(출력 `trailer-v10-*`).
+- §8–§17은 각 버전의 작업 기록이다. 최종 상태는 §17까지 반영된 `tools/trailer-compose.cjs`가 기준이다.
