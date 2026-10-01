@@ -420,7 +420,12 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
  const b=fn('beat');
  for(const call of ['Presentation.nightTone(r)','Presentation.nightVerdict(r)','Presentation.nightHappened(r)','Presentation.nightWhy(r)'])
   assert.ok(b.includes(call),'the beat reads '+call+' rather than its own copy');
- assert.ok(fn('changedRows').includes('Presentation.nightChanges(r, n)'),'WHAT CHANGED comes from the same report');
+ /* User 2026-10-01 review: the notebook prints the injury figure prepare() applies, reads the Death risk only off TODAY's
+    SALE entry, and the codex locks the two DAY-unlocked Items on their account flag */
+ assert.ok(fn('npcDetail').includes('Dungeon.injuryPenaltyFor(game.run.facilities)')&&!/'\+20%':'-15%'/.test(app),'the notebook reads the one injury figure');
+ assert.ok(fn('npcDetail').includes('n.outlook&&n.outlook.day===game.run.day'),'a past visit\'s Death risk is not shown as current');
+ assert.ok(/const DAY_UNLOCK=\{guildlunch:10,worldcharm:14\};/.test(app)&&/DAY_UNLOCK\[e\.id\]\?!game\.account\.unlocks\?\.\[e\.id\]/.test(app),'the codex locks 길드 특제 도시락 / 세계수 생환부적 until reached');
+ assert.ok(fn('changedRows').includes('Presentation.nightChanges(r, n, game.run.facilities)'),'WHAT CHANGED comes from the same report (and the store supports that set its injury figure)');
  // compactness is about copy: a routine beat drops the quote, never the adventurer
  assert.ok(/portrait\(n,150,'returner'\)/.test(b),'every outcome renders the same NPC art size');
  assert.ok(!/heavy\s*\?[^)]*returner/.test(b),'the figure is never branched on importance');

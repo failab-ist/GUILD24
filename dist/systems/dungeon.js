@@ -178,6 +178,8 @@ function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
    in the order the Canonical composition rules run: who they are, what they carry, what that
    leaves them for Supply and Fatigue, what their condition costs them, the prepared Stats,
    and the Hazard reading off those Stats. No rule lives here. */
+/* The injured-combat penalty, one owner: the night card and the notebook print the same figure prepare() applies. */
+const injuryPenaltyFor=(facilities=[])=>facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
 function prepare(n,d,facilities=[]){
  const why=[],events=[];
  const {mult,e,sum:traitSum,foodSupplyDelta,supplyPerItem}=traitModifiers(n);
@@ -187,7 +189,7 @@ function prepare(n,d,facilities=[]){
  const {effectiveFatigue}=sup;
  e.supply=finalSupply;
  /* NPC_TRAIT §INJURY: an ordinary Injury costs 투력 15%; RELIC 야전 들것 (v2.9.11) makes it 8% */
- const injuryPenalty=facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
+ const injuryPenalty=injuryPenaltyFor(facilities);
  const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
  /* RELIC 원정 도시락 코너 at the 마왕성 (v2.9.11, User 2026-09-29): every Food/Drink's +2 lands on this adventurer's most
@@ -722,5 +724,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);
