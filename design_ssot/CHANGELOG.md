@@ -23,7 +23,35 @@ and this table is their commit record.
 | v2.9.10 | 2026-09-28 | `8c1d4ae` (PR #22); quick patch `0fa6891` (PR #24) and its follow-up | - |
 | v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | - |
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
-| v2.9.13 | 2026-10-01 | `f20f89a` (PR #34) | `v2.9.13` |
+| v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37 | `v2.9.13` |
+
+## v2.9.13 quick patch — fixes after the v2.9.13 merge (User 2026-10-01, PR #37; the version stays 2.9.13)
+
+- **SALE readout title back to `전투 전망`, the outlook coach mark back**: `도착 시 전투 전망` (v2.9.12 coach diet, carrying the
+  retired outlook mark's fact) filled a half cell on a phone, so 전투 전망 and 환경 대응 stacked on two rows and the readout grew a
+  line (three with a two-Hazard Gate). The first SALE shows three marks again: destination, Stats and the outlook (COPY_AUDIT
+  §3-4, reworded so it reads at once: `손님이 막 왔을 때의 전망이다. 상품을 팔아도 이 칸은 그대로다. 상품이 무엇을 바꾸는지는
+  계산대에 올리면 보인다.`). UI_UX §TUTORIAL — COACH DIET / UI-Q-v29-53, COPY_AUDIT §3-4 / §3-7; tests ui-guard.
+- **NIGHT injury lesson on the first hurt record**: it fired on a record that only departed injured, so a healthy, successful
+  return carried `다친 채 떠나면 …` and read as wrong. It now fires on the first record that came back with 부상 or 중상, worded
+  for that moment (`부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다.`). NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT
+  §26-2; tests revision.
+- **Coach bubble as wide as its words**: a fixed 340 px bubble folded a one-line mark (`판 상품은 손님 가방에 …`) onto two
+  lines on a desk and more on a narrow phone. It now takes the width its copy needs up to the screen (560 px on a desk) and
+  grows only by the lines it needs. UI_UX §TUTORIAL coach mark.
+- **ORDER warehouse rack as tall as its stock**: the rack drew a cell for every store slot, so a few held units still took three
+  rows of mostly empty cells. On a phone only held units are drawn now - one row while they fit, more as stock grows; the room
+  left reads in the header's `N / M칸`. The desk column has the room and keeps every 칸 (the maximum in view). An order that
+  passes a row grows the open sheet to its new height over the first beat (~180 ms), the crates landing in the new row. UI_UX §ORDER — WAREHOUSE PANEL / UI-Q-v29-50; tests ui-guard.
+- **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
+  outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
+  the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.
+- **초코바 기동 +8 · 피로 회복 3 → 기동 +6 · 피로 회복 5**: it read the same as 캔커피 (기동 +12 · 2) per Gold; now the pair splits
+  as 삼각김밥 / 생수 do - the Food keeps going, the Drink lifts the Stat. ITEM §ACTIVE CATALOG, §ITEM ROLE NOTES; tests vocabulary.
+- **New Common Food 녹차 양갱 (`yanggaeng`)**: 30 / 60, 정신 +8 · 피로 회복 5, 2 days, DAY 1 - the 정신 Food beside 진정 허브티
+  (정신 +15 · 2), as 초코바 is beside 캔커피 and 삼각김밥 beside 생수. Active catalog 44 (Common 12). Flavor `어르신 손님은 꼭 두 개씩
+  사 간다.`; a green-tea jelly bar icon. ITEM §ACTIVE CATALOG / §ACTIVE RARITY DISTRIBUTION / §SHELF LIFE / §ITEM ROLE NOTES,
+  COPY_AUDIT §12-4; tests vocabulary, delta.
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 

@@ -492,6 +492,11 @@ function cueOrder(A,h){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_B
   /* the list on screen takes the crates: the desk's column or the phone's open 창고 sheet (UI_UX §ORDER — WAREHOUSE PANEL;
      a folded sheet shows the handle's figures only); every `N / M칸` and `N종` figure moves on the last landing */
   const side=$('.p-order .stock-side'),sheet=$('#stock-sheet'),list=side?.getClientRects().length?side:sheet&&!sheet.hidden?sheet:null;
+  /* User 2026-10-01: the phone sheet draws only held units, so an order that passes a row makes it taller - it rises to the new
+     height over the first beat (the new row shows from the dock up) instead of jumping a row in one frame */
+  if(list===sheet&&h.sheetH!=null){const to=sheet.getBoundingClientRect().height;
+   if(to>h.sheetH+1){sheet.style.overflow='hidden';A(sheet,{height:{from:h.sheetH,to,duration:STAMP_FALL*2,ease:'outQuad'},
+    onComplete:()=>{sheet.style.height='';sheet.style.overflow='';}});}}
   k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
    /* the SKU's new cells - the ones past what it held before - take its crate, all on the same fall */
    const cells=list?[...list.querySelectorAll('li.wh-slot[data-item="'+item+'"]')].slice(h.before?.[item]||0):[];
@@ -846,9 +851,9 @@ function readout(n,extra=null,cls=''){
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
-  /* COACH DIET (User 2026-09-30): the title says when the reading was taken - the retired outlook mark's one fact */
-  /* on a phone the half cell wraps it: 전투 전망 stays together so the break falls after 도착 시 */
-  +'<span class="fore">도착 시 전투&nbsp;전망<b>'+o.combat+'</b>'
+  /* User 2026-10-01: back to `전투 전망` - `도착 시 전투 전망` filled a half cell on a phone, so the two readings stacked;
+     the outlook coach mark says when the reading is taken again */
+  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
@@ -1277,8 +1282,8 @@ const coachSteps={
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
-    The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout title reads
-    `도착 시 전투 전망`, and price is taught after the fact. Everything else is contextual: showCoach() shows the first
+    The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
+    The outlook mark is back (User 2026-10-01): it says the readout is the SALE-entry snapshot, so the title stays short. Everything else is contextual: showCoach() shows the first
     unfinished mark whose target is VISIBLE, so a mark anchored to an element that only exists in its situation (a
     returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
@@ -1287,6 +1292,8 @@ const coachSteps={
  /* COPY_AUDIT §3-7 STATS (User 2026-09-24): the first time a customer's Stats are on screen - what they are, that they
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
+ /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
+ ['forecast','.readout .top','손님이 막 왔을 때의 전망이다. 상품을 팔아도 이 칸은 그대로다. 상품이 무엇을 바꾸는지는 계산대에 올리면 보인다.'],
  /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
@@ -1339,15 +1346,18 @@ function paintCoach(step,target){
  const RESERVE=172;
  const room=top>=RESERVE?floor-top:floor-top-RESERVE;
  const height=Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
- const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
+ /* User 2026-10-01: the bubble takes the width its words need, up to the screen (560 px on a desk), so a line that fits
+    is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
+ const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
- root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:max-content;min-width:'+Math.min(260,bw)+'px;max-width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
  /* `bh` above is only the estimate that keeps the first paint from flashing. A real bubble is
     120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
     and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
     measured height, which is why this is a style write and not a second paint. */
  const bub=root.querySelector('.coach-bubble');
- if(bub){const real=bub.getBoundingClientRect().height;
+ if(bub){const real=bub.getBoundingClientRect().height,rw=bub.getBoundingClientRect().width;
+  bub.style.left=Math.max(12,Math.min(innerWidth-rw-12,left))+'px';
   bub.style.top=(bottom+real+12<floor?bottom+12:Math.max(12,top-real-12))+'px';}
  return coachKey(target);
 }
@@ -1483,13 +1493,15 @@ function statGrid(n){
 /* the warehouse as a rack of 칸 (User 2026-09-29): one cell per slot the store has, each held unit in its own cell - the
    same `N / M칸` the ledger counts - grouped by Item in the order the shelf reads them, with its days left; the empty cells
    are the room left. The icon is the one the offer rows show; the Item's name is the cell's reader label. */
-function stockSlots(){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];
+/* User 2026-10-01: on a phone only the held units are drawn, so the sheet is as many rows as they need (one while they fit) and
+   the room left reads in the head's `N / M칸`; the desk column has the room, so it shows every 칸 with the empty ones (`full`) */
+function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
    label=E(it.name)+(left===null?'':' · '+left+'일');
    return '<li class="wh-slot" data-item="'+it.id+'" aria-label="'+label+'">'+Art.itemIcon(it.id,32)
     +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')
-  +'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length))+'</ol>';}
+  +(full?'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length)):'')+'</ol>';}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is not on the 발주서 any more; it is held apart like an
    inventory, so it can be read against the offer rows while ordering. Desk: a large column beside the form, always open.
    Phone: a slim handle on top of the dock - part of the dock, so it never covers an offer row - stating 창고 N / M칸 · K종,
@@ -1501,7 +1513,7 @@ function stockSlots(){const s=game.run,cap=game.capacity(),order=groupStock().ma
    warehouse holds only what HQ put there, and the head says so */
 function stockHead(){const s=game.run,n=groupStock().length,hq=s.day===1&&!(s.daily?.spent>0);
  return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+(hq?'본사 기본 상품 ':'')+n+'종</em>':'');}
-function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots()+'</aside>';}
+function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots(true)+'</aside>';}
 const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
 function stockSheetKey(){const open=sheetOpen();
  return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(open?'':' hidden')+'>'+stockSlots()+'</section>'
@@ -2471,9 +2483,11 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'begin-order':game.beginOrder();sound('open');render();break;
  case'confirm-order':{/* H3: what the warehouse and the till held before the commit, for the cascade after it (playCue) */
   const before=Object.fromEntries(groupStock().map(st=>[st.item,st.count])),used=s.inventory.length,gold=s.money,
-   skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))];
+   skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))],
+   /* the open phone sheet's height before the commit: a new rack row grows in instead of appearing in one frame */
+   sheetEl=$('#stock-sheet'),sheetH=sheetEl&&!sheetEl.hidden?sheetEl.getBoundingClientRect().height:null;
   orderCueAt.forEach(clearTimeout);orderCueAt=[];game.confirmOrder();
-  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);}else sound('order');
+  if(motionOK()){cue='order';handoff={before,used,gold,skus,sheetH};Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);}else sound('order');
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;

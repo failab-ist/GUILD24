@@ -11,6 +11,19 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
 
+## v2.9.13 퀵패치 (User 2026-10-01, 버전 2.9.13 유지)
+
+내용은 `design_ssot/CHANGELOG.md` §v2.9.13 quick patch. v2.9.13 머지 뒤 플레이에서 나온 버그·불편 수정이라 버전은 그대로 둔다.
+
+| 묶음 | 내용 |
+|---|---|
+| SALE | 판독 제목 `전투 전망` 복구(폰에서 두 칸이 한 줄에), 첫 SALE 전망 코치 복구와 문구 수정, PC 손님 카드 높이를 옆 정보 칸에 맞춤 |
+| 코치 | 말풍선 폭을 문장에 맞춤(줄 수 최소), NIGHT 부상 코치는 처음 부상·중상으로 돌아온 기록에 |
+| ORDER | 창고: 폰은 보유 칸만(줄 수가 재고에 맞게, 늘 때 시트가 자라는 연출), PC는 전체 칸 |
+| 상품 | 초코바 기동 +6 · 피로 회복 5, 새 C등급 음식 녹차 양갱(정신 +8 · 피로 회복 5, 30G) — 카탈로그 44종 |
+
+검증(바꾼 부분만): `npm test` · `npm run audit` · `git diff --exit-code`, 바뀐 화면 캡처(SALE 360/390/1280, ORDER 390/1280, 코치 360/390/1280), qa-visual 코치 검사, ORDER 창고 시트 실시간 프레임 측정.
+
 ## v2.9.13 — 0930 D30 클리어 세이브 뒤 밸런스 (User 2026-09-30 ~ 10-01)
 
 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.13. 빌드 표시 2.9.13. main(PR #33 SSOT 정리)을 받아 규칙 변경을 새 owner 위치에 옮겼다.
@@ -202,6 +215,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
    - DUN-Q75
 7. v2.9.13 병합(User 2026-10-01): main(PR #33)을 받아 `design_ssot` 변경을 새 owner 위치에 현재형으로 옮겼다(QA는 각 owner §QA, 원장 수정은 버림). 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`)은 지우고 결론 README만 남겼다. `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는 입력이라 남겼다.
    - SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
+8. 리팩터링 세션(`ccr-4a2ee33b-4r88nj`, "동작은 그대로" 정리, 진행 중)이 main을 받을 때: v2.9.13 퀵패치가 `dist/ui/app.js`의 `readout`, `coachSteps`, `paintCoach`, `stockSlots` · `stockSide`, `playCue`의 발주 연출, `action`의 `confirm-order`를 바꿨다. 옮기는 함수에 이 변경을 그대로 싣는다. `tests/ui-guard.cjs` UI-Q-v29-32는 `playCue`의 `if(c==='order')` 구간을 잘라 읽으므로(창고 시트 높이 연출 `h.sheetH` 포함), 발주 연출을 다른 함수로 옮기면 검사 위치도 같이 옮긴다. 2026-10-01 기준 두 브랜치를 시험으로 합쳐 보니 텍스트 충돌 없이 `npm test` 통과.
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
