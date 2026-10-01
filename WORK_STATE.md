@@ -14,6 +14,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 ## v2.9.13 — 0930 D30 클리어 세이브 뒤 밸런스 (User 2026-09-30 ~ 10-01)
 
 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.13. 빌드 표시 2.9.13. main(PR #33 SSOT 정리)을 받아 규칙 변경을 새 owner 위치에 옮겼다.
+검증(패치 버전이라 바꾼 부분만): `npm test` · `npm run audit` · `git diff --exit-code`, 환경 대응 화면 캡처 360 / 390 / 412 / 430 / 1024 / 1280(레이아웃 검사 통과). 전체 `qa:runtime` · `qa:visual`은 돌리지 않았다.
 
 | 묶음 | 내용 | 근거 |
 |---|---|---|
@@ -167,8 +168,11 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-- 검증 리듬 (User 2026-09-28): 배치마다 바뀐 영역의 테스트만 돌리고, 전체 `npm test`·`qa:runtime`·`qa:visual`은 모든 배치 뒤 PR 전에 한 번.
-- PR 전에는 Pages `verify`와 같은 순서로 `npm test` → `npm run audit` → `git diff --exit-code`까지 돌린다. audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다(v2.9.11 PR #28, 2026-09-29).
+- 검증 범위 (User 2026-10-01): 고친 부분과 꼭 필요한 검사만 돌린다.
+  - 바꾼 영역의 테스트, 화면을 바꿨으면 그 화면만 캡처(폰 · 데스크), 흐름을 바꿨으면 그 흐름의 `qa:runtime` 하네스만.
+  - 전체 `qa:runtime` · `qa:visual`은 큰 버전 업(x.y.0, 예: v3.0.0)에서만 한다. 패치 버전(v2.9.x)의 PR에는 돌리지 않는다.
+  - 보고에는 무엇을 돌렸는지 적고, 일부만 돌린 것을 전체 PASS라고 하지 않는다(AGENTS §5).
+- PR 전에 꼭 돌리는 것은 Pages `verify`와 같은 순서의 `npm test` → `npm run audit` → `git diff --exit-code`뿐이다. audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다(v2.9.11 PR #28, 2026-09-29).
 - 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
 
 다음 작업:
@@ -248,11 +252,11 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
 ### qa:visual (2026-09-26 해결)
 
 - `npm run qa:visual` 전부 통과(126 캡처, `visual QA clean`). 원인과 수정은 `2e1a045`(하네스: 런 유지, D25 대기, 글자 박스 기준 충돌, 장식 행 예외)와
-  `daf83b9`(ORDER 코치 id 버그, 대기 해제). 앞으로 배치마다 qa:runtime과 함께 돌린다.
+  `daf83b9`(ORDER 코치 id 버그, 대기 해제). 전체 실행은 큰 버전 업에서만 한다(§Next 검증 범위).
 
 ### 2단계 지침(하네스 엄격)
 
-- 배치마다 전부: `npm test` 전체, `npm run qa:runtime` 12/12, `npm run qa:visual`(clean), 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 일부만 돌리고 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
+- 배치마다: 바꾼 화면의 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 바꾼 흐름의 `qa:runtime` 하네스, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 전체 `qa:runtime` · `qa:visual`은 큰 버전 업에서만(§Next 검증 범위). 일부만 돌리고 전체 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
 - 새 한글 글자는 폰트 서브셋 검사에 걸린다(코멘트 포함) — 새 카피가 없으면 새 글자도 없어야 한다.
 - 핀 누락은 커밋 전에 잡는다. 계약(≤ 320 ms, 임팩트 예산, 카드 안, 금지 목록)을 넘는 제안은 구현하지 않고 보고한다.
 - 환경: 얕은 클론이면 `git fetch --unshallow`; `pip install fonttools brotli pillow`; `npm install`.
