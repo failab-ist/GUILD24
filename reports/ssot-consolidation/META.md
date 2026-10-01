@@ -546,7 +546,6 @@ User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-a
 
 ```new
 (User 2026-09-25, v2.9.1 balance): back to 1 / 2 / 3 / 4 / 5% with the cheaper Decoration prices below. Buying a Decoration inside the first Run is still not a goal.
-1st Decoration : around Run 4-6     (measured at the v2.9.1 balance; the 2026-09-24 expectation was Run 2-3)
 all four Slots : around Run 9
 every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.1 balance; was +40G)
 an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance    (User 2026-09-25, v2.9.1 balance; was 35%)
@@ -651,11 +650,28 @@ D30     = 3%
 (User 2026-09-30, v2.9.13): D25-29 4% → 3% and D30 5% → 3%. A player who reaches D30 every Run earned about 1,700 a Run
 and filled all four Slots by about Run 5; the longer Run still earns more through its larger Gross Sales
 (`reports/balance-proposal-v2912.md` §4).
-Read by bot (User 2026-09-30, v2.9.13; `reports/balance-proposal-v2912.md` §4): the lines above were measured with
-`balanced`, the weakest engaged bot (fresh D30 about 5%). A player who reaches D30 every Run - `reader` / `expert`, and the
-User's own account - bought the four at Run 2 / 3 / 4 / 5 under the v2.9.1 table. With the v2.9.13 table (1/2/3/3/3%) and
-훈련소 제휴 간판 at 40%, bought 훈련소 제휴 간판 first then cheapest first, 40 trajectories each:
-balanced        : Run 6 / 8 / 10 / 12
-reader / expert : Run 4 / 5 / 6 / 8
 every adventurer created while it is worn: 40% chance of spawn Level +1    (User 2026-09-30, v2.9.13; 65% from v2.9.1, was 50%)
+```
+
+## AMENDMENT — v2.9.13 measurement basis `reader` (User decision 2026-10-01)
+
+User 2026-10-01: progression and balance are read with `reader`, `expert` its upper reference; `balanced` no longer sets them.
+The progression expectation and its by-bot reading are re-measured on the shipped v2.9.13 tree
+(`reports/balance-proposal-v2912.md` §10). Lines declared in earlier fences are edited in place and removed from them.
+
+Dropped (the history line, replaced by the `reader` line):
+
+```text
+Measured under the approved balance, across the ordinary purchase orders:
+```
+
+```new
+Measured with `reader` under the approved balance (User 2026-10-01, v2.9.13: every progression reading is `reader`'s):
+1st Decoration : around Run 4
+Measurement basis (User 2026-10-01, v2.9.13): progression and balance are read with `reader`, the main bot; `expert`
+(reader plus the User's habits, on the User's account) is its upper reference. With the v2.9.13 table (1/2/3/3/3%) and
+훈련소 제휴 간판 at 40%, bought 훈련소 제휴 간판 first then cheapest first, 40 trajectories of 12 Runs each
+(`reports/balance-proposal-v2912.md` §10):
+reader : Run 4 / 5 / 7 / 9
+expert : Run 4 / 6 / 7 / 9
 ```

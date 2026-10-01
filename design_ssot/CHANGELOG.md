@@ -50,6 +50,9 @@ the owner headers and in the git tag.
 - **세계수 생환부적 400 / 800 → 300 / 600** (User 2026-09-30): the context-aware price review measured it at about half of
   귀환석's cover for a weak departure (`reports/item-price-v2913/README.md`). ITEM §세계수 생환부적 and catalog table; ledger;
   tests vocabulary.
+- **Measurement basis: `reader`** (User 2026-10-01): progression and balance are read with `reader`, `expert` its upper
+  reference; `balanced` no longer sets them. META §Approved progression expectation and its by-bot reading re-measured on the
+  shipped v2.9.13 tree: `reader` Run 4 / 5 / 7 / 9, `expert` 4 / 6 / 7 / 9 (`reports/balance-proposal-v2912.md` §10).
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 

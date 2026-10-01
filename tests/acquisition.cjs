@@ -18,12 +18,12 @@ const T=Number(process.env.T||120),R=Number(process.env.R||20);
 const STRONG=['sponsorSign','guildShelf','thriftSafe','honorFrame'];
 const WEAK=['honorFrame','thriftSafe','guildShelf','sponsorSign'];
 console.log('가격 확인: '+STRONG.map(id=>id+' '+D.decorationBy[id].price).join(' / '));
-console.log('trajectories='+T+', runs per trajectory='+R+', policy=balanced\n');
+console.log('trajectories='+T+', runs per trajectory='+R+', policy=reader\n');
 
 const pctile=(xs,q)=>{if(!xs.length)return null;const a=[...xs].sort((x,y)=>x-y);return a[Math.min(a.length-1,Math.floor(q*(a.length-1)))];};
 const detail={};
 function run(order,label){
- const t=Debug.trajectory({trajectories:T,runs:R,policy:'balanced',prefix:'acq-'+label,purchaseOrder:order});
+ const t=Debug.trajectory({trajectories:T,runs:R,policy:'reader',prefix:'acq-'+label,purchaseOrder:order});
  console.log('== '+label+' ('+order.join(' → ')+') ==');
  console.log('  순서  장식            가격   획득 궤적      획득 Run  p25 / 중앙값 / p75');
  const med=[];
@@ -76,9 +76,10 @@ const w=run(WEAK,'약한 것부터');
 console.log('획득 Run 중앙값  강한 것부터 '+s.map(x=>x??'미획득').join(' / '));
 console.log('                약한 것부터 '+w.map(x=>x??'미획득').join(' / '));
 /* the expectation lives in META §Approved progression expectation - this line only quotes it (was a stale 2026-09-19 copy) */
-console.log('META 기대       첫 장식 Run 4~6 · 네 칸 Run 9 (User 2026-09-24: 네 칸 Run 10~11까지)');
+/* measured with `reader` (User 2026-10-01, v2.9.13: progression is read with the main bot) */
+console.log('META 기대       첫 장식 Run 4 · 네 칸 Run 9 (reader)');
 fs.writeFileSync(require('node:path').resolve(__dirname,'acquisition-results-v5.json'),
- JSON.stringify({version:5,trajectories:T,runsPerTrajectory:R,policy:'balanced',
+ JSON.stringify({version:5,trajectories:T,runsPerTrajectory:R,policy:'reader',
   prices:Object.fromEntries(STRONG.map(id=>[id,D.decorationBy[id].price])),
   rates:D.capitalRates,strongFirst:s,weakFirst:w,detail,
-  approvedExpectation:'META: 1st Decoration around Run 4-6, all four Slots around Run 9 (User 2026-09-24: four Slots by Run 10-11)'},null,2));
+  approvedExpectation:'META: 1st Decoration around Run 4, all four Slots around Run 9 (reader)'},null,2));

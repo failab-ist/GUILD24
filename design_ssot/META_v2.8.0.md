@@ -476,10 +476,10 @@ The band is the Day the Run actually reached. Boss CLEAR does not multiply it.
 
 ### Approved progression expectation
 
-Measured under the approved balance, across the ordinary purchase orders:
+Measured with `reader` under the approved balance (User 2026-10-01, v2.9.13: every progression reading is `reader`'s):
 
 ```text
-1st Decoration : around Run 4-6     (measured at the v2.9.1 balance; the 2026-09-24 expectation was Run 2-3)
+1st Decoration : around Run 4
 all four Slots : around Run 9
 ```
 
@@ -487,14 +487,14 @@ all four Slots : around Run 9
 and a Boss clear becomes worth attempting after that. Collecting both Decorations of every Slot
 is a longer tail beyond Run 11.)
 
-Read by bot (User 2026-09-30, v2.9.13; `reports/balance-proposal-v2912.md` §4): the lines above were measured with
-`balanced`, the weakest engaged bot (fresh D30 about 5%). A player who reaches D30 every Run - `reader` / `expert`, and the
-User's own account - bought the four at Run 2 / 3 / 4 / 5 under the v2.9.1 table. With the v2.9.13 table (1/2/3/3/3%) and
-훈련소 제휴 간판 at 40%, bought 훈련소 제휴 간판 first then cheapest first, 40 trajectories each:
+Measurement basis (User 2026-10-01, v2.9.13): progression and balance are read with `reader`, the main bot; `expert`
+(reader plus the User's habits, on the User's account) is its upper reference. With the v2.9.13 table (1/2/3/3/3%) and
+훈련소 제휴 간판 at 40%, bought 훈련소 제휴 간판 first then cheapest first, 40 trajectories of 12 Runs each
+(`reports/balance-proposal-v2912.md` §10):
 
 ```text
-balanced        : Run 6 / 8 / 10 / 12
-reader / expert : Run 4 / 5 / 6 / 8
+reader : Run 4 / 5 / 7 / 9
+expert : Run 4 / 6 / 7 / 9
 ```
 
 Requirements:
