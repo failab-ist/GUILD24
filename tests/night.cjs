@@ -715,8 +715,8 @@ test('RESULT-PROOF: the departure snapshot freezes Equipment before the Outcome\
  const src=read('dist/systems/dungeon.js');
  assert.ok(/equipment:\{power:beforeEquipment,name:n\.equipment\.name\}/.test(src),
   'the departure snapshot captures equipment.power/name before this resolution\'s own equipment-tier win');
- assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury\};/.test(src),
-  'stats/equipment/traits/fatigue/injury are captured together, in one snapshot, before any of this resolution\'s own mutations (Level left it with the Level factor, v2.9.2 fourth pass)');
+ assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury,feast:n\.feast\};/.test(src),
+  'stats/equipment/traits/fatigue/injury/feast are captured together, in one snapshot, before any of this resolution\'s own mutations (Level left it with the Level factor, v2.9.2 fourth pass)');
  assert.ok(/prepare\(\{\.\.\.departure,pack\}/.test(src),
   'shadowOutcome() prepares every shadow against that frozen departure snapshot, never against `n`');
  // and live behaviourally: an equipment-tier win during THIS resolution must not change what a
@@ -1016,6 +1016,55 @@ test('DUNGEON_HAZARD §Ordinary EXP (v2.9.2 balance, User 2026-09-25 / 2026-09-2
    g.finishNight();g.closeDay();}}
  assert.ok(seen['대성공']>0&&seen['성공']>0,'a 대성공 and a 성공 were resolved and checked');
 });
+
+/* RESULT-PROOF shadows replay the real resolution, so whatever the real path applies the shadow applies too
+   (User 2026-10-01 code review). Three gaps let the Hero Item line credit Items that changed nothing. */
+{const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const NOT_PATH=new Set(['mobility','escape','itemEscape','injuryGuard','injuryRisk','revive','aftercare','supply','duplicate','potion','fatigue']);
+test('RESULT-PROOF: the first-run death guard applies to the shadow too - no Item is credited for what the guard did',()=>{
+ /* resolve() turns a first-run Day 1-2 death into 중상. A shadow without that guard reads 사망 whatever the pack held, so
+    every carried Item - and the bare pack - was credited with `살아 돌아왔다`. */
+ const g=new Game();g.autosave=false;g.start('result-proof-first-run');
+ const gate={...g.makeDungeon('spider',1),power:1e9,day:2};
+ const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['rice'],injury:0,fatigue:0,alive:true,recovery:0,records:[]}));
+ const run={firstRun:true,day:2,daily:{},loadout:{},event:null};
+ const r=Dungeon.resolve(n,gate,scripted([0.5,0.999,0.0001]),[],run);
+ assert.equal(r.outcome,'중상','sanity: the guard turned the death into 중상');
+ assert.equal(r.heroProof?.outcome??null,null,'no Item and no bare pack is credited - without 쌀 the guard still stops the death');
+});
+test('RESULT-PROOF: the shadow carries the Day\'s 길드 연회 food bonus (n.feast)',()=>{
+ /* resolve()'s departure snapshot dropped n.feast, so on a banquet Day the shadow fed half the Food supply: its Fatigue band
+    came out worse and an Item that has nothing to do with escape was credited with the difference. */
+ const g=new Game();g.autosave=false;g.start('result-proof-feast');
+ const base=g.makeDungeon('spider',1),gate={...base,power:1e9,day:500};
+ const x=D.items.find(it=>!['food','drink'].includes(it.category)&&Object.keys(it.effects).every(k=>!NOT_PATH.has(k))&&Object.keys(it.effects).length);
+ assert.ok(x,'an Item that cannot touch the escape path exists');
+ const mk=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['ramen',x.id],injury:0,fatigue:24,feast:2,alive:true,recovery:0,level:1,xp:0,records:[]}));
+ const esc=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-e.itemEscape-(gate.scale||1)*.024));
+ const withFeast=esc(Dungeon.prepare(mk(),gate,[]).effects),noFeast=esc(Dungeon.prepare({...mk(),feast:0},gate,[]).effects);
+ assert.ok(withFeast>noFeast,'the banquet really moves the Fatigue band, or this proof has nothing to test');
+ // combat fails (power 1e9); an incident (envRoll .0001) makes the real retreat draw injuryRoll; the escape roll sits between the two chances
+ const r=Dungeon.resolve(mk(),gate,scripted([0.5,0.0001,0.999,(withFeast+noFeast)/2,0.25,0.999,0.999]),[]);
+ assert.equal(r.outcome,'부상','sanity: the real path escapes and keeps 부상');
+ assert.ok(!(r.heroProof?.outcome?.items||[]).includes(x.id),x.name+' is not credited - without it the banquet still feeds the same supply');
+ assert.ok((r.heroProof?.outcome?.items||[]).includes('ramen'),'the Food that really carried the escape is still credited');
+});
+test('RESULT-PROOF: an incident the bad-luck assist prevented is not put down to the Items',()=>{
+ /* `prevented` compared the roll against the bare pack's incident chance without the assist the real chance carried, so an
+    incident the assist alone kept away was shown as one the Hazard Items prevented. */
+ const g=new Game();g.autosave=false;g.start('result-proof-assist');
+ const gate=g.makeDungeon('spider',1),h=gate.hazards[0];
+ const it=D.items.find(i=>(i.effects[h]||0)>0);
+ const n0=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:[it.id],injury:0,fatigue:0,alive:true,recovery:0,records:[]}));
+ const env=p=>Math.min(.48,Math.max(.02,.06+p.hazard*.012-p.effects.survival*.001));
+ const assist=.5,withItem=env(Dungeon.prepare(n0(),gate,[]))*(1-assist),bare=env(Dungeon.prepare({...n0(),pack:[]},gate,[]));
+ const roll=(bare*(1-assist)+bare)/2;
+ assert.ok(roll>=withItem&&roll>=bare*(1-assist)&&roll<bare,'the roll lands where only the missing assist factor decides');
+ const r=Dungeon.resolve(n0(),gate,scripted([0.5,roll]),[],undefined,assist);
+ const ev=r.events.find(e=>e.id==='hazard');
+ assert.ok(ev,'sanity: the Hazard Item event is there');
+ assert.equal(ev.prevented,false,'the assist would have kept this incident away without the Item');
+});}
 console.log(groups+' night groups passed');
 
 test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 balance): only CONSECUTIVE injured departures raise the failure Death chance',()=>{
