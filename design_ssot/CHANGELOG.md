@@ -36,6 +36,9 @@ and this table is their commit record.
   return carried `다친 채 떠나면 …` and read as wrong. It now fires on the first record that came back with 부상 or 중상, worded
   for that moment (`부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다.`). NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT
   §26-2; tests revision.
+- **Coach bubble as wide as its words**: a fixed 340 px bubble folded a one-line mark (`판 상품은 손님 가방에 …`) onto two
+  lines on a desk and more on a narrow phone. It now takes the width its copy needs up to the screen (560 px on a desk) and
+  grows only by the lines it needs. UI_UX §TUTORIAL coach mark.
 - **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
   outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
   the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.

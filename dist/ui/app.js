@@ -1319,15 +1319,18 @@ function paintCoach(step,target){
  const RESERVE=172;
  const room=top>=RESERVE?floor-top:floor-top-RESERVE;
  const height=Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
- const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
+ /* User 2026-10-01: the bubble takes the width its words need, up to the screen (560 px on a desk), so a line that fits
+    is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
+ const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
- root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:max-content;min-width:'+Math.min(260,bw)+'px;max-width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
  /* `bh` above is only the estimate that keeps the first paint from flashing. A real bubble is
     120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
     and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
     measured height, which is why this is a style write and not a second paint. */
  const bub=root.querySelector('.coach-bubble');
- if(bub){const real=bub.getBoundingClientRect().height;
+ if(bub){const real=bub.getBoundingClientRect().height,rw=bub.getBoundingClientRect().width;
+  bub.style.left=Math.max(12,Math.min(innerWidth-rw-12,left))+'px';
   bub.style.top=(bottom+real+12<floor?bottom+12:Math.max(12,top-real-12))+'px';}
  return coachKey(target);
 }

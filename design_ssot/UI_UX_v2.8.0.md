@@ -1203,7 +1203,8 @@ that this path still reaches the capability.
 Coach Mark / Spotlight / FTUE Overlay: the screen stays visible, dimmed, a spotlight target, a small anchored bubble, `다음`,
 `건너뛰기`. Action steps may allow only the target and auto-advance on success.
 - no added page height (sole exception: the DAY 1~3 task line, §TUTORIAL — TASK LINE) and no pushed layout
-- responsive bubble; target may scroll into view; one concept per step; contextual first use preferred
+- responsive bubble: as wide as its words need, up to the screen (560 px on a desk), so it takes only the lines its copy
+  needs; target may scroll into view; one concept per step; contextual first use preferred
 - `건너뛰기` skips the current screen's marks only
 - completion persists; reload never restarts a finished tutorial
 - no large green instruction cards in the flow
