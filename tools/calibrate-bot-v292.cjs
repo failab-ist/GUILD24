@@ -2,7 +2,7 @@
 // Measurement only. The same metrics are read from the User's exported save and from simulated Runs, from the same
 // fields (npc.records / npc.history / run.reportHistory), so the two sides cannot measure different things.
 //   node tools/calibrate-bot-v292.cjs --profile <save.json> <profile.json>   extract the User's profile (derived numbers only)
-//   node tools/calibrate-bot-v292.cjs <policy> [runs=300] [profile.json]      simulate and print bot vs User
+//   node tools/calibrate-bot-v292.cjs <policy> [runs=300] [profile.json] [--account account.json]   simulate and print bot vs User
 const fs=require('node:fs'),path=require('node:path');
 function metrics(run,deathLimit){
  const R=run.npcs.flatMap(n=>n.records||[]),H=run.npcs.flatMap(n=>n.history||[]),rh=run.reportHistory||[];
@@ -30,10 +30,13 @@ if(process.argv[2]==='--profile'){load();const j=JSON.parse(fs.readFileSync(proc
  const m=metrics(j.run,Meta.deathLimit(j.run));fs.writeFileSync(process.argv[4],JSON.stringify({source:path.basename(process.argv[3]),seed:j.run.seed,...m},null,1)+'\n');
  console.log(m);return;}
 load();
-const policy=process.argv[2]||'reader',runs=Number(process.argv[3]||300),prof=process.argv[4]?JSON.parse(fs.readFileSync(process.argv[4],'utf8')):null;
+/* --account <account.json> (User 2026-09-30): play every Run on a copy of that account instead of a fresh one, so a
+   save made on a later Run (Decorations, Job Mastery) is compared against bots that start where the User started. */
+const argv=process.argv.slice(2),ai=argv.indexOf('--account'),account=ai>=0?JSON.parse(fs.readFileSync(argv.splice(ai,2)[1],'utf8')):null;
+const policy=argv[0]||'reader',runs=Number(argv[1]||300),prof=argv[2]?JSON.parse(fs.readFileSync(argv[2],'utf8')):null;
 const P=Game.prototype,end=P.end,rows=[];
 P.end=function(w,why){const s=this.run;const r=end.call(this,w,why);rows.push(metrics(s,Meta.deathLimit(s)));return r;};
-Debug.simulate(runs,policy,null,'adaptive','hybrid',{});
+Debug.simulate(runs,policy,account,'adaptive','hybrid',{});
 const agg=(set,k)=>{const v=set.map(r=>r[k]).filter(x=>x!==null&&x!==undefined&&!Number.isNaN(x));if(!v.length)return null;const s=[...v].sort((a,b)=>a-b);return {mean:v.reduce((a,b)=>a+b,0)/v.length,p50:s[(s.length-1)>>1],p90:s[Math.floor((s.length-1)*.9)],n:v.length};};
 const reached10=rows.filter(r=>r.endDay>=10);
 /* A User-like start: by D10 at least the User's top-3 level and at most one death. The User's two fresh Runs both cleared,

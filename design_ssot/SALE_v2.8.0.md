@@ -2,8 +2,8 @@
 
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
-DOC_VERSION=2.9.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -314,7 +314,7 @@ Hazard:
 
 No single final safety score, exact Success %, hidden Power or master safety score. Forecast is an estimate, not a guarantee.
 
-The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is exposed at SALE entry at Help level — the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and the NPC detail — not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`).
+The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so one worst label would hide which side is open. It is the same frozen snapshot and gives no number, threshold or Item. The exact failure-conditioned Death risk is exposed at SALE entry at Help level — the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and the NPC detail — not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`).
 
 Hazard name, pressured Stat/readiness and qualitative preparedness form one readable hierarchy; do not repeat the same
 decision signal as multiple equal-priority labels. Long explanatory prose is secondary Help/Tooltip content, not

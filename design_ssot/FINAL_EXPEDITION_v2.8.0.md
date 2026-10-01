@@ -2,8 +2,8 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
+DOC_VERSION=2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE / NON-NEGOTIABLE
@@ -378,7 +378,7 @@ No separate Final-only Hazard defense table.
 No standalone `scale=4.6` path is used in Final resolution.
 
 Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier
-(`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×1.70 term stays hidden.
+(`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×2.50 term stays hidden.
 
 역할 분리:
 
@@ -398,7 +398,7 @@ FinalMeanHazardGap
 = sum(each Final Hazard gap) / Final Hazard Count
 
 Final Hazard Penalty
-= FinalMeanHazardGap × 1.70
+= FinalMeanHazardGap × 2.50
 ```
 
 Final uses this mean-gap penalty path.
@@ -417,7 +417,7 @@ Individual Final Power
 + 강인함 × 0.34
 + 기동 × 0.27
 + 정신 × 0.20
-- FinalMeanHazardGap × 1.70
+- FinalMeanHazardGap × 2.50
 ```
 
 `투력`은 Player-facing `combat` Stat 용어다.
@@ -607,7 +607,7 @@ For each participant:
 PASS exact:
 ```text
 FinalMeanHazardGap = sum(gaps) / hazardCount
-FinalHazardPenalty = FinalMeanHazardGap × 1.70
+FinalHazardPenalty = FinalMeanHazardGap × 2.50
 ```
 
 No `환경피해 ×0.35` path contributes in parallel.
@@ -615,7 +615,7 @@ No `환경피해 ×0.35` path contributes in parallel.
 ### FINAL-Q73 — INDIVIDUAL FINAL POWER
 PASS exact:
 ```text
-투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*1.70
+투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*2.50
 ```
 using the Boss modifier ordering owned by current BOSS.
 

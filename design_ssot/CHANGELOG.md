@@ -22,6 +22,36 @@ Every closed version, where it landed on `main` and its tag. Tags are set by the
 | v2.9.10 | 2026-09-28 | `8c1d4ae` (PR #22); quick patch `0fa6891` (PR #24) and its follow-up | - |
 | v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | pending |
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | pending |
+| v2.9.13 | 2026-10-01 | PR #34 (`ccr-7d937a8a-u6s02e`) | pending |
+
+## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
+
+- **DAY 21+ Gate slope 0.80 → 1.10**: a D30 party grows about 1.9 prepared Power a Day in D21~29 against the 0.80 Gate
+  climb. DAY 1~20 unchanged; the DAY 10 step keeps its own 0.80. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE and
+  DUN-Q-v27-GATE-SLOPE anchors.
+- **Hazard Threat by Stat group** (× 강인함 1.0 · 기동 1.1 · 정신 1.2; the ÷3 / ÷2 conversion unchanged): an average
+  adventurer's own share at Tier 1 was 0.43 on 강인함 and 0.70 on 정신. Counters rose with their Hazard's factor (기동
+  10 / 15 / 23, 정신 10 / 15 / 22, 방한 두건 화이트아웃 11); 초반 하이브리드 sits under 초반 대응 on a Gate's first Hazard
+  (강인함 9), so 초반 대응 is the Tier 1 answer again and NEUTRAL-FIT T1 "hybrid alone is commonly a little short" holds.
+  Hazard Traits follow the factor (공포 · 화염 · 화이트아웃 7 / 5). DUNGEON_HAZARD §HAZARD THREAT / §NEUTRAL-FIT / DUN-Q71,
+  ITEM §COUNTER LADDER and §ACTIVE CATALOG, NPC_TRAIT Hazard Traits.
+- **Final mean-gap penalty 1.70 → 2.50**: a D30 party cleared with no Item at all about one Run in five. FINAL_EXPEDITION
+  §INDIVIDUAL FINAL POWER / FINAL-Q72 / FINAL-Q73.
+- **Store Capital 1 / 2 / 3 / 3 / 3% and 훈련소 제휴 간판 40%** (was 4 / 5% at the top and 65%): a player who reaches D30
+  every Run filled all four Slots by about Run 5. META §Day-reach conversion rate, §sign; COPY_AUDIT decoration line.
+- **용사의 곡주 trade-off 기동 -4 → 강인함 -3**: 기동 widened the 어둠 gap of its own Gate. **세계수 생환부적 400 / 800 → 300 / 600**:
+  it covered a weak departure at about half of 귀환석. Other Counter values and prices stay after a context-aware price review
+  (`reports/item-price-v2913/README.md`, `reports/counter-ladder-v2913/README.md`). ITEM §ACTIVE CATALOG, §세계수 생환부적,
+  §ITEM ROLE NOTES, §PRESENTATION ORDER.
+- **환경 대응 per Hazard from T2**: on a two-Hazard Gate the SALE readout and the forecast pin name each Hazard with its own
+  frozen state, since judgment sums both gaps; states only. The cell stays two lines (desk: states side by side under the
+  label; phone: two rows beside it, names right-aligned). SALE §always-on outlook, UI_UX §SALE outlook / §FORECAST PIN / UI-Q109.
+- **Measurement basis `reader`** (User 2026-10-01): progression and balance are read with `reader`, `expert` (reader plus
+  the User's habits, on the User's account) its upper reference. Harness defaults, `tests/simulation.cjs`, the measurement
+  scripts and tools follow. META §Approved progression expectation: 1st Decoration Run 4, four Slots Run 9 (`reader`
+  4 / 5 / 7 / 9, `expert` 4 / 6 / 7 / 9).
+- Shipped re-measure (300 seeds; `reports/balance-proposal-v2912.md` §10): `reader` D30 12.3%, clear 7.7%, Store Capital
+  301 a Run; `expert` (0930 account) D30 30.3%, clear 18.0%, 489 a Run.
 
 ## Docs / hygiene after v2.9.12 (User 2026-09-30, no build change)
 

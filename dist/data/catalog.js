@@ -23,27 +23,27 @@ item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 �
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
 item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
-item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:8,supply:1}),
+item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
 /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
 item('soda','중화 탄산수',0,35,70,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:10,supply:1}),
-item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:21}),
-item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:21}),
-item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:8,supply:2}),
+item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:23}),
+item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:23}),
+item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:2}),
 item('dragonramen','불룡볶음면',2,95,190,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:21,supply:3}),
 item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:17,supply:2}),
-item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:18,mobility:-4,supply:1}),
+item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:22,survival:-3,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
 item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:10}),
 /* was 핫팩 (냉기 +24): the id stays so a saved unit carries over as the Snow 초반 하이브리드 (User 2026-09-27) */
-item('hood','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:12,whiteout:9}),
-item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:12,bind:9}),
-item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:9,dark:9}),
-item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:12,mire:9}),
+item('hood','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:9,whiteout:11}),
+item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:9,bind:10}),
+item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:9,dark:10}),
+item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:9,mire:10}),
 item('coating','부식 방지 코팅제',2,95,190,'gear',5,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:23}),
-item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:21}),
-item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:18}),
+item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:23}),
+item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:22}),
 item('highpotion','상급 포션',2,195,390,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:20,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
 item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:23}),
@@ -52,17 +52,17 @@ item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨�
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),
 item('guildlunch','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
-item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:18,supply:1}),
-item('worldcharm','세계수 생환부적',3,400,800,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
+item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:22,supply:1}),
+item('worldcharm','세계수 생환부적',3,300,600,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
    than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
-item('spiderkit','거미줄 방호세트',3,135,270,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:16,bind:14}),
-item('slimesuit','연금 방수슈트',3,135,270,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:16,mire:14}),
-item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:12,dark:14}),
-item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:16,whiteout:12}),
-item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:12,combat:10}),
+item('spiderkit','거미줄 방호세트',3,135,270,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:16,bind:15}),
+item('slimesuit','연금 방수슈트',3,135,270,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:16,mire:15}),
+item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:15,dark:15}),
+item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:16,whiteout:15}),
+item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:15,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
 item('kingwater','왕도 천연암반수',3,185,370,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),
@@ -88,8 +88,8 @@ jobs:[
 traits:[
 // NPC_TRAIT ACTIVE TRAIT CATALOG (FROZEN, 30). `direction` is internal only.
 // Every material effect carries an explicit semantic tone; meaning is never inferred from the sign.
-['brave','용감함','mixed',{fear:6,escape:-0.06},{fear:'benefit',escape:'cost'}],
-['coward','겁쟁이','mixed',{fear:-6,escape:0.19,loot:-0.15},{fear:'cost',escape:'benefit',loot:'cost'}],
+['brave','용감함','mixed',{fear:7,escape:-0.06},{fear:'benefit',escape:'cost'}],
+['coward','겁쟁이','mixed',{fear:-7,escape:0.19,loot:-0.15},{fear:'cost',escape:'benefit',loot:'cost'}],
 ['eater','대식가','mixed',{foodMult:1.3,foodSupplyDelta:-1},{foodMult:'benefit',foodSupplyDelta:'cost'}],
 ['small','소식가','mixed',{foodMult:0.8,foodSupplyDelta:1},{foodMult:'cost',foodSupplyDelta:'benefit'}],
 ['careful','신중함','mixed',{injuryRisk:-0.04,loot:-0.10},{injuryRisk:'benefit',loot:'cost'}],
@@ -102,7 +102,7 @@ traits:[
 ['strong','강골','positive',{injuryGuard:0.23},{injuryGuard:'benefit'}],
 ['frail','허약함','negative',{survivalPercent:-0.10,recoveryDelta:1},{survivalPercent:'cost',recoveryDelta:'cost'}],
 ['potionbody','포션체질','positive',{potionMult:1.15},{potionMult:'benefit'}],
-['pyrophobia','화염공포증','negative',{fire:-6},{fire:'cost'}],
+['pyrophobia','화염공포증','negative',{fire:-7},{fire:'cost'}],
 ['collector','수집가','mixed',{rareBias:0.12,commonBias:-0.05},{rareBias:'benefit',commonBias:'cost'}],
 ['thrifty','실속파','mixed',{commonBias:0.10,rareBias:-0.10},{commonBias:'benefit',rareBias:'cost'}],
 ['social','사교적인','positive',{revisitMult:1.25},{revisitMult:'benefit'}],
@@ -113,7 +113,7 @@ traits:[
 ['mender','회복체질','positive',{recoveryDelta:-1},{recoveryDelta:'benefit'}],
 ['stamina','지구력','positive',{fatigue:-1},{fatigue:'benefit'}],
 ['weary','쉽게 지침','negative',{fatigue:1},{fatigue:'cost'}],
-['sharpeye','눈썰미','positive',{dark:4,whiteout:4},{dark:'benefit',whiteout:'benefit'}],
+['sharpeye','눈썰미','positive',{dark:4,whiteout:5},{dark:'benefit',whiteout:'benefit'}],
 ['antitoxin','해독가','positive',{poison:6},{poison:'benefit'}],
 ['coldhand','수족냉증','negative',{cold:-6},{cold:'cost'}],
 ['prepared','준비성','positive',{supplyPerItem:1},{supplyPerItem:'benefit'}],
@@ -127,8 +127,8 @@ traits:[
 ['clumsy','몸치','negative',{bind:-4,mire:-4},{bind:'cost',mire:'cost'}],
 ['maintain','장비관리','positive',{corrosion:6},{corrosion:'benefit'}],
 ['butterfingers','서투른','negative',{corrosion:-6},{corrosion:'cost'}],
-['heatproof','내열성','positive',{fire:6},{fire:'benefit'}],
-['nearsight','약시','negative',{dark:-4,whiteout:-4},{dark:'cost',whiteout:'cost'}]
+['heatproof','내열성','positive',{fire:7},{fire:'benefit'}],
+['nearsight','약시','negative',{dark:-4,whiteout:-5},{dark:'cost',whiteout:'cost'}]
 
 ].map(([id,name,direction,effects,tones,note=''])=>({id,name,direction,effects,tones,note})),
 dungeons:[

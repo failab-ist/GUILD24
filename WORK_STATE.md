@@ -1,15 +1,31 @@
 # WORK_STATE
 
-DATE: 2026-09-30
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) — v2.9.2~v2.9.12 태그는 User가 걸어야 함
+DATE: 2026-10-01
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) — v2.9.2~v2.9.13 태그는 User가 걸어야 함
 
 ## Current
 
 - repository: `failab-ist/GUILD24`. main = v2.9.12(PR #31 · #32, `f02eb8d`, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
-- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.12). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
+- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.9.13, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
+
+## v2.9.13 — 0930 D30 클리어 세이브 뒤 밸런스 (User 2026-09-30 ~ 10-01)
+
+내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.13. 빌드 표시 2.9.13. main(PR #33 SSOT 정리)을 받아 규칙 변경을 새 owner 위치에 옮겼다.
+검증(패치 버전이라 바꾼 부분만): `npm test` · `npm run audit` · `git diff --exit-code`, 환경 대응 화면 캡처 360 / 390 / 412 / 430 / 1024 / 1280(레이아웃 검사 통과). 전체 `qa:runtime` · `qa:visual`은 돌리지 않았다.
+
+| 묶음 | 내용 | 근거 |
+|---|---|---|
+| 곡선 | DAY 21+ 게이트 기울기 0.80 → 1.10 | DUNGEON_HAZARD §GATE POWER, `reports/balance-proposal-v2912.md` §1 |
+| 위험 | 위험 수치 능력치 계열 배율(강인함 1.0 · 기동 1.1 · 정신 1.2), 대응 수치 같은 배율로 상향, 초반 하이브리드를 초반 대응 아래로, 위험 특성 같은 배율 | DUNGEON_HAZARD §HAZARD THREAT, ITEM §COUNTER LADDER, §7~9 |
+| 파이널 | 평균 위험 격차 계수 1.70 → 2.50 | FINAL_EXPEDITION §INDIVIDUAL FINAL POWER |
+| 캐피탈 | 비율 1/2/3/3/3%, 훈련소 제휴 간판 40% | META, §4 |
+| 상품 | 용사의 곡주 강인함 −3, 세계수 생환부적 300 / 600 | `reports/item-price-v2913/`, `reports/counter-ladder-v2913/` |
+| 화면 | T2부터 환경 대응을 위험별로(판독 · 고정 전망), 2줄 유지 | SALE, UI_UX §SALE outlook / UI-Q109 |
+| 측정 | 숙련봇 `expert`, 측정 기준 `reader`(하네스 기본값 · 테스트 · 도구) | `reports/expert-bot-calibration-v2912.md`, META |
+| 재측정 | reader D30 12.3% · 클리어 7.7%, expert 30.3% · 18.0%, 장식 4종 reader Run 4/5/7/9 | §10 |
 
 ## v2.9.12 — 밸런스 리뷰 + v3.0 준비 퀵패치 (머지됨, PR #31 · #32) (User 2026-09-29~30)
 
@@ -152,8 +168,11 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-- 검증 리듬 (User 2026-09-28): 배치마다 바뀐 영역의 테스트만 돌리고, 전체 `npm test`·`qa:runtime`·`qa:visual`은 모든 배치 뒤 PR 전에 한 번.
-- PR 전에는 Pages `verify`와 같은 순서로 `npm test` → `npm run audit` → `git diff --exit-code`까지 돌린다. audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다(v2.9.11 PR #28, 2026-09-29).
+- 검증 범위 (User 2026-10-01): 고친 부분과 꼭 필요한 검사만 돌린다.
+  - 바꾼 영역의 테스트, 화면을 바꿨으면 그 화면만 캡처(폰 · 데스크), 흐름을 바꿨으면 그 흐름의 `qa:runtime` 하네스만.
+  - 전체 `qa:runtime` · `qa:visual`은 큰 버전 업(x.y.0, 예: v3.0.0)에서만 한다. 패치 버전(v2.9.x)의 PR에는 돌리지 않는다.
+  - 보고에는 무엇을 돌렸는지 적고, 일부만 돌린 것을 전체 PASS라고 하지 않는다(AGENTS §5).
+- PR 전에 꼭 돌리는 것은 Pages `verify`와 같은 순서의 `npm test` → `npm run audit` → `git diff --exit-code`뿐이다. audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다(v2.9.11 PR #28, 2026-09-29).
 - 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
 
 다음 작업:
@@ -162,11 +181,11 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
    - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, `archive/v2.9.11/remeasure-v2911.md` §13-2) — User 플레이 뒤 판단(2026-09-29)
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
-   - 화염 조합 +18은 v2.9.12 곡선에서 잰 값이다. 다른 세션의 v2.9.13(DAY 21+ 게이트 기울기 · Final T3 위험 제안)이 들어가면 다시 잰다(`tools/measure-firepair.cjs`, 실행 전 User 컨펌).
+   - 화염 조합 +18은 v2.9.12 곡선에서 잰 값이다. v2.9.13(DAY 21+ 기울기 · 위험 배율 · 파이널 계수 2.50)이 들어갔으니 다시 잰다(`tools/measure-firepair.cjs`, 실행 전 User 컨펌).
 3. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
    - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
    - 출시 준비 외 작업은 §8, 1위 루브릭은 §9.
-4. 다른 세션(2026-09-30 기준): v2.9.13 밸런스(`ccr-7d937a8a`), 1위 인터뷰(`reports/interview-1st-place.md`). 그 세션이 main을 받을 때 `CHANGELOG.md` · META 원장 충돌은 양쪽 기록을 모두 남기면 풀린다.
+4. 다른 세션: 1위 인터뷰(`reports/interview-1st-place.md`). v2.9.13 밸런스는 이번 병합으로 main에 들어간다.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
 6. SSOT 재정리(User 2026-09-30): `design_ssot/` 105개·2.0 MB → 18개·0.89 MB. 내용은 `design_ssot/CHANGELOG.md` §Docs / hygiene after v2.9.12.
    다시 쓰다가 드러난 Canonical 불일치는 User 결정("코드에 맞춰 정정")대로 모두 코드·owner 규칙 절에 맞췄다.
@@ -181,13 +200,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
    - SUPPLY MODEL(길드 특제 도시락 7)
    - Day term 예시값
    - DUN-Q75
-7. v2.9.13(`ccr-7d937a8a`) 머지 방식(User 2026-09-30): 이 위생 브랜치를 먼저 main에 넣고, v2.9.13 세션이 main을 받아 옮긴다. 그 세션에 줄 핸드오프는 아래와 같다.
-   - Source · 테스트 · 도구 · 보고서는 자동으로 합쳐진다. 충돌은 `design_ssot` 10개와 지워진 원장 9개뿐이다.
-   - SSOT 충돌은 줄 단위로 맞추지 않는다. 그 브랜치가 바꾼 규칙(`git diff <merge-base> HEAD -- design_ssot`, 약 +154/−61줄)을 새 owner 위치에 현재형으로 옮긴다. 출처 괄호와 옛 값은 쓰지 않는다(AGENTS §10).
-   - `DUNGEON_ITEM_QA` 변경은 DUNGEON_HAZARD / ITEM §QA로, `UI_UX_QA` 변경은 UI_UX §QA로 간다(id는 그대로). `reports/ssot-consolidation/` 원장 수정은 버린다(원장과 `ssot:check`는 없어졌다).
-   - ITEM QA의 수치는 §ACTIVE CATALOG를 가리키므로 카탈로그 표만 고치면 된다.
-   - CHANGELOG에는 맨 위 §RELEASE RECORD에 v2.9.13 행을 넣고, v2.9.13 절을 추가한다.
-   - 버전이 닫힐 때 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`, `expert-bot/`)은 결론 README만 남기고 정리한다(`archive/README.md` 기준).
+7. v2.9.13 병합(User 2026-10-01): main(PR #33)을 받아 `design_ssot` 변경을 새 owner 위치에 현재형으로 옮겼다(QA는 각 owner §QA, 원장 수정은 버림). 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`)은 지우고 결론 README만 남겼다. `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는 입력이라 남겼다.
    - SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
@@ -239,11 +252,11 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
 ### qa:visual (2026-09-26 해결)
 
 - `npm run qa:visual` 전부 통과(126 캡처, `visual QA clean`). 원인과 수정은 `2e1a045`(하네스: 런 유지, D25 대기, 글자 박스 기준 충돌, 장식 행 예외)와
-  `daf83b9`(ORDER 코치 id 버그, 대기 해제). 앞으로 배치마다 qa:runtime과 함께 돌린다.
+  `daf83b9`(ORDER 코치 id 버그, 대기 해제). 전체 실행은 큰 버전 업에서만 한다(§Next 검증 범위).
 
 ### 2단계 지침(하네스 엄격)
 
-- 배치마다 전부: `npm test` 전체, `npm run qa:runtime` 12/12, `npm run qa:visual`(clean), 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 일부만 돌리고 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
+- 배치마다: 바꾼 화면의 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 바꾼 흐름의 `qa:runtime` 하네스, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 전체 `qa:runtime` · `qa:visual`은 큰 버전 업에서만(§Next 검증 범위). 일부만 돌리고 전체 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
 - 새 한글 글자는 폰트 서브셋 검사에 걸린다(코멘트 포함) — 새 카피가 없으면 새 글자도 없어야 한다.
 - 핀 누락은 커밋 전에 잡는다. 계약(≤ 320 ms, 임팩트 예산, 카드 안, 금지 목록)을 넘는 제안은 구현하지 않고 보고한다.
 - 환경: 얕은 클론이면 `git fetch --unshallow`; `pip install fonttools brotli pillow`; `npm install`.

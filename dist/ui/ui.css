@@ -1108,6 +1108,28 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    same red the Hazard rows use when the customer is not ready for what is waiting. */
 .readout .fore b.env-ok,.readout .fore b.env-lack{font-size:16px}
 .readout .fore b.env-lack{color:var(--blood)}
+/* v2.9.13: a two-Hazard Gate lists each Hazard's state and the cell stays two lines tall - on a phone as two short rows beside
+   the 환경 대응 label. The two cells split the row in halves, as the Core Stats under them do; only when the states do not fit
+   half (the longest name, 화이트아웃, at 360) does the fight cell give up width, never the states */
+@media (max-width:1023px){
+ .readout .top:has(.env-each)>.fore{flex:1 1 0;white-space:nowrap}
+ .readout .fore.env-each{min-width:max-content}
+ .readout .fore.env-each>.tip{padding-left:4px}}
+@media (max-width:389px){.readout .top:has(.env-each){gap:8px}}
+.readout .fore.env-each{align-items:flex-start;white-space:nowrap}
+.env-list{display:inline-flex;flex-direction:column;gap:2px;margin-left:6px}
+.env-row{display:inline-flex;align-items:baseline;white-space:nowrap}
+.env-row i{font:500 12px/1.2 var(--ui);font-style:normal;color:#b3a282}
+.readout .fore .env-row b{margin-left:4px}
+/* stacked (phone), the names align right so the coloured states share one column; the widest row sets the width, as before */
+@media (max-width:1023px){
+ .env-list{display:inline-grid;grid-template-columns:auto auto;align-items:baseline;gap:2px 0;margin-left:5px}
+ .env-row{display:contents}
+ .env-row i{justify-self:end}}
+/* where there is room (desk) the two rows read side by side on the line under the label, the label's ? beside it */
+@media (min-width:1024px){
+ .readout .fore.env-each{flex-wrap:wrap;align-items:baseline}
+ .readout .fore.env-each>.env-list{order:2;flex:1 0 100%;flex-direction:row;gap:0 16px;margin:4px 0 0}}
 .readout .tip,.dest-plate .tip,.kit .tip{display:inline-block;margin-left:6px;position:static}
 .readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;
@@ -1240,6 +1262,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .forecast-pin:hover{background:#0d0904}
 .forecast-pin b{margin-left:6px;font:500 17px/1 var(--f-led);color:var(--gold)}
 .forecast-pin b.env-lack{color:var(--blood)}
+.forecast-pin .pin-full:has(.env-each)>.pin-fore{flex:1 1 0;white-space:nowrap}
+.forecast-pin .pin-fore.env-each{display:inline-flex;min-width:max-content;align-items:flex-start}
+.forecast-pin .env-row b{margin-left:4px}
 .forecast-pin .pin-chip{display:none;color:var(--gold)}
 .forecast-pin.folded .pin-full{display:none}
 .forecast-pin.folded .pin-chip{display:inline}

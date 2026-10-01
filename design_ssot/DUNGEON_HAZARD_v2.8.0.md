@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
+DOC_VERSION=2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -301,11 +301,12 @@ Rules:
 ## GATE POWER — LATE-DAY SLOPE
 
 Gate required Power keeps its current generation inputs. The Day term runs DAY 1~9 at 1.45 per Day, DAY 10 at 0.80,
-DAY 11~20 at 1.10 and DAY 21+ at 0.80, DAY 21+ keeping the offset accumulated by D20:
+DAY 11~20 at 1.10 and DAY 21+ at 1.10, DAY 21+ keeping the offset accumulated by D20. The late slope keeps the Gates
+level with a grown roster (a D30 party grows about 1.9 prepared Power a Day in D21~29); DAY 10 keeps its own 0.80 step:
 
 ```text
 Day term
-= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
+= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10
 ```
 
 Full required Power (Source-exact):
@@ -333,8 +334,8 @@ D10 = 13.85
 D12 = 16.05
 D18 = 22.65
 D20 = 24.85
-D24 = 28.05
-D29 = 32.05
+D24 = 29.25
+D29 = 34.75
 ```
 
 ## HAZARD THREAT
@@ -343,8 +344,14 @@ For each canonical Hazard:
 
 ```text
 Hazard Threat
-= 12 + Day × 0.35 + (Tier - 1) × 6
+= (12 + Day × 0.35 + (Tier - 1) × 6) × Stat-group factor
+Stat-group factor: 강인함 (독 · 냉기 · 부식) 1.0 · 기동 (속박 · 진창 · 어둠) 1.1 · 정신 (공포 · 화염 · 화이트아웃) 1.2
 ```
+
+The factor follows the Stat the Hazard presses. 기동 and 정신 convert to Defense at ÷2 and 강인함 at ÷3, so without it an
+average adventurer would answer a 정신 Hazard far more on their own than a 강인함 one. The ÷3 / ÷2 conversion is unchanged;
+the Counter values carry the same factor (`ITEM_v2.8.0.md` §COUNTER LADDER). The anchors below are the 강인함 values; 기동 and
+정신 read them × 1.1 / × 1.2 (e.g. D29 T3 = 34.15 / 37.57 / 40.98).
 
 Reference anchors:
 
@@ -400,6 +407,10 @@ T3
 - upper/main specialist alone is commonly 대응 / slightly short
 - upper + secondary/natural/trait/hybrid support can reach 충분
 ```
+
+On a Gate's first Hazard the 초반 하이브리드 sits under the 초반 대응 (`ITEM_v2.8.0.md` §COUNTER LADDER), so 초반 대응 stays the
+Tier 1 answer through the late Days a Tier 1 Gate still appears (D15~20) and the hybrid's worth arrives with the second
+Hazard at Tier 2.
 
 A naturally strong, invested NPC may need fewer Item resources; a weak-fit NPC may need more.
 No canonical route may require a third normal Bag slot.
@@ -1442,9 +1453,9 @@ PASS:
 Owner rule: §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80`
+- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10`
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
-- the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 28.05, D29 32.05
+- the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
 
 FAIL:
 - a single slope applied across all Days
@@ -1456,10 +1467,10 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = 12 + Day*.35 + (Tier-1)*6
+Threat = (12 + Day*.35 + (Tier-1)*6) × Stat-group factor (강인함 1.0 · 기동 1.1 · 정신 1.2)
 ```
 
-Exact anchors:
+Exact anchors (강인함; 기동 × 1.1, 정신 × 1.2):
 - D1 T1 = 12.35
 - D12 T1 = 16.20
 - D18 T2 = 24.30

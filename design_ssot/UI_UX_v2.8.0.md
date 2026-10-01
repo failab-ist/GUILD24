@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
+DOC_VERSION=2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -302,6 +302,13 @@ line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`) and a line 
 line under the readout `.top`, only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing
 to the Death chance); words only — no %, verdict, `?` or new color.
 
+Hazard Readiness is one label on a one-Hazard Gate. On a two-Hazard Gate (T2 on) it is each Hazard's own state
+(`{위험} {충분|대응|불안|취약}`), and the cell stays two lines tall, never a third: where there is room (desk) `환경 대응 ?` on
+the first line and the two states side by side on the second; where there is not (phone) the two states as two short rows
+beside the `환경 대응` label, the Hazard names right-aligned so the coloured states share one column. The two cells split the
+row in halves as the Core Stats under them do; only when the states do not fit half does the 전투 전망 cell give up width (in
+the pin too). Below the width that holds both cells on one line the 환경 대응 cell drops to its own line rather than overflow.
+
 Never show exact expedition Success %, the hidden readiness thresholds (0.75 / 0.40) and Defense formula, or exact Great
 Success % (`대응 {N} 필요` and `{능력치} {n}당 대응 1 제공` are public Gate facts, §HAZARD NUDGE). The % follows
 `DUNGEON_HAZARD_v2.8.0.md`: the chance an ordinary failed expedition escalates to Death, not unconditional Death odds.
@@ -391,7 +398,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 ### SALE — FORECAST PIN
 
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
-repeats `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` — the same frozen values and colours, never a second
+repeats `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` (on a two-Hazard Gate, each Hazard's own state as the
+readout reads it) — the same frozen values and colours, never a second
 source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
@@ -1850,6 +1858,9 @@ PASS:
 - `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a
   phone — in the forecast pin that mirrors it (UI-Q-v29-24)
 - per-Hazard readiness does not wrap the destination rows or pull a row for its own help
+- on a two-Hazard Gate (T2 on) `환경 대응` names each Hazard with its own frozen state, in the readout and in the forecast pin; a
+  one-Hazard Gate reads one label; the readout `.top` and the pin stay two lines tall with the label on one line, and no row
+  overflows or collides at 360 / 390 / 412 / 1024 / 1280
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
 At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress/count; no

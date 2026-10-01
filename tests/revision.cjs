@@ -43,7 +43,7 @@ test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh()
    row for - a labelless 포션 row was exactly the leak SA-Q05 closes - so it is exempted here
    the same way the derived `jobBonus` key already was. */
 test('all effect keys presented and names readable',()=>{for(const it of DATA.items){const rows=Presentation.rows(it.effects);assert.ok(rows.length);for(const key of Object.keys(it.effects))assert.ok(rows.some(r=>r.key===key)||key==='jobBonus'||key==='potion');}const r=new RNG('names');for(let i=0;i<500;i++)assert.ok(!/\s/.test(Adventurer.name(r,0)));});
-test('headless 30-day smoke',()=>{const a=Debug.simulate(3,'balanced');assert.equal(a.runs,3);assert.ok(a.reached30>=0);assert.ok(Number.isFinite(a.averageMoney));});
+test('headless 30-day smoke',()=>{const a=Debug.simulate(3,'reader');assert.equal(a.runs,3);assert.ok(a.reached30>=0);assert.ok(Number.isFinite(a.averageMoney));});
 
 
 test('seven relic windows, stable offers, phase gating and no duplicate purchase',()=>{const g=new Game();g.autosave=false;g.start('window');assert.equal(g.run.phase,'foundation');const w=copy(g.run.relicWindow);assert.equal(w.candidateIds.length,3);assert.equal(new Set(w.candidateIds).size,3);assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind==='foundation'));g.buyRelic(w.candidateIds[0]);for(const day of [5,10,15,20,25,30]){g.run.day=day;g.morning();const offer=copy(g.run.relicWindow);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.relicWindow,offer);g.run.money=10000;const id=offer.candidateIds[0];g.buyRelic(id);assert.throws(()=>g.buyRelic(id));}assert.equal(g.run.facilities.length,7);assert.ok(g.run.relicWindow.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)));});
@@ -272,10 +272,10 @@ test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
  /* META_v2.8 §Day-reach conversion rate, DIRECTOR DOCUMENT BASELINE. These multiply Gross
     Sales, not an end-state net worth, which is why they are a fraction of the retired
     net-asset table this line used to carry. */
- // back to the full 1/2/3/4/5% (User 2026-09-25, v2.9.1 balance; was halved in v2.9.0)
- for(const [day,rate] of [[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]])
+ // 1/2/3/3/3% (User 2026-09-30, v2.9.13; 1/2/3/4/5% from v2.9.1, halved in v2.9.0)
+ for(const [day,rate] of [[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]])
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
- assert.equal(Meta.capitalRate(31),.05,'past D30 stays on the last band rather than falling off');
+ assert.equal(Meta.capitalRate(31),.03,'past D30 stays on the last band rather than falling off');
  const a=Meta.fresh();
  Meta.addCapital(a,120);assert.equal(Meta.storeCapital(a),120,'capital accumulates');
  Meta.addCapital(a,-500);assert.equal(Meta.storeCapital(a),120,'and never goes backwards');

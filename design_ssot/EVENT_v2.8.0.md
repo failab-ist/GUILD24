@@ -3,7 +3,7 @@
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
 DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## NON-NEGOTIABLE

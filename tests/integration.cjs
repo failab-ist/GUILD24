@@ -995,7 +995,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
  }
 
  // B. each Day band converts at its exact Canonical rate
- const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]]; // META §Day-reach conversion rate (User 2026-09-25, v2.9.1 balance: back to full 1/2/3/4/5%)
+ const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]]; // META §Day-reach conversion rate (User 2026-09-30, v2.9.13: 1/2/3/3/3%; v2.9.1 was 1/2/3/4/5%)
  for(const [day,rate] of BANDS){
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
   const g=at(10000,day);
@@ -1005,10 +1005,11 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
   assert.equal(st.gain,Math.round(10000*rate),'D'+day+' gain');
  }
 
- // C. the same Gross Sales earns strictly more the deeper the band reached
+ // C. the same Gross Sales earns more the deeper the band reached up to D20, and the same from D20 on (User 2026-09-30,
+ //    v2.9.13: the D20+ bands are one 3% - the longer Run still earns more through its larger Gross Sales)
  const byBand=[9,19,24,29,30].map(day=>at(10000,day).settleStoreCapital().gain);
- for(let i=1;i<byBand.length;i++)
-  assert.ok(byBand[i]>byBand[i-1],'a deeper band earns more on the same sales: '+byBand.join(' < '));
+ assert.ok(byBand[0]<byBand[1]&&byBand[1]<byBand[2],'a deeper band earns more up to D20: '+byBand.join(' < '));
+ assert.ok(byBand[2]===byBand[3]&&byBand[3]===byBand[4],'D20+ bands earn the same on the same sales: '+byBand.join(' = '));
 
  // J. Ending Gold and Inventory are not inputs: same sales, same Day, different end state
  const poor=at(8000,22,-4000),rich=at(8000,22,9000);
@@ -1075,7 +1076,7 @@ test('META_v2.8 §STORE CAPITAL: a failed Run still earns on what it actually so
  // F. reached D30 and lost the Final
  const failed=drive('sc-finalfail',30,9000,g=>{g.run.win=false;});
  assert.equal(failed.gain,Math.round(9000*Meta.capitalRate(30)),'a lost Final uses the ordinary formula');
- assert.equal(failed.st.rate,0.05,'at the D30 rate it actually reached (v2.9.1 balance, User 2026-09-25: back to full)');
+ assert.equal(failed.st.rate,0.03,'at the D30 rate it actually reached (User 2026-09-30, v2.9.13: 3%; v2.9.1 was 5%)');
 
  // the failures are still failures: none of them kept anything Run-scoped
  for(const r of [bank,dead,failed]){
@@ -1387,7 +1388,7 @@ test('구급품 진열장: an ordinary Injury the expedition would leave is not 
  const eleventh=weak();Dungeon.resolve(eleventh,d,new RNG(hurt),[],late);assert.equal(eleventh.injury,1,'an eleventh is not');
  assert.equal(DATA.decorationParams.aidCabinet.saves,10);
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 65% chance (v2.9.1 balance; was 50%)',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 40% chance (User 2026-09-30, v2.9.13; was 65%)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
@@ -1395,11 +1396,11 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
- assert.equal(P.chance,.65);
+ assert.equal(P.chance,.40);
  let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
   P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
- assert.ok(up/all>.55&&up/all<.75,'about 65%: '+(up/all));
+ assert.ok(up/all>.30&&up/all<.50,'about 40%: '+(up/all));
 });
 test('알뜰 금고: 50G every morning, on the receipt (v2.9.1 balance; was 40G)',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run;

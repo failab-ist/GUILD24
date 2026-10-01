@@ -224,7 +224,7 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
      entries. The v2.6 aggregate-gap path is superseded. */
   const meanGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
   const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+p.effects.survival*.34
-   +p.effects.mobility*.27+p.effects.spirit*.20-meanGap(p)*1.70,0);
+   +p.effects.mobility*.27+p.effects.spirit*.20-meanGap(p)*2.50,0); // FINAL-Q72 2.50 (User 2026-09-30, v2.9.13; was 1.70)
   g.commitFinalParty();g.boss();
   /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
      participants untouched - it is the one Run where the party sum can be checked against the
@@ -480,10 +480,10 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
   'and it is resolved ahead of the Relic window it exists to inform');
 });
 
-test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, not the aggregate path',()=>{
+test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.50 (v2.9.13; was 1.70), not the aggregate path',()=>{
  const src=read('dist/systems/run.js');
  assert.ok(!/hazard\*\.35/.test(src),'the retired aggregate-gap penalty is gone');
- assert.ok(/meanGap\*1\.70/.test(src),'the Final penalty is the mean gap x 1.70');
+ assert.ok(/meanGap\*2\.50/.test(src),'the Final penalty is the mean gap x 2.50');
  assert.ok(/p\.hazards\.reduce\(\(v,h\)=>v\+h\.gap,0\)\/p\.hazards\.length/.test(src),
   'and the mean divides by the Hazard COUNT, never by sqrt(count)');
  assert.ok(!/scale.*4\.6/.test(src),'no standalone scale=4.6 path is used in Final resolution');
@@ -492,7 +492,7 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, no
     balance harness drifted a whole Stage behind the game; it reads the one helper now, so the
     check is that the Final contribution IS preparedPower minus the mean-gap penalty, measured,
     rather than four literals matching by eye. */
- assert.ok(/individualPower=\(e,meanGap\)=>G\.Dungeon\.preparedPower\(e\)-meanGap\*1\.70/.test(src),
+ assert.ok(/individualPower=\(e,meanGap\)=>G\.Dungeon\.preparedPower\(e\)-meanGap\*2\.50/.test(src),
   'the Final contribution reads the Prepared Power helper');
  const e={combat:100,survival:50,mobility:30,spirit:20};
  assert.equal(Dungeon.preparedPower(e),100*.50+50*.34+30*.27+20*.20,

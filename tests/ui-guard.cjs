@@ -866,8 +866,13 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/환경 압박/.test(app),'and no collapsed environment duplicate survives anywhere');
  assert.ok(!/env-press/.test(app)&&!/env-press/.test(css),'the phone-only duplicate is gone with it');
  assert.ok(!/hazardList\(/.test(readout),'the outlook renders no Hazard rows of its own');
- assert.ok(/환경 대응<b class="env-/.test(readout),'the outlook states this customer readiness');
- assert.ok(/o\.worst/.test(readout),'and it is the engine canonical worst state, not a screen calculation');
+ assert.ok(/환경 대응'\+envReading\(o\)/.test(readout),'the outlook states this customer readiness');
+ /* v2.9.13 (User 2026-09-30, SALE §always-on outlook): a one-Hazard Gate reads the engine's worst state; a two-Hazard Gate
+    names each Hazard with its own frozen state - the outlook's own rows, never a screen calculation */
+ const env=fn('envReading');
+ assert.ok(/o\.hazards\.length>1/.test(env)&&/o\.hazards\.map\(h=>/.test(env)&&/h\.label/.test(env)&&/b\(o\.worst\)/.test(env),
+  'one label on a one-Hazard Gate, each Hazard\'s own frozen state from T2');
+ assert.ok(!/Dungeon\.|prepare\(|\d+\s*%|gap/.test(env),'the per-Hazard reading shows states only - no number, no fresh calculation');
  const plate=fn('destPlate');
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),
   'the destination plate states the Gate\'s numbered Hazard rows only, off the known-Hazard truth');
@@ -876,8 +881,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
- assert.equal((codeOnly.match(/환경 대응<b/g)||[]).length,2,'the readiness reading is rendered in the readout and in the pin that mirrors it, nowhere else');
- assert.ok(/환경 대응<b/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
+ assert.equal((codeOnly.match(/환경 대응'\+envReading\(o\)/g)||[]).length,2,'the readiness reading is rendered in the readout and in the pin that mirrors it, nowhere else');
+ assert.ok(/환경 대응'\+envReading\(o\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -957,7 +962,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     two counter tooltips already use, so there is no separate row left to hide or to lose
     with a hidden caps label. */
  assert.ok(!/env-help/.test(app)&&!/env-help/.test(css),'the separate help row is gone, not merely hidden');
- const envCell=readout.slice(readout.indexOf('환경 대응<b'),readout.indexOf("</span>':''",readout.indexOf('환경 대응<b')));
+ const envCell=readout.slice(readout.indexOf("환경 대응'+envReading"),readout.indexOf("</span>':''",readout.indexOf("환경 대응'+envReading")));
  assert.ok(envCell.includes("tip('환경 대응'"),'the environment help sits in the same cell as the reading');
  assert.ok(!/\.readout \.fore>\.tip[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
  /* UI_UX §SHARED ANCHORED POPOVER (User 2026-09-25, phone): a positioned ? or cell becomes the
@@ -1971,7 +1976,7 @@ test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail 
  assert.ok(top>0&&line>top&&line<r.indexOf('great-signal'),'directly under the readout .top');
  assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
  assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
- assert.equal((r.match(/<span class="fore">/g)||[]).length,2,'the .top still holds the two cells');
+ assert.equal((r.match(/<span class="fore(?:">|'\+)/g)||[]).length,2,'the .top still holds the two cells');
  assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
  assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
 });
@@ -3582,7 +3587,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
  // v2.9.10 quick patch (User 2026-09-28): one order for every Item - Hazard Counter, 피로 회복, Core Stats, the rest
  assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'피로 회복, then the stat, then the rest');
- assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','mobility'],'Counter first, then 피로 회복, then the stat');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','survival'],'Counter first, then 피로 회복, then the stat');
  assert.deepEqual(Presentation.rows(DATA.itemBy.dragonramen.effects,undefined,'food').map(r=>r.key),['cold','supply','survival'],'a Food Counter leads too');
  assert.deepEqual(Presentation.rows(DATA.itemBy.energy.effects,undefined,'drink').map(r=>r.key),['supply','mobility'],'a Drink stat follows 피로 회복');
  assert.deepEqual(Presentation.rows(DATA.itemBy.magmagear.effects,undefined,'gear').map(r=>r.key),['fire','combat'],'gear keeps Counter then stat');

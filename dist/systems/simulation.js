@@ -32,7 +32,8 @@ const SPEND={
  'balanced':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
  'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:true},
  'human':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
- 'reader':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
+ 'reader':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
+ 'expert':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
 /* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
@@ -44,7 +45,7 @@ const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-b
    the Final all read. A copy of them is exactly how this harness came to report every Final
    contribution against the pre-Stage-10 .58/.32/.24/.16 formula the game had already left. */
 const contribution=p=>G.Dungeon.preparedPower(p.effects)
- -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*1.70;
+ -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*2.50;
 
 function blank(runs,policy,pricing,build){
  return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,
@@ -180,7 +181,15 @@ function playRun(g,out,ctx){
     starves the shelf and spirals into bankruptcy - a player keeps ordering.) Adopted as the v2.9.2 review's primary lens after
     the User's save (run-level revenue, knowledge, first-discovery Days) sat closer to it than to `balanced`
     (archive/v2.9.2/v292-balance-review.md §2). */
- const reader=policy==='reader',bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
+ /* `expert` (User 2026-09-30, measurement only): the skilled-human lens. `skilled` above is not one - it only reads hidden
+    Hazards and measures weaker than `reader` (counter-ladder-v297.md). `expert` is `reader` plus two things the User's
+    0930 D30-clear save shows and `reader` does not do: a cheap meal at 150% to a customer who can easily pay it, from
+    DAY 1, and a Final party picked by what each adventurer adds to the Final rather than by Level (the Final supply by
+    contribution is shared with `reader` since 2026-09-30).
+    Tried and dropped in calibration (no gain or worse): spending brakes loosened to `spender`'s, rerolling until every
+    visitor Hazard has a Counter, Counters ordered right after the meals, 50% to the top roster in D1-10.
+    Calibrated with tools/calibrate-bot-v292.cjs --account (reports/expert-bot-calibration-v2912.md). */
+ const expert=policy==='expert',reader=policy==='reader'||expert,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
  /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
     it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk
     that outlookFor() shows as 전투 전망 · 환경 대응 · 사망 위험 - trying each shelf Item in the Bag and taking the one that
@@ -446,7 +455,10 @@ function playRun(g,out,ctx){
     const overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),regular=n.visits>=8||n.loyalty>=50;
     const strong=s.day>=10&&regular&&!overToday;
     for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);const it=D.itemBy[st.item];
-     const modes=strong?['overcharge','full','half']:['full','half'];
+     /* expert: from DAY 1, one meal or drink per visit at 150% to a purse holding three times its list price
+        (the User's D1-10: 21% of sales at 150%, mostly 쌀밥 · 생수 · 커피) */
+     const cheapOver=expert&&!overToday&&['food','drink'].includes(it.category)&&n.money>=it.sell*3;
+     const modes=(strong||cheapOver)?['overcharge','full','half']:['full','half'];
      const mode=modes.find(m=>!n.refused.includes(it.id+':'+m)&&g.interest(n,it,m).debit<=n.money);if(!mode)continue;
      /* 50% is a margin of zero (Sell = Buy x 2): it is the answer to a short purse, not to a first refusal */
      picks.push({st,mode,gain:readScore(n,[...n.pack,it.id],d)-base+(st.expires?1/(st.expires-s.day+1):0)-(mode==='half'?4:0)});}
@@ -512,7 +524,8 @@ function playRun(g,out,ctx){
   }
   else if(s.phase==='final'){buySupport();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
    measureFinal();
-   const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort((a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
+   const fd=s.dungeons[0],bareFinal=n=>contribution(G.Dungeon.prepare({...copy(n),pack:[]},fd,s.facilities));
+   const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort(expert?(a,b)=>bareFinal(b)-bareFinal(a):(a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
    /* FINAL-Q75: the party is selected and confirmed first, then prepared one at a time. */
    for(const n of team){g.selectFinal(n.id);act();}
    if(team.length){g.commitFinalParty();act();}
@@ -522,7 +535,11 @@ function playRun(g,out,ctx){
        rule rather than bypassing it. Nothing affordable left means the slot stays empty. */
     const afford=s.inventory.filter(x=>!g.finalNoEffect(x.item)&&n.money>=g.finalPrice(x.item));
     if(!afford.length)break;
-    const st=afford.slice().sort((a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
+    /* reader / expert (User 2026-09-30): the Item that raises this adventurer's Final contribution most. itemValue scores a
+       Counter by its raw points even where the Hazard is already answered, which handed Counters the Final slots over
+       potions and lowered the party (reports/balance-proposal-v2912.md §3); `balanced` keeps itemValue. */
+    const gain=x=>contribution(G.Dungeon.prepare({...copy(n),pack:[...n.pack,x.item]},s.dungeons[0],s.facilities));
+    const st=afford.slice().sort(reader?(a,b)=>gain(b)-gain(a):(a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
     g.supplyFinal(n.id,st.id);act();}}
    if(team.length){g.boss();act();}else g.end(false,'출전 가능한 모험가 없음');}
  }
@@ -605,7 +622,7 @@ function playRun(g,out,ctx){
    Meta.fresh() (or a copy of the supplied account), so nothing a Run earns carries anywhere.
    Its Final numbers describe a first-time account and must not be read as the game's ceiling. */
 /* opts.relicAware (default false) turns on playRun's relic-aware layer; off is the baseline. */
-function simulate(count=100,policy='balanced',account=null,pricing='adaptive',build='hybrid',opts={}){
+function simulate(count=100,policy='reader',account=null,pricing='adaptive',build='hybrid',opts={}){
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
   const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start('revision-'+seed);
@@ -645,7 +662,7 @@ function masterySpawnPatch(){
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false}={}){
+function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
  for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);

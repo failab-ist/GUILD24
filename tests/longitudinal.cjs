@@ -20,9 +20,9 @@ const out={version:5,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',trajectories,runs
 const STRONG_FIRST=['sponsorSign','guildShelf','thriftSafe','honorFrame'];
 const WEAK_FIRST=['honorFrame','thriftSafe','guildShelf','sponsorSign'];
 const plans=[
- {label:'engaged / 장식 없음',policy:'balanced',pricing:'adaptive',build:'hybrid',purchaseOrder:null,tag:'none'},
- {label:'engaged / 강한 것부터',policy:'balanced',pricing:'adaptive',build:'hybrid',purchaseOrder:STRONG_FIRST,tag:'strong'},
- {label:'engaged / 약한 것부터',policy:'balanced',pricing:'adaptive',build:'hybrid',purchaseOrder:WEAK_FIRST,tag:'weak'},
+ {label:'engaged / 장식 없음',policy:'reader',pricing:'adaptive',build:'hybrid',purchaseOrder:null,tag:'none'},
+ {label:'engaged / 강한 것부터',policy:'reader',pricing:'adaptive',build:'hybrid',purchaseOrder:STRONG_FIRST,tag:'strong'},
+ {label:'engaged / 약한 것부터',policy:'reader',pricing:'adaptive',build:'hybrid',purchaseOrder:WEAK_FIRST,tag:'weak'},
  {label:'meta-farm / repeated',policy:'meta-farm',pricing:'adaptive',build:'hybrid',purchaseOrder:STRONG_FIRST,tag:'farm'}];
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 for(const plan of plans){

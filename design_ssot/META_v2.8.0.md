@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.12
+DOC_VERSION=2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -301,20 +301,26 @@ Ending Gold and remaining Inventory liquidation value are **not Store Capital in
 D1-9    = 1%
 D10-19  = 2%
 D20-24  = 3%
-D25-29  = 4%
-D30     = 5%
+D25-29  = 3%
+D30     = 3%
 ```
 
-The band is the Day the Run actually reached. Boss CLEAR does not multiply it. Buying a Decoration inside the first Run
+The top of the table is flat: a player who reaches D30 every Run would otherwise fill all four Slots within a few Runs, and
+the longer Run still earns more through its larger Gross Sales. The band is the Day the Run actually reached. Boss CLEAR does not multiply it. Buying a Decoration inside the first Run
 is not a goal.
 
 ### Approved progression expectation
 
-Across the ordinary purchase orders:
+Measured with `reader`, the main bot every progression and balance reading is taken with (`expert`, reader plus the
+User's habits on the User's account, is its upper reference); 40 trajectories of 12 Runs, 훈련소 제휴 간판 first then cheapest
+first:
 
 ```text
-1st Decoration : around Run 4-6
+1st Decoration : around Run 4
 all four Slots : around Run 9
+
+reader : Run 4 / 5 / 7 / 9
+expert : Run 4 / 6 / 7 / 9
 ```
 
 The four Slots fill by Run 10-11 at the latest, and a Boss clear becomes worth attempting after that. Collecting both
@@ -400,7 +406,7 @@ the dearer Slot.
 
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
-every adventurer created while it is worn: 65% chance of spawn Level +1
+every adventurer created while it is worn: 40% chance of spawn Level +1
 ```
 
 ### wall — 의무실 현판
