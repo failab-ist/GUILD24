@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-10-01
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) · V2_9_13_QUICK_PATCH_2(첫 판 가르치기, User 컨펌 2026-10-01) — v2.9.2~v2.9.13 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) · V2_9_13_QUICK_PATCH_2(PR #42, 첫 판 가르치기, User 컨펌 2026-10-01) — v2.9.2~v2.9.13 태그는 User가 걸어야 함
 
 ## Current
 
