@@ -1212,12 +1212,12 @@ function changedRows(r){
 // form — that is a wide sheet a person fills in; this is a tape a machine printed, so
 // every figure is monospace and right-aligned on a dotted leader, subtotals rule off,
 // and the money actually in the drawer is the last thing stamped on it.
-function closingScreen(){
+function closingReceipt(s){
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): the receipt is the Day's cash - what the store
     started with, the Gold that moved, what it ends with - not an income statement. The opening is derived from the Day's own
     flows (end - ins + outs), so the tape always adds up. Stock and waste are counts: an expired Item was paid for when it was
     ordered, and printing its cost as a loss read as Gold leaving the drawer twice. */
- const s=game.run,d=s.daily;
+ const d=s.daily;
  const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['알뜰 금고',d.safeGold],['재고 정리',d.liquidation]];
  const outs=[['발주',d.spent,true],['발주 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
  const total=rows=>rows.reduce((t,r)=>t+(r[1]||0),0),change=total(ins)-total(outs),open=s.money-change;
@@ -1225,7 +1225,7 @@ function closingScreen(){
  const tomorrow=s.day<29?game.tomorrowOperatingCost():null,tone=change>0?'gain':change<0?'loss':'even';
  /* what expired: a name alone for one, `×n` from two, three kinds at most and the rest as `외 N종` so it stays one line */
  const wasted=Object.entries(d.wasteItems||{}).sort((x,y)=>y[1]-x[1]),wasteNames=wasted.length?' · '+wasted.slice(0,3).map(([id,n])=>E(D.itemBy[id]?.name||id)+(n>1?' ×'+n:'')).join(' · ')+(wasted.length>3?' 외 '+(wasted.length-3)+'종':''):'';
- const body='<div class="tape">'
+ return '<div class="tape">'
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
   +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
@@ -1241,14 +1241,19 @@ function closingScreen(){
    +(tomorrow!==null?'<p>내일 운영비 예상 '+fmt(tomorrow)+'G</p>':'')+'</div>'
  +'</div>'
  +'<div class="tear bottom" aria-hidden="true"></div></div>';
+}
+function closingDock(s){
  const rescue=game.canRescue(),spent=(s.rescueUsed||0),cap=game.rescueLimit();
- const dock=(s.money<0
+ return (s.money<0
   ?'<p class="danger-text">운영비가 부족하다.'+(rescue?' 회생 '+spent+' / '+cap+'':' 회생을 모두 썼다.')+'</p>'
    +(rescue?btn('재고 정리','stock'):'')+btn('폐점','retire','danger')
   :'')+btn('다음 날','close','stamp');
+}
+function closingScreen(){
+ const s=game.run;
  return '<div class="stage p-closing">'+menuFab()
- +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+taskLine('closing')+body+'</main>'
- +'<div class="dock">'+dock+'</div></div>';
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+taskLine('closing')+closingReceipt(s)+'</main>'
+ +'<div class="dock">'+closingDock(s)+'</div></div>';
 }
 const coachSteps={
  /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
@@ -1957,36 +1962,25 @@ function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',bl
 function finalForecastView(){const f=game.finalForecast(),c=Copy.finalPrep;if(!f)return '';
  return '<div class="readout final-forecast"><div class="top"><span class="fore">'+E(c.forecast)+'<b>'+E(f)+'</b>'
   +tip(c.forecast,...c.forecastWhy)+'</span></div></div>';}
-function finalScreen(){
- const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
- const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명';
- if(!s.team.includes(supplyNPC))supplyNPC=s.team[0]||null;
- const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
- /* UI_UX: the Boss is a primary game object, and on the day the player finally faces it the
-    standing screen has to say which one. It used to open on a generic 마왕성 plate with a
-    28px procedural mark, so every Run's last day looked identical. Identity and art resolve
-    from the Run exactly as the D5 / D15 reveals do - Scene.bossArt reads bossId, day and
-    sealBreakCount, so SLOTH shows the form its broken seals earned and the others their
-    battle form - and the castle stays as the place, under the name of who is in it. */
- const b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
- const body='<div class="gate-zero">'
- +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
-      :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
- +'<div class="who"><span class="label">제0게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
+function finalThreat(d){
  /* BATCH 5-1: each Family owns its Hazards. The persisted Final pool is the union of the two
     Families' tier-II Hazards (shop.js), so each column takes the pool filtered by its own
     Family, in the pool's order - nothing added, nothing recomputed. A phone still reads the two
     Families and then the Hazards (the columns are laid out flat there); a desk puts each
     Family's Hazards under it. Anything the pool held outside both Families would still print. */
- +'<section class="threat"><h2>확인된 위협</h2><div class="fams">'
+ return '<section class="threat"><h2>확인된 위협</h2><div class="fams">'
  +(d.families||[]).map(id=>{const b=D.dungeonBy[id],own=(D.familyTiers[id]||[])[1]||[];
    return '<div class="fam-col"><span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>'
     +hazardList(d.hazards.filter(h=>own.includes(h)),null,d)+'</div>';}).join('')
- +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+'</section>'
+ +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+'</section>';
+}
+function finalMuster(s,need,committed){
  /* B5-2 / FINAL-Q75: 출전 NPC 선택 -> FINAL 준비. Until the party is confirmed the screen is the
     muster only; once confirmed (saved) the roster is gone and only the confirmed members are
     prepared, one at a time, against the shelf. */
- +(!committed&&!finalOrdered&&!s.team.length
+ const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명';
+ const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
+ return (!committed&&!finalOrdered&&!s.team.length
   /* step 1: the last order, open - the same form as ORDER, confirmed on its own 발주 확정 */
   ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order open">'+orderForm()+'</div>'
   :!committed
@@ -2006,8 +2000,9 @@ function finalScreen(){
    +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))
     /* User 2026-09-30: Stats alone do not decide who carries what - the same notebook (Traits, records) opens here, read only */
     +btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')
-   +shelf(true))
- +ownedRelicView();
+   +shelf(true));
+}
+function finalDock(s,need,committed){
  /* UI_UX §PER-PHASE (FINAL) — DISABLED COMMIT CAUSE (USER AMENDMENT 2026-09-22): the fixed dock
     states why the sortie cannot start, on the control itself, rather than leaving a dead
     `마왕성으로 출발` whose reason is a screen-length away in the muster head. The muster's own
@@ -2015,17 +2010,34 @@ function finalScreen(){
  /* any 1..need may be committed; with nobody picked the action is closed and the count it
     waits on is the head's 선택 0명 (stating it on the dock too printed the same line twice) */
  const ready=s.team.length>0&&s.team.length<=need;
- const dock=relicWindowLink()+(need
+ return relicWindowLink()+(need
   ?committed?btn('마왕성으로 출발','boss','stamp')
    /* User 2026-09-30: the last order is chosen for the people who can go, so the candidates can be read from here - view
       only (their notebooks, no pick); the pick and 원정대 확정 stay on the next step */
    :!finalOrdered&&!s.team.length?btn('원정대 후보 보기','final-roster','stamp')+btn('원정대 선택','final-ordered','stamp',Object.values(s.cart||{}).some(q=>q>0)?'disabled':'')
    :btn('원정대 확정','final-commit','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
+}
+function finalScreen(){
+ const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
+ if(!s.team.includes(supplyNPC))supplyNPC=s.team[0]||null;
+ /* UI_UX: the Boss is a primary game object, and on the day the player finally faces it the
+    standing screen has to say which one. It used to open on a generic 마왕성 plate with a
+    28px procedural mark, so every Run's last day looked identical. Identity and art resolve
+    from the Run exactly as the D5 / D15 reveals do - Scene.bossArt reads bossId, day and
+    sealBreakCount, so SLOTH shows the form its broken seals earned and the others their
+    battle form - and the castle stays as the place, under the name of who is in it. */
+ const b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
+ const body='<div class="gate-zero">'
+ +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
+      :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
+ +'<div class="who"><span class="label">제0게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
+ +finalThreat(d)+finalMuster(s,need,committed)
+ +ownedRelicView();
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
     stands in the Boss's own domain. The stage names which Boss so the stylesheet can hang that
     Boss's authored room behind it - the only place any of those rooms is used. */
- return stage('final','최종 원정','',body,dock,' data-boss="'+E(s.bossId)+'"');
+ return stage('final','최종 원정','',body,finalDock(s,need,committed),' data-boss="'+E(s.bossId)+'"');
 }
 /* Whoever went to the castle is the ending. run.js clears s.results when the Final resolves,
    so after D30 the end screen had the statement and then nothing - the people the player

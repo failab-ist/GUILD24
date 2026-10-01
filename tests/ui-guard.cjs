@@ -472,7 +472,7 @@ test('SA-Q21 / SA-Q34: Closing is economics-only, and supply-impact attribution 
     The attribution helper itself (Presentation.supplyImpact/supplyLines) stays correct - it is
     still a unit other Presentation callers (and tests/night.cjs) may use - Closing simply does
     not call it any more. */
- const closingEmitted=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ const closingEmitted=(fn('closingReceipt')+fn('closingDock')+fn('closingScreen')).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
  assert.ok(!closingEmitted.includes('supplyImpact')&&!closingEmitted.includes('오늘의 보급 영향'),
   'Closing reads no attribution helper and prints no impact block');
  assert.ok(!closingEmitted.includes('미판매 재고는 자산으로 남는다'),'and no explanatory footer');
@@ -771,7 +771,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.ok(changed.includes('r.storeBonus'),'a normal 대성공 names the Store Gold it earned');
  assert.ok(changed.includes('r.deep.bonusWallet')&&changed.includes('r.deep.bonusXp'),
   'a Deep return is reported as the adventurer\'s change');
- const closing=fn('closingScreen');
+ const closing=fn('closingReceipt')+fn('closingDock')+fn('closingScreen');
  assert.ok(closing.includes('Copy.deep.sponsor'),'Closing names the sponsorship outflow');
  assert.ok(closing.includes("d.greatSuccess"),'and the Great Success income');
 
@@ -1822,7 +1822,7 @@ test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verba
 });
 
 test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
- const f=fn('finalScreen');
+ const f=fn('finalMuster')+fn('finalDock')+fn('finalScreen');
  assert.ok(/!committed&&!finalOrdered&&!s\.team\.length\s*\n?\s*\/\*[^*]*\*\/\s*\?'<div class="party-head"><h2>마지막 발주<\/h2><\/div><div class="final-order open">'\+orderForm\(\)/.test(f),'D30 opens on the last order');
  assert.ok(/btn\('원정대 선택','final-ordered','stamp',Object\.values\(s\.cart\|\|\{\}\)\.some\(q=>q>0\)\?'disabled':''\)/.test(f),'moving on waits for a pending cart');
  assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
@@ -2063,7 +2063,7 @@ test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one mov
 
 /* UI-Q18 (v2.9.7, User 2026-09-26, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the receipt is the Day's cash */
 test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 자금 with 영업 손익, counts, tomorrow',()=>{
- const c=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'');
+ const c=(fn('closingReceipt')+fn('closingDock')+fn('closingScreen')).replace(/\/\*[\s\S]*?\*\//g,'');
  for(const gone of ['판매 원가','판매 마진','폐기 원가','오늘 시작','오늘 끝','오늘 변화'])assert.ok(!c.includes(gone),'no '+gone+' row');
  for(const l of ['영업 전 자금','보유 자금','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
  assert.ok(/change=total\(ins\)-total\(outs\),open=s\.money-change/.test(c),'the opening is derived from the Day\'s own flows, so the tape adds up');
@@ -3577,7 +3577,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29)
  assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
- assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalScreen')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
+ assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalThreat')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');
  assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.','COPY_AUDIT §14-7 intro');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
