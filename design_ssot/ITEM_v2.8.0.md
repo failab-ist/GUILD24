@@ -26,7 +26,7 @@ newItemRule=REWORK_EXISTING_BEFORE_ADD
 
 canonicalHazards=[poison,bind,corrosion,mire,fire,fear,dark,cold,whiteout]
 
-globalPressure=NONE (User 2026-09-24, v2.9.0)
+globalPressure=NONE
 
 hiddenCombo=NO
 jobIdItemModifier=NO
@@ -42,17 +42,10 @@ longHazard=NO
 
 ## ROLE
 
-ITEM =
-`이번 원정에 무엇을 준비시킬 것인가`
+ITEM = `이번 원정에 무엇을 준비시킬 것인가`
 
-Item responsibilities:
-- Stat support
-- Fatigue recovery (Supply) (User 2026-09-24, v2.9.0)
-- Hazard response
-- Condition management
-- Insurance
-- Risk/Reward
-- Expedition economy
+Item responsibilities: Stat support, Fatigue recovery (Supply), Hazard response, Condition management, Insurance,
+Risk/Reward, Expedition economy.
 
 Division:
 JOB=BaseStats+Growth
@@ -60,8 +53,7 @@ TRAIT=CharacterVariation
 RELIC=StoreBuild
 ITEM=ExpeditionPreparation
 
-Item must primarily answer:
-`무엇에 좋은가?`
+Item must primarily answer: `무엇에 좋은가?`
 
 Do not create a new micro-system merely to give one Item flavor.
 
@@ -82,7 +74,7 @@ Category = 상품 정체성/상점 분류
 Functional Role = 실제 Gameplay 기능
 
 Contracts:
-- Food = large Fatigue recovery (Supply) + lower secondary Core Stat value (User 2026-09-24, v2.9.0)
+- Food = large Fatigue recovery (Supply) + lower secondary Core Stat value
 - Drink = small Fatigue recovery (Supply) + sharper Stat/Counter/RiskReward value
 - Potion = generic immediate raw-Power specialist
 - Field Gear = narrow Hazard specialist or explicit Hazard Hybrid
@@ -93,18 +85,12 @@ Contracts:
 
 ## ITEM ROLE BOUNDARY
 
-A normal Item should read primarily as one gameplay purpose with at most one meaningful secondary purpose unless explicitly exceptional.
+A normal Item reads primarily as one gameplay purpose with at most one meaningful secondary purpose unless explicitly exceptional.
 
-Do not hide:
-- Core Stat value
-- Supply value (shown as `피로 회복 N`) (User 2026-09-24, v2.9.0)
-- Hazard Counter value
-- Insurance behavior
-- explicit penalty/tradeoff
+Do not hide: Core Stat value, Supply value (shown as `피로 회복 N`), Hazard Counter value, Insurance behavior, explicit
+penalty/tradeoff. Do not collapse Hazard Counter into generic Power.
 
-Do not collapse Hazard Counter into generic Power.
-
-The exact active-catalog table below controls approved multi-effect exceptions; do not remove an explicit listed effect merely to force a role-count heuristic.
+The exact active-catalog table controls approved multi-effect exceptions; do not remove an explicit listed effect merely to force a role-count heuristic.
 
 ## FUNCTIONAL ROLE
 
@@ -112,17 +98,7 @@ The exact active-catalog table below controls approved multi-effect exceptions; 
 direct stat/recovery support
 
 ### Supply
-reduces the customer's Fatigue; shown as `피로 회복 N` (User 2026-09-24, v2.9.0)
-
-Rules:
-- Supply reduces current Fatigue first, then this expedition's Fatigue gain; no Gate requires Supply
-- Supply is NOT a Hazard Counter
-- no thirst/hunger subsystem
-- no Food+Drink pairing requirement
-- leftover Supply is not persisted and gives no extra expedition bonus
-
-Exact Supply -> Fatigue order and formulas:
--> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
+reduces the customer's Fatigue; shown as `피로 회복 N` (→ §SUPPLY MODEL)
 
 ### DirectCounter
 single-hazard specialist
@@ -143,8 +119,7 @@ value=flexibility
 persistent condition management
 
 ### Insurance
-mitigates bad outcomes through escape/retreat/death-conversion effects
-does not directly guarantee expedition success
+mitigates bad outcomes through escape/retreat/death-conversion effects; does not directly guarantee expedition success
 
 ### RiskReward
 strong benefit + explicit readable cost/penalty
@@ -157,90 +132,64 @@ explicit special operation that does not fit Stat/Counter/Insurance/Economy
 
 ## SUPPLY MODEL
 
-All active Food/Drink Items provide a visible Supply value unless explicitly defined otherwise.
-Its only meaning is Fatigue recovery: the Player sees the value as `피로 회복 N`, never `보급 +N` (User 2026-09-24, v2.9.0)
-Catalog tables below keep the internal notation `Supply N`.
+All active Food/Drink Items provide a visible Supply value > 0 (values: §ACTIVE CATALOG, internal notation `Supply N`).
+Its only meaning is Fatigue recovery: the Player sees `피로 회복 N`, never `보급 +N`.
 
-Fatigue-recovery contract (User 2026-09-24/25, v2.9.0): Food is the main recovery route; a Drink recovers 1~2; no Food
-recovers more than 6 except 영웅 결전 도시락 (Epic, 9), so the worst single outcome gain (+9) is never
-erased by one ordinary Item; a Hazard-Counter Food keeps at least 2 so 대식가's -1 stays a real cost.
-The redistributed values are the ACTIVE CATALOG rows (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 ·
-집중 사탕 2 · 불룡볶음면 2 · 길드 특제 도시락 6 · 영웅 결전 도시락 9; Drinks unchanged).
+Rules:
+- Supply reduces current Fatigue first, then this expedition's Fatigue gain; no Gate requires Supply
+- Supply is NOT a Hazard Counter
+- no thirst/hunger subsystem; no Food+Drink pairing requirement
+- leftover Supply is not persisted and gives no extra expedition bonus
+- exact Supply -> Fatigue order and formulas -> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
 
-Each Food/Drink Item defines:
-- supplyValue
-- native Stat/recovery effect if any
-- explicit Hazard Counter if any
-- explicit RiskReward if any
+Fatigue-recovery contract: Food is the main recovery route; a Drink recovers 1~2; no Food recovers more than 6 except
+영웅 결전 도시락 (Epic, 9), so the worst single outcome gain (+9) is never erased by one ordinary Item; a Hazard-Counter
+Food keeps at least 2 so 대식가's -1 stays a real cost.
 
-Supply values are listed in ACTIVE CATALOG.
-Supply > 0 is preserved for every active Food/Drink.
+Each Food/Drink Item defines: supplyValue, native Stat/recovery effect if any, explicit Hazard Counter if any, explicit RiskReward if any.
 
-No Item may:
-- create thirst
-- cleanse thirst
-- require Water after spicy Food
-- create hidden caffeine stacking
-- create hunger/thirst gauge
+No Item may create thirst, cleanse thirst, require Water after spicy Food, create hidden caffeine stacking, or create a
+hunger/thirst gauge.
 
 ## DIRECT CORE-STAT ITEM VALUE
 
 Rules:
 - NPC Level/Growth remains the long-term body of strength
-- but one appropriate Stat Item must still create a perceptible, decision-relevant change on a mid/late-Run NPC
-- do not add a new Day/Level percentage-scaling Item system merely to create late-game relevance
-- use the exact flat values in the active catalog below
+- one appropriate Stat Item still creates a perceptible, decision-relevant change on a mid/late-Run NPC
+- no Day/Level percentage-scaling Item system
+- use the exact flat values in the active catalog
 
-Fresh / Food-affinity / Potionbody modifiers use their existing owned composition rules from these base Item values.
+Fresh / Food-affinity / Potionbody modifiers use their owned composition rules from these base Item values.
 
 ## PRICE
 
-Canonical price modes:
-50% / 100% / 150%
+Canonical price modes: 50% / 100% / 150%. Full price/economy rules -> `ECONOMY_ORDER_v2.8.0.md`.
 
-Full price/economy rules:
--> `ECONOMY_ORDER_v2.8.0.md`
-
-Balance considers:
-- buy cost
-- sale price
-- margin
-- NPC wallet burden
-- role
-- typical day
-- rarity
-- Relic/build interaction
+Balance considers buy cost, sale price, margin, NPC wallet burden, role, typical day, rarity, Relic/build interaction.
 
 ### ITEM PRICE ALIGNMENT
 
-Item price should follow actual gameplay breadth/slot value, not Rarity label alone.
+Item price follows actual gameplay breadth/slot value, not Rarity label alone.
 
 Rules:
-- narrow Main Hazard specialists of one Rarity should remain in comparable practical SALE bands
-- Sell = Buy × 2 for every Item, so the Player can predict a price from its cost (User 2026-09-25, v2.9.1 balance)
-- Common prices hold (the early low margin is the D1~10 operating-cost pressure); an Uncommon / Rare whose effect rose at the
-  v2.9.1 balance costs +15% (+20% when the effect rose 30%+), an Epic whose effect rose +10%, Insurance holds
-  (User 2026-09-25, v2.9.1 balance)
+- narrow Main Hazard specialists of one Rarity stay in comparable practical SALE bands
+- Sell = Buy × 2 for every Item, so the Player can predict a price from its cost
 - Rarity may justify a modest premium but must not make a simple single-Hazard answer practically unsellable to the customers who need it
 - broad multi-role Food / strong Insurance / exceptional Utility may remain materially more expensive
 - Epic late-Run Items may command a slot-efficiency premium, but 50% pricing must remain a plausible NPC-investment route rather than becoming fake affordability
-- exact Buy/Sell values are the active catalog values below
+- exact Buy/Sell values are the active catalog values
 
 ## CATEGORY AFFINITY
 
 Category-based Trait/Relic modifiers only boost the intended category core effect.
-
-Example:
-Food affinity may boost:
-- Supply, only where a Trait entry states it (e.g. 소식가 / 대식가 in NPC_TRAIT)
-- food-native recovery/Stat
+Example: Food affinity may boost Supply only where a Trait entry states it (e.g. 소식가 / 대식가 in NPC_TRAIT), and food-native recovery/Stat.
 
 ### FOOD / DRINK CORE EFFECT
 
 Fresh-category Relics and category-affinity effects use `native core effect`, not a blanket whole-item multiplier.
 
 Food/Drink nativeCore for Fresh Store Supports and category affinity is positive native Stat only.
-Supply stays its own channel; Fresh Store Supports leave Supply unchanged.
+Supply stays its own channel; Fresh Store Supports leave Supply unchanged. Wallet-gain effect stays its own loot/economy channel.
 
 genericWholeItemMultiplier=NO
 
@@ -260,7 +209,7 @@ Rules:
 - each percentage reads the Item table's base positive native Core Stat
 - Food Trait affinity and Fresh Relic native-Stat bonuses add from the same base; do not multiply Trait and Relic layers sequentially
 - do not round each modifier layer separately; use the existing final Core-Stat arithmetic/rounding convention after the combined modifier is resolved
-- only modifiers that explicitly target positive native Core Stat enter this pool
+- only modifiers that explicitly target positive native Core Stat enter this pool (Food affinity on eligible positive native Food Stat; Fresh Store Supports on eligible positive native Food/Drink Stat)
 - Hazard Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalties remain separate channels
 
 Examples of modifier totals:
@@ -276,44 +225,25 @@ Examples of modifier totals:
 ```
 
 Drink has no Food-affinity Trait modifier, so the two Fresh native-Stat bonuses alone give base ×1.75.
-원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Fatigue recovery via Supply and flat Hazard defense). (User 2026-09-24, v2.9.0)
+원정 도시락 코너 adds no native-Stat bonus (its effects are Fatigue recovery via Supply and flat Hazard defense).
 
 GLUTTONY's Final reduction, when applicable, occurs after the final Item-side positive Core-Stat contribution has been produced, as owned by `BOSS_v2.8.0.md`.
 
-The Food/Drink positive Core-Stat values use the existing base-additive composition rules.
-
-No new exception is created:
-- Food affinity may modify eligible positive native Food Stat
-- Fresh Store Supports may modify eligible positive native Food/Drink Stat
-- Supply remains its own channel
-- Wallet-gain effect remains its own loot/economy channel
-
 ### CATEGORY AFFINITY BOUNDARY
 
-Food/Drink category-affinity or Fresh Relic effects do not automatically multiply:
-- Hazard Counter
-- Insurance
-- RiskReward penalty
-- unrelated special effects
+Food/Drink category-affinity or Fresh Relic effects do not automatically multiply Hazard Counter, Insurance,
+RiskReward penalty or unrelated special effects.
 
-Exact Trait modifiers -> `NPC_TRAIT_v2.8.0.md`.
-Exact Fresh Relic effects -> `RELIC_v2.8.0.md`.
+Exact Trait modifiers -> `NPC_TRAIT_v2.8.0.md`. Exact Fresh Relic effects -> `RELIC_v2.8.0.md`.
 
 ## HAZARD COVERAGE CONTRACT
 
-Canonical rule:
 Every Hazard must have:
 - 1 Main specialist route
 - >=2 meaningful Alternative routes
 
-Alternative may be:
-- secondary Counter Item
-- Hybrid Item
-- relevant natural Stat
-- Stat-support Item
-- another explicit preparation route
-
-Insurance does not automatically count as a Hazard-specific Alternative.
+Alternative may be: secondary Counter Item, Hybrid Item, relevant natural Stat, Stat-support Item, another explicit
+preparation route. Insurance does not automatically count as a Hazard-specific Alternative.
 
 Direct = certainty/reliability
 Hybrid = flexibility
@@ -321,20 +251,19 @@ Hybrid = flexibility
 Rules:
 - one Hazard must not require one specific mandatory SKU
 - one Item must not solve an entire Family
-- Hybrid must not strictly dominate a Direct of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main)
+- Hybrid must not strictly dominate a Direct of the same or a higher Rarity (an Epic hybrid may exceed a Common Main)
 - T3 must retain viable <=2 required-prep-slot routes
 - proper Main/Direct prep should feel reliable, especially T1/T2
 
-Canonical Dungeon behavior:
--> `DUNGEON_HAZARD_v2.8.0.md`
+Canonical Dungeon behavior -> `DUNGEON_HAZARD_v2.8.0.md`.
 
 ## HAZARD COUNTER BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
 
-Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동 and 화염 -> 정신 per User 2026-09-24 revisions 3 / 5) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동, 화염 -> 정신) -> `DUNGEON_HAZARD_v2.8.0.md`
 
-### COUNTER LADDER (User 2026-09-27, v2.9.7)
+### COUNTER LADDER
 
 Every Gate family carries the same four rungs; 화염 골렘 광산 has one Hazard, so it has no early hybrid. A Tier 1 Gate
 shows only its family's first Hazard (독 / 부식 / 냉기 / 공포 / 화염), so only those need an early Counter; the second
@@ -357,8 +286,7 @@ Values by the pressed Stat (강인함 ÷3 for 독 · 부식 · 냉기; 기동 ÷
 | 후반 하이브리드 | 16 | 14 | 12 |
 | 중반 대응 | 23 | 21 | 18 |
 
-Prices by rung (User 2026-09-27 price review): 초반 대응 30~45G, 초반 하이브리드 75G, 중반 대응 95G, 후반 하이브리드
-135G (마그마 냉각장비 145G, its 투력 +10 included). A 후반 하이브리드 at 135G sells at 270G, inside the D25 median wallet.
+Prices by rung: 초반 대응 30~45G, 초반 하이브리드 75G, 중반 대응 95G, 후반 하이브리드 135G (마그마 냉각장비 145G, its 투력 +10 included).
 
 A Food / Drink Counter keeps its Supply and reads one step lower where it also raises the pressed Stat: 불룡볶음면 냉기 21
 with 강인함 +6 (its own Stat is worth 냉기 +2).
@@ -371,18 +299,13 @@ with 강인함 +6 (its own Stat is worth 냉기 +2).
 | 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
 | 화염 골렘 광산 (화염) | 얼음컵 화염 8 | — | 쿨링 이온음료 화염 18 | 마그마 냉각장비 화염 12 · 투력 10 |
 
-중화 탄산수, 방독 작업장갑 and 축성 손전등 are new with this ladder. 방한 두건 replaces 핫팩 (Uncommon 냉기 +24); its id is `hood`
-(v2.9.8 ID cleanup).
-Superseded: the v2.9.1 by-Rarity Counter values (Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22) and
-the v2.9.6 불룡볶음면 냉기 +12 line.
+The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT).
 
-The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)).
+Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog
+exception says otherwise; their cost is narrow coverage.
 
-Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog exception says otherwise.
-Their cost is narrow coverage.
-
-Epic Family Hybrid Field Gear intentionally trades per-Hazard peak strength for one-slot breadth.
-It must not become stronger on each covered Hazard than the dedicated Main specialist for that Hazard.
+Epic Family Hybrid Field Gear trades per-Hazard peak strength for one-slot breadth; it must not become stronger on each
+covered Hazard than the dedicated Main specialist for that Hazard.
 
 Matrix rule:
 - Main specialist remains the most reliable single-Hazard answer
@@ -400,11 +323,8 @@ hiddenOrderDependentEffect=NO
 hiddenPenaltyCancel=NO
 
 Normal effects may stack according to stated values.
-
-Explicit Special/Legendary interaction is allowed when it is the Item's stated identity.
-
-`황금 1+1 쿠폰`:
-explicit next-consumable interaction allowed
+Explicit Special/Legendary interaction is allowed when it is the Item's stated identity:
+`황금 1+1 쿠폰` — explicit next-consumable interaction allowed.
 
 Rule:
 explicitInteraction=visibleToPlayer
@@ -418,27 +338,15 @@ Penalty is allowed only when:
 - the cost is visible before purchase/use
 - it does not require a new hidden subsystem
 
-Allowed examples:
-- explicit Mobility decrease
-- explicit Injury Risk increase
-- explicit Stat decrease
+Allowed examples: explicit Mobility decrease, explicit Injury Risk increase, explicit Stat decrease.
 
-Forbidden as Item micro-systems:
-- thirst
-- caffeine stacking
-- hidden fatigue chain
-- hidden pair-dependent penalty
+Forbidden as Item micro-systems: thirst, caffeine stacking, hidden fatigue chain, hidden pair-dependent penalty.
 
 ## POTION LINE — EXACT BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
 
-| Item | Rarity | Buy / Sell | Effect |
-|---|---:|---:|---|
-| 하급 포션 | Common | 70 / 140 | 투력 +8 |
-| 중급 포션 | Uncommon | 125 / 250 | 투력 +14 |
-| 상급 포션 | Rare | 175 / 350 | 투력 +20 |
-| 최상급 포션 | Epic | 210 / 420 | 투력 +28 |
+하급 / 중급 / 상급 / 최상급 포션 (Common / Uncommon / Rare / Epic; 투력 +8 / +14 / +20 / +28; Buy / Sell -> §ACTIVE CATALOG).
 
 All four:
 ```text
@@ -448,35 +356,16 @@ Hazard Counter = 0
 Insurance = 0
 ```
 
-Shelf-life contract:
-- all Potion tiers use the same ordinary Potion-family shelf-life behavior unless an explicit row later says otherwise
-- `중급 포션` does **not** inherit the retired `마석 보조배터리` non-expiring/tool-like shelf behavior merely because it reuses that catalog slot
+- all Potion tiers use the ordinary Potion-family shelf-life behavior (rows -> §SHELF LIFE — EXACT); `중급 포션` is not non-expiring or tool-like
 - `최상급 포션` is the top-end pure raw-Power slot-efficiency option, not a Hazard specialist
-
-The former player-facing `마석 보조배터리` catalog entry is retired and its active catalog slot becomes `중급 포션`.
-Do not keep a second active Spirit-battery SKU under Special.
 
 Potion Trait interaction -> `NPC_TRAIT_v2.8.0.md`.
 
 ## BANDAGE RETIREMENT / SPIRIT STAT ROUTE
 
-`붕대` is removed from the active catalog.
-It is not converted into another Item on legacy saves.
-
-The active catalog slot is replaced by:
-
-```text
-진정 허브티
-Category = Drink
-Rarity = Common
-Buy / Sell = 40 / 80
-Shelf Life = 2 (§SHELF LIFE — EXACT, v2.9.0)
-정신 +15
-Supply 2
-```
-
-It is a generic Spirit Stat route, not a Fear/Dark/Whiteout Counter.
-Use a new active Item ID; do not reuse retired `bandage` as the new Drink identity.
+`진정 허브티` (Drink, Common; row -> §ACTIVE CATALOG) is a generic Spirit Stat route, not a Fear/Dark/Whiteout Counter.
+It has its own active Item ID; retired `bandage` is not reused as its identity, and a legacy `붕대` is not converted into
+another Item.
 
 Start-stock ownership -> `CORE_RUN_v2.8.0.md`.
 
@@ -485,10 +374,9 @@ Start-stock ownership -> `CORE_RUN_v2.8.0.md`.
 ### ROLE SPLIT — EXACT
 
 Meal / 도시락 line:
-- Supply (large Fatigue recovery) is the primary identity (User 2026-09-24, v2.9.0)
+- Supply (large Fatigue recovery) is the primary identity; Supply is the direct Fatigue recovery and no separate Fatigue effect exists
 - 강인함 is secondary
 - higher tiers represent a more complete expedition meal
-- Supply is the direct Fatigue recovery; no separate Fatigue effect is created
 - U/R may invest in the NPC's future Wallet
 
 Water line:
@@ -501,56 +389,32 @@ Thus:
 - meal asks: do I spend a slot on large Fatigue recovery plus broad survival?
 - water asks: do I spend a slot on concentrated 강인함 with small Fatigue recovery?
 
-### ACTIVE REPLACEMENT IDS
-
-Keep active catalog count = 40 and reuse existing IDs:
-
-    rice        -> 삼각김밥
-    water       -> 생수
-    bar         -> 간단 도시락
-    premium     -> 길드 특제 도시락
-    battlelunch -> 영웅 결전 도시락
-    herobar     -> 왕도 천연암반수
-
-No new catalog slot is added.
-
-For current internal saves, these IDs resolve to the current identities.
-Only the current identities are active for these IDs.
-
 ### REPLACEMENT ID BOUNDARY
 
-For `lunchbox` / `kingwater` (ids `bar` / `herobar` until v2.9.8):
-- no Fatigue-reduction role beyond the Item's own Supply value is active (User 2026-09-24, v2.9.0)
+For `lunchbox` / `kingwater`:
+- no Fatigue-reduction role beyond the Item's own Supply value is active
 - no hidden Hotbar role is active
 - no Hotbar name is a Player-facing alias
 
 ### CURRENT ITEM ART IDENTITY — EXACT
-
-Save-safe internal ID reuse must preserve the current Item's visible identity.
 
 Required icons:
 - `lunchbox` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
 - `kingwater` / 왕도 천연암반수 -> bottled/mineral-water icon in the existing Item-art language
 
 Do not use a Hotbar / skewered-stick silhouette for either ID.
-
-This is a visual identity correction only.
-Category, Rarity, price, effect, shelf life and save ID do not change.
+This is visual identity only; Category, Rarity, price, effect, shelf life and save ID are as the catalog states.
 
 ### REPLACEMENT ITEM FLAVOR — EXACT
 
-ID reuse uses the current replacement Flavor below.
-
-\`bar\` / 간단 도시락:
+\`lunchbox\` / 간단 도시락:
     반찬은 단출하지만 빈칸은 없다.
 
-\`herobar\` / 왕도 천연암반수:
+\`kingwater\` / 왕도 천연암반수:
     왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.
 
-The existing compatible Flavor for 삼각김밥 / 생수 / 길드 특제 도시락 / 영웅 결전 도시락
-may remain unless a later approved Copy pass changes it.
-
-Do not preserve Hotbar/skewer wording on the replacement IDs.
+삼각김밥 / 생수 / 길드 특제 도시락 / 영웅 결전 도시락 keep their existing compatible Flavor.
+No Hotbar/skewer wording on these IDs.
 
 ### NPC WALLET GAIN — EXACT SCOPE
 
@@ -565,14 +429,9 @@ Composition:
 - no new cap
 - two eligible modifiers may add together if the Bag actually contains them
 
-Applies only to the ordinary resolved NPC expedition-Wallet reward.
-
-Does not multiply:
-- Deep Expedition bonusWallet
-- Store Support direct Wallet grants
-- Event purchase budget
-- Store Gold / commission / subsidy
-- any other non-expedition-loot Wallet source
+Applies only to the ordinary resolved NPC expedition-Wallet reward. Does not multiply Deep Expedition bonusWallet,
+Store Support direct Wallet grants, Event purchase budget, Store Gold / commission / subsidy, or any other
+non-expedition-loot Wallet source.
 
 Player-facing term:
     원정 소지금 획득 +20%
@@ -582,90 +441,35 @@ Do not say current 소지금 +20% / +40%.
 
 ## EPIC LATE-RUN VALUE LAYER — EXACT
 
-There are 10 Epic preparation Items.
-They are not D20-hard-unlocked.
-Their late-Run identity comes from the Day-band Rarity weights owned by `ECONOMY_ORDER_v2.8.0.md`.
-
-Design split:
+There are 10 Epic preparation Items. They are not D20-hard-unlocked; their late-Run identity comes from the Day-band
+Rarity weights owned by `ECONOMY_ORDER_v2.8.0.md`.
 
 ```text
 5 Epic Field Gear
 = Family-shaped one-slot Hybrid breadth
 
 5 Epic Food/Drink/Potion
-= top-end direct Stat / Fatigue-recovery (Supply) slot efficiency (User 2026-09-24, v2.9.0)
+= top-end direct Stat / Fatigue-recovery (Supply) slot efficiency
 ```
 
-Purpose:
+Constraints:
 - D20+ preparation must not feel like the Player is still choosing only the same early/mid SKU power ceiling
-- late-Run progression should improve **what one slot can do**, not add a third normal Bag slot
-- Epic must remain optional high-efficiency preparation; T3 must still have viable routes without drawing one exact Epic SKU
+- late-Run progression improves **what one slot can do**, not a third normal Bag slot
+- Epic remains optional high-efficiency preparation; T3 must still have viable routes without drawing one exact Epic SKU
 
 ### EPIC FIELD GEAR — FAMILY HYBRIDS
 
-```text
-거미줄 방호세트
-Field Gear / Epic
-165 / 330
-독 +22
-속박 +18
+거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 / 마그마 냉각장비 (rows -> §ACTIVE CATALOG, rungs -> §COUNTER LADDER).
 
-연금 방수슈트
-Field Gear / Epic
-165 / 330
-부식 +22
-진창 +18
-
-성화 랜턴
-Field Gear / Epic
-165 / 330
-공포 +18
-어둠 +18
-
-백설 방한고글
-Field Gear / Epic
-165 / 330
-냉기 +22
-화이트아웃 +18
-
-마그마 냉각장비
-Field Gear / Epic
-175 / 350
-화염 +18
-투력 +10
-```
-
-FIRE uses one Hazard plus its existing higher-combat identity instead of inventing a second FIRE Hazard.
+FIRE uses one Hazard plus its higher-combat identity instead of a second FIRE Hazard.
 The `투력 +10` on `마그마 냉각장비` is an explicit catalog exception; it is not permission for generic specialist Field Gear to gain Core Stats.
-투력 +6 → +10 (User 2026-09-26, v2.9.6): the only Epic hybrid for a one-Hazard Gate read weaker at its own Gate than the Rare 쿨링 이온음료; the combat half is what the Fire Gate's higher Power asks for, and 화염 +18 stays below the Main's +26.
 
 ### EPIC FOOD / DRINK / POTION — TOP-END PREPARATION
 
-Epic Drink Stat +4 (User 2026-09-26, v2.9.6): 초고속 에너지드링크 기동 22 → 26, 대현자 허브엘릭서 정신 24 → 28, 왕도 천연암반수 강인함 20 → 24 - one Rarity step over the Uncommon Drink was +5 for 2.2× the price.
+초고속 에너지드링크 / 대현자 허브엘릭서 / 최상급 포션 (rows -> §ACTIVE CATALOG) and the Epic meal / water rows
+(`battlelunch` 영웅 결전 도시락, `kingwater` 왕도 천연암반수) in the ACTIVE CATALOG meal / water table.
 
-```text
-초고속 에너지드링크
-Drink / Epic
-175 / 350
-기동 +26
-Supply 2
-
-대현자 허브엘릭서
-Drink / Epic
-175 / 350
-정신 +28
-Supply 2
-
-최상급 포션
-Potion / Epic
-210 / 420
-투력 +28
-```
-
-The Epic meal / water rows (`battlelunch` 영웅 결전 도시락, `kingwater` 왕도 천연암반수) are in the ACTIVE CATALOG meal / water table.
-
-Fresh/Food-affinity/Potionbody rules apply normally by category.
-No separate Epic-only amplifier is created.
+Fresh/Food-affinity/Potionbody rules apply normally by category. No separate Epic-only amplifier exists.
 
 ## INSURANCE HIERARCHY
 
@@ -679,9 +483,9 @@ Rarity = Uncommon
 Buy / Sell = 80 / 160
 ```
 
-It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance (User 2026-09-24, v2.9.0).
+It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance.
 
-It lowers the resolved expedition Outcome one step, after the higher-priority emergency conversions (User 2026-09-25, v2.9.0):
+It lowers the resolved expedition Outcome one step, after the higher-priority emergency conversions:
 
 ```text
 중상 Outcome
@@ -694,9 +498,8 @@ It lowers the resolved expedition Outcome one step, after the higher-priority em
 -> no effect
 ```
 
-This is Item Aftercare, not natural recovery.
-It does not change the existing natural Severe-Injury recovery rule owned by `NPC_TRAIT_v2.8.0.md`.
-It has no hidden injury-risk percentage.
+This is Item Aftercare, not natural recovery. It does not change the natural Severe-Injury recovery rule owned by
+`NPC_TRAIT_v2.8.0.md`. It has no hidden injury-risk percentage.
 
 ### 귀환석
 rarity=Rare
@@ -712,43 +515,32 @@ Rules:
 - retreat XP > 0
 - retreat loot ≈ almost none
 - does not own Death -> Severe conversion
-
-Rare Insurance identity (User 2026-09-28, v2.9.10 - the rule is what a player reads the line as):
 - an expedition that ends in neither 성공 nor 대성공 (부상 / 중상 / 사망) rolls once more for a retreat
 - that roll's chance = the adventurer's own retreat chance (`DUNGEON_HAZARD_v2.8.0.md` escapeChance: 기동, Traits,
   Gate scale) + escapeBonus, clamped 0.15~0.94 as the retreat chance is
 - a hit makes the Outcome 퇴각
-- the stone no longer adds to the combat-failure retreat roll itself (that roll reads the Traits only)
+- the stone adds nothing to the combat-failure retreat roll itself (that roll reads the Traits only)
 
-escapeBonus=+20%p (User 2026-09-28, v2.9.10; was +50%p on the combat retreat roll plus a 50% crisis roll on 중상/사망)
+escapeBonus=+20%p
 player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
 
-Measured (v2.9.10, `reader` 3000-run counterfactual: every third expedition re-rolled with one Item added, 퇴각 / 부상 /
-중상 / 사망 %): own Bag 28.8 / 24.6 / 13.3 / 10.8 · old stone 61.1 / 12.6 / 1.8 / 5.5 · new stone 66.1 / 7.4 / 4.1 / 3.2 ·
-구급키트 29.7 / 39.9 / 0 / 11.2 (Death untouched) · 세계수 old 29.9 / 25.7 / 25.2 / 0, new 55.0 / 25.8 / 0 / 0.
-Harm total (부상+중상+사망) own 48.7 -> old stone 19.9 -> new stone 14.7.
+Outcome-share evidence: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` (v2.9.10, Insurance).
 
 ### 세계수 생환부적
 rarity=Epic
 category=Insurance
 role=Insurance
 subrole=DeathInsurance
-Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
+Buy / Sell = 400 / 800
 
 core:
-Death or Severe Injury -> 퇴각 (무사 퇴각; no injury) (User 2026-09-28, v2.9.10; was Death -> Severe Injury)
+Death or Severe Injury -> 퇴각 (무사 퇴각; no injury)
 uses=1
 
 Rules:
-- clearly above Return Stone in survival hierarchy
-- not Food/Drink
-- Fresh-category effect does not apply
-
-Epic death-insurance identity:
-- one use
-- remaining Death or Severe Injury -> 퇴각: the heavy results are stopped outright, where 귀환석 only makes them less
-  likely (the Epic price bought a likely Severe Injury before, and Death-only still measured below 귀환석)
+- clearly above Return Stone in survival hierarchy: the remaining Death or Severe Injury is stopped outright, where 귀환석 only makes it less likely
 - a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
+- not Food/Drink; Fresh-category effect does not apply
 - player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
 
 ### Insurance resolution order
@@ -757,9 +549,9 @@ Where multiple effects are present:
 
 ```text
 1. resolve ordinary expedition outcome
-2. 귀환석 second retreat roll on 부상 / 중상 / 사망 (User 2026-09-28, v2.9.10)
-3. if Death or Severe Injury remains, 세계수 생환부적 -> 퇴각 (User 2026-09-28, v2.9.10)
-4. 구급키트 Aftercare lowers the final non-death Outcome one step (중상 -> 부상; a 부상 keeps its Outcome but leaves no injury); XP/Loot/Fatigue follow the lowered Outcome (User 2026-09-25, v2.9.0)
+2. 귀환석 second retreat roll on 부상 / 중상 / 사망
+3. if Death or Severe Injury remains, 세계수 생환부적 -> 퇴각
+4. 구급키트 Aftercare lowers the final non-death Outcome one step (중상 -> 부상; a 부상 keeps its Outcome but leaves no injury); XP/Loot/Fatigue follow the lowered Outcome
 ```
 
 Do not rerun the whole outcome-resolution chain after Aftercare.
@@ -768,7 +560,7 @@ Final-specific usability -> `FINAL_EXPEDITION_v2.8.0.md`.
 
 ## ACTIVE CATALOG
 
-Unlisted implementation-only flavor fields inherit the previous Item where identity remains unchanged, except where this spec states otherwise; shelf lives are the §SHELF LIFE — EXACT table (v2.9.0).
+Unlisted implementation-only flavor fields inherit the previous Item where identity remains unchanged, except where this spec states otherwise; shelf lives are the §SHELF LIFE — EXACT table.
 
 ### MEAL / WATER LINE — DIRECTOR DOCUMENT BASELINE — EXACT
 
@@ -781,17 +573,11 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 420 | 강인함 +18, Supply 9 | 2d |
 | kingwater | 왕도 천연암반수 | Drink E | 185 / 370 | 강인함 +24, Supply 2 | 3d |
 
-The meal Stat ladder is intentionally readable:
+The meal 강인함 ladder rises readably by tier; the water route is more Stat-concentrated than the meal at the same broad
+stage, with much lower Supply (Fatigue recovery).
 
-    6 -> 10 -> 14 -> 18
-
-The water route is intentionally more Stat-concentrated than the meal at the same broad stage,
-while keeping much lower Supply (Fatigue recovery). (User 2026-09-24, v2.9.0)
-
-The table above is the approved DIRECTOR DOCUMENT BASELINE.
-
-After Source adoption, price/efficiency may be measured.
-Any later change requires a new approved ITEM amendment; QA does not auto-tune it.
+This table is the approved DIRECTOR DOCUMENT BASELINE. Price/efficiency may be measured; any change requires a new
+approved ITEM amendment; QA does not auto-tune it.
 
 ### OTHER ACTIVE ITEMS
 
@@ -837,28 +623,22 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
 
-Active catalog count is exactly 43 (40 until the v2.9.7 Counter ladder, User 2026-09-27).
-Retired active identities:
-```text
-붕대
-마석 보조배터리
-```
+Active catalog count is exactly 43. No active Item creates a separate poison Condition/cure subsystem.
 
-No active Item creates a separate poison Condition/cure subsystem.
+Retired — do not bring back:
+- 붕대 (`bandage`): not active, not converted on legacy saves
+- 마석 보조배터리: not active; no Spirit-battery SKU under Special; its non-expiring/tool-like shelf behavior does not carry to 중급 포션
+- 핫팩: 방한 두건 holds its catalog slot
+- pre-rename ids `heat` `lava` `bar` `premium` `herobar` `tree` `potion`: not read back (save schema v9)
 
-### ITEM IDS (User 2026-09-27, v2.9.8)
+### ITEM IDS
 
-Each id reads as its current Item; ids that had been carried over from an earlier Item or name were renamed, and the
-save schema moved to v9 so no old id is read back: `heat` → `hood` (방한 두건), `lava` → `dragonramen` (불룡볶음면),
-`bar` → `lunchbox` (간단 도시락), `premium` → `guildlunch` (길드 특제 도시락; the D10 unlock key follows), `herobar` →
-`kingwater` (왕도 천연암반수), `tree` → `worldcharm` (세계수 생환부적; the D14 unlock key follows), `potion` →
-`lowpotion` (하급 포션). Art keys (`icon`) name a drawing and may be shared; they are not ids.
+Each id reads as its current Item (the ID columns above and §SHELF LIFE — EXACT); the D10 / D14 unlock keys are
+`guildlunch` / `worldcharm`. Art keys (`icon`) name a drawing and may be shared; they are not ids.
 
 ### ACTIVE RARITY DISTRIBUTION — EXACT
 
-The approved `lunchbox` (was `bar`) repurpose is Uncommon.
-
-The active 43-Item distribution is therefore:
+`lunchbox` is Uncommon. The active 43-Item distribution is:
 
     Common 11
     Uncommon 8
@@ -866,19 +646,13 @@ The active 43-Item distribution is therefore:
     Epic 11
     Legendary 1
 
-(User 2026-09-27, v2.9.7: the Counter ladder moves 방진마스크 to Common and 경량 로프 / 랜턴 건전지 / 부식 방지 코팅제 /
-원정용 장화 / 설원 고글 / 용사의 곡주 / 불룡볶음면 to Rare and adds 중화 탄산수 (Common), 방독 작업장갑 and 축성 손전등
-(Uncommon).)
-
 Do not move another Item solely to alter these approved Common/Uncommon counts.
 
 ## SHELF LIFE — EXACT
 
-(User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
-stocking day. A unit that is still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) is discarded that
-Night and counts as that Day's waste (`오늘 폐기` on its CLOSING receipt) (User 2026-09-28, v2.9.11; it used to go the
-next morning and reach the next Day's receipt, so the receipt named stock the player had last seen a Day earlier). The
-rule behind the table:
+No active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the stocking day. A unit that
+is still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) is discarded that Night and counts as that
+Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 
 - Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 is 2
 - Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 중화 탄산수 3, 용사의 곡주 4, 쿨링 이온음료 5)
@@ -937,113 +711,43 @@ rule behind the table:
 
 ### Common / Rarity 0
 
-1. 삼각김밥
-identity=cheap basic expedition supply
-
-3. 컵라면
-roles=[Supply,DirectCounter]
-counter=cold
-identity=Cold 초반 대응 with Supply
-
-5. 초코바
-roles=[Supply,Stat]
-identity=cheap quick Stat support
-hiddenPostFatigue=NO
-
-6. 캔커피
-roles=[Supply,Stat]
-identity=Mobility support
-caffeineStack=NO
-
-9. 얼음컵
-roles=[Supply,DirectCounter]
-counter=fire
-identity=Fire 초반 대응 with Supply
-
-41. 중화 탄산수
-roles=[Supply,DirectCounter]
-counter=corrosion
-identity=Corrosion 초반 대응 with Supply
-
-12. 집중 사탕
-roles=[Supply,DirectCounter]
-counter=fear
-identity=Fear 초반 대응 with Supply
-
-17. 방진마스크
-roles=[DirectCounter]
-counter=poison
-identity=Poison 초반 대응
+1. 삼각김밥 — identity=cheap basic expedition supply
+3. 컵라면 — roles=[Supply,DirectCounter] counter=cold identity=Cold 초반 대응 with Supply
+5. 초코바 — roles=[Supply,Stat] identity=cheap quick Stat support hiddenPostFatigue=NO
+6. 캔커피 — roles=[Supply,Stat] identity=Mobility support caffeineStack=NO
+9. 얼음컵 — roles=[Supply,DirectCounter] counter=fire identity=Fire 초반 대응 with Supply
+41. 중화 탄산수 — roles=[Supply,DirectCounter] counter=corrosion identity=Corrosion 초반 대응 with Supply
+12. 집중 사탕 — roles=[Supply,DirectCounter] counter=fear identity=Fear 초반 대응 with Supply
+17. 방진마스크 — roles=[DirectCounter] counter=poison identity=Poison 초반 대응
 
 ### Uncommon / Rarity 1
 
-14. 에너지드링크
-roles=[Supply,Stat]
-identity=strong Mobility support
-caffeineStack=NO
-
-16. 구급키트
-roles=[Insurance]
-subrole=InjuryInsurance
-identity=strong injury protection
-
-18. 방한 두건
-roles=[HybridCounter]
-counters=[cold,whiteout]
-identity=Snow 초반 하이브리드
-
-42. 방독 작업장갑
-roles=[HybridCounter]
-counters=[poison,bind]
-identity=Spider 초반 하이브리드
-
-43. 축성 손전등
-roles=[HybridCounter]
-counters=[fear,dark]
-identity=Crypt 초반 하이브리드
-
-19. 방수망토
-roles=[HybridCounter]
-counters=[corrosion,mire]
-identity=Slime 초반 하이브리드
+14. 에너지드링크 — roles=[Supply,Stat] identity=strong Mobility support caffeineStack=NO
+16. 구급키트 — roles=[Insurance] subrole=InjuryInsurance identity=strong injury protection
+18. 방한 두건 — roles=[HybridCounter] counters=[cold,whiteout] identity=Snow 초반 하이브리드
+42. 방독 작업장갑 — roles=[HybridCounter] counters=[poison,bind] identity=Spider 초반 하이브리드
+43. 축성 손전등 — roles=[HybridCounter] counters=[fear,dark] identity=Crypt 초반 하이브리드
+19. 방수망토 — roles=[HybridCounter] counters=[corrosion,mire] identity=Slime 초반 하이브리드
 rule=stays under the Slime 후반 하이브리드 and each 중반 대응 on its own Hazard (§COUNTER LADDER)
 
 ### Rare / Rarity 2
 
 24. 농축 해독제 · 20. 부식 방지 코팅제 · 11. 경량 로프 · 21. 원정용 장화 · 10. 랜턴 건전지 · 22. 설원 고글
-roles=[DirectCounter]
-identity=중반 대응 of its Hazard (§COUNTER LADDER)
+roles=[DirectCounter] identity=중반 대응 of its Hazard (§COUNTER LADDER)
 
-13. 불룡볶음면
-roles=[Supply,Stat,DirectCounter]
-counter=cold
+13. 불룡볶음면 — roles=[Supply,Stat,DirectCounter] counter=cold
 identity=Cold 중반 대응; one step under the 강인함 rung because its 강인함 +6 also defends Cold
 
-15. 용사의 곡주
-roles=[Supply,DirectCounter,RiskReward]
-counter=fear
-identity=Fear 중반 대응 with an explicit Mobility trade-off
+15. 용사의 곡주 — roles=[Supply,DirectCounter,RiskReward] counter=fear identity=Fear 중반 대응 with an explicit Mobility trade-off
+28. 쿨링 이온음료 — roles=[Supply,DirectCounter] counter=fire identity=Fire 중반 대응 with Supply
+25. 귀환석 — roles=[Insurance] subrole=EscapeInsurance
 
-28. 쿨링 이온음료
-roles=[Supply,DirectCounter]
-counter=fire
-identity=Fire 중반 대응 with Supply
-
-25. 귀환석
-roles=[Insurance]
-subrole=EscapeInsurance
-
-27. 길드 특제 도시락
-roles=[Supply,Economy]
-identity=Premium Food / expedition economy
+27. 길드 특제 도시락 — roles=[Supply,Economy] identity=Premium Food / expedition economy
 rule=must not dominate survival+supply+loot+general stats simultaneously
 
 ### Epic / Rarity 3
 
-29. 세계수 생환부적
-roles=[Insurance]
-subrole=DeathInsurance
-core=Death -> Severe Injury once
+29. 세계수 생환부적 — roles=[Insurance] subrole=DeathInsurance core=Death / Severe Injury -> 퇴각 once (§INSURANCE HIERARCHY)
 
 ### Legendary / Rarity 4
 
@@ -1067,23 +771,12 @@ Rules:
 - Fresh must have broad Food/Drink access across price/rarity and must not erase specialist FieldGear advantage
 - Rotation/low-cost play must remain viable through cheap useful SKUs and bulk ordering
 
-Build-filtered Relics must not depend on one single eligible SKU.
-
-Canonical Relic interaction:
--> `RELIC_v2.8.0.md`
+Build-filtered Relics must not depend on one single eligible SKU. Canonical Relic interaction -> `RELIC_v2.8.0.md`.
 
 ## RARITY / UPGRADE
 
-Higher rarity may be:
-- stronger
-- broader
-- more reliable
-- stronger Risk/Reward
-- premium economy-oriented
-
-Not every upgrade must be a sidegrade.
-
-But:
+Higher rarity may be stronger, broader, more reliable, stronger Risk/Reward, or premium economy-oriented.
+Not every upgrade must be a sidegrade. But:
 rarity != universal dominance
 
 A specialized lower-rarity Direct Counter may remain best for its specific Hazard.
@@ -1096,43 +789,20 @@ jobIdEffectModifier=NO
 jobIdPurchaseBias=NO
 jobIdCounterModifier=NO
 
-Job affinity should emerge from:
-BaseStats + Growth + visible Traits
-
-Canonical:
--> `NPC_TRAIT_v2.8.0.md`
+Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v2.8.0.md`.
 
 ## INFORMATION
 
-Player can see:
-- Category
-- relevant Functional Role
-- Supply contribution as `피로 회복 N` (User 2026-09-24, v2.9.0)
-- actual Stat effect
-- Counter effect
-- Condition effect
-- Insurance behavior
-- explicit penalty/tradeoff
+Player can see Category, relevant Functional Role, and exact Item-side values for Core Stat, Hazard Counter, Supply
+(`피로 회복 N`), Condition effect, Insurance behavior and explicit penalty/tradeoff.
 
-Player can see exact Item-side values for:
-- Core Stat
-- Hazard Counter
-- Supply (`피로 회복 N`)
-- explicit penalty
-- Insurance behavior
-
-Do not expose:
-- exact expedition success %
-- hidden internal formula
-
-Do not expose hidden Gate requirement/formula or exact success probability through the Item panel.
+Do not expose exact expedition success %, hidden internal formula, or a hidden Gate requirement/formula through the Item panel.
 
 ### PRESENTATION ORDER — EXACT
 
-(User 2026-09-28, v2.9.10 quick patch; since User 2026-09-24, v2.9.0): an Item's effect lines are listed in **one order for
-every Item**, the same on the ORDER offer row, the SALE shelf row, the counter tray's `특수 효과` line and the codex, never
-reordered or emphasized by the Gate or the customer. The order reads the shelf's own kind order (대응 장비 → 음식·음료 → 포션)
-as effects:
+An Item's effect lines are listed in **one order for every Item**, the same on the ORDER offer row, the SALE shelf row,
+the counter tray's `특수 효과` line and the codex, never reordered or emphasized by the Gate or the customer. The order
+reads the shelf's own kind order (대응 장비 → 음식·음료 → 포션) as effects:
 
 ```text
 1. Hazard Counter  (catalog order)
@@ -1143,8 +813,7 @@ Insurance / Special: its one function line
 ```
 
 e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +18 · 피로 회복 1 · 기동 -4`, `피로 회복 2 · 기동 +17`,
-`화염 대응 +12 · 투력 +10`. (v2.9.0 led a Food with 피로 회복 and ended a Drink with it, so the same two effects read in
-opposite orders on neighbouring rows - User 2026-09-28.)
+`화염 대응 +12 · 투력 +10`.
 
 The order is identity information (what kind of Item this is), not advice.
 
@@ -1155,22 +824,8 @@ Material hidden behavior=NO
 
 ## SALE / INVENTORY
 
-Sale shows all currently sellable inventory.
-
-Same Item may be stacked in UI.
-
-Player chooses:
-item type
-
-Consumed physical unit:
-nearest expiry first
-
-SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its shelf life, `폐기까지 N일 / 내일까지 / 오늘까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
-
-Consumer slot limit is separate from inventory visibility.
-
-Canonical:
--> `SALE_v2.8.0.md`
+Inventory view, stacking, nearest-expiry consumption and the consumer-slot limit -> `SALE_v2.8.0.md` §INVENTORY VIEW;
+shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER).
 
 ## BALANCE QA
 
@@ -1188,13 +843,7 @@ Per Item track:
 - dead-pick rate
 - universal-best rate
 
-By role:
-- Supply usage
-- Direct usage
-- Hybrid usage
-- Stat usage
-- Insurance usage
-- RiskReward usage
+By role: Supply / Direct / Hybrid / Stat / Insurance / RiskReward usage.
 
 By build filter:
 - eligible SKU count by Day/rarity
@@ -1233,7 +882,7 @@ PASS:
 #### ITEM-Q71 — ACTIVE CATALOG EXACT 43
 
 PASS:
-- exactly 43 active Items (v2.9.7 Counter ladder: + 중화 탄산수, 방독 작업장갑, 축성 손전등; 핫팩 is now 방한 두건)
+- exactly 43 active Items
 - 붕대 inactive/retired
 - 마석 보조배터리 inactive/retired
 - 진정 허브티 active
@@ -1273,7 +922,7 @@ Audit catalog.
 
 EXPECT:
 Items have understandable gameplay role:
-Stat/Supply (Fatigue recovery, shown `피로 회복 N`)/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility (User 2026-09-24, v2.9.0)
+Stat/Supply (Fatigue recovery, shown `피로 회복 N`)/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility
 
 PASS:
 No item exists only as unexplained modifier bundle.
@@ -1319,13 +968,12 @@ PASS: no stale Stat bundle survives.
 
 #### ITEM-Q81 — REBALANCED PRICE TABLE
 
-PASS (User 2026-09-25, v2.9.1 balance):
+PASS:
 - every Item's Sell = Buy × 2 exactly
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
 간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 175 · 대현자 허브엘릭서 175
-(v2.9.7 Counter ladder and price review, User 2026-09-27 - ITEM §COUNTER LADDER:)
 방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
 농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
 거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
@@ -1375,7 +1023,7 @@ PASS:
 - no unrelated Item Rarity is moved from the approved active distribution
 - Hotbar names are not active player Items
 - meal shelf life 2, water shelf life 5
-- Supply is the direct Fatigue reduction (`피로 회복 N`, current Fatigue first, remainder buffers this expedition's gain); no replacement carries any other Fatigue effect (User 2026-09-24, v2.9.0)
+- Supply is the direct Fatigue reduction (`피로 회복 N`, current Fatigue first, remainder buffers this expedition's gain); no replacement carries any other Fatigue effect
 
 #### DI-Q-v28-2 — WALLET GAIN SCOPE
 
@@ -1389,7 +1037,7 @@ PASS:
 
 #### DI-Q-v28-3 — MEAL VS WATER IDENTITY
 
-PASS direction (User 2026-09-24, v2.9.0):
+PASS direction:
 - meal is materially higher Fatigue recovery (Supply): Food = large recovery + lower Core Stat
 - water is materially more Stat-concentrated for its stage: Drink = small recovery + sharper Stat/Counter
 - Water does not become a meal substitute through Fatigue recovery
@@ -1423,7 +1071,7 @@ EXPECT:
 Useful premium expedition/economy option.
 
 PASS:
-Does not dominate survival+Fatigue recovery+loot+stats simultaneously (User 2026-09-24, v2.9.0).
+Does not dominate survival+Fatigue recovery+loot+stats simultaneously.
 
 ### POTION / STAT ITEMS
 
@@ -1437,7 +1085,7 @@ EXPECT:
 
 All:
 - Potion category
-- Supply 0 (no `피로 회복` row; User 2026-09-24, v2.9.0)
+- Supply 0 (no `피로 회복` row)
 - Counter 0
 - Insurance 0
 - same ordinary Potion-family shelf-life behavior unless explicitly overridden
@@ -1452,7 +1100,7 @@ PASS:
 - Drink Common
 - 40/80
 - 정신 +15
-- Supply 2, displayed `피로 회복 2` (User 2026-09-24, v2.9.0)
+- Supply 2, displayed `피로 회복 2`
 - no explicit fear/dark/whiteout Counter
 
 PASS: it is a natural-Stat alternative, not a hidden multi-Hazard specialist.
@@ -1468,7 +1116,7 @@ PASS direction:
 - no Day/Level percentage-scaling Item system exists
 - Fresh/Potionbody can increase the owned Item contribution, but Counter/Supply/Insurance channels remain outside that native-Stat amplification
 
-Exact base Item values must match the current active catalog; Supply is displayed `피로 회복 N` (User 2026-09-24, v2.9.0).
+Exact base Item values must match the current active catalog; Supply is displayed `피로 회복 N`.
 
 ### HAZARD COUNTER ITEMS
 
@@ -1508,7 +1156,7 @@ For every canonical Hazard:
 - Main remains the most reliable dedicated response
 
 PASS:
-No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1).
+No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate a specialist of the same or a higher Rarity.
 
 #### ITEM-Q07 — HOT PACK VS LAVA NOODLE
 
@@ -1646,12 +1294,10 @@ PASS:
 - Trait and Relic native-Stat percentages are summed from Item base
 - no sequential Trait×Relic multiplicative layer
 - Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalty do not enter the native-Stat modifier pool
-- the Supply value (`피로 회복 N`) is unchanged by Fresh / Relic native-Stat percentages (User 2026-09-24, v2.9.0)
+- the Supply value (`피로 회복 N`) is unchanged by Fresh / Relic native-Stat percentages
 - GLUTTONY, when present in Final, applies after the Item-side positive Core-Stat contribution is resolved
 
 #### ITEM-Q17 — SUPPLY = FATIGUE RECOVERY / NO THIRST
-
-(User 2026-09-24, v2.9.0)
 
 SETUP:
 Audit all Food/Drink effects and expedition resolution.
@@ -1677,7 +1323,7 @@ SETUP:
 Use in losing expeditions.
 
 EXPECT:
-Uses approved escapeBonus +20%p (User 2026-09-28, v2.9.10): a 부상 / 중상 / 사망 Outcome rolls once more for 퇴각 at
+Uses approved escapeBonus +20%p: a 부상 / 중상 / 사망 Outcome rolls once more for 퇴각 at
 the adventurer's own escapeChance + 20%p (clamp 0.15~0.94); the combat-failure retreat roll itself carries no stone
 bonus; combat success is not increased.
 
@@ -1702,7 +1348,7 @@ SETUP:
 Trigger lethal outcome with Epic World Tree insurance active.
 
 EXPECT:
-Death or Severe Injury converts to 퇴각 with no injury (User 2026-09-28, v2.9.10; was Death -> Severe Injury); a 부상 stays 부상.
+Death or Severe Injury converts to 퇴각 with no injury; a 부상 stays 부상.
 
 PASS:
 Clearly stronger survival tier than Return Stone and not treated as Food.
@@ -1711,7 +1357,7 @@ Clearly stronger survival tier than Return Stone and not treated as Food.
 
 Controlled final ordinary outcomes:
 
-부상 + 구급키트 (User 2026-09-25, v2.9.0):
+부상 + 구급키트:
 - Outcome stays 부상
 - XP/Loot/Fatigue follow 부상
 - persistent injury=0/recovery=0
@@ -1785,7 +1431,7 @@ PASS:
 
 ## RELATED
 
-Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.8.0.md`
 Job / Trait multipliers -> `NPC_TRAIT_v2.8.0.md`
 Relic / build modifiers -> `RELIC_v2.8.0.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
