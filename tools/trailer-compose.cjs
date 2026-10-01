@@ -14,72 +14,71 @@ const rect=(take,label,key,i=0)=>T[take].rects.find(r=>r.label===label).r[key][i
 const ctr=r=>[r[0]+r[2]/2,r[1]+r[3]/2];
 const b=60/90.03,B=4*b;                                 // beat, bar
 const SONG_IN=6.06,DUR=30,FPS=30;
-// ---- source time maps (v3: User + GPT review 2026-10-01 — no edit flashes / shakes / whips; one tap per choice; fixed framings) ----
-const tapItem=T.sale.marks.tapItem,tapPrice=T.sale.marks.tapPrice,great=cue('night','great');
-const clash1=cue('final','clash',0),counter1=cue('final','counter',0),clash3=cue('final','clash',2),counter3=cue('final','counter',2),collapse=cue('final','collapse'),seal=cue('final','sealwin');
+// ---- source time maps (v4, §11: User + GPT review 2026-10-01 — the sale ends on the hand-over, the night holds 1.2 s after the
+// underline, 오름찬's later visit replaces the ready-party card, the clash keeps its own speed, the result is two cuts, logo at 27 s) ----
+const tapItem=T.sale.marks.tapItem,tapPrice=T.sale.marks.tapPrice,great=cue('night','great'),collapse=cue('final','collapse');
 const itemR=rect('sale','rScroll','item'),priceR=rect('sale','rPrice','price'),destR=rect('sale','r0','dest'),portraitR=rect('sale','r0','portrait');
-const heroR=rect('night','r1','hero'),standR=rect('night','r1','stand'),cardR=rect('final','r2','cCard',0);
+const heroR=rect('night','r1','hero'),standR=rect('night','r1','stand'),heroText=T.night.marks.heroText;
 const g=k=>+(k*b).toFixed(4);                          // beat k on the output grid
 const S=[];const shot=(t0,t1,take,src,cam,extra={})=>S.push({t0,t1,take,src,cam,...extra});
 const lin=(o,s0,speed=1)=>t=>s0+(t-o)*speed;            // output t → source t
 const hold=s0=>()=>s0;
+const LOGO=27;
 // S0 the empty shop; footsteps come closer (audio), 단 30일.
 shot(0,g(4),'store',hold(0),[[0,470,860,1.0],[g(4),470,820,1.10]]);
 // S1 the customer arrives on the last step: face and destination in one framing
 shot(g(4),g(6),'sale',lin(g(4),0.2),[[g(4),607,1030,1.06]],{spots:[[g(4)+0.15,g(6),[portraitR,destR],0.5]]});
-// S2 the Boss (camera punch only)
+// S2 the Boss
 shot(g(6),g(8),'final',lin(g(6),0.1),[[g(6),560,700,1.22],[g(6)+0.35,560,700,1.12],[g(8),560,690,1.10]]);
-// S3 the product, large: tap once
-const oItem=g(9),oPrice=g(13);
-// (the tray opens over the row on the tap, so the card holds the row as it was tapped while the mark plays)
-const itemOff=oItem+0.4,itemCard={taps:[[oItem,...ctr(itemR),'card']],callouts:[[g(8),itemOff,[81,itemR[1],720,itemR[3]],1064,860,0,true]]};
+// S5 is placed first because the sale is timed back from it: the 대성공 stamp lands on the song's hit at 11.06 s (measured onset)
+const oGreat=11.06,N0=oGreat-(great-0.5);                // the night card from the frame after 다음 (source 0.5)
+// S3 the product, large: tap once (the tray opens over the row on the tap, so the card holds the row as tapped while the mark plays)
+const oItem=g(10),itemOff=oItem+0.4,itemCard={taps:[[oItem,...ctr(itemR),'card']],callouts:[[g(8),itemOff,[81,itemR[1],720,itemR[3]],1064,860,0,true]]};
 shot(g(8),oItem,'sale',lin(oItem,tapItem),[[g(8),607,1080,1.0]],itemCard);
 shot(oItem,itemOff,'sale',hold(tapItem-1/30),[[oItem,607,1080,1.0]],itemCard);
-// S4 name + the three prices in one card: tap once (the tray closes on the tap, so the card holds it while the mark plays),
-// then the real sale from the tap on, full screen and at its own speed
-const handOff=oPrice+0.26,trayCard={taps:[[oPrice,...ctr(priceR),'card']],pulse:[g(11),oPrice,priceR],callouts:[[itemOff,handOff,[40,1372,1135,532],1076,900,0,true]]};
+// S4 name + the three live prices in one card, clear of the frame edge: tap once (held while the mark plays), then the real sale
+// full screen from the frame the tray has closed (the tray is not shown twice): the hand-over, the customer's answer, 0.5 s, night
+const SOLD=tapPrice+4/30,handOff=N0-((8.8-SOLD)+0.5),oPrice=handOff-0.26;
+const trayCard={taps:[[oPrice,...ctr(priceR),'card']],pulse:[oPrice-1.1,oPrice,priceR],callouts:[[itemOff,handOff,[40,1372,1135,532],1010,900,0,true]]};
 shot(itemOff,oPrice,'sale',lin(oPrice,tapPrice),[[itemOff,607,1080,1.0]],trayCard);
 shot(oPrice,handOff,'sale',hold(tapPrice-1/30),[[oPrice,607,1080,1.0]],trayCard);
-shot(handOff,g(16),'sale',lin(handOff,tapPrice+4/30),[[handOff,607,1080,1.0]]);   // from the frame the tray has closed: the tray is not shown twice
-// S5 night: the same customer; the stamp lands on the beat; the frame then holds
-const oGreat=11.07;                                   // on the song's hit (measured onset), not the bare grid
-shot(g(16),g(24),'night',lin(oGreat,great),[[g(16),607,1000,1.06]],
- {dark:[g(16),oGreat-great+0.55,0.18],underline:[g(19)+0.2,0.45,heroR],spots:[[g(19),g(24),[standR,heroR],0.6]]});
-// S6 thirty days later: 오름찬, grown, then the ready party (supplies already in)
-const ready=6.6,cardC=ctr(cardR);
-shot(g(24),g(26),'final',hold(ready),[[g(24),cardC[0],cardC[1]+40,2.3],[g(26),cardC[0],cardC[1]+40,2.24]]);
-shot(g(26),g(28),'final',hold(ready),[[g(26),607,1040,1.04]]);                 // hard cut to the ready party
-// S7 the clash, one still framing: first attack → counter, the last attack → counter, the boss's bar running out (2.35× — nothing
-// moves but the bar), the collapse at its own speed. The second exchange and the supply icons are cut, with their sounds.
-const A0=g(28),A1=A0+(8.26-ready),B1=A1+(10.67-9.32),oCol=23.38,drain=(collapse-10.67)/(oCol-B1);
-shot(A0,A1,'final',lin(A0,ready),[[A0,607,1040,1.04]]);
-shot(A1,B1,'final',lin(A1,9.32),[[A1,607,1040,1.04]]);
-shot(B1,oCol,'final',lin(B1,10.67,drain),[[B1,607,1040,1.04]]);
-// S8 the collapse, the receipt and its seal (the seal lands on the beat), then a cut in on 마왕이 쓰러졌다. held 2 s
-const endShow=cue('final','ui',0),oEnd=oCol+(endShow-collapse),big=oCol+(endShow-collapse)+0.62;  // the collapse on the song's hit at 23.38 s, the seal lands, then 1.5 s of the line
-shot(oCol,oEnd,'final',lin(oCol,collapse),[[oCol,607,1040,1.04]]);
-shot(oEnd,big,'final',lin(oEnd,endShow),[[oEnd,631,600,1.18]]);
-shot(big,g(40),'final',lin(oEnd,endShow),[[big,496,684,1.6]]);   // header, line and reason whole; the seal and the right column fall outside
+shot(handOff,N0,'sale',lin(handOff,SOLD),[[handOff,607,1080,1.0]]);
+// S5 night: face, 대성공 and the cause line in one still frame; after the caption the line is underlined to its own length, then 1.2 s
+const ulT=oGreat+1.34,NE=ulT+0.45+1.2;
+shot(N0,NE,'night',lin(oGreat,great),[[N0,607,1000,1.06]],{dark:[N0,N0+0.2,0.18],underline:[ulT,0.45,heroText],spots:[[ulT-0.1,NE,[standR,heroR],0.6]]});
+// S6 the same customer's later visit (D28, Lv.19, the line the game gave it), lifted with its portrait card only
+const C0=16.88,rvR=[30,0,486,816];
+shot(NE,C0,'revisit',lin(NE,0.15),[[NE,607,1080,1.0]],{callouts:[[NE,C0,rvR,900,860,0,true]]});
+// S7 the clash in one still framing: the battle screen comes in, 0.4 s, the first exchange, then the last exchange through the boss's
+// bar running out to the collapse, all at the game's own speed. The supply icons and the second exchange are cut, with their sounds.
+const RES=24.2,CUT2=25.0,oCol=RES-(13.8-collapse),E3=oCol-(collapse-9.32),E1=E3-(8.26-6.62);
+shot(C0,E1,'final',lin(C0,2.75),[[C0,607,1040,1.04]]);
+shot(E1,E3,'final',lin(E1,6.62),[[E1,607,1040,1.04]]);
+shot(E3,RES,'final',lin(E3,9.32),[[E3,607,1040,1.04]]);
+// S8 the result in two cuts: the receipt as it lands with its seal, then 마왕이 쓰러졌다. / 우리 점포에서 떠난 원정대가 해냈다. held
+shot(RES,CUT2,'final',lin(RES,13.8),[[RES,631,600,1.18]]);
+shot(CUT2,LOGO,'final',lin(RES,13.8),[[CUT2,496,684,1.6]]);
 // S9 the logo, still
-shot(g(40),DUR,'logo',hold(0),[[g(40),0,0,1]]);
+shot(LOGO,DUR,'logo',hold(0),[[LOGO,0,0,1]]);
 // ---- captions: one at a time, placed off the key UI ----------------------------------------------------------------
 const CAP=[
  {t0:0.32,t1:g(4)-0.12,font:'MUL',size:200,y:900,lines:[[['단',0],['30일.',1]]]},
  {t0:g(4)+0.05,t1:g(6)-0.02,font:'WSB',size:96,y:1560,lines:[[['편의점에서',0],['시작되는',0]]]},
  {t0:g(6)+0.04,t1:g(8)-0.1,font:'MUL',size:210,y:1500,lines:[[['마왕',1],['토벌.',1]]],slam:true},
  {t0:g(8)+0.08,t1:oPrice-0.12,font:'WSB',size:84,y:1430,lines:[[['당신이',0],['건넨',0]],[['물건',1],['하나가',1]]]},
- {t0:oGreat+0.05,t1:g(19)-0.1,font:'WSB',size:86,y:250,lines:[[['그들의',0],['생사를',1],['가른다.',0]]]},
- {t0:g(24)+0.05,t1:g(26)-0.06,font:'WSB',size:84,y:1735,lines:[[['키워낸',0],['단골들과',1],['함께',0]]]},
- {t0:A1+0.04,t1:oCol-0.3,font:'MUL',size:104,y:1250,lines:[[['마왕을',1],['쓰러뜨려라.',0]]],slam:true}];
-// the game's own cues on the events the edit kept (rendered from dist/ui/audio.js, see audioTrack below)
-const CUES=[['button',oItem+(cue('sale','button')-tapItem)],[T.sale.marks.priceMode,handOff+(cue('sale',T.sale.marks.priceMode)-(tapPrice+4/30))],['great',oGreat],
- ['clash',A0+(clash1-ready)],['counter',A0+(counter1-ready)],['clash',A1+(clash3-9.32)],['counter',A1+(counter3-9.32)],['collapse',oCol],
- ...T.final.cues.filter(c=>c[0]==='ui'||c[0]==='sealwin').map(c=>[c[0],oEnd+(c[1]-endShow)])];
+ {t0:oGreat+0.05,t1:ulT-0.12,font:'WSB',size:86,y:250,lines:[[['그들의',0],['생사를',1],['가른다.',0]]]},
+ {t0:NE+0.05,t1:C0-0.08,font:'WSB',size:84,y:1760,lines:[[['키워낸',0],['단골들과',1],['함께',0]]]},
+ {t0:E1+0.5,t1:oCol-0.3,font:'MUL',size:104,y:1805,lines:[[['마왕을',1],['쓰러뜨려라.',0]]],slam:true}];   // under the party: off the charge path
+// the game's own cues, each mapped through the shot that shows its source moment (a cue in a cut span is dropped with it);
+// the item tap's cue falls in the held frame, so it is placed from the tap
+const mapCue=(take,st)=>{for(const s of S){if(s.take!==take)continue;const a=s.src(s.t0),z=s.src(s.t1);if(z>a&&st>=a&&st<z)return s.t0+(st-a)*(s.t1-s.t0)/(z-a);}return null;};
+const CUES=[['button',oItem+(cue('sale','button')-tapItem)],
+ ...['sale','night','final'].flatMap(k=>T[k].cues.filter(c=>c[0]!=='button').map(c=>[c[0],mapCue(k,c[1])]).filter(c=>c[1]!=null))];
 const STEPS=[[g(1),0.35],[g(2),0.55],[g(3),0.75],[g(4),0.95]];   // footsteps (not a game cue): closer each beat, the last on the cut
 const CONFIG={DUR,FPS,shots:S,caps:CAP,takes:Object.fromEntries(Object.entries(T).map(([k,t])=>[k,{dir:'file://'+t.dir,fps:t.fps,n:t.frames.length,w:t.size[0],h:t.size[1]}])),
  store:'file://'+path.join(ROOT,'dist/ui/assets/presentation/morning/store-bg-phone.png'),logo:'file://'+path.join(ROOT,'dist/ui/assets/presentation/start/title-logo.png'),
  mul:'file://'+path.join(ROOT,'vendor/mulmaru/Mulmaru.woff2'),wsb:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-Black.ttf'),
- wsm:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-SemiBold.ttf'),logoT:g(40)};
+ wsm:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-SemiBold.ttf')};
 const PAGE=`<!doctype html><meta charset=utf-8><style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style><canvas id=c width=1080 height=1920></canvas><script>
 const C=__CONFIG__;const cv=document.getElementById('c'),x=cv.getContext('2d');const W=1080,H=1920;
 const cache=new Map();function img(src){if(cache.has(src))return cache.get(src);const p=new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});cache.set(src,p);
@@ -162,7 +161,8 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
   const res=await page.evaluate(async({CUES,STEPS,DUR})=>{const off=window.__off;const S=window.Sound;
    S.sync(false,'title',{bgm:1,sfx:1});
    const t0=Date.now();while(!window.__env&&Date.now()-t0<15000)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1500));
-   const e=window.__env.gain;e.setValueAtTime(0.38,0);e.setValueAtTime(0.38,2.5);e.linearRampToValueAtTime(1,3.0);e.setValueAtTime(1,DUR-1.6);e.linearRampToValueAtTime(0.0001,DUR);
+   const e=window.__env.gain;e.setValueAtTime(0.0001,0);e.linearRampToValueAtTime(0.38,0.7);   // the song fades in under the first steps
+   e.setValueAtTime(0.38,2.5);e.linearRampToValueAtTime(1,3.0);e.setValueAtTime(1,DUR-1.6);e.linearRampToValueAtTime(0.0001,DUR);
    // footsteps: filtered noise scuff + low body thump, from a fixed sequence (no Math.random), louder each step
    const nb=off.createBuffer(1,Math.round(off.sampleRate*0.2),off.sampleRate),d=nb.getChannelData(0);let q=12345;for(let i=0;i<d.length;i++){q=(q*1103515245+12345)&0x7fffffff;d[i]=q/0x3fffffff-1;}
    for(const [t,v] of STEPS)for(const [dt,k] of [[0,1],[0.055,0.45]]){const at=t-0.012+dt;
@@ -195,10 +195,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
  // is the game's; the cues fire at their kept times (CUES). Added for the edit only: the footsteps before the first customer
  // (no game cue exists for them), the music held low under them, and the closing fade.
  const wav=path.join(dir,'mix.wav');await renderAudio(wav);
- const mp4=path.join(dir,'trailer-v3-30s-1080x1920.mp4');
+ const mp4=path.join(dir,'trailer-v4-30s-1080x1920.mp4');
  execFileSync(FF,['-hide_banner','-loglevel','error','-y','-framerate',String(FPS),'-i',path.join(out,'%05d.jpg'),'-i',wav,
   '-af',`volume=${AUDIO_GAIN}dB,alimiter=limit=0.89:level=false`,'-map','0:v','-map','1:a','-t',String(DUR),'-r',String(FPS),'-c:v','libx264','-profile:v','high','-preset','slow','-crf','17','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',mp4]);
- execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v3-540.mp4')]);
+ execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v4-540.mp4')]);
  fs.writeFileSync(path.join(dir,'edl.json'),JSON.stringify({beat:b,bar:B,songIn:SONG_IN,shots:S.map(s=>({t0:+s.t0.toFixed(3),t1:+s.t1.toFixed(3),take:s.take,src:s.srcFn})),cues:CUES,steps:STEPS},null,1));
  console.log('done',mp4);
 })().catch(e=>{console.error(e);process.exit(1);});

@@ -5,7 +5,10 @@
 // Capture is deterministic: Playwright's fake clock is paused and stepped 1/30 s per frame, the web-animation timeline is held at
 // rate 0 and every animation is advanced by the same step, so motion is sampled at exactly 30 fps whatever the screenshot cost.
 // Hidden for capture only: the build marker, the toast and the menu button (chrome, not play).
-//   node tools/trailer-shoot.cjs <snap.json> <itemName> <npcId> <outDir>
+// One staged value (User 2026-10-01, trailer v4 §11): in the SALE take only, the customer's money is raised to SALE_MONEY so
+// all three price keys are live; the key pressed stays the recorded run's (PRICE_MODE). Every other value is the record's.
+// REVISIT (optional, snap.revisit): the same customer's later arrival in the same run, as recorded (its own arrival line).
+//   SALE_MONEY=300 PRICE_MODE=half node tools/trailer-shoot.cjs <snap.json> <itemName> <npcId> <outDir>
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const ROOT=path.resolve(__dirname,'..'),PORT=Number(process.env.QA_PORT||5217),EXEC=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',DPR=3;
 const [snapPath,itemName,npcId,outArg]=process.argv.slice(2);const outDir=path.resolve(outArg);const snaps=JSON.parse(fs.readFileSync(snapPath,'utf8'));
@@ -18,7 +21,10 @@ async function load(ctx,snap,opts={}){const page=await ctx.newPage();page.on('pa
  await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
  await page.evaluate(()=>{window.__cues=[];const p=Sound.play.bind(Sound);Sound.play=(k,...a)=>{window.__cues.push([k,performance.now()]);return p(k,...a);};});
  const run=JSON.parse(JSON.stringify(snap.run));run.rngState=snap.rng.state;if(opts.cursor!=null)run.nightCursor=opts.cursor;
+ if(opts.money!=null){const n=run.npcs.find(x=>x.id===opts.npc);if(n)n.money=opts.money;}
  const account=JSON.parse(JSON.stringify(snap.account));(account.tutorial??={}).skipped=true;
+ // hold: the page clock stops before the import, so a line's on-screen timer (SAY_MS) starts with the take, not during the load wait
+ if(opts.hold){const now=await page.evaluate(()=>Date.now());await page.clock.pauseAt(now+50);}
  await page.setInputFiles('#save-file',{name:'snap.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({version:9,account,run}))});
  await page.waitForTimeout(700);
  if(opts.dismiss)for(let i=0;i<3;i++){const b=await page.$('#modal-root [data-action="boss-seen"], #modal-root [data-action="approve"], #modal-root [data-action="dismiss"]');if(!b)break;await page.evaluate(el=>el.click(),b);await page.waitForTimeout(400);}
@@ -43,18 +49,24 @@ const clickJS=(page,sel)=>page.evaluate(s=>{const e=document.querySelector(s);if
  const takes={};const meta={head:require('child_process').execFileSync('git',['rev-parse','--short','HEAD'],{cwd:ROOT}).toString().trim(),seed:snaps.sale.run.seed,npcId,itemName,dpr:DPR};
  try{
   // SALE: the customer arrives, the item is tapped, the price is chosen (the same key the recorded run used)
-  let ctx=await mk();let p=await load(ctx,snaps.sale,{dismiss:true});
+  const SALE_MONEY=process.env.SALE_MONEY?Number(process.env.SALE_MONEY):null,PRICE_MODE=process.env.PRICE_MODE||'';
+  let ctx=await mk();let p=await load(ctx,snaps.sale,{dismiss:true,npc:npcId,money:SALE_MONEY});
   const stockId=await p.evaluate(n=>(Guild24.game.run.inventory.find(x=>DATA.itemBy[x.item]?.name===n)||{}).id,itemName);
   const S={say:'.p-sale .say, .say',portrait:'.who .portrait, .who img, .who',dossier:'.dossier',dest:'.dest-plate',readout:'.readout',item:`[data-action="select"][data-id="${stockId}"]`,
    tray:'.counter-tray',tills:'.tills',delta:'.tray-delta',slots:'.slots',stats:'.detail-stats'};
   takes.sale=await shoot(p,'sale',11,[{t:0.2,name:'r0',rects:S},{t:3.8,name:'scroll',fn:pg=>pg.evaluate(s=>{const e=document.querySelector(s);if(e)e.scrollIntoView({block:'center',behavior:'instant'});},S.item)},{t:3.85,name:'rScroll',rects:S},{t:5.0,name:'tapItem',fn:pg=>clickJS(pg,S.item)},{t:5.9,name:'r1',rects:S},
-   {t:8.5,name:'tapPrice',fn:async pg=>{const m=await pg.$$eval('.tills button[data-action="sell"]',b=>(b.find(x=>x.dataset.mode==='full'&&!x.disabled)||b.find(x=>!x.disabled))?.dataset.mode);await clickJS(pg,`.tills button[data-action="sell"][data-mode="${m}"]`);return {priceMode:m};}},
-   {t:8.45,name:'rPrice',rects:{price:'.tills button[data-action="sell"]:not([disabled])'}},{t:10.0,name:'r2',rects:S}]);
+   {t:8.5,name:'tapPrice',fn:async pg=>{const m=await pg.$$eval('.tills button[data-action="sell"]',(b,want)=>(b.find(x=>x.dataset.mode===want&&!x.disabled)||b.find(x=>x.dataset.mode==='full'&&!x.disabled)||b.find(x=>!x.disabled))?.dataset.mode,PRICE_MODE);await clickJS(pg,`.tills button[data-action="sell"][data-mode="${m}"]`);return {priceMode:m};}},
+   {t:8.45,name:'rPrice',rects:{price:`.tills button[data-action="sell"]${PRICE_MODE?`[data-mode="${PRICE_MODE}"]`:':not([disabled])'}`,keys:'.tills button[data-action="sell"]',live:'.tills button[data-action="sell"]:not([disabled])'}},{t:10.0,name:'r2',rects:S}]);
   await ctx.close();
   // NIGHT: the same customer's card
   const nightIdx=snaps.night.run.results.findIndex(r=>r.npcId===npcId);ctx=await mk();p=await load(ctx,snaps.night,{cursor:Math.max(0,nightIdx-1)});
   const N={beat:'.beat',verdict:'.beat .verdict',hero:'.beat .cause li.hero',what:'.beat .what',stand:'.beat .stand-in',name:'.beat .who h3',say:'.beat .say',changes:'.beat-room, .beat .changed'};
-  takes.night=await shoot(p,'night',6.5,[{t:0.5,name:'next',fn:pg=>clickJS(pg,'[data-action="night-next"]')},{t:0.55,name:'r0',rects:N},{t:3.5,name:'r1',rects:N}]);await ctx.close();
+  takes.night=await shoot(p,'night',6.5,[{t:0.5,name:'next',fn:pg=>clickJS(pg,'[data-action="night-next"]')},{t:0.55,name:'r0',rects:N},
+   {t:3.5,name:'r1',rects:N,fn:pg=>pg.evaluate(dpr=>{const li=document.querySelector('.beat .cause li.hero');if(!li)return {};const rg=document.createRange();rg.selectNodeContents(li);
+    const r=rg.getBoundingClientRect();return {heroText:[r.left*dpr,r.top*dpr,r.width*dpr,r.height*dpr].map(v=>Math.round(v))};},DPR)}]);await ctx.close();
+  // REVISIT: the same customer, later in the same run, arriving with the line the game gave it
+  if(snaps.revisit){ctx=await mk();p=await load(ctx,snaps.revisit,{dismiss:true,hold:true});
+   takes.revisit=await shoot(p,'revisit',3.5,[{t:0.2,name:'r0',rects:{say:'.say',portrait:'.who .portrait, .who img, .who',who:'.who',dest:'.dest-plate'}}]);await ctx.close();}
   // FINAL: the boss screen, 마왕성으로 출발, the clash, the END receipt
   ctx=await mk();p=await load(ctx,snaps.finalBefore,{dismiss:true});
   const F={boss:'.boss-art, .p-final .boss, .final-boss',title:'.p-final h1, .p-final h2, .boss-name',threat:'.final-forecast, .threats',go:'[data-action="boss"]',
