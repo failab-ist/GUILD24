@@ -24,7 +24,7 @@ const S=[];const shot=(t0,t1,take,src,cam,extra={})=>S.push({t0,t1,take,src,cam,
 const lin=(o,s0,speed=1)=>t=>s0+(t-o)*speed;            // output t → source t
 const hold=s0=>()=>s0;
 // S0 the empty shop; footsteps come closer (audio), 단 30일.
-shot(0,g(4),'store',hold(0),[[0,470,860,1.0],[g(4),470,820,1.10]]);
+shot(0,g(4),'store',hold(0),[[0,470,860,1.0],[g(4),470,820,1.10]],{bob:[[0.867,16],[1.467,15],[2.067,9]]});   // walking: the view dips on each step
 // S1 the customer arrives on the last step: face and destination in one framing
 shot(g(4),g(6),'sale',lin(g(4),0.2),[[g(4),607,1030,1.06]],{spots:[[g(4)+0.15,g(6),[portraitR,destR],0.5]]});
 // S2 the Boss
@@ -40,10 +40,11 @@ const trayCard={taps:[[oPrice,...ctr(priceR),'card']],pulse:[itemOff+0.75,oPrice
 shot(itemOff,oPrice,'sale',lin(oPrice,tapPrice),[[itemOff,607,1080,1.0]],trayCard);
 shot(oPrice,handOff,'sale',hold(tapPrice-1/30),[[oPrice,607,1080,1.0]],trayCard);
 shot(handOff,N0,'sale',lin(handOff,SOLD),[[handOff,607,1080,1.0]]);
-// S5 night (v5): the stamp and the face first (the stamp falls on the song's hit near 10.04 s), then one 0.45 s push to the frame that
-// holds face, 대성공 and the cause line; once it stops, the line is underlined to its own length, 0.9 s to read, cut
-const oGreat=N0+(great-0.5),zIn=oGreat+0.7,zOut=zIn+0.45,ulT=zOut+0.1,NE=ulT+0.45+0.9;
-shot(N0,NE,'night',lin(oGreat,great),[[N0,607,1000,1.06],[zIn,607,1000,1.06],[zOut,548,950,1.2]],
+// S5 night (v6): the full frame, still (the v5 push was too small to read as one — User: drop it; the full frame also keeps the
+// left margin); the stamp and the face first (the stamp falls on the song's hit near 10.04 s), then the cause line is underlined
+// to its own length, 0.9 s to read, cut
+const oGreat=N0+(great-0.5),ulT=oGreat+1.25,NE=ulT+0.45+0.9;
+shot(N0,NE,'night',lin(oGreat,great),[[N0,607,1080,1.0]],
  {dark:[N0,N0+0.2,0.18],underline:[ulT,0.45,heroText],spots:[[ulT-0.1,NE,[standR,heroR],0.6]]});
 // S6 the same customer's later visit (D28, Lv.19, the line the game gave it), lifted with its portrait card only
 const C0=NE+2.2,rvR=[30,0,486,816];
@@ -57,9 +58,9 @@ shot(E3,RES,'final',lin(E3,9.32),[[E3,607,1040,1.04]]);
 // S8 the result, one shot: the receipt lands with its seal, then one 0.6 s push centred on 마왕이 쓰러졌다. / 우리 점포에서 떠난
 // 원정대가 해냈다. (the header and the figures stay at the edge); on the stop a pale gold wash behind the two lines and a short burst of
 // gold pixels along the frame edge, with the game's settlement cue; 1 s to read, then the title
-const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+1.0,DUR=+(LOGO+3).toFixed(4);
-const lines2=[120,448,640,198];
-shot(RES,LOGO,'final',lin(RES,13.8),[[RES,631,600,1.18],[rIn,631,600,1.18],[rOut,500,640,1.6]],{glow:[rOut,lines2],burst:[rOut,0.7]});
+const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+0.9,DUR=+(LOGO+3).toFixed(4);
+const line1=[128,452,430,80];
+shot(RES,LOGO,'final',lin(RES,13.8),[[RES,631,600,1.18],[rIn,631,600,1.18],[rOut,445,600,1.75]],{glow:[rOut,line1],burst:[rOut,0.7,line1]});
 // S9 the logo, still
 shot(LOGO,DUR,'logo',hold(0),[[LOGO,0,0,1]]);
 // ---- captions: one at a time, placed off the key UI ----------------------------------------------------------------
@@ -74,9 +75,11 @@ const CAP=[
 // the game's own cues, each mapped through the shot that shows its source moment (a cue in a cut span is dropped with it);
 // the item tap's cue falls in the held frame, so it is placed from the tap
 const mapCue=(take,st)=>{for(const s of S){if(s.take!==take)continue;const a=s.src(s.t0),z=s.src(s.t1);if(z>a&&st>=a&&st<z)return s.t0+(st-a)*(s.t1-s.t0)/(z-a);}return null;};
-const CUES=[['button',oItem+(cue('sale','button')-tapItem)],['gold',rOut],
+// the result's jingle is the game's run-start fanfare `begin` (G–D–G, triangle) — not `great`, which already carries the night stamp
+const CUES=[['button',oItem+(cue('sale','button')-tapItem)],['begin',rOut],
  ...['sale','night','final'].flatMap(k=>T[k].cues.filter(c=>c[0]!=='button').map(c=>[c[0],mapCue(k,c[1])]).filter(c=>c[1]!=null))];
-const STEPS=[[g(1),0.35],[g(2),0.55],[g(3),0.75],[g(4),0.95]];   // footsteps (not a game cue): closer each beat, the last on the cut
+const DUCKS=[[rOut,0.8,0.5]];   // the music steps back under the result's jingle (on top of the cue's own duck)
+const STEPS=[[0.867,0.5,'L'],[1.467,0.64,'R'],[2.067,0.8,'L'],[2.667,1,'R']];   // footsteps (not a game cue): 0.6 s apart, closer each step, the last on the cut
 const CONFIG={DUR,FPS,shots:S,caps:CAP,takes:Object.fromEntries(Object.entries(T).map(([k,t])=>[k,{dir:'file://'+t.dir,fps:t.fps,n:t.frames.length,w:t.size[0],h:t.size[1]}])),
  store:'file://'+path.join(ROOT,'dist/ui/assets/presentation/morning/store-bg-phone.png'),logo:'file://'+path.join(ROOT,'dist/ui/assets/presentation/start/title-logo.png'),
  mul:'file://'+path.join(ROOT,'vendor/mulmaru/Mulmaru.woff2'),wsb:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-Black.ttf'),
@@ -88,6 +91,8 @@ const cache=new Map();function img(src){if(cache.has(src))return cache.get(src);
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),outBack=t=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2);};
 function camAt(k,t){if(t<=k[0][0])return k[0].slice(1);for(let i=1;i<k.length;i++)if(t<=k[i][0]){const a=k[i-1],b=k[i],u=ease((t-a[0])/Math.max(1e-6,b[0]-a[0]));return [a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u,a[3]+(b[3]-a[3])*u];}return k[k.length-1].slice(1);}
 function rnd(n){const s=Math.sin(n*127.1)*43758.5453;return s-Math.floor(s);}
+// a footfall: the view drops fast (0.12 s) and comes back with a small damped overshoot; content moves up as the view drops
+function bobAt(bb,t){let v=0;for(const [ts,A] of bb||[]){const u=t-ts;if(u<0)continue;v+=u<0.12?-A*ease(u/0.12):-A*Math.exp(-3*(u-0.12))*Math.cos(Math.PI*(u-0.12)/0.4);}return v;}
 function shakeAt(sh,t){let dx=0,dy=0;for(const [t0,d,a] of sh||[]){if(t<t0||t>t0+d)continue;const u=1-(t-t0)/d,amp=a*u*u;const k=Math.floor(t*60);dx+=(rnd(k)-.5)*2*amp;dy+=(rnd(k+99)-.5)*2*amp;}return [dx,dy];}
 let FONTS=false;async function fonts(){if(FONTS)return;for(const [n,u,w] of [['MUL',C.mul,'400'],['WSB',C.wsb,'900'],['WSM',C.wsm,'600']]){const f=new FontFace(n,'url('+u+')',{weight:w});await f.load();document.fonts.add(f);}FONTS=true;}
 async function render(t){await fonts();x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.filter='none';x.fillStyle='#000';x.fillRect(0,0,W,H);
@@ -95,7 +100,7 @@ async function render(t){await fonts();x.setTransform(1,0,0,1,0,0);x.globalAlpha
  if(s.take==='logo'){await logo(t);}else{
   let im,sw,sh;if(s.take==='store'){im=await img(C.store);sw=im.width;sh=im.height;}else{const tk=C.takes[s.take];const st=new Function('t','return ('+s.srcFn+')(t)')(t);
    const n=clamp(Math.round(st*tk.fps),0,tk.n-1);im=await img(tk.dir+'/'+String(n).padStart(5,'0')+'.jpg');sw=tk.w;sh=tk.h;}
-  const [cx,cy,z]=camAt(s.cam,t);const [dx,dy]=shakeAt(s.shake,t);const over=(dx||dy)?1.035:1;
+  const [cx,cy,z]=camAt(s.cam,t);const [dx,dy0]=shakeAt(s.shake,t);const dy=dy0+bobAt(s.bob,t);const over=(s.shake||s.bob)?1.035:1;
   let cw=sw/(z*over),ch=cw*H/W;if(ch>sh){ch=sh;cw=ch*W/H;}const sx=clamp(cx-cw/2,0,sw-cw),sy=clamp(cy-ch/2,0,sh-ch);
   const nx=C.shots[C.shots.indexOf(s)+1];let wx=0,wb=0;if(s.whip&&t<s.t0+0.13){const u=1-(t-s.t0)/0.13;wx=170*u*u;wb=18*u;}if(nx&&nx.whip&&t>s.t1-0.1){const u=(t-(s.t1-0.1))/0.1;wx=-170*u*u;wb=18*u;}
   x.imageSmoothingQuality='high';if(wb>0.5)x.filter='blur('+wb.toFixed(1)+'px)';x.drawImage(im,sx,sy,cw,ch,dx+wx,dy,W,H);x.filter='none';
@@ -117,14 +122,17 @@ async function render(t){await fonts();x.setTransform(1,0,0,1,0,0);x.globalAlpha
   for(const tp of s.taps||[]){const u=(t-tp[0])/0.42;if(u<-0.05||u>1)continue;if(tp[3]==='card'&&!onCard)continue;const [px,py]=mapP(tp[1],tp[2]);x.save();
    if(u<0.25){x.fillStyle='rgba(255,255,255,'+(0.75*(1-u/0.25))+')';x.beginPath();x.arc(px,py,38,0,7);x.fill();}
    if(u>=0){x.strokeStyle='rgba(255,255,255,'+(0.9*(1-u))+')';x.lineWidth=7;x.beginPath();x.arc(px,py,38+110*ease(clamp(u,0,1)),0,7);x.stroke();}x.restore();}
-  if(s.glow&&t>=s.glow[0]){const u=t-s.glow[0],a=u<0.25?u/0.25:u<0.55?1:Math.max(0,1-(u-0.55)/0.5);if(a>0){const [a1,b1,c1,d1]=mapR(s.glow[1]);
-   x.save();x.globalCompositeOperation='multiply';x.globalAlpha=0.55*a;const gr=x.createLinearGradient(a1-40,0,a1+c1+40,0);gr.addColorStop(0,'rgba(255,214,120,0)');gr.addColorStop(0.12,'#ffd27a');gr.addColorStop(0.88,'#ffd27a');gr.addColorStop(1,'rgba(255,214,120,0)');
-   x.fillStyle=gr;x.beginPath();x.roundRect(a1-40,b1-14,c1+80,d1+28,26);x.fill();x.restore();}}
-  if(s.burst&&t>=s.burst[0]&&t<s.burst[0]+s.burst[1]){const u=(t-s.burst[0])/s.burst[1];x.save();
-   for(let i=0;i<44;i++){const side=i%4,r1=rnd(i*3.1),r2=rnd(i*7.7),r3=rnd(i*1.9);let px,py,vx,vy;
-    if(side<2){px=side?W-30-r1*90:30+r1*90;py=r2<0.5?240+r2*2*300:1060+(r2-0.5)*2*(H-1420);/* side bands skip the result lines' height */vx=(side?1:-1)*(40+r3*90);vy=-60-r3*120;}else{px=60+r1*(W-120);py=side===2?60+r2*110:H-80-r2*110;vx=(r3-0.5)*80;vy=side===2?-50-r3*60:-120-r3*120;}
-    px+=vx*u;py+=vy*u+260*u*u;const sz=Math.round(6+r2*8),a=(u<0.15?u/0.15:1)*(1-u);
-    x.globalAlpha=a;x.fillStyle=i%3?'#ffd35a':'#fff1b8';x.fillRect(Math.round(px/sz)*sz,Math.round(py/sz)*sz,sz,sz);}x.restore();}
+  if(s.glow&&t>=s.glow[0]){const a=clamp((t-s.glow[0])/0.25,0,1);const [a1,b1,c1,d1]=mapR(s.glow[1]);
+   /* multiply: the gold sits behind the dark type of the line, as a marker would; in over 0.25 s and held */
+   x.save();x.globalCompositeOperation='multiply';x.globalAlpha=0.85*a;const gr=x.createLinearGradient(a1-30,0,a1+c1+30,0);gr.addColorStop(0,'rgba(240,170,50,0)');gr.addColorStop(0.08,'#f0b03c');gr.addColorStop(0.92,'#f0b03c');gr.addColorStop(1,'rgba(240,170,50,0)');
+   x.fillStyle=gr;x.beginPath();x.roundRect(a1-30,b1-10,c1+60,d1+20,18);x.fill();x.restore();}
+  if(s.burst&&t>=s.burst[0]&&t<s.burst[0]+s.burst[1]){const u=(t-s.burst[0])/s.burst[1],e=t-s.burst[0];const [a1,b1,c1,d1]=mapR(s.burst[2]);x.save();
+   /* one burst either side of the line, outward and up, so nothing crosses the words; big pixels with a dark rim to read on paper */
+   for(let i=0;i<36;i++){const right=i%2,r1=rnd(i*3.1+1),r2=rnd(i*7.7+2),r3=rnd(i*1.9+3);
+    const ox=right?a1+c1+28:a1+16,oy=right?b1+d1/2:b1-16,vx=right?110+r1*300:-70+r1*170,vy=-(right?160+r2*420:300+r2*380);   /* the left margin is narrow: the left burst starts just above the line's head and rises */
+    const px=ox+vx*e,py=oy+vy*e+720*e*e,sz=Math.round(12+r3*12),a=u<0.7?1:(1-u)/0.3;
+    x.globalAlpha=a;x.fillStyle='#4a2a06';x.fillRect(px-sz/2-3,py-sz/2-3,sz+6,sz+6);x.fillStyle=i%3===0?'#fff4b8':i%3===1?'#ffc21a':'#ff9a00';x.fillRect(px-sz/2,py-sz/2,sz,sz);}
+   x.restore();}
   if(s.dark&&t<s.dark[1]){const a=t<s.dark[1]-s.dark[2]?1:(s.dark[1]-t)/s.dark[2];x.fillStyle='rgba(6,10,26,'+clamp(a,0,1)+')';x.fillRect(0,0,W,H);}
   if(s.flash&&t>=s.flash[0]&&t<s.flash[0]+s.flash[1]){const u=1-(t-s.flash[0])/s.flash[1];x.fillStyle='rgba('+s.flash[2]+','+(s.flash[3]*u*u)+')';x.fillRect(0,0,W,H);}
  }
@@ -168,20 +176,27 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
    AudioNode.prototype.connect=function(dst,...a){if(this instanceof AudioBufferSourceNode&&this.buffer&&this.buffer.duration>60&&!this.__env){const env=off.createGain();this.__env=env;window.__env=env;connect.call(env,dst,...a);return connect.call(this,env);}return connect.call(this,dst,...a);};
    AudioBufferSourceNode.prototype.start=function(at,from,...a){if(this.buffer&&this.buffer.duration>60)return start.call(this,0,SONG_IN);return start.call(this,at,from,...a);};},{DUR,SONG_IN});
   await page.goto(`http://127.0.0.1:${PORT}/__trailer-audio.html`);
-  const res=await page.evaluate(async({CUES,STEPS,DUR})=>{const off=window.__off;const S=window.Sound;
+  const res=await page.evaluate(async({CUES,STEPS,DUR,DUCKS})=>{const off=window.__off;const S=window.Sound;
    S.sync(false,'title',{bgm:1,sfx:1});
    const t0=Date.now();while(!window.__env&&Date.now()-t0<15000)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1500));
    // a 2.2 s fade-in that stays low under the first steps (0.67 / 1.33 s) and reaches the full level as the customer arrives (2.67 s);
    // only the level moves — the song's position (SONG_IN) is what the later cuts are timed to. The closing fade ends with the clip.
    const e=window.__env.gain;e.setValueAtTime(0.0001,0);e.exponentialRampToValueAtTime(0.1,1.0);e.linearRampToValueAtTime(0.4,2.2);e.linearRampToValueAtTime(1,2.67);
+   for(const [t0,dur,lv] of DUCKS){e.setValueAtTime(1,t0-0.06);e.linearRampToValueAtTime(lv,t0);e.setValueAtTime(lv,t0+dur);e.linearRampToValueAtTime(1,t0+dur+0.3);}
    e.setValueAtTime(1,DUR-1.6);e.linearRampToValueAtTime(0.0001,DUR);
-   // footsteps: filtered noise scuff + low body thump, from a fixed sequence (no Math.random), louder each step
-   const nb=off.createBuffer(1,Math.round(off.sampleRate*0.2),off.sampleRate),d=nb.getChannelData(0);let q=12345;for(let i=0;i<d.length;i++){q=(q*1103515245+12345)&0x7fffffff;d[i]=q/0x3fffffff-1;}
-   for(const [t,v] of STEPS)for(const [dt,k] of [[0,1],[0.055,0.45]]){const at=t-0.012+dt;
-    const n=off.createBufferSource();n.buffer=nb;const f=off.createBiquadFilter();f.type='lowpass';f.frequency.value=650;f.Q.value=0.7;const g=off.createGain();
-    g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(0.33*v*k,at+0.004);g.gain.exponentialRampToValueAtTime(0.0001,at+0.13);n.connect(f);f.connect(g);g.connect(off.destination);n.start(at);n.stop(at+0.2);
-    const o=off.createOscillator();o.type='sine';o.frequency.setValueAtTime(95,at);o.frequency.exponentialRampToValueAtTime(48,at+0.1);const og=off.createGain();
-    og.gain.setValueAtTime(0,at);og.gain.linearRampToValueAtTime(0.42*v*k,at+0.005);og.gain.exponentialRampToValueAtTime(0.0001,at+0.12);o.connect(og);og.connect(off.destination);o.start(at);o.stop(at+0.15);}
+   // footsteps (v6, "뚜벅뚜벅"): a boot heel on a wooden floor — a short contact click, a knock (band-passed noise) and a low body
+   // thump — then a softer toe; left and right steps differ a little in pitch and weight, each one closer than the last.
+   // Synthesised from a fixed sequence (no Math.random).
+   const nb=off.createBuffer(1,Math.round(off.sampleRate*0.25),off.sampleRate),d=nb.getChannelData(0);let q=12345;for(let i=0;i<d.length;i++){q=(q*1103515245+12345)&0x7fffffff;d[i]=q/0x3fffffff-1;}
+   const burst=(at,type,hz,Q,peak,decay)=>{const n=off.createBufferSource();n.buffer=nb;const f=off.createBiquadFilter();f.type=type;f.frequency.value=hz;f.Q.value=Q;const g=off.createGain();
+    g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(peak,at+0.003);g.gain.exponentialRampToValueAtTime(0.0001,at+decay);n.connect(f);f.connect(g);g.connect(off.destination);n.start(at);n.stop(at+decay+0.05);};
+   const thump=(at,hz,peak,decay)=>{const o=off.createOscillator();o.type='sine';o.frequency.setValueAtTime(hz,at);o.frequency.exponentialRampToValueAtTime(hz*0.5,at+decay);const g=off.createGain();
+    g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(peak,at+0.004);g.gain.exponentialRampToValueAtTime(0.0001,at+decay);o.connect(g);g.connect(off.destination);o.start(at);o.stop(at+decay+0.05);};
+   for(const [t,v,side] of STEPS){const R=side==='R',at=t-0.01,k=R?0.88:1;
+    burst(at,'highpass',2600,0.7,0.10*v*k,0.012);                       // contact click
+    burst(at,'bandpass',R?430:360,1.3,0.75*v*k,0.10);                   // heel knock
+    thump(at,R?120:105,0.55*v*k,0.14);                                   // body
+    burst(at+(R?0.075:0.085),'bandpass',R?950:820,1.0,0.22*v*k,0.06);}   // toe
    // the game's cues at their kept times: the render suspends 0.1 s ahead and the engine schedules the cue with its own delay
    const by=new Map();for(const [k,t] of CUES){const s=Math.max(0,Math.round((t-0.1)*off.sampleRate/128)*128/off.sampleRate);if(!by.has(s))by.set(s,[]);by.get(s).push([k,t-s]);}
    const fired=[];for(const [s,list] of by)off.suspend(s).then(()=>{for(const [k,dl] of list){S.play(k,dl);fired.push([k,+(off.currentTime+dl).toFixed(3)]);}window.__resume();});
@@ -189,7 +204,7 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
    const L=buf.getChannelData(0),Rr=buf.getChannelData(1),n=L.length,ab=new ArrayBuffer(44+n*4),v=new DataView(ab);const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
    ws(0,'RIFF');v.setUint32(4,36+n*4,true);ws(8,'WAVE');ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,2,true);v.setUint32(24,off.sampleRate,true);v.setUint32(28,off.sampleRate*4,true);v.setUint16(32,4,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,n*4,true);
    let peak=0;for(let i=0;i<n;i++){peak=Math.max(peak,Math.abs(L[i]),Math.abs(Rr[i]));v.setInt16(44+i*4,Math.max(-1,Math.min(1,L[i]))*32767,true);v.setInt16(46+i*4,Math.max(-1,Math.min(1,Rr[i]))*32767,true);}
-   const u8=new Uint8Array(ab);let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return {b64:btoa(bin),fired,peak};},{CUES,STEPS,DUR});
+   const u8=new Uint8Array(ab);let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return {b64:btoa(bin),fired,peak};},{CUES,STEPS,DUR,DUCKS});
   fs.writeFileSync(outWav,Buffer.from(res.b64,'base64'));console.log('audio peak',res.peak.toFixed(3),'cues',JSON.stringify(res.fired));}
  finally{await browser.close();server.kill();}}
 (async()=>{
@@ -207,10 +222,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
  // is the game's; the cues fire at their kept times (CUES). Added for the edit only: the footsteps before the first customer
  // (no game cue exists for them), the music held low under them, and the closing fade.
  const wav=path.join(dir,'mix.wav');await renderAudio(wav);
- const mp4=path.join(dir,'trailer-v5-1080x1920.mp4');
+ const mp4=path.join(dir,'trailer-v6-1080x1920.mp4');
  execFileSync(FF,['-hide_banner','-loglevel','error','-y','-framerate',String(FPS),'-i',path.join(out,'%05d.jpg'),'-i',wav,
   '-af',`volume=${AUDIO_GAIN}dB,alimiter=limit=0.89:level=false`,'-map','0:v','-map','1:a','-t',String(DUR),'-r',String(FPS),'-c:v','libx264','-profile:v','high','-preset','slow','-crf','17','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',mp4]);
- execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v5-540.mp4')]);
+ execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v6-540.mp4')]);
  fs.writeFileSync(path.join(dir,'edl.json'),JSON.stringify({beat:b,bar:B,songIn:SONG_IN,shots:S.map(s=>({t0:+s.t0.toFixed(3),t1:+s.t1.toFixed(3),take:s.take,src:s.srcFn})),cues:CUES,steps:STEPS},null,1));
  console.log('done',mp4);
 })().catch(e=>{console.error(e);process.exit(1);});
