@@ -651,7 +651,6 @@ erased by one ordinary Item; a Hazard-Counter Food keeps at least 2 so 대식가
 The redistributed values are the ACTIVE CATALOG rows (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 ·
 집중 사탕 2 · 불룡볶음면 2 · 길드 특제 도시락 6 · 영웅 결전 도시락 9; Drinks unchanged).
 Shelf Life = 2 (§SHELF LIFE — EXACT, v2.9.0)
-Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
 Unlisted implementation-only flavor fields inherit the previous Item where identity remains unchanged, except where this spec states otherwise; shelf lives are the §SHELF LIFE — EXACT table (v2.9.0).
 ## SHELF LIFE — EXACT
 (User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
@@ -1093,7 +1092,6 @@ likely (the Epic price bought a likely Severe Injury before, and Death-only stil
 - a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
 - player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
 3. if Death or Severe Injury remains, 세계수 생환부적 -> 퇴각 (User 2026-09-28, v2.9.10)
-| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 ```
 
 ## AMENDMENT — v2.9.10 World Tree measurement (User 2026-09-28)
@@ -1179,4 +1177,15 @@ removed from them.
 | 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +22, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
 identity=Fear 중반 대응 with an explicit 강인함 trade-off (User 2026-09-30, v2.9.13: was 기동 -4, which widened the 어둠 gap of its own Gate - 망자역 지하묘지 pairs 공포 with 어둠, a 기동 Hazard; 강인함 presses neither)
 e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +22 · 피로 회복 1 · 강인함 -3`, `피로 회복 2 · 기동 +17`,
+```
+
+## AMENDMENT — v2.9.13 세계수 생환부적 price (User decision 2026-09-30)
+
+User 2026-09-30: 세계수 생환부적 400 / 800 → 300 / 600. In the context-aware price review it covered a weak departure at about
+half of what 귀환석 covers (`reports/item-price-v2913/README.md`). Lines declared in earlier fences are edited in place and
+removed from them.
+
+```new
+Buy / Sell = 300 / 600 (User 2026-09-30, v2.9.13; was 400 / 800, before that 600 / 1200)
+| 29 | 세계수 생환부적 | Insurance E | 300 / 600 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 ```

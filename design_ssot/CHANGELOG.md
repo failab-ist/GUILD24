@@ -47,6 +47,9 @@ the owner headers and in the git tag.
   side under the label; phone: two short rows beside it, names right-aligned so the coloured states line up). A one-Hazard Gate reads one label as before.
   SALE §always-on outlook, UI_UX §PRE-SUPPLY OUTLOOK / §FORECAST PIN, UI_UX_QA UI-Q109; ledgers. Runtime: dist/ui/app.js
   envReading, ui.css.
+- **세계수 생환부적 400 / 800 → 300 / 600** (User 2026-09-30): the context-aware price review measured it at about half of
+  귀환석's cover for a weak departure (`reports/item-price-v2913/README.md`). ITEM §세계수 생환부적 and catalog table; ledger;
+  tests vocabulary.
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 

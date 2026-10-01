@@ -53,7 +53,7 @@ item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨�
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),
 item('guildlunch','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
 item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:22,supply:1}),
-item('worldcharm','세계수 생환부적',3,400,800,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
+item('worldcharm','세계수 생환부적',3,300,600,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather

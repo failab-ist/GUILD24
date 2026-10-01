@@ -746,7 +746,7 @@ rarity=Epic
 category=Insurance
 role=Insurance
 subrole=DeathInsurance
-Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
+Buy / Sell = 300 / 600 (User 2026-09-30, v2.9.13; was 400 / 800, before that 600 / 1200)
 
 core:
 Death or Severe Injury -> 퇴각 (무사 퇴각; no injury) (User 2026-09-28, v2.9.10; was Death -> Severe Injury)
@@ -839,7 +839,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 25 | 귀환석 | Insurance R | 200 / 400 | 부상·중상·사망 -> one more retreat roll at own retreat chance +20%p | Failure Insurance |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +14 | — |
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +22, Supply 1 | Fire 중반 대응 |
-| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death / Severe Injury -> 퇴각 once | Death Insurance |
+| 29 | 세계수 생환부적 | Insurance E | 300 / 600 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
 | 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +16, 속박 +15 | Spider 후반 하이브리드 |
 | 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +16, 진창 +15 | Slime 후반 하이브리드 |
