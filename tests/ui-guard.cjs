@@ -1889,7 +1889,7 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
 test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its landing, <= 320 ms, <= 3 hits, the till counts down',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const ORDER_BEAT=\{total:320,step:70,hits:3,till:220\};/.test(app),'320 ms cap, 70 ms step ceiling, 3 hits, 220 ms till');
- const pc=bare(fn('playCue')),o=pc.slice(pc.indexOf("if(c==='order')"),pc.indexOf("if(c==='sale')"));
+ const o=bare(fn('cueOrder'));
  assert.ok(/step=Math\.min\(ORDER_BEAT\.step,\(ORDER_BEAT\.total-STAMP_FALL\)\/Math\.max\(1,k\.length-1\)\)/.test(o),'the step shrinks so the last landing stays within the cap');
  assert.ok(/k\.forEach\(\(item,i\)=>/.test(o)&&!/quantity|cart\[/.test(o),'one crate per SKU, never per unit');
  assert.ok(/translateY:\{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in\(3\)'\}/.test(o),'the crate reuses the NIGHT stamp fall');
@@ -1908,7 +1908,7 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const KEY_PRESS=\{y:3,down:60,up:60\};/.test(app),'3 px, 60 ms down and 60 ms back - 일반, no hold');
  assert.ok(/translateY:\[\{from:0,to:KEY_PRESS\.y,duration:KEY_PRESS\.down/.test(app),'the key travels down and returns');
- const pc=bare(fn('playCue')),sale=pc.slice(pc.indexOf("if(c==='sale')"),pc.indexOf("if(c==='refuse')")),refuse=pc.slice(pc.indexOf("if(c==='refuse')"));
+ const sale=bare(fn('cueSale')),refuse=bare(fn('cueRefuse')+fn('playCue'));
  assert.ok(/scale:\{from:1\.12,to:1,duration:200,delay:KEY_PRESS\.down/.test(sale)&&/opacity:\{from:0,to:1,duration:40,delay:KEY_PRESS\.down/.test(sale),'the A8 stub lands on the key landing, 1.12 -> 1 in 200 ms');
  assert.ok(/held\.inert=true/.test(sale)&&/keyPress\(A,key,\{onComplete:put\}\)/.test(sale)&&/setTimeout\(put,/.test(sale),'the pressed tray is held inert for the press only, with a fallback');
  assert.ok(/\.p-sale \.counter-tray\.held\{pointer-events:none\}/.test(css),'and it answers no input');
@@ -2106,7 +2106,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
    the order, the bar and the skip are measured on the running page by tools/qa-final-clash.cjs */
 test('UI-Q-v29-46: the FINAL clash - after the resolution, the carried items, the resolved ratio only, skippable, no save, reduced motion none',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- const cs=bare(fn('clashScene'));
+ const cs=bare(fn('clashMarkup')+fn('clashScene'));
  assert.ok(/if\(!motionOK\(\)\|\|!host\|\|!rep\?\.members\?\.length\|\|!d\|\|!\(d\.bossPower>0\)\)return false;/.test(cs),'never under reduced motion, only on a resolved Final');
  assert.ok(/const left=s\.win\?0:Math\.max\(\.03,1-Math\.max\(0,Math\.min\(1,d\.assault\/d\.bossPower\)\)\),share=\(1-left\)\/n;/.test(cs),'the bar is the resolved ratio split evenly; a failure keeps 3%');
  assert.ok(!/game\.(save|boss|end)|\.rng|localStorage|s\.[a-zA-Z]+=(?!=)/.test(cs),'the scene reads the Run and writes nothing');
@@ -2208,10 +2208,13 @@ test('D-24: the feel layer is optional, and it never animates a redraw of the sa
   assert.ok(fn(name).includes('if(!motionOK()')||fn(name).includes('||!motionOK()'),name+' stands down on its own');
  // the per-phase beats run only through playPhase's motion check, so they count as part of it
  const phaseBeats=['phaseMorning','phaseOrder','phaseFinal','phaseClosing','phaseNight','phaseEnd','phaseSell'];
- const elsewhere=phaseBeats.reduce((t,name)=>t.replace(fn(name),''),app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),''))
+ // the in-phase cues run only through playCue's motion check, the same way
+ const cueBeats=['cueSelect','cueOrder','cueSale','cueRefuse'];
+ const elsewhere=phaseBeats.concat(cueBeats).reduce((t,name)=>t.replace(fn(name),''),app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),''))
   .split('\n').filter(l=>!l.trimStart().startsWith('//')&&!l.trimStart().startsWith('*')&&!l.includes('const motionOK=')).join('\n');
  assert.ok(!/anime\.(animate|stagger)/.test(elsewhere),'nothing animates outside the three guarded places');
  assert.ok(phaseBeats.every(name=>!new RegExp('\\b'+name+'\\b').test(elsewhere)&&fn('playPhase').includes(':'+name)),'a phase beat is reached only from playPhase');
+ assert.ok(cueBeats.every(name=>!new RegExp('\\b'+name+'\\b').test(elsewhere)&&fn('playCue').includes(':'+name)),'an in-phase cue is reached only from playCue');
  // a redraw replaces the screen, so an entry animation would replay on every click:
  // the phase beats run only when the view actually changed, the in-phase ones on a one-shot marker
  assert.ok(/if\(changed\)playPhase\(phase\);playCue\(\);/.test(app),'the phase beat is gated on the view changing');
@@ -3462,7 +3465,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(/handoff=seen;showStub\(\);render\(\);/.test(sell),'and they are handed to the draw that follows (the receipt stub is placed before that draw so playCue can animate it)');
  assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
  assert.ok(!/account\.\w*handoff|run\.\w*handoff/.test(app),'the record is never written into a save');
- const cue=fn('playCue');
+ const cue=['cueSelect','cueOrder','cueSale','cueRefuse','playCue'].map(fn).join('');
  // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
  assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from the counter tray to the Bag slot it fills, in the state strip');
  assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
@@ -3599,7 +3602,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
   assert.deepEqual(ks,[...ks].sort((a,b)=>a-b),it.name+' follows Counter -> 피로 회복 -> stat -> rest');}
  // §TRANSACTION RESULT STUB
  assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money,mode:el\.dataset\.mode\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
- assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
+ assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('cueSale').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)

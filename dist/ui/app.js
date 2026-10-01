@@ -124,13 +124,8 @@ const CLASH={dim:400,drop:500,presence:300,rise:400,stagger:100,settle:400,item:
  lunge:700,hitAt:370,counter:550,strikeAt:220,gap:100,drain:300,wait:900,run:850,hesitate:500,snap:160,verdict:900,tail:300};
 const CLASH_EDGE=.05;   // where a clear hesitates before it breaks
 let clash=null;
-function clashScene(){
- const s=game.run,d=s?.bossDebug,rep=s?.finalReport,host=$('.stage.p-final');
- if(!motionOK()||!host||!rep?.members?.length||!d||!(d.bossPower>0))return false;
- const b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount),n=rep.members.length;
- const left=s.win?0:Math.max(.03,1-Math.max(0,Math.min(1,d.assault/d.bossPower))),share=(1-left)/n;   // a party that did no harm leaves it full
- const el=document.createElement('div');el.className='clash';el.setAttribute('aria-hidden','true');
- el.innerHTML='<div class="clash-boss">'+(art?'<img src="'+art+'" alt="" draggable="false">':Art.mark('final',96))
+function clashMarkup(s,b,art,rep){
+ return '<div class="clash-boss">'+(art?'<img src="'+art+'" alt="" draggable="false">':Art.mark('final',96))
   +'<b>'+E(b?.name||'')+'</b><span class="clash-bar"><i class="hp"></i></span>'
   +'<svg class="crack" viewBox="0 0 40 30" preserveAspectRatio="none" shape-rendering="crispEdges"><path d="M20 0v2h1v2h1v2h-1v2h-2v2h-1v2h-1v2h1v2h2v2h1v2h1v2h-1v2h-1v2h1v2M18 12h-2v1h-2v1h-1v2h-2v1h-2v2M22 20h2v1h1v1h2v2h1v1"/></svg></div>'
   +'<div class="clash-party">'+rep.members.map(m=>{const npc=s.npcs.find(x=>x.id===m.npcId),items=m.items||[],slots=Math.max(items.length,Adventurer.slots(npc));
@@ -138,6 +133,14 @@ function clashScene(){
     +'<span class="clash-bag">'+Array.from({length:slots},(_,i)=>'<span class="slot">'+(items[i]?'<i class="got">'+Art.itemIcon(items[i],22)+'</i>':'')+'</span>').join('')+'</span>'
     +'<i class="flash"></i></div>';}).join('')
   +'</div>';
+}
+function clashScene(){
+ const s=game.run,d=s?.bossDebug,rep=s?.finalReport,host=$('.stage.p-final');
+ if(!motionOK()||!host||!rep?.members?.length||!d||!(d.bossPower>0))return false;
+ const b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount),n=rep.members.length;
+ const left=s.win?0:Math.max(.03,1-Math.max(0,Math.min(1,d.assault/d.bossPower))),share=(1-left)/n;   // a party that did no harm leaves it full
+ const el=document.createElement('div');el.className='clash';el.setAttribute('aria-hidden','true');
+ el.innerHTML=clashMarkup(s,b,art,rep);
  for(const c of host.children)c.inert=true;
  host.appendChild(el);
  const timers=[],anims=[];clash={el,timers,anims};
@@ -475,11 +478,8 @@ function showStub(){if(!stub)return;const st=stub;stub=null;
  /* while a coach mark is open the line stays - the 50% lesson may be waiting behind the Bag mark - and goes once they close */
  const drop=()=>{if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
  stubTimer=setTimeout(drop,motionOK()?2800+KEY_PRESS.down:2500);}
-function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
- if(!c||!motionOK())return;
- const A=anime.animate;
  // picking a product puts it on the counter tray - the tray contents arrive, the list does not move
- if(c==='select'){const open=$('.counter-tray .tray-item');if(open)A(open,{opacity:[0,1],translateY:[8,0],duration:190,ease:'outQuad'});}
+function cueSelect(A){const open=$('.counter-tray .tray-item');if(open)A(open,{opacity:[0,1],translateY:[8,0],duration:190,ease:'outQuad'});}
  /* A1 건네기: the Item icon travels from its shelf row to the Bag slot it now fills (280 ms), the
     slot settles (1.05 -> 1, 240 ms), the dock Gold counts to its new value, and each Stat cell that
     changed pulses once (300 ms) and keeps the new value. A2: the customer nods (4 px, 180 ms x 2).
@@ -488,7 +488,7 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     falls onto its row with the NIGHT stamp's fall, and that row's count goes from its prior value straight to the resolved one on
     the landing frame (one crate per SKU, never one per unit); a SKU new to the warehouse brings its row in with it. A folded list
     shows the `N / M칸` summary only, which moves on the last landing. The till's 보유 골드 counts down to the resolved value. */
- if(c==='order'){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_BEAT.total-STAMP_FALL)/Math.max(1,k.length-1));
+function cueOrder(A,h){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_BEAT.total-STAMP_FALL)/Math.max(1,k.length-1));
   /* the list on screen takes the crates: the desk's column or the phone's open 창고 sheet (UI_UX §ORDER — WAREHOUSE PANEL;
      a folded sheet shows the handle's figures only); every `N / M칸` and `N종` figure moves on the last landing */
   const side=$('.p-order .stock-side'),sheet=$('#stock-sheet'),list=side?.getClientRects().length?side:sheet&&!sheet.hidden?sheet:null;
@@ -509,8 +509,9 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
    A({t:0},{t:1,duration:last,onComplete:()=>{held.forEach(([el],i)=>{el.textContent=now[i];});}});}
   const gold=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='보유 골드')?.querySelector('b');
   if(gold&&h.gold!==undefined&&h.gold!==game.run.money){const now=gold.textContent,box={v:h.gold};
-   A(box,{v:game.run.money,duration:ORDER_BEAT.till,ease:'outQuad',onUpdate:()=>{gold.textContent=fmt(Math.round(box.v));},onComplete:()=>{gold.textContent=now;}});}}
- if(c==='sale'){
+   A(box,{v:game.run.money,duration:ORDER_BEAT.till,ease:'outQuad',onUpdate:()=>{gold.textContent=fmt(Math.round(box.v));},onComplete:()=>{gold.textContent=now;}});}
+}
+function cueSale(A,h){
   /* A8 영수증 조각: stamps in (1.12 -> 1, 200 ms) and fades after 2.5 s; showStub() owns its removal */
   const stubEl=$('.receipt-stub');if(stubEl){A(stubEl,{scale:{from:1.12,to:1,duration:200,delay:KEY_PRESS.down,ease:'outQuad'},opacity:{from:0,to:1,duration:40,delay:KEY_PRESS.down,ease:'linear'}});setTimeout(()=>{if(stubEl.isConnected)A(stubEl,{opacity:[1,0],duration:280,ease:'outQuad'});},2500+KEY_PRESS.down);}
   /* H2: a successful sale draws the counter without its tray, so the tray that was pressed is put back where it stood,
@@ -540,14 +541,20 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
   if(h.stats)[...document.querySelectorAll('.detail-stats .detail-stat')].forEach((cell,i)=>{
    const now=cell.querySelector('strong')?.textContent;if(h.stats[i]!==undefined&&h.stats[i]!==now)A(cell,{scale:[1,1.04,1],duration:300,ease:'inOutQuad'});});
   const fig=$('.who .figure');if(fig)A(fig,{translateY:[0,4,0,4,0],duration:360,ease:'inOutSine'});
-  const said=$('.say');if(said)A(said,{opacity:[0,1],translateY:[6,0],duration:220,ease:'outQuad'});}
+  const said=$('.say');if(said)A(said,{opacity:[0,1],translateY:[6,0],duration:220,ease:'outQuad'});
+}
  /* A2 / A6: a refusal is the same channel saying no - the balloon and the figure shake their head,
     and the price button that was refused shakes once where it locked (오늘 거절됨 is already on it). */
- if(c==='refuse'){const shake={translateX:[0,-4,4,-2,0],duration:280,ease:'outQuad'};
+function cueRefuse(A,h){const shake={translateX:[0,-4,4,-2,0],duration:280,ease:'outQuad'};
   const said=$('.say');if(said)A(said,{translateX:[0,-5,4,-2,0],duration:280,ease:'outQuad'});
   const fig=$('.who .figure');if(fig)A(fig,shake);
   /* H2: the refused key is pressed like any other (3 px, 60 + 60 ms) while it shakes where it locked */
-  const b=h.mode?$('.tills button[data-mode="'+h.mode+'"][disabled]'):null;if(b){keyPress(A,b);A(b,shake);}}
+  const b=h.mode?$('.tills button[data-mode="'+h.mode+'"][disabled]'):null;if(b){keyPress(A,b);A(b,shake);}
+}
+function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
+ if(!c||!motionOK())return;
+ const run={select:cueSelect,order:cueOrder,sale:cueSale,refuse:cueRefuse}[c];
+ if(run)run(anime.animate,h);
 }
 /* A4 손님 교대: the customer walks off left (240 ms) before the next one is drawn. The state moves
    in `go` exactly as it did without the beat; the beat only delays that call by its own length,
