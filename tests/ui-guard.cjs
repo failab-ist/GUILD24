@@ -248,7 +248,7 @@ test('UI-Q-v28-29: a sheet hands focus back to the control that opened it',()=>{
 });
 
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
- const morning=fn('morningScreen'),order=fn('orderForm')+fn('orderScreen');
+ const morning=fn('morningScreen'),order=(fn('orderOffer')+fn('orderForm'))+fn('orderScreen');
  for(const part of ['Scene.ceiling()','Scene.wall(','Scene.counter()'])
   assert.ok(morning.includes(part),'Morning is built from the store itself: '+part);
  assert.ok(morning.includes('class="daysign"')&&morning.includes('class="till"'),'the day and the float are objects in the room');
@@ -280,7 +280,7 @@ test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is expl
 });
 
 test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hierarchy',()=>{
- const order=fn('orderForm')+fn('orderScreen');
+ const order=(fn('orderOffer')+fn('orderForm'))+fn('orderScreen');
  assert.ok(order.includes('본사 발주')||order.includes('발주서'),'the form is titled as the HQ order');
  for(const label of ['운영비(예상)','창고 잔여 칸','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
@@ -472,7 +472,7 @@ test('SA-Q21 / SA-Q34: Closing is economics-only, and supply-impact attribution 
     The attribution helper itself (Presentation.supplyImpact/supplyLines) stays correct - it is
     still a unit other Presentation callers (and tests/night.cjs) may use - Closing simply does
     not call it any more. */
- const closingEmitted=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ const closingEmitted=(fn('closingReceipt')+fn('closingDock')+fn('closingScreen')).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
  assert.ok(!closingEmitted.includes('supplyImpact')&&!closingEmitted.includes('오늘의 보급 영향'),
   'Closing reads no attribution helper and prints no impact block');
  assert.ok(!closingEmitted.includes('미판매 재고는 자산으로 남는다'),'and no explanatory footer');
@@ -771,7 +771,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.ok(changed.includes('r.storeBonus'),'a normal 대성공 names the Store Gold it earned');
  assert.ok(changed.includes('r.deep.bonusWallet')&&changed.includes('r.deep.bonusXp'),
   'a Deep return is reported as the adventurer\'s change');
- const closing=fn('closingScreen');
+ const closing=fn('closingReceipt')+fn('closingDock')+fn('closingScreen');
  assert.ok(closing.includes('Copy.deep.sponsor'),'Closing names the sponsorship outflow');
  assert.ok(closing.includes("d.greatSuccess"),'and the Great Success income');
 
@@ -1240,7 +1240,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(/warn=n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
  assert.ok(!/popover|badge|title=/.test(dl),'no popover, badge or extra text');
  assert.ok(fn('morningScreen').includes('deathLimitItem()'),'MORNING shows the line, always on screen');
- assert.ok(fn('orderForm').includes('deathLimitItem(true)'),'ORDER shows the same line, 사망 set as its label (User 2026-09-29)');
+ assert.ok((fn('orderOffer')+fn('orderForm')).includes('deathLimitItem(true)'),'ORDER shows the same line, 사망 set as its label (User 2026-09-29)');
  assert.ok(/labelled\?'<i>사망<\/i><b class="death-limit'\+warn\+'">'\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'the same words, split into label and value');
 
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
@@ -1250,7 +1250,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     open it again - a presentation preference on the account, not run state. */
  // User 2026-09-29 (UI_UX §ORDER — WAREHOUSE PANEL): the warehouse left the form for its own panel - a desk column and a
  // phone handle + sheet - still from the one grouping, still against total slots, still folded until the player opens it
- assert.ok(!fn('orderForm').includes('stock'),'the form no longer carries the warehouse');
+ assert.ok(!(fn('orderOffer')+fn('orderForm')).includes('stock'),'the form no longer carries the warehouse');
  const whList=fn('stockSlots'),whHead=fn('stockHead');
  assert.ok(whList.includes('groupStock()'),'reusing the existing grouping, not a second one');
  assert.ok(whHead.includes('game.capacity()')&&whHead.includes('s.inventory.length'),'used against total slots');
@@ -1788,7 +1788,7 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
  assert.ok(!/bossId|b\.name|trait|family/i.test(bseg),'the cue is not chosen from anything the beat has not shown');
  assert.ok(/s\.bossReveal\.d0Seen=true/.test(bseg)&&/BOSS_BEATS\.find/.test(bseg),'D0 and D5-D25 keep their own persistence');
  // a redraw replays nothing: one-shot cues live in the click handler, never in render()
- assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')),'render() plays no one-shot cue');
+ assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')+fn('phaseScreen')+fn('openOwedModal')+fn('syncWatchers')),'render() plays no one-shot cue');
 });
 
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
@@ -1822,7 +1822,7 @@ test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verba
 });
 
 test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
- const f=fn('finalScreen');
+ const f=fn('finalMuster')+fn('finalDock')+fn('finalScreen');
  assert.ok(/!committed&&!finalOrdered&&!s\.team\.length\s*\n?\s*\/\*[^*]*\*\/\s*\?'<div class="party-head"><h2>마지막 발주<\/h2><\/div><div class="final-order open">'\+orderForm\(\)/.test(f),'D30 opens on the last order');
  assert.ok(/btn\('원정대 선택','final-ordered','stamp',Object\.values\(s\.cart\|\|\{\}\)\.some\(q=>q>0\)\?'disabled':''\)/.test(f),'moving on waits for a pending cart');
  assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
@@ -1842,7 +1842,7 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
- const of=fn('orderForm');
+ const of=(fn('orderOffer')+fn('orderForm'));
  assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+\(railFolded\(\)\?' folded':''\)\+'">'[\s\S]{0,400}?\+'<span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
   'Death first, then 오늘, then 발주 후 last - each a label and a value; 발주 후 is the ledger\'s own `after`, short in the ledger\'s warning');
  // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
@@ -1889,7 +1889,7 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
 test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its landing, <= 320 ms, <= 3 hits, the till counts down',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const ORDER_BEAT=\{total:320,step:70,hits:3,till:220\};/.test(app),'320 ms cap, 70 ms step ceiling, 3 hits, 220 ms till');
- const pc=bare(fn('playCue')),o=pc.slice(pc.indexOf("if(c==='order')"),pc.indexOf("if(c==='sale')"));
+ const o=bare(fn('cueOrder'));
  assert.ok(/step=Math\.min\(ORDER_BEAT\.step,\(ORDER_BEAT\.total-STAMP_FALL\)\/Math\.max\(1,k\.length-1\)\)/.test(o),'the step shrinks so the last landing stays within the cap');
  assert.ok(/k\.forEach\(\(item,i\)=>/.test(o)&&!/quantity|cart\[/.test(o),'one crate per SKU, never per unit');
  assert.ok(/translateY:\{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in\(3\)'\}/.test(o),'the crate reuses the NIGHT stamp fall');
@@ -1910,7 +1910,7 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const KEY_PRESS=\{y:3,down:60,up:60\};/.test(app),'3 px, 60 ms down and 60 ms back - 일반, no hold');
  assert.ok(/translateY:\[\{from:0,to:KEY_PRESS\.y,duration:KEY_PRESS\.down/.test(app),'the key travels down and returns');
- const pc=bare(fn('playCue')),sale=pc.slice(pc.indexOf("if(c==='sale')"),pc.indexOf("if(c==='refuse')")),refuse=pc.slice(pc.indexOf("if(c==='refuse')"));
+ const sale=bare(fn('cueSale')),refuse=bare(fn('cueRefuse')+fn('playCue'));
  assert.ok(/scale:\{from:1\.12,to:1,duration:200,delay:KEY_PRESS\.down/.test(sale)&&/opacity:\{from:0,to:1,duration:40,delay:KEY_PRESS\.down/.test(sale),'the A8 stub lands on the key landing, 1.12 -> 1 in 200 ms');
  assert.ok(/held\.inert=true/.test(sale)&&/keyPress\(A,key,\{onComplete:put\}\)/.test(sale)&&/setTimeout\(put,/.test(sale),'the pressed tray is held inert for the press only, with a fallback');
  assert.ok(/\.p-sale \.counter-tray\.held\{pointer-events:none\}/.test(css),'and it answers no input');
@@ -2027,7 +2027,7 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
 /* v2.9.10 (User 2026-09-27/28): the customer walks up and holds a silhouette until the portrait is decoded; a sold-out
    ORDER offer carries a stamp instead of its controls */
 test('UI_UX §SALE — CUSTOMER ARRIVAL / ORDER sold out (v2.9.10)',()=>{
- const pp=fn('playPhase');
+ const pp=fn('phaseSell');
  assert.ok(/const WALK=560,waiting=fig&&fig\.tagName==='IMG'&&!\(fig\.complete&&fig\.naturalWidth\);/.test(pp)&&/A\(face,\{translateX:\[72,0\],duration:WALK/.test(pp)
   &&/Promise\.race\(\[fig\.decode\(\)\.catch\(\(\)=>\{\}\),new Promise\(r=>setTimeout\(r,1500\)\)\]\)/.test(pp),'the card walks in and the portrait rises once decoded (at most 1.5 s)');
  assert.ok(/<span class="figure-wait" aria-hidden="true"><\/span><img class="figure"/.test(app)&&/\.face\.waiting \.figure-wait\{display:block\}/.test(css),'a plain silhouette stands in meanwhile');
@@ -2042,21 +2042,21 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
  assert.ok(/const opened=modal==='boss'&&dossierShown!==stageKey\(\);/.test(rm)&&/if\(opened&&motionOK\(\)\)\{const sheet=root\.querySelector\('\.modal'\);\s*if\(sheet\)sheet\.animate\(\[\{transform:'translateY\(18px\)',opacity:0\},\{transform:'none',opacity:1\}\],\{duration:260,/.test(rm)&&!/boss-art img/.test(rm),
   'the dossier sheet rises once, when it opens, the art on it (no separate settle)');
  assert.ok(/<link rel="preload" href="ui\/fonts\/MulmaruMono\.woff2" as="font" type="font\/woff2" crossorigin>/.test(html),'the fonts come with the page');
- const r=fn('render');
+ const r=fn('render'),m=fn('openOwedModal');
  /* v2.9.10: after the shutter the hold also waits for the Boss's art (never past BOSS_WAIT), so the dossier opens with it */
- assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(r)
+ assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(m)
   &&/const BOSS_WAIT=1200,/.test(src)&&/warmAhead\(s,phase\);/.test(r),
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
- assert.ok(r.indexOf('bossRevealDue()')<r.indexOf("modal='event'")&&r.indexOf('bossRevealDue()')<r.indexOf("modal='relics';\n",r.indexOf('bossRevealDue()')),'the reveal keeps its place ahead of the Event and the Relic window');
+ assert.ok(m.indexOf('bossRevealDue()')<m.indexOf("modal='event'")&&m.indexOf('bossRevealDue()')<m.indexOf("modal='relics';\n",m.indexOf('bossRevealDue()'))&&/openOwedModal\(s,phase,changed\);[\s\S]*renderModal\(\)/.test(r),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
- assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(r),'the hold ends with the MORNING it belongs to - the screen is never left inert');
+ assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(m),'the hold ends with the MORNING it belongs to - the screen is never left inert');
 });
 
 /* UI-Q-v29-34 (v2.9.2 H6, UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate settle in as one
    movement on FINAL's own entry - the only H6 target left after the four-cut capture excluded the rest */
 test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one movement, nothing else moves',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- const pp=bare(fn('playPhase')),final=pp.slice(pp.indexOf("if(phase==='final')"),pp.indexOf("if(phase==='closing')"));
+ const final=bare(fn('phaseFinal'));
  assert.ok(/const gate=\$\('\.gate-zero'\);/.test(final),'the boss art and name plate are read as one block');
  assert.ok(/if\(gate\)A\(gate,\{translateY:\[10,0\],opacity:\[0,1\],duration:220,ease:'outQuad'\}\);/.test(final),'one movement, 220 ms, outQuad - 일반 intensity, no hold');
  assert.ok(!/stagger|scale:|\.threat|\.dock|\.final-order/.test(final),'nothing else on the screen moves, and the block is never scaled (a wide flex block scaling would overflow, H4\'s own lesson)');
@@ -2065,7 +2065,7 @@ test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one mov
 
 /* UI-Q18 (v2.9.7, User 2026-09-26, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the receipt is the Day's cash */
 test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 자금 with 영업 손익, counts, tomorrow',()=>{
- const c=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'');
+ const c=(fn('closingReceipt')+fn('closingDock')+fn('closingScreen')).replace(/\/\*[\s\S]*?\*\//g,'');
  for(const gone of ['판매 원가','판매 마진','폐기 원가','오늘 시작','오늘 끝','오늘 변화'])assert.ok(!c.includes(gone),'no '+gone+' row');
  for(const l of ['영업 전 자금','보유 자금','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
  assert.ok(/change=total\(ins\)-total\(outs\),open=s\.money-change/.test(c),'the opening is derived from the Day\'s own flows, so the tape adds up');
@@ -2082,7 +2082,7 @@ test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 
 test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts past each Decoration price',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const CLOSING_STAMP=\{hold:100,dip:4\};/.test(app),'100 ms hold, 4 px dip - 중요, reusing the NIGHT fall');
- const pp=bare(fn('playPhase')),closing=pp.slice(pp.indexOf("if(phase==='closing')"),pp.indexOf("if(phase==='night')"));
+ const closing=bare(fn('phaseClosing'));
  assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block'\)/.test(closing),'every figure block prints together; the purse box is the stamp (v2.9.7)');
  assert.ok(/opacity:\[0,1\],translateY:\[-4,0\],duration:200,ease:'outQuad'/.test(closing)&&!/stagger/.test(closing),'one 200 ms pass, never a per-row stagger');
  assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
@@ -2095,7 +2095,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/closingCueAt=setTimeout\(\(\)=>sound\(kind\),CLOSING_STAMP\.hold\+STAMP_FALL\)/.test(cs),'the stamp cue lands on the same frame as the visual stamp');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
  assert.ok(/nightSound\(s\.results\[s\.nightCursor\]\);if\(s\.phase==='closing'\)closingSound\(\);break;/.test(app),'the ordinary 마감으로 press (night-next reaching the last result) plays it too');
- const end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ const end=bare(fn('phaseEnd'));
  assert.ok(/\[\.\.\.new Set\(D\.decorations\.map\(d=>d\.price\)\)\]/.test(end),'the price lines are read from the live Decoration list, never a second copy of the numbers');
  assert.ok(/for\(const p of lines\)if\(last<p&&box\.v>=p\)sound\('ui'\)/.test(end),'a quiet ui click on each price the count actually passes, none otherwise');
  assert.ok(/capRow\.textContent=to\.toLocaleString\(\)/.test(end),'the settlement figure ends on the same resolved value with or without motion');
@@ -2108,7 +2108,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
    the order, the bar and the skip are measured on the running page by tools/qa-final-clash.cjs */
 test('UI-Q-v29-46: the FINAL clash - after the resolution, the carried items, the resolved ratio only, skippable, no save, reduced motion none',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- const cs=bare(fn('clashScene'));
+ const cs=bare(fn('clashMarkup')+fn('clashScene'));
  assert.ok(/if\(!motionOK\(\)\|\|!host\|\|!rep\?\.members\?\.length\|\|!d\|\|!\(d\.bossPower>0\)\)return false;/.test(cs),'never under reduced motion, only on a resolved Final');
  assert.ok(/const left=s\.win\?0:Math\.max\(\.03,1-Math\.max\(0,Math\.min\(1,d\.assault\/d\.bossPower\)\)\),share=\(1-left\)\/n;/.test(cs),'the bar is the resolved ratio split evenly; a failure keeps 3%');
  assert.ok(!/game\.(save|boss|end)|\.rng|localStorage|s\.[a-zA-Z]+=(?!=)/.test(cs),'the scene reads the Run and writes nothing');
@@ -2135,7 +2135,7 @@ test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a 
  assert.ok(!/members|team|forEach|map\(/.test(fs_),'never one per member');
  assert.ok(/<div class="print">'\+finalSeal\(\)/.test(fn('endBanner')),'struck on the ending tape');
  assert.ok(/const FINAL_SEAL=\{hold:200,won:\{from:2,dip:6\},lost:\{from:1\.6,dip:3\}\};/.test(app),'the clear is the heaviest landing; both hold 200 ms (클라이맥스)');
- const pp=bare(fn('playPhase')),end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ const end=bare(fn('phaseEnd'));
  assert.ok(/scale:\{from:v\.from,to:1,duration:STAMP_FALL,delay:at/.test(end),'the seal reuses the NIGHT stamp\'s fall');
  assert.ok(/to:parseFloat\(getComputedStyle\(seal\)\.opacity\)/.test(end),'its ink ends where the stylesheet leaves it');
  assert.ok(/'\.end-tape \.closed,\.end-tape \.reason'/.test(end)&&/delay:land/.test(end),'the result sentence follows the landing');
@@ -2167,7 +2167,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(S.gone.tape&&S.gone.tape<=500&&!S.gone.from,'사망 has no stamp and a tape ≤ 500 ms');
  // each beat ≤ 320 ms after the landing (dip 190, settle 160, count 220), and the whole run ends by 770 ms
  for(const k of Object.keys(S))assert.ok((S[k].tape?S[k].entry+S[k].hold+S[k].tape:land(k)+220)<=770,k+' ends by 770 ms');
- const pp=bare(fn('playPhase')),night=pp.slice(pp.indexOf("if(phase==='night')"),pp.indexOf("if(phase==='sell')"));
+ const night=bare(fn('phaseNight')+fn('phaseEnd'));
  assert.ok(/to:st\.dip,duration:40/.test(night)&&/to:0,duration:150/.test(night),'the card gives 4 px and settles - the only companion motion');
  assert.ok(/scale:\{from:st\.from,to:1,duration:STAMP_FALL,delay:at/.test(night),'the tag falls onto the card after it stands');
  assert.ok(!/stagger|rotate:|translateX:\{from:[^s]|document\.body|#app|\.stage/.test(night),'no ring, shake, scatter or screen-level motion');
@@ -2208,9 +2208,15 @@ test('D-24: the feel layer is optional, and it never animates a redraw of the sa
  // every animation call sits behind that check
  for(const name of ['playPhase','playCue','stampPress','playExit'])
   assert.ok(fn(name).includes('if(!motionOK()')||fn(name).includes('||!motionOK()'),name+' stands down on its own');
- const elsewhere=app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),'')
+ // the per-phase beats run only through playPhase's motion check, so they count as part of it
+ const phaseBeats=['phaseMorning','phaseOrder','phaseFinal','phaseClosing','phaseNight','phaseEnd','phaseSell'];
+ // the in-phase cues run only through playCue's motion check, the same way
+ const cueBeats=['cueSelect','cueOrder','cueSale','cueRefuse'];
+ const elsewhere=phaseBeats.concat(cueBeats).reduce((t,name)=>t.replace(fn(name),''),app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),''))
   .split('\n').filter(l=>!l.trimStart().startsWith('//')&&!l.trimStart().startsWith('*')&&!l.includes('const motionOK=')).join('\n');
  assert.ok(!/anime\.(animate|stagger)/.test(elsewhere),'nothing animates outside the three guarded places');
+ assert.ok(phaseBeats.every(name=>!new RegExp('\\b'+name+'\\b').test(elsewhere)&&fn('playPhase').includes(':'+name)),'a phase beat is reached only from playPhase');
+ assert.ok(cueBeats.every(name=>!new RegExp('\\b'+name+'\\b').test(elsewhere)&&fn('playCue').includes(':'+name)),'an in-phase cue is reached only from playCue');
  // a redraw replaces the screen, so an entry animation would replay on every click:
  // the phase beats run only when the view actually changed, the in-phase ones on a one-shot marker
  assert.ok(/if\(changed\)playPhase\(phase\);playCue\(\);/.test(app),'the phase beat is gated on the view changing');
@@ -2854,7 +2860,7 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
     shown BEFORE the same-Day Store Support decision. The chain is asserted in source and then
     resolved for each of the five Days with a Store Support window genuinely pending, because
     D10 and D20 are themselves acquisition Days and that is where the order actually matters. */
- const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('renderModal();requestAnimationFrame'));
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('function syncWatchers('));
  assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
   'the Boss beat is chosen before the Store Support window on the same Day');
  const resolve=(day,seen,final,windowPending)=>{
@@ -3357,12 +3363,12 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
    the expected visitor count, and never a customer's name, Job, Trait, Wallet or destination.
    On actual appearance the NPC becomes introduced. */
 test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count before Sale, the person on arrival',()=>{
- const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','todayLine'].map(fn).join('\n');
- assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('todayLine(counts')&&fn('todayLine').includes('s.queue.length'),
+ const pre=['morningScreen','orderOffer','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','todayLine'].map(fn).join('\n');
+ assert.ok(fn('morningScreen').includes('s.queue.length')&&(fn('orderOffer')+fn('orderForm')).includes('todayLine(counts')&&fn('todayLine').includes('s.queue.length'),
   'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
- assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test(fn('orderForm')),'per-Gate counts only with two or more Gates');
+ assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts only with two or more Gates');
  const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
@@ -3462,7 +3468,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(/handoff=seen;showStub\(\);render\(\);/.test(sell),'and they are handed to the draw that follows (the receipt stub is placed before that draw so playCue can animate it)');
  assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
  assert.ok(!/account\.\w*handoff|run\.\w*handoff/.test(app),'the record is never written into a save');
- const cue=fn('playCue');
+ const cue=['cueSelect','cueOrder','cueSale','cueRefuse','playCue'].map(fn).join('');
  // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
  assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from the counter tray to the Bag slot it fills, in the state strip');
  assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
@@ -3578,17 +3584,17 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29)
  assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
- assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalScreen')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
+ assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalThreat')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');
  assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.','COPY_AUDIT §14-7 intro');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
- const of=fn('orderForm');
+ const of=(fn('orderOffer')+fn('orderForm'));
  // v2.9.0 F6 (User 2026-09-24): the today-fit / matching-effect emphasis is retired on ORDER and SALE
  assert.ok(!/fitToday|fitKeys/.test(app)&&!('fitKeys' in Presentation),'no fit computation survives');
  assert.ok(!/class="fit"|' fit'/.test(app)&&!/\.fit\{/.test(css),'no emphasis class or rule survives');
  assert.ok(!/오늘 필요|추천/.test(of),'no badge or verdict word');
  // ITEM §PRESENTATION ORDER: every row passes its category, so the fixed order is the same everywhere
- for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
+ for(const f of ['effectList','shelf','tray','till','orderOffer'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
  // v2.9.10 quick patch (User 2026-09-28): one order for every Item - Hazard Counter, 피로 회복, Core Stats, the rest
  assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'피로 회복, then the stat, then the rest');
  assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','survival'],'Counter first, then 피로 회복, then the stat');
@@ -3600,7 +3606,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
   assert.deepEqual(ks,[...ks].sort((a,b)=>a-b),it.name+' follows Counter -> 피로 회복 -> stat -> rest');}
  // §TRANSACTION RESULT STUB
  assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money,mode:el\.dataset\.mode\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
- assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
+ assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('cueSale').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)
