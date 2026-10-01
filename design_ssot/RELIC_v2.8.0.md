@@ -8,38 +8,22 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
 
-Player-facing active system name:
-    점포지원
+Player-facing active system name: 점포지원
 
 Internal source IDs/files may retain relic where changing them adds unnecessary migration/refactor risk.
-
-The Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 since v2.9.7 (User 2026-09-26).
-Thus 쇼케이스 is no longer reused by these active Store Supports.
+No active Store Support is named 쇼케이스 (the wall Decoration is 명예 모험가 액자).
 
 ## KEY
 windows=[D0,D5,D10,D15,D20,D25,D30]
 maxOwned/run=7
 candidates/window=3
 
-D0:
-cost=0
-pick<=1
-eligible=Foundation
+D0: cost=0 · pick<=1 · eligible=Foundation
 
-D5+:
-currency=G
-buy<=1
-defer=YES
-baseEligible=[Foundation,Hybrid,Utility]
-KeystoneEligible=D10+
-KeystoneStart=D10
-KeystoneSeparateHardRate=NO
+D5+: currency=G · buy<=1 · defer=YES · baseEligible=[Foundation,Hybrid,Utility] · KeystoneEligible=D10+ ·
+KeystoneStart=D10 · KeystoneSeparateHardRate=NO
 
-pool=30
-Foundation=12
-Hybrid=8
-Keystone=6
-Utility=4
+pool=32 · Foundation=13 · Hybrid=8 · Keystone=7 · Utility=4 (§POOL ARCHITECTURE)
 
 buildAxes=[Rotation,VIP,Premium,Expedition,Fresh,Customer]
 
@@ -51,28 +35,16 @@ slothSealBreakGoldCost=0
 slothSealBreakConsumesWindowAcquisition=YES
 
 ## ROLE
-RELIC =
-`이번 Run에서 어떤 편의점을 운영할 것인가`
+RELIC = `이번 Run에서 어떤 편의점을 운영할 것인가`
 
-Relic responsibilities:
-- 발주 방식 변화
-- 재고 운용 방향 변화
-- 고객 가치 판단 변화
-- 가격 전략 변화
-- 원정 준비 우선순위 변화
-- Run별 Store Build 형성
+Relic responsibilities: 발주 방식 변화 · 재고 운용 방향 변화 · 고객 가치 판단 변화 · 가격 전략 변화 ·
+원정 준비 우선순위 변화 · Run별 Store Build 형성.
 
-Relic should modify existing core loops rather than create isolated mini-systems.
+Relic modifies existing core loops rather than creating isolated mini-systems.
 
-Division:
-JOB=BaseStats+Growth
-TRAIT=CharacterVariation
-RELIC=StoreBuild
-ITEM=ExpeditionPreparation
+Division: JOB=BaseStats+Growth · TRAIT=CharacterVariation · RELIC=StoreBuild · ITEM=ExpeditionPreparation
 
 ## RELIC POWER / BUILD HIERARCHY
-
-Use the project influence hierarchy as:
 
 ```text
 NPC Base / Level / Growth / Equipment
@@ -82,59 +54,35 @@ NPC Base / Level / Growth / Equipment
 > Trait
 ```
 
-Therefore one Relic's same-moment direct expedition contribution should be smaller than one appropriate Item's own contribution.
-
-But Relic is a Run-wide Store Build system. A coherent multi-Relic build may and should exceed one Item through repeated economy/access/growth/item-value effects.
+One Relic's same-moment direct expedition contribution is smaller than one appropriate Item's own contribution.
+A coherent multi-Relic Run-wide Store Build may and should exceed one Item through repeated
+economy/access/growth/item-value effects.
 
 ## ACQUISITION WINDOWS
 
 ### D0
-timing=before first business
-cand=3
-pick<=1
-cost=0
-eligible=Foundation
+timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=Foundation
 
-Goal:
-첫 선택부터 Run 방향을 제안.
+Goal: 첫 선택부터 Run 방향을 제안.
 
-At Run start, the first Store Support choice is the first DAY 0 decision.
-
-The Store Support takeover contains only the support decision and its own compact copy.
-It does not carry the D0 Boss objective above the candidate cards.
+At Run start, the first Store Support choice is the first DAY 0 decision. The Store Support takeover contains only
+the support decision and its own compact copy; it does not carry the D0 Boss objective above the candidate cards.
 
 After one first support is chosen:
 - the support commits under existing foundation rules
 - the separate D0 Boss-information beat is shown
 - ordinary DAY 1 begins only after acknowledgement
 
-Exact first-support copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
-Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
+Exact first-support copy -> COPY_AUDIT_APPROVED_v2.8.0.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
 
 ### D5 / D10 / D15 / D20 / D25
-cand=3
-buy<=1
-currency=G
-firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION
-defer=YES
+cand=3 · buy<=1 · currency=G · firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION · defer=YES
 
-새 Milestone Window가 생성되면
-해당 Day의 첫 유효 Management 진입에서 후보 3개를 1회 Focused Reveal한다.
-
-Player may:
-- 구매
-- 나중에 결정
-
-`나중에 결정`은 기존 Defer다.
-후보/가격은 바뀌지 않는다.
+새 Milestone Window가 생성되면 해당 Day의 첫 유효 Management 진입에서 후보 3개를 1회 Focused Reveal한다.
+Player may 구매 or 나중에 결정. `나중에 결정`은 기존 Defer다. 후보/가격은 바뀌지 않는다.
 
 ### D30
-cand=3
-buy<=1
-currency=G
-timing=before final expedition lock
-firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION
-defer=YES
+cand=3 · buy<=1 · currency=G · timing=before final expedition lock · firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION · defer=YES
 
 Final lock 전에 해당 Window의 1회 Focused Reveal이 보장되어야 한다.
 
@@ -142,50 +90,32 @@ D30 Boss/Final ordering:
 - exact Final Family Pair/Hazard Pool is generated and revealed on D25 by `FINAL_EXPEDITION_v2.8.0.md`
 - D30 reuses that persisted state
 - D30 Relic focused reveal/decision occurs with the already-known persisted Final state
-- if Boss=SLOTH, the D30 Seal choice still shares the same D30 Relic window and remains mutually exclusive with Relic acquisition
+- if Boss=SLOTH, the D30 Seal choice shares the same D30 Relic window and is mutually exclusive with Relic acquisition
 - Final lock occurs only after the D30 Relic/Seal choice opportunity has been handled
 
 No D30 Family reroll/reveal generation occurs.
 
 ### D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE
 
-D30 rule:
-    every otherwise-eligible Store Support is included by default.
-
-A Store Support is excluded from D30 only when, after acquisition on D30 and before Final Lock,
-there is no legal action/state through which that support can change:
+Every otherwise-eligible Store Support is included in D30 by default. A Store Support is excluded from D30 only when,
+after acquisition on D30 and before Final Lock, there is no legal action/state through which it can change:
 - D30 ORDER / Reroll / inventory preparation
 - Final participant preparation
 - Final participant power / Hazard readiness
 - Final result-relevant state
 
-Implementation must therefore use an explicit D30 no-effect exclusion set, not a positive
-final-useful inclusion list.
+Implementation uses an explicit D30 no-effect exclusion set, not a positive final-useful inclusion list.
 
 Current explicit D30 no-effect exclusions:
-- 단골 스탬프 기계 (stamp)
-- 회원 관리대장 (member)
-- 길드 보증 진열대 (guarantee)
-- 대형 냉장고 (fridge)
-- 길드 전광판 (board)
-- 첫 방문 쿠폰 (firstVisitCoupon)
-- 단체 주문 창구 (groupOrder)
-- 단골 묶음혜택 (memberBundle)
-- 프리미엄 멤버십 (premiumMember)
-- 귀환 적립제 (returnPoints)
-- 길드 납품 인증 (supplyCert)
-- 새벽 회수 계약 (dawnRecovery)
-- 평생 단골제 (lifetime)
-- 왕도 프리미엄 인증 (royalCert)
-- 지역 거점점 계약 (hub)
-- 운영 효율 매뉴얼 (efficiency)
-- 응급 처치대 (firstAidDesk) (v2.9.11: no SALE arrival on D30)
+단골 스탬프 기계 (stamp) · 회원 관리대장 (member) · 길드 보증 진열대 (guarantee) · 대형 냉장고 (fridge) ·
+길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
+프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) · 새벽 회수 계약 (dawnRecovery) ·
+평생 단골제 (lifetime) · 왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
+응급 처치대 (firstAidDesk; no SALE arrival on D30)
 
-All other current supports are D30-eligible when they satisfy ordinary acquisition eligibility.
-
-Future Store Supports are also D30-eligible by default.
-A future support is removed from D30 only by adding it to the explicit no-effect exclusion set after
-its actual D30-to-Final usefulness is reviewed.
+All other current supports are D30-eligible under ordinary acquisition eligibility. Future Store Supports are
+D30-eligible by default; one is removed from D30 only by adding it to the exclusion set after its actual
+D30-to-Final usefulness is reviewed.
 
 ### SLOTH SEAL-BREAK WINDOW
 
@@ -197,47 +127,27 @@ When Boss=SLOTH:
 - D10 is never a Seal opportunity
 
 At a selected opportunity, this Relic window offers one mutually exclusive acquisition outcome:
-
 A. acquire <=1 normal Relic under the ordinary window rules
 B. break 1 Sloth Seal for 0G
 
-Seal Break:
-- grants no Relic
-- consumes this window's acquisition opportunity
-- committed state persists
-- cannot be duplicated/reversed by Save/Load
+Seal Break grants no Relic, consumes this window's acquisition opportunity, persists once committed and cannot be
+duplicated/reversed by Save/Load.
 
-Defer remains the ordinary window behavior until window expiry / Final lock.
-If the Player has not committed either branch, no free Seal Break is auto-awarded.
+Defer is the ordinary window behavior until window expiry / Final lock. If the Player has not committed either branch,
+no free Seal Break is auto-awarded.
 
-Persist additional state when applicable:
-- slothSealOpportunity=YES/NO
-- consumedBySealBreak=YES/NO
-- sealBreakCommitted=YES/NO
+Persist when applicable: slothSealOpportunity=YES/NO · consumedBySealBreak=YES/NO · sealBreakCommitted=YES/NO
 
-Relic owns only the mutually exclusive window lifecycle:
-```text
-Relic acquisition OR Seal Break
-```
-
-Boss Power by committed break count is owned by `BOSS_v2.8.0.md`.
-Do not duplicate SLOTH Boss Power numbers here.
+Relic owns only the mutually exclusive window lifecycle (`Relic acquisition OR Seal Break`).
+Boss Power by committed break count is owned by `BOSS_v2.8.0.md`; do not duplicate SLOTH Boss Power numbers here.
 
 ## WINDOW STATE
 
-At window creation:
-generate(candidates,prices) once
+At window creation: generate(candidates,prices) once
 
-persist:
-- milestoneDay
-- candidateIds
-- candidatePrices
-- purchased
-- expiryDay
-- focusedRevealSeen
+persist: milestoneDay · candidateIds · candidatePrices · purchased · expiryDay · focusedRevealSeen
 
-save/load => same(candidates,prices,state)
-reload => no reroll
+save/load => same(candidates,prices,state); reload => no reroll
 
 focusedReveal:
 - D5/D10/D15/D20/D25/D30의 새 Window는 1회만 Player에게 명확히 보여준다.
@@ -245,44 +155,33 @@ focusedReveal:
 - Save/Reload로 Focused Reveal을 반복 재생하거나 후보를 다시 뽑을 수 없다.
 - D0는 영업 전 Relic 선택 자체가 시작 Flow이므로 중복 Reveal을 추가하지 않는다.
 
-defer:
-- 구매하지 않고 닫기 가능
-- window expiry 전 다시 열기 가능
+defer: 구매하지 않고 닫기 가능 · window expiry 전 다시 열기 가능
 
-reopenAllowed:
-- Morning
-- Order
-- Store Management
+reopenAllowed=[Morning,Order,Store Management] · reopenBlocked=[Active Sale,Night Resolution]
 
-reopenBlocked:
-- Active Sale
-- Night Resolution
+Menu 점포지원 row: opens the selection surface only while reopenAllowed holds and the window is still purchasable;
+otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back and no close.
 
-Menu 점포지원 row (User 2026-09-24, v2.9.0): opens the selection surface only while reopenAllowed holds and the window is still purchasable; otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back and no close.
-
-ownedRelicQuickView:
-mode=READ_ONLY
-availablePhases=[Morning,Order,Sale]
-
-Rules:
+ownedRelicQuickView: mode=READ_ONLY · availablePhases=[Morning,Order,Sale]
 - 이미 보유한 점포지원의 이름/효과/조건은 Morning/Order/Sale에서 빠르게 확인 가능
 - Sale에서는 읽기만 가능
 - Quick View가 Relic 구매/Defer timing을 우회하지 않는다
 
 ### QUICK VIEW STATUS LINE
 
-(User 2026-09-24, v2.9.0): a Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never written as inactive. The exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32; the conditional supports are exactly: 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only), 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it pays every surviving 단골 at NIGHT (once per customer per Day, which is every expedition), always on; its card drops `(하루 1회)` (User 2026-09-25).
+A Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one
+status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save
+field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
+written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32. The conditional supports are exactly:
+회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
+단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it pays every surviving 단골 at NIGHT
+(once per customer per Day, which is every expedition), always on; its card carries no `(하루 1회)`.
 
-expiry:
-next relic window begins
-
-Example:
-D5 offer valid through D9
-D10 => new window
+expiry: next relic window begins (e.g. D5 offer valid through D9; D10 => new window)
 
 ## COUNTER JUDGEMENT
 
-(User 2026-09-24, v2.9.0): two predicates, one owner, no third definition anywhere.
+Two predicates, one owner, no third definition anywhere.
 
 ```text
 직접 대응 directCounter(item, hazards)
@@ -295,62 +194,41 @@ D10 => new window
 Who reads which:
 - 관련 준비: SALE purchase acceptance (the accessible-mode floor and the 바가지 fit term, ECONOMY_ORDER §PURCHASE ACCEPTANCE), 원정 위험 게시판 offer weight
 - 직접 대응: 야전 정비대 and 원정 전문 인증 Counter multipliers, the Known-Hazard Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold
-- the legacy exception that read 기동 as a Counter for 속박/진창 is retired; 기동 on those Gates is 관련 준비, never a Counter
+- 기동 on 속박/진창 Gates is 관련 준비, never a Counter
 
 ## CANDIDATE RULES
 
 withinWindowDuplicate=NO
-
-owned nonstackable relic:
-futureEligible=NO
-
-unbought relic:
-futureEligible=YES
-immediateNextWindowRepeat=NO
-
-offer diversity:
-prefer >=2 distinct Primary Build directions when practical
-
-buildBias:
-soft only
-
-Rule:
-현재 보유 Build와 관련된 후보 Weight를 약하게 높일 수 있으나
-필수 Piece를 보장하지 않는다.
+owned nonstackable relic: futureEligible=NO
+unbought relic: futureEligible=YES · immediateNextWindowRepeat=NO
+offer diversity: prefer >=2 distinct Primary Build directions when practical
+buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약하게 높일 수 있으나 필수 Piece를 보장하지 않는다.
 
 Keystone:
-- D0/D5 eligible=NO
-- D10/D15/D20/D25/D30 eligible=YES
-- no separate fixed Keystone appearance probability is added
-- eligible Keystone competes in the normal candidate pool
+- D0/D5 eligible=NO; D10/D15/D20/D25/D30 eligible=YES
+- no separate fixed Keystone appearance probability; eligible Keystone competes in the normal candidate pool
 - related build pieces may softly raise weight
 - guaranteed completion=NO
 
 ## POOL ARCHITECTURE
 
-total=32 (User 2026-09-28, v2.9.11: 야전 들것 and 응급 처치대 joined the Expedition line)
+total=32
 
 Foundation=13
 - 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3)
-- early direction setters
-- D0 eligible
+- early direction setters; D0 eligible
 
 Hybrid=8
-- connects 2 Build axes
-- pivot/flex value
+- connects 2 Build axes; pivot/flex value
 
 Keystone=7
 - 1 per Primary Build, plus 응급 처치대 (Expedition holds 2)
-- build engine/completion piece
-- eligible from D10
+- build engine/completion piece; eligible from D10
 
 Utility=4
-- general support
-- should not erase build identity
+- general support; should not erase build identity
 
 ## BUILD COMPLETION FEEL
-
-Target feel:
 
 ```text
 1 Piece = direction visible; small immediate effect
@@ -360,201 +238,108 @@ Target feel:
 5+ Pieces = rare high-roll; do not normalize automatically
 ```
 
-For build effects that can be meaningfully expressed as Final Party Power, a coherent 3~4 Piece build may create roughly +10~20 Party-equivalent direct/indirect difference as a `DIRECTOR DOCUMENT BASELINE` measurement target.
+For build effects expressible as Final Party Power, a coherent 3~4 Piece build may create roughly +10~20
+Party-equivalent direct/indirect difference as a `DIRECTOR DOCUMENT BASELINE` measurement target.
+Do not implement this by adding generic Power to every Relic; economy/visitor/order builds express value through
+their actual channels. High-roll synergy is valid roguelite power; do not automatically nerf a good seed into average play.
 
-Do not implement this by adding generic Power to every Relic.
-Economy/visitor/order builds should express value through their actual channels.
-
-High-roll synergy is valid roguelite power.
-Do not automatically nerf a good seed into average play.
-
-Typical final mix:
-mainBuild=3–4
-hybridSupport=1–2
-utility=1–2
-
-All 7 relics do not need same tag.
+Typical final mix: mainBuild=3–4 · hybridSupport=1–2 · utility=1–2. All 7 relics do not need same tag.
 
 ## BUILD AXES
 
 ### ROTATION
 identity=high volume / fast inventory turnover
-
-questions:
-- bulk buy?
-- cheap stock depth?
-- waste risk?
-- throughput?
-
-strength:
-sales count / rotation / cashflow
-
-cost:
-inventory exposure / lower single-sale margin
+questions: bulk buy? · cheap stock depth? · waste risk? · throughput?
+strength: sales count / rotation / cashflow · cost: inventory exposure / lower single-sale margin
 
 ### VIP
 identity=long-term investment in selected returning NPCs
-
-questions:
-- who deserves discount/investment?
-- who should be kept alive?
-- who can become future high-value customer?
-
-strength:
-wallet / loyalty / revisit / boss roster
-
-cost:
-early cashflow / death opportunity cost
+questions: who deserves discount/investment? · who should be kept alive? · who can become future high-value customer?
+strength: wallet / loyalty / revisit / boss roster · cost: early cashflow / death opportunity cost
 
 ### PREMIUM
 identity=high-margin expensive sales
-
-questions:
-- stock expensive items?
-- who can afford them?
-- attempt 150%?
-
-strength:
-large margin spikes
-
-cost:
-high COGS / refusal / stuck inventory / capital pressure
+questions: stock expensive items? · who can afford them? · attempt 150%?
+strength: large margin spikes · cost: high COGS / refusal / stuck inventory / capital pressure
 
 ### EXPEDITION
 identity=prepare around current Gate risks
-
-questions:
-- which known Hazard matters?
-- Counter vs Insurance vs generic stats?
-
-strength:
-survival / difficult Gate readiness
-
-cost:
-less direct generic economy power
+questions: which known Hazard matters? · Counter vs Insurance vs generic stats?
+strength: survival / difficult Gate readiness · cost: less direct generic economy power
 
 ### FRESH
-identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation (User 2026-09-24, v2.9.0)
-
-questions:
-- shelf life?
-- Food/Drink volume?
-- native Stat/recovery value?
-- can flexible Food/Drink prep cover enough without replacing specialist gear?
-
-strength:
-Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
-
-cost:
-expiry / weaker specialist reliability / limited Insurance access
+identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation
+questions: shelf life? · Food/Drink volume? · native Stat/recovery value? · can flexible Food/Drink prep cover enough
+without replacing specialist gear?
+strength: Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
+cost: expiry / weaker specialist reliability / limited Insurance access
 
 Fresh must not become a blanket multiplier that erases FieldGear specialists.
 
 ### CUSTOMER
 identity=who comes to the store
+questions: more visitors? · more new customers? · more returners? · customer mix?
+strength: hybridizes with all builds · cost: little direct Item power / depends on pool state
 
-questions:
-- more visitors?
-- more new customers?
-- more returners?
-- customer mix?
-
-strength:
-hybridizes with all builds
-
-cost:
-little direct Item power / depends on pool state
-
-Pacing/attachment guardrail:
-Customer value should come from meaningful traffic/composition tradeoffs,
-not merely from forcing the Player through more repetitive customer interactions.
-Visitor-count tuning must preserve the normal trusted-regular target and active-cap rules.
-If raw visitor volume materially damages Run pacing or NPC attachment in playtest,
-rebalance the existing Customer effects rather than adding another workload system.
+Pacing/attachment guardrail: Customer value comes from meaningful traffic/composition tradeoffs, not from forcing the
+Player through more repetitive customer interactions. Visitor-count tuning preserves the normal trusted-regular target
+and active-cap rules. If raw visitor volume materially damages Run pacing or NPC attachment in playtest, rebalance the
+existing Customer effects rather than adding another workload system.
 
 ## RELIC BLUEPRINTS
 
-Exact Player-facing wording remains owned by COPY_AUDIT_APPROVED_v2.8.0.md.
-
-The following Store Support Functions are exact:
+Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.md §11 (§11-1..§11-30 for blueprints
+1–30, §11-30b 야전 들것, §11-30c 응급 처치대). The following Store Support Functions are exact.
 
 ### ROTATION — Foundation
-1. 묶음발주 계약
-tag=Rotation
+1. 묶음발주 계약 · tag=Rotation · purpose=reward inventory-risk-taking
 - 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
-purpose=reward inventory-risk-taking
 
-2. 회전 진열대
-tag=Rotation
-purpose=sales->order->sales loop
-
-`DIRECTOR DOCUMENT BASELINE`
-
-회전 진열대:
-    Price = 80G
-    trigger = previous Day sales >= 4
-    effect = next generated ORDER offers for every Item rarity get supply quantity +1
-
-Purpose:
-    high sales -> more available units -> bulk-order threshold becomes reachable more often
-    -> Rotation discounts can actually be exercised -> more stock can support the next sales cycle
-
-Boundaries:
-- it does not add ORDER offer slots
-- it does not lower Item price by itself
-- the existing 묶음발주 계약 / 물류 본부계약 discounts remain separate
+2. 회전 진열대 · tag=Rotation · purpose=sales->order->sales loop · `DIRECTOR DOCUMENT BASELINE`
+- Price = 80G
+- trigger = previous Day sales >= 4
+- effect = next generated ORDER offers for every Item rarity get supply quantity +1
+- purpose: high sales -> more available units -> bulk-order threshold becomes reachable more often -> Rotation
+  discounts can actually be exercised -> more stock can support the next sales cycle
+- it does not add ORDER offer slots and does not lower Item price by itself
+- the 묶음발주 계약 / 물류 본부계약 discounts remain separate
 - if previous Day sales < 4, this support adds no quantity
 
 ### VIP — Foundation
-3. 단골 스탬프 기계
-tag=VIP
+3. 단골 스탬프 기계 · tag=VIP
 - 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 
-4. 회원 관리대장
-tag=VIP
+4. 회원 관리대장 · tag=VIP · identityPreReveal=NO
 - 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
-identityPreReveal=NO
 
 ### PREMIUM — Foundation
-5. 희귀상품 입고 계약
-tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store 10% of the charged price on top, in every mode (User 2026-09-29, v2.9.11; was +10% paid by the customer); no operating-cost modifier
+5. 희귀상품 입고 계약 · tag=Premium
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store
+  10% of the charged price on top, in every mode; no operating-cost modifier
 
-6. 길드 보증 진열대
-tag=Premium
+6. 길드 보증 진열대 · tag=Premium · 150AutoSuccess=NO · playerReceivesChosenPrice=YES
 - 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
   of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
-150AutoSuccess=NO
-playerReceivesChosenPrice=YES
 
 ### EXPEDITION — Foundation
-7. 원정 위험 게시판
-tag=Expedition
-- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) 관련 준비 Item offer weight +50% (§COUNTER JUDGEMENT; a direct Counter or the Stat that Hazard presses; (User 2026-09-24, v2.9.0)); this is not a guarantee
-unknownHazardReveal=NO
-specificItemGuarantee=NO
+7. 원정 위험 게시판 · tag=Expedition · unknownHazardReveal=NO · specificItemGuarantee=NO
+- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) 관련 준비 Item offer weight +50% (§COUNTER JUDGEMENT; a
+  direct Counter or the Stat that Hazard presses); this is not a guarantee
 
-8. 야전 정비대
-tag=Expedition
+8. 야전 정비대 · tag=Expedition
 - 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
 - it changes no ORDER offer weight and no offer quantity
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
 
-31. 야전 들것 (User 2026-09-28, v2.9.11)
-tag=Expedition
+31. 야전 들것 · tag=Expedition
 - 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
 - it applies wherever preparation is read: SALE outlook, NIGHT resolution and the D30 Final (so it is D30-eligible)
-- 악바리's injured 투력 bonus replaces the penalty as before; the support changes nothing for that Trait
-- measured (archive/v2.9.11/v2.9.11-drafts.md §C, owned from D10, upper bound): D30 19.6 → 21.1%, clear 13.5 → 14.7%
+- 악바리's injured 투력 bonus replaces the penalty; the support changes nothing for that Trait
+- measurement evidence: archive/v2.9.11/v2.9.11-drafts.md §C
 
 ### FRESH — Foundation
-9. 대형 냉장고
-tag=Fresh
-
-`DIRECTOR DOCUMENT BASELINE`
-
-`대형 냉장고`:
+9. 대형 냉장고 · tag=Fresh · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
 base Price = 60G
@@ -563,17 +348,9 @@ existing eligible non-expired stock extends once on acquisition
 future eligible stock enters with the extension
 ```
 
-No Stat/Supply multiplier is added to this Relic.
-No repeated daily extension.
-dailyRepeatedExtension=NO
-infinitePreservation=NO
+No Stat/Supply multiplier. dailyRepeatedExtension=NO · infinitePreservation=NO
 
-10. 즉석식품 코너
-tag=Fresh
-
-`DIRECTOR DOCUMENT BASELINE`
-
-`즉석식품 코너`:
+10. 즉석식품 코너 · tag=Fresh · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
 Food/Drink positive native Core-Stat contribution +25%
@@ -581,109 +358,64 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-no operating-cost effect (User 2026-09-29, v2.9.11; was overheadBase × 0.10 from the next Day)
+no operating-cost effect
 ```
 
-Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).` (User 2026-09-24, v2.9.0; operating cost clause removed v2.9.11)
-
-notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
-newCombatSystem=NO
+notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect] · newCombatSystem=NO
 
 ### CUSTOMER — Foundation
-11. 길드 전광판
-tag=Customer
-livingNpcCapIgnored=NO
+11. 길드 전광판 · tag=Customer · livingNpcCapIgnored=NO · `DIRECTOR DOCUMENT BASELINE`
 
-`DIRECTOR DOCUMENT BASELINE`
-
-Role: raise the floor of a bad Morning.
-
-It applies to the **base visitor roll only**, before any other modifier:
-
-```text
-base 3 -> 4
-base 4 -> 4
-base 5 -> 5
-base 6 -> 6
-```
-
-Rules:
+Role: raise the floor of a bad Morning. It applies to the **base visitor roll only**, before any other modifier:
+base 3 -> 4 · base 4 -> 4 · base 5 -> 5 · base 6 -> 6
 - this is a floor of 4 on the base roll, not a floor of 4 on the final visitor count
 - no separate chance roll is made
-- other modifiers (Relic, Decoration, Event) apply afterward as they already do
+- other modifiers (Relic, Decoration, Event) apply afterward
 - the available-adventurer limit still caps the actual seating
 
-12. 첫 방문 쿠폰
-tag=Customer
-
-`DIRECTOR DOCUMENT BASELINE`
-
-첫 방문 쿠폰 exact rule:
+12. 첫 방문 쿠폰 · tag=Customer · `DIRECTOR DOCUMENT BASELINE`
 - on an adventurer's first-ever visit: NPC Wallet +30G on arrival
 - during that visit: purchase intent +0.20
 - it adds no visitor, seats no one and changes no queue
 
 ### HYBRID
-13. 단체 주문 창구
-tags=[Rotation,Customer]
+13. 단체 주문 창구 · tags=[Rotation,Customer]
 - 단체 주문 창구: its own Morning roll, 20% -> expected visitors +1, independent of 길드 전광판 /
   지역 거점점 계약 / wall Decoration
 - from the Day's 5th sale, each sale -> HQ commission +15G
 - it discounts no ORDER
 
-14. 단골 묶음혜택
-tags=[Rotation,VIP]
+14. 단골 묶음혜택 · tags=[Rotation,VIP] · consumerSlotRule=UNCHANGED
 - 단골 묶음혜택: a 단골 (Trusted Regular) customer's second paid purchase that Day -> the customer
   pays, and is judged on, half the charged price; the store receives the full charged price and HQ
   pays the other half (recorded on that sale)
-consumerSlotRule=UNCHANGED
 
-15. 프리미엄 멤버십
-tags=[VIP,Premium]
+15. 프리미엄 멤버십 · tags=[VIP,Premium] · 150AutoSuccess=NO
 - 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +40G; that customer's Rare+
   Item purchase intent +15%p
-150AutoSuccess=NO
 
-16. 귀환 적립제
-tags=[VIP,Expedition]
+16. 귀환 적립제 · tags=[VIP,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=paid returning customer survives expedition -> long-term customer value up
 channel=prefer existing loyalty/wallet/revisit systems
+- Price = 240G
+- condition = paid returning customer today survives (no Loyalty threshold)
+- Loyalty +5, NPC Wallet +25G
 
-`DIRECTOR DOCUMENT BASELINE`
-
-귀환 적립제:
-    Price = 240G
-    condition = paid returning customer today survives (no Loyalty threshold)
-    Loyalty +5
-    NPC Wallet +25G
-
-17. 원정 도시락 코너
-tags=[Fresh,Expedition]
-
-`DIRECTOR DOCUMENT BASELINE`
-
-`원정 도시락 코너`:
+17. 원정 도시락 코너 · tags=[Fresh,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-per Food/Drink Item in the Bag (User 2026-09-28, v2.9.11; was Supply +2 for both and +4):
+per Food/Drink Item in the Bag:
   Food:  Supply +2 (피로 회복 +2)
   Drink: Supply +1 (피로 회복 +1)
   +2 defence on every Hazard of the Gate the adventurer actually goes to
   at the 마왕성 (the Final) the +2 goes to one Hazard only: the adventurer's most 취약 one - the largest gap before this
-    bonus, the Final's own Hazard order on a tie (User 2026-09-29, v2.9.11)
+    bonus, the Final's own Hazard order on a tie
 ```
-
-Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나).` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28 / 2026-09-29)
 
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 
-18. 냉장 유통 계약
-tags=[Fresh,Premium]
-eligible=Uncommon+ Food/Drink
-singleSkuDependency=NO
-
-냉장 유통 계약:
+18. 냉장 유통 계약 · tags=[Fresh,Premium] · eligible=Uncommon+ Food/Drink · singleSkuDependency=NO
 - Uncommon+ Food/Drink offer weight +80%
 - Uncommon+ Food/Drink purchase intent +16%p
 - no Stat effect
@@ -691,116 +423,66 @@ singleSkuDependency=NO
 - on acquisition, currently owned non-expired eligible stock extends exactly once
 - future eligible stock receives the extension
 
-Eligibility:
-    category in [Food, Drink]
-    rarity >= Uncommon
+Eligibility: category in [Food, Drink] and rarity >= Uncommon. Do not use a retired fresh boolean/property.
 
-Do not use a retired fresh boolean/property.
-
-19. 길드 납품 인증
-tags=[Premium,Expedition]
+19. 길드 납품 인증 · tags=[Premium,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=Rare+ expedition-response items gain premium-economy viability
+- Price = 220G
+- HQ commission = 20% of Item list price
+- buyer NPC Wallet +30G
 
-`DIRECTOR DOCUMENT BASELINE`
-
-길드 납품 인증:
-    Price = 220G
-    HQ commission = 20% of Item list price
-    buyer NPC Wallet +30G
-
-20. 새벽 회수 계약
-tags=[Fresh,Rotation]
+20. 새벽 회수 계약 · tags=[Fresh,Rotation]
 - 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
-  being wasted (it is not counted as waste); it is taken back that Night, with the discard (ITEM §SHELF LIFE, v2.9.11),
+  being wasted (it is not counted as waste); it is taken back that Night, with the discard (ITEM §SHELF LIFE),
   so the refund is on that Day's receipt
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
 - it discounts no ORDER
 
 ### KEYSTONE
-21. 물류 본부계약
-tag=Rotation
+21. 물류 본부계약 · tag=Rotation · `DIRECTOR DOCUMENT BASELINE`
+- Price = 300G
+- effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
+- no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
+- the internal purchase-price floor (45% of list) still applies
 
-`DIRECTOR DOCUMENT BASELINE`
-
-물류 본부계약 (remade User 2026-09-29, v2.9.11; was previous Day sales >= 6 -> same-SKU 3+ orders -25%):
-    Price = 300G
-    effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
-    no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
-
-The internal purchase-price floor (45% of list) is unchanged.
-
-22. 평생 단골제
-tag=VIP
+22. 평생 단골제 · tag=VIP · snowballCap=required · `DIRECTOR DOCUMENT BASELINE`
 effect=high-loyalty survival/revisit accelerates wallet/revisit value
-snowballCap=required
+- Price = 310G
+- 단골 (Trusted Regular, Loyalty >= 51) survival condition
+- NPC Wallet +50G
+- next-visit weight +100%
+- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51
 
-`DIRECTOR DOCUMENT BASELINE`
-
-평생 단골제:
-    Price = 310G
-    단골 (Trusted Regular, Loyalty >= 51) survival condition
-    NPC Wallet +50G
-    next-visit weight +100% (User 2026-09-29, v2.9.11; was +50%)
-
-The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
-
-23. 왕도 프리미엄 인증
-tag=Premium
+23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
-refusal/inventoryRisk=REMAINS
+- Price = 320G
+- HQ commission = 45% of the charged (150%) sale price
+- the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16)
+- base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
+- the 1.5x price burden and Loyalty -3 are unchanged
 
-`DIRECTOR DOCUMENT BASELINE`
-
-왕도 프리미엄 인증:
-    Price = 320G
-    HQ commission = 45% of the charged (150%) sale price (User 2026-09-29, v2.9.11; was 60%, 40% before)
-    the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16; User 2026-09-29, v2.9.11; it did not apply before)
-    base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
-      (User 2026-09-29, v2.9.11)
-    the 1.5x price burden and Loyalty -3 are unchanged
-
-Player card copy: `바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.` (User 2026-09-29, v2.9.11)
-
-24. 원정 전문 인증
-tag=Expedition
-
-`DIRECTOR DOCUMENT BASELINE`
-
-원정 전문 인증:
-    Price = 290G
-
-- an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat Item does not qualify; (User 2026-09-24, v2.9.0)): its Hazard Counter values x1.60
+24. 원정 전문 인증 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
+- Price = 290G
+- an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat
+  Item does not qualify): its Hazard Counter values x1.60
 - multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 
-32. 응급 처치대 (User 2026-09-28, v2.9.11)
-tag=Expedition
-
-`DIRECTOR DOCUMENT BASELINE`
-
-응급 처치대:
-    Price = 300G
-
-- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn after it;
-  only for an injured arrival and only while owned)
+32. 응급 처치대 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
+- Price = 300G
+- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn
+  after it; only for an injured arrival and only while owned)
 - the SALE state strip says so once (COPY_AUDIT §9-4b)
-- the Expedition line holds two Keystones (원정 전문 인증 and this one), User 2026-09-28
 - D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
-- measured against the six Keystones (archive/v2.9.11/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
-  clear 13.5 → 16.8% - at or just above the strongest Keystones (물류 본부계약, 원정 전문 인증: D30 24.0%)
+- measurement evidence: archive/v2.9.11/v2.9.11-drafts.md §C-2
 
-25. 24시간 신선체계
-tag=Fresh
+25. 24시간 신선체계 · tag=Fresh · `DIRECTOR DOCUMENT BASELINE`
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
-
-`DIRECTOR DOCUMENT BASELINE`
-
-`24시간 신선체계`:
 
 ```text
 no shelf-life effect and no operating-cost effect
-Food/Drink ORDER (purchase) price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
+Food/Drink ORDER (purchase) price x1.15
 Food/Drink positive native Core-Stat contribution +50%
 Supply (피로 회복) unchanged
 Hazard Counter unchanged
@@ -808,106 +490,61 @@ Insurance unchanged
 RiskReward penalty unchanged
 ```
 
-Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
+26. 지역 거점점 계약 · tag=Customer · livingNpcCapIgnored=NO · `DIRECTOR DOCUMENT BASELINE`
 
-26. 지역 거점점 계약
-tag=Customer
-livingNpcCapIgnored=NO
-
-`DIRECTOR DOCUMENT BASELINE`
-
-Role: pay overhead to widen the catchment.
-
-지역 거점점 계약:
-    Price = 340G
+Role: pay overhead to widen the catchment. Price = 340G.
 
 Each applicable Morning, exactly one mutually exclusive visitor result:
-    +1 visitor = 45%
-    +2 visitors = 15%
-    no visitor increase = 40%
++1 visitor = 45% · +2 visitors = 15% · no visitor increase = 40%
 
 Expected visitor delta = +0.75 / applicable Day before ordinary availability caps.
+The visitor increase is subject to the ordinary active/available adventurer cap.
 
-The visitor increase remains subject to the ordinary active/available adventurer cap.
-
-Operating cost:
-
-```text
-overheadBase + overheadBase × 0.10 + other flat extras
-```
-
-then the existing operating-cost rounding rule.
-
-The 10% applies to `overheadBase` only. It must not be applied again to other Event or Relic
-flat modifiers, and it does not compound with them.
+Operating cost: `overheadBase + overheadBase × 0.10 + other flat extras`, then the existing operating-cost rounding
+rule. The 10% applies to `overheadBase` only; it is not applied again to other Event or Relic flat modifiers and does
+not compound with them.
 
 ### UTILITY
 27. 후방 창고 증설
-- 후방 창고 증설: inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
+- 후방 창고 증설: inventory capacity +5
 
 28. 본사 추가발주권
 - 본사 추가발주권: from the next ORDER-offer generation, offer candidate count +2
 
 29. 발주 교환권
 effect=매일 첫 canonical Full-offer Reroll 비용 0G
-firstRerollFree=YES
-freeUseConsumesFirstRerollStep=NO
-dailyReset=YES
-singleOfferSwap=NO
-requirements:
-- applies to canonical full-offer reroll
+firstRerollFree=YES · freeUseConsumesFirstRerollStep=NO · dailyReset=YES · singleOfferSwap=NO · rerollAdvancesPity=NO ·
+pity farming=NO
+- applies to canonical full-offer reroll; current eligibility/coverage/rarity rules preserved
 - after the free first use, same-Day Reroll follows the normal curve from its first step
-- current eligibility/coverage/rarity rules preserved
-- rerollAdvancesPity=NO
-- pity farming=NO
 
-```text
-each Day's first canonical Full-offer Reroll = 0G
-paid Rerolls then start at the first normal step
-```
-
-All paid Reroll costs after that use the current authoritative curve from `ECONOMY_ORDER_v2.8.0.md`.
-
-With the current curve:
+Paid Reroll costs use the current authoritative curve from `ECONOMY_ORDER_v2.8.0.md`. With the current curve:
 
 ```text
 normal: 50 -> 100 -> 200 -> 400 -> 800 -> x2 thereafter
 with 발주 교환권: 0 -> 50 -> 100 -> 200 -> 400 -> x2 thereafter
 ```
 
-30. 운영 효율 매뉴얼
-buildDefiningPower=LOW
+30. 운영 효율 매뉴얼 · buildDefiningPower=LOW · `DIRECTOR DOCUMENT BASELINE`
+- Price = 130G
+- from next Day, basic operating cost -30G
 
-`DIRECTOR DOCUMENT BASELINE`
-
-운영 효율 매뉴얼:
-    Price = 130G
-    from next Day, basic operating cost -30G
-
-Late acquisition may rationally be skipped. That alone is not a Balance Finding.
-Evaluate this support by whether earlier acquisition can repay its price and create meaningful
-remaining-Run economy value.
+Late acquisition may rationally be skipped; that alone is not a Balance Finding. Evaluate this support by whether
+earlier acquisition can repay its price and create meaningful remaining-Run economy value.
 
 ## FRESH NATIVE-STAT COMPOSITION
 
 Positive native Core Stat means the Item's own positive contribution to 투력/강인함/기동/정신 before unrelated effects.
+Fresh native-Stat bonuses stack additively from the Item's base native positive Stat:
+    즉석식품 코너 + 24시간 신선체계 = +25% +50% => base positive native Stat ×1.75
 
-Fresh native-Stat bonuses stack additively from the Item's base native positive Stat.
-
-Therefore:
-    즉석식품 코너 + 24시간 신선체계
-    +25% +50%
-    => base positive native Stat ×1.75
-
-Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive pool under `ITEM_v2.8.0.md`.
-Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second sequential layer.
-
-This high point is an allowed coherent-build reward.
+Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive
+pool under `ITEM_v2.8.0.md`. Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second
+sequential layer. This high point is an allowed coherent-build reward.
 
 ## VISITOR SUPPORT COMPOSITION
 
-The two answer different questions and neither is a strict upgrade of the other.
-
+The supports answer different questions and none is a strict upgrade of another.
 `board`, `hub`, `groupOrder` and the `wall` Decoration are independent and may all be held at once.
 
 ```text
@@ -917,69 +554,59 @@ groupOrder = its own 20% Morning roll, +1 visitor
 wall       = 10% Morning proc (Decoration, not a Relic)
 ```
 
-They share no ownership, no purchase candidacy and no slot. Holding more than one simply applies
-each in its own place: the board floor first on the base roll, then the probabilistic additions.
+They share no ownership, no purchase candidacy and no slot. Holding more than one applies each in its own place: the
+board floor first on the base roll, then the probabilistic additions.
 
 ## ITEM / BUILD COMPATIBILITY
 
 Relic build filters must be supported by the active Item catalog, not only by description text.
+Build-filtered Relics must not depend on one single eligible SKU. Item categories -> `ITEM_v2.8.0.md`.
 
 Rotation:
-- low-rarity useful specialists must remain sellable/valuable into late run
-- bulk economics should have enough cheap/common SKUs to create real choices
+- low-rarity useful specialists remain sellable/valuable into late run
+- bulk economics have enough cheap/common SKUs to create real choices
 
 Premium:
-- Rare+ pool must contain enough distinct roles/price points to support repeated premium play
+- Rare+ pool contains enough distinct roles/price points to support repeated premium play
 - Rare+ must not become universal superiority
 
 Expedition:
 - uses canonical 9 Hazard matrix only
-- Counter availability must preserve Main vs Alternative-route choice
-- Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
-
-Other Expedition Relics that inspect Item functional role continue to use actual Counter/Insurance functionality rather than physical item shape.
+- Counter availability preserves Main vs Alternative-route choice
+- Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction
+- Expedition Relics that inspect Item functional role use actual Counter/Insurance functionality rather than physical item shape
 
 Fresh:
-- active Food/Drink pool must span multiple prices/rarities/roles
+- active Food/Drink pool spans multiple prices/rarities/roles
 - native core boost means positive native Stat only; Supply (피로 회복) stays its own channel
-- specialist FieldGear must remain the more reliable dedicated Counter
-
-Category checks must use Food/Drink categories rather than stale legacy `fresh` category aliases.
+- specialist FieldGear remains the more reliable dedicated Counter
+- category checks use Food/Drink categories, not stale legacy `fresh` category aliases
 
 Customer/VIP:
 - may amplify demand/customer value but must not create hidden Item-Job affinity
 
-Build-filtered Relics must not depend on one single eligible SKU.
-
-Item categories -> `ITEM_v2.8.0.md`.
-
 ## ACTIVE POOL BOUNDARY
 
-activeRelicPool=the 30 canonical blueprints in this document only
+activeRelicPool=the 32 canonical blueprints in this document only
 
 nonCanonicalFacilityActive=NO
 excludedFacilityNames=[포션 냉장고,마석 충전대,상권 분석대]
 
 No excluded facility effect may modify Order/Item/NPC/Dungeon resolution.
 
-## STORE SUPPORT IDS (User 2026-09-27, v2.9.8)
+## STORE SUPPORT IDS
 
-Ids read as the current names: `medicine` → `fieldRepair` (야전 정비대), `dawnBulk` → `dawnRecovery` (새벽 회수 계약),
-`showcase` → `rareContract` (희귀상품 입고 계약), `rookieBoard` → `firstVisitCoupon` (첫 방문 쿠폰), `groupFlyer` →
-`groupOrder` (단체 주문 창구), `terminal` → `extraOrder` (본사 추가발주권), `delivery` → `rerollTicket` (발주 교환권).
-The Event 본사 반값 행사 is `halfPrice` (was `tasting`, with its effect key and support value). Save schema v9.
+Ids read as the current names: `fieldRepair` (야전 정비대), `dawnRecovery` (새벽 회수 계약), `rareContract`
+(희귀상품 입고 계약), `firstVisitCoupon` (첫 방문 쿠폰), `groupOrder` (단체 주문 창구), `extraOrder` (본사 추가발주권),
+`rerollTicket` (발주 교환권). The Event 본사 반값 행사 is `halfPrice` (its effect key and support value too). Save schema v9.
 
 ## PRICE
 
 D0=free
 
-D5+:
-price=basePrice × limitedRandomBand
-randomBand≈±15–20% starting point
-priceFixedForWindow=YES
+D5+: price=basePrice × limitedRandomBand · randomBand≈±15–20% starting point · priceFixedForWindow=YES
 
-relative direction:
-Foundation < Hybrid < Keystone; Utility is priced as a cheap support (User decision 2026-09-23)
+relative direction: Foundation < Hybrid < Keystone; Utility is priced as a cheap support
 
 The following 21 Store Support base prices are the approved baseline.
 
@@ -1008,73 +635,41 @@ The following 21 Store Support base prices are the approved baseline.
 | fieldStretcher | 야전 들것 | 80G |
 
 The other 11 active support prices are exact in their Store Support entries above.
-
 Price should follow actual ROI, not label alone.
 
 ## GOLD ROLE
 
-Gold tension:
-current cash
-vs
-NPC investment
-vs
-store investment
+Gold tension: current cash vs NPC investment vs store investment
 
-price modes:
-150%=current Gold focus
-100%=stable operation
-50%=NPC future-value investment
+price modes: 150%=current Gold focus · 100%=stable operation · 50%=NPC future-value investment ·
 Relic=store future-value investment
 
-Canonical economy:
--> ECONOMY_ORDER_v2.8.0.md
+Canonical economy -> ECONOMY_ORDER_v2.8.0.md
 
 ## INFORMATION
 
-Relic description must make clear:
-- what changes
-- trigger/condition
-- meaningful limit
-- price when currently purchasable
+Relic description must make clear: what changes · trigger/condition · meaningful limit · price when currently purchasable.
 
 Material hidden modifier=NO
 
-Internal design taxonomy:
-- Foundation
-- Hybrid
-- Keystone
-- Utility
-- Rotation / VIP / Premium / Expedition / Fresh / Customer Build Axis
+Internal design taxonomy: Foundation / Hybrid / Keystone / Utility; Rotation / VIP / Premium / Expedition / Fresh /
+Customer Build Axis.
 
-playerFacingTaxonomy=NO
+playerFacingTaxonomy=NO — do not show Player-facing labels such as `신선식품 · 기반`, `단골 육성 · 기반`,
+`고마진 · 키스톤`. These are Director/implementation organization terms; the Player discovers build synergy from actual
+effects and combinations.
 
-Do not show Player-facing labels such as:
-- `신선식품 · 기반`
-- `단골 육성 · 기반`
-- `고마진 · 키스톤`
-
-These are Director/implementation organization terms.
-Player should discover build synergy from actual effects and combinations.
-
-Exact internal coefficient may stay hidden when not needed,
-but effect existence/condition must be player-readable.
+Exact internal coefficient may stay hidden when not needed, but effect existence/condition must be player-readable.
 
 ## FEEL / ATTRIBUTION BOUNDARY
 
-Deterministic visible changes may expose their Store Support source:
-- Order offer count +N
-- operating cost -N
-- HQ commission +N
-- deterministic visitor-count delta
-- other exact resolved deltas
+Deterministic visible changes may expose their Store Support source: Order offer count +N · operating cost -N ·
+HQ commission +N · deterministic visitor-count delta · other exact resolved deltas.
 
-Probability/weight-only effects do not claim that a particular random result happened because of
-the support.
-
+Probability/weight-only effects do not claim that a particular random result happened because of the support.
 Do not build a new rarity-attribution UI merely to explain weighting.
 
-The Player can always inspect current owned Store Supports through the existing compact owned
-support reference.
+The Player can always inspect current owned Store Supports through the existing compact owned support reference.
 
 ## COPY TRUTH
 
@@ -1086,62 +681,33 @@ Do not mention 무료 보급; the active price system has no free-sale mode.
 길드 전광판 must describe the actual base-roll floor:
     하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
 
-발주 교환권:
-    first canonical full reroll each Day = 0G
-    then the ordinary paid curve from its first step: 50G -> 100G -> 200G ...
+발주 교환권: first canonical full reroll each Day = 0G, then the ordinary paid curve from its first step:
+50G -> 100G -> 200G ...
 
-SLOTH:
-    점포지원, not 유물
+SLOTH: 점포지원, not 유물
 
 ## SAVE CONTRACT
 
-Persist at minimum:
-- owned relic IDs
-- active relic window
-- candidates
-- prices
-- purchased/deferred state
-- immediate-repeat cooldown state
-- Sloth opportunity / consumedBySealBreak state when applicable
+Persist at minimum: owned relic IDs · active relic window · candidates · prices · purchased/deferred state ·
+immediate-repeat cooldown state · Sloth opportunity / consumedBySealBreak state when applicable.
 
 Save/Load must not become an offer reroll method.
 
 ## BALANCE
 
-A Store Support is not required to remain equally valuable at every acquisition Day.
-Late-Run decline is valid when an early acquisition has enough remaining Run time to create a
-meaningful snowball and the Player can rationally choose to skip it later.
-
-Future tuning remains measurement-gated.
+A Store Support is not required to remain equally valuable at every acquisition Day. Late-Run decline is valid when an
+early acquisition has enough remaining Run time to create a meaningful snowball and the Player can rationally choose to
+skip it later. Future tuning is measurement-gated.
 
 ### METRICS
 
-Per Relic:
-- offer rate
-- pick/purchase rate
-- average purchase day
-- ROI
-- final Gold
-- sales mix
-- NPC survival
-- boss outcome
+Per Relic: offer rate · pick/purchase rate · average purchase day · ROI · final Gold · sales mix · NPC survival · boss outcome
 
-Per Run:
-- build-piece count distribution [0,1,2,3,4,5+]
-- candidate tag diversity
-- same-relic repeat rate
-- utility share
-- Keystone timing
-- excessive build lock-in
-- no-clear-build viability
+Per Run: build-piece count distribution [0,1,2,3,4,5+] · candidate tag diversity · same-relic repeat rate · utility share ·
+Keystone timing · excessive build lock-in · no-clear-build viability
 
-Reject:
-- dead picks
-- automatic picks
-- universal snowball
-- mandatory Relic purchase
-- no-Relic always optimal
-- one Build always dominates
+Reject: dead picks · automatic picks · universal snowball · mandatory Relic purchase · no-Relic always optimal ·
+one Build always dominates
 
 ## QA — ACCEPTANCE
 
@@ -1150,133 +716,69 @@ Acceptance criteria for this owner. Status values are not stored here; FAIL is v
 ### WINDOW SCHEDULE / LIFECYCLE
 
 #### REL-Q01 — WINDOW SCHEDULE
-SETUP:
-Play D0–D30.
-
-EXPECT:
-Relic windows appear:
-D0,D5,D10,D15,D20,D25,D30
-
-PASS:
-No missing/extra normal milestone window.
+SETUP: Play D0–D30.
+EXPECT: Relic windows appear: D0,D5,D10,D15,D20,D25,D30
+PASS: No missing/extra normal milestone window.
 
 #### REL-Q02 — D0 FOUNDATION
-SETUP:
-Start new run.
-
-EXPECT:
-- 3 candidates
-- Foundation only
-- choose <=1
-- free
-
-PASS:
-All conditions hold.
+SETUP: Start new run.
+EXPECT: 3 candidates · Foundation only · choose <=1 · free
+PASS: All conditions hold.
 
 #### REL-Q03 — D5+ PURCHASE
-SETUP:
-Open D5+ window.
-
-EXPECT:
-- 3 candidates
-- Gold prices
-- max 1 purchase/window
-- defer allowed
-
-PASS:
-All conditions hold.
+SETUP: Open D5+ window.
+EXPECT: 3 candidates · Gold prices · max 1 purchase/window · defer allowed
+PASS: All conditions hold.
 
 #### REL-Q04 — DEFER REOPEN
-SETUP:
-Open D5 window, buy nothing, close.
-
-EXPECT:
-Reopen possible during valid management phases until next window.
-
-PASS:
-Candidates/prices unchanged.
+SETUP: Open D5 window, buy nothing, close.
+EXPECT: Reopen possible during valid management phases until next window.
+PASS: Candidates/prices unchanged.
 
 #### REL-Q05 — WINDOW EXPIRY
-SETUP:
-Defer D5 until D10.
-
-EXPECT:
-D5 window expires when D10 window begins.
-
-PASS:
-Only current window remains active.
+SETUP: Defer D5 until D10.
+EXPECT: D5 window expires when D10 window begins.
+PASS: Only current window remains active.
 
 #### REL-Q06 — NO SALE/NIGHT REOPEN
-SETUP:
-Have active deferred Relic window.
-
-EXPECT:
-Relic reopen unavailable during:
-- active Sale
-- Night resolution
-
-PASS:
-Management timing respected.
+SETUP: Have active deferred Relic window.
+EXPECT: Relic reopen unavailable during active Sale and Night resolution.
+PASS: Management timing respected.
 
 #### REL-Q07 — SAVE/LOAD PERSISTENCE
-SETUP:
-Record candidates/prices, Save/Reload.
-
-EXPECT:
-Same:
-- candidate IDs
-- prices
-- purchased/deferred state
-
-PASS:
-Reload does not reroll.
+SETUP: Record candidates/prices, Save/Reload.
+EXPECT: Same candidate IDs, prices, purchased/deferred state.
+PASS: Reload does not reroll.
 
 #### REL-Q25 — PRICE STABILITY
-SETUP:
-Open window, record prices, reload/reopen.
-
-EXPECT:
-Price remains fixed for that window.
-
-PASS:
-No price fishing.
+SETUP: Open window, record prices, reload/reopen.
+EXPECT: Price remains fixed for that window.
+PASS: No price fishing.
 
 #### REL-Q38 — MILESTONE FOCUSED REVEAL
-SETUP:
-Reach D5/D10/D15/D20/D25/D30 with a new Relic window.
-
+SETUP: Reach D5/D10/D15/D20/D25/D30 with a new Relic window.
 EXPECT:
 - each new milestone window is visibly presented once
 - candidate IDs/prices are already fixed
 - Player may Buy or choose `나중에 결정`
 - defer keeps the same window
 - Save/Reload does not replay/reroll the reveal as an exploit
-
-PASS:
-A valid Relic window cannot silently exist in the background so the Player misses the milestone choice.
+PASS: A valid Relic window cannot silently exist in the background so the Player misses the milestone choice.
 
 #### REL-Q41 — BOSS REVEAL PRECEDES SAME-DAY RELIC
-SETUP:
-Reach D5, D15 with a fresh milestone window.
-
+SETUP: Reach D5, D15 with a fresh milestone window.
 EXPECT:
 - D5 Boss Identity reveal completes before D5 Relic focused reveal
 - D15 Boss Trait reveal completes before D15 Relic focused reveal
-
-PASS:
-Relic choice never appears before the information intentionally granted for that Day.
+PASS: Relic choice never appears before the information intentionally granted for that Day.
 
 #### REL-Q40 — OWNED RELIC QUICK VIEW
-SETUP:
-Own multiple Relics and inspect Morning, Order, Sale.
-
+SETUP: Own multiple Relics and inspect Morning, Order, Sale.
 EXPECT:
 - owned Relics are quickly readable in all three phases
 - Sale access is read-only
 - purchase/defer timing cannot be bypassed
-
-PASS:
-Store-build information needed for decisions is available without enabling illegal Relic actions.
+PASS: Store-build information needed for decisions is available without enabling illegal Relic actions.
 
 #### REL-Q-v28-20 — DAY 0 FIRST SUPPORT SURFACE
 
@@ -1291,14 +793,9 @@ PASS:
 ### D30 WINDOW
 
 #### REL-Q13 — D30 RELEVANCE
-SETUP:
-Open D30 window.
-
-EXPECT:
-All candidates can affect Final preparation/outcome.
-
-PASS:
-No future-only dead relic.
+SETUP: Open D30 window.
+EXPECT: All candidates can affect Final preparation/outcome.
+PASS: No future-only dead relic.
 
 #### REL-Q78 — D25 FINAL INFO / D30 WINDOW
 
@@ -1312,28 +809,12 @@ PASS:
 
 #### REL-Q-v28-18 — D30 DEFAULT INCLUDE
 
-D30 candidate generation must be:
-    ordinary eligible pool
-    minus explicit D30 no-effect exclusions
-
+D30 candidate generation must be: ordinary eligible pool minus explicit D30 no-effect exclusions.
 It must NOT be implemented as a positive finalUseful/futureRelevant allowlist.
 
-Current explicit exclusions:
-    stamp
-    member
-    guarantee
-    fridge
-    board
-    firstVisitCoupon
-    groupOrder
-    memberBundle
-    premiumMember
-    returnPoints
-    supplyCert
-    lifetime
-    royalCert
-    hub
-    efficiency
+Current explicit exclusions: the §D30 CANDIDATE ELIGIBILITY list (stamp, member, guarantee, fridge, board,
+firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, dawnRecovery, lifetime, royalCert,
+hub, efficiency, firstAidDesk).
 
 PASS:
 - every other current support can enter D30 under ordinary eligibility
@@ -1344,43 +825,31 @@ PASS:
 ### SLOTH WINDOW
 
 #### REL-Q42 — SLOTH OPPORTUNITY SCHEDULE
-SETUP:
-Run many seeded SLOTH runs.
-
+SETUP: Run many seeded SLOTH runs.
 EXPECT:
 - exactly 2 distinct opportunity Days selected from D15/D20/D25
 - D30 always opportunity
 - D10 never opportunity
 - selected Days persist on Save/Load
-
-PASS:
-Every SLOTH run has exactly three valid opportunities with no reroll exploit.
+PASS: Every SLOTH run has exactly three valid opportunities with no reroll exploit.
 
 #### REL-Q43 — SLOTH MUTUAL EXCLUSION
-SETUP:
-At a SLOTH opportunity window, choose Seal Break.
-
+SETUP: At a SLOTH opportunity window, choose Seal Break.
 EXPECT:
 - Gold cost=0
 - Seal Break count +1
 - no Relic is acquired from that window
 - acquisition opportunity is consumed
 - reload cannot obtain both outcomes
-
-PASS:
-One window produces at most one of [Relic, Seal Break].
+PASS: One window produces at most one of [Relic, Seal Break].
 
 #### REL-Q44 — SLOTH DEFER / EXPIRY
-SETUP:
-Open a SLOTH opportunity and defer without committing either outcome.
-
+SETUP: Open a SLOTH opportunity and defer without committing either outcome.
 EXPECT:
 - ordinary window reopen rules remain valid until expiry / D30 Final lock
 - no Seal Break is auto-awarded
 - after committing either Relic or Seal Break, the other branch is unavailable
-
-PASS:
-Sloth reuses the existing Relic window lifecycle without a duplicate choice path.
+PASS: Sloth reuses the existing Relic window lifecycle without a duplicate choice path.
 
 #### REL-Q79 — SLOTH WINDOW OWNERSHIP
 
@@ -1393,154 +862,79 @@ PASS:
 ### CANDIDATE RULES
 
 #### REL-Q08 — OWNED DUPLICATE
-SETUP:
-Own a nonstackable Relic and open later windows.
-
-EXPECT:
-Owned Relic is excluded.
-
-PASS:
-No duplicate ownership offer.
+SETUP: Own a nonstackable Relic and open later windows.
+EXPECT: Owned Relic is excluded.
+PASS: No duplicate ownership offer.
 
 #### REL-Q09 — IMMEDIATE REPEAT
-SETUP:
-Skip an offered Relic.
-
-EXPECT:
-It may recur later but not immediately next window.
-
-PASS:
-Immediate-repeat protection works.
+SETUP: Skip an offered Relic.
+EXPECT: It may recur later but not immediately next window.
+PASS: Immediate-repeat protection works.
 
 #### REL-Q10 — OFFER DIVERSITY
-SETUP:
-Sample many windows.
-
-EXPECT:
-When practical, candidate set includes >=2 different primary build directions.
-
-PASS:
-Windows are not routinely three near-identical choices.
+SETUP: Sample many windows.
+EXPECT: When practical, candidate set includes >=2 different primary build directions.
+PASS: Windows are not routinely three near-identical choices.
 
 #### REL-Q11 — SOFT BUILD BIAS
-SETUP:
-Own several same-axis Relics and sample offers.
-
-EXPECT:
-Related pieces may be somewhat more likely.
-
-PASS:
-No guaranteed missing-piece completion.
+SETUP: Own several same-axis Relics and sample offers.
+EXPECT: Related pieces may be somewhat more likely.
+PASS: No guaranteed missing-piece completion.
 
 #### REL-Q12 — KEYSTONE TIMING
-SETUP:
-Inspect D0 and later windows.
-
+SETUP: Inspect D0 and later windows.
 EXPECT:
 - D0/D5 Keystone=NO
 - D10+ Keystone eligible
 - no separate fixed Keystone quota/probability is required
 - normal candidate pool + soft build bias rules still apply
-
-PASS:
-No pre-D10 Keystone leak and no hidden guaranteed Keystone completion path.
+PASS: No pre-D10 Keystone leak and no hidden guaranteed Keystone completion path.
 
 ### POOL / BLUEPRINTS
 
 #### REL-Q14 — POOL SIZE
-SETUP:
-Inspect canonical pool.
-
-EXPECT:
-30 total:
-- Foundation 12
-- Hybrid 8
-- Keystone 6
-- Utility 4
-
-PASS:
-Counts match.
+SETUP: Inspect canonical pool.
+EXPECT: 32 total: Foundation 13 · Hybrid 8 · Keystone 7 · Utility 4 (§POOL ARCHITECTURE)
+PASS: Counts match.
 
 #### REL-Q15 — BUILD AXES
-SETUP:
-Audit relic catalog.
-
-EXPECT:
-Primary axes represented:
-Rotation/VIP/Premium/Expedition/Fresh/Customer
-
-PASS:
-Each axis has coherent Foundation→later build support.
+SETUP: Audit relic catalog.
+EXPECT: Primary axes represented: Rotation/VIP/Premium/Expedition/Fresh/Customer
+PASS: Each axis has coherent Foundation→later build support.
 
 #### REL-Q16 — FOUNDATION BLUEPRINTS
-SETUP:
-Audit IDs 1–12.
-
-EXPECT:
-Effects match canonical identities for:
-묶음발주 계약
-회전 진열대
-단골 스탬프 기계
-회원 관리대장
-희귀상품 입고 계약
-길드 보증 진열대
-원정 위험 게시판
-야전 정비대
-대형 냉장고
-즉석식품 코너
-길드 전광판
-첫 방문 쿠폰
-
-PASS:
-No material behavior contradicts RELIC spec.
+SETUP: Audit IDs 1–12 and 31.
+EXPECT: Effects match canonical identities for: 묶음발주 계약, 회전 진열대, 단골 스탬프 기계, 회원 관리대장,
+희귀상품 입고 계약, 길드 보증 진열대, 원정 위험 게시판, 야전 정비대, 대형 냉장고, 즉석식품 코너, 길드 전광판,
+첫 방문 쿠폰, 야전 들것
+PASS: No material behavior contradicts RELIC spec.
 
 #### REL-Q17 — HYBRID BLUEPRINTS
-SETUP:
-Audit IDs 13–20.
-
-EXPECT:
-Each bridges its stated two build axes.
-
-PASS:
-No Hybrid acts as unrelated generic stat relic.
+SETUP: Audit IDs 13–20.
+EXPECT: Each bridges its stated two build axes.
+PASS: No Hybrid acts as unrelated generic stat relic.
 
 #### REL-Q18 — KEYSTONE BLUEPRINTS
-SETUP:
-Audit IDs 21–26.
-
-EXPECT:
-Each materially strengthens its own build axis without becoming mandatory.
-
-PASS:
-Build engine is strong but optional.
+SETUP: Audit IDs 21–26 and 32.
+EXPECT: Each materially strengthens its own build axis without becoming mandatory.
+PASS: Build engine is strong but optional.
 
 #### REL-Q19 — UTILITY BLUEPRINTS
-SETUP:
-Audit IDs 27–30.
-
-EXPECT:
-Utility supports operation without replacing build identity.
-
-PASS:
-No Utility is universal auto-pick.
+SETUP: Audit IDs 27–30.
+EXPECT: Utility supports operation without replacing build identity.
+PASS: No Utility is universal auto-pick.
 
 #### REL-Q37 — ACTIVE RELIC POOL BOUNDARY
-SETUP:
-Inspect all loaded/acquirable facility/relic IDs.
-
-EXPECT:
-Only the 30 canonical Relic blueprints are active.
-`포션 냉장고`, `마석 충전대`, `상권 분석대` do not affect gameplay.
-
-PASS:
-No excluded facility is offered, owned, or applied as a hidden modifier.
+SETUP: Inspect all loaded/acquirable facility/relic IDs.
+EXPECT: Only the 32 canonical Relic blueprints are active. `포션 냉장고`, `마석 충전대`, `상권 분석대` do not affect gameplay.
+PASS: No excluded facility is offered, owned, or applied as a hidden modifier.
 
 #### REL-Q-v28-1 — NAME COLLISION CLEANUP
 
 Expected:
 - rareContract -> 희귀상품 입고 계약
 - coldcase -> 냉장 유통 계약
-- the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (v2.9.7); no Store Support is named 쇼케이스
+- the wall Decoration is 명예 모험가 액자; no Store Support is named 쇼케이스
 
 No active Store Support uses 쇼케이스 in these two names.
 
@@ -1551,26 +945,26 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> returning revisit weight +70% from next Day
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price (v2.9.11, User 2026-09-29); no operating-cost modifier
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
-- COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect (v2.9.11, User 2026-09-29; was overheadBase × 0.10)
+- COUNTER JUDGEMENT: 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
 - 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28: was +2 for both and +4); at the 마왕성 the +2 lands on the adventurer's most 취약 Hazard only - the largest gap before the bonus, the Final's Hazard order on a tie (User 2026-09-29)
+- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item; at the 마왕성 the +2 lands on the adventurer's most 취약 Hazard only - the largest gap before the bonus, the Final's Hazard order on a tie
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
-- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15 (v2.9.11); no shelf life
-- 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read (User 2026-09-28, v2.9.11)
-- 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so (v2.9.11)
-- 후방 창고 증설 -> inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
+- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15; no shelf life
+- 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read
+- 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so
+- 후방 창고 증설 -> inventory capacity +5
 - 본사 추가발주권 -> next ORDER-offer generation candidate count +2
 
 FAIL if Source omits one of these exact functions or uses a different numeric value.
@@ -1578,39 +972,17 @@ FAIL if Source omits one of these exact functions or uses a different numeric va
 ### PRICE
 
 #### REL-Q26 — PRICE BAND
-SETUP:
-Sample prices.
-
-EXPECT:
-Limited random band around approved base.
-Starting target around ±15–20%.
-
-PASS:
-Exact final values match `RELIC_v2.8.0.md` §PRICE.
+SETUP: Sample prices.
+EXPECT: Limited random band around approved base. Starting target around ±15–20%.
+PASS: Exact final values match `RELIC_v2.8.0.md` §PRICE.
 
 #### REL-Q-v28-22 — SUPPORT BASE PRICES
 
 Expect exactly these approved base prices for these rows:
 
-    bulk 130
-    stamp 130
-    member 130
-    rareContract 140
-    guarantee 140
-    hazardBoard 60
-    fieldRepair 80
-    kitchen 170
-    board 110
-    firstVisitCoupon 110
-    groupOrder 200
-    memberBundle 190
-    premiumMember 200
-    expeditionMeal 200
-    coldcase 180
-    dawnRecovery 190
-    fresh24 360
-    warehouse 130
-    extraOrder 130
+    bulk 130 · stamp 130 · member 130 · rareContract 140 · guarantee 140 · hazardBoard 60 · fieldRepair 80 ·
+    kitchen 170 · board 110 · firstVisitCoupon 110 · groupOrder 200 · memberBundle 190 · premiumMember 200 ·
+    expeditionMeal 200 · coldcase 180 · dawnRecovery 190 · fresh24 360 · warehouse 130 · extraOrder 130 ·
     rerollTicket 120
 
 FAIL if implementation uses a different base price without a new approved owner amendment.
@@ -1620,19 +992,14 @@ FAIL if implementation uses a different base price without a new approved owner 
 #### REL-Q-v28-14 — ROTATION DISPLAY SUPPLY ENGINE
 
 Given 회전 진열대 is owned:
-
-If previous Day sales >= 4:
-- each newly generated ORDER offer, of every rarity, gets quantity +1
-- total offer-slot count is unchanged
-
-If previous Day sales < 4:
-- quantity is unchanged.
+- previous Day sales >= 4: each newly generated ORDER offer, of every rarity, gets quantity +1; total offer-slot count is unchanged
+- previous Day sales < 4: quantity is unchanged
 
 FAIL:
 - any first-bulk discount effect is active on 회전 진열대
 - the support directly discounts Item price
 
-#### REL-Q-v28-15 — LOGISTICS HQ PER-SALE DISCOUNT (remade User 2026-09-29, v2.9.11)
+#### REL-Q-v28-15 — LOGISTICS HQ PER-SALE DISCOUNT
 
 Expected:
     previous Day sales N
@@ -1647,91 +1014,64 @@ FAIL:
 - the internal 45% purchase-price floor is bypassed
 
 #### REL-Q35 — ROTATION LOW-RARITY VIABILITY
-SETUP:
-Run Rotation-heavy build into late game using Common/Uncommon specialist stock.
-
-EXPECT:
-Useful low-rarity specialists still have valid demand/value when their Hazard appears.
-
-PASS:
-Rotation/low-cost build is not invalidated by universal Rare+ upgrades.
+SETUP: Run Rotation-heavy build into late game using Common/Uncommon specialist stock.
+EXPECT: Useful low-rarity specialists still have valid demand/value when their Hazard appears.
+PASS: Rotation/low-cost build is not invalidated by universal Rare+ upgrades.
 
 ### VIP SUPPORTS
 
 #### REL-Q-v28-4 — RETURN POINTS
 
-Expected:
-    paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
+Expected: paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
 
 #### REL-Q-v28-6 — LIFETIME
 
-Expected:
-    단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
-    revisit weight +100% (v2.9.11, User 2026-09-29; was +50%)
+Expected: 단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G; revisit weight +100%
 
 Reads the Trusted Regular owner judgement; no second threshold.
 
 ### PREMIUM SUPPORTS
 
 #### REL-Q22 — PREMIUM 150%
-SETUP:
-Use Premium build effects.
-
-EXPECT:
-150% may become more viable.
-
-PASS:
-No relic turns 150% into automatic acceptance.
+SETUP: Use Premium build effects.
+EXPECT: 150% may become more viable.
+PASS: No relic turns 150% into automatic acceptance.
 
 #### REL-Q-v28-5 — SUPPLY CERT
 
-Expected:
-    eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wallet +30G
+Expected: eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wallet +30G
 
 #### REL-Q-v28-7 — ROYAL PREMIUM
 
 Expected:
-    150% sale of any rarity -> HQ commission = 45% of the charged sale price (v2.9.11, User 2026-09-29; was 60%, 40% before)
-    the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16; User 2026-09-29)
-    the next Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's (User 2026-09-29)
+    150% sale of any rarity -> HQ commission = 45% of the charged sale price
+    the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16)
+    the next Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's
     the 1.5x price burden and Loyalty -3 are unchanged
 
 #### REL-Q36 — PREMIUM POOL SUPPORT
-SETUP:
-Simulate Premium build with canonical Item catalog.
-
-EXPECT:
-Rare+ offers contain multiple roles/price points and generate repeated meaningful premium-sale decisions.
-
-PASS:
-Premium does not depend on a single SKU and Rare+ is not universally superior.
+SETUP: Simulate Premium build with canonical Item catalog.
+EXPECT: Rare+ offers contain multiple roles/price points and generate repeated meaningful premium-sale decisions.
+PASS: Premium does not depend on a single SKU and Rare+ is not universally superior.
 
 ### EXPEDITION SUPPORTS
 
 #### REL-Q21 — EXPEDITION CERTIFICATION
-SETUP:
-Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
-
+SETUP: Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
 EXPECT:
 - an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
 - with `야전 정비대` on Field Gear: x1.40 x1.60
 - the flat `원정 도시락 코너` +2 is not multiplied
 - the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
-
-PASS:
-No ORDER offer guarantee and no unknown hazard reveal.
+PASS: No ORDER offer guarantee and no unknown hazard reveal.
 
 #### REL-Q34 — EXPEDITION BUILD CANONICAL HAZARDS
-SETUP:
-Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
-
+SETUP: Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
 EXPECT:
 - only the 9 canonical Hazards drive Hazard-counter filtering
 - Main/Alternative Item routes remain possible
-- Food/Drink Supply (피로 회복) is not treated as a Hazard key (User 2026-09-24, v2.9.0)
-
-PASS:
-Expedition Relics match the current Dungeon×Item model.
+- Food/Drink Supply (피로 회복) is not treated as a Hazard key
+PASS: Expedition Relics match the current Dungeon×Item model.
 
 #### REL-Q77 — FIELD MAINTENANCE (야전 정비대)
 
@@ -1744,17 +1084,10 @@ PASS:
 ### FRESH SUPPORTS
 
 #### REL-Q20 — LARGE FRIDGE
-SETUP:
-Acquire with existing eligible stock.
-
-EXPECT:
-- current non-expired stock extends once
-- future stock gets extended shelf life
-- no daily repeated extension
-- no infinite preservation
-
-PASS:
-Shelf-life logic stable.
+SETUP: Acquire with existing eligible stock.
+EXPECT: current non-expired stock extends once · future stock gets extended shelf life · no daily repeated extension ·
+no infinite preservation
+PASS: Shelf-life logic stable.
 
 #### REL-Q72 — LARGE FRIDGE
 
@@ -1763,22 +1096,21 @@ EXPECT:
 - Food/Drink shelf life +2
 - existing non-expired eligible stock extends once on acquisition
 - future stock receives extension
-- no Stat/Supply (피로 회복) multiplier (User 2026-09-24, v2.9.0)
+- no Stat/Supply (피로 회복) multiplier
 - no repeated daily extension
 
 #### REL-Q-v28-2 — LARGE FRIDGE PRICE
 
-Expected:
-    대형 냉장고 = 120G
+Expected: 대형 냉장고 = 60G (§FRESH blueprint 9, REL-Q72).
 
-PASS only when the active implementation uses 120G.
+PASS only when the active implementation uses 60G.
 
 #### REL-Q73 — INSTANT FOOD CORNER
 
 PASS:
 - native Core-Stat +25%
-- from next Day operating cost + overheadBase × 0.10, never compounded
-- Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
+- no operating-cost effect
+- Supply (피로 회복) unchanged
 - Hazard Counter unchanged
 - Insurance unchanged
 - RiskReward penalty unchanged
@@ -1786,8 +1118,8 @@ PASS:
 #### REL-Q74 — EXPEDITION MEAL CORNER
 
 Per Food/Drink Item in the Bag:
-- Supply +2 (피로 회복 +2) (User 2026-09-24, v2.9.0)
-- flat +4 on every Hazard of the Gate the adventurer actually enters
+- Food Supply +2 (피로 회복 +2), Drink Supply +1 (피로 회복 +1)
+- flat +2 on every Hazard of the Gate the adventurer actually enters (at the 마왕성, the adventurer's most 취약 Hazard only; blueprint 17)
 
 PASS:
 - no native Core-Stat bonus
@@ -1798,13 +1130,12 @@ PASS:
 
 EXPECT:
 - no shelf-life effect and no operating-cost effect
-- Food/Drink ORDER price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
-- Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
+- Food/Drink ORDER price x1.15
+- Supply (피로 회복) unchanged
 - Counter unchanged
 
-Fresh-to-Fresh stacking uses base-additive bonuses.
-
-When a Food-affinity Trait also applies, its native-Stat percentage joins the same base-additive pool under `ITEM_v2.8.0.md`.
+Fresh-to-Fresh stacking uses base-additive bonuses. When a Food-affinity Trait also applies, its native-Stat percentage
+joins the same base-additive pool under `ITEM_v2.8.0.md`.
 
 PASS:
 - no multiplicative drift between Fresh pieces
@@ -1817,41 +1148,22 @@ Expected:
 - 24시간 신선체계 native Core-Stat +50%
 - 원정 도시락 코너 adds no native Core-Stat bonus
 
-Composition remains base-additive.
-
-Therefore:
-- kitchen + fresh24 => ×1.75 native positive Stat
+Composition is base-additive: kitchen + fresh24 => ×1.75 native positive Stat.
 
 FAIL:
 - any alternate native-Stat percentages are active
-- Supply (피로 회복) itself is multiplied by these native-Stat percentages (User 2026-09-24, v2.9.0)
+- Supply (피로 회복) itself is multiplied by these native-Stat percentages
 
 #### REL-Q31 — FRESH CORE-EFFECT SCOPE
-SETUP:
-Use 즉석식품 코너 / 24시간 신선체계 with multi-role Food/Drink Items.
-
-EXPECT:
-Generic Fresh core boost applies only to:
-- native Stat/recovery
-
-It does not automatically boost:
-- Hazard Counter
-- Insurance
-- RiskReward penalty
-- unrelated attached effects
-
-PASS:
-Fresh does not become a blanket whole-item multiplier.
+SETUP: Use 즉석식품 코너 / 24시간 신선체계 with multi-role Food/Drink Items.
+EXPECT: Generic Fresh core boost applies only to native Stat/recovery. It does not automatically boost Hazard Counter,
+Insurance, RiskReward penalty or unrelated attached effects.
+PASS: Fresh does not become a blanket whole-item multiplier.
 
 #### REL-Q33 — COLD DISTRIBUTION ELIGIBILITY
-SETUP:
-Own 냉장 유통 계약 and generate Order offers repeatedly.
-
-EXPECT:
-Eligibility targets Uncommon+ Food/Drink, purchase intent +16%p and shelf-life relief as defined in RELIC.
-
-PASS:
-Effect has a meaningful multi-SKU pool and is not dependent on one or two Rare items.
+SETUP: Own 냉장 유통 계약 and generate Order offers repeatedly.
+EXPECT: Eligibility targets Uncommon+ Food/Drink, purchase intent +16%p and shelf-life relief as defined in RELIC.
+PASS: Effect has a meaningful multi-SKU pool and is not dependent on one or two Rare items.
 
 #### REL-Q76 — COLD DISTRIBUTION / DAWN RECOVERY CATEGORY
 
@@ -1862,11 +1174,7 @@ PASS:
 
 #### REL-Q-v28-9 — COLD DISTRIBUTION ACQUISITION
 
-On acquisition:
-- existing non-expired U+ Food/Drink stock extends exactly once +1 day
-
-Future eligible stock:
-- receives +1 day
+On acquisition, existing non-expired U+ Food/Drink stock extends exactly once +1 day. Future eligible stock receives +1 day.
 
 FAIL:
 - eligibility depends on retired item.fresh property
@@ -1874,21 +1182,16 @@ FAIL:
 - eligible existing stock is not extended
 
 #### REL-Q32 — FRESH BUILD ITEM SUPPORT
-SETUP:
-Simulate Fresh-heavy runs across early/mid/late Item availability.
-
+SETUP: Simulate Fresh-heavy runs across early/mid/late Item availability.
 EXPECT:
 - Food/Drink pool spans multiple prices/rarities/roles
 - Fresh effects have repeated meaningful targets
 - specialist FieldGear remains more reliable for dedicated Hazard response
-
-PASS:
-Fresh is a real build without deleting Expedition specialist identity.
+PASS: Fresh is a real build without deleting Expedition specialist identity.
 
 #### REL-Q80 — FRESH DOES NOT DELETE SPECIALISTS
 
-Full-run/targeted comparison:
-PASS direction:
+Full-run/targeted comparison. PASS direction:
 - completed Fresh build materially changes Food/Drink choices
 - dedicated Field Gear remains stronger/reliable on its narrow Hazard target unless the actual combined build tradeoff justifies the Food/Drink alternative
 - Fresh is powerful through coherent build accumulation, not one universal Food item
@@ -1896,27 +1199,18 @@ PASS direction:
 ### CUSTOMER / VISITOR SUPPORTS
 
 #### REL-Q23 — VISITOR CAP
-SETUP:
-Stack Customer visitor effects.
-
-EXPECT:
-Visitor increases still respect Living NPC Cap rules.
-
-PASS:
-No invalid roster overflow.
+SETUP: Stack Customer visitor effects.
+EXPECT: Visitor increases still respect Living NPC Cap rules.
+PASS: No invalid roster overflow.
 
 #### REL-Q30 — CUSTOMER BUILD PACING / ATTACHMENT
-SETUP:
-Play/simulate Customer-heavy builds including visitor-count and newcomer-weight effects.
-
+SETUP: Play/simulate Customer-heavy builds including visitor-count and newcomer-weight effects.
 EXPECT:
 - Customer effects create meaningful traffic/composition value
 - visitor increases still respect Living NPC Cap
 - normal 2–4 trusted-regular feel remains achievable
 - extra visitors do not make repetitive interaction burden the primary reward/cost of the build
-
-PASS:
-Customer remains a store-build choice rather than a pure workload multiplier.
+PASS: Customer remains a store-build choice rather than a pure workload multiplier.
 
 #### REL-Q-v28-3 — FIRST VISIT COUPON
 
@@ -1970,34 +1264,23 @@ PASS:
 
 #### REL-Q-v28-17 — REGION HUB
 
-On each applicable Morning exactly one outcome occurs:
-- +1 visitor: 45%
-- +2 visitors: 15%
-- +0 visitors: 40%
+On each applicable Morning exactly one outcome occurs: +1 visitor: 45% · +2 visitors: 15% · +0 visitors: 40%
 
-Expected mean before ordinary availability caps:
-    +0.75 visitor / applicable Day
+Expected mean before ordinary availability caps: +0.75 visitor / applicable Day
 
-Also:
-- Price 340G
-- operating modifier remains overheadBase +10%
-- outcomes are mutually exclusive
+Also: Price 340G · operating modifier overheadBase +10% · outcomes are mutually exclusive
 
 ### UTILITY SUPPORTS
 
 #### REL-Q24 — REROLL RELIC
-SETUP:
-Own `발주 교환권`, start a fresh Day, and use the canonical Full-offer Reroll multiple times.
-
+SETUP: Own `발주 교환권`, start a fresh Day, and use the canonical Full-offer Reroll multiple times.
 EXPECT:
 - first Full-offer Reroll costs 0G
 - next same-Day Reroll uses the first normal cost step
 - next Day restores the free first Reroll
 - regenerated offers preserve eligibility / coverage / rarity rules
 - Reroll does not advance pity
-
-PASS:
-The Relic provides a clear daily Utility benefit without single-slot swap behavior or pity farming.
+PASS: The Relic provides a clear daily Utility benefit without single-slot swap behavior or pity farming.
 
 #### REL-Q81 — REROLL RELIC USES CURRENT ECONOMY CURVE
 
@@ -2008,37 +1291,21 @@ With `발주 교환권`:
 - next Day restores the free first use
 - pity is not advanced by Reroll
 
-PASS:
-No stale `0 -> 60 -> 120` curve survives.
+PASS: No stale `0 -> 60 -> 120` curve survives.
 
 #### REL-Q-v28-8 — OPERATING EFFICIENCY
 
-Expected:
-    Price 130G
-    from next Day basic operating cost -30G
-
-This is a Production baseline, not harness-only.
+Expected: Price 130G; from next Day basic operating cost -30G. This is a Production baseline, not harness-only.
 
 ### INFORMATION / COPY
 
 #### REL-Q39 — INTERNAL TAXONOMY IS NOT PLAYER-FACING
-SETUP:
-Inspect candidate and owned-Relic UI.
-
+SETUP: Inspect candidate and owned-Relic UI.
 EXPECT:
-Player does not see:
-- Foundation / Hybrid / Keystone / Utility
-- Build Axis names as quality/category coaching
-- labels such as `신선식품 · 기반`
-
-Player does see:
-- name
-- effect
-- condition/limit
-- price when relevant
-
-PASS:
-Build discovery comes from effects, not Director taxonomy labels.
+Player does not see: Foundation / Hybrid / Keystone / Utility · Build Axis names as quality/category coaching ·
+labels such as `신선식품 · 기반`.
+Player does see: name · effect · condition/limit · price when relevant.
+PASS: Build discovery comes from effects, not Director taxonomy labels.
 
 #### REL-Q-v28-10 — COPY TRUTH
 
@@ -2089,45 +1356,26 @@ Across seeded builds:
 
 For directly power-observable coherent builds, +10~20 Party-equivalent direct/indirect difference at 3~4 Pieces is an initial measurement target, not a hidden runtime bonus.
 
-FAIL:
-Relic build choice changes labels but not actual Order/Sale/Inventory/NPC investment behavior.
+FAIL: Relic build choice changes labels but not actual Order/Sale/Inventory/NPC investment behavior.
 
 #### REL-Q27 — BUILD HIGH-ROLL
-SETUP:
-Seed a strong synergistic run.
-
-EXPECT:
-Strong 4–5+ piece synergy is allowed to feel powerful.
-
-PASS:
-System does not forcibly normalize good seed into average.
+SETUP: Seed a strong synergistic run.
+EXPECT: Strong 4–5+ piece synergy is allowed to feel powerful.
+PASS: System does not forcibly normalize good seed into average.
 
 #### REL-Q28 — NO-RELIC VIABILITY
-SETUP:
-Play/simulate low-Relic investment route.
-
-EXPECT:
-Run remains playable though economically/build-wise different.
-
-PASS:
-Relic purchase is meaningful, not hard mandatory.
+SETUP: Play/simulate low-Relic investment route.
+EXPECT: Run remains playable though economically/build-wise different.
+PASS: Relic purchase is meaningful, not hard mandatory.
 
 #### REL-Q29 — BUILD DIVERSITY
-SETUP:
-Simulate all six build directions.
-
-EXPECT:
-No one build consistently dominates:
-Gold/survival/final success across all contexts.
-
-PASS:
-Multiple build identities viable.
+SETUP: Simulate all six build directions.
+EXPECT: No one build consistently dominates Gold/survival/final success across all contexts.
+PASS: Multiple build identities viable.
 
 #### REL-Q-v28-19 — TIMING VALUE PRINCIPLE
 
-Do not FAIL a support merely because late acquisition is rationally skipped.
-
-Balance review should instead verify:
+Do not FAIL a support merely because late acquisition is rationally skipped. Balance review verifies instead:
 - early acquisition can create meaningful remaining-Run value/snowball
 - the support is not an automatic pick at every timing/state
 - the support is not a dead pick across all reasonable timing/state combinations
