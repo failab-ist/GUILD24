@@ -601,13 +601,15 @@ test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted
  const M=Meta,acc={knowledge:{},discoveries:[]},K=Copy.learned.map(([k])=>k),T=k=>Copy.learned.find(x=>x[0]===k)[1];
  const rep=o=>({day:4,dungeon:'spider',items:[],events:[],outcome:'성공',storeBonus:0,...o});
  const notebook=()=>acc.discoveries.filter(x=>/^learn-/.test(x.id)).map(x=>x.id);
- const r1=rep({departedInjured:true,fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:[]}]});M.observe(acc,r1);
+ const r1=rep({outcome:'부상',fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:[]}]});M.observe(acc,r1);
  assert.deepEqual(r1.acted,['injured','fatigue','counter'],'injured, fatigue, counter - in coach order');
  assert.deepEqual(notebook(),['learn-injured','learn-fatigue','learn-counter'],'each kept in the notebook with its line');
  assert.equal(acc.discoveries.find(x=>x.id==='learn-injured').text,T('injured'));
- const r2=rep({departedInjured:true,fatigueBeforeExpedition:15});M.observe(acc,r2);
+ const r2=rep({outcome:'중상',fatigueBeforeExpedition:15});M.observe(acc,r2);
  assert.deepEqual(r2.acted,['injured','fatigue'],'a later record still carries its class (the coach seen-state keeps the mark to once)');
  assert.equal(notebook().length,3,'and the notebook does not repeat');
+ /* User 2026-10-01: the injury rule is taught on the first record that came back hurt, never on a healthy return that only departed injured */
+ {const hx=rep({departedInjured:true,outcome:'성공'});M.observe(acc,hx);assert.ok(!hx.acted.includes('injured'),'a healthy return does not carry the injury rule');}
  const r3=rep({outcome:'대성공',storeBonus:0});M.observe(acc,r3);assert.deepEqual(r3.acted,[],'a 대성공 without the store bonus (Deep) proves nothing about it');
  const r4=rep({outcome:'사망',departedInjured:true,events:[{id:'prepared',text:'x'}]});M.observe(acc,r4);
  assert.deepEqual(r4.acted,['death'],'a Death record carries only the Death limit (User 2026-09-30)');

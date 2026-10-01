@@ -3117,9 +3117,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk>.counter-tray{grid-area:tray;align-self:start;display:block;padding:14px 16px 16px;box-shadow:none;background:none}
  .sale-desk>.counter-tray>*{grid-column:auto}
  .sale-desk>.counter-tray .tills{margin-top:14px}
- /* the customer about 1.3x the old desk card (390 px at 1280 x 880, 400 at most), as tall as the band allows over a
-    ledger / tray / shelf that keeps at least 300 px (a 1024 x 768 desk included) */
- .stage.sale-desk .front{--cardw:max(200px,min(400px,calc(100dvh - 490px)));grid-template-columns:auto minmax(0,1fr) auto;
+ /* the customer card as tall as the information beside it (User 2026-10-01: the 400 px card stood far above the status /
+    outlook / destination column): card height = width + gap + plate, so 270 px meets the ~340 px column of a two-Hazard Gate;
+    a short desk still shrinks it so the ledger / tray / shelf keep at least 300 px */
+ .stage.sale-desk .front{--cardw:max(200px,min(270px,calc(100dvh - 490px)));grid-template-columns:auto minmax(0,1fr) auto;
   align-items:end;column-gap:20px}
  .sale-desk .front-side{max-width:640px}
  .sale-desk .front>.line-up{grid-column:3;grid-row:1;align-self:end;padding-bottom:12px}

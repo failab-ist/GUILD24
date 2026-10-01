@@ -129,14 +129,16 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
-beam), one cell per store slot, each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by
-Item; empty cells are the room left. Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
+beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item. The desk rack shows every
+store slot, the empty ones as empty cells; the phone sheet draws only held units, so it takes as many rows as the stock needs
+(one while it fits) and the room left reads in the header's `N / M칸`. Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
 hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's ladder); no new copy.
 - Desk (1024 px and wider): 발주서 left, an always-open rack right, following the scroll, below the menu pin.
 - Phone: a slim `창고 N / M칸 · K종` handle as a dock row (never covers an offer row) opens the rack as a sheet rising from the
   dock, at most 45% of the screen, own scroll. It neither dims nor locks the form (rows above take taps; rows under it can be
   scrolled above it); only the handle (`열기` / `닫기`) or Escape closes it (a quantity tap keeps it open). Open/folded → §ORDER — WAREHOUSE DISCLOSURE.
-- ORDER CONFIRM's crates drop into the new cells of the visible rack; with the sheet folded the handle's figures move on the
+- ORDER CONFIRM's crates drop into the new cells of the visible rack (an open phone sheet that gains a row grows to its new
+  height first, never jumping in one frame); with the sheet folded the handle's figures move on the
   last landing.
 
 ### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
@@ -407,8 +409,8 @@ to read a covered row); target at least 44px.
 ### SALE — DESK LAYOUT
 
 A desk (≥1024) draws its own SALE from the phone's pieces (same texts, keys, actions):
-- above the counter the customer stands large (as tall as the band allows) with state and Bag, outlook and destination
-  beside, the waiting line at the far end; the counter top is one band with a hard edge and one cast shadow (PRESENTATION
+- above the counter the customer card stands as tall as the column beside it (state and Bag, outlook and destination), not
+  taller; a short desk shrinks it so the player's side keeps its room; the waiting line at the far end; the counter top is one band with a hard edge and one cast shadow (PRESENTATION
   §Edge / material)
 - below, the player's side: the customer's ledger (last expedition, four stats, Traits), the tray in the middle on the counter
   (empty = bare counter), the shelf; ledger and shelf scroll separately, kept on a same-customer redraw, reset for a new
@@ -1203,7 +1205,8 @@ that this path still reaches the capability.
 Coach Mark / Spotlight / FTUE Overlay: the screen stays visible, dimmed, a spotlight target, a small anchored bubble, `다음`,
 `건너뛰기`. Action steps may allow only the target and auto-advance on success.
 - no added page height (sole exception: the DAY 1~3 task line, §TUTORIAL — TASK LINE) and no pushed layout
-- responsive bubble; target may scroll into view; one concept per step; contextual first use preferred
+- responsive bubble: as wide as its words need, up to the screen (560 px on a desk), so it takes only the lines its copy
+  needs; target may scroll into view; one concept per step; contextual first use preferred
 - `건너뛰기` skips the current screen's marks only
 - completion persists; reload never restarts a finished tutorial
 - no large green instruction cards in the flow
@@ -1227,9 +1230,10 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): two marks, destination and Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
-the other three answer Hazards; COPY_AUDIT §3-7 STATS). No Hazard, outlook or price marks (Hazard rows say what answers them,
-the readout reads `도착 시 전투 전망`, price comes after the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
+First SALE (§TUTORIAL — COACH DIET): three marks, destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
+the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
+does not move with a sale; COPY_AUDIT §3-4). No Hazard or price marks (Hazard rows say what answers them, price comes after
+the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
 returning-customer mark (tap opens the notebook) the first returning customer. Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1237,11 +1241,11 @@ returning-customer mark (tap opens the notebook) the first returning customer. N
 (acceptance -> UI_UX §QA UI-Q-v29-53.) One rule, one place: a mark only where the rule must be known before the decision and no
 screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL) and II / FIRE Gate marks (§GATE TIER / FIRE GATE
-  TUTORIAL); ORDER `발주 확정`; SALE destination and Stats; SALE Bag (after the first sale) and returning customer; FINAL
+  TUTORIAL); ORDER `발주 확정`; SALE destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
-  Hazard, outlook; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
-- two words carry the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only) and the readout `도착 시 전투 전망`
+  Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
+- one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
 - after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
 
 ### SALE PRICE LESSONS (v2.9.12)
@@ -2408,8 +2412,8 @@ PASS: the 발주서 carries no warehouse block at any width; desk: the form set 
 scrolls, clear of the menu pin; phone: the `창고` handle on the dock covers no offer row, the sheet rises from the dock to at most
 45% of the screen, the rows above scroll and take taps, a quantity tap keeps it open, the handle or Escape closes it, a fresh
 account starts folded and the next Day keeps the choice; handle, sheet and column read as one steel rack apart from the floating
-box and the paper, no decorative stripe or stacked frame (PRESENTATION §Edge / material); one cell per slot, a held unit per
-filled cell, empty cells equal the room left; the rack equals the warehouse; no console or runtime error.
+box and the paper, no decorative stripe or stacked frame (PRESENTATION §Edge / material); desk: one cell per slot, empty cells equal the room
+left; phone: a cell per held unit, no empty cells, the sheet's rows only what the stock needs; the rack equals the warehouse; no console or runtime error.
 FAIL: the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a quantity
 tap closes it; a second copy of the warehouse on screen.
 
@@ -2439,11 +2443,11 @@ FAIL: the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mar
 Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
 PASS:
 - the marks shown are exactly the owner's list: DAY 0 one mark (`점포지원`); no MORNING 방문객 / 게이트 mark (Deep and the II / FIRE
-  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination and Stats, then Bag after the
+  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, then Bag after the
   first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
   receipt mark
 - DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads
-  `도착 시 전투 전망`
+  `전투 전망`
 - the first 150% refusal shows §26-3 line 1 on the refused key, the first 50% sale line 2 on its change line (staying until the
   mark is closed); neither shows a second time on the account
 - `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the baseline (16)

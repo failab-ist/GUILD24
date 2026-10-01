@@ -154,7 +154,7 @@ VERDICT STAMP.
 A rule is named once per account, on the NIGHT record of the first expedition it acted on - taught after it happened,
 not before. It is shown like the tutorial: a `점주 안내` coach mark over that record, one per rule, after the NIGHT result
 mark, persisted and skipped with the other coach marks; the record itself gains no line. Each rule is also kept in the
-발견 수첩 the first time. Triggers (proof, not presence): departed with an ordinary Injury; departed at Fatigue 10 or more;
+발견 수첩 the first time. Triggers (proof, not presence): came back with an Injury or Severe Injury (the first hurt record, never a healthy return); departed at Fatigue 10 or more;
 a Hazard Item actually lowered a Hazard (the `hazard` resolution event); 만반의 준비 turned away a Death; a 대성공 that paid
 the store bonus. On a Death record only the Death-limit rule - the one exception to its closed payload (§RESULT
 PRESENTATION ROUTING). Exact copy -> COPY_AUDIT §26-2.

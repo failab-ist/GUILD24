@@ -22,6 +22,8 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
     the retired Hotbar/skewered-stick shape this ID used to carry. */
  if(p==='lunchbox')s=rect(7,14,30,22,'#4f5847')+rect(9,16,26,18,'#e9dfc2')+rect(9,25,26,2,'#cbb98a')+rect(11,18,11,6,'#f4eedb')+rect(24,18,9,6,'#a6b97b');
  if(p==='choco')s=rect(7,13,30,19,'#8e7267')+rect(10,16,24,13,'#d9af82')+rect(19,13,15,19,'#746158')+rect(23,17,7,11,'#aa8470');
+ /* 녹차 양갱 (v2.9.13 quick patch): a green-tea jelly bar in a paper wrap twisted at both ends */
+ if(p==='yanggaeng')s=rect(4,15,5,17,'#e3d9bd')+rect(35,15,5,17,'#e3d9bd')+rect(8,14,28,19,'#56743f')+rect(8,14,28,3,'#86a86a')+rect(30,17,6,16,'#435d31')+rect(14,21,13,6,'#efe3c4')+rect(16,23,9,2,'#86a86a');
  if(['bandage','kit','mask'].includes(p)){const col=p==='kit'?'#d5dfcc':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,'#bd7d6a')+rect(14,21,15,5,'#bd7d6a');}
  /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): 중화 탄산수 is a fizzing can; 방독 작업장갑 a two-layer rubber glove;
     축성 손전등 a torch with a holy-water window and a light fan; 방한 두건 (the old 핫팩 id) a knit balaclava with a tinted eye slit. */

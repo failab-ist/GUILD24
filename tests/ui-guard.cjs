@@ -1800,7 +1800,7 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
- for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','forecast','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
@@ -1897,8 +1897,10 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/if\(i<ORDER_BEAT\.hits\)orderCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(i\?'crate':'order'\),land\)\)/.test(o),'at most three audible landings');
  assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
  assert.ok(/\.stock-head em/.test(o)&&/\.stock-head b/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
- assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
+ assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus,sheetH\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
  assert.ok(/'<li class="wh-slot" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
+ /* User 2026-10-01: an order that passes a row of the phone sheet grows it to the new height over the first beat, never a one-frame jump */
+ assert.ok(/if\(to>h\.sheetH\+1\)\{sheet\.style\.overflow='hidden';A\(sheet,\{height:\{from:h\.sheetH,to,duration:STAMP_FALL\*2/.test(o),'the sheet grows into its new row');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
  assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
 });
@@ -2418,14 +2420,14 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const hz of Object.values(DATA.hazards))
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
- /* COACH DIET (User 2026-09-30): the retired outlook mark's fact is the readout's own title - WHEN the reading was taken */
- assert.ok(!/\['forecast',/.test(steps)&&/'<span class="fore">도착 시 전투&nbsp;전망<b>'\+o\.combat/.test(fn('readout')),'the outlook reads 도착 시 전투 전망, no mark');
+ /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
+ assert.ok(steps.includes(`['forecast','.readout .top','손님이 막 왔을 때의 전망이다. 상품을 팔아도 이 칸은 그대로다. 상품이 무엇을 바꾸는지는 계산대에 올리면 보인다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','returning','bag','price-refused','price-half'],'the first SALE reads destination and Stats; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','forecast','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the outlook; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.']`)
   &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
@@ -2957,7 +2959,8 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
                     // retired 2026-09-30: taught after the fact on the NIGHT record (COPY_AUDIT §26-2)
                     '대성공 신호. 준비가 넉넉할 때 뜨지만','음식·음료는 피로를 줄인다. 피로가 10을','건강한 손님의 가방을 가득 채웠다.',
                     // retired 2026-09-30 (COACH DIET, COPY_AUDIT §3-4 / §3-7 superseded)
-                    '손님이 계산대에 왔을 때의 원정 전망','50% 할인은 단골도를 크게 올리고','이 손님이 갈 게이트의 위험. 위험마다',
+                    // ('손님이 계산대에 왔을 때의 원정 전망' is live again: the outlook mark is back, User 2026-10-01)
+                    '50% 할인은 단골도를 크게 올리고','이 손님이 갈 게이트의 위험. 위험마다',
                     '오늘 올 손님 수. 점포지원','열린 게이트의 위험을 보고 오늘 필요한','오늘 열린 게이트와 위험. 위험 보기를',
                     '창고에 있는 재고. 첫날에는','‘최대’는 이 후보에서 지금 발주할 수 있는',
                     '후보 전체를 교환한다. 같은 날','카드마다 효과와 가격이 적혀','누르면 바로 확보된다. 이후 DAY',
@@ -3502,7 +3505,8 @@ test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, 
  assert.ok(/grid-template-areas:"task task task" "front front front" "edge edge edge" "left tray shelf" "dock dock dock"/.test(css),'three areas under the counter band: ledger, tray, shelf');
  assert.ok(/\.sale-desk>\.stage-scroll\{display:contents\}/.test(css)&&/\.sale-desk \.dossier-col\{grid-area:left/.test(css)&&/\.sale-desk \.shelf-col\{display:block;grid-area:shelf/.test(css)&&/\.sale-desk>\.counter-tray\{grid-area:tray/.test(css),'the tray lies in the middle, on the counter, never over the shelf');
  assert.ok(/\.sale-desk \.dossier-col,\.sale-desk \.shelf-col\{min-height:0;overflow-y:auto/.test(css),'the ledger and the shelf scroll on their own');
- assert.ok(/\.stage\.sale-desk \.front\{--cardw:max\(200px,min\(400px,calc\(100dvh - 490px\)\)\)/.test(css),'the customer stands large, as tall as the band allows');
+ /* User 2026-10-01: the card is as tall as the column beside it (270 px wide = ~340 px tall), a short desk shrinks it */
+ assert.ok(/\.stage\.sale-desk \.front\{--cardw:max\(200px,min\(270px,calc\(100dvh - 490px\)\)\)/.test(css),'the customer card is as tall as the column beside it');
  assert.ok(/\.p-sale \.shelf-col\{display:contents\}/.test(css)&&/'<div class="shelf-col">'\+shelf\(\)\+'<\/div>'/.test(fn('saleScreen')),'the shelf column is no box on a phone');
  assert.ok(/const previousCols=\['\.p-sale \.dossier-col','\.p-sale \.shelf-col'\]/.test(app)&&/el\.scrollTop=changed\?0:previousCols\[i\]/.test(app),'a redraw keeps both column positions; a new view starts at the top');
 });
@@ -3748,8 +3752,10 @@ test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a
 test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, phone handle and sheet',()=>{
  const css=read('dist/ui/ui.css');
  assert.ok(!/stockBrief\(|stock-brief/.test(app)&&!/stock-brief/.test(css+read('dist/ui/director-review.css')),'the form block is gone, code and styles');
- assert.ok(/stockSlots\(\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey')),'one rack for the column and the sheet');
- const sl=fn('stockSlots');assert.ok(/cap=game\.capacity\(\)/.test(sl)&&/'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\)/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl),'one cell per slot: a held unit in each, the rest empty');
+ assert.ok(/stockSlots\(true\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey')),'one rack for the column and the sheet (the desk column with every 칸)');
+ /* User 2026-10-01: the phone sheet draws a cell per held unit only (rows as the stock needs, room left in the head's N / M칸);
+    the desk column, with room to spare, also draws the empty 칸 */
+ const sl=fn('stockSlots');assert.ok(/stockSlots\(true\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey'))&&/full\?'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\):''/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl)&&/'<em>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>'|<b>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>/.test(fn('stockHead')),'phone: a held unit per cell, no empty rows; desk: every 칸; the head carries the room left');
  const os=fn('orderScreen');assert.ok(/'<div class="order-desk">'\+orderForm\(\)\+'<\/div>'\+stockSide\(\)/.test(os)&&/stockSheetKey\(\)\+/.test(os),'the column beside the form, the handle in the dock');
  assert.ok(/class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
  assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&game\.run\?\.phase==='order'&&sheetOpen\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');
