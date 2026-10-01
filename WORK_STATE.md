@@ -1,19 +1,35 @@
 # WORK_STATE
 
-DATE: 2026-09-29
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28, User 컨펌 2026-09-29) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+DATE: 2026-09-30
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) — v2.9.2~v2.9.12 태그는 User가 걸어야 함
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.10 + 퀵패치(PR #22, PR #24, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
-- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.10). 닫힌 버전의 보고서·측정 도구는 `archive/`.
+- repository: `failab-ist/GUILD24`. main = v2.9.12(PR #31 · #32, `f02eb8d`, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.12). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
-  근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
+  근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
+
+## v2.9.12 — 밸런스 리뷰 + v3.0 준비 퀵패치 (머지됨, PR #31 · #32) (User 2026-09-29~30)
+
+내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.12. 빌드 표시 2.9.12. 머지 전 전체 검증(HEAD `4e226a2`): `npm test` · `audit` · `ssot:check` 21/21 ·
+`qa:runtime` 16/16 · `qa:visual` clean.
+
+| 묶음 | 내용 | 근거 |
+|---|---|---|
+| 밸런스 리뷰(PR #31, 다른 세션) | 첫 판 레슨(DAY 1 대응 상품 · DAY 1~2 사망 없음 · DAY 3 부상 · 보수날 손님), NIGHT 발견 안내, END 다회차 줄 위치 | CORE_RUN §FIRST-RUN LESSONS, NIGHT_CLOSING §DISCOVERY LINE |
+| 폰 · 소리 | iPhone Safari · SE · 갤럭시 360×597, BGM/효과음 폰 기준 평탄화 · 리미터, 페이즈 BGM 1초 페이드 뒤 시작 | `archive/v2.9.11/ios-safari-v2911.md`, `archive/v2.9.11/bgm-sfx-mix-v2911.md` |
+| 화면 | ORDER 떠 있는 박스 접기 · 창고 패널, 데스크 전용 SALE, 데스크 폭 1440, `오늘 폐쇄` 게이트, 장식 구매 스크롤 유지 | UI_UX 해당 절 |
+| END | 최고 총매출 다회차 줄, `이 점포의 기록` 블록 | UI_UX §END — THIS RUN BLOCK / REPLAY NUDGE |
+| D30 | 발주 중 `원정대 후보 보기`, 원정대 준비 `자세히 보기` | FINAL_EXPEDITION §D30 PLAYER FLOW |
+| 밸런스 | 화염 섞인 마왕전 +18(reader 3,000: 74.3/65.5 → 63.4/64.8%) | `reports/v3-prep-measure-v2911.md` §6, `tools/measure-firepair.cjs` |
+| 튜토리얼 | II · 화염 게이트 안내, 코치 정리(12개 은퇴 · 가격 사후 안내, 첫 판매 24 → 12탭) | `reports/v3.0-prep.md` §9-6 |
+| 위생 | `fire -> 정신` · `dark -> 기동` 옛 줄 정정, AGENTS 9-A(시뮬레이션은 User 컨펌 뒤), 닫힌 버전 보고서 · 도구 archive 이동 | `archive/README.md` |
 
 ## v2.9.11 — v3.0 준비 1차 (머지됨, PR #28) (User 2026-09-28~29)
 
-브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.11. 빌드 표시 2.9.11.
+브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.11. 빌드 표시 2.9.11.
 
 | 묶음 | 내용 |
 |---|---|
@@ -24,14 +40,14 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 | 화면 · 문구 | 전역 keep-all(단어 중간 줄바꿈 297 → 0) · 문구 교정 1~4배치 · 첫 발주 튜토리얼 `창고` 단계 · 아침 DAY 간판 넘김 · FINAL 균열 NIT |
 | 사운드 | 녹음 BGM(페이즈별 · 결말 성공/실패, 원곡 전체 루프, BOSS 1초 크로스페이드) · 웹 128 kb/s + 다음 곡 미리 받기 |
 
-측정 기록: `reports/remeasure-v2911.md` §1~§14 · v3.0 준비 §8 측정(장식 전부 보유 곡선 · 넛지 공백 · RUN-Q15 · 360 SALE): `reports/v3-prep-measure-v2911.md`
+측정 기록: `archive/v2.9.11/remeasure-v2911.md` §1~§14 · v3.0 준비 §8 측정(장식 전부 보유 곡선 · 넛지 공백 · RUN-Q15 · 360 SALE): `reports/v3-prep-measure-v2911.md`
 - v2.9.10 대비 전체는 §12
 - 마지막 확인은 §14
 - 도구: `tools/remeasure-v2911.cjs`(REMEASURE_EARLY / REMEASURE_BALANCE 메모리 시안), `tools/deco-impact.cjs`(약한 장식 팔)
 
-줄바꿈 점검: `tools/qa-text.cjs`, `reports/text-audit-v2911.md`.
+줄바꿈 점검: `tools/qa-text.cjs`, `archive/v2.9.11/text-audit-v2911.md`.
 
-문구 교정: `reports/copy-proofread-v2911.md`
+문구 교정: `archive/v2.9.11/copy-proofread-v2911.md`
 - 1배치(상품 · 사건) · 2배치(점포지원 · 장식) · 3배치(화면)를 모두 반영했다(`f762b85` · `9d9a4d9` · `5ff4d6e`).
 - 4배치(NPC 대사, 14개)도 반영했다. 겁쟁이 유행어 대사는 User 결정으로 유지.
 
@@ -43,7 +59,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 
 ## v2.9.10 퀵패치 2차 (머지됨, PR #24) (User 2026-09-28, v2.9.10 플레이 뒤)
 
-- `b9d89e4` 효과 줄 순서 통일(대응 → 피로 회복 → 능력치 → 기타), 본사 1+1 행사 발주 행에 빨간 `1+1` 딱지. CHANGELOG §v2.9.10 quick patch.
+- `b9d89e4` 효과 줄 순서 통일(대응 → 피로 회복 → 능력치 → 기타), 본사 1+1 행사 발주 행에 빨간 `1+1` 딱지. archive CHANGELOG §v2.9.10 quick patch.
 - `52de75c` `qa:visual` 코치 확인 간헐 실패 수정(점검 도구만). 빌드 표시는 2.9.10 그대로.
 - 후속 PR(User 컨펌 2026-09-28): `본사 폐기 유예`(오늘 밤 폐기될 상품만 유통기한 +1일, 환급 폐지), 슬로스 봉인 해제 창이 닫힘·`닫기`,
   보유 점포지원 목록의 `슬로스 봉인 해제 N / 3`(D15부터), 봉인 칸 보라 판·`접기`·칩 접기.
@@ -53,7 +69,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 ## v2.9.10 퀵패치 (머지됨, PR #22) (User 2026-09-27~28, v2.9.9 플레이 뒤)
 
 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`(main `8acc8dc`에서 다시 시작, v2.9.9 퀵패치 main을 머지해 둠). 내용과 근거는
-`design_ssot/CHANGELOG.md` §v2.9.10. 빌드 표시 2.9.10.
+`archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.10. 빌드 표시 2.9.10.
 
 | 커밋 | 내용 | 검사 |
 |---|---|---|
@@ -68,14 +84,14 @@ closeout(2026-09-28): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 1
 
 ## v2.9.9 퀵패치 (머지됨, PR #21) (User 2026-09-28, 프레쉬런 D23 검수에서 나옴)
 
-브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `reports/fresh-run-d23-review-v299.md`, 내용 `design_ssot/CHANGELOG.md` §v2.9.9 quick patch.
-- 실패 보상 배율 퇴각 0.40 · 부상 0.25 · 중상 0.15 (`395de5f`). 측정 `tools/measure-wallet-v299.cjs`.
+브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `archive/v2.9.9/fresh-run-d23-review-v299.md`, 내용 `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.9 quick patch.
+- 실패 보상 배율 퇴각 0.40 · 부상 0.25 · 중상 0.15 (`395de5f`). 측정 `archive/v2.9.9/tools/measure-wallet-v299.cjs`.
 - SALE 폰 플로팅 줄에 `연속 부상 출발 {n}회` (조건·문구는 판독 줄과 같음). 360/390 캡처 User 확인.
 - 남은 BALANCE FINDING 후보(결정 안 됨): D11~20 준비도 절벽, 부상 → 가난 → 회복이 느린 고리(부상은 성공 또는 퇴각 회복 25~100%로 풀림). 보고서 §2. 퀵패치 후 첫 런(D16) 검수: 보고서 §5. v2.9.11 클리어 런 검수와 왕도 프리미엄 인증 · 원정 도시락 코너 조정(User 2026-09-29): 보고서 §7~8.
 
 ## v2.9.9 화면 개선 (머지됨) (User 2026-09-27, 레퍼런스 리뷰에서 나온 배치)
 
-내용 요약은 `design_ssot/CHANGELOG.md` §v2.9.9(화면별로 정리됨). 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`에서 PR #20으로 머지됨(User 컨펌 2026-09-27).
+내용 요약은 `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.9(화면별로 정리됨). 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`에서 PR #20으로 머지됨(User 컨펌 2026-09-27).
 
 | 커밋 | 내용 | 검사 |
 |---|---|---|
@@ -103,7 +119,7 @@ closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:v
 
 2026-09-25에 User 부재 중 추천안으로 들어간 6건을 현재 구현대로 확정했다. SALE 트레이 접기(UI-Q-v29-28), 발주 플로팅 오늘 줄(UI-Q-v29-29),
 게이트 방문 최소 1명(NPC_TRAIT destinationCoverage), D30 흐름(FINAL_EXPEDITION §D30 PLAYER FLOW, COPY_AUDIT §14-9), 진열대 요약 문구,
-H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(CHANGELOG §v2.9.3).
+H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(archive CHANGELOG §v2.9.3).
 
 ## v3.0 사운드 — 녹음 BGM 연결 (User 2026-09-29)
 
@@ -119,7 +135,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
   - 페이즈별 곡은 `audioPhase()`로 고른다. 결말은 SUCC / FAIL로 나뉜다.
   - 곡마다 음량을 BGM_LUFS −30으로 맞춘다(NIGHT는 3 dB 더 작게). 효과음은 큐마다 등급 레벨(LEVEL, tools/qa-sfx-mix.cjs, 폰 스피커 기준 · 출력 리미터 −3 dBFS)이다. 페이즈 전환은 1초 페이드아웃 뒤 1.5초 페이드인이다(퀵패치, User 2026-09-29).
   - 로드에 실패하면 신스로 대체한다.
-- 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, CHANGELOG §v2.9.11
+- 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, archive CHANGELOG §v2.9.11
 - 최종 QA (2026-09-29, HEAD `4c2704b`)
   - 전체 `npm test` PASS · revision 39 · `ssot:check` 21/21
   - `qa:runtime` 14/14(`qa-bgm` 29/29 새로 추가) · `qa:visual` clean(126장)
@@ -136,29 +152,49 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-- 검증 리듬 (User 2026-09-28): 배치마다 바뀐 영역의 테스트만 돌리고, 전체 `npm test`·`ssot:check`·`qa:runtime`·`qa:visual`은 모든 배치 뒤 PR 전에 한 번.
+- 검증 리듬 (User 2026-09-28): 배치마다 바뀐 영역의 테스트만 돌리고, 전체 `npm test`·`qa:runtime`·`qa:visual`은 모든 배치 뒤 PR 전에 한 번.
 - PR 전에는 Pages `verify`와 같은 순서로 `npm test` → `npm run audit` → `git diff --exit-code`까지 돌린다. audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다(v2.9.11 PR #28, 2026-09-29).
 - 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
 
 다음 작업:
-1. v2.9.11은 PR #28로 머지했다(User 2026-09-29). User 플레이로 확인한다: 1.45 곡선, 새 사건, 점포지원 변경, BGM 실기기 청취, DAY 간판, 창고 안내. 태그 `v2.9.11`은 User가 건다.
-2. 문구 교정 4배치(NPC 대사)는 끝났다: 14개 전부 반영, 겁쟁이 유행어 대사는 User 결정으로 유지. FINAL 교전 NIT(균열이 바가 0이 된 뒤)도 끝났다(`d635c00`).
-3. 보류 · 결정 대기
-   - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, §13-2) — User 플레이 뒤 판단(2026-09-29)
+1. v2.9.12는 PR #31 · #32로 머지했다(User 2026-09-30). User 플레이로 확인한다: 코치 정리 뒤 첫 판, 가격 사후 안내, END `이 점포의 기록`, D30 후보 보기, 화염 게이트 안내.
+2. 보류 · 결정 대기
+   - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, `archive/v2.9.11/remeasure-v2911.md` §13-2) — User 플레이 뒤 판단(2026-09-29)
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
-4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
-5. ~~사전 코치 → 사후 안내 이전~~ **끝남 (v2.9.12, 브랜치 `claude/v3-0-prep-planning-g42z7y`)** — User 결정과 결과는 `reports/v3.0-prep.md` §9-6 끝. 코치 12개 은퇴, 가격 사후 안내 2개, 첫 판매 24탭 → 12탭. 다른 세션은 스토어 1위 루브릭(§9-4) 나머지 칸을 이어 간다.
-6. **다른 세션**: END 영수증 `이 점포의 기록` 블록(A안). 핸드오프 `reports/handoff-end-record.md`(초안 `reports/v3.0-prep.md` §9-8-1-A). 이 세션은 기획(1위 인터뷰, `reports/interview-1st-place.md`).
+   - 화염 조합 +18은 v2.9.12 곡선에서 잰 값이다. 다른 세션의 v2.9.13(DAY 21+ 게이트 기울기 · Final T3 위험 제안)이 들어가면 다시 잰다(`tools/measure-firepair.cjs`, 실행 전 User 컨펌).
+3. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
    - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
-   - 출시 준비 외 작업은 §8.
+   - 출시 준비 외 작업은 §8, 1위 루브릭은 §9.
+4. 다른 세션(2026-09-30 기준): v2.9.13 밸런스(`ccr-7d937a8a`), 1위 인터뷰(`reports/interview-1st-place.md`). 그 세션이 main을 받을 때 `CHANGELOG.md` · META 원장 충돌은 양쪽 기록을 모두 남기면 풀린다.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
+6. SSOT 재정리(User 2026-09-30): `design_ssot/` 105개·2.0 MB → 18개·0.89 MB. 내용은 `design_ssot/CHANGELOG.md` §Docs / hygiene after v2.9.12.
+   다시 쓰다가 드러난 Canonical 불일치는 User 결정("코드에 맞춰 정정")대로 모두 코드·owner 규칙 절에 맞췄다.
+   - ITEM QA: 값 목록 대신 §ACTIVE CATALOG를 가리킨다
+   - `피로 A → 출발 B` 줄이 없다는 규칙으로 통일
+   - 첫 발주 코치
+   - RELIC 카드 문구
+   - META Save v9
+   - SPEC_INDEX scope C
+   - ORD-Q85(방문객 수)
+   - UI-Q-v29-55
+   - SUPPLY MODEL(길드 특제 도시락 7)
+   - Day term 예시값
+   - DUN-Q75
+7. v2.9.13(`ccr-7d937a8a`) 머지 방식(User 2026-09-30): 이 위생 브랜치를 먼저 main에 넣고, v2.9.13 세션이 main을 받아 옮긴다. 그 세션에 줄 핸드오프는 아래와 같다.
+   - Source · 테스트 · 도구 · 보고서는 자동으로 합쳐진다. 충돌은 `design_ssot` 10개와 지워진 원장 9개뿐이다.
+   - SSOT 충돌은 줄 단위로 맞추지 않는다. 그 브랜치가 바꾼 규칙(`git diff <merge-base> HEAD -- design_ssot`, 약 +154/−61줄)을 새 owner 위치에 현재형으로 옮긴다. 출처 괄호와 옛 값은 쓰지 않는다(AGENTS §10).
+   - `DUNGEON_ITEM_QA` 변경은 DUNGEON_HAZARD / ITEM §QA로, `UI_UX_QA` 변경은 UI_UX §QA로 간다(id는 그대로). `reports/ssot-consolidation/` 원장 수정은 버린다(원장과 `ssot:check`는 없어졌다).
+   - ITEM QA의 수치는 §ACTIVE CATALOG를 가리키므로 카탈로그 표만 고치면 된다.
+   - CHANGELOG에는 맨 위 §RELEASE RECORD에 v2.9.13 행을 넣고, v2.9.13 절을 추가한다.
+   - 버전이 닫힐 때 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`, `expert-bot/`)은 결론 README만 남기고 정리한다(`archive/README.md` 기준).
+   - SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
 ### User 할 일
 
-1. 태그: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`, `v2.9.8` → `621d007` (GitHub Releases에서 새 태그로 만들면 된다). v2.9.9는 머지 커밋에.
+1. 태그: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`, `v2.9.8` → `621d007`, `v2.9.11` → `e1ce51e`(PR #30, 마지막 2.9.11 머지), `v2.9.12` → `f02eb8d`(PR #32) (GitHub Releases에서 새 태그로 만들면 된다). v2.9.9는 머지 커밋에.
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
 
@@ -207,9 +243,9 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 
 ### 2단계 지침(하네스 엄격)
 
-- 배치마다 전부: `npm test` 전체, `npm run ssot:check`(21/21), `npm run qa:runtime` 12/12, `npm run qa:visual`(clean), 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 일부만 돌리고 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
+- 배치마다 전부: `npm test` 전체, `npm run qa:runtime` 12/12, `npm run qa:visual`(clean), 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 일부만 돌리고 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
 - 새 한글 글자는 폰트 서브셋 검사에 걸린다(코멘트 포함) — 새 카피가 없으면 새 글자도 없어야 한다.
-- 핀·원장 누락은 커밋 전에 잡는다(`ssot:check`가 UNDECLARED NEW를 보고). 계약(≤ 320 ms, 임팩트 예산, 카드 안, 금지 목록)을 넘는 제안은 구현하지 않고 보고한다.
+- 핀 누락은 커밋 전에 잡는다. 계약(≤ 320 ms, 임팩트 예산, 카드 안, 금지 목록)을 넘는 제안은 구현하지 않고 보고한다.
 - 환경: 얕은 클론이면 `git fetch --unshallow`; `pip install fonttools brotli pillow`; `npm install`.
 
 ## Execution Boundary

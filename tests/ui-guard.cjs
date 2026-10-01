@@ -3710,7 +3710,7 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  const tb=css.slice(css.indexOf('@media (max-height:699px) and (orientation:portrait){'),css.indexOf('.p-prep .slot-tag i{'));
  assert.ok(/\.p-sale \.counter-tray \.tills button\{min-height:48px;/.test(tb)&&/\.p-sale \.tray-icon\{width:30px;height:30px\}/.test(tb),'short SALE: the tighter tray');
 });
-// v2.9.11 quick patch mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): decision and result cues read above the music
+// v2.9.11 quick patch mix (User 2026-09-29, archive/v2.9.11/bgm-sfx-mix-v2911.md): decision and result cues read above the music
 // (PRESENTATION §Mix) - the music 3 dB down, the effects bus 6 dB up, NIGHT a further 3 dB down; a phase change fades
 // the old track out, then the next one rises.
 test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a phase change fades out then in',()=>{

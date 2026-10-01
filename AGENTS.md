@@ -289,8 +289,7 @@ Do not:
 - duplicate current rules across multiple live documents
 - keep superseded discussion as another live expectation
 - mass-copy old specs into a new version
-  (exception: a User-approved consolidation that merges an owner's inheritance chain verbatim, with
-  every dropped line accounted in a ledger checked by `npm run ssot:check`; see reports/ssot-consolidation/)
+- keep old wording, superseded values or change history inside an owner (history belongs to CHANGELOG and git)
 
 Follow the current `SPEC_INDEX` routing and inheritance structure.
 Versioning / manifest changes must reflect the current project routing rather than historical examples in this file.

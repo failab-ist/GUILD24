@@ -93,7 +93,7 @@ html{touch-action:manipulation}
 img{-webkit-touch-callout:none}
 body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-webkit-text-size-adjust:100%}
 /* v2.9.11 (User 2026-09-28): Korean breaks between words everywhere - 297 mid-word breaks across Events, Store Supports, the
-   guide and settings (reports/text-audit-v2911.md); break-word still splits a token too long for its box. */
+   guide and settings (archive/v2.9.11/text-audit-v2911.md); break-word still splits a token too long for its box. */
 body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}

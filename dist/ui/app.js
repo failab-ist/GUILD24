@@ -850,7 +850,7 @@ function readout(n,extra=null,cls=''){
     row's own wording and number. Words only; the % stays in the help. */
  +(n.injury===1&&Dungeon.injuredStreak(n.records)>0?'<p class="strain">연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회</p>':'')
  /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
-    `피로 N`, the counter tray shows `피로 A → 출발 B` for a chosen Food/Drink that moves it, NIGHT answers the rest. */
+    `피로 N`, the counter tray lists a Food/Drink's own `피로 회복 N` row (no `피로 A → 출발 B` line), NIGHT answers the rest. */
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
