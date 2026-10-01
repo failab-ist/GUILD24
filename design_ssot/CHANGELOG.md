@@ -25,7 +25,7 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37 | `v2.9.13` |
 
-## Unreleased — v3.0 prep, first-Run teaching (User 2026-10-01; the version number is the User's to set)
+## v2.9.13 quick patch 2 — first-Run teaching (User 2026-10-01; the version stays 2.9.13)
 
 - **NIGHT injury lesson says how an Injury heals** (`reports/v3.0-prep.md` §9-9 F3): the first hurt record's mark now ends
   `원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.` - success clears an ordinary Injury, a retreat may
