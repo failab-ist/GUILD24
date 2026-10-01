@@ -35,6 +35,18 @@ Every closed version, where it landed on `main` and its tag. Tags are set by the
   "it was / used to / since v2.9.x" clauses from their decision parentheticals. Rules and current values are unchanged;
   each ledger accounts every line (`npm run ssot:check`).
 - **SSOT_AUDIT** (the closed v2.8 audit record) moves unchanged to `archive/v2.8/`.
+- **SSOT re-review — current spec only** (User 2026-09-30: "SSOT는 현재 사양 위주로"): `design_ssot/` goes from 105 files /
+  2.0 MB to 18 files / 0.91 MB.
+  - Removed: `history/` (79 pre-v2.8 owner files), the 21 consolidation ledgers, the ledger check and `npm run ssot:check`
+    (git keeps them; AGENTS §10 now forbids old wording / superseded values / change history inside an owner).
+  - Moved to `archive/`: SOURCE_ADOPTION_QA (closed v2.8 defect record) and this CHANGELOG's v2.8.0 ~ v2.9.11 sections.
+  - Merged: each QA file into its owner's `## QA — ACCEPTANCE` (ids unchanged; DUNGEON_ITEM_QA split into DUNGEON_HAZARD
+    and ITEM), 00_GAME_CORE into SPEC_INDEX §GAME CORE.
+  - Every owner rewritten as the current spec: decision provenance, change history, superseded values, measurement
+    narratives and in-file duplicates out; rules, values, ids, QA criteria and cited headings unchanged. UI_UX went deeper
+    (User: "깊게 줄임"): construction px / ms that Source carries and no test asserts became behaviour + representative values.
+  - Stale Canonical text fixed to the rule and Source (User: "코드에 맞춰 문서 정정"): DUNGEON_HAZARD Day-term anchors on the 1.45
+    slope, DUN-Q75 중상 = 0; RELIC QA lines carrying replaced values (pool 32 / 13 / 7, ids 31 / 32, 대형 냉장고 60G, REL-Q73 / 74).
 - **Archive**: closed-version reports and finished-question tools moved from `reports/` · `tools/` to `archive/v2.9.x/`, live
   references follow. Then the archive kept only what carries a decision or an insight, or what a live file points at; raw
   result JSON, unrunnable old tools, the legacy harness, finished handoffs and applied checklists were removed (git history

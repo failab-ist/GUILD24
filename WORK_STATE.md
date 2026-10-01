@@ -168,6 +168,15 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
    - 출시 준비 외 작업은 §8, 1위 루브릭은 §9.
 4. 다른 세션(2026-09-30 기준): v2.9.13 밸런스(`ccr-7d937a8a`), 1위 인터뷰(`reports/interview-1st-place.md`). 그 세션이 main을 받을 때 `CHANGELOG.md` · META 원장 충돌은 양쪽 기록을 모두 남기면 풀린다.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
+6. SSOT 재정리(User 2026-09-30, 내용은 `design_ssot/CHANGELOG.md` §Docs / hygiene after v2.9.12) 중 드러난 Canonical 불일치 — 결정 대기(DESIGN ISSUE).
+   Source와 owner 규칙 절은 서로 맞고, 낡은 문장이 남은 곳들이다.
+   - ITEM QA가 ACTIVE CATALOG · `dist/data/catalog.js`와 어긋난다: ITEM-Q72 · Q73 · Q77 · Q79 · Q83 · Q84 · Q07(방한 두건 > 불룡볶음면 역전), DI-Q-v28-1(43종 · 희귀도 분포 · 생수 유통기한).
+   - ITEM §SUPPLY MODEL "음식은 6 이하(영웅 결전 도시락 9 예외)" ↔ 길드 특제 도시락 7.
+   - SALE §POST-COMMIT DELTA SOURCE TRUTH 예시(집중 사탕 공포 +10 · 회복 3 ↔ 카탈로그 +8 · 2), SALE PRE-COMMIT이 허용하는 `피로 A → 출발 B` ↔ PREVIEW 금지.
+   - UI_UX QA: UI-Q-v29-11의 첫 발주 코치 6단계 ↔ 코치 다이어트(UI-Q-v29-53, `발주 확정` 하나); UI-Q86 · Q89 · UI-Q-v28-8의 `피로 A → 출발 B` ↔ UI-Q-v29-7(없음); `UI-Q-v29-20` id가 두 항목에 쓰임.
+   - RELIC §COPY TRUTH · REL-Q-v28-12의 카드 문구 두 줄 ↔ COPY_AUDIT §11-3 · 보드 문구와 Source. REL-Q-v28-22 기본가 목록에 야전 들것 80 없음.
+   - META §PRE-RELEASE COMPATIBILITY · §SAVE RELATIONSHIP의 Save v8 ↔ CORE_RUN §SAVE v9.
+   - SPEC_INDEX PURPOSE scope C ↔ deferred 목록(지난 원정 접힘 줄), ECONOMY_ORDER ORD-Q85 "MORNING forecast surface"의 대상.
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
