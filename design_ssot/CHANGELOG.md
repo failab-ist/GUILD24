@@ -34,6 +34,8 @@ and this table is their commit record.
 - **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
   outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
   the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.
+- **초코바 기동 +8 · 피로 회복 3 → 기동 +6 · 피로 회복 5**: it read the same as 캔커피 (기동 +12 · 2) per Gold; now the pair splits
+  as 삼각김밥 / 생수 do - the Food keeps going, the Drink lifts the Stat. ITEM §ACTIVE CATALOG, §ITEM ROLE NOTES; tests vocabulary.
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 

@@ -699,7 +699,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the pos
  const n=base();
  const r=Dungeon.resolve(n,hard,scripted([0.5,0.0001,0.999,roll,0.25,0.999,0.999]),[]);
  assert.equal(r.outcome,'부상','WITH the Item, escape succeeds into the harsher .13 threshold and stays 부상');
- assert.equal(r.finalFatigue,24,'sanity: 18 - 3 (초코바 피로 회복, v2.9.0 F4) = 15 at departure, and the Outcome\'s own +9 crosses into the 20~29 band downstream of departure');
+ assert.equal(r.finalFatigue,22,'sanity: 18 - 5 (초코바 피로 회복, v2.9.14) = 13 at departure, and the Outcome\'s own +9 crosses into the 20~29 band downstream of departure');
  assert.ok(r.heroProof?.outcome?.items?.includes('choco'),
   'proof still credits 초코바 off the DEPARTURE (10-19 band) Fatigue, not the post-Outcome (20 band) figure');
  assert.equal(r.heroProof.outcome.worse,'중상','and names the worse tier losing 초코바 would have reached');

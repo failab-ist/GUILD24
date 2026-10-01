@@ -594,7 +594,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | # | Item | Category / Rarity | Buy / Sell | Effect | Hazard Role |
 |---:|---|---|---:|---|---|
 | 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold 초반 대응 |
-| 5 | 초코바 | Food C | 30 / 60 | 기동 +8, Supply 3 | — |
+| 5 | 초코바 | Food C | 30 / 60 | 기동 +6, Supply 5 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +12, Supply 2 | Stat route |
 | 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +15, Supply 2 | Stat route |
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +8 | — |
@@ -721,7 +721,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 
 1. 삼각김밥 — identity=cheap basic expedition supply
 3. 컵라면 — roles=[Supply,DirectCounter] counter=cold identity=Cold 초반 대응 with Supply
-5. 초코바 — roles=[Supply,Stat] identity=cheap quick Stat support hiddenPostFatigue=NO
+5. 초코바 — roles=[Supply,Stat] identity=cheap snack that keeps going (more Supply, less 기동 than 캔커피, as 삼각김밥 against 생수) hiddenPostFatigue=NO
 6. 캔커피 — roles=[Supply,Stat] identity=Mobility support caffeineStack=NO
 9. 얼음컵 — roles=[Supply,DirectCounter] counter=fire identity=Fire 초반 대응 with Supply
 41. 중화 탄산수 — roles=[Supply,DirectCounter] counter=corrosion identity=Corrosion 초반 대응 with Supply

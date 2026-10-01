@@ -69,7 +69,7 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
  for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
  // the redistributed Fatigue recovery (ITEM §SUPPLY MODEL contract) and the two price / Stat moves
  // (v2.9.1 balance, User 2026-09-25: rice/ramen/bar/premium/lava (now lunchbox / guildlunch / dragonramen) Supply each +1)
- const supply={soda:1,rice:5,ramen:3,lunchbox:6,choco:3,candy:2,dragonramen:3,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,kingwater:2,hyperenergy:2,sageelixir:2};
+ const supply={soda:1,rice:5,ramen:3,lunchbox:6,choco:5,candy:2,dragonramen:3,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,kingwater:2,hyperenergy:2,sageelixir:2};
  for(const [id,v] of Object.entries(supply))assert.equal(DATA.itemBy[id].effects.supply,v,id+' 피로 회복');
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
