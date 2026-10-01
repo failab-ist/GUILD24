@@ -3751,7 +3751,8 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  const css=read('dist/ui/ui.css');
  assert.ok(!/stockBrief\(|stock-brief/.test(app)&&!/stock-brief/.test(css+read('dist/ui/director-review.css')),'the form block is gone, code and styles');
  assert.ok(/stockSlots\(\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey')),'one rack for the column and the sheet');
- const sl=fn('stockSlots');assert.ok(/cap=game\.capacity\(\)/.test(sl)&&/'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\)/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl),'one cell per slot: a held unit in each, the rest empty');
+ /* User 2026-10-01: a cell per held unit only - the rack takes the rows its stock needs; the room left is the head's N / M칸 */
+ const sl=fn('stockSlots');assert.ok(!/wh-slot empty/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl)&&/'<em>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>'|<b>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>/.test(fn('stockHead')),'a held unit per cell, no empty rows; the head carries the room left');
  const os=fn('orderScreen');assert.ok(/'<div class="order-desk">'\+orderForm\(\)\+'<\/div>'\+stockSide\(\)/.test(os)&&/stockSheetKey\(\)\+/.test(os),'the column beside the form, the handle in the dock');
  assert.ok(/class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
  assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&game\.run\?\.phase==='order'&&sheetOpen\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');

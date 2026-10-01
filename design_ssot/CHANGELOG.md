@@ -39,6 +39,9 @@ and this table is their commit record.
 - **Coach bubble as wide as its words**: a fixed 340 px bubble folded a one-line mark (`판 상품은 손님 가방에 …`) onto two
   lines on a desk and more on a narrow phone. It now takes the width its copy needs up to the screen (560 px on a desk) and
   grows only by the lines it needs. UI_UX §TUTORIAL coach mark.
+- **ORDER warehouse rack as tall as its stock**: the rack drew a cell for every store slot, so a few held units still took three
+  rows of mostly empty cells. Only held units are drawn now - one row while they fit, more as stock grows; the room left reads in
+  the header's `N / M칸`. UI_UX §ORDER — WAREHOUSE PANEL / UI-Q-v29-50; tests ui-guard.
 - **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
   outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
   the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.
