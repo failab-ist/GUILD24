@@ -168,15 +168,27 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
    - 출시 준비 외 작업은 §8, 1위 루브릭은 §9.
 4. 다른 세션(2026-09-30 기준): v2.9.13 밸런스(`ccr-7d937a8a`), 1위 인터뷰(`reports/interview-1st-place.md`). 그 세션이 main을 받을 때 `CHANGELOG.md` · META 원장 충돌은 양쪽 기록을 모두 남기면 풀린다.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
-6. SSOT 재정리(User 2026-09-30, 내용은 `design_ssot/CHANGELOG.md` §Docs / hygiene after v2.9.12) 중 드러난 Canonical 불일치 — 결정 대기(DESIGN ISSUE).
-   Source와 owner 규칙 절은 서로 맞고, 낡은 문장이 남은 곳들이다.
-   - ITEM QA가 ACTIVE CATALOG · `dist/data/catalog.js`와 어긋난다: ITEM-Q72 · Q73 · Q77 · Q79 · Q83 · Q84 · Q07(방한 두건 > 불룡볶음면 역전), DI-Q-v28-1(43종 · 희귀도 분포 · 생수 유통기한).
-   - ITEM §SUPPLY MODEL "음식은 6 이하(영웅 결전 도시락 9 예외)" ↔ 길드 특제 도시락 7.
-   - SALE §POST-COMMIT DELTA SOURCE TRUTH 예시(집중 사탕 공포 +10 · 회복 3 ↔ 카탈로그 +8 · 2), SALE PRE-COMMIT이 허용하는 `피로 A → 출발 B` ↔ PREVIEW 금지.
-   - UI_UX QA: UI-Q-v29-11의 첫 발주 코치 6단계 ↔ 코치 다이어트(UI-Q-v29-53, `발주 확정` 하나); UI-Q86 · Q89 · UI-Q-v28-8의 `피로 A → 출발 B` ↔ UI-Q-v29-7(없음); `UI-Q-v29-20` id가 두 항목에 쓰임.
-   - RELIC §COPY TRUTH · REL-Q-v28-12의 카드 문구 두 줄 ↔ COPY_AUDIT §11-3 · 보드 문구와 Source. REL-Q-v28-22 기본가 목록에 야전 들것 80 없음.
-   - META §PRE-RELEASE COMPATIBILITY · §SAVE RELATIONSHIP의 Save v8 ↔ CORE_RUN §SAVE v9.
-   - SPEC_INDEX PURPOSE scope C ↔ deferred 목록(지난 원정 접힘 줄), ECONOMY_ORDER ORD-Q85 "MORNING forecast surface"의 대상.
+6. SSOT 재정리(User 2026-09-30): `design_ssot/` 105개·2.0 MB → 18개·0.89 MB. 내용은 `design_ssot/CHANGELOG.md` §Docs / hygiene after v2.9.12.
+   다시 쓰다가 드러난 Canonical 불일치는 User 결정("코드에 맞춰 정정")대로 모두 코드·owner 규칙 절에 맞췄다.
+   - ITEM QA: 값 목록 대신 §ACTIVE CATALOG를 가리킨다
+   - `피로 A → 출발 B` 줄이 없다는 규칙으로 통일
+   - 첫 발주 코치
+   - RELIC 카드 문구
+   - META Save v9
+   - SPEC_INDEX scope C
+   - ORD-Q85(방문객 수)
+   - UI-Q-v29-55
+   - SUPPLY MODEL(길드 특제 도시락 7)
+   - Day term 예시값
+   - DUN-Q75
+7. v2.9.13(`ccr-7d937a8a`) 머지 방식(User 2026-09-30): 이 위생 브랜치를 먼저 main에 넣고, v2.9.13 세션이 main을 받아 옮긴다. 그 세션에 줄 핸드오프는 아래와 같다.
+   - Source · 테스트 · 도구 · 보고서는 자동으로 합쳐진다. 충돌은 `design_ssot` 10개와 지워진 원장 9개뿐이다.
+   - SSOT 충돌은 줄 단위로 맞추지 않는다. 그 브랜치가 바꾼 규칙(`git diff <merge-base> HEAD -- design_ssot`, 약 +154/−61줄)을 새 owner 위치에 현재형으로 옮긴다. 출처 괄호와 옛 값은 쓰지 않는다(AGENTS §10).
+   - `DUNGEON_ITEM_QA` 변경은 DUNGEON_HAZARD / ITEM §QA로, `UI_UX_QA` 변경은 UI_UX §QA로 간다(id는 그대로). `reports/ssot-consolidation/` 원장 수정은 버린다(원장과 `ssot:check`는 없어졌다).
+   - ITEM QA의 수치는 §ACTIVE CATALOG를 가리키므로 카탈로그 표만 고치면 된다.
+   - CHANGELOG에는 맨 위 §RELEASE RECORD에 v2.9.13 행을 넣고, v2.9.13 절을 추가한다.
+   - 버전이 닫힐 때 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`, `expert-bot/`)은 결론 README만 남기고 정리한다(`archive/README.md` 기준).
+   - SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
