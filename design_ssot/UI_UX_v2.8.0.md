@@ -129,8 +129,9 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
-beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item; only held units are
-drawn, so the rack takes as many rows as the stock needs (one while it fits) and the room left reads in the header's `N / M칸`. Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
+beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item. The desk rack shows every
+store slot, the empty ones as empty cells; the phone sheet draws only held units, so it takes as many rows as the stock needs
+(one while it fits) and the room left reads in the header's `N / M칸`. Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
 hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's ladder); no new copy.
 - Desk (1024 px and wider): 발주서 left, an always-open rack right, following the scroll, below the menu pin.
 - Phone: a slim `창고 N / M칸 · K종` handle as a dock row (never covers an offer row) opens the rack as a sheet rising from the
@@ -2410,8 +2411,8 @@ PASS: the 발주서 carries no warehouse block at any width; desk: the form set 
 scrolls, clear of the menu pin; phone: the `창고` handle on the dock covers no offer row, the sheet rises from the dock to at most
 45% of the screen, the rows above scroll and take taps, a quantity tap keeps it open, the handle or Escape closes it, a fresh
 account starts folded and the next Day keeps the choice; handle, sheet and column read as one steel rack apart from the floating
-box and the paper, no decorative stripe or stacked frame (PRESENTATION §Edge / material); a cell per held unit and no empty cells,
-the rack's rows only what the stock needs; the rack equals the warehouse; no console or runtime error.
+box and the paper, no decorative stripe or stacked frame (PRESENTATION §Edge / material); desk: one cell per slot, empty cells equal the room
+left; phone: a cell per held unit, no empty cells, the sheet's rows only what the stock needs; the rack equals the warehouse; no console or runtime error.
 FAIL: the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a quantity
 tap closes it; a second copy of the warehouse on screen.
 

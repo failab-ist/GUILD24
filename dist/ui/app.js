@@ -1466,14 +1466,15 @@ function statGrid(n){
 /* the warehouse as a rack of 칸 (User 2026-09-29): one cell per slot the store has, each held unit in its own cell - the
    same `N / M칸` the ledger counts - grouped by Item in the order the shelf reads them, with its days left; the empty cells
    are the room left. The icon is the one the offer rows show; the Item's name is the cell's reader label. */
-/* User 2026-10-01: only the held units are drawn, so the rack is as many rows as they need (one row while they fit); the room
-   left reads in the head's `N / M칸`, not as rows of empty cells */
-function stockSlots(){const s=game.run,order=groupStock().map(g=>g.item),units=[];
+/* User 2026-10-01: on a phone only the held units are drawn, so the sheet is as many rows as they need (one while they fit) and
+   the room left reads in the head's `N / M칸`; the desk column has the room, so it shows every 칸 with the empty ones (`full`) */
+function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
    label=E(it.name)+(left===null?'':' · '+left+'일');
    return '<li class="wh-slot" data-item="'+it.id+'" aria-label="'+label+'">'+Art.itemIcon(it.id,32)
-    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')+'</ol>';}
+    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')
+  +(full?'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length)):'')+'</ol>';}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is not on the 발주서 any more; it is held apart like an
    inventory, so it can be read against the offer rows while ordering. Desk: a large column beside the form, always open.
    Phone: a slim handle on top of the dock - part of the dock, so it never covers an offer row - stating 창고 N / M칸 · K종,
@@ -1485,7 +1486,7 @@ function stockSlots(){const s=game.run,order=groupStock().map(g=>g.item),units=[
    warehouse holds only what HQ put there, and the head says so */
 function stockHead(){const s=game.run,n=groupStock().length,hq=s.day===1&&!(s.daily?.spent>0);
  return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+(hq?'본사 기본 상품 ':'')+n+'종</em>':'');}
-function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots()+'</aside>';}
+function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots(true)+'</aside>';}
 const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
 function stockSheetKey(){const open=sheetOpen();
  return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(open?'':' hidden')+'>'+stockSlots()+'</section>'

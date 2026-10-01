@@ -3750,9 +3750,10 @@ test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a
 test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, phone handle and sheet',()=>{
  const css=read('dist/ui/ui.css');
  assert.ok(!/stockBrief\(|stock-brief/.test(app)&&!/stock-brief/.test(css+read('dist/ui/director-review.css')),'the form block is gone, code and styles');
- assert.ok(/stockSlots\(\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey')),'one rack for the column and the sheet');
- /* User 2026-10-01: a cell per held unit only - the rack takes the rows its stock needs; the room left is the head's N / M칸 */
- const sl=fn('stockSlots');assert.ok(!/wh-slot empty/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl)&&/'<em>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>'|<b>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>/.test(fn('stockHead')),'a held unit per cell, no empty rows; the head carries the room left');
+ assert.ok(/stockSlots\(true\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey')),'one rack for the column and the sheet (the desk column with every 칸)');
+ /* User 2026-10-01: the phone sheet draws a cell per held unit only (rows as the stock needs, room left in the head's N / M칸);
+    the desk column, with room to spare, also draws the empty 칸 */
+ const sl=fn('stockSlots');assert.ok(/stockSlots\(true\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey'))&&/full\?'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\):''/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl)&&/'<em>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>'|<b>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>/.test(fn('stockHead')),'phone: a held unit per cell, no empty rows; desk: every 칸; the head carries the room left');
  const os=fn('orderScreen');assert.ok(/'<div class="order-desk">'\+orderForm\(\)\+'<\/div>'\+stockSide\(\)/.test(os)&&/stockSheetKey\(\)\+/.test(os),'the column beside the form, the handle in the dock');
  assert.ok(/class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
  assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&game\.run\?\.phase==='order'&&sheetOpen\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');

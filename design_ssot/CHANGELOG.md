@@ -40,16 +40,16 @@ and this table is their commit record.
   lines on a desk and more on a narrow phone. It now takes the width its copy needs up to the screen (560 px on a desk) and
   grows only by the lines it needs. UI_UX §TUTORIAL coach mark.
 - **ORDER warehouse rack as tall as its stock**: the rack drew a cell for every store slot, so a few held units still took three
-  rows of mostly empty cells. Only held units are drawn now - one row while they fit, more as stock grows; the room left reads in
-  the header's `N / M칸`. UI_UX §ORDER — WAREHOUSE PANEL / UI-Q-v29-50; tests ui-guard.
+  rows of mostly empty cells. On a phone only held units are drawn now - one row while they fit, more as stock grows; the room
+  left reads in the header's `N / M칸`. The desk column has the room and keeps every 칸 (the maximum in view). UI_UX §ORDER — WAREHOUSE PANEL / UI-Q-v29-50; tests ui-guard.
 - **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
   outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
   the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.
 - **초코바 기동 +8 · 피로 회복 3 → 기동 +6 · 피로 회복 5**: it read the same as 캔커피 (기동 +12 · 2) per Gold; now the pair splits
   as 삼각김밥 / 생수 do - the Food keeps going, the Drink lifts the Stat. ITEM §ACTIVE CATALOG, §ITEM ROLE NOTES; tests vocabulary.
 - **New Common Food 녹차 양갱 (`yanggaeng`)**: 30 / 60, 정신 +8 · 피로 회복 5, 2 days, DAY 1 - the 정신 Food beside 진정 허브티
-  (정신 +15 · 2), as 초코바 is beside 캔커피 and 삼각김밥 beside 생수. Active catalog 44 (Common 12). Flavor `녹차 향이 머리를 식혀
-  준다.`; a green-tea jelly bar icon. ITEM §ACTIVE CATALOG / §ACTIVE RARITY DISTRIBUTION / §SHELF LIFE / §ITEM ROLE NOTES,
+  (정신 +15 · 2), as 초코바 is beside 캔커피 and 삼각김밥 beside 생수. Active catalog 44 (Common 12). Flavor `어르신 손님은 꼭 두 개씩
+  사 간다.`; a green-tea jelly bar icon. ITEM §ACTIVE CATALOG / §ACTIVE RARITY DISTRIBUTION / §SHELF LIFE / §ITEM ROLE NOTES,
   COPY_AUDIT §12-4; tests vocabulary, delta.
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
