@@ -491,6 +491,11 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
   /* the list on screen takes the crates: the desk's column or the phone's open 창고 sheet (UI_UX §ORDER — WAREHOUSE PANEL;
      a folded sheet shows the handle's figures only); every `N / M칸` and `N종` figure moves on the last landing */
   const side=$('.p-order .stock-side'),sheet=$('#stock-sheet'),list=side?.getClientRects().length?side:sheet&&!sheet.hidden?sheet:null;
+  /* User 2026-10-01: the phone sheet draws only held units, so an order that passes a row makes it taller - it rises to the new
+     height over the first beat (the new row shows from the dock up) instead of jumping a row in one frame */
+  if(list===sheet&&h.sheetH!=null){const to=sheet.getBoundingClientRect().height;
+   if(to>h.sheetH+1){sheet.style.overflow='hidden';A(sheet,{height:{from:h.sheetH,to,duration:STAMP_FALL*2,ease:'outQuad'},
+    onComplete:()=>{sheet.style.height='';sheet.style.overflow='';}});}}
   k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
    /* the SKU's new cells - the ones past what it held before - take its crate, all on the same fall */
    const cells=list?[...list.querySelectorAll('li.wh-slot[data-item="'+item+'"]')].slice(h.before?.[item]||0):[];
@@ -2448,9 +2453,11 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'begin-order':game.beginOrder();sound('open');render();break;
  case'confirm-order':{/* H3: what the warehouse and the till held before the commit, for the cascade after it (playCue) */
   const before=Object.fromEntries(groupStock().map(st=>[st.item,st.count])),used=s.inventory.length,gold=s.money,
-   skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))];
+   skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))],
+   /* the open phone sheet's height before the commit: a new rack row grows in instead of appearing in one frame */
+   sheetEl=$('#stock-sheet'),sheetH=sheetEl&&!sheetEl.hidden?sheetEl.getBoundingClientRect().height:null;
   orderCueAt.forEach(clearTimeout);orderCueAt=[];game.confirmOrder();
-  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);}else sound('order');
+  if(motionOK()){cue='order';handoff={before,used,gold,skus,sheetH};Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);}else sound('order');
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;

@@ -137,7 +137,8 @@ hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's l
 - Phone: a slim `창고 N / M칸 · K종` handle as a dock row (never covers an offer row) opens the rack as a sheet rising from the
   dock, at most 45% of the screen, own scroll. It neither dims nor locks the form (rows above take taps; rows under it can be
   scrolled above it); only the handle (`열기` / `닫기`) or Escape closes it (a quantity tap keeps it open). Open/folded → §ORDER — WAREHOUSE DISCLOSURE.
-- ORDER CONFIRM's crates drop into the new cells of the visible rack; with the sheet folded the handle's figures move on the
+- ORDER CONFIRM's crates drop into the new cells of the visible rack (an open phone sheet that gains a row grows to its new
+  height first, never jumping in one frame); with the sheet folded the handle's figures move on the
   last landing.
 
 ### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)

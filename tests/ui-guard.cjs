@@ -1897,8 +1897,10 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/if\(i<ORDER_BEAT\.hits\)orderCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(i\?'crate':'order'\),land\)\)/.test(o),'at most three audible landings');
  assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
  assert.ok(/\.stock-head em/.test(o)&&/\.stock-head b/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
- assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
+ assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus,sheetH\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
  assert.ok(/'<li class="wh-slot" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
+ /* User 2026-10-01: an order that passes a row of the phone sheet grows it to the new height over the first beat, never a one-frame jump */
+ assert.ok(/if\(to>h\.sheetH\+1\)\{sheet\.style\.overflow='hidden';A\(sheet,\{height:\{from:h\.sheetH,to,duration:STAMP_FALL\*2/.test(o),'the sheet grows into its new row');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
  assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
 });
