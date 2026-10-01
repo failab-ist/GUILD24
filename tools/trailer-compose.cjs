@@ -13,7 +13,7 @@ const cue=(take,name,i=0)=>T[take].cues.filter(c=>c[0]===name)[i][1];
 const rect=(take,label,key,i=0)=>T[take].rects.find(r=>r.label===label).r[key][i];
 const ctr=r=>[r[0]+r[2]/2,r[1]+r[3]/2];
 const b=60/90.03,B=4*b;                                 // beat, bar
-const SONG_IN=6.06,DUR=30,FPS=30;
+const SONG_IN=6.06,FPS=30;                          // the length (DUR) is what the edit comes to (v5)
 // ---- source time maps (v4, §11: User + GPT review 2026-10-01 — the sale ends on the hand-over, the night holds 1.2 s after the
 // underline, 오름찬's later visit replaces the ready-party card, the clash keeps its own speed, the result is two cuts, logo at 27 s) ----
 const tapItem=T.sale.marks.tapItem,tapPrice=T.sale.marks.tapPrice,great=cue('night','great'),collapse=cue('final','collapse');
@@ -23,41 +23,43 @@ const g=k=>+(k*b).toFixed(4);                          // beat k on the output g
 const S=[];const shot=(t0,t1,take,src,cam,extra={})=>S.push({t0,t1,take,src,cam,...extra});
 const lin=(o,s0,speed=1)=>t=>s0+(t-o)*speed;            // output t → source t
 const hold=s0=>()=>s0;
-const LOGO=27;
 // S0 the empty shop; footsteps come closer (audio), 단 30일.
 shot(0,g(4),'store',hold(0),[[0,470,860,1.0],[g(4),470,820,1.10]]);
 // S1 the customer arrives on the last step: face and destination in one framing
 shot(g(4),g(6),'sale',lin(g(4),0.2),[[g(4),607,1030,1.06]],{spots:[[g(4)+0.15,g(6),[portraitR,destR],0.5]]});
 // S2 the Boss
 shot(g(6),g(8),'final',lin(g(6),0.1),[[g(6),560,700,1.22],[g(6)+0.35,560,700,1.12],[g(8),560,690,1.10]]);
-// S5 is placed first because the sale is timed back from it: the 대성공 stamp lands on the song's hit at 11.06 s (measured onset)
-const oGreat=11.06,N0=oGreat-(great-0.5);                // the night card from the frame after 다음 (source 0.5)
 // S3 the product, large: tap once (the tray opens over the row on the tap, so the card holds the row as tapped while the mark plays)
 const oItem=g(10),itemOff=oItem+0.4,itemCard={taps:[[oItem,...ctr(itemR),'card']],callouts:[[g(8),itemOff,[81,itemR[1],720,itemR[3]],1064,860,0,true]]};
 shot(g(8),oItem,'sale',lin(oItem,tapItem),[[g(8),607,1080,1.0]],itemCard);
 shot(oItem,itemOff,'sale',hold(tapItem-1/30),[[oItem,607,1080,1.0]],itemCard);
-// S4 name + the three live prices in one card, clear of the frame edge: tap once (held while the mark plays), then the real sale
-// full screen from the frame the tray has closed (the tray is not shown twice): the hand-over, the customer's answer, 0.5 s, night
-const SOLD=tapPrice+4/30,handOff=N0-((8.8-SOLD)+0.5),oPrice=handOff-0.26;
-const trayCard={taps:[[oPrice,...ctr(priceR),'card']],pulse:[oPrice-1.1,oPrice,priceR],callouts:[[itemOff,handOff,[40,1372,1135,532],1010,900,0,true]]};
+// S4 name + the three live prices in one card, clear of the frame edge: 0.75 s to see the three, the 할인 key's ring 0.9 s, one tap
+// (held while the mark plays), then the real sale full screen from the frame the tray has closed: the hand-over, the answer, 0.5 s
+const SOLD=tapPrice+4/30,oPrice=itemOff+0.75+0.9,handOff=oPrice+0.26,N0=handOff+(8.8-SOLD)+0.5;
+const trayCard={taps:[[oPrice,...ctr(priceR),'card']],pulse:[itemOff+0.75,oPrice,priceR],callouts:[[itemOff,handOff,[40,1372,1135,532],1010,900,0,true]]};
 shot(itemOff,oPrice,'sale',lin(oPrice,tapPrice),[[itemOff,607,1080,1.0]],trayCard);
 shot(oPrice,handOff,'sale',hold(tapPrice-1/30),[[oPrice,607,1080,1.0]],trayCard);
 shot(handOff,N0,'sale',lin(handOff,SOLD),[[handOff,607,1080,1.0]]);
-// S5 night: face, 대성공 and the cause line in one still frame; after the caption the line is underlined to its own length, then 1.2 s
-const ulT=oGreat+1.34,NE=ulT+0.45+1.2;
-shot(N0,NE,'night',lin(oGreat,great),[[N0,607,1000,1.06]],{dark:[N0,N0+0.2,0.18],underline:[ulT,0.45,heroText],spots:[[ulT-0.1,NE,[standR,heroR],0.6]]});
+// S5 night (v5): the stamp and the face first (the stamp falls on the song's hit near 10.04 s), then one 0.45 s push to the frame that
+// holds face, 대성공 and the cause line; once it stops, the line is underlined to its own length, 0.9 s to read, cut
+const oGreat=N0+(great-0.5),zIn=oGreat+0.7,zOut=zIn+0.45,ulT=zOut+0.1,NE=ulT+0.45+0.9;
+shot(N0,NE,'night',lin(oGreat,great),[[N0,607,1000,1.06],[zIn,607,1000,1.06],[zOut,548,950,1.2]],
+ {dark:[N0,N0+0.2,0.18],underline:[ulT,0.45,heroText],spots:[[ulT-0.1,NE,[standR,heroR],0.6]]});
 // S6 the same customer's later visit (D28, Lv.19, the line the game gave it), lifted with its portrait card only
-const C0=16.88,rvR=[30,0,486,816];
+const C0=NE+2.2,rvR=[30,0,486,816];
 shot(NE,C0,'revisit',lin(NE,0.15),[[NE,607,1080,1.0]],{callouts:[[NE,C0,rvR,900,860,0,true]]});
 // S7 the clash in one still framing: the battle screen comes in, 0.4 s, the first exchange, then the last exchange through the boss's
 // bar running out to the collapse, all at the game's own speed. The supply icons and the second exchange are cut, with their sounds.
-const RES=24.2,CUT2=25.0,oCol=RES-(13.8-collapse),E3=oCol-(collapse-9.32),E1=E3-(8.26-6.62);
+const E1=C0+(3.95-2.75),E3=E1+(8.26-6.62),oCol=E3+(collapse-9.32),RES=oCol+(13.8-collapse);
 shot(C0,E1,'final',lin(C0,2.75),[[C0,607,1040,1.04]]);
 shot(E1,E3,'final',lin(E1,6.62),[[E1,607,1040,1.04]]);
 shot(E3,RES,'final',lin(E3,9.32),[[E3,607,1040,1.04]]);
-// S8 the result in two cuts: the receipt as it lands with its seal, then 마왕이 쓰러졌다. / 우리 점포에서 떠난 원정대가 해냈다. held
-shot(RES,CUT2,'final',lin(RES,13.8),[[RES,631,600,1.18]]);
-shot(CUT2,LOGO,'final',lin(RES,13.8),[[CUT2,496,684,1.6]]);
+// S8 the result, one shot: the receipt lands with its seal, then one 0.6 s push centred on 마왕이 쓰러졌다. / 우리 점포에서 떠난
+// 원정대가 해냈다. (the header and the figures stay at the edge); on the stop a pale gold wash behind the two lines and a short burst of
+// gold pixels along the frame edge, with the game's settlement cue; 1 s to read, then the title
+const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+1.0,DUR=+(LOGO+3).toFixed(4);
+const lines2=[120,448,640,198];
+shot(RES,LOGO,'final',lin(RES,13.8),[[RES,631,600,1.18],[rIn,631,600,1.18],[rOut,500,640,1.6]],{glow:[rOut,lines2],burst:[rOut,0.7]});
 // S9 the logo, still
 shot(LOGO,DUR,'logo',hold(0),[[LOGO,0,0,1]]);
 // ---- captions: one at a time, placed off the key UI ----------------------------------------------------------------
@@ -66,13 +68,13 @@ const CAP=[
  {t0:g(4)+0.05,t1:g(6)-0.02,font:'WSB',size:96,y:1560,lines:[[['편의점에서',0],['시작되는',0]]]},
  {t0:g(6)+0.04,t1:g(8)-0.1,font:'MUL',size:210,y:1500,lines:[[['마왕',1],['토벌.',1]]],slam:true},
  {t0:g(8)+0.08,t1:oPrice-0.12,font:'WSB',size:84,y:1430,lines:[[['당신이',0],['건넨',0]],[['물건',1],['하나가',1]]]},
- {t0:oGreat+0.05,t1:ulT-0.12,font:'WSB',size:86,y:250,lines:[[['그들의',0],['생사를',1],['가른다.',0]]]},
+ {t0:oGreat+0.05,t1:ulT-0.08,font:'WSB',size:86,y:250,lines:[[['그들의',0],['생사를',1],['가른다.',0]]]},
  {t0:NE+0.05,t1:C0-0.08,font:'WSB',size:84,y:1760,lines:[[['키워낸',0],['단골들과',1],['함께',0]]]},
  {t0:E1+0.5,t1:oCol-0.3,font:'MUL',size:104,y:1805,lines:[[['마왕을',1],['쓰러뜨려라.',0]]],slam:true}];   // under the party: off the charge path
 // the game's own cues, each mapped through the shot that shows its source moment (a cue in a cut span is dropped with it);
 // the item tap's cue falls in the held frame, so it is placed from the tap
 const mapCue=(take,st)=>{for(const s of S){if(s.take!==take)continue;const a=s.src(s.t0),z=s.src(s.t1);if(z>a&&st>=a&&st<z)return s.t0+(st-a)*(s.t1-s.t0)/(z-a);}return null;};
-const CUES=[['button',oItem+(cue('sale','button')-tapItem)],
+const CUES=[['button',oItem+(cue('sale','button')-tapItem)],['gold',rOut],
  ...['sale','night','final'].flatMap(k=>T[k].cues.filter(c=>c[0]!=='button').map(c=>[c[0],mapCue(k,c[1])]).filter(c=>c[1]!=null))];
 const STEPS=[[g(1),0.35],[g(2),0.55],[g(3),0.75],[g(4),0.95]];   // footsteps (not a game cue): closer each beat, the last on the cut
 const CONFIG={DUR,FPS,shots:S,caps:CAP,takes:Object.fromEntries(Object.entries(T).map(([k,t])=>[k,{dir:'file://'+t.dir,fps:t.fps,n:t.frames.length,w:t.size[0],h:t.size[1]}])),
@@ -115,6 +117,14 @@ async function render(t){await fonts();x.setTransform(1,0,0,1,0,0);x.globalAlpha
   for(const tp of s.taps||[]){const u=(t-tp[0])/0.42;if(u<-0.05||u>1)continue;if(tp[3]==='card'&&!onCard)continue;const [px,py]=mapP(tp[1],tp[2]);x.save();
    if(u<0.25){x.fillStyle='rgba(255,255,255,'+(0.75*(1-u/0.25))+')';x.beginPath();x.arc(px,py,38,0,7);x.fill();}
    if(u>=0){x.strokeStyle='rgba(255,255,255,'+(0.9*(1-u))+')';x.lineWidth=7;x.beginPath();x.arc(px,py,38+110*ease(clamp(u,0,1)),0,7);x.stroke();}x.restore();}
+  if(s.glow&&t>=s.glow[0]){const u=t-s.glow[0],a=u<0.25?u/0.25:u<0.55?1:Math.max(0,1-(u-0.55)/0.5);if(a>0){const [a1,b1,c1,d1]=mapR(s.glow[1]);
+   x.save();x.globalCompositeOperation='multiply';x.globalAlpha=0.55*a;const gr=x.createLinearGradient(a1-40,0,a1+c1+40,0);gr.addColorStop(0,'rgba(255,214,120,0)');gr.addColorStop(0.12,'#ffd27a');gr.addColorStop(0.88,'#ffd27a');gr.addColorStop(1,'rgba(255,214,120,0)');
+   x.fillStyle=gr;x.beginPath();x.roundRect(a1-40,b1-14,c1+80,d1+28,26);x.fill();x.restore();}}
+  if(s.burst&&t>=s.burst[0]&&t<s.burst[0]+s.burst[1]){const u=(t-s.burst[0])/s.burst[1];x.save();
+   for(let i=0;i<44;i++){const side=i%4,r1=rnd(i*3.1),r2=rnd(i*7.7),r3=rnd(i*1.9);let px,py,vx,vy;
+    if(side<2){px=side?W-30-r1*90:30+r1*90;py=r2<0.5?240+r2*2*300:1060+(r2-0.5)*2*(H-1420);/* side bands skip the result lines' height */vx=(side?1:-1)*(40+r3*90);vy=-60-r3*120;}else{px=60+r1*(W-120);py=side===2?60+r2*110:H-80-r2*110;vx=(r3-0.5)*80;vy=side===2?-50-r3*60:-120-r3*120;}
+    px+=vx*u;py+=vy*u+260*u*u;const sz=Math.round(6+r2*8),a=(u<0.15?u/0.15:1)*(1-u);
+    x.globalAlpha=a;x.fillStyle=i%3?'#ffd35a':'#fff1b8';x.fillRect(Math.round(px/sz)*sz,Math.round(py/sz)*sz,sz,sz);}x.restore();}
   if(s.dark&&t<s.dark[1]){const a=t<s.dark[1]-s.dark[2]?1:(s.dark[1]-t)/s.dark[2];x.fillStyle='rgba(6,10,26,'+clamp(a,0,1)+')';x.fillRect(0,0,W,H);}
   if(s.flash&&t>=s.flash[0]&&t<s.flash[0]+s.flash[1]){const u=1-(t-s.flash[0])/s.flash[1];x.fillStyle='rgba('+s.flash[2]+','+(s.flash[3]*u*u)+')';x.fillRect(0,0,W,H);}
  }
@@ -161,8 +171,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
   const res=await page.evaluate(async({CUES,STEPS,DUR})=>{const off=window.__off;const S=window.Sound;
    S.sync(false,'title',{bgm:1,sfx:1});
    const t0=Date.now();while(!window.__env&&Date.now()-t0<15000)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1500));
-   const e=window.__env.gain;e.setValueAtTime(0.0001,0);e.linearRampToValueAtTime(0.38,0.7);   // the song fades in under the first steps
-   e.setValueAtTime(0.38,2.5);e.linearRampToValueAtTime(1,3.0);e.setValueAtTime(1,DUR-1.6);e.linearRampToValueAtTime(0.0001,DUR);
+   // a 2.2 s fade-in that stays low under the first steps (0.67 / 1.33 s) and reaches the full level as the customer arrives (2.67 s);
+   // only the level moves — the song's position (SONG_IN) is what the later cuts are timed to. The closing fade ends with the clip.
+   const e=window.__env.gain;e.setValueAtTime(0.0001,0);e.exponentialRampToValueAtTime(0.1,1.0);e.linearRampToValueAtTime(0.4,2.2);e.linearRampToValueAtTime(1,2.67);
+   e.setValueAtTime(1,DUR-1.6);e.linearRampToValueAtTime(0.0001,DUR);
    // footsteps: filtered noise scuff + low body thump, from a fixed sequence (no Math.random), louder each step
    const nb=off.createBuffer(1,Math.round(off.sampleRate*0.2),off.sampleRate),d=nb.getChannelData(0);let q=12345;for(let i=0;i<d.length;i++){q=(q*1103515245+12345)&0x7fffffff;d[i]=q/0x3fffffff-1;}
    for(const [t,v] of STEPS)for(const [dt,k] of [[0,1],[0.055,0.45]]){const at=t-0.012+dt;
@@ -188,17 +200,17 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
  const page=await (await browser.newContext({viewport:{width:1080,height:1920},deviceScaleFactor:1})).newPage();page.on('pageerror',e=>console.log('PAGEERROR',e.message));
  page.on('console',m=>{if(m.type()==='error')console.log('CONSOLE',m.text().slice(0,200));});
  await page.goto('file://'+html);const out=path.join(dir,'comp');const t0=Date.now();if(!process.env.SKIP_VIDEO){fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out);}
- for(let n=0;n<(process.env.SKIP_VIDEO?0:DUR*FPS);n++){await page.evaluate(t=>window.render(t),n/FPS);fs.writeFileSync(path.join(out,String(n).padStart(5,'0')+'.jpg'),await page.screenshot({type:'jpeg',quality:94}));}
- await browser.close();console.log('rendered',DUR*FPS,'frames in',((Date.now()-t0)/1000).toFixed(0),'s');
+ for(let n=0;n<(process.env.SKIP_VIDEO?0:Math.round(DUR*FPS));n++){await page.evaluate(t=>window.render(t),n/FPS);fs.writeFileSync(path.join(out,String(n).padStart(5,'0')+'.jpg'),await page.screenshot({type:'jpeg',quality:94}));}
+ await browser.close();console.log('rendered',Math.round(DUR*FPS),'frames in',((Date.now()-t0)/1000).toFixed(0),'s');
  // audio: rendered by the game's own engine (dist/ui/audio.js) in an OfflineAudioContext. The title song plays through the engine's
  // music bus from its first bar at SONG_IN, so every cue's level against the music and every cue's own duck (half, great, sealwin …)
  // is the game's; the cues fire at their kept times (CUES). Added for the edit only: the footsteps before the first customer
  // (no game cue exists for them), the music held low under them, and the closing fade.
  const wav=path.join(dir,'mix.wav');await renderAudio(wav);
- const mp4=path.join(dir,'trailer-v4-30s-1080x1920.mp4');
+ const mp4=path.join(dir,'trailer-v5-1080x1920.mp4');
  execFileSync(FF,['-hide_banner','-loglevel','error','-y','-framerate',String(FPS),'-i',path.join(out,'%05d.jpg'),'-i',wav,
   '-af',`volume=${AUDIO_GAIN}dB,alimiter=limit=0.89:level=false`,'-map','0:v','-map','1:a','-t',String(DUR),'-r',String(FPS),'-c:v','libx264','-profile:v','high','-preset','slow','-crf','17','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',mp4]);
- execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v4-540.mp4')]);
+ execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v5-540.mp4')]);
  fs.writeFileSync(path.join(dir,'edl.json'),JSON.stringify({beat:b,bar:B,songIn:SONG_IN,shots:S.map(s=>({t0:+s.t0.toFixed(3),t1:+s.t1.toFixed(3),take:s.take,src:s.srcFn})),cues:CUES,steps:STEPS},null,1));
  console.log('done',mp4);
 })().catch(e=>{console.error(e);process.exit(1);});
