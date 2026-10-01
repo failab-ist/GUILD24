@@ -622,7 +622,7 @@ function playRun(g,out,ctx){
    Meta.fresh() (or a copy of the supplied account), so nothing a Run earns carries anywhere.
    Its Final numbers describe a first-time account and must not be read as the game's ceiling. */
 /* opts.relicAware (default false) turns on playRun's relic-aware layer; off is the baseline. */
-function simulate(count=100,policy='balanced',account=null,pricing='adaptive',build='hybrid',opts={}){
+function simulate(count=100,policy='reader',account=null,pricing='adaptive',build='hybrid',opts={}){
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
   const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start('revision-'+seed);
@@ -662,7 +662,7 @@ function masterySpawnPatch(){
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false}={}){
+function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
  for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);

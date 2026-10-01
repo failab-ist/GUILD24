@@ -22,12 +22,12 @@ test('RUN-Q30 / ECO-Q12: each minimal-engagement policy drops exactly the lever 
  assert.equal(supply.spend,0,'zero-supply buys nothing');
  for(const band of Object.values(supply.bands))assert.equal(band.packed,0,'no expedition in a zero-supply run carries an Item');
  const poverty=cached('poverty');
- assert.ok(poverty.spend>0&&poverty.spend<cached('balanced').spend/4,'poverty spends, but only a fraction of engaged play');
+ assert.ok(poverty.spend>0&&poverty.spend<cached('reader').spend/4,'poverty spends, but only a fraction of engaged play');
  assert.ok(poverty.revenue>0,'poverty still trades');
 });
 
 test('RUN-Q30: no minimal-engagement policy is an efficient permanent-reward farm',()=>{
- const engaged=cached('balanced');
+ const engaged=cached('reader');
  for(const policy of ['zero-sale','zero-order','zero-supply','poverty']){
   const r=cached(policy);
   assert.ok(r.averageDay<engaged.averageDay,policy+' does not reach as far as engaged play');
@@ -45,7 +45,7 @@ test('RUN-Q30: no minimal-engagement policy is an efficient permanent-reward far
 });
 
 test('DUN-Q20: preparation is measured per progression band, prepared against bare',()=>{
- const engaged=cached('balanced'),bare=cached('zero-supply');
+ const engaged=cached('reader'),bare=cached('zero-supply');
  /* Stage 10 tightened the Run economy deliberately, and bare play no longer survives into the
     later bands at all - it averages around DAY 10 where it used to reach DAY 15. That is the
     point of the change, so the contract is stated as what it now is: prepared play is sampled
@@ -81,7 +81,7 @@ test('DUN-Q20: preparation is measured per progression band, prepared against ba
 });
 
 test('preparation and phase decomposition are measured, and each one nests inside the run',()=>{
- const r=Debug.simulate(10,'balanced',null,'adaptive','hybrid');
+ const r=Debug.simulate(10,'reader',null,'adaptive','hybrid');
  const P=r.prep;
  assert.ok(P.samples>0,'expeditions were observed at all');
  assert.ok(P.packed<=P.slots,'no bag carries more than its slots');
@@ -107,7 +107,7 @@ test('preparation and phase decomposition are measured, and each one nests insid
  assert.equal(banded,P.samples,'and every observed expedition lands in exactly one Day band');
 });
 test('the extended metric set the report cites is actually produced',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  for(const key of ['dayReached','metaMastery','metaDistinct','metaStore','knowledge','revenue','spend','npc','bands','final'])
   assert.ok(r[key]!==undefined,'metric present: '+key);
  for(const key of ['averageDay','masteryPerRun','distinctPerRun','clearsPerRun','knowledgePerRun'])
@@ -149,8 +149,8 @@ test('the harness measures Prepared Power with the game helper, never its own co
 
 test('the simulation observes the run and never rewrites it',()=>{
  // Two identical cohorts must agree exactly: the harness adds measurement, not behaviour.
- const a=Debug.simulate(4,'balanced',null,'adaptive','hybrid');
- const b=Debug.simulate(4,'balanced',null,'adaptive','hybrid');
+ const a=Debug.simulate(4,'reader',null,'adaptive','hybrid');
+ const b=Debug.simulate(4,'reader',null,'adaptive','hybrid');
  assert.deepEqual(b.days,a.days,'the same seeds produce the same per-Day measurements');
  assert.deepEqual(b.bands,a.bands,'and the same per-band measurements');
  assert.equal(b.metaMastery,a.metaMastery,'and the same Meta reward');
@@ -161,13 +161,13 @@ test('the simulation observes the run and never rewrites it',()=>{
    this gate still holds is what it was written for: the harness MEASURES against whatever the
    approved baseline is and never writes one of its own. */
 test('PASS3 GATE: the harness reports Boss Power evidence and leaves the value alone',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  assert.equal(DATA.balance.bossPower,180,'the approved Source baseline is untouched by simulation (v2.9.1 balance; was 200)');
  /* The gate is that the harness MEASURES and never writes a baseline of its own, so it is
     asserted on the baseline and on the reporting - not on whether a fresh-Account cohort
     happened to reach a Final to measure against, which is a balance question. */
  const before=JSON.stringify(DATA.balance);
- Debug.simulate(3,'balanced',null,'adaptive','hybrid');
+ Debug.simulate(3,'reader',null,'adaptive','hybrid');
  assert.equal(JSON.stringify(DATA.balance),before,'running the harness writes nothing back into Source balance');
  assert.ok(Number.isFinite(r.final.assault),'the assault the Boss was met with is reported');
  assert.ok(r.final.assault>=0,'and it is never negative');
@@ -180,7 +180,7 @@ test('the fresh-account benchmark is labelled as one, and progression is measure
  const seen=[];
  const originalFresh=Meta.fresh;
  Meta.fresh=function(){seen.push(1);return originalFresh.apply(this,arguments);};
- try{Debug.simulate(3,'balanced',null,'adaptive','hybrid');}finally{Meta.fresh=originalFresh;}
+ try{Debug.simulate(3,'reader',null,'adaptive','hybrid');}finally{Meta.fresh=originalFresh;}
  assert.equal(seen.length,3,'simulate() builds one fresh account per seed');
  assert.equal(typeof Debug.trajectory,'function','the longitudinal mode exists alongside it');
 });
@@ -287,7 +287,7 @@ test('CROSS-RUN DECORATION: Capital is earned by the production path and spent b
 });
 
 test('RUN-Q30: the adversarial meta-farm is measured per action, not only per Run',()=>{
- const farm=cached('meta-farm'),engaged=cached('balanced');
+ const farm=cached('meta-farm'),engaged=cached('reader');
  assert.equal(farm.revenue,0,'the farm sells nothing');
  assert.equal(farm.spend,0,'and buys nothing');
  assert.equal(farm.relicSpend,0,'and never pays for a Relic');
@@ -297,7 +297,7 @@ test('RUN-Q30: the adversarial meta-farm is measured per action, not only per Ru
 });
 
 test('FINAL party size 1 / 2 / 3 is measured at the same D30 state without changing it',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  /* The counterfactual only has a D30 state to read when a fresh-Account cohort reached one,
     which is a balance question rather than a property of the counterfactual. Party sizes
     1/2/3 themselves are covered on controlled D30 setups in tests/final.cjs; what is asserted
@@ -322,7 +322,7 @@ test('FINAL party size 1 / 2 / 3 is measured at the same D30 state without chang
 });
 
 test('RUN-Q15: invested regulars and late newcomers are classified from the run own history',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  /* The harness classifies at D30, so a fresh-Account cohort that does not get there produces
     no sample - a balance fact, not a classification fault. The classification itself is
     asserted on a controlled D30 setup in tests/final.cjs; here it is asserted well-formed. */
@@ -342,7 +342,7 @@ test('RUN-Q15: invested regulars and late newcomers are classified from the run 
    the new counters are well-formed and partition the same attempts `modes`/`wallets` already
    count, so the re-measure report is reading a real subdivision and not a second, drifting tally. */
 test('RE-MEASURE: SALE mode acceptance by Day band and by Loyalty band partitions `modes`',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  for(const mode of Object.keys(r.modes)){
   const byBand=Object.values(r.modesByBand).reduce((a,b)=>a+(b[mode]?.attempts||0),0);
   assert.equal(byBand,r.modes[mode].attempts,mode+': every attempt lands in exactly one Day band');
@@ -355,7 +355,7 @@ test('RE-MEASURE: SALE mode acceptance by Day band and by Loyalty band partition
 });
 
 test('RE-MEASURE: visit-time Wallet is split fresh/returning and the 2000 cap is observed, not guessed',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  const totalWallets=Object.values(r.wallets).reduce((a,w)=>a+w.count,0);
  assert.equal(r.walletFreshStats.count+r.walletReturningStats.count,totalWallets,
   'fresh + returning accounts for every sampled visit-time Wallet');
@@ -368,13 +368,13 @@ test('RE-MEASURE: visit-time Wallet is split fresh/returning and the 2000 cap is
 });
 
 test('RE-MEASURE: a Deep-collapse sample never exceeds the sponsorships it watches',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  assert.ok(r.deepCollapse.collapsed<=r.deepCollapse.samples,'collapse count cannot exceed samples watched');
  assert.ok(r.deepCollapseRate>=0&&r.deepCollapseRate<=1,'and the derived rate stays a rate');
 });
 
 test('RE-MEASURE follow-up: Store Gold checkpoints carry sample size, mean and spread, matched by Day',()=>{
- const r=cached('balanced');
+ const r=cached('reader');
  for(const d of [5,10,15,20,25,29]){
   const c=r.goldCheckpointStats[d];
   assert.ok(c&&Number.isFinite(c.count)&&c.count>=0,'Day '+d+' checkpoint is reported');
