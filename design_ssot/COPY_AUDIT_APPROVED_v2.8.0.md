@@ -147,7 +147,7 @@
 
 ## 3-4. 전망 안내
 
-**폐지** — SALE 읽기 판 제목 `도착 시 전투 전망`(§3-7)이 말한다 (UI_UX §TUTORIAL — COACH DIET).
+**폐지** — SALE 읽기 판의 `전투 전망` · `환경 대응`과 각 `?`가 말한다 (UI_UX §TUTORIAL — COACH DIET).
 
 ---
 
@@ -177,9 +177,8 @@ No GATES · STOCK · OFFER · QUANTITY · 후보 교환 · `gold` · HAZARD · �
 ### RETURNING (재방문 손님, contextual on the returning customer's card)
 > 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.
 
-### 표기 두 곳 (코치 대신 화면이 말한다)
-> 창고 · 본사 기본 상품 {N}종 (DAY 1 ORDER 창고 머리, 본사 기본 재고만 있을 때)  
-> 도착 시 전투 전망 (SALE 읽기 판 제목)
+### 표기 (코치 대신 화면이 말한다)
+> 창고 · 본사 기본 상품 {N}종 (DAY 1 ORDER 창고 머리, 본사 기본 재고만 있을 때)
 
 ---
 

@@ -1229,7 +1229,7 @@ Fatigue 10+ lowers 기동/정신.
 
 First SALE (§TUTORIAL — COACH DIET): two marks, destination and Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
 the other three answer Hazards; COPY_AUDIT §3-7 STATS). No Hazard, outlook or price marks (Hazard rows say what answers them,
-the readout reads `도착 시 전투 전망`, price comes after the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
+the readout says `전투 전망` and `환경 대응` with their `?`, price comes after the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
 returning-customer mark (tap opens the notebook) the first returning customer. Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1241,7 +1241,7 @@ screen says it; otherwise none, or taught after the fact.
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard, outlook; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
-- two words carry the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only) and the readout `도착 시 전투 전망`
+- one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only); the readout title stays `전투 전망`, short enough to share the row with `환경 대응` on a phone
 - after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
 
 ### SALE PRICE LESSONS (v2.9.12)
@@ -2443,7 +2443,7 @@ PASS:
   first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
   receipt mark
 - DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads
-  `도착 시 전투 전망`
+  `전투 전망`
 - the first 150% refusal shows §26-3 line 1 on the refused key, the first 50% sale line 2 on its change line (staying until the
   mark is closed); neither shows a second time on the account
 - `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the baseline (16)

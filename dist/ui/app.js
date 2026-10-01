@@ -829,9 +829,8 @@ function readout(n,extra=null,cls=''){
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
-  /* COACH DIET (User 2026-09-30): the title says when the reading was taken - the retired outlook mark's one fact */
-  /* on a phone the half cell wraps it: 전투 전망 stays together so the break falls after 도착 시 */
-  +'<span class="fore">도착 시 전투&nbsp;전망<b>'+o.combat+'</b>'
+  /* User 2026-10-01: back to `전투 전망` - `도착 시 전투 전망` filled a half cell on a phone, so the two readings stacked */
+  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
@@ -1255,8 +1254,8 @@ const coachSteps={
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
-    The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout title reads
-    `도착 시 전투 전망`, and price is taught after the fact. Everything else is contextual: showCoach() shows the first
+    The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout says 전투 전망
+    beside 환경 대응, and price is taught after the fact. Everything else is contextual: showCoach() shows the first
     unfinished mark whose target is VISIBLE, so a mark anchored to an element that only exists in its situation (a
     returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.

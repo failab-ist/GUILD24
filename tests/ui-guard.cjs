@@ -2418,8 +2418,8 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const hz of Object.values(DATA.hazards))
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
- /* COACH DIET (User 2026-09-30): the retired outlook mark's fact is the readout's own title - WHEN the reading was taken */
- assert.ok(!/\['forecast',/.test(steps)&&/'<span class="fore">도착 시 전투&nbsp;전망<b>'\+o\.combat/.test(fn('readout')),'the outlook reads 도착 시 전투 전망, no mark');
+ /* COACH DIET (User 2026-09-30): no outlook mark; the readout title is `전투 전망` (User 2026-10-01: the longer title stacked the cells) */
+ assert.ok(!/\['forecast',/.test(steps)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook reads 전투 전망, no mark');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */

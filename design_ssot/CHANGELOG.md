@@ -25,6 +25,12 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34) | `v2.9.13` |
 
+## v2.9.14 — quick patch (User 2026-10-01, in progress)
+
+- **SALE readout title back to `전투 전망`**: `도착 시 전투 전망` (v2.9.12 coach diet) filled a half cell on a phone, so 전투 전망
+  and 환경 대응 stacked on two rows and the readout grew a line (three with a two-Hazard Gate). The outlook coach mark stays
+  retired. UI_UX §TUTORIAL — COACH DIET / UI-Q-v29-53, COPY_AUDIT §3-4 / §3-7; tests ui-guard.
+
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 
 - **DAY 21+ Gate slope 0.80 → 1.10**: a D30 party grows about 1.9 prepared Power a Day in D21~29 against the 0.80 Gate
