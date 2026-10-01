@@ -30,7 +30,12 @@ and this table is their commit record.
 - **SALE readout title back to `전투 전망`, the outlook coach mark back**: `도착 시 전투 전망` (v2.9.12 coach diet, carrying the
   retired outlook mark's fact) filled a half cell on a phone, so 전투 전망 and 환경 대응 stacked on two rows and the readout grew a
   line (three with a two-Hazard Gate). The first SALE shows three marks again: destination, Stats and the outlook (COPY_AUDIT
-  §3-4 copy as before). UI_UX §TUTORIAL — COACH DIET / UI-Q-v29-53, COPY_AUDIT §3-4 / §3-7; tests ui-guard.
+  §3-4, reworded so it reads at once: `손님이 막 왔을 때의 전망이다. 상품을 팔아도 이 칸은 그대로다. 상품이 무엇을 바꾸는지는
+  계산대에 올리면 보인다.`). UI_UX §TUTORIAL — COACH DIET / UI-Q-v29-53, COPY_AUDIT §3-4 / §3-7; tests ui-guard.
+- **NIGHT injury lesson on the first hurt record**: it fired on a record that only departed injured, so a healthy, successful
+  return carried `다친 채 떠나면 …` and read as wrong. It now fires on the first record that came back with 부상 or 중상, worded
+  for that moment (`부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다.`). NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT
+  §26-2; tests revision.
 - **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
   outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
   the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.

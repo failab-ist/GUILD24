@@ -1266,7 +1266,7 @@ const coachSteps={
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
+ ['forecast','.readout .top','손님이 막 왔을 때의 전망이다. 상품을 팔아도 이 칸은 그대로다. 상품이 무엇을 바꾸는지는 계산대에 올리면 보인다.'],
  /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
