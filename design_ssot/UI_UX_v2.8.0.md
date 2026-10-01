@@ -2958,7 +2958,7 @@ PASS:
 
 FAIL: a per-customer "더 필요" number, a readiness ratio, or a requirement number that does not match ceil(Hazard Threat).
 
-#### UI-Q-v29-20 — SHELF EXPIRY ORDER
+#### UI-Q-v29-55 — SHELF EXPIRY ORDER
 
 SETUP: SALE with a shelf holding units stocked on different days (some at 1 day left), at 360 and 1280; the same shelf for two
 customers going to different Gates.
