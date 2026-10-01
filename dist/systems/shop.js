@@ -536,9 +536,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day,s)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
- validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))food+=q;}
+ /* unusedCartFood / unusedStockFood: Food+Drink counts kept for a later balance check. No rule reads them today. */
+ validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,unusedCartFood=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))unusedCartFood+=q;}
  const cap=s.event?.effects.orderCap;if(cap){const per={};for(const [i,q]of Object.entries(cart)){const it=s.offers[i]?.item;if(it)per[it]=(per[it]||0)+q;}if(Object.values(per).some(v=>v>cap))throw Error('오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.');}
- if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
+ if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const unusedStockFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
  /* UI_UX §ORDER quantity interaction (User 2026-09-24, v2.9.0): the largest quantity this offer takes right now AND what stops
