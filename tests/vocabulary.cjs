@@ -20,7 +20,7 @@ test('DUN-Q19/ITEM-Q17: no legacy resolution key survives on any active Item',()
  for(const d of Object.values(DATA.dungeonBy))for(const h of d.hazards)assert.ok(CANON_HAZARDS.includes(h),d.id+' hazard '+h);
 });
 
-test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladder: +3; v2.9.14 녹차 양갱: +1)',()=>{
+test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladder: +3; v2.9.13 quick patch 녹차 양갱: +1)',()=>{
  assert.equal(DATA.items.length,44);
  assert.ok(!DATA.itemBy.bandage&&!DATA.itemBy.mana,'붕대 and 마석 보조배터리 are retired, not renamed');
  assert.deepEqual(DATA.items.map(i=>i.name),CATALOG);
@@ -28,7 +28,7 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladde
  /* ITEM_v2.8 §ACTIVE RARITY DISTRIBUTION - EXACT. The `bar` repurpose is Uncommon, so the
     active 40 were C11 / U12 / R5 / E11 / L1; the Counter ladder (User 2026-09-27, v2.9.7) moves 방진마스크 to Common and
     seven mid Counters to Rare, and adds 중화 탄산수 (Common) and 방독 작업장갑 / 축성 손전등 (Uncommon): the active 43 are
-    C11 / U8 / R12 / E11 / L1; 녹차 양갱 (Common, User 2026-10-01, v2.9.14) makes it C12. */
+    C11 / U8 / R12 / E11 / L1; 녹차 양갱 (Common, User 2026-10-01, v2.9.13 quick patch) makes it C12. */
  assert.deepEqual([0,1,2,3,4].map(v=>DATA.items.filter(i=>i.rarity===v).length),[12,8,12,11,1],
   'active Rarity distribution is the approved C12/U8/R12/E11/L1');
  /* ITEM §DIRECTOR DOCUMENT BASELINE - the six rebaselined active identities, to the digit

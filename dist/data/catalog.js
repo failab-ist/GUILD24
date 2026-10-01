@@ -19,7 +19,7 @@ item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨
 item('ramen','컵라면',0,45,90,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:3}),
 item('lunchbox','간단 도시락',1,100,200,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.2}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:6,supply:5}),
-/* ITEM §ACTIVE CATALOG (User 2026-10-01, v2.9.14): the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
+/* ITEM §ACTIVE CATALOG (User 2026-10-01, v2.9.13 quick patch): the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
 item('yanggaeng','녹차 양갱',0,30,60,'food',2,'yanggaeng','용사픽','어르신 손님은 꼭 두 개씩 사 간다.',{spirit:8,supply:5}),
 item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */

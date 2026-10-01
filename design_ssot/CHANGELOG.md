@@ -25,7 +25,7 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34) | `v2.9.13` |
 
-## v2.9.14 — quick patch (User 2026-10-01, in progress)
+## v2.9.13 quick patch — fixes after the v2.9.13 merge (User 2026-10-01, in progress; the version stays 2.9.13)
 
 - **SALE readout title back to `전투 전망`, the outlook coach mark back**: `도착 시 전투 전망` (v2.9.12 coach diet, carrying the
   retired outlook mark's fact) filled a half cell on a phone, so 전투 전망 and 환경 대응 stacked on two rows and the readout grew a
