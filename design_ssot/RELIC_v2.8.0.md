@@ -674,12 +674,12 @@ The Player can always inspect current owned Store Supports through the existing 
 ## COPY TRUTH
 
 단골 스탬프 기계 Player copy:
-    유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
+    유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.
 
 Do not mention 무료 보급; the active price system has no free-sale mode.
 
 길드 전광판 must describe the actual base-roll floor:
-    하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
+    하루 기본 최소 방문객 4명 (기존 3명).
 
 발주 교환권: first canonical full reroll each Day = 0G, then the ordinary paid curve from its first step:
 50G -> 100G -> 200G ...
@@ -1317,7 +1317,7 @@ Expected:
 #### REL-Q-v28-12 — STAMP COPY
 
 Expected:
-    유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
+    유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.
 
 FAIL:
 - active copy mentions 무료 보급

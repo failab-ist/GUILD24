@@ -528,16 +528,16 @@ v3.0.0
 Current internal v2.x builds do **not** spend implementation complexity preserving compatibility with older internal
 test Account/Meta saves whose schema or semantic meaning changed.
 
-For Save v8:
+For Save v9 (CORE_RUN §SAVE v9 — EXACT):
 
 ```text
-v1~v7 Run state
+v1~v8 Run state
 -> no migration
 
-v1~v7 Account/Meta state
--> no migration into v8
+v1~v8 Account/Meta state
+-> no migration into v9
 
-v8
+v9
 -> initialize fresh current Account/Meta + fresh current Run
 ```
 
@@ -545,8 +545,8 @@ Rules:
 - do not preserve old Franchise Grade / Start Contract availability by compatibility shim
 - do not preserve old Job Mastery / Boss matrix / Monster Knowledge merely for internal-test continuity
 - do not add conversion logic for retired or changed-semantics Meta fields
-- legacy bytes may remain physically present until the existing reset/storage policy removes them, but they are not imported into current v8 progression
-- once v8 exists, current-version Save behavior follows current v8 owners
+- legacy bytes may remain physically present until the existing reset/storage policy removes them, but they are not imported into current v9 progression
+- once v9 exists, current-version Save behavior follows current v9 owners
 - Full Data Reset still clears current game-owned Account/Meta data
 
 Purpose: keep the internal development line simple before the v3.0.0 external-release compatibility boundary.
@@ -578,12 +578,12 @@ deletion action.
 
 ## SAVE RELATIONSHIP
 
-`CORE_RUN_v2.8.0.md` owns: v8 Run schema · legacy Save rejection / fresh v8 initialization · start stock ·
+`CORE_RUN_v2.8.0.md` owns: v9 Run schema · legacy Save rejection / fresh v9 initialization · start stock ·
 D25 persisted Final state · fresh-account tutorial reset boundary.
 
-META owns: current v8 Account/Meta truth · Job Mastery / Job×Boss matrix.
+META owns: current v9 Account/Meta truth · Job Mastery / Job×Boss matrix.
 
-No v1~v7 Account/Meta migration path is required for this internal-development version.
+No v1~v8 Account/Meta migration path is required for this internal-development version.
 
 ---
 
