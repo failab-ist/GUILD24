@@ -1542,6 +1542,45 @@ function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
   if(rail.offsetHeight!==h)watchOrderToday();},
   {root:sc,rootMargin:'-'+edge+'px 0px 0px 0px',threshold:0});
  orderWatch.observe(brief);if(out)orderWatch.observe(out);}
+function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
+    /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
+    const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
+    const sl = it.days + Relics.shelf(game, it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
+    /* data-offer is the row's handle across a redraw: the qty controls inside it flip
+       between enabled and disabled as the quantity hits 0 or the cap, so the pressed
+       button is not a stable anchor but its row is. */
+    /* v2.9.10 (User 2026-09-27): an offer whose whole supply was already ordered today reads as sold out - a quiet
+       stamp where the quantity controls were and the paper a shade worked - so it is not tapped again for more */
+    const out=o.quantity<=0;
+    return '<li class="line r'+it.rarity+(q?' on':'')+(out?' soldout':'')+'" data-offer="'+i+'">'
+    +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
+    +Scene.crate(Art.itemIcon(it.id,30),46)
+    +'<span class="col">'
+     /* UI_UX §ORDER — ITEM INFORMATION HIERARCHY (User 2026-09-26, v2.9.6, COPY_AUDIT §4-26): the tag is what 발주 spends, labelled;
+         the sale price is the smaller muted tag under it; floated so the name, rarity and effects wrap beside it */
+     +'<span class="prices">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')
+      /* EVENT §02 본사 1+1 행사 (User 2026-09-28, v2.9.10 quick patch): the promoted offer wears a red 1+1 sticker on its
+         매입 tag, as a store shelf does - it was a `· 1+1` fragment inside the muted metadata line and went unseen */
+      +(o.promo?'<em class="promo-sticker" aria-label="1+1 행사">1+1</em>':'')+'</span>'
+     /* SA-Q19 / EVENT_v2.8 §암시장 상인: the Event-origin row says where it came from, beside
+        the name where the Player reads it. Only a row carrying that provenance is marked - an
+        ordinary offer has no origin and no source label, so this stays special-offer
+        presentation rather than a generic rarity-attribution UI. */
+     +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+'</span>'
+     /* UI_UX §ORDER ITEM INFORMATION HIERARCHY (User 2026-09-24, v2.9.0): the rarity name as one small identity line, not a role chip */
+     +'<span class="kind">'+E(itemKind(it))+' · <i class="rar r'+it.rarity+'">'+E(D.rarities[it.rarity])+'</i></span>'
+     /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
+        organised by, not something a player decides with - and it never reaches a render path.
+        The data stays: ordering weights and Relic conditions read `category`. What the row
+        needs is right underneath it, in the effects summary. */
+       +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
+     +'<span class="have">수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+' · <i>유통기한 '+sl+'일</i></span>'
+  +'</span>'
+  +(out?'<span class="dial"><em class="soldout-mark">품절</em></span></li>':'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
+   +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
+   +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
+   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
+}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  const counts=s.dungeons.length>=2?gateCounts():null;
@@ -1580,45 +1619,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
      +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards,s.final).map(h=>
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
-   +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
-    /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
-    const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
-    const sl = it.days + Relics.shelf(game, it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
-    /* data-offer is the row's handle across a redraw: the qty controls inside it flip
-       between enabled and disabled as the quantity hits 0 or the cap, so the pressed
-       button is not a stable anchor but its row is. */
-    /* v2.9.10 (User 2026-09-27): an offer whose whole supply was already ordered today reads as sold out - a quiet
-       stamp where the quantity controls were and the paper a shade worked - so it is not tapped again for more */
-    const out=o.quantity<=0;
-    return '<li class="line r'+it.rarity+(q?' on':'')+(out?' soldout':'')+'" data-offer="'+i+'">'
-    +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
-    +Scene.crate(Art.itemIcon(it.id,30),46)
-    +'<span class="col">'
-     /* UI_UX §ORDER — ITEM INFORMATION HIERARCHY (User 2026-09-26, v2.9.6, COPY_AUDIT §4-26): the tag is what 발주 spends, labelled;
-         the sale price is the smaller muted tag under it; floated so the name, rarity and effects wrap beside it */
-     +'<span class="prices">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')
-      /* EVENT §02 본사 1+1 행사 (User 2026-09-28, v2.9.10 quick patch): the promoted offer wears a red 1+1 sticker on its
-         매입 tag, as a store shelf does - it was a `· 1+1` fragment inside the muted metadata line and went unseen */
-      +(o.promo?'<em class="promo-sticker" aria-label="1+1 행사">1+1</em>':'')+'</span>'
-     /* SA-Q19 / EVENT_v2.8 §암시장 상인: the Event-origin row says where it came from, beside
-        the name where the Player reads it. Only a row carrying that provenance is marked - an
-        ordinary offer has no origin and no source label, so this stays special-offer
-        presentation rather than a generic rarity-attribution UI. */
-     +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+'</span>'
-     /* UI_UX §ORDER ITEM INFORMATION HIERARCHY (User 2026-09-24, v2.9.0): the rarity name as one small identity line, not a role chip */
-     +'<span class="kind">'+E(itemKind(it))+' · <i class="rar r'+it.rarity+'">'+E(D.rarities[it.rarity])+'</i></span>'
-     /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
-        organised by, not something a player decides with - and it never reaches a render path.
-        The data stays: ordering weights and Relic conditions read `category`. What the row
-        needs is right underneath it, in the effects summary. */
-       +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
-     +'<span class="have">수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+' · <i>유통기한 '+sl+'일</i></span>'
-  +'</span>'
-  +(out?'<span class="dial"><em class="soldout-mark">품절</em></span></li>':'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
-   +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
-   +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
-   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
- }).join('')+'</ol>'
+   +'<ol class="lines">'+s.offers.map((o,i)=>orderOffer(s,o,i)).join('')+'</ol>'
  +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}

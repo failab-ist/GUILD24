@@ -248,7 +248,7 @@ test('UI-Q-v28-29: a sheet hands focus back to the control that opened it',()=>{
 });
 
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
- const morning=fn('morningScreen'),order=fn('orderForm')+fn('orderScreen');
+ const morning=fn('morningScreen'),order=(fn('orderOffer')+fn('orderForm'))+fn('orderScreen');
  for(const part of ['Scene.ceiling()','Scene.wall(','Scene.counter()'])
   assert.ok(morning.includes(part),'Morning is built from the store itself: '+part);
  assert.ok(morning.includes('class="daysign"')&&morning.includes('class="till"'),'the day and the float are objects in the room');
@@ -280,7 +280,7 @@ test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is expl
 });
 
 test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hierarchy',()=>{
- const order=fn('orderForm')+fn('orderScreen');
+ const order=(fn('orderOffer')+fn('orderForm'))+fn('orderScreen');
  assert.ok(order.includes('본사 발주')||order.includes('발주서'),'the form is titled as the HQ order');
  for(const label of ['운영비(예상)','창고 잔여 칸','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
@@ -1240,7 +1240,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(/warn=n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
  assert.ok(!/popover|badge|title=/.test(dl),'no popover, badge or extra text');
  assert.ok(fn('morningScreen').includes('deathLimitItem()'),'MORNING shows the line, always on screen');
- assert.ok(fn('orderForm').includes('deathLimitItem(true)'),'ORDER shows the same line, 사망 set as its label (User 2026-09-29)');
+ assert.ok((fn('orderOffer')+fn('orderForm')).includes('deathLimitItem(true)'),'ORDER shows the same line, 사망 set as its label (User 2026-09-29)');
  assert.ok(/labelled\?'<i>사망<\/i><b class="death-limit'\+warn\+'">'\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'the same words, split into label and value');
 
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
@@ -1250,7 +1250,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     open it again - a presentation preference on the account, not run state. */
  // User 2026-09-29 (UI_UX §ORDER — WAREHOUSE PANEL): the warehouse left the form for its own panel - a desk column and a
  // phone handle + sheet - still from the one grouping, still against total slots, still folded until the player opens it
- assert.ok(!fn('orderForm').includes('stock'),'the form no longer carries the warehouse');
+ assert.ok(!(fn('orderOffer')+fn('orderForm')).includes('stock'),'the form no longer carries the warehouse');
  const whList=fn('stockSlots'),whHead=fn('stockHead');
  assert.ok(whList.includes('groupStock()'),'reusing the existing grouping, not a second one');
  assert.ok(whHead.includes('game.capacity()')&&whHead.includes('s.inventory.length'),'used against total slots');
@@ -1842,7 +1842,7 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
- const of=fn('orderForm');
+ const of=(fn('orderOffer')+fn('orderForm'));
  assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+\(railFolded\(\)\?' folded':''\)\+'">'[\s\S]{0,400}?\+'<span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
   'Death first, then 오늘, then 발주 후 last - each a label and a value; 발주 후 is the ledger\'s own `after`, short in the ledger\'s warning');
  // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
@@ -3357,12 +3357,12 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
    the expected visitor count, and never a customer's name, Job, Trait, Wallet or destination.
    On actual appearance the NPC becomes introduced. */
 test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count before Sale, the person on arrival',()=>{
- const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','todayLine'].map(fn).join('\n');
- assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('todayLine(counts')&&fn('todayLine').includes('s.queue.length'),
+ const pre=['morningScreen','orderOffer','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','todayLine'].map(fn).join('\n');
+ assert.ok(fn('morningScreen').includes('s.queue.length')&&(fn('orderOffer')+fn('orderForm')).includes('todayLine(counts')&&fn('todayLine').includes('s.queue.length'),
   'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
- assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test(fn('orderForm')),'per-Gate counts only with two or more Gates');
+ assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts only with two or more Gates');
  const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
@@ -3581,13 +3581,13 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');
  assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.','COPY_AUDIT §14-7 intro');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
- const of=fn('orderForm');
+ const of=(fn('orderOffer')+fn('orderForm'));
  // v2.9.0 F6 (User 2026-09-24): the today-fit / matching-effect emphasis is retired on ORDER and SALE
  assert.ok(!/fitToday|fitKeys/.test(app)&&!('fitKeys' in Presentation),'no fit computation survives');
  assert.ok(!/class="fit"|' fit'/.test(app)&&!/\.fit\{/.test(css),'no emphasis class or rule survives');
  assert.ok(!/오늘 필요|추천/.test(of),'no badge or verdict word');
  // ITEM §PRESENTATION ORDER: every row passes its category, so the fixed order is the same everywhere
- for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
+ for(const f of ['effectList','shelf','tray','till','orderOffer'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
  // v2.9.10 quick patch (User 2026-09-28): one order for every Item - Hazard Counter, 피로 회복, Core Stats, the rest
  assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'피로 회복, then the stat, then the rest');
  assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','survival'],'Counter first, then 피로 회복, then the stat');
