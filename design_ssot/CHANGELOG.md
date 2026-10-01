@@ -44,6 +44,10 @@ and this table is their commit record.
   the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.
 - **초코바 기동 +8 · 피로 회복 3 → 기동 +6 · 피로 회복 5**: it read the same as 캔커피 (기동 +12 · 2) per Gold; now the pair splits
   as 삼각김밥 / 생수 do - the Food keeps going, the Drink lifts the Stat. ITEM §ACTIVE CATALOG, §ITEM ROLE NOTES; tests vocabulary.
+- **New Common Food 녹차 양갱 (`yanggaeng`)**: 30 / 60, 정신 +8 · 피로 회복 5, 2 days, DAY 1 - the 정신 Food beside 진정 허브티
+  (정신 +15 · 2), as 초코바 is beside 캔커피 and 삼각김밥 beside 생수. Active catalog 44 (Common 12). Flavor `녹차 향이 머리를 식혀
+  준다.`; a green-tea jelly bar icon. ITEM §ACTIVE CATALOG / §ACTIVE RARITY DISTRIBUTION / §SHELF LIFE / §ITEM ROLE NOTES,
+  COPY_AUDIT §12-4; tests vocabulary, delta.
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 

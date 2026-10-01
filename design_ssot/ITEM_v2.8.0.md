@@ -595,6 +595,7 @@ approved ITEM amendment; QA does not auto-tune it.
 |---:|---|---|---:|---|---|
 | 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold 초반 대응 |
 | 5 | 초코바 | Food C | 30 / 60 | 기동 +6, Supply 5 | — |
+| 44 | 녹차 양갱 | Food C | 30 / 60 | 정신 +8, Supply 5 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +12, Supply 2 | Stat route |
 | 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +15, Supply 2 | Stat route |
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +8 | — |
@@ -631,7 +632,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
 
-Active catalog count is exactly 43. No active Item creates a separate poison Condition/cure subsystem.
+Active catalog count is exactly 44. No active Item creates a separate poison Condition/cure subsystem.
 
 Retired — do not bring back:
 - 붕대 (`bandage`): not active, not converted on legacy saves
@@ -646,9 +647,9 @@ Each id reads as its current Item (the ID columns above and §SHELF LIFE — EXA
 
 ### ACTIVE RARITY DISTRIBUTION — EXACT
 
-`lunchbox` is Uncommon. The active 43-Item distribution is:
+`lunchbox` is Uncommon. The active 44-Item distribution is:
 
-    Common 11
+    Common 12
     Uncommon 8
     Rare 12
     Epic 11
@@ -662,7 +663,7 @@ No active Item is non-expiring; every unit has a shelf life of 2 to 5 days, coun
 is still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) is discarded that Night and counts as that
 Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 
-- Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 is 2
+- Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 and 녹차 양갱 are 2
 - Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 중화 탄산수 3, 용사의 곡주 4, 쿨링 이온음료 5)
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
@@ -675,6 +676,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 | ramen | 컵라면 | Food | 3d |
 | lunchbox | 간단 도시락 | Food | 2d |
 | choco | 초코바 | Food | 2d |
+| yanggaeng | 녹차 양갱 | Food | 2d |
 | candy | 집중 사탕 | Food | 4d |
 | dragonramen | 불룡볶음면 | Food | 3d |
 | guildlunch | 길드 특제 도시락 | Food | 2d |
@@ -722,6 +724,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 1. 삼각김밥 — identity=cheap basic expedition supply
 3. 컵라면 — roles=[Supply,DirectCounter] counter=cold identity=Cold 초반 대응 with Supply
 5. 초코바 — roles=[Supply,Stat] identity=cheap snack that keeps going (more Supply, less 기동 than 캔커피, as 삼각김밥 against 생수) hiddenPostFatigue=NO
+44. 녹차 양갱 — roles=[Supply,Stat] identity=the 정신 snack that keeps going (more Supply, less 정신 than 진정 허브티, as 초코바 against 캔커피)
 6. 캔커피 — roles=[Supply,Stat] identity=Mobility support caffeineStack=NO
 9. 얼음컵 — roles=[Supply,DirectCounter] counter=fire identity=Fire 초반 대응 with Supply
 41. 중화 탄산수 — roles=[Supply,DirectCounter] counter=corrosion identity=Corrosion 초반 대응 with Supply
