@@ -1788,7 +1788,7 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
  assert.ok(!/bossId|b\.name|trait|family/i.test(bseg),'the cue is not chosen from anything the beat has not shown');
  assert.ok(/s\.bossReveal\.d0Seen=true/.test(bseg)&&/BOSS_BEATS\.find/.test(bseg),'D0 and D5-D25 keep their own persistence');
  // a redraw replays nothing: one-shot cues live in the click handler, never in render()
- assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')),'render() plays no one-shot cue');
+ assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')+fn('phaseScreen')+fn('openOwedModal')+fn('syncWatchers')),'render() plays no one-shot cue');
 });
 
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
@@ -2040,14 +2040,14 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
  assert.ok(/const opened=modal==='boss'&&dossierShown!==stageKey\(\);/.test(rm)&&/if\(opened&&motionOK\(\)\)\{const sheet=root\.querySelector\('\.modal'\);\s*if\(sheet\)sheet\.animate\(\[\{transform:'translateY\(18px\)',opacity:0\},\{transform:'none',opacity:1\}\],\{duration:260,/.test(rm)&&!/boss-art img/.test(rm),
   'the dossier sheet rises once, when it opens, the art on it (no separate settle)');
  assert.ok(/<link rel="preload" href="ui\/fonts\/MulmaruMono\.woff2" as="font" type="font\/woff2" crossorigin>/.test(html),'the fonts come with the page');
- const r=fn('render');
+ const r=fn('render'),m=fn('openOwedModal');
  /* v2.9.10: after the shutter the hold also waits for the Boss's art (never past BOSS_WAIT), so the dossier opens with it */
- assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(r)
+ assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(m)
   &&/const BOSS_WAIT=1200,/.test(src)&&/warmAhead\(s,phase\);/.test(r),
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
- assert.ok(r.indexOf('bossRevealDue()')<r.indexOf("modal='event'")&&r.indexOf('bossRevealDue()')<r.indexOf("modal='relics';\n",r.indexOf('bossRevealDue()')),'the reveal keeps its place ahead of the Event and the Relic window');
+ assert.ok(m.indexOf('bossRevealDue()')<m.indexOf("modal='event'")&&m.indexOf('bossRevealDue()')<m.indexOf("modal='relics';\n",m.indexOf('bossRevealDue()'))&&/openOwedModal\(s,phase,changed\);[\s\S]*renderModal\(\)/.test(r),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
- assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(r),'the hold ends with the MORNING it belongs to - the screen is never left inert');
+ assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(m),'the hold ends with the MORNING it belongs to - the screen is never left inert');
 });
 
 /* UI-Q-v29-34 (v2.9.2 H6, UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate settle in as one
@@ -2855,7 +2855,7 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
     shown BEFORE the same-Day Store Support decision. The chain is asserted in source and then
     resolved for each of the five Days with a Store Support window genuinely pending, because
     D10 and D20 are themselves acquisition Days and that is where the order actually matters. */
- const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('renderModal();requestAnimationFrame'));
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('function syncWatchers('));
  assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
   'the Boss beat is chosen before the Store Support window on the same Day');
  const resolve=(day,seen,final,windowPending)=>{

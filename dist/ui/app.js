@@ -618,7 +618,7 @@ function render(){
     control's place among its namesakes: the quantity dial alone puts 30 buttons under
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
  const focusHold=holdFocus($('#app'));
- $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
+ $('#app').innerHTML=phaseScreen(phase);
  if(phase!=='final')finalOrdered=false;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
@@ -629,20 +629,29 @@ function render(){
     zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
     neighbour inside the same group rather than back to the top. */
  if(!changed)restoreFocus($('#app'),focusHold);
- /* The warehouse is a native disclosure, but its preference is an account-level presentation
-    choice: it opens for a new player and, once folded, stays folded on later Days and reloads
-    until the player opens it again. It is not progression and does not need another state owner. */
- // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
- /* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
-    own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
-    window on the same Day, because the Relic decision is the one it is meant to inform
-    (REL-Q41, UI-Q40): D5 identity, D15 the exact Trait, D25 the two Families. */
- /* The foundation takeover owns the screen so the first store support gets decided, but it
-    used to be a one-way door: the Run was already committed and the only way back was to
-    spend it. The pre-Run screen may therefore win over it - nothing has been played yet, so
-    going back costs nothing and creates no second Run. */
- /* a Boss-reveal hold belongs to the MORNING it started on: if the Day has left it (only a scripted path can) or nothing is
-    owed any more, the hold ends at once rather than leaving the screen inert */
+ openOwedModal(s,phase,changed);
+ const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
+ renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
+ syncWatchers(phase);
+}
+function phaseScreen(phase){
+ return phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
+}
+/* The warehouse is a native disclosure, but its preference is an account-level presentation
+   choice: it opens for a new player and, once folded, stays folded on later Days and reloads
+   until the player opens it again. It is not progression and does not need another state owner. */
+// An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
+/* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
+   own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
+   window on the same Day, because the Relic decision is the one it is meant to inform
+   (REL-Q41, UI-Q40): D5 identity, D15 the exact Trait, D25 the two Families. */
+/* The foundation takeover owns the screen so the first store support gets decided, but it
+   used to be a one-way door: the Run was already committed and the only way back was to
+   spend it. The pre-Run screen may therefore win over it - nothing has been played yet, so
+   going back costs nothing and creates no second Run. */
+/* a Boss-reveal hold belongs to the MORNING it started on: if the Day has left it (only a scripted path can) or nothing is
+   owed any more, the hold ends at once rather than leaving the screen inert */
+function openOwedModal(s,phase,changed){
  if(bossHold&&(phase!=='morning'||!bossRevealDue())){clearTimeout(bossHold);bossHold=null;$('#app').inert=false;}
  if(phase==='foundation')modal='relics';
  /* UI_UX §BOSS REVEAL — MORNING LANDS FIRST (User 2026-09-26): a reveal due on a fresh MORNING entry waits for the
@@ -653,8 +662,8 @@ function render(){
    .then(()=>{if(!bossHold)return;bossHold=null;$('#app').inert=false;render();}),BOSS_HOLD);}else modal='boss';}
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
- const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
- renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
+}
+function syncWatchers(phase){
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
  if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';}
 }
