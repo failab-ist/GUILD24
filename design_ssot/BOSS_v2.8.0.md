@@ -132,7 +132,7 @@ Do not repeat generic 조사 중 copy without a new question.
 
 D0 is the deliberate exception to later milestone ordering:
 
-    first Store Support choice
+    first Store Support choice (picked or deferred)
     -> enter DAY 1 MORNING
     -> D0 first-Morning Boss briefing
     -> ordinary DAY 1 MORNING flow

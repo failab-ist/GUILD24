@@ -493,7 +493,11 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  // v2.9.10 quick patch (User 2026-09-28): a seal break closes the window like 구매; a spent window shows 닫기, not 나중에 결정
  assert.ok(app.includes("case'break-seal':game.breakSeal();setModal(null);render();"),'봉인 해제 closes the Store Support window');
- assert.ok(app.includes("w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp'):"),'a spent window offers 닫기 only');
+ assert.ok(app.includes("w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')"),'a spent window offers 닫기 only');
+ // v2.9.13 quick patch 3 (User 2026-10-01): the DAY 0 free pick may wait - on DAY 0 its 나중에 결정 opens DAY 1, later it closes
+ assert.ok(app.includes("btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')"),'the DAY 0 takeover offers 나중에 결정');
+ assert.ok(app.includes("case'defer-relic':game.deferFoundationRelic();setModal(null);render();"),'deferring leaves the takeover for DAY 1');
+ assert.ok(app.includes("'<p>지금 안 골라도 된다. '+until+' 아침·발주 화면에서 무료로 고를 수 있다.</p>'"),'the defer line names its last Day');
  // and the owned list carries the SLOTH seal count once the seals are revealed; the chip does not
  assert.ok(/function sealCount\(\)\{const s=game\.run;if\(s\?\.bossId!=='SLOTH'\|\|!s\.bossReveal\?\.traitSeen\)return '';/.test(app)
   &&app.includes("'<p class=\"seal-count\">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>'"),'SLOTH seal count in the owned list');
@@ -3040,7 +3044,7 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
 test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  const h=fn('help');
  for(const line of [
-  'DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
+  'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
   '오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
   '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',

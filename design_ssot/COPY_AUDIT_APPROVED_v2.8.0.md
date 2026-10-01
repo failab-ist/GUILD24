@@ -746,7 +746,7 @@ SALE 목적지 판(폰): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란�
 ## 8-1. 점포지원
 
 **현재**
-> DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.
+> DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.
 
 ---
 
@@ -2685,11 +2685,18 @@ Heading:
 Body:
     이번 영업에 쓸 지원 하나를 고르세요.
 
+Body when reopened on DAY 1~4:
+    DAY 4까지 무료로 고를 수 있다.
+
+Defer line + key (DAY 0 and reopened):
+    지금 안 골라도 된다. DAY 4까지 아침·발주 화면에서 무료로 고를 수 있다.
+    나중에 결정
+
 Absent from this decision surface:
     하나는 무료다. 고르면 영업이 시작된다.
     하나를 골라야 영업이 시작된다.
 
-The D0 Boss objective appears after the first support choice as a separate Boss-information beat.
+The D0 Boss objective appears after the first support choice (or its deferral) as a separate Boss-information beat.
 
 
 ## 14-9. D30 원정대 선택 / 마왕성 준비

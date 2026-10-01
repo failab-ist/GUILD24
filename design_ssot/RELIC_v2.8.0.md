@@ -18,7 +18,7 @@ windows=[D0,D5,D10,D15,D20,D25,D30]
 maxOwned/run=7
 candidates/window=3
 
-D0: cost=0 · pick<=1 · eligible=Foundation
+D0: cost=0 · pick<=1 · eligible=Foundation · defer=YES (until DAY 4)
 
 D5+: currency=G · buy<=1 · defer=YES · baseEligible=[Foundation,Hybrid,Utility] · KeystoneEligible=D10+ ·
 KeystoneStart=D10 · KeystoneSeparateHardRate=NO
@@ -61,17 +61,20 @@ economy/access/growth/item-value effects.
 ## ACQUISITION WINDOWS
 
 ### D0
-timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=Foundation
+timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=Foundation · defer=YES · expiry=D5 window
 
 Goal: 첫 선택부터 Run 방향을 제안.
 
 At Run start, the first Store Support choice is the first DAY 0 decision. The Store Support takeover contains only
 the support decision and its own compact copy; it does not carry the D0 Boss objective above the candidate cards.
 
-After one first support is chosen:
-- the support commits under existing foundation rules
+After one first support is chosen, or the choice is deferred (`나중에 결정`):
+- a chosen support commits under existing foundation rules
 - the separate D0 Boss-information beat is shown
 - ordinary DAY 1 begins only after acknowledgement
+
+A deferred D0 window stays open, still free, through DAY 4 and reopens like any deferred window (§WINDOW STATE); it does not
+pop up again, and the D5 window replaces it. A pick on DAY 1~4 applies from that moment like any later purchase.
 
 Exact first-support copy -> COPY_AUDIT_APPROVED_v2.8.0.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
 
@@ -160,7 +163,8 @@ defer: 구매하지 않고 닫기 가능 · window expiry 전 다시 열기 가�
 reopenAllowed=[Morning,Order,Store Management] · reopenBlocked=[Active Sale,Night Resolution]
 
 Menu 점포지원 row: opens the selection surface only while reopenAllowed holds and the window is still purchasable;
-otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back and no close.
+otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back to preparation and no generic close; its
+only exit without a pick is `나중에 결정`, which opens DAY 1.
 
 ownedRelicQuickView: mode=READ_ONLY · availablePhases=[Morning,Order,Sale]
 - 이미 보유한 점포지원의 이름/효과/조건은 Morning/Order/Sale에서 빠르게 확인 가능
@@ -722,7 +726,7 @@ PASS: No missing/extra normal milestone window.
 
 #### REL-Q02 — D0 FOUNDATION
 SETUP: Start new run.
-EXPECT: 3 candidates · Foundation only · choose <=1 · free
+EXPECT: 3 candidates · Foundation only · choose <=1 · free · defer allowed · still free on reopen through DAY 4 · gone at D5
 PASS: All conditions hold.
 
 #### REL-Q03 — D5+ PURCHASE
@@ -786,7 +790,7 @@ PASS:
 - DAY 0 first Store Support choice appears before the D0 Boss-information beat
 - candidate surface does not contain the D0 Boss objective
 - first-support screen uses current exact Copy-owner text
-- choosing one support commits exactly once
+- choosing one support commits exactly once; `나중에 결정` commits nothing and opens DAY 1
 - separate D0 Boss-information beat follows
 - normal DAY 1 does not begin before D0 acknowledgement
 

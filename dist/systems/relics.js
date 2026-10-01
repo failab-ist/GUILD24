@@ -33,7 +33,7 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
    the choice. Whether a D30 support needs a legal Reroll or ORDER action to realise its value is
    likewise no bar: that action is legal on D30. */
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&(day!==0||r.kind==='foundation')&&(r.kind!=='keystone'||day>=10)&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!previous.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags);let eligible=pool;if((i===1||day===0&&i===2)&&pool.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=pool.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=this.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
- s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+this.rng.next()*.3))),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day===0?1:day+5};this.save();};
+ s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+this.rng.next()*.3))),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
 /* Sloth's seals are not a second choice path: they are the other thing this window's one
    acquisition can be spent on. Two of D15/D20/D25 were drawn with the Run and D30 always
    counts, so the opportunity Days are already fixed before the player sees any of them. */
@@ -55,7 +55,7 @@ P.breakSeal=function(){const s=this.run,w=s.relicWindow;
  s.notice='봉인 하나가 풀렸다. 이번 점포지원은 받지 않는다.';
  this.save();};
 
-P.canBuyRelic=function(){const s=this.run,w=s.relicWindow;return ['foundation','morning','order','final'].includes(s.phase)&&w&&!w.purchased&&!w.consumedBySealBreak&&(w.milestoneDay===0||s.day<w.expiryDay)&&s.facilities.filter(id=>D.relicBy[id]).length<7;};
+P.canBuyRelic=function(){const s=this.run,w=s.relicWindow;return ['foundation','morning','order','final'].includes(s.phase)&&w&&!w.purchased&&!w.consumedBySealBreak&&(s.phase==='foundation'||s.day<w.expiryDay)&&s.facilities.filter(id=>D.relicBy[id]).length<7;};
 P.buyRelic=function(id){const s=this.run,w=s.relicWindow;if(!this.canBuyRelic()||!w.candidateIds.includes(id)||this.has(id))throw Error('지금 구매할 수 없는 점포지원입니다.');const price=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money<price)throw Error('점포지원 구매 자금이 부족합니다.');s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;s.facilities.push(id);w.purchased=id;
  /* META_v2.7 §FRANCHISE ACHIEVEMENT 4 */
 w.purchaseDay=s.phase==='foundation'?0:s.day;
@@ -64,6 +64,9 @@ w.purchaseDay=s.phase==='foundation'?0:s.day;
     table are repriced once here and every later offer is priced by offerFor. */
  if(id==='fresh24')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.fresh24.orderPriceMult);
  if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
+/* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait. Deferring
+   opens DAY 1 exactly as a pick does, and the D0 window stays open, still free, until the D5 window replaces it. */
+P.deferFoundationRelic=function(){if(this.run.phase!=='foundation')throw Error('지금은 점포지원 선택을 넘길 수 없습니다.');this.morning();this.save();};
 P.relicQuote=function(index,quantity,cart=this.run.cart||{}){const s=this.run,o=s.offers[index],it=D.itemBy[o.item];const entries=Object.keys(cart),skuTotal=entries.filter(i=>s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0),prior=entries.filter(i=>Number(i)<Number(index)&&s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0);let sum=0;for(let unit=1;unit<=quantity;unit++){let mult=1;if(skuTotal>=3){if(this.has('bulk')&&prior+unit>=3)mult*=1-D.relicParams.bulk.discount;}if(this.has('logisticsHQ')){const f=D.relicParams.logisticsHQ;mult*=1-Math.min(f.maxDiscount,f.perSale*(s.previousSales||0));}sum+=Math.round(o.price*Math.max(.45,mult));}return sum;};
 P.ownedRelics=function(){return this.run.facilities.map(id=>D.relicBy[id]).filter(Boolean).map(r=>({id:r.id,name:r.name,description:r.description}));};
 G.Relics={food,field,known,directCounter,relatedPrep,status,offerWeight(g,it){let w=1;const has=id=>g.has(id);if(has('rareContract')&&it.rarity>=2)w*=D.relicParams.rareContract.rareWeightMult;if(has('hazardBoard')&&relatedPrep(it,known(g)))w*=D.relicParams.hazardBoard.weightMult;if(has('coldcase')&&food(it)&&it.rarity>=1)w*=D.relicParams.coldcase.weightMult;return w;},shelf(g,it){if(!food(it))return 0;const p=D.relicParams;return (g.has('fridge')?p.fridge.shelfDays:0)+(g.has('coldcase')&&it.rarity>=1?p.coldcase.shelfDays:0);}};

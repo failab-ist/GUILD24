@@ -1318,7 +1318,7 @@ const coachSteps={
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
     names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
     COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
- relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.']]
+ relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 무료이고, 지금 고르지 않아도 된다. DAY 4까지 아침·발주 화면의 점포지원에서 고를 수 있다. 이후 5일마다 새 후보가 온다.']]
 };
 let activeCoach=null;
 let coachSettle=0,coachPainted=null,activeGroup=null;
@@ -1855,7 +1855,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
     window was open until DAY N. A disabled action says why it is disabled, on the line that
     would otherwise contradict it. The seven is the same literal ownedRelicView prints - it
     is the rule's own number, not a balance parameter to be promoted. */
- +'<p>'+(first?'이번 영업에 쓸 지원 하나를 고르세요.'
+ +'<p>'+(first?(s.phase==='foundation'?'이번 영업에 쓸 지원 하나를 고르세요.':until+' 무료로 고를 수 있다.')
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
    :until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
  +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
@@ -1873,10 +1873,13 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
   +btn(label,'buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
- /* UI_UX §MENU (User 2026-09-24, v2.9.0): the DAY 0 choice is mandatory and has no way back - the
+ /* UI_UX §MENU (User 2026-09-24, v2.9.0): the DAY 0 choice has no way back (it may be deferred, User 2026-10-01) - the
     return button to the pre-Run screen is retired; Decorations are managed from 새 점포 준비, before a Run. */
  /* a window already spent (bought, or a Sloth seal broken) has nothing left to defer: it closes plainly */
- +sealChoice() +'<div class="close">'+(first?'':w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+ +sealChoice() +'<div class="close">'+(w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')
+  /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
+  :first?'<p>지금 안 골라도 된다. '+until+' 아침·발주 화면에서 무료로 고를 수 있다.</p>'+btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
+  :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
    acquisition can be spent on, so it sits beside the candidates and says as much.
@@ -2276,7 +2279,7 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -2559,6 +2562,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* §STORE SUPPORT: acquisition is heavier than an ordinary purchase and reads as securing a
     fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
+ case'defer-relic':game.deferFoundationRelic();setModal(null);render();sound('ui');break;
  case'closing':game.finishNight();game.save();render();nightSound(null);closingSound();break;
  case'open':game.open();selected=null;render();healCue();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
