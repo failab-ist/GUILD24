@@ -5,24 +5,25 @@ the owner headers and in the git tag. Versions v2.8.0 ~ v2.9.11 in detail: `arch
 
 ## RELEASE RECORD
 
-Every closed version, where it landed on `main` and its tag. Tags are set by the User (WORK sessions cannot push tags);
-`pending` means the User has not set it yet.
+Every closed version, where it landed on `main` and its tag. Tags are set by the User (WORK sessions cannot push tags).
+From v2.9.13 on, each closed version is tagged on its `main` merge commit; v2.9.2 ~ v2.9.12 stay untagged (User 2026-10-01)
+and this table is their commit record.
 
 | version | closed | on `main` | tag |
 |---|---|---|---|
 | v2.8.0 | 2026-09-24 | `8226c4c` | - |
 | v2.9.0 | 2026-09-25 | `3d0ddc6` (close-out `3f18ceb` + the D0 briefing fix); balance moved to v2.9.1 | `v2.9.0` |
 | v2.9.1 | 2026-09-25 | `d23d076` (PR #2) | `v2.9.1` |
-| v2.9.2 | 2026-09-26 | `d6fcfbd` (H1~H6) | pending |
-| v2.9.3 | 2026-09-26 | `229df97` | pending |
-| v2.9.4 | 2026-09-26 | `630b6d0` | pending |
+| v2.9.2 | 2026-09-26 | `d6fcfbd` (H1~H6) | - |
+| v2.9.3 | 2026-09-26 | `229df97` | - |
+| v2.9.4 | 2026-09-26 | `630b6d0` | - |
 | v2.9.5 ~ v2.9.7 | 2026-09-26 | merged to `main` | - |
-| v2.9.8 | 2026-09-27 | `621d007` (PR #19) | pending |
+| v2.9.8 | 2026-09-27 | `621d007` (PR #19) | - |
 | v2.9.9 | 2026-09-27 | `8acc8dc` (PR #20); quick patch `5d32f79` (PR #21, 2026-09-28) | - |
 | v2.9.10 | 2026-09-28 | `8c1d4ae` (PR #22); quick patch `0fa6891` (PR #24) and its follow-up | - |
-| v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | pending |
-| v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | pending |
-| v2.9.13 | 2026-10-01 | PR #34 (`ccr-7d937a8a-u6s02e`) | pending |
+| v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | - |
+| v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
+| v2.9.13 | 2026-10-01 | `f20f89a` (PR #34) | `v2.9.13` |
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 
