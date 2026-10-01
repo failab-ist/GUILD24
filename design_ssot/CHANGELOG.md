@@ -22,7 +22,7 @@ Every closed version, where it landed on `main` and its tag. Tags are set by the
 | v2.9.10 | 2026-09-28 | `8c1d4ae` (PR #22); quick patch `0fa6891` (PR #24) and its follow-up | - |
 | v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | pending |
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | pending |
-| v2.9.13 | 2026-10-01 | this branch's PR (`ccr-7d937a8a-u6s02e`) | pending |
+| v2.9.13 | 2026-10-01 | PR #34 (`ccr-7d937a8a-u6s02e`) | pending |
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 
