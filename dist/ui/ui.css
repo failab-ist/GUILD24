@@ -1077,11 +1077,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout .fore b.env-ok,.readout .fore b.env-lack{font-size:16px}
 .readout .fore b.env-lack{color:var(--blood)}
 /* v2.9.13: a two-Hazard Gate lists each Hazard's state and the cell stays two lines tall - on a phone as two short rows beside
-   the 환경 대응 label (the fight cell takes only its own width there, which gives the longest name, 화이트아웃, room at 360) */
+   the 환경 대응 label. The two cells split the row in halves, as the Core Stats under them do; only when the states do not fit
+   half (the longest name, 화이트아웃, at 360) does the fight cell give up width, never the states */
 @media (max-width:1023px){
- .readout .top:has(.env-each){gap:8px}
- .readout .top:has(.env-each)>.fore:not(.env-each){flex:0 1 auto}
- .readout .fore.env-each{flex:1 1 auto}}
+ .readout .top:has(.env-each)>.fore{flex:1 1 0;white-space:nowrap}
+ .readout .fore.env-each{min-width:max-content}
+ .readout .fore.env-each>.tip{padding-left:4px}}
+@media (max-width:389px){.readout .top:has(.env-each){gap:8px}}
 .readout .fore.env-each{align-items:flex-start;white-space:nowrap}
 .env-list{display:inline-flex;flex-direction:column;gap:2px;margin-left:6px}
 .env-row{display:inline-flex;align-items:baseline;white-space:nowrap}
@@ -1228,8 +1230,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .forecast-pin:hover{background:#0d0904}
 .forecast-pin b{margin-left:6px;font:500 17px/1 var(--f-led);color:var(--gold)}
 .forecast-pin b.env-lack{color:var(--blood)}
-.forecast-pin .pin-full:has(.env-each)>.pin-fore:not(.env-each){flex:0 1 auto}
-.forecast-pin .pin-fore.env-each{display:inline-flex;flex:1 1 auto;align-items:flex-start;white-space:nowrap}
+.forecast-pin .pin-full:has(.env-each)>.pin-fore{flex:1 1 0;white-space:nowrap}
+.forecast-pin .pin-fore.env-each{display:inline-flex;min-width:max-content;align-items:flex-start}
 .forecast-pin .env-row b{margin-left:4px}
 .forecast-pin .pin-chip{display:none;color:var(--gold)}
 .forecast-pin.folded .pin-full{display:none}
