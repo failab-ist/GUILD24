@@ -1074,9 +1074,9 @@ PASS:
 #### ORD-Q85 — ORDER FORECAST CONTINUITY
 
 PASS:
-- MORNING is the required forecast surface
-- ORDER may repeat the same forecast compactly
-- repeated ORDER presentation matches MORNING and does not generate a second value
+- MORNING is where today's per-Gate visitor counts first appear (→ §VISITOR FORECAST)
+- ORDER repeats the same counts compactly
+- the ORDER counts match MORNING's and are not generated a second time; no next-day value appears on either
 
 ### GOLD ACCOUNTING
 
