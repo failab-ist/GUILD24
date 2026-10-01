@@ -25,7 +25,7 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
-## v2.9.13 quick patch 3 — the DAY 0 free Store Support may wait (User 2026-10-01; the version stays 2.9.13)
+## v2.9.13 quick patch 3 — the DAY 0 free Store Support may wait (User 2026-10-01, PR #43; the version stays 2.9.13)
 
 - **The free first pick is deferrable** (User: 처음 하는 사람에게 가혹함): the DAY 0 takeover gains `나중에 결정` under
   `지금 안 골라도 된다. DAY 4까지 아침·발주 화면에서 무료로 고를 수 있다.`; it opens DAY 1 (the D0 Boss briefing follows as
