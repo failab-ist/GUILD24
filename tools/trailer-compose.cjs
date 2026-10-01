@@ -45,7 +45,7 @@ shot(handOff,N0,'sale',lin(handOff,SOLD),[[handOff,607,1080,1.0]]);
 // to its own length, 0.9 s to read, cut
 const oGreat=N0+(great-0.5),ulT=oGreat+1.4,NE=ulT+0.45+0.9;   // v7: +0.15 s so the swish clears the 대성공 ring
 shot(N0,NE,'night',lin(oGreat,great),[[N0,607,1080,1.0]],
- {dark:[N0,N0+0.2,0.18],underline:[ulT,0.45,heroText],spots:[[ulT-0.1,NE,[standR,heroR],0.6]]});
+ {mute:[[771,1956,397,168]],dark:[N0,N0+0.2,0.18],underline:[ulT,0.45,heroText],spots:[[ulT-0.1,NE,[standR,heroR],0.6]]});
 // S6 the same customer's later visit (D28, Lv.19, the line the game gave it), lifted with its portrait card only
 const C0=NE+2.2,rvR=[30,0,486,816];
 shot(NE,C0,'revisit',lin(NE,0.15),[[NE,607,1080,1.0]],{callouts:[[NE,C0,rvR,720,700,0,true]]});
@@ -67,7 +67,7 @@ shot(LOGO,DUR,'logo',hold(0),[[LOGO,0,0,1]]);
 const CAP=[
  {t0:0.32,t1:g(4)-0.12,font:'MUL',size:200,y:900,lines:[[['단',0],['30일.',1]]]},
  {t0:g(4)+0.05,t1:g(6)-0.01,font:'WSB',size:96,y:1440,band:1,bandIn:0.2,lead:0.1,outDur:0.08,lines:[[['편의점에서',0],['시작되는',0]]]},
- {t0:g(6)+0.04,t1:g(8)-0.1,font:'MUL',size:210,y:1500,lines:[[['마왕',1],['토벌.',1]]],slam:true},
+ {t0:g(6)+0.04,t1:g(8)-0.1,font:'MUL',size:210,y:1500,band:1,bandIn:0.15,lead:0.08,lines:[[['마왕',1],['토벌.',1]]],slam:true},
  {t0:g(8)+0.08,t1:oPrice-0.12,font:'WSB',size:84,y:1440,band:1,lines:[[['당신이',0],['건넨',0]],[['물건',1],['하나가',1]]]},
  {t0:oGreat+0.05,t1:ulT-0.08,font:'WSB',size:86,y:1440,band:1,lines:[[['그들의',0],['생사를',1],['가른다.',0]]]},
  {t0:NE+0.05,t1:C0-0.08,font:'WSB',size:84,y:1440,band:1,lines:[[['키워낸',0],['단골들과',1],['함께',0]]]},
@@ -119,6 +119,7 @@ async function render(t){await fonts();x.setTransform(1,0,0,1,0,0);x.globalAlpha
    x.save();x.filter='blur(5px) brightness(0.36)';x.drawImage(bd,(W-bw)/2,(H-bh)/2,bw,bh);x.restore();
    x.drawImage(fr,(W-W*k)/2,oy,W*k,H*k);}
   const map=(px,py)=>[(px-sx)/cw*W+dx,(py-sy)/ch*H+dy],mapR=r=>{const [a,b2]=map(r[0],r[1]),[c,d]=map(r[0]+r[2],r[1]+r[3]);return [a,b2,c-a,d-b2];};
+  for(const r of s.mute||[]){const [a1,b1,c1,d1]=mapR(r);x.save();x.beginPath();x.roundRect(a1-4,b1-4,c1+8,d1+8,14);x.clip();x.filter='saturate(0) brightness(0.5)';x.drawImage(cv,0,0);x.restore();}
   if(s.take==='store'){x.fillStyle='rgba(10,6,4,'+(0.30+0.25*clamp(t/1.2,0,1))+')';x.fillRect(0,0,W,H);}
   for(const sp of s.spots||[]){if(t<sp[0]||t>sp[1])continue;const a=sp[3]*Math.min(clamp((t-sp[0])/0.3,0,1),clamp((sp[1]-t)/0.2,0,1));x.save();x.fillStyle='rgba(0,0,0,'+a+')';x.beginPath();x.rect(0,0,W,H);for(const r of sp[2]){const [a1,b1,c1,d1]=mapR(r);x.roundRect(a1-12,b1-10,c1+24,d1+20,18);}x.fill('evenodd');x.restore();}
   if(s.underline&&t>=s.underline[0]){const [a1,b1,c1,d1]=mapR(s.underline[2]);const u=ease(clamp((t-s.underline[0])/s.underline[1],0,1));x.save();x.shadowColor='rgba(255,205,90,.95)';x.shadowBlur=30;x.fillStyle='#ffd65e';x.fillRect(a1,b1+d1+5,c1*u,12);x.restore();}
@@ -248,10 +249,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
  // is the game's; the cues fire at their kept times (CUES). Added for the edit only: the footsteps before the first customer
  // (no game cue exists for them), the music held low under them, and the closing fade.
  const wav=path.join(dir,'mix.wav');await renderAudio(wav);
- const mp4=path.join(dir,'trailer-v9-1080x1920.mp4');
+ const mp4=path.join(dir,'trailer-v10-1080x1920.mp4');
  execFileSync(FF,['-hide_banner','-loglevel','error','-y','-framerate',String(FPS),'-i',path.join(out,'%05d.jpg'),'-i',wav,
   '-af',`volume=${AUDIO_GAIN}dB,alimiter=limit=0.89:level=false`,'-map','0:v','-map','1:a','-t',String(DUR),'-r',String(FPS),'-c:v','libx264','-profile:v','high','-preset','slow','-crf','17','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',mp4]);
- execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v9-540.mp4')]);
+ execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v10-540.mp4')]);
  fs.writeFileSync(path.join(dir,'edl.json'),JSON.stringify({beat:b,bar:B,songIn:SONG_IN,shots:S.map(s=>({t0:+s.t0.toFixed(3),t1:+s.t1.toFixed(3),take:s.take,src:s.srcFn})),cues:CUES,steps:STEPS},null,1));
  console.log('done',mp4);
 })().catch(e=>{console.error(e);process.exit(1);});
