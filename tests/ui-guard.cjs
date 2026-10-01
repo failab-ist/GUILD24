@@ -1800,7 +1800,7 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
- for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','forecast','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
@@ -2418,14 +2418,14 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const hz of Object.values(DATA.hazards))
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
- /* COACH DIET (User 2026-09-30): no outlook mark; the readout title is `전투 전망` (User 2026-10-01: the longer title stacked the cells) */
- assert.ok(!/\['forecast',/.test(steps)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook reads 전투 전망, no mark');
+ /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
+ assert.ok(steps.includes(`['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','returning','bag','price-refused','price-half'],'the first SALE reads destination and Stats; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','forecast','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the outlook; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.']`)
   &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
@@ -2957,7 +2957,8 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
                     // retired 2026-09-30: taught after the fact on the NIGHT record (COPY_AUDIT §26-2)
                     '대성공 신호. 준비가 넉넉할 때 뜨지만','음식·음료는 피로를 줄인다. 피로가 10을','건강한 손님의 가방을 가득 채웠다.',
                     // retired 2026-09-30 (COACH DIET, COPY_AUDIT §3-4 / §3-7 superseded)
-                    '손님이 계산대에 왔을 때의 원정 전망','50% 할인은 단골도를 크게 올리고','이 손님이 갈 게이트의 위험. 위험마다',
+                    // ('손님이 계산대에 왔을 때의 원정 전망' is live again: the outlook mark is back, User 2026-10-01)
+                    '50% 할인은 단골도를 크게 올리고','이 손님이 갈 게이트의 위험. 위험마다',
                     '오늘 올 손님 수. 점포지원','열린 게이트의 위험을 보고 오늘 필요한','오늘 열린 게이트와 위험. 위험 보기를',
                     '창고에 있는 재고. 첫날에는','‘최대’는 이 후보에서 지금 발주할 수 있는',
                     '후보 전체를 교환한다. 같은 날','카드마다 효과와 가격이 적혀','누르면 바로 확보된다. 이후 DAY',

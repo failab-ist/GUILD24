@@ -1227,9 +1227,10 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): two marks, destination and Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
-the other three answer Hazards; COPY_AUDIT §3-7 STATS). No Hazard, outlook or price marks (Hazard rows say what answers them,
-the readout says `전투 전망` and `환경 대응` with their `?`, price comes after the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
+First SALE (§TUTORIAL — COACH DIET): three marks, destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
+the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
+does not move with a sale; COPY_AUDIT §3-4). No Hazard or price marks (Hazard rows say what answers them, price comes after
+the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
 returning-customer mark (tap opens the notebook) the first returning customer. Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1237,11 +1238,11 @@ returning-customer mark (tap opens the notebook) the first returning customer. N
 (acceptance -> UI_UX §QA UI-Q-v29-53.) One rule, one place: a mark only where the rule must be known before the decision and no
 screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL) and II / FIRE Gate marks (§GATE TIER / FIRE GATE
-  TUTORIAL); ORDER `발주 확정`; SALE destination and Stats; SALE Bag (after the first sale) and returning customer; FINAL
+  TUTORIAL); ORDER `발주 확정`; SALE destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
-  Hazard, outlook; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
-- one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only); the readout title stays `전투 전망`, short enough to share the row with `환경 대응` on a phone
+  Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
+- one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
 - after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
 
 ### SALE PRICE LESSONS (v2.9.12)
@@ -2439,7 +2440,7 @@ FAIL: the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mar
 Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
 PASS:
 - the marks shown are exactly the owner's list: DAY 0 one mark (`점포지원`); no MORNING 방문객 / 게이트 mark (Deep and the II / FIRE
-  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination and Stats, then Bag after the
+  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, then Bag after the
   first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
   receipt mark
 - DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads

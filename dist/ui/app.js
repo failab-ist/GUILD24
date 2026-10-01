@@ -829,7 +829,8 @@ function readout(n,extra=null,cls=''){
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
-  /* User 2026-10-01: back to `전투 전망` - `도착 시 전투 전망` filled a half cell on a phone, so the two readings stacked */
+  /* User 2026-10-01: back to `전투 전망` - `도착 시 전투 전망` filled a half cell on a phone, so the two readings stacked;
+     the outlook coach mark says when the reading is taken again */
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
@@ -1254,8 +1255,8 @@ const coachSteps={
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
-    The Hazard, outlook and price marks are retired: the Hazard rows say what answers them, the readout says 전투 전망
-    beside 환경 대응, and price is taught after the fact. Everything else is contextual: showCoach() shows the first
+    The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
+    The outlook mark is back (User 2026-10-01): it says the readout is the SALE-entry snapshot, so the title stays short. Everything else is contextual: showCoach() shows the first
     unfinished mark whose target is VISIBLE, so a mark anchored to an element that only exists in its situation (a
     returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
@@ -1264,6 +1265,8 @@ const coachSteps={
  /* COPY_AUDIT §3-7 STATS (User 2026-09-24): the first time a customer's Stats are on screen - what they are, that they
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
+ /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
+ ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
  /* contextual marks */
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
