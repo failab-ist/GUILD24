@@ -143,7 +143,8 @@ Rules:
 - exact Supply -> Fatigue order and formulas -> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
 
 Fatigue-recovery contract: Food is the main recovery route; a Drink recovers 1~2; no Food recovers more than 6 except
-영웅 결전 도시락 (Epic, 9), so the worst single outcome gain (+9) is never erased by one ordinary Item; a Hazard-Counter
+길드 특제 도시락 (Rare, 7) and 영웅 결전 도시락 (Epic, 9), so the worst single outcome gain (+9) is never erased by one
+ordinary Item; a Hazard-Counter
 Food keeps at least 2 so 대식가's -1 stays a real cost.
 
 Each Food/Drink Item defines: supplyValue, native Stat/recovery effect if any, explicit Hazard Counter if any, explicit RiskReward if any.
@@ -951,17 +952,9 @@ No addition exists only to increase item count.
 
 #### ITEM-Q77 — FOOD/DRINK BASELINE VALUES
 
-Audit the exact §ACTIVE CATALOG values, including:
-- Choco mobility +8 / Supply3
-- Coffee mobility +12 / Supply2
-- Herb Tea spirit +15 / Supply2
-- Energy mobility +17 / Supply2
-- 불룡볶음면 survival +6 / cold21 / Supply3
-- Ramen cold10 / Supply3
-- Ice fire8 / Supply1
-- Candy fear8 / Supply2
+EXPECT: every Food / Drink row equals §ACTIVE CATALOG (Stat, Counter and Supply values; the table is the one source).
 
-Supply N is displayed as `피로 회복 N` (User 2026-09-24, v2.9.0).
+Supply N is displayed as `피로 회복 N`.
 
 PASS: no stale Stat bundle survives.
 
@@ -1076,11 +1069,7 @@ Does not dominate survival+Fatigue recovery+loot+stats simultaneously.
 
 #### ITEM-Q72 — POTION LADDER
 
-EXPECT:
-- 하급: 70/140, 투력 +8
-- 중급: 125/250, 투력 +14
-- 상급: 195/390, 투력 +20
-- 최상급: 235/470, 투력 +28
+EXPECT: the four Potions (하급 / 중급 / 상급 / 최상급) equal §ACTIVE CATALOG prices and 투력, rising with each step.
 
 All:
 - Potion category
@@ -1121,12 +1110,8 @@ Exact base Item values must match the current active catalog; Supply is displaye
 
 #### ITEM-Q73 — HAZARD COUNTER VALUES
 
-Exact pre-Epic Counter values (§COUNTER LADDER / §ACTIVE CATALOG):
-- Common: mask poison +10 · soda corrosion +10 · ice fire +8 · candy fear +8 · ramen cold +10
-- Uncommon hybrids: webgloves poison +12 / bind +9 · cloak corrosion +12 / mire +9 · holylight fear +9 / dark +9 ·
-  hood cold +12 / whiteout +9
-- Rare: antidote poison +23 · rope bind +21 · coating corrosion +23 · boots mire +21 · ion fire +18 · wine fear +18 ·
-  battery dark +21 · dragonramen cold +21 · snowgoggles whiteout +18
+EXPECT: every pre-Epic Counter value (Common Lower, Uncommon hybrid, Rare Main) equals §ACTIVE CATALOG, on the
+§COUNTER LADDER rungs.
 
 PASS:
 - specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
@@ -1173,32 +1158,18 @@ PASS:
 
 #### ITEM-Q83 — EPIC FAMILY HYBRIDS
 
-EXPECT exact new Epic Field Gear:
-
-```text
-거미줄 방호세트   135/270  독+16 / 속박+14
-연금 방수슈트     135/270  부식+16 / 진창+14
-성화 랜턴         135/270  공포+12 / 어둠+14
-백설 방한고글     135/270  냉기+16 / 화이트아웃+12
-마그마 냉각장비   145/290  화염+12 / 투력+10
-```
+EXPECT: the five Epic Field Gear (거미줄 방호세트, 연금 방수슈트, 성화 랜턴, 백설 방한고글, 마그마 냉각장비) equal §ACTIVE CATALOG.
 
 PASS:
-- each dual-Hazard value stays below the Rare dedicated specialist for that Hazard (e.g. 독 +16 < 농축 해독제 +23)
+- each dual-Hazard value stays below the Rare dedicated specialist for that Hazard
 - FIRE item does not invent a second FIRE Hazard
 - `마그마 냉각장비 투력+10` is an explicit exception only
 
 #### ITEM-Q84 — EPIC TOP-END STAT/SUPPLY ITEMS
 
-EXPECT:
+EXPECT: 초고속 에너지드링크, 대현자 허브엘릭서 (Drink E) and 최상급 포션 (Potion E) equal §ACTIVE CATALOG.
 
-```text
-초고속 에너지드링크    Drink E   175/350  기동+26 / Supply2
-대현자 허브엘릭서      Drink E   175/350  정신+28 / Supply2
-최상급 포션            Potion E  235/470  투력+28
-```
-
-Supply2 is displayed `피로 회복 2` (User 2026-09-24, v2.9.0).
+Supply is displayed `피로 회복 N`.
 
 PASS:
 - ordinary category modifier rules apply
