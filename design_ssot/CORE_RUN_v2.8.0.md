@@ -43,7 +43,7 @@ The pre-Run flow has no Start Contract selection.
     new Run preparation
     -> inspect/equip owned Decoration loadout
     -> confirm Run start
-    -> DAY 0 first 점포지원 choice
+    -> DAY 0 first 점포지원 choice (pick one free, or defer it: RELIC §ACQUISITION WINDOWS D0)
     -> enter DAY 1 MORNING
     -> D0 first-Morning Boss briefing
     -> ordinary DAY 1 MORNING flow
@@ -60,7 +60,7 @@ Purpose: bridge the opening / first-support setup into the actual 30-Day Run obj
 first ordinary Morning decision.
 
 Trigger:
-- only after the first DAY 0 점포지원 choice has resolved;
+- only after the first DAY 0 점포지원 choice has resolved (picked or deferred);
 - only when the Run has entered DAY 1 MORNING;
 - before the ordinary DAY 1 Morning Event, Gate detail, ORDER entry or any other ordinary Morning
   information / decision surface.
@@ -969,7 +969,7 @@ PASS:
 #### RUN-Q-v28-5 — BOSS INFORMATION ORDER
 
 D0:
-- first Store Support choice is shown and committed before D0 Boss information
+- first Store Support choice is shown and committed (picked or deferred) before D0 Boss information
 - D0 Boss objective is not embedded in the Store Support takeover
 - after the support choice, D0 opens as a separate information beat
 - acknowledging D0 proceeds to ordinary DAY 1

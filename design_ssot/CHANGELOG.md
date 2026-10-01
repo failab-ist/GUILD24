@@ -25,6 +25,19 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 3 — the DAY 0 free Store Support may wait (User 2026-10-01; the version stays 2.9.13)
+
+- **The free first pick is deferrable** (User: 처음 하는 사람에게 가혹함): the DAY 0 takeover gains `나중에 결정` under
+  `지금 안 골라도 된다. DAY 4까지 아침·발주 화면에서 무료로 고를 수 있다.`; it opens DAY 1 (the D0 Boss briefing follows as
+  before). The D0 window stays open and free through DAY 4 (`expiryDay` 5), reopens from the MORNING / ORDER 점포지원 key and
+  the Menu with `DAY 4까지 무료로 고를 수 있다.`, never pops up again, and the D5 window replaces it. A DAY 1~4 pick applies
+  like any later purchase. The bots still pick on DAY 0, so measurements are unchanged.
+- **DAY 0 coach**: `점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 무료이고, 지금 고르지 않아도 된다. DAY 4까지
+  아침·발주 화면의 점포지원에서 고를 수 있다. 이후 5일마다 새 후보가 온다.` Guide §8-1 opens `DAY 0 무료 1개는 DAY 4까지
+  고를 수 있다.` COPY_WORLD_VOICE no longer lists 전망 as a no-mark item (the outlook mark is §3-4).
+- RELIC §KEY / §ACQUISITION WINDOWS D0 / §WINDOW STATE / REL-Q02 / REL-Q-v28-20, CORE_RUN, BOSS §SAME-DAY ORDERING, UI_UX
+  §MENU / SETTINGS / §FIRST STORE SUPPORT TUTORIAL, COPY_AUDIT §8-1 / DAY 0 첫 점포지원, COPY_WORLD_VOICE; tests revision, ui-guard.
+
 ## v2.9.13 quick patch 2 — first-Run teaching (User 2026-10-01, PR #42; the version stays 2.9.13)
 
 - **NIGHT injury lesson says how an Injury heals** (`reports/v3.0-prep.md` §9-9 F3): the first hurt record's mark now ends

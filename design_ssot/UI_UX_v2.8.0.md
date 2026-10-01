@@ -1128,7 +1128,8 @@ Top-level Menu exactly: 모험가 수첩 · 도감 · 점포지원 · 이번 영
   §1-7); 영업 · 점포 vocabulary, never 런
 - 현재 지점 포기: COPY_AUDIT §1-3 confirm, then the Run is discarded at once (CORE_RUN §CURRENT RUN ABANDON) and 새 점포 준비
   shows with no Run (Decorations can be bought and equipped); a new Run starts only from `첫 점포지원 고르기`
-- the DAY 0 첫 점포지원 surface is mandatory with no way back (no `장식 구성 다시 보기`, no close)
+- the DAY 0 첫 점포지원 surface has no way back (no `장식 구성 다시 보기`, no generic close); its `나중에 결정` defers the free
+  pick and opens DAY 1 (RELIC §ACQUISITION WINDOWS D0)
 - 점포지원, 이번 영업의 장식 and 현재 지점 포기 appear only while a Run exists
 
 Sound Toggle and Full Data Reset are not top-level. Settings: 저장 내보내기 · 저장 가져오기 · Sound On/Off · BGM · SFX · Full
@@ -1275,8 +1276,9 @@ no SUPPLY mark; the SALE counter anchors neither.
 
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 
-The tutorial starts on the DAY 0 Store Support takeover with one mark saying what a Store Support is, never naming a pick (cards
-print effect and price; the key, later windows and `점포지원 N / 7` say the rest). It is the one mark over a modal, DAY 0 only,
+The tutorial starts on the DAY 0 Store Support takeover with one mark saying what a Store Support is, that the free pick may
+wait until DAY 4 and where it reopens, and that new candidates come every 5 days - never naming a pick (cards print effect and
+price; the key and `점포지원 N / 7` say the rest). It is the one mark over a modal, DAY 0 only,
 persisted per account. Copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
 
 ### FIRST-EVER DEEP EXPEDITION TUTORIAL
