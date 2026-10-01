@@ -563,6 +563,20 @@ test('first-Run lesson: DAY 1 warehouse holds one Common Counter for the first G
  const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-probe');
  assert.equal(sim.run.firstRun,false,'measurement harnesses switch the lessons off');
 });
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-01): the first Run meets 본사 1+1 행사 on DAY 2, the one Event before DAY 3;
+   the ordinary roll still draws and no pick is drawn, so the stream matches a later Run's */
+test('first-Run lesson: DAY 2 brings 본사 1+1 행사 on the first Run only, stream untouched',()=>{
+ const run=runs=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start('lesson-event');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.nextDay();return g.run;};
+ const first=run(0),later=run(1);
+ assert.equal(first.day,2);assert.equal(first.event?.id,'oneplus','the first Run: 본사 1+1 행사 on DAY 2');
+ assert.equal(first.eventSeen,false,'revealed like any Event');assert.deepEqual(first.eventLog,['oneplus'],'and logged, so the Run never meets it twice');
+ assert.equal(later.event,null,'a later Run: DAY 2 has no Event');
+ assert.ok(first.offers.some(o=>o.promo),'one offer carries the 1+1 promo');
+ assert.deepEqual(first.offers.map(o=>o.item),later.offers.map(o=>o.item),'the same offers');
+ assert.deepEqual(first.queue,later.queue,'the same visitors');assert.equal(first.rngState,later.rngState,'the same stream');
+ const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-event');sim.buyRelic(sim.run.relicWindow.candidateIds[0]);sim.nextDay();
+ assert.equal(sim.run.event,null,'measurement harnesses: no DAY 2 Event');
+});
 test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death settles as 중상',()=>{
  const g=fresh('lesson-death'),base=g.run.npcs[0];
  const weak={...copy(base),traits:[],injury:0,fatigue:0,pack:[],level:1,stats:{combat:1,survival:1,mobility:1,spirit:1},equipment:{...base.equipment,power:0}};

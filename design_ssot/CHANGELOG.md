@@ -31,6 +31,11 @@ and this table is their commit record.
   `원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.` - success clears an ordinary Injury, a retreat may
   (DUNGEON_HAZARD §RETREAT HEALING). No separate retreat-healing mark. COPY_AUDIT §26-2. NPC-Q78 corrected to the current rule
   (a retreat heals only through §RETREAT HEALING).
+- **First Run, DAY 2: 본사 1+1 행사, and a first Event mark** (§9-9 F4): the account's first Run meets `본사 1+1 행사` on DAY 2,
+  the one Event before DAY 3; the ordinary roll still draws and no pick is drawn, so the stream matches a later Run's, and
+  the bots (lessons off) are unchanged. The first Event slip on the board carries `아침마다 사건이 생길 수 있다. 사건은 오늘
+  하루 가게 사정을 바꾼다.` once per account. CORE_RUN §FIRST-RUN LESSONS / RUN-Q81, EVENT §EVENT TIMING, UI_UX §FIRST EVENT
+  TUTORIAL / UI-Q-v29-56, COPY_AUDIT §3-11, COPY_WORLD_VOICE; tests revision, ui-guard.
 
 ## v2.9.13 quick patch — fixes after the v2.9.13 merge (User 2026-10-01, PR #37; the version stays 2.9.13)
 

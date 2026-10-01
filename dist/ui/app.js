@@ -1275,6 +1275,8 @@ const coachSteps={
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): 방문객 and 게이트 are retired - the sign's 손님 N and the DAY 1~3 task line say them */
  morning:[['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
+  /* UI_UX §FIRST EVENT TUTORIAL (User 2026-10-01): the first Event slip on the board, once per account (the first Run's DAY 2) */
+  ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.'],
   ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's

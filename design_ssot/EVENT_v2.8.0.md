@@ -37,6 +37,7 @@ Normal Daily Event는 D0 · D1 · D2 · D5 · D10 · D15 · D20 · D25 · D30, �
 
 - D5 / D10 / D15 / D20 / D25는 Relic Window Day이므로 Event를 겹치지 않는다.
 - D30은 Final Day다. Boss reveal은 Normal Event가 아니며 `BOSS_v2.8.0.md`가 소유한다.
+- 예외: 계정 첫 Run의 D2는 `본사 1+1 행사`가 고정으로 나온다(`CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS). 다른 Run의 D2는 그대로 Event가 없다.
 
 ### Eligible Day
 

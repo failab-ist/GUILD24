@@ -233,6 +233,15 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
+## 3-11. 첫 사건
+
+(규칙 owner UI_UX §FIRST EVENT TUTORIAL. 아침 게시판의 사건 쪽지, 계정에서 처음 사건이 나왔을 때 한 번)
+
+**현재**
+> 아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.
+
+---
+
 ## 4-1. 전투 전망 Help
 
 **현재** (two lines; the second line is the frozen SALE-entry value)
