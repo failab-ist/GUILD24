@@ -804,8 +804,9 @@ function readout(n,extra=null,cls=''){
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
      here because it is judged against an Item, beside the other two readings a product is
-     bought to move. No new label and no new calculation. */
-  +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
+     bought to move. No new label and no new calculation. From a two-Hazard Gate it reads each Hazard's own state
+     instead (envReading, v2.9.13). */
+  +(o.worst?'<span class="fore'+(o.hazards.length>1?' env-each':'')+'">환경 대응'+envReading(o)
    +tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')+'</span>':'')
   +'</div>'
  /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
@@ -1582,6 +1583,12 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    the three price keys always in the same place. The shelf rows never change height. A sale clears
    the tray (the Item went into the Bag, and the hand-over starts from the tray icon); a refusal keeps
    the Item here with the refused key locked. Same information as the old per-row panel, one place. */
+/* v2.9.13 (User 2026-09-30, SALE §FROZEN OUTLOOK): on a Gate with two Hazards (T2 on) the sum of both gaps decides the
+   environment, so one worst label hid which side is open. 환경 대응 then names each Hazard with its own state - the same
+   frozen `outlook.hazards` rows, the same four labels and colours; still no number, threshold or Item pointer. A one-Hazard
+   Gate reads the single label as before. */
+function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes(l)?'lack':'ok')+'">'+E(l)+'</b>';
+ return o.hazards.length>1?'<span class="env-list">'+o.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'+b(h.label)+'</span>').join('')+'</span>':b(o.worst);}
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
    the Player works the shelf, so the same two readings float at the top of the scrolled column, where the readout
    sat - only while the readout itself is off screen, the same frozen SALE-entry values and colours, never a second
@@ -1590,7 +1597,7 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    words and number (an injured departure with a chain behind it); the folded chip stays `전망`. */
 function forecastPin(n){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
-  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(o.worst?'<span class="pin-fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b></span>':'')
+  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(o.worst?'<span class="pin-fore'+(o.hazards.length>1?' env-each':'')+'">환경 대응'+envReading(o)+'</span>':'')
   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);

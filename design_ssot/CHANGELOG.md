@@ -41,6 +41,12 @@ the owner headers and in the git tag.
   (`reports/counter-ladder-v2913/README.md` §6). 강인함 presses neither of that Gate's Hazards. Price 95 kept; every other
   Counter value, the Ladder and the Counter prices stay after the context-aware price review (`reports/item-price-v2913/`).
   ITEM catalog row / §15 identity / §PRESENTATION ORDER example; ledger; tests ui-guard.
+- **환경 대응 per Hazard from T2** (User 2026-09-30): on a two-Hazard Gate the SALE readout and the forecast pin name each
+  Hazard with its own frozen state (`냉기 취약 · 화이트아웃 불안`) instead of the worst one alone - judgment sums both gaps, so the
+  worst label hid which side is open. States only: no number, threshold or Item. The cell stays two lines (desk: states side by
+  side under the label; phone: two short rows beside it, names right-aligned so the coloured states line up). A one-Hazard Gate reads one label as before.
+  SALE §always-on outlook, UI_UX §PRE-SUPPLY OUTLOOK / §FORECAST PIN, UI_UX_QA UI-Q109; ledgers. Runtime: dist/ui/app.js
+  envReading, ui.css.
 
 ## v2.9.12 — balance review line (User 2026-09-30)
 

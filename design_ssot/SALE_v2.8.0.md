@@ -496,7 +496,7 @@ Hazard:
 
 No single final safety score.
 
-The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so the worst label hid which side is open; it is the same frozen snapshot and still gives no number, threshold or Item (User 2026-09-30, v2.9.13). The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 
 Forecast is:
 estimate, not guarantee.

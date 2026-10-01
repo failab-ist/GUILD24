@@ -547,7 +547,7 @@ customer SALE decision begins
 
 Show:
 - qualitative Combat Forecast
-- qualitative Hazard Readiness for the known current Hazard state
+- qualitative Hazard Readiness for the known current Hazard state — one label on a one-Hazard Gate; on a two-Hazard Gate (T2 on) each Hazard's own state (`{위험} {충분|대응|불안|취약}`) and the cell stays two lines tall, never a third: where there is room (desk) `환경 대응 ?` on the first line and the two states side by side on the second; where there is not (phone) the two states as two short rows beside the `환경 대응` label, the Hazard names right-aligned so the coloured states share one column, the 전투 전망 cell taking only its own width to make room; below the width that holds both cells on one line the 환경 대응 cell drops to its own line rather than overflow (User 2026-09-30, v2.9.13: a stacked third line was rejected)
 - exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
 - existing Injury/Condition state that is already part of that snapshot
 - `연속 부상 출발 {n}회` — one thin, small line directly under the readout `.top` (under 전투 전망), only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the failure Death chance); `{n}` is the NPC detail row's number, the chain of injured departures behind this one; words only — no %, no verdict, no `?`, no new color (User 2026-09-26, v2.9.5)
@@ -683,7 +683,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 
 (User 2026-09-25, v2.9.0) On a phone the readout scrolls away with the dossier while the Player works the shelf.
 
-- while the readout is outside the scrolled column's view, one floating line shows the same two readings at the top of the scrolled column, where the readout sat: `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` — the same frozen SALE-entry values and colours, never a second source
+- while the readout is outside the scrolled column's view, one floating line shows the same two readings at the top of the scrolled column, where the readout sat: `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` (on a two-Hazard Gate, each Hazard's own state as the readout reads it; User 2026-09-30, v2.9.13) — the same frozen SALE-entry values and colours, never a second source
 - while the readout is on screen the pin is not shown; on a desk (≥1024) it is never shown (the readout sits beside the portrait there)
 - one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
 - it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px

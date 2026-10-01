@@ -1019,7 +1019,6 @@ User decision 2026-09-25: on a phone the readout's two readings float above the 
 ```new
 ### SALE — FORECAST PIN
 (User 2026-09-25, v2.9.0) On a phone the readout scrolls away with the dossier while the Player works the shelf.
-- while the readout is outside the scrolled column's view, one floating line shows the same two readings at the top of the scrolled column, where the readout sat: `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` — the same frozen SALE-entry values and colours, never a second source
 - while the readout is on screen the pin is not shown; on a desk (≥1024) it is never shown (the readout sits beside the portrait there)
 - one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
 - it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px
@@ -1951,4 +1950,19 @@ chance, and it leaves the Store an additional Gold bonus. The SALE signal carrie
 §Preparation / Level Death reduction) turns away a Death, that NIGHT record names the condition and the effect in words
 only (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE). The same holds for Fatigue (the SUPPLY mark is retired too): the
 SALE counter carries no anchor for either.
+```
+
+## AMENDMENT — v2.9.13 환경 대응 per Hazard from T2 (User decision 2026-09-30)
+
+User 2026-09-30: on a two-Hazard Gate (T2 on) 환경 대응 names each Hazard with its own frozen state instead of the worst one alone - the sum of both gaps decides the environment, so the worst label hid which side is open; it tells the state, not the answer. Lines declared in earlier fences are edited in place and removed from them.
+
+Dropped (the history line, edited in place):
+
+```text
+- qualitative Hazard Readiness for the known current Hazard state
+```
+
+```new
+- qualitative Hazard Readiness for the known current Hazard state — one label on a one-Hazard Gate; on a two-Hazard Gate (T2 on) each Hazard's own state (`{위험} {충분|대응|불안|취약}`) and the cell stays two lines tall, never a third: where there is room (desk) `환경 대응 ?` on the first line and the two states side by side on the second; where there is not (phone) the two states as two short rows beside the `환경 대응` label, the Hazard names right-aligned so the coloured states share one column, the 전투 전망 cell taking only its own width to make room; below the width that holds both cells on one line the 환경 대응 cell drops to its own line rather than overflow (User 2026-09-30, v2.9.13: a stacked third line was rejected)
+- while the readout is outside the scrolled column's view, one floating line shows the same two readings at the top of the scrolled column, where the readout sat: `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` (on a two-Hazard Gate, each Hazard's own state as the readout reads it; User 2026-09-30, v2.9.13) — the same frozen SALE-entry values and colours, never a second source
 ```

@@ -325,7 +325,6 @@ User decision 2026-09-24 (v2.9.0), D-3 rule sheet: the transaction is shown by p
 `finalizeCustomer -> nextCustomer` carries the customer exit-then-entry beat (the current customer exits, then the next arrives with the existing entry). It is presentation only and changes no state (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT) (User 2026-09-24, v2.9.0).
 - the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION); tap remains sufficient, no drag is required (User 2026-09-24, v2.9.0)
 After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `원정 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation (User 2026-09-25, replaces the v2.9.0 derived / departure rows). The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
-The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 The exact 실패 시 사망 위험 % sits at that Help level (전투 전망 help, NPC detail), not as an always-on cell (User 2026-09-24, v2.9.0).
 The Death risk % is frozen where it is now shown: the 전투 전망 help and the NPC detail (User 2026-09-24, v2.9.0).
 ### STAT GRID PRESSURE TAG
@@ -439,4 +438,12 @@ New:
 
 ```new
 On `게이트 순례 주간`:
+```
+
+## AMENDMENT — v2.9.13 환경 대응 per Hazard from T2 (User decision 2026-09-30)
+
+User 2026-09-30: on a two-Hazard Gate (T2 on) 환경 대응 names each Hazard with its own frozen state instead of the worst one alone - the sum of both gaps decides the environment, so the worst label hid which side is open; it tells the state, not the answer. Lines declared in earlier fences are edited in place and removed from them.
+
+```new
+The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so the worst label hid which side is open; it is the same frozen snapshot and still gives no number, threshold or Item (User 2026-09-30, v2.9.13). The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 ```

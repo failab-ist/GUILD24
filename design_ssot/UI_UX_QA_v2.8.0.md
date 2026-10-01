@@ -649,6 +649,7 @@ PASS:
 - the destination block states Hazard pressure only
 - `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a phone — in the forecast pin that mirrors it (UI-Q-v29-24; User 2026-09-25, v2.9.0)
 - per-Hazard readiness no longer wraps the destination rows or pulls a row for its own help
+- on a two-Hazard Gate (T2 on) `환경 대응` names each Hazard with its own frozen state, in the readout and in the forecast pin; a one-Hazard Gate reads one label; the readout `.top` and the pin stay two lines tall with the label on one line, and no row overflows or collides at 360 / 390 / 412 / 1024 / 1280 (User 2026-09-30, v2.9.13)
 
 ### UI-Q-v28-3 — MOBILE SALE QUEUE
 

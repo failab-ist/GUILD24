@@ -1815,3 +1815,11 @@ SUPERSEDED (the coach-mark acceptance):
 - the first store-bonus 대성공 names it on its NIGHT record, once per account (NIGHT_CLOSING §DISCOVERY LINE):
   extra preparation can raise its chance, and it leaves the Store an additional Gold bonus
 ```
+
+## AMENDMENT — v2.9.13 환경 대응 per Hazard from T2 (User decision 2026-09-30)
+
+User 2026-09-30: on a two-Hazard Gate (T2 on) 환경 대응 names each Hazard with its own frozen state instead of the worst one alone - the sum of both gaps decides the environment, so the worst label hid which side is open; it tells the state, not the answer. Lines declared in earlier fences are edited in place and removed from them.
+
+```new
+- on a two-Hazard Gate (T2 on) `환경 대응` names each Hazard with its own frozen state, in the readout and in the forecast pin; a one-Hazard Gate reads one label; the readout `.top` and the pin stay two lines tall with the label on one line, and no row overflows or collides at 360 / 390 / 412 / 1024 / 1280 (User 2026-09-30, v2.9.13)
+```
