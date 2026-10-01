@@ -3503,7 +3503,8 @@ test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, 
  assert.ok(/grid-template-areas:"task task task" "front front front" "edge edge edge" "left tray shelf" "dock dock dock"/.test(css),'three areas under the counter band: ledger, tray, shelf');
  assert.ok(/\.sale-desk>\.stage-scroll\{display:contents\}/.test(css)&&/\.sale-desk \.dossier-col\{grid-area:left/.test(css)&&/\.sale-desk \.shelf-col\{display:block;grid-area:shelf/.test(css)&&/\.sale-desk>\.counter-tray\{grid-area:tray/.test(css),'the tray lies in the middle, on the counter, never over the shelf');
  assert.ok(/\.sale-desk \.dossier-col,\.sale-desk \.shelf-col\{min-height:0;overflow-y:auto/.test(css),'the ledger and the shelf scroll on their own');
- assert.ok(/\.stage\.sale-desk \.front\{--cardw:max\(200px,min\(400px,calc\(100dvh - 490px\)\)\)/.test(css),'the customer stands large, as tall as the band allows');
+ /* User 2026-10-01: the card is as tall as the column beside it (270 px wide = ~340 px tall), a short desk shrinks it */
+ assert.ok(/\.stage\.sale-desk \.front\{--cardw:max\(200px,min\(270px,calc\(100dvh - 490px\)\)\)/.test(css),'the customer card is as tall as the column beside it');
  assert.ok(/\.p-sale \.shelf-col\{display:contents\}/.test(css)&&/'<div class="shelf-col">'\+shelf\(\)\+'<\/div>'/.test(fn('saleScreen')),'the shelf column is no box on a phone');
  assert.ok(/const previousCols=\['\.p-sale \.dossier-col','\.p-sale \.shelf-col'\]/.test(app)&&/el\.scrollTop=changed\?0:previousCols\[i\]/.test(app),'a redraw keeps both column positions; a new view starts at the top');
 });

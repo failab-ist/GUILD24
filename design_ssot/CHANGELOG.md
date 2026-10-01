@@ -31,6 +31,9 @@ and this table is their commit record.
   retired outlook mark's fact) filled a half cell on a phone, so 전투 전망 and 환경 대응 stacked on two rows and the readout grew a
   line (three with a two-Hazard Gate). The first SALE shows three marks again: destination, Stats and the outlook (COPY_AUDIT
   §3-4 copy as before). UI_UX §TUTORIAL — COACH DIET / UI-Q-v29-53, COPY_AUDIT §3-4 / §3-7; tests ui-guard.
+- **Desk SALE customer card as tall as the column beside it**: the 400 px card (v2.9.12 desk SALE) stood far above the status /
+  outlook / destination column; 270 px makes the card about the column's height (~340 px with a two-Hazard Gate) and gives
+  the ledger / tray / shelf the rest. UI_UX §SALE — DESK LAYOUT.
 
 ## v2.9.13 — balance line after the 0930 D30-clear save (User 2026-09-30 ~ 2026-10-01; CLOSED)
 

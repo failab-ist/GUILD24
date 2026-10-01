@@ -407,8 +407,8 @@ to read a covered row); target at least 44px.
 ### SALE — DESK LAYOUT
 
 A desk (≥1024) draws its own SALE from the phone's pieces (same texts, keys, actions):
-- above the counter the customer stands large (as tall as the band allows) with state and Bag, outlook and destination
-  beside, the waiting line at the far end; the counter top is one band with a hard edge and one cast shadow (PRESENTATION
+- above the counter the customer card stands as tall as the column beside it (state and Bag, outlook and destination), not
+  taller; a short desk shrinks it so the player's side keeps its room; the waiting line at the far end; the counter top is one band with a hard edge and one cast shadow (PRESENTATION
   §Edge / material)
 - below, the player's side: the customer's ledger (last expedition, four stats, Traits), the tray in the middle on the counter
   (empty = bare counter), the shelf; ledger and shelf scroll separately, kept on a same-customer redraw, reset for a new
