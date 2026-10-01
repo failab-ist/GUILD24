@@ -2427,7 +2427,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
- assert.ok(steps.includes(`['forecast','.readout .top','손님이 막 왔을 때의 전망이다. 상품을 팔아도 이 칸은 그대로다. 상품이 무엇을 바꾸는지는 계산대에 올리면 보인다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
+ assert.ok(steps.includes(`['forecast','.readout .top','이 전망은 손님이 들어올 때 정해져서 끝까지 그대로다. 상품을 고르면 능력치·피로 회복 같은 효과가 계산대에 보이지만, 전망은 바뀌지 않는다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
