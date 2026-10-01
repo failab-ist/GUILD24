@@ -25,6 +25,13 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37 | `v2.9.13` |
 
+## Unreleased — v3.0 prep, first-Run teaching (User 2026-10-01; the version number is the User's to set)
+
+- **NIGHT injury lesson says how an Injury heals** (`reports/v3.0-prep.md` §9-9 F3): the first hurt record's mark now ends
+  `원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.` - success clears an ordinary Injury, a retreat may
+  (DUNGEON_HAZARD §RETREAT HEALING). No separate retreat-healing mark. COPY_AUDIT §26-2. NPC-Q78 corrected to the current rule
+  (a retreat heals only through §RETREAT HEALING).
+
 ## v2.9.13 quick patch — fixes after the v2.9.13 merge (User 2026-10-01, PR #37; the version stays 2.9.13)
 
 - **SALE readout title back to `전투 전망`, the outlook coach mark back**: `도착 시 전투 전망` (v2.9.12 coach diet, carrying the
