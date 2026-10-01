@@ -423,8 +423,8 @@ Forecast/readiness/death explanation is on demand via the shared anchored popove
 
 ### SALE — UNCOMMITTED PREVIEW
 
-Per `SALE_v2.8.0.md`, an uncommitted Item may show its exact effect, price / affordability and the deterministic
-`피로 A -> 출발 B`; never hypothetical answers (`접전 -> 우세`, `불안 -> 충분`, Great Success signal change).
+Per `SALE_v2.8.0.md`, an uncommitted Item may show its exact effect and price / affordability (no `피로 {A} → 출발 {B}`
+line); never hypothetical answers (`접전 -> 우세`, `불안 -> 충분`, Great Success signal change).
 
 ### SALE — POST-COMMIT DELTA SOURCE TRUTH
 
@@ -536,8 +536,8 @@ ceiling 40) strong danger treatment.
 
 ### FATIGUE SURFACE
 
-SALE: Fatigue is the status strip's `피로 N` (harmful emphasis when penalized); no standing Fatigue line; the tray shows
-`피로 A -> 출발 B` only for a chosen Food/Drink that moves it; no Outcome-by-Outcome table — the expedition's Fatigue is NIGHT's
+SALE: Fatigue is the status strip's `피로 N` (harmful emphasis when penalized); no standing Fatigue line; the tray lists a
+Food/Drink's own `피로 회복 N` row only, no `피로 {A} → 출발 {B}` line; no Outcome-by-Outcome table — the expedition's Fatigue is NIGHT's
 answer:
     귀환 후 피로 N
     귀환 후 피로 N · {band}
@@ -2058,7 +2058,7 @@ PASS:
 #### UI-Q86 — UNCOMMITTED PREVIEW / FROZEN PRE-SUPPLY OUTLOOK
 
 Select/focus an uncommitted Item.
-May show: exact Item effect; price/affordability; deterministic Fatigue-recovery arithmetic (`피로 A -> 출발 B`).
+May show: exact Item effect (a Food/Drink's own `피로 회복 N` row); price/affordability. No `피로 {A} → 출발 {B}` line.
 Must not show hypothetical post-Item answers: `접전 -> 우세`, `불안 -> 충분`, 실패 시 사망 위험 `% -> %` change, Great Success
 signal change, exact expedition Success probability. The visible exact 실패 시 사망 위험 % is allowed only as the fixed
 pre-supply snapshot.
@@ -2135,12 +2135,12 @@ PASS: no hover-only or inconsistent Hazard explanation.
 
 #### UI-Q89 — SUPPLY/FATIGUE CONDITIONAL ARITHMETIC
 Controlled setup with known Fatigue/Supply/Trait.
-PASS: `피로 A -> 출발 B` matches runtime preRecovery, no required / deficit value is shown; departure Fatigue matches runtime; no
+PASS: the tray's `피로 회복 N` matches the Item's Supply and NIGHT's `출발 {N}` matches runtime fatigueBeforeExpedition; no `피로 {A} → 출발 {B}` line, no required / deficit value is shown; departure Fatigue matches runtime; no
 single Outcome is predicted as guaranteed.
 
 #### UI-Q-v28-8 — FATIGUE
-SALE: no hypothetical Outcome fatigue matrix; current Fatigue readable in the status strip; `피로 A -> 출발 B` only on the counter
-tray for a chosen Food/Drink; no always-on Fatigue line, no `보급 X / 필요 Y` cell.
+SALE: no hypothetical Outcome fatigue matrix; current Fatigue readable in the status strip; a chosen Food/Drink lists its own
+`피로 회복 N` row on the counter tray and no `피로 {A} → 출발 {B}` line; no always-on Fatigue line, no `보급 X / 필요 Y` cell.
 NIGHT: main label 귀환 후 피로, with ` · {band}` from Fatigue 20 up; detailed path on demand; the recovery row is `음식·음료로 -N`,
 never `남은 보급으로`; 보급 회복 / 보급 완화 / 밤 피로 absent as primary labels.
 
@@ -2856,20 +2856,14 @@ at 360.
 #### UI-Q-v29-11 — FIRST-ORDER COACH ORDER / TARGETS
 
 SETUP: fresh account, first ORDER at 360 and 1280; step through the coach.
-EXPECT: the ORDER coach group runs `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
+EXPECT: the ORDER coach group is one mark, `confirm` on `발주 확정` with the COPY_AUDIT §3-2 line (→ UI_UX §TUTORIAL — COACH DIET).
 
 PASS:
-- the steps appear in exactly that order and nothing else is in the group
-- `gates` (step id `order-gates`, apart from MORNING's `gates`, so seeing one never marks the other seen) highlights the ORDER 오늘
-  brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
-- `stock` (step id `order-stock`) highlights the ORDER 창고 summary and reads the COPY_AUDIT §3-7 STOCK line
-- `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
-- `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH
-  COPY); `reroll` is last
+- `confirm` is the only ORDER step; no `gates` / `stock` / `offer` / `quantity` / `reroll` mark
 - no `gold` mark: `#order-register` carries no coach step
-- every step passes UI-Q-v28-27 target truth
+- the step passes UI-Q-v28-27 target truth
 
-FAIL: a step reads 보유 골드, or the register is the first target.
+FAIL: a retired ORDER mark shows, a step reads 보유 골드, or the register is a target.
 
 #### UI-Q-v29-12 — ORDER TODAY-FIT EMPHASIS — RETIRED
 

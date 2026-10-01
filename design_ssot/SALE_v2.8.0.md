@@ -281,7 +281,7 @@ Stat / Counter / `피로 회복 N` / explicit penalty.
 When the Player focuses/selects an **uncommitted** Item, UI may additionally show:
 - that Item's exact effects
 - selected price / affordability
-- deterministic Fatigue-recovery arithmetic (`피로 A -> 출발 B`) owned by `DUNGEON_HAZARD_v2.8.0.md`
+- a Food/Drink's own `피로 회복 N` row (no `피로 {A} → 출발 {B}` line; the arithmetic is `DUNGEON_HAZARD_v2.8.0.md`'s and NIGHT shows it)
 
 Before actual purchase commitment, do **not** show a hypothetical post-Item derived answer such as `접전 -> 우세`,
 `불안 -> 충분`, a 실패 시 사망 위험 `% -> %` change, a Great Success signal change, exact expedition success chance, or a
@@ -340,7 +340,7 @@ Once an Item is actually purchased and committed into the NPC's Bag, it is no lo
 - the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 % stay frozen (§FROZEN OUTLOOK)
 - exact Item/direct-effect changes may be shown
 - exact proven derived changes from Fatigue/other owned systems may be shown with their source
-- current Fatigue-recovery arithmetic (`피로 A -> 출발 B`) may update where it is deterministic public arithmetic
+- current Fatigue stays the status strip's `피로 N`; no `피로 {A} → 출발 {B}` line is added
 
 A refusal does not grant the Item effect.
 
@@ -384,7 +384,7 @@ Rules:
 - Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope
 
 Example boundary:
-- current `집중 사탕` shows `공포 대응 +10 / 피로 회복 3`
+- current `집중 사탕` shows `공포 대응 +8 / 피로 회복 2`
 - it has no direct positive four-Core-Stat contribution
 - if there is no Fatigue band change, selling it must not create a Core-Stat delta
 - if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
