@@ -2025,7 +2025,7 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
 /* v2.9.10 (User 2026-09-27/28): the customer walks up and holds a silhouette until the portrait is decoded; a sold-out
    ORDER offer carries a stamp instead of its controls */
 test('UI_UX §SALE — CUSTOMER ARRIVAL / ORDER sold out (v2.9.10)',()=>{
- const pp=fn('playPhase');
+ const pp=fn('phaseSell');
  assert.ok(/const WALK=560,waiting=fig&&fig\.tagName==='IMG'&&!\(fig\.complete&&fig\.naturalWidth\);/.test(pp)&&/A\(face,\{translateX:\[72,0\],duration:WALK/.test(pp)
   &&/Promise\.race\(\[fig\.decode\(\)\.catch\(\(\)=>\{\}\),new Promise\(r=>setTimeout\(r,1500\)\)\]\)/.test(pp),'the card walks in and the portrait rises once decoded (at most 1.5 s)');
  assert.ok(/<span class="figure-wait" aria-hidden="true"><\/span><img class="figure"/.test(app)&&/\.face\.waiting \.figure-wait\{display:block\}/.test(css),'a plain silhouette stands in meanwhile');
@@ -2054,7 +2054,7 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
    movement on FINAL's own entry - the only H6 target left after the four-cut capture excluded the rest */
 test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one movement, nothing else moves',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- const pp=bare(fn('playPhase')),final=pp.slice(pp.indexOf("if(phase==='final')"),pp.indexOf("if(phase==='closing')"));
+ const final=bare(fn('phaseFinal'));
  assert.ok(/const gate=\$\('\.gate-zero'\);/.test(final),'the boss art and name plate are read as one block');
  assert.ok(/if\(gate\)A\(gate,\{translateY:\[10,0\],opacity:\[0,1\],duration:220,ease:'outQuad'\}\);/.test(final),'one movement, 220 ms, outQuad - 일반 intensity, no hold');
  assert.ok(!/stagger|scale:|\.threat|\.dock|\.final-order/.test(final),'nothing else on the screen moves, and the block is never scaled (a wide flex block scaling would overflow, H4\'s own lesson)');
@@ -2080,7 +2080,7 @@ test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 
 test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts past each Decoration price',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const CLOSING_STAMP=\{hold:100,dip:4\};/.test(app),'100 ms hold, 4 px dip - 중요, reusing the NIGHT fall');
- const pp=bare(fn('playPhase')),closing=pp.slice(pp.indexOf("if(phase==='closing')"),pp.indexOf("if(phase==='night')"));
+ const closing=bare(fn('phaseClosing'));
  assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block'\)/.test(closing),'every figure block prints together; the purse box is the stamp (v2.9.7)');
  assert.ok(/opacity:\[0,1\],translateY:\[-4,0\],duration:200,ease:'outQuad'/.test(closing)&&!/stagger/.test(closing),'one 200 ms pass, never a per-row stagger');
  assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
@@ -2093,7 +2093,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/closingCueAt=setTimeout\(\(\)=>sound\(kind\),CLOSING_STAMP\.hold\+STAMP_FALL\)/.test(cs),'the stamp cue lands on the same frame as the visual stamp');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
  assert.ok(/nightSound\(s\.results\[s\.nightCursor\]\);if\(s\.phase==='closing'\)closingSound\(\);break;/.test(app),'the ordinary 마감으로 press (night-next reaching the last result) plays it too');
- const end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ const end=bare(fn('phaseEnd'));
  assert.ok(/\[\.\.\.new Set\(D\.decorations\.map\(d=>d\.price\)\)\]/.test(end),'the price lines are read from the live Decoration list, never a second copy of the numbers');
  assert.ok(/for\(const p of lines\)if\(last<p&&box\.v>=p\)sound\('ui'\)/.test(end),'a quiet ui click on each price the count actually passes, none otherwise');
  assert.ok(/capRow\.textContent=to\.toLocaleString\(\)/.test(end),'the settlement figure ends on the same resolved value with or without motion');
@@ -2133,7 +2133,7 @@ test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a 
  assert.ok(!/members|team|forEach|map\(/.test(fs_),'never one per member');
  assert.ok(/<div class="print">'\+finalSeal\(\)/.test(fn('endBanner')),'struck on the ending tape');
  assert.ok(/const FINAL_SEAL=\{hold:200,won:\{from:2,dip:6\},lost:\{from:1\.6,dip:3\}\};/.test(app),'the clear is the heaviest landing; both hold 200 ms (클라이맥스)');
- const pp=bare(fn('playPhase')),end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ const end=bare(fn('phaseEnd'));
  assert.ok(/scale:\{from:v\.from,to:1,duration:STAMP_FALL,delay:at/.test(end),'the seal reuses the NIGHT stamp\'s fall');
  assert.ok(/to:parseFloat\(getComputedStyle\(seal\)\.opacity\)/.test(end),'its ink ends where the stylesheet leaves it');
  assert.ok(/'\.end-tape \.closed,\.end-tape \.reason'/.test(end)&&/delay:land/.test(end),'the result sentence follows the landing');
@@ -2165,7 +2165,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(S.gone.tape&&S.gone.tape<=500&&!S.gone.from,'사망 has no stamp and a tape ≤ 500 ms');
  // each beat ≤ 320 ms after the landing (dip 190, settle 160, count 220), and the whole run ends by 770 ms
  for(const k of Object.keys(S))assert.ok((S[k].tape?S[k].entry+S[k].hold+S[k].tape:land(k)+220)<=770,k+' ends by 770 ms');
- const pp=bare(fn('playPhase')),night=pp.slice(pp.indexOf("if(phase==='night')"),pp.indexOf("if(phase==='sell')"));
+ const night=bare(fn('phaseNight')+fn('phaseEnd'));
  assert.ok(/to:st\.dip,duration:40/.test(night)&&/to:0,duration:150/.test(night),'the card gives 4 px and settles - the only companion motion');
  assert.ok(/scale:\{from:st\.from,to:1,duration:STAMP_FALL,delay:at/.test(night),'the tag falls onto the card after it stands');
  assert.ok(!/stagger|rotate:|translateX:\{from:[^s]|document\.body|#app|\.stage/.test(night),'no ring, shake, scatter or screen-level motion');
@@ -2206,9 +2206,12 @@ test('D-24: the feel layer is optional, and it never animates a redraw of the sa
  // every animation call sits behind that check
  for(const name of ['playPhase','playCue','stampPress','playExit'])
   assert.ok(fn(name).includes('if(!motionOK()')||fn(name).includes('||!motionOK()'),name+' stands down on its own');
- const elsewhere=app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),'')
+ // the per-phase beats run only through playPhase's motion check, so they count as part of it
+ const phaseBeats=['phaseMorning','phaseOrder','phaseFinal','phaseClosing','phaseNight','phaseEnd','phaseSell'];
+ const elsewhere=phaseBeats.reduce((t,name)=>t.replace(fn(name),''),app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),''))
   .split('\n').filter(l=>!l.trimStart().startsWith('//')&&!l.trimStart().startsWith('*')&&!l.includes('const motionOK=')).join('\n');
  assert.ok(!/anime\.(animate|stagger)/.test(elsewhere),'nothing animates outside the three guarded places');
+ assert.ok(phaseBeats.every(name=>!new RegExp('\\b'+name+'\\b').test(elsewhere)&&fn('playPhase').includes(':'+name)),'a phase beat is reached only from playPhase');
  // a redraw replaces the screen, so an entry animation would replay on every click:
  // the phase beats run only when the view actually changed, the in-phase ones on a one-shot marker
  assert.ok(/if\(changed\)playPhase\(phase\);playCue\(\);/.test(app),'the phase beat is gated on the view changing');

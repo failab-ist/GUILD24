@@ -310,10 +310,7 @@ const BOSS_WAIT=1200,warmed=new Map();
 function warm(src){if(!src)return Promise.resolve();if(!warmed.has(src)){const im=new Image();im.src=src;warmed.set(src,(im.decode?im.decode():Promise.resolve()).catch(()=>{}));}return warmed.get(src);}
 function warmAhead(s,phase){warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount));
  if(['morning','order','sell'].includes(phase))for(const n of s.npcs)if(n.alive)warm(Scene.npcArt(n));}
-function playPhase(phase){
- if(!motionOK())return;
- const A=anime.animate;
- if(phase==='morning'){
+function phaseMorning(A){
   const shutter=$('.band.ceiling .band-art');
   if(shutter)A(shutter,{translateY:[-14,0],duration:420,ease:'outQuad'});
   const slips=[...document.querySelectorAll('.pinned .slip')];
@@ -321,28 +318,28 @@ function playPhase(phase){
   const till=$('.till .coin');
   if(till){const to=game.run.money,from=lastTill===null?to:lastTill;lastTill=to;
    if(from!==to){const box={v:from};A(box,{v:to,duration:520,ease:'outQuad',onUpdate:()=>{till.textContent=fmt(box.v);}});}}
- }
- if(phase==='order'){
+}
+function phaseOrder(A){
   const form=$('.form');
   if(form)A(form,{translateY:[16,0],opacity:[0,1],duration:280,ease:'outQuad'});
- }
+}
  /* v2.9.2 H6 FINAL boss reveal entry (UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate
     settle in as one movement - the only H6 target the four-cut capture and report left in scope. */
- if(phase==='final'){
+function phaseFinal(A){
   const gate=$('.gate-zero');
   if(gate)A(gate,{translateY:[10,0],opacity:[0,1],duration:220,ease:'outQuad'});
- }
+}
  /* v2.9.2 H4 CLOSING receipt (UI_UX §CLOSING — RECEIPT STAMP): every row of the two figure blocks
     settles together in one 200 ms pass - never a tick per row - and only the 보유 자금 figure (v2.9.7) lands as
     a stamp on a fixed 100 ms hold, reusing the NIGHT stamp's own 90 ms fall and card dip. */
- if(phase==='closing'){
+function phaseClosing(A){
   const printed=[...document.querySelectorAll('.p-closing .tape .print>.block')];
   if(printed.length)A(printed,{opacity:[0,1],translateY:[-4,0],duration:200,ease:'outQuad'});
   const row=$('.p-closing .tape .purse'),val=row?.querySelector(':scope>b'),tape=$('.p-closing .tape'),land=CLOSING_STAMP.hold+STAMP_FALL;
   if(row)A(row,{opacity:{from:0,to:1,duration:40,delay:CLOSING_STAMP.hold,ease:'linear'}});
   if(val)A(val,{scale:{from:1.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP.hold,ease:'in(3)'}});
   if(tape)A(tape,{translateY:[{from:0,to:0,duration:land},{to:CLOSING_STAMP.dip,duration:40,ease:'in(2)'},{to:0,duration:150,ease:'outQuad'}]});
- }
+}
  /* v2.9.2 H1 NIGHT VERDICT STAMP (UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT).
     The card arrives the way that return happened (BATCH 3), stands, and the tag is stamped onto
     it: one hard 90 ms fall, the card dipping under it on the landing frame. Weight follows the
@@ -351,7 +348,7 @@ function playPhase(phase){
     the money only when there is not (REWARD figures count up). A reversal prints what the
     Insurance turned away and overstamps it; a death gets a tape, not a stamp. Everything reads
     the tone and the result already resolved; nothing here is state. */
- if(phase==='night'){
+function phaseNight(A){
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
   const st=r?nightStampOf(r):NIGHT_STAMP[tone]||NIGHT_STAMP.safe,at=st.entry+st.hold,land=stampLand(st);
@@ -387,9 +384,9 @@ function playPhase(phase){
    const text=b.textContent,m=text.match(/\d[\d,]*/);if(!m)return;
    const to=Number(m[0].replace(/,/g,'')),box={v:0},put=()=>{b.textContent=text.replace(m[0],fmt(box.v));};
    put();A(box,{v:to,duration:220,delay:land,ease:'outQuad',onUpdate:put,onComplete:()=>{b.textContent=text;}});});
- }
+}
  /* v2.9.2 H5: the Final seal lands on the standing tape and the ending's own sentence follows it */
- if(phase==='end'){const seal=$('.end-tape .seal'),tape=$('.end-tape');
+function phaseEnd(A){const seal=$('.end-tape .seal'),tape=$('.end-tape');
   if(seal){const v=FINAL_SEAL[seal.classList.contains('won')?'won':'lost'],at=FINAL_SEAL.hold,land=at+STAMP_FALL;
    /* the ink ends where the stylesheet leaves it (a failure is faint), so reduced motion and motion end alike */
    A(seal,{scale:{from:v.from,to:1,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:parseFloat(getComputedStyle(seal).opacity)||1,duration:40,delay:at,ease:'linear'}});
@@ -408,10 +405,10 @@ function playPhase(phase){
      capRow.textContent=Math.round(box.v).toLocaleString();
      for(const p of lines)if(last<p&&box.v>=p)sound('ui');
      last=box.v;},onComplete:()=>{capRow.textContent=to.toLocaleString();}});}}
- }
+}
  // SALE reveal: the next back walks up to the counter and turns face up. It only ever
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
- if(phase==='sell'){
+function phaseSell(A){
   const face=$('.who .face'),fig=$('.who .figure'),tag=$('.who .nameplate'),br=$('.bracket'),pool=$('.pool');
   /* v2.9.10 (User 2026-09-28): the customer's card walks up to the counter - a few steps in from the side - and a
      newcomer's portrait, fetched only as they arrive, rises into it once decoded (at most 1.5 s); until then the card holds
@@ -429,7 +426,11 @@ function playPhase(phase){
   if(tag)A(tag,{translateY:[10,0],opacity:[0,1],duration:200,delay:120,ease:'outQuad'});
   const waits=[...document.querySelectorAll('.line-up .wait')];
   if(waits.length)A(waits,{translateX:[16,0],duration:240,delay:anime.stagger(45),ease:'outQuad'});
- }
+}
+function playPhase(phase){
+ if(!motionOK())return;
+ const run={morning:phaseMorning,order:phaseOrder,final:phaseFinal,closing:phaseClosing,night:phaseNight,end:phaseEnd,sell:phaseSell}[phase];
+ if(run)run(anime.animate);
 }
 /* Beats that happen inside a Phase rather than on the way into one. A redraw rebuilds the
    whole screen, so an entry animation attached to an element would replay on every click:
