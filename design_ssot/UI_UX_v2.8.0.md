@@ -1240,8 +1240,8 @@ returning-customer mark (tap opens the notebook) the first returning customer. N
 
 (acceptance -> UI_UX §QA UI-Q-v29-53.) One rule, one place: a mark only where the rule must be known before the decision and no
 screen says it; otherwise none, or taught after the fact.
-- before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL) and II / FIRE Gate marks (§GATE TIER / FIRE GATE
-  TUTORIAL); ORDER `발주 확정`; SALE destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
+- before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL), the first Event (§FIRST EVENT TUTORIAL) and II / FIRE
+  Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정`; SALE destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
@@ -1287,6 +1287,13 @@ again. It teaches: 1. `심층원정` exists 2. optional 3. higher required Comba
 can be nominated 5. nomination costs Store sponsorship Gold 6. Success gives extra NPC EXP/Growth + Wallet 7. unlike a normal
 Great Success, Store Gold return is 0 even on Great Success. Shown before the first nomination decision; dismissing it leaves
 no Morning/Order information hidden.
+
+### FIRST EVENT TUTORIAL
+
+(acceptance -> UI_UX §QA UI-Q-v29-56.) One contextual MORNING mark, like the Gate marks: the first time an Event slip (`.slip.event`)
+is on the board, after the Event reveal is closed, once per account, persisted and reset with the rest. On a fresh account it
+lands on the first Run's DAY 2 (`CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS). It says that an Event may come any morning and changes
+that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-11.
 
 ### GATE TIER / FIRE GATE TUTORIAL
 
@@ -2452,6 +2459,16 @@ PASS:
   mark is closed); neither shows a second time on the account
 - `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the baseline (16)
 FAIL: a retired mark still shows, a mark names an Item, or a price lesson shows before its situation.
+
+#### UI-Q-v29-56 — FIRST EVENT TUTORIAL (User 2026-10-01)
+
+Verify UI_UX §FIRST EVENT TUTORIAL on a fresh account, tutorial on, at 390 and 1280.
+
+PASS:
+- the first Run's DAY 2 opens the 본사 1+1 행사 reveal; after `오늘 상황 보기` the board's Event slip carries COPY_AUDIT §3-11
+- once per account; a later Event shows no mark; 건너뛰기 and reset behave as the other marks; the mark names no Event or Item
+
+FAIL: the mark over the open reveal, on a board without an Event, or a second time.
 
 #### UI-Q-v29-54 — END THIS RUN BLOCK (User 2026-09-30)
 

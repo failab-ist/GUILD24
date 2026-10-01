@@ -233,6 +233,15 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
+## 3-11. 첫 사건
+
+(규칙 owner UI_UX §FIRST EVENT TUTORIAL. 아침 게시판의 사건 쪽지, 계정에서 처음 사건이 나왔을 때 한 번)
+
+**현재**
+> 아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.
+
+---
+
 ## 4-1. 전투 전망 Help
 
 **현재** (two lines; the second line is the frozen SALE-entry value)
@@ -2767,7 +2776,7 @@ No Rare Reference customer and no line for one (COPY_WORLD_VOICE §RARE REFERENC
 > 사망(사망 기록에는 이것만).
 
 **현재**
-> 부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다.
+> 부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다. 원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.
 > 피로가 10을 넘으면 기동·정신이 떨어진다. 음식·음료가 피로를 덜어 준다.
 > 위험에 맞는 상품은 그 위험의 압박을 줄인다.
 > 건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.

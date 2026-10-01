@@ -173,7 +173,7 @@ const Copy={
  lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule, named once per account by a coach mark on the NIGHT record
     of the first expedition it acted on - taught after it happened rather than before. Order = coach order on one record. */
- learned:[['injured','부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다.'],
+ learned:[['injured','부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다. 원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.'],
   ['fatigue','피로가 10을 넘으면 기동·정신이 떨어진다. 음식·음료가 피로를 덜어 준다.'],
   ['counter','위험에 맞는 상품은 그 위험의 압박을 줄인다.'],
   ['prepared','건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.'],

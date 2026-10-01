@@ -23,7 +23,19 @@ and this table is their commit record.
 | v2.9.10 | 2026-09-28 | `8c1d4ae` (PR #22); quick patch `0fa6891` (PR #24) and its follow-up | - |
 | v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | - |
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
-| v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37 | `v2.9.13` |
+| v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
+
+## v2.9.13 quick patch 2 — first-Run teaching (User 2026-10-01, PR #42; the version stays 2.9.13)
+
+- **NIGHT injury lesson says how an Injury heals** (`reports/v3.0-prep.md` §9-9 F3): the first hurt record's mark now ends
+  `원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.` - success clears an ordinary Injury, a retreat may
+  (DUNGEON_HAZARD §RETREAT HEALING). No separate retreat-healing mark. COPY_AUDIT §26-2. NPC-Q78 corrected to the current rule
+  (a retreat heals only through §RETREAT HEALING).
+- **First Run, DAY 2: 본사 1+1 행사, and a first Event mark** (§9-9 F4): the account's first Run meets `본사 1+1 행사` on DAY 2,
+  the one Event before DAY 3; the ordinary roll still draws and no pick is drawn, so the stream matches a later Run's, and
+  the bots (lessons off) are unchanged. The first Event slip on the board carries `아침마다 사건이 생길 수 있다. 사건은 오늘
+  하루 가게 사정을 바꾼다.` once per account. CORE_RUN §FIRST-RUN LESSONS / RUN-Q81, EVENT §EVENT TIMING, UI_UX §FIRST EVENT
+  TUTORIAL / UI-Q-v29-56, COPY_AUDIT §3-11, COPY_WORLD_VOICE; tests revision, ui-guard.
 
 ## v2.9.13 quick patch — fixes after the v2.9.13 merge (User 2026-10-01, PR #37; the version stays 2.9.13)
 

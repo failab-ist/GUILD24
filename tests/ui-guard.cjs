@@ -1804,8 +1804,15 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
- for(const id of ['relic-what','deep','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
+ for(const id of ['relic-what','deep','event','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
   assert.ok(ids.has(id),'kept before the fact: '+id);
+});
+
+/* UI_UX §FIRST EVENT TUTORIAL (UI-Q-v29-56, User 2026-10-01): one contextual MORNING mark on the board's Event slip */
+test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
+ const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
+ assert.ok(morning.includes(`['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.']`),'COPY_AUDIT §3-11 Event mark');
+ assert.ok(/class="slip event" data-action="event-again"/.test(app),'the MORNING board carries the Event slip the mark anchors to');
 });
 
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */

@@ -1095,12 +1095,12 @@ EXPECT:
 ```text
 성공 -> injury=0
 대성공 -> injury=0
-퇴각 -> injury=1
+퇴각 -> injury=1, or injury=0 when RETREAT HEALING heals it
 부상 -> injury=1
 ```
 
 PASS:
-- Retreat does not cure ordinary Injury
+- Retreat cures ordinary Injury only through `DUNGEON_HAZARD_v2.8.0.md` §RETREAT HEALING (its own chance, one draw)
 - merely completing another expedition does not cure Injury
 - Severe/Death follow their own outcome/state paths
 - First Aid Aftercare may still override the persistent state after outcome resolution exactly as ITEM owns

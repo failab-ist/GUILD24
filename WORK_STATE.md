@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-10-01
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) — v2.9.2~v2.9.13 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) · V2_9_13_QUICK_PATCH_2(PR #42, 첫 판 가르치기, User 컨펌 2026-10-01) — v2.9.2~v2.9.13 태그는 User가 걸어야 함
 
 ## Current
 
@@ -10,6 +10,18 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
+
+## v2.9.13 퀵패치 2 — 첫 판 가르치기 (User 2026-10-01, 버전 2.9.13 유지)
+
+내용은 `design_ssot/CHANGELOG.md` §v2.9.13 quick patch 2, 결정 기록은 `reports/v3.0-prep.md` §9-9.
+
+| 묶음 | 내용 |
+|---|---|
+| 부상 안내 | 첫 부상 안내 끝에 `원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.` NPC-Q78 옛 규칙 정정 |
+| 첫 판 D2 | 계정 첫 판 D2에 `본사 1+1 행사` 고정(난수 흐름 그대로, 봇 측정 불변), 첫 사건 쪽지에 코치 `아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.` |
+
+검증(바꾼 부분만): `npm test` · `npm run audit` · `tests/revision.cjs` · `git diff --exit-code`, 런타임 `qa-d0-flow` 12 · `qa-day-flip` 12 · `qa-final-bosses` 42, 캡처 D2 사건 창 · 코치 · NIGHT 부상 안내 390 / 1280.
+v3.0 게임 쪽 남은 것: 진동(앱 래핑 때), 밸런스(플레이 피드백 뒤), 체험판 자동 수집(PostHog 키 대기). 글자 크기 설정은 넣지 않음.
 
 ## v2.9.13 퀵패치 (User 2026-10-01, 버전 2.9.13 유지)
 
