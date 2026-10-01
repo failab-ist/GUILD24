@@ -1070,18 +1070,14 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  /* There is no counter either. A full-width slab with drawers turned the register back into
     a fitting on someone else's cabinet, so the register is the object now: it stands on a
     short plinth and the floor is left open on both sides of it. */
- assert.ok(/width="252"[^>]*fill="#39434b"/.test(counterArt),'the register is the object, at a size that reads');
- assert.ok(!/width="360"/.test(counterArt),'nothing spans the room down here any more');
- assert.ok(/y="66" width="264"/.test(counterArt)&&/y="84" width="256"/.test(counterArt),
-  'it stands on a short plinth rather than hovering');
- assert.ok(!/#5e4028|#8a6435/.test(counterArt),'the drawers and the counter run are gone');
+ /* User 2026-10-01: the painted backdrop draws the room and this art was hidden on every surface that mounted it, so the
+    drawing is archived (archive/v2.9.13/unused-room-art.js). The frame stays: it still sizes the mount the till anchors to. */
+ assert.ok(!/<rect/.test(counterArt),'the counter frame carries no drawing');
  assert.ok(!/\.band\.counter\{background:linear-gradient\(180deg,[^)]*#c6a26c/.test(css),
   'and the band no longer continues a counter either side of the art');
- /* The band ends where the plinth does. Left taller, the register hovered over a strip of
-    empty floor between it and the action bar. */
  assert.ok(counterArt.includes('viewBox="0 0 360 90"'),
-  'the counter band is as tall as the object in it, so the register lands on the dock');
- assert.ok(/y="84"[^>]*height="6"/.test(counterArt),'the plinth is the last thing in it');
+  'the counter frame keeps its height, so the register lands on the dock');
+ assert.ok(/\.p-morning \.band\.counter \.band-art\{visibility:hidden\}|\.p-morning \.band\.counter \.band-art\{visibility:hidden/.test(read('dist/ui/director-review.css').replace(/\n/g,'')),'and nothing would show if it did');
 
  /* UI_UX: on the day the player faces the Boss, the standing screen says which Boss. It used
     to open on a generic 마왕성 plate with a 28px procedural mark, identical every Run. */
