@@ -58,7 +58,7 @@ shot(E3,RES,'final',lin(E3,9.32),[[E3,607,1040,1.04]],{inset:[0.82,-80]});
 // S8 the result, one shot: the receipt lands with its seal, then one 0.6 s push centred on 마왕이 쓰러졌다. / 우리 점포에서 떠난
 // 원정대가 해냈다. (the header and the figures stay at the edge); on the stop a pale gold wash behind the two lines and a short burst of
 // gold pixels along the frame edge, with the game's settlement cue; 1 s to read, then the title
-const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+0.9,LOGO_LAND=LOGO+0.45+0.18,DUR=+(LOGO+3.8).toFixed(4);
+const seal=cue('final','sealwin'),rIn=RES+(seal-13.8)+0.12,rOut=rIn+0.6,LOGO=rOut+0.9,LOGO_LAND=LOGO+0.45+0.18,LOGO_HOLD=2.3,DUR=+(LOGO_LAND+1.05+LOGO_HOLD+0.6).toFixed(4);   // v9: landing → glow (to +0.85) → genre line full at +1.05 → 2.3 s still → 0.6 s fade
 const line1=[128,452,430,80];
 shot(RES,LOGO,'final',lin(RES,13.8),[[RES,631,600,1.18],[rIn,631,600,1.18],[rOut,445,600,1.75]],{glow:[rOut,line1],burst:[rOut,0.7,line1]});
 // S9 the logo, still
@@ -179,9 +179,10 @@ async function logo(t){const st=await img(C.store);const u0=clamp((t-C.LOGO)/0.5
  // v8: 111 % → 100 % in 0.18 s, accelerating into the landing (so it lands, not floats), with a 10 px drop; then exactly still.
  // At 111 % the logo is 999 px wide, so it and its shadow stay inside the frame.
  if(t>=tl){const sc=1.11-0.11*ei,dy=-10*(1-ei);x.save();x.globalAlpha=clamp((t-tl)/0.06,0,1);x.translate(W/2,860+dy);x.scale(sc,sc);x.shadowColor='rgba(0,0,0,.8)';x.shadowBlur=40;x.drawImage(lg,-lw/2,-lh/2,lw,lh);x.restore();
-  const gl=t<tl+LD?0:1-clamp((t-tl-LD)/0.22,0,1);
+  // v9: the gold rim lights once after the landing like a shop sign coming on — up in 0.12 s, held to +0.5 s, eased off by +0.85 s
+  const e=t-(tl+LD),gl=e<0?0:e<0.12?e/0.12:e<0.5?1:1-ease(clamp((e-0.5)/0.35,0,1));
   if(gl>0){x.save();x.translate(W/2,860);x.globalAlpha=gl;x.shadowColor='rgba(255,190,80,1)';x.shadowBlur=34;for(let k=0;k<2;k++)x.drawImage(lg,-lw/2,-lh/2,lw,lh);x.restore();}}
- const ga=clamp((t-(tl+LD+0.17))/0.15,0,1);if(ga>0){
+ const ga=clamp((t-(tl+LD+0.85))/0.2,0,1);/* the genre line once the glow has had its moment */if(ga>0){
  x.save();x.globalAlpha=ga;x.font='400 64px MUL';x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=18;x.shadowOffsetY=4;
  x.lineWidth=12;x.strokeStyle='rgba(20,12,6,0.95)';x.strokeText('턴제 경영 로그라이트',W/2,860+lh/2+56);x.shadowColor='transparent';
  x.lineWidth=2.2;x.strokeStyle='#f1e3c2';x.strokeText('턴제 경영 로그라이트',W/2,860+lh/2+56);x.fillStyle='#f1e3c2';x.fillText('턴제 경영 로그라이트',W/2,860+lh/2+56);x.restore();}}
@@ -247,10 +248,10 @@ async function renderAudio(outWav){const {spawn}=require('node:child_process'),P
  // is the game's; the cues fire at their kept times (CUES). Added for the edit only: the footsteps before the first customer
  // (no game cue exists for them), the music held low under them, and the closing fade.
  const wav=path.join(dir,'mix.wav');await renderAudio(wav);
- const mp4=path.join(dir,'trailer-v8-1080x1920.mp4');
+ const mp4=path.join(dir,'trailer-v9-1080x1920.mp4');
  execFileSync(FF,['-hide_banner','-loglevel','error','-y','-framerate',String(FPS),'-i',path.join(out,'%05d.jpg'),'-i',wav,
   '-af',`volume=${AUDIO_GAIN}dB,alimiter=limit=0.89:level=false`,'-map','0:v','-map','1:a','-t',String(DUR),'-r',String(FPS),'-c:v','libx264','-profile:v','high','-preset','slow','-crf','17','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',mp4]);
- execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v8-540.mp4')]);
+ execFileSync(FF,['-hide_banner','-loglevel','error','-y','-i',mp4,'-vf','scale=540:960','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','copy',path.join(dir,'trailer-v9-540.mp4')]);
  fs.writeFileSync(path.join(dir,'edl.json'),JSON.stringify({beat:b,bar:B,songIn:SONG_IN,shots:S.map(s=>({t0:+s.t0.toFixed(3),t1:+s.t1.toFixed(3),take:s.take,src:s.srcFn})),cues:CUES,steps:STEPS},null,1));
  console.log('done',mp4);
 })().catch(e=>{console.error(e);process.exit(1);});
