@@ -3,13 +3,13 @@
 // seeds, between a Run that owns it from DAY 1 and the same Run without it.
 //   primary : Store Capital gained by the Run (Gross Sales x reached-Day rate, META)
 //   guards  : reached D30 rate, Boss clear rate
-// Policy 'balanced' / pricing 'adaptive' / build 'none' (no paid Store Support is bought, so the
+// Policy 'reader' / pricing 'adaptive' / build 'none' (no paid Store Support is bought, so the
 // measured relic is the only one besides the free D0 pick). The measured relic is removed from the
 // D0 window in BOTH arms, so both arms choose from the same D0 set.
 //   node tools/relic-contribution.cjs [seeds=300] [ids=all | a,b,a+b] [--set '{"bulk":{"discount":0.18}}'] [--out file]
 // --builds: instead, play each build strategy (and 'none') with the same seeds and report mean
 //   Store Capital gain, reached-D30, clear rate and relic spend per build.
-// --policy <name> (default balanced) · --account full : an account owning and wearing every Decoration
+// --policy <name> (default reader) · --account full : an account owning and wearing every Decoration
 // (one per slot) instead of Meta.fresh(). Workers: one child process per relic / build (os.cpus()).
 // --aware : the simulated player uses what it owns (simulation.js relic-aware layer); off by default.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
@@ -69,7 +69,7 @@ if(process.env.RELIC_WORKER){
  const seeds=Number(pos[0])||300,G0=load(),all=G0.DATA.relics.map(r=>r.id);
  const builds=args.includes('--builds');
  const ids=builds?['none','hybrid',...Object.keys(G0.DATA.buildNames)]:pos[1]&&pos[1]!=='all'?pos[1].split(','):all;
- const policy=flag('--policy')||'balanced',account=flag('--account')||'fresh',aware=args.includes('--aware');
+ const policy=flag('--policy')||'reader',account=flag('--account')||'fresh',aware=args.includes('--aware');
  const setArg=flag('--set'),overrides=setArg?JSON.parse(setArg.startsWith('@')?fs.readFileSync(setArg.slice(1),'utf8'):setArg):null,outFile=flag('--out');
  const stat=(b,t,k)=>{const d=b.map((x,i)=>t[i][k]-x[k]),n=d.length,m=d.reduce((a,v)=>a+v,0)/n,
   sd=Math.sqrt(d.reduce((a,v)=>a+(v-m)**2,0)/Math.max(1,n-1));

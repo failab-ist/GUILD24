@@ -1,6 +1,6 @@
 // Single-Decoration contribution — MEASUREMENT ONLY, dev tool, never part of npm test.
 // Same seeds; a fresh account wearing exactly one Decoration vs wearing none. Every Run is new.
-//   node tools/deco-single.cjs [seeds=1000] [--policy balanced] [--aware] [--set '{"memorialBook":{"deathLimitBonus":1}}'] [--sets a+b+c+d,...] [--out file]
+//   node tools/deco-single.cjs [seeds=1000] [--policy reader] [--aware] [--set '{"memorialBook":{"deathLimitBonus":1}}'] [--sets a+b+c+d,...] [--out file]
 // --sets: measure whole loadouts (ids joined with +) instead of one Decoration each.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
@@ -13,7 +13,7 @@ if(process.env.DECO_WORKER){
   process.send({id,reach:r.reach30,win:r.clearsPerRun,deaths:r.deathsMedian,deathFail:r.deathFailRate},()=>process.exit(0));});
 }else{
  const args=process.argv.slice(2),flag=k=>{const i=args.indexOf(k);return i>=0?args[i+1]:null;};
- const N=Number(args.find((a,i)=>/^\d+$/.test(a)&&!['--policy','--set','--out','--sets'].includes(args[i-1])))||1000,policy=flag('--policy')||'balanced',aware=args.includes('--aware');
+ const N=Number(args.find((a,i)=>/^\d+$/.test(a)&&!['--policy','--set','--out','--sets'].includes(args[i-1])))||1000,policy=flag('--policy')||'reader',aware=args.includes('--aware');
  const set=flag('--set')?JSON.parse(flag('--set')):null;
  const G0=load(),ids=['none',...(flag('--sets')?flag('--sets').split(','):G0.DATA.decorations.map(d=>d.id))],res={};let live=0;const q=ids.slice();
  const next=()=>{if(!q.length){if(!live)done();return;}const id=q.shift();live++;const c=fork(__filename,[],{env:{...process.env,DECO_WORKER:'1'}});

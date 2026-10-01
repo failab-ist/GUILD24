@@ -59,7 +59,7 @@ for(const rank of [0,2,4,6]){
  for(const on of [true,false]){
   const account=atRank(rank);
   const undo=on?()=>{}:globalThis.Debug.masterySpawnPatch();
-  let r;try{r=globalThis.Debug.simulate(seeds,'balanced',account,'adaptive','expedition');}finally{undo();}
+  let r;try{r=globalThis.Debug.simulate(seeds,'reader',account,'adaptive','expedition');}finally{undo();}
   const row={rank,mastery:on?'on':'off',reach:r.reachRate,clear:r.overallClearRate,deaths:r.averageDeaths,
    finalPower:r.final.resolved?r.final.power/r.final.resolved:0,
    finalMargin:r.final.resolved?r.final.margin/r.final.resolved:0,

@@ -18,9 +18,10 @@ const N=Number(process.env.N||200);
 
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 const ARMS=[
- {key:'balanced',        label:'engaged / balanced',   policy:'balanced',    pricing:'adaptive'},
+ {key:'reader',          label:'engaged / reader',     policy:'reader',      pricing:'adaptive'},
  {key:'spender',         label:'engaged / spender',    policy:'spender',     pricing:'adaptive'},
  {key:'skilled',         label:'engaged / skilled',    policy:'skilled',     pricing:'adaptive'},
+ /* `reader` sells by its own read and ignores the pricing argument, so the overcharge-heavy arm keeps a policy that follows it */
  {key:'overcharge',      label:'overcharge-heavy',     policy:'balanced',    pricing:'overcharge'},
  {key:'meta-farm',       label:'meta-farm / 반복 단축', policy:'meta-farm',   pricing:'adaptive'},
  {key:'zero-supply',     label:'zero-sale / 무활동',    policy:'zero-supply', pricing:'adaptive'},
@@ -48,7 +49,8 @@ for(const r of rows)
   +(100*r.zeroShare).toFixed(0).padStart(6)+'%'+(100*r.reach30).toFixed(1).padStart(6)+'%');
 
 const by=k=>rows.find(r=>r.key===k);
-const engaged=[by('balanced'),by('spender'),by('skilled')];
+/* engaged play is `reader`'s (User 2026-10-01, v2.9.13: everything is read with the main bot); spender / skilled stay as rows */
+const engaged=[by('reader')];
 const bestEngagedRun=Math.max(...engaged.map(r=>r.gain));
 const worstEngagedRun=Math.min(...engaged.map(r=>r.gain));
 const bestEngagedAction=Math.max(...engaged.map(r=>r.perAction));

@@ -2,7 +2,7 @@
 // One account plays Runs in a row (Debug.trajectory: real settlement, real Meta.buyDecoration).
 // Each purchase order is measurement INPUT. Reports, at Run 1 / 5 / 10 / 15: D30 reach, Boss
 // clear, Decorations owned at start, and the acquisition ladder.
-//   node tools/deco-trajectory.cjs [trajectories=200] [runs=15] [--policy balanced] [--build hybrid] [--aware] [--out file]
+//   node tools/deco-trajectory.cjs [trajectories=200] [runs=15] [--policy reader] [--build hybrid] [--aware] [--out file]
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 const ORDERS={
@@ -24,7 +24,7 @@ if(process.env.DECO_WORKER){
 }else{
  const args=process.argv.slice(2),flag=k=>{const i=args.indexOf(k);return i>=0?args[i+1]:null;};
  const pos=args.filter((a,i)=>!a.startsWith('--')&&!(i>0&&['--policy','--build','--out','--orders'].includes(args[i-1])));
- const T=Number(pos[0])||200,R=Number(pos[1])||15,policy=flag('--policy')||'balanced',build=flag('--build')||'hybrid',aware=args.includes('--aware');
+ const T=Number(pos[0])||200,R=Number(pos[1])||15,policy=flag('--policy')||'reader',build=flag('--build')||'hybrid',aware=args.includes('--aware');
  const PARTS=Math.max(1,Math.floor(os.cpus().length/Object.keys(ORDERS).length))||1,per=Math.ceil(T/PARTS);
  const only=flag('--orders')?flag('--orders').split(','):Object.keys(ORDERS);
  const jobs=[];for(const name of only)for(let p=0;p<PARTS;p++)jobs.push({name,part:p,T:per});

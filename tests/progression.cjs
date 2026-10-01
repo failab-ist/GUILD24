@@ -126,10 +126,9 @@ const out={version:2,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',seedsPerTier:seed
 console.log('== arm:',ARM,'==');
 
 /* Two play qualities, because the targets are written against the first of them. `beginner` is
-   the first-run-like policy the Fresh D30 target is read from; `balanced` is the human-type seller
-   (User 2026-09-25, modelled on the User's own play), an analysis axis rather than a target. Both
-   are heuristics, not people. */
-const POLICIES=[['beginner','배우는 중'],['balanced','숙련'],['spender','숙련+지출']];
+   the first-run-like policy the Fresh D30 target is read from; `reader` is the main bot every progression and balance
+   reading is taken with (User 2026-10-01, v2.9.13; it replaced `balanced` here). Both are heuristics, not people. */
+const POLICIES=[['beginner','배우는 중'],['reader','숙련'],['spender','숙련+지출']];
 console.log('tier'.padEnd(20),'정책      장식 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
 for(const [policy,policyLabel] of POLICIES)
 for(const t of TIERS){
@@ -166,7 +165,7 @@ for(const t of TIERS){
 
 /* 도적 / 광전사 against the base four, at Mastery 0 so the Job is the only difference. */
 console.log('\n=== §A-1 forced-unlock Job comparison (Mastery 0, simulation only) ===');
-const forced=withCandidate(()=>withAllJobs(()=>globalThis.Debug.simulate(seeds,'balanced',globalThis.Meta.fresh(),'adaptive','hybrid')));
+const forced=withCandidate(()=>withAllJobs(()=>globalThis.Debug.simulate(seeds,'reader',globalThis.Meta.fresh(),'adaptive','hybrid')));
 out.forcedUnlock={familyJob:forced.familyJob,bossJob:forced.bossJob,jobs:forced.jobs,
  reach30:forced.reach30,clear:forced.overallClearRate};
 const KO={warrior:'전사',archer:'궁수',mage:'마법사',priest:'사제',rogue:'도적',berserker:'광전사'};
