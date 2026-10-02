@@ -31,6 +31,9 @@ function lowTrafficOdds(days,x){let dist=new Map([[0,1]]);
  for(let i=0;i<days;i++){const nx=new Map();for(const [v,p] of dist)for(let c=3;c<=6;c++)nx.set(v+c,(nx.get(v+c)||0)+p/4);dist=nx;}
  let p=0;for(const [v,q] of dist)if(v<=x)p+=q;return p;}
 
+// The lowest Level a newcomer can arrive at that Day (adventurer.js spawnLevel: randomInt(1,3) + floor((Day-1)/4)) - a
+// reference line for how far a returning adventurer has fallen behind, not a rule.
+const newcomerMin=day=>1+Math.floor((day-1)/4);
 function departLevel(rec){const m=(rec.changes||[]).map(c=>/^Lv\.(\d+) → Lv\.(\d+)$/.exec(c)).find(Boolean);return m?+m[1]:rec.level;}
 
 // The game's own Morning weighting (shop.js visitor draw), drawn many times without replacement on a fixed seed.
@@ -81,19 +84,19 @@ function report(save){
 
  L.push('## 4. 원정 기록 (준비 대 게이트)','');
  L.push('준비/요구 = 출발 시 준비 전력 ÷ 게이트 요구 전력. `승리 불가`는 최고 흔들림('+(1+W).toFixed(3)+'배)으로도 못 미치는 원정이다.','');
- head(['DAY','손님','출발 Lv','최저선','게이트','상품','결과','준비/요구','전투 승률','판정']);
+ head(['DAY','손님','출발 Lv','신규 최저 Lv','게이트','상품','결과','준비/요구','전투 승률','판정']);
  let impossible=0,belowFloor=0;
- for(const r of recs){const ratio=1+(r.greatMargin??0),odds=winOdds(ratio),lv=departLevel(r),fl=G.Dungeon.levelFloor(r.day);
+ for(const r of recs){const ratio=1+(r.greatMargin??0),odds=winOdds(ratio),lv=departLevel(r),fl=newcomerMin(r.day);
   const tag=ratio*(1+W)<1?'승리 불가':ratio*(1-W)>=1?'확정 승리':'';if(tag==='승리 불가')impossible++;if(lv<fl)belowFloor++;
   row([r.day,r.name,lv,lv<fl?fl+' ▲':fl,r.dungeonName+(r.deep?' (심층)':''),(r.items||[]).map(item).join(' + ')||'-',r.outcome,ratio.toFixed(2),pct(odds),tag]);}
- L.push('','승리 불가 원정 **'+impossible+'회** / '+recs.length+'회 · 최저선 아래로 출발 **'+belowFloor+'회** (▲: 레벨 최저선 보정 대상).','');
+ L.push('','승리 불가 원정 **'+impossible+'회** / '+recs.length+'회 · 신규 손님 최저 레벨보다 낮게 출발 **'+belowFloor+'회** (▲).','');
 
  L.push('## 5. 손님 상태 · 성장 · 방문','');
- const floorNow=G.Dungeon.levelFloor(s.day),k2=Math.max(1,Math.round(s.expectedVisitors||4.5)),odds=visitOdds(s,k2);
+ const floorNow=newcomerMin(s.day),k2=Math.max(1,Math.round(s.expectedVisitors||4.5)),odds=visitOdds(s,k2);
  const alive=npcs.filter(n=>n.alive&&n.introduced),lv=alive.map(n=>n.level);
- L.push('오늘(DAY '+s.day+') 레벨 최저선 **Lv'+floorNow+'** (그날 새 손님이 올 수 있는 가장 낮은 레벨). 소개된 생존 손님 레벨: 최저 '+Math.min(...lv)+' · 하위 25% '+quant(lv,.25)?.toFixed(1)+' · 중앙 '+quant(lv,.5)?.toFixed(1)+' · 최고 '+Math.max(...lv)+'.');
+ L.push('오늘(DAY '+s.day+') 신규 손님 최저 레벨 **Lv'+floorNow+'** (그날 새 손님이 올 수 있는 가장 낮은 레벨, 참고선). 소개된 생존 손님 레벨: 최저 '+Math.min(...lv)+' · 하위 25% '+quant(lv,.25)?.toFixed(1)+' · 중앙 '+quant(lv,.5)?.toFixed(1)+' · 최고 '+Math.max(...lv)+'.');
  L.push('방문 확률은 오늘 손님 '+k2+'명을 뽑는다고 보고 게임의 가중치(단골도·특성·점포지원)로 4000번 뽑은 값이다.','');
- head(['손님','직업','희귀도','Lv','최저선 대비','단골도','지갑','방문일','최대 공백','상태','오늘 방문 확률']);
+ head(['손님','직업','희귀도','Lv','신규 최저 대비','단골도','지갑','방문일','최대 공백','상태','오늘 방문 확률']);
  for(const n of npcs.filter(x=>x.introduced)){const dd=[...new Set((n.records||[]).map(r=>r.day))].sort((a,b)=>a-b);
   const gaps=dd.slice(1).map((d,i)=>d-dd[i]),gap=Math.max(0,...gaps,n.alive&&dd.length?s.day-dd.at(-1):0);
   const st=!n.alive?'사망':n.recovery?'회복 '+n.recovery+'일':n.injury===2?'중상':n.injury===1?'부상':'건강';

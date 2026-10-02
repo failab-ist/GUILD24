@@ -510,10 +510,6 @@ function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutco
 /* `run`, when given, threads COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE recent-repeat tracking
    into the Night line below - see data/copy.js. Omitting it (every direct call in this repo's
    own tests) keeps the plain deterministic pick this function always returned. */
-function levelFloor(day){return 1+Math.floor((day-1)*.25);}
-function levelFloorBonus(n,xp,day){const floor=levelFloor(day);if(!n.alive||xp<=0||n.level>=floor)return 0;
- let toFloor=18+n.level*7-(n.xp||0);for(let k=n.level+1;k<floor;k++)toFloor+=18+k*7;
- return Math.max(0,Math.min(Math.round(xp*D.balance.levelFloorBonus),toFloor));}
 function resolve(n,d,r,facilities=[],run,assist=0){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
  /* RESULT-PROOF DEPARTURE SNAPSHOT. This is the ONLY state prepare() actually reads off `n`
@@ -703,10 +699,6 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
- /* DUNGEON_HAZARD §LEVEL FLOOR CATCH-UP (User 2026-10-02): an adventurer below the Day's floor - the lowest Level a newcomer
-    can arrive at that Day, 1 + floor((Day-1)/4) - gets half again this expedition's EXP, never past what reaches the floor.
-    Only an expedition from this store moves it, so staying away never pays; above the floor nothing changes. No RNG draw. */
- const floorBonus=levelFloorBonus(n,xp,d.day||1);xp+=floorBonus;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward (User 2026-09-25, v2.9.0): keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
@@ -740,5 +732,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,levelFloor,levelFloorBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

@@ -717,17 +717,6 @@ test('an adventurer who could have come banks Away Days, at most 3, paid on the 
  B.money.forEach((m,i)=>assert.ok(m>=A.money[i],'a banked visitor brings at least as much'));
 });
 
-/* DUNGEON_HAZARD §LEVEL FLOOR CATCH-UP (User 2026-10-02) */
-test('an adventurer below the Day\'s newcomer floor gets half again its EXP, never past the floor; at the floor nothing',()=>{
- assert.deepEqual([1,4,5,9,13,17,21,25,29].map(Dungeon.levelFloor),[1,1,2,3,4,5,6,7,8],'1 + floor((Day-1)/4), the lowest newcomer Level');
- const n={alive:true,level:2,xp:0};
- assert.equal(Dungeon.levelFloorBonus(n,40,13),20,'Lv2 on DAY 13 (floor 4): +50%, well short of the floor');
- assert.equal(Dungeon.levelFloorBonus({alive:true,level:3,xp:30},40,13),9,'Lv3 needing 9 more EXP: the bonus stops at the floor');
- assert.equal(Dungeon.levelFloorBonus({alive:true,level:4,xp:0},40,13),0,'at the floor: nothing');
- assert.equal(Dungeon.levelFloorBonus({alive:false,level:1,xp:0},40,13),0,'the dead: nothing');
- assert.equal(Dungeon.levelFloorBonus({alive:true,level:1,xp:0},0,13),0,'no expedition EXP: nothing');
-});
-
 /* RELIC §24 (User 2026-10-02): a save holding the old 원정 전문 인증 id loads as 원정 작전실 */
 test('a save holding expeditionCert loads with opsRoom in its place',()=>{
  const g=fresh('ops-alias');g.run.facilities=['opsRoom'];g.run.dayFacilities=['opsRoom'];

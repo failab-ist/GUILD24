@@ -78,10 +78,9 @@ and this table is their commit record.
   the Bag, Stat-route shares included, so there is nothing to add up; the fight never previews. Numbers are gold, green only at
   or past the need. Coach §3-4 says it. UI_UX §SALE — ENVIRONMENT METER / §UNCOMMITTED PREVIEW, SALE (the one preview
   exception), COPY_AUDIT §3-4 / §4-2; test ui-guard.
-- **Level floor catch-up** (User: 손님 성장 가속은 과하지 않게, 최저선 레벨 정도만): an adventurer below the lowest Level a
-  newcomer can arrive at that Day (`1 + floor((Day-1)/4)`) gets half again an expedition's EXP, never past what reaches that
-  floor; at or above it nothing changes, and only an expedition from the store moves it. Unmeasured. DUNGEON_HAZARD §LEVEL
-  FLOOR CATCH-UP; test revision.
+- **Level floor catch-up - tried and dropped** (User: 레벨 최저 빼자): +50% EXP up to the lowest newcomer Level of the Day was
+  added in this patch, measured (reader, 300 paired Runs: ~5% of expeditions below the floor, success / Level / D30 / clear
+  within noise of off) and removed. No rule remains.
 - **원정 전문 인증 -> 원정 작전실** (User: 이름과 효과 다 갈아엎자 · 원정 전투력이 아니라 투력으로, 효과는 비슷하게): the keystone
   (Expedition, 290G) no longer multiplies Counters or pays next-visit Gold. For each Hazard of the adventurer's Gate the
   overshoot past its Threat (capped 0.5) is averaged over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left short
