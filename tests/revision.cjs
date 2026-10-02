@@ -650,9 +650,12 @@ test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted
  assert.deepEqual(r1.acted,['injured','fatigue','counter'],'injured, fatigue, counter - in coach order');
  assert.deepEqual(notebook(),['learn-injured','learn-fatigue','learn-counter'],'each kept in the notebook with its line');
  assert.equal(acc.discoveries.find(x=>x.id==='learn-injured').text,T('injured'));
- const r2=rep({outcome:'중상',fatigueBeforeExpedition:15});M.observe(acc,r2);
+ const r2=rep({outcome:'부상',fatigueBeforeExpedition:15});M.observe(acc,r2);
  assert.deepEqual(r2.acted,['injured','fatigue'],'a later record still carries its class (the coach seen-state keeps the mark to once)');
  assert.equal(notebook().length,3,'and the notebook does not repeat');
+ /* User 2026-10-02: a Severe Injury is its own rule - it rests, then comes back healthy - and never reads the Injury line */
+ const rs=rep({outcome:'중상'});M.observe(acc,rs);assert.deepEqual(rs.acted,['severe'],'중상 carries the Severe Injury rule, not the Injury one');
+ assert.equal(acc.discoveries.find(x=>x.id==='learn-severe').text,T('severe'));assert.equal(notebook().length,4);
  /* User 2026-10-01: the injury rule is taught on the first record that came back hurt, never on a healthy return that only departed injured */
  {const hx=rep({departedInjured:true,outcome:'성공'});M.observe(acc,hx);assert.ok(!hx.acted.includes('injured'),'a healthy return does not carry the injury rule');}
  const r3=rep({outcome:'대성공',storeBonus:0});M.observe(acc,r3);assert.deepEqual(r3.acted,[],'a 대성공 without the store bonus (Deep) proves nothing about it');
