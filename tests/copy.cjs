@@ -78,7 +78,6 @@ const COMPOSED={
  '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
- '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
  '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
  '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
  '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};

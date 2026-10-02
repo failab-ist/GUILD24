@@ -180,7 +180,12 @@ function heroLine(r){
  const hp=r.heroProof?.outcome;if(!hp)return null;
  const said=hp.worse==='사망'?'살아 돌아왔다':hp.worse==='중상'?'중상을 피했다':
   hp.worse==='부상'?'부상을 피했다':hp.worse==='퇴각'?'원정을 성공했다':'대성공했다';
- const who=!hp.items?'챙긴 보급':hp.items.map(id=>D.itemBy[id].name).join('·');
+ /* User 2026-10-02: the Bag is two slots, so a whole-Bag proof (items:null - no single removal worsens it, removing both does)
+    means each Item alone was enough. Both are named - `{A}·{B} 덕분에`, the same Item twice `{A} 2개 덕분에` - never the
+    vague `챙긴 보급`. The departure Bag is the record's own `items`. */
+ const named=ids=>{const c=new Map();for(const id of ids)c.set(id,(c.get(id)||0)+1);
+  return [...c].map(([id,k])=>D.itemBy[id].name+(k>1?' '+k+'개':'')).join('·');};
+ const who=hp.items?hp.items.map(id=>D.itemBy[id].name).join('·'):(r.items||[]).length?named(r.items):'챙긴 보급';
  return who+' 덕분에 '+said+'.';
 }
 /* WHAT CHANGED — only what actually moved. A change the resolution wrote as a sentence

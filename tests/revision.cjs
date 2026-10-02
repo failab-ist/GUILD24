@@ -694,4 +694,13 @@ test('the Counter guarantee comes on the third sheet in a row without one, Rerol
  g.reroll();assert.ok(!has());assert.equal(s.pity.counter,1,'rerolling the guaranteed sheet away starts a new count');
  g.rollOffer=roll;});
 
+/* User 2026-10-02: a whole-Bag proof (each Item alone was enough) names both Items, never 챙긴 보급 */
+test('a whole-Bag Hero proof names both Items, or the one Item twice',()=>{
+ const r=o=>({outcome:'부상',heroProof:{outcome:{items:null,worse:'사망'}},...o});
+ assert.equal(Presentation.heroLine(r({items:['ramen','hood']})),'컵라면·방한 두건 덕분에 살아 돌아왔다.');
+ assert.equal(Presentation.heroLine(r({items:['ramen','ramen']})),'컵라면 2개 덕분에 살아 돌아왔다.');
+ assert.equal(Presentation.heroLine({outcome:'성공',items:['ramen','hood'],heroProof:{outcome:{items:['ramen'],worse:'퇴각'}}}),'컵라면 덕분에 원정을 성공했다.','a single proven Item is named alone, as before');
+ assert.ok(!/챙긴 보급 덕분에/.test(Presentation.heroLine(r({items:['ramen','hood']}))));
+});
+
 console.log(checks+' revision groups passed');

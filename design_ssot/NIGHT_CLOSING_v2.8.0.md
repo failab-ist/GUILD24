@@ -139,8 +139,10 @@ Preferred short grammar:
 Two necessary Items:
     {Item A}·{Item B} 덕분에 부상을 피했다.
 
-Only the combination is provable:
-    챙긴 보급 덕분에 부상을 피했다.
+Each of the two Items would have been enough alone (no single removal changes the result, removing both does - the Bag is
+two slots, so this is what a whole-Bag proof means; User 2026-10-02): both are named, never `챙긴 보급`:
+    {Item A}·{Item B} 덕분에 부상을 피했다.
+    {Item} 2개 덕분에 부상을 피했다.        (the same Item twice)
 
 Do not use vague Hero claims such as `부식 위험 감소` / `환경을 철저한 준비로 극복했다`.
 A hidden risk decrease without a proven resolved difference is not Hero feedback.

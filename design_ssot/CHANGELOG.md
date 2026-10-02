@@ -66,6 +66,9 @@ and this table is their commit record.
   §3-4: `전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을
   막는다.` Help §4-2 rewritten. Measurement bots keep reading `outlookFor`'s words (unchanged). UI_UX §SALE — ENVIRONMENT
   METER (new), §PRE-SUPPLY OUTLOOK, §GATE VS ITEM, §FORECAST PIN, UI-Q85; COPY_AUDIT §3-4, §4-2; tests ui-guard.
+- **No more `챙긴 보급 덕분에`** (User: 두 개 다 적용했다는 소리냐): with a two-slot Bag a whole-Bag proof means each Item alone
+  was enough, so both are named - `컵라면·방한 두건 덕분에 살아 돌아왔다.`, the same Item twice `컵라면 2개 덕분에 …`. NIGHT_CLOSING
+  §HERO ITEM FEEDBACK, COPY_AUDIT §6-5; tests revision, copy.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
