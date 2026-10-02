@@ -322,7 +322,8 @@ Never show exact expedition Success %, the hidden readiness thresholds (0.75 / 0
 Success % (`대응 {N} 필요` and `{능력치} {n}당 대응 1 제공` are public Gate facts, §HAZARD NUDGE). The % follows
 `DUNGEON_HAZARD_v2.8.0.md`: the chance an ordinary failed expedition escalates to Death, not unconditional Death odds.
 
-After a purchase commits in the visit, all three stay the snapshot — never `접전 -> 우세`, `불안 -> 충분`, `12% -> 5%`. The
+After a purchase commits in the visit, the Combat Forecast and the death % stay the snapshot — never `접전 -> 우세`, `12% -> 5%`;
+환경 대응 is the live meter instead (§SALE — ENVIRONMENT METER, User 2026-10-02). The
 runtime preparation **does** change (Resolve uses the final Items / Fatigue / Condition); feedback shows exact actual changes
 and sources (Item Stat / Counter / 피로 회복 N, proven Fatigue band change, an owned Trait / Relic / Boss effect), so the choice
 is not graded before the remaining-slot decision.
@@ -338,6 +339,17 @@ Header:
 The 전투 전망 `?` help is two lines, the second `실패 시 사망 위험 {N}%`; no `실패 시 사망 위험` readout cell. Copy ->
 `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1.
 
+### SALE — ENVIRONMENT METER (User 2026-10-02)
+
+The readout's 환경 대응 cell is a number, not a word: per Hazard of the customer's (claimed) Gate, `{위험} {N}/{필요}` - N the
+Counter the expedition is judged on (Dungeon.prepare: the customer's own Stat share and Traits, Store Supports, plus the
+committed Bag's Counters; whole, never below 0), 필요 the Gate's public `대응 {N} 필요`. It moves when a sale commits (a selected,
+unsold Item moves only the tray). It sits in a lit display window (the till's green LED, a display role) so it reads apart
+from the stamped `전투 전망` word beside it, which stays the SALE-entry snapshot with its death % help. No readiness word, no
+colour by state, no breakdown of the number. The phone forecast pin carries the same meter. The tray's Hazard Counter row is
+the Item's own share, `{위험} 대응 +N`. Help and coach copy -> COPY_AUDIT §4-2, §3-4. The four readiness words stay the
+resolver's and the measurement bots' vocabulary (outlookFor) and are not drawn on SALE.
+
 ### SALE — GATE VS ITEM INFORMATION
 
 ```text
@@ -346,7 +358,8 @@ Item: Core Stat +N / Hazard Counter +N / 피로 회복 N / explicit penalty
 ```
 
 Every Hazard row, the SALE destination plate included, states the Gate facts
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need; readiness stays the four words.
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need. This customer's own
+number is the readout's 환경 대응 meter (§SALE — ENVIRONMENT METER, User 2026-10-02), not the plate.
 
 ### SALE — DECISION-ONLY ITEM DETAIL
 
@@ -407,8 +420,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 ### SALE — FORECAST PIN
 
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
-repeats `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` (on a two-Hazard Gate, each Hazard's own state as the
-readout reads it) — the same frozen values and colours, never a second
+repeats `전투 전망 {우세|접전|불리}` (the frozen value) and the 환경 대응 meter `{위험} {N}/{필요}` per Hazard, live as the readout
+reads it (§SALE — ENVIRONMENT METER) — the same values, never a second
 source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
@@ -2153,7 +2166,9 @@ Desktop: hover/focus works and click stays usable. Mobile: tap toggles. All: no 
 outside/Escape closes; no gameplay pause/background lock; viewport placement stays readable.
 
 #### UI-Q85 — ITEM VS GATE INFORMATION BOUNDARY
-PASS: Item shows exact Stat/Counter/`피로 회복 N`; Gate shows qualitative readiness; exact Gate Counter threshold stays hidden.
+PASS: Item shows exact Stat/Counter/`피로 회복 N` (the tray's Counter row as the Item's own `+N`); the Gate states its public
+`대응 {N} 필요`; the readout's 환경 대응 meter shows this customer's committed number against it (User 2026-10-02); the hidden
+readiness thresholds (0.75 / 0.40) are never shown.
 
 #### UI-Q83 — DANGER DETAIL DOES NOT GIVE ANSWER
 PASS: detail may show Hazard, pressured Stat, readiness meaning.

@@ -58,6 +58,14 @@ and this table is their commit record.
   원정 도시락 코너 +2 are unchanged. Copy `판매한 상품의 위험 대응 수치 +40%.` (`원정 위험 게시판`'s offer weight already read every
   category's Counter and the Hazard's Stat items.) Unmeasured (no simulation run). RELIC §8 / REL-Q77 / REL-Q21, COPY_AUDIT
   §11-8; tests relic-order, copy.
+- **환경 대응 is a number on SALE** (User: 정답 맞히기 없이 계산 가능한 값은 보여 주자, 전투 전망과 다른 영역처럼): the readout's
+  환경 대응 cell is now a lit display window per Hazard, `공포 6/23` - the resolver's own defense off the committed Bag (the
+  customer's Stat share and Traits, Store Supports, the sold Items' Counters) over the Gate's public need - and it moves when a
+  sale commits; the readiness word and its colour are gone from SALE. `전투 전망` stays the stamped SALE-entry snapshot. The
+  phone pin carries the same meter; the tray's Counter row reads the Item's own `공포 대응 +10` (it read `0 → 10`). Coach
+  §3-4: `전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을
+  막는다.` Help §4-2 rewritten. Measurement bots keep reading `outlookFor`'s words (unchanged). UI_UX §SALE — ENVIRONMENT
+  METER (new), §PRE-SUPPLY OUTLOOK, §GATE VS ITEM, §FORECAST PIN, UI-Q85; COPY_AUDIT §3-4, §4-2; tests ui-guard.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

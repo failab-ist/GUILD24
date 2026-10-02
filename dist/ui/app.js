@@ -873,8 +873,10 @@ function readout(n,extra=null,cls=''){
      here because it is judged against an Item, beside the other two readings a product is
      bought to move. No new label and no new calculation. From a two-Hazard Gate it reads each Hazard's own state
      instead (envReading, v2.9.13). */
-  +(o.worst?'<span class="fore'+(o.hazards.length>1?' env-each':'')+'">환경 대응'+envReading(o)
-   +tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')+'</span>':'')
+  /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): 환경 대응 is now the number itself, live with the committed Bag - a
+     display window of its own beside the stamped 전투 전망, so a cell that moves never reads like the one that does not */
+  +(p.hazards.length?'<span class="fore env-each env-meter">환경 대응'+envMeter(p,d)
+   +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>':'')
   +'</div>'
  /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
     reads here - one thin line, only for an injured departure with a chain behind it (the first adds nothing), the NPC detail
@@ -1307,7 +1309,7 @@ const coachSteps={
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .top','이 전망은 손님이 들어올 때 정해져서 끝까지 그대로다. 상품을 고르면 능력치·피로 회복 같은 효과가 계산대에 보이지만, 전망은 바뀌지 않는다.'],
+ ['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
@@ -1747,6 +1749,12 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    environment, so one worst label hid which side is open. 환경 대응 then names each Hazard with its own state - the same
    frozen `outlook.hazards` rows, the same four labels and colours; still no number, threshold or Item pointer. A one-Hazard
    Gate reads the single label as before. */
+/* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): per Hazard of the customer's Gate, the Counter the expedition is judged
+   on - the customer's own Stat share and Traits plus the committed Bag's Counters (Dungeon.prepare, the resolver's own
+   number) - over the Gate's public need (`대응 N 필요`). Whole numbers, never below 0; no word, no colour by state, no
+   breakdown. It moves when a sale commits; a selected, unsold Item moves only the tray. */
+function envMeter(p,d){return '<span class="env-list env-meter-list">'+p.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'
+ +'<b class="env-num">'+Math.max(0,Math.floor(h.defense+1e-9))+'<small>/'+Presentation.hazardNeed(h.key,d)+'</small></b></span>').join('')+'</span>';}
 function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes(l)?'lack':'ok')+'">'+E(l)+'</b>';
  return o.hazards.length>1?'<span class="env-list">'+o.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'+b(h.label)+'</span>').join('')+'</span>':b(o.worst);}
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
@@ -1755,9 +1763,10 @@ function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes
    source. One tap folds it to a `전망` chip and back. The anchor has no height: it reserves nothing in the layout.
    v2.9.9 quick patch (User 2026-09-28): the readout's strain line rides along under the two readings - the same condition,
    words and number (an injured departure with a chain behind it); the folded chip stays `전망`. */
-function forecastPin(n){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0;
+function forecastPin(n){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0,
+ d=game.claimedGateFor(n),p=Dungeon.prepare({...n,traits:Presentation.traits(n),pack:n.pack},d,game.run.facilities);
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
-  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(o.worst?'<span class="pin-fore'+(o.hazards.length>1?' env-each':'')+'">환경 대응'+envReading(o)+'</span>':'')
+  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore env-each env-meter">환경 대응'+envMeter(p,d)+'</span>':'')
   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
@@ -1773,8 +1782,11 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  /* User 2026-09-25: the Item's own effects only (the retired `피로 A → 출발 B` line is not back). */
+ /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): a Hazard Counter row is this Item's own share, `공포 대응 +10` - the
+    total it adds to lives in the 환경 대응 meter, so the tray no longer shows a running count starting from 0 */
  const parts=moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'
-  +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
+  +E(r.label)+' '+(r.key in D.hazards?(r.after-r.before>=0?'+':'')+Math.round(r.after-r.before)
+   :Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after))+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life=lastSaleDay(st.expires-s.day);
  return '<div class="counter-tray'+(trayFolded?' folded':'')+'" role="region" aria-label="계산대">'
