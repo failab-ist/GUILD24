@@ -41,6 +41,10 @@ and this table is their commit record.
 - **The Fatigue mark lights the Fatigue row** (User: 피로 코치가 부상 쪽에 포커스): every NIGHT discovery mark lit the record's
   Outcome block (`원정을 끝내지 못하고 다친 채 …`), the Fatigue one included. The Fatigue mark now lights the record's `귀환 후 피로`
   row; the others are unchanged. NIGHT_CLOSING §DISCOVERY LINE; test ui-guard.
+- **No empty stretch under the 발주서 with the 창고 sheet open** (User: 발주 밑에 이렇게 많이 남는다): an open phone sheet left
+  room under the form for the most the sheet may take (45% of the screen, ~410px at 390) since v2.9.13 quick patch made it as
+  tall as the stock needs, so a one-row sheet left ~300px of bare wall. The room is now the sheet's own height (measured as it
+  opens, grows or closes). UI_UX §ORDER — WAREHOUSE PANEL.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

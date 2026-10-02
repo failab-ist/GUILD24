@@ -131,7 +131,8 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
 beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item. The desk rack shows every
 store slot, the empty ones as empty cells; the phone sheet draws only held units, so it takes as many rows as the stock needs
-(one while it fits) and the room left reads in the header's `N / M칸`. Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
+(one while it fits) and the room left reads in the header's `N / M칸`; while it is open the 발주서 scrolls up above it by the
+sheet's own height, no more (User 2026-10-02: a fixed 45% left an empty stretch under a one-row sheet). Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
 hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's ladder); no new copy.
 - Cell tip (User 2026-10-02): a held cell is a tip - a tap opens it and a second tap closes it (another cell or a tap elsewhere
   switches or closes it); on desk a hover opens it, and keyboard focus too. It shows the offer row's own lines - name,

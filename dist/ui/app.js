@@ -452,7 +452,7 @@ let cue=null,handoff=null;
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
-let pinFolded=false,pinWatch=null,orderWatch=null,railShown='';
+let pinFolded=false,pinWatch=null,orderWatch=null,sheetWatch=null,railShown='';
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
@@ -678,8 +678,14 @@ function openOwedModal(s,phase,changed){
 }
 function syncWatchers(phase){
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';}
+ if(phase==='order'){watchOrderToday();watchStockSheet();}else{orderWatch?.disconnect();orderWatch=null;railShown='';sheetWatch?.disconnect();sheetWatch=null;}
 }
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-10-02): the rows under an open phone sheet scroll up above it, and the room left
+   under the 발주서 is the sheet's own height - it takes only the rows the stock needs - not the 45% it may reach at most,
+   which left an empty stretch under a short sheet. The sheet reports its height as it opens, grows or closes. */
+function watchStockSheet(){sheetWatch?.disconnect();sheetWatch=null;
+ const sh=$('#stock-sheet'),host=$('.p-order');if(!sh||!host||typeof ResizeObserver!=='function')return;
+ sheetWatch=new ResizeObserver(()=>host.style.setProperty('--sheet-h',Math.ceil(sh.getBoundingClientRect().height)+'px'));sheetWatch.observe(sh);}
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
 // Every named Hazard carries its canonical pressure inline — burned into the notice,

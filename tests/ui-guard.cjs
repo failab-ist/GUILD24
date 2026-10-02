@@ -1869,7 +1869,10 @@ test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only
  assert.ok(/\.death-limit-row \.rail-today,\.death-limit-row \.rail-gold\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today,\.board-rail\.show-gold \.rail-gold\{display:grid\}/.test(css)&&/\.rail-gold\.short b\{color:/.test(css),'hidden by default, set apart by a rule, short reads as short');
  // one type ladder (User 2026-09-29): every label in one column and style, every value in one face and size
  assert.ok(/\.death-limit-row \.rail-line\{display:grid;grid-template-columns:44px 1fr/.test(css)&&/\.death-limit-row \.rail-line i\{[^}]*font:600 11px/.test(css)&&/\.death-limit-row \.rail-line b\{[^}]*font:500 13px/.test(css),'one label column, one value size');
- assert.ok(/if\(phase==='order'\)watchOrderToday\(\)/.test(app),'watched on ORDER only');
+ assert.ok(/if\(phase==='order'\)\{watchOrderToday\(\);watchStockSheet\(\);\}/.test(app),'watched on ORDER only');
+ /* User 2026-10-02: the room under the 발주서 is the open sheet's own height, not the 45% it may reach */
+ assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(var\(--sheet-h,45dvh\) \+ 30px\)\}/.test(css)
+  &&/host\.style\.setProperty\('--sheet-h'/.test(fn('watchStockSheet')),'the sheet reports its own height as the room under the form');
 });
 
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): scrolling the shelf or tapping elsewhere folds the tray to its header */
@@ -3786,7 +3789,7 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  assert.ok(/\.p-order \.dock \.stock-handle\{display:flex;flex:1 0 100%;order:-1;/.test(css),'the handle is always a row of the dock, so it covers no offer row');
  assert.ok(/\.stock-sheet\{position:absolute;left:0;right:0;bottom:100%;[^}]*max-height:45dvh;overflow-y:auto/.test(css),'the sheet rises from the dock, 45% at most, its own scroll');
  assert.ok(!/\.stock-sheet[^{]*\{[^}]*(backdrop|inert|pointer-events:none)/.test(css)&&!/stock-sheet[^\n]*inert/.test(app),'no dimming or lock over the form');
- assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(45dvh \+ 30px\)\}/.test(css),'the rows under the sheet can be scrolled above it');
+ assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(var\(--sheet-h,45dvh\) \+ 30px\)\}/.test(css),'the rows under the sheet can be scrolled above it, by the sheet\'s own height (User 2026-10-02)');
  // a steel rack: not the floating box's brown (#4a3018), not the 발주서's paper
  const rk=/\.p-order\{--rack:(#[0-9a-f]{6});/.exec(css);assert.ok(rk&&!['#4a3018','#efe7d2','#e6ddc6'].includes(rk[1]),'its own material');
  assert.ok((css.match(/background:var\(--tex-metal\),var\(--rack\)/g)||[]).length===3,'handle, sheet and column are the steel rack');

@@ -2428,7 +2428,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  text-shadow:0 1px 0 #000}
 .wh-slot em.soon{color:var(--rack-soon)}
 /* the rows under an open sheet can still be scrolled up above it */
-.p-order:has(#stock-sheet:not([hidden])) .stage-scroll{padding-bottom:calc(45dvh + 30px)}
+.p-order:has(#stock-sheet:not([hidden])) .stage-scroll{padding-bottom:calc(var(--sheet-h,45dvh) + 30px)}
 /* desk: the 발주서 is no longer centred; it takes the left, and the warehouse is a large rack on its right */
 @media(min-width:1024px){
  .p-order .stage-scroll{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);column-gap:24px;align-items:start}
