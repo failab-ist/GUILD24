@@ -30,6 +30,9 @@ and this table is their commit record.
 - **One sure 바가지 instead of +20%p**: the first Run's DAY 3 payday customer takes the first 150% offer it can pay for, once
   (`lessonPaydayTaken`); every later 150% offer is an ordinary one - the +20%p is gone. The roll still draws, so the stream
   is unchanged, and the bots play with the lessons off. CORE_RUN §FIRST-RUN LESSONS / RUN-Q; test revision.
+- **Payday mark**: the customer's wallet carries one SALE `점주 안내` mark: `오늘 보수를 받은 손님이다. 이런 손님에게는
+  바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.` (it does not say the first is sure).
+  COPY_AUDIT §3-13, UI_UX §TUTORIAL — COACH DIET, COPY_WORLD_VOICE; test ui-guard.
 
 ## v2.9.13 quick patch 5 — the DAY 3 HQ 구급키트 is told (User 2026-10-02; the version stays 2.9.13)
 

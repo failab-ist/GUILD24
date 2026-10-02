@@ -2448,7 +2448,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','forecast','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the outlook; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','forecast','payday','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the outlook; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.']`)
   &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
@@ -2479,7 +2479,8 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  const walletChip=fn('walletChip');
  assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
  // both Wallet surfaces read that chip; neither prints a bare n.money any more
- assert.ok(/class="npc-wallet">'\+walletChip\(n\)/.test(app),'the NPC vitals row uses it');
+ assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
+ assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
  assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
  assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
  // the two figures are printed side by side and never summed into one

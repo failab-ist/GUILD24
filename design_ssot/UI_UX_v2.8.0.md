@@ -1247,7 +1247,8 @@ returning-customer mark (tap opens the notebook) the first returning customer. N
 screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL), the first Event (§FIRST EVENT TUTORIAL) and II / FIRE
   Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the first Run's DAY 3, the HQ 구급키트 (its cell on
-  desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
+  desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
+  first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)

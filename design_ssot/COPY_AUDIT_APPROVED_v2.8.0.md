@@ -252,6 +252,16 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
+## 3-13. 보수날 손님 (첫 판 DAY 3)
+
+(규칙 owner CORE_RUN §FIRST-RUN LESSONS. 계정 첫 판 DAY 3의 보수날 손님이 판매 화면에 왔을 때, 그 손님의 소지금 표시에 한 번.
+첫 바가지 1회 수락은 말하지 않는다 - 해 볼 만한 이유와 두 가지 대가만)
+
+**현재**
+> 오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.
+
+---
+
 ## 4-1. 전투 전망 Help
 
 **현재** (two lines; the second line is the frozen SALE-entry value)

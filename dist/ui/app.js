@@ -1089,7 +1089,8 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
   :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대 덕분에 부상이 나았다.</p>'
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단 덕분에 부상이 나았다.</p>':'';
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
- +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
+ /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
+ +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
@@ -1300,6 +1301,8 @@ const coachSteps={
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .top','이 전망은 손님이 들어올 때 정해져서 끝까지 그대로다. 상품을 고르면 능력치·피로 회복 같은 효과가 계산대에 보이지만, 전망은 바뀌지 않는다.'],
  /* contextual marks */
+ /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
+ ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
  /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
