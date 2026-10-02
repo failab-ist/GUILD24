@@ -25,6 +25,14 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 8 — a slimmer phone ORDER dock (User 2026-10-02; the version stays 2.9.13)
+
+- **One slim dock row on a phone** (User: 발주칸이 좁아 보인다, 버튼이 뚱뚱하다): the `창고` handle is no longer a row of its own
+  but a compact key (`창고` over `N / M칸`, the arrow in its corner) left of the Action(s), and the Actions and key are 44 px
+  with a 3 px cast and lighter edges, labels 15 px - the dock goes from 132 px to 66 px, and the 발주서 gains that height.
+  `K종` / `본사 기본 상품` stay on the desk head only; the open sheet adds no head line (its cells say it). Desk unchanged.
+  UI_UX §ORDER — WAREHOUSE PANEL / §PRIMARY ACTION GRAMMAR / COACH DIET / UI-Q-v29-44 / UI-Q-v29-50.
+
 ## v2.9.13 quick patch 7 — the 구급키트 lesson waits for someone hurt (User 2026-10-02; the version stays 2.9.13)
 
 - **The first Day someone injured can come, not DAY 3 only**: a first Run whose DAY 3 had no one injured never met the
