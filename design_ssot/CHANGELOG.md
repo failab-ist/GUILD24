@@ -33,6 +33,12 @@ and this table is their commit record.
   the 대성공 기회 tag too, the second chip wraps under the first); a desk shows a small line under the word. On the phone pin the words
   sit at the bottom right of the strip, in the room the 환경 meter leaves. UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT /
   §FORECAST PIN, COPY_AUDIT §4-25; test ui-guard.
+- **The early Counter rungs rise** (User: 초반 버티기가 쉽지 않다 · 하이브리드 버프, B안 - 순서 유지): 초반 대응 10 -> 12 (컵라면 냉기, 얼음컵
+  화염, 중화 탄산수 부식, 집중 사탕 공포, 방진마스크 독); 초반 하이브리드 9 / 10 -> 11 / 12 on the first / second Hazard (방한 두건
+  냉기 11 · 화이트아웃 13, 방독 작업장갑 독 11 · 속박 12, 축성 손전등 공포 11 · 어둠 12, 방수망토 부식 11 · 진창 12). The ladder order
+  holds (초반 대응 > 초반 하이브리드 on the first Hazard, both under 후반 하이브리드 and 중반 대응). By the formula, an average D1
+  adventurer now clears Tier 1 through D7 with either, and the hybrid's Tier 2 opening shortfall falls from 7~9 to 5~7.
+  Unmeasured. ITEM §COUNTER LADDER and catalogue rows, RELIC / UI_UX examples; reports/ITEM-PRICES.md regenerated.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 

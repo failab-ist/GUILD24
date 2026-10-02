@@ -481,7 +481,7 @@ changes; a change not from the Item's listed effect names its source class; an I
 Item's Stat and not in `판매 후 변화`. Example `집중 사탕`:
 
 ```text
-직접 효과 = 공포 대응 +10 / 피로 회복 3
+직접 효과 = 공포 대응 +12 / 피로 회복 3
 ```
 
 — no Core-Stat increase unless a band changes, and `판매 후 변화` lists only 공포 대응 / 피로 회복. A combined block is allowed
@@ -2140,7 +2140,7 @@ After actual purchase commit, PASS only if:
 
 #### UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
 
-Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 3`) in two controlled setups.
+Use current `집중 사탕` (`공포 대응 +12 / 피로 회복 3`) in two controlled setups.
 
 ##### Case A — no Fatigue band change
 
