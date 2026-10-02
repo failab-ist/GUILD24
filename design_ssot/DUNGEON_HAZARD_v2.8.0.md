@@ -745,7 +745,7 @@ Ordinary expedition Wallet reward:
 
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
-    대성공 / 성공 = 1.00
+    대성공 / 성공 = 1.50
     퇴각 = 0.40
     부상 = 0.25
     중상 = 0.15
@@ -1746,7 +1746,7 @@ Reward PASS:
 - EXP base = 26.4 + Day×5.52
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
+- Wallet outcome multipliers are 대성공 / 성공 1.50 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5

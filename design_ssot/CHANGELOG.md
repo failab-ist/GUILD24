@@ -39,6 +39,11 @@ and this table is their commit record.
 - **Accidents rise with the counters** (User: 대응 장비 상한과 레벨 성장으로 위험을 쉽게 넘기니 사고 확률과 비율도 올린다): the
   environment incident chance is 0.08 + Hazard aggregate × 0.020 − 강인함 × 0.001, clamped 2%~60% (was 0.06 · 0.012 · 2%~48%).
   The incident-cause split reads the same base and gap coefficient. DUNGEON_HAZARD §Environment incident; tests night.
+- **The Wallet follows the results** (User: 이기지도 못하는데 27일까지 가는 게 이상하다 · 저점은 깔아 준다): the visit income is
+  Level × 3 + 20~60 (was Level × 8 + 0~80), and a 성공 / 대성공 pays the expedition Wallet reward × 1.5 (failure multipliers
+  unchanged). A regular who keeps winning keeps buying; one who keeps losing still brings 20G+ for basic preparation. The Away
+  Wallet keeps its rule, half an ordinary visit's average income per Day: Level × 1.5 + 20 (was Level × 4 + 20).
+  ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet, DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests revision, night.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 

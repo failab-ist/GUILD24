@@ -74,33 +74,33 @@ test('same SKU bulk across separate offers; board does not change rookie level',
    amendment to randomInt(0,80). Reducing the candidate pool to the one NPC under test makes a
    weighted draw of one deterministic - it is the only thing that can be selected - without
    needing to fight the real selection weights for a guaranteed pick. */
-test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (0/80), cap, and failed-expedition Loot untouched',()=>{
+test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (20/60, v2.10.0), cap, and failed-expedition Loot untouched',()=>{
  const g=fresh('eco-q49');
  const n=g.run.npcs[0];
  g.run.npcs=[n];
  g.addNPC=()=>null; // an unrelated Morning Event may otherwise seat a second candidate
  const originalInt=g.rng.int.bind(g.rng);
  let rolls=0;
- const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===0&&b===80){rolls++;return v;}return originalInt(a,b);};};
+ const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===20&&b===60){rolls++;return v;}return originalInt(a,b);};};
 
- // A - a never-introduced NPC: Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint
- n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(0);
+ // A - a never-introduced NPC: Wallet = 180 + Level*3 + roll, roll forced to its 20 endpoint
+ n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(20);
  g.run.day=2;g.morning();
  assert.ok(g.run.queue.includes(n.id),'the lone NPC is the only candidate available that Day');
- assert.equal(n.money,180+3*8+0,'fresh Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint');
+ assert.equal(n.money,180+3*3+20,'fresh Wallet = 180 + Level*3 + roll, roll forced to its 20 endpoint');
  assert.equal(n.newToday,true,'a never-introduced NPC is a fresh visit');
  assert.equal(rolls,1,'exactly one visit-income roll for the one visited NPC - no new draw was added');
 
- // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 80 endpoint
- n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(80);
+ // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 60 endpoint
+ n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(60);
  g.run.day=3;g.morning();
  assert.ok(g.run.queue.includes(n.id));
- assert.equal(n.money,500+3*8+80,'returning Wallet = existing Wallet + Level*8 + roll, roll forced to its 80 endpoint');
+ assert.equal(n.money,500+3*3+60,'returning Wallet = existing Wallet + Level*3 + roll, roll forced to its 60 endpoint');
  assert.equal(n.newToday,false,'an already-introduced NPC is a returning visit');
  assert.equal(rolls,1);
 
  // C - the 2000 cap still applies at the narrowed range
- n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(80);
+ n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(60);
  g.run.day=4;g.morning();
  assert.equal(n.money,2000,'the 2000 cap is unchanged by the narrowed range');
  g.rng.int=originalInt;
@@ -120,7 +120,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   }
  }
  assert.ok(sampled>0,'sanity: at least one 퇴각 sample was observed to check');
- assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1,'성공':1,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
+ assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1.5,'성공':1.5,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
 });
 test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
  const ids=new Set();
@@ -709,7 +709,8 @@ test('an adventurer who could have come banks Away Days, at most 3, paid on the 
  const n=s.npcs.find(x=>x.introduced)||s.npcs[0];n.introduced=true;n.awayDays=5;
  assert.equal(g.awayWallet(n),a.maxDays*(n.level*a.perLevel+a.base),'capped at maxDays');
  n.awayDays=1;assert.equal(g.awayWallet(n),n.level*a.perLevel+a.base);
- assert.ok(n.level*a.perLevel+a.base<n.level*8+40,'a banked Day is worth less than an average visit\'s own income');
+ const v=DATA.balance.visitWallet;assert.ok(n.level*a.perLevel+a.base<=(n.level*v.perLevel+(v.min+v.max)/2)/2,'a banked Day is worth half an average visit\'s own income');
+ assert.deepEqual(v,{perLevel:3,min:20,max:60},'ECONOMY_ORDER §Ordinary NPC Wallet on visit (v2.10.0)');
  const fresh0={...n,introduced:false,awayDays:2};assert.equal(g.awayWallet(fresh0),0,'a first visit banks nothing');
  /* the same seed with and without banked Days draws the same stream */
  const run=(days)=>{const h=fresh('away-stream');for(const x of h.run.npcs){x.introduced=true;x.awayDays=days;}h.run.day=4;h.morning();return {state:h.rng.state,queue:h.run.queue.slice(),money:h.run.queue.map(id=>h.run.npcs.find(x=>x.id===id).money)};};

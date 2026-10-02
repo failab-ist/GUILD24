@@ -1014,7 +1014,7 @@ test('DUNGEON_HAZARD §Ordinary EXP (v2.9.2 balance, User 2026-09-25 / 2026-09-2
  assert.equal(Dungeon.GREAT.xp,1.00);assert.equal(Dungeon.WIN.xp,.90);
  const src=read('dist/systems/dungeon.js');
  assert.ok(/\(26\.4\+d\.day\*5\.52\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?WIN\.xp:\.5\)\*e\.xpMult/.test(src),'base (v2.10.0 x1.2: 26.4 + Day x 5.52), Retreat 0.38 and other living 0.50');
- assert.equal(Dungeon.WALLET_MULT['대성공'],1,'the Great Success Wallet reward is unchanged');
+ assert.equal(Dungeon.WALLET_MULT['대성공'],1.5,'the Great Success Wallet reward is the success one (v2.10.0 x1.5)');
  // real resolved results pay exactly round(base x multiplier x the explicit XP modifiers)
  const want={'대성공':1.00,'성공':.90};const seen={'대성공':0,'성공':0};
  for(let k=0;k<400&&(seen['대성공']<3||seen['성공']<3);k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
