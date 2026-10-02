@@ -363,6 +363,14 @@ Rules:
 - D20+ is where Epic becomes a normal late-Run preparation consideration because the shared Epic weight rises materially
 - Legendary remains exceptional and does not scale with late-Run danger beyond the exact 1% rows above
 - existing unlock/meta eligibility still applies before Rarity selection where another current owner explicitly requires it
+
+## ORDER OFFER VARIETY
+
+(User 2026-10-02.) One ORDER sheet holds an Item on at most `offerSameItemMax` = 2 slots: a slot already supplies 2~4 units
+(Common / Uncommon), so a third copy only hides another Item. It holds for the Day's sheet, every Reroll and the extra Event /
+Store Support slots; each rolled slot draws from the Items still under the cap (Rarity first, as above), and the Counter
+guarantee picks a Counter still under it when one exists. Only when no Item is left under the cap does the cap yield, rather
+than leave a slot empty.
 - Reroll uses the same current-Day Rarity band; it does not bypass Day progression
 - pity/guarantee systems operate on top of this Day-band table; no fixed all-Run Rarity table is used
 
@@ -1026,6 +1034,11 @@ PASS:
 - each row sums to exactly 100
 - correct row is selected from current Run Day
 - no stale all-Run `55/27/12/5/1` table remains as the live normal path
+
+#### ORD-Q88 — OFFER VARIETY CAP
+
+Generate Day sheets and Rerolls across Day bands.
+PASS: no Item appears on more than 2 slots of one sheet (extra Event / Store Support slots and the Counter guarantee included).
 
 #### ORD-Q87 — EPIC PROGRESSION WITHOUT HARD D20 UNLOCK
 
