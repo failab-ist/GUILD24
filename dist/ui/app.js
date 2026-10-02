@@ -500,7 +500,7 @@ function cueOrder(A,h){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_B
   k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
    /* the SKU's new cells - the ones past what it held before - take its crate, all on the same fall */
    const cells=list?[...list.querySelectorAll('li.wh-slot[data-item="'+item+'"]')].slice(h.before?.[item]||0):[];
-   for(const cell of cells){const icon=cell.firstElementChild;if(!icon)continue;
+   for(const cell of cells){const icon=cell.querySelector('summary')?.firstElementChild;if(!icon)continue;
     A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});}
    if(i<ORDER_BEAT.hits)orderCueAt.push(setTimeout(()=>Sound.play(i?'crate':'order'),land));});
   if(!k.length)Sound.play('order');
@@ -610,6 +610,7 @@ function render(){
     Action starts one. */
  if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;warmAhead(s,phase);
+ const pop=document.getElementById('wh-pop');if(pop)pop.hidden=true; // its cell is redrawn closed
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
  const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);
  /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
@@ -1088,7 +1089,8 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
   :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대 덕분에 부상이 나았다.</p>'
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단 덕분에 부상이 나았다.</p>':'';
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
- +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
+ /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
+ +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
@@ -1281,7 +1283,9 @@ const coachSteps={
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
- order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
+ order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],
+  /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
+  ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사에서 구급키트 1개를 보내 줬다. 이번 한 번뿐이다. 원정에서 다쳐도 한 단계 가볍게 끝나게 해 준다 (중상 → 부상, 부상 → 무사). 오늘 첫 손님은 부상 중이다.']],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1297,6 +1301,8 @@ const coachSteps={
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .top','이 전망은 손님이 들어올 때 정해져서 끝까지 그대로다. 상품을 고르면 능력치·피로 회복 같은 효과가 계산대에 보이지만, 전망은 바뀌지 않는다.'],
  /* contextual marks */
+ /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
+ ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
  /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
@@ -1497,12 +1503,17 @@ function statGrid(n){
    are the room left. The icon is the one the offer rows show; the Item's name is the cell's reader label. */
 /* User 2026-10-01: on a phone only the held units are drawn, so the sheet is as many rows as they need (one while they fit) and
    the room left reads in the head's `N / M칸`; the desk column has the room, so it shows every 칸 with the empty ones (`full`) */
-function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 구급키트 from HQ is told once - the ORDER `kit` mark sits
+   on its cell (desk) or the 창고 handle (phone, where the sheet starts folded) */
+const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.day===3&&s.lessonInjured);};
+function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];let kit=lessonKit();
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
    label=E(it.name)+(left===null?'':' · '+left+'일');
-   return '<li class="wh-slot" data-item="'+it.id+'" aria-label="'+label+'">'+Art.itemIcon(it.id,32)
-    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')
+   /* User 2026-10-02: a cell is a tip - a tap (a hover on desk) shows what the Item does, in the floating #wh-pop (whPop) */
+   const mark=kit&&it.id==='kit'?(kit=false,' lesson-kit'):'';
+   return '<li class="wh-slot'+mark+'" data-item="'+it.id+'"><details class="tip wh-tip" name="wh-tip"><summary aria-label="'+label+'">'+Art.itemIcon(it.id,32)
+    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</summary></details></li>';}).join('')
   +(full?'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length)):'')+'</ol>';}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is not on the 발주서 any more; it is held apart like an
    inventory, so it can be read against the offer rows while ordering. Desk: a large column beside the form, always open.
@@ -1519,7 +1530,7 @@ function stockSide(){return '<aside class="stock-side" aria-label="창고"><p cl
 const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
 function stockSheetKey(){const open=sheetOpen();
  return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(open?'':' hidden')+'>'+stockSlots()+'</section>'
-  +'<button type="button" class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+open+'">'
+  +'<button type="button" class="stock-handle stock-head'+(lessonKit()?' lesson-kit':'')+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+open+'">'
   +stockHead()+'<span class="stock-toggle">'+(open?'닫기':'열기')+'</span></button>';}
 function setStockSheet(open){const st=game.account.settings;if((st.stockBriefOpen===true)!==open){st.stockBriefOpen=open;game.save();}
  const sh=$('#stock-sheet'),k=$('.stock-handle');if(!sh)return;sh.hidden=!open;
@@ -2670,6 +2681,24 @@ document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]
    <details> closes on its own summary already, and the shared name closes a sibling, so this
    only has to handle the outside tap and Escape. */
 const closeTips=except=>{for(const t of document.querySelectorAll('.tip[open]'))if(t!==except)t.open=false;};
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-10-02): a warehouse cell's tip is one floating balloon on <body>, so neither the
+   sheet's own scroll nor the desk column clips it. It sits right on its cell and points at it (above it, below when there is
+   no room), and may cover the rack around it; kept inside the screen. Its lines are the offer row's own - name, kind · rarity, effects. Any scroll or resize closes it. */
+function whPop(){const t=document.querySelector('.wh-tip[open]'),cell=t?.closest('.wh-slot');
+ let p=document.getElementById('wh-pop');
+ if(!t||!cell){if(p)p.hidden=true;return;}
+ if(!p){p=document.createElement('div');p.id='wh-pop';p.setAttribute('role','tooltip');document.body.appendChild(p);}
+ const it=D.itemBy[cell.dataset.item],rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
+ p.innerHTML='<b>'+E(it.name)+'</b><span class="kind">'+E(itemKind(it))+' · <i class="r'+it.rarity+'">'+E(D.rarities[it.rarity])+'</i></span>'
+  +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>';
+ p.hidden=false;
+ const c=cell.getBoundingClientRect(),m=8,gap=9,w=p.offsetWidth,h=p.offsetHeight,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const above=c.top-gap-h>=m,x=cl(c.left+c.width/2-w/2,m,innerWidth-w-m),y=above?c.top-gap-h:Math.min(c.bottom+gap,innerHeight-h-m);
+ p.dataset.side=above?'top':'bottom';p.style.left=x+'px';p.style.top=y+'px';
+ p.style.setProperty('--at',cl(c.left+c.width/2-x,12,w-12)+'px');}
+document.addEventListener('toggle',ev=>{if(ev.target.classList?.contains('wh-tip'))whPop();},true);
+const whClose=()=>{for(const t of document.querySelectorAll('.wh-tip[open]'))t.open=false;whPop();};
+addEventListener('scroll',whClose,{capture:true,passive:true});addEventListener('resize',whClose);
 document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);
  /* a tap anywhere but the tray itself, a shelf row, the dock or an overlay folds the tray (UI_UX §SALE — COUNTER TRAY FOLD) */
  if(!ev.target.closest('.counter-tray,[data-action="select"],.dock,#modal-root,#coach-root'))foldTray();},true);

@@ -802,7 +802,7 @@ Tutorial may point to the relevant UI value without selecting the answer for the
 
 Keep each coach step short: one system-reading job, usually one or two sentences (the DAY 0 점포지원 step also says the first pick may wait, until when, and where).
 
-Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 전망 (§3-4) / 가방 (상품 사용) / 재방문 손님 / II 게이트 · 화염 게이트 (§3-10) / 첫 사건 (§3-11) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record (COPY_AUDIT §26-2) and 가격 after the first refusal / 50% sale (COPY_AUDIT §26-3). There is no 방문객, 게이트 (MORNING and ORDER), 창고, 후보, 수량, 후보 교환, 환경 대응, 점포지원 카드 · 구매 or NIGHT mark (UI_UX §TUTORIAL — COACH DIET); the CLOSING mark is its first clause only.
+Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 전망 (§3-4) / 가방 (상품 사용) / 재방문 손님 / II 게이트 · 화염 게이트 (§3-10) / 첫 사건 (§3-11) / 본사 구급키트 (§3-12) / 보수날 손님 (§3-13) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record (COPY_AUDIT §26-2) and 가격 after the first refusal / 50% sale (COPY_AUDIT §26-3). There is no 방문객, 게이트 (MORNING and ORDER), 창고, 후보, 수량, 후보 교환, 환경 대응, 점포지원 카드 · 구매 or NIGHT mark (UI_UX §TUTORIAL — COACH DIET); the CLOSING mark is its first clause only.
 
 ```text
 점포지원 (DAY 0)

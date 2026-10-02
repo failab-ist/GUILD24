@@ -1,6 +1,6 @@
 (function(G){
 /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer - +200G to spend this visit only, +20%p on 150% */
-const LESSON={paydayBudget:200,paydayOvercharge:.20};
+const LESSON={paydayBudget:200};
 /* Stage 10, approved (§O). Stage 9 measured FIRE as the hardest Family for all six Jobs and by
    a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
    Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
@@ -463,8 +463,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   if(n.injury&&it.category==='insurance')need+=.25;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&G.Adventurer.isTrustedRegular(n))need+=D.relicParams.premiumMember.rareIntentBonus;
- /* CORE_RUN §FIRST-RUN LESSONS: the DAY 3 payday customer of the account's first Run takes a 150% offer more readily */
- if(mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===this.run.day)need+=LESSON.paydayOvercharge;
+ /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the DAY 3 payday customer of the account's first Run takes the first
+    150% offer it can pay for - once; every later one is decided as any customer's */
+ const payday=mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===this.run.day&&!n.lessonPaydayTaken;
  if(this.has('coldcase')&&G.Relics.food(it)&&it.rarity>=1)need+=D.relicParams.coldcase.intentBonus;
  /* 첫 방문 쿠폰: the whole of an adventurer's first-ever visit */
  if(this.has('firstVisitCoupon')&&n.newToday&&n.visits<=1)need+=D.relicParams.firstVisitCoupon.intentBonus;
@@ -496,7 +497,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+D.relicParams.royalCert.intentBonus:rule.intent;
  /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): only 정가 carries one, applied after the
     floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio. */
- const chance=wallet<debit?0:(counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97))*(rule.finalScale||1);
+ const chance=wallet<debit?0:payday?1:(counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97))*(rule.finalScale||1);
  return {price,debit,guarantee,bundle,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){
@@ -513,6 +514,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
      left the paradox open: refuse at 50% for a Counter they do not need, then sell at 150%.
      Lower prices stay open, and no other SKU is touched. */
   for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day,s)};this.save();return false;}
+ if(mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===s.day)n.lessonPaydayTaken=true;
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);

@@ -25,6 +25,31 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 6 — the DAY 3 payday customer (User 2026-10-02, PR #45; the version stays 2.9.13)
+
+- **One sure 바가지 instead of +20%p**: the first Run's DAY 3 payday customer takes the first 150% offer it can pay for, once
+  (`lessonPaydayTaken`); every later 150% offer is an ordinary one - the +20%p is gone. The roll still draws, so the stream
+  is unchanged, and the bots play with the lessons off. CORE_RUN §FIRST-RUN LESSONS / RUN-Q; test revision.
+- **Payday mark**: the customer's wallet carries one SALE `점주 안내` mark: `오늘 보수를 받은 손님이다. 이런 손님에게는
+  바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.` (it does not say the first is sure).
+  COPY_AUDIT §3-13, UI_UX §TUTORIAL — COACH DIET, COPY_WORLD_VOICE; test ui-guard.
+
+## v2.9.13 quick patch 5 — the DAY 3 HQ 구급키트 is told (User 2026-10-02, PR #45; the version stays 2.9.13)
+
+- **First Run DAY 3 구급키트 mark** (User: 조용히 들어와서 티가 안 남): when the lesson brings the kit, that Day's ORDER shows one
+  `점주 안내` mark on its cell (desk) or the folded sheet's `창고` handle (phone): `본사에서 구급키트 1개를 보내 줬다. 이번 한
+  번뿐이다. 원정에서 다쳐도 한 단계 가볍게 끝나게 해 준다 (중상 → 부상, 부상 → 무사). 오늘 첫 손님은 부상 중이다.` The kit
+  heals nothing at once - it lowers the expedition's outcome one step (ITEM §구급키트), so the line says that. It is the one
+  mark that names an Item (a gift, not a pick). COPY_AUDIT §3-12, CORE_RUN §FIRST-RUN LESSONS, UI_UX §TUTORIAL — COACH DIET,
+  COPY_WORLD_VOICE; test ui-guard.
+
+## v2.9.13 quick patch 4 — a warehouse cell says what it does (User 2026-10-02, PR #45; the version stays 2.9.13)
+
+- **ORDER warehouse cell tip** (User: 처음 하는 사람도 무슨 효과인지 알게): tapping a held cell (hovering on desk) shows the offer
+  row's own lines - name, `kind · rarity`, effects - in a balloon right above that cell, pointing at it; a second tap closes it.
+  It reuses the shared tip control (tap / hover / focus / tap-away), floats on `<body>` so the sheet's scroll cannot clip it,
+  stays inside the screen and may cover the rack. No new copy. UI_UX §ORDER — WAREHOUSE PANEL / UI-Q-v29-50; test ui-guard.
+
 ## v2.9.13 quick patch 3 — the DAY 0 free Store Support may wait (User 2026-10-01, PR #43; the version stays 2.9.13)
 
 - **The free first pick is deferrable** (User: 처음 하는 사람에게 가혹함): the DAY 0 takeover gains `나중에 결정` under

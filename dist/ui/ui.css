@@ -2382,7 +2382,28 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .wh-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:5px;margin:0;padding:0;list-style:none}
 .wh-slot{position:relative;aspect-ratio:1;display:grid;place-items:center;background:var(--cell);box-shadow:inset 2px 2px 0 #00000080}
 .wh-slot.empty{background:#30383f;box-shadow:inset 1px 1px 0 #0000004d}
-.wh-slot>svg,.wh-slot>.item-art{width:62%;height:auto}
+.wh-slot svg,.wh-slot .item-art{width:62%;height:auto}
+/* each held cell is a tip (User 2026-10-02): the whole 칸 is the control, the balloon floats as #wh-pop */
+.wh-tip,.wh-tip>summary{position:absolute;inset:0}
+.wh-tip>summary{display:grid;place-items:center;list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.wh-tip>summary::-webkit-details-marker{display:none}
+.wh-tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.wh-tip[open]>summary{box-shadow:inset 0 0 0 2px var(--rack-ink)}
+#wh-pop{position:fixed;z-index:40;width:max-content;max-width:min(280px,calc(100vw - 16px));padding:9px 12px;
+ font:400 12px/1.55 var(--ui);color:#e8dcc0;background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059;pointer-events:none}
+#wh-pop[hidden]{display:none}
+#wh-pop>*{display:block}
+#wh-pop b{font:600 14px/1.4 var(--ui);color:#fff3d6}
+#wh-pop .kind i{font-style:normal;font-weight:600}
+#wh-pop .r0{color:var(--r0)}#wh-pop .r1{color:var(--r1)}#wh-pop .r2{color:var(--r2)}#wh-pop .r3{color:var(--r3)}#wh-pop .r4{color:var(--r4)}
+#wh-pop .fx{margin-top:4px;font-size:13px}
+#wh-pop .fx i{font-style:normal;font-weight:600;font-variant-numeric:tabular-nums}
+#wh-pop .fx .cost{color:#ff9e82}
+#wh-pop .fx em{font-style:normal;color:#9d927a}
+/* the point onto its own cell: down from above it, up from below it */
+#wh-pop:after{content:'';position:absolute;left:calc(var(--at) - 7px);border:7px solid transparent}
+#wh-pop[data-side="top"]:after{top:100%;border-top-color:#191108f2}
+#wh-pop[data-side="bottom"]:after{bottom:100%;border-bottom-color:#191108f2}
 .wh-slot em{position:absolute;right:2px;bottom:1px;font:600 10px/1 var(--ui);font-style:normal;color:var(--rack-mute);
  text-shadow:0 1px 0 #000}
 .wh-slot em.soon{color:var(--rack-soon)}
