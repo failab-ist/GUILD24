@@ -25,7 +25,7 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
-## v2.9.13 quick patch 6 — the DAY 3 payday customer (User 2026-10-02; the version stays 2.9.13)
+## v2.9.13 quick patch 6 — the DAY 3 payday customer (User 2026-10-02, PR #45; the version stays 2.9.13)
 
 - **One sure 바가지 instead of +20%p**: the first Run's DAY 3 payday customer takes the first 150% offer it can pay for, once
   (`lessonPaydayTaken`); every later 150% offer is an ordinary one - the +20%p is gone. The roll still draws, so the stream
@@ -34,7 +34,7 @@ and this table is their commit record.
   바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.` (it does not say the first is sure).
   COPY_AUDIT §3-13, UI_UX §TUTORIAL — COACH DIET, COPY_WORLD_VOICE; test ui-guard.
 
-## v2.9.13 quick patch 5 — the DAY 3 HQ 구급키트 is told (User 2026-10-02; the version stays 2.9.13)
+## v2.9.13 quick patch 5 — the DAY 3 HQ 구급키트 is told (User 2026-10-02, PR #45; the version stays 2.9.13)
 
 - **First Run DAY 3 구급키트 mark** (User: 조용히 들어와서 티가 안 남): when the lesson brings the kit, that Day's ORDER shows one
   `점주 안내` mark on its cell (desk) or the folded sheet's `창고` handle (phone): `본사에서 구급키트 1개를 보내 줬다. 이번 한
@@ -43,7 +43,7 @@ and this table is their commit record.
   mark that names an Item (a gift, not a pick). COPY_AUDIT §3-12, CORE_RUN §FIRST-RUN LESSONS, UI_UX §TUTORIAL — COACH DIET,
   COPY_WORLD_VOICE; test ui-guard.
 
-## v2.9.13 quick patch 4 — a warehouse cell says what it does (User 2026-10-02; the version stays 2.9.13)
+## v2.9.13 quick patch 4 — a warehouse cell says what it does (User 2026-10-02, PR #45; the version stays 2.9.13)
 
 - **ORDER warehouse cell tip** (User: 처음 하는 사람도 무슨 효과인지 알게): tapping a held cell (hovering on desk) shows the offer
   row's own lines - name, `kind · rarity`, effects - in a balloon right above that cell, pointing at it; a second tap closes it.
