@@ -672,4 +672,14 @@ test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted
  assert.deepEqual(notebook().sort(),K.map(k=>'learn-'+k).sort(),'all six are in the notebook');
 });
 
+/* User 2026-10-02: 카리냐 -> 카리냥, in place (same F/021 portrait); a Run saved before the rename carries the new name */
+test('a renamed customer keeps its portrait slot, and an older save carries the new name',()=>{
+ assert.ok(!Adventurer.names.includes('카리냐')&&Adventurer.names.includes('카리냥'),'the pool holds the new name only');
+ assert.deepEqual(Adventurer.portraitOf('카리냥'),{gender:'F',slot:21},'at the old name\'s slot');
+ const g=fresh('rename-test'),n=g.run.npcs[0];n.name='카리냐';n.records.push({name:'카리냐',day:1,outcome:'성공'});
+ const state=Save.import(Save.export(g.account,g.run)),m=state.run.npcs.find(x=>x.id===n.id);
+ assert.equal(m.name,'카리냥');assert.equal(m.records.at(-1).name,'카리냥');
+ assert.equal(state.run.npcs.filter(x=>x.name==='카리냐').length,0);
+});
+
 console.log(checks+' revision groups passed');

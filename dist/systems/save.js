@@ -217,9 +217,20 @@ function legacyFinalCommit(r,D){
  if(proven)r.finalCommitted=true;
 }
 
+/* A customer renamed in place in the pool (User 2026-10-02: 카리냐 -> 카리냥, same F/021 portrait). The portrait is
+   addressed by the name, so a Run saved before the rename carries the new name forward rather than drawing the
+   placeholder. Only the Run's own copies of the name change; nothing else in the save does. */
+const RENAMED={'카리냐':'카리냥'};
+function renamedNpcs(r){
+ if(!r||!Array.isArray(r.npcs))return;
+ const to=x=>x&&typeof x.name==='string'&&RENAMED[x.name]?(x.name=RENAMED[x.name]):null;
+ for(const n of r.npcs){to(n);(n.records||[]).forEach(to);}
+ (r.results||[]).forEach(to);
+}
+
 G.Save={
  error:null,
- migrate(s){if(s&&s.run)legacyFinalCommit(s.run,G.DATA);return s;},
+ migrate(s){if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
