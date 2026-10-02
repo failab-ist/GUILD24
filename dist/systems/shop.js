@@ -378,7 +378,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  if(s.pity.counter>=3&&hazards.length){
   const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,target));
-  if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(matches));
+  /* ECONOMY_ORDER §ORDER OFFER VARIETY (User 2026-10-02): the guarantee picks a Counter not already at the sheet's cap, if any */
+  const others=s.offers.filter((o,i)=>i!==ordinary-1),room=matches.filter(it=>others.filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);
+  if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(room.length?room:matches));
  }
  if(advancePity&&hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
@@ -393,7 +395,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)),quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
  rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary (User 2026-09-29): D30 has no SALE, and an Item with no Final effect
    cannot go in a Final Bag, so the D30 sheet never offers one - the same explicit no-effect exclusion D30 Store Supports use */
- let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it))&&!(s.day>=30&&this.finalNoEffect(it.id)));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
+ let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it))&&!(s.day>=30&&this.finalNoEffect(it.id)));
+ /* ECONOMY_ORDER §ORDER OFFER VARIETY (User 2026-10-02): one sheet holds an Item on at most offerSameItemMax slots - a slot
+    already supplies 2~4 units, so a third copy only hides another Item. The sheet being built is s.offers; with nothing left
+    under the cap the cap yields rather than leave a slot empty. */
+ const roomy=pool.filter(it=>(s.offers||[]).filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);if(roomy.length)pool=roomy;/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);

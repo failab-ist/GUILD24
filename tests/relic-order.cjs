@@ -291,6 +291,18 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  }
 });
 
+/* User 2026-10-02: one sheet holds an Item on at most two slots - Day sheets, Rerolls and the Counter guarantee alike */
+test('ECONOMY_ORDER §ORDER OFFER VARIETY: an Item is on at most offerSameItemMax slots of a sheet',()=>{
+ assert.equal(DATA.balance.offerSameItemMax,2,'the cap is 2');
+ const g=fresh('offer-variety');
+ for(const day of [1,3,6,15,29]){g.run.day=day;
+  for(let i=0;i<600;i++){g.generateOffers({advancePity:i%2===0});const c={};for(const o of g.run.offers)c[o.item]=(c[o.item]||0)+1;
+   assert.ok(Math.max(...Object.values(c))<=2,'D'+day+': no Item past two slots');}}
+ const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/shop.js'),'utf8');
+ assert.ok(/const roomy=pool\.filter\(it=>\(s\.offers\|\|\[\]\)\.filter\(o=>o\.item===it\.id\)\.length<D\.balance\.offerSameItemMax\);if\(roomy\.length\)pool=roomy;/.test(src),'every rolled slot reads the sheet being built');
+ assert.ok(/room=matches\.filter\(it=>others\.filter\(o=>o\.item===it\.id\)\.length<D\.balance\.offerSameItemMax\)/.test(src),'the Counter guarantee respects it');
+});
+
 test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows the Day band',()=>{
  const rows=DATA.rarityBands;
  assert.equal(rows.length,7,'seven Day bands');
