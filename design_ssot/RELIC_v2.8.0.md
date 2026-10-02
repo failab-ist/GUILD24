@@ -113,7 +113,7 @@ Current explicit D30 no-effect exclusions:
 단골 스탬프 기계 (stamp) · 회원 관리대장 (member) · 길드 보증 진열대 (guarantee) · 대형 냉장고 (fridge) ·
 길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
 프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) · 새벽 회수 계약 (dawnRecovery) ·
-평생 단골제 (lifetime) · 왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
+왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
 응급 처치대 (firstAidDesk; no SALE arrival on D30)
 
 All other current supports are D30-eligible under ordinary acquisition eligibility. Future Store Supports are
@@ -178,8 +178,7 @@ status line under its name and effect in the owned quick view, computed from run
 field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
 written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32. The conditional supports are exactly:
 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
-단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it pays every surviving 단골 at NIGHT
-(once per customer per Day, which is every expedition), always on; its card carries no `(하루 1회)`.
+단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it is always on for every 단골.
 
 expiry: next relic window begins (e.g. D5 offer valid through D9; D10 => new window)
 
@@ -461,12 +460,14 @@ effect=Rare+ expedition-response items gain premium-economy viability
 - no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
 - the internal purchase-price floor (45% of list) still applies
 
-22. 평생 단골제 · tag=VIP · snowballCap=required · `DIRECTOR DOCUMENT BASELINE`
-effect=high-loyalty survival/revisit accelerates wallet/revisit value
+22. 평생 단골제 · tag=VIP · User 2026-10-02 remake (no Gold, no revisit weight)
+effect=a 단골 is stronger, and stays a 단골
 - Price = 310G
-- 단골 (Trusted Regular, Loyalty >= 51) survival condition
-- NPC Wallet +50G
-- next-visit weight +100%
+- 단골 (Trusted Regular, Loyalty >= 51): the four Core Stats x1.10 in the prepared reading (after Items and condition,
+  before the Hazard reading), so Hazard Counters through the Stat routes rise too; listed among each Stat's sources
+  (`평생 단골제 +10%`); the Final party reads it the same way
+- while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
+  an adventurer not yet a 단골 has no floor
 - the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51
 
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
@@ -836,7 +837,7 @@ D30 candidate generation must be: ordinary eligible pool minus explicit D30 no-e
 It must NOT be implemented as a positive finalUseful/futureRelevant allowlist.
 
 Current explicit exclusions: the §D30 CANDIDATE ELIGIBILITY list (stamp, member, guarantee, fridge, board,
-firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, dawnRecovery, lifetime, royalCert,
+firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, dawnRecovery, royalCert,
 hub, efficiency, firstAidDesk).
 
 PASS:

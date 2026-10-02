@@ -54,15 +54,25 @@ test('return points excludes first visit, no-sale and free transfer',()=>{
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
  const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,20);
 });
-test('RELIC 22 / REL-Q-v28-6: 평생 단골제 doubles the next-visit weight (v2.9.11, User 2026-09-29; was +50%)',()=>{
- assert.equal(DATA.relicParams.lifetime.revisitMult,2.0,'next-visit weight +100%');
- assert.ok(/includes\('lifetime'\)\?D\.relicParams\.lifetime\.revisitMult:1/.test(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8')),'and visitor selection reads it');
+/* RELIC 22 (User 2026-10-02 remake): 평생 단골제 pays no Gold and weights no visit - a 단골's four Core Stats +10% (shown among
+   each Stat's sources, the Final party included), and once a 단골, Loyalty does not drop below 51 while it is owned. */
+test('RELIC 22: 평생 단골제 - 단골 Stats +10% and the 단골 line holds; no Gold, no revisit weight',()=>{
+ const g=fresh('lifetime'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0,pack:[]},d={...g.run.dungeons[0],requiredSupply:0};
+ const reg={...n,loyalty:51},plain=Dungeon.prepare(reg,d,[]),owned=Dungeon.prepare(reg,d,['lifetime']);
+ for(const k of ['combat','survival','mobility','spirit']){
+  assert.ok(Math.abs(owned.effects[k]-plain.effects[k]*1.1)<1e-9,k+' +10% for a 단골');
+  assert.ok(owned.sources[k].some(x=>x.name==='평생 단골제'&&x.isPct&&x.v===10),k+' lists the source');}
+ const not={...n,loyalty:50};assert.deepEqual(Dungeon.prepare(not,d,['lifetime']).effects,Dungeon.prepare(not,d,[]).effects,'below 51: nothing');
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
+ assert.ok(!/relicParams\.lifetime\.(goldBonus|revisitMult)/.test(src),'no Gold, no revisit weight');
+ assert.ok(!DATA.relicD30NoEffect.includes('lifetime'),'it now reaches the Final party, so it may be offered on DAY 30');
+ const h=fresh('lifetime-floor'),m=h.run.npcs[0];m.loyalty=55;h.run.facilities=['lifetime'];h.loyal(m,-10);assert.equal(m.loyalty,51,'a 단골 stops at 51');
+ m.loyalty=55;h.run.facilities=[];h.loyal(m,-10);assert.equal(m.loyalty,45,'without it Loyalty falls as before');
+ m.loyalty=40;h.run.facilities=['lifetime'];h.loyal(m,-10);assert.equal(m.loyalty,30,'not yet a 단골: no floor');
+ m.loyalty=49;h.loyal(m,5);assert.equal(m.loyalty,54);h.loyal(m,-20);assert.equal(m.loyalty,51,'the floor holds once the line is crossed');
 });
-test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
- const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
- /* 2026-09-23 rebalance: the condition is 단골 (Loyalty >= 51, the NPC_TRAIT owner), not 60 */
- const at=(loyalty,f)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=loyalty;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[];s.queue=[n.id];s.phase='sell';s.facilities=f;s.dayFacilities=f;g.night();return n;};
- for(const start of [20,40,45,48,49,50,51,55]){const plain=at(start,[]),n=at(start,['lifetime']);assert.equal(n.money-plain.money,n.loyalty>=51?50:0,'평생 단골제 at Loyalty '+n.loyalty);}
+test('overhead matches day effects',()=>{
+ const base=nightWith([]);
  /* Two things this line used to get wrong. hub's cost is a PROPORTION of the overhead base
     under the approved bundle, not the flat +35 it was written against; and the operating cost
     is rounded to the nearest 10G, so what the store is actually charged is not the raw
@@ -82,9 +92,9 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
    can show that something DID appear, never that everything else still CAN. */
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
-                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime',
+                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery',
                  'royalCert','hub','efficiency','firstAidDesk'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (17; 응급 처치대 joined in v2.9.11)');
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16; 평생 단골제 left it on 2026-10-02)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){

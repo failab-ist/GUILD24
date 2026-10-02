@@ -28,7 +28,7 @@ const rows=[
 ['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,'오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
 ['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
 ['logisticsHQ','물류 본부계약','keystone',['rotation'],300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
-['lifetime','평생 단골제','keystone',['vip'],310,'단골 생환 시 · 소지금 +50G · 다음 방문 가중치 +100%.'],
+['lifetime','평생 단골제','keystone',['vip'],310,'단골 · 모든 능력치 +10% · 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
 ['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
 ['opsRoom','원정 작전실','keystone',['expedition'],290,'위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.'],
 ['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
@@ -72,7 +72,7 @@ D.relicParams={
  supplyCert:{commissionRate:.20,goldBonus:30},
  dawnRecovery:{refundRate:.5,extraOffers:1},
  logisticsHQ:{perSale:.03,maxDiscount:.30}, /* v2.9.11 remake (User 2026-09-29): was same-SKU 3+ -25% after 6 sales */
- lifetime:{goldBonus:50,revisitMult:2.0}, /* v2.9.11 (User 2026-09-29): was 1.5 */
+ lifetime:{statBonus:.10}, /* User 2026-10-02 remake: no Gold, no revisit weight - 단골 Stats +10%, and the 단골 line holds */
  royalCert:{commissionRate:.45,intentBonus:.10,overheadRate:.10},
  opsRoom:{overshootCap:.5,mult:.6,final:true}, /* User 2026-10-02: 원정 전문 인증 remade; 투력 +30% at most */
  fresh24:{statBonus:.50,orderPriceMult:1.15},
@@ -93,7 +93,7 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
    acquisition and the Final Lock through which it could change anything - not merely when it
    looks weak that late. A future support joins D30 by existing; it leaves only by being added
    here after its own D30-to-Final review. */
-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime','royalCert','hub','efficiency','firstAidDesk'];
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','royalCert','hub','efficiency','firstAidDesk'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not

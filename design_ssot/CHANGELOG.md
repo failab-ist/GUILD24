@@ -89,8 +89,8 @@ and this table is their commit record.
   `expeditionCert` is read as `opsRoom` on load. Unmeasured here (the all-support contribution run follows). RELIC §24 /
   REL-Q21, COPY_AUDIT §11-24, EVENT; tests relic-order, relic-effects, copy, revision.
 - **Loyalty weighs a little more on the revisit draw** (User: 단골도 3%로): the returning-NPC revisit weight is x(1 + Loyalty x 0.03)
-  (was 0.025). A 단골 (51) in a ten-adventurer pool comes about 41% of Days (was 39%); 평생 단골제 keeps its own +100% on top
-  (about 61%). NPC_TRAIT §Loyalty effect on revisit weighting.
+  (was 0.025). A 단골 (51) in a ten-adventurer pool comes about 41% of Days (was 39%). NPC_TRAIT §Loyalty effect on revisit
+  weighting.
 - **전투 전망 and 환경 대응 in two boxes** (User: 같은 박스에 넣으니 같아 보인다, 박스 2개로 · 같은 가로 길이): the readout is two
   iron-plate boxes - 전투 전망 (the stamped word) and 환경 대응 (the meter) - equal halves while the meter fits (it does at 360 with
   a preview and the longest Hazard name), the Core Stats in a box of their own below; the whole keeps the old panel's 146px. The
@@ -111,6 +111,9 @@ and this table is their commit record.
   300G, then 600G, 1200G… in the same window, back to 300G on the next; the pool rules hold and the three on the table are
   left out when possible; the spend is 점포지원 투자. The bots do not use it, so it is checked in play, not measured. RELIC
   §CANDIDATE REROLL, COPY_AUDIT §11-31c; test relic-order.
+- **평생 단골제 remade** (User: 돈 말고 단골과 관계를 이어가는 쪽 · 단골도 안 떨어지는 게 좋다): no Gold and no revisit weight. A
+  단골's four Core Stats +10% (listed among the sources; the Final party too, so it leaves the D30 exclusion list), and while it
+  is owned a 단골's Loyalty never drops below 51. RELIC §22 / §D30, COPY_AUDIT §11-22; tests relic-effects, ui-guard, copy.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

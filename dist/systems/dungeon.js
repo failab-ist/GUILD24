@@ -198,12 +198,16 @@ function prepare(n,d,facilities=[]){
  const injuryPenalty=injuryPenaltyFor(facilities);
  const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
+ /* RELIC 평생 단골제 (User 2026-10-02): a 단골's four Core Stats +10%, before the Hazard reading - the Final party included */
+ const lifetime=facilities.includes('lifetime')&&G.Adventurer.isTrustedRegular(n)?D.relicParams.lifetime.statBonus:0;
+ if(lifetime)for(const k of STAT_KEYS)e[k]*=1+lifetime;
  /* RELIC 원정 도시락 코너 at the 마왕성 (v2.9.11, User 2026-09-29): every Food/Drink's +2 lands on this adventurer's most
     취약 Hazard - the largest gap before the bonus, the Final's own Hazard order on a tie. */
  if(mealFinal){const gaps=d.hazards.map(h=>hazardState(h,e,d).gap),i=gaps.indexOf(Math.max(...gaps)),h=d.hazards[i];
   e[h]=(e[h]||0)+D.relicParams.expeditionMeal.hazardDefense*mealFinal;}
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
+ if(lifetime)for(const k of STAT_KEYS)sources[k].push({name:D.relicBy.lifetime.name,v:lifetime*100,isPct:true});
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  const ops=e.opsBonus=opsBonus(hazards,d,facilities);
