@@ -313,11 +313,12 @@ Full required Power (Source-exact):
 
 ```text
 Gate Power
-= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
+= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
 × Event danger multiplier
 
 FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
 FamilyCombat = golemCombat 0.90 for golem, else 1
+SuccessEase = 0.92 on DAY 1~7, 0.90 from DAY 8 (ordinary Gates; the Final's Boss Power is its own owner)
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
@@ -724,7 +725,7 @@ their current owner ordering and are not redefined here.
 
 For a living adventurer:
 
-    baseEXP = 22 + Day × 4.6
+    baseEXP = 26.4 + Day × 5.52
 
 Outcome multiplier:
 
@@ -1455,6 +1456,7 @@ PASS:
 - the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10`
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
+- SuccessEase multiplies the whole ordinary Gate Power once: 0.92 on DAY 1~7, 0.90 from DAY 8
 
 FAIL:
 - a single slope applied across all Days
@@ -1741,7 +1743,7 @@ Controlled seeded cases must verify (no Supply-deficit row):
 - failure-conditioned Death still follows the separate current Death owner formula exactly once
 
 Reward PASS:
-- EXP base = 22 + Day×4.6
+- EXP base = 26.4 + Day×5.52
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
 - Wallet base = 35 + Day×8
 - Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0

@@ -328,6 +328,8 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    (reports/balance-proposal-v2912.md §1). The DAY 9~10 step, which shared `late`, is its own `step` and keeps 0.80, so
    DAY 1~10 does not move. */
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
+/* DUNGEON_HAZARD §GATE POWER — SUCCESS EASE (User 2026-10-02, v2.10.0): the whole Gate Power x .92 on DAY 1~7, x .90 from DAY 8 */
+const GATE_EASE={early:.92,late:.90,from:8},gateEase=day=>day>=GATE_EASE.from?GATE_EASE.late:GATE_EASE.early;
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; the Level
@@ -702,7 +704,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const beforeFatigue=e.beforeFatigue!==undefined?e.beforeFatigue:(n.fatigue||0);
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
- const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
+ const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((26.4+d.day*5.52)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward (User 2026-09-25, v2.9.0): keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
@@ -736,5 +738,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

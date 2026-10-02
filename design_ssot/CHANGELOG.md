@@ -32,6 +32,10 @@ and this table is their commit record.
   that moved with each Night's results and scaled every Gate's required power by up to ±5% the next Morning. Gate power is the
   Gate formula and the day's Event only; the Night no longer writes the unseen reputation line. DUNGEON_HAZARD §GATE POWER —
   LATE-DAY SLOPE; tests revision.
+- **Success uplift** (User: 성공도 콱 늘린다 · 게임 메타가 바뀌는 거라): every ordinary Gate's required Power × 0.92 on DAY 1~7 and
+  × 0.90 from DAY 8 (SuccessEase, on the finished Gate Power, before the Event); expedition EXP × 1.2 (base 22 + Day × 4.6 →
+  26.4 + Day × 5.52); potions 투력 하급 8 → 10 · 중급 14 → 18 · 상급 20 → 25 · 최상급 28 → 35, prices unchanged (대응 장비와 레벨이 위험을
+  더 쉽게 넘기니 포션 값어치도 오른다). DUNGEON_HAZARD §GATE POWER / §Ordinary EXP, ITEM §ACTIVE CATALOG; tests night.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 

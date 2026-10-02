@@ -515,6 +515,10 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.95],[24,29.25],[29,34.75],[30,35.85]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
+ /* §GATE POWER SuccessEase (User 2026-10-02, v2.10.0): the whole ordinary Gate Power x .92 on DAY 1~7, x .90 from DAY 8 */
+ assert.deepEqual(Dungeon.GATE_EASE,{early:.92,late:.90,from:8});
+ for(const [day,ease] of [[1,.92],[7,.92],[8,.90],[29,.90]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
+ assert.match(read('dist/systems/shop.js'),/golemCombat:1\)\*G\.Dungeon\.gateEase\(s\.day\)/,'makeDungeon applies SuccessEase once, after Family Combat');
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
@@ -1009,14 +1013,14 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
 test('DUNGEON_HAZARD §Ordinary EXP (v2.9.2 balance, User 2026-09-25 / 2026-09-26): 대성공 1.00, combat-success 0.90, the rest unchanged',()=>{
  assert.equal(Dungeon.GREAT.xp,1.00);assert.equal(Dungeon.WIN.xp,.90);
  const src=read('dist/systems/dungeon.js');
- assert.ok(/\(22\+d\.day\*4\.6\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?WIN\.xp:\.5\)\*e\.xpMult/.test(src),'base, Retreat 0.38 and other living 0.50 keep their values');
+ assert.ok(/\(26\.4\+d\.day\*5\.52\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?WIN\.xp:\.5\)\*e\.xpMult/.test(src),'base (v2.10.0 x1.2: 26.4 + Day x 5.52), Retreat 0.38 and other living 0.50');
  assert.equal(Dungeon.WALLET_MULT['대성공'],1,'the Great Success Wallet reward is unchanged');
  // real resolved results pay exactly round(base x multiplier x the explicit XP modifiers)
  const want={'대성공':1.00,'성공':.90};const seen={'대성공':0,'성공':0};
  for(let k=0;k<400&&(seen['대성공']<3||seen['성공']<3);k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
   for(let d=0;d<12&&g.run.phase!=='end';d++){const s=g.run;s.money=5000;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();
    for(const r of s.results)if(want[r.outcome]&&!r.deep&&seen[r.outcome]<3){const e=Dungeon.prepare({...s.npcs.find(n=>n.id===r.npcId),pack:r.items},s.dungeons.find(x=>x.id===r.dungeon)||s.dungeons[0],s.facilities).effects;
-    assert.equal(r.xp,Math.round((22+r.day*4.6)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
+    assert.equal(r.xp,Math.round((26.4+r.day*5.52)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
    g.finishNight();g.closeDay();}}
  assert.ok(seen['대성공']>0&&seen['성공']>0,'a 대성공 and a 성공 were resolved and checked');
 });

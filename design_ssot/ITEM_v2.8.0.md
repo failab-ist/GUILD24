@@ -356,7 +356,7 @@ Forbidden as Item micro-systems: thirst, caffeine stacking, hidden fatigue chain
 
 `DIRECTOR DOCUMENT BASELINE`
 
-하급 / 중급 / 상급 / 최상급 포션 (Common / Uncommon / Rare / Epic; 투력 +8 / +14 / +20 / +28; Buy / Sell -> §ACTIVE CATALOG).
+하급 / 중급 / 상급 / 최상급 포션 (Common / Uncommon / Rare / Epic; 투력 +10 / +18 / +25 / +35; Buy / Sell -> §ACTIVE CATALOG).
 
 All four:
 ```text
@@ -600,7 +600,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | 44 | 녹차 양갱 | Food C | 30 / 60 | 정신 +8, Supply 5 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +12, Supply 2 | Stat route |
 | 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +15, Supply 2 | Stat route |
-| 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +8 | — |
+| 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +10 | — |
 | 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +12, Supply 1 | Fire 초반 대응 |
 | 41 | 중화 탄산수 | Drink C | 35 / 70 | 부식 +12, Supply 1 | Corrosion 초반 대응 |
 | 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +23 | Dark 중반 대응 |
@@ -618,10 +618,10 @@ approved ITEM amendment; QA does not auto-tune it.
 | 20 | 부식 방지 코팅제 | Field Gear R | 95 / 190 | 부식 +23 | Corrosion 중반 대응 |
 | 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +23 | Mire 중반 대응 |
 | 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +22 | Whiteout 중반 대응 |
-| 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +20 | — |
+| 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +25 | — |
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +23 | Poison 중반 대응 |
 | 25 | 귀환석 | Insurance R | 200 / 400 | 부상·중상·사망 -> one more retreat roll at own retreat chance +20%p | Failure Insurance |
-| 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +14 | — |
+| 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +18 | — |
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +22, Supply 1 | Fire 중반 대응 |
 | 29 | 세계수 생환부적 | Insurance E | 300 / 600 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
@@ -632,7 +632,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +18, 투력 +10 | Fire 후반 하이브리드 |
 | 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +26, Supply 2 | Top-end mobility |
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
-| 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
+| 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +35 | Top-end raw Power |
 
 Active catalog count is exactly 44. No active Item creates a separate poison Condition/cure subsystem.
 

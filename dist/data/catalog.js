@@ -24,7 +24,7 @@ item('yanggaeng','녹차 양갱',0,30,60,'food',2,'yanggaeng','용사픽','어�
 item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
-item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
+item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:10,potion:1}),
 item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:12,supply:1}),
 /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
 item('soda','중화 탄산수',0,35,70,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:12,supply:1}),
@@ -46,13 +46,13 @@ item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는
 item('coating','부식 방지 코팅제',2,95,190,'gear',5,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:23}),
 item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:23}),
 item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:22}),
-item('highpotion','상급 포션',2,195,390,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:20,potion:1}),
+item('highpotion','상급 포션',2,195,390,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:25,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
 item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:23}),
 item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.2}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
-item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),
+item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:18,potion:1}),
 item('guildlunch','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
 item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:22,supply:1}),
 item('worldcharm','세계수 생환부적',3,300,600,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
@@ -70,7 +70,7 @@ item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','�
 item('kingwater','왕도 천연암반수',3,185,370,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),
 item('hyperenergy','초고속 에너지드링크',3,175,350,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:26,supply:2}),
 item('sageelixir','대현자 허브엘릭서',3,175,350,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:28,supply:2}),
-item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:28,potion:1})
+item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:35,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
    full-run rebaseline existed; this is that rebaseline. The shape of the change: a Job with a
