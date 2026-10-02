@@ -3791,6 +3791,21 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  assert.ok(/\.stock-side\{display:block;position:sticky;top:46px;margin-top:46px;/.test(css)&&/\.p-order \.dock \.stock-handle,\.p-order \.dock \.stock-sheet\{display:none\}/.test(css),'desk: open, following the scroll, below the menu pin, no handle');
  assert.ok(/'<em>'\+\(hq\?'본사 기본 상품 ':''\)/.test(fn('stockHead'))&&/stockHead\(\)/.test(fn('stockSide'))&&/stockHead\(\)/.test(fn('stockSheetKey')),'the retired stock lesson\'s fact is on the head the handle and the column both print (COACH DIET)');
 });
+
+/* User 2026-10-02: a warehouse cell says what its Item does - a tap toggles it (a hover on desk), in a balloon that points at
+   that cell (it may cover the rack) and stays inside the screen */
+test('ORDER warehouse cell: a tip with the offer row\'s lines, pointing at its own cell',()=>{
+ const css=read('dist/ui/ui.css'),sl=fn('stockSlots'),pop=fn('whPop');
+ assert.ok(sl.includes("<details class=\"tip wh-tip\" name=\"wh-tip\"><summary aria-label=\"'+label+'\">"),'each held cell is the shared tip control (tap, hover, focus, tap-away), named by its reader label');
+ assert.ok(/document\.body\.appendChild\(p\)/.test(pop)&&/#wh-pop\{position:fixed;/.test(css)&&/pointer-events:none/.test(css.slice(css.indexOf('#wh-pop{'))),'one balloon on <body>: the sheet\'s scroll cannot clip it');
+ assert.ok(/Presentation\.rows\(it\.effects,undefined,it\.category\)\.slice\(0,3\)/.test(pop)&&/itemKind\(it\)/.test(pop)&&/D\.rarities\[it\.rarity\]/.test(pop),'name, kind · rarity and the effects the offer row prints - no new copy');
+ assert.ok(/const above=c\.top-gap-h>=m/.test(pop)&&/y=above\?c\.top-gap-h:Math\.min\(c\.bottom\+gap,/.test(pop)&&/c\.left\+c\.width\/2-x/.test(pop),'on its own cell - above, else below - its point on the cell centre');
+ assert.ok(/innerWidth-w-m/.test(pop)&&/innerHeight-h-m/.test(pop),'clamped inside the screen');
+ assert.ok(app.includes("document.addEventListener('toggle',ev=>{if(ev.target.classList?.contains('wh-tip'))whPop();},true);")
+  &&app.includes("addEventListener('scroll',whClose,{capture:true,passive:true});addEventListener('resize',whClose);"),'follows the tip state; a scroll or resize closes it');
+ assert.ok(/const pop=document\.getElementById\('wh-pop'\);if\(pop\)pop\.hidden=true;/.test(fn('render')),'a redraw never leaves it behind');
+ assert.ok(/const icon=cell\.querySelector\('summary'\)\?\.firstElementChild;/.test(app),'ORDER CONFIRM still drops the crate on the icon');
+});
 // UI_UX §AUDIO FEEDBACK — ENDING CUE (User 2026-09-29): the ending's music and cue wait for the result to land
 test('ending: the music before holds until the result lands, then the ending cue and SUCC / FAIL',()=>{
  const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;

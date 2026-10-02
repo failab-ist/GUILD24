@@ -25,6 +25,13 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 4 — a warehouse cell says what it does (User 2026-10-02; the version stays 2.9.13)
+
+- **ORDER warehouse cell tip** (User: 처음 하는 사람도 무슨 효과인지 알게): tapping a held cell (hovering on desk) shows the offer
+  row's own lines - name, `kind · rarity`, effects - in a balloon right above that cell, pointing at it; a second tap closes it.
+  It reuses the shared tip control (tap / hover / focus / tap-away), floats on `<body>` so the sheet's scroll cannot clip it,
+  stays inside the screen and may cover the rack. No new copy. UI_UX §ORDER — WAREHOUSE PANEL / UI-Q-v29-50; test ui-guard.
+
 ## v2.9.13 quick patch 3 — the DAY 0 free Store Support may wait (User 2026-10-01, PR #43; the version stays 2.9.13)
 
 - **The free first pick is deferrable** (User: 처음 하는 사람에게 가혹함): the DAY 0 takeover gains `나중에 결정` under

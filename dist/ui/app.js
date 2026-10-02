@@ -500,7 +500,7 @@ function cueOrder(A,h){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_B
   k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
    /* the SKU's new cells - the ones past what it held before - take its crate, all on the same fall */
    const cells=list?[...list.querySelectorAll('li.wh-slot[data-item="'+item+'"]')].slice(h.before?.[item]||0):[];
-   for(const cell of cells){const icon=cell.firstElementChild;if(!icon)continue;
+   for(const cell of cells){const icon=cell.querySelector('summary')?.firstElementChild;if(!icon)continue;
     A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});}
    if(i<ORDER_BEAT.hits)orderCueAt.push(setTimeout(()=>Sound.play(i?'crate':'order'),land));});
   if(!k.length)Sound.play('order');
@@ -610,6 +610,7 @@ function render(){
     Action starts one. */
  if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;warmAhead(s,phase);
+ const pop=document.getElementById('wh-pop');if(pop)pop.hidden=true; // its cell is redrawn closed
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
  const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);
  /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
@@ -1501,8 +1502,9 @@ function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=group
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
    label=E(it.name)+(left===null?'':' · '+left+'일');
-   return '<li class="wh-slot" data-item="'+it.id+'" aria-label="'+label+'">'+Art.itemIcon(it.id,32)
-    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')
+   /* User 2026-10-02: a cell is a tip - a tap (a hover on desk) shows what the Item does, in the floating #wh-pop (whPop) */
+   return '<li class="wh-slot" data-item="'+it.id+'"><details class="tip wh-tip" name="wh-tip"><summary aria-label="'+label+'">'+Art.itemIcon(it.id,32)
+    +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</summary></details></li>';}).join('')
   +(full?'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length)):'')+'</ol>';}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is not on the 발주서 any more; it is held apart like an
    inventory, so it can be read against the offer rows while ordering. Desk: a large column beside the form, always open.
@@ -2670,6 +2672,24 @@ document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]
    <details> closes on its own summary already, and the shared name closes a sibling, so this
    only has to handle the outside tap and Escape. */
 const closeTips=except=>{for(const t of document.querySelectorAll('.tip[open]'))if(t!==except)t.open=false;};
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-10-02): a warehouse cell's tip is one floating balloon on <body>, so neither the
+   sheet's own scroll nor the desk column clips it. It sits right on its cell and points at it (above it, below when there is
+   no room), and may cover the rack around it; kept inside the screen. Its lines are the offer row's own - name, kind · rarity, effects. Any scroll or resize closes it. */
+function whPop(){const t=document.querySelector('.wh-tip[open]'),cell=t?.closest('.wh-slot');
+ let p=document.getElementById('wh-pop');
+ if(!t||!cell){if(p)p.hidden=true;return;}
+ if(!p){p=document.createElement('div');p.id='wh-pop';p.setAttribute('role','tooltip');document.body.appendChild(p);}
+ const it=D.itemBy[cell.dataset.item],rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
+ p.innerHTML='<b>'+E(it.name)+'</b><span class="kind">'+E(itemKind(it))+' · <i class="r'+it.rarity+'">'+E(D.rarities[it.rarity])+'</i></span>'
+  +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>';
+ p.hidden=false;
+ const c=cell.getBoundingClientRect(),m=8,gap=9,w=p.offsetWidth,h=p.offsetHeight,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const above=c.top-gap-h>=m,x=cl(c.left+c.width/2-w/2,m,innerWidth-w-m),y=above?c.top-gap-h:Math.min(c.bottom+gap,innerHeight-h-m);
+ p.dataset.side=above?'top':'bottom';p.style.left=x+'px';p.style.top=y+'px';
+ p.style.setProperty('--at',cl(c.left+c.width/2-x,12,w-12)+'px');}
+document.addEventListener('toggle',ev=>{if(ev.target.classList?.contains('wh-tip'))whPop();},true);
+const whClose=()=>{for(const t of document.querySelectorAll('.wh-tip[open]'))t.open=false;whPop();};
+addEventListener('scroll',whClose,{capture:true,passive:true});addEventListener('resize',whClose);
 document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);
  /* a tap anywhere but the tray itself, a shelf row, the dock or an overlay folds the tray (UI_UX §SALE — COUNTER TRAY FOLD) */
  if(!ev.target.closest('.counter-tray,[data-action="select"],.dock,#modal-root,#coach-root'))foldTray();},true);
