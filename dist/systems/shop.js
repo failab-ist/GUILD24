@@ -374,7 +374,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  if(advancePity&&this.has('dawnRecovery'))for(let i=0;i<D.relicParams.dawnRecovery.extraOffers;i++)s.offers.push(this.rollOffer(0,1,G.Relics.food));
  const ordinary=num;
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
- const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
+ /* ECONOMY_ORDER §Known-Hazard Counter pity (User 2026-10-02): every sheet drawn counts - the Day's first and each Reroll -
+    so three sheets in a row without a Counter for a known Hazard bring one, however they were drawn. Rare pity above
+    still counts the Day's first sheet only. */
+ const hazards=G.Relics.known(this);s.pity.hazards??={};{for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
  if(s.pity.counter>=3&&hazards.length){
   const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,target));
@@ -382,7 +385,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   const others=s.offers.filter((o,i)=>i!==ordinary-1),room=matches.filter(it=>others.filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);
   if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(room.length?room:matches));
  }
- if(advancePity&&hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
+ if(hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }

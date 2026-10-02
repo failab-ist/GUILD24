@@ -28,7 +28,7 @@ reroll=paid
 rerollScope=fullOffer
 rerollSameDayCost=escalating
 rerollDailyReset=YES
-rerollAdvancesPity=NO
+rerollAdvancesPity=NO (Rare pity); YES for the Known-Hazard Counter pity (User 2026-10-02)
 
 nextDayTierForecast=NONE (→ §NEXT-DAY FORECAST — RETIRED)
 nextDayFamilyForecast=HIDDEN
@@ -415,7 +415,8 @@ Canonical Full-offer Reroll does not advance pity, cannot be used to farm pity, 
 
 Track each currently known Hazard independently.
 
-For each qualifying normal offer-set generation:
+For every offer-set generation - the Day's first sheet and each Reroll alike (User 2026-10-02: the guarantee counts sheets drawn,
+however they were drawn):
 - if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT) -> its missing count resets
 - otherwise -> its missing count +1
 
@@ -426,7 +427,8 @@ When any known Hazard reaches 3 consecutive missing sets:
 - do not reveal an unknown Hazard
 - reset covered missing state through the same resulting offer truth
 
-Reroll does not advance these pity counters.
+A Reroll is a drawn sheet here: three sheets in a row without a direct Counter for a known Hazard bring one on the third, by
+the Day's first sheets, by Rerolls, or both. A Reroll that throws away a guaranteed Counter starts a new count.
 
 No Store Support adds a further Counter-offer guarantee (RELIC).
 
@@ -473,7 +475,8 @@ next day:
 cost/resetCount=RESET
 
 Reroll preserves current Day eligibility, unlock rules, rarity rules and coverage rules.
-Reroll does not advance pity, cannot farm pity and does not bypass eligibility.
+Reroll does not advance Rare pity, cannot farm it and does not bypass eligibility; it does count toward the Known-Hazard Counter
+pity (§Known-Hazard Counter pity, User 2026-10-02).
 
 With an unconfirmed cart:
 - Reroll is still usable
@@ -968,7 +971,7 @@ PASS: No prior-day escalation remains.
 #### ORD-Q06 — REROLL PITY INTEGRITY
 SETUP: Reroll repeatedly.
 
-EXPECT: Reroll itself does not advance rarity pity.
+EXPECT: Reroll itself does not advance rarity pity; it counts as a drawn sheet for the Known-Hazard Counter pity.
 
 PASS: No pity farming by spending Gold.
 

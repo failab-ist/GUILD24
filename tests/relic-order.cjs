@@ -23,12 +23,13 @@ test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free, then the or
  assert.equal(g.rerollPrice(),0,'next Day restores the free first Reroll');
 });
 
-test('ORD-Q06/Q07: Reroll regenerates every slot, keeps legality and never advances pity',()=>{
+/* User 2026-10-02: a Reroll is a drawn sheet for the Known-Hazard Counter pity (ECONOMY_ORDER); Rare pity still ignores it */
+test('ORD-Q06/Q07: Reroll regenerates every slot, keeps legality and never advances Rare pity',()=>{
  const g=fresh('reroll-pity');g.beginOrder();g.run.facilities=[];g.run.money=5000;
  const pity=copy(g.run.pity);
  for(let i=0;i<3;i++){
   g.reroll();
-  assert.deepEqual(g.run.pity,pity,'Reroll does not advance or farm pity');
+  assert.equal(g.run.pity.rare,pity.rare,'Reroll does not advance or farm Rare pity');
   assert.equal(g.run.offers.length>=6,true,'the whole offer list is regenerated');
   for(const o of g.run.offers){const it=DATA.itemBy[o.item];assert.ok(it,'offer is a real Item');assert.ok(!it.unlock||g.account.unlocked.includes(it.unlock),'unlock rules preserved');}
  }

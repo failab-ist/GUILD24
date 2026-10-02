@@ -47,6 +47,11 @@ and this table is their commit record.
   opens, grows or closes). UI_UX §ORDER — WAREHOUSE PANEL.
 - **A free Store Support is 선택, not 구매** (User): the DAY 0 / DAY 1~4 free card printed `무료` over a `구매` key. A free card's
   key now reads `선택`; a priced card keeps `구매`. COPY_AUDIT §11-31b; test copy.
+- **The Counter guarantee counts every sheet drawn** (User: 3번 리롤했는데도 안 나온다 - 그냥 3번 그려졌을 때로): the Known-Hazard
+  Counter pity counted only the Day's first sheet, so Rerolls never moved it. Every sheet drawn now counts - the Day's first and
+  each Reroll - and the third in a row without a direct Counter for a known Hazard carries one. Rare pity still ignores Rerolls.
+  A Reroll now reaches a guaranteed Counter for 50G + 100G on any Day; unmeasured (no simulation run). ECONOMY_ORDER §REROLL,
+  §Known-Hazard Counter pity, ORD-Q06; tests revision, delta, relic-order.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

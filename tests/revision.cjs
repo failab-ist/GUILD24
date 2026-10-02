@@ -682,4 +682,16 @@ test('a renamed customer keeps its portrait slot, and an older save carries the 
  assert.equal(state.run.npcs.filter(x=>x.name==='카리냐').length,0);
 });
 
+/* ECONOMY_ORDER §Known-Hazard Counter pity (User 2026-10-02): every sheet drawn counts, the Day's first and each Reroll */
+test('the Counter guarantee comes on the third sheet in a row without one, Rerolls included; Rare pity ignores Rerolls',()=>{
+ const g=fresh('pity-sheets'),s=g.run,hz=Relics.known(g),has=()=>s.offers.some(o=>Relics.directCounter(DATA.itemBy[o.item],hz));
+ assert.ok(hz.length,'a known Hazard');const roll=g.rollOffer;g.rollOffer=function(){return this.offerFor(DATA.itemBy.rice);};
+ s.pity={rare:0,hazards:{}};s.money=99999;
+ g.generateOffers();assert.ok(!has());assert.equal(Math.max(...hz.map(h=>s.pity.hazards[h])),1,'the Day\'s first sheet: 1');
+ g.reroll();assert.ok(!has());assert.equal(Math.max(...hz.map(h=>s.pity.hazards[h])),2,'a Reroll counts: 2');
+ const rare=s.pity.rare;g.reroll();assert.ok(has(),'the third sheet carries a Counter');assert.equal(s.pity.counter,0,'and the count starts over');
+ assert.equal(s.pity.rare,rare,'Rare pity is not advanced by a Reroll');
+ g.reroll();assert.ok(!has());assert.equal(s.pity.counter,1,'rerolling the guaranteed sheet away starts a new count');
+ g.rollOffer=roll;});
+
 console.log(checks+' revision groups passed');
