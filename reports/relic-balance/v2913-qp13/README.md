@@ -1,5 +1,7 @@
 # 유물 기여도 측정 — v2.9.13 퀵패치 13
 
+> 최신 평가표(퀵패치 13 확정 규칙, 일당 현금 포함)는 `EVALUATION.md`. 이 문서는 첫 측정(`8c71d0e`, `자본` 지표) 기록이다.
+
 측정 HEAD `8c71d0e` · 2026-10-02 · 1000시드 짝비교 · 봇 정책 `reader` · 가격 `adaptive` · 계정 fresh
 
 명령: `node tools/relic-contribution.cjs 1000 all --policy reader` / 원정 작전실 마왕전 제외 변형: `node tools/relic-contribution.cjs 1000 opsRoom --policy reader --set '{"opsRoom":{"final":false}}'`

@@ -115,6 +115,13 @@ and this table is their commit record.
 - **평생 단골제 remade** (User: 돈 말고 단골과 관계를 이어가는 쪽 · 단골도 안 떨어지는 게 좋다): no Gold and no revisit weight. A
   단골's four Core Stats +10% (listed among the sources; the Final party too, so it leaves the D30 exclusion list), and while it
   is owned a 단골's Loyalty never drops below 51. RELIC §22 / §D30, COPY_AUDIT §11-22; tests relic-effects, ui-guard, copy.
+- **Store Support evaluation for this patch's rules** (User: 바뀐 것만 재서 전체 평가표 · 버전 기록에): reader bot, relic-aware, 1000
+  paired seeds; the four supports changed here measured at `6dbe7ce` / `ba90044`, the other 28 carried over from `81e1e2d`
+  (only the Level floor changed between, measured as no effect). New metric: cash per closed Day (the earlier `gain` never saw
+  costs or support payouts, so 물류 본부계약 and the other economy supports read as zero - corrected). By line, clear %p /
+  cash per Day: Fresh +5.3 / +1.9G (24시간 신선체계 and 원정 도시락 코너 lowest balance -132G / -141G), Expedition +2.9 /
+  +9.7G, Customer +3.0 / +40.2G, VIP +2.1 / +11.1G, Rotation +1.9 / +40.7G, Premium +1.0 / +14.8G. Findings only, no other
+  value changed. `reports/relic-balance/v2913-qp13/EVALUATION.md`.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
