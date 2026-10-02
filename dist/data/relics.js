@@ -22,7 +22,7 @@ const rows=[
 ['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
 ['memberBundle','단골 묶음혜택','hybrid',['rotation','vip'],190,'단골의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
 ['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,'단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
-['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +25G.'],
+['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +20G.'],
 ['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,'음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나).'],
 ['coldcase','냉장 유통 계약','hybrid',['fresh','premium'],180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
 ['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,'오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
@@ -66,7 +66,7 @@ D.relicParams={
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},
  memberBundle:{payShare:.5},
  premiumMember:{rareIntentBonus:.15,arrivalGold:40},
- returnPoints:{loyaltyBonus:5,goldBonus:25},
+ returnPoints:{loyaltyBonus:5,goldBonus:20}, /* User 2026-10-02: was 25G */
  expeditionMeal:{supplyPerItem:2,drinkSupplyPerItem:1,hazardDefense:2},
  coldcase:{weightMult:1.8,shelfDays:1,intentBonus:.16},
  supplyCert:{commissionRate:.20,goldBonus:30},

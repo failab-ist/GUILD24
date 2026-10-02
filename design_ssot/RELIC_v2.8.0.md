@@ -404,7 +404,7 @@ effect=paid returning customer survives expedition -> long-term customer value u
 channel=prefer existing loyalty/wallet/revisit systems
 - Price = 240G
 - condition = paid returning customer today survives (no Loyalty threshold)
-- Loyalty +5, NPC Wallet +25G
+- Loyalty +5, NPC Wallet +20G (User 2026-10-02)
 
 17. 원정 도시락 코너 · tags=[Fresh,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 
@@ -1034,7 +1034,7 @@ PASS: Rotation/low-cost build is not invalidated by universal Rare+ upgrades.
 
 #### REL-Q-v28-4 — RETURN POINTS
 
-Expected: paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
+Expected: paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +20G
 
 #### REL-Q-v28-6 — LIFETIME
 
