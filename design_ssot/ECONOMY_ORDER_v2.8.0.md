@@ -131,7 +131,8 @@ Target: most normal customers have >=1 plausible low-cost option.
 
 Wallet growth should support long-term NPC value, so that from early game the default 2 purchase slots more often
 support a real decision between enough preparation, extra preparation to chase Great Success, and conserving stock/cash.
-Do not add a new Day-based Wallet inflation system or a separate Wallet-growth subsystem.
+Do not add a new Day-based Wallet inflation system or a separate Wallet-growth subsystem - the one exception is the Away
+Wallet below (User 2026-10-02).
 
 ### Ordinary NPC Wallet on visit — exact
 
@@ -150,6 +151,18 @@ Rules:
 - successful purchases reduce Persistent Wallet normally
 - every permanent increase path clamps final Persistent Wallet to **2000G**
 - re-measure the failure -> low Wallet -> under-supplied -> failure loop before further reward tuning; further Wallet tuning is a separate balance finding and must not be auto-applied during QA
+
+### Away Wallet — exact (User 2026-10-02)
+
+A long gap between visits left a returning adventurer behind the Gates and short of money to buy preparation. An introduced,
+living adventurer who was available (not on recovery Days) and was not among the Day's visitors banks one Away Day, at most
+**3**; the next ordinary visit adds, on top of the visit income above,
+
+    banked Days × (Level × 4 + 20)
+
+and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half an ordinary visit's average income per Day,
+so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's
+way to the money is still a regular who comes often. Clamped by the 2000 cap like every other increase.
 
 `rich` is separate (`NPC_TRAIT_v2.8.0.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
 actual arrival, not Morning formula; cap 2000 after application.

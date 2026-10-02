@@ -69,6 +69,10 @@ and this table is their commit record.
 - **No more `챙긴 보급 덕분에`** (User: 두 개 다 적용했다는 소리냐): with a two-slot Bag a whole-Bag proof means each Item alone
   was enough, so both are named - `컵라면·방한 두건 덕분에 살아 돌아왔다.`, the same Item twice `컵라면 2개 덕분에 …`. NIGHT_CLOSING
   §HERO ITEM FEEDBACK, COPY_AUDIT §6-5; tests revision, copy.
+- **Away Wallet** (User: 미방문 고객은 그동안 골드라도 모으게, 단 방문보다 이득이면 안 됨): an introduced adventurer who was
+  available and did not come banks one Away Day (at most 3); the next visit adds banked Days x (Level x4 + 20) - half an
+  ordinary visit's average income per Day, no expedition reward, no EXP or Loyalty, so a regular who comes often stays the
+  better customer. No RNG draw added. Unmeasured (no simulation run). ECONOMY_ORDER §Away Wallet; test revision.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

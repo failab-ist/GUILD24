@@ -336,7 +336,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49 re-measure amendment: visit income
     narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the
     excess Store-Gold expansion to this step. Fresh base 180, Level x8 and the 2000 cap unchanged. */
-n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.int(0,80)));n.newToday=!n.introduced;}
+n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.int(0,80)+this.awayWallet(n)));n.awayDays=0;n.newToday=!n.introduced;}
+  /* ECONOMY_ORDER §Away Wallet (User 2026-10-02): an adventurer who could have come and did not earns elsewhere - each such
+     Day banks one, up to a few, paid on the next visit. Counted after the draw, so it adds no RNG draw. */
+  for(const n of s.npcs)if(n.alive&&!n.recovery&&n.introduced&&!selected.includes(n))n.awayDays=Math.min(D.balance.awayWallet.maxDays,(n.awayDays||0)+1);
   /* NPC_TRAIT destinationDefault / SALE §EXPECTED DESTINATION (User 2026-09-25): every open Gate is claimed by at
      least one visitor whenever there are as many visitors as Gates - the per-Gate count on MORNING / ORDER was
      showing Gates nobody would visit. The ordinary draw above is untouched; only a Day that left a Gate empty
@@ -417,6 +420,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     decision into answer-following, which the owner forbids in both directions. The runtime
     preparation state is NOT frozen - Resolve still reads the final Bag. Nothing here draws
     from the run RNG, so taking the snapshot does not move the seeded stream. */
+ /* ECONOMY_ORDER §Away Wallet (User 2026-10-02): per banked Day half an ordinary visit's average income (Level x4 + 20), at most
+    maxDays - always below what the visit itself brings (Level x8 + 0~80, plus the expedition's own Wallet reward, growth and
+    Loyalty), so coming often stays the better life; a regular simply misses fewer Days. */
+ awayWallet(n){const a=D.balance.awayWallet,k=Math.min(a.maxDays,n.awayDays||0);return n.introduced?k*(n.level*a.perLevel+a.base):0;}
  outlookFor(n){
   const d=this.claimedGateFor(n)||this.run.dungeons[0];
   const v={...n};  // the snapshot is a systems-layer calculation; it does not reach for the UI module

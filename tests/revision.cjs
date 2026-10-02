@@ -703,4 +703,18 @@ test('a whole-Bag Hero proof names both Items, or the one Item twice',()=>{
  assert.ok(!/챙긴 보급 덕분에/.test(Presentation.heroLine(r({items:['ramen','hood']}))));
 });
 
+/* ECONOMY_ORDER §Away Wallet (User 2026-10-02) */
+test('an adventurer who could have come banks Away Days, at most 3, paid on the next visit; no extra RNG draw',()=>{
+ const g=fresh('away-wallet'),s=g.run,a=DATA.balance.awayWallet;
+ const n=s.npcs.find(x=>x.introduced)||s.npcs[0];n.introduced=true;n.awayDays=5;
+ assert.equal(g.awayWallet(n),a.maxDays*(n.level*a.perLevel+a.base),'capped at maxDays');
+ n.awayDays=1;assert.equal(g.awayWallet(n),n.level*a.perLevel+a.base);
+ assert.ok(n.level*a.perLevel+a.base<n.level*8+40,'a banked Day is worth less than an average visit\'s own income');
+ const fresh0={...n,introduced:false,awayDays:2};assert.equal(g.awayWallet(fresh0),0,'a first visit banks nothing');
+ /* the same seed with and without banked Days draws the same stream */
+ const run=(days)=>{const h=fresh('away-stream');for(const x of h.run.npcs){x.introduced=true;x.awayDays=days;}h.run.day=4;h.morning();return {state:h.rng.state,queue:h.run.queue.slice(),money:h.run.queue.map(id=>h.run.npcs.find(x=>x.id===id).money)};};
+ const A=run(0),B=run(2);assert.equal(A.state,B.state,'no extra RNG draw');assert.deepEqual(A.queue,B.queue);
+ B.money.forEach((m,i)=>assert.ok(m>=A.money[i],'a banked visitor brings at least as much'));
+});
+
 console.log(checks+' revision groups passed');
