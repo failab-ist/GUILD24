@@ -25,6 +25,20 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
+
+- **+160G for the injured visitor** (User: 돈 없어서 못 사네): on the kit lesson's Day the injured visitor brings the
+  구급키트's 정가 (160G) to spend this visit only - the same nightly-cleared channel as the payday customer (`추가 구매 +160G`),
+  first Run only, its own 소지금 untouched. CORE_RUN §FIRST-RUN LESSONS; test revision.
+
+## v2.9.13 quick patch 11 — the Severe Injury has its own NIGHT mark (User 2026-10-02, PR #49; the version stays 2.9.13)
+
+- **Injury / Severe Injury split**: the NIGHT `injured` mark acted on 부상 and 중상 alike, so a first 중상 record read "다친 채
+  다시 떠나면 … 성공하면 낫는다" - false for a Severe Injury, which rests 2~4 Days unseen and comes back healthy. `injured` now
+  acts on 부상 only, and a new `severe` mark on the first 중상 record: `중상을 입었다. 며칠 쉬어야 해서 그동안은 손님으로 오지
+  않는다. 다 쉬면 건강하게 돌아온다.` Once per account each, kept in the 발견 수첩. NIGHT_CLOSING §DISCOVERY LINE, COPY_AUDIT
+  §26-2; test revision.
+
 ## v2.9.13 quick patch 10 — at most two slots per Item (User 2026-10-02, PR #48; the version stays 2.9.13)
 
 - **ORDER offer variety** (User: 6칸에 하급 포션만 4칸): one sheet holds an Item on at most 2 slots (`balance.offerSameItemMax`),
