@@ -347,8 +347,8 @@ Exact normalized weights:
 
 | Day | Common | Uncommon | Rare | Epic | Legendary |
 |---|---:|---:|---:|---:|---:|
-| D1–3 | 68% | 24% | 7% | 1% | 0% |
-| D4–7 | 63% | 25% | 11% | 1% | 0% |
+| D1–3 | 76% | 20% | 4% | 0% | 0% |
+| D4–7 | 68% | 24% | 8% | 0% | 0% |
 | D8–12 | 58% | 27% | 12% | 2% | 1% |
 | D13–19 | 53% | 27% | 15% | 4% | 1% |
 | D20–24 | 46% | 26% | 17% | 10% | 1% |
@@ -358,7 +358,8 @@ Exact normalized weights:
 Rules:
 - every row sums to exactly 100%
 - Epic preparation Items use the ordinary Epic pool; they do **not** receive a separate D20 hard unlock
-- early Epic appearance is intentionally possible but rare
+- D1–7 lean on Common and offer no Epic (User 2026-10-02): a T1 Day's customer (a new Lv1 Wallet about 188~268G) cannot
+  pay for an Epic (sell 270G+) and a Rare takes the whole Wallet; Epic is possible but rare from D8
 - D20+ is where Epic becomes a normal late-Run preparation consideration because the shared Epic weight rises materially
 - Legendary remains exceptional and does not scale with late-Run danger beyond the exact 1% rows above
 - existing unlock/meta eligibility still applies before Rarity selection where another current owner explicitly requires it
@@ -1013,8 +1014,8 @@ For ordinary ORDER Rarity selection, EXPECT exact normalized rows:
 
 | Day | Common | Uncommon | Rare | Epic | Legendary |
 |---|---:|---:|---:|---:|---:|
-| D1–3 | 68 | 24 | 7 | 1 | 0 |
-| D4–7 | 63 | 25 | 11 | 1 | 0 |
+| D1–3 | 76 | 20 | 4 | 0 | 0 |
+| D4–7 | 68 | 24 | 8 | 0 | 0 |
 | D8–12 | 58 | 27 | 12 | 2 | 1 |
 | D13–19 | 53 | 27 | 15 | 4 | 1 |
 | D20–24 | 46 | 26 | 17 | 10 | 1 |
@@ -1033,7 +1034,7 @@ Using the 10 Epic preparation Items from `ITEM_v2.8.0.md`:
 PASS:
 - they are eligible through the ordinary Epic pool whenever other general eligibility allows
 - no dedicated `day >= 20` gate exists for these 10 Items
-- early Epic appearance remains possible but rare through Day-band weights
+- no Epic in D1–7; from D8 Epic appearance is possible but rare through Day-band weights
 - D20+ Epic frequency rises because the shared Epic weight rises, not because a hidden second unlock system activates
 
 #### ECO-Q-v28-5 — ORDER PITY EXACT
