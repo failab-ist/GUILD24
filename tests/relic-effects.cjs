@@ -403,12 +403,12 @@ test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ 
  assert.equal(r.store,300,'the store still receives the full charged price');assert.equal(r.paid,210,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
-test('즉석식품 코너 costs no operating cost (v2.9.11, User 2026-09-29; was overheadBase +10%); hub still takes its 10%',()=>{
+test('즉석식품 코너 takes overheadBase +10% (User 2026-10-02), added to hub\'s 10%, never compounded',()=>{
  const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','hub']);
  const b=base.g.overheadBase(),charged=x=>Math.round((b+x)/10)*10;
- assert.equal(kitchen.g.run.daily.operating,charged(0),'kitchen adds nothing');
- assert.equal(both.g.run.daily.operating,charged(b*.10),'only hub takes 10% of the base');
- assert.ok(!('overheadRate' in DATA.relicParams.kitchen),'no dormant operating-cost lever is left on the card');
+ assert.equal(DATA.relicParams.kitchen.overheadRate,.10);
+ assert.equal(kitchen.g.run.daily.operating,charged(b*.10),'kitchen takes 10% of the base');
+ assert.equal(both.g.run.daily.operating,charged(b*.20),'with hub: 10% + 10% of the same base');
 });
 test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x1.25), no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];

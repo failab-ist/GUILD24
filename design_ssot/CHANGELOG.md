@@ -99,6 +99,9 @@ and this table is their commit record.
   one row height (User: 투력·강인함만 세로 여백 - a tappable cell took the 44px summary minimum); the outlook coach mark is
   two, one per box. UI_UX §SALE — OUTLOOK BOXES (new),
   §FORECAST PIN, §ENVIRONMENT METER, §TUTORIAL — COACH DIET; COPY_AUDIT §3-4; test ui-guard.
+- **즉석식품 코너 takes operating cost again** (User: 운영비 10%로): base operating cost +10% of overheadBase from the next Day,
+  added to 지역 거점점 계약 / 왕도 프리미엄 인증 the same way. The Fresh line is meant to clear more and pay more; the earlier
+  measure (`gain` = gross sales x reach) never saw a cost. RELIC §10, COPY_AUDIT §11-10; tests relic-effects, copy.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

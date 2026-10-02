@@ -362,7 +362,8 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-no operating-cost effect
+base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
+  (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect] · newCombatSystem=NO
@@ -962,7 +963,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
 - COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +10% of overheadBase
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
