@@ -31,7 +31,8 @@ and this table is their commit record.
 - **연속 부상 출발 in the 전투 전망 box** (User: 이상한 데 있다 · 대성공처럼 전투 전망 밑에, 모바일은 버튼 · 플로팅은 우하단): the loose line
   under the two boxes is gone. A phone shows a small muted-red chip beside the stamped word (the line kept for a screen reader; with
   the 대성공 기회 tag too, the second chip wraps under the first); a desk shows a small line under the word. On the phone pin the words
-  sit at the bottom right of the strip, in the room the 환경 meter leaves. UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT /
+  ride at the bottom right of the strip as the same chips, with the 대성공 기회 chip, stacked when both show (User: 플로팅도 버튼 디자인 · 겹치지
+  않게; the deployed pin drew the line over the meter). UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT /
   §FORECAST PIN, COPY_AUDIT §4-25; test ui-guard.
 - **The early Counter rungs rise** (User: 초반 버티기가 쉽지 않다 · 하이브리드 버프, B안 - 순서 유지): 초반 대응 10 -> 12 (컵라면 냉기, 얼음컵
   화염, 중화 탄산수 부식, 집중 사탕 공포, 방진마스크 독); 초반 하이브리드 9 / 10 -> 11 / 12 on the first / second Hazard (방한 두건

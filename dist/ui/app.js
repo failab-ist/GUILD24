@@ -1788,9 +1788,10 @@ function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=
  pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
   /* User 2026-10-02: one strip, the boxes' short names - `전투` | `환경` - so a preview still fits at 360 */
-  /* v2.9.14 quick patch (User 2026-10-02): the strain line sits at the bottom right of the strip, in the room the 환경 meter leaves */
-  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length||streak>0?'<span class="pin-fore pin-plate env-meter">'+(p.hazards.length?'환경'+envMeter(p,d,pre):'')
-   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>':'')+'</span>'
+  /* v2.9.14 quick patch (User 2026-10-02): the readout's chips - 연속 부상 출발, 대성공 기회 - ride at the bottom right of the strip,
+     in the room the 환경 meter leaves, stacked when both show, never over the meter */
+  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length||streak>0||o.greatSignal?'<span class="pin-fore pin-plate env-meter">'+(p.hazards.length?'환경'+envMeter(p,d,pre):'')
+   +(streak>0||o.greatSignal?'<span class="pin-tags">'+(streak>0?'<i class="st-tag">연속 부상 출발 '+streak+'회</i>':'')+(o.greatSignal?'<i class="gs-tag">'+E(Copy.great.tag)+'</i>':'')+'</span>':'')+'</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}

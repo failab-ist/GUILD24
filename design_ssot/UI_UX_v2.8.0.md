@@ -438,7 +438,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
 repeats, on one strip split by a thin divider, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
 Hazard, live as the readout reads it (§SALE — OUTLOOK BOXES / ENVIRONMENT METER) — the same values, never a second
-source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` words at the bottom right of the strip. Hidden while the readout is on screen. One
+source — plus, when the readout carries them, the same chips (`연속 부상 출발 {n}회`, `대성공 기회`) at the bottom right of the strip,
+stacked when both show, never over the meter. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
 

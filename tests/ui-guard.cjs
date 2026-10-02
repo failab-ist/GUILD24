@@ -2012,10 +2012,11 @@ test('UI-Q-v29-38: SALE strain - in the 전투 전망 box, injured with a chain 
 test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and wording, folded away with the readings',()=>{
  const p=fn('forecastPin');
  assert.ok(p.includes("streak=n.injury===1?Dungeon.injuredStreak(n.records):0"),'injured only, the same injuredStreak');
- assert.ok(p.includes("(streak>0?'<span class=\"pin-strain\">연속 부상 출발 '+streak+'회</span>':'')"),'a chain of 1 or more, the readout wording');
- assert.ok(/\.forecast-pin \.pin-plate \.pin-strain\{[^}]*margin-left:auto;align-self:flex-end/.test(css),'at the bottom right of the strip (v2.9.14 quick patch)');
- assert.ok(p.indexOf('pin-strain')<p.indexOf('pin-chip')&&p.indexOf('pin-strain')>p.indexOf('pin-full'),'inside the full line, not the chip');
- assert.ok(/\.forecast-pin \.pin-plate \.pin-strain\{[^}]*font:500 12px/.test(css),'small, as the readout line');
+ assert.ok(p.includes("(streak>0?'<i class=\"st-tag\">연속 부상 출발 '+streak+'회</i>':'')"),'a chain of 1 or more, the readout wording, as the readout chip');
+ assert.ok(p.includes("(o.greatSignal?'<i class=\"gs-tag\">'+E(Copy.great.tag)+'</i>':'')"),'the 대성공 기회 chip rides with it (v2.9.14 quick patch)');
+ assert.ok(/\.forecast-pin \.pin-plate \.pin-tags\{display:flex;flex-direction:column;align-items:flex-end;[^}]*margin-left:auto;align-self:flex-end/.test(css),'stacked at the bottom right of the strip (v2.9.14 quick patch)');
+ assert.ok(p.indexOf('pin-tags')<p.indexOf('pin-chip')&&p.indexOf('pin-tags')>p.indexOf('pin-full'),'inside the full line, not the folded chip');
+ assert.ok(/\.forecast-pin \.st-tag\{padding:2px 5px;font:600 11px/.test(css),'the readout chip\'s own look');
 });
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
