@@ -415,6 +415,8 @@ per Food/Drink Item in the Bag:
   +2 defence on every Hazard of the Gate the adventurer actually goes to
   at the 마왕성 (the Final) the +2 goes to one Hazard only: the adventurer's most 취약 one - the largest gap before this
     bonus, the Final's own Hazard order on a tie
+Food/Drink ORDER price +5G flat, after any percentage modifier (24시간 신선체계 x1.15 first); the offers on the table are
+  repriced once at acquisition (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.

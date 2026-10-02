@@ -63,6 +63,8 @@ w.purchaseDay=s.phase==='foundation'?0:s.day;
  /* 24시간 신선체계: Food/Drink ORDER price x1.25 from acquisition, so the offers already on the
     table are repriced once here and every later offer is priced by offerFor. */
  if(id==='fresh24')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.fresh24.orderPriceMult);
+ /* 원정 도시락 코너 (User 2026-10-02): the same once-only repricing, a flat +5G */
+ if(id==='expeditionMeal')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price+=D.relicParams.expeditionMeal.orderPriceAdd;
  if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait. Deferring
    opens DAY 1 exactly as a pick does, and the D0 window stays open, still free, until the D5 window replaces it. */

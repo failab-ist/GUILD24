@@ -104,6 +104,9 @@ and this table is their commit record.
   measure (`gain` = gross sales x reach) never saw a cost. RELIC §10, COPY_AUDIT §11-10; tests relic-effects, copy.
 - **귀환 적립제 Wallet 25G -> 20G** (User: 단골 만들기는 시간과 특성이 드니 소지금만): Loyalty +5 unchanged. RELIC §16,
   COPY_AUDIT §11-16; tests relic-effects, copy.
+- **원정 도시락 코너 raises the Food/Drink order price +5G flat** (User: 유통기한 -1일은 빠듯, 매입가를 정량으로): after any
+  percentage modifier, the table repriced once at acquisition; the Supply / Hazard effects are unchanged. The 5G is a first
+  value to be checked by the next measurement. RELIC §17, COPY_AUDIT §11-17; tests relic-effects, copy.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
