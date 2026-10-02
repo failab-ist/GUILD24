@@ -3641,6 +3641,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .readout.ro2 .st-tag{display:none}
  .readout.ro2 .ro-strain{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;
   font:500 12px/1.3 var(--ui);color:#b3a282}}
-/* both chips on one customer (an injured 단골 the fight still favours) is rare; then the second takes its own line rather than
-   running out of the box */
-.readout.ro2 .gs-row{flex-wrap:wrap;row-gap:4px}
+/* both chips on one customer (an injured adventurer the fight still favours) is rare; then they stack, left-aligned on the first
+   chip, beside the word rather than running out of the box (User 2026-10-02) */
+.readout.ro2 .ro-tags{display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px;min-width:0}

@@ -880,8 +880,8 @@ function readout(n,extra=null,cls=''){
    /* User 2026-10-02 (UI_UX §GREAT SUCCESS OPPORTUNITY SIGNAL): the signal lives in this box, not on a line of its own under the
       pair - a phone shows the short tag beside the word (the sentence stays for a screen reader), a desk the sentence under it */
    /* v2.9.14 quick patch (User 2026-10-02): the 연속 부상 출발 line joins it the same way - it is what raises this box's death % */
-   +(signal||strain?'<span class="gs-row"><b>'+o.combat+'</b>'+(strain?'<i class="st-tag" aria-hidden="true">'+E(strainText)+'</i>':'')
-     +(signal?'<i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i>':'')+'</span>'
+   +(signal||strain?'<span class="gs-row"><b>'+o.combat+'</b><span class="ro-tags">'+(strain?'<i class="st-tag" aria-hidden="true">'+E(strainText)+'</i>':'')
+     +(signal?'<i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i>':'')+'</span></span>'
      +(strain?'<span class="ro-strain">'+E(strainText)+'</span>':'')+(signal?'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'')
      :'<b>'+o.combat+'</b>')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
