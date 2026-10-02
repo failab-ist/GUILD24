@@ -104,9 +104,10 @@ and this table is their commit record.
   measure (`gain` = gross sales x reach) never saw a cost. RELIC §10, COPY_AUDIT §11-10; tests relic-effects, copy.
 - **귀환 적립제 Wallet 25G -> 20G** (User: 단골 만들기는 시간과 특성이 드니 소지금만): Loyalty +5 unchanged. RELIC §16,
   COPY_AUDIT §11-16; tests relic-effects, copy.
-- **원정 도시락 코너 raises the Food/Drink order price +5G flat** (User: 유통기한 -1일은 빠듯, 매입가를 정량으로): after any
-  percentage modifier, the table repriced once at acquisition; the Supply / Hazard effects are unchanged. The 5G is a first
-  value to be checked by the next measurement. RELIC §17, COPY_AUDIT §11-17; tests relic-effects, copy.
+- **원정 도시락 코너 raises the Food/Drink order price +3G flat** (User: 유통기한 -1일은 빠듯, 매입가를 정량으로 · 5G는 과해서 3G):
+  after any percentage modifier, the table repriced once at acquisition; the Supply / Hazard effects are unchanged. +5G
+  measured -26G/Day with the lowest balance -218G, harsher than 24시간 신선체계. RELIC §17, COPY_AUDIT §11-17; tests
+  relic-effects, copy.
 - **Store Support candidate reroll** (User: 매번 리셋, 300G 2배씩, D0 제외): from D5 an open window may redraw its three -
   300G, then 600G, 1200G… in the same window, back to 300G on the next; the pool rules hold and the three on the table are
   left out when possible; the spend is 점포지원 투자. The bots do not use it, so it is checked in play, not measured. RELIC

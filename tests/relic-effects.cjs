@@ -420,12 +420,12 @@ test('즉석식품 코너 takes overheadBase +10% (User 2026-10-02), added to hu
  assert.equal(kitchen.g.run.daily.operating,charged(b*.10),'kitchen takes 10% of the base');
  assert.equal(both.g.run.daily.operating,charged(b*.20),'with hub: 10% + 10% of the same base');
 });
-test('원정 도시락 코너: Food/Drink ORDER price +5G flat (User 2026-10-02), after 24시간 신선체계 x1.15; other Items untouched',()=>{
+test('원정 도시락 코너: Food/Drink ORDER price +3G flat (User 2026-10-02), after 24시간 신선체계 x1.15; other Items untouched',()=>{
  const g=fresh('meal-price'),s=g.run;
  for(const id of ['rice','guildlunch','lowpotion','rope']){const it=DATA.itemBy[id],f=['food','drink'].includes(it.category);
   s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['expeditionMeal'];
-  assert.equal(g.offerFor(it).price,plain+(f?5:0),id+' +5G only on Food/Drink');
-  s.facilities=['expeditionMeal','fresh24'];assert.equal(g.offerFor(it).price,f?Math.round(it.buy*1.15)+5:plain,id+' flat after the x1.15');}
+  assert.equal(g.offerFor(it).price,plain+(f?3:0),id+' +3G only on Food/Drink');
+  s.facilities=['expeditionMeal','fresh24'];assert.equal(g.offerFor(it).price,f?Math.round(it.buy*1.15)+3:plain,id+' flat after the x1.15');}
 });
 test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x1.25), no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
