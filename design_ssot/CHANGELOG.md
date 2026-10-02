@@ -25,6 +25,15 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 5 — the DAY 3 HQ 구급키트 is told (User 2026-10-02; the version stays 2.9.13)
+
+- **First Run DAY 3 구급키트 mark** (User: 조용히 들어와서 티가 안 남): when the lesson brings the kit, that Day's ORDER shows one
+  `점주 안내` mark on its cell (desk) or the folded sheet's `창고` handle (phone): `본사에서 구급키트 1개를 보내 줬다. 이번 한
+  번뿐이다. 원정에서 다쳐도 한 단계 가볍게 끝나게 해 준다 (중상 → 부상, 부상 → 무사). 오늘 첫 손님은 부상 중이다.` The kit
+  heals nothing at once - it lowers the expedition's outcome one step (ITEM §구급키트), so the line says that. It is the one
+  mark that names an Item (a gift, not a pick). COPY_AUDIT §3-12, CORE_RUN §FIRST-RUN LESSONS, UI_UX §TUTORIAL — COACH DIET,
+  COPY_WORLD_VOICE; test ui-guard.
+
 ## v2.9.13 quick patch 4 — a warehouse cell says what it does (User 2026-10-02; the version stays 2.9.13)
 
 - **ORDER warehouse cell tip** (User: 처음 하는 사람도 무슨 효과인지 알게): tapping a held cell (hovering on desk) shows the offer

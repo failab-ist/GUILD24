@@ -1910,7 +1910,7 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
  assert.ok(/\.stock-head em/.test(o)&&/\.stock-head b/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
  assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus,sheetH\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
- assert.ok(/'<li class="wh-slot" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
+ assert.ok(/'<li class="wh-slot'\+mark\+'" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
  /* User 2026-10-01: an order that passes a row of the phone sheet grows it to the new height over the first beat, never a one-frame jump */
  assert.ok(/if\(to>h\.sheetH\+1\)\{sheet\.style\.overflow='hidden';A\(sheet,\{height:\{from:h\.sheetH,to,duration:STAMP_FALL\*2/.test(o),'the sheet grows into its new row');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
@@ -2427,12 +2427,15 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
- const EXACT=['stats'];
+ /* COPY_AUDIT §3-12 (User 2026-10-02): the DAY 3 HQ 구급키트 line is pinned exact too - it tells a gift that already
+    arrived (what it is, once, what it does), not a pick, so it is the one mark that names an Item */
+ const EXACT=['stats','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
+ assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
  /* It must not hand over an answer, and must not expose the hidden formula. */
- const all=[...steps.matchAll(/'([^']{12,})'/g)].map(m=>m[1]).join(' ');
+ const all=[...steps.replace(KIT,'').matchAll(/'([^']{12,})'/g)].map(m=>m[1]).join(' ');
  for(const item of DATA.items)
   assert.ok(!all.includes(item.name),'no lesson names an Item to buy: '+item.name);
  for(const hz of Object.values(DATA.hazards))
@@ -3775,7 +3778,7 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
     the desk column, with room to spare, also draws the empty 칸 */
  const sl=fn('stockSlots');assert.ok(/stockSlots\(true\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey'))&&/full\?'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\):''/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl)&&/'<em>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>'|<b>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>/.test(fn('stockHead')),'phone: a held unit per cell, no empty rows; desk: every 칸; the head carries the room left');
  const os=fn('orderScreen');assert.ok(/'<div class="order-desk">'\+orderForm\(\)\+'<\/div>'\+stockSide\(\)/.test(os)&&/stockSheetKey\(\)\+/.test(os),'the column beside the form, the handle in the dock');
- assert.ok(/class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
+ assert.ok(/class="stock-handle stock-head'\+\(lessonKit\(\)\?' lesson-kit':''\)\+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
  assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&game\.run\?\.phase==='order'&&sheetOpen\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');
  assert.ok(/\.p-order \.dock \.stock-handle\{display:flex;flex:1 0 100%;order:-1;/.test(css),'the handle is always a row of the dock, so it covers no offer row');
  assert.ok(/\.stock-sheet\{position:absolute;left:0;right:0;bottom:100%;[^}]*max-height:45dvh;overflow-y:auto/.test(css),'the sheet rises from the dock, 45% at most, its own scroll');
@@ -3794,6 +3797,13 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
 
 /* User 2026-10-02: a warehouse cell says what its Item does - a tap toggles it (a hover on desk), in a balloon that points at
    that cell (it may cover the rack) and stays inside the screen */
+/* User 2026-10-02 / COPY_AUDIT §3-12: the first Run's DAY 3 HQ kit is told once, where it lands */
+test('first Run DAY 3: the HQ kit mark sits on its cell (desk) or the 창고 handle (phone), only that Day',()=>{
+ assert.ok(app.includes("const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.day===3&&s.lessonInjured);};"),'only when the lesson brought the kit, on DAY 3 of the first Run');
+ assert.ok(/const mark=kit&&it\.id==='kit'\?\(kit=false,' lesson-kit'\):'';/.test(fn('stockSlots')),'one cell carries it - the first kit cell');
+ assert.ok(app.includes("['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit',"),'the ORDER mark anchors to the visible one');
+});
+
 test('ORDER warehouse cell: a tip with the offer row\'s lines, pointing at its own cell',()=>{
  const css=read('dist/ui/ui.css'),sl=fn('stockSlots'),pop=fn('whPop');
  assert.ok(sl.includes("<details class=\"tip wh-tip\" name=\"wh-tip\"><summary aria-label=\"'+label+'\">"),'each held cell is the shared tip control (tap, hover, focus, tap-away), named by its reader label');

@@ -1282,7 +1282,9 @@ const coachSteps={
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
- order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
+ order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],
+  /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
+  ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사에서 구급키트 1개를 보내 줬다. 이번 한 번뿐이다. 원정에서 다쳐도 한 단계 가볍게 끝나게 해 준다 (중상 → 부상, 부상 → 무사). 오늘 첫 손님은 부상 중이다.']],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1498,12 +1500,16 @@ function statGrid(n){
    are the room left. The icon is the one the offer rows show; the Item's name is the cell's reader label. */
 /* User 2026-10-01: on a phone only the held units are drawn, so the sheet is as many rows as they need (one while they fit) and
    the room left reads in the head's `N / M칸`; the desk column has the room, so it shows every 칸 with the empty ones (`full`) */
-function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 구급키트 from HQ is told once - the ORDER `kit` mark sits
+   on its cell (desk) or the 창고 handle (phone, where the sheet starts folded) */
+const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.day===3&&s.lessonInjured);};
+function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];let kit=lessonKit();
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
    label=E(it.name)+(left===null?'':' · '+left+'일');
    /* User 2026-10-02: a cell is a tip - a tap (a hover on desk) shows what the Item does, in the floating #wh-pop (whPop) */
-   return '<li class="wh-slot" data-item="'+it.id+'"><details class="tip wh-tip" name="wh-tip"><summary aria-label="'+label+'">'+Art.itemIcon(it.id,32)
+   const mark=kit&&it.id==='kit'?(kit=false,' lesson-kit'):'';
+   return '<li class="wh-slot'+mark+'" data-item="'+it.id+'"><details class="tip wh-tip" name="wh-tip"><summary aria-label="'+label+'">'+Art.itemIcon(it.id,32)
     +(left===null?'':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</summary></details></li>';}).join('')
   +(full?'<li class="wh-slot empty" aria-hidden="true"></li>'.repeat(Math.max(0,cap-units.length)):'')+'</ol>';}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is not on the 발주서 any more; it is held apart like an
@@ -1521,7 +1527,7 @@ function stockSide(){return '<aside class="stock-side" aria-label="창고"><p cl
 const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
 function stockSheetKey(){const open=sheetOpen();
  return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(open?'':' hidden')+'>'+stockSlots()+'</section>'
-  +'<button type="button" class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+open+'">'
+  +'<button type="button" class="stock-handle stock-head'+(lessonKit()?' lesson-kit':'')+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+open+'">'
   +stockHead()+'<span class="stock-toggle">'+(open?'닫기':'열기')+'</span></button>';}
 function setStockSheet(open){const st=game.account.settings;if((st.stockBriefOpen===true)!==open){st.stockBriefOpen=open;game.save();}
  const sh=$('#stock-sheet'),k=$('.stock-handle');if(!sh)return;sh.hidden=!open;

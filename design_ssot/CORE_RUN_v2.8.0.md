@@ -177,7 +177,7 @@ Item identity/prices/effects -> `ITEM_v2.8.0.md`.
 
 The account's first Run - no Run settled yet (`account.runs` 0) - teaches by play, not by text: the situation leaves one
 sensible move, and the Night shows why it worked. Every later Run is the ordinary Run. Nothing here is shown as a
-tutorial, and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then takes the
+tutorial except the DAY 3 HQ 구급키트, told once by its ORDER mark (User 2026-10-02), and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then takes the
 draws a living adventurer takes).
 
 - DAY 1: one Common Item that counters the first Gate's Hazard joins the warehouse after the DAY 0 pick (독 방진마스크 ·
@@ -191,7 +191,7 @@ draws a living adventurer takes).
 - DAY 3: an adventurer with an ordinary Injury comes first - one already coming moves to the front, else one takes the
   last returning visitor's place (its Gate and visit income as that visitor's; a new face seated today is never the one
   replaced) - and one 구급키트 joins the warehouse (HQ's, like the opening stock). With no one injured, nothing moves and
-  no 구급키트 comes.
+  no 구급키트 comes. When it comes, that Day's ORDER marks it once (UI_UX §TUTORIAL — COACH DIET, COPY_AUDIT §3-12).
 - DAY 3: a returning visitor (not the injured one; a healthy one first) comes on payday: +200G to spend this visit
   only (the nightly-cleared extra-purchase channel), 150% purchase intent +20%p this visit, and the arrival line
   COPY_AUDIT §26-1. The Day's count of visitors is unchanged.

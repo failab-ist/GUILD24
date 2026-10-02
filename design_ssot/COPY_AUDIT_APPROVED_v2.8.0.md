@@ -242,6 +242,16 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
+## 3-12. 본사 구급키트 (첫 판 DAY 3)
+
+(규칙 owner CORE_RUN §FIRST-RUN LESSONS / UI_UX §TUTORIAL — COACH DIET. 계정 첫 판 DAY 3에 본사 구급키트가 왔을 때, 그날 발주
+화면의 그 칸(모바일은 `창고` 손잡이)에 한 번. 이미 온 선물을 알리는 안내라 상품 이름을 쓰는 유일한 코치다)
+
+**현재**
+> 본사에서 구급키트 1개를 보내 줬다. 이번 한 번뿐이다. 원정에서 다쳐도 한 단계 가볍게 끝나게 해 준다 (중상 → 부상, 부상 → 무사). 오늘 첫 손님은 부상 중이다.
+
+---
+
 ## 4-1. 전투 전망 Help
 
 **현재** (two lines; the second line is the frozen SALE-entry value)
