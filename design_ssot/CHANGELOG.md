@@ -38,6 +38,9 @@ and this table is their commit record.
   per-Gate counts only with two open Gates, so a 게이트 임시 폐쇄 day read `4명 · 독거미 동굴 I · 북부 설원 폐허 I 오늘 폐쇄`. The open
   Gate now carries its count beside the closed one: `4명 · 독거미 동굴 I 4 · 북부 설원 폐허 I 오늘 폐쇄`. ECONOMY_ORDER §VISITOR
   FORECAST, COPY_AUDIT §4-21, UI-Q-v29-13; test ui-guard.
+- **The Fatigue mark lights the Fatigue row** (User: 피로 코치가 부상 쪽에 포커스): every NIGHT discovery mark lit the record's
+  Outcome block (`원정을 끝내지 못하고 다친 채 …`), the Fatigue one included. The Fatigue mark now lights the record's `귀환 후 피로`
+  row; the others are unchanged. NIGHT_CLOSING §DISCOVERY LINE; test ui-guard.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

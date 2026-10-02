@@ -1205,7 +1205,7 @@ function changedRows(r){
   /* v2.9.0 NIGHT next-decision line (COPY_AUDIT §6-6): one sentence under the settled Fatigue, not a chip */
   ?'<p class="next-decision">'+E(c.value+' — '+c.label+' '+c.extra)+'</p>'
   :c.detail
-  ?'<details class="tip '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
+  ?'<details class="tip fatigue-row '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
    +'<p><span>'+E(c.detail)+'</span></p></details>'
   /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
      of words (`장비 보강된 전사 장비 전투 +5`). The effect is its own element after a middle dot
@@ -1313,7 +1313,9 @@ const coachSteps={
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
     it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it).
     COACH DIET (User 2026-09-30): the `한 명씩` result mark is retired - the record and its 전체 건너뛰기 key say it */
- night:[...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
+ /* User 2026-10-02: a mark lights what it is about - the Fatigue rule the record's 귀환 후 피로 row (`.fatigue-row`, the only
+    token carrying the Fatigue arithmetic), every other rule the record's outcome block it acted on */
+ night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text])],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the

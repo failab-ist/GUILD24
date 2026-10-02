@@ -2414,8 +2414,10 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/'fatigue'/.test(fn('tray'))&&!/' prepared'/.test(fn('kitLine')),'and no anchor class is left for them');
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): they are taught after they act - a NIGHT coach mark per taught rule,
     anchored to the class the returning record carries, in Copy.learned order, after the NIGHT result mark */
- assert.ok(/night:\[\.\.\.Copy\.learned\.map\(\(\[k,text\]\)=>\['learn-'\+k,'\.beat \.told\.learn-'\+k,text\]\)\]/.test(steps),'the NIGHT marks are the taught rules alone, one per rule (the result mark is retired, COACH DIET)');
+ assert.ok(/night:\[\.\.\.Copy\.learned\.map\(\(\[k,text\]\)=>\['learn-'\+k,k==='fatigue'\?'\.beat \.told\.learn-fatigue ~ \.changed \.fatigue-row':'\.beat \.told\.learn-'\+k,text\]\)\]/.test(steps),'the NIGHT marks are the taught rules alone, one per rule (the result mark is retired, COACH DIET)');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
+ /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */
+ assert.ok(/<details class="tip fatigue-row '\+c\.kind\+'"/.test(app),'the 귀환 후 피로 token is the Fatigue mark\'s anchor');
  assert.ok(!/class="learned"|<b>발견<\/b>/.test(app),'no inline 발견 line on the record (User 2026-09-30: shown like the tutorial)');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
