@@ -25,7 +25,7 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
-## v2.9.13 quick patch 9 — early ORDER sheets lean on Common (User 2026-10-02; the version stays 2.9.13)
+## v2.9.13 quick patch 9 — early ORDER sheets lean on Common (User 2026-10-02, PR #47; the version stays 2.9.13)
 
 - **ORDER rarity D1–7** (User: 티어1에서는 희귀 이상이 필요 없고 손님 소지금도 적다): D1–3 68/24/7/1/0 → 76/20/4/0/0, D4–7
   63/25/11/1/0 → 68/24/8/0/0 (Common / Uncommon / Rare / Epic / Legendary). No Epic before D8; D8 on unchanged; the Rare pity
