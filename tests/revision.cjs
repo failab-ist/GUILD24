@@ -611,11 +611,17 @@ test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급�
  assert.equal(t.s.inventory.filter(u=>u.item==='kit').length,t.kits+1,'one 구급키트 joins the warehouse');
  const pay=t.s.npcs.find(n=>n.id===t.s.lessonPayday);assert.ok(pay&&pay.id!==t.hurt.id&&pay.lessonPayday===3,'a returning visitor is the payday customer');
  const it=DATA.items.find(i=>i.rarity===0&&i.category==='food');pay.loyalty=0;pay.traits=[];
+ /* User 2026-10-02: the +20%p is gone - the first 150% offer it can pay for is taken, once */
  const on=t.g.interest(pay,it,'overcharge').chance;t.s.firstRun=false;const off=t.g.interest(pay,it,'overcharge').chance;t.s.firstRun=true;
- assert.ok(on<.97&&Math.abs(on-off-.20)<1e-9,'+20%p on a 150% offer, that visit');
+ assert.equal(on,1,'the first 150% offer is taken');assert.ok(off<1,'an ordinary customer may refuse it');
+ const poor=pay.money;pay.money=0;assert.equal(t.g.interest(pay,it,'overcharge').chance,0,'never past what it can pay');pay.money=poor;
  assert.equal(t.g.interest(pay,it,'full').chance,(t.s.firstRun=false,t.g.interest(pay,it,'full').chance),'정가 untouched');t.s.firstRun=true;
  t.s.cursor=t.s.queue.indexOf(pay.id);t.s.event=null;t.g.arrive();
  assert.ok(pay.eventBudget>=200,'200G to spend this visit (the nightly-cleared channel)');assert.equal(t.s.say.text,Copy.lessonPayday,'the payday line');
+ t.s.phase='sell';const unit=t.g.run.inventory.find(u=>t.g.interest(pay,DATA.itemBy[u.item],'overcharge').debit<=pay.money+(pay.eventBudget||0));
+ assert.ok(unit,'a unit the payday customer can pay 150% for');{const id=unit.item;assert.equal(t.g.sell(unit.id,'overcharge'),true,'the first 150% sale goes through');assert.ok(pay.lessonPaydayTaken,'and spends the lesson');
+  const next=t.g.run.inventory.find(u=>u.item!==id);assert.ok(next,'another SKU to offer');{t.s.firstRun=false;const plain=t.g.interest(pay,DATA.itemBy[next.item],'overcharge').chance;t.s.firstRun=true;
+   assert.equal(t.g.interest(pay,DATA.itemBy[next.item],'overcharge').chance,plain,'a second 150% offer is an ordinary one - no +20%p');}}
  const mixed=(()=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=true;s.day=3;delete s.lessonDay3;const [a,b,c]=s.npcs;
   for(const n of [a,b,c]){n.alive=true;n.introduced=true;n.visits=2;delete n.lessonPayday;}a.injury=1;b.injury=1;c.injury=0;s.queue=[a.id,b.id,c.id];g.firstRunLessons();return {s,c};})();
  assert.equal(mixed.s.lessonPayday,mixed.c.id,'the payday customer is a healthy returning visitor when one is coming (User 2026-09-30)');

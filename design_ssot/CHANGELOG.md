@@ -25,6 +25,12 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 6 — the DAY 3 payday customer (User 2026-10-02; the version stays 2.9.13)
+
+- **One sure 바가지 instead of +20%p**: the first Run's DAY 3 payday customer takes the first 150% offer it can pay for, once
+  (`lessonPaydayTaken`); every later 150% offer is an ordinary one - the +20%p is gone. The roll still draws, so the stream
+  is unchanged, and the bots play with the lessons off. CORE_RUN §FIRST-RUN LESSONS / RUN-Q; test revision.
+
 ## v2.9.13 quick patch 5 — the DAY 3 HQ 구급키트 is told (User 2026-10-02; the version stays 2.9.13)
 
 - **First Run DAY 3 구급키트 mark** (User: 조용히 들어와서 티가 안 남): when the lesson brings the kit, that Day's ORDER shows one

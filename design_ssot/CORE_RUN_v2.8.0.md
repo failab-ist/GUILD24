@@ -193,7 +193,8 @@ draws a living adventurer takes).
   replaced) - and one 구급키트 joins the warehouse (HQ's, like the opening stock). With no one injured, nothing moves and
   no 구급키트 comes. When it comes, that Day's ORDER marks it once (UI_UX §TUTORIAL — COACH DIET, COPY_AUDIT §3-12).
 - DAY 3: a returning visitor (not the injured one; a healthy one first) comes on payday: +200G to spend this visit
-  only (the nightly-cleared extra-purchase channel), 150% purchase intent +20%p this visit, and the arrival line
+  only (the nightly-cleared extra-purchase channel), its first 150% offer it can pay for taken - once, every later one
+  decided as any customer's (User 2026-10-02) - and the arrival line
   COPY_AUDIT §26-1. The Day's count of visitors is unchanged.
 - measurement harnesses (`reader` and the other bots, the multi-Run trajectory) switch the lessons off, so balance
   measurements stay on the ordinary Run.
@@ -1275,8 +1276,8 @@ PASS:
 - DAY 2 of the first Run: the Event is 본사 1+1 행사 (one offer carries the 1+1 promo); a later Run: no Event on DAY 2
 - a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
 - DAY 3 of the first Run with someone injured: the injured adventurer is the first visitor, one 구급키트 joined the
-  warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, +20%p on
-  150% only, the §26-1 line; a later Run: none of it
+  warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, its first
+  affordable 150% offer taken and the next one an ordinary one, the §26-1 line; a later Run: none of it
 - the same seed gives the same Gates, visitors and stream on both
 - the measurement harness (`lessons=false`) plays the ordinary Run
 - `tests/revision.cjs`
