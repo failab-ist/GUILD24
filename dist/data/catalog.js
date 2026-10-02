@@ -60,11 +60,11 @@ item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이�
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
    than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
-item('spiderkit','거미줄 방호세트',3,135,270,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:16,bind:15}),
-item('slimesuit','연금 방수슈트',3,135,270,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:16,mire:15}),
-item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:15,dark:15}),
-item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:16,whiteout:15}),
-item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:15,combat:10}),
+item('spiderkit','거미줄 방호세트',3,135,270,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:18,bind:18}),
+item('slimesuit','연금 방수슈트',3,135,270,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:18,mire:18}),
+item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:18,dark:18}),
+item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:18,whiteout:18}),
+item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
 item('kingwater','왕도 천연암반수',3,185,370,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),

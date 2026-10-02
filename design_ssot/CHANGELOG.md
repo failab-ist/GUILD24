@@ -39,6 +39,11 @@ and this table is their commit record.
   holds (초반 대응 > 초반 하이브리드 on the first Hazard, both under 후반 하이브리드 and 중반 대응). By the formula, an average D1
   adventurer now clears Tier 1 through D7 with either, and the hybrid's Tier 2 opening shortfall falls from 7~9 to 5~7.
   Unmeasured. ITEM §COUNTER LADDER and catalogue rows, RELIC / UI_UX examples; reports/ITEM-PRICES.md regenerated.
+- **후반 하이브리드 rises to 18 / 18 / 18** (User: 중반 대응과 후반 하이브리드도 보자 · 18로): 거미줄 방호세트, 연금 방수슈트, 성화 랜턴, 백설
+  방한고글 16·15 / 15·15 -> 18·18, 마그마 냉각장비 화염 15 -> 18 (투력 +10 unchanged). By the formula an average adventurer
+  now clears Tier 2 with one slot (+3 / +2 / 0 by Stat group) and stays 3~7 short of Tier 3; 중반 대응 is unchanged (Tier 2 sure,
+  Tier 3 just for 강인함, short for 정신 - left to the 정신 Jobs). The order holds: 중반 대응 > 후반 하이브리드 > 초반 rungs.
+  ITEM §COUNTER LADDER and catalogue rows; reports/ITEM-PRICES.md regenerated.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 

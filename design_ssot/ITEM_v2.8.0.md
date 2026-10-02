@@ -279,7 +279,8 @@ pressed-Stat share
   still clears Tier 1 with it; short of Tier 2 (about 5~7 at the Tier 2 opening days, User 2026-10-02: it was 7~9); only a
   well-grown adventurer clears Tier 2 with it from mid-Run
 - 중반 대응 (Rare, one Hazard): clears Tier 2 surely; from about D20 an average adventurer clears Tier 3 with it
-- 후반 하이브리드 (Epic, both Hazards): just short of Tier 2; late in the Run a top adventurer can try Tier 3 with it alone
+- 후반 하이브리드 (Epic, both Hazards): clears Tier 2 with one slot for an average adventurer (User 2026-10-02: it was just
+  short); short of Tier 3, where a grown adventurer can try it alone late in the Run
 
 Values by the pressed Stat (강인함 ÷3 for 독 · 부식 · 냉기; 기동 ÷2 for 속박 · 진창 · 어둠; 정신 ÷2 for 공포 · 화이트아웃 · 화염):
 
@@ -287,7 +288,7 @@ Values by the pressed Stat (강인함 ÷3 for 독 · 부식 · 냉기; 기동 ÷
 |---|---:|---:|---:|
 | 초반 대응 | 12 | — | 12 |
 | 초반 하이브리드 | 11 | 12 | 11 (first Hazard) · 13 (화이트아웃, second) |
-| 후반 하이브리드 | 16 | 15 | 15 |
+| 후반 하이브리드 | 18 | 18 | 18 |
 | 중반 대응 | 23 | 23 | 22 |
 
 The values carry their Hazard's Stat-group Threat factor (강인함 1.0 · 기동 1.1 · 정신 1.2, `DUNGEON_HAZARD_v2.8.0.md` §HAZARD
@@ -302,11 +303,11 @@ with 강인함 +6 (its own Stat is worth 냉기 +2).
 
 | Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
 |---|---|---|---|---|
-| 독거미 동굴 (독 · 속박) | 방진마스크 독 12 | 방독 작업장갑 독 11 · 속박 12 | 농축 해독제 독 23 · 경량 로프 속박 23 | 거미줄 방호세트 16 · 15 |
-| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 12 | 방수망토 부식 11 · 진창 12 | 부식 방지 코팅제 23 · 원정용 장화 23 | 연금 방수슈트 16 · 15 |
-| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 12 | 축성 손전등 공포 11 · 어둠 12 | 용사의 곡주 공포 22 · 랜턴 건전지 어둠 23 | 성화 랜턴 공포 15 · 어둠 15 |
-| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 12 | 방한 두건 냉기 11 · 화이트아웃 13 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 22 | 백설 방한고글 16 · 15 |
-| 화염 골렘 광산 (화염) | 얼음컵 화염 12 | — | 쿨링 이온음료 화염 22 | 마그마 냉각장비 화염 15 · 투력 10 |
+| 독거미 동굴 (독 · 속박) | 방진마스크 독 12 | 방독 작업장갑 독 11 · 속박 12 | 농축 해독제 독 23 · 경량 로프 속박 23 | 거미줄 방호세트 18 · 18 |
+| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 12 | 방수망토 부식 11 · 진창 12 | 부식 방지 코팅제 23 · 원정용 장화 23 | 연금 방수슈트 18 · 18 |
+| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 12 | 축성 손전등 공포 11 · 어둠 12 | 용사의 곡주 공포 22 · 랜턴 건전지 어둠 23 | 성화 랜턴 공포 18 · 어둠 18 |
+| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 12 | 방한 두건 냉기 11 · 화이트아웃 13 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 22 | 백설 방한고글 18 · 18 |
+| 화염 골렘 광산 (화염) | 얼음컵 화염 12 | — | 쿨링 이온음료 화염 22 | 마그마 냉각장비 화염 18 · 투력 10 |
 
 The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT).
 
@@ -624,11 +625,11 @@ approved ITEM amendment; QA does not auto-tune it.
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +22, Supply 1 | Fire 중반 대응 |
 | 29 | 세계수 생환부적 | Insurance E | 300 / 600 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
-| 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +16, 속박 +15 | Spider 후반 하이브리드 |
-| 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +16, 진창 +15 | Slime 후반 하이브리드 |
-| 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +15, 어둠 +15 | Crypt 후반 하이브리드 |
-| 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +16, 화이트아웃 +15 | Snow 후반 하이브리드 |
-| 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +15, 투력 +10 | Fire 후반 하이브리드 |
+| 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +18, 속박 +18 | Spider 후반 하이브리드 |
+| 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +18, 진창 +18 | Slime 후반 하이브리드 |
+| 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +18, 어둠 +18 | Crypt 후반 하이브리드 |
+| 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +18, 화이트아웃 +18 | Snow 후반 하이브리드 |
+| 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +18, 투력 +10 | Fire 후반 하이브리드 |
 | 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +26, Supply 2 | Top-end mobility |
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
@@ -825,7 +826,7 @@ Insurance / Special: its one function line
 ```
 
 e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +22 · 피로 회복 1 · 강인함 -3`, `피로 회복 2 · 기동 +17`,
-`화염 대응 +15 · 투력 +10`.
+`화염 대응 +18 · 투력 +10`.
 
 The order is identity information (what kind of Item this is), not advice.
 
