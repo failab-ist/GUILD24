@@ -82,11 +82,11 @@ and this table is their commit record.
   newcomer can arrive at that Day (`1 + floor((Day-1)/4)`) gets half again an expedition's EXP, never past what reaches that
   floor; at or above it nothing changes, and only an expedition from the store moves it. Unmeasured. DUNGEON_HAZARD §LEVEL
   FLOOR CATCH-UP; test revision.
-- **원정 전문 인증 -> 원정 작전실** (User: 이름과 효과 다 갈아엎자 · 투력 최대 15%): the keystone (Expedition, 290G) no longer
-  multiplies Counters or pays next-visit Gold. For each Hazard of the adventurer's Gate the overshoot past its Threat (capped
-  0.5) is averaged over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left short counts 0 - and the prepared combat
-  ability gains 0.3 x that average, +15% at most: the fight, the forecast, the Great Success margin, the death risk and the
-  Final individual power all read it. Copy `위험 대응이 필요 수치를 넘긴 만큼 원정 전투력 +, 최대 +15%.` Id `opsRoom`; a save's
+- **원정 전문 인증 -> 원정 작전실** (User: 이름과 효과 다 갈아엎자 · 원정 전투력이 아니라 투력으로, 효과는 비슷하게): the keystone
+  (Expedition, 290G) no longer multiplies Counters or pays next-visit Gold. For each Hazard of the adventurer's Gate the
+  overshoot past its Threat (capped 0.5) is averaged over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left short
+  counts 0 - and 투력 gains 0.6 x that average, +30% at most (about the earlier +15% of the whole prepared ability); it is
+  listed among 투력's sources on the SALE Stat grid. Copy `위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.` Id `opsRoom`; a save's
   `expeditionCert` is read as `opsRoom` on load. Unmeasured here (the all-support contribution run follows). RELIC §24 /
   REL-Q21, COPY_AUDIT §11-24, EVENT; tests relic-order, relic-effects, copy, revision.
 - **Loyalty weighs a little more on the revisit draw** (User: 단골도 3%로): the returning-NPC revisit weight is x(1 + Loyalty x 0.03)

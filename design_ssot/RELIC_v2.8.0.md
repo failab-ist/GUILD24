@@ -470,10 +470,12 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - Price = 290G
 - for each Hazard of the adventurer's Gate: overshoot = min(0.5, max(0, Counter ÷ Threat - 1)) - the resolver's own Counter
   (the customer's Stat share and Traits, Store Supports, the Bag); a Hazard answered short counts 0
-- the prepared combat ability (DUNGEON_HAZARD's 4-Stat ability, the one the fight, the forecast, the Great Success margin and
-  the death risk read) x (1 + 0.3 x the average overshoot over ALL the Gate's Hazards) - +15% at most
+- 투력 x (1 + 0.6 x the average overshoot over ALL the Gate's Hazards) - +30% at most; applied after the Hazard reading (no
+  Hazard reads 투력), so it reaches everything that reads 투력 (the fight, the forecast, the Great Success margin, the death
+  risk, the Final individual power) and no other Stat; no separate combat-power concept is introduced
+- the SALE Stat grid lists it among 투력's sources (`원정 작전실 +N%`), so the shown 투력 and its sources agree
 - three Hazards (an Event Hazard on a II Gate) average over three; the Final averages over its whole Hazard pool, each
-  participant on its own preparation, applied to that participant's prepared ability before the mean-gap penalty
+  participant on its own preparation
 - no Counter multiplier, no Wallet, no ORDER offer effect; the SALE 전투 전망 stays the SALE-entry snapshot (with the
   entry Bag), so an owner's bonus from a sale is not previewed
 - copy -> COPY_AUDIT §11-24
@@ -1068,7 +1070,8 @@ PASS: Premium does not depend on a single SKU and Rare+ is not universally super
 #### REL-Q21 — 원정 작전실 (User 2026-10-02)
 SETUP: Own `원정 작전실`; prepare adventurers for one-, two- and three-Hazard Gates and the Final, short and past the need.
 EXPECT:
-- prepared combat ability x (1 + 0.3 x the average capped overshoot over every Hazard of the Gate); +15% at most
+- 투력 x (1 + 0.6 x the average capped overshoot over every Hazard of the Gate); +30% at most; other Stats unchanged
+- the 투력 source list carries `원정 작전실 +N%` exactly when the bonus is above 0
 - a Hazard answered short counts 0 in the average; no Counter value, Wallet or offer changes
 PASS: the bonus equals the formula on every Gate shape; a save holding `expeditionCert` loads as `opsRoom`.
 

@@ -359,19 +359,24 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
 });
 
 /* User 2026-10-02: 원정 전문 인증 is remade as 원정 작전실 - no Counter multiplier, no next-visit Gold. Each of the Gate's Hazards
-   answered past its Threat adds its overshoot (capped 0.5) to an average over all the Gate's Hazards, and the prepared combat
-   ability gains 0.3 x that average (+15% at most), at the Final too. */
-test('REMAKE 원정 작전실: overshoot averaged over the Gate\'s Hazards lifts the prepared ability, +15% at most; no Counter multiplier',()=>{
+   answered past its Threat adds its overshoot (capped 0.5) to an average over all the Gate's Hazards, and 투력 gains 0.6 x that
+   average (+30% at most), at the Final too - shown as one of 투력's sources, no other Stat touched. */
+test('REMAKE 원정 작전실: overshoot averaged over the Gate\'s Hazards lifts 투력, +30% at most; no Counter multiplier',()=>{
  const g=fresh('ops-room'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0};
  const spider={...g.makeDungeon('spider',2),requiredSupply:0},snow={...g.makeDungeon('snow',1),requiredSupply:0};
  const prep=(pack,gate,fac)=>Dungeon.prepare({...n,pack},gate,fac);
  assert.equal(prep(['rope'],spider,['opsRoom']).effects.bind,prep(['rope'],spider,[]).effects.bind,'no Counter multiplier any more');
  for(const [pack,gate] of [[[],snow],[['ramen'],snow],[['spiderkit','spiderkit'],spider],[['rope'],spider]]){
   const p=prep(pack,gate,['opsRoom']),avg=p.hazards.reduce((v,h)=>v+Math.min(.5,Math.max(0,h.defense/h.threat-1)),0)/p.hazards.length;
-  assert.ok(Math.abs(p.effects.opsBonus-.3*avg)<1e-12,'0.3 x the averaged, capped overshoot');
-  assert.ok(p.effects.opsBonus<=.15+1e-12,'never past +15%');
+  assert.ok(Math.abs(p.effects.opsBonus-.6*avg)<1e-12,'0.6 x the averaged, capped overshoot');
+  assert.ok(p.effects.opsBonus<=.30+1e-12,'never past +30%');
   const plain=prep(pack,gate,[]);assert.equal(plain.effects.opsBonus,0,'nothing without the support');
-  assert.ok(Math.abs(Dungeon.preparedPower(p.effects)-Dungeon.preparedPower(plain.effects)*(1+p.effects.opsBonus))<1e-9,'the whole prepared ability scales');}
+  assert.ok(Math.abs(p.effects.combat-plain.effects.combat*(1+p.effects.opsBonus))<1e-9,'투력 scales');
+  for(const k of ['survival','mobility','spirit'])assert.equal(p.effects[k],plain.effects[k],k+' untouched');
+  const line=p.sources.combat.find(x=>x.name==='원정 작전실');
+  if(p.effects.opsBonus>0)assert.ok(line&&line.isPct&&Math.abs(line.v-p.effects.opsBonus*100)<1e-9,'listed among 투력 sources');
+  else assert.equal(line,undefined,'no empty source line');}
+ assert.ok(prep(['spiderkit','spiderkit'],spider,['opsRoom']).effects.opsBonus>0,'a covered Gate actually lifts 투력');
  // an unanswered Hazard counts as 0 in the average: a second, uncovered Hazard halves the bonus of the same overshoot
  const one={...snow,hazards:['cold']},two={...snow,hazards:['cold','poison']};
  const big=prep(['dragonramen','dragonramen'],one,['opsRoom']).effects.opsBonus,half=prep(['dragonramen','dragonramen'],two,['opsRoom']).effects.opsBonus;

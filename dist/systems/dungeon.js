@@ -4,9 +4,7 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
    read the same prepared ability before hidden combat noise, and three copies of the weights
    is how they drifted apart before - so there is one. 투력 remains the strongest single lever,
    and no Player-facing aggregate Power Stat is created from it. */
-/* RELIC 원정 작전실 (User 2026-10-02): `opsBonus`, set by prepare() for an owner, scales the whole prepared combat ability - the
-   one number the fight, the forecast, the Great Success margin, the death risk and the Final individual power all read. */
-const preparedPower=e=>(e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20)*(1+(e.opsBonus||0));
+const preparedPower=e=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20;
 const STAT_KEYS=['combat','survival','mobility','spirit'];
 /* Trait keys that describe how somebody SHOPS, not how they perform on an expedition. They are
    read by the store, never summed into a prepared effect. */
@@ -64,7 +62,8 @@ function counterFactor(item,k,v,facilities,d){
 }
 /* RELIC 원정 작전실 (User 2026-10-02, the 원정 전문 인증 remake): each of the Gate's Hazards answered past its Threat adds the
    overshoot (Counter / Threat - 1, capped) to an average over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left
-   unanswered counts as 0 - and the prepared combat ability gains that average x mult (cap 0.5 x 0.3 = +15%). */
+   unanswered counts as 0 - and 투력 gains that average x mult (cap 0.5 x 0.6 = +30%), applied by prepare() after the Hazard
+   reading (no Hazard reads 투력) and listed among 투력's sources. */
 function opsBonus(hazards,d,facilities){const p=D.relicParams.opsRoom;
  if(!facilities.includes('opsRoom')||!hazards.length||(d.family==='final'&&!p.final))return 0;
  return p.mult*hazards.reduce((v,h)=>v+Math.min(p.overshootCap,Math.max(0,h.defense/h.threat-1)),0)/hazards.length;}
@@ -207,7 +206,8 @@ function prepare(n,d,facilities=[]){
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
- e.opsBonus=opsBonus(hazards,d,facilities);
+ const ops=e.opsBonus=opsBonus(hazards,d,facilities);
+ if(ops>0){e.combat*=1+ops;sources.combat.push({name:D.relicBy.opsRoom.name,v:ops*100,isPct:true});}
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
