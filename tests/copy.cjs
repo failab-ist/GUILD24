@@ -74,6 +74,7 @@ test('COPY_AUDIT §25 (v2.9.11): the Rare Reference lines are gone',()=>{
    built; the set must match exactly, so a newly unadopted line fails instead of joining it. */
 const COMPOSED={
  '4-10':"app.js lastSaleDay(): '폐기까지 '+N+'일' / '내일까지' / '오늘까지' (v2.9.10)",
+ '5-4':"presentation.js labels: '방문 시 소지금' + the signed Trait value (User 2026-10-02: no longer coincident with the retired 원정 전문 인증 text)",
  '4-18':'presentation.js rows(): labels.foodSupplyDelta / labels.supplyPerItem + the signed Trait value',
  '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",
@@ -84,8 +85,7 @@ const COMPOSED={
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set
    comparison below stays exact. */
-const COINCIDENT={
- '5-4':"'방문 시 소지금 +50G' also sits inside 원정 전문 인증's approved §11-24 text (…다음 방문 시 소지금 +50G.)"};
+const COINCIDENT={};
 test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const walk=d=>fs.readdirSync(path.join(root,d),{withFileTypes:true}).flatMap(e=>e.isDirectory()?
   (e.name==='vendor'?[]:walk(d+'/'+e.name)):/\.(js|html)$/.test(e.name)?[d+'/'+e.name]:[]);
@@ -617,7 +617,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['logisticsHQ','물류 본부계약',300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
   ['lifetime','평생 단골제',310,'단골 생환 시 · 소지금 +50G · 다음 방문 가중치 +100%.'],
   ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
-  ['expeditionCert','원정 전문 인증',290,'위험 대응 상품의 대응 수치 +60% · 그 상품을 산 손님의 다음 방문 시 소지금 +50G.'],
+  ['opsRoom','원정 작전실',290,'위험 대응이 필요 수치를 넘긴 만큼 원정 전투력 +, 최대 +15%.'],
   ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
   ['hub','지역 거점점 계약',340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
   ['warehouse','후방 창고 증설',130,'창고 용량 +5칸.'],

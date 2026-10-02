@@ -217,6 +217,10 @@ function legacyFinalCommit(r,D){
  if(proven)r.finalCommitted=true;
 }
 
+/* Store Support ids renamed by a remake (User 2026-10-02: 원정 전문 인증 -> 원정 작전실). An id is only ever a JSON string value,
+   so the raw save text maps it before it is parsed and validated - every place a Run or the account keeps it moves at once. */
+const RENAMED_IDS={expeditionCert:'opsRoom'};
+const renameIds=raw=>Object.entries(RENAMED_IDS).reduce((s,[a,b])=>s.split('"'+a+'"').join('"'+b+'"'),raw);
 /* A customer renamed in place in the pool (User 2026-10-02: 카리냐 -> 카리냥, same F/021 portrait). The portrait is
    addressed by the name, so a Run saved before the rename carries the new name forward rather than drawing the
    placeholder. Only the Run's own copies of the name change; nothing else in the save does. */
@@ -258,7 +262,7 @@ G.Save={
   for(const key of [KEY,BACKUP])try{
    const raw=localStorage.getItem(key);
    if(!raw)continue;
-   const s=JSON.parse(raw);
+   const s=JSON.parse(renameIds(raw));
    if(this.valid(s))return this.migrate(s);
   }catch(e){}
   this.error='저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
@@ -303,7 +307,7 @@ G.Save={
 
  export(account,run){return JSON.stringify({version:VERSION,account,run},null,2);},
  import(raw){
-  const s=JSON.parse(raw);
+  const s=JSON.parse(renameIds(raw));
   if(!this.valid(s))throw Error('이 버전의 저장 파일이 아닙니다.');
   return this.migrate(s);
  }

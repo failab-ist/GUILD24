@@ -358,43 +358,30 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
  for(const it of epics)assert.equal(it.metaUnlock??null,it.id==='worldcharm'?null:null,it.name+' needs no unlock of its own');
 });
 
-/* 2026-09-23 remake: 원정 전문 인증 replaces the 길드24 원정전문점 인증 offer guarantee (REL-Q-v28-16
-   retired with it). The Counter values of an Item that Counters a Hazard of the adventurer's own
-   Gate x1.60, multiplying 야전 정비대 on Field Gear but never the flat 원정 도시락 코너 +2; and the
-   buyer of such an Item gets +50G on their next visit, once per purchase Day. */
-test('REMAKE 원정 전문 인증: Gate Counters x1.60, stacks with 야전 정비대, not with the flat meal defence',()=>{
- const g=fresh('exp-cert'),n={...g.run.npcs[0],traits:[]};
+/* User 2026-10-02: 원정 전문 인증 is remade as 원정 작전실 - no Counter multiplier, no next-visit Gold. Each of the Gate's Hazards
+   answered past its Threat adds its overshoot (capped 0.5) to an average over all the Gate's Hazards, and the prepared combat
+   ability gains 0.3 x that average (+15% at most), at the Final too. */
+test('REMAKE 원정 작전실: overshoot averaged over the Gate\'s Hazards lifts the prepared ability, +15% at most; no Counter multiplier',()=>{
+ const g=fresh('ops-room'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0};
  const spider={...g.makeDungeon('spider',2),requiredSupply:0},snow={...g.makeDungeon('snow',1),requiredSupply:0};
- const val=(pack,gate,fac,h)=>Dungeon.prepare({...n,pack},gate,fac).effects[h]||0;
- const rope=DATA.itemBy.rope.effects.bind;                                     // Field Gear, bind
- assert.ok(Math.abs(val(['rope'],spider,['expeditionCert'],'bind')-val(['rope'],spider,[],'bind')-rope*.60)<1e-9,'+60% on a Gate Counter');
- assert.ok(Math.abs(val(['rope'],spider,['expeditionCert','fieldRepair'],'bind')-val(['rope'],spider,[],'bind')-rope*(1.4*1.6-1))<1e-9,'x1.40 x1.60 for Field Gear');
- assert.equal(val(['rope'],snow,['expeditionCert'],'bind'),val(['rope'],snow,[],'bind'),'no bonus when the Item Counters nothing on this Gate');
- const ramen=DATA.itemBy.ramen.effects.cold;                                   // Food, cold
- const meal=val(['ramen'],snow,['expeditionMeal'],'cold'),both=val(['ramen'],snow,['expeditionMeal','expeditionCert'],'cold');
- assert.ok(Math.abs(both-meal-ramen*.60)<1e-9,'the flat meal defence is not multiplied');
- // no offer guarantee survives
+ const prep=(pack,gate,fac)=>Dungeon.prepare({...n,pack},gate,fac);
+ assert.equal(prep(['rope'],spider,['opsRoom']).effects.bind,prep(['rope'],spider,[]).effects.bind,'no Counter multiplier any more');
+ for(const [pack,gate] of [[[],snow],[['ramen'],snow],[['spiderkit','spiderkit'],spider],[['rope'],spider]]){
+  const p=prep(pack,gate,['opsRoom']),avg=p.hazards.reduce((v,h)=>v+Math.min(.5,Math.max(0,h.defense/h.threat-1)),0)/p.hazards.length;
+  assert.ok(Math.abs(p.effects.opsBonus-.3*avg)<1e-12,'0.3 x the averaged, capped overshoot');
+  assert.ok(p.effects.opsBonus<=.15+1e-12,'never past +15%');
+  const plain=prep(pack,gate,[]);assert.equal(plain.effects.opsBonus,0,'nothing without the support');
+  assert.ok(Math.abs(Dungeon.preparedPower(p.effects)-Dungeon.preparedPower(plain.effects)*(1+p.effects.opsBonus))<1e-9,'the whole prepared ability scales');}
+ // an unanswered Hazard counts as 0 in the average: a second, uncovered Hazard halves the bonus of the same overshoot
+ const one={...snow,hazards:['cold']},two={...snow,hazards:['cold','poison']};
+ const big=prep(['dragonramen','dragonramen'],one,['opsRoom']).effects.opsBonus,half=prep(['dragonramen','dragonramen'],two,['opsRoom']).effects.opsBonus;
+ assert.ok(big>0&&Math.abs(half-big/2)<1e-9,'the average runs over every Hazard of the Gate');
+ // the Final reads it too, and the measured switch turns it off there only
+ const fin={...g.makeFinal(),requiredSupply:0};const finP=prep(['spiderkit','spiderkit'],fin,['opsRoom']).effects.opsBonus;
+ assert.ok(finP>=0);DATA.relicParams.opsRoom.final=false;assert.equal(prep(['spiderkit','spiderkit'],fin,['opsRoom']).effects.opsBonus,0);
+ assert.ok(prep(['spiderkit','spiderkit'],spider,['opsRoom']).effects.opsBonus>=0);DATA.relicParams.opsRoom.final=true;
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(!/has\('expeditionCert'\)&&hazards\.length/.test(src)&&!/guaranteedSlots/.test(src),'the offer guarantee is gone');
-});
-
-test('REMAKE 원정 전문 인증: the buyer of a Gate Counter gets +50G on the next visit, once per purchase Day',()=>{
- const g=fresh('exp-cert-gold'),s=g.run,n=s.npcs[0];
- s.facilities=['expeditionCert'];s.dayFacilities=['expeditionCert'];
- s.dungeons=[{...g.makeDungeon('spider',2),requiredSupply:0}];
- n.traits=[];n.money=1500;  /* within the 2000G wallet cap, so arrival Gold is not clipped */n.introduced=true;n.visits=2;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
- s.queue=[n.id];s.cursor=0;s.phase='sell';
- const real=g.rng;g.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
- g.stock('rope',1);g.stock('antidote',1);
- assert.equal(g.sell(s.inventory.at(-2).id,'full'),true);assert.equal(g.sell(s.inventory.at(-1).id,'full'),true);
- assert.equal(n.certGoldDay,s.day,'two qualifying purchases mark ONE purchase Day');
- const before=n.money;g.arrive();assert.equal(n.money,before,'no Gold on the same Day');
- s.day++;const next=n.money;g.arrive();assert.equal(n.money-next,50,'+50G on the next visit');
- const after=n.money;s.day++;g.arrive();assert.equal(n.money,after,'and only once');
- // a non-Counter purchase marks nothing
- const m=s.npcs[1];m.traits=[];m.money=99999;m.pack=[];m.refused=[];m.history=[];m.destination=0;m.claimedDestination=0;s.queue=[m.id];s.cursor=0;s.phase='sell';
- g.stock('rice',1);assert.equal(g.sell(s.inventory.at(-1).id,'full'),true);assert.equal(m.certGoldDay,undefined);
- g.rng=real;
+ assert.ok(!/certGoldDay|nextVisitGold/.test(src),'the next-visit Gold is gone');
 });
 
 /* The pity Counter guarantee (ECONOMY_ORDER base pity) may never overwrite the Black Market row. */

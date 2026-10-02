@@ -197,7 +197,7 @@ Two predicates, one owner, no third definition anywhere.
 
 Who reads which:
 - 관련 준비: SALE purchase acceptance (the accessible-mode floor and the 바가지 fit term, ECONOMY_ORDER §PURCHASE ACCEPTANCE), 원정 위험 게시판 offer weight
-- 직접 대응: 야전 정비대 and 원정 전문 인증 Counter multipliers, the Known-Hazard Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold
+- 직접 대응: the 야전 정비대 Counter multiplier, the Known-Hazard Counter pity, 길드 납품 인증
 - 기동 on 속박/진창 Gates is 관련 준비, never a Counter
 
 ## CANDIDATE RULES
@@ -335,7 +335,6 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
 - 야전 정비대: Hazard Counter values of every Item the adventurer carries from this store x1.40 - Field Gear, Food and Drink alike
   (User 2026-10-02: Counters are not Field Gear's alone)
 - it changes no ORDER offer weight and no offer quantity
-- it multiplies with 원정 전문 인증 on a Field Gear Counter
 
 31. 야전 들것 · tag=Expedition
 - 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
@@ -466,13 +465,18 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
 - the 1.5x price burden and Loyalty -3 are unchanged
 
-24. 원정 전문 인증 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
+24. 원정 작전실 (`opsRoom`) · tag=Expedition · User 2026-10-02 remake of 원정 전문 인증 (`expeditionCert`; a save's old id is
+    read as `opsRoom` on load)
 - Price = 290G
-- an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat
-  Item does not qualify): its Hazard Counter values x1.60
-- multiplies with 야전 정비대 on any Counter; does NOT multiply the flat 원정 도시락 코너 +2
-- the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
-- it guarantees no ORDER offer
+- for each Hazard of the adventurer's Gate: overshoot = min(0.5, max(0, Counter ÷ Threat - 1)) - the resolver's own Counter
+  (the customer's Stat share and Traits, Store Supports, the Bag); a Hazard answered short counts 0
+- the prepared combat ability (DUNGEON_HAZARD's 4-Stat ability, the one the fight, the forecast, the Great Success margin and
+  the death risk read) x (1 + 0.3 x the average overshoot over ALL the Gate's Hazards) - +15% at most
+- three Hazards (an Event Hazard on a II Gate) average over three; the Final averages over its whole Hazard pool, each
+  participant on its own preparation, applied to that participant's prepared ability before the mean-gap penalty
+- no Counter multiplier, no Wallet, no ORDER offer effect; the SALE 전투 전망 stays the SALE-entry snapshot (with the
+  entry Bag), so an owner's bonus from a sale is not previewed
+- copy -> COPY_AUDIT §11-24
 
 32. 응급 처치대 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
 - Price = 300G
@@ -601,7 +605,7 @@ No excluded facility effect may modify Order/Item/NPC/Dungeon resolution.
 
 ## STORE SUPPORT IDS
 
-Ids read as the current names: `fieldRepair` (야전 정비대), `dawnRecovery` (새벽 회수 계약), `rareContract`
+Ids read as the current names: `opsRoom` (원정 작전실, was `expeditionCert`), `fieldRepair` (야전 정비대), `dawnRecovery` (새벽 회수 계약), `rareContract`
 (희귀상품 입고 계약), `firstVisitCoupon` (첫 방문 쿠폰), `groupOrder` (단체 주문 창구), `extraOrder` (본사 추가발주권),
 `rerollTicket` (발주 교환권). The Event 본사 반값 행사 is `halfPrice` (its effect key and support value too). Save schema v9.
 
@@ -955,7 +959,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
-- COUNTER JUDGEMENT: 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
+- COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
 - 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
@@ -1061,17 +1065,15 @@ PASS: Premium does not depend on a single SKU and Rare+ is not universally super
 
 ### EXPEDITION SUPPORTS
 
-#### REL-Q21 — EXPEDITION CERTIFICATION
-SETUP: Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
+#### REL-Q21 — 원정 작전실 (User 2026-10-02)
+SETUP: Own `원정 작전실`; prepare adventurers for one-, two- and three-Hazard Gates and the Final, short and past the need.
 EXPECT:
-- an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
-- with `야전 정비대`: x1.40 x1.60 (any category)
-- the flat `원정 도시락 코너` +2 is not multiplied
-- the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
-PASS: No ORDER offer guarantee and no unknown hazard reveal.
+- prepared combat ability x (1 + 0.3 x the average capped overshoot over every Hazard of the Gate); +15% at most
+- a Hazard answered short counts 0 in the average; no Counter value, Wallet or offer changes
+PASS: the bonus equals the formula on every Gate shape; a save holding `expeditionCert` loads as `opsRoom`.
 
 #### REL-Q34 — EXPEDITION BUILD CANONICAL HAZARDS
-SETUP: Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
+SETUP: Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 작전실 across all Families.
 EXPECT:
 - only the 9 canonical Hazards drive Hazard-counter filtering
 - Main/Alternative Item routes remain possible

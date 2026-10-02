@@ -112,7 +112,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
  for(const sales of [0,5,6,7,8])for(const id of ['rotation','logisticsHQ'])
   assert.equal(eligibleAtD30(id,sales),true,id+' is not gated by '+sales+' previous sales at D30');
  /* a support that needs a legal D30 ORDER / Reroll action to pay is still eligible */
- for(const id of ['rerollTicket','extraOrder','bulk','fieldRepair','rareContract','hazardBoard','expeditionCert'])
+ for(const id of ['rerollTicket','extraOrder','bulk','fieldRepair','rareContract','hazardBoard','opsRoom'])
   assert.equal(eligibleAtD30(id,0),true,id+' realises its value through a legal D30 action');
 
  /* a future Store Support is included by DEFAULT, and leaves only by being named */
@@ -369,7 +369,7 @@ test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the cata
                           ['board',110],['firstVisitCoupon',110],['groupOrder',200],['memberBundle',190],
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
                           ['supplyCert',220],['dawnRecovery',190],['logisticsHQ',300],['lifetime',310],
-                          ['royalCert',320],['expeditionCert',290],['fresh24',360],['hub',340],
+                          ['royalCert',320],['opsRoom',290],['fresh24',360],['hub',340],
                           ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130],
                           ['fieldStretcher',80],['firstAidDesk',300]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
@@ -507,10 +507,10 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
  s.facilities=[];const base=Relics.offerWeight(g,coffee);s.facilities=['hazardBoard'];
  assert.ok(Relics.offerWeight(g,coffee)>base,'게시판 weights a 기동 Drink on a 속박 Gate (관련 준비)');
  const n={...s.npcs[0],traits:[],pack:['coffee'],injury:0,fatigue:0};
- const plain=Dungeon.prepare(n,s.dungeons[0],[]).effects,cert=Dungeon.prepare(n,s.dungeons[0],['expeditionCert']).effects;
- assert.equal(cert.mobility,plain.mobility,'원정 전문 인증 does not multiply a pressed Stat');
+ const plain=Dungeon.prepare(n,s.dungeons[0],[]).effects,fr=Dungeon.prepare(n,s.dungeons[0],['fieldRepair']).effects;
+ assert.equal(fr.mobility,plain.mobility,'야전 정비대 does not multiply a pressed Stat');
  const withRope={...n,pack:['rope']};
- assert.ok(Dungeon.prepare(withRope,s.dungeons[0],['expeditionCert']).effects.bind>Dungeon.prepare(withRope,s.dungeons[0],[]).effects.bind,'it still multiplies a direct Counter');
+ assert.ok(Dungeon.prepare(withRope,s.dungeons[0],['fieldRepair']).effects.bind>Dungeon.prepare(withRope,s.dungeons[0],[]).effects.bind,'it multiplies a direct Counter');
  // SALE acceptance floor reads 관련 준비
  s.phase='sell';s.queue=[n.id];const cust=s.npcs[0];cust.money=9999;cust.destination=0;cust.claimedDestination=0;cust.traits=[];
  /* v2.9.2 (User 2026-09-25): the final 정가 chance carries x 0.90, the 관련 준비 floor included; 50% keeps the bare floor. */

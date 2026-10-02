@@ -4,7 +4,9 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
    read the same prepared ability before hidden combat noise, and three copies of the weights
    is how they drifted apart before - so there is one. 투력 remains the strongest single lever,
    and no Player-facing aggregate Power Stat is created from it. */
-const preparedPower=e=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20;
+/* RELIC 원정 작전실 (User 2026-10-02): `opsBonus`, set by prepare() for an owner, scales the whole prepared combat ability - the
+   one number the fight, the forecast, the Great Success margin, the death risk and the Final individual power all read. */
+const preparedPower=e=>(e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20)*(1+(e.opsBonus||0));
 const STAT_KEYS=['combat','survival','mobility','spirit'];
 /* Trait keys that describe how somebody SHOPS, not how they perform on an expedition. They are
    read by the store, never summed into a prepared effect. */
@@ -58,10 +60,14 @@ function counterFactor(item,k,v,facilities,d){
  if(!(k in D.hazards)||v<=0)return 1;
  let f=1;
  if(facilities.includes('fieldRepair'))f*=D.relicParams.fieldRepair.counterMult;
- /* 직접 대응 only (RELIC §COUNTER JUDGEMENT, User 2026-09-24, v2.9.0): the 기동-for-속박/진창 exception is retired */
- if(facilities.includes('expeditionCert')&&d.hazards.some(h=>(item.effects[h]||0)>0))f*=D.relicParams.expeditionCert.counterMult;
  return f;
 }
+/* RELIC 원정 작전실 (User 2026-10-02, the 원정 전문 인증 remake): each of the Gate's Hazards answered past its Threat adds the
+   overshoot (Counter / Threat - 1, capped) to an average over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left
+   unanswered counts as 0 - and the prepared combat ability gains that average x mult (cap 0.5 x 0.3 = +15%). */
+function opsBonus(hazards,d,facilities){const p=D.relicParams.opsRoom;
+ if(!facilities.includes('opsRoom')||!hazards.length||(d.family==='final'&&!p.final))return 0;
+ return p.mult*hazards.reduce((v,h)=>v+Math.min(p.overshootCap,Math.max(0,h.defense/h.threat-1)),0)/hazards.length;}
 /* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
 function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
  if(item.category==='food')value=Math.max(1,value+foodSupplyDelta);
@@ -201,6 +207,7 @@ function prepare(n,d,facilities=[]){
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
+ e.opsBonus=opsBonus(hazards,d,facilities);
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
@@ -733,5 +740,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={levelFloor,levelFloorBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,levelFloor,levelFloorBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

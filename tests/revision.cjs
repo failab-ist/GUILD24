@@ -728,4 +728,12 @@ test('an adventurer below the Day\'s newcomer floor gets half again its EXP, nev
  assert.equal(Dungeon.levelFloorBonus({alive:true,level:1,xp:0},0,13),0,'no expedition EXP: nothing');
 });
 
+/* RELIC §24 (User 2026-10-02): a save holding the old 원정 전문 인증 id loads as 원정 작전실 */
+test('a save holding expeditionCert loads with opsRoom in its place',()=>{
+ const g=fresh('ops-alias');g.run.facilities=['opsRoom'];g.run.dayFacilities=['opsRoom'];
+ const raw=Save.export(g.account,g.run).split('"opsRoom"').join('"expeditionCert"');assert.ok(raw.includes('"expeditionCert"'));
+ const st=Save.import(raw);assert.deepEqual(st.run.facilities,['opsRoom']);assert.deepEqual(st.run.dayFacilities,['opsRoom']);
+ assert.ok(!JSON.stringify(st).includes('expeditionCert'));
+});
+
 console.log(checks+' revision groups passed');
