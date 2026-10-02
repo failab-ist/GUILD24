@@ -739,6 +739,21 @@ Then:
     EXP
     = round(baseEXP × outcomeMultiplier × explicit XP modifiers)
 
+### LEVEL FLOOR CATCH-UP (User 2026-10-02)
+
+A returning adventurer could come back so far below the Gates that no Bag in its Wallet reached a fight. The floor is the
+lowest Level a newcomer can arrive at that Day:
+
+    levelFloor(Day) = 1 + floor((Day - 1) × 0.25)        (NPC spawn: randomInt(1,3) + floor((Day-1) × 0.25))
+
+An adventurer below it gets, on an expedition from this store, half again that expedition's EXP - never more than what
+brings it to the floor:
+
+    floorBonus = min(round(EXP × 0.5), EXP still needed to reach levelFloor)
+
+At or above the floor nothing changes. Only an expedition moves it (no visit, no EXP), so staying away never pays; no RNG
+draw is added (a Level gained still rolls what any Level-up rolls). The NIGHT EXP figure includes it; nothing names it.
+
 Ordinary expedition Wallet reward:
 
     baseWalletReward = 35 + Day × 8

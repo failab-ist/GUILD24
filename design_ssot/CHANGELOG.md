@@ -78,6 +78,10 @@ and this table is their commit record.
   the Bag, Stat-route shares included, so there is nothing to add up; the fight never previews. Numbers are gold, green only at
   or past the need. Coach §3-4 says it. UI_UX §SALE — ENVIRONMENT METER / §UNCOMMITTED PREVIEW, SALE (the one preview
   exception), COPY_AUDIT §3-4 / §4-2; test ui-guard.
+- **Level floor catch-up** (User: 손님 성장 가속은 과하지 않게, 최저선 레벨 정도만): an adventurer below the lowest Level a
+  newcomer can arrive at that Day (`1 + floor((Day-1)/4)`) gets half again an expedition's EXP, never past what reaches that
+  floor; at or above it nothing changes, and only an expedition from the store moves it. Unmeasured. DUNGEON_HAZARD §LEVEL
+  FLOOR CATCH-UP; test revision.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
