@@ -92,6 +92,13 @@ and this table is their commit record.
 - **Loyalty weighs a little more on the revisit draw** (User: 단골도 3%로): the returning-NPC revisit weight is x(1 + Loyalty x 0.03)
   (was 0.025). A 단골 (51) in a ten-adventurer pool comes about 41% of Days (was 39%); 평생 단골제 keeps its own +100% on top
   (about 61%). NPC_TRAIT §Loyalty effect on revisit weighting.
+- **전투 전망 and 환경 대응 in two boxes** (User: 같은 박스에 넣으니 같아 보인다, 박스 2개로 · 같은 가로 길이): the readout is two
+  iron-plate boxes - 전투 전망 (the stamped word) and 환경 대응 (the meter) - equal halves while the meter fits (it does at 360 with
+  a preview and the longest Hazard name), the Core Stats in a box of their own below; the whole keeps the old panel's 146px. The
+  phone pin is two plates, `전투` and `환경`, the Hazards on one line while they fit (User: 공간 있으면 한 줄로); every Stat cell is
+  one row height (User: 투력·강인함만 세로 여백 - a tappable cell took the 44px summary minimum); the outlook coach mark is
+  two, one per box. UI_UX §SALE — OUTLOOK BOXES (new),
+  §FORECAST PIN, §ENVIRONMENT METER, §TUTORIAL — COACH DIET; COPY_AUDIT §3-4; test ui-guard.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

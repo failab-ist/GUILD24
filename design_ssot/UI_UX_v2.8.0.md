@@ -346,10 +346,22 @@ Counter the expedition is judged on (Dungeon.prepare: the customer's own Stat sh
 committed Bag's Counters; whole, never below 0), 필요 the Gate's public `대응 {N} 필요`. It moves when a sale commits; a selected,
 unsold Item previews where it would land, `{위험} {N} → {M}/{필요}` - the resolver's number with that Item in the Bag, Stat-route
 shares included, so nothing is left to add up (User 2026-10-02). The number is gold, green only once it reaches the need (a
-preview coloured on its own). It sits in a display window so it reads apart from the stamped `전투 전망` word beside it, which
+preview coloured on its own). It sits in its own box (§SALE — OUTLOOK BOXES), apart from the stamped `전투 전망` word, which
 stays the SALE-entry snapshot with its death % help and never previews. No readiness word, no breakdown of the number. The phone forecast pin carries the same meter. The tray's Hazard Counter row is
 the Item's own share, `{위험} 대응 +N`. Help and coach copy -> COPY_AUDIT §4-2, §3-4. The four readiness words stay the
 resolver's and the measurement bots' vocabulary (outlookFor) and are not drawn on SALE.
+
+### SALE — OUTLOOK BOXES (User 2026-10-02)
+
+The readout is two boxes of their own, not one panel: `전투 전망` (its stamped word; the ? with the death % line) and `환경
+대응` (the meter, one row per Hazard), each an iron plate with two painted corner rivets, a head line (name, ?) over its value.
+They split the row in equal halves while the meter fits half; past that the 환경 대응 box takes what it needs. The Core Stats
+below are a box of their own (the stat grid), not part of the readout; every Stat cell is one row height, a tappable
+(source) cell included - no extra vertical padding on any cell. The pair plus the Stats keep the old panel's height
+(146px at 360 / 390 on a two-Hazard Gate): the head line takes 16px while its ? keeps the 24px target. The phone pin is two
+small plates, `전투 {word}` and `환경 {meter}`, the meter's Hazards side by side on one line while they fit, wrapping whole
+only when they do not (one 44px target that folds to `전망`). The
+first SALE's outlook mark is two marks, one per box (COPY_AUDIT §3-4).
 
 ### SALE — GATE VS ITEM INFORMATION
 
@@ -421,8 +433,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 ### SALE — FORECAST PIN
 
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
-repeats `전투 전망 {우세|접전|불리}` (the frozen value) and the 환경 대응 meter `{위험} {N}/{필요}` per Hazard, live as the readout
-reads it (§SALE — ENVIRONMENT METER) — the same values, never a second
+repeats, as two small plates, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
+Hazard, live as the readout reads it (§SALE — OUTLOOK BOXES / ENVIRONMENT METER) — the same values, never a second
 source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
@@ -1254,7 +1266,7 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): three marks, destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
+First SALE (§TUTORIAL — COACH DIET): four marks (User 2026-10-02: the outlook is two), destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
 the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
 does not move with a sale; COPY_AUDIT §3-4). No Hazard or price marks (Hazard rows say what answers them, price comes after
 the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
@@ -1267,7 +1279,8 @@ screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL), the first Event (§FIRST EVENT TUTORIAL) and II / FIRE
   Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
-  first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
+  first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
+  대응 - one mark each, User 2026-10-02); SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)

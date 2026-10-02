@@ -877,7 +877,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/hazardList\(/.test(readout),'the outlook renders no Hazard rows of its own');
  /* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): 환경 대응 is the live number per Hazard - the resolver's own defense off the
     committed Bag over the Gate's public need - in a display window; no readiness word, no colour by state, no breakdown */
- assert.ok(/환경 대응'\+envMeter\(p,d,pre\)/.test(readout),'the outlook states this customer\'s 환경 대응 as the meter');
+ assert.ok(/<span class="fore ro-env env-each env-meter"><span class="ro-head">환경 대응'/.test(readout)&&/\+'<\/span>'\+envMeter\(p,d,pre\)\+'<\/span>'/.test(readout),'the outlook states this customer\'s 환경 대응 as the meter, in its own box (User 2026-10-02)');
  const env=fn('envMeter');
  assert.ok(/p\.hazards\.map\(\(h,i\)=>/.test(env)&&/Math\.max\(0,Math\.floor\(x\+1e-9\)\)/.test(env)&&/whole\(h\.defense\)/.test(env)&&/Presentation\.hazardNeed\(h\.key,d\)/.test(env),
   'each Hazard: the whole defense, never below 0, over the Gate\'s public need');
@@ -893,8 +893,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
- assert.equal((codeOnly.match(/환경 대응'\+envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
- assert.ok(/환경 대응'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
+ assert.equal((codeOnly.match(/envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
+ assert.ok(/<span class="pin-fore pin-plate env-meter">환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -974,7 +974,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     two counter tooltips already use, so there is no separate row left to hide or to lose
     with a hidden caps label. */
  assert.ok(!/env-help/.test(app)&&!/env-help/.test(css),'the separate help row is gone, not merely hidden');
- const envCell=readout.slice(readout.indexOf("환경 대응'+envMeter"),readout.indexOf("</span>':''",readout.indexOf("환경 대응'+envMeter")));
+ const envCell=readout.slice(readout.indexOf('<span class="fore ro-env'),readout.indexOf("</span>':''",readout.indexOf('<span class="fore ro-env')));
  assert.ok(envCell.includes("tip('환경 대응'"),'the environment help sits in the same cell as the reading');
  assert.ok(!/\.readout \.fore>\.tip[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
  /* UI_UX §SHARED ANCHORED POPOVER (User 2026-09-25, phone): a positioned ? or cell becomes the
@@ -1996,7 +1996,7 @@ test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail 
  assert.ok(top>0&&line>top&&line<r.indexOf('great-signal'),'directly under the readout .top');
  assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
  assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
- assert.equal((r.match(/<span class="fore(?:">|'\+| env-each env-meter">)/g)||[]).length,2,'the .top still holds the two cells (전투 전망 and the 환경 대응 meter)');
+ assert.equal((r.match(/<span class="fore ro-(?:combat|env)/g)||[]).length,2,'the .top still holds the two boxes (전투 전망 and the 환경 대응 meter)');
  assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
  assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
 });
@@ -2450,13 +2450,15 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
- assert.ok(steps.includes(`['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
+ assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.']`)
+  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.']`)
+  &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/<b>'\+o\.combat\+'<\/b><\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','forecast','payday','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the outlook; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','forecast','envmeter','payday','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the two outlook boxes; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.']`)
   &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
@@ -3543,7 +3545,7 @@ test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, 
 test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
  const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
  assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n,st\?st\.item:null\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
- assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('전투 전망')&&pin.includes('환경 대응')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
+ assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('>전투<b>')&&pin.includes('>환경\'+envMeter')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
  assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
  assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
  assert.ok(/aria-expanded/.test(sync),'the fold state is announced');

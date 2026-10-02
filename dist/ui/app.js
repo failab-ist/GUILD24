@@ -861,16 +861,18 @@ function readout(n,extra=null,cls=''){
     and no new calculation: the summary IS the worst of the rows the player can see. */
 
  const mob=cls==='core-mob';
- return '<div class="readout'+(cls?' '+cls:'')+'">'
+ /* UI_UX §SALE — OUTLOOK BOXES (User 2026-10-02): 전투 전망 and 환경 대응 are two boxes of their own (`ro2`), equal halves while
+    both fit - one stamped word that does not move, one number that does - so neither reads as part of the other */
+ return '<div class="readout ro2'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   /* User 2026-10-01: back to `전투 전망` - `도착 시 전투 전망` filled a half cell on a phone, so the two readings stacked;
      the outlook coach mark says when the reading is taken again */
-  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
+  +'<span class="fore ro-combat"><span class="ro-head">전투 전망'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
      ends in death. The NPC detail states it too (§5-7). */
-   +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span>'
+   +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span><b>'+o.combat+'</b></span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
@@ -879,8 +881,8 @@ function readout(n,extra=null,cls=''){
      instead (envReading, v2.9.13). */
   /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): 환경 대응 is now the number itself, live with the committed Bag - a
      display window of its own beside the stamped 전투 전망, so a cell that moves never reads like the one that does not */
-  +(p.hazards.length?'<span class="fore env-each env-meter">환경 대응'+envMeter(p,d,pre)
-   +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>':'')
+  +(p.hazards.length?'<span class="fore ro-env env-each env-meter"><span class="ro-head">환경 대응'
+   +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>'+envMeter(p,d,pre)+'</span>':'')
   +'</div>'
  /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
     reads here - one thin line, only for an injured departure with a chain behind it (the first adds nothing), the NPC detail
@@ -1313,7 +1315,9 @@ const coachSteps={
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
+ ['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.'],
+ /* User 2026-10-02: the outlook mark is two - one per box */
+ ['envmeter','.readout .ro-env','환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
@@ -1777,7 +1781,8 @@ function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=
  d=game.claimedGateFor(n),v={...n,traits:Presentation.traits(n),pack:n.pack},p=Dungeon.prepare(v,d,game.run.facilities),
  pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
-  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore env-each env-meter">환경 대응'+envMeter(p,d,pre)+'</span>':'')
+  /* User 2026-10-02: two small plates, the boxes' short names - `전투` `환경` - so a preview still fits at 360 */
+  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore pin-plate env-meter">환경'+envMeter(p,d,pre)+'</span>':'')
   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);

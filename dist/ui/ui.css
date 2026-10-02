@@ -1054,7 +1054,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    reason. The row keeps its exact shape so the two-column grid does not move, and the marker
    is suppressed because the affordance is the row, not a twisty. */
 details.detail-stat{display:block;padding:0}
-details.detail-stat>summary{display:flex;align-items:baseline;gap:8px;padding:5px 0;list-style:none;cursor:pointer}
+details.detail-stat>summary{display:flex;align-items:baseline;gap:8px;padding:5px 0;min-height:0;list-style:none;cursor:pointer}
 details.detail-stat>summary::-webkit-details-marker{display:none}
 details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .detail-stat label{display:flex;align-items:baseline;gap:6px;min-width:0;font:400 13px/1 var(--ui);color:#a2947c;overflow:hidden}
@@ -3561,3 +3561,50 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .clash-card .pfp{width:96px;height:96px}
 }
 
+
+/* UI_UX §SALE — OUTLOOK BOXES (User 2026-10-02): the readout is two iron-plate boxes, 전투 전망 (a stamped word) and 환경 대응 (the
+   meter), equal halves while the meter fits half - past that the 환경 대응 box takes what it needs. No panel around them; the
+   Core Stats sit in a box of their own below. Corner rivets are painted, so no box is positioned (a ? balloon still floats
+   against the readout). */
+.readout.ro2{background:none;box-shadow:none;padding:0}
+.readout.ro2 .top{display:grid;grid-template-columns:minmax(0,1fr) minmax(max-content,1fr);gap:5px;margin:0;align-items:stretch}
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+ gap:5px;min-width:0;padding:6px 9px 8px;white-space:normal;flex:none;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
+ box-shadow:inset 0 0 0 1px #3a2c1c,inset 0 2px 0 #0009,0 2px 0 #0006}
+.readout.ro2 .ro-head{display:flex;align-items:center;gap:6px;font:500 12px/1.2 var(--ui);color:#9c8d70;white-space:nowrap}
+.readout.ro2 .ro-head .tip{margin-left:auto}
+.readout.ro2 .top .ro-combat>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
+.readout.ro2 .fore.env-each>.env-list,.readout.ro2 .env-meter-list{display:grid;grid-template-columns:auto 1fr;gap:3px 6px;margin:0;order:0;flex:none}
+.readout.ro2 .env-row{display:contents}
+.readout.ro2 .env-row i{justify-self:start;align-self:baseline}
+.readout.ro2 .fore .env-row b{margin:0}
+.readout.ro2 .top b.env-num{padding:0;background:none;box-shadow:none;font-size:17px;white-space:nowrap}
+.p-sale .dossier:not(.traits):has(>.readout.ro2){background:none;box-shadow:none}
+.p-sale .dossier:not(.traits)>.readout.ro2{padding:0}
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats{margin:5px 0 0;padding:2px 12px 6px;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
+ box-shadow:inset 0 0 0 1px #3a2c1c,inset 0 2px 0 #0009,0 2px 0 #0006}
+/* the phone pin: the button turns into two small plates (still one 44px tap target that folds to the 전망 chip); the meter's
+   Hazards wrap whole, a Hazard never split from its number */
+.forecast-pin:not(.folded):has(.pin-plate){padding:0;background:none;box-shadow:none;align-items:stretch}
+.forecast-pin .pin-full:has(.pin-plate){gap:5px;align-items:stretch;flex-wrap:nowrap}
+.forecast-pin .pin-plate{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;flex:none;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),#120c06;box-shadow:inset 0 0 0 1px #5a452b,0 4px 10px #000a}
+.forecast-pin .pin-plate.env-meter{flex:1 1 0;min-width:0}
+.forecast-pin .pin-plate .env-meter-list{display:inline-flex;flex-direction:row;flex-wrap:wrap;gap:2px 8px;margin:0}
+.forecast-pin .pin-plate .env-row{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap}
+.forecast-pin .pin-plate b,.forecast-pin .pin-plate .env-row b{margin:0}
+.forecast-pin .pin-plate b.env-num{padding:0;background:none;box-shadow:none;font-size:15px}
+/* tighter rows inside the boxed readout and stat box, so the pair plus the Stats keep the old panel's height */
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:5px 9px 6px;gap:3px}
+.readout.ro2 .env-meter-list{row-gap:1px}
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats{padding:0 12px 2px}
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding:3px 0}
+/* the box head takes 16px of height while its ? keeps the 24px target (it overhangs the padding) */
+.readout.ro2 .ro-head{height:16px}
+.readout.ro2 .ro-head .tip>summary{margin:-4px -5px -4px 0}
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:4px 9px 5px;gap:2px}
+.readout.ro2 .env-meter-list{row-gap:0}
+.readout.ro2 .top b.env-num{line-height:16px}
