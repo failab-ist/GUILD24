@@ -2,8 +2,8 @@
 
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## NON-NEGOTIABLE
@@ -243,7 +243,7 @@ Known Hazards
 ```
 
 다음 기존 시스템은 Event Hazard를 반드시 인식해야 한다: Morning Hazard 표시 · Hazard Forecast · Known Hazard 기반
-Order 처리 · 원정 위험 게시판 · 원정 전문 인증 · 기존 Counter coverage / pity logic · 기타 Known Hazard 참조 로직.
+Order 처리 · 원정 위험 게시판 · 원정 작전실 · 기존 Counter coverage / pity logic · 기타 Known Hazard 참조 로직.
 
 Event가 공개한 Hazard가 Monster Knowledge 부족 때문에 Known 목록에서 누락되어서는 안 된다.
 Event Hazard를 `hazards` 배열 끝에 추가한 뒤 기존 Knowledge 기반 `slice()`에 의해 잘려 나가는 동작은 Implementation Bug다.
@@ -1133,7 +1133,7 @@ PASS:
 - 반대로 Event Hazard를 완전히 무시하는 것과 대응하는 것에는 체감 차이가 있다.
 - Event Hazard가 즉시 Known으로 표시된다.
 - 원정 위험 게시판이 Event Hazard를 인식한다.
-- 원정 전문 인증이 Event Hazard를 인식한다.
+- 원정 작전실이 Event Hazard를 인식한다 (넘침 평균에 들어간다).
 - 기존 Counter coverage / pity logic이 Event Hazard를 인식한다.
 - Forecast가 Event Hazard를 인식한다.
 

@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.9.11
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -113,7 +113,7 @@ Current explicit D30 no-effect exclusions:
 단골 스탬프 기계 (stamp) · 회원 관리대장 (member) · 길드 보증 진열대 (guarantee) · 대형 냉장고 (fridge) ·
 길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
 프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) · 새벽 회수 계약 (dawnRecovery) ·
-평생 단골제 (lifetime) · 왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
+왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
 응급 처치대 (firstAidDesk; no SALE arrival on D30)
 
 All other current supports are D30-eligible under ordinary acquisition eligibility. Future Store Supports are
@@ -148,7 +148,7 @@ Boss Power by committed break count is owned by `BOSS_v2.8.0.md`; do not duplica
 
 At window creation: generate(candidates,prices) once
 
-persist: milestoneDay · candidateIds · candidatePrices · purchased · expiryDay · focusedRevealSeen
+persist: milestoneDay · candidateIds · candidatePrices · purchased · expiryDay · focusedRevealSeen · rerolls
 
 save/load => same(candidates,prices,state); reload => no reroll
 
@@ -178,8 +178,7 @@ status line under its name and effect in the owned quick view, computed from run
 field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
 written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32. The conditional supports are exactly:
 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
-단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it pays every surviving 단골 at NIGHT
-(once per customer per Day, which is every expedition), always on; its card carries no `(하루 1회)`.
+단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it is always on for every 단골.
 
 expiry: next relic window begins (e.g. D5 offer valid through D9; D10 => new window)
 
@@ -197,7 +196,7 @@ Two predicates, one owner, no third definition anywhere.
 
 Who reads which:
 - 관련 준비: SALE purchase acceptance (the accessible-mode floor and the 바가지 fit term, ECONOMY_ORDER §PURCHASE ACCEPTANCE), 원정 위험 게시판 offer weight
-- 직접 대응: 야전 정비대 and 원정 전문 인증 Counter multipliers, the Known-Hazard Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold
+- 직접 대응: the 야전 정비대 Counter multiplier, the Known-Hazard Counter pity, 길드 납품 인증
 - 기동 on 속박/진창 Gates is 관련 준비, never a Counter
 
 ## CANDIDATE RULES
@@ -207,6 +206,15 @@ owned nonstackable relic: futureEligible=NO
 unbought relic: futureEligible=YES · immediateNextWindowRepeat=NO
 offer diversity: prefer >=2 distinct Primary Build directions when practical
 buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약하게 높일 수 있으나 필수 Piece를 보장하지 않는다.
+
+### CANDIDATE REROLL (User 2026-10-02)
+
+- an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
+- price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
+- the redraw keeps every pool rule above (ownership, Keystone from D10, the D30 exclusions, diversity, build bias) and leaves
+  the three on the table out when at least three others remain; the new three are priced as any window's
+- the spend is Store Support investment (the closing receipt's `점포지원 투자`); a reload never redraws for free
+- the key sits in the window's footer beside `나중에 결정`, the same rank and look (User 2026-10-02); copy -> COPY_AUDIT §11-31c
 
 Keystone:
 - D0/D5 eligible=NO; D10/D15/D20/D25/D30 eligible=YES
@@ -332,9 +340,9 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
   direct Counter or the Stat that Hazard presses); this is not a guarantee
 
 8. 야전 정비대 · tag=Expedition
-- 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
+- 야전 정비대: Hazard Counter values of every Item the adventurer carries from this store x1.40 - Field Gear, Food and Drink alike
+  (User 2026-10-02: Counters are not Field Gear's alone)
 - it changes no ORDER offer weight and no offer quantity
-- it multiplies with 원정 전문 인증 on a Field Gear Counter
 
 31. 야전 들것 · tag=Expedition
 - 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
@@ -362,7 +370,8 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-no operating-cost effect
+base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
+  (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect] · newCombatSystem=NO
@@ -403,7 +412,7 @@ effect=paid returning customer survives expedition -> long-term customer value u
 channel=prefer existing loyalty/wallet/revisit systems
 - Price = 240G
 - condition = paid returning customer today survives (no Loyalty threshold)
-- Loyalty +5, NPC Wallet +25G
+- Loyalty +5, NPC Wallet +20G (User 2026-10-02)
 
 17. 원정 도시락 코너 · tags=[Fresh,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 
@@ -414,6 +423,8 @@ per Food/Drink Item in the Bag:
   +2 defence on every Hazard of the Gate the adventurer actually goes to
   at the 마왕성 (the Final) the +2 goes to one Hazard only: the adventurer's most 취약 one - the largest gap before this
     bonus, the Final's own Hazard order on a tie
+Food/Drink ORDER price +3G flat, after any percentage modifier (24시간 신선체계 x1.15 first); the offers on the table are
+  repriced once at acquisition (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
@@ -449,12 +460,14 @@ effect=Rare+ expedition-response items gain premium-economy viability
 - no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
 - the internal purchase-price floor (45% of list) still applies
 
-22. 평생 단골제 · tag=VIP · snowballCap=required · `DIRECTOR DOCUMENT BASELINE`
-effect=high-loyalty survival/revisit accelerates wallet/revisit value
+22. 평생 단골제 · tag=VIP · User 2026-10-02 remake (no Gold, no revisit weight)
+effect=a 단골 is stronger, and stays a 단골
 - Price = 310G
-- 단골 (Trusted Regular, Loyalty >= 51) survival condition
-- NPC Wallet +50G
-- next-visit weight +100%
+- 단골 (Trusted Regular, Loyalty >= 51): the four Core Stats x1.10 in the prepared reading (after Items and condition,
+  before the Hazard reading), so Hazard Counters through the Stat routes rise too; listed among each Stat's sources
+  (`평생 단골제 +10%`); the Final party reads it the same way
+- while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
+  an adventurer not yet a 단골 has no floor
 - the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51
 
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
@@ -465,13 +478,20 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
 - the 1.5x price burden and Loyalty -3 are unchanged
 
-24. 원정 전문 인증 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
+24. 원정 작전실 (`opsRoom`) · tag=Expedition · User 2026-10-02 remake of 원정 전문 인증 (`expeditionCert`; a save's old id is
+    read as `opsRoom` on load)
 - Price = 290G
-- an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat
-  Item does not qualify): its Hazard Counter values x1.60
-- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
-- the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
-- it guarantees no ORDER offer
+- for each Hazard of the adventurer's Gate: overshoot = min(0.5, max(0, Counter ÷ Threat - 1)) - the resolver's own Counter
+  (the customer's Stat share and Traits, Store Supports, the Bag); a Hazard answered short counts 0
+- 투력 x (1 + 0.6 x the average overshoot over ALL the Gate's Hazards) - +30% at most; applied after the Hazard reading (no
+  Hazard reads 투력), so it reaches everything that reads 투력 (the fight, the forecast, the Great Success margin, the death
+  risk, the Final individual power) and no other Stat; no separate combat-power concept is introduced
+- the SALE Stat grid lists it among 투력's sources (`원정 작전실 +N%`), so the shown 투력 and its sources agree
+- three Hazards (an Event Hazard on a II Gate) average over three; the Final averages over its whole Hazard pool, each
+  participant on its own preparation
+- no Counter multiplier, no Wallet, no ORDER offer effect; the SALE 전투 전망 stays the SALE-entry snapshot (with the
+  entry Bag), so an owner's bonus from a sale is not previewed
+- copy -> COPY_AUDIT §11-24
 
 32. 응급 처치대 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
 - Price = 300G
@@ -600,7 +620,7 @@ No excluded facility effect may modify Order/Item/NPC/Dungeon resolution.
 
 ## STORE SUPPORT IDS
 
-Ids read as the current names: `fieldRepair` (야전 정비대), `dawnRecovery` (새벽 회수 계약), `rareContract`
+Ids read as the current names: `opsRoom` (원정 작전실, was `expeditionCert`), `fieldRepair` (야전 정비대), `dawnRecovery` (새벽 회수 계약), `rareContract`
 (희귀상품 입고 계약), `firstVisitCoupon` (첫 방문 쿠폰), `groupOrder` (단체 주문 창구), `extraOrder` (본사 추가발주권),
 `rerollTicket` (발주 교환권). The Event 본사 반값 행사 is `halfPrice` (its effect key and support value too). Save schema v9.
 
@@ -817,7 +837,7 @@ D30 candidate generation must be: ordinary eligible pool minus explicit D30 no-e
 It must NOT be implemented as a positive finalUseful/futureRelevant allowlist.
 
 Current explicit exclusions: the §D30 CANDIDATE ELIGIBILITY list (stamp, member, guarantee, fridge, board,
-firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, dawnRecovery, lifetime, royalCert,
+firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, dawnRecovery, royalCert,
 hub, efficiency, firstAidDesk).
 
 PASS:
@@ -953,9 +973,9 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
-- 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
-- COUNTER JUDGEMENT: 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect
+- 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
+- COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +10% of overheadBase
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
@@ -1026,7 +1046,7 @@ PASS: Rotation/low-cost build is not invalidated by universal Rare+ upgrades.
 
 #### REL-Q-v28-4 — RETURN POINTS
 
-Expected: paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
+Expected: paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +20G
 
 #### REL-Q-v28-6 — LIFETIME
 
@@ -1060,17 +1080,16 @@ PASS: Premium does not depend on a single SKU and Rare+ is not universally super
 
 ### EXPEDITION SUPPORTS
 
-#### REL-Q21 — EXPEDITION CERTIFICATION
-SETUP: Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
+#### REL-Q21 — 원정 작전실 (User 2026-10-02)
+SETUP: Own `원정 작전실`; prepare adventurers for one-, two- and three-Hazard Gates and the Final, short and past the need.
 EXPECT:
-- an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
-- with `야전 정비대` on Field Gear: x1.40 x1.60
-- the flat `원정 도시락 코너` +2 is not multiplied
-- the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
-PASS: No ORDER offer guarantee and no unknown hazard reveal.
+- 투력 x (1 + 0.6 x the average capped overshoot over every Hazard of the Gate); +30% at most; other Stats unchanged
+- the 투력 source list carries `원정 작전실 +N%` exactly when the bonus is above 0
+- a Hazard answered short counts 0 in the average; no Counter value, Wallet or offer changes
+PASS: the bonus equals the formula on every Gate shape; a save holding `expeditionCert` loads as `opsRoom`.
 
 #### REL-Q34 — EXPEDITION BUILD CANONICAL HAZARDS
-SETUP: Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
+SETUP: Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 작전실 across all Families.
 EXPECT:
 - only the 9 canonical Hazards drive Hazard-counter filtering
 - Main/Alternative Item routes remain possible
@@ -1079,10 +1098,11 @@ PASS: Expedition Relics match the current Dungeon×Item model.
 
 #### REL-Q77 — FIELD MAINTENANCE (야전 정비대)
 
-`야전 정비대` multiplies the Hazard Counter values of carried Field Gear by 1.40.
+`야전 정비대` multiplies the Hazard Counter values of every carried Item by 1.40 (User 2026-10-02).
 
 PASS:
-- Potion / Food / Drink / Insurance Counter values are unchanged
+- Field Gear, Food and Drink Counter values all x1.40 (e.g. 컵라면 냉기 대응 10 -> 14); Core Stats, 피로 회복 and the flat 원정 도시락
+  코너 +2 are unchanged
 - no ORDER offer weight or offer quantity effect
 
 ### FRESH SUPPORTS

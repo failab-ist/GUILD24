@@ -49,18 +49,24 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
  return 1;
 }
 /* A Hazard Counter value (an Item effect keyed by a Hazard) under the two Counter supports:
-   야전 정비대 x1.40 on Field Gear, 원정 전문 인증 x1.60 on an Item that Counters a Hazard of the
+   야전 정비대 x1.40 on any Item's Counter (User 2026-10-02: Food / Drink Counters too, not Field Gear alone), 원정 전문 인증
+   x1.60 on an Item that Counters a Hazard of the
    Gate actually entered. They multiply each other; neither reaches the flat 원정 도시락 코너 +4,
    which is added outside this channel. "Counters" is the Relics.counter predicate, read inline
    because this module loads before systems/relics.js. */
 function counterFactor(item,k,v,facilities,d){
  if(!(k in D.hazards)||v<=0)return 1;
  let f=1;
- if(facilities.includes('fieldRepair')&&item.category==='gear')f*=D.relicParams.fieldRepair.counterMult;
- /* 직접 대응 only (RELIC §COUNTER JUDGEMENT, User 2026-09-24, v2.9.0): the 기동-for-속박/진창 exception is retired */
- if(facilities.includes('expeditionCert')&&d.hazards.some(h=>(item.effects[h]||0)>0))f*=D.relicParams.expeditionCert.counterMult;
+ if(facilities.includes('fieldRepair'))f*=D.relicParams.fieldRepair.counterMult;
  return f;
 }
+/* RELIC 원정 작전실 (User 2026-10-02, the 원정 전문 인증 remake): each of the Gate's Hazards answered past its Threat adds the
+   overshoot (Counter / Threat - 1, capped) to an average over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left
+   unanswered counts as 0 - and 투력 gains that average x mult (cap 0.5 x 0.6 = +30%), applied by prepare() after the Hazard
+   reading (no Hazard reads 투력) and listed among 투력's sources. */
+function opsBonus(hazards,d,facilities){const p=D.relicParams.opsRoom;
+ if(!facilities.includes('opsRoom')||!hazards.length||(d.family==='final'&&!p.final))return 0;
+ return p.mult*hazards.reduce((v,h)=>v+Math.min(p.overshootCap,Math.max(0,h.defense/h.threat-1)),0)/hazards.length;}
 /* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
 function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
  if(item.category==='food')value=Math.max(1,value+foodSupplyDelta);
@@ -192,14 +198,20 @@ function prepare(n,d,facilities=[]){
  const injuryPenalty=injuryPenaltyFor(facilities);
  const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
+ /* RELIC 평생 단골제 (User 2026-10-02): a 단골's four Core Stats +10%, before the Hazard reading - the Final party included */
+ const lifetime=facilities.includes('lifetime')&&G.Adventurer.isTrustedRegular(n)?D.relicParams.lifetime.statBonus:0;
+ if(lifetime)for(const k of STAT_KEYS)e[k]*=1+lifetime;
  /* RELIC 원정 도시락 코너 at the 마왕성 (v2.9.11, User 2026-09-29): every Food/Drink's +2 lands on this adventurer's most
     취약 Hazard - the largest gap before the bonus, the Final's own Hazard order on a tie. */
  if(mealFinal){const gaps=d.hazards.map(h=>hazardState(h,e,d).gap),i=gaps.indexOf(Math.max(...gaps)),h=d.hazards[i];
   e[h]=(e[h]||0)+D.relicParams.expeditionMeal.hazardDefense*mealFinal;}
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
+ if(lifetime)for(const k of STAT_KEYS)sources[k].push({name:D.relicBy.lifetime.name,v:lifetime*100,isPct:true});
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
+ const ops=e.opsBonus=opsBonus(hazards,d,facilities);
+ if(ops>0){e.combat*=1+ops;sources.combat.push({name:D.relicBy.opsRoom.name,v:ops*100,isPct:true});}
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
@@ -724,5 +736,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

@@ -2,8 +2,8 @@
 
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -139,8 +139,10 @@ Preferred short grammar:
 Two necessary Items:
     {Item A}·{Item B} 덕분에 부상을 피했다.
 
-Only the combination is provable:
-    챙긴 보급 덕분에 부상을 피했다.
+Each of the two Items would have been enough alone (no single removal changes the result, removing both does - the Bag is
+two slots, so this is what a whole-Bag proof means; User 2026-10-02): both are named, never `챙긴 보급`:
+    {Item A}·{Item B} 덕분에 부상을 피했다.
+    {Item} 2개 덕분에 부상을 피했다.        (the same Item twice)
 
 Do not use vague Hero claims such as `부식 위험 감소` / `환경을 철저한 준비로 극복했다`.
 A hidden risk decrease without a proven resolved difference is not Hero feedback.
@@ -153,7 +155,8 @@ VERDICT STAMP.
 
 A rule is named once per account, on the NIGHT record of the first expedition it acted on - taught after it happened,
 not before. It is shown like the tutorial: a `점주 안내` coach mark over that record, one per rule, after the NIGHT result
-mark, persisted and skipped with the other coach marks; the record itself gains no line. Each rule is also kept in the
+mark, persisted and skipped with the other coach marks; the record itself gains no line. The mark lights what its rule is
+about (User 2026-10-02): the Fatigue rule the record's `귀환 후 피로` row, every other rule the record's Outcome block. Each rule is also kept in the
 발견 수첩 the first time. Triggers (proof, not presence): came back with an Injury (the first 부상 record, never a healthy return); came back with a
 Severe Injury (the first 중상 record - its own rule, User 2026-10-02: it rests unseen, then returns healthy); departed at Fatigue 10 or more;
 a Hazard Item actually lowered a Hazard (the `hazard` resolution event); 만반의 준비 turned away a Death; a 대성공 that paid

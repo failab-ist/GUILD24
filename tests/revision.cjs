@@ -672,4 +672,57 @@ test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted
  assert.deepEqual(notebook().sort(),K.map(k=>'learn-'+k).sort(),'all six are in the notebook');
 });
 
+/* User 2026-10-02: 카리냐 -> 카리냥, in place (same F/021 portrait); a Run saved before the rename carries the new name */
+test('a renamed customer keeps its portrait slot, and an older save carries the new name',()=>{
+ assert.ok(!Adventurer.names.includes('카리냐')&&Adventurer.names.includes('카리냥'),'the pool holds the new name only');
+ assert.deepEqual(Adventurer.portraitOf('카리냥'),{gender:'F',slot:21},'at the old name\'s slot');
+ const g=fresh('rename-test'),n=g.run.npcs[0];n.name='카리냐';n.records.push({name:'카리냐',day:1,outcome:'성공'});
+ const state=Save.import(Save.export(g.account,g.run)),m=state.run.npcs.find(x=>x.id===n.id);
+ assert.equal(m.name,'카리냥');assert.equal(m.records.at(-1).name,'카리냥');
+ assert.equal(state.run.npcs.filter(x=>x.name==='카리냐').length,0);
+});
+
+/* ECONOMY_ORDER §Known-Hazard Counter pity (User 2026-10-02): every sheet drawn counts, the Day's first and each Reroll */
+test('the Counter guarantee comes on the third sheet in a row without one, Rerolls included; Rare pity ignores Rerolls',()=>{
+ const g=fresh('pity-sheets'),s=g.run,hz=Relics.known(g),has=()=>s.offers.some(o=>Relics.directCounter(DATA.itemBy[o.item],hz));
+ assert.ok(hz.length,'a known Hazard');const roll=g.rollOffer;g.rollOffer=function(){return this.offerFor(DATA.itemBy.rice);};
+ s.pity={rare:0,hazards:{}};s.money=99999;
+ g.generateOffers();assert.ok(!has());assert.equal(Math.max(...hz.map(h=>s.pity.hazards[h])),1,'the Day\'s first sheet: 1');
+ g.reroll();assert.ok(!has());assert.equal(Math.max(...hz.map(h=>s.pity.hazards[h])),2,'a Reroll counts: 2');
+ const rare=s.pity.rare;g.reroll();assert.ok(has(),'the third sheet carries a Counter');assert.equal(s.pity.counter,0,'and the count starts over');
+ assert.equal(s.pity.rare,rare,'Rare pity is not advanced by a Reroll');
+ g.reroll();assert.ok(!has());assert.equal(s.pity.counter,1,'rerolling the guaranteed sheet away starts a new count');
+ g.rollOffer=roll;});
+
+/* User 2026-10-02: a whole-Bag proof (each Item alone was enough) names both Items, never 챙긴 보급 */
+test('a whole-Bag Hero proof names both Items, or the one Item twice',()=>{
+ const r=o=>({outcome:'부상',heroProof:{outcome:{items:null,worse:'사망'}},...o});
+ assert.equal(Presentation.heroLine(r({items:['ramen','hood']})),'컵라면·방한 두건 덕분에 살아 돌아왔다.');
+ assert.equal(Presentation.heroLine(r({items:['ramen','ramen']})),'컵라면 2개 덕분에 살아 돌아왔다.');
+ assert.equal(Presentation.heroLine({outcome:'성공',items:['ramen','hood'],heroProof:{outcome:{items:['ramen'],worse:'퇴각'}}}),'컵라면 덕분에 원정을 성공했다.','a single proven Item is named alone, as before');
+ assert.ok(!/챙긴 보급 덕분에/.test(Presentation.heroLine(r({items:['ramen','hood']}))));
+});
+
+/* ECONOMY_ORDER §Away Wallet (User 2026-10-02) */
+test('an adventurer who could have come banks Away Days, at most 3, paid on the next visit; no extra RNG draw',()=>{
+ const g=fresh('away-wallet'),s=g.run,a=DATA.balance.awayWallet;
+ const n=s.npcs.find(x=>x.introduced)||s.npcs[0];n.introduced=true;n.awayDays=5;
+ assert.equal(g.awayWallet(n),a.maxDays*(n.level*a.perLevel+a.base),'capped at maxDays');
+ n.awayDays=1;assert.equal(g.awayWallet(n),n.level*a.perLevel+a.base);
+ assert.ok(n.level*a.perLevel+a.base<n.level*8+40,'a banked Day is worth less than an average visit\'s own income');
+ const fresh0={...n,introduced:false,awayDays:2};assert.equal(g.awayWallet(fresh0),0,'a first visit banks nothing');
+ /* the same seed with and without banked Days draws the same stream */
+ const run=(days)=>{const h=fresh('away-stream');for(const x of h.run.npcs){x.introduced=true;x.awayDays=days;}h.run.day=4;h.morning();return {state:h.rng.state,queue:h.run.queue.slice(),money:h.run.queue.map(id=>h.run.npcs.find(x=>x.id===id).money)};};
+ const A=run(0),B=run(2);assert.equal(A.state,B.state,'no extra RNG draw');assert.deepEqual(A.queue,B.queue);
+ B.money.forEach((m,i)=>assert.ok(m>=A.money[i],'a banked visitor brings at least as much'));
+});
+
+/* RELIC §24 (User 2026-10-02): a save holding the old 원정 전문 인증 id loads as 원정 작전실 */
+test('a save holding expeditionCert loads with opsRoom in its place',()=>{
+ const g=fresh('ops-alias');g.run.facilities=['opsRoom'];g.run.dayFacilities=['opsRoom'];
+ const raw=Save.export(g.account,g.run).split('"opsRoom"').join('"expeditionCert"');assert.ok(raw.includes('"expeditionCert"'));
+ const st=Save.import(raw);assert.deepEqual(st.run.facilities,['opsRoom']);assert.deepEqual(st.run.dayFacilities,['opsRoom']);
+ assert.ok(!JSON.stringify(st).includes('expeditionCert'));
+});
+
 console.log(checks+' revision groups passed');

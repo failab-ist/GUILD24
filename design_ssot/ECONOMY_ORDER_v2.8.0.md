@@ -2,8 +2,8 @@
 
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
-DOC_VERSION=2.9.7
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -28,7 +28,7 @@ reroll=paid
 rerollScope=fullOffer
 rerollSameDayCost=escalating
 rerollDailyReset=YES
-rerollAdvancesPity=NO
+rerollAdvancesPity=NO (Rare pity); YES for the Known-Hazard Counter pity (User 2026-10-02)
 
 nextDayTierForecast=NONE (→ §NEXT-DAY FORECAST — RETIRED)
 nextDayFamilyForecast=HIDDEN
@@ -131,7 +131,8 @@ Target: most normal customers have >=1 plausible low-cost option.
 
 Wallet growth should support long-term NPC value, so that from early game the default 2 purchase slots more often
 support a real decision between enough preparation, extra preparation to chase Great Success, and conserving stock/cash.
-Do not add a new Day-based Wallet inflation system or a separate Wallet-growth subsystem.
+Do not add a new Day-based Wallet inflation system or a separate Wallet-growth subsystem - the one exception is the Away
+Wallet below (User 2026-10-02).
 
 ### Ordinary NPC Wallet on visit — exact
 
@@ -150,6 +151,18 @@ Rules:
 - successful purchases reduce Persistent Wallet normally
 - every permanent increase path clamps final Persistent Wallet to **2000G**
 - re-measure the failure -> low Wallet -> under-supplied -> failure loop before further reward tuning; further Wallet tuning is a separate balance finding and must not be auto-applied during QA
+
+### Away Wallet — exact (User 2026-10-02)
+
+A long gap between visits left a returning adventurer behind the Gates and short of money to buy preparation. An introduced,
+living adventurer who was available (not on recovery Days) and was not among the Day's visitors banks one Away Day, at most
+**3**; the next ordinary visit adds, on top of the visit income above,
+
+    banked Days × (Level × 4 + 20)
+
+and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half an ordinary visit's average income per Day,
+so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's
+way to the money is still a regular who comes often. Clamped by the 2000 cap like every other increase.
 
 `rich` is separate (`NPC_TRAIT_v2.8.0.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
 actual arrival, not Morning formula; cap 2000 after application.
@@ -415,7 +428,8 @@ Canonical Full-offer Reroll does not advance pity, cannot be used to farm pity, 
 
 Track each currently known Hazard independently.
 
-For each qualifying normal offer-set generation:
+For every offer-set generation - the Day's first sheet and each Reroll alike (User 2026-10-02: the guarantee counts sheets drawn,
+however they were drawn):
 - if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT) -> its missing count resets
 - otherwise -> its missing count +1
 
@@ -426,7 +440,8 @@ When any known Hazard reaches 3 consecutive missing sets:
 - do not reveal an unknown Hazard
 - reset covered missing state through the same resulting offer truth
 
-Reroll does not advance these pity counters.
+A Reroll is a drawn sheet here: three sheets in a row without a direct Counter for a known Hazard bring one on the third, by
+the Day's first sheets, by Rerolls, or both. A Reroll that throws away a guaranteed Counter starts a new count.
 
 No Store Support adds a further Counter-offer guarantee (RELIC).
 
@@ -450,7 +465,7 @@ Before order commitment show/readably expose:
 - warehouse usage / remaining capacity
 - current-day Gate / known Hazard
 - each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 대응 1 제공` (Gate detail)
-- visitor count per open Gate, only when two or more Gates are open (→ §VISITOR FORECAST)
+- visitor count per open Gate, only when two or more Gates are open or an Event closed one (→ §VISITOR FORECAST)
 - current Reroll cost/state
 - each offer's rarity name under the Item name
 - the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap
@@ -473,7 +488,8 @@ next day:
 cost/resetCount=RESET
 
 Reroll preserves current Day eligibility, unlock rules, rarity rules and coverage rules.
-Reroll does not advance pity, cannot farm pity and does not bypass eligibility.
+Reroll does not advance Rare pity, cannot farm it and does not bypass eligibility; it does count toward the Known-Hazard Counter
+pity (§Known-Hazard Counter pity, User 2026-10-02).
 
 With an unconfirmed cart:
 - Reroll is still usable
@@ -509,7 +525,8 @@ Exact visual layout is owned by `UI_UX_v2.8.0.md`.
 ## VISITOR FORECAST
 
 Before Sale (MORNING and ORDER): show expected visitor count.
-With two or more open Gates, also the count per open Gate, by the destination each customer claims.
+With two or more open Gates - or on a day an Event closed a Gate (User 2026-10-02), so the one left open is not read as the
+whole list - also the count per open Gate, by the destination each customer claims.
 
 Do not reveal before customer appearance:
 - name
@@ -967,7 +984,7 @@ PASS: No prior-day escalation remains.
 #### ORD-Q06 — REROLL PITY INTEGRITY
 SETUP: Reroll repeatedly.
 
-EXPECT: Reroll itself does not advance rarity pity.
+EXPECT: Reroll itself does not advance rarity pity; it counts as a drawn sheet for the Known-Hazard Counter pity.
 
 PASS: No pity farming by spending Gold.
 

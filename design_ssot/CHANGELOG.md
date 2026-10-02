@@ -24,6 +24,105 @@ and this table is their commit record.
 | v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | - |
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
+| v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
+
+## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
+
+- **카리냐 → 카리냥** (User): renamed in place - the same F/021 portrait - in the shipped pool and the production name pool
+  (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the F NAME_INDEX, the id mapping, their checksums). A Run saved earlier
+  carries the new name on load (`Save.migrate`), so that customer keeps the portrait; test revision.
+- **The II Gate mark only on a tier II Gate** (User: 실제 티어2가 아닌데 이 코치가 나오네): the mark was keyed on a two-Hazard plate,
+  and a 한파 / 독안개 Event gives a tier I Gate a second Hazard (a tier III Gate also holds two), so it could land on either. It is
+  now keyed on the tier - the first tier II Gate that is not FIRE (FIRE II holds one Hazard). UI_UX §GATE TIER / FIRE GATE
+  TUTORIAL, UI-Q-v29-52; test ui-guard.
+- **A closure day counts the Gate left open** (User: 폐쇄 사건 때 기존 게이트는 몇 명인지 안 나온다): the ORDER 오늘 line gave
+  per-Gate counts only with two open Gates, so a 게이트 임시 폐쇄 day read `4명 · 독거미 동굴 I · 북부 설원 폐허 I 오늘 폐쇄`. The open
+  Gate now carries its count beside the closed one: `4명 · 독거미 동굴 I 4 · 북부 설원 폐허 I 오늘 폐쇄`. ECONOMY_ORDER §VISITOR
+  FORECAST, COPY_AUDIT §4-21, UI-Q-v29-13; test ui-guard.
+- **The Fatigue mark lights the Fatigue row** (User: 피로 코치가 부상 쪽에 포커스): every NIGHT discovery mark lit the record's
+  Outcome block (`원정을 끝내지 못하고 다친 채 …`), the Fatigue one included. The Fatigue mark now lights the record's `귀환 후 피로`
+  row; the others are unchanged. NIGHT_CLOSING §DISCOVERY LINE; test ui-guard.
+- **No empty stretch under the 발주서 with the 창고 sheet open** (User: 발주 밑에 이렇게 많이 남는다): an open phone sheet left
+  room under the form for the most the sheet may take (45% of the screen, ~410px at 390) since v2.9.13 quick patch made it as
+  tall as the stock needs, so a one-row sheet left ~300px of bare wall. The room is now the sheet's own height (measured as it
+  opens, grows or closes). UI_UX §ORDER — WAREHOUSE PANEL.
+- **A free Store Support is 선택, not 구매** (User): the DAY 0 / DAY 1~4 free card printed `무료` over a `구매` key. A free card's
+  key now reads `선택`; a priced card keeps `구매`. COPY_AUDIT §11-31b; test copy.
+- **The Counter guarantee counts every sheet drawn** (User: 3번 리롤했는데도 안 나온다 - 그냥 3번 그려졌을 때로): the Known-Hazard
+  Counter pity counted only the Day's first sheet, so Rerolls never moved it. Every sheet drawn now counts - the Day's first and
+  each Reroll - and the third in a row without a direct Counter for a known Hazard carries one. Rare pity still ignores Rerolls.
+  A Reroll now reaches a guaranteed Counter for 50G + 100G on any Day; unmeasured (no simulation run). ECONOMY_ORDER §REROLL,
+  §Known-Hazard Counter pity, ORD-Q06; tests revision, delta, relic-order.
+- **야전 정비대 boosts every Counter** (User: 필드기어만 대응하는 게 아니니 음식류의 위험 대응도 다 적용): the support multiplied
+  only Field Gear Counter values x1.40, while 컵라면 · 집중 사탕 · 얼음컵 · 중화 탄산수 and the others answer Hazards too. It now
+  multiplies the Hazard Counter value of any carried Item - Field Gear, Food, Drink - x1.40; Core Stats, 피로 회복 and the flat
+  원정 도시락 코너 +2 are unchanged. Copy `판매한 상품의 위험 대응 수치 +40%.` (`원정 위험 게시판`'s offer weight already read every
+  category's Counter and the Hazard's Stat items.) Unmeasured (no simulation run). RELIC §8 / REL-Q77 / REL-Q21, COPY_AUDIT
+  §11-8; tests relic-order, copy.
+- **환경 대응 is a number on SALE** (User: 정답 맞히기 없이 계산 가능한 값은 보여 주자, 전투 전망과 다른 영역처럼): the readout's
+  환경 대응 cell is now a lit display window per Hazard, `공포 6/23` - the resolver's own defense off the committed Bag (the
+  customer's Stat share and Traits, Store Supports, the sold Items' Counters) over the Gate's public need - and it moves when a
+  sale commits; the readiness word and its colour are gone from SALE. `전투 전망` stays the stamped SALE-entry snapshot. The
+  phone pin carries the same meter; the tray's Counter row reads the Item's own `공포 대응 +10` (it read `0 → 10`). Coach
+  §3-4: `전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을
+  막는다.` Help §4-2 rewritten. Measurement bots keep reading `outlookFor`'s words (unchanged). UI_UX §SALE — ENVIRONMENT
+  METER (new), §PRE-SUPPLY OUTLOOK, §GATE VS ITEM, §FORECAST PIN, UI-Q85; COPY_AUDIT §3-4, §4-2; tests ui-guard.
+- **No more `챙긴 보급 덕분에`** (User: 두 개 다 적용했다는 소리냐): with a two-slot Bag a whole-Bag proof means each Item alone
+  was enough, so both are named - `컵라면·방한 두건 덕분에 살아 돌아왔다.`, the same Item twice `컵라면 2개 덕분에 …`. NIGHT_CLOSING
+  §HERO ITEM FEEDBACK, COPY_AUDIT §6-5; tests revision, copy.
+- **Away Wallet** (User: 미방문 고객은 그동안 골드라도 모으게, 단 방문보다 이득이면 안 됨): an introduced adventurer who was
+  available and did not come banks one Away Day (at most 3); the next visit adds banked Days x (Level x4 + 20) - half an
+  ordinary visit's average income per Day, no expedition reward, no EXP or Loyalty, so a regular who comes often stays the
+  better customer. No RNG draw added. Unmeasured (no simulation run). ECONOMY_ORDER §Away Wallet; test revision.
+- **환경 대응 previews the selected Item, gold until it reaches the need** (User: 미리보기는 넣자 · 노란색으로, 대응 넘었을 때만
+  초록): selecting an unsold Item shows where the number would land, `어둠 5 → 28/21` - the resolver's number with that Item in
+  the Bag, Stat-route shares included, so there is nothing to add up; the fight never previews. Numbers are gold, green only at
+  or past the need. Coach §3-4 says it. UI_UX §SALE — ENVIRONMENT METER / §UNCOMMITTED PREVIEW, SALE (the one preview
+  exception), COPY_AUDIT §3-4 / §4-2; test ui-guard.
+- **Level floor catch-up - tried and dropped** (User: 레벨 최저 빼자): +50% EXP up to the lowest newcomer Level of the Day was
+  added in this patch, measured (reader, 300 paired Runs: ~5% of expeditions below the floor, success / Level / D30 / clear
+  within noise of off) and removed. No rule remains.
+- **원정 전문 인증 -> 원정 작전실** (User: 이름과 효과 다 갈아엎자 · 원정 전투력이 아니라 투력으로, 효과는 비슷하게): the keystone
+  (Expedition, 290G) no longer multiplies Counters or pays next-visit Gold. For each Hazard of the adventurer's Gate the
+  overshoot past its Threat (capped 0.5) is averaged over ALL the Gate's Hazards - an Event Hazard or a Final Hazard left short
+  counts 0 - and 투력 gains 0.6 x that average, +30% at most (about the earlier +15% of the whole prepared ability); it is
+  listed among 투력's sources on the SALE Stat grid. Copy `위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.` Id `opsRoom`; a save's
+  `expeditionCert` is read as `opsRoom` on load. Unmeasured here (the all-support contribution run follows). RELIC §24 /
+  REL-Q21, COPY_AUDIT §11-24, EVENT; tests relic-order, relic-effects, copy, revision.
+- **Loyalty weighs a little more on the revisit draw** (User: 단골도 3%로): the returning-NPC revisit weight is x(1 + Loyalty x 0.03)
+  (was 0.025). A 단골 (51) in a ten-adventurer pool comes about 41% of Days (was 39%). NPC_TRAIT §Loyalty effect on revisit
+  weighting.
+- **전투 전망 and 환경 대응 in two boxes** (User: 같은 박스에 넣으니 같아 보인다, 박스 2개로 · 같은 가로 길이): the readout is two
+  iron-plate boxes - 전투 전망 (the stamped word) and 환경 대응 (the meter) - equal halves while the meter fits (it does at 360 with
+  a preview and the longest Hazard name), the Core Stats in a box of their own below; the whole keeps the old panel's 146px. The
+  phone pin is one strip, `전투` | `환경` with a thin divider (User: 플로팅에 한해 한 줄로, 두 판은 복잡해 보인다), the Hazards on one
+  line while they fit; every Stat cell is
+  one row height (User: 투력·강인함만 세로 여백 - a tappable cell took the 44px summary minimum); the outlook coach mark is
+  two, one per box. UI_UX §SALE — OUTLOOK BOXES (new),
+  §FORECAST PIN, §ENVIRONMENT METER, §TUTORIAL — COACH DIET; COPY_AUDIT §3-4; test ui-guard.
+- **즉석식품 코너 takes operating cost again** (User: 운영비 10%로): base operating cost +10% of overheadBase from the next Day,
+  added to 지역 거점점 계약 / 왕도 프리미엄 인증 the same way. The Fresh line is meant to clear more and pay more; the earlier
+  measure (`gain` = gross sales x reach) never saw a cost. RELIC §10, COPY_AUDIT §11-10; tests relic-effects, copy.
+- **귀환 적립제 Wallet 25G -> 20G** (User: 단골 만들기는 시간과 특성이 드니 소지금만): Loyalty +5 unchanged. RELIC §16,
+  COPY_AUDIT §11-16; tests relic-effects, copy.
+- **원정 도시락 코너 raises the Food/Drink order price +3G flat** (User: 유통기한 -1일은 빠듯, 매입가를 정량으로 · 5G는 과해서 3G):
+  after any percentage modifier, the table repriced once at acquisition; the Supply / Hazard effects are unchanged. +5G
+  measured -26G/Day with the lowest balance -218G, harsher than 24시간 신선체계. RELIC §17, COPY_AUDIT §11-17; tests
+  relic-effects, copy.
+- **Store Support candidate reroll** (User: 매번 리셋, 300G 2배씩, D0 제외): from D5 an open window may redraw its three -
+  300G, then 600G, 1200G… in the same window, back to 300G on the next; the pool rules hold and the three on the table are
+  left out when possible; the spend is 점포지원 투자. The bots do not use it, so it is checked in play, not measured. RELIC
+  §CANDIDATE REROLL, COPY_AUDIT §11-31c; test relic-order.
+- **평생 단골제 remade** (User: 돈 말고 단골과 관계를 이어가는 쪽 · 단골도 안 떨어지는 게 좋다): no Gold and no revisit weight. A
+  단골's four Core Stats +10% (listed among the sources; the Final party too, so it leaves the D30 exclusion list), and while it
+  is owned a 단골's Loyalty never drops below 51. RELIC §22 / §D30, COPY_AUDIT §11-22; tests relic-effects, ui-guard, copy.
+- **Store Support evaluation for this patch's rules** (User: 바뀐 것만 재서 전체 평가표 · 버전 기록에): reader bot, relic-aware, 1000
+  paired seeds; the four supports changed here measured at `6dbe7ce` / `ba90044`, the other 28 carried over from `81e1e2d`
+  (only the Level floor changed between, measured as no effect). New metric: cash per closed Day (the earlier `gain` never saw
+  costs or support payouts, so 물류 본부계약 and the other economy supports read as zero - corrected). By line, clear %p /
+  cash per Day: Fresh +5.3 / +1.9G (24시간 신선체계 and 원정 도시락 코너 lowest balance -132G / -141G), Expedition +2.9 /
+  +9.7G, Customer +3.0 / +40.2G, VIP +2.1 / +11.1G, Rotation +1.9 / +40.7G, Premium +1.0 / +14.8G. Findings only, no other
+  value changed. `reports/relic-balance/v2913-qp13/EVALUATION.md`.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

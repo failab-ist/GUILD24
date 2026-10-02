@@ -23,12 +23,13 @@ test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free, then the or
  assert.equal(g.rerollPrice(),0,'next Day restores the free first Reroll');
 });
 
-test('ORD-Q06/Q07: Reroll regenerates every slot, keeps legality and never advances pity',()=>{
+/* User 2026-10-02: a Reroll is a drawn sheet for the Known-Hazard Counter pity (ECONOMY_ORDER); Rare pity still ignores it */
+test('ORD-Q06/Q07: Reroll regenerates every slot, keeps legality and never advances Rare pity',()=>{
  const g=fresh('reroll-pity');g.beginOrder();g.run.facilities=[];g.run.money=5000;
  const pity=copy(g.run.pity);
  for(let i=0;i<3;i++){
   g.reroll();
-  assert.deepEqual(g.run.pity,pity,'Reroll does not advance or farm pity');
+  assert.equal(g.run.pity.rare,pity.rare,'Reroll does not advance or farm Rare pity');
   assert.equal(g.run.offers.length>=6,true,'the whole offer list is regenerated');
   for(const o of g.run.offers){const it=DATA.itemBy[o.item];assert.ok(it,'offer is a real Item');assert.ok(!it.unlock||g.account.unlocked.includes(it.unlock),'unlock rules preserved');}
  }
@@ -97,18 +98,22 @@ test('REL-Q77: the field-category helper names exactly Potion / Field Gear / Ins
 
 /* 2026-09-23 remake: 야전 정비대 - the Hazard Counter values of Field Gear the adventurer carries
    x1.40. It no longer weights offers or adds supply quantity. */
-test('REMAKE 야전 정비대: Field Gear Hazard Counter values x1.40, nothing else',()=>{
+/* User 2026-10-02: every Item's Counter, Food and Drink too */
+test('REMAKE 야전 정비대: Hazard Counter values x1.40 in any category, nothing else',()=>{
  const g=fresh('field-maint'),n={...g.run.npcs[0],traits:[]};
  const gate={...g.makeDungeon('spider',2),requiredSupply:0};                 // poison + bind
  for(const [id,h] of [['rope','bind'],['antidote','poison']]){
   const it=DATA.itemBy[id],p={...n,pack:[id]};
   const plain=Dungeon.prepare(p,gate).effects[h],with_=Dungeon.prepare(p,gate,['fieldRepair']).effects[h];
   assert.ok(it.effects[h]>0,id+' carries a '+h+' Counter');
-  assert.equal(it.category,'gear');
   assert.ok(Math.abs((with_-plain)-it.effects[h]*.40)<1e-9,id+' '+h+' Counter +40%');
  }
  const food={...n,pack:['ramen']},cold={...g.makeDungeon('snow',1),requiredSupply:0};
- assert.deepEqual(Dungeon.prepare(food,cold,['fieldRepair']).effects,Dungeon.prepare(food,cold).effects,'a Food Counter is not Field Gear');
+ {const a=Dungeon.prepare(food,cold).effects,b=Dungeon.prepare(food,cold,['fieldRepair']).effects;
+  assert.ok(Math.abs((b.cold-a.cold)-DATA.itemBy.ramen.effects.cold*.40)<1e-9,'a Food Counter (컵라면 냉기) +40% too');
+  for(const k of ['combat','survival','mobility','spirit'])assert.equal(b[k],a[k],k+' unchanged');}
+ {const drink={...n,pack:['ice']},fire={...g.makeDungeon('golem',1),requiredSupply:0};
+  assert.ok(Math.abs(Dungeon.prepare(drink,fire,['fieldRepair']).effects.fire-Dungeon.prepare(drink,fire).effects.fire-DATA.itemBy.ice.effects.fire*.40)<1e-9,'a Drink Counter (얼음컵 화염) +40% too');}
  // no offer weight, no quantity
  for(const it of DATA.items){g.run.facilities=[];const w=Relics.offerWeight(g,it);g.run.facilities=['fieldRepair'];assert.equal(Relics.offerWeight(g,it),w,it.id+' weight');}
  for(const it of [DATA.itemBy.lowpotion,DATA.itemBy.boots]){g.run.facilities=[];const st=g.rng.state,q=g.offerFor(it).quantity;g.run.facilities=['fieldRepair'];g.rng=new RNG(g.run.seed,st);assert.equal(g.offerFor(it).quantity,q);}
@@ -353,43 +358,35 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
  for(const it of epics)assert.equal(it.metaUnlock??null,it.id==='worldcharm'?null:null,it.name+' needs no unlock of its own');
 });
 
-/* 2026-09-23 remake: 원정 전문 인증 replaces the 길드24 원정전문점 인증 offer guarantee (REL-Q-v28-16
-   retired with it). The Counter values of an Item that Counters a Hazard of the adventurer's own
-   Gate x1.60, multiplying 야전 정비대 on Field Gear but never the flat 원정 도시락 코너 +2; and the
-   buyer of such an Item gets +50G on their next visit, once per purchase Day. */
-test('REMAKE 원정 전문 인증: Gate Counters x1.60, stacks with 야전 정비대, not with the flat meal defence',()=>{
- const g=fresh('exp-cert'),n={...g.run.npcs[0],traits:[]};
+/* User 2026-10-02: 원정 전문 인증 is remade as 원정 작전실 - no Counter multiplier, no next-visit Gold. Each of the Gate's Hazards
+   answered past its Threat adds its overshoot (capped 0.5) to an average over all the Gate's Hazards, and 투력 gains 0.6 x that
+   average (+30% at most), at the Final too - shown as one of 투력's sources, no other Stat touched. */
+test('REMAKE 원정 작전실: overshoot averaged over the Gate\'s Hazards lifts 투력, +30% at most; no Counter multiplier',()=>{
+ const g=fresh('ops-room'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0};
  const spider={...g.makeDungeon('spider',2),requiredSupply:0},snow={...g.makeDungeon('snow',1),requiredSupply:0};
- const val=(pack,gate,fac,h)=>Dungeon.prepare({...n,pack},gate,fac).effects[h]||0;
- const rope=DATA.itemBy.rope.effects.bind;                                     // Field Gear, bind
- assert.ok(Math.abs(val(['rope'],spider,['expeditionCert'],'bind')-val(['rope'],spider,[],'bind')-rope*.60)<1e-9,'+60% on a Gate Counter');
- assert.ok(Math.abs(val(['rope'],spider,['expeditionCert','fieldRepair'],'bind')-val(['rope'],spider,[],'bind')-rope*(1.4*1.6-1))<1e-9,'x1.40 x1.60 for Field Gear');
- assert.equal(val(['rope'],snow,['expeditionCert'],'bind'),val(['rope'],snow,[],'bind'),'no bonus when the Item Counters nothing on this Gate');
- const ramen=DATA.itemBy.ramen.effects.cold;                                   // Food, cold
- const meal=val(['ramen'],snow,['expeditionMeal'],'cold'),both=val(['ramen'],snow,['expeditionMeal','expeditionCert'],'cold');
- assert.ok(Math.abs(both-meal-ramen*.60)<1e-9,'the flat meal defence is not multiplied');
- // no offer guarantee survives
+ const prep=(pack,gate,fac)=>Dungeon.prepare({...n,pack},gate,fac);
+ assert.equal(prep(['rope'],spider,['opsRoom']).effects.bind,prep(['rope'],spider,[]).effects.bind,'no Counter multiplier any more');
+ for(const [pack,gate] of [[[],snow],[['ramen'],snow],[['spiderkit','spiderkit'],spider],[['rope'],spider]]){
+  const p=prep(pack,gate,['opsRoom']),avg=p.hazards.reduce((v,h)=>v+Math.min(.5,Math.max(0,h.defense/h.threat-1)),0)/p.hazards.length;
+  assert.ok(Math.abs(p.effects.opsBonus-.6*avg)<1e-12,'0.6 x the averaged, capped overshoot');
+  assert.ok(p.effects.opsBonus<=.30+1e-12,'never past +30%');
+  const plain=prep(pack,gate,[]);assert.equal(plain.effects.opsBonus,0,'nothing without the support');
+  assert.ok(Math.abs(p.effects.combat-plain.effects.combat*(1+p.effects.opsBonus))<1e-9,'투력 scales');
+  for(const k of ['survival','mobility','spirit'])assert.equal(p.effects[k],plain.effects[k],k+' untouched');
+  const line=p.sources.combat.find(x=>x.name==='원정 작전실');
+  if(p.effects.opsBonus>0)assert.ok(line&&line.isPct&&Math.abs(line.v-p.effects.opsBonus*100)<1e-9,'listed among 투력 sources');
+  else assert.equal(line,undefined,'no empty source line');}
+ assert.ok(prep(['spiderkit','spiderkit'],spider,['opsRoom']).effects.opsBonus>0,'a covered Gate actually lifts 투력');
+ // an unanswered Hazard counts as 0 in the average: a second, uncovered Hazard halves the bonus of the same overshoot
+ const one={...snow,hazards:['cold']},two={...snow,hazards:['cold','poison']};
+ const big=prep(['dragonramen','dragonramen'],one,['opsRoom']).effects.opsBonus,half=prep(['dragonramen','dragonramen'],two,['opsRoom']).effects.opsBonus;
+ assert.ok(big>0&&Math.abs(half-big/2)<1e-9,'the average runs over every Hazard of the Gate');
+ // the Final reads it too, and the measured switch turns it off there only
+ const fin={...g.makeFinal(),requiredSupply:0};const finP=prep(['spiderkit','spiderkit'],fin,['opsRoom']).effects.opsBonus;
+ assert.ok(finP>=0);DATA.relicParams.opsRoom.final=false;assert.equal(prep(['spiderkit','spiderkit'],fin,['opsRoom']).effects.opsBonus,0);
+ assert.ok(prep(['spiderkit','spiderkit'],spider,['opsRoom']).effects.opsBonus>=0);DATA.relicParams.opsRoom.final=true;
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(!/has\('expeditionCert'\)&&hazards\.length/.test(src)&&!/guaranteedSlots/.test(src),'the offer guarantee is gone');
-});
-
-test('REMAKE 원정 전문 인증: the buyer of a Gate Counter gets +50G on the next visit, once per purchase Day',()=>{
- const g=fresh('exp-cert-gold'),s=g.run,n=s.npcs[0];
- s.facilities=['expeditionCert'];s.dayFacilities=['expeditionCert'];
- s.dungeons=[{...g.makeDungeon('spider',2),requiredSupply:0}];
- n.traits=[];n.money=1500;  /* within the 2000G wallet cap, so arrival Gold is not clipped */n.introduced=true;n.visits=2;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
- s.queue=[n.id];s.cursor=0;s.phase='sell';
- const real=g.rng;g.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
- g.stock('rope',1);g.stock('antidote',1);
- assert.equal(g.sell(s.inventory.at(-2).id,'full'),true);assert.equal(g.sell(s.inventory.at(-1).id,'full'),true);
- assert.equal(n.certGoldDay,s.day,'two qualifying purchases mark ONE purchase Day');
- const before=n.money;g.arrive();assert.equal(n.money,before,'no Gold on the same Day');
- s.day++;const next=n.money;g.arrive();assert.equal(n.money-next,50,'+50G on the next visit');
- const after=n.money;s.day++;g.arrive();assert.equal(n.money,after,'and only once');
- // a non-Counter purchase marks nothing
- const m=s.npcs[1];m.traits=[];m.money=99999;m.pack=[];m.refused=[];m.history=[];m.destination=0;m.claimedDestination=0;s.queue=[m.id];s.cursor=0;s.phase='sell';
- g.stock('rice',1);assert.equal(g.sell(s.inventory.at(-1).id,'full'),true);assert.equal(m.certGoldDay,undefined);
- g.rng=real;
+ assert.ok(!/certGoldDay|nextVisitGold/.test(src),'the next-visit Gold is gone');
 });
 
 /* The pity Counter guarantee (ECONOMY_ORDER base pity) may never overwrite the Black Market row. */
@@ -490,6 +487,28 @@ test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is pai
 
 /* ECONOMY_ORDER §RELIC GOLD SINK + RELIC §KEY / §PRICE: D0 cost=0; D5+ currency=G, price =
    basePrice x a limited band (about +-15-20%), fixed for the window; buy<=1; maxOwned/run=7. */
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): from DAY 5 an open window redraws its three for 300G, doubling within the
+   window and back to 300G on the next; never on DAY 0; the spend is Store Support investment and survives a reload. */
+test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
+ const g=new Game();g.autosave=false;g.start('relic-reroll');
+ assert.equal(g.canRerollRelics(),false,'the DAY 0 free pick has no reroll');
+ assert.throws(()=>g.rerollRelics());
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ g.run.day=5;g.morning();const w=g.run.relicWindow;g.run.money=2000;
+ assert.equal(g.canRerollRelics(),true);assert.equal(g.relicRerollPrice(),300);
+ const first=[...w.candidateIds],spent=g.run.stats.relicSpent||0;
+ g.rerollRelics();
+ assert.equal(g.run.money,1700,'the first reroll costs 300G');assert.equal(g.run.stats.relicSpent,spent+300,'counted as Store Support investment');
+ assert.equal(w.candidateIds.length,3);assert.ok(w.candidateIds.every(id=>!first.includes(id)),'the three on the table are left out when the pool allows');
+ assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind!=='keystone'),'pool rules hold: no Keystone before DAY 10');
+ assert.ok(w.candidatePrices.every(p=>p>0),'redrawn cards are priced');
+ assert.equal(g.relicRerollPrice(),600,'the second doubles');
+ const back=Save.import(Save.export(g.account,g.run));assert.equal(back.run.relicWindow.rerolls,1,'a reload keeps the count');
+ g.run.money=500;assert.throws(()=>g.rerollRelics(),'short of 600G');assert.equal(g.run.money,500);
+ g.run.money=5000;g.buyRelic(w.candidateIds[0]);assert.equal(g.canRerollRelics(),false,'a spent window cannot reroll');
+ g.run.day=10;g.morning();assert.equal(g.relicRerollPrice(),300,'the next window starts at 300G again');
+});
+
 test('ECONOMY_ORDER §RELIC GOLD SINK: D0 is free, every D5+ Store Support costs Gold and buying it spends it',()=>{
  const g=new Game();g.autosave=false;g.start('gold-sink');
  const w0=g.run.relicWindow;

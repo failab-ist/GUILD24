@@ -452,7 +452,7 @@ let cue=null,handoff=null;
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
-let pinFolded=false,pinWatch=null,orderWatch=null,railShown='';
+let pinFolded=false,pinWatch=null,orderWatch=null,sheetWatch=null,railShown='';
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
@@ -678,8 +678,14 @@ function openOwedModal(s,phase,changed){
 }
 function syncWatchers(phase){
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';}
+ if(phase==='order'){watchOrderToday();watchStockSheet();}else{orderWatch?.disconnect();orderWatch=null;railShown='';sheetWatch?.disconnect();sheetWatch=null;}
 }
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-10-02): the rows under an open phone sheet scroll up above it, and the room left
+   under the 발주서 is the sheet's own height - it takes only the rows the stock needs - not the 45% it may reach at most,
+   which left an empty stretch under a short sheet. The sheet reports its height as it opens, grows or closes. */
+function watchStockSheet(){sheetWatch?.disconnect();sheetWatch=null;
+ const sh=$('#stock-sheet'),host=$('.p-order');if(!sh||!host||typeof ResizeObserver!=='function')return;
+ sheetWatch=new ResizeObserver(()=>host.style.setProperty('--sheet-h',Math.ceil(sh.getBoundingClientRect().height)+'px'));sheetWatch.observe(sh);}
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
 // Every named Hazard carries its canonical pressure inline — burned into the notice,
@@ -712,8 +718,9 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
    MORNING calls it with the Gate alone: handed to .map directly, the array index arrived as `full`
    and every Gate after the first printed the Gate-detail sentence (User 2026-09-25). */
 function gatePlate(d,full=false){const b=sigilOf(d);
- /* data-hazards / data-family: the anchors of the two Gate lessons (a two-Hazard Gate, a FIRE Gate); no style reads them */
- return '<article class="slip gate" data-hazards="'+d.hazards.length+'" data-family="'+E(d.family||'')+'" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
+ /* data-tier / data-family: the anchors of the two Gate lessons (a tier II Gate, a FIRE Gate); no style reads them. User 2026-10-02:
+    the tier, not the Hazard count - a 한파 / 독안개 Event adds a Hazard to a tier I Gate, which then held two and drew the II mark */
+ return '<article class="slip gate" data-tier="'+(d.tier||1)+'" data-family="'+E(d.family||'')+'" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
    +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game),d).map(h=>full
@@ -836,6 +843,10 @@ function readout(n,extra=null,cls=''){
     own exact effects and the deterministic Supply/Fatigue arithmetic, but never a moved
     Forecast/Readiness/Death/signal - so `extra` no longer enters the preparation at all. */
  const v={...n,traits:Presentation.traits(n),pack:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
+ /* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): the selected, unsold Item previews where the 환경 대응 number would land
+    (`6 → 16`), the resolver's own number with that Item in the Bag - Stat-route shares included, so nothing is left to add up.
+    Only 환경 대응 previews; 전투 전망 and its death % stay the SALE-entry snapshot. */
+ const pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  /* ...and the outlook itself is the frozen SALE-entry snapshot, not this live preparation. */
  const o=n.outlook||game.outlookFor(n);
  /* DUNGEON_HAZARD §GREAT SUCCESS signal. It sits in the forecast the player is already reading,
@@ -850,24 +861,32 @@ function readout(n,extra=null,cls=''){
     and no new calculation: the summary IS the worst of the rows the player can see. */
 
  const mob=cls==='core-mob';
- return '<div class="readout'+(cls?' '+cls:'')+'">'
+ /* UI_UX §SALE — OUTLOOK BOXES (User 2026-10-02): 전투 전망 and 환경 대응 are two boxes of their own (`ro2`), equal halves while
+    both fit - one stamped word that does not move, one number that does - so neither reads as part of the other */
+ return '<div class="readout ro2'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   /* User 2026-10-01: back to `전투 전망` - `도착 시 전투 전망` filled a half cell on a phone, so the two readings stacked;
      the outlook coach mark says when the reading is taken again */
-  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
+  +'<span class="fore ro-combat"><span class="ro-head">전투 전망'
   /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
      ends in death. The NPC detail states it too (§5-7). */
    +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span>'
+   /* User 2026-10-02 (UI_UX §GREAT SUCCESS OPPORTUNITY SIGNAL): the signal lives in this box, not on a line of its own under the
+      pair - a phone shows the short tag beside the word (the sentence stays for a screen reader), a desk the sentence under it */
+   +(signal?'<span class="gs-row"><b>'+o.combat+'</b><i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i></span>'
+     +'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'<b>'+o.combat+'</b>')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
      here because it is judged against an Item, beside the other two readings a product is
      bought to move. No new label and no new calculation. From a two-Hazard Gate it reads each Hazard's own state
      instead (envReading, v2.9.13). */
-  +(o.worst?'<span class="fore'+(o.hazards.length>1?' env-each':'')+'">환경 대응'+envReading(o)
-   +tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')+'</span>':'')
+  /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): 환경 대응 is now the number itself, live with the committed Bag - a
+     display window of its own beside the stamped 전투 전망, so a cell that moves never reads like the one that does not */
+  +(p.hazards.length?'<span class="fore ro-env env-each env-meter"><span class="ro-head">환경 대응'
+   +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>'+envMeter(p,d,pre)+'</span>':'')
   +'</div>'
  /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
     reads here - one thin line, only for an injured departure with a chain behind it (the first adds nothing), the NPC detail
@@ -875,8 +894,7 @@ function readout(n,extra=null,cls=''){
  +(n.injury===1&&Dungeon.injuredStreak(n.records)>0?'<p class="strain">연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회</p>':'')
  /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
     `피로 N`, the counter tray lists a Food/Drink's own `피로 회복 N` row (no `피로 A → 출발 B` line), NIGHT answers the rest. */
- +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
- /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
+  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
     where the destination is named instead of meeting a second, differently-worded copy of it
     inside the outlook. The outlook keeps only what is about the expedition as a whole:
@@ -926,7 +944,7 @@ function saleScreen(){
     expedition - so nothing is duplicated on screen. */
  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
- +'<div class="counter-edge" aria-hidden="true"></div>'+forecastPin(n)
+ +'<div class="counter-edge" aria-hidden="true"></div>'+forecastPin(n,st?st.item:null)
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
   /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
      the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
@@ -1204,7 +1222,7 @@ function changedRows(r){
   /* v2.9.0 NIGHT next-decision line (COPY_AUDIT §6-6): one sentence under the settled Fatigue, not a chip */
   ?'<p class="next-decision">'+E(c.value+' — '+c.label+' '+c.extra)+'</p>'
   :c.detail
-  ?'<details class="tip '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
+  ?'<details class="tip fatigue-row '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
    +'<p><span>'+E(c.detail)+'</span></p></details>'
   /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
      of words (`장비 보강된 전사 장비 전투 +5`). The effect is its own element after a middle dot
@@ -1279,7 +1297,8 @@ const coachSteps={
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   /* UI_UX §FIRST EVENT TUTORIAL (User 2026-10-01): the first Event slip on the board, once per account (the first Run's DAY 2) */
   ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.'],
-  ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
+  /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one Hazard) */
+  ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
@@ -1299,7 +1318,9 @@ const coachSteps={
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .top','이 전망은 손님이 들어올 때 정해져서 끝까지 그대로다. 상품을 고르면 능력치·피로 회복 같은 효과가 계산대에 보이지만, 전망은 바뀌지 않는다.'],
+ ['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.'],
+ /* User 2026-10-02: the outlook mark is two - one per box */
+ ['envmeter','.readout .ro-env','환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
@@ -1311,7 +1332,9 @@ const coachSteps={
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
     it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it).
     COACH DIET (User 2026-09-30): the `한 명씩` result mark is retired - the record and its 전체 건너뛰기 key say it */
- night:[...Copy.learned.map(([k,text])=>['learn-'+k,'.beat .told.learn-'+k,text])],
+ /* User 2026-10-02: a mark lights what it is about - the Fatigue rule the record's 귀환 후 피로 row (`.fatigue-row`, the only
+    token carrying the Fatigue arithmetic), every other rule the record's outcome block it acted on */
+ night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text])],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
@@ -1616,7 +1639,8 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
- const counts=s.dungeons.length>=2?gateCounts():null;
+ /* User 2026-10-02: on a day an Event closed a Gate the one Gate left open also shows its count, beside the closed one */
+ const counts=s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null;
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
     seal carried no function or state - it filled the head's right margin and nothing else. The
@@ -1736,6 +1760,18 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    environment, so one worst label hid which side is open. 환경 대응 then names each Hazard with its own state - the same
    frozen `outlook.hazards` rows, the same four labels and colours; still no number, threshold or Item pointer. A one-Hazard
    Gate reads the single label as before. */
+/* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): per Hazard of the customer's Gate, the Counter the expedition is judged
+   on - the customer's own Stat share and Traits plus the committed Bag's Counters (Dungeon.prepare, the resolver's own
+   number) - over the Gate's public need (`대응 N 필요`). Whole numbers, never below 0; no word, no colour by state, no
+   breakdown. It moves when a sale commits; a selected, unsold Item moves only the tray. */
+/* Gold by default, green only once the number reaches the need (User 2026-10-02) - the whole number against the rounded-up need,
+   so green never shows before the resolver's own 충분. `pre`: the selected Item's preview, `6 → 16`, coloured the same way. */
+function envMeter(p,d,pre=null){const whole=x=>Math.max(0,Math.floor(x+1e-9));
+ return '<span class="env-list env-meter-list">'+p.hazards.map((h,i)=>{const need=Presentation.hazardNeed(h.key,d),now=whole(h.defense),
+  then=pre?whole(pre.hazards[i].defense):null;
+  return '<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'
+  +'<b class="env-num'+(now>=need?' ok':'')+'">'+now+(then!==null&&then!==now?'<em>→</em><span class="pre'+(then>=need?' ok':'')+'">'+then+'</span>':'')
+  +'<small>/'+need+'</small></b></span>';}).join('')+'</span>';}
 function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes(l)?'lack':'ok')+'">'+E(l)+'</b>';
  return o.hazards.length>1?'<span class="env-list">'+o.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'+b(h.label)+'</span>').join('')+'</span>':b(o.worst);}
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
@@ -1744,9 +1780,12 @@ function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes
    source. One tap folds it to a `전망` chip and back. The anchor has no height: it reserves nothing in the layout.
    v2.9.9 quick patch (User 2026-09-28): the readout's strain line rides along under the two readings - the same condition,
    words and number (an injured departure with a chain behind it); the folded chip stays `전망`. */
-function forecastPin(n){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0;
+function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0,
+ d=game.claimedGateFor(n),v={...n,traits:Presentation.traits(n),pack:n.pack},p=Dungeon.prepare(v,d,game.run.facilities),
+ pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
-  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(o.worst?'<span class="pin-fore'+(o.hazards.length>1?' env-each':'')+'">환경 대응'+envReading(o)+'</span>':'')
+  /* User 2026-10-02: one strip, the boxes' short names - `전투` | `환경` - so a preview still fits at 360 */
+  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore pin-plate env-meter">환경'+envMeter(p,d,pre)+'</span>':'')
   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
@@ -1762,8 +1801,11 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  /* User 2026-09-25: the Item's own effects only (the retired `피로 A → 출발 B` line is not back). */
+ /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): a Hazard Counter row is this Item's own share, `공포 대응 +10` - the
+    total it adds to lives in the 환경 대응 meter, so the tray no longer shows a running count starting from 0 */
  const parts=moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'
-  +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
+  +E(r.label)+' '+(r.key in D.hazards?(r.after-r.before>=0?'+':'')+Math.round(r.after-r.before)
+   :Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after))+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life=lastSaleDay(st.expires-s.day);
  return '<div class="counter-tray'+(trayFolded?' folded':'')+'" role="region" aria-label="계산대">'
@@ -1881,7 +1923,8 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   /* COPY_AUDIT §11-31: a disabled action names its own cause. Leaving 구매 on a control that
      cannot be pressed says nothing - the window being over and the wallet being short are
      different facts, and the Player needs to know which one applies. */
-  const label=mine?'보유 중':spent?'선택 종료':poor?'골드 부족':'구매';
+  /* COPY_AUDIT §11-31b (User 2026-10-02): a free card is chosen, not bought - its key reads 선택 under the 무료 price */
+  const label=mine?'보유 중':spent?'선택 종료':poor?'골드 부족':price?'구매':'선택';
   return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
   +btn(label,'buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
@@ -1891,8 +1934,13 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  +sealChoice() +'<div class="close">'+(w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')
   /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
   :first?'<p>지금 안 골라도 된다. '+until+' 아침·발주 화면에서 무료로 고를 수 있다.</p>'+btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
-  :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+  :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): a footer key beside 나중에 결정, the same rank and look, one line, while the window
+   can still be bought from (never DAY 0). A short wallet greys it the way ORDER's 후보 전체 교환 does - the label keeps its one
+   line and a tap says the cause and the shortfall (COPY_AUDIT §11-31c) */
+function relicReroll(){if(!game.canRerollRelics())return '';const price=game.relicRerollPrice(),lack=price-game.run.money;
+ return btn('후보 전체 교환 · '+fmt(price)+'G','reroll-relics','stamp',lack>0?'aria-disabled="true" data-reason="relicMoney" data-lack="'+lack+'"':'');}
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
    acquisition can be spent on, so it sits beside the candidates and says as much.
    Shown only on a Run that is actually facing SLOTH, and only on an opportunity Day. */
@@ -2577,6 +2625,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* §STORE SUPPORT: acquisition is heavier than an ordinary purchase and reads as securing a
     fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
+ case'reroll-relics':game.rerollRelics();sound('spend');render();break;
  case'defer-relic':game.deferFoundationRelic();setModal(null);render();sound('ui');break;
  case'closing':game.finishNight();game.save();render();nightSound(null);closingSound();break;
  case'open':game.open();selected=null;render();healCue();break;
@@ -2671,7 +2720,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
-const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
  /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
  cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;

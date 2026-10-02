@@ -1054,7 +1054,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    reason. The row keeps its exact shape so the two-column grid does not move, and the marker
    is suppressed because the affordance is the row, not a twisty. */
 details.detail-stat{display:block;padding:0}
-details.detail-stat>summary{display:flex;align-items:baseline;gap:8px;padding:5px 0;list-style:none;cursor:pointer}
+details.detail-stat>summary{display:flex;align-items:baseline;gap:8px;padding:5px 0;min-height:0;list-style:none;cursor:pointer}
 details.detail-stat>summary::-webkit-details-marker{display:none}
 details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .detail-stat label{display:flex;align-items:baseline;gap:6px;min-width:0;font:400 13px/1 var(--ui);color:#a2947c;overflow:hidden}
@@ -1121,6 +1121,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .env-row{display:inline-flex;align-items:baseline;white-space:nowrap}
 .env-row i{font:500 12px/1.2 var(--ui);font-style:normal;color:#b3a282}
 .readout .fore .env-row b{margin-left:4px}
+/* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): the live number sits in a lit display window, the till's green LED -
+   a display role, apart from the stamped 전투 전망 word beside it */
+.env-num{display:inline-flex;align-items:baseline;padding:3px 6px 2px;background:#0b0805;
+ box-shadow:inset 0 1px 0 #000,inset 0 0 0 1px #3a2c1c;font:500 17px/1 var(--f-led);color:var(--gold);
+ -webkit-font-smoothing:none;font-variant-numeric:tabular-nums}
+/* gold by default; green only at or past the need (User 2026-10-02), the preview number coloured on its own */
+.env-num small{margin-left:2px;font:500 12px/1 var(--f-led);color:#9c8d70;text-shadow:none}
+.env-num em{margin:0 3px;font:500 13px/1 var(--f-led);font-style:normal;color:#9c8d70}
+.readout .top b.env-num,.forecast-pin b.env-num{font-size:17px;color:var(--gold)}
+.readout .top b.env-num.ok,.forecast-pin b.env-num.ok,.env-num .pre.ok{color:#8df0b4;text-shadow:0 0 6px #3fe08c55}
+.env-num .pre{color:var(--gold)}
+.env-meter-list{row-gap:3px}
 /* stacked (phone), the names align right so the coloured states share one column; the widest row sets the width, as before */
 @media (max-width:1023px){
  .env-list{display:inline-grid;grid-template-columns:auto auto;align-items:baseline;gap:2px 0;margin-left:5px}
@@ -2428,7 +2440,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  text-shadow:0 1px 0 #000}
 .wh-slot em.soon{color:var(--rack-soon)}
 /* the rows under an open sheet can still be scrolled up above it */
-.p-order:has(#stock-sheet:not([hidden])) .stage-scroll{padding-bottom:calc(45dvh + 30px)}
+.p-order:has(#stock-sheet:not([hidden])) .stage-scroll{padding-bottom:calc(var(--sheet-h,45dvh) + 30px)}
 /* desk: the 발주서 is no longer centred; it takes the left, and the warehouse is a large rack on its right */
 @media(min-width:1024px){
  .p-order .stage-scroll{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);column-gap:24px;align-items:start}
@@ -3549,3 +3561,72 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .clash-card .pfp{width:96px;height:96px}
 }
 
+
+/* UI_UX §SALE — OUTLOOK BOXES (User 2026-10-02): the readout is two iron-plate boxes, 전투 전망 (a stamped word) and 환경 대응 (the
+   meter), equal halves while the meter fits half - past that the 환경 대응 box takes what it needs. No panel around them; the
+   Core Stats sit in a box of their own below. Corner rivets are painted, so no box is positioned (a ? balloon still floats
+   against the readout). */
+.readout.ro2{background:none;box-shadow:none;padding:0}
+.readout.ro2 .top{display:grid;grid-template-columns:minmax(0,1fr) minmax(max-content,1fr);gap:5px;margin:0;align-items:stretch}
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+ gap:5px;min-width:0;padding:6px 9px 8px;white-space:normal;flex:none;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
+ box-shadow:inset 0 0 0 1px #3a2c1c,inset 0 2px 0 #0009,0 2px 0 #0006}
+.readout.ro2 .ro-head{display:flex;align-items:center;gap:6px;font:500 12px/1.2 var(--ui);color:#9c8d70;white-space:nowrap}
+.readout.ro2 .ro-head .tip{margin-left:auto}
+.readout.ro2 .top .ro-combat>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
+.readout.ro2 .fore.env-each>.env-list,.readout.ro2 .env-meter-list{display:grid;grid-template-columns:auto 1fr;gap:3px 6px;margin:0;order:0;flex:none}
+.readout.ro2 .env-row{display:contents}
+.readout.ro2 .env-row i{justify-self:start;align-self:baseline}
+.readout.ro2 .fore .env-row b{margin:0}
+.readout.ro2 .top b.env-num{padding:0;background:none;box-shadow:none;font-size:17px;white-space:nowrap}
+.p-sale .dossier:not(.traits):has(>.readout.ro2){background:none;box-shadow:none}
+.p-sale .dossier:not(.traits)>.readout.ro2{padding:0}
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats{margin:5px 0 0;padding:2px 12px 6px;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
+ box-shadow:inset 0 0 0 1px #3a2c1c,inset 0 2px 0 #0009,0 2px 0 #0006}
+/* the phone pin (User 2026-10-02: pin only, one line): one iron strip - `전투 {word}`, a thin divider, `환경 {meter}` - still one
+   44px tap target that folds to the 전망 chip; the meter's Hazards wrap whole only when the line is full */
+.forecast-pin:not(.folded):has(.pin-plate){padding:0 4px;align-items:stretch;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
+ box-shadow:inset 0 0 0 1px #5a452b,0 4px 10px #000a}
+.forecast-pin .pin-full:has(.pin-plate){gap:0;align-items:stretch;flex-wrap:nowrap}
+.forecast-pin .pin-plate{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;flex:none}
+.forecast-pin .pin-plate+.pin-plate{box-shadow:inset 1px 0 0 #5a452b}
+.forecast-pin .pin-plate.env-meter{flex:1 1 0;min-width:0}
+.forecast-pin .pin-plate .env-meter-list{display:inline-flex;flex-direction:row;flex-wrap:wrap;gap:2px 8px;margin:0}
+.forecast-pin .pin-plate .env-row{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap}
+.forecast-pin .pin-plate b,.forecast-pin .pin-plate .env-row b{margin:0}
+.forecast-pin .pin-plate b.env-num{padding:0;background:none;box-shadow:none;font-size:15px}
+/* tighter rows inside the boxed readout and stat box, so the pair plus the Stats keep the old panel's height */
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:5px 9px 6px;gap:3px}
+.readout.ro2 .env-meter-list{row-gap:1px}
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats{padding:0 12px 2px}
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
+.p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding:3px 0}
+/* the box head takes 16px of height while its ? keeps the 24px target (it overhangs the padding) */
+.readout.ro2 .ro-head{height:16px}
+.readout.ro2 .ro-head .tip>summary{margin:-4px -5px -4px 0}
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:4px 9px 5px;gap:2px}
+.readout.ro2 .env-meter-list{row-gap:0}
+.readout.ro2 .top b.env-num{line-height:16px}
+/* the Great Success signal inside the 전투 전망 box (User 2026-10-02): a phone shows a quiet tag beside the word and keeps the
+   sentence for a screen reader only; a desk shows the sentence under the word and no tag */
+.readout.ro2 .gs-row{display:flex;align-items:center;gap:8px;min-width:0}
+.readout.ro2 .top .ro-combat .gs-row>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
+.readout.ro2 .gs-tag{padding:2px 5px;font:600 11px/1.2 var(--ui);font-style:normal;color:#d9bf78;background:#2e2410;
+ box-shadow:inset 0 0 0 1px #6b5428;white-space:nowrap}
+.readout.ro2 .great-signal{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+@media(min-width:1024px){
+ .readout.ro2 .gs-tag{display:none}
+ .readout.ro2 .great-signal{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;
+  font:600 12px/1.3 var(--ui);color:#e6c766}}
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): on a phone the two footer keys - 후보 전체 교환 and 나중에 결정 - share one row in
+   equal halves under the note, the label wrapping inside its key rather than stacking the keys */
+/* the footer never grows for it: on a phone the two keys take the row and the defer note steps aside (나중에 결정 still says it) */
+.relic-takeover .close:has([data-action=reroll-relics]) p{display:none}
+.relic-takeover .close:has([data-action=reroll-relics]) .stamp{flex:1 1 auto;min-width:0;padding:10px 10px;white-space:nowrap}
+/* a desk keeps the footer as it was: the note on the left, both keys one line each at their own width */
+@media(min-width:1024px){
+ .relic-takeover .close:has([data-action=reroll-relics]) p{display:block;flex:1 1 auto}
+ .relic-takeover .close:has([data-action=reroll-relics]) .stamp{flex:0 0 auto;min-width:150px;padding:10px 14px}}

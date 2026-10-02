@@ -32,8 +32,22 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
    quiet D29 is a reason the support may pay nothing - not a reason the player may not be offered
    the choice. Whether a D30 support needs a legal Reroll or ORDER action to realise its value is
    likewise no bar: that action is legal on D30. */
-P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&(day!==0||r.kind==='foundation')&&(r.kind!=='keystone'||day>=10)&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!previous.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags);let eligible=pool;if((i===1||day===0&&i===2)&&pool.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=pool.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=this.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
- s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+this.rng.next()*.3))),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
+/* The candidate draw, one owner: the window and its reroll read the same pool rules. `avoid` is the set kept off this
+   draw when at least three others remain - the previous window's three for a new window, the three on the table for a
+   reroll. Picks are drawn first, then prices, so a window draws exactly as it always has. */
+function drawCandidates(g,day,avoid){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&(day!==0||r.kind==='foundation')&&(r.kind!=='keystone'||day>=10)&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags);let eligible=pool;if((i===1||day===0&&i===2)&&pool.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=pool.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=g.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
+ return {candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+g.rng.next()*.3)))};}
+P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
+ s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),...drawCandidates(this,day,previous),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): an open, unspent window from DAY 5 on may redraw its three for Gold - 300G,
+   doubling with each reroll of the same window, back to 300G on the next window. The DAY 0 free pick has none. The redraw
+   keeps every pool rule and leaves the three on the table out when it can; the spend is 점포지원 investment. */
+P.relicRerollPrice=function(){const w=this.run.relicWindow;return D.balance.relicReroll.base*2**(w?.rerolls||0);};
+P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.milestoneDay!==0&&this.canBuyRelic();};
+P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
+ const price=this.relicRerollPrice();if(s.money<price)throw Error('후보 교환 자금이 부족합니다.');
+ s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;
+ Object.assign(w,drawCandidates(this,w.milestoneDay,w.candidateIds));w.rerolls=(w.rerolls||0)+1;this.save();};
 /* Sloth's seals are not a second choice path: they are the other thing this window's one
    acquisition can be spent on. Two of D15/D20/D25 were drawn with the Run and D30 always
    counts, so the opportunity Days are already fixed before the player sees any of them. */
@@ -63,6 +77,8 @@ w.purchaseDay=s.phase==='foundation'?0:s.day;
  /* 24시간 신선체계: Food/Drink ORDER price x1.25 from acquisition, so the offers already on the
     table are repriced once here and every later offer is priced by offerFor. */
  if(id==='fresh24')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.fresh24.orderPriceMult);
+ /* 원정 도시락 코너 (User 2026-10-02): the same once-only repricing, a flat +3G */
+ if(id==='expeditionMeal')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price+=D.relicParams.expeditionMeal.orderPriceAdd;
  if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait. Deferring
    opens DAY 1 exactly as a pick does, and the D0 window stays open, still free, until the D5 window replaces it. */

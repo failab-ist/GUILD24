@@ -2,8 +2,8 @@
 
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
-DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -285,7 +285,8 @@ When the Player focuses/selects an **uncommitted** Item, UI may additionally sho
 
 Before actual purchase commitment, do **not** show a hypothetical post-Item derived answer such as `접전 -> 우세`,
 `불안 -> 충분`, a 실패 시 사망 위험 `% -> %` change, a Great Success signal change, exact expedition success chance, or a
-system-recommended/best Item.
+system-recommended/best Item. Exception (User 2026-10-02): the 환경 대응 meter previews its own number for the selected Item
+(`6 → 16/23`, UI_UX §SALE — ENVIRONMENT METER) - the environment is arithmetic the Player could do; the fight never previews.
 
 Nor add a relative Stat-contribution percent, a contribution score, a new live post-Item Combat/Hazard/Death answer or
 qualitative best/worse Item labels. The Player sees exact ingredients and learns the final contribution from resolved

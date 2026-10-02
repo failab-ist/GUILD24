@@ -74,19 +74,18 @@ test('COPY_AUDIT §25 (v2.9.11): the Rare Reference lines are gone',()=>{
    built; the set must match exactly, so a newly unadopted line fails instead of joining it. */
 const COMPOSED={
  '4-10':"app.js lastSaleDay(): '폐기까지 '+N+'일' / '내일까지' / '오늘까지' (v2.9.10)",
+ '5-4':"presentation.js labels: '방문 시 소지금' + the signed Trait value (User 2026-10-02: no longer coincident with the retired 원정 전문 인증 text)",
  '4-18':'presentation.js rows(): labels.foodSupplyDelta / labels.supplyPerItem + the signed Trait value',
  '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
- '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
  '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
  '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
  '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set
    comparison below stays exact. */
-const COINCIDENT={
- '5-4':"'방문 시 소지금 +50G' also sits inside 원정 전문 인증's approved §11-24 text (…다음 방문 시 소지금 +50G.)"};
+const COINCIDENT={};
 test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const walk=d=>fs.readdirSync(path.join(root,d),{withFileTypes:true}).flatMap(e=>e.isDirectory()?
   (e.name==='vendor'?[]:walk(d+'/'+e.name)):/\.(js|html)$/.test(e.name)?[d+'/'+e.name]:[]);
@@ -602,23 +601,23 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['rareContract','희귀상품 입고 계약',140,'희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.'],
   ['guarantee','길드 보증 진열대',140,'하루 첫 200G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
   ['hazardBoard','원정 위험 게시판',60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
-  ['fieldRepair','야전 정비대',80,'판매한 야외장비의 위험 대응 수치 +40%.'],
+  ['fieldRepair','야전 정비대',80,'판매한 상품의 위험 대응 수치 +40%.'],
   ['fridge','대형 냉장고',60,'음식·음료 유통기한 +2일 (보유 재고도 1회 연장).'],
-  ['kitchen','즉석식품 코너',170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).'],
+  ['kitchen','즉석식품 코너',170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 기본 운영비 +10%.'],
   ['board','길드 전광판',110,'하루 기본 최소 방문객 4명 (기존 3명).'],
   ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
   ['memberBundle','단골 묶음혜택',190,'단골의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
   ['premiumMember','프리미엄 멤버십',200,'단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
-  ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +25G.'],
-  ['expeditionMeal','원정 도시락 코너',200,'음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나).'],
+  ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +20G.'],
+  ['expeditionMeal','원정 도시락 코너',200,'음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나) · 음식·음료 매입가 +3G.'],
   ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
   ['supplyCert','길드 납품 인증',220,'오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
   ['dawnRecovery','새벽 회수 계약',190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
   ['logisticsHQ','물류 본부계약',300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
-  ['lifetime','평생 단골제',310,'단골 생환 시 · 소지금 +50G · 다음 방문 가중치 +100%.'],
+  ['lifetime','평생 단골제',310,'단골 · 모든 능력치 +10% · 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
   ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
-  ['expeditionCert','원정 전문 인증',290,'위험 대응 상품의 대응 수치 +60% · 그 상품을 산 손님의 다음 방문 시 소지금 +50G.'],
+  ['opsRoom','원정 작전실',290,'위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.'],
   ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
   ['hub','지역 거점점 계약',340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
   ['warehouse','후방 창고 증설',130,'창고 용량 +5칸.'],
@@ -653,6 +652,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  const app=read('dist/ui/app.js');
  assert.ok(app.includes('확보 완료 · ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
  assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
+ assert.ok(app.includes("poor?'골드 부족':price?'구매':'선택'"),'a free card is chosen (선택), a priced one bought (구매) - COPY_AUDIT §11-31b');
 });
 
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not

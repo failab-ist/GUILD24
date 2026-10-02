@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -131,7 +131,8 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
 beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item. The desk rack shows every
 store slot, the empty ones as empty cells; the phone sheet draws only held units, so it takes as many rows as the stock needs
-(one while it fits) and the room left reads in the header's `N / M칸`. Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
+(one while it fits) and the room left reads in the header's `N / M칸`; while it is open the 발주서 scrolls up above it by the
+sheet's own height, no more (User 2026-10-02: a fixed 45% left an empty stretch under a one-row sheet). Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
 hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's ladder); no new copy.
 - Cell tip (User 2026-10-02): a held cell is a tip - a tap opens it and a second tap closes it (another cell or a tap elsewhere
   switches or closes it); on desk a hover opens it, and keyboard focus too. It shows the offer row's own lines - name,
@@ -321,7 +322,8 @@ Never show exact expedition Success %, the hidden readiness thresholds (0.75 / 0
 Success % (`대응 {N} 필요` and `{능력치} {n}당 대응 1 제공` are public Gate facts, §HAZARD NUDGE). The % follows
 `DUNGEON_HAZARD_v2.8.0.md`: the chance an ordinary failed expedition escalates to Death, not unconditional Death odds.
 
-After a purchase commits in the visit, all three stay the snapshot — never `접전 -> 우세`, `불안 -> 충분`, `12% -> 5%`. The
+After a purchase commits in the visit, the Combat Forecast and the death % stay the snapshot — never `접전 -> 우세`, `12% -> 5%`;
+환경 대응 is the live meter instead (§SALE — ENVIRONMENT METER, User 2026-10-02). The
 runtime preparation **does** change (Resolve uses the final Items / Fatigue / Condition); feedback shows exact actual changes
 and sources (Item Stat / Counter / 피로 회복 N, proven Fatigue band change, an owned Trait / Relic / Boss effect), so the choice
 is not graded before the remaining-slot decision.
@@ -337,6 +339,31 @@ Header:
 The 전투 전망 `?` help is two lines, the second `실패 시 사망 위험 {N}%`; no `실패 시 사망 위험` readout cell. Copy ->
 `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1.
 
+### SALE — ENVIRONMENT METER (User 2026-10-02)
+
+The readout's 환경 대응 cell is a number, not a word: per Hazard of the customer's (claimed) Gate, `{위험} {N}/{필요}` - N the
+Counter the expedition is judged on (Dungeon.prepare: the customer's own Stat share and Traits, Store Supports, plus the
+committed Bag's Counters; whole, never below 0), 필요 the Gate's public `대응 {N} 필요`. It moves when a sale commits; a selected,
+unsold Item previews where it would land, `{위험} {N} → {M}/{필요}` - the resolver's number with that Item in the Bag, Stat-route
+shares included, so nothing is left to add up (User 2026-10-02). The number is gold, green only once it reaches the need (a
+preview coloured on its own). It sits in its own box (§SALE — OUTLOOK BOXES), apart from the stamped `전투 전망` word, which
+stays the SALE-entry snapshot with its death % help and never previews. No readiness word, no breakdown of the number. The phone forecast pin carries the same meter. The tray's Hazard Counter row is
+the Item's own share, `{위험} 대응 +N`. Help and coach copy -> COPY_AUDIT §4-2, §3-4. The four readiness words stay the
+resolver's and the measurement bots' vocabulary (outlookFor) and are not drawn on SALE.
+
+### SALE — OUTLOOK BOXES (User 2026-10-02)
+
+The readout is two boxes of their own, not one panel: `전투 전망` (its stamped word; the ? with the death % line) and `환경
+대응` (the meter, one row per Hazard), each an iron plate with two painted corner rivets, a head line (name, ?) over its value.
+They split the row in equal halves while the meter fits half; past that the 환경 대응 box takes what it needs. The Core Stats
+below are a box of their own (the stat grid), not part of the readout; every Stat cell is one row height, a tappable
+(source) cell included - no extra vertical padding on any cell. The pair plus the Stats keep the old panel's height
+(146px at 360 / 390 on a two-Hazard Gate): the head line takes 16px while its ? keeps the 24px target. The phone pin is not
+two boxes: one strip, `전투 {word}` | `환경 {meter}` with a thin divider (User 2026-10-02: pin only, two plates read busy), the
+meter's Hazards side by side on one line while they fit, wrapping whole only when they do not (one 44px target that folds to
+`전망`). The
+first SALE's outlook mark is two marks, one per box (COPY_AUDIT §3-4).
+
 ### SALE — GATE VS ITEM INFORMATION
 
 ```text
@@ -345,7 +372,8 @@ Item: Core Stat +N / Hazard Counter +N / 피로 회복 N / explicit penalty
 ```
 
 Every Hazard row, the SALE destination plate included, states the Gate facts
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need; readiness stays the four words.
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need. This customer's own
+number is the readout's 환경 대응 meter (§SALE — ENVIRONMENT METER, User 2026-10-02), not the plate.
 
 ### SALE — DECISION-ONLY ITEM DETAIL
 
@@ -406,8 +434,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 ### SALE — FORECAST PIN
 
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
-repeats `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` (on a two-Hazard Gate, each Hazard's own state as the
-readout reads it) — the same frozen values and colours, never a second
+repeats, on one strip split by a thin divider, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
+Hazard, live as the readout reads it (§SALE — OUTLOOK BOXES / ENVIRONMENT METER) — the same values, never a second
 source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
@@ -440,7 +468,8 @@ Forecast/readiness/death explanation is on demand via the shared anchored popove
 ### SALE — UNCOMMITTED PREVIEW
 
 Per `SALE_v2.8.0.md`, an uncommitted Item may show its exact effect and price / affordability (no `피로 {A} → 출발 {B}`
-line); never hypothetical answers (`접전 -> 우세`, `불안 -> 충분`, Great Success signal change).
+line); never hypothetical answers (`접전 -> 우세`, `불안 -> 충분`, Great Success signal change) - the 환경 대응 meter's numeric preview
+(§SALE — ENVIRONMENT METER, User 2026-10-02) is the one exception.
 
 ### SALE — POST-COMMIT DELTA SOURCE TRUTH
 
@@ -472,7 +501,10 @@ carry-over to a later visit unless an owner defines it; absent from Final prepar
 
 When the authoritative condition holds, show `대성공을 노려볼 만합니다.` (`대성공` mandatory) before departure while the
 preparation can still change; no Great Success %, Combat margin/formula or master safety score. It does not react to
-selection/preview; after a committed purchase only it refreshes from the committed Bag.
+selection/preview; after a committed purchase only it refreshes from the committed Bag. It sits inside the 전투 전망 box
+(§SALE — OUTLOOK BOXES), never on a line of its own under the pair (User 2026-10-02): on a desk (≥1024) the sentence is a line
+under the stamped word; on a phone the box keeps its height and shows the short tag `대성공 기회` beside the word - a quiet dark
+gold plate, not a bright fill - with the exact sentence kept as the screen-reader text.
 
 ### RETURNING NPC QUICK SURFACE
 
@@ -1238,7 +1270,7 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): three marks, destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
+First SALE (§TUTORIAL — COACH DIET): four marks (User 2026-10-02: the outlook is two), destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
 the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
 does not move with a sale; COPY_AUDIT §3-4). No Hazard or price marks (Hazard rows say what answers them, price comes after
 the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
@@ -1251,7 +1283,8 @@ screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL), the first Event (§FIRST EVENT TUTORIAL) and II / FIRE
   Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
-  first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
+  first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
+  대응 - one mark each, User 2026-10-02); SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
@@ -1312,8 +1345,9 @@ that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDI
 (acceptance -> UI_UX §QA UI-Q-v29-52.) Two contextual MORNING marks, like Deep: first time such a Gate is on the board, once per
 account, persisted and reset with the rest, anchored on that Gate's plate, rule only, never the answering Item (§READ THE
 SYSTEM):
-- a two-Hazard Gate (tier II and III; `DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, each pressing its own
-  Stat
+- the first tier II Gate that is not FIRE (`DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, each pressing its
+  own Stat. Keyed on the tier, not the Hazard count (User 2026-10-02): a tier I Gate an Event (한파 · 독안개) gave a second
+  Hazard, and a tier III Gate, never draw it
 - a FIRE Gate: one Hazard, higher required Combat Power (`DUNGEON_HAZARD` §FIRE second axis)
 - copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-10
 
@@ -2132,7 +2166,8 @@ During one customer visit: focusing an Item does not change the signal; a succes
 appear or disappear); the Combat/Hazard readout cells and the help-line Death % stay frozen; exact probability is not exposed.
 
 #### GREAT SUCCESS SIGNAL
-PASS: exact copy `대성공을 노려볼 만합니다.`; visible while preparation can still change; exact % / margin / formula hidden.
+PASS: exact copy `대성공을 노려볼 만합니다.` (desk line; phone screen-reader text beside the visible `대성공 기회` tag); visible while
+preparation can still change; exact % / margin / formula hidden.
 
 #### UI-Q84 — FOUR CORE STATS REMAIN VISIBLE
 The SALE primary decision surface keeps 투력, 강인함, 기동, 정신.
@@ -2151,7 +2186,9 @@ Desktop: hover/focus works and click stays usable. Mobile: tap toggles. All: no 
 outside/Escape closes; no gameplay pause/background lock; viewport placement stays readable.
 
 #### UI-Q85 — ITEM VS GATE INFORMATION BOUNDARY
-PASS: Item shows exact Stat/Counter/`피로 회복 N`; Gate shows qualitative readiness; exact Gate Counter threshold stays hidden.
+PASS: Item shows exact Stat/Counter/`피로 회복 N` (the tray's Counter row as the Item's own `+N`); the Gate states its public
+`대응 {N} 필요`; the readout's 환경 대응 meter shows this customer's committed number against it (User 2026-10-02); the hidden
+readiness thresholds (0.75 / 0.40) are never shown.
 
 #### UI-Q83 — DANGER DETAIL DOES NOT GIVE ANSWER
 PASS: detail may show Hazard, pressured Stat, readiness meaning.
@@ -2452,12 +2489,13 @@ FAIL: a pick or release possible while ordering, or a second muster on the order
 Verify UI_UX §GATE TIER / FIRE GATE TUTORIAL on MORNING at 390 and 1280, tutorial on.
 
 PASS:
-- the first board with a two-Hazard Gate shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.` on that
-  plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
+- the first board with a tier II Gate that is not FIRE shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.`
+  on that plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
 - each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks; neither names
   an Item
 
-FAIL: the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mark on a closed Gate.
+FAIL: the II mark on a FIRE II Gate (it holds one Hazard), on a tier I Gate an Event gave a second Hazard, or on a tier III Gate
+before any tier II Gate; either mark on a closed Gate.
 
 #### UI-Q-v29-53 — COACH DIET (User 2026-09-30)
 
@@ -2924,10 +2962,12 @@ FAIL: a badge / word / reorder marks the fit, or any effect is emphasised.
 SETUP: ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's
 customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
 PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `{N}명 · {Gate}` with no per-Gate count; two or
-more `{N}명 · {Gate A} {a} · {Gate B} {b}`, summing to N; each count follows the claimed destination, never exposing a liar's or
+more `{N}명 · {Gate A} {a} · {Gate B} {b}`, summing to N; an Event-closed Gate beside one open Gate
+`{N}명 · {Gate} {n} · {닫힌 Gate} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
 rerouted customer's true Gate; no name, Job, Trait, Wallet or individual destination of a future customer (UI-Q91 / UI-Q101,
 narrowed to the individual).
-FAIL: per-Gate counts on a one-Gate day, a count that exposes a true Gate, or any individual identity.
+FAIL: per-Gate counts on a one-Gate day with no closed Gate, no count on the open Gate beside a closed one, a count that exposes a
+true Gate, or any individual identity.
 
 #### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 처음 3일
 

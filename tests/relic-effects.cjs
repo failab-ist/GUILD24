@@ -49,20 +49,30 @@ test('premium guarantee obeys wallet, daily limit and never guarantees acceptanc
 });
 function nightWith(facilities,visits=2,paid=true){const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=visits;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=60;n.money=100;n.destination=0;n.claimedDestination=0;n.history=paid?[{day:s.day,item:'rice',paid:35,mode:'half'}]:[];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return {g,n};}
 test('return points excludes first visit, no-sale and free transfer',()=>{
- for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?25:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?5:0);}
+ for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?20:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?5:0);}
  /* 2026-09-23 rebalance: the Loyalty >= 30 condition is gone - a low-Loyalty paid returner earns it too */
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
- const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,25);
+ const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,20);
 });
-test('RELIC 22 / REL-Q-v28-6: 평생 단골제 doubles the next-visit weight (v2.9.11, User 2026-09-29; was +50%)',()=>{
- assert.equal(DATA.relicParams.lifetime.revisitMult,2.0,'next-visit weight +100%');
- assert.ok(/includes\('lifetime'\)\?D\.relicParams\.lifetime\.revisitMult:1/.test(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8')),'and visitor selection reads it');
+/* RELIC 22 (User 2026-10-02 remake): 평생 단골제 pays no Gold and weights no visit - a 단골's four Core Stats +10% (shown among
+   each Stat's sources, the Final party included), and once a 단골, Loyalty does not drop below 51 while it is owned. */
+test('RELIC 22: 평생 단골제 - 단골 Stats +10% and the 단골 line holds; no Gold, no revisit weight',()=>{
+ const g=fresh('lifetime'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0,pack:[]},d={...g.run.dungeons[0],requiredSupply:0};
+ const reg={...n,loyalty:51},plain=Dungeon.prepare(reg,d,[]),owned=Dungeon.prepare(reg,d,['lifetime']);
+ for(const k of ['combat','survival','mobility','spirit']){
+  assert.ok(Math.abs(owned.effects[k]-plain.effects[k]*1.1)<1e-9,k+' +10% for a 단골');
+  assert.ok(owned.sources[k].some(x=>x.name==='평생 단골제'&&x.isPct&&x.v===10),k+' lists the source');}
+ const not={...n,loyalty:50};assert.deepEqual(Dungeon.prepare(not,d,['lifetime']).effects,Dungeon.prepare(not,d,[]).effects,'below 51: nothing');
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
+ assert.ok(!/relicParams\.lifetime\.(goldBonus|revisitMult)/.test(src),'no Gold, no revisit weight');
+ assert.ok(!DATA.relicD30NoEffect.includes('lifetime'),'it now reaches the Final party, so it may be offered on DAY 30');
+ const h=fresh('lifetime-floor'),m=h.run.npcs[0];m.loyalty=55;h.run.facilities=['lifetime'];h.loyal(m,-10);assert.equal(m.loyalty,51,'a 단골 stops at 51');
+ m.loyalty=55;h.run.facilities=[];h.loyal(m,-10);assert.equal(m.loyalty,45,'without it Loyalty falls as before');
+ m.loyalty=40;h.run.facilities=['lifetime'];h.loyal(m,-10);assert.equal(m.loyalty,30,'not yet a 단골: no floor');
+ m.loyalty=49;h.loyal(m,5);assert.equal(m.loyalty,54);h.loyal(m,-20);assert.equal(m.loyalty,51,'the floor holds once the line is crossed');
 });
-test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
- const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
- /* 2026-09-23 rebalance: the condition is 단골 (Loyalty >= 51, the NPC_TRAIT owner), not 60 */
- const at=(loyalty,f)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=loyalty;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[];s.queue=[n.id];s.phase='sell';s.facilities=f;s.dayFacilities=f;g.night();return n;};
- for(const start of [20,40,45,48,49,50,51,55]){const plain=at(start,[]),n=at(start,['lifetime']);assert.equal(n.money-plain.money,n.loyalty>=51?50:0,'평생 단골제 at Loyalty '+n.loyalty);}
+test('overhead matches day effects',()=>{
+ const base=nightWith([]);
  /* Two things this line used to get wrong. hub's cost is a PROPORTION of the overhead base
     under the approved bundle, not the flat +35 it was written against; and the operating cost
     is rounded to the nearest 10G, so what the store is actually charged is not the raw
@@ -82,9 +92,9 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
    can show that something DID appear, never that everything else still CAN. */
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
-                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime',
+                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery',
                  'royalCert','hub','efficiency','firstAidDesk'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (17; 응급 처치대 joined in v2.9.11)');
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16; 평생 단골제 left it on 2026-10-02)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
@@ -112,7 +122,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
  for(const sales of [0,5,6,7,8])for(const id of ['rotation','logisticsHQ'])
   assert.equal(eligibleAtD30(id,sales),true,id+' is not gated by '+sales+' previous sales at D30');
  /* a support that needs a legal D30 ORDER / Reroll action to pay is still eligible */
- for(const id of ['rerollTicket','extraOrder','bulk','fieldRepair','rareContract','hazardBoard','expeditionCert'])
+ for(const id of ['rerollTicket','extraOrder','bulk','fieldRepair','rareContract','hazardBoard','opsRoom'])
   assert.equal(eligibleAtD30(id,0),true,id+' realises its value through a legal D30 action');
 
  /* a future Store Support is included by DEFAULT, and leaves only by being named */
@@ -369,7 +379,7 @@ test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the cata
                           ['board',110],['firstVisitCoupon',110],['groupOrder',200],['memberBundle',190],
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
                           ['supplyCert',220],['dawnRecovery',190],['logisticsHQ',300],['lifetime',310],
-                          ['royalCert',320],['expeditionCert',290],['fresh24',360],['hub',340],
+                          ['royalCert',320],['opsRoom',290],['fresh24',360],['hub',340],
                           ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130],
                           ['fieldStretcher',80],['firstAidDesk',300]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
@@ -403,12 +413,19 @@ test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ 
  assert.equal(r.store,300,'the store still receives the full charged price');assert.equal(r.paid,210,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
-test('즉석식품 코너 costs no operating cost (v2.9.11, User 2026-09-29; was overheadBase +10%); hub still takes its 10%',()=>{
+test('즉석식품 코너 takes overheadBase +10% (User 2026-10-02), added to hub\'s 10%, never compounded',()=>{
  const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','hub']);
  const b=base.g.overheadBase(),charged=x=>Math.round((b+x)/10)*10;
- assert.equal(kitchen.g.run.daily.operating,charged(0),'kitchen adds nothing');
- assert.equal(both.g.run.daily.operating,charged(b*.10),'only hub takes 10% of the base');
- assert.ok(!('overheadRate' in DATA.relicParams.kitchen),'no dormant operating-cost lever is left on the card');
+ assert.equal(DATA.relicParams.kitchen.overheadRate,.10);
+ assert.equal(kitchen.g.run.daily.operating,charged(b*.10),'kitchen takes 10% of the base');
+ assert.equal(both.g.run.daily.operating,charged(b*.20),'with hub: 10% + 10% of the same base');
+});
+test('원정 도시락 코너: Food/Drink ORDER price +3G flat (User 2026-10-02), after 24시간 신선체계 x1.15; other Items untouched',()=>{
+ const g=fresh('meal-price'),s=g.run;
+ for(const id of ['rice','guildlunch','lowpotion','rope']){const it=DATA.itemBy[id],f=['food','drink'].includes(it.category);
+  s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['expeditionMeal'];
+  assert.equal(g.offerFor(it).price,plain+(f?3:0),id+' +3G only on Food/Drink');
+  s.facilities=['expeditionMeal','fresh24'];assert.equal(g.offerFor(it).price,f?Math.round(it.buy*1.15)+3:plain,id+' flat after the x1.15');}
 });
 test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x1.25), no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
@@ -507,10 +524,10 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
  s.facilities=[];const base=Relics.offerWeight(g,coffee);s.facilities=['hazardBoard'];
  assert.ok(Relics.offerWeight(g,coffee)>base,'게시판 weights a 기동 Drink on a 속박 Gate (관련 준비)');
  const n={...s.npcs[0],traits:[],pack:['coffee'],injury:0,fatigue:0};
- const plain=Dungeon.prepare(n,s.dungeons[0],[]).effects,cert=Dungeon.prepare(n,s.dungeons[0],['expeditionCert']).effects;
- assert.equal(cert.mobility,plain.mobility,'원정 전문 인증 does not multiply a pressed Stat');
+ const plain=Dungeon.prepare(n,s.dungeons[0],[]).effects,fr=Dungeon.prepare(n,s.dungeons[0],['fieldRepair']).effects;
+ assert.equal(fr.mobility,plain.mobility,'야전 정비대 does not multiply a pressed Stat');
  const withRope={...n,pack:['rope']};
- assert.ok(Dungeon.prepare(withRope,s.dungeons[0],['expeditionCert']).effects.bind>Dungeon.prepare(withRope,s.dungeons[0],[]).effects.bind,'it still multiplies a direct Counter');
+ assert.ok(Dungeon.prepare(withRope,s.dungeons[0],['fieldRepair']).effects.bind>Dungeon.prepare(withRope,s.dungeons[0],[]).effects.bind,'it multiplies a direct Counter');
  // SALE acceptance floor reads 관련 준비
  s.phase='sell';s.queue=[n.id];const cust=s.npcs[0];cust.money=9999;cust.destination=0;cust.claimedDestination=0;cust.traits=[];
  /* v2.9.2 (User 2026-09-25): the final 정가 chance carries x 0.90, the 관련 준비 floor included; 50% keeps the bare floor. */
