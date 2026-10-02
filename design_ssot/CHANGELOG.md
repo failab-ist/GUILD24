@@ -52,6 +52,12 @@ and this table is their commit record.
   each Reroll - and the third in a row without a direct Counter for a known Hazard carries one. Rare pity still ignores Rerolls.
   A Reroll now reaches a guaranteed Counter for 50G + 100G on any Day; unmeasured (no simulation run). ECONOMY_ORDER §REROLL,
   §Known-Hazard Counter pity, ORD-Q06; tests revision, delta, relic-order.
+- **야전 정비대 boosts every Counter** (User: 필드기어만 대응하는 게 아니니 음식류의 위험 대응도 다 적용): the support multiplied
+  only Field Gear Counter values x1.40, while 컵라면 · 집중 사탕 · 얼음컵 · 중화 탄산수 and the others answer Hazards too. It now
+  multiplies the Hazard Counter value of any carried Item - Field Gear, Food, Drink - x1.40; Core Stats, 피로 회복 and the flat
+  원정 도시락 코너 +2 are unchanged. Copy `판매한 상품의 위험 대응 수치 +40%.` (`원정 위험 게시판`'s offer weight already read every
+  category's Counter and the Hazard's Stat items.) Unmeasured (no simulation run). RELIC §8 / REL-Q77 / REL-Q21, COPY_AUDIT
+  §11-8; tests relic-order, copy.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

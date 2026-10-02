@@ -14,7 +14,7 @@ const rows=[
 ['rareContract','희귀상품 입고 계약','foundation',['premium'],140,'희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.'],
 ['guarantee','길드 보증 진열대','foundation',['premium'],140,'하루 첫 '+GUARANTEE_MIN_PRICE+'G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
-['fieldRepair','야전 정비대','foundation',['expedition'],80,'판매한 야외장비의 위험 대응 수치 +40%.'],
+['fieldRepair','야전 정비대','foundation',['expedition'],80,'판매한 상품의 위험 대응 수치 +40%.'],
 ['fridge','대형 냉장고','foundation',['fresh'],60,'음식·음료 유통기한 +2일 (보유 재고도 1회 연장).'],
 ['kitchen','즉석식품 코너','foundation',['fresh'],170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).'],
 ['board','길드 전광판','foundation',['customer'],110,'하루 기본 최소 방문객 4명 (기존 3명).'],

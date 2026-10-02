@@ -98,18 +98,22 @@ test('REL-Q77: the field-category helper names exactly Potion / Field Gear / Ins
 
 /* 2026-09-23 remake: 야전 정비대 - the Hazard Counter values of Field Gear the adventurer carries
    x1.40. It no longer weights offers or adds supply quantity. */
-test('REMAKE 야전 정비대: Field Gear Hazard Counter values x1.40, nothing else',()=>{
+/* User 2026-10-02: every Item's Counter, Food and Drink too */
+test('REMAKE 야전 정비대: Hazard Counter values x1.40 in any category, nothing else',()=>{
  const g=fresh('field-maint'),n={...g.run.npcs[0],traits:[]};
  const gate={...g.makeDungeon('spider',2),requiredSupply:0};                 // poison + bind
  for(const [id,h] of [['rope','bind'],['antidote','poison']]){
   const it=DATA.itemBy[id],p={...n,pack:[id]};
   const plain=Dungeon.prepare(p,gate).effects[h],with_=Dungeon.prepare(p,gate,['fieldRepair']).effects[h];
   assert.ok(it.effects[h]>0,id+' carries a '+h+' Counter');
-  assert.equal(it.category,'gear');
   assert.ok(Math.abs((with_-plain)-it.effects[h]*.40)<1e-9,id+' '+h+' Counter +40%');
  }
  const food={...n,pack:['ramen']},cold={...g.makeDungeon('snow',1),requiredSupply:0};
- assert.deepEqual(Dungeon.prepare(food,cold,['fieldRepair']).effects,Dungeon.prepare(food,cold).effects,'a Food Counter is not Field Gear');
+ {const a=Dungeon.prepare(food,cold).effects,b=Dungeon.prepare(food,cold,['fieldRepair']).effects;
+  assert.ok(Math.abs((b.cold-a.cold)-DATA.itemBy.ramen.effects.cold*.40)<1e-9,'a Food Counter (컵라면 냉기) +40% too');
+  for(const k of ['combat','survival','mobility','spirit'])assert.equal(b[k],a[k],k+' unchanged');}
+ {const drink={...n,pack:['ice']},fire={...g.makeDungeon('golem',1),requiredSupply:0};
+  assert.ok(Math.abs(Dungeon.prepare(drink,fire,['fieldRepair']).effects.fire-Dungeon.prepare(drink,fire).effects.fire-DATA.itemBy.ice.effects.fire*.40)<1e-9,'a Drink Counter (얼음컵 화염) +40% too');}
  // no offer weight, no quantity
  for(const it of DATA.items){g.run.facilities=[];const w=Relics.offerWeight(g,it);g.run.facilities=['fieldRepair'];assert.equal(Relics.offerWeight(g,it),w,it.id+' weight');}
  for(const it of [DATA.itemBy.lowpotion,DATA.itemBy.boots]){g.run.facilities=[];const st=g.rng.state,q=g.offerFor(it).quantity;g.run.facilities=['fieldRepair'];g.rng=new RNG(g.run.seed,st);assert.equal(g.offerFor(it).quantity,q);}

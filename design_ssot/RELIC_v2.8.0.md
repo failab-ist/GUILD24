@@ -332,7 +332,8 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
   direct Counter or the Stat that Hazard presses); this is not a guarantee
 
 8. 야전 정비대 · tag=Expedition
-- 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
+- 야전 정비대: Hazard Counter values of every Item the adventurer carries from this store x1.40 - Field Gear, Food and Drink alike
+  (User 2026-10-02: Counters are not Field Gear's alone)
 - it changes no ORDER offer weight and no offer quantity
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
 
@@ -469,7 +470,7 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - Price = 290G
 - an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat
   Item does not qualify): its Hazard Counter values x1.60
-- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
+- multiplies with 야전 정비대 on any Counter; does NOT multiply the flat 원정 도시락 코너 +2
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 
@@ -953,7 +954,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
-- 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
+- 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
 - COUNTER JUDGEMENT: 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
 - 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
@@ -1064,7 +1065,7 @@ PASS: Premium does not depend on a single SKU and Rare+ is not universally super
 SETUP: Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
 EXPECT:
 - an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
-- with `야전 정비대` on Field Gear: x1.40 x1.60
+- with `야전 정비대`: x1.40 x1.60 (any category)
 - the flat `원정 도시락 코너` +2 is not multiplied
 - the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
 PASS: No ORDER offer guarantee and no unknown hazard reveal.
@@ -1079,10 +1080,11 @@ PASS: Expedition Relics match the current Dungeon×Item model.
 
 #### REL-Q77 — FIELD MAINTENANCE (야전 정비대)
 
-`야전 정비대` multiplies the Hazard Counter values of carried Field Gear by 1.40.
+`야전 정비대` multiplies the Hazard Counter values of every carried Item by 1.40 (User 2026-10-02).
 
 PASS:
-- Potion / Food / Drink / Insurance Counter values are unchanged
+- Field Gear, Food and Drink Counter values all x1.40 (e.g. 컵라면 냉기 대응 10 -> 14); Core Stats, 피로 회복 and the flat 원정 도시락
+  코너 +2 are unchanged
 - no ORDER offer weight or offer quantity effect
 
 ### FRESH SUPPORTS

@@ -49,14 +49,15 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
  return 1;
 }
 /* A Hazard Counter value (an Item effect keyed by a Hazard) under the two Counter supports:
-   야전 정비대 x1.40 on Field Gear, 원정 전문 인증 x1.60 on an Item that Counters a Hazard of the
+   야전 정비대 x1.40 on any Item's Counter (User 2026-10-02: Food / Drink Counters too, not Field Gear alone), 원정 전문 인증
+   x1.60 on an Item that Counters a Hazard of the
    Gate actually entered. They multiply each other; neither reaches the flat 원정 도시락 코너 +4,
    which is added outside this channel. "Counters" is the Relics.counter predicate, read inline
    because this module loads before systems/relics.js. */
 function counterFactor(item,k,v,facilities,d){
  if(!(k in D.hazards)||v<=0)return 1;
  let f=1;
- if(facilities.includes('fieldRepair')&&item.category==='gear')f*=D.relicParams.fieldRepair.counterMult;
+ if(facilities.includes('fieldRepair'))f*=D.relicParams.fieldRepair.counterMult;
  /* 직접 대응 only (RELIC §COUNTER JUDGEMENT, User 2026-09-24, v2.9.0): the 기동-for-속박/진창 exception is retired */
  if(facilities.includes('expeditionCert')&&d.hazards.some(h=>(item.effects[h]||0)>0))f*=D.relicParams.expeditionCert.counterMult;
  return f;
