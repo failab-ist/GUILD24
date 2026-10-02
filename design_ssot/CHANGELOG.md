@@ -44,6 +44,10 @@ and this table is their commit record.
   unchanged). A regular who keeps winning keeps buying; one who keeps losing still brings 20G+ for basic preparation. The Away
   Wallet keeps its rule, half an ordinary visit's average income per Day: Level × 1.5 + 20 (was Level × 4 + 20).
   ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet, DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests revision, night.
+- **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다): with growth, potions and counters lifting a D30 party's
+  Power by about 17~21%, WRATH 180 → 210, the FIRE pair +18 → +21, the GREED shortfall cap +11 → +13 (223 at most), SLOTH by
+  breaks 200/189/171/149 → 234/221/200/174 (× 1.17). BOSS §WRATH / §GREED / §SLOTH, FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT;
+  tests final, simulation.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 
