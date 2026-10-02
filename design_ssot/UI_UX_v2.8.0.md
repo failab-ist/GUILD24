@@ -358,9 +358,10 @@ The readout is two boxes of their own, not one panel: `전투 전망` (its stamp
 They split the row in equal halves while the meter fits half; past that the 환경 대응 box takes what it needs. The Core Stats
 below are a box of their own (the stat grid), not part of the readout; every Stat cell is one row height, a tappable
 (source) cell included - no extra vertical padding on any cell. The pair plus the Stats keep the old panel's height
-(146px at 360 / 390 on a two-Hazard Gate): the head line takes 16px while its ? keeps the 24px target. The phone pin is two
-small plates, `전투 {word}` and `환경 {meter}`, the meter's Hazards side by side on one line while they fit, wrapping whole
-only when they do not (one 44px target that folds to `전망`). The
+(146px at 360 / 390 on a two-Hazard Gate): the head line takes 16px while its ? keeps the 24px target. The phone pin is not
+two boxes: one strip, `전투 {word}` | `환경 {meter}` with a thin divider (User 2026-10-02: pin only, two plates read busy), the
+meter's Hazards side by side on one line while they fit, wrapping whole only when they do not (one 44px target that folds to
+`전망`). The
 first SALE's outlook mark is two marks, one per box (COPY_AUDIT §3-4).
 
 ### SALE — GATE VS ITEM INFORMATION
@@ -433,7 +434,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 ### SALE — FORECAST PIN
 
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
-repeats, as two small plates, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
+repeats, on one strip split by a thin divider, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
 Hazard, live as the readout reads it (§SALE — OUTLOOK BOXES / ENVIRONMENT METER) — the same values, never a second
 source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold

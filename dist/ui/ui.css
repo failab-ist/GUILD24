@@ -3585,12 +3585,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .dossier:not(.traits)>.readout.ro2+.detail-stats{margin:5px 0 0;padding:2px 12px 6px;
  background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
  box-shadow:inset 0 0 0 1px #3a2c1c,inset 0 2px 0 #0009,0 2px 0 #0006}
-/* the phone pin: the button turns into two small plates (still one 44px tap target that folds to the 전망 chip); the meter's
-   Hazards wrap whole, a Hazard never split from its number */
-.forecast-pin:not(.folded):has(.pin-plate){padding:0;background:none;box-shadow:none;align-items:stretch}
-.forecast-pin .pin-full:has(.pin-plate){gap:5px;align-items:stretch;flex-wrap:nowrap}
-.forecast-pin .pin-plate{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;flex:none;
- background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),#120c06;box-shadow:inset 0 0 0 1px #5a452b,0 4px 10px #000a}
+/* the phone pin (User 2026-10-02: pin only, one line): one iron strip - `전투 {word}`, a thin divider, `환경 {meter}` - still one
+   44px tap target that folds to the 전망 chip; the meter's Hazards wrap whole only when the line is full */
+.forecast-pin:not(.folded):has(.pin-plate){padding:0 4px;align-items:stretch;
+ background:radial-gradient(circle at 4px 4px,#7a603c 1.4px,#0000 1.9px),radial-gradient(circle at calc(100% - 4px) 4px,#7a603c 1.4px,#0000 1.9px),#120c06;
+ box-shadow:inset 0 0 0 1px #5a452b,0 4px 10px #000a}
+.forecast-pin .pin-full:has(.pin-plate){gap:0;align-items:stretch;flex-wrap:nowrap}
+.forecast-pin .pin-plate{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;flex:none}
+.forecast-pin .pin-plate+.pin-plate{box-shadow:inset 1px 0 0 #5a452b}
 .forecast-pin .pin-plate.env-meter{flex:1 1 0;min-width:0}
 .forecast-pin .pin-plate .env-meter-list{display:inline-flex;flex-direction:row;flex-wrap:wrap;gap:2px 8px;margin:0}
 .forecast-pin .pin-plate .env-row{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap}
