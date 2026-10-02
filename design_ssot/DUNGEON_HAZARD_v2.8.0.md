@@ -3,7 +3,7 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
 DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY

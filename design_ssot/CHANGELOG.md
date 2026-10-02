@@ -24,8 +24,9 @@ and this table is their commit record.
 | v2.9.11 | 2026-09-29 | `5647020` (PR #28), last merge `e1ce51e` (PR #30) | - |
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
+| v2.9.14 | 2026-10-02 | merged to `main` from `ccr-b84a430e-j4dydo` | `v2.9.14` (set by the User) |
 
-## v2.9.13 quick patch 13 — play feedback (User 2026-10-02; the version stays 2.9.13)
+## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
 - **카리냐 → 카리냥** (User): renamed in place - the same F/021 portrait - in the shipped pool and the production name pool
   (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the F NAME_INDEX, the id mapping, their checksums). A Run saved earlier

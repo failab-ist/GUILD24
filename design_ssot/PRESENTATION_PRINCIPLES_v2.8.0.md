@@ -3,7 +3,7 @@
 DOC=PRESENTATION_PRINCIPLES
 OWNER=presentation_system,presentation_principles,visual_construction,asset_quality,ornament_budget,audio_presentation,visual_review
 DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE

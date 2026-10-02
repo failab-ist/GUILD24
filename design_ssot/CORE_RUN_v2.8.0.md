@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
-DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.13
+DOC_VERSION=2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
