@@ -877,11 +877,14 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/hazardList\(/.test(readout),'the outlook renders no Hazard rows of its own');
  /* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): 환경 대응 is the live number per Hazard - the resolver's own defense off the
     committed Bag over the Gate's public need - in a display window; no readiness word, no colour by state, no breakdown */
- assert.ok(/환경 대응'\+envMeter\(p,d\)/.test(readout),'the outlook states this customer\'s 환경 대응 as the meter');
+ assert.ok(/환경 대응'\+envMeter\(p,d,pre\)/.test(readout),'the outlook states this customer\'s 환경 대응 as the meter');
  const env=fn('envMeter');
- assert.ok(/p\.hazards\.map\(h=>/.test(env)&&/Math\.max\(0,Math\.floor\(h\.defense/.test(env)&&/Presentation\.hazardNeed\(h\.key,d\)/.test(env),
+ assert.ok(/p\.hazards\.map\(\(h,i\)=>/.test(env)&&/Math\.max\(0,Math\.floor\(x\+1e-9\)\)/.test(env)&&/whole\(h\.defense\)/.test(env)&&/Presentation\.hazardNeed\(h\.key,d\)/.test(env),
   'each Hazard: the whole defense, never below 0, over the Gate\'s public need');
- assert.ok(!/label|worst|env-lack|env-ok|%/.test(env),'no readiness word, no state colour, no percentage');
+ assert.ok(!/label|worst|env-lack|env-ok|%/.test(env),'no readiness word, no percentage');
+ /* User 2026-10-02: gold, green at or past the need; the selected Item previews `now → then` */
+ assert.ok(/now>=need\?' ok':''/.test(env)&&/then>=need\?' ok':''/.test(env)&&/<em>→<\/em>/.test(env),'green only at the need, the preview coloured on its own');
+ assert.ok(/const pre=extra&&n\.pack\.length<Adventurer\.slots\(n\)\?Dungeon\.prepare\(\{\.\.\.v,pack:\[\.\.\.n\.pack,extra\]\}/.test(readout),'the preview is the resolver\'s number with the selected Item in the Bag');
  const plate=fn('destPlate');
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),
   'the destination plate states the Gate\'s numbered Hazard rows only, off the known-Hazard truth');
@@ -890,8 +893,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
- assert.equal((codeOnly.match(/환경 대응'\+envMeter\(p,d\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
- assert.ok(/환경 대응'\+envMeter\(p,d\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
+ assert.equal((codeOnly.match(/환경 대응'\+envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
+ assert.ok(/환경 대응'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -2447,7 +2450,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
- assert.ok(steps.includes(`['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
+ assert.ok(steps.includes(`['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.']`)&&/'<span class="fore">전투 전망<b>'\+o\.combat/.test(fn('readout')),'the outlook mark, verbatim, and the readout reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
@@ -3539,7 +3542,7 @@ test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, 
 });
 test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
  const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
- assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
+ assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n,st\?st\.item:null\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
  assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('전투 전망')&&pin.includes('환경 대응')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
  assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
  assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');

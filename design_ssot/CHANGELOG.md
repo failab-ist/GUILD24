@@ -73,6 +73,11 @@ and this table is their commit record.
   available and did not come banks one Away Day (at most 3); the next visit adds banked Days x (Level x4 + 20) - half an
   ordinary visit's average income per Day, no expedition reward, no EXP or Loyalty, so a regular who comes often stays the
   better customer. No RNG draw added. Unmeasured (no simulation run). ECONOMY_ORDER §Away Wallet; test revision.
+- **환경 대응 previews the selected Item, gold until it reaches the need** (User: 미리보기는 넣자 · 노란색으로, 대응 넘었을 때만
+  초록): selecting an unsold Item shows where the number would land, `어둠 5 → 28/21` - the resolver's number with that Item in
+  the Bag, Stat-route shares included, so there is nothing to add up; the fight never previews. Numbers are gold, green only at
+  or past the need. Coach §3-4 says it. UI_UX §SALE — ENVIRONMENT METER / §UNCOMMITTED PREVIEW, SALE (the one preview
+  exception), COPY_AUDIT §3-4 / §4-2; test ui-guard.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

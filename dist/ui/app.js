@@ -843,6 +843,10 @@ function readout(n,extra=null,cls=''){
     own exact effects and the deterministic Supply/Fatigue arithmetic, but never a moved
     Forecast/Readiness/Death/signal - so `extra` no longer enters the preparation at all. */
  const v={...n,traits:Presentation.traits(n),pack:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
+ /* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): the selected, unsold Item previews where the 환경 대응 number would land
+    (`6 → 16`), the resolver's own number with that Item in the Bag - Stat-route shares included, so nothing is left to add up.
+    Only 환경 대응 previews; 전투 전망 and its death % stay the SALE-entry snapshot. */
+ const pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  /* ...and the outlook itself is the frozen SALE-entry snapshot, not this live preparation. */
  const o=n.outlook||game.outlookFor(n);
  /* DUNGEON_HAZARD §GREAT SUCCESS signal. It sits in the forecast the player is already reading,
@@ -875,7 +879,7 @@ function readout(n,extra=null,cls=''){
      instead (envReading, v2.9.13). */
   /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): 환경 대응 is now the number itself, live with the committed Bag - a
      display window of its own beside the stamped 전투 전망, so a cell that moves never reads like the one that does not */
-  +(p.hazards.length?'<span class="fore env-each env-meter">환경 대응'+envMeter(p,d)
+  +(p.hazards.length?'<span class="fore env-each env-meter">환경 대응'+envMeter(p,d,pre)
    +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>':'')
   +'</div>'
  /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
@@ -935,7 +939,7 @@ function saleScreen(){
     expedition - so nothing is duplicated on screen. */
  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
- +'<div class="counter-edge" aria-hidden="true"></div>'+forecastPin(n)
+ +'<div class="counter-edge" aria-hidden="true"></div>'+forecastPin(n,st?st.item:null)
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
   /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
      the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
@@ -1309,7 +1313,7 @@ const coachSteps={
     differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
  ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
+ ['forecast','.readout .top','전투 전망은 손님이 들어올 때 정해져서 바뀌지 않는다. 환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
@@ -1753,8 +1757,14 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    on - the customer's own Stat share and Traits plus the committed Bag's Counters (Dungeon.prepare, the resolver's own
    number) - over the Gate's public need (`대응 N 필요`). Whole numbers, never below 0; no word, no colour by state, no
    breakdown. It moves when a sale commits; a selected, unsold Item moves only the tray. */
-function envMeter(p,d){return '<span class="env-list env-meter-list">'+p.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'
- +'<b class="env-num">'+Math.max(0,Math.floor(h.defense+1e-9))+'<small>/'+Presentation.hazardNeed(h.key,d)+'</small></b></span>').join('')+'</span>';}
+/* Gold by default, green only once the number reaches the need (User 2026-10-02) - the whole number against the rounded-up need,
+   so green never shows before the resolver's own 충분. `pre`: the selected Item's preview, `6 → 16`, coloured the same way. */
+function envMeter(p,d,pre=null){const whole=x=>Math.max(0,Math.floor(x+1e-9));
+ return '<span class="env-list env-meter-list">'+p.hazards.map((h,i)=>{const need=Presentation.hazardNeed(h.key,d),now=whole(h.defense),
+  then=pre?whole(pre.hazards[i].defense):null;
+  return '<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'
+  +'<b class="env-num'+(now>=need?' ok':'')+'">'+now+(then!==null&&then!==now?'<em>→</em><span class="pre'+(then>=need?' ok':'')+'">'+then+'</span>':'')
+  +'<small>/'+need+'</small></b></span>';}).join('')+'</span>';}
 function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes(l)?'lack':'ok')+'">'+E(l)+'</b>';
  return o.hazards.length>1?'<span class="env-list">'+o.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'+b(h.label)+'</span>').join('')+'</span>':b(o.worst);}
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
@@ -1763,10 +1773,11 @@ function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes
    source. One tap folds it to a `전망` chip and back. The anchor has no height: it reserves nothing in the layout.
    v2.9.9 quick patch (User 2026-09-28): the readout's strain line rides along under the two readings - the same condition,
    words and number (an injured departure with a chain behind it); the folded chip stays `전망`. */
-function forecastPin(n){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0,
- d=game.claimedGateFor(n),p=Dungeon.prepare({...n,traits:Presentation.traits(n),pack:n.pack},d,game.run.facilities);
+function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=n.injury===1?Dungeon.injuredStreak(n.records):0,
+ d=game.claimedGateFor(n),v={...n,traits:Presentation.traits(n),pack:n.pack},p=Dungeon.prepare(v,d,game.run.facilities),
+ pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
-  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore env-each env-meter">환경 대응'+envMeter(p,d)+'</span>':'')
+  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore env-each env-meter">환경 대응'+envMeter(p,d,pre)+'</span>':'')
   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);

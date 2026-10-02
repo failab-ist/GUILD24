@@ -343,10 +343,11 @@ The 전투 전망 `?` help is two lines, the second `실패 시 사망 위험 {N
 
 The readout's 환경 대응 cell is a number, not a word: per Hazard of the customer's (claimed) Gate, `{위험} {N}/{필요}` - N the
 Counter the expedition is judged on (Dungeon.prepare: the customer's own Stat share and Traits, Store Supports, plus the
-committed Bag's Counters; whole, never below 0), 필요 the Gate's public `대응 {N} 필요`. It moves when a sale commits (a selected,
-unsold Item moves only the tray). It sits in a lit display window (the till's green LED, a display role) so it reads apart
-from the stamped `전투 전망` word beside it, which stays the SALE-entry snapshot with its death % help. No readiness word, no
-colour by state, no breakdown of the number. The phone forecast pin carries the same meter. The tray's Hazard Counter row is
+committed Bag's Counters; whole, never below 0), 필요 the Gate's public `대응 {N} 필요`. It moves when a sale commits; a selected,
+unsold Item previews where it would land, `{위험} {N} → {M}/{필요}` - the resolver's number with that Item in the Bag, Stat-route
+shares included, so nothing is left to add up (User 2026-10-02). The number is gold, green only once it reaches the need (a
+preview coloured on its own). It sits in a display window so it reads apart from the stamped `전투 전망` word beside it, which
+stays the SALE-entry snapshot with its death % help and never previews. No readiness word, no breakdown of the number. The phone forecast pin carries the same meter. The tray's Hazard Counter row is
 the Item's own share, `{위험} 대응 +N`. Help and coach copy -> COPY_AUDIT §4-2, §3-4. The four readiness words stay the
 resolver's and the measurement bots' vocabulary (outlookFor) and are not drawn on SALE.
 
@@ -454,7 +455,8 @@ Forecast/readiness/death explanation is on demand via the shared anchored popove
 ### SALE — UNCOMMITTED PREVIEW
 
 Per `SALE_v2.8.0.md`, an uncommitted Item may show its exact effect and price / affordability (no `피로 {A} → 출발 {B}`
-line); never hypothetical answers (`접전 -> 우세`, `불안 -> 충분`, Great Success signal change).
+line); never hypothetical answers (`접전 -> 우세`, `불안 -> 충분`, Great Success signal change) - the 환경 대응 meter's numeric preview
+(§SALE — ENVIRONMENT METER, User 2026-10-02) is the one exception.
 
 ### SALE — POST-COMMIT DELTA SOURCE TRUTH
 

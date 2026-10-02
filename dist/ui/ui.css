@@ -1123,11 +1123,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout .fore .env-row b{margin-left:4px}
 /* UI_UX §SALE — ENVIRONMENT METER (User 2026-10-02): the live number sits in a lit display window, the till's green LED -
    a display role, apart from the stamped 전투 전망 word beside it */
-.env-num{display:inline-flex;align-items:baseline;padding:3px 6px 2px;background:#071009;
- box-shadow:inset 0 1px 0 #000,inset 0 0 0 1px #24392b;font:500 17px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 6px #3fe08c66;
+.env-num{display:inline-flex;align-items:baseline;padding:3px 6px 2px;background:#0b0805;
+ box-shadow:inset 0 1px 0 #000,inset 0 0 0 1px #3a2c1c;font:500 17px/1 var(--f-led);color:var(--gold);
  -webkit-font-smoothing:none;font-variant-numeric:tabular-nums}
-.env-num small{margin-left:2px;font:500 12px/1 var(--f-led);color:#5fa97c;text-shadow:none}
-.readout .top b.env-num,.forecast-pin b.env-num{font-size:17px;color:#8df0b4}
+/* gold by default; green only at or past the need (User 2026-10-02), the preview number coloured on its own */
+.env-num small{margin-left:2px;font:500 12px/1 var(--f-led);color:#9c8d70;text-shadow:none}
+.env-num em{margin:0 3px;font:500 13px/1 var(--f-led);font-style:normal;color:#9c8d70}
+.readout .top b.env-num,.forecast-pin b.env-num{font-size:17px;color:var(--gold)}
+.readout .top b.env-num.ok,.forecast-pin b.env-num.ok,.env-num .pre.ok{color:#8df0b4;text-shadow:0 0 6px #3fe08c55}
+.env-num .pre{color:var(--gold)}
 .env-meter-list{row-gap:3px}
 /* stacked (phone), the names align right so the coloured states share one column; the widest row sets the width, as before */
 @media (max-width:1023px){
