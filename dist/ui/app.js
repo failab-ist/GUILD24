@@ -1892,7 +1892,8 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   /* COPY_AUDIT §11-31: a disabled action names its own cause. Leaving 구매 on a control that
      cannot be pressed says nothing - the window being over and the wallet being short are
      different facts, and the Player needs to know which one applies. */
-  const label=mine?'보유 중':spent?'선택 종료':poor?'골드 부족':'구매';
+  /* COPY_AUDIT §11-31b (User 2026-10-02): a free card is chosen, not bought - its key reads 선택 under the 무료 price */
+  const label=mine?'보유 중':spent?'선택 종료':poor?'골드 부족':price?'구매':'선택';
   return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
   +btn(label,'buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'

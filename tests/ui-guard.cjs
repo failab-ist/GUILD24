@@ -3374,8 +3374,8 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
  const win=app.slice(app.indexOf('relic-choices'),app.indexOf('function sealChoice'));
  assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),
   'the two disabled causes are separated from the one blocked flag');
- assert.ok(win.includes("mine?'\ubcf4\uc720 \uc911':spent?'\uc120\ud0dd \uc885\ub8cc':poor?'\uace8\ub4dc \ubd80\uc871':'\uad6c\ub9e4'"),
-  'and the four approved labels are adopted verbatim, in that order');
+ assert.ok(win.includes("mine?'\ubcf4\uc720 \uc911':spent?'\uc120\ud0dd \uc885\ub8cc':poor?'\uace8\ub4dc \ubd80\uc871':price?'\uad6c\ub9e4':'\uc120\ud0dd'"),
+  'and the approved labels are adopted verbatim, in that order - a free card 선택, a priced one 구매 (User 2026-10-02)');
  assert.ok(!/mine\?'\ubcf4\uc720 \uc911':'\uad6c\ub9e4'/.test(win),'the old two-way label is gone');
 });
 

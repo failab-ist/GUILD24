@@ -45,6 +45,8 @@ and this table is their commit record.
   room under the form for the most the sheet may take (45% of the screen, ~410px at 390) since v2.9.13 quick patch made it as
   tall as the stock needs, so a one-row sheet left ~300px of bare wall. The room is now the sheet's own height (measured as it
   opens, grows or closes). UI_UX §ORDER — WAREHOUSE PANEL.
+- **A free Store Support is 선택, not 구매** (User): the DAY 0 / DAY 1~4 free card printed `무료` over a `구매` key. A free card's
+  key now reads `선택`; a priced card keeps `구매`. COPY_AUDIT §11-31b; test copy.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

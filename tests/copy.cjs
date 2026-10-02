@@ -653,6 +653,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  const app=read('dist/ui/app.js');
  assert.ok(app.includes('확보 완료 · ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
  assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
+ assert.ok(app.includes("poor?'골드 부족':price?'구매':'선택'"),'a free card is chosen (선택), a priced one bought (구매) - COPY_AUDIT §11-31b');
 });
 
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not
