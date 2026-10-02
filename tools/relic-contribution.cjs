@@ -21,7 +21,11 @@ function load(){
 }
 /* User 2026-10-02 (all-support re-measure, ordinary Gates vs the Final apart): expWin = the share of ordinary DAY 1~29
    expeditions that came home 성공/대성공; topLevel = the end-of-Run Core Roster (six best alive) mean Level. */
-const METRICS=['gain','reached','win','deaths','regulars','sales','margin','finalRatio','expWin','topLevel','spend'];
+/* User 2026-10-02 (gain is gross sales x the reach rate and never sees a cost): cashDay = the Run's cash change per closed Day
+   (last closing balance - the 700G start, over the Days closed) - every cost and every support payout included; squeeze =
+   the share of closed Days whose morning cash was below that Day's operating cost; minCash = the lowest closing balance. */
+const METRICS=['gain','reached','win','deaths','regulars','sales','margin','finalRatio','expWin','topLevel','cashDay','squeeze','minCash','spend'];
+const START_GOLD=700;
 // one row per finished Run: the axes each build claims as its strength (RELIC §BUILD AXES)
 const rowOf=s=>{const h=s.reportHistory||[],sum=k=>h.reduce((a,d)=>a+(d[k]||0),0);
  return {gain:s.settlement?.gain??0,reached:s.day>=30?1:0,win:s.win?1:0,deaths:s.stats.deaths||0,
@@ -29,6 +33,9 @@ const rowOf=s=>{const h=s.reportHistory||[],sum=k=>h.reduce((a,d)=>a+(d[k]||0),0
   finalRatio:s.bossDebug?s.bossDebug.power/s.bossDebug.bossPower:0,
   expWin:(()=>{const r=s.npcs.flatMap(n=>n.records||[]).filter(x=>x.day<30&&!x.deep);return r.length?r.filter(x=>x.outcome==='성공'||x.outcome==='대성공').length/r.length:0;})(),
   topLevel:(()=>{const c=s.npcs.filter(n=>n.alive).sort((a,b)=>b.level-a.level).slice(0,6);return c.length?c.reduce((a,n)=>a+n.level,0)/c.length:0;})(),
+  cashDay:h.length?(h.at(-1).balance-START_GOLD)/h.length:0,
+  squeeze:h.length?h.filter((d,i)=>(i?h[i-1].balance:START_GOLD)<(d.operating||0)).length/h.length:0,
+  minCash:h.length?Math.min(...h.map(d=>d.balance)):START_GOLD,
   spend:s.stats.relicSpent||0};};
 // overrides: {"<id>":{param:value}} for D.relicParams, plus optional "_price":{"<id>":gold}
 function applyOverrides(D,o){if(!o)return;
