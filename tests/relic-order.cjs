@@ -487,6 +487,28 @@ test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is pai
 
 /* ECONOMY_ORDER §RELIC GOLD SINK + RELIC §KEY / §PRICE: D0 cost=0; D5+ currency=G, price =
    basePrice x a limited band (about +-15-20%), fixed for the window; buy<=1; maxOwned/run=7. */
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): from DAY 5 an open window redraws its three for 300G, doubling within the
+   window and back to 300G on the next; never on DAY 0; the spend is Store Support investment and survives a reload. */
+test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
+ const g=new Game();g.autosave=false;g.start('relic-reroll');
+ assert.equal(g.canRerollRelics(),false,'the DAY 0 free pick has no reroll');
+ assert.throws(()=>g.rerollRelics());
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ g.run.day=5;g.morning();const w=g.run.relicWindow;g.run.money=2000;
+ assert.equal(g.canRerollRelics(),true);assert.equal(g.relicRerollPrice(),300);
+ const first=[...w.candidateIds],spent=g.run.stats.relicSpent||0;
+ g.rerollRelics();
+ assert.equal(g.run.money,1700,'the first reroll costs 300G');assert.equal(g.run.stats.relicSpent,spent+300,'counted as Store Support investment');
+ assert.equal(w.candidateIds.length,3);assert.ok(w.candidateIds.every(id=>!first.includes(id)),'the three on the table are left out when the pool allows');
+ assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind!=='keystone'),'pool rules hold: no Keystone before DAY 10');
+ assert.ok(w.candidatePrices.every(p=>p>0),'redrawn cards are priced');
+ assert.equal(g.relicRerollPrice(),600,'the second doubles');
+ const back=Save.import(Save.export(g.account,g.run));assert.equal(back.run.relicWindow.rerolls,1,'a reload keeps the count');
+ g.run.money=500;assert.throws(()=>g.rerollRelics(),'short of 600G');assert.equal(g.run.money,500);
+ g.run.money=5000;g.buyRelic(w.candidateIds[0]);assert.equal(g.canRerollRelics(),false,'a spent window cannot reroll');
+ g.run.day=10;g.morning();assert.equal(g.relicRerollPrice(),300,'the next window starts at 300G again');
+});
+
 test('ECONOMY_ORDER §RELIC GOLD SINK: D0 is free, every D5+ Store Support costs Gold and buying it spends it',()=>{
  const g=new Game();g.autosave=false;g.start('gold-sink');
  const w0=g.run.relicWindow;

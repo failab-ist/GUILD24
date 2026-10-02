@@ -107,6 +107,10 @@ and this table is their commit record.
 - **원정 도시락 코너 raises the Food/Drink order price +5G flat** (User: 유통기한 -1일은 빠듯, 매입가를 정량으로): after any
   percentage modifier, the table repriced once at acquisition; the Supply / Hazard effects are unchanged. The 5G is a first
   value to be checked by the next measurement. RELIC §17, COPY_AUDIT §11-17; tests relic-effects, copy.
+- **Store Support candidate reroll** (User: 매번 리셋, 300G 2배씩, D0 제외): from D5 an open window may redraw its three -
+  300G, then 600G, 1200G… in the same window, back to 300G on the next; the pool rules hold and the three on the table are
+  left out when possible; the spend is 점포지원 투자. The bots do not use it, so it is checked in play, not measured. RELIC
+  §CANDIDATE REROLL, COPY_AUDIT §11-31c; test relic-order.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

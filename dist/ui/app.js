@@ -1934,8 +1934,13 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  +sealChoice() +'<div class="close">'+(w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')
   /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
   :first?'<p>지금 안 골라도 된다. '+until+' 아침·발주 화면에서 무료로 고를 수 있다.</p>'+btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
-  :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+  :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): a footer key beside 나중에 결정, the same rank and look, one line, while the window
+   can still be bought from (never DAY 0). A short wallet greys it the way ORDER's 후보 전체 교환 does - the label keeps its one
+   line and a tap says the cause and the shortfall (COPY_AUDIT §11-31c) */
+function relicReroll(){if(!game.canRerollRelics())return '';const price=game.relicRerollPrice(),lack=price-game.run.money;
+ return btn('후보 전체 교환 · '+fmt(price)+'G','reroll-relics','stamp',lack>0?'aria-disabled="true" data-reason="relicMoney" data-lack="'+lack+'"':'');}
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
    acquisition can be spent on, so it sits beside the candidates and says as much.
    Shown only on a Run that is actually facing SLOTH, and only on an opportunity Day. */
@@ -2620,6 +2625,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* §STORE SUPPORT: acquisition is heavier than an ordinary purchase and reads as securing a
     fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
+ case'reroll-relics':game.rerollRelics();sound('spend');render();break;
  case'defer-relic':game.deferFoundationRelic();setModal(null);render();sound('ui');break;
  case'closing':game.finishNight();game.save();render();nightSound(null);closingSound();break;
  case'open':game.open();selected=null;render();healCue();break;
@@ -2714,7 +2720,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
-const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
  /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
  cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;

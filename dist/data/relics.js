@@ -100,6 +100,8 @@ D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',ex
    the settled figure. Level contribution, carry and per-NPC variation are unchanged, and no
    Day-based Wallet inflation was added - this one number is the whole lever. */
 D.balance.relicPriceScale=1;
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): the first reroll of a window costs this; each further one doubles it */
+D.balance.relicReroll={base:300};
 /* CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): the flat D.balance.deathLimit=10 baseline
    is retired - D.balance.deathLimitSegments (catalog.js) and Meta.deathLimit(run) are the only
    truth now. */

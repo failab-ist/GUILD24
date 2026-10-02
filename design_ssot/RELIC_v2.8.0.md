@@ -148,7 +148,7 @@ Boss Power by committed break count is owned by `BOSS_v2.8.0.md`; do not duplica
 
 At window creation: generate(candidates,prices) once
 
-persist: milestoneDay · candidateIds · candidatePrices · purchased · expiryDay · focusedRevealSeen
+persist: milestoneDay · candidateIds · candidatePrices · purchased · expiryDay · focusedRevealSeen · rerolls
 
 save/load => same(candidates,prices,state); reload => no reroll
 
@@ -207,6 +207,15 @@ owned nonstackable relic: futureEligible=NO
 unbought relic: futureEligible=YES · immediateNextWindowRepeat=NO
 offer diversity: prefer >=2 distinct Primary Build directions when practical
 buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약하게 높일 수 있으나 필수 Piece를 보장하지 않는다.
+
+### CANDIDATE REROLL (User 2026-10-02)
+
+- an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
+- price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
+- the redraw keeps every pool rule above (ownership, Keystone from D10, the D30 exclusions, diversity, build bias) and leaves
+  the three on the table out when at least three others remain; the new three are priced as any window's
+- the spend is Store Support investment (the closing receipt's `점포지원 투자`); a reload never redraws for free
+- the key sits in the window's footer beside `나중에 결정`, the same rank and look (User 2026-10-02); copy -> COPY_AUDIT §11-31c
 
 Keystone:
 - D0/D5 eligible=NO; D10/D15/D20/D25/D30 eligible=YES
