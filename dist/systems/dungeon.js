@@ -178,6 +178,8 @@ function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
    in the order the Canonical composition rules run: who they are, what they carry, what that
    leaves them for Supply and Fatigue, what their condition costs them, the prepared Stats,
    and the Hazard reading off those Stats. No rule lives here. */
+/* The injured-combat penalty, one owner: the night card and the notebook print the same figure prepare() applies. */
+const injuryPenaltyFor=(facilities=[])=>facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
 function prepare(n,d,facilities=[]){
  const why=[],events=[];
  const {mult,e,sum:traitSum,foodSupplyDelta,supplyPerItem}=traitModifiers(n);
@@ -187,7 +189,7 @@ function prepare(n,d,facilities=[]){
  const {effectiveFatigue}=sup;
  e.supply=finalSupply;
  /* NPC_TRAIT §INJURY: an ordinary Injury costs 투력 15%; RELIC 야전 들것 (v2.9.11) makes it 8% */
- const injuryPenalty=facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
+ const injuryPenalty=injuryPenaltyFor(facilities);
  const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
  /* RELIC 원정 도시락 코너 at the 마왕성 (v2.9.11, User 2026-09-29): every Food/Drink's +2 lands on this adventurer's most
@@ -401,7 +403,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   const sPrepared=fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition)?PREPARED.factor:1;
   const sRolled=sDeathChance*sPrepared;
   if(ev.deathRoll<sRolled){
-   sOutcome='사망';
+   sOutcome=ev.firstRunGuard?'중상':'사망'; // the real path's first-run guard (resolve) applies here too
   }else if(ev.deathRoll<sDeathChance){
    if(ev.bandRoll===undefined)return UNPROVEN;
    sOutcome=ev.bandRoll<PREPARED.bandSevere?'중상':'부상';
@@ -508,7 +510,8 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     which by the time resultProof() runs has already been mutated by this same resolution
     (growth, injury/aftercare, fatigue, equipment). Only Bag composition may differ between
     the actual and shadow preparation states. */
- const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury};
+ const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast};
+ const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
 
  const ability=preparedPower(e);
@@ -574,7 +577,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
   if(deathRoll<rolledDeathChance){
    /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): on the account's first Run no one dies on DAY 1~2 - the Death settles
       as 중상, with no extra draw, so the stream is the one the Run would have had */
-   outcome=run?.firstRun&&(run.day??d.day)<=2?'중상':'사망';
+   outcome=firstRunGuard?'중상':'사망';
   }else if(deathRoll<deathChance){
    bandRoll=r.next();
    outcome=bandRoll<PREPARED.bandSevere?'중상':'부상';
@@ -692,7 +695,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money+=loot;
- if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<clamp(.06+bare.hazard*.012-bare.effects.survival*.001,.02,.48);
+ if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<clamp(.06+bare.hazard*.012-bare.effects.survival*.001,.02,.48)*(1-assist);
   /* structure only: which Hazards were actually mitigated and which carried Items did it.
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
@@ -700,7 +703,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,escapeCut:dayEv.escapeCut,strain,assist},severeEscalation,outcome,aftercare);
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
@@ -721,5 +724,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

@@ -38,6 +38,7 @@
 | `v2.9.9/tools/measure-wallet-v299.cjs` | v2.9.9 실패 보상 배율 측정(CHANGELOG가 가리킨다) | `tools/` |
 | `v2.9.11/*.md` | v2.9.11 재측정(`remeasure-v2911`), 부상 · 성장, 문구 교정, 줄바꿈 점검, iPhone Safari, BGM · 효과음 믹스, 초안(`v2.9.11-drafts`) | `reports/` |
 | `v2.9.11/tools/measure-royalcert-v2911.cjs` | 왕도 프리미엄 인증 측정(CHANGELOG가 가리킨다). 곡선 재측정 `remeasure-v2911.cjs`는 현행이라 `tools/`에 남김 | `tools/` |
+| `v2.9.13/unused-room-art.js` | 더 이상 화면에 안 보이는 옛 그림 코드(아침 · 새 점포 준비의 천장 · 벽 · 계산대 그림, 쓰이지 않던 `Art.scene`). 그림 배경으로 바뀌어 숨겨져 있었다(User 2026-10-01) | `dist/ui/scene.js` · `dist/ui/art.js` |
 
 ## 규칙
 

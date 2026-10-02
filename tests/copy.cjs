@@ -144,8 +144,12 @@ test('§12: a Callback only speaks about history the run actually has',()=>{
  const report={outcome:'사망',day:5,items:[],changes:[]};
  assert.ok(Copy.pools.night.deathStranger.includes(Copy.night(report,{...n,id:'x',history:[],records:[{}]})),
   'a stranger death gets the stranger line');
- assert.ok(Copy.pools.night.deathTraded.includes(Copy.night(report,{...n,id:'x',history:[{item:'rice'}],records:[{}]})),
+ assert.ok(Copy.pools.night.deathTraded.includes(Copy.night(report,{...n,id:'x',history:[{item:'rice',day:5}],records:[{}]})),
   'a customer death may mention the counter');
+ /* deathTraded speaks of TODAY's receipt (`오늘 산 물건이 마지막 구매가 됐다`), so a purchase from an earlier Day does not
+    make it eligible (User 2026-10-01 review) */
+ assert.ok(!Copy.pools.night.deathTraded.includes(Copy.night(report,{...n,id:'x',history:[{item:'rice',day:3}],records:[{},{}]})),
+  'a customer who last bought days ago gets no receipt line');
 });
 
 test('SA-Q25: the helped-return callback needs COMPLETE proven sold-Item contribution',()=>{

@@ -203,7 +203,7 @@ const Copy={
  night(report,n,run){
   const k=key(n,'night',report.day),ex=exclusionFor(run,n,'night'),emit=line=>{remember(run,n,'night',line);return line;};
   if(report.outcome==='사망')
-   return emit(pick(n.history.length?night.deathTraded:n.records.length>1?night.deathKnown:night.deathStranger,k,ex));
+   return emit(pick(n.history.some(h=>h.day===report.day)?night.deathTraded:n.records.length>1?night.deathKnown:night.deathStranger,k,ex));
   if(report.avoidedDeath)return emit(pick(night.avoided,k,ex));
   if(report.rescued)return emit(pick(night.rescued,k,ex));
   /* COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE: 대성공 is its own named Pool now, distinct from

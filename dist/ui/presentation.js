@@ -201,7 +201,7 @@ function nightChange(text){
     keeps its own legacy `전투 +N` wording - nothing is renamed in the Save or the resolution. */
  m=/^(.+?)\s*·\s*전투\s*(\+\d+)$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'장비',value:m[1],extra:'투력 '+m[2]};
  return {kind:'up',group:'grew',label:'변화',value:text};}
-function nightChanges(r, npc){const out=[];
+function nightChanges(r, npc, facilities=[]){const out=[];
  for(const c of (r.changes||[]).slice(0,3))out.push(nightChange(c));
  for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
   if(label)out.push({kind:'up',group:'grew',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
@@ -209,7 +209,7 @@ function nightChanges(r, npc){const out=[];
   else if(r.injury===1){
    const n=npc;
    if(n){
-    const combat=n.traits.includes('grit')?'+20%':'-15%';
+    const combat=n.traits.includes('grit')?'+20%':'-'+Math.round(G.Dungeon.injuryPenaltyFor(facilities)*100)+'%';
     out.push({kind:'down',group:'after',label:'남은 부상',value:'투력 '+combat+' · 강인함 -20%'});
    }
   }
