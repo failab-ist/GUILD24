@@ -280,12 +280,12 @@ G.DATA.bossTuning={
    the harness without editing production. The value is unchanged by that move. */
 /* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION. The inherited fixed all-Run table is
    superseded: the ORDER offer Rarity shifts by Day band, so the catalogue itself communicates
-   progression and the new Epic preparation Items need no separate D20 hard unlock. Early Epic
-   is deliberately possible but rare; Legendary stays exceptional and never scales past 1%.
-   Each row is the exact normalized percentage and sums to 100. */
+   progression and the new Epic preparation Items need no separate D20 hard unlock. D1-7 lean on
+   Common and offer no Epic (User 2026-10-02: a T1 Day's customer cannot pay for one); Legendary
+   stays exceptional and never scales past 1%. Each row is the exact normalized percentage and sums to 100. */
 G.DATA.rarityBands=[
- {maxDay:3, weights:[68,24, 7, 1,0]},
- {maxDay:7, weights:[63,25,11, 1,0]},
+ {maxDay:3, weights:[76,20, 4, 0,0]},
+ {maxDay:7, weights:[68,24, 8, 0,0]},
  {maxDay:12,weights:[58,27,12, 2,1]},
  {maxDay:19,weights:[53,27,15, 4,1]},
  {maxDay:24,weights:[46,26,17,10,1]},
