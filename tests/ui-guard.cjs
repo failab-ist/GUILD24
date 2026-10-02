@@ -723,7 +723,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.ok(!/노려볼 만합니다/.test(app.replace('Copy.great.signal','')),'no second copy of the wording');
  /* User 2026-10-02: inside the 전투 전망 box - a phone's quiet tag beside the word, the sentence kept for a screen reader */
  assert.equal(Copy.great.tag,'대성공 기회','the phone tag is the approved short form');
- assert.ok(/<b>'\+o\.combat\+'<\/b><i class="gs-tag" aria-hidden="true">'\+E\(Copy\.great\.tag\)/.test(app),'the tag sits beside the word and is not read twice');
+ assert.ok(/<span class="gs-row"><b>'\+o\.combat\+'<\/b>'/.test(app)&&/<i class="gs-tag" aria-hidden="true">'\+E\(Copy\.great\.tag\)/.test(app),'the tag sits beside the word and is not read twice');
  assert.ok(/\.readout\.ro2 \.great-signal\{position:absolute;width:1px/.test(css)&&/@media\(min-width:1024px\)\{\n \.readout\.ro2 \.gs-tag\{display:none\}/.test(css),'phone: tag shown, sentence screen-reader only; desk: sentence shown, no tag');
  /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY names a Great Success signal CHANGE as one of
     the hypothetical answers the decision surface may not show, so the screen now reads the
@@ -898,7 +898,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
  assert.equal((codeOnly.match(/envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
- assert.ok(/<span class="pin-fore pin-plate env-meter">환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
+ assert.ok(/<span class="pin-fore pin-plate env-meter">'\+\(p\.hazards\.length\?'환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -1993,16 +1993,19 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
-/* UI-Q-v29-38 (UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT, User 2026-09-26, v2.9.5): one thin words-only line under the
-   readout .top, only for an injured departure with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
-test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail number, no %',()=>{
- const r=fn('readout'),top=r.indexOf("+'</div>'"),line=r.indexOf('class="strain"');
- assert.ok(top>0&&line>top&&r.indexOf('great-signal')<top,'directly under the readout .top (the Great Success signal sits inside it)');
- assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
+/* UI-Q-v29-38 (UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; v2.9.14 quick patch, User 2026-10-02): the strain words live in
+   the 전투 전망 box like the Great Success signal - a phone chip beside the word, a desk line under it - only for an injured departure
+   with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
+test('UI-Q-v29-38: SALE strain - in the 전투 전망 box, injured with a chain only, the NPC detail number, no %',()=>{
+ const r=fn('readout'),top=r.indexOf("+'</div>'"),combat=r.indexOf('class="fore ro-combat"'),env=r.indexOf('class="fore ro-env');
+ assert.ok(r.includes("const strain=n.injury===1?Dungeon.injuredStreak(n.records):0,strainText='연속 부상 출발 '+strain+'회';"),'injured departures, the same injuredStreak and wording');
+ for(const cls of ['st-tag','ro-strain']){const i=r.indexOf('class="'+cls+'"');assert.ok(i>combat&&i<env&&i<top,cls+' sits inside the 전투 전망 box');}
+ assert.ok(!r.includes('class="strain"'),'no loose line under the pair any more');
+ assert.ok(/\.readout\.ro2 \.ro-strain\{position:absolute/.test(css)&&/\.readout\.ro2 \.st-tag\{display:none\}/.test(css),'phone chip (line for a screen reader), desk line');
  assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
  assert.equal((r.match(/<span class="fore ro-(?:combat|env)/g)||[]).length,2,'the .top still holds the two boxes (전투 전망 and the 환경 대응 meter)');
- assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
- assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
+ assert.ok(!/strainText='[^;]*%/.test(r)&&(r.match(/E\(strainText\)/g)||[]).length===2,'no % in the words: the chip and the line print strainText only');
+ assert.ok(/\.readout\.ro2 \.ro-strain\{position:static;[^}]*font:500 12px/.test(css),'small on a desk');
 });
 /* UI-Q-v29-24 (UI_UX §SALE — FORECAST PIN, User 2026-09-28, v2.9.9 quick patch): the pin carries the readout's strain line under its
    two readings - the same condition, wording and number; inside .pin-full, so the folded chip stays `전망` */
@@ -2010,8 +2013,9 @@ test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and
  const p=fn('forecastPin');
  assert.ok(p.includes("streak=n.injury===1?Dungeon.injuredStreak(n.records):0"),'injured only, the same injuredStreak');
  assert.ok(p.includes("(streak>0?'<span class=\"pin-strain\">연속 부상 출발 '+streak+'회</span>':'')"),'a chain of 1 or more, the readout wording');
+ assert.ok(/\.forecast-pin \.pin-plate \.pin-strain\{[^}]*margin-left:auto;align-self:flex-end/.test(css),'at the bottom right of the strip (v2.9.14 quick patch)');
  assert.ok(p.indexOf('pin-strain')<p.indexOf('pin-chip')&&p.indexOf('pin-strain')>p.indexOf('pin-full'),'inside the full line, not the chip');
- assert.ok(/\.forecast-pin \.pin-strain\{[^}]*font:500 12px/.test(css),'small, as the readout line');
+ assert.ok(/\.forecast-pin \.pin-plate \.pin-strain\{[^}]*font:500 12px/.test(css),'small, as the readout line');
 });
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
@@ -3549,7 +3553,7 @@ test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, 
 test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
  const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
  assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n,st\?st\.item:null\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
- assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('>전투<b>')&&pin.includes('>환경\'+envMeter')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
+ assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('>전투<b>')&&pin.includes("'환경'+envMeter(p,d,pre)")&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
  assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
  assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
  assert.ok(/aria-expanded/.test(sync),'the fold state is announced');

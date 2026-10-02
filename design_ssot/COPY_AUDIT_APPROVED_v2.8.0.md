@@ -542,8 +542,8 @@ SALE 목적지 판(폰): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란�
 ## 4-25. SALE 판독 — 연속 부상 출발
 
 **노출 위치**
-> SALE 판독 `.top`(전투 전망 · 환경 대응) 바로 아래 얇은 한 줄. 부상 상태로 출발하는 손님이고 연속 부상 출발이 1회 이상일 때만 (rule owner: UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT).
-> 폰에서 판독이 스크롤로 가려져 전망 플로팅 줄이 뜨면, 그 줄의 두 판독 아래에도 같은 조건으로 같은 한 줄 (rule owner: UI_UX §SALE — FORECAST PIN).
+> 전투 전망 박스 안 — 폰은 판정 단어 옆 작은 칩, PC는 단어 아래 한 줄 (대성공 신호와 같은 자리, v2.9.14 퀵패치 · User 2026-10-02). 부상 상태로 출발하는 손님이고 연속 부상 출발이 1회 이상일 때만 (rule owner: UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT).
+> 폰에서 판독이 스크롤로 가려져 전망 플로팅 띠가 뜨면, 띠의 오른쪽 아래에 같은 조건으로 같은 문구 (rule owner: UI_UX §SALE — FORECAST PIN).
 
 **현재** (NPC 상세의 `연속 부상 출발 {n}회` 줄(UI_UX NPC detail)과 같은 문구·같은 숫자. 실패 시 사망 위험 %는 `?` 안에만)
 > 연속 부상 출발 {n}회

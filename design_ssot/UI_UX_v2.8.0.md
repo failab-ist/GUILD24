@@ -307,9 +307,11 @@ customer SALE decision begins
 
 Show qualitative Combat Forecast and Hazard Readiness (known Hazard state), existing Injury/Condition in the snapshot, and the
 exact 실패 시 사망 위험 % — not as a readout cell (the readout `.top` shows 전투 전망 and 환경 대응 only) but as the second
-line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`) and a line of the NPC detail. `연속 부상 출발 {n}회`: one thin small
-line under the readout `.top`, only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing
-to the Death chance); words only — no %, verdict, `?` or new color.
+line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`) and a line of the NPC detail. `연속 부상 출발 {n}회`: inside the 전투 전망 box,
+the way the Great Success signal sits (v2.9.14 quick patch, User 2026-10-02) — a small muted-red chip beside the stamped word on a
+phone (the line kept for a screen reader; a second chip wraps under the first rather than leaving the box), a small line under the
+word on a desk — only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the Death
+chance); words only — no %, verdict or `?`.
 
 Hazard Readiness is one label on a one-Hazard Gate. On a two-Hazard Gate (T2 on) it is each Hazard's own state
 (`{위험} {충분|대응|불안|취약}`), and the cell stays two lines tall, never a third: where there is room (desk) `환경 대응 ?` on
@@ -436,7 +438,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
 repeats, on one strip split by a thin divider, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
 Hazard, live as the readout reads it (§SALE — OUTLOOK BOXES / ENVIRONMENT METER) — the same values, never a second
-source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
+source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` words at the bottom right of the strip. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
 
@@ -2298,9 +2300,9 @@ by text inside the metadata line.
 → UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25. Runtime: `node tools/qa-strain-line.cjs` (in qa:runtime).
 
 PASS:
-- a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
-  under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
-- at 390, with the readout scrolled out of view, the forecast pin shows the same line under its two readings for the chain case
+- a customer departing injured with an injured-departure chain of {n} >= 1 shows `연속 부상 출발 {n}회` once inside the 전투 전망
+  box (390: chip beside the word; 1280: line under it), with the same {n} as the NPC detail row
+- at 390, with the readout scrolled out of view, the forecast pin shows the same words at the bottom right of its strip for the chain case
   and none for the healthy and first-injured cases (UI-Q-v29-24)
 - a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
 - the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`

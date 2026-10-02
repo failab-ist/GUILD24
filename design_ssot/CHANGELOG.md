@@ -26,6 +26,14 @@ and this table is their commit record.
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 
+## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
+
+- **연속 부상 출발 in the 전투 전망 box** (User: 이상한 데 있다 · 대성공처럼 전투 전망 밑에, 모바일은 버튼 · 플로팅은 우하단): the loose line
+  under the two boxes is gone. A phone shows a small muted-red chip beside the stamped word (the line kept for a screen reader; with
+  the 대성공 기회 tag too, the second chip wraps under the first); a desk shows a small line under the word. On the phone pin the words
+  sit at the bottom right of the strip, in the room the 환경 meter leaves. UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT /
+  §FORECAST PIN, COPY_AUDIT §4-25; test ui-guard.
+
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
 - **카리냐 → 카리냥** (User): renamed in place - the same F/021 portrait - in the shipped pool and the production name pool

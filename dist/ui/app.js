@@ -854,6 +854,10 @@ function readout(n,extra=null,cls=''){
     same margin the roll uses - so it moves as items are added. It says the attempt is worth
     chasing and nothing more: no percentage, no margin, no readiness score. */
  const signal=o.greatSignal;
+ /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
+    is said in the 전투 전망 box (v2.9.14 quick patch) - only for an injured departure with a chain behind it (the first adds
+    nothing), the NPC detail row's own wording and number. Words only; the % stays in the help. */
+ const strain=n.injury===1?Dungeon.injuredStreak(n.records):0,strainText='연속 부상 출발 '+strain+'회';
  /* Two forecasts, said apart. An expedition can fail two different ways - beaten in the fight,
     or worn down by the environment - and one blended verdict hides which. Both read their own
     canonical vocabulary: the fight is Dungeon.estimate (우세/접전/불리), the environment is the
@@ -875,8 +879,11 @@ function readout(n,extra=null,cls=''){
    +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span>'
    /* User 2026-10-02 (UI_UX §GREAT SUCCESS OPPORTUNITY SIGNAL): the signal lives in this box, not on a line of its own under the
       pair - a phone shows the short tag beside the word (the sentence stays for a screen reader), a desk the sentence under it */
-   +(signal?'<span class="gs-row"><b>'+o.combat+'</b><i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i></span>'
-     +'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'<b>'+o.combat+'</b>')+'</span>'
+   /* v2.9.14 quick patch (User 2026-10-02): the 연속 부상 출발 line joins it the same way - it is what raises this box's death % */
+   +(signal||strain?'<span class="gs-row"><b>'+o.combat+'</b>'+(strain?'<i class="st-tag" aria-hidden="true">'+E(strainText)+'</i>':'')
+     +(signal?'<i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i>':'')+'</span>'
+     +(strain?'<span class="ro-strain">'+E(strainText)+'</span>':'')+(signal?'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'')
+     :'<b>'+o.combat+'</b>')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
@@ -888,10 +895,6 @@ function readout(n,extra=null,cls=''){
   +(p.hazards.length?'<span class="fore ro-env env-each env-meter"><span class="ro-head">환경 대응'
    +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>'+envMeter(p,d,pre)+'</span>':'')
   +'</div>'
- /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
-    reads here - one thin line, only for an injured departure with a chain behind it (the first adds nothing), the NPC detail
-    row's own wording and number. Words only; the % stays in the help. */
- +(n.injury===1&&Dungeon.injuredStreak(n.records)>0?'<p class="strain">연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회</p>':'')
  /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
     `피로 N`, the counter tray lists a Food/Drink's own `피로 회복 N` row (no `피로 A → 출발 B` line), NIGHT answers the rest. */
   /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
@@ -1785,8 +1788,9 @@ function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=
  pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
   /* User 2026-10-02: one strip, the boxes' short names - `전투` | `환경` - so a preview still fits at 360 */
-  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore pin-plate env-meter">환경'+envMeter(p,d,pre)+'</span>':'')
-  +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
+  /* v2.9.14 quick patch (User 2026-10-02): the strain line sits at the bottom right of the strip, in the room the 환경 meter leaves */
+  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length||streak>0?'<span class="pin-fore pin-plate env-meter">'+(p.hazards.length?'환경'+envMeter(p,d,pre):'')
+   +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
