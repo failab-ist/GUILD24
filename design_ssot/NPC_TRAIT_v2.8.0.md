@@ -648,7 +648,7 @@ Full purchase formula -> ECONOMY_ORDER_v2.8.0.md.
 
 Within the ordinary returning-NPC selection branch, Loyalty multiplies that NPC's revisit weight by:
 
-    1 + Loyalty × 0.025
+    1 + Loyalty × 0.03        (User 2026-10-02; was 0.025)
 
 This combines with explicit current Trait / Store Support revisit modifiers and does not guarantee a visit.
 The introduced-vs-newcomer mixture is otherwise unchanged.
@@ -1180,7 +1180,7 @@ PASS:
 - purchase Loyalty remains separate
 - final Loyalty remains clamped 0–100
 - ordinary purchase formula receives +0.002 per Loyalty point
-- returning-NPC revisit weight includes ×(1 + Loyalty×0.025)
+- returning-NPC revisit weight includes ×(1 + Loyalty×0.03)
 - other explicit Trait/Store Support revisit modifiers compose once
 - Loyalty never guarantees a revisit
 

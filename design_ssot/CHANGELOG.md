@@ -89,6 +89,9 @@ and this table is their commit record.
   Final individual power all read it. Copy `위험 대응이 필요 수치를 넘긴 만큼 원정 전투력 +, 최대 +15%.` Id `opsRoom`; a save's
   `expeditionCert` is read as `opsRoom` on load. Unmeasured here (the all-support contribution run follows). RELIC §24 /
   REL-Q21, COPY_AUDIT §11-24, EVENT; tests relic-order, relic-effects, copy, revision.
+- **Loyalty weighs a little more on the revisit draw** (User: 단골도 3%로): the returning-NPC revisit weight is x(1 + Loyalty x 0.03)
+  (was 0.025). A 단골 (51) in a ten-adventurer pool comes about 41% of Days (was 39%); 평생 단골제 keeps its own +100% on top
+  (about 61%). NPC_TRAIT §Loyalty effect on revisit weighting.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
