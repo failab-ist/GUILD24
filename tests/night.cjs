@@ -1064,7 +1064,7 @@ test('RESULT-PROOF: an incident the bad-luck assist prevented is not put down to
  const gate=g.makeDungeon('spider',1),h=gate.hazards[0];
  const it=D.items.find(i=>(i.effects[h]||0)>0);
  const n0=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:[it.id],injury:0,fatigue:0,alive:true,recovery:0,records:[]}));
- const env=p=>Math.min(.48,Math.max(.02,.06+p.hazard*.012-p.effects.survival*.001));
+ const env=p=>Math.min(.60,Math.max(.02,.08+p.hazard*.020-p.effects.survival*.001));
  const assist=.5,withItem=env(Dungeon.prepare(n0(),gate,[]))*(1-assist),bare=env(Dungeon.prepare({...n0(),pack:[]},gate,[]));
  const roll=(bare*(1-assist)+bare)/2;
  assert.ok(roll>=withItem&&roll>=bare*(1-assist)&&roll<bare,'the roll lands where only the missing assist factor decides');

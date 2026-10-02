@@ -330,6 +330,8 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
 /* DUNGEON_HAZARD §GATE POWER — SUCCESS EASE (User 2026-10-02, v2.10.0): the whole Gate Power x .92 on DAY 1~7, x .90 from DAY 8 */
 const GATE_EASE={early:.92,late:.90,from:8},gateEase=day=>day>=GATE_EASE.from?GATE_EASE.late:GATE_EASE.early;
+/* DUNGEON_HAZARD environment incident (User 2026-10-02, v2.10.0: base .06 -> .08, gap .012 -> .020, cap .48 -> .60, floor kept) */
+const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; the Level
@@ -390,7 +392,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sAssist=ev.assist||0;
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
  const sCombatSuccess=sAbility*(1+sAssist)*sNoise>=d.power;
- const sEnvironment=clamp(.06+sp.hazard*.012-se.survival*.001,.02,.48)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
+ const sEnvironment=envChance(sp.hazard,se.survival)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
  const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-se.itemEscape-(d.scale||1)*.024-(ev.escapeCut||0),.15,.94);
  /* mirrors resolve()'s real order exactly: SUCCESS-vs-FAILURE first (never escape/injury
     evidence to decide THAT), then one Death roll immediately on entering failure, and only a
@@ -543,9 +545,9 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     incident chance; the prepared `ability` itself stays the true reading everywhere else
     (Great Success margin included). */
  const score=ability*(1+assist)*noise;const combatSuccess=score>=d.power;
- const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48)*(1-assist);
+ const envRoll=r.next(),environment=envChance(p.hazard,e.survival)*(1-assist);
  const affected=envRoll<environment;
- const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
+ const incidentWeights=[{key:'accident',weight:Math.max(ENV.floor,ENV.base-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*ENV.gap/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,bandRoll,rescued=false,deathChance=0,avoidedDeath=false;
  /* Today's Event, read once for the resolution (EVENT 24~55, v2.9.11): escapeCut / outcomeFatigue / xpMult / nightSaves */
@@ -709,7 +711,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money+=loot;
- if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<clamp(.06+bare.hazard*.012-bare.effects.survival*.001,.02,.48)*(1-assist);
+ if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<envChance(bare.hazard,bare.effects.survival)*(1-assist);
   /* structure only: which Hazards were actually mitigated and which carried Items did it.
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
@@ -738,5 +740,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

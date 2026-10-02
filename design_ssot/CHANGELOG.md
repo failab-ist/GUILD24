@@ -36,6 +36,9 @@ and this table is their commit record.
   × 0.90 from DAY 8 (SuccessEase, on the finished Gate Power, before the Event); expedition EXP × 1.2 (base 22 + Day × 4.6 →
   26.4 + Day × 5.52); potions 투력 하급 8 → 10 · 중급 14 → 18 · 상급 20 → 25 · 최상급 28 → 35, prices unchanged (대응 장비와 레벨이 위험을
   더 쉽게 넘기니 포션 값어치도 오른다). DUNGEON_HAZARD §GATE POWER / §Ordinary EXP, ITEM §ACTIVE CATALOG; tests night.
+- **Accidents rise with the counters** (User: 대응 장비 상한과 레벨 성장으로 위험을 쉽게 넘기니 사고 확률과 비율도 올린다): the
+  environment incident chance is 0.08 + Hazard aggregate × 0.020 − 강인함 × 0.001, clamped 2%~60% (was 0.06 · 0.012 · 2%~48%).
+  The incident-cause split reads the same base and gap coefficient. DUNGEON_HAZARD §Environment incident; tests night.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 

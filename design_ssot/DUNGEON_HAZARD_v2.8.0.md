@@ -668,11 +668,11 @@ Environment incident probability:
 
     environmentIncidentChance
     = clamp(
-        0.06
-        + hazardAggregate × 0.012
+        0.08
+        + hazardAggregate × 0.020
         - prepared 강인함 × 0.001,
         0.02,
-        0.48
+        0.60
       )
 
 When combat fails:
@@ -1735,7 +1735,7 @@ Supply/Fatigue runtime arithmetic follows the current owner truth.
 #### DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
 
 Controlled seeded cases must verify (no Supply-deficit row):
-- environment incident chance uses the exact closure formula and 2%–48% clamp
+- environment incident chance uses the exact closure formula and 2%–60% clamp
 - escape chance uses the exact closure formula and 15%–94% clamp
 - failed-combat Severe branch uses 36% base before current modifiers
 - environment/other Severe branch uses 11% base before current modifiers
