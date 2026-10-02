@@ -34,6 +34,10 @@ and this table is their commit record.
   and a 한파 / 독안개 Event gives a tier I Gate a second Hazard (a tier III Gate also holds two), so it could land on either. It is
   now keyed on the tier - the first tier II Gate that is not FIRE (FIRE II holds one Hazard). UI_UX §GATE TIER / FIRE GATE
   TUTORIAL, UI-Q-v29-52; test ui-guard.
+- **A closure day counts the Gate left open** (User: 폐쇄 사건 때 기존 게이트는 몇 명인지 안 나온다): the ORDER 오늘 line gave
+  per-Gate counts only with two open Gates, so a 게이트 임시 폐쇄 day read `4명 · 독거미 동굴 I · 북부 설원 폐허 I 오늘 폐쇄`. The open
+  Gate now carries its count beside the closed one: `4명 · 독거미 동굴 I 4 · 북부 설원 폐허 I 오늘 폐쇄`. ECONOMY_ORDER §VISITOR
+  FORECAST, COPY_AUDIT §4-21, UI-Q-v29-13; test ui-guard.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 

@@ -1618,7 +1618,8 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
- const counts=s.dungeons.length>=2?gateCounts():null;
+ /* User 2026-10-02: on a day an Event closed a Gate the one Gate left open also shows its count, beside the closed one */
+ const counts=s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null;
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
     seal carried no function or state - it filled the head's right margin and nothing else. The

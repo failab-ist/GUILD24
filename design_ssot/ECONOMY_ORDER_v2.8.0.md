@@ -450,7 +450,7 @@ Before order commitment show/readably expose:
 - warehouse usage / remaining capacity
 - current-day Gate / known Hazard
 - each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 대응 1 제공` (Gate detail)
-- visitor count per open Gate, only when two or more Gates are open (→ §VISITOR FORECAST)
+- visitor count per open Gate, only when two or more Gates are open or an Event closed one (→ §VISITOR FORECAST)
 - current Reroll cost/state
 - each offer's rarity name under the Item name
 - the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap
@@ -509,7 +509,8 @@ Exact visual layout is owned by `UI_UX_v2.8.0.md`.
 ## VISITOR FORECAST
 
 Before Sale (MORNING and ORDER): show expected visitor count.
-With two or more open Gates, also the count per open Gate, by the destination each customer claims.
+With two or more open Gates - or on a day an Event closed a Gate (User 2026-10-02), so the one left open is not read as the
+whole list - also the count per open Gate, by the destination each customer claims.
 
 Do not reveal before customer appearance:
 - name

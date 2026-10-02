@@ -3384,7 +3384,7 @@ test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count befor
   'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
- assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts only with two or more Gates');
+ assert.ok(/counts=s\.dungeons\.length>=2\|\|\(s\.closedGates\|\|\[\]\)\.length\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts with two or more Gates, or beside a closed Gate (User 2026-10-02)');
  const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
