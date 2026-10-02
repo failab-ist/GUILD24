@@ -191,7 +191,9 @@ draws a living adventurer takes).
 - the first Day, DAY 2 on, that an adventurer with an ordinary Injury can come (User 2026-10-02; once per Run): it comes
   first - one already coming moves to the front, else one takes the last returning visitor's place (its Gate and visit
   income as that visitor's; a new face seated today is never the one replaced) - and one 구급키트 joins the warehouse (HQ's,
-  like the opening stock). A Day with no one injured moves nothing and brings no 구급키트; the lesson waits. When it comes, that Day's ORDER marks it once (UI_UX §TUTORIAL — COACH DIET, COPY_AUDIT §3-12).
+  like the opening stock); the injured visitor also brings the kit's 정가 (160G) to spend this visit only (the nightly-cleared
+  extra-purchase channel, User 2026-10-02), so it can always pay for it. A Day with no one injured moves nothing and brings no
+  구급키트; the lesson waits. When it comes, that Day's ORDER marks it once (UI_UX §TUTORIAL — COACH DIET, COPY_AUDIT §3-12).
 - DAY 3: a returning visitor (not the injured one; a healthy one first) comes on payday: +200G to spend this visit
   only (the nightly-cleared extra-purchase channel), its first 150% offer it can pay for taken - once, every later one
   decided as any customer's (User 2026-10-02), its SALE mark on its wallet (COPY_AUDIT §3-13; it does not say the first is

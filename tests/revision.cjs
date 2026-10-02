@@ -614,6 +614,11 @@ test('first-Run lesson: the 구급키트 comes on the first Day an injured adven
  g=start();assert.equal(day(g,3,false).kits,0,'a DAY 3 with no one hurt brings nothing...');assert.ok(g.run.lessonPayday,'(the payday lesson still keeps DAY 3)');
  r=day(g,4,true);assert.equal(r.kits,1,'...and the first Day someone hurt comes, it does');assert.equal(g.run.lessonKitDay,4);
  g=start();g.run.firstRun=false;assert.equal(day(g,2,true).kits,0,'a later Run: nothing');
+ /* User 2026-10-02: the injured visitor brings the kit's 정가 for this visit (the nightly-cleared channel), lesson Day only */
+ g=start();r=day(g,2,true);const s=g.run;s.phase='sell';s.event=null;s.cursor=s.queue.indexOf(r.h.id);const before=r.h.money;g.arrive();
+ assert.equal(r.h.eventBudget,DATA.itemBy.kit.sell,'+'+DATA.itemBy.kit.sell+'G to spend this visit');assert.equal(r.h.money,before,'its own 소지금 untouched');
+ assert.ok(r.h.money+r.h.eventBudget>=g.interest(r.h,DATA.itemBy.kit,'full').debit,'so the kit at 정가 is always affordable');
+ s.day=3;r.h.eventBudget=0;g.arrive();assert.equal(r.h.eventBudget,0,'not on another Day');
 });
 test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급키트, and a payday customer for 150%',()=>{
  const setup=first=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=first;s.day=3;delete s.lessonDay3;delete s.lessonInjured;delete s.lessonKitDay;

@@ -444,7 +444,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   n.feast=dv.feast||0;}const ev=this.run.event?.effects||{};
   /* META §sign — 원정 지원금 간판 (User 2026-09-26, v2.9.7): the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
-  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0)+(this.run.firstRun&&n.lessonPayday===this.run.day?LESSON.paydayBudget:0);const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
+  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0)+(this.run.firstRun&&n.lessonPayday===this.run.day?LESSON.paydayBudget:0)
+  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the injured visitor of the kit lesson brings the kit's 정가 to spend this
+     visit, so the lesson is never lost to an empty purse */
+  +(this.run.firstRun&&n.id===this.run.lessonInjured&&(this.run.lessonKitDay??3)===this.run.day?D.itemBy.kit.sell:0);const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
