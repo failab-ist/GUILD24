@@ -602,8 +602,21 @@ test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death sett
  assert.equal(out({firstRun:true,day:2},2).o,'중상','DAY 2 too');
  assert.equal(out({firstRun:true,day:3},3).o,'사망','DAY 3 is an ordinary Day');
 });
+/* User 2026-10-02: the injured lesson waits for the first Day (DAY 2 on) someone injured can come, and runs once */
+test('first-Run lesson: the 구급키트 comes on the first Day an injured adventurer can come, once',()=>{
+ const day=(g,d,hurt)=>{const s=g.run;s.day=d;const [a,b,c,h]=s.npcs;for(const n of [a,b,c,h]){n.alive=true;n.injury=0;n.introduced=true;n.visits=2;}
+  if(hurt)h.injury=1;s.queue=[a.id,b.id,c.id];const kits=s.inventory.filter(u=>u.item==='kit').length;g.firstRunLessons();
+  return {kits:s.inventory.filter(u=>u.item==='kit').length-kits,first:s.queue[0],h};};
+ const start=()=>{const g=fresh('lesson-kit'),s=g.run;s.firstRun=true;for(const k of ['lessonDay3','lessonInjured','lessonKitDay','lessonPayday'])delete s[k];return g;};
+ let g=start(),r=day(g,2,true);assert.equal(r.kits,1,'DAY 2 with someone hurt: it comes on DAY 2');assert.equal(r.first,r.h.id,'the injured comes first');
+ assert.equal(g.run.lessonKitDay,2);assert.equal(day(g,3,true).kits,0,'and never again');
+ g=start();assert.equal(day(g,1,true).kits,0,'never on DAY 1 (no one can be hurt yet)');
+ g=start();assert.equal(day(g,3,false).kits,0,'a DAY 3 with no one hurt brings nothing...');assert.ok(g.run.lessonPayday,'(the payday lesson still keeps DAY 3)');
+ r=day(g,4,true);assert.equal(r.kits,1,'...and the first Day someone hurt comes, it does');assert.equal(g.run.lessonKitDay,4);
+ g=start();g.run.firstRun=false;assert.equal(day(g,2,true).kits,0,'a later Run: nothing');
+});
 test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급키트, and a payday customer for 150%',()=>{
- const setup=first=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=first;s.day=3;delete s.lessonDay3;
+ const setup=first=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=first;s.day=3;delete s.lessonDay3;delete s.lessonInjured;delete s.lessonKitDay;
   const [a,b,c,hurt]=s.npcs;for(const n of [a,b,c,hurt]){n.alive=true;n.injury=0;n.introduced=true;n.visits=2;delete n.lessonPayday;}
   hurt.injury=1;s.queue=[a.id,b.id,c.id];const kits=s.inventory.filter(u=>u.item==='kit').length;g.firstRunLessons();return {g,s,a,b,c,hurt,kits};};
  const t=setup(true);
@@ -622,7 +635,7 @@ test('first-Run lesson: DAY 3 brings an injured adventurer first with a 구급�
  assert.ok(unit,'a unit the payday customer can pay 150% for');{const id=unit.item;assert.equal(t.g.sell(unit.id,'overcharge'),true,'the first 150% sale goes through');assert.ok(pay.lessonPaydayTaken,'and spends the lesson');
   const next=t.g.run.inventory.find(u=>u.item!==id);assert.ok(next,'another SKU to offer');{t.s.firstRun=false;const plain=t.g.interest(pay,DATA.itemBy[next.item],'overcharge').chance;t.s.firstRun=true;
    assert.equal(t.g.interest(pay,DATA.itemBy[next.item],'overcharge').chance,plain,'a second 150% offer is an ordinary one - no +20%p');}}
- const mixed=(()=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=true;s.day=3;delete s.lessonDay3;const [a,b,c]=s.npcs;
+ const mixed=(()=>{const g=fresh('lesson-d3'),s=g.run;s.firstRun=true;s.day=3;delete s.lessonDay3;delete s.lessonInjured;delete s.lessonKitDay;const [a,b,c]=s.npcs;
   for(const n of [a,b,c]){n.alive=true;n.introduced=true;n.visits=2;delete n.lessonPayday;}a.injury=1;b.injury=1;c.injury=0;s.queue=[a.id,b.id,c.id];g.firstRunLessons();return {s,c};})();
  assert.equal(mixed.s.lessonPayday,mixed.c.id,'the payday customer is a healthy returning visitor when one is coming (User 2026-09-30)');
  const later=setup(false);assert.deepEqual(later.s.queue,[later.a.id,later.b.id,later.c.id],'a later Run: nothing moves');

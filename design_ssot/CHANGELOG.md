@@ -25,6 +25,14 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 
+## v2.9.13 quick patch 7 — the 구급키트 lesson waits for someone hurt (User 2026-10-02; the version stays 2.9.13)
+
+- **The first Day someone injured can come, not DAY 3 only**: a first Run whose DAY 3 had no one injured never met the
+  구급키트 lesson. Now it runs on the first Day, DAY 2 on, that an ordinarily injured adventurer can come (already coming, or
+  swapped in for the last returning visitor as before), once per Run (`lessonKitDay`); the ORDER `kit` mark follows that
+  Day. The payday customer stays on DAY 3. CORE_RUN §FIRST-RUN LESSONS / RUN-Q, COPY_AUDIT §3-12, UI_UX §TUTORIAL — COACH
+  DIET; tests revision, ui-guard.
+
 ## v2.9.13 quick patch 6 — the DAY 3 payday customer (User 2026-10-02, PR #45; the version stays 2.9.13)
 
 - **One sure 바가지 instead of +20%p**: the first Run's DAY 3 payday customer takes the first 150% offer it can pay for, once

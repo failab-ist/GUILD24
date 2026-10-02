@@ -177,7 +177,7 @@ Item identity/prices/effects -> `ITEM_v2.8.0.md`.
 
 The account's first Run - no Run settled yet (`account.runs` 0) - teaches by play, not by text: the situation leaves one
 sensible move, and the Night shows why it worked. Every later Run is the ordinary Run. Nothing here is shown as a
-tutorial except the DAY 3 HQ 구급키트 and payday customer, each told once by a mark (User 2026-10-02), and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then takes the
+tutorial except the HQ 구급키트 and the DAY 3 payday customer, each told once by a mark (User 2026-10-02), and no lesson adds a draw to the Run's own random stream (an adventurer a lesson keeps alive then takes the
 draws a living adventurer takes).
 
 - DAY 1: one Common Item that counters the first Gate's Hazard joins the warehouse after the DAY 0 pick (독 방진마스크 ·
@@ -188,10 +188,10 @@ draws a living adventurer takes).
   TUTORIAL).
 - DAY 1~2: no one dies. An expedition whose Death roll lands settles as 중상 instead (the ordinary 중상: the adventurer
   sits out and recovers). DAY 3 on is the ordinary Run.
-- DAY 3: an adventurer with an ordinary Injury comes first - one already coming moves to the front, else one takes the
-  last returning visitor's place (its Gate and visit income as that visitor's; a new face seated today is never the one
-  replaced) - and one 구급키트 joins the warehouse (HQ's, like the opening stock). With no one injured, nothing moves and
-  no 구급키트 comes. When it comes, that Day's ORDER marks it once (UI_UX §TUTORIAL — COACH DIET, COPY_AUDIT §3-12).
+- the first Day, DAY 2 on, that an adventurer with an ordinary Injury can come (User 2026-10-02; once per Run): it comes
+  first - one already coming moves to the front, else one takes the last returning visitor's place (its Gate and visit
+  income as that visitor's; a new face seated today is never the one replaced) - and one 구급키트 joins the warehouse (HQ's,
+  like the opening stock). A Day with no one injured moves nothing and brings no 구급키트; the lesson waits. When it comes, that Day's ORDER marks it once (UI_UX §TUTORIAL — COACH DIET, COPY_AUDIT §3-12).
 - DAY 3: a returning visitor (not the injured one; a healthy one first) comes on payday: +200G to spend this visit
   only (the nightly-cleared extra-purchase channel), its first 150% offer it can pay for taken - once, every later one
   decided as any customer's (User 2026-10-02), its SALE mark on its wallet (COPY_AUDIT §3-13; it does not say the first is
@@ -1276,8 +1276,8 @@ PASS:
 - an account with a settled Run: the four opening Items only
 - DAY 2 of the first Run: the Event is 본사 1+1 행사 (one offer carries the 1+1 promo); a later Run: no Event on DAY 2
 - a Death roll on DAY 1 or 2 of the first Run settles as 중상; DAY 3, and any Day of a later Run, settles as 사망
-- DAY 3 of the first Run with someone injured: the injured adventurer is the first visitor, one 구급키트 joined the
-  warehouse, the count of visitors is unchanged; a returning visitor is the payday customer - +200G this visit, its first
+- the first Run's first Day (DAY 2 on) with someone injured: the injured adventurer is the first visitor, one 구급키트
+  joined the warehouse, the count of visitors is unchanged, and never again that Run; DAY 3: a returning visitor is the payday customer - +200G this visit, its first
   affordable 150% offer taken and the next one an ordinary one, the §26-1 line; a later Run: none of it
 - the same seed gives the same Gates, visitors and stream on both
 - the measurement harness (`lessons=false`) plays the ordinary Run

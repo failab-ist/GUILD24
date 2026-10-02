@@ -3799,8 +3799,8 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
 /* User 2026-10-02: a warehouse cell says what its Item does - a tap toggles it (a hover on desk), in a balloon that points at
    that cell (it may cover the rack) and stays inside the screen */
 /* User 2026-10-02 / COPY_AUDIT §3-12: the first Run's DAY 3 HQ kit is told once, where it lands */
-test('first Run DAY 3: the HQ kit mark sits on its cell (desk) or the 창고 handle (phone), only that Day',()=>{
- assert.ok(app.includes("const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.day===3&&s.lessonInjured);};"),'only when the lesson brought the kit, on DAY 3 of the first Run');
+test('first Run: the HQ kit mark sits on its cell (desk) or the 창고 handle (phone), only on the Day it came',()=>{
+ assert.ok(app.includes("const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.lessonInjured&&(s.lessonKitDay??3)===s.day);};"),'only on the Day the lesson brought the kit, in the first Run');
  assert.ok(/const mark=kit&&it\.id==='kit'\?\(kit=false,' lesson-kit'\):'';/.test(fn('stockSlots')),'one cell carries it - the first kit cell');
  assert.ok(app.includes("['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit',"),'the ORDER mark anchors to the visible one');
 });

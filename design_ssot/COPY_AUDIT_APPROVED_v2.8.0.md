@@ -242,9 +242,9 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
-## 3-12. 본사 구급키트 (첫 판 DAY 3)
+## 3-12. 본사 구급키트 (첫 판, 부상 손님이 처음 오는 날)
 
-(규칙 owner CORE_RUN §FIRST-RUN LESSONS / UI_UX §TUTORIAL — COACH DIET. 계정 첫 판 DAY 3에 본사 구급키트가 왔을 때, 그날 발주
+(규칙 owner CORE_RUN §FIRST-RUN LESSONS / UI_UX §TUTORIAL — COACH DIET. 계정 첫 판에서 부상 손님이 처음 오는 날(DAY 2부터) 본사 구급키트가 왔을 때, 그날 발주
 화면의 그 칸(모바일은 `창고` 손잡이)에 한 번. 이미 온 선물을 알리는 안내라 상품 이름을 쓰는 유일한 코치다)
 
 **현재**
