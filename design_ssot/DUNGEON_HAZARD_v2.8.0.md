@@ -314,12 +314,11 @@ Full required Power (Source-exact):
 ```text
 Gate Power
 = (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
-× Event danger multiplier × (1 + (50 - region) × 0.001)
+× Event danger multiplier
 
 FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
 FamilyCombat = golemCombat 0.90 for golem, else 1
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
-region: 0..100, starts 50; each Night +2 per win, -4 per death, -1 per other result
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
