@@ -1312,8 +1312,9 @@ that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDI
 (acceptance -> UI_UX §QA UI-Q-v29-52.) Two contextual MORNING marks, like Deep: first time such a Gate is on the board, once per
 account, persisted and reset with the rest, anchored on that Gate's plate, rule only, never the answering Item (§READ THE
 SYSTEM):
-- a two-Hazard Gate (tier II and III; `DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, each pressing its own
-  Stat
+- the first tier II Gate that is not FIRE (`DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, each pressing its
+  own Stat. Keyed on the tier, not the Hazard count (User 2026-10-02): a tier I Gate an Event (한파 · 독안개) gave a second
+  Hazard, and a tier III Gate, never draw it
 - a FIRE Gate: one Hazard, higher required Combat Power (`DUNGEON_HAZARD` §FIRE second axis)
 - copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-10
 
@@ -2452,12 +2453,13 @@ FAIL: a pick or release possible while ordering, or a second muster on the order
 Verify UI_UX §GATE TIER / FIRE GATE TUTORIAL on MORNING at 390 and 1280, tutorial on.
 
 PASS:
-- the first board with a two-Hazard Gate shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.` on that
-  plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
+- the first board with a tier II Gate that is not FIRE shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.`
+  on that plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
 - each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks; neither names
   an Item
 
-FAIL: the two-Hazard mark on a FIRE II Gate (it holds one Hazard), or either mark on a closed Gate.
+FAIL: the II mark on a FIRE II Gate (it holds one Hazard), on a tier I Gate an Event gave a second Hazard, or on a tier III Gate
+before any tier II Gate; either mark on a closed Gate.
 
 #### UI-Q-v29-53 — COACH DIET (User 2026-09-30)
 

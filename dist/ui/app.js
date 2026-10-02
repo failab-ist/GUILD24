@@ -712,8 +712,9 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
    MORNING calls it with the Gate alone: handed to .map directly, the array index arrived as `full`
    and every Gate after the first printed the Gate-detail sentence (User 2026-09-25). */
 function gatePlate(d,full=false){const b=sigilOf(d);
- /* data-hazards / data-family: the anchors of the two Gate lessons (a two-Hazard Gate, a FIRE Gate); no style reads them */
- return '<article class="slip gate" data-hazards="'+d.hazards.length+'" data-family="'+E(d.family||'')+'" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
+ /* data-tier / data-family: the anchors of the two Gate lessons (a tier II Gate, a FIRE Gate); no style reads them. User 2026-10-02:
+    the tier, not the Hazard count - a 한파 / 독안개 Event adds a Hazard to a tier I Gate, which then held two and drew the II mark */
+ return '<article class="slip gate" data-tier="'+(d.tier||1)+'" data-family="'+E(d.family||'')+'" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
    +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game),d).map(h=>full
@@ -1279,7 +1280,8 @@ const coachSteps={
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   /* UI_UX §FIRST EVENT TUTORIAL (User 2026-10-01): the first Event slip on the board, once per account (the first Run's DAY 2) */
   ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.'],
-  ['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
+  /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one Hazard) */
+  ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.'],
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */

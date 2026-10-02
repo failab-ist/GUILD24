@@ -1823,11 +1823,11 @@ test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */
 test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verbatim, the rule only',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- assert.ok(morning.includes(`['gatepair','.slip.gate[data-hazards="2"]','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.']`),'COPY_AUDIT §3-10 two-Hazard mark');
+ assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
  assert.ok(morning.includes(`['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']`),'COPY_AUDIT §3-10 FIRE mark');
  const gp=fn('gatePlate');
- assert.ok(/data-hazards="'\+d\.hazards\.length\+'" data-family="'\+E\(d\.family\|\|''\)\+'"/.test(gp),'the plate carries its Hazard count and Family');
- assert.ok(!/data-hazards|data-family/.test(fn('closedPlate')),'a closed Gate carries neither anchor');
+ assert.ok(/data-tier="'\+\(d\.tier\|\|1\)\+'" data-family="'\+E\(d\.family\|\|''\)\+'"/.test(gp),'the plate carries its tier and Family - not its Hazard count, which an Event can raise on a tier I Gate (User 2026-10-02)');
+ assert.ok(!/data-tier|data-family/.test(fn('closedPlate')),'a closed Gate carries neither anchor');
  // a FIRE Gate of any tier holds one Hazard, so the two-Hazard mark can never land on it
  for(const tier of [1,2,3])assert.equal(DATA.familyTiers.golem[tier-1].length,1,'FIRE tier '+tier+' is one Hazard');
  for(const f of ['spider','slime','crypt','snow'])assert.deepEqual(DATA.familyTiers[f].map(h=>h.length),[1,2,2],f+': II and III carry two');

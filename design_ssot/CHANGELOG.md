@@ -30,6 +30,10 @@ and this table is their commit record.
 - **카리냐 → 카리냥** (User): renamed in place - the same F/021 portrait - in the shipped pool and the production name pool
   (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the F NAME_INDEX, the id mapping, their checksums). A Run saved earlier
   carries the new name on load (`Save.migrate`), so that customer keeps the portrait; test revision.
+- **The II Gate mark only on a tier II Gate** (User: 실제 티어2가 아닌데 이 코치가 나오네): the mark was keyed on a two-Hazard plate,
+  and a 한파 / 독안개 Event gives a tier I Gate a second Hazard (a tier III Gate also holds two), so it could land on either. It is
+  now keyed on the tier - the first tier II Gate that is not FIRE (FIRE II holds one Hazard). UI_UX §GATE TIER / FIRE GATE
+  TUTORIAL, UI-Q-v29-52; test ui-guard.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
