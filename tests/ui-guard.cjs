@@ -3798,9 +3798,19 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
 
 /* User 2026-10-02: a warehouse cell says what its Item does - a tap toggles it (a hover on desk), in a balloon that points at
    that cell (it may cover the rack) and stays inside the screen */
+/* User 2026-10-02: the phone ORDER dock is one slim row - the 창고 key beside the Action(s), all 48 px */
+test('ORDER phone dock: one slim row - the 창고 key and the Action(s) at 48 px, no head line in the sheet',()=>{
+ const css=read('dist/ui/ui.css'),m=css.slice(css.indexOf('the phone ORDER dock is one slim row'));
+ assert.ok(/\.p-order \.dock\{flex-wrap:nowrap;/.test(m),'one row');
+ assert.ok(/\.p-order \.dock \.stock-handle\{position:relative;flex:0 0 64px;[^}]*min-height:48px;/.test(m),'the handle is a compact 48 px key');
+ assert.ok(/\.p-order \.dock \.stock-handle em\{display:none\}/.test(m),'K종 / 본사 기본 상품 stay on the desk head');
+ assert.ok(/\.p-order \.dock \.stamp\{flex:2 1 0;min-width:0;min-height:48px;[^}]*drop-shadow\(3px 3px 0/.test(m)&&/\.p-order \.dock \.stamp:active\{transform:translate\(2px,2px\)/.test(m),'48 px Actions on a 3 px cast, pressed by the depth less 1 px');
+ assert.ok(!/sheet-head/.test(app)&&/'<section class="stock-sheet" id="stock-sheet" aria-label="창고"'\+\(open\?'':' hidden'\)\+'>'\+stockSlots\(\)/.test(app),'the open sheet is the cells alone');
+});
+
 /* User 2026-10-02 / COPY_AUDIT §3-12: the first Run's DAY 3 HQ kit is told once, where it lands */
-test('first Run DAY 3: the HQ kit mark sits on its cell (desk) or the 창고 handle (phone), only that Day',()=>{
- assert.ok(app.includes("const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.day===3&&s.lessonInjured);};"),'only when the lesson brought the kit, on DAY 3 of the first Run');
+test('first Run: the HQ kit mark sits on its cell (desk) or the 창고 handle (phone), only on the Day it came',()=>{
+ assert.ok(app.includes("const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.lessonInjured&&(s.lessonKitDay??3)===s.day);};"),'only on the Day the lesson brought the kit, in the first Run');
  assert.ok(/const mark=kit&&it\.id==='kit'\?\(kit=false,' lesson-kit'\):'';/.test(fn('stockSlots')),'one cell carries it - the first kit cell');
  assert.ok(app.includes("['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit',"),'the ORDER mark anchors to the visible one');
 });

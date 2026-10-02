@@ -1503,9 +1503,10 @@ function statGrid(n){
    are the room left. The icon is the one the offer rows show; the Item's name is the cell's reader label. */
 /* User 2026-10-01: on a phone only the held units are drawn, so the sheet is as many rows as they need (one while they fit) and
    the room left reads in the head's `N / M칸`; the desk column has the room, so it shows every 칸 with the empty ones (`full`) */
-/* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 구급키트 from HQ is told once - the ORDER `kit` mark sits
-   on its cell (desk) or the 창고 handle (phone, where the sheet starts folded) */
-const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.day===3&&s.lessonInjured);};
+/* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's 구급키트 from HQ - on the first Day someone injured comes - is
+   told once that Day: the ORDER `kit` mark sits on its cell (desk) or the 창고 handle (phone, where the sheet starts folded).
+   A save from before `lessonKitDay` had the lesson on DAY 3. */
+const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.lessonInjured&&(s.lessonKitDay??3)===s.day);};
 function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];let kit=lessonKit();
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,

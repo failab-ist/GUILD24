@@ -201,20 +201,23 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(s.day===1&&!s.lessonCounter){const h=s.dungeons[0]?.hazards?.[0],it=h&&D.items.find(i=>i.rarity===0&&!i.metaUnlock&&(i.effects[h]||0)>0);
    /* the stock id draws from a stream of its own, so the Run's stream - every later Gate, visitor and roll - is untouched */
    if(it){const main=this.rng;this.rng=new G.RNG(s.seed+':lesson');try{this.stock(it.id,1);}finally{this.rng=main;}s.lessonCounter=it.id;}}
-  /* DAY 3: an injured adventurer comes first, with a 구급키트 in the warehouse (HQ's, like the opening stock); a returning
-     customer comes on payday - an extra 200G for this visit and a readier ear for 바가지 (arrive / interest). Draws come from
+  /* The first Day an ordinarily injured adventurer can come (DAY 2 on; User 2026-10-02 - it was DAY 3 only, and a DAY 3 with no
+     one hurt never taught it): it comes first, with a 구급키트 in the warehouse (HQ's, like the opening stock). DAY 3: a
+     returning customer comes on payday - an extra 200G for this visit and one sure 바가지 (arrive / interest). Draws come from
      a stream of their own; the Day's count of visitors is unchanged. */
-  if(s.day===3&&!s.lessonDay3){s.lessonDay3=true;const lr=new G.RNG(s.seed+':lesson3');
+  if(s.day>=2&&!s.lessonInjured){const lr=new G.RNG(s.seed+':lesson3');
    let inj=s.queue.map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.alive&&n.injury===1);
    if(!inj&&s.queue.length){const cand=s.npcs.find(n=>n.alive&&n.injury===1&&n.introduced&&!s.queue.includes(n.id));
     /* the swap takes the last returning visitor's seat - a new face the Day (or an Event) seated is never the one sent home */
     const out=cand&&[...s.queue].reverse().map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.introduced);
     if(out){cand.destination=out.destination;cand.claimedDestination=out.claimedDestination;cand.destinationFinal=true;
      cand.money=Math.min(2000,Math.round(cand.money+cand.level*8+lr.int(0,80)));cand.newToday=false;s.queue[s.queue.indexOf(out.id)]=cand.id;inj=cand;}}
-   if(inj){s.queue=[inj.id,...s.queue.filter(id=>id!==inj.id)];s.lessonInjured=inj.id;
-    const main=this.rng;this.rng=lr;try{this.stock('kit',1);}finally{this.rng=main;}}
+   if(inj){s.queue=[inj.id,...s.queue.filter(id=>id!==inj.id)];s.lessonInjured=inj.id;s.lessonKitDay=s.day;
+    const main=this.rng;this.rng=lr;try{this.stock('kit',1);}finally{this.rng=main;}}}
+  if(s.day===3&&!s.lessonDay3){s.lessonDay3=true;
    /* a healthy returning visitor first (User 2026-09-30), so the payday lesson never reads as a second injury lesson */
-   const back=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.introduced&&n.id!==s.lessonInjured),pay=back.find(n=>!n.injury)||back[0];
+   const hurt=s.lessonKitDay===s.day?s.lessonInjured:null;
+   const back=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.introduced&&n.id!==hurt),pay=back.find(n=>!n.injury)||back[0];
    if(pay){pay.lessonPayday=s.day;s.lessonPayday=pay.id;}}
  }
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the

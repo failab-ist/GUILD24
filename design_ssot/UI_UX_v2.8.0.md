@@ -138,7 +138,9 @@ hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's l
   `kind · rarity`, the effects (up to 3) - in one balloon right above its cell (below when there is no room), its point on
   that cell, which is outlined; it may cover the rack and the form, stays inside the screen, and closes on scroll, resize or a redraw.
 - Desk (1024 px and wider): 발주서 left, an always-open rack right, following the scroll, below the menu pin.
-- Phone: a slim `창고 N / M칸 · K종` handle as a dock row (never covers an offer row) opens the rack as a sheet rising from the
+- Phone (User 2026-10-02): the dock is one slim row - a compact `창고` key (`창고` over `N / M칸`, the arrow in its corner; `K종`
+  and `본사 기본 상품` are the desk head's alone, and the open sheet adds no head) left of the Action(s), never covering an offer
+  row - and the key opens the rack as a sheet rising from the
   dock, at most 45% of the screen, own scroll. It neither dims nor locks the form (rows above take taps; rows under it can be
   scrolled above it); only the handle (`열기` / `닫기`) or Escape closes it (a quantity tap keeps it open). Open/folded → §ORDER — WAREHOUSE DISCLOSURE.
 - ORDER CONFIRM's crates drop into the new cells of the visible rack (an open phone sheet that gains a row grows to its new
@@ -1171,7 +1173,8 @@ colour, silhouette and place vary by Phase.
 - the one pair: on D30's last order `원정대 후보 보기` shares the gate bar with `원정대 선택` (a view, not a second flow
   Action), both on one smaller row on a phone
 - depth 5 px across a boundary, 4 px inside the Day, `손님 보내기` 3 px (under the price keys, §SALE — COUNTER TRAY);
-  `발주 확정` and `영업 시작` are never enabled together and share the 4 px
+  `발주 확정` and `영업 시작` are never enabled together and share the 4 px - on a phone ORDER's slim dock row (User 2026-10-02)
+  sets both, and the `창고` key, at 48 px (Android's touch target) with a 3 px cast, a 2 px lit top and a 3 px foot, labels 15 px
 - edges: inside-the-Day Actions are a face with a lit top edge and a deep foot edge, no outline, the label dropped in that
   edge's ink (ORDER's frost is the lit edge of both its Actions); NIGHT `다음` is a flat plane (no bevel); boundary Actions keep
   their heavier bevel
@@ -1246,13 +1249,14 @@ returning-customer mark (tap opens the notebook) the first returning customer. N
 (acceptance -> UI_UX §QA UI-Q-v29-53.) One rule, one place: a mark only where the rule must be known before the decision and no
 screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL), the first Event (§FIRST EVENT TUTORIAL) and II / FIRE
-  Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the first Run's DAY 3, the HQ 구급키트 (its cell on
+  Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and outlook; SALE Bag (after the first sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
-- one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
+- one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
+  `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
 - after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
 
 ### SALE PRICE LESSONS (v2.9.12)
@@ -2307,8 +2311,8 @@ SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작
 
 PASS:
 - per → UI_UX §PRIMARY ACTION GRAMMAR: equal right and down depth - 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 / the
-  gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음, 3 px for 손님 보내기; heights 56 px (phone) / 60 px (desk) inside the
-  Day, 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
+  gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음 (3 px for ORDER's phone row), 3 px for 손님 보내기; heights 56 px (phone) /
+  60 px (desk) inside the Day (ORDER's phone row 48 px), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
   no outline (NIGHT flat), labels on a 2 px drop; each Phase keeps its own face (wood / steel on paper with a frost edge / counter
   key / muted cobalt / BRICK / gate bar); `영업 시작` and `발주 확정` share the steel face and frost edge; `첫 점포지원 고르기`,
   `다음 날` and `다음 점포 열기` the same BRICK build (only the rivets differ)
@@ -2429,7 +2433,8 @@ scrolls, clear of the menu pin; phone: the `창고` handle on the dock covers no
 account starts folded and the next Day keeps the choice; handle, sheet and column read as one steel rack apart from the floating
 box and the paper, no decorative stripe or stacked frame (PRESENTATION §Edge / material); desk: one cell per slot, empty cells equal the room
 left; phone: a cell per held unit, no empty cells, the sheet's rows only what the stock needs; the rack equals the warehouse; a cell's
-tip points at that cell, inside the screen with no page overflow, and a second tap closes it; no console or runtime error.
+tip points at that cell, inside the screen with no page overflow, and a second tap closes it; phone: the dock is one row (the
+`창고` key and the Action(s), 48 px), the open sheet has no head line; no console or runtime error.
 FAIL: the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a quantity
 tap closes it; a second copy of the warehouse on screen.
 
