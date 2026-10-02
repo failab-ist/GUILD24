@@ -34,6 +34,10 @@ and this table is their commit record.
   ride at the bottom right of the strip as the same chips, with the 대성공 기회 chip, stacked when both show (User: 플로팅도 버튼 디자인 · 겹치지
   않게; the deployed pin drew the line over the meter). UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT /
   §FORECAST PIN, COPY_AUDIT §4-25; test ui-guard.
+- **A rescue stays open past zero** (User: 적자만 넘기면 끝나서, 그 돈으로는 발주에서 살 게 없다): 재고 정리 still starts only on a short
+  Closing and still counts one of the three rescues, but once started that Closing may keep clearing stock after the till
+  reaches zero, until 다음 날. The CLOSING dock keeps its 재고 정리 key while the started rescue is open; the stock sheet says so.
+  tests integration.
 - **The early Counter rungs rise** (User: 초반 버티기가 쉽지 않다 · 하이브리드 버프, B안 - 순서 유지): 초반 대응 10 -> 12 (컵라면 냉기, 얼음컵
   화염, 중화 탄산수 부식, 집중 사탕 공포, 방진마스크 독); 초반 하이브리드 9 / 10 -> 11 / 12 on the first / second Hazard (방한 두건
   냉기 11 · 화이트아웃 13, 방독 작업장갑 독 11 · 속박 12, 축성 손전등 공포 11 · 어둠 12, 방수망토 부식 11 · 진창 12). The ladder order

@@ -685,20 +685,23 @@ test('RESCUE: clearing stock is a short-Closing action, priced at what that stoc
  assert.equal(s.rescueUsed,1,'one short Closing is one rescue');
 });
 
-test('RESCUE: it ends the moment the till reaches zero, and three Closings is the whole Run',()=>{
+test('RESCUE: once started it stays open past zero for that Closing, and three Closings is the whole Run',()=>{
  const g=fresh('rescue-cap'),s=g.run;
  for(let i=0;i<12;i++)g.stock('ramen',1);
  s.phase='closing';s.money=-10;
  const ids=s.inventory.map(x=>x.id);
  assert.equal(g.liquidate(ids[0]),true,'the first clears the deficit');
  assert.ok(s.money>=0);
- assert.equal(g.liquidate(ids[1]),false,'and nothing more may be sold once it is square');
+ /* v2.9.14 quick patch (User 2026-10-02): selling only to zero left nothing to order with - the started rescue stays open */
+ assert.equal(g.liquidate(ids[1]),true,'the same Closing may keep clearing past zero');
+ assert.equal(s.rescueUsed,1,'and it is still one rescue');
 
  /* The Closing above was the first rescue, so two remain; the one after that is refused with
     stock still on the shelf. */
  for(const day of [4,5]){s.day=day;s.money=-10;
   assert.equal(g.liquidate(s.inventory[0].id),true,'rescue on DAY '+day);}
  assert.equal(s.rescueUsed,DATA.balance.rescueLimit);
+ s.day=6;s.money=50;assert.equal(g.liquidate(s.inventory[0].id),false,'a square Closing that started no rescue clears nothing');
  s.day=7;s.money=-10;
  assert.equal(g.liquidate(s.inventory[0].id),false,'the fourth is refused');
  assert.ok(s.inventory.length,'with stock still on the shelf');

@@ -40,14 +40,15 @@ P.reroll=function(){const s=this.run;if(!['order','final'].includes(s.phase))thr
 /* 재고 정리 is an emergency, not a savings account. It exists so a Closing that came up short
    makes the player decide what to give up, and it stops being available the moment the till is
    square again. The rules are enforced here rather than in the UI: CLOSING only, only while the
-   till is short, at half of what THAT stock actually cost to buy, and at most three separate
-   deficit Closings per Run. One rescue is one such Closing - inside it any number of items may
-   go until the till reaches zero. When the third is spent and the till is short again, the store
-   closes with stock still on the shelf. */
+   till is short to start it, at half of what THAT stock actually cost to buy, and at most three
+   separate deficit Closings per Run. One rescue is one such Closing - inside it any number of
+   items may go, and it stays open past zero until the Closing ends (v2.9.14 quick patch, User
+   2026-10-02: selling only to zero left no Gold to order with). When the third is spent and the
+   till is short again, the store closes with stock still on the shelf. */
 P.rescueLimit=function(){return D.balance.rescueLimit;};
 P.canRescue=function(){const s=this.run;
- return s.phase==='closing'&&s.money<0&&
-  ((s.rescueDay===s.day)||(s.rescueUsed||0)<this.rescueLimit());};
+ return s.phase==='closing'&&
+  (s.rescueDay===s.day||(s.money<0&&(s.rescueUsed||0)<this.rescueLimit()));};
 P.liquidate=function(stockId){const s=this.run;
  if(!this.canRescue())return false;
  const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)return false;
