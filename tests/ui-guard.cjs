@@ -2014,7 +2014,8 @@ test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and
  assert.ok(p.includes("streak=n.injury===1?Dungeon.injuredStreak(n.records):0"),'injured only, the same injuredStreak');
  assert.ok(p.includes("(streak>0?'<i class=\"st-tag\">연속 부상 출발 '+streak+'회</i>':'')"),'a chain of 1 or more, the readout wording, as the readout chip');
  assert.ok(p.includes("(o.greatSignal?'<i class=\"gs-tag\">'+E(Copy.great.tag)+'</i>':'')"),'the 대성공 기회 chip rides with it (v2.9.14 quick patch)');
- assert.ok(/\.forecast-pin \.pin-plate \.pin-tags\{display:flex;flex-direction:column;align-items:flex-end;[^}]*margin-left:auto;align-self:flex-end/.test(css),'stacked at the bottom right of the strip (v2.9.14 quick patch)');
+ assert.ok(/\.forecast-pin \.pin-plate \.pin-tags\{display:flex;flex-direction:column;align-items:flex-end;[^}]*margin-left:auto;align-self:center/.test(css)
+  &&/\.forecast-pin \.pin-plate\.env-meter:has\(\.pin-tags\)\{flex-wrap:nowrap/.test(css),'stacked at the right of the meter, never growing the strip (v2.9.14 quick patch)');
  assert.ok(p.indexOf('pin-tags')<p.indexOf('pin-chip')&&p.indexOf('pin-tags')>p.indexOf('pin-full'),'inside the full line, not the folded chip');
  assert.ok(/\.forecast-pin \.st-tag\{padding:2px 5px;font:600 11px/.test(css),'the readout chip\'s own look');
 });
