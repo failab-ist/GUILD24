@@ -3798,13 +3798,13 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
 
 /* User 2026-10-02: a warehouse cell says what its Item does - a tap toggles it (a hover on desk), in a balloon that points at
    that cell (it may cover the rack) and stays inside the screen */
-/* User 2026-10-02: the phone ORDER dock is one slim row - the 창고 key beside the Action(s), all 44 px */
-test('ORDER phone dock: one slim row - the 창고 key and the Action(s) at 44 px, no head line in the sheet',()=>{
+/* User 2026-10-02: the phone ORDER dock is one slim row - the 창고 key beside the Action(s), all 48 px */
+test('ORDER phone dock: one slim row - the 창고 key and the Action(s) at 48 px, no head line in the sheet',()=>{
  const css=read('dist/ui/ui.css'),m=css.slice(css.indexOf('the phone ORDER dock is one slim row'));
  assert.ok(/\.p-order \.dock\{flex-wrap:nowrap;/.test(m),'one row');
- assert.ok(/\.p-order \.dock \.stock-handle\{position:relative;flex:0 0 64px;[^}]*min-height:44px;/.test(m),'the handle is a compact 44 px key');
+ assert.ok(/\.p-order \.dock \.stock-handle\{position:relative;flex:0 0 64px;[^}]*min-height:48px;/.test(m),'the handle is a compact 48 px key');
  assert.ok(/\.p-order \.dock \.stock-handle em\{display:none\}/.test(m),'K종 / 본사 기본 상품 stay on the desk head');
- assert.ok(/\.p-order \.dock \.stamp\{flex:2 1 0;min-width:0;min-height:44px;[^}]*drop-shadow\(3px 3px 0/.test(m)&&/\.p-order \.dock \.stamp:active\{transform:translate\(2px,2px\)/.test(m),'44 px Actions on a 3 px cast, pressed by the depth less 1 px');
+ assert.ok(/\.p-order \.dock \.stamp\{flex:2 1 0;min-width:0;min-height:48px;[^}]*drop-shadow\(3px 3px 0/.test(m)&&/\.p-order \.dock \.stamp:active\{transform:translate\(2px,2px\)/.test(m),'48 px Actions on a 3 px cast, pressed by the depth less 1 px');
  assert.ok(!/sheet-head/.test(app)&&/'<section class="stock-sheet" id="stock-sheet" aria-label="창고"'\+\(open\?'':' hidden'\)\+'>'\+stockSlots\(\)/.test(app),'the open sheet is the cells alone');
 });
 

@@ -1174,7 +1174,7 @@ colour, silhouette and place vary by Phase.
   Action), both on one smaller row on a phone
 - depth 5 px across a boundary, 4 px inside the Day, `손님 보내기` 3 px (under the price keys, §SALE — COUNTER TRAY);
   `발주 확정` and `영업 시작` are never enabled together and share the 4 px - on a phone ORDER's slim dock row (User 2026-10-02)
-  sets both, and the `창고` key, at 44 px with a 3 px cast, a 2 px lit top and a 3 px foot, labels 15 px
+  sets both, and the `창고` key, at 48 px (Android's touch target) with a 3 px cast, a 2 px lit top and a 3 px foot, labels 15 px
 - edges: inside-the-Day Actions are a face with a lit top edge and a deep foot edge, no outline, the label dropped in that
   edge's ink (ORDER's frost is the lit edge of both its Actions); NIGHT `다음` is a flat plane (no bevel); boundary Actions keep
   their heavier bevel
@@ -2312,7 +2312,7 @@ SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작
 PASS:
 - per → UI_UX §PRIMARY ACTION GRAMMAR: equal right and down depth - 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 / the
   gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음 (3 px for ORDER's phone row), 3 px for 손님 보내기; heights 56 px (phone) /
-  60 px (desk) inside the Day (ORDER's phone row 44 px), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
+  60 px (desk) inside the Day (ORDER's phone row 48 px), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
   no outline (NIGHT flat), labels on a 2 px drop; each Phase keeps its own face (wood / steel on paper with a frost edge / counter
   key / muted cobalt / BRICK / gate bar); `영업 시작` and `발주 확정` share the steel face and frost edge; `첫 점포지원 고르기`,
   `다음 날` and `다음 점포 열기` the same BRICK build (only the rivets differ)
@@ -2434,7 +2434,7 @@ account starts folded and the next Day keeps the choice; handle, sheet and colum
 box and the paper, no decorative stripe or stacked frame (PRESENTATION §Edge / material); desk: one cell per slot, empty cells equal the room
 left; phone: a cell per held unit, no empty cells, the sheet's rows only what the stock needs; the rack equals the warehouse; a cell's
 tip points at that cell, inside the screen with no page overflow, and a second tap closes it; phone: the dock is one row (the
-`창고` key and the Action(s), 44 px), the open sheet has no head line; no console or runtime error.
+`창고` key and the Action(s), 48 px), the open sheet has no head line; no console or runtime error.
 FAIL: the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a quantity
 tap closes it; a second copy of the warehouse on screen.
 
