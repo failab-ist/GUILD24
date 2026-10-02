@@ -872,7 +872,11 @@ function readout(n,extra=null,cls=''){
      second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
      Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
      ends in death. The NPC detail states it too (§5-7). */
-   +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span><b>'+o.combat+'</b></span>'
+   +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span>'
+   /* User 2026-10-02 (UI_UX §GREAT SUCCESS OPPORTUNITY SIGNAL): the signal lives in this box, not on a line of its own under the
+      pair - a phone shows the short tag beside the word (the sentence stays for a screen reader), a desk the sentence under it */
+   +(signal?'<span class="gs-row"><b>'+o.combat+'</b><i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i></span>'
+     +'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'<b>'+o.combat+'</b>')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
@@ -890,8 +894,7 @@ function readout(n,extra=null,cls=''){
  +(n.injury===1&&Dungeon.injuredStreak(n.records)>0?'<p class="strain">연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회</p>':'')
  /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
     `피로 N`, the counter tray lists a Food/Drink's own `피로 회복 N` row (no `피로 A → 출발 B` line), NIGHT answers the rest. */
- +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
- /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
+  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
     where the destination is named instead of meeting a second, differently-worded copy of it
     inside the outlook. The outlook keeps only what is about the expedition as a whole:

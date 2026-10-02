@@ -721,6 +721,10 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.equal(Copy.great.signal,'대성공을 노려볼 만합니다.','the exact signal is the locked string');
  assert.ok(app.includes('Copy.great.signal'),'the screen prints that string rather than its own');
  assert.ok(!/노려볼 만합니다/.test(app.replace('Copy.great.signal','')),'no second copy of the wording');
+ /* User 2026-10-02: inside the 전투 전망 box - a phone's quiet tag beside the word, the sentence kept for a screen reader */
+ assert.equal(Copy.great.tag,'대성공 기회','the phone tag is the approved short form');
+ assert.ok(/<b>'\+o\.combat\+'<\/b><i class="gs-tag" aria-hidden="true">'\+E\(Copy\.great\.tag\)/.test(app),'the tag sits beside the word and is not read twice');
+ assert.ok(/\.readout\.ro2 \.great-signal\{position:absolute;width:1px/.test(css)&&/@media\(min-width:1024px\)\{\n \.readout\.ro2 \.gs-tag\{display:none\}/.test(css),'phone: tag shown, sentence screen-reader only; desk: sentence shown, no tag');
  /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY names a Great Success signal CHANGE as one of
     the hypothetical answers the decision surface may not show, so the screen now reads the
     signal off the frozen SALE-entry snapshot. It is still the engine's calculation - the
@@ -1993,7 +1997,7 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
    readout .top, only for an injured departure with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
 test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail number, no %',()=>{
  const r=fn('readout'),top=r.indexOf("+'</div>'"),line=r.indexOf('class="strain"');
- assert.ok(top>0&&line>top&&line<r.indexOf('great-signal'),'directly under the readout .top');
+ assert.ok(top>0&&line>top&&r.indexOf('great-signal')<top,'directly under the readout .top (the Great Success signal sits inside it)');
  assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
  assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
  assert.equal((r.match(/<span class="fore ro-(?:combat|env)/g)||[]).length,2,'the .top still holds the two boxes (전투 전망 and the 환경 대응 meter)');
@@ -2452,7 +2456,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
  assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.']`)
   &&steps.includes(`['envmeter','.readout .ro-env','환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.']`)
-  &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/<b>'\+o\.combat\+'<\/b><\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
+  &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */

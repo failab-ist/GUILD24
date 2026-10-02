@@ -3610,3 +3610,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:4px 9px 5px;gap:2px}
 .readout.ro2 .env-meter-list{row-gap:0}
 .readout.ro2 .top b.env-num{line-height:16px}
+/* the Great Success signal inside the 전투 전망 box (User 2026-10-02): a phone shows a quiet tag beside the word and keeps the
+   sentence for a screen reader only; a desk shows the sentence under the word and no tag */
+.readout.ro2 .gs-row{display:flex;align-items:center;gap:8px;min-width:0}
+.readout.ro2 .top .ro-combat .gs-row>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
+.readout.ro2 .gs-tag{padding:2px 5px;font:600 11px/1.2 var(--ui);font-style:normal;color:#d9bf78;background:#2e2410;
+ box-shadow:inset 0 0 0 1px #6b5428;white-space:nowrap}
+.readout.ro2 .great-signal{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+@media(min-width:1024px){
+ .readout.ro2 .gs-tag{display:none}
+ .readout.ro2 .great-signal{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;
+  font:600 12px/1.3 var(--ui);color:#e6c766}}

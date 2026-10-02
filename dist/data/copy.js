@@ -271,7 +271,7 @@ Copy.boss={
    to 긴급의뢰 / 특별원정 / 고난도 의뢰. The sponsorship is a Store Gold sink, never a deposit,
    so nothing here may promise it back. The Deep voice says what the Store gets - the
    adventurer's growth - and never a cash payout, 대성공 included. */
-Copy.great={signal:'대성공을 노려볼 만합니다.'};
+Copy.great={signal:'대성공을 노려볼 만합니다.',tag:'대성공 기회'};
 Copy.deep={
  term:'심층원정',sponsor:'원정 후원금',
  header:'길드 심층원정 공고',

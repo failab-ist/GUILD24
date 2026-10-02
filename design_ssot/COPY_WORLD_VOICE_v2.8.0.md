@@ -226,7 +226,8 @@ Deep Expedition voice communicates:
 Exact required signal:
 `대성공을 노려볼 만합니다.`
 
-Do not replace with vague wording that omits `대성공`.
+Do not replace with vague wording that omits `대성공`. Phone short tag (User 2026-10-02, UI_UX §GREAT SUCCESS OPPORTUNITY
+SIGNAL): `대성공 기회`, with the exact signal kept as its screen-reader text.
 
 Help:
     구매가 확정되면 현재 준비 상태를 반영해 이 신호만 다시 확인합니다.

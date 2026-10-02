@@ -501,7 +501,10 @@ carry-over to a later visit unless an owner defines it; absent from Final prepar
 
 When the authoritative condition holds, show `대성공을 노려볼 만합니다.` (`대성공` mandatory) before departure while the
 preparation can still change; no Great Success %, Combat margin/formula or master safety score. It does not react to
-selection/preview; after a committed purchase only it refreshes from the committed Bag.
+selection/preview; after a committed purchase only it refreshes from the committed Bag. It sits inside the 전투 전망 box
+(§SALE — OUTLOOK BOXES), never on a line of its own under the pair (User 2026-10-02): on a desk (≥1024) the sentence is a line
+under the stamped word; on a phone the box keeps its height and shows the short tag `대성공 기회` beside the word - a quiet dark
+gold plate, not a bright fill - with the exact sentence kept as the screen-reader text.
 
 ### RETURNING NPC QUICK SURFACE
 
@@ -2163,7 +2166,8 @@ During one customer visit: focusing an Item does not change the signal; a succes
 appear or disappear); the Combat/Hazard readout cells and the help-line Death % stay frozen; exact probability is not exposed.
 
 #### GREAT SUCCESS SIGNAL
-PASS: exact copy `대성공을 노려볼 만합니다.`; visible while preparation can still change; exact % / margin / formula hidden.
+PASS: exact copy `대성공을 노려볼 만합니다.` (desk line; phone screen-reader text beside the visible `대성공 기회` tag); visible while
+preparation can still change; exact % / margin / formula hidden.
 
 #### UI-Q84 — FOUR CORE STATS REMAIN VISIBLE
 The SALE primary decision surface keeps 투력, 강인함, 기동, 정신.
