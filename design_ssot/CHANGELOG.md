@@ -50,10 +50,10 @@ and this table is their commit record.
   healthy cap 50% (was 30%); the injured, 탈진 and strain terms still add their %p and lift the cap with them (injured 60%,
   injured + 탈진 70%). Still one roll, only on the failure path. DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK /
   DUN-Q77 / DUN-Q78; tests night, integration.
-- **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다 · 도달 시 클리어는 좀 높게): WRATH 180 → 248, the FIRE pair
-  +18 → +25, the GREED shortfall cap +11 → +15 (263 at most), SLOTH by breaks 200/189/171/149 → 276/261/236/205. The first pass
-  (210, × 1.17) left clear-given-reach at 76%; the second pass is × 1.18 on it, which the grid measurement reads as about 50%
-  clear-given-reach and 23% overall (`reports/v2100-measure/grid.log`, arm 0.95 / 안1). BOSS §WRATH / §GREED / §SLOTH,
+- **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다 · 도달 시 클리어는 좀 높게): WRATH 180 → 240 (User: 딱 떨어지게), the
+  FIRE pair +18 → +24, the GREED shortfall cap +11 → +15 (255 at most), SLOTH by breaks 200/189/171/149 → 267/252/228/199 (all × 4/3).
+  The first pass (210) left clear-given-reach at 76%; on the grid measurement's reached parties (`reports/v2100-measure/grid.log`,
+  arm 0.95 / 안1) 240 reads as about 57% clear-given-reach and 26% overall. BOSS §WRATH / §GREED / §SLOTH,
   FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT; tests final, simulation.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)

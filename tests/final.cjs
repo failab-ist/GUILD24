@@ -685,11 +685,11 @@ test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exac
     implementation starting values during adoption. Frozen QA may report a BALANCE FINDING but
     may not auto-tune them, so they are pinned here and a change has to come from an approved
     owner-spec update rather than from a harness. */
- assert.equal(DATA.balance.bossPower,248,'WRATH is 248 (User 2026-10-03, v2.10.0; was 180)');
+ assert.equal(DATA.balance.bossPower,240,'WRATH is 240 (User 2026-10-03, v2.10.0; was 180)');
  assert.equal(t.prideCombatFactor,0.92,'PRIDE is 0.92, superseding 0.90');
- assert.equal(t.greedShortfallCap,15,'GREED shortfall caps at +15 (v2.10.0; was 11, scaled with WRATH 180 -> 248)');
- assert.equal(DATA.balance.bossPower+t.greedShortfallCap,263,'so GREED alone cannot pass 263');
- assert.deepEqual(t.slothBossPower,[276,261,236,205],'SLOTH by committed break count (v2.10.0: 200/189/171/149 x 1.38)');
+ assert.equal(t.greedShortfallCap,15,'GREED shortfall caps at +15 (v2.10.0; was 11, scaled with WRATH 180 -> 240)');
+ assert.equal(DATA.balance.bossPower+t.greedShortfallCap,255,'so GREED alone cannot pass 255');
+ assert.deepEqual(t.slothBossPower,[267,252,228,199],'SLOTH by committed break count (v2.10.0: 200/189/171/149 x 4/3)');
  assert.equal(t.gluttonyStatFactor,0.50,'GLUTTONY halves the Item Core-Stat contribution');
  assert.equal(t.gluttonyRarityThreshold,undefined,'and keeps no Rarity threshold');
  // ENVY and LUST take no v2.7 numeric change
@@ -706,14 +706,14 @@ test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exac
 
 /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair holding FIRE (3 Hazards, not 4) measured easier, so
    its Boss stands firePairPower stronger - every Boss, on top of its own rule, and nothing else about the Final moves */
-test('FINAL: a FIRE-containing pair adds 25 to effective Boss Power, any other pair adds nothing',()=>{
- assert.equal(DATA.bossTuning.firePairPower,25);
+test('FINAL: a FIRE-containing pair adds 24 to effective Boss Power, any other pair adds nothing',()=>{
+ assert.equal(DATA.bossTuning.firePairPower,24);
  let fire=0,other=0;
  for(let i=0;i<60&&(fire<3||other<3);i++){const g=atFinal('firepair-'+i),s=g.run,withFire=s.final.families.includes('golem');
   for(const id of ['WRATH','SLOTH','GREED']){s.bossId=id;
    const base=id==='SLOTH'?DATA.bossTuning.slothBossPower[0]:DATA.balance.bossPower;
    const got=g.effectiveBossPower(0,{revenue:DATA.bossTuning.greedRevenueTarget,sealBreakCount:0});
-   assert.equal(got,base+(withFire?25:0),id+(withFire?' with':' without')+' FIRE');}
+   assert.equal(got,base+(withFire?24:0),id+(withFire?' with':' without')+' FIRE');}
   if(withFire){fire++;assert.equal(s.final.hazards.length,3,'a FIRE pair holds 3 Hazards');}else{other++;assert.equal(s.final.hazards.length,4);}}
  assert.ok(fire>=3&&other>=3,'both kinds of pair were drawn');
 });
