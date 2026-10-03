@@ -1404,7 +1404,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 var(--sky),#100c07 calc(var(--sky) + 24px),#140f08 100%);
  --sky:var(--nb-h)}
 .p-night .rail{margin-top:calc(var(--sky) - 4px)}
-.p-night .task-line{position:absolute;left:0;right:0;top:0;height:var(--nb-head);box-sizing:border-box;display:flex;align-items:center;padding-right:56px;background:linear-gradient(180deg,#0a0d16cc 0,#0a0d1600 100%)}
+.p-night .task-line{position:absolute;left:8px;right:58px;top:8px;box-sizing:border-box;min-height:34px;padding:6px 10px;display:flex;align-items:center;background:#0a0d16e6;box-shadow:inset 0 0 0 2px #3b2f21,3px 3px 0 #00000073}
 .p-night .menu-pin{background:#0f0c0af2}
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
