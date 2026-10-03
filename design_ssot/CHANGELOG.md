@@ -29,12 +29,12 @@ and this table is their commit record.
 
 ## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
 
-- **SuccessEase only on DAY 1~5** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다 · 완화 다 끄고, then after the ablation
-  measure: 초반 완화는 1~5까지만): × 0.92 on DAY 1~5, 1.00 on DAY 6~7, DAY 8~21 × 0.90 and DAY 22 on × 0.95 unchanged. With all
-  of DAY 1~7 at 1.00 and the Lv1~2 roster, DAY 1~7 success fell from 54% to 26% and fresh Runs ended on the death limit around
-  DAY 9. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
+- **One SuccessEase through DAY 21** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다, then after the ablation measure: 0.90으로
+  D21까지 통일): × 0.90 on DAY 1~21 (was 0.92 on DAY 1~7, 0.90 on DAY 8~21), × 0.95 from DAY 22 unchanged. Taking the early ease
+  away altogether, with the Lv1~2 roster, dropped DAY 1~7 success from 54% to 26% and ended fresh Runs on the death limit around
+  DAY 9; the roster alone keeps the empty-Bag DAY 1 forecast off 우세. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
 - **The opening roster is Lv1~2**: the ordinary spawn Level draws 1~2 on DAY 1 (it was 1~3 like every Day); DAY 2 on is
-  unchanged. With it, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (also with the DAY 1~5 ease) (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
+  unchanged. With it, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (also with the × 0.90 ease) (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
   forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
 - **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
