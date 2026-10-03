@@ -3621,7 +3621,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale{isolation:isolate;background:#17110b url('assets/presentation/morning/store-bg-phone.png') center/cover no-repeat}
 .p-sale .front{background:none}
 .p-sale .front .backwall{display:none}
-.p-sale .stage-scroll{background:#21170ded}
+.p-sale .stage-scroll{background:#21170d}
 .sale-desk{background-image:url('assets/presentation/morning/store-bg-wide.png')}
 .sale-desk .front-side .kit{background:#17110bf2}
 .sale-desk .front-side .dest-plate{background:#21180ff5}
