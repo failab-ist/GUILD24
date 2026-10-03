@@ -3633,7 +3633,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 
 /* Settings: carved wood and brass, with raster nine-slice frames. These assets only skin
    the existing controls; other menus and phase surfaces retain their own materials. */
-.modal.settings-wood{border:16px solid transparent;background:none;
+.modal.settings-wood{border:16px solid transparent;background:#24160d;background-clip:padding-box;
  border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
  color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
 .settings-wood .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
