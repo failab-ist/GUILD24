@@ -627,13 +627,13 @@ header/background. Authoritative -> NPC_TRAIT_v2.8.0.md.
 
 Help the player notice risk without solving it. Every known Hazard shows its name and a short pressure line from DUNGEON_HAZARD,
 number first, on every row (MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL):
-- 냉기 · 대응 15 필요 · 강인함 4당 대응 1 제공
+- 냉기 · 대응 15 필요 · 강인함 3당 대응 1 제공
 - 화이트아웃 · 대응 21 필요 · 정신 3당 대응 1 제공
-- 부식 · 대응 13 필요 · 강인함 4당 대응 1 제공
+- 부식 · 대응 13 필요 · 강인함 3당 대응 1 제공
 - 진창 · 대응 21 필요 · 기동 3당 대응 1 제공
 
 (no `{위험} · {label}` row; no `?` on the SALE plate.) Gate detail adds the full sentence, e.g.
-`냉기 — 대응 15 필요 · 강인함 4당 대응 1 제공 · 냉기 대응 상품이 막는다` (forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16). PC hover/focus or touch tap/inline
+`냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16). PC hover/focus or touch tap/inline
 disclosure give the same information; hoverOnly=NO. Never explain some Hazards and leave others name-only. Allowed: clear
 labels, readable contrast/icon, preparedness label, highlighting what is relevant. Never: an alarm naming the required Item,
 `이 아이템 사세요`, automatic optimal picks — clarify ingredients, do not provide the answer. Ownership ->

@@ -1209,10 +1209,10 @@ Then show the two selected Family names and each Family's actual T2 Hazard rows,
 Authoritative Hazard wording (the MORNING short row with the Final's N):
 
 ```text
-독 · 대응 29 필요 · 강인함 4당 대응 1 제공
+독 · 대응 29 필요 · 강인함 3당 대응 1 제공
 속박 · 대응 29 필요 · 기동 3당 대응 1 제공
 
-부식 · 대응 29 필요 · 강인함 4당 대응 1 제공
+부식 · 대응 29 필요 · 강인함 3당 대응 1 제공
 진창 · 대응 29 필요 · 기동 3당 대응 1 제공
 
 화염 · 대응 29 필요 · 정신 3당 대응 1 제공
@@ -1220,7 +1220,7 @@ Authoritative Hazard wording (the MORNING short row with the Final's N):
 공포 · 대응 29 필요 · 정신 3당 대응 1 제공
 어둠 · 대응 29 필요 · 기동 3당 대응 1 제공
 
-냉기 · 대응 29 필요 · 강인함 4당 대응 1 제공
+냉기 · 대응 29 필요 · 강인함 3당 대응 1 제공
 화이트아웃 · 대응 29 필요 · 정신 3당 대응 1 제공
 ```
 

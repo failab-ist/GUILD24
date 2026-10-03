@@ -239,19 +239,16 @@ function tierWeights0(day){
    preparation, not raw Power alone. T1 and every other Day are the anchors above. */
 const LATE_T3={from:21,to:29,shift:.10};
 function tierWeights(day){const w=tierWeights0(day);if(day<LATE_T3.from||day>LATE_T3.to)return w;const m=Math.min(LATE_T3.shift,w[1]);return [w[0],w[1]-m,w[2]+m];}
-/* DUNGEON_HAZARD §Hazard Defense: one non-투력 Stat per Hazard and no Gate's Hazards on the same Stat, 3 / 3 / 3 - 강인함 ×1/4
-   for 독·냉기·부식, 기동 ×1/3 for 속박·진창·어둠, 정신 ×1/3 for 공포·화이트아웃·화염. One owner: the readiness calculation below
-   and the player-facing Gate sentence (`{능력치} {n}당 대응 1 제공`) read it. */
-const HAZARD_RULES={poison:['survival',1/4],cold:['survival',1/4],corrosion:['survival',1/4],bind:['mobility',1/3],mire:['mobility',1/3],fire:['spirit',1/3],fear:['spirit',1/3],dark:['mobility',1/3],whiteout:['spirit',1/3]};
+/* DUNGEON_HAZARD §Hazard Defense: one non-투력 Stat per Hazard and no Gate's Hazards on the same Stat, 3 / 3 / 3 - 강인함 for
+   독·냉기·부식, 기동 for 속박·진창·어둠, 정신 for 공포·화이트아웃·화염, every Stat at ×1/3. One owner: the readiness calculation
+   below and the player-facing Gate sentence (`{능력치} {n}당 대응 1 제공`) read it. */
+const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/3],mire:['mobility',1/3],fire:['spirit',1/3],fear:['spirit',1/3],dark:['mobility',1/3],whiteout:['spirit',1/3]};
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
-/* DUNGEON_HAZARD §HAZARD THREAT: the Threat is scaled by the Stat the Hazard presses, so an average adventurer's own share
-   answers each Stat group alike (기동 and 정신 convert at ÷3, 강인함 at ÷4). */
-const HAZARD_THREAT_FACTOR={survival:1.0,mobility:1.1,spirit:1.2};
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
     Hazard means the same thing wherever it appears on that Day at that Tier. */
- const rule=rules[h]||['survival',.2],threat=(12+(d.day||1)*.35+(d.family==='final'?0:Math.max(0,(d.day||1)-7)*.45)+((d.tier||1)-1)*6)*(HAZARD_THREAT_FACTOR[rule[0]]||1),defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
+ const rule=rules[h]||['survival',.2],threat=(12+(d.day||1)*.35+(d.family==='final'?0:Math.max(0,(d.day||1)-7)*.45)+((d.tier||1)-1)*6),defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */
@@ -721,5 +718,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,HAZARD_THREAT_FACTOR,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

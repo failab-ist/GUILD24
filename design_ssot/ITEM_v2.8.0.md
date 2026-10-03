@@ -283,35 +283,31 @@ pressed-Stat share
 - 후반 하이브리드 (Epic, both Hazards): one slot reads 대응 on both Tier 2 Hazards late (about 0.8~0.9 on D21) - the broad
   answer that leaves the other slot free, at the cost of some incident chance; short of Tier 3
 
-Values by the pressed Stat (강인함 ÷4 for 독 · 부식 · 냉기; 기동 ÷3 for 속박 · 진창 · 어둠; 정신 ÷3 for 공포 · 화이트아웃 · 화염):
+Values (every Hazard alike - each Core Stat answers at ÷3 and no Hazard carries a Stat-group factor):
 
-| Rung | 강인함 | 기동 | 정신 |
-|---|---:|---:|---:|
-| 초반 대응 (Field Gear) | 12 | — | — |
-| 초반 대응 (Food / Drink) | 10 | — | 10 |
-| 초반 하이브리드 | 8 (first Hazard) | 12 | 8 (first Hazard) · 13 (화이트아웃, second) |
-| 후반 하이브리드 | 18 | 18 | 18 |
-| 중반 대응 (Field Gear) | 28 | 27 | 32 |
-| 중반 대응 (Food / Drink) | 23 (불룡볶음면) | — | 29 (용사의 곡주) · 27 (쿨링 이온음료) |
+| Rung | Field Gear | Food / Drink |
+|---|---:|---:|
+| 초반 대응 | 12 | 10 |
+| 초반 하이브리드 | 8 (first Hazard) · 12 (second) | — |
+| 후반 하이브리드 | 18 · 18 | — |
+| 중반 대응 | 28 | 25 (용사의 곡주) · 23 (쿨링 이온음료 · 불룡볶음면) |
 
-The values carry their Hazard's Stat-group Threat factor (강인함 1.0 · 기동 1.1 · 정신 1.2, `DUNGEON_HAZARD_v2.8.0.md` §HAZARD
-THREAT): the Field Gear 중반 대응 of each group reads the same for an average adventurer. A Counter's points above the gap it
-meets are wasted, because judgment sums the remaining gaps: 중반 대응 is the answer for the Job weak against that Hazard, a
-hybrid the broad answer for one who is not.
+A Counter's points above the gap it meets are wasted, because judgment sums the remaining gaps: 중반 대응 is the answer for
+the Job weak against that Hazard, a hybrid the broad answer for one who is not.
 
 Prices by rung: 초반 대응 30~45G, 초반 하이브리드 75G, 중반 대응 95G, 후반 하이브리드 135G (마그마 냉각장비 145G, its 투력 +10 included).
 
 A Food / Drink Counter pays for its 피로 회복 (Supply): it reads 2 under the Field Gear rung at 초반 대응 and 3 under it at 중반
 대응; one that also raises the pressed Stat reads that much lower again (불룡볶음면 냉기 23 with 강인함 +6, worth 냉기 +2), and one
-with no drawback reads 2 lower again (쿨링 이온음료 27; 용사의 곡주 keeps 29 against its 강인함 −3).
+with no drawback reads 2 lower again (쿨링 이온음료 23; 용사의 곡주 keeps 25 against its 강인함 −3).
 
 | Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
 |---|---|---|---|---|
-| 독거미 동굴 (독 · 속박) | 방진마스크 독 12 | 방독 작업장갑 독 8 · 속박 12 | 농축 해독제 독 28 · 경량 로프 속박 27 | 거미줄 방호세트 18 · 18 |
-| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 | 방수망토 부식 8 · 진창 12 | 부식 방지 코팅제 28 · 원정용 장화 27 | 연금 방수슈트 18 · 18 |
-| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 10 | 축성 손전등 공포 8 · 어둠 12 | 용사의 곡주 공포 29 · 랜턴 건전지 어둠 27 | 성화 랜턴 공포 18 · 어둠 18 |
-| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 8 · 화이트아웃 13 | 불룡볶음면 냉기 23 · 설원 고글 화이트아웃 32 | 백설 방한고글 18 · 18 |
-| 화염 골렘 광산 (화염) | 얼음컵 화염 10 | — | 쿨링 이온음료 화염 27 | 마그마 냉각장비 화염 18 · 투력 10 |
+| 독거미 동굴 (독 · 속박) | 방진마스크 독 12 | 방독 작업장갑 독 8 · 속박 12 | 농축 해독제 독 28 · 경량 로프 속박 28 | 거미줄 방호세트 18 · 18 |
+| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 | 방수망토 부식 8 · 진창 12 | 부식 방지 코팅제 28 · 원정용 장화 28 | 연금 방수슈트 18 · 18 |
+| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 10 | 축성 손전등 공포 8 · 어둠 12 | 용사의 곡주 공포 25 · 랜턴 건전지 어둠 28 | 성화 랜턴 공포 18 · 어둠 18 |
+| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 8 · 화이트아웃 12 | 불룡볶음면 냉기 23 · 설원 고글 화이트아웃 28 | 백설 방한고글 18 · 18 |
+| 화염 골렘 광산 (화염) | 얼음컵 화염 10 | — | 쿨링 이온음료 화염 23 | 마그마 냉각장비 화염 18 · 투력 10 |
 
 The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT).
 
@@ -607,26 +603,26 @@ approved ITEM amendment; QA does not auto-tune it.
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +10 | — |
 | 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +10, Supply 1 | Fire 초반 대응 |
 | 41 | 중화 탄산수 | Drink C | 35 / 70 | 부식 +10, Supply 1 | Corrosion 초반 대응 |
-| 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +27 | Dark 중반 대응 |
-| 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +27 | Bind 중반 대응 |
+| 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +28 | Dark 중반 대응 |
+| 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +28 | Bind 중반 대응 |
 | 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +10, Supply 2 | Fear 초반 대응 |
 | 13 | 불룡볶음면 | Food R | 95 / 190 | 강인함 +6, 냉기 +23, Supply 3 | Cold 중반 대응 |
 | 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +17, Supply 2 | Stat route |
-| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +29, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
+| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +25, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +12 | Poison 초반 대응 |
-| 18 | 방한 두건 | Field Gear U | 75 / 150 | 냉기 +8, 화이트아웃 +13 | Snow 초반 하이브리드 |
+| 18 | 방한 두건 | Field Gear U | 75 / 150 | 냉기 +8, 화이트아웃 +12 | Snow 초반 하이브리드 |
 | 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +8, 속박 +12 | Spider 초반 하이브리드 |
 | 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +8, 어둠 +12 | Crypt 초반 하이브리드 |
 | 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +8, 진창 +12 | Slime 초반 하이브리드 |
 | 20 | 부식 방지 코팅제 | Field Gear R | 95 / 190 | 부식 +28 | Corrosion 중반 대응 |
-| 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +27 | Mire 중반 대응 |
-| 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +32 | Whiteout 중반 대응 |
+| 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +28 | Mire 중반 대응 |
+| 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +28 | Whiteout 중반 대응 |
 | 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +25 | — |
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +28 | Poison 중반 대응 |
 | 25 | 귀환석 | Insurance R | 200 / 400 | 부상·중상·사망 -> one more retreat roll at own retreat chance +20%p | Failure Insurance |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +18 | — |
-| 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +27, Supply 1 | Fire 중반 대응 |
+| 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +23, Supply 1 | Fire 중반 대응 |
 | 29 | 세계수 생환부적 | Insurance E | 300 / 600 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
 | 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +18, 속박 +18 | Spider 후반 하이브리드 |
@@ -1153,7 +1149,7 @@ SETUP:
 Compare pure Cold response.
 
 EXPECT:
-불룡볶음면 (Rare, cold +23) > 방한 두건 (Uncommon hybrid, cold +8 / whiteout +13) for Cold specialization (`tests/delta.cjs`).
+불룡볶음면 (Rare, cold +23) > 방한 두건 (Uncommon hybrid, cold +8 / whiteout +12) for Cold specialization (`tests/delta.cjs`).
 
 PASS:
 불룡볶음면 keeps its Food identity (Supply 3, survival +6); 방한 두건 stays the Snow 초반 하이브리드.

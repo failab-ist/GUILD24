@@ -74,7 +74,7 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
  assert.equal(DATA.itemBy.dragonramen.effects.survival,6,'불룡볶음면 강인함 +6 (User 2026-09-26, v2.9.6: 냉기 +12 / 강인함 +6)');
- assert.equal(DATA.itemBy.dragonramen.effects.cold,23,'불룡볶음면 냉기 +23: the Cold 중반 대응, the 강인함 rung 28 less 3 for its 피로 회복 and less 2 for its 강인함 +6 (ITEM §COUNTER LADDER)');
+ assert.equal(DATA.itemBy.dragonramen.effects.cold,23,'불룡볶음면 냉기 +23: the Cold 중반 대응, the rung 28 less 3 for its 피로 회복 and less 2 for its 강인함 +6 (ITEM §COUNTER LADDER)');
  assert.deepEqual([DATA.itemBy.worldcharm.buy,DATA.itemBy.worldcharm.sell],[300,600],'세계수 생환부적 300 / 600 (User 2026-09-30, v2.9.13)');
  // every stocked unit carries a finite expiry
  const g=new Game();g.autosave=false;g.start('shelf-life');g.run.facilities=[];

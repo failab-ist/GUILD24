@@ -36,24 +36,26 @@ and this table is their commit record.
   forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
 - **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
-  curve A): Threat = (12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier − 1) × 6) × Stat-group factor - DAY 1~7 unchanged,
+  curve A): Threat = 12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier − 1) × 6 - DAY 1~7 unchanged,
   D21 T2 26 → 32, D29 T3 35 → 45. The Final keeps the curve without the late term (Day 30 / T2 = 29): with it, a weak
   third adventurer's Hazard gaps outweighed their Power and a full party read weaker than two. DUNGEON_HAZARD §HAZARD THREAT /
   DUN-Q71; tests vocabulary, ui-guard, simulation.
-- **Core Stats answer a Hazard less** (User: 깡스탯 음식·음료로 채워지는 게 너무 크다 · 강인 4당 1, 나머지 3당 1): 강인함 ÷4 (was ÷3),
-  기동 / 정신 ÷3 (was ÷2) - an adventurer's own Stat and a Food / Drink's alike, so a stat Drink no longer stands in for a
-  Counter. The Gate rows read `강인함 4당 대응 1 제공` / `기동 · 정신 3당 대응 1 제공`. DUNGEON_HAZARD §Hazard Defense / §HAZARD
-  THREAT / Gate sentence, ITEM §COUNTER LADDER, COPY_AUDIT, COPY_WORLD_VOICE, SALE, UI_UX; test ui-guard.
+- **One Hazard scale: every Core Stat ÷3, no Stat-group factor** (User: 깡스탯 음식·음료로 채워지는 게 너무 크다 · 강인도 그냥
+  3당 1 · 계열계수도 다 없애면 되겠다): 기동 / 정신 answer at ÷3 (was ÷2), 강인함 stays ÷3, and the Threat loses its 강인함 1.0 /
+  기동 1.1 / 정신 1.2 factor - each Stat group's average share is about the same, so every Hazard reads one Threat. A stat Drink
+  no longer stands in for a Counter. The Gate rows read `{능력치} 3당 대응 1 제공` everywhere; the Hazard Traits drop the factor
+  too (용감함 / 겁쟁이 / 화염공포증 / 내열성 ±7 → ±6, 눈썰미 / 약시 화이트아웃 ±5 → ±4). DUNGEON_HAZARD §Hazard Defense / §HAZARD
+  THREAT / Gate sentence, NPC_TRAIT, COPY_AUDIT, COPY_WORLD_VOICE, SALE, UI_UX; tests ui-guard, traits.
 - **영웅 결전 도시락 fights** (User: 영웅이랑 차이가 별로 없다 · 희귀는 소지금 획득도 있는데): 투력 +10 added (강인함 +18 and
   피로 회복 9 unchanged, 210G) - a meal and a 하급 포션 in one slot, where 길드 특제 도시락 is the earning lunch. ITEM §ACTIVE CATALOG
   / DI-Q-v28-1; test vocabulary.
 - **The Counter ladder re-cut for the steeper Threat** (User: 피로 회복 같은 게 달린 건 감안해서 깎고 · 전문 대응템에 메리트 · 이온음료는
-  페널티도 없다): the Field Gear 중반 대응 rises to 강인함 28 / 기동 27 / 정신 32 (was 23 / 23 / 22) so each reads the same - Tier 2
-  surely, 대응 at late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 -
-  컵라면 · 얼음컵 · 중화 탄산수 · 집중 사탕 12 → 10, 불룡볶음면 냉기 21 → 23, 용사의 곡주 22 → 29, 쿨링 이온음료 22 → 27 (no drawback,
-  2 lower again); the 초반 하이브리드 first Hazard 11 → 8 (under the Food 초반 대응); 방진마스크 12 and the 후반 하이브리드 18 unchanged
-  (the steeper Threat already takes the Epic hybrid from 충분 to 대응 on late Tier 2). Prices unchanged. ITEM §COUNTER LADDER /
-  §ACTIVE CATALOG / ITEM-Q, RELIC (예시), UI_UX (집중 사탕 예시); test vocabulary.
+  페널티도 없다): one value per rung for every Hazard - the Field Gear 중반 대응 28 (was 23 / 23 / 22), Tier 2 surely and 대응 at
+  late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 - 컵라면 · 얼음컵 · 중화
+  탄산수 · 집중 사탕 12 → 10, 용사의 곡주 22 → 25, 불룡볶음면 냉기 21 → 23 (its 강인함 +6 counted), 쿨링 이온음료 22 → 23 (no
+  drawback, 2 lower again); the 초반 하이브리드 first Hazard 11 → 8 (under the Food 초반 대응), its second 12 (방한 두건 화이트아웃 13
+  → 12); 방진마스크 12 and the 후반 하이브리드 18 unchanged (the steeper Threat already takes the Epic hybrid from 충분 to 대응 on late
+  Tier 2). Prices unchanged. ITEM §COUNTER LADDER / §ACTIVE CATALOG / ITEM-Q, RELIC (예시), UI_UX (집중 사탕 예시); test vocabulary.
 
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 

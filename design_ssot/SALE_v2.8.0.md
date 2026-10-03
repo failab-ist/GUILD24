@@ -627,7 +627,7 @@ BOSS/GREED may read that metric; SALE does not create a Boss-only sales counter.
 - the counter tray sits fixed above the dock; the price keys are always in the same place
 
 Core environment example form (the numbered row, no label, no `?`):
-`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 4당 대응 1 제공`
+`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 3당 대응 1 제공`
 
 Tap/tooltip may add detail; it may not hide the core risk needed for the sale decision.
 
