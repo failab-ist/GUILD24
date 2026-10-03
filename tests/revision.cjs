@@ -758,14 +758,4 @@ test('ORDER sheet: at most offerCounterMax Hazard Counters, the guarantee still 
  assert.ok(wide>4,'with 본사 추가발주권 the sheet can carry more than four Counters: '+wide);
 });
 
-/* SALE §EXPECTED DESTINATION: a newcomer's first two visits go to a Tier I Gate while one is open */
-test('newcomer destination: visits 0~1 land on an open Tier I Gate; with none open, anywhere',()=>{
- let rookies=0,checked=0,noTierOne=0;
- for(let i=0;i<200;i++){const g=fresh('rookie-dest-'+i),s=g.run;s.day=14;s.phase='closing';try{g.morning();}catch(e){continue;}
-  const t1=s.dungeons.map((d,k)=>k).filter(k=>s.dungeons[k].tier===1);
-  for(const id of s.queue){const n=s.npcs.find(x=>x.id===id);if((n.visits||0)>=2)continue;rookies++;
-   if(t1.length){checked++;assert.ok(t1.includes(n.destination)&&t1.includes(n.claimedDestination),'a newcomer goes to Tier I: '+s.dungeons[n.destination].tier);}else noTierOne++;}}
- assert.ok(checked>50,'enough newcomers met an open Tier I Gate: '+checked);
-});
-
 console.log(checks+' revision groups passed');

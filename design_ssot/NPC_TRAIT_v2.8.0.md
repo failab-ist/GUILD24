@@ -26,7 +26,7 @@ effectSemanticTone=[benefit,cost,neutral]
 targetTrustedRegulars/run≈2–4
 livingNpcCap=22
 
-destinationDefault=randomAmongOpenGates (newcomer, visits 1~2: among open Tier I Gates when one is open)
+destinationDefault=randomAmongOpenGates
 destinationCoverage=EVERY_OPEN_GATE_WHEN_VISITORS_AT_LEAST_GATES (→ §DESTINATION)
 autoBestFitRouting=NO
 
@@ -529,10 +529,6 @@ Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.8.0.md`.
 ## DESTINATION
 
 Default: random among currently open eligible Gates.
-
-Newcomer (User 2026-10-03): on its first and second visit an adventurer goes to a Tier I Gate while one is open - the same
-draw, mapped onto the open Tier I Gates, so no draw is added; a 거짓말쟁이 newcomer diverts only to another Tier I Gate, and
-coverage never moves a newcomer into a higher Tier. With no Tier I Gate open, the ordinary rule applies.
 
 Coverage: after the ordinary random draw, a Gate left empty takes one visitor, picked at random, from a Gate that
 holds two or more; a visitor a 거짓말쟁이 roll already diverted is never moved; Days without an empty Gate draw nothing more.
