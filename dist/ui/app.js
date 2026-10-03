@@ -1940,7 +1940,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  /* a window already spent (bought, or a Sloth seal broken) has nothing left to defer: it closes plainly */
  +sealChoice() +'<div class="close">'+(w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')
   /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
-  :first?'<p class="first-support-note"><span>점포 지원은 5일 단위로 고를 수 있다.</span><span>첫 지원은 <b>Day'+(w.expiryDay-1)+'까지</b> </span><span>아침, 발주 화면에서 무료로 고를 수 있다.</span></p>'+btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
+  :first?btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
   :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): a footer key beside 나중에 결정, the same rank and look, one line, while the window

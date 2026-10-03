@@ -939,11 +939,8 @@ User 2026-10-03 follow-up: desktop stacks three large contracts vertically in on
 blank paper asset. Desktop titles/effects/prices use 28/18/22px and purchase targets are 184×54px. Cards use at least 200px
 height and grow with the available viewport (capped at 270px); shorter windows scroll instead of compressing content.
 Keep all three D0 cards substantially visible at 1280×880 and every action scrollable above the dock at shorter heights.
-The first-window guide uses dark 14px text on a flat ivory information slip without press depth. COPY_AUDIT §11-31a owns
-the two sentences: mobile breaks them into three complete phrase lines; desktop joins the second sentence on one line
-when it fits. Deadline text remains live. Mobile contract layout stays at the approved size. All purchase targets
-remain at least 48px high. Remove the footer's brown enclosing plane and full-width orange defer bar; keep readable guide
-text and a compact wooden return tag. The footer remains outside the candidate scroll; later windows keep reroll/defer peers.
+The footer carries no separate guide text: the coach mark owns the first-window explanation (User 2026-10-03). Mobile contract layout stays at the approved size. All purchase targets
+remain at least 48px high. Remove the footer's brown enclosing plane and full-width orange defer bar; keep a compact wooden return tag. The footer remains outside the candidate scroll; later windows keep reroll/defer peers.
 Candidate count, effects, prices, acquisition timing, unavailable causes and save/reload behavior remain owned by RELIC/COPY.
 Acceptance: capture D0 and D5 at 360×640, 375×548, 390×780, 430×780, 1280×700 and 1280×880. Every candidate's button
 scrolls clear of the fixed footer, all catalogue names/conditions/prices wrap without clipping, owned/unavailable states keep
