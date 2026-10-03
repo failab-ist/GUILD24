@@ -5,6 +5,16 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 점포지원 계약서·표찰 — 프로젝트 생성 제안 (2026-10-03)
+
+- OpenAI 이미지 생성으로 제작한 글자 없는 RGBA PNG. 별도 제3자 라이선스를 추정하지 않는다.
+- `dist/ui/assets/presentation/support/contract-blank.png`: 1536×1024, 무지 크림 종이와 작은 금속 집게.
+- 같은 폴더 `choice-tag-blank.png`, `return-tag-blank.png`: 각 2172×724, 무지 금색 종이 표찰과 목재 표찰.
+- 생성 원본을 리사이즈·크롭·재인코딩 없이 그대로 복사했다. CSS에서 화면 크기에 맞춰 표시한다.
+- 이름·효과·무료/실제 가격·선택/구매·나중에 결정은 모두 런타임 텍스트이며 이미지에 넣지 않는다.
+  프롬프트도 모든 글자·숫자·가격·무료 문구를 배제하고 균일한 중앙 글자 영역, 투명 외곽, 절제된 픽셀 재질을 요청했다.
+- 점포지원 선택 화면의 구현 제안이며 실제 화면 검증 후에도 최종 시각 컨펌은 별도로 남긴다.
+
 ### 점포지원 창고 배경·시각 참고 — User 제공 원본 (2026-10-03)
 
 - 1번 `16833.jpg`는 구성 참고이며 `reports/references/store-support-2026-10-03/selection-reference.jpg`에 보존한다.

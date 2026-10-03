@@ -152,14 +152,14 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  const back=ruleFor('.modal-footer button:not(.stamp)[data-action="dismiss"]{');
  assert.ok(/background:var\(--brown\)/.test(back),'the way back is BROWN');
  assert.ok(/:not\(\.stamp\)/.test(back),'and a 확인 that wears .stamp is not swept up with it');
- assert.ok(/background:var\(--brown\)/.test(ruleFor('.relic-takeover .close .stamp{')),
-  'deferring a Store Support purchase is the same role');
+ assert.ok(/return-tag-blank\.png/.test(ruleFor('.relic-takeover .close .stamp{')),
+  'User 2026-10-03: deferring is a compact wooden return tag');
  // the footer's remaining controls carry no face at all: a utility is the neutral control
  const footerRest=ruleFor('.modal-footer button:not(.stamp){');
  assert.ok(!/background:/.test(footerRest),'a plain footer utility takes no family of its own');
  assert.ok(!/#3a2c1d/.test(footerRest),'and the retired dead brown is not its default');
  // YELLOW: a purchase, inside a card, never a screen's Action
- assert.ok(/background:var\(--yellow\)/.test(ruleFor('.relic-plate .stamp{')),'a Store Support purchase is YELLOW');
+ assert.ok(/choice-tag-blank\.png/.test(ruleFor('.relic-plate .stamp{')),'User 2026-10-03: Store Support purchase uses a compact gold paper tag');
  assert.ok(/background:var\(--yellow\)/.test(ruleFor('.slot-option>button[data-action="deco-buy"]')),
   'and so is a Decoration purchase');
  /* ...but only the purchase. Equipping something already owned is a state change, so the
@@ -3286,109 +3286,30 @@ test('OPENING: the preparation scene starts on the three axes, with no franchise
  assert.ok(/Meta\.storeCapital\(a\)/.test(intro),'and the Capital display stays');
 });
 
-/* UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Two things this screen kept regressing to are
-   asserted directly rather than described: green as the selected/state colour, and a disabled
-   action that still reads 구매. The Canonical surface / border / text / action values are
-   checked at their exact strings, because the spec states them as exact. */
-test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact planes and the caused labels',()=>{
- const from=css.indexOf('/* ---- STORE SUPPORT — FINAL VISUAL SPEC'),
-       to=css.indexOf('.relic-takeover .close{');
- assert.ok(from>0&&to>from,'the Store Support block is where the spec says it is');
- // declarations only: the block's own prose names the banned treatments in order to ban them
+/* User 2026-10-03 / UI_UX §RELIC VISUAL: blank contract materials and live prices. */
+test('UI_UX Store Support: contract/tag hierarchy, readable states and live free/paid prices',()=>{
+ const from=css.indexOf('/* ---- STORE SUPPORT — CONTRACT SHEETS'),to=css.indexOf('.relic-takeover .close{');
+ assert.ok(from>0&&to>from,'contract selection block exists');
  const block=css.slice(from,to).replace(/\/\*[\s\S]*?\*\//g,'');
- // GREEN BAN. No green token and no green literal carries state, selection or action here.
- assert.ok(!/--sign(-lit)?\)/.test(block),'no --sign / --sign-lit treatment survives on this screen');
+ assert.ok(!/--sign(-lit)?\)|gradient|blur|drop-shadow|opacity:\.[0-9]/.test(block),'no green state, soft depth or whole-card fade');
  for(const banned of ['#27382f','#2c5c40','#7ddc9f','#9ce4b6','#4f9e6d','#3d8b5b','#d8f5e3','#e9fbef'])
-  assert.ok(!block.includes(banned),'the banned green '+banned+' is gone');
- // the superseded first palette is not kept alongside the amended one
- for(const gone of ['#273033','#58666a','#a9843d','#c7a653','#191f21','#343f42','#b6c0c1','#899597',
-   '#242b2d','#394549','#707d80','#b08f45','#faf6e9','#c2a15c','#8f7539'])
-  assert.ok(!block.includes(gone),'the superseded '+gone+' is gone');
- // ORNAMENT BAN. The left accent bar, the sheen and the blur are all expressible in one sheet,
- // so each is checked as a shape rather than trusted to a comment.
- assert.ok(!/inset \d+px 0 0 /.test(block),'no vertical accent / left status strip');
- assert.ok(!/gradient|blur|drop-shadow/.test(block),'no gradient, blur or soft glow');
- assert.ok(!/inset 0 \d+px 0 #f|inset -?\dpx -?\dpx 0 #f/i.test(block),'no inset sheen band');
- assert.ok(!/opacity:\.[0-9]/.test(block),'no whole-element opacity fade');
- assert.ok(/opacity:1/.test(block),'the base sheet\'s disabled fade is switched off explicitly');
- // EXACT STATE HIERARCHY, at the amended Canonical values.
- assert.ok(/\.relic-plate\{[^}]*background:#20272b/.test(block),'AVAILABLE surface #20272B');
- assert.ok(/\.relic-plate\{[^}]*inset 0 0 0 1px #465158/.test(block),'AVAILABLE uses the approved thin edge #465158');
- assert.ok(/\.relic-plate h3\{[^}]*color:#f1ece2/.test(block),'title #F1ECE2');
- assert.ok(/\.relic-plate p\{[^}]*color:#b8c0c2/.test(block),'Function #B8C0C2');
- assert.ok(/\.relic-plate \.cost\{[^}]*color:#d2a347/.test(block),'price #D2A347');
- /* The control's HUE is the one thing on this screen Canonical hands to implementation -
-    "No literal colour value is Canonical for this screen. The exact hue / saturation /
-    brightness may be tuned" - so this asserts the grammar Canonical does own, and the exact
-    values only as the current tune. USER DIRECTION 2026-09-22 retired #C4973E over a #765821
-    brown offset, which still read as a brown box on a phone; the plane is a clean gold and the
-    depth is the card's own slate. */
+  assert.ok(!block.includes(banned),'no green state literal '+banned);
+ assert.ok(/contract-blank\.png/.test(block)&&/choice-tag-blank\.png/.test(block),'blank authored contract and choice materials');
+ assert.ok(/\.relic-plate h3\{[^}]*22px/.test(block)&&/\.relic-plate p\{[^}]*14px/.test(block),'readable title and effect steps remain');
+ assert.ok(/grid-template-columns:minmax\(0,1fr\) 132px/.test(block),'cost and compact action have separate columns');
  const ctrl=(block.match(/\.relic-plate \.stamp\{[^}]*\}/)||[''])[0];
- /* USER DIRECTION 2026-09-22, final: acquiring a Store Support is a PURCHASE, so the one
-    control here takes the YELLOW family - a clean gold-yellow, not the mustard the retired gold
-    read as and not the flow Action, which belongs to whole screens rather than to a card.
-    What stays screen-specific is the GRAMMAR Canonical owns: a flat plane with a hard offset
-    and nothing else, so this control keeps neither the notch nor the drop shadow the base
-    control carries, which §ORNAMENT BAN rules out here. */
- assert.ok(/background:var\(--yellow\)/.test(ctrl),'the one control is the purchase family');
- assert.ok(!/var\(--brick\)/.test(ctrl),'never the flow Action, which is not what this is');
- assert.ok(/inset 0 0 0 2px var\(--yellow-lit\),3px 3px 0 var\(--yellow-deep\)/.test(ctrl),
-  'with a lit pixel edge over a hard offset in its own deep tone');
- assert.ok(/clip-path:none/.test(ctrl)&&/filter:none/.test(ctrl),
-  'and it drops the base control\'s notch and drop shadow, which this screen bans');
- /* the grammar, independent of the tune: it is the strongest pop on the screen, it has real
-    pixel depth, and no part of it is brown or olive - the tone this screen is required to be
-    free of, and the one the previous values kept reading as */
- assert.ok(/inset 0 0 0 2px (#[0-9a-f]{6}|var\(--[a-z-]+\)),\dpx \dpx 0 (#[0-9a-f]{6}|var\(--[a-z-]+\))/.test(ctrl),
-  'the AVAILABLE control keeps a hard edge plus a hard offset - its depth is the affordance');
- const brownish=hex=>{const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
-  // a muddy brown/olive: the blue channel starved AND the plane dark enough to read as dirt
-  return b<r*0.45&&Math.max(r,g,b)<0.62*255;};
- // the PLANES only - the ink on a gold control is a warm near-black on purpose, and reading it
- // as a brown box would be reading the letters instead of the button
- const tok=n=>(css.match(new RegExp('--'+n+':(#[0-9a-f]{6})'))||[])[1];
- const planes=[...ctrl.replace(/color:[^;]*/g,'').matchAll(/#([0-9a-f]{6})/g)].map(m=>m[1])
-  .concat(['yellow','yellow-lit','yellow-deep'].filter(n=>ctrl.includes('var(--'+n+')')).map(n=>tok(n).slice(1)));
- assert.ok(planes.length>=3,'the control names its plane, its edge and its offset');
- for(const hex of planes)
-  assert.ok(!brownish(hex),'no brown/olive value survives in the one control: #'+hex);
- assert.ok(!/#c4973e|#765821|#e3b341|#f6d878|#21c7f3|#f2644b/.test(block),
-  'and every retired plane - brown, muddy gold, cyan, coral - is gone from the screen');
- /* the defer control shares the takeover, so it answers to the same slate palette */
- const defer=(css.match(/\.relic-takeover \.close \.stamp\{[^}]*\}/)||[''])[0];
- assert.ok(defer&&!/#3a2c1d|#6b5335/.test(defer),'the defer control is no longer the dead brown box');
- assert.ok(/background:var\(--brown\)/.test(defer),'it is the back/defer family');
- assert.ok(!/var\(--yellow\)|var\(--brick\)/.test(defer),'and never competes with the purchase beside it');
- // affordance only on the control that can be pressed - :hover/:active still match a disabled one
- assert.ok(/\.relic-plate \.stamp:not\(\[disabled\]\):hover/.test(block)
-  &&/\.relic-plate \.stamp:not\(\[disabled\]\):active/.test(block),
-  'hover and active are scoped away from a disabled control');
- assert.ok(/\.relic-plate\.owned\{[^}]*background:#20272b/.test(block),
-  'SELECTED keeps the AVAILABLE surface - it is never a filled card');
- assert.ok(/\.relic-plate\.owned\{[^}]*inset 0 0 0 2px #b98b3e/.test(block),'and carries the #B98B3E outline');
- assert.ok(/\.relic-plate\.owned h3\{color:#f6f0e5/.test(block),
-  'with the raised title contrast, so the state is not the outline alone');
- const owned=(block.match(/\.relic-plate\.owned \.stamp\[disabled\]\{[^}]*\}/)||[''])[0];
- assert.ok(/background:#171c1f/.test(owned)&&/color:#d2a347/.test(owned)
-  &&/inset 0 0 0 2px #b98b3e/.test(owned),'the state control is charcoal with a muted-gold edge and ink');
- assert.ok(!/min-width|min-height|font:|padding:/.test(owned),
-  'and keeps the AVAILABLE footprint exactly - never a smaller status chip');
- assert.ok(!/\dpx \dpx 0 /.test(owned),'with no hard press shadow');
- assert.ok(/\.relic-plate\.unavailable\{[^}]*background:#171c1f/.test(block),'UNAVAILABLE surface #171C1F');
- assert.ok(/\.relic-plate\.unavailable\{[^}]*inset 0 0 0 2px #303a3e/.test(block),'border #303A3E');
- assert.ok(/\.relic-plate\.unavailable h3\{color:#aeb8ba/.test(block),'title #AEB8BA, still legible');
- assert.ok(/\.relic-plate\.unavailable p\{color:#828e91/.test(block),'Function #828E91, still legible');
- assert.ok(/\.relic-plate \.stamp\[disabled\]\{background:#23292c;color:#697579/.test(block),
-  'and the dead plane at #23292C / #697579');
- assert.ok(!/\.relic-plate \.stamp\[disabled\]\{[^}]*\dpx \dpx 0 /.test(block),
-  'which carries no hard offset, so it cannot read as pressable');
- // DISABLED COPY, COPY_AUDIT §11-31 / §11-31b: the cause is named, never left as 구매.
- const win=app.slice(app.indexOf('relic-choices'),app.indexOf('function sealChoice'));
- assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),
-  'the two disabled causes are separated from the one blocked flag');
- assert.ok(win.includes("mine?'\ubcf4\uc720 \uc911':spent?'\uc120\ud0dd \uc885\ub8cc':poor?'\uace8\ub4dc \ubd80\uc871':price?'\uad6c\ub9e4':'\uc120\ud0dd'"),
-  'and the approved labels are adopted verbatim, in that order - a free card 선택, a priced one 구매 (User 2026-10-02)');
- assert.ok(!/mine\?'\ubcf4\uc720 \uc911':'\uad6c\ub9e4'/.test(win),'the old two-way label is gone');
+ assert.ok(/min-height:48px/.test(ctrl)&&/width:132px/.test(ctrl),'compact key retains a 48px hit target');
+ assert.ok(/\.relic-plate \.stamp:not\(\[disabled\]\):hover/.test(block)&&/\.relic-plate \.stamp:not\(\[disabled\]\):active\{transform:translate/.test(block),'only enabled controls press');
+ const disabled=(block.match(/\.relic-plate \.stamp\[disabled\]\{[^}]*\}/)||[''])[0];
+ assert.ok(/opacity:1/.test(disabled)&&/transform:none/.test(disabled)&&/box-shadow:none/.test(disabled),'disabled control stays legible without press depth');
+ assert.ok(!/min-width|min-height|font:|padding:/.test(disabled),'owned/unavailable keep the action footprint');
+ const footer=(css.match(/\.relic-takeover \.close\{[^}]*\}/)||[''])[0];
+ assert.ok(/background:transparent;box-shadow:none/.test(footer),'footer has no enclosing brown panel');
+ assert.ok(/return-tag-blank\.png/.test(css),'defer uses a compact wooden tag');
+ const win=fn('relicTakeover');
+ assert.ok(win.includes("price?fmt(price)+'G':'무료'"),'free or actual calculated price is rendered as text');
+ assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),'disabled causes remain separate');
+ assert.ok(win.includes("mine?'보유 중':spent?'선택 종료':poor?'골드 부족':price?'구매':'선택'"),'owned/spent/poor/free/paid actions name their cause');
 });
 
 

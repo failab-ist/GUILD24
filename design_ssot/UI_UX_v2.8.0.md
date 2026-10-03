@@ -919,15 +919,17 @@ block at any width (FINAL preparation keeps its list).
 
 ### RELIC VISUAL
 
-Metal fixture/plate language; purchase reads as a metal/brass transaction.
-The selection takeover uses the supplied warehouse background: portrait on phones, wide from 1024px. The original JPEGs
-remain byte-identical; viewport framing is CSS only. A restrained wood title plate sits over the room, followed by three
-slate candidate plates. Keep one thin separation edge on available cards, the gold owned outline and the established
-yellow purchase / brown defer state grammar. Do not copy the reference's multiple nested borders, stars, chains or effect values.
-On phones the choice key spans the candidate's inner width and remains at least 48px high. Titles use the 22px plate step;
-effect/condition text remains 14px and wraps intact. Desktop shows three equal columns within a bounded 1120px composition,
-with actions aligned at the card foot. The footer stays outside the candidate scroll, on a restrained wood plane: D0 keeps
-the defer explanation and a full-width phone key; later windows retain the existing peer reroll/defer controls.
+User 2026-10-03: replace the gray candidate windows and full-width yellow purchase bars with blank, clipped ivory
+contract sheets and compact gold paper choice/purchase tags at the lower right. The name, full effect/condition and
+price are live text: zero-priced first-window candidates read `무료`; later candidates show their actual calculated `NG`
+price from candidatePrices. Never bake `무료`, any price or any action label into art. The price shares a bottom row with
+the action tag, with no overlap. Titles remain 22px, effects 14px with intact wrapping and dark readable ink on cream.
+Use real text-free raster materials for the paper/clip and tags. No nested ornamental borders, blur, green state or card fade.
+Owned/unavailable tags retain the same footprint, lose purchase art and press affordance, and name their existing cause.
+The supplied phone/wide warehouse JPEGs remain byte-identical; viewport framing is CSS only. Keep the wood title plate.
+Desktop retains three equal columns in a bounded 1120px composition, actions aligned at the card foot. All purchase targets
+remain at least 48px high. Remove the footer's brown enclosing plane and full-width orange defer bar; keep readable guide
+text and a compact wooden return tag. The footer remains outside the candidate scroll; later windows keep reroll/defer peers.
 Candidate count, effects, prices, acquisition timing, unavailable causes and save/reload behavior remain owned by RELIC/COPY.
 Acceptance: capture D0 and D5 at 360×640, 375×548, 390×780, 430×780, 1280×700 and 1280×880. Every candidate's button
 scrolls clear of the fixed footer, all catalogue names/conditions/prices wrap without clipping, owned/unavailable states keep

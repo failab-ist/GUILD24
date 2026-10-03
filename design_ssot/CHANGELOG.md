@@ -28,6 +28,12 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **Store Support contract sheets on `ui/design-trim`** (User 2026-10-03): replace the gray panels and full-width yellow
+  keys with clipped blank paper contracts, compact gold choice/purchase tags and live text for every price. Zero-cost
+  first support reads 무료; later costs use the existing candidatePrices. Remove the enclosing brown footer and use
+  compact wood reroll/defer tags. Supplied backgrounds, game data and acquisition flows stay unchanged. UI_UX owns this
+  presentation proposal; final visual approval remains separate from implementation QA.
+
 - **Store Support warehouse selection on `ui/design-trim`** (User 2026-10-03): preserve all three supplied JPEGs byte for byte,
   apply portrait/wide warehouse backgrounds to the selection takeover, and adapt the reference to a restrained wood title,
   thin-edged slate candidates and full-width yellow choice keys. Desktop keeps three equal candidates; the defer/reroll footer

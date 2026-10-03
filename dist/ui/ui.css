@@ -1991,110 +1991,55 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .discovery{margin:0 0 14px;padding:9px 12px;font:400 13px/1.5 var(--ui);color:#e8d9b0;
  background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
 .relic-choices{display:grid;gap:12px}
-/* ---- STORE SUPPORT — FINAL VISUAL SPEC ------------------------------------
-   UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Every value below is the Canonical one, at the
-   amended palette. The superseded palette is not kept anywhere alongside it.
-
-   The screen is a restrained 2D pixel game selection panel. The game feel is made by flat
-   colour planes, hard edges, a hard offset shadow, a clear state hierarchy and a compact game
-   control - and by nothing else. No gradient, no blur, no inset sheen, no bevel, no soft glow,
-   no badge, no seal, no vertical accent bar, and no whole-element opacity.
-
-   GREEN IS BANNED ON THIS SCREEN as a state, selection, border, button or status colour,
-   `--sign` / `--sign-lit` included. The palette is slate / charcoal / muted gold / warm ivory.
-   This is a Store Support Presentation decision only; the game's semantic benefit green is
-   untouched.
-
-     AVAILABLE    #20272B slate, #465158 edge     the one real control: the YELLOW family, depth
-     SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
-     UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
-
-   SELECTED is never a filled card, a tint or a left strip; it is the gold outline, the raised
-   title contrast and the state control together - never the outline alone.
-   ---------------------------------------------------------------------------- */
-.relic-plate{position:relative;padding:14px 15px 13px;background:#20272b;
- display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #465158,2px 2px 0 #10161a}
-/* the certificate's subject, left-aligned like every other record in the game */
-.relic-plate h3{font:500 22px/1.35 var(--f-plate);-webkit-font-smoothing:none;color:#f1ece2;
- padding:0}
-/* UI_UX §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT, and §CARD CONTENT: the exact Function is
-   the comparison this choice is made on, so it stays one step under the title, never dim. */
-.relic-plate p{flex:1 1 auto;margin-top:10px;font:600 14px/1.6 var(--ui);color:#b8c0c2;word-break:keep-all;overflow-wrap:normal}
-/* the price, struck on the panel as a ruled line rather than a box inside a box */
-.relic-plate .cost{display:block;margin:11px 0 10px;padding:9px 0 0;letter-spacing:.06em;
- font:500 20px/1 var(--f-led);color:#d2a347;box-shadow:inset 0 1px 0 #46515899}
-
-/* AVAILABLE: the yellow purchase family carries a hard edge and one hard depth. The supplied
-   reference's choice composition uses the card's inner width; keep a 48px target and the same
-   footprint for owned/unavailable states. No ornamental frame is added around the key. */
-.relic-plate .stamp{width:100%;min-width:138px;min-height:48px;padding:0 18px;
- font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:var(--yellow);color:var(--yellow-ink);transform:none;clip-path:none;filter:none;
- box-shadow:inset 0 0 0 2px var(--yellow-lit),3px 3px 0 var(--yellow-deep)}
-/* affordance belongs only to the control that can actually be pressed - :hover and :active
-   still match a disabled button, so both are scoped away from one */
-.relic-plate .stamp:not([disabled]):hover{background:#f7d669}
-/* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
-.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#dcb53c;
- box-shadow:inset 0 0 0 2px var(--yellow-deep),1px 1px 0 var(--yellow-deep)}
-
-/* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
-   state is the muted-gold outline, a slightly raised title contrast, and the control losing
-   every pressable cue while keeping its shape. */
-.relic-plate.owned{background:#20272b;
- box-shadow:inset 0 0 0 2px #b98b3e,3px 3px 0 #10161a}
-.relic-plate.owned h3{color:#f6f0e5}
-.relic-plate.owned .cost{color:#d2a347;box-shadow:inset 0 1px 0 #b98b3e66}
-/* the committed control keeps the AVAILABLE footprint exactly. Shrinking it left a hole beside
-   a card of unchanged height and read as a web status chip; the state is carried by the
-   charcoal fill, the muted-gold edge and ink, and the absence of any depth or press - not by
-   becoming smaller. `opacity:.4` from the base sheet is off. */
-.relic-plate.owned .stamp[disabled]{background:#171c1f;color:#d2a347;opacity:1;transform:none;
- clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #b98b3e}
-
-/* UNAVAILABLE. The panel recedes on its own lightness, not on opacity, and the title and the
-   Function stay fully legible at the Canonical values. */
-.relic-plate.unavailable{background:#171c1f;
- box-shadow:inset 0 0 0 2px #303a3e,1px 1px 0 #10161a}
-.relic-plate.unavailable h3{color:#aeb8ba}
-.relic-plate.unavailable p{color:#828e91}
-/* the price steps back with the panel - it is not actionable here - but stays muted gold,
-   because gold is what a price is in this game */
-.relic-plate.unavailable .cost{color:#b98b3e;box-shadow:inset 0 1px 0 #303a3e}
-
-/* DISABLED ACTION, general. A dead plane at the Canonical values: no depth, no lit edge, no
-   press. It names its own cause (선택 종료 / 골드 부족) rather than staying 구매, and it is never
-   faded by whole-element opacity. */
-.relic-plate .stamp[disabled]{background:#23292c;color:#697579;opacity:1;transform:none;
- clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #394347}
-
-.relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
- width:calc(100% - 32px);max-width:1120px;align-self:center;margin:12px 0 max(14px,env(safe-area-inset-bottom));
- padding:12px 14px;background:#21150ff5;box-shadow:inset 0 0 0 1px #8c6e45}
-.relic-takeover .close p{flex:1 1 100%;font:400 13px/1.5 var(--ui);color:#d4c5a8;text-align:center}
-.relic-takeover .close:not(:has([data-action=reroll-relics])) .stamp{width:100%}
-/* the defer control sits on the same takeover, so it answers to the same palette: slate, not
-   brown. It stays plainly secondary - no gold, no depth competition with the one real control. */
-/* BROWN. Deferring is a step under the purchase it sits beside, so it takes the back/defer
-   family - a rich chestnut that belongs to the wood, not the dead #3A2C1D it used to be and
-   not a second bid for the eye. It keeps this screen's flat grammar like the control above it. */
-.relic-takeover .close .stamp{flex:0 0 auto;min-height:50px;min-width:150px;font:600 16px/1 var(--ui);
- clip-path:none;filter:none;
- background:var(--brown);color:var(--brown-ink);
- box-shadow:inset 0 0 0 2px var(--brown-lit),3px 3px 0 var(--brown-deep)}
-.relic-takeover .close .stamp:hover{background:#87502f}
-.relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#653a24;
- box-shadow:inset 0 0 0 2px var(--brown-deep),1px 1px 0 var(--brown-deep)}
+/* ---- STORE SUPPORT — CONTRACT SHEETS (User 2026-10-03) --------------------
+   Blank raster materials only. Names, effects, free/paid cost and action causes stay live.
+   A compact purchase tag replaces the full-width web button; secondary wood tags float
+   over the room without a footer panel. No green state, blur, decorative frame or fade. */
+.relic-plate{position:relative;padding:34px 22px 20px;
+ background:transparent url('assets/presentation/support/contract-blank.png') center / 100% 100% no-repeat;
+ display:grid;grid-template-columns:minmax(0,1fr) 132px;grid-template-rows:auto 1fr auto;
+ gap:10px 16px;align-items:start;box-shadow:none}
+.relic-plate h3{grid-column:1/-1;padding:0 0 8px;font:500 22px/1.35 var(--f-plate);
+ -webkit-font-smoothing:none;color:#392a1c;border-bottom:1px solid #80674966}
+.relic-plate p{grid-column:1/-1;align-self:start;margin:0;font:600 14px/1.6 var(--ui);
+ color:#534638;word-break:keep-all;overflow-wrap:normal}
+.relic-plate .cost{display:flex;align-items:center;min-height:48px;margin:0;padding:0;
+ font:600 18px/1.3 var(--ui);color:#684117;letter-spacing:.03em;box-shadow:none}
+.relic-plate .stamp{width:132px;min-width:132px;min-height:48px;padding:10px 12px 10px 24px;
+ font:600 16px/1.2 var(--ui);letter-spacing:0;color:#392a1c;
+ background:transparent url('assets/presentation/support/choice-tag-blank.png') center / 100% 100% no-repeat;
+ transform:none;clip-path:none;filter:none;box-shadow:none}
+.relic-plate .stamp:not([disabled]):hover{text-decoration:underline;text-underline-offset:4px}
+.relic-plate .stamp:not([disabled]):active{transform:translate(0,2px)}
+/* Same paper and footprint; a committed tag is ink instead of purchase gold. */
+.relic-plate.owned{box-shadow:none}
+.relic-plate.owned h3{color:#392a1c}
+.relic-plate.owned .stamp[disabled]{color:#684117;border:1px solid #9b743c}
+.relic-plate.unavailable{box-shadow:none}
+.relic-plate.unavailable h3{color:#655a4b}
+.relic-plate.unavailable p{color:#655a4b}
+.relic-plate .stamp[disabled]{background:#e3d5b9;color:#655a4b;opacity:1;transform:none;
+ clip-path:none;filter:none;box-shadow:none;border:1px solid #958570}
+.relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;
+ width:calc(100% - 32px);max-width:1120px;align-self:center;margin:8px 0 max(12px,env(safe-area-inset-bottom));
+ padding:0;background:transparent;box-shadow:none}
+.relic-takeover .close p{flex:1 1 100%;font:600 13px/1.5 var(--ui);color:#f5e8ce;text-align:center;
+ text-shadow:1px 1px 0 #21150f,-1px -1px 0 #21150f}
+.relic-takeover .close .stamp{flex:0 0 auto;min-height:48px;min-width:168px;padding:10px 16px 10px 26px;
+ font:600 15px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;
+ background:transparent url('assets/presentation/support/return-tag-blank.png') center / 100% 100% no-repeat;
+ clip-path:none;filter:none;box-shadow:none}
+.relic-takeover .close .stamp:hover{text-decoration:underline;text-underline-offset:4px}
+.relic-takeover .close .stamp:active{transform:translate(0,2px)}
 @media(min-width:1024px){
  .relic-takeover{background-image:url('assets/presentation/support/backroom-wide.jpg')}
  .relic-takeover .scroll{padding-left:32px;padding-right:32px}
  .relic-takeover .relic-open{margin-top:32px;margin-bottom:28px;padding:20px 24px}
  .relic-takeover .relic-open h2{font-size:32px}
  .relic-takeover .relic-choices{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
- .relic-takeover .relic-plate{padding:20px}
- .relic-takeover .close{margin-bottom:24px;padding:16px 20px}
+ .relic-takeover .relic-plate{padding:40px 26px 24px}
+ .relic-takeover .close{margin-bottom:24px}
  .relic-takeover .close p{flex:1 1 360px;text-align:left}
- .relic-takeover .close:not(:has([data-action=reroll-relics])) .stamp{width:auto;min-width:200px}
 }
 
 /* =====================================================================

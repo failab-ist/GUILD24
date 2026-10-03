@@ -1,0 +1,35 @@
+[
+  {
+    "repository_path": "dist/ui/assets/presentation/support/contract-blank.png",
+    "generated_original": "/workspace/generated_images/exec-f72c0909-87b0-4ea0-9d6e-109a99b614aa.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGBA",
+    "bytes": 1969768,
+    "sha256": "cb3a338a3299e1365b2b12742011b37aa3a8388d246606bb5a5865b8f6acec95",
+    "byte_identical": true,
+    "contains_fixed_text": false
+  },
+  {
+    "repository_path": "dist/ui/assets/presentation/support/choice-tag-blank.png",
+    "generated_original": "/workspace/generated_images/exec-79e12301-8be7-4db7-9ad2-5ac0bb686c34.png",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGBA",
+    "bytes": 1124623,
+    "sha256": "e79f2e8c26d8cb2a5a219d69f1666200d655027d034025a123114a2ca30cb897",
+    "byte_identical": true,
+    "contains_fixed_text": false
+  },
+  {
+    "repository_path": "dist/ui/assets/presentation/support/return-tag-blank.png",
+    "generated_original": "/workspace/generated_images/exec-6d1ae1be-f915-423e-b32c-c6411b0e3a33.png",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGBA",
+    "bytes": 913520,
+    "sha256": "5f64f6a316654f5b73849d251dd489eca63f42da5bad489a5b7adbd2a52f9b45",
+    "byte_identical": true,
+    "contains_fixed_text": false
+  }
+]
