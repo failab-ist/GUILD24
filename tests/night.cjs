@@ -515,9 +515,9 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.95],[24,29.25],[29,34.75],[30,35.85]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
- /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 on DAY 1~21, x .90 on DAY 8~21, x .95 from DAY 22 */
- assert.deepEqual(Dungeon.GATE_EASE,{early:.90,late:.95,lateFrom:22});
- for(const [day,ease] of [[1,.90],[5,.90],[6,.90],[7,.90],[8,.90],[21,.90],[22,.95],[29,.95]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
+ /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .85 on DAY 1~21, x .90 from DAY 22 */
+ assert.deepEqual(Dungeon.GATE_EASE,{early:.85,late:.90,lateFrom:22});
+ for(const [day,ease] of [[1,.85],[5,.85],[8,.85],[21,.85],[22,.90],[29,.90]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
  /* makeDungeon applies SuccessEase once, on the finished Gate Power (read off real Gates, golem's Family Combat included) */
  {const g=new Game();g.autosave=false;g.start('gate-ease');
   for(const day of [3,8,22])for(const id of ['spider','golem'])for(const tier of [1,2]){g.run.day=day;const b=D.dungeonBy[id],gate=g.makeDungeon(id,tier);
@@ -526,7 +526,7 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
- assert.deepEqual(Dungeon.DEATH,{combat:.30,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
+ assert.deepEqual(Dungeon.DEATH,{combat:.40,environment:.25,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
   'the shipped coefficients are the canonical baseline');
  // the two deficits are the only inputs, and each one alone raises the chance
  const weak=at(1,0).risk,strong=at(400,0).risk;
@@ -535,8 +535,8 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  assert.ok(weak.chance<=0.50+1e-9,'the healthy conditional cap is 50% (v2.10.0)');
  for(const over of [1,20,60,140,400]){
   const {risk}=at(over,0);
-  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.30+risk.environmentDeficit*.20))*risk.steady)<1e-12,
-   'the chance is exactly CombatDeficit x .30 + EnvironmentDeficit x .20, clamped, then 정신 steadiness');
+  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.40+risk.environmentDeficit*.25))*risk.steady)<1e-12,
+   'the chance is exactly CombatDeficit x .40 + EnvironmentDeficit x .25, clamped, then 정신 steadiness');
   /* DUNGEON_HAZARD §Spirit steadiness: 정신 x .003 off the chance, at most 15% */
   const sp=Dungeon.prepare(at(over,0).n,d).effects.spirit;
   assert.ok(Math.abs(risk.steady-(1-Math.min(.15,sp*.003)))<1e-12,'정신 '+sp.toFixed(1)+' trims the chance by '+(100*(1-risk.steady)).toFixed(1)+'%');
@@ -669,7 +669,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expe
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:(a)=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
  const base=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco'],injury:0,fatigue:0,alive:true,recovery:0,level:1,xp:0}));
- const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-(gate.scale||1)*.024));
+ const escChance=e=>Math.min(.94,Math.max(.15,.40+e.mobility*.003+e.escape-(gate.scale||1)*.024));
  const withE=Dungeon.prepare(base(),gate,[]).effects,withoutE=Dungeon.prepare({...base(),pack:[]},gate,[]).effects;
  const escWith=escChance(withE),escWithout=escChance(withoutE);
  assert.ok(escWith>escWithout,'초코바 really does raise the escape chance, or this proof has nothing to test');
@@ -703,7 +703,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the pos
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:(a)=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
  const base=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco'],injury:0,fatigue:18,alive:true,recovery:0,level:1,xp:0}));
- const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-(gate.scale||1)*.024));
+ const escChance=e=>Math.min(.94,Math.max(.15,.40+e.mobility*.003+e.escape-(gate.scale||1)*.024));
  const withE=Dungeon.prepare(base(),gate,[]).effects,withoutE=Dungeon.prepare({...base(),pack:[]},gate,[]).effects;
  assert.ok(withE.effectiveFatigue>=10&&withE.effectiveFatigue<20,
   'sanity: the departure Fatigue really is in the 10-19 band, or this proof has nothing to test');
@@ -883,7 +883,7 @@ test('RESULT-PROOF: existing attribution rules still hold (single / overlap / wh
  const g=new Game();g.autosave=false;g.start('result-proof-attribution');
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
- const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-(gate.scale||1)*.024));
+ const escChance=e=>Math.min(.94,Math.max(.15,.40+e.mobility*.003+e.escape-(gate.scale||1)*.024));
  // single necessary Item is exercised directly by the departure-Stats/Fatigue tests above
  // (초코바 alone flips 부상 <-> 중상); this test covers overlap / whole-Bag / 황금 1+1 only.
  // Every case below forces an environment incident (envRoll 0.0001) so the retreat-still-
@@ -1060,7 +1060,7 @@ test('RESULT-PROOF: the shadow carries the Day\'s 길드 연회 food bonus (n.fe
  const x=D.items.find(it=>!['food','drink'].includes(it.category)&&Object.keys(it.effects).every(k=>!NOT_PATH.has(k))&&Object.keys(it.effects).length);
  assert.ok(x,'an Item that cannot touch the escape path exists');
  const mk=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['ramen',x.id],injury:0,fatigue:24,feast:2,alive:true,recovery:0,level:1,xp:0,records:[]}));
- const esc=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-e.itemEscape-(gate.scale||1)*.024));
+ const esc=e=>Math.min(.94,Math.max(.15,.40+e.mobility*.003+e.escape-e.itemEscape-(gate.scale||1)*.024));
  const withFeast=esc(Dungeon.prepare(mk(),gate,[]).effects),noFeast=esc(Dungeon.prepare({...mk(),feast:0},gate,[]).effects);
  assert.ok(withFeast>noFeast,'the banquet really moves the Fatigue band, or this proof has nothing to test');
  // combat fails (power 1e9); an incident (envRoll .0001) makes the real retreat draw injuryRoll; the escape roll sits between the two chances
@@ -1088,8 +1088,8 @@ test('RESULT-PROOF: an incident the bad-luck assist prevented is not put down to
 console.log(groups+' night groups passed');
 
 test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 balance): only CONSECUTIVE injured departures raise the failure Death chance',()=>{
- assert.deepEqual(Dungeon.STRAIN,{step:.08,cap:.30,weary:20},'the shipped coefficients are the canonical baseline');
- for(const [c,exp] of [[0,0],[1,0],[2,.08],[3,.16],[5,.30],[8,.30]])
+ assert.deepEqual(Dungeon.STRAIN,{step:.12,cap:.40,weary:20},'the shipped coefficients are the canonical baseline');
+ for(const [c,exp] of [[0,0],[1,0],[2,.12],[3,.24],[4,.36],[5,.40],[8,.40]])
   assert.ok(Math.abs(Dungeon.strainEscalation(c)-exp)<1e-12,'strain('+c+') = '+exp);
  const d={...D.dungeonBy.slime,day:14,tier:2,hazards:['poison','mire'],scale:1,power:80,reward:40,requiredSupply:0};
  const base=Adventurer.create(new RNG('strain'),1,10,Meta.fresh());
@@ -1098,28 +1098,28 @@ test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 ba
   n.records=records;return n;};
  const healthy=Dungeon.failureDeathRisk(mk([]),d);
  assert.equal(healthy.strain,0,'no records, no strain, and a healthy departure never reads it at all');
- // one past injured run + departing injured now = 2 consecutive -> +8%p
+ // one past injured run + departing injured now = 2 consecutive -> +12%p
  const once=Dungeon.failureDeathRisk(mk([{departedInjured:true,outcome:'부상'}],1),d);
- assert.ok(Math.abs(once.strain-.08)<1e-12,'a second consecutive injured departure adds 8%p');
- assert.ok(Math.abs(once.chance-Math.min(.60+.08,once.healthy+.10+.08)*once.steady)<1e-12,'the +8%p rides the injured term and lifts the cap with it');
+ assert.ok(Math.abs(once.strain-.12)<1e-12,'a second consecutive injured departure adds 12%p');
+ assert.ok(Math.abs(once.chance-Math.min(.60+.12,once.healthy+.10+.12)*once.steady)<1e-12,'the +12%p rides the injured term and lifts the cap with it');
  const firstInjured=Dungeon.failureDeathRisk(mk([],1),d);
  assert.equal(firstInjured.strain,0,'the first injured departure is free');
  assert.ok(Math.abs(firstInjured.chance-Math.min(.60,firstInjured.healthy+.10)*firstInjured.steady)<1e-12,'the injured departure itself is unchanged');
- // two past + this one = 3 consecutive -> +16%p
+ // two past + this one = 3 consecutive -> +24%p
  const chain3=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1),d);
- assert.ok(Math.abs(chain3.strain-.16)<1e-12,'two past + this one = 3 consecutive -> +16%p');
+ assert.ok(Math.abs(chain3.strain-.24)<1e-12,'two past + this one = 3 consecutive -> +24%p');
  // a healthy departure anywhere in between resets the chain - only the trailing run counts
  const broken=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true},{departedInjured:false}],1),d);
  assert.equal(broken.strain,0,'a healthy departure - including the return after a Severe-Injury rest - resets the chain');
  // Fatigue no longer feeds this term at all, however weary the departure or the past records
  const wearyIgnored=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1,25),d);
- assert.ok(Math.abs(wearyIgnored.strain-.16)<1e-12,'Fatigue at departure does not change the strain term');
+ assert.ok(Math.abs(wearyIgnored.strain-.24)<1e-12,'Fatigue at departure does not change the strain term');
  const wearyRecordsIgnored=Dungeon.failureDeathRisk(mk([{departedInjured:false,departedWeary:true},{departedInjured:false,departedWeary:true}],0),d);
  assert.equal(wearyRecordsIgnored.strain,0,'past weary (non-injured) records do not feed strain');
- // caps at 30%p
+ // caps at 40%p
  const capped=Dungeon.failureDeathRisk(mk(Array(7).fill({departedInjured:true}),1),d);
- assert.ok(Math.abs(capped.strain-.30)<1e-12,'the strain term caps at 30%p');
- assert.ok(capped.chance<=.60+.30+1e-9&&capped.chance>=.30,'the cap rises with the strain');
+ assert.ok(Math.abs(capped.strain-.40)<1e-12,'the strain term caps at 40%p');
+ assert.ok(capped.chance<=.60+.40+1e-9&&capped.chance>=.30,'the cap rises with the strain');
  // the live resolution still records departedInjured (and keeps departedWeary, even unused) and uses the same strain
  const hard={...d,power:1e9};
  for(let i=0;i<50;i++){const n=mk([{departedInjured:true},{departedInjured:true}],1);
@@ -1129,7 +1129,7 @@ test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 ba
   assert.equal(r.debug,undefined,'the persisted record carries no development payload');}
  const n=mk([{departedInjured:true},{departedInjured:true}],1);const r=Dungeon.resolve(n,hard,new RNG('strain-live'));
  const expected=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1),hard);
- assert.ok(Math.abs(expected.strain-.16)<1e-12,'two past injured runs + this one = 3 consecutive -> +16%p');
+ assert.ok(Math.abs(expected.strain-.24)<1e-12,'two past injured runs + this one = 3 consecutive -> +24%p');
  assert.ok(Math.abs(r.debug.deathChance-expected.chance)<1e-12,'the resolution draws Death against the strained chance');
  const w=mk([],0,30);Dungeon.resolve(w,{...d,power:1e9},new RNG('strain-w'));
  assert.equal(w.records.at(-1).departedWeary,true,'Fatigue 30 at departure is still recorded as weary, even though strain ignores it');
