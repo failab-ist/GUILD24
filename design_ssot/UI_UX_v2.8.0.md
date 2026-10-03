@@ -266,6 +266,9 @@ phone's NPC detail holds it); core environment signal visible without tap, never
 (`전투 전망` / `환경 대응`) and the four Core Stats are ONE recessed plate with one seam, not two boxes; the shelf keeps the room
 (acceptance -> UI_UX §QA UI-Q-v29-43).
 
+The phone nameplate scales with the card: name 14px, rarity 9px with a restrained letter gap, Level/Job 11px with readable
+line spacing. Keep every word intact and visually separated; no compressed glyphs, clipping or ellipsis (User 2026-10-03).
+
 SALE reuses the unmodified MORNING store room assets: portrait on phones, wide on desks. Information stays on dark,
 high-contrast planes so the room light never competes with destination, customer state or product text.
 
@@ -415,6 +418,10 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
 - row and tray name the category in a small tag after the name (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`); the icon
   tile's bottom edge is the rarity colour
+  The entire icon stays inside its tile above the uninterrupted 3px rarity edge at every SALE size; the icon never covers
+  the edge, name, category or effect line (User 2026-10-03).
+  The hand-over travels from the actual tray SVG bounds to the actual Bag SVG bounds, fitting its moving footprint;
+  resized outer tiles must not enlarge the icon beyond the Bag slot.
 - tray, top to bottom: header (icon · name · kind, `{손님}에게 · 소지 {N}G` at right), the
   `판매 후 변화` list (may be one wrapping line), `특수 효과` when any, the three price keys (§SALE — PRICE ROLE WORDS)
 - on phones, sell price / stock / shelf life sit at the lower right under the customer line, beside the change list;
@@ -2950,6 +2957,10 @@ PASS:
 - contextual missing targets skip cleanly and do not block later lessons
 - the lesson explains how to read the system, not which gameplay answer to choose
 - the same step stays semantically correct at phone and desktop layouts
+- SALE's nine first/contextual marks fit the resized live target with at most a 4px surround: destination, Stats, combat,
+  environment, payday wallet, returning card, filled Bag slot, refused price and discount receipt. Use the actual phone or
+  desk scroller for automatic positioning, never the desk's zero-size `display:contents` wrapper. Copy, target and dock
+  remain separate after scroll, resize and phase-entry motion (User 2026-10-03).
 
 FAIL examples: text explains Hazard readiness while only an unrelated destination heading is highlighted; one button is discussed
 while the whole card/column is spotlighted without need; only part of a tall meaningful target is cut out; automatic scroll puts

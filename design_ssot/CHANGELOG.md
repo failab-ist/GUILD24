@@ -28,6 +28,11 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **SALE resized details on `ui/design-trim`** (User 2026-10-03): scale the phone nameplate's name/rarity/Level-Job to
+  14/9/11px without clipping, keep the full tray rarity edge clear of its SVG, and move the hand-over between actual icon
+  bounds. SALE's nine coach marks hug the live resized target and use the actual desk/phone scroller. UI_UX §SALE — MOBILE
+  AUTHORITY, §COUNTER TRAY and UI-Q-v28-27 own the behavior. Final visual review remains separate.
+
 - **SALE design candidate on `ui/design-trim`** (User 2026-10-03): restore the phone character to about 85–90% of the pre-trim
   size, keep both Bag targets clear of the menu, and recover comparison space through a readable local type ladder and
   aligned tray metadata. Deep nomination follows the phone shelf, still before purchase; desks keep the control placement.

@@ -3496,7 +3496,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  const css=read('dist/ui/ui.css'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  const sell=app.slice(app.indexOf("case'sell':"),app.indexOf("\n case'",app.indexOf("case'sell':")+1));
  // the click handler records what the screen showed before the commit, and only that
- assert.ok(/const tile=\$\('\.counter-tray \.tray-icon'\)/.test(sell)&&/from:tile\?tile\.getBoundingClientRect\(\):null/.test(sell),"the tray icon's place is read before the state moves (v2.9.0 counter tray)");
+ assert.ok(/const tile=\$\('\.counter-tray \.tray-icon'\)/.test(sell)&&sell.includes("from:tile?(tile.querySelector('svg')||tile).getBoundingClientRect():null"),"the actual tray SVG's place is read before the state moves (User 2026-10-03: resized SALE icons)");
  assert.ok(/gold:s\.money/.test(sell)&&/stats:\[\.\.\.document\.querySelectorAll\('\.detail-stats \.detail-stat strong'\)\]/.test(sell),'so are the Gold and the four Stat readings');
  assert.ok(/handoff=seen;showStub\(\);render\(\);/.test(sell),'and they are handed to the draw that follows (the receipt stub is placed before that draw so playCue can animate it)');
  assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
@@ -3504,6 +3504,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  const cue=['cueSelect','cueOrder','cueSale','cueRefuse','playCue'].map(fn).join('');
  // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
  assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from the counter tray to the Bag slot it fills, in the state strip');
+ assert.ok(cue.includes('(slot.firstElementChild||slot).getBoundingClientRect()')&&/\.handoff>svg\{display:block;width:100%;height:100%;max-width:100%;max-height:100%\}/.test(css),'the travelling SVG fits its footprint and lands at the actual Bag icon size');
  assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
  assert.ok(/\.dock \.on-hand b/.test(cue)&&/duration:320/.test(cue)&&/gold\.textContent=fmt\(box\.v\)/.test(cue),'the dock Gold counts to its new value');
  assert.ok(/\.detail-stats \.detail-stat/.test(cue)&&/duration:300/.test(cue),'the changed Stat cells pulse once and keep the new value');

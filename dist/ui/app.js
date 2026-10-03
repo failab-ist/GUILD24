@@ -531,7 +531,7 @@ function cueSale(A,h){
    keyPress(A,key,{onComplete:put});setTimeout(put,1500);}
   const slot=[...document.querySelectorAll('.kit .slots i.full')].pop();
   const settle=()=>{if(slot)A(slot,{scale:[1.05,1],duration:240,ease:'outQuad'});};
-  if(slot&&h.from&&h.icon){const to=slot.getBoundingClientRect(),g=document.createElement('i');g.className='handoff';g.innerHTML=h.icon;
+  if(slot&&h.from&&h.icon){const to=(slot.firstElementChild||slot).getBoundingClientRect(),g=document.createElement('i');g.className='handoff';g.innerHTML=h.icon;
    g.style.cssText='left:'+h.from.left+'px;top:'+h.from.top+'px;width:'+h.from.width+'px;height:'+h.from.height+'px';
    document.body.appendChild(g);
    /* the slot's own icon waits, hidden, until the travelling one lands on it - one Item, not two */
@@ -1377,7 +1377,8 @@ function paintCoach(step,target){
     RESERVE is the tallest real bubble (143px) plus its two 12px gaps, rounded up. */
  const RESERVE=172;
  const room=top>=RESERVE?floor-top:floor-top-RESERVE;
- const height=Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
+ const height=target.closest('.p-sale')?Math.min(floor,b.bottom+4)-top
+  :Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
  /* User 2026-10-01: the bubble takes the width its words need, up to the screen (560 px on a desk), so a line that fits
     is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
  const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
@@ -1434,7 +1435,8 @@ function showCoach(){
     flex item the scrolled column slides under, so a mark whose target had been scrolled beneath
     it measured as "visible" at y=195 and lit the band instead of the line it teaches
     (UI-Q-v28-27: automatic scroll must not leave the target behind a header). */
- const view=target.getBoundingClientRect(),area=target.closest('.stage-scroll')?.getBoundingClientRect();
+ const view=target.getBoundingClientRect(),scrollArea=[target.closest('.stage-scroll'),target.closest('.dossier-col'),target.closest('.shelf-col')]
+  .find(el=>el&&el.getBoundingClientRect().height>0),area=scrollArea?.getBoundingClientRect();
  const top=Math.max(80,area?area.top:0),bottom=Math.min(innerHeight-100,area?area.bottom:innerHeight);
  if(view.top<top||view.bottom>bottom){target.scrollIntoView({block:'center',behavior:'instant'});}
  coachPainted=paintCoach(step,target);
@@ -2653,7 +2655,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
- case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,tray:el.closest('.counter-tray'),
+ case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?(tile.querySelector('svg')||tile).getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,tray:el.closest('.counter-tray'),
    stats:[...document.querySelectorAll('.detail-stats .detail-stat strong')].map(x=>x.textContent)};
   /* SALE §TRANSACTION RESULT — PER CUSTOMER (User 2026-09-24, v2.9.0): the customer's own Loyalty and Wallet
      before the commit, so the receipt stub can state the real result of this price choice. */
