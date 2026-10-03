@@ -11,7 +11,7 @@ G.DATA.decorationSlots=['sign','wall','counter','display'];
 G.DATA.decorations=[
  /* v2.9.7 (User 2026-09-26, META §INITIAL FOUR DECORATIONS): the sign economy Decoration is remade as 원정 지원금 간판; the wall
     and display economy Decorations swap Slots, names and art following the Slot. Ids are kept, so ownership carries over. */
- {id:'sponsorSign', kind:'economy', slot:'sign',    name:'원정 지원금 간판',  price:1250, effect:'방문 모험가마다 현재 소지금의 40%만큼 추가 구매 가능',
+ {id:'sponsorSign', kind:'economy', slot:'sign',    name:'원정 지원금 간판',  price:1250, effect:'방문 모험가마다 현재 소지금의 50%만큼 추가 구매 가능',
   text:'길드 원정 지원금이 되는 가게. 모험가들이 하나씩 더 집어 간다.'},
  {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:'평범보다 높은 등급의 모험가 등장 확률 60%로 증가 (기존 40%)',
   text:'이름난 모험가의 초상. 저 벽에 걸리고 싶은 사람이 문을 연다.'},
@@ -35,7 +35,7 @@ G.DATA.decorations=[
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance). Presentation copy above states the same values. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={sponsorSign:{budgetShare:.40},thriftSafe:{firstWallet:200,customers:2},honorFrame:{weights:[40,32,18,8,2]},
+G.DATA.decorationParams={sponsorSign:{budgetShare:.50},thriftSafe:{firstWallet:200,customers:2},honorFrame:{weights:[40,32,18,8,2]},
  memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.40},trainingSign:{levelBonus:1,chance:.55},aidCabinet:{preparedFactor:.60,powerMult:1.05}};
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */
