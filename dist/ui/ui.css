@@ -4001,3 +4001,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .slot-option>button:disabled{transform:none;background:#1b1009;color:#a8946f;box-shadow:inset 0 0 0 2px #140b06}
 .modal.wood-frame .decoration-panel .slot h4:before{background:#d29a35}
 .modal.wood-frame .decoration-panel .slot h4:after{background:#140b06;box-shadow:0 2px 0 #9b6a3a40}
+/* 점포 장식: Slot 머리줄은 나무 띠, 카드 사이는 한 칸 띄우고, 이름 줄과 효과 줄은 가는 홈으로 나눈다 */
+.modal.wood-frame .decoration-panel{gap:18px}
+.modal.wood-frame .decoration-panel .slot h4{margin:0 0 10px;padding:7px 10px 6px;font-size:14px;color:#ffe8b7;
+ background:linear-gradient(180deg,#5a3a20 0,#42291a 60%,#33200f 100%);box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a66}
+.modal.wood-frame .decoration-panel .slot h4:before{height:12px}
+.modal.wood-frame .decoration-panel .slot h4:after{display:none}
+.modal.wood-frame .slot-option+.slot-option{margin-top:12px}
+.modal.wood-frame .slot-option{padding:10px 12px 13px 14px;row-gap:8px}
+.modal.wood-frame .slot-option>.deco-effect{padding-top:8px;box-shadow:inset 0 2px 0 #140b06,inset 0 3px 0 #9b6a3a26}
+.modal.wood-frame .slot-option>.deco-name{font-size:16px;color:#fff0cf}
+.modal.wood-frame .slot-option.locked>.deco-name{color:#e2cfa6}
