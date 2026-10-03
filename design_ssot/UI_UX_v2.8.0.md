@@ -628,9 +628,9 @@ header/background. Authoritative -> NPC_TRAIT_v2.8.0.md.
 Help the player notice risk without solving it. Every known Hazard shows its name and a short pressure line from DUNGEON_HAZARD,
 number first, on every row (MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL):
 - 냉기 · 대응 15 필요 · 강인함 3당 대응 1 제공
-- 화이트아웃 · 대응 21 필요 · 정신 2당 대응 1 제공
+- 화이트아웃 · 대응 21 필요 · 정신 3당 대응 1 제공
 - 부식 · 대응 13 필요 · 강인함 3당 대응 1 제공
-- 진창 · 대응 21 필요 · 기동 2당 대응 1 제공
+- 진창 · 대응 21 필요 · 기동 3당 대응 1 제공
 
 (no `{위험} · {label}` row; no `?` on the SALE plate.) Gate detail adds the full sentence, e.g.
 `냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16). PC hover/focus or touch tap/inline
@@ -2143,7 +2143,7 @@ After actual purchase commit, PASS only if:
 
 #### UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
 
-Use current `집중 사탕` (`공포 대응 +12 / 피로 회복 3`) in two controlled setups.
+Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 2`) in two controlled setups.
 
 ##### Case A — no Fatigue band change
 

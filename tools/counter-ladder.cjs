@@ -73,7 +73,7 @@ if(process.env.CL_WORKER){
   globalThis.__HZ=(rep,d,s)=>{if(d.deep||d.id==='final'||!rep.debug)return;const day=d.day||s.day,b=BANDS.findIndex(([a,z])=>day>=a&&day<=z);if(b<0)return;
    const e=rep.debug.effects;exp++;for(const id of rep.items){items[id]=(items[id]||0)+1;const ef=D.itemBy[id].effects;
     if(HZ.some(h=>ef[h]>0))ctrCarried++;if(Object.keys(STATS).some(k=>ef[k]>0))statCarried++;}
-   for(const h of d.hazards){const c=cell(h,b),r=Dungeon.hazardRule(h),threat=12+day*.35+((d.tier||1)-1)*6,def=(e[h]||0)+(e[r.stat]||0)*r.coef;
+   for(const h of d.hazards){const c=cell(h,b),r=Dungeon.hazardRule(h),threat=12+day*.35+Math.max(0,day-7)*.25+((d.tier||1)-1)*6,def=(e[h]||0)+(e[r.stat]||0)*r.coef;
     c.exp++;c.ratio+=def/threat;if(def>=threat)c.covered++;if(rep.items.some(id=>(D.itemBy[id].effects[h]||0)>0))c.carried++;}};
   const r=Debug.simulate(to-from,policy,null,'adaptive','hybrid',{relicAware:true,from});
   process.send({acc,items,trade:r.items,exp,ctrCarried,statCarried,runs:to-from,reach20:r.reach20*(to-from),reach30:r.reach30*(to-from),clear:r.clearsPerRun*(to-from),

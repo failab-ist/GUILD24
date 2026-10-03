@@ -333,7 +333,9 @@ test('EVENT 신입 모험가 시즌: the arrival follows the Day-based Level rul
     event arrives higher. What must hold is that rookie gets no rule of its own. */
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
  assert.ok(!/opts\.rookie/.test(src),'create reads no rookie flag');
- assert.ok(/r\.int\(1,3\)\+Math\.floor\(\(day-1\)\*\.25\)/.test(src),'the Day-based rule is the one rule');
+ /* the Day-based rule is the one rule: the same draws give the same Level with or without a rookie flag */
+ for(const day of [2,9,21])for(let i=0;i<20;i++){const a=globalThis.Meta.fresh(),seed='rookie-rule-'+day+'-'+i;
+  assert.equal(globalThis.Adventurer.create(new globalThis.RNG(seed),i,day,a,{rookie:true}).level,globalThis.Adventurer.create(new globalThis.RNG(seed),i,day,a).level,'the Day-based rule is the one rule');}
 
  const band=day=>[Math.max(1,1+Math.floor((day-1)*.25)),3+Math.floor((day-1)*.25)];
  const seen=[];
@@ -555,7 +557,7 @@ test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat acco
 
 test('NPC_TRAIT destinationDefault (User 2026-09-25): with as many visitors as Gates, every open Gate is claimed by someone',()=>{
  let days=0,covered=0,fixes=0;
- for(let k=1;k<=24;k++){const g=fresh('gate-cover-'+k);
+ for(let k=1;k<=40;k++){const g=fresh('gate-cover-'+k);
   for(let d=0;d<30&&g.run.phase!=='end';d++){const s=g.run;
    if(s.phase==='morning'&&s.dungeons.length>1&&s.queue.length>=s.dungeons.length){days++;
     const claimed=new Set(s.queue.map(id=>s.npcs.find(n=>n.id===id).claimedDestination));

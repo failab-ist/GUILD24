@@ -297,8 +297,8 @@ Rules:
 
 Entry format: `N. **name** — internalDirection — effects`.
 
-1. **용감함** — MIXED — [benefit] fear 대응 +7 · [cost] escape -6%p
-2. **겁쟁이** — MIXED — [benefit] escape +19%p · [cost] fear 대응 -7 · [cost] loot -15%
+1. **용감함** — MIXED — [benefit] fear 대응 +6 · [cost] escape -6%p
+2. **겁쟁이** — MIXED — [benefit] escape +19%p · [cost] fear 대응 -6 · [cost] loot -15%
 3. **대식가** — MIXED — [benefit] Food positive native Core-Stat contribution +30% · [cost] 음식의 피로 회복 -1: each Food Item Supply -1, minimum 1 · [neutral] Hazard Counter/Insurance/RiskReward magnitude is not amplified
 4. **소식가** — MIXED — [cost] Food positive native Core-Stat contribution -20% · [benefit] 음식의 피로 회복 +1: each Food Item Supply +1 · [neutral] Hazard Counter/Insurance/RiskReward magnitude is not amplified
 5. **신중함** — MIXED — [benefit] injuryRisk (부상/중상 확률) -4%p · [cost] loot -10%
@@ -311,7 +311,7 @@ Entry format: `N. **name** — internalDirection — effects`.
 12. **강골** — POSITIVE — [benefit] injuryGuard +23%p
 13. **허약함** — NEGATIVE — [cost] 강인함 -10% · [cost] Severe Injury recovery duration +1 day
 14. **포션체질** — POSITIVE — [benefit] Potion positive native Core-Stat effect ×1.15 · [neutral] no automatic Counter/Insurance amplification
-15. **화염공포증** — NEGATIVE — [cost] fire 대응 -7
+15. **화염공포증** — NEGATIVE — [cost] fire 대응 -6
 16. **수집가** — MIXED — [benefit] Rare+ purchase interest +12%p · [cost] Common/Uncommon purchase interest -5%p
 17. **실속파** — MIXED — [benefit] Common/Uncommon purchase interest +10%p · [cost] Rare+ purchase interest -10%p
 18. **사교적인** — POSITIVE — [benefit] revisit selection weight ×1.25
@@ -319,7 +319,7 @@ Entry format: `N. **name** — internalDirection — effects`.
 20. **회복체질** — POSITIVE — [benefit] Severe Injury recovery duration -1 day, minimum 1 day
 21. **지구력** — POSITIVE — [benefit] expedition Fatigue gain -1
 22. **쉽게 지침** — NEGATIVE — [cost] expedition Fatigue gain +1
-23. **눈썰미** — POSITIVE — [benefit] dark 대응 +4 · [benefit] whiteout 대응 +5
+23. **눈썰미** — POSITIVE — [benefit] dark 대응 +4 · [benefit] whiteout 대응 +4
 24. **해독가** — POSITIVE — [benefit] poison 대응 +6
 25. **수족냉증** — NEGATIVE — [cost] cold 대응 -6
 26. **준비성** — POSITIVE — [benefit] 음식·음료의 피로 회복 +1: each Food/Drink Item Supply +1
@@ -332,11 +332,11 @@ Entry format: `N. **name** — internalDirection — effects`.
 33. **몸치** (clumsy) — NEGATIVE — [cost] bind 대응 -4, mire 대응 -4
 34. **장비관리** (maintain) — POSITIVE — [benefit] corrosion 대응 +6
 35. **서투른** (butterfingers) — NEGATIVE — [cost] corrosion 대응 -6
-36. **내열성** (heatproof) — POSITIVE — [benefit] fire 대응 +7
-37. **약시** (nearsight) — NEGATIVE — [cost] dark 대응 -4, whiteout 대응 -5
+36. **내열성** (heatproof) — POSITIVE — [benefit] fire 대응 +6
+37. **약시** (nearsight) — NEGATIVE — [cost] dark 대응 -4, whiteout 대응 -4
 
-Hazard Trait values follow the Stat-group factor of their Hazard's Threat (`DUNGEON_HAZARD_v2.8.0.md` §HAZARD THREAT),
-rounded: 공포 · 화염 · 화이트아웃 × 1.2, 속박 · 진창 · 어둠 × 1.1, 강인함 Hazards × 1.0.
+Hazard Trait values are one scale for every Hazard (no Stat-group factor, `DUNGEON_HAZARD_v2.8.0.md` §HAZARD THREAT): 6 for a
+one-Hazard Trait, 4 per Hazard for a two-Hazard Trait.
 
 ### HONEST
 

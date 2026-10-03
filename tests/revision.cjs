@@ -120,7 +120,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   }
  }
  assert.ok(sampled>0,'sanity: at least one 퇴각 sample was observed to check');
- assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1.5,'성공':1.5,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
+ assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
 });
 test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
  const ids=new Set();
@@ -729,6 +729,14 @@ test('a save holding expeditionCert loads with opsRoom in its place',()=>{
  const raw=Save.export(g.account,g.run).split('"opsRoom"').join('"expeditionCert"');assert.ok(raw.includes('"expeditionCert"'));
  const st=Save.import(raw);assert.deepEqual(st.run.facilities,['opsRoom']);assert.deepEqual(st.run.dayFacilities,['opsRoom']);
  assert.ok(!JSON.stringify(st).includes('expeditionCert'));
+});
+
+/* META §Exact spawn-Level model: the ordinary spawn Level is 1~2 on DAY 1~4, 1~3 (+ the Day term) from DAY 5 */
+test('spawn Level: DAY 1~4 draw Lv1~2, DAY 5 on Lv1~3 + the Day term (no Mastery)',()=>{
+ const a=Meta.fresh(),seen=day=>{const r=new RNG('spawn-'+day),ls=new Set();for(let i=0;i<400;i++)ls.add(Adventurer.create(r,i,day,a).level);return [...ls].sort();};
+ assert.deepEqual(seen(1),[1,2],'DAY 1: Lv1 and Lv2 only');assert.deepEqual(seen(4),[1,2],'DAY 4: still Lv1~2');assert.deepEqual(seen(5),[2,3,4],'DAY 5: Lv1~3 + the Day term 1');
+ for(let i=0;i<40;i++){const g=new Game(Meta.fresh());g.autosave=false;g.start('roster-'+i);
+  assert.ok(g.run.npcs.every(n=>n.level<=2),'a fresh account opens with no Lv3 adventurer');}
 });
 
 console.log(checks+' revision groups passed');

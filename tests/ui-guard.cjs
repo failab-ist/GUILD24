@@ -2444,7 +2444,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.']])
+   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다. 강인함은 사고를, 기동은 패배 후 부상을, 정신은 사망을 조금씩 줄여 준다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
@@ -3617,9 +3617,9 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['confirm','[data-action="confirm-order"]']],'one step, on the confirm key');
  assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
- // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)
- const rate={survival:3,mobility:2,spirit:2};
- for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',2],fear:['spirit',2],dark:['mobility',2]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
+ // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 for every Stat (Stat n당 대응 1)
+ const rate={survival:3,mobility:3,spirit:3};
+ for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',3],fear:['spirit',3],dark:['mobility',3]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
  for(const [day,tier] of [[1,1],[6,2],[18,3]]){const d={day,tier};
   for(const k of Object.keys(DATA.hazards)){const st=Presentation.hazardStat[k],need=Math.ceil(Dungeon.hazardState(k,{},d).threat);
    assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공 · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
@@ -3637,8 +3637,8 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  const plate=fn('destPlate');
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
  assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');
- // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29)
- assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
+ // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29, no late term)
+ assert.equal(Presentation.hazardShort('poison',{day:30,tier:2,family:'final'}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
  assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalThreat')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');

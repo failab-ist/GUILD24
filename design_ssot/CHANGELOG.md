@@ -25,7 +25,64 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
-| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1) | `v2.10.0` (set by the User) |
+| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54 | `v2.10.0` (set by the User) |
+
+## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
+
+- **One SuccessEase through DAY 21** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다, then after the ablation measure: 0.90으로
+  D21까지 통일): × 0.90 on DAY 1~21 (was 0.92 on DAY 1~7, 0.90 on DAY 8~21), × 0.95 from DAY 22 unchanged. Taking the early ease
+  away altogether, with the Lv1~2 roster, dropped DAY 1~7 success from 54% to 26% and ended fresh Runs on the death limit around
+  DAY 9; the roster alone keeps the empty-Bag DAY 1 forecast off 우세. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
+- **The opening roster is Lv1~2**: the ordinary spawn Level draws 1~2 on DAY 1~4 (it was 1~3 like every Day; User: Lv1~2 구간을
+  좀 더 넓히자), so the first newcomers start low too; DAY 5 on is unchanged. With it, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (also with the × 0.90 ease) (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
+  forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
+  Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
+- **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
+  curve A, its late term measured at 0.45 / 0.35 / 0.25 and set at 0.25): Threat = 12 + Day × 0.35 + max(0, Day − 7) × 0.25
+  + (Tier − 1) × 6 - DAY 1~7 unchanged, D21 T2 26 → 29, D29 T3 35 → 40. The Final keeps the curve without the late term (Day 30 / T2 = 29): with it, a weak
+  third adventurer's Hazard gaps outweighed their Power and a full party read weaker than two. DUNGEON_HAZARD §HAZARD THREAT /
+  DUN-Q71; tests vocabulary, ui-guard, simulation.
+- **One Hazard scale: every Core Stat ÷3, no Stat-group factor** (User: 깡스탯 음식·음료로 채워지는 게 너무 크다 · 강인도 그냥
+  3당 1 · 계열계수도 다 없애면 되겠다): 기동 / 정신 answer at ÷3 (was ÷2), 강인함 stays ÷3, and the Threat loses its 강인함 1.0 /
+  기동 1.1 / 정신 1.2 factor - each Stat group's average share is about the same, so every Hazard reads one Threat. A stat Drink
+  no longer stands in for a Counter. The Gate rows read `{능력치} 3당 대응 1 제공` everywhere; the Hazard Traits drop the factor
+  too (용감함 / 겁쟁이 / 화염공포증 / 내열성 ±7 → ±6, 눈썰미 / 약시 화이트아웃 ±5 → ±4). DUNGEON_HAZARD §Hazard Defense / §HAZARD
+  THREAT / Gate sentence, NPC_TRAIT, COPY_AUDIT, COPY_WORLD_VOICE, SALE, UI_UX; tests ui-guard, traits.
+- **Every Epic Food / Drink fights** (User: 영웅이랑 차이가 별로 없다 · 희귀는 소지금 획득도 있는데 · 투력 6으로 통일): 영웅 결전 도시락,
+  왕도 천연암반수, 초고속 에너지드링크 and 대현자 허브엘릭서 add 투력 +6, Stats and 피로 회복 unchanged - so an adventurer strong in a
+  Hazard's Stat can answer it with that Stat's Epic Drink and a Counter for the other Hazard, and still fight; 길드 특제 도시락 stays
+  the earning lunch. Their prices rise between 상급 포션 (195) and 최상급 포션 (235), as each now fights and answers a Stat group:
+  초고속 에너지드링크 / 대현자 허브엘릭서 175 → 205, 왕도 천연암반수 185 → 210, 영웅 결전 도시락 210 → 230 (Sell × 2). ITEM §ACTIVE
+  CATALOG / ITEM-Q prices / DI-Q-v28-1; test vocabulary.
+- **The Counter ladder re-cut for the steeper Threat** (User: 피로 회복 같은 게 달린 건 감안해서 깎고 · 전문 대응템에 메리트 · 이온음료는
+  페널티도 없다): one value per rung for every Hazard - the Field Gear 중반 대응 28 (was 23 / 23 / 22), Tier 2 surely and 대응 at
+  late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 - 컵라면 · 얼음컵 · 중화
+  탄산수 · 집중 사탕 12 → 10, 용사의 곡주 22 → 25, 불룡볶음면 냉기 21 → 23 (its 강인함 +6 counted), 쿨링 이온음료 22 → 23 (no
+  drawback, 2 lower again); the 초반 하이브리드 first Hazard 11 → 8 (under the Food 초반 대응), its second 12 (방한 두건 화이트아웃 13
+  → 12); 방진마스크 12 and the 후반 하이브리드 18 unchanged (the steeper Threat already takes the Epic hybrid from 충분 to 대응 on late
+  Tier 2). Prices unchanged. ITEM §COUNTER LADDER / §ACTIVE CATALOG / ITEM-Q, RELIC (예시), UI_UX (집중 사탕 예시); test vocabulary.
+
+- **Levels and Wallets snowball less** (User, from a main-build save that cleared its first Run: 레벨은 무조건 돌려야 · 소지금 큰 게
+  너무 스노우볼 · 경제도 깎아야): the expedition EXP × 1.2 becomes × 1.1 (base 26.4 + Day × 5.52 → 24.2 + Day × 5.06; × 1.0 measured too
+  harsh with the rest of this patch) - the save's lead warrior reached Lv23 in 18 expeditions, about one Level per late success; a 성공 / 대성공 pays the expedition Wallet reward × 1.25
+  (was × 1.5) - the same warrior brought home +867G on D28. DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests night, revision.
+
+- **Every Core Stat counts alike, each with one small side role** (User: 가중치는 없애되 직업별 특색은 살리기 · 능력치당 역할이 게임
+  판도를 바꿀 만큼 크지 않게 · 코치에도 알려 줘): Prepared Power = 투력 × 0.50 + (강인함 + 기동 + 정신) × 0.27 (was .34 / .27 / .20;
+  the average adventurer moves under 1%, a Job at most ±3%), the Final's individual Power the same. Side roles, small: 강인함 keeps
+  its incident cut (× 0.001), 기동's escape on a lost fight drops to × 0.003 (was × 0.005), and 정신 now trims the failure Death
+  chance by × 0.003, at most 15%. The SALE STATS coach adds one sentence naming the three roles, no numbers. DUNGEON_HAZARD
+  §PREPARED POWER / escape / §Spirit steadiness, FINAL_EXPEDITION §INDIVIDUAL FINAL POWER, COPY_AUDIT §3-7; tests vocabulary,
+  final, night, simulation, relic-effects, ui-guard.
+- **One Stat Food / Drink value per Rarity** (User: 등급마다 올려 주는 스탯은 높게 · 도시락 강인함도 깎고 · 영웅 투력 5): Drink 12 / 17 / 20
+  + 투력 5, Food 6 / 9 / 12 / 15 + 투력 5 - 생수 10 → 12, 진정 허브티 15 → 12, 녹차 양갱 8 → 6, 간단 도시락 12 → 9 (원정 소지금 +20% → +10%,
+  100 → 90G), 길드 특제 도시락 16 → 12 (+40% → +25%, 185 → 165G), 영웅 결전 도시락 18 → 15, 왕도 천연암반수 24 → 20, 초고속 에너지드링크
+  26 → 20, 대현자 허브엘릭서 28 → 20 (the four Epics 투력 6 → 5; 205G / 180G / 180G / 180G). ITEM §STAT FOOD / DRINK LADDER /
+  §ACTIVE CATALOG / DI-Q-v28-1; tests vocabulary, relic-effects.
+
+- **A lost fight kills less often** (User, after the second measure ended 80% of fresh Runs on the death limit around DAY 17:
+  실패 시 사망의 전투 결손 계수만 풀고): CombatDeathContribution = CombatDeficit × 0.30 (was × 0.40); the environment term, the caps
+  and the injured / 탈진 / strain terms are unchanged. DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK / DUN-Q; test night.
 
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 

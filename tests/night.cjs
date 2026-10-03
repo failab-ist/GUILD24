@@ -426,9 +426,9 @@ test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 
   assert.equal(Dungeon.fatigueBand(f).name,name,f+' is '+name);}
  // Fatigue 40 adds the +10%p failure-Death term like an injured departure, cap raised the same way
  const risk39=Dungeon.failureDeathRisk(npc(39),{...d,power:400}),risk40=Dungeon.failureDeathRisk(npc(40),{...d,power:400});
- assert.ok(near(risk40.chance,Math.min(.60,risk40.healthy+.10))&&risk40.chance>risk39.chance,'탈진 is +10%p over its own healthy chance, under a 60% cap');
+ assert.ok(near(risk40.chance,Math.min(.60,risk40.healthy+.10)*risk40.steady)&&risk40.chance>risk39.chance,'탈진 is +10%p over its own healthy chance, under a 60% cap (then 정신 steadiness)');
  const both=Dungeon.failureDeathRisk({...npc(40),injury:1},{...d,power:400});
- assert.ok(both.chance<=.70+1e-9&&near(both.chance,Math.min(.70,both.healthy+.20)),'injured and 탈진 together: +20%p under 70%');
+ assert.ok(both.chance<=.70+1e-9&&near(both.chance,Math.min(.70,both.healthy+.20)*both.steady),'injured and 탈진 together: +20%p under 70%');
  // the band is judged after preRecovery: 삼각김밥 Supply 5 (v2.9.1 balance, was 4) at 22 departs at 17 (지침), not 22 (과로)
  assert.equal(D.itemBy.rice.effects.supply,5);
  const fed=Dungeon.prepare(npc(22,['rice']),d).effects;
@@ -515,9 +515,9 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.95],[24,29.25],[29,34.75],[30,35.85]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
- /* §GATE POWER SuccessEase (User 2026-10-02/03, v2.10.0): the whole ordinary Gate Power x .92 on DAY 1~7, x .90 on DAY 8~21, x .95 from DAY 22 */
- assert.deepEqual(Dungeon.GATE_EASE,{early:.92,mid:.90,late:.95,midFrom:8,lateFrom:22});
- for(const [day,ease] of [[1,.92],[7,.92],[8,.90],[21,.90],[22,.95],[29,.95]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
+ /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 on DAY 1~21, x .90 on DAY 8~21, x .95 from DAY 22 */
+ assert.deepEqual(Dungeon.GATE_EASE,{early:.90,late:.95,lateFrom:22});
+ for(const [day,ease] of [[1,.90],[5,.90],[6,.90],[7,.90],[8,.90],[21,.90],[22,.95],[29,.95]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
  /* makeDungeon applies SuccessEase once, on the finished Gate Power (read off real Gates, golem's Family Combat included) */
  {const g=new Game();g.autosave=false;g.start('gate-ease');
   for(const day of [3,8,22])for(const id of ['spider','golem'])for(const tier of [1,2]){g.run.day=day;const b=D.dungeonBy[id],gate=g.makeDungeon(id,tier);
@@ -526,7 +526,7 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
- assert.deepEqual(Dungeon.DEATH,{combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10},
+ assert.deepEqual(Dungeon.DEATH,{combat:.30,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
   'the shipped coefficients are the canonical baseline');
  // the two deficits are the only inputs, and each one alone raises the chance
  const weak=at(1,0).risk,strong=at(400,0).risk;
@@ -535,11 +535,14 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  assert.ok(weak.chance<=0.50+1e-9,'the healthy conditional cap is 50% (v2.10.0)');
  for(const over of [1,20,60,140,400]){
   const {risk}=at(over,0);
-  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.40+risk.environmentDeficit*.20)))<1e-12,
-   'the chance is exactly CombatDeficit x .40 + EnvironmentDeficit x .20, clamped');
+  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.30+risk.environmentDeficit*.20))*risk.steady)<1e-12,
+   'the chance is exactly CombatDeficit x .30 + EnvironmentDeficit x .20, clamped, then 정신 steadiness');
+  /* DUNGEON_HAZARD §Spirit steadiness: 정신 x .003 off the chance, at most 15% */
+  const sp=Dungeon.prepare(at(over,0).n,d).effects.spirit;
+  assert.ok(Math.abs(risk.steady-(1-Math.min(.15,sp*.003)))<1e-12,'정신 '+sp.toFixed(1)+' trims the chance by '+(100*(1-risk.steady)).toFixed(1)+'%');
   const hurt=at(over,1).risk;
   // the +10%p rides that snapshot's OWN healthy value - departing injured also lowers the Stats
-  assert.ok(Math.abs(hurt.chance-Math.max(0,Math.min(.60,hurt.healthy+.10)))<1e-12,'an injured departure is +10%p under a 60% cap');
+  assert.ok(Math.abs(hurt.chance-Math.max(0,Math.min(.60,hurt.healthy+.10))*hurt.steady)<1e-12,'an injured departure is +10%p under a 60% cap');
   assert.ok(hurt.chance>risk.chance,'sending a wounded adventurer back out is visibly more dangerous');
   assert.ok(hurt.chance<=0.60+1e-9,'the injured conditional cap is 60%');
  }
@@ -666,7 +669,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expe
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:(a)=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
  const base=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco'],injury:0,fatigue:0,alive:true,recovery:0,level:1,xp:0}));
- const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+ const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-(gate.scale||1)*.024));
  const withE=Dungeon.prepare(base(),gate,[]).effects,withoutE=Dungeon.prepare({...base(),pack:[]},gate,[]).effects;
  const escWith=escChance(withE),escWithout=escChance(withoutE);
  assert.ok(escWith>escWithout,'초코바 really does raise the escape chance, or this proof has nothing to test');
@@ -700,7 +703,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the pos
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:(a)=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
  const base=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco'],injury:0,fatigue:18,alive:true,recovery:0,level:1,xp:0}));
- const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+ const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-(gate.scale||1)*.024));
  const withE=Dungeon.prepare(base(),gate,[]).effects,withoutE=Dungeon.prepare({...base(),pack:[]},gate,[]).effects;
  assert.ok(withE.effectiveFatigue>=10&&withE.effectiveFatigue<20,
   'sanity: the departure Fatigue really is in the 10-19 band, or this proof has nothing to test');
@@ -880,7 +883,7 @@ test('RESULT-PROOF: existing attribution rules still hold (single / overlap / wh
  const g=new Game();g.autosave=false;g.start('result-proof-attribution');
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
- const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+ const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-(gate.scale||1)*.024));
  // single necessary Item is exercised directly by the departure-Stats/Fatigue tests above
  // (초코바 alone flips 부상 <-> 중상); this test covers overlap / whole-Bag / 황금 1+1 only.
  // Every case below forces an environment incident (envRoll 0.0001) so the retreat-still-
@@ -1014,22 +1017,22 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
   'ownership is generic ({items:null}) - since either single 구급키트 copy alone still relieves it, no one copy is invented as the sole cause');
 });
 
-test('DUNGEON_HAZARD §Ordinary EXP: base 26.4 + Day x 5.52; 대성공 1.00, combat-success 0.90, 퇴각 0.38, other living 0.50',()=>{
+test('DUNGEON_HAZARD §Ordinary EXP: base 24.2 + Day x 5.06; 대성공 1.00, combat-success 0.90, 퇴각 0.38, other living 0.50',()=>{
  assert.equal(Dungeon.GREAT.xp,1.00);assert.equal(Dungeon.WIN.xp,.90);
  /* 퇴각 and the other living failures, read off real resolutions at a Gate the adventurer cannot beat */
  {const lose={'퇴각':.38,'부상':.5,'중상':.5},got={'퇴각':0,'부상':0,'중상':0};
   const base=Adventurer.create(new RNG('xp-lose'),1,6,Meta.fresh()),d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:9999,reward:1};
   for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(base)),traits:[],pack:[],fatigue:0,injury:0,records:[]};
    const xpMult=Dungeon.prepare(n,d).effects.xpMult,r=Dungeon.resolve(n,d,new RNG('xp-lose-'+i));
-   if(lose[r.outcome]!==undefined){assert.equal(r.xp,Math.round((26.4+6*5.52)*lose[r.outcome]*xpMult),r.outcome+' EXP = round(base x '+lose[r.outcome]+' x xpMult)');got[r.outcome]++;}}
+   if(lose[r.outcome]!==undefined){assert.equal(r.xp,Math.round((24.2+6*5.06)*lose[r.outcome]*xpMult),r.outcome+' EXP = round(base x '+lose[r.outcome]+' x xpMult)');got[r.outcome]++;}}
   assert.ok(got['퇴각']>0&&got['부상']+got['중상']>0,'a 퇴각 and another living failure were resolved and checked '+JSON.stringify(got));}
- assert.equal(Dungeon.WALLET_MULT['대성공'],1.5,'the Great Success Wallet reward is the success one (v2.10.0 x1.5)');
+ assert.equal(Dungeon.WALLET_MULT['대성공'],1.25,'the Great Success Wallet reward is the success one');
  // real resolved results pay exactly round(base x multiplier x the explicit XP modifiers)
  const want={'대성공':1.00,'성공':.90};const seen={'대성공':0,'성공':0};
  for(let k=0;k<400&&(seen['대성공']<3||seen['성공']<3);k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
   for(let d=0;d<12&&g.run.phase!=='end';d++){const s=g.run;s.money=5000;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();
    for(const r of s.results)if(want[r.outcome]&&!r.deep&&seen[r.outcome]<3){const e=Dungeon.prepare({...s.npcs.find(n=>n.id===r.npcId),pack:r.items},s.dungeons.find(x=>x.id===r.dungeon)||s.dungeons[0],s.facilities).effects;
-    assert.equal(r.xp,Math.round((26.4+r.day*5.52)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
+    assert.equal(r.xp,Math.round((24.2+r.day*5.06)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
    g.finishNight();g.closeDay();}}
  assert.ok(seen['대성공']>0&&seen['성공']>0,'a 대성공 and a 성공 were resolved and checked');
 });
@@ -1057,7 +1060,7 @@ test('RESULT-PROOF: the shadow carries the Day\'s 길드 연회 food bonus (n.fe
  const x=D.items.find(it=>!['food','drink'].includes(it.category)&&Object.keys(it.effects).every(k=>!NOT_PATH.has(k))&&Object.keys(it.effects).length);
  assert.ok(x,'an Item that cannot touch the escape path exists');
  const mk=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['ramen',x.id],injury:0,fatigue:24,feast:2,alive:true,recovery:0,level:1,xp:0,records:[]}));
- const esc=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-e.itemEscape-(gate.scale||1)*.024));
+ const esc=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.003+e.escape-e.itemEscape-(gate.scale||1)*.024));
  const withFeast=esc(Dungeon.prepare(mk(),gate,[]).effects),noFeast=esc(Dungeon.prepare({...mk(),feast:0},gate,[]).effects);
  assert.ok(withFeast>noFeast,'the banquet really moves the Fatigue band, or this proof has nothing to test');
  // combat fails (power 1e9); an incident (envRoll .0001) makes the real retreat draw injuryRoll; the escape roll sits between the two chances
@@ -1098,10 +1101,10 @@ test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 ba
  // one past injured run + departing injured now = 2 consecutive -> +8%p
  const once=Dungeon.failureDeathRisk(mk([{departedInjured:true,outcome:'부상'}],1),d);
  assert.ok(Math.abs(once.strain-.08)<1e-12,'a second consecutive injured departure adds 8%p');
- assert.ok(Math.abs(once.chance-Math.min(.60+.08,once.healthy+.10+.08))<1e-12,'the +8%p rides the injured term and lifts the cap with it');
+ assert.ok(Math.abs(once.chance-Math.min(.60+.08,once.healthy+.10+.08)*once.steady)<1e-12,'the +8%p rides the injured term and lifts the cap with it');
  const firstInjured=Dungeon.failureDeathRisk(mk([],1),d);
  assert.equal(firstInjured.strain,0,'the first injured departure is free');
- assert.ok(Math.abs(firstInjured.chance-Math.min(.60,firstInjured.healthy+.10))<1e-12,'the injured departure itself is unchanged');
+ assert.ok(Math.abs(firstInjured.chance-Math.min(.60,firstInjured.healthy+.10)*firstInjured.steady)<1e-12,'the injured departure itself is unchanged');
  // two past + this one = 3 consecutive -> +16%p
  const chain3=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1),d);
  assert.ok(Math.abs(chain3.strain-.16)<1e-12,'two past + this one = 3 consecutive -> +16%p');
@@ -1201,7 +1204,8 @@ test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, 
  const p=Dungeon.prepare(lv10Prepared,d),required=d.power||1;
  const combatDeficit=Math.max(0,Math.min(1,(required-Dungeon.preparedPower(p.effects))/required));
  const environmentDeficit=p.hazards.length?p.hazards.reduce((v,h)=>v+Math.max(0,Math.min(1,h.gap/h.threat)),0)/p.hazards.length:0;
- const expectedHealthy=Math.max(0,Math.min(Dungeon.DEATH.cap,combatDeficit*Dungeon.DEATH.combat+environmentDeficit*Dungeon.DEATH.environment));
+ const steady=1-Math.min(Dungeon.DEATH.spiritMax,p.effects.spirit*Dungeon.DEATH.spirit);
+ const expectedHealthy=Math.max(0,Math.min(Dungeon.DEATH.cap,combatDeficit*Dungeon.DEATH.combat+environmentDeficit*Dungeon.DEATH.environment))*steady;
  assert.ok(Math.abs(Dungeon.failureDeathRisk(lv10Prepared,d).chance-expectedHealthy)<1e-9,
   'a carried Bag only ever moves the SALE snapshot through the ordinary combat/environment deficit terms, never through preparedFactor');
 });
