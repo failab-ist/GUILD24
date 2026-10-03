@@ -315,7 +315,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,100,'counter: the first customer of the Day +100G (User 2026-10-03, v2.10.0; was 50G Store Gold every morning)');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200,'counter: the first customer of the Day +200G (User 2026-10-03, v2.10.0; was 50G Store Gold every morning)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
  assert.equal(DATA.balance.wallVisitorChance,.45,'길드 추천 매대 is the approved Morning chance (User 2026-09-28, v2.9.11; 30% from v2.9.1, was 25%)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');

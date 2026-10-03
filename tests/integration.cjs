@@ -1398,16 +1398,16 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.30&&up/all<.50,'about 40%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first customer brings +100G more, once a Day (User 2026-10-03, v2.10.0; was 50G Store Gold)',()=>{
+test('알뜰 금고: the Day\'s first customer brings +200G more, once a Day (User 2026-10-03, v2.10.0; was 50G Store Gold)',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b]=s.npcs;
  for(const n of [a,b]){n.traits=[];n.money=100;n.introduced=true;}
  s.queue=[a.id,b.id];s.cursor=0;g.arrive();
- assert.equal(a.money,200,'the first customer to reach the counter: +100G');assert.equal(s.daily.safeWallet,a.id);
+ assert.equal(a.money,300,'the first customer to reach the counter: +200G');assert.equal(s.daily.safeWallet,a.id);
  s.cursor=1;g.arrive();assert.equal(b.money,100,'the second gets nothing');
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
  assert.ok(!source('dist/ui/app.js').includes("'알뜰 금고'"),'the Store receives nothing, so the receipt has no row for it');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,100);
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);
 });
 
 test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estimate is tomorrow\'s real base cost (v2.9.7)',()=>{

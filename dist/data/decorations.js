@@ -15,7 +15,7 @@ G.DATA.decorations=[
   text:'길드 원정 지원금이 되는 가게. 모험가들이 하나씩 더 집어 간다.'},
  {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:'평범보다 높은 등급의 모험가 등장 확률 60%로 증가 (기존 40%)',
   text:'이름난 모험가의 초상. 저 벽에 걸리고 싶은 사람이 문을 연다.'},
- {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:750, effect:'매일 첫 손님 소지금 +100G',
+ {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:750, effect:'매일 첫 손님 소지금 +200G',
   text:'카운터 아래 작은 금고. 그날 첫 손님의 지갑에 길드 적립금을 보태 준다.'},
  {id:'guildShelf', kind:'economy', slot:'display', name:'길드 추천 매대',   price:500, effect:'매일 아침 45% 확률로 방문객 +1명',
   text:'길드 추천 딱지가 붙은 매대. 가끔 이걸 보고 한 명이 더 들른다.'},
@@ -35,7 +35,7 @@ G.DATA.decorations=[
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance). Presentation copy above states the same values. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={sponsorSign:{budgetShare:.25},thriftSafe:{firstWallet:100},honorFrame:{weights:[40,32,18,8,2]},
+G.DATA.decorationParams={sponsorSign:{budgetShare:.25},thriftSafe:{firstWallet:200},honorFrame:{weights:[40,32,18,8,2]},
  memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.45},trainingSign:{levelBonus:1,chance:.40},aidCabinet:{preparedFactor:.60}};
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */
