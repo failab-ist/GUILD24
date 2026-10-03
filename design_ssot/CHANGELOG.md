@@ -60,6 +60,11 @@ and this table is their commit record.
   → 12); 방진마스크 12 and the 후반 하이브리드 18 unchanged (the steeper Threat already takes the Epic hybrid from 충분 to 대응 on late
   Tier 2). Prices unchanged. ITEM §COUNTER LADDER / §ACTIVE CATALOG / ITEM-Q, RELIC (예시), UI_UX (집중 사탕 예시); test vocabulary.
 
+- **Levels and Wallets snowball less** (User, from a main-build save that cleared its first Run: 레벨은 무조건 돌려야 · 소지금 큰 게
+  너무 스노우볼 · 경제도 깎아야): the expedition EXP × 1.2 is undone (base 26.4 + Day × 5.52 → 22 + Day × 4.6) - the save's lead
+  warrior reached Lv23 in 18 expeditions, about one Level per late success; a 성공 / 대성공 pays the expedition Wallet reward × 1.25
+  (was × 1.5) - the same warrior brought home +867G on D28. DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests night, revision.
+
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 
 - **The hidden reputation is gone** (User: 평판처럼 몰래 하는 건 안 된다 · 싹 없앤다): the Run no longer keeps a 0~100 reputation

@@ -120,7 +120,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   }
  }
  assert.ok(sampled>0,'sanity: at least one 퇴각 sample was observed to check');
- assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1.5,'성공':1.5,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
+ assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
 });
 test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
  const ids=new Set();

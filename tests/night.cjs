@@ -1014,22 +1014,22 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
   'ownership is generic ({items:null}) - since either single 구급키트 copy alone still relieves it, no one copy is invented as the sole cause');
 });
 
-test('DUNGEON_HAZARD §Ordinary EXP: base 26.4 + Day x 5.52; 대성공 1.00, combat-success 0.90, 퇴각 0.38, other living 0.50',()=>{
+test('DUNGEON_HAZARD §Ordinary EXP: base 22 + Day x 4.6; 대성공 1.00, combat-success 0.90, 퇴각 0.38, other living 0.50',()=>{
  assert.equal(Dungeon.GREAT.xp,1.00);assert.equal(Dungeon.WIN.xp,.90);
  /* 퇴각 and the other living failures, read off real resolutions at a Gate the adventurer cannot beat */
  {const lose={'퇴각':.38,'부상':.5,'중상':.5},got={'퇴각':0,'부상':0,'중상':0};
   const base=Adventurer.create(new RNG('xp-lose'),1,6,Meta.fresh()),d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:9999,reward:1};
   for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(base)),traits:[],pack:[],fatigue:0,injury:0,records:[]};
    const xpMult=Dungeon.prepare(n,d).effects.xpMult,r=Dungeon.resolve(n,d,new RNG('xp-lose-'+i));
-   if(lose[r.outcome]!==undefined){assert.equal(r.xp,Math.round((26.4+6*5.52)*lose[r.outcome]*xpMult),r.outcome+' EXP = round(base x '+lose[r.outcome]+' x xpMult)');got[r.outcome]++;}}
+   if(lose[r.outcome]!==undefined){assert.equal(r.xp,Math.round((22+6*4.6)*lose[r.outcome]*xpMult),r.outcome+' EXP = round(base x '+lose[r.outcome]+' x xpMult)');got[r.outcome]++;}}
   assert.ok(got['퇴각']>0&&got['부상']+got['중상']>0,'a 퇴각 and another living failure were resolved and checked '+JSON.stringify(got));}
- assert.equal(Dungeon.WALLET_MULT['대성공'],1.5,'the Great Success Wallet reward is the success one (v2.10.0 x1.5)');
+ assert.equal(Dungeon.WALLET_MULT['대성공'],1.25,'the Great Success Wallet reward is the success one');
  // real resolved results pay exactly round(base x multiplier x the explicit XP modifiers)
  const want={'대성공':1.00,'성공':.90};const seen={'대성공':0,'성공':0};
  for(let k=0;k<400&&(seen['대성공']<3||seen['성공']<3);k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
   for(let d=0;d<12&&g.run.phase!=='end';d++){const s=g.run;s.money=5000;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();
    for(const r of s.results)if(want[r.outcome]&&!r.deep&&seen[r.outcome]<3){const e=Dungeon.prepare({...s.npcs.find(n=>n.id===r.npcId),pack:r.items},s.dungeons.find(x=>x.id===r.dungeon)||s.dungeons[0],s.facilities).effects;
-    assert.equal(r.xp,Math.round((26.4+r.day*5.52)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
+    assert.equal(r.xp,Math.round((22+r.day*4.6)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
    g.finishNight();g.closeDay();}}
  assert.ok(seen['대성공']>0&&seen['성공']>0,'a 대성공 and a 성공 were resolved and checked');
 });
