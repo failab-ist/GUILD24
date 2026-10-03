@@ -954,11 +954,12 @@ function saleScreen(){
      as the standing description they are, under the goods. Nothing is dropped, no wording
      changes, and the wide layout still sets both columns side by side. */
   +'<div class="dossier-col">'
-   +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+'</div>'
+   +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+'</div>'
    +'<div class="dossier traits">'+traitRows(n)+'</div>'
    /* UI-Q-v29-16 (User 2026-09-24, v2.9.0): no second owned-Relic block in SALE at any width - the shelf-head control is the one reference */
   +'</div>'
   +'<div class="shelf-col">'+shelf()+'</div>'
+  +'<div class="sale-deep">'+deepOfferUI(n)+'</div>'
  +'</main>'
  +tray()
  /* D-34. Every price on this screen is a judgement against what the store has, and the
@@ -1811,7 +1812,7 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  return '<div class="counter-tray'+(trayFolded?' folded':'')+'" role="region" aria-label="계산대">'
   +'<button type="button" class="tray-unfold" data-action="tray-open" aria-expanded="'+!trayFolded+'" aria-label="계산대 열기"></button>'
   +'<div class="tray-item"><span class="tray-icon r'+it.rarity+'">'+Art.itemIcon(it.id,32)+'</span>'
-  +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+it.sell+'G · 재고 '+st.count+' · '+life+'</span></span>'
+  +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span class="tray-stock">'+it.sell+'G · 재고 '+st.count+' · '+life+'</span></span>'
   +'<span class="tray-who"><b>'+E(n.name)+'에게</b> · '+walletChip(n)+'</span></div>'
   +'<p class="tray-delta"><span class="delta-src">판매 후 변화</span>'+(parts.length?parts.join('<i> · </i>'):'<b>현재 준비 변화 없음</b>')+'</p>'
   +(rest.length?'<p class="tray-delta special"><span class="delta-src">특수 효과</span>'+rest.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label+' '+r.text)+'</b>').join('<i> · </i>')+'</p>':'')
@@ -2761,7 +2762,10 @@ const whClose=()=>{for(const t of document.querySelectorAll('.wh-tip[open]'))t.o
 addEventListener('scroll',whClose,{capture:true,passive:true});addEventListener('resize',whClose);
 document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);
  /* a tap anywhere but the tray itself, a shelf row, the dock or an overlay folds the tray (UI_UX §SALE — COUNTER TRAY FOLD) */
- if(!ev.target.closest('.counter-tray,[data-action="select"],.dock,#modal-root,#coach-root'))foldTray();},true);
+ if(!ev.target.closest('.counter-tray,[data-action="select"],.dock,.sale-deep,#modal-root,#coach-root'))foldTray();},true);
+/* The phone Deep disclosure sits below the shelf: folding on pointerdown would move its summary
+   before pointerup and swallow the tap. Keep the outside-tap fold, after the native click. */
+document.addEventListener('click',ev=>{if(ev.target.closest('.sale-deep'))setTimeout(foldTray,0);});
 /* UI_UX_QA §UI-Q-v28-6. A popover a mouse has to click is a phone control wearing a desktop
    coat: on a pointer device the explanation opens on hover, and for a keyboard it opens on
    focus. Both drive the SAME <details> the tap toggles - no second popover mechanism, no CSS

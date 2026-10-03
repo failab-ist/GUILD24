@@ -28,6 +28,13 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **SALE design candidate on `ui/design-trim`** (User 2026-10-03): restore the phone character to about 85–90% of the pre-trim
+  size, keep both Bag targets clear of the menu, and recover comparison space through a readable local type ladder and
+  aligned tray metadata. Deep nomination follows the phone shelf, still before purchase; desks keep the control placement.
+  SALE reuses MORNING's untouched portrait/wide room assets behind dark information planes. UI_UX §SALE — MOBILE AUTHORITY,
+  §COUNTER TRAY, §MOBILE SALE DENSITY, §FUNCTION / FLAVOR, §SHORT PHONE and UI-Q-v29-18 own the approved behavior.
+  Implementation approval does not close final visual review; no balance/version/main/release change.
+
 - **카리냐 → 카리냥** (User): renamed in place - the same F/021 portrait - in the shipped pool and the production name pool
   (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the F NAME_INDEX, the id mapping, their checksums). A Run saved earlier
   carries the new name on load (`Save.migrate`), so that customer keeps the portrait; test revision.

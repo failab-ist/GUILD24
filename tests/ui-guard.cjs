@@ -1887,7 +1887,7 @@ test('SALE counter tray folds while the shelf is read and opens on any row',()=>
  assert.ok(/function foldTray\(\)\{if\(!selected\|\|trayFolded\|\|innerWidth>=1024/.test(app),'only a filled tray folds, and never on a desk');
  assert.ok(/Math\.abs\(sc\.scrollTop-trayBase\)>32\)foldTray\(\)/.test(fn('watchTray')),'a shelf scroll past 32px folds it');
  assert.ok(/performance\.now\(\)<trayArm/.test(fn('watchTray')),'the anchoring scroll of a pick does not fold it');
- assert.ok(/if\(!ev\.target\.closest\('\.counter-tray,\[data-action="select"\],\.dock,#modal-root,#coach-root'\)\)foldTray\(\)/.test(app),'a tap outside the tray folds it');
+ assert.ok(/if\(!ev\.target\.closest\('\.counter-tray,\[data-action="select"\],\.dock,\.sale-deep,#modal-root,#coach-root'\)\)foldTray\(\)/.test(app)&&/if\(ev\.target\.closest\('\.sale-deep'\)\)setTimeout\(foldTray,0\)/.test(app),'outside taps fold; the moved phone Deep control completes its native click before folding');
  assert.ok(/case'tray-open':trayFolded=false;syncTray\(\)/.test(app),'the folded strip opens it again');
  assert.ok(/const reopen=trayFolded&&selected===id;trayFolded=false;/.test(app),'any shelf row opens it again');
  assert.ok(/\.p-sale \.counter-tray\.folded \.tray-delta,\.p-sale \.counter-tray\.folded \.tills\{display:none\}/.test(css),'folded, only the header line stays');
@@ -1899,7 +1899,7 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  const sh=fn('shelf'),se=fn('shelfEffects');
  assert.ok(!/\.slice\(0,2\)/.test(sh),'no effect is cut from the shelf row');
  assert.ok(/shelfEffects\(Presentation\.rows\(/.test(sh),'the row hands every row to one owner');
- assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'a longer line steps down instead of wrapping');
+ assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'desk density classes remain; the approved phone SALE override wraps at its readable step');
  for(const [c,px] of [['tight',13],['dense',12],['densest',11]])assert.ok(new RegExp('\\.good \\.what span\\.'+c+'\\{font-size:'+px+'px').test(css),c+' is '+px+'px');
  assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소모품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
  // the core is the approved line's own words, not new copy
@@ -3237,7 +3237,10 @@ test('UI-Q-v29-43: the SALE phone outlook and Core Stats are one plate, the desk
  assert.ok(/>\.readout\{margin:0;padding:9px 12px 7px;background:none;box-shadow:none\}/.test(block),'the outlook has no box of its own');
  assert.ok(/>\.detail-stats\{margin:0;padding:2px 12px 8px;background:none;box-shadow:inset 0 1px 0 #ffffff26\}/.test(block),'the grid has no box, only the seam');
  assert.ok(/@media\(min-width:1024px\)\{\n \.p-sale \.dossier:not\(\.traits\)\{background:none;box-shadow:none\}/.test(css),'and the desk column is restored as it was');
- assert.ok(/'<div class="dossier">'\+returningSummary\(n\)\+readout\(n,st\?st\.item:null,'core-mob'\)\+statGrid\(n\)\+deepOfferUI\(n\)\+'<\/div>'/.test(fn('saleScreen')),'the same content in the same order');
+ const sale=fn('saleScreen');
+ assert.ok(/'<div class="dossier">'\+returningSummary\(n\)\+readout\(n,st\?st\.item:null,'core-mob'\)\+statGrid\(n\)\+'<\/div>'/.test(sale),'the customer outlook and stats keep their reading order');
+ assert.ok(sale.indexOf("shelf()")<sale.indexOf("deepOfferUI(n)"),'the optional phone Deep disclosure follows comparison (User 2026-10-03)');
+ assert.ok(fn('saleDesk').includes('statGrid(n)+deepOfferUI(n)'),'the desk keeps its existing Deep placement');
 });
 
 test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, dock Action, the way back from the ending',()=>{
@@ -3568,7 +3571,7 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
  assert.ok(/\.p-sale \.counter-tray\{flex:0 0 auto;/.test(css)&&/\.tray-empty\{margin:0;min-height:44px/.test(css),'fixed band, 44px when empty');
  assert.ok(/\.counter-tray \.tills button\{min-height:64px/.test(css)&&/\.good\{[^}]*padding:8px 0/.test(css)&&/\.good \.tile\{width:38px/.test(css),'compact keys and rows keep the 360 budget');
  assert.ok(/\.sale-desk>\.counter-tray\{grid-area:tray;align-self:start;display:block;/.test(css)&&/\.sale-desk>\.counter-mat\{grid-area:tray;/.test(css),'on a desk the tray lies in the middle area on the counter (User 2026-09-30)');
- assert.ok(/\.good \.what span\{font:600 14px/.test(css),'the effect line keeps its Function class (UI_UX §FUNCTION / FLAVOR)');
+ assert.ok(/\.good \.what span\{font:600 14px/.test(css)&&css.includes('.p-sale:not(.sale-desk) .good .what span{font-size:13px;line-height:1.3;')&&css.includes('word-break:keep-all;overflow-wrap:normal'),'desk effects keep the Function class; the approved phone SALE step is 13px and wraps intact (UI_UX §FUNCTION / FLAVOR)');
 });
 
 

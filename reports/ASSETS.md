@@ -239,6 +239,8 @@ flatter than the shared Action geometry it replaced.
     counter face 76-90.7%, floor 90.7-100%
   These are what the live layer is seated against, per breakpoint.
 - adopted: both `store-bg-*` files, as the MORNING room, in `dist/ui/director-review.css`.
+  SALE also reuses the portrait/wide room in `dist/ui/ui.css` (User 2026-10-03): the previous generated shelf-strip SVG is
+  hidden there; opaque information planes retain contrast. Asset bytes are untouched. Final visual approval is pending.
   PHONE takes the portrait file and DESKTOP the wide one at the sheet's existing 1024
   breakpoint. The room is owned by the MORNING stage, so it runs behind the Action dock as
   well, and `cover` crops horizontally only at every shipped width - no authored zone is lost
