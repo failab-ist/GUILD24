@@ -1395,12 +1395,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a handful of stamped tokens. A death cools the whole room.
    ===================================================================== */
 .p-night{background:#0a0d16}
-.p-night{--nb-head:50px;--nb-h:min(56vw,260px)}
+.p-night{--nb-head:50px;--nb-h:40vw}
 .p-night .nightband{position:absolute;left:0;right:0;top:0;height:var(--nb-h);z-index:0;pointer-events:none;
- background:url('assets/presentation/night/store-night.png') center top/cover no-repeat}
+ background:url('assets/presentation/night/store-night.png') center top/auto calc(var(--nb-h)/.74) no-repeat}
 .p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:22%;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
-@media(max-width:1023px){.p-night{--nb-h:40vw}.p-night .nightband{background-size:auto calc(var(--nb-h)/.74)}}
+@media(min-width:1024px){.p-night{--nb-h:min(56vw,260px)}.p-night .nightband{background-size:cover}}
 .p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;padding:0 var(--gutter) 24px;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 var(--sky),#100c07 calc(var(--sky) + 24px),#140f08 100%);
  --sky:var(--nb-h)}
