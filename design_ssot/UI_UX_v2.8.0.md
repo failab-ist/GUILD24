@@ -2143,7 +2143,7 @@ After actual purchase commit, PASS only if:
 
 #### UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
 
-Use current `집중 사탕` (`공포 대응 +12 / 피로 회복 3`) in two controlled setups.
+Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 2`) in two controlled setups.
 
 ##### Case A — no Fatigue band change
 

@@ -39,6 +39,13 @@ and this table is their commit record.
   curve A): Threat = (12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier − 1) × 6) × Stat-group factor - DAY 1~7 unchanged,
   D21 T2 26 → 32, D29 T3 35 → 45, the Final (Day 30 / T2) 29 → 39. DUNGEON_HAZARD §HAZARD THREAT / DUN-Q71 / the `대응 N 필요`
   rows, UI_UX, COPY_WORLD_VOICE; tests vocabulary, ui-guard.
+- **The Counter ladder re-cut for the steeper Threat** (User: 피로 회복 같은 게 달린 건 감안해서 깎고 · 전문 대응템에 메리트 · 이온음료는
+  페널티도 없다): the Field Gear 중반 대응 rises to 강인함 28 / 기동 27 / 정신 32 (was 23 / 23 / 22) so each reads the same - Tier 2
+  surely, 대응 at late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 -
+  컵라면 · 얼음컵 · 중화 탄산수 · 집중 사탕 12 → 10, 불룡볶음면 냉기 21 → 23, 용사의 곡주 22 → 29, 쿨링 이온음료 22 → 27 (no drawback,
+  2 lower again); the 초반 하이브리드 first Hazard 11 → 8 (under the Food 초반 대응); 방진마스크 12 and the 후반 하이브리드 18 unchanged
+  (the steeper Threat already takes the Epic hybrid from 충분 to 대응 on late Tier 2). Prices unchanged. ITEM §COUNTER LADDER /
+  §ACTIVE CATALOG / ITEM-Q, RELIC (예시), UI_UX (집중 사탕 예시); test vocabulary.
 
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 

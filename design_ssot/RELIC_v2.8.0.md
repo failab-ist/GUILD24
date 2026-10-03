@@ -1101,7 +1101,7 @@ PASS: Expedition Relics match the current Dungeon×Item model.
 `야전 정비대` multiplies the Hazard Counter values of every carried Item by 1.40 (User 2026-10-02).
 
 PASS:
-- Field Gear, Food and Drink Counter values all x1.40 (e.g. 컵라면 냉기 대응 12 -> 16.8); Core Stats, 피로 회복 and the flat 원정 도시락
+- Field Gear, Food and Drink Counter values all x1.40 (e.g. 컵라면 냉기 대응 10 -> 14); Core Stats, 피로 회복 and the flat 원정 도시락
   코너 +2 are unchanged
 - no ORDER offer weight or offer quantity effect
 
