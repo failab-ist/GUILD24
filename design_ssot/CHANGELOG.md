@@ -74,6 +74,8 @@ and this table is their commit record.
   40% → 55%, 의무실 현판 heal 45% → 40%, 알뜰 금고 now the Day's first two customers +200G each, 길드 추천 매대 45% → 35%, 구급품 진열장
   Death roll × 0.50 → × 0.60 (투력 +5% kept). META §sign / §wall / §counter / §display, DUNGEON_HAZARD §Preparation / Level Death
   reduction, COPY_AUDIT 9-5; tests integration, revision.
+- **UI_UX END tape names the current Store Capital rates** (1 / 2 / 3 / 3 / 3%; it still read 1 / 2 / 3 / 4 / 5% from before the
+  v2.9.13 change). UI_UX §END.
 - **A short Decoration key** (User 2026-10-03: 버튼 영역을 줄이고 효과 영역을 넓게): the buy key reads `구매` over a small `{가격} 자본`
   (was `{가격} 자본으로 구매`), beside the name on the card's first row, and the effect line runs the card's full width on the
   row below (the key is one 48 px height whether it reads 구매 or 해제, so buying never resizes the card); the eight effect lines
