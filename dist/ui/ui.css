@@ -3876,8 +3876,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
 /* SALE backdrop (User 2026-10-03): one wide store art for phone and desk, framed from the wall down (no ceiling), the side shelves
    showing at the edges; a dim layer keeps the bright room behind the dark cards */
-.p-sale{background:linear-gradient(#0d0a06a6,#0d0a06bd),url('assets/presentation/sale/sale-bg-phone.png') 85% bottom/cover no-repeat #17110b}
-.p-sale.sale-desk{background:linear-gradient(#0d0a0680,#0d0a06a0),url('assets/presentation/sale/sale-bg.png') center bottom/auto 118% no-repeat #17110b}
+.p-sale{background:linear-gradient(#0d0a0670,#0d0a0680),url('assets/presentation/sale/sale-bg-phone.png') center bottom/100% auto no-repeat #1d1710}
+.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.png') center bottom/100% 120% no-repeat #17110b}
 /* SALE shelf head (User 2026-10-03): the wooden plank asset spans the whole frame width */
 .p-sale .shelf-head{margin:0;padding:6px 16px;border:solid transparent;border-width:0 14px;
  border-image:url('assets/presentation/sale/shelf-plank.png') 0 115 fill/0 14px stretch;
@@ -3942,3 +3942,5 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* SALE section rules (User 2026-10-03): the rule under the tray above 손님 보내기 is the same 4px board edge as the one between the two halves */
 .p-sale:not(.sale-desk) .counter-tray{box-shadow:inset 0 4px 0 #000000b3,inset 0 -1px 0 #4a331d,inset 0 -2px 0 #7c5730,inset 0 -3px 0 #b98d52,inset 0 -4px 0 #d3ac71}
 .p-sale .detail-stat strong,.p-sale:not(.sale-desk) .detail-stat strong,.sale-desk .detail-stat strong{font:600 16px/1.2 var(--ui)}
+/* SALE desk (User 2026-10-03): the column ends on the card's own bottom edge, not on the card slot's gap below it */
+@media(min-width:1024px){.sale-desk .front-side{margin-bottom:14px}}
