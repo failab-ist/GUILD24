@@ -11,11 +11,21 @@ Regenerate the vendored copies with `npm run assets`.
 - shipped PNG files under `dist/ui/assets/presentation/settings/`: `wood-panel.png` (1254 × 1254),
   `blue-key.png` and `red-key.png` (2172 × 724 each), `supply-backdrop.png` (1774 × 887). All retain their original
   RGBA pixels and metadata; copied without resizing, cropping or re-encoding.
-- role: wood panel and blank steel keys are CSS nine-slice sources for Settings and its existing import/reset
-  confirmations only. Labels remain live, selectable UI text. The supply illustration sits behind Settings content
+- role: wood panel is a CSS nine-slice source for Settings, its existing import/reset confirmations and the store
+  menu candidate; blank steel keys remain confined to Settings and its confirmations. Labels remain live, selectable UI text. The supply illustration sits behind Settings content
   at reduced opacity with no pointer events. These are not a replacement skin for gameplay phases.
 - status: implementation candidate. Generated concept images are not browser evidence; final material / content-fit
   acceptance requires actual mobile capture and User review.
+
+### Store menu destination icons — project-generated, review candidate
+- source: seven OpenAI-generated PNGs retained from the interrupted menu-design session (2026-10-03).
+  No third-party asset licence is claimed. Original RGBA pixels and metadata are copied without re-encoding.
+- shipped at `dist/ui/assets/presentation/menu/`, each 1254 × 1254: `roster.png` (scroll and quill),
+  `codex.png` (bound book), `support.png` (supply stall), `decor.png` (banner), `guide.png` (open book),
+  `settings.png` (gear), `abandon.png` (signpost).
+- role: decorative destination markers on existing menu rows only, displayed at 40px with empty alt text;
+  the live row label carries the accessible name. No title icon, new action or detailed-settings icon is added.
+- status: implementation candidate; runtime captures and User review determine visual acceptance.
 
 ### Wanted Sans 1.0.3 — information UI face
 - source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab

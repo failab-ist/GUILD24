@@ -2368,6 +2368,33 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-list button.danger{margin-top:13px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .menu-list button.danger:hover{background:#6b322b}
+/* The store menu owns wood navigation rows, not the blue utility keys in Settings.
+   Its PNG icons only identify destinations; names and actions stay live controls. */
+.modal.menu-panel{border:14px solid transparent;background:#24160d;background-clip:padding-box;
+ border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 14px / 0 stretch;
+ box-shadow:0 -4px 0 #100a06;isolation:isolate}
+.menu-panel .modal-header{padding:2px 6px 10px;box-shadow:0 2px 0 #100905,inset 0 -1px 0 #986532}
+.menu-panel .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.menu-panel .modal-header .bare{padding:8px 10px;color:#ead8b6;background:#2d190e;
+ box-shadow:inset 0 0 0 1px #8b6037,0 2px 0 #100905}
+.menu-panel .modal-header .bare:hover{background:#412816;color:#fff0d1}
+.menu-panel .modal-body{padding:14px 6px max(8px,env(safe-area-inset-bottom));color:#efdfbf}
+.menu-panel .menu-list{gap:8px}
+.menu-panel .menu-list button{display:flex;align-items:center;gap:10px;min-height:56px;
+ padding:5px 9px;border:2px solid #85603c;background:#422b19;color:#f6e8cf;
+ font:600 15px/1.35 var(--ui);box-shadow:inset 0 1px 0 #b27d45,0 3px 0 #110a06;
+ text-shadow:0 1px 0 #170d06;clip-path:none}
+.menu-panel .menu-list button::after{content:"";flex:0 0 auto;width:7px;height:7px;margin:0 3px 0 auto;
+ border-top:2px solid #d2a362;border-right:2px solid #d2a362;transform:rotate(45deg);pointer-events:none}
+.menu-panel .menu-list button:hover{background:#503520}
+.menu-panel .menu-list button:active,.menu-panel .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 1px 0 #b27d45,0 1px 0 #110a06}
+.menu-panel button:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
+.menu-panel .menu-icon{display:block;flex:0 0 40px;width:40px;height:40px;object-fit:contain;image-rendering:pixelated;pointer-events:none}
+.menu-panel .menu-label{min-width:0;overflow-wrap:anywhere}
+.menu-panel .menu-list button.danger{margin-top:6px;border-color:#a55745;background:#572620;color:#ffe5dd;
+ box-shadow:inset 0 1px 0 #b96d54,0 3px 0 #110a06;text-shadow:0 1px 0 #300f0b}
+.menu-panel .menu-list button.danger::after{border-color:#e5957d}
+.menu-panel .menu-list button.danger:hover{background:#693029}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is off the 발주서, held apart like a game's storage - a
    steel rack of 칸, one cell per slot the store has, a held unit in each (icon, days left), the empty cells the room left.
    It reads apart from the 발주서 by material and value - the existing steel texture, dark against the paper - with one hard
