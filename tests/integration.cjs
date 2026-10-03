@@ -803,7 +803,7 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
  assert.ok(entry,'the snapshot is taken when the customer reaches the counter');
  for(const k of ['combat','worst','deathRisk','greatSignal','hazards'])
   assert.ok(k in entry,'the snapshot carries '+k);
- assert.ok(entry.deathRisk>=0&&entry.deathRisk<=0.40,'the Death risk is the conditional one, inside its caps');
+ assert.ok(entry.deathRisk>=0&&entry.deathRisk<=0.60,'the Death risk is the conditional one, inside its caps');
  // it is the SALE-entry state: the same calculation on the untouched NPC
  const fresh0=g.outlookFor({...n,pack:[]});
  assert.deepEqual({...entry,gate:undefined,day:undefined},{...fresh0,gate:undefined,day:undefined},

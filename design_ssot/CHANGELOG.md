@@ -32,8 +32,9 @@ and this table is their commit record.
   that moved with each Night's results and scaled every Gate's required power by up to ±5% the next Morning. Gate power is the
   Gate formula and the day's Event only; the Night no longer writes the unseen reputation line. DUNGEON_HAZARD §GATE POWER —
   LATE-DAY SLOPE; tests revision.
-- **Success uplift** (User: 성공도 콱 늘린다 · 게임 메타가 바뀌는 거라): every ordinary Gate's required Power × 0.92 on DAY 1~7 and
-  × 0.90 from DAY 8 (SuccessEase, on the finished Gate Power, before the Event); expedition EXP × 1.2 (base 22 + Day × 4.6 →
+- **Success uplift** (User: 성공도 콱 늘린다 · 게임 메타가 바뀌는 거라): every ordinary Gate's required Power × 0.92 on DAY 1~7,
+  × 0.90 on DAY 8~21 and × 0.95 from DAY 22 (SuccessEase, on the finished Gate Power, before the Event; the late step is the
+  second pass, User 2026-10-03: 후반 완화는 줄이고 초반은 그대로); expedition EXP × 1.2 (base 22 + Day × 4.6 →
   26.4 + Day × 5.52); potions 투력 하급 8 → 10 · 중급 14 → 18 · 상급 20 → 25 · 최상급 28 → 35, prices unchanged (대응 장비와 레벨이 위험을
   더 쉽게 넘기니 포션 값어치도 오른다). DUNGEON_HAZARD §GATE POWER / §Ordinary EXP, ITEM §ACTIVE CATALOG; tests night.
 - **Accidents rise with the counters** (User: 대응 장비 상한과 레벨 성장으로 위험을 쉽게 넘기니 사고 확률과 비율도 올린다): the
@@ -44,10 +45,16 @@ and this table is their commit record.
   unchanged). A regular who keeps winning keeps buying; one who keeps losing still brings 20G+ for basic preparation. The Away
   Wallet keeps its rule, half an ordinary visit's average income per Day: Level × 1.5 + 20 (was Level × 4 + 20).
   ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet, DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests revision, night.
-- **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다): with growth, potions and counters lifting a D30 party's
-  Power by about 17~21%, WRATH 180 → 210, the FIRE pair +18 → +21, the GREED shortfall cap +11 → +13 (223 at most), SLOTH by
-  breaks 200/189/171/149 → 234/221/200/174 (× 1.17). BOSS §WRATH / §GREED / §SLOTH, FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT;
-  tests final, simulation.
+- **A failure costs more when the preparation is short** (User 2026-10-03: 사망도 좀 풀어야 · 준비·전투 전망이 부족할수록 늘어나게 ·
+  상한은 둔다): the failure-conditioned Death chance is CombatDeficit × 0.40 + EnvironmentDeficit × 0.20 (was × 0.18 / × 0.12),
+  healthy cap 50% (was 30%); the injured, 탈진 and strain terms still add their %p and lift the cap with them (injured 60%,
+  injured + 탈진 70%). Still one roll, only on the failure path. DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK /
+  DUN-Q77 / DUN-Q78; tests night, integration.
+- **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다 · 도달 시 클리어는 좀 높게): WRATH 180 → 248, the FIRE pair
+  +18 → +25, the GREED shortfall cap +11 → +15 (263 at most), SLOTH by breaks 200/189/171/149 → 276/261/236/205. The first pass
+  (210, × 1.17) left clear-given-reach at 76%; the second pass is × 1.18 on it, which the grid measurement reads as about 50%
+  clear-given-reach and 23% overall (`reports/v2100-measure/grid.log`, arm 0.95 / 안1). BOSS §WRATH / §GREED / §SLOTH,
+  FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT; tests final, simulation.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 

@@ -266,14 +266,14 @@ G.DATA.bossTuning={
                                 //   = 90% of the median engaged Run's gross sales measured on
                                 //   the Stage 10 economy (median 20,909 across the engaged
                                 //   strategies, 200 seeds each), rounded to 100G.
- greedShortfallCap:13,          // GREED: the most that a total shortfall can add to Boss Power (v2.10.0, User 2026-10-02: 11 -> 13, scaled with WRATH 180 -> 210)
+ greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power (v2.10.0, User 2026-10-03: 11 -> 15, scaled with WRATH 180 -> 248)
  /* GLUTTONY v2.7: the Rare+ threshold is superseded. EVERY positive Core-Stat contribution
     that came from an Item is halved, whatever its Rarity, after the Item-side amplification
     has produced that contribution. No Rarity threshold remains. */
  gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
- firePairPower:21,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss (User 2026-09-30; v2.10.0 18 -> 21 with WRATH)
- slothBossPower:[234,221,200,174] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.10.0, User 2026-10-02: 200/189/171/149 x 1.17 with WRATH 180 -> 210)
+ firePairPower:25,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss (User 2026-09-30; v2.10.0 18 -> 25 with WRATH)
+ slothBossPower:[276,261,236,205] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.10.0, User 2026-10-03: 234/221/200/174 x 1.18 with WRATH 210 -> 248)
 };
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
@@ -291,7 +291,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={loyaltyRevisit:.03,visitWallet:{perLevel:3,min:20,max:60},awayWallet:{perLevel:1.5,base:20,maxDays:3},offerSameItemMax:2,wallVisitorChance:.45,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:210,combatNoise:.175,rerollBase:50,golemCombat:.90,
+G.DATA.balance={loyaltyRevisit:.03,visitWallet:{perLevel:3,min:20,max:60},awayWallet:{perLevel:1.5,base:20,maxDays:3},offerSameItemMax:2,wallVisitorChance:.45,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:248,combatNoise:.175,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

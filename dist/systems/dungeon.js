@@ -298,7 +298,8 @@ function greatSuccessSignal(n,d,facilities=[]){
    combat-success path 1.00 -> 0.90 (성공, or a won fight that came home hurt); 퇴각 .38 and other living .5 unchanged. */
 const GREAT={xp:1.00},WIN={xp:.90};
 const WALLET_MULT={'대성공':1.5,'성공':1.5,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
-const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10};
+/* v2.10.0 (User 2026-10-03): combat .18 -> .40, environment .12 -> .20, healthy cap .30 -> .50 (+10%p a departure term, as before) */
+const DEATH={combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation (User 2026-09-25,
    v2.9.1 balance): only CONSECUTIVE injured departures count now. A healthy departure - including
    the return after a Severe-Injury rest - resets the chain; the first injured departure is free,
@@ -328,8 +329,9 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    (reports/balance-proposal-v2912.md §1). The DAY 9~10 step, which shared `late`, is its own `step` and keeps 0.80, so
    DAY 1~10 does not move. */
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
-/* DUNGEON_HAZARD §GATE POWER — SUCCESS EASE (User 2026-10-02, v2.10.0): the whole Gate Power x .92 on DAY 1~7, x .90 from DAY 8 */
-const GATE_EASE={early:.92,late:.90,from:8},gateEase=day=>day>=GATE_EASE.from?GATE_EASE.late:GATE_EASE.early;
+/* DUNGEON_HAZARD §GATE POWER — SUCCESS EASE (User 2026-10-02/03, v2.10.0): the whole Gate Power x .92 on DAY 1~7, x .90 on
+   DAY 8~21, x .95 from DAY 22 */
+const GATE_EASE={early:.92,mid:.90,late:.95,midFrom:8,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:day>=GATE_EASE.midFrom?GATE_EASE.mid:GATE_EASE.early;
 /* DUNGEON_HAZARD environment incident (User 2026-10-02, v2.10.0: base .06 -> .08, gap .012 -> .020, cap .48 -> .60, floor kept) */
 const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step

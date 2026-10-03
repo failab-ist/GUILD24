@@ -56,7 +56,7 @@ D25 does not grant guaranteed Counter Items, free stock, or a special Final shop
 Final Hazard Pool에는 각 Family의 authoritative **Hazard key**만 들어간다.
 Family의 non-Hazard second axis는 별도 Final modifier로 중복 추가하지 않는다.
 예: FIRE의 higher Dungeon Combat Power는 Final Hazard Pool에 들어가지 않으며, 마왕 자체의 강함 축은 effective Boss Power가 소유한다.
-대신 FIRE가 든 Pair는 effective Boss Power에 `+21`을 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
+대신 FIRE가 든 Pair는 effective Boss Power에 `+25`을 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
 
 Family의 T2 정의 자체는 이 문서에서 재정의하지 않는다 → DUNGEON_HAZARD.
 
@@ -513,11 +513,11 @@ FIRE PAIR: a pair that holds FIRE has 3 Hazards instead of 4 and clears more oft
 amount that levels the two:
 
 ```text
-FIRE-containing pair -> effective Boss Power + 21   (every Boss, on top of its own rule: WRATH 231, GREED 231~244, SLOTH seal table + 21)
+FIRE-containing pair -> effective Boss Power + 25   (every Boss, on top of its own rule: WRATH 273, GREED 273~288, SLOTH seal table + 25)
 any other pair       -> + 0
 ```
 
-The +21 touches no Hazard Pool, mean-gap penalty or forecast rule; the 토벌 전망 reads the same effective Boss Power.
+The +25 touches no Hazard Pool, mean-gap penalty or forecast rule; the 토벌 전망 reads the same effective Boss Power.
 Measurement record -> CHANGELOG.
 
 ## BALANCE QA

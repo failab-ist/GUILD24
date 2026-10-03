@@ -268,12 +268,12 @@ but may not auto-tune them. Any numeric change requires a separate approved owne
 identity=baseline raw-power Boss
 specialTrait=NONE
 
-WRATH effective Boss Power=210.
+WRATH effective Boss Power=248.
 It is the unmodified baseline every other Boss is measured against. WRATH adds no special modifier layer; its
 differentiation is the baseline Boss Power / direct Final check. PRIDE / ENVY / GLUTTONY / LUST (participant-side
-rules) face this same 210; GREED and SLOTH set their own Boss Power below.
+rules) face this same 248; GREED and SLOTH set their own Boss Power below.
 
-Every Boss's effective Boss Power takes `+21` when the Final Family Pair holds FIRE, on top of its own rule ->
+Every Boss's effective Boss Power takes `+25` when the Final Family Pair holds FIRE, on top of its own rule ->
 `FINAL_EXPEDITION_v2.8.0.md` §FAMILY-PAIR BALANCE AUDIT (FIRE PAIR).
 
 Purpose:
@@ -399,12 +399,12 @@ Keep the existing Gross-Sales metric and revenue target unless separately rebala
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-shortfallCap = 13 Boss Power
+shortfallCap = 15 Boss Power
 ```
 
-Thus with WRATH base 210:
-- target met -> effective Boss Power 210
-- maximum shortfall penalty -> effective Boss Power 223
+Thus with WRATH base 248:
+- target met -> effective Boss Power 248
+- maximum shortfall penalty -> effective Boss Power 263
 
 Displayed strengthening must still derive from the actual applied Greed bonus.
 
@@ -600,10 +600,10 @@ Let `sealBreakCount` be committed Seal Break choices by Final Lock.
 Effective Boss Power by committed `sealBreakCount`:
 
 ```text
-0 breaks = 234
-1 break  = 221
-2 breaks = 200
-3 breaks = 174
+0 breaks = 276
+1 break  = 261
+2 breaks = 236
+3 breaks = 205
 ```
 
 Design intent:
@@ -778,9 +778,9 @@ PASS:
 ### BOSS-Q72 — GREED CAP / SNAPSHOT / FINAL TRANSFER ACCOUNTING
 PASS:
 - existing revenue metric/target path is reused
-- applied shortfall strengthening caps at +13 Boss Power
-- target met returns to 210 baseline
-- maximum shortfall cannot exceed 223 through GREED alone
+- applied shortfall strengthening caps at +15 Boss Power
+- target met returns to 248 baseline
+- maximum shortfall cannot exceed 263 through GREED alone
 - every committed Final transfer contributes its exact fixed 50% / 매입가 amount to Gross Sales exactly once
 - committed Gross Sales snapshot occurs at Final Lock after Final preparation completes
 - no committed Final transfer is excluded or double-counted
@@ -796,10 +796,10 @@ PASS:
 ### BOSS-Q74 — SLOTH POWER BY BREAK COUNT
 PASS exact:
 ```text
-0 = 234
-1 = 221
-2 = 200
-3 = 174
+0 = 276
+1 = 261
+2 = 236
+3 = 205
 ```
 
 Also PASS:
