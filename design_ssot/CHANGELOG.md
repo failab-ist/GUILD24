@@ -213,6 +213,10 @@ and this table is their commit record.
 - SALE 손님 카드: 단골은 이름판 오른쪽 금빛 배지로 알린다. 상태줄의 `· 단골` 글자와 이름판 왼쪽 등급 색 띠는 뺀다. UI_UX §CURRENT CUSTOMER STATE, SALE §CURRENT CUSTOMER COMPACT STATE.
 - NIGHT: 절차 그림 대신 비 오는 밤 편의점 그림. 맨 위까지 가득 채우고 귀환 줄 바로 위에서 끝난다. 메뉴 키는 더 진하게, 오늘 할 일 줄은 위쪽 어두운 그라데이션 위에 둔다. UI_UX §NIGHT LAYOUT.
 - 부상 회복 한 줄을 `의무실 현판으로 부상 회복` · `응급 처치대로 부상 회복` · `길드 의료단으로 부상 회복`으로 줄여 상태 칸이 세로로 늘지 않게 한다. COPY_AUDIT §9-4 · §9-4b · §13.
+- 메뉴가 여는 시트(설정 · 모험가 수첩 · 현재 지점 포기 등)는 한 장의 나무 틀과 세로 리듬을 쓴다. 닫기는 키·판 없는 밝은 ✕ 하나이고, 점포지원 창도 다 쓰면 같은 ✕로 닫는다. 메뉴 키(☰)는 모든 페이즈에서 놋쇠 테두리 어두운 나무다. UI_UX §MENU / SETTINGS VISUAL.
+- 시트 · 설정 · 초기화 · 가져오기 · 포기 문구와 원정 실패 문구는 `~다`체로 통일. COPY_AUDIT §1-3 · 설정 행.
+- 발주서는 점포지원과 같은 찢긴 양피지 틀 위에 놓인다(CSS 찢김 띠 · 평지 제거). UI_UX §ORDER.
+- 마감 영수증과 END는 NIGHT와 같은 비 오는 편의점 그림(폰 세로 · PC 가로) 위에 선다. END 총매출의 G는 작게. UI_UX §CLOSING.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
