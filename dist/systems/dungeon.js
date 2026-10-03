@@ -305,7 +305,7 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    DAY 1~10 does not move. */
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
 /* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power) */
-const GATE_EASE={early:.85,late:.90,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:GATE_EASE.early;
+const GATE_EASE={early:.90,late:.95,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:GATE_EASE.early;
 /* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
 const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
