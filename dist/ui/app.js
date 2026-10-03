@@ -1752,7 +1752,8 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
       바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
       extra depth; `pct` stays the mode's number, the word is what the coach already says. */
    /* `refused`: the first 바가지 refusal's lesson anchors here (UI_UX §SALE PRICE LESSONS) */
-   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
+   const face=game.run.phase==='sell'?'<em class="price-role"><span>'+role.split(' ')[0]+'</span>'+(mode==='full'?'':' <span class="price-rate">'+pct+'%</span>')+'</em>':'<em>'+role+'</em>';
+   return btn(face+'<strong>'+q.price+'G</strong><small'+(blocked?' class="price-block"':'')+'>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
     'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');}
 /* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): the chosen Item sits on a fixed tray above the dock,
    outside the scrolled column - header line, the one delta list on one wrapping line, 특수 효과, then
@@ -1810,13 +1811,16 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
   +E(r.label)+' '+(r.key in D.hazards?(r.after-r.before>=0?'+':'')+Math.round(r.after-r.before)
    :Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after))+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
+ /* A numberless utility's full condition is the useful explanation. Retain the no-change warning
+    for an unapplied numeric effect; merely having a remaining effect is not sufficient to hide it. */
+ const utilityOnly=!parts.length&&rest.length>0&&rest.every(r=>r.utility);
  const life=lastSaleDay(st.expires-s.day);
  return '<div class="counter-tray'+(trayFolded?' folded':'')+'" role="region" aria-label="계산대">'
   +'<button type="button" class="tray-unfold" data-action="tray-open" aria-expanded="'+!trayFolded+'" aria-label="계산대 열기"></button>'
   +'<div class="tray-item"><span class="tray-icon r'+it.rarity+'">'+Art.itemIcon(it.id,32)+'</span>'
-  +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span class="tray-stock">'+it.sell+'G · 재고 '+st.count+' · '+life+'</span></span>'
+  +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span class="tray-stock"><span class="stock-base">'+it.sell+'G · </span><span class="stock-count">재고 '+st.count+'</span><span class="stock-sep"> · </span><span class="stock-life">'+life+'</span></span></span>'
   +'<span class="tray-who"><b>'+E(n.name)+'에게</b> · '+walletChip(n)+'</span></div>'
-  +'<p class="tray-delta"><span class="delta-src">판매 후 변화</span>'+(parts.length?parts.join('<i> · </i>'):'<b>현재 준비 변화 없음</b>')+'</p>'
+  +(utilityOnly?'':'<p class="tray-delta"><span class="delta-src">판매 후 변화</span>'+(parts.length?parts.join('<i> · </i>'):'<b>현재 준비 변화 없음</b>')+'</p>')
   +(rest.length?'<p class="tray-delta special"><span class="delta-src">특수 효과</span>'+rest.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label+' '+r.text)+'</b>').join('<i> · </i>')+'</p>':'')
   +'<div class="tills">'+priceKeys(n,it,st)+'</div></div>';}
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
@@ -2655,9 +2659,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   /* User 2026-10-03: the roomier tray must not cover the selected product. Only its opening
-     may move the phone list: show the selected row and, at 640 high or more, its next peer
+     may move the phone list: show the selected row and its next peer
      when both fit. An already-open comparison keeps its anchor and scroll unchanged. */
-  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=innerHeight>=640?back.nextElementSibling:null;
+  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=back.nextElementSibling;
    const end=peer&&peer.getBoundingClientRect().bottom-row.top<=clip.height-8?peer.getBoundingClientRect().bottom:row.bottom;
    if(end>clip.bottom-4)sc.scrollTop+=end-clip.bottom+4;
    else if(row.top<clip.top+4)sc.scrollTop+=row.top-clip.top-4;

@@ -51,7 +51,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   });
   await page.screenshot({path:path.join(out,`d${day}-${width}x${height}-selected.png`)});
   const tag=`D${day} ${width}x${height}`;
-  const floor=width>=1024||height>=640?2:1; // UI_UX spacing review: readable tray + bounded opening correction.
+  const floor=2; // UI_UX ribbon review: two ordinary rows after bounded opening, including short phones.
   check(entry.phase==='sell'&&entry.day===day&&entry.stock>=6,tag+' representative fixture');
   check(entry.fullRows>=1,tag+' entry shelf row');
   check(measure.fullRows>=floor,tag+' selected comparison floor');
@@ -66,21 +66,21 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
    const slots=[...document.querySelectorAll('.kit .slots i')],menu=document.querySelector('.menu-pin');
    const onscreen=e=>r(e).left>=0&&r(e).right<=innerWidth+1&&r(e).top>=0&&r(e).bottom<=innerHeight+1;
    const hit=e=>{const b=r(e);return [document.elementFromPoint(b.left+b.width/2,b.top+b.height/2)].some(t=>t&&(t===e||e.contains(t)||e.closest('button')?.contains(t)));};
-   const texts=[...document.querySelectorAll('.tray-what>b,.tray-stock,.tray-who,.tray-delta,.nameplate b')];
+   const texts=[...document.querySelectorAll('.tray-what>b,.tray-stock,.tray-who,.tray-delta,.nameplate b,.tills em,.tills em span,.tills strong,.tills small')].filter(e=>r(e).width>0);
    const tray=document.querySelector('.counter-tray'),tr=r(tray);
    const unclipped=texts.every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
    const shelf=[...document.querySelectorAll('.good .what')].every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
    const trayText=texts.filter(e=>tray.contains(e)).every(e=>r(e).left>=tr.left&&r(e).right<=tr.right+1&&r(e).top>=tr.top&&r(e).bottom<=tr.bottom);
-   const stock=document.querySelector('.tray-stock'),who=document.querySelector('.tray-who'),delta=document.querySelector('.tray-delta'),tills=document.querySelector('.tills');
+   const stock=document.querySelector('.tray-stock'),who=document.querySelector('.tray-who'),name=document.querySelector('.tray-what>b'),delta=document.querySelector('.tray-delta'),tills=document.querySelector('.tills');
    const fs=sel=>{const e=document.querySelector(sel);return e?parseFloat(getComputedStyle(e).fontSize):null;};
    const contrast=(fg,bg)=>{const lum=c=>c.match(/[\d.]+/g).slice(0,3).map(x=>Number(x)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((s,x,i)=>s+x*[.2126,.7152,.0722][i],0);const a=lum(fg),b=lum(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);};
-   const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>contrast(getComputedStyle(t).color,getComputedStyle(e).backgroundColor)));
+   const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>{const bg=getComputedStyle(t).backgroundColor;return contrast(getComputedStyle(t).color,bg==='rgba(0, 0, 0, 0)'?getComputedStyle(e).backgroundColor:bg);}));
    const send=document.querySelector('.dock [data-action="depart"]')||document.querySelector('.dock .stamp');
    const plate=document.querySelector('.nameplate'),pc=getComputedStyle(plate),dest=document.querySelector('.dest-plate'),dc=getComputedStyle(dest);
    const insetOnly=e=>getComputedStyle(e).boxShadow.replace(/rgba?\([^)]*\)/g,'color').split(',').every(s=>s==='none'||s.includes('inset'));
    const keys=[...document.querySelectorAll('.tills button')];
    return {face:box(document.querySelector('.face')),slots:slots.map(box),bag:slots.every(e=>onscreen(e)&&hit(e)&&(!menu||r(e).bottom<=r(menu).top||r(e).top>=r(menu).bottom||r(e).right<=r(menu).left||r(e).left>=r(menu).right)),
-    unclipped,shelf,trayText,metadata:Math.abs(r(stock).top-r(who).top)<=1&&r(stock).left>=r(who).right+11&&Math.max(r(stock).bottom,r(who).bottom)<=r(delta).top-2,
+    unclipped,shelf,trayText,metadata:r(who).width===0&&r(stock).left>=r(name).right+7&&Math.max(r(stock).bottom,r(name).bottom)<=r(delta).top-2,
     room:{plate:parseFloat(pc.paddingLeft)>=8&&parseFloat(pc.paddingTop)>=4&&parseFloat(pc.paddingBottom)>=4&&parseFloat(pc.gap)>=2,
      cardShadow:insetOnly(document.querySelector('.face'))&&insetOnly(plate),destination:parseFloat(dc.paddingTop)>=5&&parseFloat(dc.paddingLeft)>=8,
      fullDelta:r(delta).width>=tr.width-36,keysClear:keys.every(e=>r(e).bottom+7<=tr.bottom-2)},
@@ -96,7 +96,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   if(width<1024){
    const beforeWidth=Math.max(88,Math.min(width*.38,150,height*.9-300));
    check(geom.face.width>=beforeWidth*.85&&geom.face.width<=beforeWidth*.9,tag+' character width 85–90% of original');
-   check(geom.metadata,tag+' separated customer/stock context above full-width effect');
+   check(geom.metadata,tag+' stock and expiry at right of name without duplicate customer');
    check(geom.room.plate&&geom.room.cardShadow&&geom.room.destination,tag+' text padding and no card cast into neighbours');
    check(geom.room.fullDelta&&geom.room.keysClear,tag+' full-width effects and price depth clear of dock');
    const reading=await page.evaluate(()=>{const c=document.querySelector('.stage-scroll').getBoundingClientRect(),r=document.querySelector('.readout.core-mob').getBoundingClientRect(),p=document.querySelector('.forecast-pin');return {whole:r.top>=c.top-1||r.bottom<=c.top+1,pin:r.bottom>c.top+1||p.classList.contains('show')};});

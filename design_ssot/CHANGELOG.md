@@ -28,6 +28,13 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **SALE price ribbons on `ui/design-trim`** (User 2026-10-03): retain the fixed character and shelf/support band, centre its
+  mixed-font elements, remove repeated customer/wallet/base price from the phone tray, and place stock/life beside the Item.
+  The phone's three equal price keys carry role/percentage on an internal left ribbon, price/profit in two right-hand lines,
+  with lighter 2px depth and 48px targets. Numberless utility descriptions replace only their redundant no-change row; numeric
+  no-change warnings remain. Bounded opening reveals the next shelf peer whenever both fit, also on short phones. UI_UX / COPY
+  own the contract. Review remains PNG; final visual approval is separate.
+
 - **SALE spacing review on `ui/design-trim`** (User 2026-10-03): give the nameplate/destination real text clearance, remove
   cast shadows entering neighbouring planes, and restore the phone tray's full-width Item/effect blocks plus a separate
   customer/stock row. Reserve space for price-key depth/press above the dock. Readability takes priority over the old compact
