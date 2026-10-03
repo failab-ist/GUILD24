@@ -2245,7 +2245,8 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
           name, exact effect, price / ownership and equipped state. The Flavor prose is not
           deleted anywhere: d.text stays in the Decoration data for Codex / lore use, it simply
           does not compete with the effect line while the player is comparing options. */
-       +'<div><b>'+E(d.name)+'</b><span class="smalltext">'+E(d.effect)+'</span></div>'
+       /* User 2026-10-03: the key sits beside the name and the effect line runs the card's full width below them */
+       +'<b class="deco-name">'+E(d.name)+'</b>'
        +(owned
          ? (inRun?'<span class="muted">'+(on?'이번 영업에 적용 중':'미적용')+'</span>'
                  :btn(on?'해제':'적용',on?'deco-unequip':'deco-equip','small'+(on?'':' active'),'data-id="'+d.id+'"'))
@@ -2261,6 +2262,7 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
                   /* User 2026-10-03: a short key - 구매 over a small price - so the effect line takes the width */
                   :btn('구매 <small>'+d.price.toLocaleString()+' 자본</small>','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
+       +'<span class="smalltext deco-effect">'+E(d.effect)+'</span>'
        +'</div>';}).join('')
     +'</div>';}).join('')
  +'</div>';}

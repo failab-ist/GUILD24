@@ -2794,8 +2794,8 @@ test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>
 test('SA-Q36: the Decoration comparison shows only what the decision is made on',()=>{
  const panel=fn('storePanel').replace(/\/\*[\s\S]*?\*\//g,'');
  // what stays: name, exact effect, price / ownership, equipped state
- assert.ok(/<b>'\+E\(d\.name\)\+'<\/b>/.test(panel),'the name stays');
- assert.ok(/<span class="smalltext">'\+E\(d\.effect\)\+'<\/span>/.test(panel),'the exact effect stays');
+ assert.ok(/<b class="deco-name">'\+E\(d\.name\)\+'<\/b>/.test(panel),'the name stays');
+ assert.ok(/<span class="smalltext deco-effect">'\+E\(d\.effect\)\+'<\/span>/.test(panel),'the exact effect stays (its own full-width row, User 2026-10-03)');
  assert.ok(/d\.price\.toLocaleString\(\)/.test(panel),'the price stays');
  assert.ok(/Meta\.decorationOwned\(a,d\.id\)/.test(panel),'ownership state stays');
  assert.ok(/on\?'해제':'적용'/.test(panel)&&/on\?'이번 영업에 적용 중':'미적용'/.test(panel),'equipped state stays');

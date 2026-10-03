@@ -1884,7 +1884,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 1px #0000003d,inset 0 3px 0 #0000004d,inset 0 -2px 0 #ffffff12}
 .modal:has(.tabs) .slot-option.on{background:#1d18104d;
  box-shadow:inset 0 0 0 1px #00000059,inset 0 0 0 2px var(--gold),inset 0 3px 0 #00000047}
-.modal:has(.tabs) .slot-option>div:first-child{box-shadow:inset 0 2px 0 #ffffff12}
 /* the key is the card's own control, built like the sheet's Action at a smaller measure:
    a dark rim, one lit edge, a hard bottom, and a press that collapses it */
 .modal:has(.tabs) .slot-option>button{background:#3f382c;color:#efe3c8;
@@ -2715,14 +2714,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    at screenshot scale four cards read as one soft column rather than four built objects. It
    takes the same two-part edge the Batch uses everywhere else - a hard outer line and one
    lit seam inside it - over a 4px hard cast. Nothing about the two-track geometry moves. */
-.slot-option{display:grid;grid-template-columns:minmax(0,1fr) 72px;align-items:stretch;
+.slot-option{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;row-gap:4px;align-items:center;padding:10px 10px 12px 13px;
  background:#17140f;
  box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 3px #453c2e,4px 4px 0 #00000073}
 /* BATCH 1: the reading face takes one lit top seam of its own. Without it the reading and the
    key were the same unlit dark and the seam between them - the thing that makes the control
    read as the card's face rather than a second box - did no work at screenshot scale. */
-.slot-option>div:first-child{min-width:0;padding:11px 13px;align-self:center;
- box-shadow:inset 0 2px 0 #ffffff0d}
+/* User 2026-10-03: name and key share the first row, the effect line takes the whole second row */
+.slot-option>.deco-name{grid-column:1;grid-row:1;min-width:0;min-height:48px;display:flex;align-items:center} /* the key's height, so the row holds while the inline confirmation stands in for the key */
+.slot-option>button,.slot-option>.muted{grid-column:2;grid-row:1}
+.slot-option>.deco-effect{grid-column:1/-1;grid-row:2}
 .slot-option+.slot-option{margin-top:8px}
 /* equipped: the same construction, with the seam in gold - the state arrives on the edge the
    card already has rather than on a new one. The label (해제) and the contrast carry the rest. */
@@ -2733,7 +2734,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    darker fill, a seam one step quieter, a shorter cast. Every word on it stays legible. */
 .slot-option.locked{opacity:1;background:#191510;
  box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 3px #322b22,2px 2px 0 #0000005c}
-.slot-option.locked>div:first-child b{color:#cdbfa4}
+.slot-option.locked>.deco-name{color:#cdbfa4}
 .slot-option.locked span.smalltext{color:#b7a98d}
 .slot-option b{display:block}
 /* the control is the card's right-hand face: full height, flush to the edge, its own ruled
@@ -2746,7 +2747,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    The DEFAULT face is neutral, because two different things live in it: buying a Decoration,
    and moving one you already own in or out of its Slot. Only the first is a purchase, so only
    the first takes the YELLOW family below. */
-.slot-option>button{align-self:stretch;min-height:0;margin:0;padding:10px 6px;
+.slot-option>button{align-self:center;min-width:64px;height:48px;min-height:48px;margin:0;padding:6px 10px; /* 구매 + price and 해제 / 적용 are one height, so buying never resizes the card */
+ 
  white-space:normal;font-size:13px;line-height:1.35;text-align:center;
  clip-path:none;filter:none;
  background:#3c362d;color:#efe3c8;font-weight:600;
@@ -2779,7 +2781,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    more colour on the key. */
 /* a state word where a control would be keeps the control's place, so the row does not reflow
    between an in-Run store and a pre-Run one */
-.slot-option>.muted{align-self:center;padding:11px 13px 11px 0;text-align:right;white-space:nowrap}
+.slot-option>.muted{align-self:center;text-align:right;white-space:nowrap}
 /* the price under 구매 (User 2026-10-03): the key is short and narrow, the effect line gets the width */
 .slot-option>button small{display:block;margin-top:2px;font-size:11px;font-weight:600;white-space:nowrap;color:inherit;opacity:.8}
 
@@ -2797,7 +2799,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the confirmation replaces the control, and it carries a sentence, so it takes the whole card
    instead of being squeezed into the control's track. Every card does this the same way, at
    every width - that is the point of the change above. */
-.slot-option>.deco-confirm{grid-column:1/-1;padding:11px 13px;justify-items:stretch;text-align:left;
+.slot-option>.deco-confirm{grid-column:1/-1;grid-row:3;padding:8px 0 0;justify-items:stretch;text-align:left;
  box-shadow:inset 0 2px 0 #2f2a22}
 .slot-option>.deco-confirm p{text-align:left}
 /* USER 2026-09-23: this line is store state, not an Action. It no longer carries the 점포 관리
@@ -3001,8 +3003,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .form-head{grid-template-columns:minmax(0,1fr) auto}
  .form-head h1{font-size:40px}
  /* past the phone the label fits on one line again, so the control takes only what it needs */
- .slot-option{grid-template-columns:minmax(0,1fr) 84px}
- .slot-option>button{padding:10px 8px;white-space:nowrap;font-size:14px}
+ .slot-option>button{padding:6px 12px;white-space:nowrap;font-size:14px}
  /* MORNING on a wide screen: the extra width goes to the notices, and the decision keeps a
     size that reads across a desk. A wide window is not a reason to set the whole game
     smaller so that more of the shop fits in it. */
