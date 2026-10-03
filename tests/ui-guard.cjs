@@ -2047,7 +2047,7 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,build:BUILD,/.test(app),'Guild24.build');
  const r=fn('render'),open=r.slice(0,r.indexOf('const phase=s.phase'));
  /* v2.9.9: the opening screen is the preparation scene (UI_UX §NEW STORE PREPARATION — STORE SCENE) */
- assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
+ assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);sentenceBreaks\(\$\('#app'\)\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
   &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
  assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'설정 ends with the same pair, readable mid-Run (v2.9.7)');
@@ -2567,7 +2567,7 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\(CLOSE_X,'dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
  // no blank stage: with no Run the render itself draws preparation
- assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
+ assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);sentenceBreaks\(\$\('#app'\)\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
  // starting the Run leaves preparation for good
  assert.ok(/preRunReturn=false;prepOpen=false;game\.start\(seed\)/.test(act),'starting clears the return state');
  // no second navigation layer was introduced for this
