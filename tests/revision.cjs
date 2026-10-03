@@ -74,33 +74,33 @@ test('same SKU bulk across separate offers; board does not change rookie level',
    amendment to randomInt(0,80). Reducing the candidate pool to the one NPC under test makes a
    weighted draw of one deterministic - it is the only thing that can be selected - without
    needing to fight the real selection weights for a guaranteed pick. */
-test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (20/60, v2.10.0), cap, and failed-expedition Loot untouched',()=>{
+test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (30/70), cap, and failed-expedition Loot untouched',()=>{
  const g=fresh('eco-q49');
  const n=g.run.npcs[0];
  g.run.npcs=[n];
  g.addNPC=()=>null; // an unrelated Morning Event may otherwise seat a second candidate
  const originalInt=g.rng.int.bind(g.rng);
  let rolls=0;
- const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===20&&b===60){rolls++;return v;}return originalInt(a,b);};};
+ const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===30&&b===70){rolls++;return v;}return originalInt(a,b);};};
 
- // A - a never-introduced NPC: Wallet = 180 + Level*3 + roll, roll forced to its 20 endpoint
- n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(20);
+ // A - a never-introduced NPC: Wallet = 180 + Level*4 + roll, roll forced to its 30 endpoint
+ n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(30);
  g.run.day=2;g.morning();
  assert.ok(g.run.queue.includes(n.id),'the lone NPC is the only candidate available that Day');
- assert.equal(n.money,180+3*3+20,'fresh Wallet = 180 + Level*3 + roll, roll forced to its 20 endpoint');
+ assert.equal(n.money,180+3*4+30,'fresh Wallet = 180 + Level*4 + roll, roll forced to its 30 endpoint');
  assert.equal(n.newToday,true,'a never-introduced NPC is a fresh visit');
  assert.equal(rolls,1,'exactly one visit-income roll for the one visited NPC - no new draw was added');
 
- // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 60 endpoint
- n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(60);
+ // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 70 endpoint
+ n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(70);
  g.run.day=3;g.morning();
  assert.ok(g.run.queue.includes(n.id));
- assert.equal(n.money,500+3*3+60,'returning Wallet = existing Wallet + Level*3 + roll, roll forced to its 60 endpoint');
+ assert.equal(n.money,500+3*4+70,'returning Wallet = existing Wallet + Level*4 + roll, roll forced to its 70 endpoint');
  assert.equal(n.newToday,false,'an already-introduced NPC is a returning visit');
  assert.equal(rolls,1);
 
  // C - the 2000 cap still applies at the narrowed range
- n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(60);
+ n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(70);
  g.run.day=4;g.morning();
  assert.equal(n.money,2000,'the 2000 cap is unchanged by the narrowed range');
  g.rng.int=originalInt;
@@ -715,7 +715,7 @@ test('an adventurer who could have come banks Away Days, at most 3, paid on the 
  assert.equal(g.awayWallet(n),a.maxDays*(n.level*a.perLevel+a.base),'capped at maxDays');
  n.awayDays=1;assert.equal(g.awayWallet(n),n.level*a.perLevel+a.base);
  const v=DATA.balance.visitWallet;assert.ok(n.level*a.perLevel+a.base<=(n.level*v.perLevel+(v.min+v.max)/2)/2,'a banked Day is worth half an average visit\'s own income');
- assert.deepEqual(v,{perLevel:3,min:20,max:60},'ECONOMY_ORDER §Ordinary NPC Wallet on visit (v2.10.0)');
+ assert.deepEqual(v,{perLevel:4,min:30,max:70},'ECONOMY_ORDER §Ordinary NPC Wallet on visit');
  const fresh0={...n,introduced:false,awayDays:2};assert.equal(g.awayWallet(fresh0),0,'a first visit banks nothing');
  /* the same seed with and without banked Days draws the same stream */
  const run=(days)=>{const h=fresh('away-stream');for(const x of h.run.npcs){x.introduced=true;x.awayDays=days;}h.run.day=4;h.morning();return {state:h.rng.state,queue:h.run.queue.slice(),money:h.run.queue.map(id=>h.run.npcs.find(x=>x.id===id).money)};};

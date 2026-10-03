@@ -27,6 +27,15 @@ and this table is their commit record.
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54 | `v2.10.0` (set by the User) |
 
+## v2.10.0 quick patch 2 — the till breathes again (User 2026-10-03; the version stays 2.10.0)
+
+- **A thicker visit Wallet and a lighter operating base** (User, from a quick-patch-1 save stuck at 200~800G through DAY 18: 자금이
+  마르니까 진행이 잘 안 됨 · 운영비를 완화하든 지갑을 개선하든): the visit income is Level × 4 + 30~70 (was Level × 3 + 20~60) and the
+  Away Wallet keeps its half-a-visit rule, Level × 2 + 25 a banked Day (was Level × 1.5 + 20); the base operating cost's Day base
+  starts at 140G (was 170G), its +1G a Day, the +12G a Day after DAY 15 and the Core Roster scaling unchanged. The success
+  Wallet × 1.25 and the 소지금 lunches are not touched. ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet / §BASE
+  OPERATING COST; tests revision, integration.
+
 ## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
 
 - **One SuccessEase through DAY 21** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다, then after the ablation measure: 0.90으로
