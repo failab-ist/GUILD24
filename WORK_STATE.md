@@ -228,7 +228,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
 7. v2.9.13 병합(User 2026-10-01): main(PR #33)을 받아 `design_ssot` 변경을 새 owner 위치에 현재형으로 옮겼다(QA는 각 owner §QA, 원장 수정은 버림). 원자료 JSON(`reports/counter-ladder-v2913/`, `item-price-v2913/`)은 지우고 결론 README만 남겼다. `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는 입력이라 남겼다.
    - SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
 8. 리팩터링(`ccr-4a2ee33b-4r88nj`, "동작은 그대로", User 2026-09-30 ~ 10-01): 머지됨(PR #38, `70e9d39`). `dist/ui/app.js`의 큰 함수를 같은 파일 안 헬퍼로 나눴다: `playPhase` → `phaseMorning` ~ `phaseSell`, `playCue` → `cueSelect` · `cueOrder` · `cueSale` · `cueRefuse`, `render` → `phaseScreen` · `openOwedModal` · `syncWatchers`, `closingScreen` → `closingReceipt` · `closingDock`, `finalScreen` → `finalThreat` · `finalMuster` · `finalDock`, `orderForm` → `orderOffer`, `clashScene` → `clashMarkup`. `tests/ui-guard.cjs`의 소스 가드도 같은 함수를 읽도록 옮겼다(assertion 그대로). 이 구간을 고칠 때는 새 함수 이름으로 찾는다. 하지 않은 것: `saleScreen`, `clashScene` 시간축, `statGrid` · `readout` · `beat` · `till` · `bossReveal`, `systems/*`.
-9. 코드 읽기·정리 규칙(User 2026-10-01 "효율적인 방법으로"): `dist/ui/app.js` 글자의 45%가 주석이다. 코드를 읽을 때는 `node tools/fn.cjs <파일> <함수...>`로 주석을 뺀 함수를 먼저 본다(`--keep-comments`로 원문; 자르기·주석 제거는 `tests/ui-guard.cjs`의 `fn()` · `bare()`와 같다). 소스 글자 검사(ui-guard의 `fn()` 슬라이스 281곳 · 파일 전체 검사 342곳)와 긴 주석은 한꺼번에 고치지 않는다. 함수를 고칠 때 그 함수에 걸린 검사만 동작 검사로 바꾸고, 그 함수 주석만 설계 근거(Canonical 섹션 이름)를 남기고 날짜·경위 서술을 줄인다.
+9. 코드 읽기·정리 규칙(User 2026-10-01): `AGENTS.md` §2B로 옮겼다(User 2026-10-03).
 
 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
