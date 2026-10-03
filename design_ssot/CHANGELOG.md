@@ -29,10 +29,12 @@ and this table is their commit record.
 
 ## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
 
-- **No SuccessEase on DAY 1~7** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다 · 완화 다 끄고): the early step is 1.00;
-  DAY 8~21 × 0.90 and DAY 22 on × 0.95 stay. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
+- **SuccessEase only on DAY 1~5** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다 · 완화 다 끄고, then after the ablation
+  measure: 초반 완화는 1~5까지만): × 0.92 on DAY 1~5, 1.00 on DAY 6~7, DAY 8~21 × 0.90 and DAY 22 on × 0.95 unchanged. With all
+  of DAY 1~7 at 1.00 and the Lv1~2 roster, DAY 1~7 success fell from 54% to 26% and fresh Runs ended on the death limit around
+  DAY 9. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
 - **The opening roster is Lv1~2**: the ordinary spawn Level draws 1~2 on DAY 1 (it was 1~3 like every Day); DAY 2 on is
-  unchanged. With both, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
+  unchanged. With it, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (also with the DAY 1~5 ease) (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
   forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
 - **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
@@ -61,8 +63,8 @@ and this table is their commit record.
   Tier 2). Prices unchanged. ITEM §COUNTER LADDER / §ACTIVE CATALOG / ITEM-Q, RELIC (예시), UI_UX (집중 사탕 예시); test vocabulary.
 
 - **Levels and Wallets snowball less** (User, from a main-build save that cleared its first Run: 레벨은 무조건 돌려야 · 소지금 큰 게
-  너무 스노우볼 · 경제도 깎아야): the expedition EXP × 1.2 is undone (base 26.4 + Day × 5.52 → 22 + Day × 4.6) - the save's lead
-  warrior reached Lv23 in 18 expeditions, about one Level per late success; a 성공 / 대성공 pays the expedition Wallet reward × 1.25
+  너무 스노우볼 · 경제도 깎아야): the expedition EXP × 1.2 becomes × 1.1 (base 26.4 + Day × 5.52 → 24.2 + Day × 5.06; × 1.0 measured too
+  harsh with the rest of this patch) - the save's lead warrior reached Lv23 in 18 expeditions, about one Level per late success; a 성공 / 대성공 pays the expedition Wallet reward × 1.25
   (was × 1.5) - the same warrior brought home +867G on D28. DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests night, revision.
 
 - **Every Core Stat counts alike, each with one small side role** (User: 가중치는 없애되 직업별 특색은 살리기 · 능력치당 역할이 게임
