@@ -14,14 +14,14 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 class Game{
  constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;}
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
- /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired; the Run always runs on the
+ /* CORE_RUN §PRE-RUN FLOW. Start Contract selection is retired; the Run always runs on the
     neutral baseline and the Account's Decoration loadout is frozen into the Run here. Changing
     the Account loadout afterwards cannot reach a Run that has already started. */
  start(seed){
  const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  /* 알뜰 금고 is paid by morningReset, which DAY 1 also runs once the DAY 0 pick is made */
- const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
- this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ const startGold=700; /* CORE_RUN §START STATE */
+ this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
   /* CORE_RUN §FIRST-RUN LESSONS: the account's first Run (no Run settled yet). Measurement harnesses set `lessons=false`. */
   this.run.firstRun=this.lessons!==false&&!(this.account.runs>0);
@@ -149,7 +149,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1)*G.Dungeon.gateEase(s.day),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -197,7 +197,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.firstRunLessons();
   this.save();
  }
- /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run only - lessons met by play, not told. DAY 1: one
+ /* CORE_RUN §FIRST-RUN LESSONS: the account's first Run only - lessons met by play, not told. DAY 1: one
     Common Item that counters the first Gate's Hazard joins the warehouse, so the first sale can find the rule itself. */
  firstRunLessons(){const s=this.run;if(!s.firstRun)return;
   if(s.day===1&&!s.lessonCounter){const h=s.dungeons[0]?.hazards?.[0],it=h&&D.items.find(i=>i.rarity===0&&!i.metaUnlock&&(i.effects[h]||0)>0);
@@ -213,11 +213,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     /* the swap takes the last returning visitor's seat - a new face the Day (or an Event) seated is never the one sent home */
     const out=cand&&[...s.queue].reverse().map(id=>s.npcs.find(n=>n.id===id)).find(n=>n&&n.introduced);
     if(out){cand.destination=out.destination;cand.claimedDestination=out.claimedDestination;cand.destinationFinal=true;
-     cand.money=Math.min(2000,Math.round(cand.money+cand.level*8+lr.int(0,80)));cand.newToday=false;s.queue[s.queue.indexOf(out.id)]=cand.id;inj=cand;}}
+     cand.money=Math.min(2000,Math.round(cand.money+this.visitIncome(cand,lr)));cand.newToday=false;s.queue[s.queue.indexOf(out.id)]=cand.id;inj=cand;}}
    if(inj){s.queue=[inj.id,...s.queue.filter(id=>id!==inj.id)];s.lessonInjured=inj.id;s.lessonKitDay=s.day;
     const main=this.rng;this.rng=lr;try{this.stock('kit',1);}finally{this.rng=main;}}}
   if(s.day===3&&!s.lessonDay3){s.lessonDay3=true;
-   /* a healthy returning visitor first (User 2026-09-30), so the payday lesson never reads as a second injury lesson */
+   /* a healthy returning visitor first, so the payday lesson never reads as a second injury lesson */
    const hurt=s.lessonKitDay===s.day?s.lessonInjured:null;
    const back=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.introduced&&n.id!==hurt),pay=back.find(n=>!n.injury)||back[0];
    if(pay){pay.lessonPayday=s.day;s.lessonPayday=pay.id;}}
@@ -225,9 +225,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
     Day's flags, and each adventurer's own per-Day state (spoiled stock left the night before - nightDiscard). */
  morningReset(){const s=this.run;
-  s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};if(this.wears('thriftSafe')){const g=D.decorationParams.thriftSafe.dailyGold;s.money+=g;s.daily.safeGold=g;}s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.halfPriceUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
-  /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11): nothing is discarded in the morning any more - see nightDiscard(). */
-  /* v2.9.0 rest recovery (DUNGEON_HAZARD §SUPPLY -> FATIGUE 6): a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
+  s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.halfPriceUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
+  /* ITEM §SHELF LIFE: nothing is discarded in the morning any more - see nightDiscard(). */
+  /* DUNGEON_HAZARD §SUPPLY -> FATIGUE 6 rest recovery: a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
   s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;n.feast=0;});
  }
  /* The milestone window, the Final state, and today's Gates. Returns the Family id pool the
@@ -266,18 +266,17 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  morningEvent(ids){const s=this.run;
   s.event=this.rollEvent();s.eventSeen=!s.event;if(s.event)(s.eventLog??=[]).push(s.event.id);s.pilgrimage=0;s.closedGates=[];const ev=s.event?.effects||{};
   if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
-  /* EVENT 52 게이트 임시 폐쇄 / 55 게이트 안정화 작업 (v2.9.11): before the day's multipliers, so they read the final Gates */
-  /* User 2026-09-30: the closed Gate is kept aside for the screens (`오늘 폐쇄`); it takes no visitor and no expedition */
+  /* EVENT 52 게이트 임시 폐쇄 / 55 게이트 안정화 작업: before the day's multipliers, so they read the final Gates */
+  /* the closed Gate is kept aside for the screens (`오늘 폐쇄`); it takes no visitor and no expedition */
   if(ev.closeGate){const open=s.dungeons.map((d,i)=>i).filter(i=>!s.dungeons[i].temporary);if(open.length>=2)s.closedGates.push(...s.dungeons.splice(this.rng.pick(open),1));}
   if(ev.tierOne)s.dungeons=s.dungeons.map(d=>d.temporary||d.tier===1?d:this.makeDungeon(d.family,1));
-  s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
+  s.dungeons.forEach(d=>{d.power*=(ev.danger||1);d.reward*=ev.reward||1;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
-  /* EVENT §20 본사 폐기 유예 (User 2026-09-28, v2.9.10 quick patch; was a refund of the overnight waste's cost, which the
-     player never saw and could not act on): stock whose last sale day is today - the shelf's `오늘까지`, discarded tonight
-     (nightDiscard, v2.9.11) - gets one more day. Only that stock; nothing bought later today is touched. */
+  /* EVENT §20 본사 폐기 유예: stock whose last sale day is today - the shelf's `오늘까지`, discarded tonight - gets
+     one more day. Only that stock; nothing bought later today is touched. */
   if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=1;
-  /* EVENT 46 냉장고 고장 (v2.9.11): Food/Drink shelf life -1 Day; what becomes due today leaves tonight as usual */
+  /* EVENT 46 냉장고 고장: Food/Drink shelf life -1 Day; what becomes due today leaves tonight as usual */
   if(ev.shelfCut)for(const st of s.inventory)if(st.expires!==null&&['food','drink'].includes(D.itemBy[st.item].category))st.expires=Math.max(s.day,st.expires-1);
   if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
@@ -307,7 +306,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.generateOffers();
   let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
   let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
-  /* EVENT 45 길드 소집령 (v2.9.11): the highest-Level adventurer does not come today; the headcount is drawn from the rest */
+  /* EVENT 45 길드 소집령: the highest-Level adventurer does not come today; the headcount is drawn from the rest */
   if(ev.summons&&available.length>=2){const top=available.reduce((a,b)=>b.level>a.level?b:a);available=available.filter(n=>n!==top);}
   /* SA-Q45. A force-seated newcomer takes an EXISTING slot, so they must not create one. They
      are a body in `available`, and on a Day whose roster is smaller than the intake the slot
@@ -322,27 +321,24 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
      event is bit-for-bit what it was. */
-  /* SA-Q45 / EVENT_v2.8 §왕립 기사단 방문: the royal Event seats the same way. It already generates
+  /* SA-Q45 / EVENT §왕립 기사단 방문: the royal Event seats the same way. It already generates
      exactly one royal-profile newcomer above, and its eligibility already refuses to fire without
      Living NPC Cap room, so the only thing it was missing was the seat - 왕립 기사단 방문 could fire
-     without the knight ever visiting. One seating rule serves both. (The Store Support that also
-     seated here was remade into 첫 방문 쿠폰 on 2026-09-23 and no longer seats anyone.) */
+     without the knight ever visiting. One seating rule serves both. */
   if((ev.rookie||ev.royal)&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
-  /* EVENT §08 (User 2026-09-25, v2.9.0): a morning with no existing slot to give (every other adventurer dead or
+  /* EVENT §08: a morning with no existing slot to give (every other adventurer dead or
      on recovery days) would seat nobody - the newcomer is then that Day's only visitor. The one case the Event
      adds a visitor, on a Day that would otherwise have none. */
   else if((ev.rookie||ev.royal)&&arrival&&!selected.length)selected.push(arrival);
-  /* EVENT 34 단골의 날 (v2.9.11): one trusted regular not already coming joins today's visitors */
+  /* EVENT 34 단골의 날: one trusted regular not already coming joins today's visitors */
   if(ev.regularVisit){const reg=available.filter(n=>!selected.includes(n)&&n.introduced&&G.Adventurer.isTrustedRegular(n));if(reg.length)selected.push(this.rng.pick(reg));}
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
-  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49 re-measure amendment: visit income
-    narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the
-    excess Store-Gold expansion to this step. Fresh base 180, Level x8 and the 2000 cap unchanged. */
-n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.int(0,80)+this.awayWallet(n)));n.awayDays=0;n.newToday=!n.introduced;}
-  /* ECONOMY_ORDER §Away Wallet (User 2026-10-02): an adventurer who could have come and did not earns elsewhere - each such
+  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
+n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,this.rng)+this.awayWallet(n)));n.awayDays=0;n.newToday=!n.introduced;}
+  /* ECONOMY_ORDER §Away Wallet: an adventurer who could have come and did not earns elsewhere - each such
      Day banks one, up to a few, paid on the next visit. Counted after the draw, so it adds no RNG draw. */
   for(const n of s.npcs)if(n.alive&&!n.recovery&&n.introduced&&!selected.includes(n))n.awayDays=Math.min(D.balance.awayWallet.maxDays,(n.awayDays||0)+1);
-  /* NPC_TRAIT destinationDefault / SALE §EXPECTED DESTINATION (User 2026-09-25): every open Gate is claimed by at
+  /* NPC_TRAIT destinationDefault / SALE §EXPECTED DESTINATION: every open Gate is claimed by at
      least one visitor whenever there are as many visitors as Gates - the per-Gate count on MORNING / ORDER was
      showing Gates nobody would visit. The ordinary draw above is untouched; only a Day that left a Gate empty
      moves one visitor into it, picked at random from a Gate that holds two or more and never one a 거짓말쟁이
@@ -424,9 +420,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     decision into answer-following, which the owner forbids in both directions. The runtime
     preparation state is NOT frozen - Resolve still reads the final Bag. Nothing here draws
     from the run RNG, so taking the snapshot does not move the seeded stream. */
- /* ECONOMY_ORDER §Away Wallet (User 2026-10-02): per banked Day half an ordinary visit's average income (Level x4 + 20), at most
-    maxDays - always below what the visit itself brings (Level x8 + 0~80, plus the expedition's own Wallet reward, growth and
-    Loyalty), so coming often stays the better life; a regular simply misses fewer Days. */
+ /* ECONOMY_ORDER §Away Wallet: per banked Day half an ordinary visit's average income, at most maxDays */
+ /* ECONOMY_ORDER §Ordinary NPC Wallet on visit: Level x perLevel + min~max */
+ visitIncome(n,rng){const v=D.balance.visitWallet;return n.level*v.perLevel+rng.int(v.min,v.max);}
  awayWallet(n){const a=D.balance.awayWallet,k=Math.min(a.maxDays,n.awayDays||0);return n.introduced?k*(n.level*a.perLevel+a.base):0;}
  outlookFor(n){
   const d=this.claimedGateFor(n)||this.run.dungeons[0];
@@ -444,22 +440,24 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;n.money=Math.min(2000,n.money);
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
+ /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +200G more each */
+ {const T=D.decorationParams.thriftSafe,paid=this.run.daily.safeWallets??=[];if(this.wears('thriftSafe')&&paid.length<T.customers&&!paid.includes(n.id)){n.money+=T.firstWallet;paid.push(n.id);}}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
     door. The roll is drawn only while the Decoration is worn and only for an injured arrival. */
  n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}
- /* RELIC 응급 처치대 (User 2026-09-28, v2.9.11): the same door heal as the 의무실 현판, at 20%, drawn only for an injured arrival
+ /* RELIC 응급 처치대: the same door heal as the 의무실 현판, at 20%, drawn only for an injured arrival
     and only while the support is owned (after the plaque, so one heal is never rolled twice). */
  if(n.injury===1&&this.has('firstAidDesk')&&this.rng.next()<D.relicParams.firstAidDesk.healChance){n.injury=0;n.status='건강';n.healedBy='firstAidDesk';this.run.daily.firstAidHeals=(this.run.daily.firstAidHeals||0)+1;}
- /* EVENT 24 길드 의료단 순회 / 33 길드 휴양일 / 31 길드 연회 (v2.9.11): at the door, from today's Event */
+ /* EVENT 24 길드 의료단 순회 / 33 길드 휴양일 / 31 길드 연회: at the door, from today's Event */
  {const dv=this.run.event?.effects||{};
   if(n.injury===1&&dv.healVisitors){n.injury=0;n.status='건강';n.healedBy='medcorps';}
   if(dv.arrivalFatigue)n.fatigue=Math.max(0,(n.fatigue||0)-dv.arrivalFatigue);
   n.feast=dv.feast||0;}const ev=this.run.event?.effects||{};
-  /* META §sign — 원정 지원금 간판 (User 2026-09-26, v2.9.7): the Event 추가 구매 channel - a share of the purse spendable this
+  /* META §sign — 원정 지원금 간판: the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
   n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0)+(this.run.firstRun&&n.lessonPayday===this.run.day?LESSON.paydayBudget:0)
-  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the injured visitor of the kit lesson brings the kit's 정가 to spend this
+  /* CORE_RUN §FIRST-RUN LESSONS: the injured visitor of the kit lesson brings the kit's 정가 to spend this
      visit, so the lesson is never lost to an empty purse */
   +(this.run.firstRun&&n.id===this.run.lessonInjured&&(this.run.lessonKitDay??3)===this.run.day?D.itemBy.kit.sell:0);const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
@@ -596,7 +594,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
   s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
  night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
-  /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden, User 2026-09-25, v2.9.1 balance): a
+  /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
      shown to the Player, never persisted past it. Deep expeditions neither count nor are assisted. */
   let badLuckChain=0;
@@ -620,7 +618,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,1);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
- s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
+ s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;
 })(globalThis);

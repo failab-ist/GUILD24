@@ -2,8 +2,8 @@
 
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
-DOC_VERSION=2.9.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -139,13 +139,14 @@ Wallet below (User 2026-10-02).
 When a selected NPC arrives for an ordinary visit:
 
 Fresh NPC:
-    Wallet = min(2000, round(180 + Level × 8 + randomInt(0, 80)))
+    Wallet = min(2000, round(180 + Level × 3 + randomInt(20, 60)))
 
 Returning NPC:
-    Wallet = min(2000, round(existing Wallet + Level × 8 + randomInt(0, 80)))
+    Wallet = min(2000, round(existing Wallet + Level × 3 + randomInt(20, 60)))
 
 Rules:
-- random range is inclusive 0..80 under the existing integer RNG convention
+- random range is inclusive 20..60 under the existing integer RNG convention (the floor keeps a losing regular able to buy
+  basic preparation; the Wallet otherwise moves with expedition results)
 - persistent Wallet carries between visits
 - explicit Trait / Event / Store Support Wallet effects stay separate under their owners
 - successful purchases reduce Persistent Wallet normally
@@ -158,7 +159,7 @@ A long gap between visits left a returning adventurer behind the Gates and short
 living adventurer who was available (not on recovery Days) and was not among the Day's visitors banks one Away Day, at most
 **3**; the next ordinary visit adds, on top of the visit income above,
 
-    banked Days × (Level × 4 + 20)
+    banked Days × (Level × 1.5 + 20)
 
 and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half an ordinary visit's average income per Day,
 so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's
@@ -846,13 +847,13 @@ FAIL:
 #### ECO-Q-v28-3B — ORDINARY NPC WALLET ON VISIT
 
 Fresh:
-    min(2000, 180 + Level ×8 + randomInt(0,80))
+    min(2000, 180 + Level ×3 + randomInt(20,60))
 
 Returning:
-    min(2000, existing Wallet + Level ×8 + randomInt(0,80))
+    min(2000, existing Wallet + Level ×3 + randomInt(20,60))
 
 PASS:
-- 0 and 80 endpoints are reachable under existing integer RNG convention
+- 20 and 60 endpoints are reachable under existing integer RNG convention
 - returning NPC keeps persistent Wallet before visit income is added
 - cap 2000 remains
 - failed-expedition Loot is unchanged

@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -313,13 +313,13 @@ Full required Power (Source-exact):
 
 ```text
 Gate Power
-= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
-× Event danger multiplier × (1 + (50 - region) × 0.001)
+= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
+× Event danger multiplier
 
 FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
 FamilyCombat = golemCombat 0.90 for golem, else 1
+SuccessEase = 0.92 on DAY 1~7, 0.90 on DAY 8~21, 0.95 from DAY 22 (ordinary Gates; the Final's Boss Power is its own owner)
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
-region: 0..100, starts 50; each Night +2 per win, -4 per death, -1 per other result
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
@@ -668,11 +668,11 @@ Environment incident probability:
 
     environmentIncidentChance
     = clamp(
-        0.06
-        + hazardAggregate × 0.012
+        0.08
+        + hazardAggregate × 0.020
         - prepared 강인함 × 0.001,
         0.02,
-        0.48
+        0.60
       )
 
 When combat fails:
@@ -725,7 +725,7 @@ their current owner ordering and are not redefined here.
 
 For a living adventurer:
 
-    baseEXP = 22 + Day × 4.6
+    baseEXP = 26.4 + Day × 5.52
 
 Outcome multiplier:
 
@@ -745,7 +745,7 @@ Ordinary expedition Wallet reward:
 
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
-    대성공 / 성공 = 1.00
+    대성공 / 성공 = 1.50
     퇴각 = 0.40
     부상 = 0.25
     중상 = 0.15
@@ -819,7 +819,7 @@ CombatDeficit
 )
 
 CombatDeathContribution
-= CombatDeficit × 0.18
+= CombatDeficit × 0.40
 ```
 
 `effectivePreparedPower` means the actual prepared state for the snapshot being calculated, including all already-applicable NPC-side modifiers and Item/Supply effects for that snapshot.
@@ -846,7 +846,7 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit × 0.12
+= EnvironmentDeficit × 0.20
 ```
 
 If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
@@ -864,7 +864,7 @@ healthyFailureDeathChance
     CombatDeathContribution
   + EnvironmentDeathContribution,
   0.00,
-  0.30
+  0.50
 )
 ```
 
@@ -875,7 +875,7 @@ failureDeathChance
 = clamp(
     healthyFailureDeathChance + 0.10,
     0.00,
-    0.40
+    0.60
 )
 ```
 
@@ -901,7 +901,7 @@ failureDeathChance
 = clamp(
     healthyFailureDeathChance + injuryEscalation + fatigueEscalation + strainEscalation,
     0.00,
-    0.30 + injuryEscalation + fatigueEscalation + strainEscalation
+    0.50 + injuryEscalation + fatigueEscalation + strainEscalation
 )
 ```
 
@@ -913,9 +913,9 @@ Meaning:
 - repeating expeditions with an already-injured NPC adds a visible material risk
 - departing at Fatigue 40 (탈진) adds the same visible material risk
 - sending an adventurer out injured again and again escalates further: +8%p per consecutive injured departure after the first, up to +30%p, and the cap rises with it; one healthy departure resets it
-- healthy conditional cap remains 30%
-- injured conditional cap remains 40%
-- Fatigue-40 conditional cap is 40%; injured and Fatigue-40 together 50%
+- healthy conditional cap is 50%
+- injured conditional cap is 60%
+- Fatigue-40 conditional cap is 60%; injured and Fatigue-40 together 70%
 
 These caps are conditional failure-risk caps, not unconditional whole-expedition Death probabilities.
 
@@ -930,6 +930,7 @@ preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
   - departed without Injury (injury=0)
   - fatigueBeforeExpedition < 20
   - 2 or more Items in the Bag
+preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 is worn (META §display — 구급품 진열장)
 ```
 
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes
@@ -1456,6 +1457,7 @@ PASS:
 - the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10`
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
+- SuccessEase multiplies the whole ordinary Gate Power once: 0.92 on DAY 1~7, 0.90 on DAY 8~21, 0.95 from DAY 22
 
 FAIL:
 - a single slope applied across all Days
@@ -1734,7 +1736,7 @@ Supply/Fatigue runtime arithmetic follows the current owner truth.
 #### DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
 
 Controlled seeded cases must verify (no Supply-deficit row):
-- environment incident chance uses the exact closure formula and 2%–48% clamp
+- environment incident chance uses the exact closure formula and 2%–60% clamp
 - escape chance uses the exact closure formula and 15%–94% clamp
 - failed-combat Severe branch uses 36% base before current modifiers
 - environment/other Severe branch uses 11% base before current modifiers
@@ -1742,10 +1744,10 @@ Controlled seeded cases must verify (no Supply-deficit row):
 - failure-conditioned Death still follows the separate current Death owner formula exactly once
 
 Reward PASS:
-- EXP base = 22 + Day×4.6
+- EXP base = 26.4 + Day×5.52
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
+- Wallet outcome multipliers are 대성공 / 성공 1.50 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
@@ -1762,7 +1764,7 @@ Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 
 and the three near misses (injured / Fatigue 20 / one Item).
 
 PASS:
-- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 only when all three hold
+- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 (0.60 with 구급품 진열장) only when all three hold
 - Level never changes the Death roll or the SALE snapshot: Lv1 / Lv2 / Lv10 / Lv20 read the same chance
 - a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
 - the SALE `실패 시 사망 위험` never includes preparedFactor
@@ -1801,7 +1803,7 @@ CombatDeficit
 = clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
 
 CombatDeathContribution
-= CombatDeficit * 0.18
+= CombatDeficit * 0.40
 
 HazardDeficit_i
 = clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)
@@ -1810,13 +1812,13 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit * 0.12
+= EnvironmentDeficit * 0.20
 
 healthyFailureDeathChance
 = clamp(
     CombatDeathContribution + EnvironmentDeathContribution,
     0.00,
-    0.30
+    0.50
 )
 ```
 
@@ -1829,7 +1831,7 @@ PASS:
 - Combat contribution uses the same current prepared-combat truth as Forecast/Resolve before hidden combat variance
 - Environment contribution uses the same current Hazard Threat/Defense truth as readiness
 - healthy minimum may reach exactly 0%
-- healthy conditional cap is exactly 30%
+- healthy conditional cap is exactly 50%
 - an expedition that resolves as `성공 / 대성공` performs zero Death rolls
 - an expedition that enters the ordinary failure path performs exactly one Death roll
 - that failure Death roll is not additionally gated behind a separate failed-escape requirement
@@ -1843,9 +1845,9 @@ Controlled identical NPC/Gate state except departure Injury state.
 
 EXPECT when departure `injury=1`:
 - ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
-- failure Death chance adds +10%p to the healthy conditional formula and caps at 40%
+- failure Death chance adds +10%p to the healthy conditional formula and caps at 60%
 - Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
-- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 50%
+- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 70%
 - no extra independent Death/Severe roll is created
 - `성공 / 대성공` still performs no Death roll
 
@@ -1859,8 +1861,8 @@ Pre-supply SALE check:
 
 PASS:
 - injured departure is materially riskier than healthy departure when an expedition fails
-- healthy conditional cap remains 30%
-- injured conditional cap remains 40%
+- healthy conditional cap is 50%
+- injured conditional cap is 60%
 - exact pre-supply `실패 시 사망 위험` is player-visible while the post-supply actual conditional probability remains hidden
 
 #### DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY

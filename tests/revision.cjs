@@ -27,7 +27,7 @@ test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',(
  assert.ok(!/level>=10/.test(require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/adventurer.js'),'utf8')),'no Level threshold survives in the slot rule');
  /* rice: D1 + 2 shelf days + 대형 냉장고 +2 -> last sale Day D4, gone that Night (ITEM §SHELF LIFE, v2.9.11; was the D5 Morning) */
  g.run.day=4;g.morning();assert.equal(g.run.inventory.length,2,'still on the shelf on its last sale Day');g.nightDiscard();assert.equal(g.run.inventory.length,0,'gone that Night');});
-test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.match(h.run.regionReport,/없었다/);});
+test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.equal(h.run.region,undefined,'no hidden reputation (v2.10.0, User 2026-10-02)');});
 test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,9);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
 test('seed and mid-day save replay deterministic',()=>{let a=fresh('replay2'),b=fresh('replay2');a.order(0);b.order(0);b.save();const state=Save.import(Save.export(b.account,b.run));b=new Game(state.account,state.run);b.autosave=false;a.open();b.open();while(a.run.phase==='sell'){a.depart();b.depart();}assert.deepEqual(a.run,b.run);});
 test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.run.inventory=[];/* the jump to D30 skipped the Nights that discard the opening stock (v2.9.11) */g.stock("lowpotion",1);
@@ -74,33 +74,33 @@ test('same SKU bulk across separate offers; board does not change rookie level',
    amendment to randomInt(0,80). Reducing the candidate pool to the one NPC under test makes a
    weighted draw of one deterministic - it is the only thing that can be selected - without
    needing to fight the real selection weights for a guaranteed pick. */
-test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (0/80), cap, and failed-expedition Loot untouched',()=>{
+test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (20/60, v2.10.0), cap, and failed-expedition Loot untouched',()=>{
  const g=fresh('eco-q49');
  const n=g.run.npcs[0];
  g.run.npcs=[n];
  g.addNPC=()=>null; // an unrelated Morning Event may otherwise seat a second candidate
  const originalInt=g.rng.int.bind(g.rng);
  let rolls=0;
- const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===0&&b===80){rolls++;return v;}return originalInt(a,b);};};
+ const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===20&&b===60){rolls++;return v;}return originalInt(a,b);};};
 
- // A - a never-introduced NPC: Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint
- n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(0);
+ // A - a never-introduced NPC: Wallet = 180 + Level*3 + roll, roll forced to its 20 endpoint
+ n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(20);
  g.run.day=2;g.morning();
  assert.ok(g.run.queue.includes(n.id),'the lone NPC is the only candidate available that Day');
- assert.equal(n.money,180+3*8+0,'fresh Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint');
+ assert.equal(n.money,180+3*3+20,'fresh Wallet = 180 + Level*3 + roll, roll forced to its 20 endpoint');
  assert.equal(n.newToday,true,'a never-introduced NPC is a fresh visit');
  assert.equal(rolls,1,'exactly one visit-income roll for the one visited NPC - no new draw was added');
 
- // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 80 endpoint
- n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(80);
+ // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 60 endpoint
+ n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(60);
  g.run.day=3;g.morning();
  assert.ok(g.run.queue.includes(n.id));
- assert.equal(n.money,500+3*8+80,'returning Wallet = existing Wallet + Level*8 + roll, roll forced to its 80 endpoint');
+ assert.equal(n.money,500+3*3+60,'returning Wallet = existing Wallet + Level*3 + roll, roll forced to its 60 endpoint');
  assert.equal(n.newToday,false,'an already-introduced NPC is a returning visit');
  assert.equal(rolls,1);
 
  // C - the 2000 cap still applies at the narrowed range
- n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(80);
+ n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(60);
  g.run.day=4;g.morning();
  assert.equal(n.money,2000,'the 2000 cap is unchanged by the narrowed range');
  g.rng.int=originalInt;
@@ -120,7 +120,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   }
  }
  assert.ok(sampled>0,'sanity: at least one 퇴각 sample was observed to check');
- assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1,'성공':1,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
+ assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1.5,'성공':1.5,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
 });
 test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
  const ids=new Set();
@@ -273,10 +273,10 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  assert.equal(Object.keys(Meta.storeLoadout(a)).length,DATA.decorationSlots.length,'one entry per Slot, always');
  for(const d of DATA.decorations)assert.ok(DATA.decorationSlots.includes(d.slot),d.id+' belongs to a real Slot');
  // the four approved effects and prices, read from the data rather than restated
- // prices re-tuned 2026-09-25, v2.9.1 balance: cheapest 500, dearest 2.5x, total 3,500
+ // prices re-tuned 2026-09-25, v2.9.1 balance; sign 1250 -> 1500 (User 2026-10-03, v2.10.0): cheapest 500, dearest 3x, total 3,750
  assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
-  [['sign',1250],['wall',1000],['counter',750],['display',500],
-   ['sign',1250],['wall',1000],['counter',750],['display',500]],
+  [['sign',1500],['wall',1000],['counter',750],['display',500],
+   ['sign',1500],['wall',1000],['counter',750],['display',500]],
   'the approved prices ship: each Slot\'s survival alternative costs what its economy Decoration costs (User 2026-09-24)');
 });
 
@@ -315,13 +315,18 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.decorationParams.thriftSafe.dailyGold,50,'counter pays 50G every morning (User 2026-09-25, v2.9.1 balance; was 40G)');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200,'counter: the first two customers of the Day +200G each (User 2026-10-03, v2.10.0; was 50G Store Gold every morning)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,.45,'길드 추천 매대 is the approved Morning chance (User 2026-09-28, v2.9.11; 30% from v2.9.1, was 25%)');
+ assert.equal(DATA.balance.wallVisitorChance,.35,'길드 추천 매대 is the approved Morning chance (User 2026-10-03, v2.10.0; 45% from v2.9.11)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
- assert.ok(/wears\('sponsorSign'\)\?D\.decorationParams\.sponsorSign\.budgetShare:0/.test(src)&&DATA.decorationParams.sponsorSign.budgetShare===.25,'sign: 25% of the purse as a that-visit extra budget');
+ assert.equal(DATA.decorationParams.sponsorSign.budgetShare,.50,'sign: 50% of the purse as a that-visit extra budget');
+ /* the 추가 구매 budget an arrival gets while the sign is worn, on a Day with no Event */
+ {const a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.sponsorSign.price);Meta.buyDecoration(a,'sponsorSign');
+  const g=new Game(a);g.autosave=false;g.start('sign-budget');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];g.run.event=null;
+  const n=g.run.npcs[0];n.traits=[];n.money=400;n.injury=0;n.introduced=true;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
+  assert.equal(n.eventBudget,Math.round(n.money*.50),'the arrival may spend half its purse again, this visit only');}
  assert.ok(!/sponsorSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.sponsorSign),'and no longer adds ORDER candidates');
  assert.ok(/wears\('honorFrame'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
@@ -332,7 +337,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 평범 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[25,30,26,13,6],'평범 60% -> 25%, so above 평범 40% -> 75% (v2.9.11; 65% in v2.9.7)');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[40,32,18,8,2],'평범 60% -> 40%, so above 평범 40% -> 60% (v2.10.0; 75% in v2.9.11)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -
@@ -709,7 +714,8 @@ test('an adventurer who could have come banks Away Days, at most 3, paid on the 
  const n=s.npcs.find(x=>x.introduced)||s.npcs[0];n.introduced=true;n.awayDays=5;
  assert.equal(g.awayWallet(n),a.maxDays*(n.level*a.perLevel+a.base),'capped at maxDays');
  n.awayDays=1;assert.equal(g.awayWallet(n),n.level*a.perLevel+a.base);
- assert.ok(n.level*a.perLevel+a.base<n.level*8+40,'a banked Day is worth less than an average visit\'s own income');
+ const v=DATA.balance.visitWallet;assert.ok(n.level*a.perLevel+a.base<=(n.level*v.perLevel+(v.min+v.max)/2)/2,'a banked Day is worth half an average visit\'s own income');
+ assert.deepEqual(v,{perLevel:3,min:20,max:60},'ECONOMY_ORDER §Ordinary NPC Wallet on visit (v2.10.0)');
  const fresh0={...n,introduced:false,awayDays:2};assert.equal(g.awayWallet(fresh0),0,'a first visit banks nothing');
  /* the same seed with and without banked Days draws the same stream */
  const run=(days)=>{const h=fresh('away-stream');for(const x of h.run.npcs){x.introduced=true;x.awayDays=days;}h.run.day=4;h.morning();return {state:h.rng.state,queue:h.run.queue.slice(),money:h.run.queue.map(id=>h.run.npcs.find(x=>x.id===id).money)};};

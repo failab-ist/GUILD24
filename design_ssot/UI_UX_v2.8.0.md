@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -307,9 +307,11 @@ customer SALE decision begins
 
 Show qualitative Combat Forecast and Hazard Readiness (known Hazard state), existing Injury/Condition in the snapshot, and the
 exact 실패 시 사망 위험 % — not as a readout cell (the readout `.top` shows 전투 전망 and 환경 대응 only) but as the second
-line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`) and a line of the NPC detail. `연속 부상 출발 {n}회`: one thin small
-line under the readout `.top`, only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing
-to the Death chance); words only — no %, verdict, `?` or new color.
+line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`) and a line of the NPC detail. `연속 부상 출발 {n}회`: inside the 전투 전망 box,
+the way the Great Success signal sits (v2.9.14 quick patch, User 2026-10-02) — a small muted-red chip beside the stamped word on a
+phone (the line kept for a screen reader; a second chip wraps under the first rather than leaving the box), a small line under the
+word on a desk — only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the Death
+chance); words only — no %, verdict or `?`.
 
 Hazard Readiness is one label on a one-Hazard Gate. On a two-Hazard Gate (T2 on) it is each Hazard's own state
 (`{위험} {충분|대응|불안|취약}`), and the cell stays two lines tall, never a third: where there is room (desk) `환경 대응 ?` on
@@ -436,7 +438,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 Phone only (never on a desk ≥1024): while the readout is scrolled out of view, one floating line at the top of the column
 repeats, on one strip split by a thin divider, `전투 {우세|접전|불리}` (the frozen value) and `환경` with the 환경 대응 meter `{위험} {N}/{필요}` per
 Hazard, live as the readout reads it (§SALE — OUTLOOK BOXES / ENVIRONMENT METER) — the same values, never a second
-source — plus, when the readout carries it, the same `연속 부상 출발 {n}회` line. Hidden while the readout is on screen. One
+source — plus, when the readout carries them, the same chips (`연속 부상 출발 {n}회`, `대성공 기회`) at the bottom right of the strip,
+stacked in a small column at the right of the meter when both show - never over the meter, and the strip keeps its height. Hidden while the readout is on screen. One
 tap folds it to a `전망` chip and back, lasting until the readout is on screen again; no Save field. No reserved height (fold
 to read a covered row); target at least 44px.
 
@@ -479,7 +482,7 @@ changes; a change not from the Item's listed effect names its source class; an I
 Item's Stat and not in `판매 후 변화`. Example `집중 사탕`:
 
 ```text
-직접 효과 = 공포 대응 +10 / 피로 회복 3
+직접 효과 = 공포 대응 +12 / 피로 회복 3
 ```
 
 — no Core-Stat increase unless a band changes, and `판매 후 변화` lists only 공포 대응 / 피로 회복. A combined block is allowed
@@ -820,9 +823,9 @@ closing `보유 자금` figure (its box also holds `영업 손익`) stamps (중�
 tape gives and settles. It stays cream; `영업 손익` beneath is green up, red down, gold at exactly 0 (each set in CSS so reduced
 motion matches). No `어제보다 +N` line (deferred, v3.0+ router).
 
-The END tape's `점포 자본 정산` (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; rates 1 / 2 / 3 / 4 / 5%) counts
+The END tape's `점포 자본 정산` (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; rates 1 / 2 / 3 / 3 / 3%) counts
 `현재 점포 자본` up from the prior total in 320 ms, a quiet `ui` cue at each Decoration price it passes (500 / 750 / 1000 /
-1250, read from META_v2.8.0.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
+1500, read from META_v2.8.0.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
 
 ### END — THIS RUN BLOCK (v2.9.12)
 
@@ -1145,6 +1148,8 @@ flag, naming no Decoration; COPY_AUDIT §1-8).
 ### DECORATION DECISION SURFACE
 
 Name, exact effect, price / ownership, equipped state; no Flavor prose and no Collection screen for it (data may keep it).
+The key is short (User 2026-10-03): `구매` over a small `{가격} 자본` (or `적용` / `해제`), beside the name on the card's first
+row; the effect line runs the card's full width on the row below, so neither the key nor the name narrows it.
 
 ### STORE GROWTH SURFACE
 
@@ -2138,7 +2143,7 @@ After actual purchase commit, PASS only if:
 
 #### UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
 
-Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 3`) in two controlled setups.
+Use current `집중 사탕` (`공포 대응 +12 / 피로 회복 3`) in two controlled setups.
 
 ##### Case A — no Fatigue band change
 
@@ -2298,9 +2303,9 @@ by text inside the metadata line.
 → UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25. Runtime: `node tools/qa-strain-line.cjs` (in qa:runtime).
 
 PASS:
-- a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
-  under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
-- at 390, with the readout scrolled out of view, the forecast pin shows the same line under its two readings for the chain case
+- a customer departing injured with an injured-departure chain of {n} >= 1 shows `연속 부상 출발 {n}회` once inside the 전투 전망
+  box (390: chip beside the word; 1280: line under it), with the same {n} as the NPC detail row
+- at 390, with the readout scrolled out of view, the forecast pin shows the same words at the bottom right of its strip for the chain case
   and none for the healthy and first-injured cases (UI-Q-v29-24)
 - a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
 - the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`

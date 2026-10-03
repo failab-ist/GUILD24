@@ -162,7 +162,7 @@ test('the simulation observes the run and never rewrites it',()=>{
    approved baseline is and never writes one of its own. */
 test('PASS3 GATE: the harness reports Boss Power evidence and leaves the value alone',()=>{
  const r=cached('reader');
- assert.equal(DATA.balance.bossPower,180,'the approved Source baseline is untouched by simulation (v2.9.1 balance; was 200)');
+ assert.equal(DATA.balance.bossPower,240,'the approved Source baseline is untouched by simulation (v2.10.0; was 180)');
  /* The gate is that the harness MEASURES and never writes a baseline of its own, so it is
     asserted on the baseline and on the reporting - not on whether a fresh-Account cohort
     happened to reach a Final to measure against, which is a balance question. */
@@ -382,6 +382,13 @@ test('RE-MEASURE follow-up: Store Gold checkpoints carry sample size, mean and s
    'Day '+d+' is sampled by every Run that reached at least that far') ;
   if(c.count)assert.ok(c.p10<=c.median&&c.median<=c.p90,'Day '+d+': percentiles are ordered');
  }
+});
+
+/* BEST HYBRID measurement input (User 2026-10-02): a ranked Support is bought ahead of the build's tag choice */
+test('relicPriority: the ranked Support is chosen whenever a window offers it and the till allows',()=>{
+ const base=cached('reader'),id=Object.keys(base.relicOffers).sort((a,b)=>(base.relicPurchases[a]?.count||0)-(base.relicPurchases[b]?.count||0))[0];
+ const ranked=Debug.simulate(SEEDS,'reader',null,'adaptive','hybrid',{relicPriority:[id]});
+ assert.ok((ranked.relicPurchases[id]?.count||0)>(base.relicPurchases[id]?.count||0),id+' is bought more once it is ranked first');
 });
 
 console.log(count+' simulation groups passed');

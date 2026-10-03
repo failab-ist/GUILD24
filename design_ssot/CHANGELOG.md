@@ -25,6 +25,87 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
+| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1) | `v2.10.0` (set by the User) |
+
+## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
+
+- **The hidden reputation is gone** (User: 평판처럼 몰래 하는 건 안 된다 · 싹 없앤다): the Run no longer keeps a 0~100 reputation
+  that moved with each Night's results and scaled every Gate's required power by up to ±5% the next Morning. Gate power is the
+  Gate formula and the day's Event only; the Night no longer writes the unseen reputation line. DUNGEON_HAZARD §GATE POWER —
+  LATE-DAY SLOPE; tests revision.
+- **Success uplift** (User: 성공도 콱 늘린다 · 게임 메타가 바뀌는 거라): every ordinary Gate's required Power × 0.92 on DAY 1~7,
+  × 0.90 on DAY 8~21 and × 0.95 from DAY 22 (SuccessEase, on the finished Gate Power, before the Event; the late step is the
+  second pass, User 2026-10-03: 후반 완화는 줄이고 초반은 그대로); expedition EXP × 1.2 (base 22 + Day × 4.6 →
+  26.4 + Day × 5.52); potions 투력 하급 8 → 10 · 중급 14 → 18 · 상급 20 → 25 · 최상급 28 → 35, prices unchanged (대응 장비와 레벨이 위험을
+  더 쉽게 넘기니 포션 값어치도 오른다). DUNGEON_HAZARD §GATE POWER / §Ordinary EXP, ITEM §ACTIVE CATALOG; tests night.
+- **Accidents rise with the counters** (User: 대응 장비 상한과 레벨 성장으로 위험을 쉽게 넘기니 사고 확률과 비율도 올린다): the
+  environment incident chance is 0.08 + Hazard aggregate × 0.020 − 강인함 × 0.001, clamped 2%~60% (was 0.06 · 0.012 · 2%~48%).
+  The incident-cause split reads the same base and gap coefficient. DUNGEON_HAZARD §Environment incident; tests night.
+- **The Wallet follows the results** (User: 이기지도 못하는데 27일까지 가는 게 이상하다 · 저점은 깔아 준다): the visit income is
+  Level × 3 + 20~60 (was Level × 8 + 0~80), and a 성공 / 대성공 pays the expedition Wallet reward × 1.5 (failure multipliers
+  unchanged). A regular who keeps winning keeps buying; one who keeps losing still brings 20G+ for basic preparation. The Away
+  Wallet keeps its rule, half an ordinary visit's average income per Day: Level × 1.5 + 20 (was Level × 4 + 20).
+  ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet, DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests revision, night.
+- **A failure costs more when the preparation is short** (User 2026-10-03: 사망도 좀 풀어야 · 준비·전투 전망이 부족할수록 늘어나게 ·
+  상한은 둔다): the failure-conditioned Death chance is CombatDeficit × 0.40 + EnvironmentDeficit × 0.20 (was × 0.18 / × 0.12),
+  healthy cap 50% (was 30%); the injured, 탈진 and strain terms still add their %p and lift the cap with them (injured 60%,
+  injured + 탈진 70%). Still one roll, only on the failure path. DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK /
+  DUN-Q77 / DUN-Q78; tests night, integration.
+- **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다 · 도달 시 클리어는 좀 높게): WRATH 180 → 240 (User: 딱 떨어지게), the
+  FIRE pair +18 → +24, the GREED shortfall cap +11 → +15 (255 at most), SLOTH by breaks 200/189/171/149 → 267/252/228/199 (all × 4/3).
+  The first pass (210) left clear-given-reach at 76%; on the grid measurement's reached parties (`reports/v2100-measure/grid.log`,
+  arm 0.95 / 안1) 240 reads as about 57% clear-given-reach and 26% overall. BOSS §WRATH / §GREED / §SLOTH,
+  FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT; tests final, simulation.
+- **Measured against the updated targets** (User 2026-10-03: 목표를 지금 수치 정도에 맞춰): reader / expert fresh Runs read ordinary
+  success 54 / 48 / 50 / 46% by Day band, D30 reach 46%, clear-given-reach 60~63%, overall clear 27~29%; the targets are now those
+  figures (`GAME_VISION.md` §Difficulty Curve, its reference lines; measured in `reports/v2100-measure/README.md`). The all-Decorations / skilled line is
+  re-read after the Decoration changes: D30 75~98%, clear-given-reach 40~75%, clear 40~57%.
+- **추모 방명록 사망 한도 +2 → +1** (User 2026-10-03, after the single-Decoration measurement: alone it was the strongest piece,
+  클리어 +22.9%p, with the Death limit now ending half the Runs; `reports/v2100-measure/deco-single.log`). META §counter — 추모 방명록,
+  COPY_AUDIT §여덟 장식.
+- **Three Decorations rebalanced after the single-Decoration measurement** (User 2026-10-03): 알뜰 금고 now gives the Day's first
+  customer +200G Wallet (+100G measured +0.7%p clear, so 200G) (was +50G Store Gold every morning, which moved clear by +0.9%p; the receipt loses its 알뜰 금고 row);
+  명예 모험가 액자 above-평범 chance 75% → 60% (weights [40, 32, 18, 8, 2]); 구급품 진열장 is remade: while worn, an adventurer who
+  departs 만반의 준비 has 투력 × 1.05 and the rolled Death chance × 0.50 instead of × 0.80 (× 0.60 alone measured +1.8%p clear) (was ten 부상 → 무사 a Run, the most zombie-prone piece). META §wall / §counter /
+  §display, DUNGEON_HAZARD §Preparation / Level Death reduction, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, COPY_AUDIT 7-3 / 9-5;
+  tests integration, revision.
+- **Decoration value follows the Slot price** (User 2026-10-03, after the single-Decoration measurement: the cheapest display Slot
+  was near the top and the dearest sign Slot near the bottom): both sign Decorations 1250 → 1500 Store Capital (money gathers faster late; total 3,750),
+  원정 지원금 간판 purse share 25% → 50% (40% measured +4.4%p clear), 훈련소 제휴 간판 Level +1 chance
+  40% → 55%, 의무실 현판 heal 45% → 40%, 알뜰 금고 now the Day's first two customers +200G each, 길드 추천 매대 45% → 35%, 구급품 진열장
+  Death roll × 0.50 → × 0.60 (투력 +5% kept). META §sign / §wall / §counter / §display, DUNGEON_HAZARD §Preparation / Level Death
+  reduction, COPY_AUDIT 9-5; tests integration, revision.
+- **UI_UX END tape names the current Store Capital rates** (1 / 2 / 3 / 3 / 3%; it still read 1 / 2 / 3 / 4 / 5% from before the
+  v2.9.13 change). UI_UX §END.
+- **A short Decoration key** (User 2026-10-03: 버튼 영역을 줄이고 효과 영역을 넓게): the buy key reads `구매` over a small `{가격} 자본`
+  (was `{가격} 자본으로 구매`), beside the name on the card's first row, and the effect line runs the card's full width on the
+  row below (the key is one 48 px height whether it reads 구매 or 해제, so buying never resizes the card); the eight effect lines
+  drop their closing period; 구급품 진열장's effect line is shortened
+  to `…로 떠나면 실패 시 사망 위험 -40% (기존 -20%).`. UI_UX §DECORATION DECISION SURFACE, COPY_AUDIT 9-5.
+
+## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; never released alone, it ships in v2.10.0)
+
+- **연속 부상 출발 in the 전투 전망 box** (User: 이상한 데 있다 · 대성공처럼 전투 전망 밑에, 모바일은 버튼 · 플로팅은 우하단): the loose line
+  under the two boxes is gone. A phone shows a small muted-red chip beside the stamped word (the line kept for a screen reader; with
+  the 대성공 기회 tag too, the second chip wraps under the first); a desk shows a small line under the word. On the phone pin the words
+  ride at the bottom right of the strip as the same chips, with the 대성공 기회 chip, stacked when both show (User: 플로팅도 버튼 디자인 · 겹치지
+  않게; the deployed pin drew the line over the meter). UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT /
+  §FORECAST PIN, COPY_AUDIT §4-25; test ui-guard.
+- **A rescue stays open past zero** (User: 적자만 넘기면 끝나서, 그 돈으로는 발주에서 살 게 없다): 재고 정리 still starts only on a short
+  Closing and still counts one of the three rescues, but once started that Closing may keep clearing stock after the till
+  reaches zero, until 다음 날. The CLOSING dock keeps its 재고 정리 key while the started rescue is open; the stock sheet says so.
+  tests integration.
+- **The early Counter rungs rise** (User: 초반 버티기가 쉽지 않다 · 하이브리드 버프, B안 - 순서 유지): 초반 대응 10 -> 12 (컵라면 냉기, 얼음컵
+  화염, 중화 탄산수 부식, 집중 사탕 공포, 방진마스크 독); 초반 하이브리드 9 / 10 -> 11 / 12 on the first / second Hazard (방한 두건
+  냉기 11 · 화이트아웃 13, 방독 작업장갑 독 11 · 속박 12, 축성 손전등 공포 11 · 어둠 12, 방수망토 부식 11 · 진창 12). The ladder order
+  holds (초반 대응 > 초반 하이브리드 on the first Hazard, both under 후반 하이브리드 and 중반 대응). By the formula, an average D1
+  adventurer now clears Tier 1 through D7 with either, and the hybrid's Tier 2 opening shortfall falls from 7~9 to 5~7.
+  Unmeasured. ITEM §COUNTER LADDER and catalogue rows, RELIC / UI_UX examples; reports/ITEM-PRICES.md regenerated.
+- **후반 하이브리드 rises to 18 / 18 / 18** (User: 중반 대응과 후반 하이브리드도 보자 · 18로): 거미줄 방호세트, 연금 방수슈트, 성화 랜턴, 백설
+  방한고글 16·15 / 15·15 -> 18·18, 마그마 냉각장비 화염 15 -> 18 (투력 +10 unchanged). By the formula an average adventurer
+  now clears Tier 2 with one slot (+3 / +2 / 0 by Stat group) and stays 3~7 short of Tier 3; 중반 대응 is unchanged (Tier 2 sure,
+  Tier 3 just for 강인함, short for 정신 - left to the 정신 Jobs). The order holds: 중반 대응 > 후반 하이브리드 > 초반 rungs.
+  ITEM §COUNTER LADDER and catalogue rows; reports/ITEM-PRICES.md regenerated.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
