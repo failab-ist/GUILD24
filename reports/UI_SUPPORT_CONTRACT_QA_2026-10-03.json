@@ -1,0 +1,839 @@
+{
+  "source_head": "542c888e9c2a562bf03f3b067d4b19728298d8f5",
+  "before_head": "79f7d4c9367ffe2b9185f1d3f53e85d3cad8d5e1",
+  "visual_approval": "pending",
+  "checks": {
+    "npm_test": {
+      "exit_code": 0
+    },
+    "support_reduced_motion": 231,
+    "support_motion": 117,
+    "d0_flow": 12,
+    "boss_hold": 22
+  },
+  "viewports": {
+    "after": [
+      {
+        "width": 360,
+        "height": 640,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 533,
+            "bottom": 628,
+            "height": 95
+          },
+          "scroll": {
+            "bottom": 525,
+            "height": 525
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 183.078125,
+              "width": 328,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 205.46875,
+              "width": 328,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 183.078125,
+              "width": 328,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 580,
+            "bottom": 628,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 572,
+            "height": 572
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 227.859375,
+              "width": 328,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 227.859375,
+              "width": 328,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 205.46875,
+              "width": 328,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 375,
+        "height": 548,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 441,
+            "bottom": 536,
+            "height": 95
+          },
+          "scroll": {
+            "bottom": 433,
+            "height": 433
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 183.078125,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 183.078125,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 488,
+            "bottom": 536,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 480,
+            "height": 480
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 390,
+        "height": 780,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 673,
+            "bottom": 768,
+            "height": 95
+          },
+          "scroll": {
+            "bottom": 665,
+            "height": 665
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 183.078125,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 183.078125,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 720,
+            "bottom": 768,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 712,
+            "height": 712
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 430,
+        "height": 780,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 692.5,
+            "bottom": 768,
+            "height": 75.5
+          },
+          "scroll": {
+            "bottom": 684.5,
+            "height": 684.5
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 183.078125,
+              "width": 398,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 183.078125,
+              "width": 398,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 183.078125,
+              "width": 398,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 720,
+            "bottom": 768,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 712,
+            "height": 712
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 205.46875,
+              "width": 398,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 205.46875,
+              "width": 398,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 205.46875,
+              "width": 398,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 1280,
+        "height": 700,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-wide.jpg\")",
+          "head": 140,
+          "footer": {
+            "top": 628,
+            "bottom": 676,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 620,
+            "height": 620
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.34375,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 3,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-wide.jpg\")",
+          "head": 140,
+          "footer": {
+            "top": 628,
+            "bottom": 676,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 620,
+            "height": 620
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.34375,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 3,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 1280,
+        "height": 880,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-wide.jpg\")",
+          "head": 140,
+          "footer": {
+            "top": 808,
+            "bottom": 856,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 800,
+            "height": 800
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.34375,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 3,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5342/ui/assets/presentation/support/backroom-wide.jpg\")",
+          "head": 140,
+          "footer": {
+            "top": 808,
+            "bottom": 856,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 800,
+            "height": 800
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.34375,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 3,
+          "hscroll": false
+        },
+        "errors": []
+      }
+    ],
+    "motion": [
+      {
+        "width": 375,
+        "height": 548,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5343/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 441,
+            "bottom": 536,
+            "height": 95
+          },
+          "scroll": {
+            "bottom": 433,
+            "height": 433
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 183.078125,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 183.078125,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5343/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 488,
+            "bottom": 536,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 480,
+            "height": 480
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 205.46875,
+              "width": 343,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 390,
+        "height": 780,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5343/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 673,
+            "bottom": 768,
+            "height": 95
+          },
+          "scroll": {
+            "bottom": 665,
+            "height": 665
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 183.078125,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 183.078125,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5343/ui/assets/presentation/support/backroom-phone.jpg\")",
+          "head": 127,
+          "footer": {
+            "top": 720,
+            "bottom": 768,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 712,
+            "height": 712
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 205.46875,
+              "width": 358,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 1,
+          "hscroll": false
+        },
+        "errors": []
+      },
+      {
+        "width": 1280,
+        "height": 880,
+        "d0": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5343/ui/assets/presentation/support/backroom-wide.jpg\")",
+          "head": 140,
+          "footer": {
+            "top": 808,
+            "bottom": 856,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 800,
+            "height": 800
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "판매한 상품의 위험 대응 수치 +40%."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.34375,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "음식·음료 유통기한 +2일 (보유 재고도 1회 연장)."
+            }
+          ],
+          "columns": 3,
+          "hscroll": false
+        },
+        "d5": {
+          "fit": true,
+          "background": "url(\"http://127.0.0.1:5343/ui/assets/presentation/support/backroom-wide.jpg\")",
+          "head": 140,
+          "footer": {
+            "top": 808,
+            "bottom": 856,
+            "height": 48
+          },
+          "scroll": {
+            "bottom": 800,
+            "height": 800
+          },
+          "actions": true,
+          "cards": [
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.328125,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G."
+            },
+            {
+              "height": 215.46875,
+              "width": 361.34375,
+              "buttonWidth": 132,
+              "buttonHeight": 48,
+              "actionClear": true,
+              "description": "단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p."
+            }
+          ],
+          "columns": 3,
+          "hscroll": false
+        },
+        "errors": []
+      }
+    ]
+  }
+}
