@@ -3769,7 +3769,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-panel .mix-row{grid-template-columns:38px minmax(0,1fr) 52px;gap:10px}
 .settings-panel .mix-row label{color:#ead8b6;font-size:14px}
 .settings-panel .mix-row b{min-height:36px;display:flex;align-items:center;justify-content:center;
- background:#1c1008;color:#ffc554;font-size:17px;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
+ background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
 /* Native inputs keep keyboard behaviour and a 44px touch area around the thin rail. */
 .settings-panel .mix-row input[type=range]{appearance:none;-webkit-appearance:none;height:44px;
  color:#ffc554;accent-color:#ffc554}
