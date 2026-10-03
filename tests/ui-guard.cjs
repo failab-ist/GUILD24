@@ -687,7 +687,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
     answers, and it states what is lost AND what survives. */
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이번 영업에서 얻을 보상은 없습니다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다.<br>본사 기록·점포 자본·보유 장식은 유지됩니다.'),
+ assert.ok(app.includes('이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
  assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
@@ -695,7 +695,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
- assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다."),
+ assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
   'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
@@ -2552,7 +2552,7 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\(CLOSE_X,'dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
  // no blank stage: with no Run the render itself draws preparation
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
@@ -2858,7 +2858,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.ok(/st==='d0'\)s\.bossReveal\.d0Seen=true/.test(app),'dismissing D0 persists its own marker, not a BOSS_BEATS entry');
  /* CORE_RUN §D0 — closing does not consume the beat, and ordinary Morning does not go on past
     it: no 닫기, no Escape and no dismiss while D0 is the open report */
- assert.ok(/!d0Owed\(\)\?btn\('닫기'/.test(app),'D0 carries no 닫기');
+ assert.ok(/!d0Owed\(\)\?btn\(CLOSE_X/.test(app),'D0 carries no 닫기');
  assert.ok(/game\.run\?\.phase!=='foundation'&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
  assert.ok(/phase==='foundation'\|\|d0Owed\(\)\)return/.test(app),'dismiss does not close D0');
  // the cadence table, and D30 reusing D25
@@ -2956,7 +2956,7 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  assert.ok(app.includes("'보유 장식 없음'"),'§1-1 the empty Decoration state');
  assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
  assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
- assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.'),'§1-5 body');
+ assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.'),'§1-5 body');
  assert.ok(app.includes("btn('전부 지우기','reset-go','danger')"),'§1-5 confirm');
  assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
  assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');

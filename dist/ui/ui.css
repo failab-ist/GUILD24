@@ -3744,12 +3744,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .tabs .small:hover{background:linear-gradient(180deg,#6a4627 0,#4f3220 55%,#382214 100%);color:#fff0d1}
 .modal.wood-frame .tabs .small.active{background:linear-gradient(180deg,#7a5224 0,#573817 55%,#3f2910 100%);color:#fff0c8;
  box-shadow:inset 0 0 0 2px #140b06,inset 0 0 0 3px #ffc554,inset 0 3px 0 #ffe29b40}
-/* 닫기 is a brass key, lighter than the wood around it, so it is never lost against the frame */
-.menu-panel .modal-header .bare,.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{min-width:64px;min-height:44px;padding:8px 14px;
- background:linear-gradient(180deg,#f0cd7e 0,#d9a548 55%,#b57f2a 100%);color:#2a1a0b;font-weight:600;text-shadow:0 1px 0 #ffe9b0;
- box-shadow:inset 0 0 0 2px #3a210c,inset 0 2px 0 #fff1c7aa,0 3px 0 #0f0905}
-.menu-panel .modal-header .bare:hover,.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:linear-gradient(180deg,#f7d98f 0,#e3b255 55%,#c08932 100%);color:#2a1a0b}
-.menu-panel .modal-header .bare:active,.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px #3a210c,0 1px 0 #0f0905}
+/* the close control is a bare light X, no key and no plate: it reads against the dark wood and cannot be mistaken for an action */
+.menu-panel .modal-header .bare,.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{flex:0 0 auto;display:grid;place-items:center;width:44px;min-width:44px;min-height:44px;padding:0;
+ background:none;box-shadow:none;color:#f1e6cc;filter:drop-shadow(0 2px 0 #0f0905)}
+.menu-panel .modal-header .bare:hover,.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:none;color:#fff;filter:drop-shadow(0 2px 0 #0f0905) brightness(1.1)}
+.menu-panel .modal-header .bare:active,.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:none}
+.modal-header .bare .x-icon{display:block;width:16px;height:16px}
 /* one vertical rhythm for the carved sheets: 14px under the header rule, 16px above the footer rule, 12px between stacked blocks */
 .modal.wood-frame .modal-body,.modal.wood-frame:has(.tabs) .modal-body{padding:16px 12px max(14px,env(safe-area-inset-bottom))}
 .modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,env(safe-area-inset-bottom))}
