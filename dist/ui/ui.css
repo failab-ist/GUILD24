@@ -3876,8 +3876,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
 /* SALE backdrop (User 2026-10-03): one wide store art for phone and desk, framed from the wall down (no ceiling), the side shelves
    showing at the edges; a dim layer keeps the bright room behind the dark cards */
-.p-sale{background:linear-gradient(#0d0a0670,#0d0a0680),url('assets/presentation/sale/sale-bg-phone.png') center bottom/100% auto no-repeat #1d1710}
-.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.png') center bottom/100% 120% no-repeat #17110b}
+.p-sale{background:linear-gradient(#0d0a0638,#0d0a0648),url('assets/presentation/sale/sale-bg-phone.png') center -70px/100% auto no-repeat #1d1710}
+.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.png') center bottom/100% 135% no-repeat #17110b}
 /* SALE shelf head (User 2026-10-03): the wooden plank asset spans the whole frame width */
 .p-sale .shelf-head{margin:0;padding:6px 16px;border:solid transparent;border-width:0 14px;
  border-image:url('assets/presentation/sale/shelf-plank.png') 0 115 fill/0 14px stretch;
@@ -3915,8 +3915,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .good .price em.expiry.soon{color:#d99a7c}
 
 /* SALE price keys (User 2026-10-03): the three key assets, nine-sliced; the role flag loses its colour bar */
-.p-sale .counter-tray .tills button{border:solid transparent;border-width:6px 10px;background:none;box-shadow:none;clip-path:none;
- border-image:url('assets/presentation/sale/till-regular.png') 36 46 fill/6px 10px stretch}
+.p-sale .counter-tray .tills button{border:solid transparent;border-width:8px;background:none;box-shadow:none;clip-path:none;
+ border-image:url('assets/presentation/sale/till-regular.png') 44 fill/8px stretch}
 .p-sale .counter-tray .tills button:nth-child(1){border-image-source:url('assets/presentation/sale/till-discount.png')}
 .p-sale .counter-tray .tills button:nth-child(3){border-image-source:url('assets/presentation/sale/till-markup.png')}
 .p-sale .counter-tray .tills button:not(:disabled):hover{background:none;filter:brightness(1.1)}
@@ -3925,7 +3925,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .counter-tray .tills .price-role,.p-sale:not(.sale-desk) .counter-tray .tills .price-role{background:none;border:0;clip-path:none}
 .p-sale:not(.sale-desk) .counter-tray .tills button{min-height:56px;padding:0 0 0 0}
 @media(min-width:1024px){
- .sale-desk .counter-tray .tills button{border-width:10px 16px;border-image-width:10px 16px;min-height:96px;padding:6px 0}
+ .sale-desk .counter-tray .tills button{border-width:14px;border-image-width:14px;min-height:96px;padding:2px 0}
  .sale-desk .counter-tray .tills em{font-size:15px}
  .sale-desk .counter-tray .tills strong{font-size:28px}
  .sale-desk .counter-tray .tills small{font-size:15px}
@@ -3944,3 +3944,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .detail-stat strong,.p-sale:not(.sale-desk) .detail-stat strong,.sale-desk .detail-stat strong{font:600 16px/1.2 var(--ui)}
 /* SALE desk (User 2026-10-03): the column ends on the card's own bottom edge, not on the card slot's gap below it */
 @media(min-width:1024px){.sale-desk .front-side{margin-bottom:14px}}
+/* SALE phone price keys (User 2026-10-03): the same stacked key as the desk - role, price, profit - centred in the key asset instead of a side flag */
+.p-sale:not(.sale-desk) .counter-tray .tills button{grid-template-columns:minmax(0,1fr);row-gap:0;min-height:64px;padding:0;justify-items:center}
+.p-sale:not(.sale-desk) .counter-tray .tills .price-role{grid-column:1;grid-row:1;width:auto;flex-direction:row;align-self:end;padding:0;gap:4px;line-height:1.2}
+.p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:1;grid-row:2;align-self:center;text-align:center}
+.p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:1;grid-row:3;align-self:start;text-align:center}
