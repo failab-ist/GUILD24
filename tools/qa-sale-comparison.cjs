@@ -19,7 +19,8 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:width<1024?2:1,isMobile:width<1024,hasTouch:width<1024,locale:'ko-KR',reducedMotion:motion?'no-preference':'reduce'});
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(`http://127.0.0.1:${port}/`,{waitUntil:'load'});
-  await page.evaluate(()=>{Guild24.game.start('qa-sale-compare-d5');Guild24.game.account.tutorial.skipped=true;Guild24.render();});
+  // the DAY 14 seed is one whose STEP bot still reaches a DAY 14 SALE under v2.10.0's failure rates (the DAY 5 seed's run ends on DAY 7); this one also offers the Deep nomination
+  await page.evaluate(seed=>{Guild24.game.start(seed);Guild24.game.account.tutorial.skipped=true;Guild24.render();},day===14?'qa-sale-compare-d14-14':'qa-sale-compare-d5');
   if(await page.locator('.p-prep [data-action="start"]').count())await page.locator('.p-prep [data-action="start"]').click();
   await page.locator('#modal-root [data-action="buy-relic"]').first().click();
   await page.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();});
@@ -70,17 +71,18 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
    const tray=document.querySelector('.counter-tray'),tr=r(tray);
    const unclipped=texts.every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
    const shelf=[...document.querySelectorAll('.good .what')].every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
-   const trayText=texts.filter(e=>tray.contains(e)).every(e=>r(e).left>=tr.left&&r(e).right<=tr.right+1&&r(e).top>=tr.top&&r(e).bottom<=tr.bottom);
+   const rr=e=>{const x=r(e);if(!e.matches('.tills .price-role'))return x;const k=r(e.closest('button'));return {left:Math.max(x.left,k.left),right:Math.min(x.right,k.right),top:Math.max(x.top,k.top),bottom:Math.min(x.bottom,k.bottom)};};
+   const trayText=texts.filter(e=>tray.contains(e)).every(e=>rr(e).left>=tr.left&&rr(e).right<=tr.right+1&&rr(e).top>=tr.top&&rr(e).bottom<=tr.bottom);
    const stock=document.querySelector('.tray-stock'),who=document.querySelector('.tray-who'),name=document.querySelector('.tray-what>b'),delta=document.querySelector('.tray-delta'),tills=document.querySelector('.tills');
    const fs=sel=>{const e=document.querySelector(sel);return e?parseFloat(getComputedStyle(e).fontSize):null;};
    const contrast=(fg,bg)=>{const lum=c=>c.match(/[\d.]+/g).slice(0,3).map(x=>Number(x)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((s,x,i)=>s+x*[.2126,.7152,.0722][i],0);const a=lum(fg),b=lum(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);};
-   const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>{const bg=getComputedStyle(t).backgroundColor;return contrast(getComputedStyle(t).color,bg==='rgba(0, 0, 0, 0)'?getComputedStyle(e).backgroundColor:bg);}));
+   const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>{const cs=getComputedStyle(t),bg=t.matches('em')&&cs.backgroundImage!=='none'?getComputedStyle(e).getPropertyValue('--rim-d').trim():cs.backgroundColor==='rgba(0, 0, 0, 0)'?(getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)'?(e.disabled?'#766055':'#8f5030'):getComputedStyle(e).backgroundColor):cs.backgroundColor;const rgb=h=>h[0]==='#'?'rgb('+[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(',')+')':h;return contrast(cs.color,rgb(bg));}));
    const send=document.querySelector('.dock [data-action="depart"]')||document.querySelector('.dock .stamp');
    const plate=document.querySelector('.nameplate'),pc=getComputedStyle(plate),dest=document.querySelector('.dest-plate'),dc=getComputedStyle(dest);
    const insetOnly=e=>getComputedStyle(e).boxShadow.replace(/rgba?\([^)]*\)/g,'color').split(',').every(s=>s==='none'||s.includes('inset'));
    const keys=[...document.querySelectorAll('.tills button')];
    return {face:box(document.querySelector('.face')),slots:slots.map(box),bag:slots.every(e=>onscreen(e)&&hit(e)&&(!menu||r(e).bottom<=r(menu).top||r(e).top>=r(menu).bottom||r(e).right<=r(menu).left||r(e).left>=r(menu).right)),
-    unclipped,shelf,trayText,metadata:r(who).width===0&&r(stock).left>=r(name).right+7&&Math.max(r(stock).bottom,r(name).bottom)<=r(delta).top-2,
+    unclipped,shelf,trayText,metadata:r(who).width===0&&r(stock).width===0&&r(name).bottom<=r(delta).top-2,
     room:{plate:parseFloat(pc.paddingLeft)>=8&&parseFloat(pc.paddingTop)>=4&&parseFloat(pc.paddingBottom)>=4&&parseFloat(pc.gap)>=2,
      cardShadow:insetOnly(document.querySelector('.face'))&&insetOnly(plate),destination:parseFloat(dc.paddingTop)>=5&&parseFloat(dc.paddingLeft)>=8,
      fullDelta:r(delta).width>=tr.width-36,keysClear:keys.every(e=>r(e).bottom+7<=tr.bottom-2)},
@@ -96,7 +98,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   if(width<1024){
    const beforeWidth=Math.max(88,Math.min(width*.38,150,height*.9-300));
    check(geom.face.width>=beforeWidth*.85&&geom.face.width<=beforeWidth*.9,tag+' character width 85–90% of original');
-   check(geom.metadata,tag+' stock and expiry at right of name without duplicate customer');
+   check(geom.metadata,tag+' tray header carries no stock or expiry and no duplicate customer (the shelf row has them)');
    check(geom.room.plate&&geom.room.cardShadow&&geom.room.destination,tag+' text padding and no card cast into neighbours');
    check(geom.room.fullDelta&&geom.room.keysClear,tag+' full-width effects and price depth clear of dock');
    const reading=await page.evaluate(()=>{const c=document.querySelector('.stage-scroll').getBoundingClientRect(),r=document.querySelector('.readout.core-mob').getBoundingClientRect(),p=document.querySelector('.forecast-pin');return {whole:r.top>=c.top-1||r.bottom<=c.top+1,pin:r.bottom>c.top+1||p.classList.contains('show')};});

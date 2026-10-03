@@ -318,7 +318,7 @@ test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row,
  assert.equal(Presentation.hazardRows(['cold']).at(0).pressure,'','without a Gate there is no row text to invent');
  assert.ok(/const pressCell=h=>h\.need\?'<span class="press"><b class="need">'[^;]*<small class="rate">/.test(app),'the short row renders as need over rate (User 2026-09-25)');
  assert.ok(/\.hazards \.press \.rate\{display:block;font-size:11px/.test(read('dist/ui/ui.css'))&&/@media\(min-width:900px\)\{\.hazards \.press \.need,\.hazards \.press \.rate\{display:inline/.test(read('dist/ui/ui.css')),'two lines on a phone, one line at 900px+');
- assert.ok(/\.detail-stat label \.press\{display:inline;[^}]*text-overflow:ellipsis/.test(read('dist/ui/ui.css'))&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid tag is inline beside the name and the value is 18px');
+ assert.ok(!/class="press">'\+pressed|pressedBy\(/.test(app)&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid carries no Hazard tag and the value is 18px');
 });
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
@@ -902,8 +902,11 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
  assert.equal((codeOnly.match(/envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
  assert.ok(/<span class="pin-fore pin-plate env-meter">'\+\(p\.hazards\.length\?'환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
- assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
+ /* User 2026-10-03: below 900px the `{능력치} n당 대응 1 제공` tail of each row reads in the plate's one `?` (rateTip); the rows' name and `대응 N 필요` are never hidden */
+ assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).filter(r=>!/\.press \.rate\{display:none\}/.test(r)).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
+ assert.ok(/\.p-sale \.front-side \.dest-plate \.hazards \.press \.rate\{display:none\}/.test(css)&&/rateTip\(d\)/.test(plate)&&/@media\(min-width:900px\)\{\n \.p-sale \.front-side \.dest-plate \.hazards \.press \.rate\{display:inline\}/.test(css),
+  'the rate tail hides only below 900px, where the plate `?` carries it');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
     read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
     calculation moved into the systems layer with it. */

@@ -1061,7 +1061,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .detail-stat label{display:flex;align-items:baseline;gap:6px;min-width:0;font:400 13px/1 var(--ui);color:#a2947c;overflow:hidden}
 /* v2.9.0 STAT GRID PRESSURE TAG: the Hazard name(s) under a pressed Stat, in the Hazard's own
    warm tone; no number, no verdict */
-.detail-stat label .press{display:inline;margin:0;font:600 11px/1.2 var(--ui);color:#d98a5a;font-style:normal;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 /* v2.9.0 MATCHING-EFFECT EMPHASIS: the effect that answers the Gate reads in the ink weight */
 .detail-stat strong{margin-left:auto;flex:none;font:600 18px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .trait-list{margin:0 0 12px;display:grid}
@@ -3844,3 +3843,134 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* both chips on one customer (an injured adventurer the fight still favours) is rare; then they stack, left-aligned on the first
    chip, beside the word rather than running out of the box (User 2026-10-02) */
 .readout.ro2 .ro-tags{display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px;min-width:0}
+
+/* SALE phone density (User 2026-10-03): smaller state type, a shorter destination plate, a card and a side column that end on one
+   line, 손님 as a label on the pips (the count is the pips' own aria-label), a smaller 보유 골드 figure and a 44px send key. */
+.p-sale .dock .queue .q-line{display:flex;align-items:center;gap:6px}
+.p-sale:not(.sale-desk) .face{margin-bottom:0}
+.p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
+.p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-evenly;padding:6px 8px;gap:0;font-size:11px}
+.p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:7px 8px}
+.p-sale:not(.sale-desk) .front-side .dest-plate h3{font-size:12px;line-height:1.2}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li,.p-sale:not(.sale-desk) .front-side .dest-plate .hazards .press .need{font-size:11px}
+.p-sale:not(.sale-desk) .dock .on-hand b{font-size:15px}
+.p-sale:not(.sale-desk) .dock .stamp{min-height:44px;padding-top:8px;padding-bottom:8px;font-size:15px}
+.p-sale .front-side .dest-plate .hazards .press .rate{display:none}
+.p-sale .front-side .dest-plate .rate-tip{margin:0}
+.p-sale .front-side .dest-plate .rate-tip>summary{position:absolute;right:4px;top:2px;min-width:28px;min-height:28px;width:28px;height:28px}
+@media(min-width:900px){
+ .p-sale .front-side .dest-plate .hazards .press .rate{display:inline}
+ .p-sale .front-side .dest-plate .rate-tip{display:none}}
+.p-sale:not(.sale-desk) .counter-tray .tray-stock{display:none}
+/* SALE phone spacing (User 2026-10-03): 상태 hangs its second line under the first value, the cards keep a gap, the counter rule is thinner and
+   clear of the cards, and the shelf head stays inside the shelf frame */
+.p-sale .vit{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em}
+.p-sale .vit>i{font-style:normal}
+.p-sale:not(.sale-desk) .front{padding-bottom:10px}
+.p-sale:not(.sale-desk) .front-side{gap:8px;justify-content:space-between}
+.p-sale:not(.sale-desk) .counter-edge{height:4px;margin-top:2px;
+ background:linear-gradient(180deg,#d3ac71 0 1px,#b98d52 1px 2px,#7c5730 2px 3px,#4a331d 3px 4px)}
+.p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 8px}
+.p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
+/* SALE backdrop (User 2026-10-03): one wide store art for phone and desk, framed from the wall down (no ceiling), the side shelves
+   showing at the edges; a dim layer keeps the bright room behind the dark cards */
+.p-sale{background:linear-gradient(#0d0a0638,#0d0a0648),url('assets/presentation/sale/sale-bg-phone.png') center -70px/100% auto no-repeat #1d1710}
+.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.png') center calc(-10vw)/100% auto no-repeat #17110b}
+/* SALE shelf head (User 2026-10-03): the wooden plank asset spans the whole frame width */
+.p-sale .shelf-head{margin:0;padding:6px 16px;border:solid transparent;border-width:0 14px;
+ border-image:url('assets/presentation/sale/shelf-plank.png') 0 115 fill/0 14px stretch;
+ background:none;box-shadow:none}
+.p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 12px}
+.p-sale .shelf{padding:0 0 8px;background:#1b140ce6;box-shadow:inset 0 0 0 2px #6a4126,inset 0 0 0 4px #2a1710,3px 3px 0 #00000066}
+.p-sale .shelf-head{margin:0 -2px}
+.p-sale .shelf>.goods{padding:4px 11px 0}
+.p-sale .shelf-head>span{background:#0e0a0699}
+
+/* SALE desk (User 2026-10-03): the status / outlook / destination column is as tall as the card and as wide as its own box, type larger;
+   the waiting deck is bigger on a desk */
+@media(min-width:1024px){
+ .sale-desk .front-side{align-self:stretch;max-width:none;width:100%;display:flex;flex-direction:column;gap:10px;padding:0}
+ .sale-desk .front-side>*{margin:0;width:auto;box-sizing:border-box}
+ .sale-desk .front-side>.kit,.sale-desk .front-side>.readout,.sale-desk .front-side>.dest-plate{align-self:stretch;width:auto}
+ .sale-desk .front-side .kit{flex:1 1 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:17px}
+ .sale-desk .front-side .kit .vitals{font-size:17px}
+ .sale-desk .front-side .kit .npc-wallet,.sale-desk .front-side .kit .slot-label{font-size:16px}
+ .sale-desk .front-side .readout.core-desk .ro-combat>b,.sale-desk .front-side .readout.core-desk .gs-row>b{font-size:26px}
+ .sale-desk .front-side .readout.core-desk b.env-num{font-size:22px}
+ .sale-desk .front-side .readout.core-desk i,.sale-desk .front-side .readout.core-desk label{font-size:15px}
+ .sale-desk .front-side .dest-plate h3{font-size:20px}
+ .sale-desk .front-side .dest-plate .hazards li{font-size:15px}
+ .sale-desk .front>.line-up{--deck:.4}
+ .stage.sale-desk .front{--cardw:max(200px,min(300px,calc(100dvh - 480px)))}
+ .sale-desk .front>.line-up .left{font-size:16px}
+}
+/* SALE type ladder (User 2026-10-03): stats, item effects and stock/expiry sit one step below names and prices */
+.p-sale .detail-stat label{font-size:11px;color:#b4a78d}
+.p-sale .detail-stat strong{font:600 16px/1.2 var(--ui);font-variant-numeric:tabular-nums;color:#e0d4b8}
+.p-sale .good .what span{font-size:12px}
+@media(min-width:1024px){.p-sale .good .what span{font-size:13px}}
+.p-sale .good .price span,.p-sale .good .price em.expiry{color:#9c8f77}
+.p-sale .good .price em.expiry.soon{color:#d99a7c}
+
+@media(min-width:1024px){
+ .sale-desk .counter-tray .tills button{min-height:96px;padding:6px 0}
+ .sale-desk .counter-tray .tills strong{font-size:28px}
+ .sale-desk .counter-tray .tills small{font-size:15px}
+ .sale-desk .counter-tray .tray-who,.sale-desk .counter-tray .tray-delta{font-size:16px}
+ .sale-desk .front-side .kit .slots i{width:68px;height:68px;flex:0 0 68px}
+ .sale-desk .front-side .kit .slots{gap:12px;padding:10px 12px;width:auto;flex:0 0 auto;display:flex;flex-flow:row wrap;max-width:190px}
+ .sale-desk .front-side .kit .slots .slot-label{flex:0 0 100%;margin:0}
+ .sale-desk .detail-stat label{font-size:16px}
+ .sale-desk .dossier.traits,.sale-desk .dossier.traits *{font-size:16px}
+ .sale-desk .dossier.traits h3,.sale-desk .dossier.traits b{font-size:18px}
+ .sale-desk .dock .queue,.sale-desk .dock .on-hand{font-size:17px}
+ .sale-desk .dock .on-hand b{font-size:30px}
+}
+/* SALE section rules (User 2026-10-03): the rule under the tray above 손님 보내기 is the same 4px board edge as the one between the two halves */
+.p-sale:not(.sale-desk) .counter-tray{box-shadow:inset 0 4px 0 #000000b3,inset 0 -1px 0 #4a331d,inset 0 -2px 0 #7c5730,inset 0 -3px 0 #b98d52,inset 0 -4px 0 #d3ac71}
+.p-sale .detail-stat strong,.p-sale:not(.sale-desk) .detail-stat strong,.sale-desk .detail-stat strong{font:600 16px/1.2 var(--ui)}
+/* SALE desk (User 2026-10-03): the column ends on the card's own bottom edge, not on the card slot's gap below it */
+@media(min-width:1024px){.sale-desk .front-side{margin-bottom:14px}}
+/* SALE price keys (User 2026-10-03): the key asset (rim per role, nine-sliced) with a CSS corner ribbon that names the role; price and profit centred.
+   Pressing sinks the whole key, a disabled key swaps to the asset's grey. */
+.p-sale .counter-tray .tills button,.p-sale:not(.sale-desk) .counter-tray .tills button{--rim:#e2ab56;--rim-d:#c98a2c;position:relative;border:solid transparent;border-width:7px;background:none;box-shadow:none;
+ clip-path:inset(0);min-height:54px;padding:0;display:grid;grid-template-columns:minmax(0,1fr);row-gap:0;align-content:center;justify-items:center;
+ border-image:url('assets/presentation/sale/till-regular.png') 38 fill/7px stretch;transition:transform .06s,filter .06s}
+.p-sale .counter-tray .tills button:nth-child(1){--rim:#72b4d5;--rim-d:#4f97bd;border-image-source:url('assets/presentation/sale/till-discount.png')}
+.p-sale .counter-tray .tills button:nth-child(3){--rim:#ef8b5c;--rim-d:#d4673c;border-image-source:url('assets/presentation/sale/till-markup.png')}
+.p-sale .counter-tray .tills button:disabled{--rim:#b5a595;--rim-d:#a8998a;border-image-source:url('assets/presentation/sale/till-off.png');box-shadow:none;background:none;filter:none}
+.p-sale .counter-tray .tills button:not(:disabled):hover{background:none;filter:brightness(1.08)}
+.p-sale .counter-tray .tills button:not(:disabled):active{transform:translateY(3px);background:none;box-shadow:none;filter:brightness(.88)}
+.p-sale:not(.sale-desk) .counter-tray .tills button:not(:disabled):active{box-shadow:none}
+.p-sale .counter-tray .tills .price-role,.p-sale:not(.sale-desk) .counter-tray .tills .price-role{position:absolute;left:-36px;top:-2px;width:80px;height:11px;margin:0;padding:0;display:block;
+ background:linear-gradient(180deg,#ffffff40 0 1px,#ffffff00 1px),linear-gradient(90deg,var(--rim),var(--rim-d));border:0;clip-path:none;transform:rotate(-45deg);
+ font:700 8px/11px var(--ui);letter-spacing:0;text-align:center;color:#1a0d04;white-space:nowrap;overflow:hidden}
+.p-sale .counter-tray .tills .price-role span{display:inline}
+.p-sale .counter-tray .tills .price-role .price-rate{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);font-size:0;line-height:0}
+.p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:1;grid-row:1;align-self:end;text-align:center;line-height:20px}
+.p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:1;grid-row:2;align-self:start;text-align:center}
+.p-sale .counter-tray .tills button small,.p-sale .counter-tray .tills button:not(:disabled) small{color:#efe0c6;font-weight:400}
+.p-sale .counter-tray .tills button strong,.p-sale .counter-tray .tills button:not(:disabled) strong{color:#fff}
+.p-sale .counter-tray .tills button:disabled em,.p-sale .counter-tray .tills button[disabled] em{color:#1a0d04}
+.p-sale .counter-tray .tills button:disabled small,.p-sale .counter-tray .tills button:disabled strong{color:#f4e9d0}
+/* SALE desk card (User 2026-10-03): shorter art box, taller nameplate; the band shrinks by the same amount and the shelf below gets it */
+@media(min-width:1024px){
+ .stage.sale-desk .front{--arth:calc(var(--artw)*.74);--plateh:100px;--cardh:calc(var(--frame)*2 + var(--arth) + var(--gapb) + var(--plateh))}
+ .sale-desk .who .portrait{height:var(--arth)}
+ .sale-desk .who .nameplate{padding:10px 14px 10px 15px;gap:4px}
+ .sale-desk .who .nameplate b{font-size:22px}
+ .sale-desk .who .nameplate>span{font-size:15px}
+ .sale-desk .who .rank{font-size:12px}
+ .sale-desk .who .regular-badge{width:40px}
+}
+/* SALE desk (User 2026-10-03): nameplate side lines and the 단골 badge grow into the taller plate; the waiting count gets its own dark plate; price-key ribbons are larger than on the phone */
+@media(min-width:1024px){
+ .sale-desk .who .nameplate>span{font-size:18px}
+ .sale-desk .who .rank{font-size:16px}
+ .sale-desk .who .regular-badge{width:56px}
+ .sale-desk .who .nameplate.regular{padding-right:68px}
+ .sale-desk .front>.line-up .left{background:#0d0a06d9;color:#f0e4c8;padding:3px 9px;box-shadow:inset 0 0 0 1px #3b2f21}
+ .sale-desk .counter-tray .tills .price-role,.sale-desk.p-sale .counter-tray .tills .price-role{left:-38px;top:0;width:100px;height:15px;font-size:10px;line-height:15px}
+}

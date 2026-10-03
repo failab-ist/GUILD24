@@ -972,7 +972,7 @@ function saleScreen(){
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
     than becoming a readout of its own. */
- +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
@@ -999,7 +999,7 @@ function saleDesk(n,st,waiting,preloadHtml){const s=game.run;
   +'<div class="shelf-col">'+shelf()+'</div>'
  +'</main>'
  +'<div class="counter-mat" aria-hidden="true"></div>'+tray()
- +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';}
 /* crossing the desk breakpoint mid-SALE draws the other layout */
@@ -1113,7 +1113,7 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판으로 부상 회복</p>'
   :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대로 부상 회복</p>'
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단으로 부상 회복</p>':'';
- return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
+ return '<div class="kit"><div class="vitals"><span class="vit"><i>상태</i><span>'+parts.map(x=>'<b>'+x+'</b>').join(' · ')+'</span></span>'
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
  +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
@@ -1460,6 +1460,7 @@ function finishCoach(skip=false){
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}
+const rateTip=d=>{const rows=Presentation.hazardRows(Presentation.known(d,game),d).filter(h=>h.rate);return rows.length?tip(d.name,...rows.map(h=>h.name+' · '+h.rate)).replace('class="tip"','class="tip rate-tip"'):'';};
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
  /* The plate says what is fixed about where this customer is going: the Gate, each Hazard it
@@ -1474,7 +1475,8 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
     decision surface rather than a screen above it. Nothing is lost: 환경 대응 states the same
     canonical snapshot, in the same vocabulary, from the same outlook. */
   +'<div><label>예상 목적지</label><div class="dest-name"><h3>'+E(d.name)+'</h3>'
-  /* v2.9.0 revision 2 (COPY_AUDIT §4-16): the rows carry this Gate's numbers themselves; the plate has no `?` help (§4-15 retired) */
+  /* UI_UX §SALE destination plate (User 2026-10-03): on a phone the `{능력치} n당 대응 1 제공` lines of every row read in one `?`; from 900px they are the row's own ` · ` tail */
+  +rateTip(d)
   +'</div>'
   +hazardList(Presentation.known(d,game),null,d)
  +'</div></div>';}
@@ -1486,7 +1488,6 @@ function statGrid(n){
    /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
       presses, a small tag with the pressing Hazard name(s) - the one place the grid links to
       the Gate. No number, no verdict; 투력 is never pressed. */
-   const pressed = gate ? Presentation.pressedBy(Presentation.known(gate,game)) : {};
    /* One display rule for every stat the player reads: a plain value is a whole number, and a
       value something moved keeps the one decimal that shows it moved. Presentation owns it, so
       this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
@@ -1509,8 +1510,7 @@ function statGrid(n){
        never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
-    const press = pressed[k] ? '<i class="press">'+pressed[k].map(h=>E(D.hazards[h])).join(' · ')+'</i>' : '';
-    const face = '<label>'+label+press+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    const face = '<label>'+label+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
@@ -1723,7 +1723,7 @@ function shelf(isFinal=false){
       style whatever the customer's Gate; the row states what the Item does, in its fixed category order. */
    const effectText=r=>E(r.label+' '+r.text);
    return '<section class="shelf">'
-   +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
+   +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2>'+(isFinal?'<span>'+stocks.length+'종 · '+s.inventory.length+'개</span>':'')
    +(isFinal?'':relicRef())+'</div><div class="goods">'
  /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
     held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */

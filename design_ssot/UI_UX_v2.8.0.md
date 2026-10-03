@@ -298,10 +298,18 @@ is not turned to wood (price and stock legibility first).
 
 ### SALE — SHELF HEAD (v2.9.9)
 
-(acceptance -> UI_UX §QA UI-Q-v29-45.) The `진열대 {N}종 · {M}개` head is one step lower and its `점포지원 {n} / {m}` plate
+(acceptance -> UI_UX §QA UI-Q-v29-45.) The SALE `진열대` head (no `{N}종 · {M}개` count, User 2026-10-03) is one step lower and its `점포지원 {n} / {m}` plate
 compact; the plate keeps its frame (a control) and an about-44 px target through an invisible margin.
 Title, quantity and support plate align on their vertical centres, rather than mixing the plate and LED font baselines.
 The phone title and quantity use a common 20px line box; the support plate retains its 24px visible height.
+The head is the wooden plank asset (`presentation/sale/shelf-plank.png`) across the full shelf frame width (User 2026-10-03).
+The SALE backdrop is `presentation/sale/sale-bg.png` without its ceiling, the side shelves at the edges, dimmed; on a desk the status / outlook /
+destination column is one width and ends on the card's bottom, with larger type, and the waiting deck is larger. Stats, item effects and
+stock / expiry are one step quieter than names and prices.
+The three price keys are the supplied key assets (`presentation/sale/till-*.png`: 할인 blue, 정가 gold, 바가지 orange, disabled grey) with a small corner ribbon
+drawn in CSS naming the role; the percentage is read by screen readers only. The amount is white and the `이익` line one step quieter, both centred in the key;
+pressed, the key moves down 3 px and darkens. On a desk the card's art box is shorter and the nameplate (job / level line, 단골 badge) larger, and the
+waiting count sits on its own dark plate.
 
 ### SALE — PRICE / SECONDARY INFORMATION LEGIBILITY (User 2026-10-03)
 
@@ -400,7 +408,7 @@ Item: Core Stat +N / Hazard Counter +N / 피로 회복 N / explicit penalty
 ```
 
 Every Hazard row, the SALE destination plate included, states the Gate facts
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need. This customer's own
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; below 900px the `{능력치} {n}당 대응 1 제공` part of every row reads in the one `?` on the plate and the row keeps `{위험}` and `대응 {N} 필요` (User 2026-10-03); no per-customer remaining need. This customer's own
 number is the readout's 환경 대응 meter (§SALE — ENVIRONMENT METER, User 2026-10-02), not the plate.
 
 ### SALE — DECISION-ONLY ITEM DETAIL
@@ -435,7 +443,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - §SALE — SHELF ORDER: by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
   Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
-- shelf life in each row's price column: `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
+- shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
 - row and tray name the category in a small tag after the name (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`); the icon
   tile's bottom edge is the rarity colour
@@ -457,7 +465,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
   plus 3px press travel, never entering the lower lip/dock. Ribbon labels are 11px, percentage 10px, price 18px, profit/reason 11px.
   No role/percentage, actual price or disabled reason is omitted. Desktop keeps its existing
   header composition. All three price keys remain
-  directly reachable. The phone `손님 보내기` target is 48px high; safe-area padding stays outside it (User 2026-10-03).
+  directly reachable. The phone `손님 보내기` target is 44px high; safe-area padding stays outside it (User 2026-10-03).
 - empty: one prompt line on DAY 1~3 while the tutorial is not skipped (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-23), otherwise no
   height
 - the keys never move; a sale clears the tray (Item into the Bag) and shows the stub; a refusal keeps the Item with the
@@ -665,9 +673,8 @@ tutorial coach). Logic -> DUNGEON_HAZARD_v2.8.0.md.
 
 ## STAT PRESENTATION
 
-Core stats 투력 / 강인함 / 기동 / 정신 in a clear 2×2. Pressure tag: when the customer's Gate presses a Stat, the pressing Hazard
-name(s) sit beside the Stat name on the same line (`강인함  독`; `냉기`, `독 · 속박`), ellipsis-clipped, never adding a line or
-overflow; the value stays larger than the name; never on 투력; no number or verdict — the only Gate link in the grid. No wall of
+Core stats 투력 / 강인함 / 기동 / 정신 in a clear 2×2. No Stat cell carries a Hazard tag (User 2026-10-03): the readout's 환경 대응
+meter and the destination plate state the Gate's pressure; the value stays larger than the name. No wall of
 equal-priority internal coefficients; Hazard detail appears where the destination makes it relevant.
 
 ## TRAIT PRESENTATION
@@ -1294,7 +1301,7 @@ plate under the logo.
 colour, silhouette and place vary by Phase.
 - shared: one hard cast down-right at 45 degrees, visible (a notched cut takes the cast in); the press moves the face into it
   by the depth less 1 px, leaving 1 px; label weight 600
-- size by consequence: inside the Day (`문 열기`, `영업 시작`, `손님 보내기`, `다음`) 56 px tall on phone / 60 px desk; across a
+- size by consequence: inside the Day (`문 열기`, `영업 시작`, `다음`) 56 px tall on phone / 60 px desk, `손님 보내기` 44 px on phone / 60 px desk; across a
   Day or Run boundary (`다음 날`, `다음 점포 열기`, FINAL gate bar) 64 / 72 px; `첫 점포지원 고르기` 64 px everywhere (the
   preparation plates sit right above the dock); ORDER labels may step down on the narrowest phones so the Gold never wraps
 - the one pair: on D30's last order `원정대 후보 보기` shares the gate bar with `원정대 선택` (a view, not a second flow
@@ -2021,7 +2028,7 @@ PASS:
   overflows or collides at 360 / 390 / 412 / 1024 / 1280
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
-At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress/count; no
+At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress: the label `손님` beside the pips, the count `{n} / {N}` as the pips' screen-reader label only (User 2026-10-03); no
 duplicate queue count consumes vertical space. Desktop may show a richer queue presentation.
 
 #### UI-Q-v28-4 — CURRENT CUSTOMER STATE
@@ -2166,9 +2173,7 @@ SALE at 360, 390 and 1280, before and after one sale. PASS:
 #### UI-Q-v29-5 — STAT GRID PRESSURE TAG
 Customers whose Gate presses one Stat through one Hazard, one Stat through two Hazards, and a Stat the Gate does not press.
 PASS:
-- under a pressed Stat cell a small tag shows the pressing Hazard icon + name only (e.g. `냉기`; two Hazards joined as `독 · 속박`),
-  under the Stat that Hazard actually presses (강인함 / 기동 / 정신 per `DUNGEON_HAZARD_v2.8.0.md`)
-- 투력 and an unpressed Stat never carry a tag; the tag carries no number and no verdict word
+- no Stat cell carries a Hazard tag, pressed or not
 
 #### UI-Q-v29-6 — MATCHING-EFFECT EMPHASIS — RETIRED
 
@@ -2450,7 +2455,7 @@ SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작
 PASS:
 - per → UI_UX §PRIMARY ACTION GRAMMAR: equal right and down depth - 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 / the
   gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음 (3 px for ORDER's phone row), 3 px for 손님 보내기; heights 56 px (phone) /
-  60 px (desk) inside the Day (ORDER's phone row 48 px), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
+  60 px (desk) inside the Day (ORDER's phone row 48 px, SALE 손님 보내기 44 px on a phone), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
   no outline (NIGHT flat), labels on a 2 px drop; each Phase keeps its own face (wood / steel on paper with a frost edge / counter
   key / muted cobalt / BRICK / gate bar); `영업 시작` and `발주 확정` share the steel face and frost edge; `첫 점포지원 고르기`,
   `다음 날` and `다음 점포 열기` the same BRICK build (only the rivets differ)
@@ -3125,8 +3130,8 @@ PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
 - the phone character is 85–90% of the pre-trim presentation in width and height; both 44px Bag slots are visible, hittable
   and clear of the menu. Shelf names/effects are 14px/13px, outlook word 16–18px, environment number 14–15px, title 12px;
   full information stays readable on dark planes. The 48px customer-send target and all price keys stay inside the viewport.
-- phone changes/special effects use the full width; stock/expiry sit at right of the Item without repeated customer/wallet/base
-  price. The shelf title/count/support centres align. Nameplate/destination padding and price-key depth clearance meet the above contract. Long names and
+- phone changes/special effects use the full width; the tray header repeats no stock/expiry, customer/wallet or base
+  price (stock/expiry live on the shelf row, User 2026-10-03). The shelf title/count/support centres align. Nameplate/destination padding and price-key depth clearance meet the above contract. Long names and
   metadata wrap without overlapping the icon, neighbouring text or price keys. Deep nomination is reachable after the shelf
   before purchase; a confirmed nominee's destination and payment stay visible.
 - role and percentage remain together on each phone key's internal left ribbon, with price/profit in two right-hand lines;

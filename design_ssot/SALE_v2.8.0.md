@@ -408,7 +408,7 @@ Stat touch/click detail may show actual source, actual applied value and calcula
 
 ### STAT GRID PRESSURE TAG
 
-Under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag names the pressing Hazard(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two). 투력 never carries a tag. No number, no verdict. The tag is the one place the Stat grid links to the Gate.
+The four Stat cells carry no Hazard tag (User 2026-10-03); the 환경 대응 meter and the destination plate state the Gate's pressure.
 
 ## NPC DETAIL — CONDITION TRUTH
 
