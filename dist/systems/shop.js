@@ -54,7 +54,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
   /* ECONOMY_ORDER §BASE OPERATING COST: a Day base, +12G per Day after DAY 15, scaled by the Core Roster */
-  const dayBase=140+1*(day-1)+12*Math.max(0,day-15);
+  const dayBase=170+1*(day-1)+12*Math.max(0,day-15);
   return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost({day=this.run.day,facilities=this.run.dayFacilities,event=this.run.event}={}){const s=this.run,ev=event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still

@@ -1313,9 +1313,9 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
    Core Roster = alive only, Level desc then Rarity desc, top 6; recovering adventurers count.
    D11 roster (alive): L7R3 L7R2 L5R1 L4R0 L3R4(recovering) L3R1 | L3R0 L1R0, plus a dead L10R4.
    top 6 levels 7,7,5,4,3,3 -> avg 29/6; rarities 3,2,1,0,4,1 -> avg 11/6.
-   dayBase = 140 + 1 x 10 = 150;
-   base = 150 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 185.647
-   charged = round(18.5647) x 10 = 190G. */
+   dayBase = 170 + 1 x 10 = 180;
+   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777
+   charged = round(22.2777) x 10 = 220G. */
 test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Canonical formula',()=>{
  const g=fresh('core-roster-overhead'),s=g.run;
  const proto=copy(s.npcs[0]);
@@ -1325,19 +1325,19 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  s.day=11;s.dayFacilities=[];s.facilities=[];s.event=null;
  assert.deepEqual(g.coreRoster().map(n=>n.id).sort((a,b)=>a-b),[1,2,3,4,5,6],
   'the six best living: the dead L10 is out, the recovering L3R4 is in, and L3R1 beats L3R0 on Rarity');
- const want=150*(1+.03*(29/6-1))*(1+.06*(11/6));
+ const want=180*(1+.03*(29/6-1))*(1+.06*(11/6));
  assert.ok(Math.abs(g.overheadBase()-want)<1e-9,'overheadBase '+g.overheadBase()+' = '+want);
- assert.equal(g.expectedOperatingCost(),190,'charged rounded to 10G');
+ assert.equal(g.expectedOperatingCost(),220,'charged rounded to 10G');
  // fewer than six alive: all of them; an empty roster reads Level 1 / Rarity 0
  s.npcs=[mk(1,5,2),mk(2,3,0),mk(3,9,4,{alive:false})];s.day=1;
- assert.ok(Math.abs(g.overheadBase()-140*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
- assert.equal(g.expectedOperatingCost(),160,'140 x 1.09 x 1.06 = 161.756 -> 160G');
+ assert.ok(Math.abs(g.overheadBase()-170*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
+ assert.equal(g.expectedOperatingCost(),200,'170 x 1.09 x 1.06 = 196.418 -> 200G');
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
  /* v2.9.2 (User 2026-09-26): + 12 per Day after DAY 15 */
- assert.equal(g.overheadBase(),140+1*29+12*15,'empty Core Roster: the Day base alone');
- assert.equal(g.expectedOperatingCost(),350,'349 -> 350G');
- s.day=15;assert.equal(g.overheadBase(),140+14,'DAY 15 carries no late term');
- s.day=16;assert.equal(g.overheadBase(),140+15+12,'DAY 16 carries the first +12');
+ assert.equal(g.overheadBase(),170+1*29+12*15,'empty Core Roster: the Day base alone');
+ assert.equal(g.expectedOperatingCost(),380,'379 -> 380G');
+ s.day=15;assert.equal(g.overheadBase(),170+14,'DAY 15 carries no late term');
+ s.day=16;assert.equal(g.overheadBase(),170+15+12,'DAY 16 carries the first +12');
 });
 
 /* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */

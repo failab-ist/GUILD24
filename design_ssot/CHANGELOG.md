@@ -29,12 +29,12 @@ and this table is their commit record.
 
 ## v2.10.0 quick patch 2 — the till breathes again (User 2026-10-03; the version stays 2.10.0)
 
-- **A thicker visit Wallet and a lighter operating base** (User, from a quick-patch-1 save stuck at 200~800G through DAY 18: 자금이
-  마르니까 진행이 잘 안 됨 · 운영비를 완화하든 지갑을 개선하든): the visit income is Level × 4 + 30~70 (was Level × 3 + 20~60) and the
-  Away Wallet keeps its half-a-visit rule, Level × 2 + 25 a banked Day (was Level × 1.5 + 20); the base operating cost's Day base
-  starts at 140G (was 170G), its +1G a Day, the +12G a Day after DAY 15 and the Core Roster scaling unchanged. The success
-  Wallet × 1.25 and the 소지금 lunches are not touched. ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet / §BASE
-  OPERATING COST; tests revision, integration.
+- **A thicker visit Wallet** (User, from a quick-patch-1 save stuck at 200~800G through DAY 18: 자금이 마르니까 진행이 잘 안 됨 · 운영비를
+  완화하든 지갑을 개선하든; then, after measuring the two apart: 지갑만 유지하고 운영비는 170G로): the visit income is Level × 4 + 30~70
+  (was Level × 3 + 20~60) and the Away Wallet keeps its half-a-visit rule, Level × 2 + 25 a banked Day (was Level × 1.5 + 20). The
+  operating base stays 170G: lowering it to 140G as well only fattened the till (cash +40G a Day) and took fresh-Run bankruptcy
+  from about 1.5% to 0.1%, with the same DAY 30 reach. The success Wallet × 1.25 and the 소지금 lunches are not touched.
+  ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet; test revision.
 
 ## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
 

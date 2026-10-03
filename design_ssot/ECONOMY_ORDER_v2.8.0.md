@@ -552,7 +552,7 @@ Let:
     avgLevel  = Core Roster average Level, or 1 if empty
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
-    dayBase = 140 + 1 × (Day - 1) + 12 × max(0, Day - 15)
+    dayBase = 170 + 1 × (Day - 1) + 12 × max(0, Day - 15)
 
     overheadBase
     = dayBase
@@ -1143,7 +1143,7 @@ Core Roster:
 
 Expected:
 
-    dayBase = 140 + 1×(Day-1) + 12×max(0, Day-15)
+    dayBase = 170 + 1×(Day-1) + 12×max(0, Day-15)
     base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 
 Then apply only current owned modifiers and round final daily operating cost to nearest 10G under
