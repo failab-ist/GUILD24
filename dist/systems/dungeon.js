@@ -278,27 +278,11 @@ function greatSuccessSignal(n,d,facilities=[]){
  const margin=preparedPower(e)/d.power-1;
  return margin>=D.greatSuccess.signalMargin;
 }
-/* DUNGEON_HAZARD_v2.7 §DEATH RISK. One conditional number, read off a prepared snapshot:
-   how likely an ordinary FAILED expedition escalates to Death. It is not the chance that the
-   expedition ends in Death - a 성공/대성공 never reaches this roll at all. Both halves read
-   the same prepared truth the ordinary Forecast reads, so there is no Death-only combat score
-   and no Death-only Hazard table. Departing already injured adds a flat +10%p and lifts the
-   cap from 30% to 40%. Exported because SALE shows the pre-supply snapshot of this same
-   calculation and the two may not drift apart. */
-/* DUNGEON_HAZARD_v2.7 §DEATH RISK — DIRECTOR DOCUMENT BASELINE. Named rather than inlined so
-   a harness can measure a candidate against the shipped value without editing the formula.
-   These are the canonical numbers; nothing in the game writes to this table. */
-/* v2.9.0: departing at Fatigue 40 (탈진) adds the same +10%p term as an injured departure and lifts the cap
-   the same way (DUNGEON_HAZARD §Healthy / injured failure Death chance): both together 50%. */
-/* DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet baseline (User 2026-09-25, v2.9.1 balance):
-   대성공/성공 back to 1.00 (were .90). */
-/* DUNGEON_HAZARD §Ordinary EXP (User 2026-09-25, v2.9.2 balance): 대성공 EXP multiplier 1.40 -> 1.10 - a Great Success still
-   pays (Store Gold, Wallet and the occurrence are unchanged); what shrinks is the snowball of a grown adventurer out-growing
-   the rest through it. v2.9.2 second pass (User 2026-09-26, after the `reader` harness review): 대성공 1.10 -> 1.00 and the
-   combat-success path 1.00 -> 0.90 (성공, or a won fight that came home hurt); 퇴각 .38 and other living .5 unchanged. */
+/* DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK: one failure-conditioned number read off the prepared snapshot
+   (a 성공/대성공 never reaches the roll). DEATH is named so a harness can measure a candidate; nothing in the game writes it.
+   DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet reward: GREAT / WIN EXP multipliers and WALLET_MULT by Outcome. */
 const GREAT={xp:1.00},WIN={xp:.90};
 const WALLET_MULT={'대성공':1.5,'성공':1.5,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
-/* v2.10.0 (User 2026-10-03): combat .18 -> .40, environment .12 -> .20, healthy cap .30 -> .50 (+10%p a departure term, as before) */
 const DEATH={combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation (User 2026-09-25,
    v2.9.1 balance): only CONSECUTIVE injured departures count now. A healthy departure - including
@@ -329,10 +313,9 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    (reports/balance-proposal-v2912.md §1). The DAY 9~10 step, which shared `late`, is its own `step` and keeps 0.80, so
    DAY 1~10 does not move. */
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
-/* DUNGEON_HAZARD §GATE POWER — SUCCESS EASE (User 2026-10-02/03, v2.10.0): the whole Gate Power x .92 on DAY 1~7, x .90 on
-   DAY 8~21, x .95 from DAY 22 */
+/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power) */
 const GATE_EASE={early:.92,mid:.90,late:.95,midFrom:8,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:day>=GATE_EASE.midFrom?GATE_EASE.mid:GATE_EASE.early;
-/* DUNGEON_HAZARD environment incident (User 2026-10-02, v2.10.0: base .06 -> .08, gap .012 -> .020, cap .48 -> .60, floor kept) */
+/* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
 const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
@@ -458,12 +441,12 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
  }
  const kit=kitSettle(sOutcome,(se.aftercare||0)>0,departure.injury);sOutcome=kit.tier;
- /* 구급품 진열장 (META §display, v2.9.7): the same availability as the real resolution below */
+ /* EVENT nightSaves (길드 의무관): the same availability as the real resolution */
  const injury=!kit.from&&sOutcome==='부상'&&ev.aidKitReady?0:kit.injury;
  if(sOutcome==='성공'&&ev.greatRoll<greatSuccessChance(sAbility/d.power-1))sOutcome='대성공';
  return {tier:sOutcome,injury};
 }
-/* ITEM v2.9.0 §Insurance resolution order step 4 (User 2026-09-25): 구급키트 lowers the settled
+/* ITEM §Insurance resolution order step 4: 구급키트 lowers the settled
    non-death Outcome one step - a would-be 중상 resolves as 부상 (injury 1, no rest days), a
    would-be 부상 resolves as 부상 with no lasting injury. Shared by the real resolution and the
    shadow so both settle the same tier and the same persistent Injury. */
@@ -532,8 +515,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast};
  const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
- /* META §display — 구급품 진열장 (User 2026-10-03, v2.10.0): worn, an adventurer who departs 만반의 준비 has 투력 x1.05 and
-    the failure Death roll is judged against x .60 instead of x .80 - an ordinary expedition only, never the Final */
+ /* META §display — 구급품 진열장: a 만반의 준비 departure gets 투력 x powerMult and preparedFactor (ordinary expeditions only) */
  const cabinet=!!run&&Object.values(run.loadout||{}).includes('aidCabinet');
  if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
 
@@ -546,7 +528,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     roll - to prove or fail to prove what a sold Item actually changed. */
  const noiseRoll=r.next();
  const noise=1+(noiseRoll-.5)*(D.balance.combatNoise*2+e.variance*2);
- /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden, User 2026-09-25, v2.9.1 balance): a
+ /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
     per-Night chain-of-bad-luck nudge shop.js's night() computes and passes in - never a global,
     never shown to the Player. It only leans the combat pass/fail check and the environment
     incident chance; the prepared `ability` itself stays the true reading everywhere else
@@ -557,7 +539,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const incidentWeights=[{key:'accident',weight:Math.max(ENV.floor,ENV.base-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*ENV.gap/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,bandRoll,rescued=false,deathChance=0,avoidedDeath=false;
- /* Today's Event, read once for the resolution (EVENT 24~55, v2.9.11): escapeCut / outcomeFatigue / xpMult / nightSaves */
+ /* Today's Event, read once for the resolution: escapeCut / outcomeFatigue / xpMult / nightSaves */
  const dayFx=run?.event?.effects||{},dayEv={escapeCut:dayFx.escapeCut||0,outcomeFatigue:dayFx.outcomeFatigue||1,xpMult:dayFx.xpMult||1};
  const medicReady=!!run&&(run.daily?.medicSaves||0)<(dayFx.nightSaves||0);
  const aidKitReady=medicReady;
@@ -565,12 +547,12 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
- /* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION: applies wherever the
+ /* DUNGEON_HAZARD §INJURED RE-EXPEDITION SEVERE ESCALATION: applies wherever the
     Severe-vs-ordinary decision is made, on the departure state alone - still one decision
     point, still no second Severe roll, still applied before that branch's clamp. */
  const departedInjured=n.injury===1,severeEscalation=departedInjured?.15:0;
  const departedWeary=(e.fatigueBeforeExpedition||0)>=STRAIN.weary,strain=strainFor(n.records,departedInjured);
- /* DUNGEON_HAZARD_v2.7 §Resolution order, complete: the game decides SUCCESS-PATH vs
+ /* DUNGEON_HAZARD §Resolution order, complete: the game decides SUCCESS-PATH vs
     FAILURE-PATH using only noise/envRoll (and, only when genuinely needed to make that one
     decision, injuryRiskRoll) - never escape/injury evidence, which settles WHICH failure this
     is and is never needed to decide THAT it is one. Death is drawn exactly once, immediately
@@ -591,15 +573,14 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  }else{
   deathChance=failureDeathChanceFor(p,d,departedInjured,undefined,strain).chance;
   deathRoll=r.next();
-  /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; no Level
-     factor since v2.9.2 fourth pass): the Death roll is judged against failureDeathChance x preparedFactor, not the raw
+  /* DUNGEON_HAZARD §Preparation / Level Death reduction: the Death roll is judged against failureDeathChance x preparedFactor, not the raw
      chance. A roll that only clears the raw chance - inside failureDeathChance but outside the
      reduced band - is not a second Death roll; it settles 중상/부상 the same as any other
      non-Death failure, via one extra draw (bandRoll). */
   const prepared=fullyPrepared(n,e.fatigueBeforeExpedition)?preparedFactor:1;
   const rolledDeathChance=deathChance*prepared;
   if(deathRoll<rolledDeathChance){
-   /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): on the account's first Run no one dies on DAY 1~2 - the Death settles
+   /* CORE_RUN §FIRST-RUN LESSONS: on the account's first Run no one dies on DAY 1~2 - the Death settles
       as 중상, with no extra draw, so the stream is the one the Run would have had */
    outcome=firstRunGuard?'중상':'사망';
   }else if(deathRoll<deathChance){
@@ -636,14 +617,11 @@ function resolve(n,d,r,facilities=[],run,assist=0){
   }
  }
  if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
- /* ITEM v2.9.10 (User 2026-09-28): 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
+ /* ITEM §세계수 생환부적: 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
  if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
- /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
-    injuryGuard channel entirely - it may not change the resolved Outcome and carries no hidden
-    injury-risk percentage - so the line no longer credits 치료용품 for a downgrade it no longer
-    performs. The Trait's own `injuryGuard +23%p` identity is unchanged. */
+ /* ITEM §INSURANCE HIERARCHY: only 강골's injuryGuard reaches this branch; 구급키트 is not on it */
  if(['부상','중상'].includes(outcome)&&injuryGuardCheck()){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
- /* ITEM v2.9.0 §Insurance resolution order step 4 (User 2026-09-25): 구급키트 lowers the settled
+ /* ITEM §Insurance resolution order step 4: 구급키트 lowers the settled
     non-death Outcome one step. XP, Loot and Fatigue follow the lowered Outcome; the report keeps
     the would-be persistent state so NIGHT_CLOSING can name the proven contribution. */
  let aftercare=null;
@@ -667,17 +645,17 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     expedition already carries, and a same-day sale is not required. A Deep Expedition always
     returns 0 Store Gold, so the bonus is suppressed there rather than added and subtracted.
     Scale is PASS3: while unapproved there is no bonus, exactly as an ordinary Success. */
- /* Stage 10, approved. A flat amount for the Day band rather than a share of the Gate's own
+ /* A flat amount for the Day band rather than a share of the Gate's own
     value: the player can know what a Great Success is worth before deciding to chase one. A
     Deep Expedition still pays the Store nothing. */
  const storeBonus=outcome==='대성공'&&!d.deep
   ?(D.greatSuccess.storeGoldByBand.find(b=>d.day<=b.maxDay)?.gold||0):0;
  if(outcome==='사망')n.alive=false;
- /* NPC_TRAIT v2.7 §Natural recovery: an ordinary Injury is cleared only by actually coming
+ /* NPC_TRAIT §Natural recovery: an ordinary Injury is cleared only by actually coming
     back safe. 퇴각 is not a safe return, so it keeps the Injury; the old blanket decrement
     let a Retreat read as healing. 중상/사망 keep their own transitions. */
  n.injury=outcome==='중상'?2:outcome==='부상'?(aftercare?aftercare.to:1):outcome==='퇴각'?n.injury:Math.max(0,n.injury-1);
- /* DUNGEON_HAZARD §RETREAT HEALING (User 2026-09-25, v2.9.1 balance): departed injured, came
+ /* DUNGEON_HAZARD §RETREAT HEALING: departed injured, came
     back 퇴각 - one extra draw, independent of 구급키트, chance rising with the unbroken run of
     the same (departed injured, ended 퇴각) result. n.records here is still last night's - this
     resolution's own record is only pushed further down. */
@@ -699,8 +677,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     only shows as a contribution when it actually absorbed something. */
  const dead=outcome==='사망';
  /* DUNGEON_HAZARD §FATIGUE OUTCOME BASELINE: 성공/대성공 +4, 퇴각 +7, 부상 +9, 중상 0, 사망 0;
-    clamp 40. 중상 joined 사망 at a final result-Fatigue gain of 0 in v2.9.1 balance (User
-    2026-09-25) - a Severe Injury already costs rest days, and its rest day recovers no Fatigue -
+    clamp 40. 중상 joins 사망 at a final result-Fatigue gain of 0 - a Severe Injury already costs rest days, and its rest day recovers no Fatigue -
     so 중상 is treated as 사망 for these two lines only; every other `dead` meaning below (alive,
     Injury, records) is untouched. */
  const severeOrDead=dead||outcome==='중상';
@@ -713,7 +690,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((26.4+d.day*5.52)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
- const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward (User 2026-09-25, v2.9.0): keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
+ const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money+=loot;
@@ -726,7 +703,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
  const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
    /* escapeChance/escapeRoll/injuryRoll are now conditional too (only the combat-failure and

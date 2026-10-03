@@ -1010,10 +1010,15 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
   'ownership is generic ({items:null}) - since either single 구급키트 copy alone still relieves it, no one copy is invented as the sole cause');
 });
 
-test('DUNGEON_HAZARD §Ordinary EXP (v2.9.2 balance, User 2026-09-25 / 2026-09-26): 대성공 1.00, combat-success 0.90, the rest unchanged',()=>{
+test('DUNGEON_HAZARD §Ordinary EXP: base 26.4 + Day x 5.52; 대성공 1.00, combat-success 0.90, 퇴각 0.38, other living 0.50',()=>{
  assert.equal(Dungeon.GREAT.xp,1.00);assert.equal(Dungeon.WIN.xp,.90);
- const src=read('dist/systems/dungeon.js');
- assert.ok(/\(26\.4\+d\.day\*5\.52\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?WIN\.xp:\.5\)\*e\.xpMult/.test(src),'base (v2.10.0 x1.2: 26.4 + Day x 5.52), Retreat 0.38 and other living 0.50');
+ /* 퇴각 and the other living failures, read off real resolutions at a Gate the adventurer cannot beat */
+ {const lose={'퇴각':.38,'부상':.5,'중상':.5},got={'퇴각':0,'부상':0,'중상':0};
+  const base=Adventurer.create(new RNG('xp-lose'),1,6,Meta.fresh()),d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:9999,reward:1};
+  for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(base)),traits:[],pack:[],fatigue:0,injury:0,records:[]};
+   const xpMult=Dungeon.prepare(n,d).effects.xpMult,r=Dungeon.resolve(n,d,new RNG('xp-lose-'+i));
+   if(lose[r.outcome]!==undefined){assert.equal(r.xp,Math.round((26.4+6*5.52)*lose[r.outcome]*xpMult),r.outcome+' EXP = round(base x '+lose[r.outcome]+' x xpMult)');got[r.outcome]++;}}
+  assert.ok(got['퇴각']>0&&got['부상']+got['중상']>0,'a 퇴각 and another living failure were resolved and checked '+JSON.stringify(got));}
  assert.equal(Dungeon.WALLET_MULT['대성공'],1.5,'the Great Success Wallet reward is the success one (v2.10.0 x1.5)');
  // real resolved results pay exactly round(base x multiplier x the explicit XP modifiers)
  const want={'대성공':1.00,'성공':.90};const seen={'대성공':0,'성공':0};

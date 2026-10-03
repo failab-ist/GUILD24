@@ -1388,7 +1388,11 @@ test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a roll
  assert.ok(won>0&&lost===0,'투력 x1.05 only ever turns a lost fight into a won one');
  assert.equal(worse,0,'it never turns a survival into a Death');
  assert.equal(diff,0,'without 만반의 준비 the outcome is the same with or without it');
- assert.ok(!/aidKitSaves/.test(source('dist/systems/dungeon.js')),'the old ten 부상 -> 무사 count is gone');
+ /* the old ten 부상 -> 무사 a Run is gone: a 부상 the expedition leaves stays, with or without it */
+ {let hurt=0;for(let i=0;i<400&&hurt<3;i++){const a=npc([]),b=npc([]);
+   const ra=Dungeon.resolve(a,d,new RNG('cab-h-'+i),[],{loadout:{}}),rb=Dungeon.resolve(b,d,new RNG('cab-h-'+i),[],{loadout:{display:'aidCabinet'}});
+   if(ra.outcome==='부상'&&a.injury===1){hurt++;assert.equal(rb.outcome,'부상');assert.equal(b.injury,1,'the Injury stands with it worn');}}
+  assert.ok(hurt>0,'an ordinary Injury case was checked');}
 });
 test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 55% chance (User 2026-10-03, v2.10.0; 40% in v2.9.13, 65% before)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
