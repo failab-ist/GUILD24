@@ -1367,8 +1367,8 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a rolled Death chance of x .50 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
- assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.50);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.05);assert.equal(Dungeon.PREPARED.factor,.80);
+test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a rolled Death chance of x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
+ assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.05);assert.equal(Dungeon.PREPARED.factor,.80);
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
  const npc=pack=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;n.fatigue=0;n.records=[];return n;};
  let saved=0,worse=0,diff=0;
@@ -1379,7 +1379,7 @@ test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a roll
   // an adventurer who is not 만반의 준비 (one Item) gets nothing from it
   const a=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{}}).outcome,b=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{display:'aidCabinet'}}).outcome;
   if(a!==b)diff++;}
- assert.ok(saved>0,'a prepared failure inside the x .80 band but outside x .50 survives only with it');
+ assert.ok(saved>0,'a prepared failure inside the x .80 band but outside x .60 survives only with it');
  /* the 투력 half: at an even Gate, a prepared departure wins at least as often with it, and sometimes only with it */
  const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(['rice','water']),d).effects)};let won=0,lost=0;
  for(let i=0;i<300;i++){const b=Dungeon.resolve(npc(['rice','water']),even,new RNG('cab-p-'+i),[],{loadout:{display:'aidCabinet'}});
@@ -1390,7 +1390,7 @@ test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a roll
  assert.equal(diff,0,'without 만반의 준비 the outcome is the same with or without it');
  assert.ok(!/aidKitSaves/.test(source('dist/systems/dungeon.js')),'the old ten 부상 -> 무사 count is gone');
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 40% chance (User 2026-09-30, v2.9.13; was 65%)',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 55% chance (User 2026-10-03, v2.10.0; 40% in v2.9.13, 65% before)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
@@ -1398,22 +1398,23 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
- assert.equal(P.chance,.40);
+ assert.equal(P.chance,.55);
  let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
   P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
- assert.ok(up/all>.30&&up/all<.50,'about 40%: '+(up/all));
+ assert.ok(up/all>.45&&up/all<.65,'about 55%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first customer brings +200G more, once a Day (User 2026-10-03, v2.10.0; was 50G Store Gold)',()=>{
- const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b]=s.npcs;
- for(const n of [a,b]){n.traits=[];n.money=100;n.introduced=true;}
- s.queue=[a.id,b.id];s.cursor=0;g.arrive();
- assert.equal(a.money,300,'the first customer to reach the counter: +200G');assert.equal(s.daily.safeWallet,a.id);
- s.cursor=1;g.arrive();assert.equal(b.money,100,'the second gets nothing');
+test('알뜰 금고: the Day\'s first two customers bring +200G more each (User 2026-10-03, v2.10.0; was 50G Store Gold)',()=>{
+ const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
+ for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
+ s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
+ assert.equal(a.money,300,'the first customer to reach the counter: +200G');
+ s.cursor=1;g.arrive();assert.equal(b.money,300,'the second too');
+ s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
  assert.ok(!source('dist/ui/app.js').includes("'알뜰 금고'"),'the Store receives nothing, so the receipt has no row for it');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
 test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estimate is tomorrow\'s real base cost (v2.9.7)',()=>{

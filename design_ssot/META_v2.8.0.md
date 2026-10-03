@@ -366,7 +366,7 @@ of the Run's Relic slots. A Decoration and a Relic that touch the same quantity 
 
 ### sign — 원정 지원금 간판 (id sponsorSign)
 ```text
-each visiting adventurer: an extra purchase budget of 25% of their current purse, that visit only
+each visiting adventurer: an extra purchase budget of 40% of their current purse, that visit only
 ```
 
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never
@@ -385,15 +385,15 @@ rarity draw when the Decoration is active; it adds no extra spawn, no extra rari
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first customer to reach the counter: Wallet +200G (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +200G each (cap 2000)
 ```
 
-Once a Day, on that customer's arrival with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
+Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
 has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning, 45% chance of visitors +1
+each Morning, 35% chance of visitors +1
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
@@ -409,12 +409,12 @@ the dearer Slot.
 
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
-every adventurer created while it is worn: 40% chance of spawn Level +1
+every adventurer created while it is worn: 55% chance of spawn Level +1
 ```
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 40% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE
@@ -430,13 +430,13 @@ counterfactual reads the same availability.
 
 ### display — 구급품 진열장 (id aidCabinet)
 ```text
-while worn, an adventurer who departs 만반의 준비: 투력 × 1.05, and preparedFactor 0.80 -> 0.50
+while worn, an adventurer who departs 만반의 준비: 투력 × 1.05, and preparedFactor 0.80 -> 0.60
 (DUNGEON_HAZARD §Preparation / Level Death reduction)
 ```
 
 Only an adventurer who departs 만반의 준비 (healthy, Fatigue under 20, 2 Items in the Bag) is helped, on an ordinary
 expedition (not the Final): the prepared 투력 is × 1.05 before the combat roll, and the failure Death roll is judged against
-failureDeathChance × 0.50. No count, no new roll; the SALE outlook and `실패 시 사망 위험` stay the pre-supply readings. The
+failureDeathChance × 0.60. No count, no new roll; the SALE outlook and `실패 시 사망 위험` stay the pre-supply readings. The
 RESULT-PROOF counterfactual reads the same two terms.
 
 ### Prices — EXACT

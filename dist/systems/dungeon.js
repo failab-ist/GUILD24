@@ -533,7 +533,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
  /* META §display — 구급품 진열장 (User 2026-10-03, v2.10.0): worn, an adventurer who departs 만반의 준비 has 투력 x1.05 and
-    the failure Death roll is judged against x .50 instead of x .80 - an ordinary expedition only, never the Final */
+    the failure Death roll is judged against x .60 instead of x .80 - an ordinary expedition only, never the Final */
  const cabinet=!!run&&Object.values(run.loadout||{}).includes('aidCabinet');
  if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
 

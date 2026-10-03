@@ -68,6 +68,11 @@ and this table is their commit record.
   departs 만반의 준비 has 투력 × 1.05 and the rolled Death chance × 0.50 instead of × 0.80 (× 0.60 alone measured +1.8%p clear) (was ten 부상 → 무사 a Run, the most zombie-prone piece). META §wall / §counter /
   §display, DUNGEON_HAZARD §Preparation / Level Death reduction, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, COPY_AUDIT 7-3 / 9-5;
   tests integration, revision.
+- **Decoration value follows the Slot price** (User 2026-10-03, after the single-Decoration measurement: the cheapest display Slot
+  was near the top and the dearest sign Slot near the bottom): 원정 지원금 간판 purse share 25% → 40%, 훈련소 제휴 간판 Level +1 chance
+  40% → 55%, 의무실 현판 heal 45% → 40%, 알뜰 금고 now the Day's first two customers +200G each, 길드 추천 매대 45% → 35%, 구급품 진열장
+  Death roll × 0.50 → × 0.60 (투력 +5% kept). META §sign / §wall / §counter / §display, DUNGEON_HAZARD §Preparation / Level Death
+  reduction, COPY_AUDIT 9-5; tests integration, revision.
 - **A short Decoration key** (User 2026-10-03: 버튼 영역을 줄이고 효과 영역을 넓게): the buy key reads `구매` over a small `{가격} 자본`
   (was `{가격} 자본으로 구매`), beside the name on the card's first row, and the effect line runs the card's full width on the
   row below (the key is one 48 px height whether it reads 구매 or 해제, so buying never resizes the card); the eight effect lines

@@ -930,7 +930,7 @@ preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
   - departed without Injury (injury=0)
   - fatigueBeforeExpedition < 20
   - 2 or more Items in the Bag
-preparedFactor = 0.50 instead of 0.80 while the Decoration 구급품 진열장 is worn (META §display — 구급품 진열장)
+preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 is worn (META §display — 구급품 진열장)
 ```
 
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes
@@ -1764,7 +1764,7 @@ Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 
 and the three near misses (injured / Fatigue 20 / one Item).
 
 PASS:
-- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 (0.50 with 구급품 진열장) only when all three hold
+- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 (0.60 with 구급품 진열장) only when all three hold
 - Level never changes the Death roll or the SALE snapshot: Lv1 / Lv2 / Lv10 / Lv20 read the same chance
 - a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
 - the SALE `실패 시 사망 위험` never includes preparedFactor
