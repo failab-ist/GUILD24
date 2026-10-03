@@ -25,8 +25,9 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
+| v2.10.0 | 2026-10-03 | merged to `main` from `ccr-b84a430e-j4dydo` (with v2.9.14 quick patch 1) | `v2.10.0` (set by the User) |
 
-## v2.10.0 — success meta (User 2026-10-02; in progress, the version bump lands at close)
+## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 
 - **The hidden reputation is gone** (User: 평판처럼 몰래 하는 건 안 된다 · 싹 없앤다): the Run no longer keeps a 0~100 reputation
   that moved with each Night's results and scaled every Gate's required power by up to ±5% the next Morning. Gate power is the
@@ -82,7 +83,7 @@ and this table is their commit record.
   drop their closing period; 구급품 진열장's effect line is shortened
   to `…로 떠나면 실패 시 사망 위험 -40% (기존 -20%).`. UI_UX §DECORATION DECISION SURFACE, COPY_AUDIT 9-5.
 
-## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
+## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; never released alone, it ships in v2.10.0)
 
 - **연속 부상 출발 in the 전투 전망 box** (User: 이상한 데 있다 · 대성공처럼 전투 전망 밑에, 모바일은 버튼 · 플로팅은 우하단): the loose line
   under the two boxes is gone. A phone shows a small muted-red chip beside the stamped word (the line kept for a screen reader; with

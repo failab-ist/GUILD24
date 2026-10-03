@@ -2,8 +2,8 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.9.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
