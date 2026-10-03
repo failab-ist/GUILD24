@@ -2835,7 +2835,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .end-tape{margin-bottom:20px}
 /* who went, and what the store put in their hands before they did */
 .sent-off{width:100%;max-width:344px;margin:0 auto 20px}
-.sent-off h3{margin-bottom:10px;font:600 13px/1 var(--ui);letter-spacing:.14em;color:#a2947c}
+.sent-off h3{margin-bottom:10px;font:600 13px/1 var(--ui);letter-spacing:.14em;color:#f3e6c8;text-shadow:0 1px 0 #000c,0 0 6px #000b}
 /* BATCH 3 END — ONE ROSTER. Each member was its own bordered dark card, so the party read as a
    stack (or, on a desk, a grid) of web cards under the tape. They are one roster plate now: a
    flat recessed plane, the members seated on it and parted by a seam - read-only, nothing that
