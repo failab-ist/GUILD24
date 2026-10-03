@@ -857,6 +857,10 @@ function readout(n,extra=null,cls=''){
     same margin the roll uses - so it moves as items are added. It says the attempt is worth
     chasing and nothing more: no percentage, no margin, no readiness score. */
  const signal=o.greatSignal;
+ /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
+    is said in the 전투 전망 box (v2.9.14 quick patch) - only for an injured departure with a chain behind it (the first adds
+    nothing), the NPC detail row's own wording and number. Words only; the % stays in the help. */
+ const strain=n.injury===1?Dungeon.injuredStreak(n.records):0,strainText='연속 부상 출발 '+strain+'회';
  /* Two forecasts, said apart. An expedition can fail two different ways - beaten in the fight,
     or worn down by the environment - and one blended verdict hides which. Both read their own
     canonical vocabulary: the fight is Dungeon.estimate (우세/접전/불리), the environment is the
@@ -878,8 +882,11 @@ function readout(n,extra=null,cls=''){
    +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span>'
    /* User 2026-10-02 (UI_UX §GREAT SUCCESS OPPORTUNITY SIGNAL): the signal lives in this box, not on a line of its own under the
       pair - a phone shows the short tag beside the word (the sentence stays for a screen reader), a desk the sentence under it */
-   +(signal?'<span class="gs-row"><b>'+o.combat+'</b><i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i></span>'
-     +'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'<b>'+o.combat+'</b>')+'</span>'
+   /* v2.9.14 quick patch (User 2026-10-02): the 연속 부상 출발 line joins it the same way - it is what raises this box's death % */
+   +(signal||strain?'<span class="gs-row"><b>'+o.combat+'</b><span class="ro-tags">'+(strain?'<i class="st-tag" aria-hidden="true">'+E(strainText)+'</i>':'')
+     +(signal?'<i class="gs-tag" aria-hidden="true">'+E(Copy.great.tag)+'</i>':'')+'</span></span>'
+     +(strain?'<span class="ro-strain">'+E(strainText)+'</span>':'')+(signal?'<span class="great-signal">'+E(Copy.great.signal)+'</span>':'')
+     :'<b>'+o.combat+'</b>')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
@@ -891,10 +898,6 @@ function readout(n,extra=null,cls=''){
   +(p.hazards.length?'<span class="fore ro-env env-each env-meter"><span class="ro-head">환경 대응'
    +tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')+'</span>'+envMeter(p,d,pre)+'</span>':'')
   +'</div>'
- /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
-    reads here - one thin line, only for an injured departure with a chain behind it (the first adds nothing), the NPC detail
-    row's own wording and number. Words only; the % stays in the help. */
- +(n.injury===1&&Dungeon.injuredStreak(n.records)>0?'<p class="strain">연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회</p>':'')
  /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
     `피로 N`, the counter tray lists a Food/Drink's own `피로 회복 N` row (no `피로 A → 출발 B` line), NIGHT answers the rest. */
   /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
@@ -1249,12 +1252,12 @@ function changedRows(r){
 // every figure is monospace and right-aligned on a dotted leader, subtotals rule off,
 // and the money actually in the drawer is the last thing stamped on it.
 function closingReceipt(s){
- /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): the receipt is the Day's cash - what the store
+ /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: the receipt is the Day's cash - what the store
     started with, the Gold that moved, what it ends with - not an income statement. The opening is derived from the Day's own
     flows (end - ins + outs), so the tape always adds up. Stock and waste are counts: an expired Item was paid for when it was
     ordered, and printing its cost as a loss read as Gold leaving the drawer twice. */
  const d=s.daily;
- const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['알뜰 금고',d.safeGold],['재고 정리',d.liquidation]];
+ const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['재고 정리',d.liquidation]];
  const outs=[['발주',d.spent,true],['발주 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
  const total=rows=>rows.reduce((t,r)=>t+(r[1]||0),0),change=total(ins)-total(outs),open=s.money-change;
  const line=(r,sign)=>r[1]||r[2]?'<div class="row"><span>'+E(r[0])+'</span><b>'+(r[1]?sign:'')+fmt(r[1]||0)+'</b></div>':'';
@@ -1269,7 +1272,7 @@ function closingReceipt(s){
   +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
   +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'
   /* the stamped figure (UI_UX §CLOSING — RECEIPT STAMP) is 보유 자금, the Gold the Day ends with, in the purse box at the
-     largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 (User 2026-09-26) */
+     largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 */
   +'<div class="purse '+tone+'"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b>'
    +'<p class="pl"><span>영업 손익</span><b>'+(change>0?'+':'')+fmt(change)+'<i>G</i></b></p></div>'
   +'<div class="block info"><p>창고 재고 '+s.inventory.length+'개</p>'
@@ -1283,7 +1286,8 @@ function closingDock(s){
  return (s.money<0
   ?'<p class="danger-text">운영비가 부족하다.'+(rescue?' 회생 '+spent+' / '+cap+'':' 회생을 모두 썼다.')+'</p>'
    +(rescue?btn('재고 정리','stock'):'')+btn('폐점','retire','danger')
-  :'')+btn('다음 날','close','stamp');
+  /* v2.9.14 quick patch (User 2026-10-02): a rescue started tonight stays open past zero, so the key stays until the Closing ends */
+  :rescue?btn('재고 정리','stock'):'')+btn('다음 날','close','stamp');
 }
 function closingScreen(){
  const s=game.run;
@@ -1318,9 +1322,9 @@ const coachSteps={
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
- /* COPY_AUDIT §3-7 STATS (User 2026-09-24): the first time a customer's Stats are on screen - what they are, that they
-    differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
- ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
+ /* COPY_AUDIT §3-7 STATS: the first time a customer's Stats are on screen - what they are, that they differ per customer,
+    투력 for combat, the other three for the Hazards and each one's side role. No number, no verdict. */
+ ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다. 강인함은 사고를, 기동은 패배 후 부상을, 정신은 사망을 조금씩 줄여 준다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.'],
  /* User 2026-10-02: the outlook mark is two - one per box */
@@ -1792,8 +1796,10 @@ function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=
  pre=extra&&n.pack.length<Adventurer.slots(n)?Dungeon.prepare({...v,pack:[...n.pack,extra]},d,game.run.facilities):null;
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
   /* User 2026-10-02: one strip, the boxes' short names - `전투` | `환경` - so a preview still fits at 360 */
-  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length?'<span class="pin-fore pin-plate env-meter">환경'+envMeter(p,d,pre)+'</span>':'')
-  +(streak>0?'<span class="pin-strain">연속 부상 출발 '+streak+'회</span>':'')+'</span>'
+  /* v2.9.14 quick patch (User 2026-10-02): the readout's chips - 연속 부상 출발, 대성공 기회 - ride at the bottom right of the strip,
+     in the room the 환경 meter leaves, stacked when both show, never over the meter */
+  +'<span class="pin-full"><span class="pin-fore pin-plate">전투<b>'+E(o.combat)+'</b></span>'+(p.hazards.length||streak>0||o.greatSignal?'<span class="pin-fore pin-plate env-meter">'+(p.hazards.length?'환경'+envMeter(p,d,pre):'')
+   +(streak>0||o.greatSignal?'<span class="pin-tags">'+(streak>0?'<i class="st-tag">연속 부상 출발 '+streak+'회</i>':'')+(o.greatSignal?'<i class="gs-tag">'+E(Copy.great.tag)+'</i>':'')+'</span>':'')+'</span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
@@ -2245,11 +2251,9 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
    return '<div class="slot" data-slot="'+E(slot)+'" tabindex="-1"><h4>'+E(SLOT_COPY[slot]||slot)+'</h4>'
     +options.map(d=>{const owned=Meta.decorationOwned(a,d.id),on=active===d.id;
       return '<div class="slot-option'+(on?' on':'')+(owned?'':' locked')+'">'
-       /* SA-Q36: this is a decision surface, so it carries only what the decision is made on -
-          name, exact effect, price / ownership and equipped state. The Flavor prose is not
-          deleted anywhere: d.text stays in the Decoration data for Codex / lore use, it simply
-          does not compete with the effect line while the player is comparing options. */
-       +'<div><b>'+E(d.name)+'</b><span class="smalltext">'+E(d.effect)+'</span></div>'
+       /* UI_UX §DECORATION DECISION SURFACE: name, exact effect, price / ownership and equipped state only (d.text stays
+          in the data); the key sits beside the name and the effect line runs the card's full width below them */
+       +'<b class="deco-name">'+E(d.name)+'</b>'
        +(owned
          ? (inRun?'<span class="muted">'+(on?'이번 영업에 적용 중':'미적용')+'</span>'
                  :btn(on?'해제':'적용',on?'deco-unequip':'deco-equip','small'+(on?'':' active'),'data-id="'+d.id+'"'))
@@ -2262,8 +2266,9 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
                     +Math.max(0,Meta.storeCapital(a)-d.price).toLocaleString()+'.</p>'
                     +btn('구매 확정','deco-confirm','small active','data-id="'+d.id+'"')
                     +btn('취소','deco-cancel','small')+'</div>'
-                  :btn(d.price.toLocaleString()+' 자본으로 구매','deco-buy','small','data-id="'+d.id+'"'
+                  :btn('구매 <small>'+d.price.toLocaleString()+' 자본</small>','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
+       +'<span class="smalltext deco-effect">'+E(d.effect)+'</span>'
        +'</div>';}).join('')
     +'</div>';}).join('')
  +'</div>';}
@@ -2297,7 +2302,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
-function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에만 할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 잔고가 0 이상이 되면 그 자리에서 끝납니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
+function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에 시작할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 시작한 마감에서는 잔고가 0 이상이 된 뒤에도 계속 정리할 수 있습니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The store the Run is about to open, as the

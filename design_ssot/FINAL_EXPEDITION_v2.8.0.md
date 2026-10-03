@@ -2,8 +2,8 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE / NON-NEGOTIABLE
@@ -56,7 +56,7 @@ D25 does not grant guaranteed Counter Items, free stock, or a special Final shop
 Final Hazard Pool에는 각 Family의 authoritative **Hazard key**만 들어간다.
 Family의 non-Hazard second axis는 별도 Final modifier로 중복 추가하지 않는다.
 예: FIRE의 higher Dungeon Combat Power는 Final Hazard Pool에 들어가지 않으며, 마왕 자체의 강함 축은 effective Boss Power가 소유한다.
-대신 FIRE가 든 Pair는 effective Boss Power에 `+18`을 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
+대신 FIRE가 든 Pair는 effective Boss Power에 `+24`를 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
 
 Family의 T2 정의 자체는 이 문서에서 재정의하지 않는다 → DUNGEON_HAZARD.
 
@@ -414,9 +414,7 @@ Reasoning boundary:
 ```text
 Individual Final Power
 = 투력 × 0.50
-+ 강인함 × 0.34
-+ 기동 × 0.27
-+ 정신 × 0.20
++ (강인함 + 기동 + 정신) × 0.27
 - FinalMeanHazardGap × 2.50
 ```
 
@@ -513,11 +511,11 @@ FIRE PAIR: a pair that holds FIRE has 3 Hazards instead of 4 and clears more oft
 amount that levels the two:
 
 ```text
-FIRE-containing pair -> effective Boss Power + 18   (every Boss, on top of its own rule: WRATH 198, GREED 198~209, SLOTH seal table + 18)
+FIRE-containing pair -> effective Boss Power + 24   (every Boss, on top of its own rule: WRATH 264, GREED 264~279, SLOTH seal table + 24)
 any other pair       -> + 0
 ```
 
-The +18 touches no Hazard Pool, mean-gap penalty or forecast rule; the 토벌 전망 reads the same effective Boss Power.
+The +24 touches no Hazard Pool, mean-gap penalty or forecast rule; the 토벌 전망 reads the same effective Boss Power.
 Measurement record -> CHANGELOG.
 
 ## BALANCE QA
@@ -615,7 +613,7 @@ No `환경피해 ×0.35` path contributes in parallel.
 ### FINAL-Q73 — INDIVIDUAL FINAL POWER
 PASS exact:
 ```text
-투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*2.50
+투력*.50 + (강인함 + 기동 + 정신)*.27 - FinalMeanHazardGap*2.50
 ```
 using the Boss modifier ordering owned by current BOSS.
 

@@ -36,11 +36,11 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladde
     shelf lives from ITEM §SHELF LIFE — EXACT are unchanged). */
  for(const [id,name,rarity,buy,sell,category,days,fx] of [
   ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:5}],
-  ['water','생수',0,40,80,'drink',2,{survival:10,supply:2}],
-  ['lunchbox','간단 도시락',1,100,200,'food',2,{survival:12,supply:6,loot:0.2}],
-  ['guildlunch','길드 특제 도시락',2,185,370,'food',2,{survival:16,supply:7,loot:0.4}],
-  ['battlelunch','영웅 결전 도시락',3,210,420,'food',2,{survival:18,supply:9}],
-  ['kingwater','왕도 천연암반수',3,185,370,'drink',3,{survival:24,supply:2}]]){ // 강인함 20 -> 24 (User 2026-09-26, v2.9.6 Epic Drink +4)
+  ['water','생수',0,40,80,'drink',2,{survival:12,supply:2}],
+  ['lunchbox','간단 도시락',1,90,180,'food',2,{survival:9,supply:6,loot:0.1}],
+  ['guildlunch','길드 특제 도시락',2,165,330,'food',2,{survival:12,supply:7,loot:0.25}],
+  ['battlelunch','영웅 결전 도시락',3,205,410,'food',2,{combat:5,survival:15,supply:9}],
+  ['kingwater','왕도 천연암반수',3,180,360,'drink',3,{combat:5,survival:20,supply:2}]]){
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
@@ -74,7 +74,7 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
  assert.equal(DATA.itemBy.dragonramen.effects.survival,6,'불룡볶음면 강인함 +6 (User 2026-09-26, v2.9.6: 냉기 +12 / 강인함 +6)');
- assert.equal(DATA.itemBy.dragonramen.effects.cold,21,'불룡볶음면 냉기 +21: the Cold 중반 대응, one step under the 강인함 rung 23 because its 강인함 +6 is worth 냉기 +2 (ITEM §COUNTER LADDER, User 2026-09-27)');
+ assert.equal(DATA.itemBy.dragonramen.effects.cold,23,'불룡볶음면 냉기 +23: the Cold 중반 대응, the rung 28 less 3 for its 피로 회복 and less 2 for its 강인함 +6 (ITEM §COUNTER LADDER)');
  assert.deepEqual([DATA.itemBy.worldcharm.buy,DATA.itemBy.worldcharm.sell],[300,600],'세계수 생환부적 300 / 600 (User 2026-09-30, v2.9.13)');
  // every stocked unit carries a finite expiry
  const g=new Game();g.autosave=false;g.start('shelf-life');g.run.facilities=[];
@@ -166,15 +166,16 @@ test('DUN-Q70/Q71: prepared Power weights and the Hazard Threat curve',()=>{
     .58/.32/.24/.16 stat weighting anywhere is invalid in v2.7. */
  assert.equal(Dungeon.preparedPower({combat:100,survival:100,mobility:100,spirit:100}),131);
  assert.equal(Dungeon.preparedPower({combat:1,survival:0,mobility:0,spirit:0}),.50);
- assert.equal(Dungeon.preparedPower({combat:0,survival:1,mobility:0,spirit:0}),.34);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:1,mobility:0,spirit:0}),.27);
  assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:1,spirit:0}),.27);
- assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:0,spirit:1}),.20);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:0,spirit:1}),.27);
  const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/dungeon.js'),'utf8');
  assert.ok(!/(combat|survival|mobility|spirit)\s*\*\s*\.(58|32|24|16)\b/.test(src),'no stale ordinary-expedition stat weight survives');
- /* Threat = 12 + Day*.35 + (Tier-1)*6, at the owner's own anchors. */
- for(const [day,tier,want] of [[1,1,12.35],[12,1,16.20],[18,2,24.30],[24,2,26.40],[29,3,34.15],[30,2,28.50]])
+ /* DUNGEON_HAZARD §HAZARD THREAT: 12 + Day*.35 + max(0, Day-7)*.25 + (Tier-1)*6, at the owner's own anchors. */
+ for(const [day,tier,want] of [[1,1,12.35],[7,1,14.45],[12,1,17.45],[18,2,27.05],[24,2,30.65],[29,3,39.65],[30,2,34.25]])
   assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day,tier}).threat-want)<1e-9,
    'D'+day+' T'+tier+' threat is '+want);
+ assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day:30,tier:2,family:'final'}).threat-28.5)<1e-9,'the Final keeps the curve without the late term: 28.50');
  // the gate's own scale no longer moves a Hazard's threat
  assert.equal(Dungeon.hazardState('poison',{},{day:30,tier:2,scale:4.6}).threat,
               Dungeon.hazardState('poison',{},{day:30,tier:2}).threat);

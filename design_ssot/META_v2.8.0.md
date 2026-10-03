@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -110,7 +110,8 @@ change an already-created NPC. It improves the chance that a newly generated NPC
 starting Level. Mastery rank is the number of distinct Bosses cleared with that Job, from 0 through 7.
 
 For each newly generated NPC:
-1. resolve the ordinary spawn Level
+1. resolve the ordinary spawn Level = max(1, randomInt(1, 3) + floor((Day − 1) × 0.4)) from DAY 5; randomInt(1, 2) with
+   no Day term on DAY 1~4 (the opening roster and the first newcomers); the royal profile adds +3 (EVENT)
 2. read Mastery for that NPC's Job
 3. make one mutually exclusive Mastery bonus roll
 4. add at most one of +1 / +2 / +3 Levels
@@ -366,7 +367,7 @@ of the Run's Relic slots. A Decoration and a Relic that touch the same quantity 
 
 ### sign — 원정 지원금 간판 (id sponsorSign)
 ```text
-each visiting adventurer: an extra purchase budget of 25% of their current purse, that visit only
+each visiting adventurer: an extra purchase budget of 50% of their current purse, that visit only
 ```
 
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never
@@ -375,22 +376,25 @@ two shares add.
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [25, 30, 26, 13, 6]
+rare-NPC rarity weights = [40, 32, 18, 8, 2]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 평범 40% -> 75%), 영웅 and 전설 the most. This
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 평범 40% -> 60%), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
 ### counter — 알뜰 금고
 ```text
-every morning, store Gold +50G (DAY 1 included), shown on the day's receipt
+each Day, the first two customers to reach the counter: Wallet +200G each (cap 2000)
 ```
+
+Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
+has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning, 45% chance of visitors +1
+each Morning, 35% chance of visitors +1
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
@@ -406,12 +410,12 @@ the dearer Slot.
 
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
-every adventurer created while it is worn: 40% chance of spawn Level +1
+every adventurer created while it is worn: 55% chance of spawn Level +1
 ```
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 40% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE
@@ -419,7 +423,7 @@ counter and counted in the Day's record (UI_UX owns the presentation).
 
 ### counter — 추모 방명록 (id memorialBook)
 ```text
-every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED)
+every segment Death limit +1 (5 / 8 / 11 -> 6 / 9 / 12; CORE_RUN §DEATH LIMIT — SEGMENTED)
 ```
 
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the RESULT-PROOF
@@ -427,19 +431,21 @@ counterfactual reads the same availability.
 
 ### display — 구급품 진열장 (id aidCabinet)
 ```text
-up to ten times per Run, an expedition that would leave an ordinary Injury (부상) leaves none (무사)
+while worn, an adventurer who departs 만반의 준비: 투력 × 1.05, and preparedFactor 0.80 -> 0.60
+(DUNGEON_HAZARD §Preparation / Level Death reduction)
 ```
 
-It is 구급키트's `부상 -> 무사` step (ITEM §INSURANCE HIERARCHY), taken in order and counted per Run. A carried 구급키트
-settles first, and an expedition it already acted on spends nothing; 중상 and 사망 are not touched. The RESULT-PROOF
-counterfactual reads the same availability.
+Only an adventurer who departs 만반의 준비 (healthy, Fatigue under 20, 2 Items in the Bag) is helped, on an ordinary
+expedition (not the Final): the prepared 투력 is × 1.05 before the combat roll, and the failure Death roll is judged against
+failureDeathChance × 0.60. No count, no new roll; the SALE outlook and `실패 시 사망 위험` stay the pre-supply readings. The
+RESULT-PROOF counterfactual reads the same two terms.
 
 ### Prices — EXACT
 
-`DIRECTOR DOCUMENT BASELINE` (cheapest 500, dearest 2.5×, total 3,500)
+`DIRECTOR DOCUMENT BASELINE` (cheapest 500, dearest 3×, total 3,750; sign 1250 -> 1500 User 2026-10-03, money gathers faster late)
 
 ```text
-sign    원정 지원금 간판 / 훈련소 제휴 간판   1250 Store Capital
+sign    원정 지원금 간판 / 훈련소 제휴 간판   1500 Store Capital
 wall    명예 모험가 액자 / 의무실 현판        1000 Store Capital
 counter 알뜰 금고 / 추모 방명록             750 Store Capital
 display 길드 추천 매대 / 구급품 진열장       500 Store Capital

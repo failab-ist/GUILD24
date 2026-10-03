@@ -3,7 +3,7 @@
 DOC=COPY_WORLD_VOICE
 OWNER=copy,world_voice,player_terms,help_copy,boss_report_copy,result_copy,event_copy
 DOC_VERSION=2.9.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -1210,18 +1210,18 @@ Authoritative Hazard wording (the MORNING short row with the Final's N):
 
 ```text
 독 · 대응 29 필요 · 강인함 3당 대응 1 제공
-속박 · 대응 29 필요 · 기동 2당 대응 1 제공
+속박 · 대응 29 필요 · 기동 3당 대응 1 제공
 
 부식 · 대응 29 필요 · 강인함 3당 대응 1 제공
-진창 · 대응 29 필요 · 기동 2당 대응 1 제공
+진창 · 대응 29 필요 · 기동 3당 대응 1 제공
 
-화염 · 대응 29 필요 · 정신 2당 대응 1 제공
+화염 · 대응 29 필요 · 정신 3당 대응 1 제공
 
-공포 · 대응 29 필요 · 정신 2당 대응 1 제공
-어둠 · 대응 29 필요 · 기동 2당 대응 1 제공
+공포 · 대응 29 필요 · 정신 3당 대응 1 제공
+어둠 · 대응 29 필요 · 기동 3당 대응 1 제공
 
 냉기 · 대응 29 필요 · 강인함 3당 대응 1 제공
-화이트아웃 · 대응 29 필요 · 정신 2당 대응 1 제공
+화이트아웃 · 대응 29 필요 · 정신 3당 대응 1 제공
 ```
 
 Button:

@@ -41,7 +41,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
     for(let i=0;i<200;i++){if(await p.evaluate(`Guild24.game.run.phase==='closing'`))break;await p.evaluate(`(${STEP})()`);}
     await dismissBoss();
     // prior Store Capital 10, Gross Sales 150000 at the Day-9 1% band -> gain 1500, capitalAfter 1510: the count
-    // crosses every Decoration price line (500 / 750 / 1000 / 1250) on the way up
+    // crosses every Decoration price line (500 / 750 / 1000 / 1500) on the way up
     await p.evaluate(()=>{const g=Guild24.game,s=g.run;s.money=-1;s.day=9;s.stats.revenue=150000;
      g.account.store=Meta.freshStore();g.account.store.capital=10;g.save();Guild24.render();});
     await p.click('.p-closing .dock [data-action="retire"]');

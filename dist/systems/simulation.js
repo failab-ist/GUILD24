@@ -210,6 +210,10 @@ function playRun(g,out,ctx){
     simulated player never makes that choice. When on, and ONLY while that Support is owned, a
     few small rules make the choice from state the player can see. Off, nothing below changes. */
  const aware=!!ctx.relicAware,owns=id=>aware&&g.has(id),RP=D.relicParams;
+ /* BEST HYBRID, measurement input (ctx.relicPriority, default none): a ranked Support list, best first. A ranked
+    candidate beats any unranked one and a higher rank beats a lower; the build's own tag score only breaks ties. Without it
+    the build picks as before (hybrid follows the tags it already owns). */
+ const priority=ctx.relicPriority||[];
  let turns=0;const seenWindows=new Set();let previousCandidates=[];let deepWatches=[];
  /* Interaction-cost proxy: one tick per action a player would actually have to perform. */
  const act=(n=1)=>{out.actions+=n;};
@@ -334,7 +338,7 @@ function playRun(g,out,ctx){
  for(const report of s.results){const fb=f=>f>=40?'40':f>=30?'30-39':f>=20?'20-29':f>=10?'10-19':'0-9';out.fatigue.departure[fb(report.fatigueBeforeExpedition||0)]++;const F=out.fatigue.foodByBand[fb(report.beforeFatigue||0)]??={visits:0,foodDrink:0};F.visits++;F.foodDrink+=Number((report.items||[]).some(id=>['food','drink'].includes(D.itemBy[id]?.category)));out.fatigue.supplyUse.preRecovery+=report.preRecovery||0;out.fatigue.supplyUse.outcomeBuffer+=report.outcomeBufferUsed||0;out.fatigue.supplyUse.waste+=Math.max(0,(report.remainingSupplyBuffer||0)-(report.outcomeBufferUsed||0));}
  for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
- function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]);return (build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+ function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
@@ -621,12 +625,12 @@ function playRun(g,out,ctx){
 /* FRESH-ACCOUNT BENCHMARK — kept unchanged as the regression baseline. Every seed starts from
    Meta.fresh() (or a copy of the supplied account), so nothing a Run earns carries anywhere.
    Its Final numbers describe a first-time account and must not be read as the game's ceiling. */
-/* opts.relicAware (default false) turns on playRun's relic-aware layer; off is the baseline. */
+/* opts.relicAware (default false) turns on playRun's relic-aware layer; off is the baseline. opts.relicPriority: best-hybrid rank. */
 function simulate(count=100,policy='reader',account=null,pricing='adaptive',build='hybrid',opts={}){
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
   const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start('revision-'+seed);
-  playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware});
+  playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware,relicPriority:opts?.relicPriority});
  }
  return derive(out,count);
 }
@@ -662,7 +666,7 @@ function masterySpawnPatch(){
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false}={}){
+function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false,relicPriority=null}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
  for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
@@ -679,7 +683,7 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
     loadout:{...G.Meta.storeLoadout(account)}};
    const g=new G.Game(account);g.autosave=false;
    g.lessons=false;g.start(prefix+'-'+t+'-'+i);
-   playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware});
+   playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware,relicPriority});
    /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
       carries its own once-only guard, so a Run playRun already ended is not settled twice. */
    g.end(!!g.run.win,g.run.endReason||'측정 종료');

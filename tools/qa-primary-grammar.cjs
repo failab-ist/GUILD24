@@ -19,9 +19,9 @@ const ACTION={
  // 첫 점포지원 고르기 keeps 64 / 20 px on a desk: the counter-front plates sit directly above the dock
  prep:{sel:'.p-prep .dock [data-action="start"]',step:'edge',depth:5,desk:[64,20]},
  morning:{sel:'.p-morning .dock .pull',step:'day',depth:4,label:'span'},
- // ORDER's labels may step down to 16 px on the narrowest phones so the commit's Gold figure never wraps
- order:{sel:'.p-order .dock [data-action="open-store"]',step:'day',depth:4,fit:true},
- commit:{sel:'.p-order .dock [data-action="confirm-order"]',step:'day',depth:4,fit:true},
+ // on a phone ORDER's slim dock row sets both Actions at 48 px with a 3 px cast and 15 px labels; the desk keeps the Day's size
+ order:{sel:'.p-order .dock [data-action="open-store"]',step:'day',depth:4,phone:{h:48,depth:3,font:15}},
+ commit:{sel:'.p-order .dock [data-action="confirm-order"]',step:'day',depth:4,phone:{h:48,depth:3,font:15}},
  sell:{sel:'.p-sale .dock [data-action="depart"]',step:'day',depth:3},
  night:{sel:'.p-night .dock .stamp',step:'day',depth:4},
  closing:{sel:'.p-closing .dock .stamp',step:'edge',depth:5},
@@ -64,7 +64,7 @@ const READ=`((sel,label)=>{const e=document.querySelector(sel);if(!e)return null
     const held=await p.evaluate(`${READ}(${JSON.stringify(A.sel)},${JSON.stringify(A.label||null)})`);
     const shotHeld=await p.screenshot({clip});if(OUT)fs.writeFileSync(path.join(OUT,`${ph}-${width}-pressed.png`),shotHeld);
     await p.mouse.move(1,1);await p.mouse.up();await p.waitForTimeout(120);
-    const S=SIZE[A.step],d=A.depth;
+    const S=SIZE[A.step],ph2=!desk&&A.phone,d=ph2?ph2.depth:A.depth;
     // on screen: a pixel counts as cast when it differs from the same spot with the Action hidden. Probes (CSS px, from the
     // face's right / bottom edge at rest) sit mid-height on the right and mid-width underneath, half a pixel into each column
     const px=await p.evaluate(async({shots,probes,dpr})=>{const load=async b64=>{const im=new Image();im.src='data:image/png;base64,'+b64;await im.decode();
@@ -84,10 +84,9 @@ const READ=`((sel,label)=>{const e=document.querySelector(sel);if(!e)return null
     check(`${where} press moves ${d-1}px right and down`,Math.abs(held.move[0]-(d-1))<.01&&Math.abs(held.move[1]-(d-1))<.01,`move ${held.move.map(v=>+v.toFixed(2))}`);
     check(`${where} press keeps a 1px cast`,held.cast[0]===1&&held.cast[1]===1,`cast ${held.cast}`);
     const paired=A.pair&&!desk&&await p.evaluate(sel=>document.querySelectorAll(sel).length>1,A.sel.split(':not(')[0]);
-    const H=desk&&A.desk?A.desk[0]:S.h[di],F=paired?A.pair:A.font||(desk&&A.desk?A.desk[1]:S.font[di]);
+    const H=ph2?ph2.h:desk&&A.desk?A.desk[0]:S.h[di],F=ph2?ph2.font:paired?A.pair:A.font||(desk&&A.desk?A.desk[1]:S.font[di]);
     check(`${where} is ${H}px tall`,Math.abs(rest.h-H)<.5,`h ${rest.h}`);
-    const fits=A.fit&&!desk?rest.font>=16&&rest.font<=18&&Math.abs(rest.font-Math.min(18,Math.max(16,width*.0462)))<.05:rest.font===F;
-    check(`${where} label ${A.fit&&!desk?'16-18':F}px, one line`,fits&&rest.lines===1,`font ${rest.font} lines ${rest.lines}`);
+    check(`${where} label ${F}px, one line`,rest.font===F&&rest.lines===1,`font ${rest.font} lines ${rest.lines}`);
     if(ph==='commit'){const long=await p.evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(A.sel)}),t=e.textContent;e.textContent='발주 1,240G · 확정';
      const rg=document.createRange();rg.selectNodeContents(e);const n=new Set([...rg.getClientRects()].filter(q=>q.width>1).map(q=>Math.round(q.top))).size;e.textContent=t;return n;})()`);
      check(`${where} a four-digit order still reads on one line`,long===1,`lines ${long}`);}
