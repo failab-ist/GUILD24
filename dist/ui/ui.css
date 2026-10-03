@@ -3931,7 +3931,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .counter-tray .tills small{font-size:15px}
  .sale-desk .counter-tray .tray-who,.sale-desk .counter-tray .tray-delta{font-size:16px}
  .sale-desk .front-side .kit .slots i{width:68px;height:68px;flex:0 0 68px}
- .sale-desk .front-side .kit .slots{gap:12px;padding:10px 12px}
+ .sale-desk .front-side .kit .slots{gap:12px;padding:10px 12px;width:auto;flex:0 0 auto;display:flex;flex-flow:row wrap;max-width:190px}
+ .sale-desk .front-side .kit .slots .slot-label{flex:0 0 100%;margin:0}
  .sale-desk .detail-stat label{font-size:16px}
  .sale-desk .dossier.traits,.sale-desk .dossier.traits *{font-size:16px}
  .sale-desk .dossier.traits h3,.sale-desk .dossier.traits b{font-size:18px}
