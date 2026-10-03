@@ -498,13 +498,11 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  // v2.9.10 quick patch (User 2026-09-28): a seal break closes the window like 구매; a spent window shows 닫기, not 나중에 결정
  assert.ok(app.includes("case'break-seal':game.breakSeal();setModal(null);render();"),'봉인 해제 closes the Store Support window');
- assert.ok(app.includes("w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')"),'a spent window offers 닫기 only');
+ assert.ok(app.includes("(w.purchased||w.consumedBySealBreak?closeX():'')"),'a spent window offers the X close only');
  // v2.9.13 quick patch 3 (User 2026-10-01): the DAY 0 free pick may wait - on DAY 0 its 나중에 결정 opens DAY 1, later it closes
  assert.ok(app.includes("btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')"),'the DAY 0 takeover offers 나중에 결정');
  assert.ok(app.includes("case'defer-relic':game.deferFoundationRelic();setModal(null);render();"),'deferring leaves the takeover for DAY 1');
- assert.ok(app.includes('점포 지원은 5일 단위로 고를 수 있다.')
-  &&app.includes("첫 지원은 <b>Day'+(w.expiryDay-1)+'까지</b>")
-  &&app.includes('아침, 발주 화면에서 무료로 고를 수 있다.'),'User 2026-10-03: exact first guide names the recurring choice and live free deadline');
+ assert.ok(!app.includes('first-support-note'),'User 2026-10-03: no footer guide text; the coach owns the first-window explanation');
  // and the owned list carries the SLOTH seal count once the seals are revealed; the chip does not
  assert.ok(/function sealCount\(\)\{const s=game\.run;if\(s\?\.bossId!=='SLOTH'\|\|!s\.bossReveal\?\.traitSeen\)return '';/.test(app)
   &&app.includes("'<p class=\"seal-count\">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>'"),'SLOTH seal count in the owned list');
@@ -689,7 +687,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
     answers, and it states what is lost AND what survives. */
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.'),
+ assert.ok(app.includes('이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
  assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
@@ -697,7 +695,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
- assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다."),
+ assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
   'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
@@ -2040,7 +2038,7 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
   &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
- assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'영업 설정 ends with the same pair, readable mid-Run (v2.9.7)');
+ assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'설정 ends with the same pair, readable mid-Run (v2.9.7)');
  assert.ok(/\.p-prep \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
  const wf=read('.github/workflows/pages.yml');
  assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
@@ -2554,7 +2552,7 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\(CLOSE_X,'dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
  // no blank stage: with no Run the render itself draws preparation
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
@@ -2864,7 +2862,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.ok(/st==='d0'\)s\.bossReveal\.d0Seen=true/.test(app),'dismissing D0 persists its own marker, not a BOSS_BEATS entry');
  /* CORE_RUN §D0 — closing does not consume the beat, and ordinary Morning does not go on past
     it: no 닫기, no Escape and no dismiss while D0 is the open report */
- assert.ok(/!d0Owed\(\)\?btn\('닫기'/.test(app),'D0 carries no 닫기');
+ assert.ok(/!d0Owed\(\)\?btn\(CLOSE_X/.test(app),'D0 carries no 닫기');
  assert.ok(/game\.run\?\.phase!=='foundation'&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
  assert.ok(/phase==='foundation'\|\|d0Owed\(\)\)return/.test(app),'dismiss does not close D0');
  // the cadence table, and D30 reusing D25
@@ -2962,7 +2960,7 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  assert.ok(app.includes("'보유 장식 없음'"),'§1-1 the empty Decoration state');
  assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
  assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
- assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.'),'§1-5 body');
+ assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.'),'§1-5 body');
  assert.ok(app.includes("btn('전부 지우기','reset-go','danger')"),'§1-5 confirm');
  assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
  assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');

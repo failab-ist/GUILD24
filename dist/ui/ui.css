@@ -901,7 +901,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
  background-origin:content-box}
-/* UI_UX §BUILD MARKER (User 2026-09-26, v2.9.7): the same pair at the foot of 영업 설정, readable mid-Run */
+/* UI_UX §BUILD MARKER (User 2026-09-26, v2.9.7): the same pair at the foot of 설정, readable mid-Run */
 .build-line{margin:4px 0 0;text-align:center;font-size:11px;line-height:1.3;letter-spacing:.04em;color:var(--muted);user-select:text}
 /* USER 2026-09-23: the menu pin was the last browser-like control left on this stage - a dark
    rounded-looking chip with a generic bevel. On the OPENING it is a small iron fixture in the
@@ -1004,9 +1004,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .dock .queue{display:grid;gap:5px}
 .p-sale .dock .queue span{font:400 12px/1 var(--ui);color:#a2947c;font-variant-numeric:tabular-nums}
 /* the store float, on the strip that is already pinned here - a value, not a panel */
-.p-sale .dock .on-hand{display:flex;align-items:baseline;gap:5px;
+.p-sale .dock .on-hand{display:flex;align-items:baseline;gap:0;
  font:400 12px/1 var(--ui);color:#a2947c;white-space:nowrap}
-.p-sale .dock .on-hand b{font:500 18px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
+.p-sale .dock .on-hand b{margin-left:5px;font:600 18px/1 var(--ui);color:var(--gold);font-variant-numeric:tabular-nums}
 /* UI_UX §PHASE VISUAL LANGUAGE (SALE reads register / commerce gold-amber) + §GAME-LIKE
    INTERACTION LANGUAGE + §GLOBAL PRESENTATION §1 / §3 / §7 / §15. Sending the customer off is the
    register key at the end of the transaction - but it is not the decision SALE is asking for.
@@ -1230,9 +1230,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .good .what span.densest{font-size:11px;letter-spacing:-.03em}
 .good:has(.what .densest){gap:6px}
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
-.good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
-.p-sale .good .price b{display:inline-flex;align-items:center;justify-content:flex-end;gap:2px}
-.p-sale .good .price b .price-unit{font:500 10px/1 var(--ui);color:inherit;transform:translateY(1px)}
+.good .price b{font:600 16px/1 var(--ui);color:var(--gold);font-variant-numeric:tabular-nums}
+.p-sale .good .price b{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:0}
+.p-sale .good .price b .price-unit{font:600 12px/1 var(--ui);color:inherit}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}
 .good .price em.expiry{font:400 11px/1 var(--ui);font-style:normal;color:#8d8067}
 .good .price em.expiry.soon{color:#a8442f;font-weight:600}
@@ -1378,9 +1378,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* v2.9.0 PRICE ROLE WORDS: the face is the role word (할인 50% / 정가 / 바가지 150%), so it is set in
    the information face, not the LED numerals */
 .tills em{font:600 12px/1.2 var(--ui);font-style:normal;color:var(--key,#a2947c);white-space:nowrap}
-.tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
-.p-sale .tills strong{display:inline-flex;align-items:center;justify-content:center;gap:2px}
-.p-sale .tills strong .price-unit{font:500 13px/1 var(--ui);color:inherit;transform:translateY(2px)}
+.tills strong{font:600 22px/1.1 var(--ui);color:#f6ecd3;font-variant-numeric:tabular-nums}
+.p-sale .tills strong{display:inline-flex;align-items:baseline;justify-content:center;gap:0}
+.p-sale .tills strong .price-unit{font:600 14px/1 var(--ui);color:inherit}
 .tills small{font:400 12px/1.3 var(--ui);color:#b3a688}
 .tills button[disabled] em{color:#6d6250}
 .tills button[disabled] strong,.tills button[disabled] small{color:inherit}
@@ -2034,10 +2034,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  padding:0;background:transparent;box-shadow:none}
 .relic-takeover .close p{flex:1 1 100%;font:600 13px/1.5 var(--ui);color:#f5e8ce;text-align:center;
  text-shadow:1px 1px 0 #21150f,-1px -1px 0 #21150f}
-.relic-takeover .close .first-support-note{padding:8px 12px;background:#f1e5cd;color:#423124;
- font:400 14px/1.5 var(--ui);text-shadow:none;word-break:keep-all}
-.first-support-note>span{display:block}
-.first-support-note b{font-weight:600}
 .relic-takeover .close .stamp{flex:0 0 auto;min-height:48px;min-width:168px;padding:10px 16px 10px 26px;
  font:600 15px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;
  background:transparent url('assets/presentation/support/return-tag-blank.png') center / 100% 100% no-repeat;
@@ -2059,7 +2055,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .relic-takeover .relic-plate .stamp{width:184px;min-width:184px;min-height:54px;font-size:18px}
  .relic-takeover .close{max-width:1000px;margin-bottom:16px}
  .relic-takeover .close p{flex:1 1 360px;text-align:left}
- .relic-takeover .close .first-support-note>span:nth-child(n+2){display:inline}
 }
 
 /* =====================================================================
@@ -2467,11 +2462,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-order .dock .stock-handle,.p-order .dock .stock-sheet{display:none}
 }
 }
-.lost-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:11px;
+.lost-count{display:block;margin-bottom:12px;
  padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;
  font:400 15px/1.4 var(--ui);color:#efe3c8}
 .lost-count b{font-variant-numeric:tabular-nums;color:var(--gold)}
-.lost-count span{font-size:13px;color:#a2947c}
+.lost-count span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:#b8a888}
 .lost-count.near{box-shadow:inset 0 0 0 2px #8a2f26}
 .lost-count.near b{color:#e8907c}
 /* META progression, inside the codex: the grade, each Job's mastery, and the Job x Boss grid
@@ -3467,7 +3462,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .front-side .readout.core-desk{display:none}
 .dossier .readout.core-mob{display:block;margin:0 0 14px}
 .kit .npc-wallet{color:#9c8d70}
-.kit .npc-wallet b{color:var(--gold);font:500 15px/1 var(--f-led);margin-left:5px}
+.kit .npc-wallet b{color:var(--gold);font:600 15px/1 var(--ui);font-variant-numeric:tabular-nums;margin-left:5px}
 /* the environment pressure a phone folds away - a real control, at thumb size */
 
 /* Phone: the top band is a face and a status line, not a stage. The band is shortened by
@@ -3737,30 +3732,54 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .relic-takeover .close:has([data-action=reroll-relics]) .stamp{flex:0 0 auto;min-width:150px;padding:10px 14px}}
 
 /* Settings: carved wood and brass, with raster nine-slice frames. These assets only skin
-   the existing controls; other menus and phase surfaces retain their own materials. */
-.modal.settings-wood{border:16px solid transparent;background:#24160d;background-clip:padding-box;
+   the existing controls; the sheets the store menu opens (roster, codex, guide, decoration, abandon) take the same frame, header and footer keys via .wood-frame; phase surfaces keep their own materials. */
+.modal.settings-wood,.modal.wood-frame{border:16px solid transparent;background:#24160d;background-clip:padding-box;
  border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
  color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
-.settings-wood .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
-.settings-wood .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
-.settings-wood .modal-header .bare{padding:8px 12px;min-height:44px;color:#dfcba9;
+.settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.settings-wood .modal-header h2,.wood-frame .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{padding:8px 12px;min-height:44px;color:#dfcba9;
  background:#2d190d;box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07}
-.settings-wood .modal-header .bare:hover{background:#392213;color:#fff0d1}
-.settings-wood .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #76502c}
+.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:#392213;color:#fff0d1}
+.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #76502c}
+/* the sheets a menu opens share the menu's carved wood: header on the wood itself, tab chips as wooden keys with the same brass edge */
+.modal.wood-frame .modal-header{background:none;margin:0;padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.modal.wood-frame .modal-header h2{font-size:23px}
+.modal.wood-frame .modal-body{color:#dfcba9}
+.modal.wood-frame .tabs .small{background:linear-gradient(180deg,#5a3a20 0,#42291a 55%,#2f1c10 100%);color:#e6d3ae;
+ box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a66}
+.modal.wood-frame .tabs .small:hover{background:linear-gradient(180deg,#6a4627 0,#4f3220 55%,#382214 100%);color:#fff0d1}
+.modal.wood-frame .tabs .small.active{background:linear-gradient(180deg,#7a5224 0,#573817 55%,#3f2910 100%);color:#fff0c8;
+ box-shadow:inset 0 0 0 2px #140b06,inset 0 0 0 3px #ffc554,inset 0 3px 0 #ffe29b40}
+/* the close control is a bare light X, no key and no plate: it reads against the dark wood and cannot be mistaken for an action */
+.menu-panel .modal-header .bare,.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{flex:0 0 auto;display:grid;place-items:center;width:44px;min-width:44px;min-height:44px;padding:0;
+ background:none;box-shadow:none;color:#f1e6cc;filter:drop-shadow(0 2px 0 #0f0905)}
+.menu-panel .modal-header .bare:hover,.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:none;color:#fff;filter:drop-shadow(0 2px 0 #0f0905) brightness(1.1)}
+.menu-panel .modal-header .bare:active,.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:none}
+.relic-takeover .takeover-x{position:absolute;top:max(10px,env(safe-area-inset-top));right:10px;z-index:3;display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;
+ background:#140905e6;color:#f1e6cc;box-shadow:inset 0 0 0 2px #ffffff33;filter:drop-shadow(0 2px 0 #0f0905)}
+.relic-takeover .takeover-x:hover{background:#140905;color:#fff}
+.relic-takeover .takeover-x:active{transform:translateY(2px)}
+.relic-takeover .close:empty{display:none}
+.modal-header .bare .x-icon,.takeover-x .x-icon{display:block;width:16px;height:16px}
+/* one vertical rhythm for the carved sheets: 14px under the header rule, 16px above the footer rule, 12px between stacked blocks */
+.modal.wood-frame .modal-body,.modal.wood-frame:has(.tabs) .modal-body{padding:16px 12px max(14px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-body p+p{margin-top:8px}
 .settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
-.settings-wood .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
+.settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
  background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}
-.settings-wood button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
+.settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
  border-image:url('assets/presentation/settings/blue-key.png') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
  background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
  box-shadow:0 3px 0 #110a06;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
-.settings-wood button:not(.bare):hover{background:none;filter:brightness(1.12)}
-.settings-wood button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
-.settings-wood button.danger{border-image-source:url('assets/presentation/settings/red-key.png');
+.settings-wood button:not(.bare):hover,.wood-frame .modal-footer button:not(.bare):hover{background:none;filter:brightness(1.12)}
+.settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
+.settings-wood button.danger,.wood-frame .modal-footer button.danger{border-image-source:url('assets/presentation/settings/red-key.png');
  color:#ffe9df;text-shadow:0 1px 0 #350e0c}
-.settings-wood button:disabled,.settings-wood button[aria-disabled="true"]{opacity:1;filter:saturate(.25) brightness(.75);
+.settings-wood button:disabled,.settings-wood button[aria-disabled="true"],.wood-frame .modal-footer button:disabled{opacity:1;filter:saturate(.25) brightness(.75);
  color:#e0d3bf;transform:none;box-shadow:none;cursor:default}
-.settings-wood button:focus-visible,.settings-wood input:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
+.settings-wood button:focus-visible,.settings-wood input:focus-visible,.wood-frame button:focus-visible,.wood-frame input:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
 .settings-content{position:relative;isolation:isolate;display:grid;gap:0}
 .settings-content::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
  background:url('assets/presentation/settings/supply-backdrop.png') right bottom / 100% auto no-repeat;opacity:.22}
@@ -3781,7 +3800,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-panel .mix-row{grid-template-columns:38px minmax(0,1fr) 52px;gap:10px}
 .settings-panel .mix-row label{color:#ead8b6;font-size:14px}
 .settings-panel .mix-row b{min-height:36px;display:flex;align-items:center;justify-content:center;
- background:#1c1008;color:#ffc554;font-size:17px;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
+ background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
 /* Native inputs keep keyboard behaviour and a 44px touch area around the thin rail. */
 .settings-panel .mix-row input[type=range]{appearance:none;-webkit-appearance:none;height:44px;
  color:#ffc554;accent-color:#ffc554}
