@@ -69,7 +69,8 @@ and this table is their commit record.
   tests integration, revision.
 - **A short Decoration key** (User 2026-10-03: 버튼 영역을 줄이고 효과 영역을 넓게): the buy key reads `구매` over a small `{가격} 자본`
   (was `{가격} 자본으로 구매`), beside the name on the card's first row, and the effect line runs the card's full width on the
-  row below (the key is one 48 px height whether it reads 구매 or 해제, so buying never resizes the card); 구급품 진열장's effect line is shortened
+  row below (the key is one 48 px height whether it reads 구매 or 해제, so buying never resizes the card); the eight effect lines
+  drop their closing period; 구급품 진열장's effect line is shortened
   to `…로 떠나면 실패 시 사망 위험 -40% (기존 -20%).`. UI_UX §DECORATION DECISION SURFACE, COPY_AUDIT 9-5.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
