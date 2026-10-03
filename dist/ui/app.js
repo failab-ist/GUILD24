@@ -1088,8 +1088,8 @@ function standee(n){
    printed side by side and never summed into one figure - the temporary half is never relabelled
    소지금. The wording is the approved Event Function's own (오늘 방문 모험가 · 현재 소지금의 20%만큼
    추가 구매 가능), so nothing new is invented here. */
-function walletChip(n){const b=n.eventBudget||0;
- return '소지 <b>'+fmt(n.money)+'G</b>'+(b>0?' · 추가 구매 <b>+'+fmt(b)+'G</b>':'');}
+function walletChip(n){const b=n.eventBudget||0,base='소지 <b>'+fmt(n.money)+'G</b>';
+ return b>0?'<span class="wp">'+base+'</span> <span class="wp">추가 구매 <b>+'+fmt(b)+'G</b></span>':base;}
 /* what the customer can actually pay with right now: the same sum interest() and sell() use. */
 function spendable(n){return n.money+(n.eventBudget||0);}
 /* SA-Q13 / SA-Q46. 단골 has ONE owner: Adventurer.isTrustedRegular, which is Loyalty >= 51.
