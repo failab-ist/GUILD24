@@ -3637,6 +3637,27 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:4px 9px 5px;gap:2px}
 .readout.ro2 .env-meter-list{row-gap:0}
 .readout.ro2 .top b.env-num{line-height:16px}
+/* UI_UX §MOBILE SALE PLAYABILITY / SHORT PHONE: give comparison rows the empty seams,
+   not the decision text or the 44px Bag and price targets. The desk keeps its own layout. */
+.p-sale:not(.sale-desk) .front{--cardw:max(88px,min(30vw,118px,calc(100dvh - 552px)));--plateh:44px;--gapb:4px;gap:6px;padding-top:4px}
+.p-sale:not(.sale-desk) .face{margin-bottom:4px}
+.p-sale:not(.sale-desk) .who .nameplate{padding:3px 4px 4px}
+.p-sale:not(.sale-desk) .front-side{padding:0 0 4px;gap:4px}
+.p-sale:not(.sale-desk) .front-side .kit{gap:4px;padding:4px;font-size:12px}
+.p-sale:not(.sale-desk) .front-side .vitals{flex:1 1 76px}
+.p-sale:not(.sale-desk) .front-side .kit .slots{padding:2px;gap:3px}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:4px 6px;gap:4px}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards{margin-top:2px}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li{padding:2px 4px;line-height:1.2}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards .rate{line-height:1.25}
+.p-sale:not(.sale-desk) .counter-edge{height:8px;
+ background:linear-gradient(180deg,#d3ac71 0 2px,#b98d52 2px 4px,#7c5730 4px 6px,#4a331d 6px 8px)}
+.p-sale:not(.sale-desk) .stage-scroll{padding-top:2px;padding-bottom:8px}
+.p-sale:not(.sale-desk) .dossier:not(.traits){margin-bottom:2px}
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{margin-top:2px}
+.p-sale:not(.sale-desk) .shelf-head{margin-bottom:2px;padding-top:2px;padding-bottom:2px}
+.p-sale:not(.sale-desk) .good{min-height:48px;padding:4px 0}
+.p-sale:not(.sale-desk) .dock{padding-top:6px;padding-bottom:max(6px,env(safe-area-inset-bottom))}
 /* the Great Success signal inside the 전투 전망 box (User 2026-10-02): a phone shows a quiet tag beside the word and keeps the
    sentence for a screen reader only; a desk shows the sentence under the word and no tag */
 .readout.ro2 .gs-row{display:flex;align-items:center;gap:8px;min-width:0}
