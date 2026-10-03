@@ -385,6 +385,11 @@ Rules:
 Store Support slots; each rolled slot draws from the Items still under the cap (Rarity first, as above), and the Counter
 guarantee picks a Counter still under it when one exists. Only when no Item is left under the cap does the cap yield, rather
 than leave a slot empty.
+
+(User 2026-10-03.) One sheet holds at most `offerCounterMax` = 4 Hazard Counters (an Item with any Hazard 대응), across the
+ordinary and the extra slots: once four are on it, every further slot draws from the non-Counter Items (Rarity first). A sheet
+may hold none. The Counter guarantee (three sheets without a known Hazard's Counter) still fires as before; on a sheet already
+at four it takes a Counter's slot rather than a fifth.
 - Reroll uses the same current-Day Rarity band; it does not bypass Day progression
 - pity/guarantee systems operate on top of this Day-band table; no fixed all-Run Rarity table is used
 

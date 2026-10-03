@@ -380,8 +380,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,target));
   /* ECONOMY_ORDER §ORDER OFFER VARIETY (User 2026-10-02): the guarantee picks a Counter not already at the sheet's cap, if any */
-  const others=s.offers.filter((o,i)=>i!==ordinary-1),room=matches.filter(it=>others.filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);
-  if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(room.length?room:matches));
+  /* ECONOMY_ORDER §ORDER OFFER VARIETY: on a sheet already at the Counter cap the guarantee takes a Counter's slot, not another's */
+  const isC=o=>G.Relics.directCounter(D.itemBy[o.item],Object.keys(D.hazards));let slot=ordinary-1;
+  if(!isC(s.offers[slot])&&s.offers.filter(isC).length>=D.balance.offerCounterMax){const j=s.offers.findIndex((o,i)=>i<ordinary&&isC(o));if(j>=0)slot=j;}
+  const others=s.offers.filter((o,i)=>i!==slot),room=matches.filter(it=>others.filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);
+  if(matches.length)s.offers[slot]=this.offerFor(this.rng.pick(room.length?room:matches));
  }
  if(hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
@@ -402,7 +405,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* ECONOMY_ORDER §ORDER OFFER VARIETY (User 2026-10-02): one sheet holds an Item on at most offerSameItemMax slots - a slot
     already supplies 2~4 units, so a third copy only hides another Item. The sheet being built is s.offers; with nothing left
     under the cap the cap yields rather than leave a slot empty. */
- const roomy=pool.filter(it=>(s.offers||[]).filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);if(roomy.length)pool=roomy;/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
+ const roomy=pool.filter(it=>(s.offers||[]).filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);if(roomy.length)pool=roomy;
+ /* ECONOMY_ORDER §ORDER OFFER VARIETY: a sheet holds at most offerCounterMax Hazard Counters; past it a slot draws from the rest */
+ {const H=Object.keys(D.hazards);if((s.offers||[]).filter(o=>G.Relics.directCounter(D.itemBy[o.item],H)).length>=D.balance.offerCounterMax){const plain=pool.filter(it=>!G.Relics.directCounter(it,H));if(plain.length)pool=plain;}}/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);

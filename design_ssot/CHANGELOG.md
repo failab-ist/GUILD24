@@ -27,6 +27,16 @@ and this table is their commit record.
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55 | `v2.10.0` (set by the User) |
 
+## v2.10.0 quick patch 3 — a tidier ORDER sheet (User 2026-10-03; the version stays 2.10.0)
+
+- **At most four Hazard Counters on a sheet** (User: 쓸모없는 대응템만 나와서 답답할 수 있겠다 · 발주 전체에서 대응템이 차지할 수 있는 칸은 최대
+  4칸 · 보정은 똑같이 · 0칸도 될 수 있게): once four Items with any Hazard 대응 are on the sheet (ordinary and extra slots alike),
+  every further slot draws from the rest; a sheet may hold none. About half of a six-slot sheet was Counters, of which a third
+  to two thirds fit no Gate open that Day. The Counter guarantee is unchanged; on a sheet already at four it takes a Counter's
+  slot. ECONOMY_ORDER §ORDER OFFER VARIETY; test revision.
+- **The 후보 전체 교환 key is narrow and right-aligned** (User: 리롤이 영업 시작보다 넓어서 자꾸 누른다 · 우정렬 · 세로 여백 줄이자): as wide
+  as its words (296 → 155px on a 360px phone), at the sheet's right edge, its margin 12 / 6 → 8 / 4px. UI_UX §ORDER Reroll UX.
+
 ## v2.10.0 quick patch 2 — the till breathes again (User 2026-10-03; the version stays 2.10.0)
 
 - **A thicker visit Wallet** (User, from a quick-patch-1 save stuck at 200~800G through DAY 18: 자금이 마르니까 진행이 잘 안 됨 · 운영비를
