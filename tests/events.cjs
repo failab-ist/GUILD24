@@ -337,7 +337,7 @@ test('EVENT 신입 모험가 시즌: the arrival follows the Day-based Level rul
  for(const day of [2,9,21])for(let i=0;i<20;i++){const a=globalThis.Meta.fresh(),seed='rookie-rule-'+day+'-'+i;
   assert.equal(globalThis.Adventurer.create(new globalThis.RNG(seed),i,day,a,{rookie:true}).level,globalThis.Adventurer.create(new globalThis.RNG(seed),i,day,a).level,'the Day-based rule is the one rule');}
 
- const band=day=>[Math.max(1,1+Math.floor((day-1)*.25)),3+Math.floor((day-1)*.25)];
+ const term=day=>day<=4?0:Math.floor((day-1)*.4),band=day=>[1+term(day),(day<=4?2:3)+term(day)];
  const seen=[];
  for(let i=0;i<120;i++){
   const g=fresh('rookielv-'+i);force(g,'rookie');
@@ -396,7 +396,7 @@ test('EVENT 왕립 기사단 방문: the royal newcomer is in today queue exactl
  assert.ok(Math.max(...sizes)<=8,'no visitor was added to make room: max queue '+Math.max(...sizes));
 
  /* the royal profile itself: Day-based spawn Level +3, and the 40/36/17/6/1 Rarity weights */
- const band=day=>[Math.max(1,1+Math.floor((day-1)*.25))+3,3+Math.floor((day-1)*.25)+3];
+ const term=day=>day<=4?0:Math.floor((day-1)*.4),band=day=>[1+term(day)+3,(day<=4?2:3)+term(day)+3];
  for(const {day,level} of levels){
   const [lo,hi]=band(day);
   assert.ok(level>=lo&&level<=hi,'day '+day+' royal arrival is Lv.'+level+', outside +3 band '+lo+'-'+hi);

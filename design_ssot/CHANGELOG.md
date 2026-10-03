@@ -35,6 +35,11 @@ and this table is their commit record.
   one (User: 발주 칸 자체가 늘면 대응템 한도도 늘게). About half of a six-slot sheet was Counters, of which a third
   to two thirds fit no Gate open that Day. The Counter guarantee is unchanged; on a sheet already at four it takes a Counter's
   slot. ECONOMY_ORDER §ORDER OFFER VARIETY; test revision.
+- **Newcomers keep up and start easy** (User, from a main-build save that ended on the death limit at DAY 19 - the four Lv10+
+  adventurers won 69% with no death, the eleven others 2% with all nine deaths: 신규 레벨 따라잡기 · 방문 2회까지는 1티어, 1티어가
+  없으면 어쩔 수 없고): the spawn Day term is floor((Day − 1) × 0.4) from DAY 5 (was × 0.25; DAY 1~4 stay Lv1~2 with no Day
+  term), and a newcomer's first two visits go to an open Tier I Gate when there is one. META §Exact spawn-Level model, NPC_TRAIT
+  §DESTINATION; tests revision, events.
 - **The 후보 전체 교환 key is narrow and right-aligned** (User: 리롤이 영업 시작보다 넓어서 자꾸 누른다 · 우정렬 · 세로 여백 줄이자): as wide
   as its words (296 → 155px on a 360px phone), at the sheet's right edge, its margin 12 / 6 → 8 / 4px. UI_UX §ORDER Reroll UX.
 

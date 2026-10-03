@@ -330,7 +330,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* EVENT 34 단골의 날: one trusted regular not already coming joins today's visitors */
   if(ev.regularVisit){const reg=available.filter(n=>!selected.includes(n)&&n.introduced&&G.Adventurer.isTrustedRegular(n));if(reg.length)selected.push(this.rng.pick(reg));}
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
-  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
+  /* SALE §EXPECTED DESTINATION: a newcomer (its first or second visit) goes to a Tier I Gate while one is open - the draw is kept,
+     mapped onto the open Tier I Gates, so no RNG draw is added */
+  const tierOne=s.dungeons.map((d,i)=>i).filter(i=>s.dungeons[i].tier===1),rookie=n=>(n.visits||0)<2&&tierOne.length>0;
+  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);if(rookie(n)&&!tierOne.includes(n.destination))n.destination=tierOne[n.destination%tierOne.length];n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination&&(!rookie(n)||tierOne.includes(i)));if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
 n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,this.rng)+this.awayWallet(n)));n.awayDays=0;n.newToday=!n.introduced;}
   /* ECONOMY_ORDER §Away Wallet: an adventurer who could have come and did not earns elsewhere - each such
      Day banks one, up to a few, paid on the next visit. Counted after the draw, so it adds no RNG draw. */
@@ -342,7 +345,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
      already sent elsewhere, so the stream of every other Day is unchanged. */
   if(s.dungeons.length>1&&selected.length>=s.dungeons.length)for(let g=0;g<s.dungeons.length;g++){
    if(selected.some(n=>n.claimedDestination===g))continue;
-   const movable=selected.filter(n=>n.destination===n.claimedDestination&&selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1);
+   const movable=selected.filter(n=>n.destination===n.claimedDestination&&selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1&&(s.dungeons[g].tier===1||!rookie(n)));
    if(!movable.length)continue;const n=this.rng.pick(movable);n.destination=n.claimedDestination=g;}
   /* EVENT §03 게이트 순례 주간: "actual destination changes to a different currently open Gate"
      reads against the expected/reported destination (claimedDestination) - the one thing the
