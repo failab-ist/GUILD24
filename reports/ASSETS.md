@@ -5,6 +5,17 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 점포지원 창고 배경·시각 참고 — User 제공 원본 (2026-10-03)
+
+- 1번 `16833.jpg`는 구성 참고이며 `reports/references/store-support-2026-10-03/selection-reference.jpg`에 보존한다.
+  참고 그림의 효과·가격·후보 개수는 게임 규칙이 아니며 현행 RELIC / COPY / 게임 데이터를 따른다.
+- 2번 `16831.jpg`: `dist/ui/assets/presentation/support/backroom-phone.jpg`, JPEG 720×1280, 136,917 bytes.
+- 3번 `16832.jpg`: `dist/ui/assets/presentation/support/backroom-wide.jpg`, JPEG 1280×720, 169,910 bytes.
+- 세 첨부 모두 변환·재압축·리사이즈 없이 바이트 그대로 복사했다. 원본/레포 사본의 SHA-256 일치와 JPEG 디코딩을 확인했다.
+  정확한 해시·크기·경로는 `reports/references/store-support-2026-10-03/originals.json`에 기록한다.
+- User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
+  배경은 점포지원 선택 화면에만 적용하며 라이브 UI 텍스트·선택 동작과 분리한다.
+
 ### Settings wood / steel controls — project-generated, review candidate
 - source: generated for this project with OpenAI image generation from the User's settings-menu visual direction
   (2026-10-03). No third-party asset licence is claimed.
