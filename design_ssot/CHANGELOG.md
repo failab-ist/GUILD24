@@ -80,6 +80,10 @@ and this table is their commit record.
   26 → 20, 대현자 허브엘릭서 28 → 20 (the four Epics 투력 6 → 5; 205G / 180G / 180G / 180G). ITEM §STAT FOOD / DRINK LADDER /
   §ACTIVE CATALOG / DI-Q-v28-1; tests vocabulary, relic-effects.
 
+- **A lost fight kills less often** (User, after the second measure ended 80% of fresh Runs on the death limit around DAY 17:
+  실패 시 사망의 전투 결손 계수만 풀고): CombatDeathContribution = CombatDeficit × 0.30 (was × 0.40); the environment term, the caps
+  and the injured / 탈진 / strain terms are unchanged. DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK / DUN-Q; test night.
+
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 
 - **The hidden reputation is gone** (User: 평판처럼 몰래 하는 건 안 된다 · 싹 없앤다): the Run no longer keeps a 0~100 reputation

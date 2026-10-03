@@ -820,7 +820,7 @@ CombatDeficit
 )
 
 CombatDeathContribution
-= CombatDeficit × 0.40
+= CombatDeficit × 0.30
 ```
 
 `effectivePreparedPower` means the actual prepared state for the snapshot being calculated, including all already-applicable NPC-side modifiers and Item/Supply effects for that snapshot.
@@ -1817,7 +1817,7 @@ CombatDeficit
 = clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
 
 CombatDeathContribution
-= CombatDeficit * 0.40
+= CombatDeficit * 0.30
 
 HazardDeficit_i
 = clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)

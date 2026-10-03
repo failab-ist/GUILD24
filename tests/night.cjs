@@ -526,7 +526,7 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
- assert.deepEqual(Dungeon.DEATH,{combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
+ assert.deepEqual(Dungeon.DEATH,{combat:.30,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
   'the shipped coefficients are the canonical baseline');
  // the two deficits are the only inputs, and each one alone raises the chance
  const weak=at(1,0).risk,strong=at(400,0).risk;
@@ -535,8 +535,8 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  assert.ok(weak.chance<=0.50+1e-9,'the healthy conditional cap is 50% (v2.10.0)');
  for(const over of [1,20,60,140,400]){
   const {risk}=at(over,0);
-  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.40+risk.environmentDeficit*.20))*risk.steady)<1e-12,
-   'the chance is exactly CombatDeficit x .40 + EnvironmentDeficit x .20, clamped, then 정신 steadiness');
+  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.30+risk.environmentDeficit*.20))*risk.steady)<1e-12,
+   'the chance is exactly CombatDeficit x .30 + EnvironmentDeficit x .20, clamped, then 정신 steadiness');
   /* DUNGEON_HAZARD §Spirit steadiness: 정신 x .003 off the chance, at most 15% */
   const sp=Dungeon.prepare(at(over,0).n,d).effects.spirit;
   assert.ok(Math.abs(risk.steady-(1-Math.min(.15,sp*.003)))<1e-12,'정신 '+sp.toFixed(1)+' trims the chance by '+(100*(1-risk.steady)).toFixed(1)+'%');

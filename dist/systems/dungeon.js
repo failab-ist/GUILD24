@@ -278,7 +278,7 @@ function greatSuccessSignal(n,d,facilities=[]){
    DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet reward: GREAT / WIN EXP multipliers and WALLET_MULT by Outcome. */
 const GREAT={xp:1.00},WIN={xp:.90};
 const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
-const DEATH={combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
+const DEATH={combat:.30,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation (User 2026-09-25,
    v2.9.1 balance): only CONSECUTIVE injured departures count now. A healthy departure - including
    the return after a Severe-Injury rest - resets the chain; the first injured departure is free,
