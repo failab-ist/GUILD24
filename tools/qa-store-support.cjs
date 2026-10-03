@@ -25,20 +25,27 @@ for(const r of JSON.parse(fs.readFileSync(path.join(root,'reports/references/sto
    const texts=[...panel.querySelectorAll('h2,h3,p,.cost,button')];
    const fit=texts.every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
    const f=box(footer),sc=box(scroll),buttons=[...footer.querySelectorAll('button')],cards=[...panel.querySelectorAll('.relic-plate')];
+   const note=footer.querySelector('.first-support-note');
+   const luminance=color=>{const rgb=color.match(/[\d.]+/g).slice(0,3).map(x=>Number(x)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];};
+   const noteStyle=note&&getComputedStyle(note),fg=noteStyle&&luminance(noteStyle.color),bg=noteStyle&&luminance(noteStyle.backgroundColor);
    const hit=e=>{const b=box(e),t=document.elementFromPoint(b.left+b.width/2,b.top+b.height/2);return !!t&&(e===t||e.contains(t));};
    return {fit,background:getComputedStyle(panel).backgroundImage,head:box(panel.querySelector('.relic-open')).height,
     footer:{top:f.top,bottom:f.bottom,height:f.height},scroll:{bottom:sc.bottom,height:sc.height},
     actions:buttons.every(e=>box(e).height>=44&&box(e).left>=0&&box(e).right<=innerWidth&&box(e).bottom<=innerHeight&&hit(e)),
     cards:cards.map(e=>{const key=box(e.querySelector('button')),price=box(e.querySelector('.cost')),effect=box(e.querySelector('p'));
-     return {height:box(e).height,width:box(e).width,buttonWidth:key.width,buttonHeight:key.height,
+     return {top:box(e).top,bottom:box(e).bottom,height:box(e).height,width:box(e).width,buttonWidth:key.width,buttonHeight:key.height,
       actionClear:price.right+8<=key.left&&effect.bottom+8<=Math.min(price.top,key.top),description:e.querySelector('p').innerText};}),
-    columns:innerWidth>=1024?new Set(cards.map(e=>box(e).left)).size:1,hscroll:document.documentElement.scrollWidth>innerWidth};
+    columns:new Set(cards.map(e=>box(e).left)).size,rows:new Set(cards.map(e=>box(e).top)).size,hscroll:document.documentElement.scrollWidth>innerWidth,
+    notice:note?{text:note.textContent,fontSize:parseFloat(noteStyle.fontSize),contrast:(Math.max(fg,bg)+.05)/(Math.min(fg,bg)+.05),
+     phraseFit:[...note.children].every(e=>innerWidth>=1024||box(e).height<=parseFloat(noteStyle.lineHeight)+1)}:null};
   });
   const d0=await geometry();
   check(d0.fit&&!d0.hscroll&&d0.actions&&d0.scroll.bottom<=d0.footer.top+1,tag+' D0 text/footer fit');
   check(d0.cards.length===3&&d0.cards.every(c=>c.buttonHeight>=48&&c.actionClear),tag+' three candidates with separated effect/cost/selection');
   check(d0.background.includes(width<1024?'backroom-phone.jpg':'backroom-wide.jpg'),tag+' correct supplied background');
-  check(width<1024?d0.cards.every(c=>c.buttonWidth>=120&&c.buttonWidth<c.width/2):d0.columns===3,tag+' compact choice tag / desktop three peers');
+  check(width<1024?d0.cards.every(c=>c.buttonWidth>=120&&c.buttonWidth<c.width/2):d0.columns===1&&d0.rows===3&&d0.cards.every(c=>c.width>=Math.min(1000,width-64)-1&&c.height>=200),tag+' compact mobile choice / large desktop vertical contracts');
+  check(d0.notice?.text==='점포 지원은 5일 단위로 고를 수 있다.첫 지원은 Day4까지 아침, 발주 화면에서 무료로 고를 수 있다.'&&d0.notice.fontSize>=14&&d0.notice.contrast>=4.5&&d0.notice.phraseFit,tag+' exact first guide, readable contrast and complete phrase lines');
+  if(width>=1024&&height>=880)check(d0.cards.at(-1).bottom<=d0.scroll.bottom+1,tag+' all three desktop D0 contracts fit above footer');
   check(await p.locator('.relic-plate .cost').allTextContents().then(a=>a.every(t=>t==='무료')),tag+' D0 live free prices');
   for(let i=0;i<3;i++){const key=p.locator('.relic-plate button').nth(i);await key.scrollIntoViewIfNeeded();check(await key.evaluate(e=>{const b=e.getBoundingClientRect(),f=document.querySelector('.relic-takeover .close').getBoundingClientRect();return b.top>=0&&b.bottom+3<=f.top;}),tag+' candidate '+i+' scrolls clear of footer');}
   await p.locator('.relic-takeover .scroll').evaluate(e=>e.scrollTop=0);await p.mouse.move(0,0);await p.screenshot({path:path.join(out,`${tag}-d0.png`)});
@@ -59,6 +66,7 @@ for(const r of JSON.parse(fs.readFileSync(path.join(root,'reports/references/sto
   await p.evaluate(()=>{const g=Guild24.game,s=g.run;g.account.tutorial.skipped=true;Object.assign(s.bossReveal,{d0Seen:true,identitySeen:true});s.phase='morning';s.day=5;s.money=9999;g.relicWindow(5);Guild24.render();});
   if(!await p.locator('.relic-takeover').count())await p.locator('[data-action="relics"]').first().click();
   await p.waitForTimeout(150);const d5=await geometry();check(d5.fit&&d5.actions,tag+' D5 footer and text fit');
+  if(width>=1024)check(d5.columns===1&&d5.rows===3&&d5.cards.every(c=>c.height>=200&&c.actionClear),tag+' paid desktop contracts stay large and vertical');
   check(await p.locator('.relic-plate .cost').allTextContents().then(async a=>JSON.stringify(a)===JSON.stringify(await p.evaluate(()=>Guild24.game.run.relicWindow.candidatePrices.map(n=>n.toLocaleString('ko-KR')+'G')))),tag+' D5 prices follow actual candidate data');
   await p.mouse.move(0,0);await p.screenshot({path:path.join(out,`${tag}-d5.png`)});
   const money=await p.evaluate(()=>Guild24.game.run.money);await p.locator('[data-action="reroll-relics"]').click();

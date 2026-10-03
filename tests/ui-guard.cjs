@@ -502,7 +502,9 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  // v2.9.13 quick patch 3 (User 2026-10-01): the DAY 0 free pick may wait - on DAY 0 its 나중에 결정 opens DAY 1, later it closes
  assert.ok(app.includes("btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')"),'the DAY 0 takeover offers 나중에 결정');
  assert.ok(app.includes("case'defer-relic':game.deferFoundationRelic();setModal(null);render();"),'deferring leaves the takeover for DAY 1');
- assert.ok(app.includes("'<p>지금 안 골라도 된다. '+until+' 아침·발주 화면에서 무료로 고를 수 있다.</p>'"),'the defer line names its last Day');
+ assert.ok(app.includes('점포 지원은 5일 단위로 고를 수 있다.')
+  &&app.includes("첫 지원은 <b>Day'+(w.expiryDay-1)+'까지</b>")
+  &&app.includes('아침, 발주 화면에서 무료로 고를 수 있다.'),'User 2026-10-03: exact first guide names the recurring choice and live free deadline');
  // and the owned list carries the SLOTH seal count once the seals are revealed; the chip does not
  assert.ok(/function sealCount\(\)\{const s=game\.run;if\(s\?\.bossId!=='SLOTH'\|\|!s\.bossReveal\?\.traitSeen\)return '';/.test(app)
   &&app.includes("'<p class=\"seal-count\">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>'"),'SLOTH seal count in the owned list');

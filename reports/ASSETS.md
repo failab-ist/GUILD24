@@ -5,6 +5,14 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 점포지원 PC 세로 배열용 넓은 계약서 — 프로젝트 생성 (2026-10-03 후속)
+
+- `dist/ui/assets/presentation/support/contract-wide-blank.png`: RGBA 2172×724, 기존 무지 계약서를 참고한
+  OpenAI 이미지 생성 에셋. PC 후보를 넓게 쌓을 때 쓰며 모바일에는 기존 승인 종이를 유지한다.
+- 이름·효과·가격·무료·행동 라벨은 없으며 모두 라이브 텍스트다. 생성 원본을 변환 없이 복사했다.
+  재질은 절제된 크림 종이와 작은 집게이며 외곽은 투명하다. 제3자 라이선스를 추정하지 않는다.
+- 해시·원본 일치 기록은 `reports/references/store-support-2026-10-03/contract-assets.json`에 있다.
+
 ### 점포지원 계약서·표찰 — 프로젝트 생성 제안 (2026-10-03)
 
 - OpenAI 이미지 생성으로 제작한 글자 없는 RGBA PNG. 별도 제3자 라이선스를 추정하지 않는다.

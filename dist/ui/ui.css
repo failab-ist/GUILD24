@@ -2025,6 +2025,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  padding:0;background:transparent;box-shadow:none}
 .relic-takeover .close p{flex:1 1 100%;font:600 13px/1.5 var(--ui);color:#f5e8ce;text-align:center;
  text-shadow:1px 1px 0 #21150f,-1px -1px 0 #21150f}
+.relic-takeover .close .first-support-note{padding:8px 12px;background:#f1e5cd;color:#423124;
+ font:400 14px/1.5 var(--ui);text-shadow:none;word-break:keep-all}
+.first-support-note>span{display:block}
+.first-support-note b{font-weight:600}
 .relic-takeover .close .stamp{flex:0 0 auto;min-height:48px;min-width:168px;padding:10px 16px 10px 26px;
  font:600 15px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;
  background:transparent url('assets/presentation/support/return-tag-blank.png') center / 100% 100% no-repeat;
@@ -2034,12 +2038,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media(min-width:1024px){
  .relic-takeover{background-image:url('assets/presentation/support/backroom-wide.jpg')}
  .relic-takeover .scroll{padding-left:32px;padding-right:32px}
- .relic-takeover .relic-open{margin-top:32px;margin-bottom:28px;padding:20px 24px}
+ .relic-takeover .relic-open{margin-top:16px;margin-bottom:12px;padding:12px 18px}
  .relic-takeover .relic-open h2{font-size:32px}
- .relic-takeover .relic-choices{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
- .relic-takeover .relic-plate{padding:40px 26px 24px}
- .relic-takeover .close{margin-bottom:24px}
+ .relic-takeover .relic-choices{grid-template-columns:minmax(0,1fr);gap:12px;width:min(100%,1000px)}
+ .relic-takeover .relic-plate{padding:40px 36px 18px;min-height:clamp(200px,calc((100dvh - 258px)/3),270px);
+  grid-template-columns:minmax(0,1fr) 184px;gap:8px 20px;
+  background-image:url('assets/presentation/support/contract-wide-blank.png')}
+ .relic-takeover .relic-plate h3{font-size:28px;line-height:1.3}
+ .relic-takeover .relic-plate p{font-size:18px;line-height:1.5}
+ .relic-takeover .relic-plate .cost{font-size:22px;min-height:54px}
+ .relic-takeover .relic-plate .stamp{width:184px;min-width:184px;min-height:54px;font-size:18px}
+ .relic-takeover .close{max-width:1000px;margin-bottom:16px}
  .relic-takeover .close p{flex:1 1 360px;text-align:left}
+ .relic-takeover .close .first-support-note>span:nth-child(n+2){display:inline}
 }
 
 /* =====================================================================

@@ -28,6 +28,12 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **Store Support desktop stack / readable first guide on `ui/design-trim`** (User 2026-10-03): enlarge desktop contracts,
+  stack all three vertically, and use a wide blank paper asset plus desktop type steps. Short viewports scroll without
+  squeezing. Replace the first-window footer wording with the User's two sentences about 5-day choices and the Day4 free
+  pick in morning/order. Dark 14px text sits on an ivory slip with complete phrase breaks. UI_UX / COPY_AUDIT own the
+  presentation/copy; prices and acquisition/save rules stay unchanged. Visual approval remains separate.
+
 - **Store Support contract sheets on `ui/design-trim`** (User 2026-10-03): replace the gray panels and full-width yellow
   keys with clipped blank paper contracts, compact gold choice/purchase tags and live text for every price. Zero-cost
   first support reads 무료; later costs use the existing candidatePrices. Remove the enclosing brown footer and use

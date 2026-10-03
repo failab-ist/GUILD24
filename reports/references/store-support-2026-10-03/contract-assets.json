@@ -31,5 +31,16 @@
     "sha256": "5f64f6a316654f5b73849d251dd489eca63f42da5bad489a5b7adbd2a52f9b45",
     "byte_identical": true,
     "contains_fixed_text": false
+  },
+  {
+    "repository_path": "dist/ui/assets/presentation/support/contract-wide-blank.png",
+    "generated_original": "/workspace/generated_images/exec-456e3ac9-48c7-4e03-b906-4af1e1efab2d.png",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGBA",
+    "bytes": 1539285,
+    "sha256": "598581d8eca96f3d15c6f2a94aa966fe0323e27080cc429d86ef81b977d3433c",
+    "byte_identical": true,
+    "contains_fixed_text": false
   }
 ]
