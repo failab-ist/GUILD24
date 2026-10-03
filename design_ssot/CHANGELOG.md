@@ -28,6 +28,11 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **SALE information legibility on `ui/design-trim`** (User 2026-10-03): use the canonical Wanted Sans information face
+  for shelf/till prices so the live G suffix remains identifiable; raise phone stock/expiry and tray-category contrast.
+  Preserve character size, shelf rows, complete effects, three price ribbons and gameplay. Store Support's current
+  design is acceptable per the User's latest clarification; this batch leaves it unchanged.
+
 - **Store Support desktop stack / readable first guide on `ui/design-trim`** (User 2026-10-03): enlarge desktop contracts,
   stack all three vertically, and use a wide blank paper asset plus desktop type steps. Short viewports scroll without
   squeezing. Replace the first-window footer wording with the User's two sentences about 5-day choices and the Day4 free

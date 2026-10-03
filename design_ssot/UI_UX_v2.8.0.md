@@ -301,6 +301,13 @@ compact; the plate keeps its frame (a control) and an about-44 px target through
 Title, quantity and support plate align on their vertical centres, rather than mixing the plate and LED font baselines.
 The phone title and quantity use a common 20px line box; the support plate retains its 24px visible height.
 
+### SALE — PRICE / SECONDARY INFORMATION LEGIBILITY (User 2026-10-03)
+
+Shelf prices and the three sale amounts use Wanted Sans with tabular numerals, following TYPOGRAPHY — EXACT PAIR.
+The live `G` suffix must read as currency, rather than resembling a digit in the atmospheric display face.
+On phones, stock/expiry and the tray's effect-category labels retain readable warm-ink contrast on their dark planes.
+This finishing pass preserves the fixed character, shelf-row space, ribbon geometry, full effects and purchase rules.
+
 ### SALE STAT SOURCE UX
 
 - Stat 하단에 실제 적용된 **Source 이름만** 작게 표시 (유리: 초록, 불리: 빨강). 미적용 표시 안함.
