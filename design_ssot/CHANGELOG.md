@@ -38,8 +38,8 @@ and this table is their commit record.
   forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
 - **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
-  curve A): Threat = 12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier − 1) × 6 - DAY 1~7 unchanged,
-  D21 T2 26 → 32, D29 T3 35 → 45. The Final keeps the curve without the late term (Day 30 / T2 = 29): with it, a weak
+  curve A, its late term measured at 0.45 / 0.35 / 0.25 and set at 0.25): Threat = 12 + Day × 0.35 + max(0, Day − 7) × 0.25
+  + (Tier − 1) × 6 - DAY 1~7 unchanged, D21 T2 26 → 29, D29 T3 35 → 40. The Final keeps the curve without the late term (Day 30 / T2 = 29): with it, a weak
   third adventurer's Hazard gaps outweighed their Power and a full party read weaker than two. DUNGEON_HAZARD §HAZARD THREAT /
   DUN-Q71; tests vocabulary, ui-guard, simulation.
 - **One Hazard scale: every Core Stat ÷3, no Stat-group factor** (User: 깡스탯 음식·음료로 채워지는 게 너무 크다 · 강인도 그냥

@@ -285,10 +285,10 @@ pressed-Stat share
 - 초반 대응 (Common, one Hazard): clears a Tier 1 Hazard on its own through the opening week (DAY 1~7); short of Tier 2
 - 초반 하이브리드 (Uncommon, both Hazards of a Gate): under 초반 대응 on the first Hazard, so an average adventurer only just
   clears Tier 1 with it in the opening week; short of Tier 2
-- 중반 대응 (Rare, one Hazard): the specialist - clears Tier 2 surely (an average adventurer about 1.16 on D21); at Tier 3 late
-  it reads 대응 (about 0.9 on D29), so a Tier 3 Hazard reads 충분 only with a second Counter in the other Bag slot or an
+- 중반 대응 (Rare, one Hazard): the specialist - clears Tier 2 surely (an average adventurer about 1.25 on D21); at Tier 3 late
+  it reads just under 충분 (about 0.95~1.0 on D29), so a Tier 3 Hazard reads 충분 only with a second Counter in the other Bag slot or an
   adventurer strong in the pressed Stat
-- 후반 하이브리드 (Epic, both Hazards): one slot reads 대응 on both Tier 2 Hazards late (about 0.8~0.9 on D21) - the broad
+- 후반 하이브리드 (Epic, both Hazards): one slot reads 대응 on both Tier 2 Hazards late (about 0.9 on D21) - the broad
   answer that leaves the other slot free, at the cost of some incident chance; short of Tier 3
 
 Values (every Hazard alike - each Core Stat answers at ÷3 and no Hazard carries a Stat-group factor):

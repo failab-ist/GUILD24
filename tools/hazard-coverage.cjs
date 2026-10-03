@@ -27,7 +27,7 @@ if(process.env.HZ_WORKER){
   const cell=(h,b)=>((acc[h]??={})[b]??={exp:0,ratio:0,covered:0,carried:0,incident:0,success:0,days:{},offerDays:{},items:{}});
   globalThis.__HZ=(rep,d,s)=>{if(d.deep||d.id==='final'||!rep.debug)return;const day=d.day||s.day,b=BANDS.findIndex(([a,z])=>day>=a&&day<=z);if(b<0)return;
    const e=rep.debug.effects,offerIds=(s.offers||[]).map(o=>o.item);
-   for(const h of d.hazards){const c=cell(h,b),r=Dungeon.hazardRule(h),threat=12+day*.35+Math.max(0,day-7)*.45+((d.tier||1)-1)*6,def=(e[h]||0)+(e[r.stat]||0)*r.coef;
+   for(const h of d.hazards){const c=cell(h,b),r=Dungeon.hazardRule(h),threat=12+day*.35+Math.max(0,day-7)*.25+((d.tier||1)-1)*6,def=(e[h]||0)+(e[r.stat]||0)*r.coef;
     c.exp++;c.ratio+=def/threat;if(def>=threat)c.covered++;
     const ctr=rep.items.filter(id=>(D.itemBy[id].effects[h]||0)>0);if(ctr.length)c.carried++;for(const id of ctr)c.items[id]=(c.items[id]||0)+1;
     if(rep.cause===h)c.incident++;if(['성공','대성공'].includes(rep.outcome))c.success++;

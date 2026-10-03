@@ -248,7 +248,7 @@ function hazardState(h,e,d){
  const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
     Hazard means the same thing wherever it appears on that Day at that Tier. */
- const rule=rules[h]||['survival',.2],threat=(12+(d.day||1)*.35+(d.family==='final'?0:Math.max(0,(d.day||1)-7)*.45)+((d.tier||1)-1)*6),defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
+ const rule=rules[h]||['survival',.2],threat=(12+(d.day||1)*.35+(d.family==='final'?0:Math.max(0,(d.day||1)-7)*.25)+((d.tier||1)-1)*6),defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */

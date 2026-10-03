@@ -343,7 +343,7 @@ For each canonical Hazard:
 ```text
 Hazard Threat
 = 12 + Day × 0.35 + LateTerm + (Tier - 1) × 6
-LateTerm = max(0, Day − 7) × 0.45 on ordinary Gates; 0 for the Final (마왕성 keeps Day 30 / T2 = 28.50)
+LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates; 0 for the Final (마왕성 keeps Day 30 / T2 = 28.50)
 ```
 
 Every Hazard reads the same Threat whatever Stat it presses: every Core Stat converts to Defense at ÷3, and an average
@@ -358,11 +358,11 @@ Reference anchors:
 ```text
 D1  T1 = 12.35
 D7  T1 = 14.45
-D12 T1 = 18.45
-D18 T2 = 29.25
-D24 T2 = 34.05
-D29 T3 = 44.05
-D30 T2 = 38.85 (ordinary formula; the Final reads 28.50)
+D12 T1 = 17.45
+D18 T2 = 27.05
+D24 T2 = 30.65
+D29 T3 = 39.65
+D30 T2 = 34.25 (ordinary formula; the Final reads 28.50)
 ```
 
 ## TIER CONTRACT
@@ -1482,17 +1482,17 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = 12 + Day*.35 + LateTerm + (Tier-1)*6, LateTerm = max(0, Day-7)*.45 (ordinary Gates; 0 for the Final); no Stat-group factor
+Threat = 12 + Day*.35 + LateTerm + (Tier-1)*6, LateTerm = max(0, Day-7)*.25 (ordinary Gates; 0 for the Final); no Stat-group factor
 ```
 
 Exact anchors (every Hazard):
 - D1 T1 = 12.35
 - D7 T1 = 14.45
-- D12 T1 = 18.45
-- D18 T2 = 29.25
-- D24 T2 = 34.05
-- D29 T3 = 44.05
-- D30 T2 = 38.85 (ordinary formula); the Final (Day 30 / T2) = 28.50
+- D12 T1 = 17.45
+- D18 T2 = 27.05
+- D24 T2 = 30.65
+- D29 T3 = 39.65
+- D30 T2 = 34.25 (ordinary formula); the Final (Day 30 / T2) = 28.50
 
 PASS: runtime threat matches.
 
