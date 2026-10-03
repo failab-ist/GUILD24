@@ -11,22 +11,21 @@ items:[
    `tool`, `magic` and the `fresh` alias are gone; 붕대 and 마석 보조배터리 are retired and
    are NOT converted into anything on an older save. Shelf lives and flavour carry over
    from the previous Item wherever the identity is unchanged. */
-/* ITEM_v2.8.0 §ITEM PRICE ALIGNMENT (User 2026-09-25, v2.9.1 balance): Sell = Buy x 2 for every
-   Item without exception, so a shipped Sell price is never hand-edited apart from its Buy price
-   again. */
+/* ITEM §ITEM PRICE ALIGNMENT: Sell = Buy x 2 for every Item without exception; a Sell price is never hand-edited apart
+   from its Buy price. */
 item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:6,supply:5}),
 item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:12,supply:2}),
 item('ramen','컵라면',0,45,90,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:3}),
 item('lunchbox','간단 도시락',1,90,180,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:9,supply:6,loot:0.1}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:6,supply:5}),
-/* ITEM §ACTIVE CATALOG (User 2026-10-01, v2.9.13 quick patch): the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
+/* ITEM §ACTIVE CATALOG: the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
 item('yanggaeng','녹차 양갱',0,30,60,'food',2,'yanggaeng','용사픽','어르신 손님은 꼭 두 개씩 사 간다.',{spirit:6,supply:5}),
 item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:12,supply:2}),
 item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:10,potion:1}),
 item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
-/* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
+/* ITEM §COUNTER LADDER: the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
 item('soda','중화 탄산수',0,35,70,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:10,supply:1}),
 item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:28}),
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:28}),
@@ -38,7 +37,7 @@ item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 
    only its identity (Insurance / Uncommon / 80-160). */
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
 item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:12}),
-/* was 핫팩 (냉기 +24): the id stays so a saved unit carries over as the Snow 초반 하이브리드 (User 2026-09-27) */
+/* ITEM §COUNTER LADDER: the Snow 초반 하이브리드; the id `hood` is kept so a saved unit carries over */
 item('hood','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:8,whiteout:12}),
 item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:8,bind:12}),
 item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:8,dark:12}),

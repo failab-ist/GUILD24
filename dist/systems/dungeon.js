@@ -1,9 +1,7 @@
 (function(G){
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-/* DUNGEON_HAZARD_v2.7 §PREPARED POWER. Forecast, Resolve and the Great-Success margin have to
-   read the same prepared ability before hidden combat noise, and three copies of the weights
-   is how they drifted apart before - so there is one. 투력 remains the strongest single lever,
-   and no Player-facing aggregate Power Stat is created from it. */
+/* DUNGEON_HAZARD §PREPARED POWER: the one weight set Forecast, Resolve and the Great-Success margin read before hidden
+   combat noise. 투력 is the strongest single lever; no Player-facing aggregate Power Stat is made from it. */
 const preparedPower=e=>e.combat*.50+(e.survival+e.mobility+e.spirit)*.27;
 const STAT_KEYS=['combat','survival','mobility','spirit'];
 /* Trait keys that describe how somebody SHOPS, not how they perform on an expedition. They are
@@ -246,8 +244,8 @@ const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['su
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;
- /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
-    Hazard means the same thing wherever it appears on that Day at that Tier. */
+ /* DUNGEON_HAZARD §HAZARD THREAT: Day, Tier and the ordinary Gates' late term (none for the Final), so a Hazard means the
+    same thing wherever it appears on that Day at that Tier. */
  const rule=rules[h]||['survival',.2],threat=(12+(d.day||1)*.35+(d.family==='final'?0:Math.max(0,(d.day||1)-7)*.25)+((d.tier||1)-1)*6),defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
@@ -360,9 +358,9 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 /* The settled shadow: the Outcome tier AND the persistent Injury it leaves, so the state proof
    reads the same 구급키트 step the real resolution applies (중상 -> 부상 keeps injury 1; a 부상
    leaves none) instead of re-deriving it. */
-/* ITEM v2.9.10 (User 2026-09-28): 귀환석 - an expedition that ends in neither 성공 nor 대성공 (부상/중상/사망) rolls once more
-   for a retreat, at the adventurer's own retreat chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that
-   chance is. One formula for the real resolution and its proof. */
+/* ITEM §귀환석: an expedition that ends in 부상/중상/사망 rolls once more for a retreat, at the adventurer's own retreat
+   chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that chance is. One formula for the real resolution
+   and its proof. */
 function stoneChance(e,d){return clamp(.40+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;

@@ -358,7 +358,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: the Counter cap grows one for one with every slot a Store Support or an Event adds */
  this.counterCap=D.balance.offerCounterMax+Math.max(0,num-D.balance.orderOffers)+(ev.blackmarket?1:0)+(advancePity&&this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0);for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
- /* EVENT §02 (User 2026-09-29): HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
+ /* EVENT §02. 본사 1+1 행사: HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
     again for a 1+1 on the SKU the player wanted is not the Event's play. Same rule as 새벽 회수 계약's extra slot below. */
  if(ev.double&&advancePity){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
@@ -381,8 +381,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(s.pity.counter>=3&&hazards.length){
   const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,target));
-  /* ECONOMY_ORDER §ORDER OFFER VARIETY (User 2026-10-02): the guarantee picks a Counter not already at the sheet's cap, if any */
-  /* ECONOMY_ORDER §ORDER OFFER VARIETY: on a sheet already at the Counter cap the guarantee takes a Counter's slot, not another's */
+  /* ECONOMY_ORDER §ORDER OFFER VARIETY: the guarantee picks a Counter not already on offerSameItemMax slots, if any; on a
+     sheet already at the Counter cap it takes a Counter's slot, not another's */
   const isC=o=>G.Relics.directCounter(D.itemBy[o.item],Object.keys(D.hazards));let slot=ordinary-1;
   if(!isC(s.offers[slot])&&s.offers.filter(isC).length>=this.counterCap){const j=s.offers.findIndex((o,i)=>i<ordinary&&isC(o));if(j>=0)slot=j;}
   const others=s.offers.filter((o,i)=>i!==slot),room=matches.filter(it=>others.filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);
@@ -401,15 +401,15 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1))
   /* RELIC 원정 도시락 코너 (User 2026-10-02): a flat +3G on every Food/Drink order price, after the percentage modifiers */
   +(this.has('expeditionMeal')&&G.Relics.food(it)?D.relicParams.expeditionMeal.orderPriceAdd:0),quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
- rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary (User 2026-09-29): D30 has no SALE, and an Item with no Final effect
+ rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary: D30 has no SALE, and an Item with no Final effect
    cannot go in a Final Bag, so the D30 sheet never offers one - the same explicit no-effect exclusion D30 Store Supports use */
  let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it))&&!(s.day>=30&&this.finalNoEffect(it.id)));
- /* ECONOMY_ORDER §ORDER OFFER VARIETY (User 2026-10-02): one sheet holds an Item on at most offerSameItemMax slots - a slot
+ /* ECONOMY_ORDER §ORDER OFFER VARIETY: one sheet holds an Item on at most offerSameItemMax slots - a slot
     already supplies 2~4 units, so a third copy only hides another Item. The sheet being built is s.offers; with nothing left
     under the cap the cap yields rather than leave a slot empty. */
  const roomy=pool.filter(it=>(s.offers||[]).filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);if(roomy.length)pool=roomy;
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: a sheet holds at most offerCounterMax Hazard Counters; past it a slot draws from the rest */
- {const H=Object.keys(D.hazards);if((s.offers||[]).filter(o=>G.Relics.directCounter(D.itemBy[o.item],H)).length>=(this.counterCap??D.balance.offerCounterMax)){const plain=pool.filter(it=>!G.Relics.directCounter(it,H));if(plain.length)pool=plain;}}/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
+ {const H=Object.keys(D.hazards);if((s.offers||[]).filter(o=>G.Relics.directCounter(D.itemBy[o.item],H)).length>=(this.counterCap??D.balance.offerCounterMax)){const plain=pool.filter(it=>!G.Relics.directCounter(it,H));if(plain.length)pool=plain;}}/* ECONOMY_ORDER §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);
