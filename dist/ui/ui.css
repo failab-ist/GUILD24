@@ -3844,3 +3844,30 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* both chips on one customer (an injured adventurer the fight still favours) is rare; then they stack, left-aligned on the first
    chip, beside the word rather than running out of the box (User 2026-10-02) */
 .readout.ro2 .ro-tags{display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px;min-width:0}
+
+/* SALE phone density (User 2026-10-03): smaller state type, a shorter destination plate, a card and a side column that end on one
+   line, 손님 as a label on the pips (the count is the pips' own aria-label), a smaller 보유 골드 figure and a 44px send key. */
+.p-sale .dock .queue .q-line{display:flex;align-items:center;gap:6px}
+.p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px)))*.86)}
+.p-sale:not(.sale-desk) .face{margin-bottom:0}
+.p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
+.p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-between;font-size:11px}
+.p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:4px 8px}
+.p-sale:not(.sale-desk) .front-side .dest-plate h3{font-size:12px;line-height:1.2}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li,.p-sale:not(.sale-desk) .front-side .dest-plate .hazards .press .need{font-size:11px}
+.p-sale:not(.sale-desk) .dock .on-hand b{font-size:15px}
+.p-sale:not(.sale-desk) .dock .stamp{min-height:44px;padding-top:8px;padding-bottom:8px;font-size:15px}
+.p-sale .front-side .dest-plate .hazards .press .rate{display:none}
+.p-sale .front-side .dest-plate .rate-tip{margin:0}
+.p-sale .front-side .dest-plate .rate-tip>summary{position:absolute;right:4px;top:2px;min-width:28px;min-height:28px;width:28px;height:28px}
+@media(min-width:900px){
+ .p-sale .front-side .dest-plate .hazards .press .rate{display:inline}
+ .p-sale .front-side .dest-plate .rate-tip{display:none}}
+.p-sale:not(.sale-desk) .good .price{grid-template-columns:auto auto;justify-content:end;column-gap:0}
+.p-sale:not(.sale-desk) .good .price b{grid-column:1/-1}
+.p-sale:not(.sale-desk) .good .price em.expiry::before{content:'·';margin:0 4px}
+.p-sale:not(.sale-desk) .counter-tray .tray-stock{display:none}
+.p-sale:not(.sale-desk) .who .regular-badge{width:24px;right:3px}
+.p-sale:not(.sale-desk) .who .nameplate.regular b{padding-right:20px;font-size:13px}

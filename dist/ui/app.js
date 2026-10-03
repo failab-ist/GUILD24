@@ -972,7 +972,7 @@ function saleScreen(){
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
     than becoming a readout of its own. */
- +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
@@ -999,7 +999,7 @@ function saleDesk(n,st,waiting,preloadHtml){const s=game.run;
   +'<div class="shelf-col">'+shelf()+'</div>'
  +'</main>'
  +'<div class="counter-mat" aria-hidden="true"></div>'+tray()
- +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';}
 /* crossing the desk breakpoint mid-SALE draws the other layout */
@@ -1460,6 +1460,7 @@ function finishCoach(skip=false){
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}
+const rateTip=d=>{const rows=Presentation.hazardRows(Presentation.known(d,game),d).filter(h=>h.rate);return rows.length?tip(d.name,...rows.map(h=>h.name+' · '+h.rate)).replace('class="tip"','class="tip rate-tip"'):'';};
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
  /* The plate says what is fixed about where this customer is going: the Gate, each Hazard it
@@ -1474,7 +1475,8 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
     decision surface rather than a screen above it. Nothing is lost: 환경 대응 states the same
     canonical snapshot, in the same vocabulary, from the same outlook. */
   +'<div><label>예상 목적지</label><div class="dest-name"><h3>'+E(d.name)+'</h3>'
-  /* v2.9.0 revision 2 (COPY_AUDIT §4-16): the rows carry this Gate's numbers themselves; the plate has no `?` help (§4-15 retired) */
+  /* UI_UX §SALE destination plate (User 2026-10-03): on a phone the `{능력치} n당 대응 1 제공` lines of every row read in one `?`; from 900px they are the row's own ` · ` tail */
+  +rateTip(d)
   +'</div>'
   +hazardList(Presentation.known(d,game),null,d)
  +'</div></div>';}

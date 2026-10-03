@@ -902,8 +902,11 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
  assert.equal((codeOnly.match(/envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
  assert.ok(/<span class="pin-fore pin-plate env-meter">'\+\(p\.hazards\.length\?'환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
- assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
+ /* User 2026-10-03: below 900px the `{능력치} n당 대응 1 제공` tail of each row reads in the plate's one `?` (rateTip); the rows' name and `대응 N 필요` are never hidden */
+ assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).filter(r=>!/\.press \.rate\{display:none\}/.test(r)).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
+ assert.ok(/\.p-sale \.front-side \.dest-plate \.hazards \.press \.rate\{display:none\}/.test(css)&&/rateTip\(d\)/.test(plate)&&/@media\(min-width:900px\)\{\n \.p-sale \.front-side \.dest-plate \.hazards \.press \.rate\{display:inline\}/.test(css),
+  'the rate tail hides only below 900px, where the plate `?` carries it');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
     read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
     calculation moved into the systems layer with it. */

@@ -400,7 +400,7 @@ Item: Core Stat +N / Hazard Counter +N / 피로 회복 N / explicit penalty
 ```
 
 Every Hazard row, the SALE destination plate included, states the Gate facts
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need. This customer's own
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; below 900px the `{능력치} {n}당 대응 1 제공` part of every row reads in the one `?` on the plate and the row keeps `{위험}` and `대응 {N} 필요` (User 2026-10-03); no per-customer remaining need. This customer's own
 number is the readout's 환경 대응 meter (§SALE — ENVIRONMENT METER, User 2026-10-02), not the plate.
 
 ### SALE — DECISION-ONLY ITEM DETAIL
@@ -435,7 +435,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - §SALE — SHELF ORDER: by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
   Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
-- shelf life in each row's price column: `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
+- shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
 - row and tray name the category in a small tag after the name (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`); the icon
   tile's bottom edge is the rarity colour
@@ -457,7 +457,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
   plus 3px press travel, never entering the lower lip/dock. Ribbon labels are 11px, percentage 10px, price 18px, profit/reason 11px.
   No role/percentage, actual price or disabled reason is omitted. Desktop keeps its existing
   header composition. All three price keys remain
-  directly reachable. The phone `손님 보내기` target is 48px high; safe-area padding stays outside it (User 2026-10-03).
+  directly reachable. The phone `손님 보내기` target is 44px high; safe-area padding stays outside it (User 2026-10-03).
 - empty: one prompt line on DAY 1~3 while the tutorial is not skipped (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-23), otherwise no
   height
 - the keys never move; a sale clears the tray (Item into the Bag) and shows the stub; a refusal keeps the Item with the
@@ -1294,7 +1294,7 @@ plate under the logo.
 colour, silhouette and place vary by Phase.
 - shared: one hard cast down-right at 45 degrees, visible (a notched cut takes the cast in); the press moves the face into it
   by the depth less 1 px, leaving 1 px; label weight 600
-- size by consequence: inside the Day (`문 열기`, `영업 시작`, `손님 보내기`, `다음`) 56 px tall on phone / 60 px desk; across a
+- size by consequence: inside the Day (`문 열기`, `영업 시작`, `다음`) 56 px tall on phone / 60 px desk, `손님 보내기` 44 px on phone / 60 px desk; across a
   Day or Run boundary (`다음 날`, `다음 점포 열기`, FINAL gate bar) 64 / 72 px; `첫 점포지원 고르기` 64 px everywhere (the
   preparation plates sit right above the dock); ORDER labels may step down on the narrowest phones so the Gold never wraps
 - the one pair: on D30's last order `원정대 후보 보기` shares the gate bar with `원정대 선택` (a view, not a second flow
@@ -2021,7 +2021,7 @@ PASS:
   overflows or collides at 360 / 390 / 412 / 1024 / 1280
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
-At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress/count; no
+At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress: the label `손님` beside the pips, the count `{n} / {N}` as the pips' screen-reader label only (User 2026-10-03); no
 duplicate queue count consumes vertical space. Desktop may show a richer queue presentation.
 
 #### UI-Q-v28-4 — CURRENT CUSTOMER STATE
@@ -2450,7 +2450,7 @@ SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작
 PASS:
 - per → UI_UX §PRIMARY ACTION GRAMMAR: equal right and down depth - 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 / the
   gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음 (3 px for ORDER's phone row), 3 px for 손님 보내기; heights 56 px (phone) /
-  60 px (desk) inside the Day (ORDER's phone row 48 px), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
+  60 px (desk) inside the Day (ORDER's phone row 48 px, SALE 손님 보내기 44 px on a phone), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
   no outline (NIGHT flat), labels on a 2 px drop; each Phase keeps its own face (wood / steel on paper with a frost edge / counter
   key / muted cobalt / BRICK / gate bar); `영업 시작` and `발주 확정` share the steel face and frost edge; `첫 점포지원 고르기`,
   `다음 날` and `다음 점포 열기` the same BRICK build (only the rivets differ)
