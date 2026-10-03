@@ -2457,11 +2457,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-order .dock .stock-handle,.p-order .dock .stock-sheet{display:none}
 }
 }
-.lost-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:11px;
+.lost-count{display:block;margin-bottom:12px;
  padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;
  font:400 15px/1.4 var(--ui);color:#efe3c8}
 .lost-count b{font-variant-numeric:tabular-nums;color:var(--gold)}
-.lost-count span{font-size:13px;color:#a2947c}
+.lost-count span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:#b8a888}
 .lost-count.near{box-shadow:inset 0 0 0 2px #8a2f26}
 .lost-count.near b{color:#e8907c}
 /* META progression, inside the codex: the grade, each Job's mastery, and the Job x Boss grid
@@ -3744,6 +3744,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .tabs .small:hover{background:linear-gradient(180deg,#6a4627 0,#4f3220 55%,#382214 100%);color:#fff0d1}
 .modal.wood-frame .tabs .small.active{background:linear-gradient(180deg,#7a5224 0,#573817 55%,#3f2910 100%);color:#fff0c8;
  box-shadow:inset 0 0 0 2px #140b06,inset 0 0 0 3px #ffc554,inset 0 3px 0 #ffe29b40}
+/* 닫기 is a brass key, lighter than the wood around it, so it is never lost against the frame */
+.menu-panel .modal-header .bare,.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{min-width:64px;min-height:44px;padding:8px 14px;
+ background:linear-gradient(180deg,#f0cd7e 0,#d9a548 55%,#b57f2a 100%);color:#2a1a0b;font-weight:600;text-shadow:0 1px 0 #ffe9b0;
+ box-shadow:inset 0 0 0 2px #3a210c,inset 0 2px 0 #fff1c7aa,0 3px 0 #0f0905}
+.menu-panel .modal-header .bare:hover,.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:linear-gradient(180deg,#f7d98f 0,#e3b255 55%,#c08932 100%);color:#2a1a0b}
+.menu-panel .modal-header .bare:active,.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px #3a210c,0 1px 0 #0f0905}
+/* one vertical rhythm for the carved sheets: 14px under the header rule, 16px above the footer rule, 12px between stacked blocks */
+.modal.wood-frame .modal-body,.modal.wood-frame:has(.tabs) .modal-body{padding:16px 12px max(14px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-body p+p{margin-top:8px}
 .settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
  background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}

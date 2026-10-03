@@ -1887,7 +1887,7 @@ const relicRef=extra=>{const owned=game.ownedRelics();
  return '<button class="relic-ref" data-action="owned-relics"'+(extra?' '+extra:'')
   +' aria-label="보유 점포지원 '+owned.length+' / 7 · 효과 보기">점포지원 <b>'+owned.length+' / 7</b></button>';};
 /* COPY_AUDIT §1-3: one body for both confirmations that discard the Run's rewards */
-const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.</p>';
+const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다.<br>본사 기록·점포 자본·보유 장식은 유지됩니다.</p>';
 /* UI_UX §MENU — 이번 영업의 장식 (User 2026-09-24, v2.9.0): the Run's frozen loadout, read-only; an empty Slot reads 비어 있음 (COPY_AUDIT §1-7) */
 function loadoutModal(){const lo=game.run?.loadout||{};
  return '<ul class="effects">'+D.decorationSlots.map(slot=>{const d=lo[slot]&&D.decorationBy[lo[slot]];
