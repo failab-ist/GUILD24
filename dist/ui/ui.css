@@ -188,8 +188,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
 .menu-pin{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:calc(env(safe-area-inset-right) + 6px);z-index:30;
- width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#0f0c0acc;color:var(--dim);
- box-shadow:inset 2px 2px 0 #ffffff14,inset -2px -2px 0 #00000080,3px 3px 0 #00000073}
+ width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#2d190d;color:#dfcba9;
+ box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07,3px 3px 0 #00000073}
 .dock{flex-shrink:0;padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom))}
 
 /* ---- hazard pressure: burned into the notice, always inline, never hover-only ---- */
@@ -508,17 +508,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* BATCH 2A §ORDER MAJOR OBJECT. At 78px the clip read as a lost pill on an 860px sheet, so
    the fixture scales with the form it holds: one steel bar across the head of the paper, with
    the two screws that actually hold it. It is the only fixture on the document. */
-.clip{position:relative;z-index:3;width:clamp(78px,26vw,180px);height:24px;margin:0 auto -10px;
+.clip{position:relative;z-index:3;width:clamp(78px,26vw,180px);height:24px;margin:0 auto -24px;
  background:linear-gradient(180deg,#9aa3ab 0 9px,#6e777f 9px 24px);
  box-shadow:inset 2px 2px 0 #cfd6dc,inset -2px -2px 0 #454d54,4px 5px 0 #00000080}
 .clip:before,.clip:after{content:'';position:absolute;top:7px;width:8px;height:8px;background:#5a646c;
  box-shadow:inset 0 0 0 2px #2b3238,inset 3px 3px 0 #99a4ac,3px 0 0 #2b323859,-3px 0 0 #2b323859}
 .clip:before{left:13px}.clip:after{right:13px}
-.form{position:relative;background:var(--tex-paper),#efe7d2;color:var(--ink);box-shadow:5px 6px 0 #00000080;padding:0 0 4px}
-.form:before,.form:after{content:'';display:block;height:8px;
- background:linear-gradient(-45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x,
-            linear-gradient(45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x}
-.form:before{transform:scaleY(-1)}
+.form{position:relative;color:var(--ink);padding:0 0 4px;border:26px solid transparent;margin:0 -12px;
+ border-image:url('assets/presentation/support/order-paper.png') 52 fill / 26px / 0 stretch}
+
 /* the document says what it is and nothing more */
 /* the 76px right margin existed to clear the letterhead seal, which §ORNAMENT RESTRAINT removed */
 /* BATCH 2A. A printed letterhead: the title and the DAY / branch line sit on one baseline once
@@ -1406,7 +1404,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  --sky:var(--nb-h)}
 .p-night .rail{margin-top:var(--sky)}
 .p-night .task-line{position:absolute;left:8px;right:58px;top:8px;box-sizing:border-box;min-height:34px;padding:6px 10px;display:flex;align-items:center;background:#0a0d16e6;box-shadow:inset 0 0 0 2px #3b2f21,3px 3px 0 #00000073}
-.p-night .menu-pin{background:#0f0c0af2}
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}
@@ -1681,7 +1678,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    than the screen), the dock follows immediately under it on the paper's own axis, and both
    lose their separate grounds so nothing but a seam sits between them. The receipt keeps its
    344px object width; the Action takes that same measure so the two read as one column. */
-.p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
+.p-closing{justify-content:center}
 /* BATCH 3 CLOSING: a till that runs longer than the screen (a Great Success day prints one more
    row) rode up under the menu pin, which then covered the receipt's torn top edge. The stage
    keeps the pin's own 6 + 44px clear above the paper; a short till still centres. The desktop
@@ -1746,7 +1743,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .row.open{align-items:center;padding:8px 12px;box-shadow:inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var(--px-cut)}
 .print .row.open span{color:#2c2418;font-weight:600;letter-spacing:.08em}
 .print .row.open b{font-size:18px;line-height:1}
-.print .row.open b i{font-style:normal;font-size:12px;margin-left:3px;color:#7a715d}
+.print .row b i{font-style:normal;font-size:12px;margin-left:3px;color:#7a715d}
 .p-closing .purse{flex-wrap:wrap;row-gap:9px}
 .p-closing .purse>b{font-size:22px;color:#f3ecd8}
 .p-closing .purse .pl{flex:1 0 100%;display:flex;align-items:baseline;margin:0}
@@ -2827,6 +2824,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    screen rather than pinned to the top of an empty one - auto margins, so a long ending
    scrolls normally instead of having its head clipped. */
 .p-end{justify-content:center}
+/* the closing receipt and the ending share the rainy store, the same room as NIGHT */
+.p-closing,.p-end{background:linear-gradient(#0c0a0873,#0c0a0873),#120e0a url('assets/presentation/night/store-rain-phone.jpg') center / cover no-repeat}
+@media(min-width:1024px){.p-closing,.p-end{background-image:linear-gradient(#0c0a0873,#0c0a0873),url('assets/presentation/night/store-rain-wide.jpg')}}
 .p-end .stage-scroll{flex:0 1 auto;display:flex;flex-direction:column;padding:58px var(--gutter) 10px}
 /* BATCH 3 END: the tape's top used to ride up under the menu pin on a phone as soon as a party or
    a settlement made the ending longer than the screen; the pin's 6 + 44px stay clear above it. */
@@ -2835,7 +2835,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .end-tape{margin-bottom:20px}
 /* who went, and what the store put in their hands before they did */
 .sent-off{width:100%;max-width:344px;margin:0 auto 20px}
-.sent-off h3{margin-bottom:10px;font:600 13px/1 var(--ui);letter-spacing:.14em;color:#a2947c}
+.sent-off h3{margin-bottom:10px;font:600 13px/1 var(--ui);letter-spacing:.14em;color:#f3e6c8;text-shadow:0 1px 0 #000c,0 0 6px #000b;padding-left:16px}
+@media(min-width:1024px){.sent-off h3{padding-left:0}}
 /* BATCH 3 END — ONE ROSTER. Each member was its own bordered dark card, so the party read as a
    stack (or, on a desk, a grid) of web cards under the tape. They are one roster plate now: a
    flat recessed plane, the members seated on it and parted by a seam - read-only, nothing that
