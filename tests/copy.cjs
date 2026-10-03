@@ -48,7 +48,7 @@ const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3'
  'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
-  if((h=l.match(/^##\s+(\d+-\d+)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
+  if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
   const q=l.match(/^>\s*(.+?)\s*$/);if(q&&mode==='현재')out[sec].push(q[1]);}
@@ -58,6 +58,11 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
   assert.ok(sec,name+' has an approved owner section');
   assert.deepEqual(pool,approved[sec],name+' is COPY_AUDIT '+sec+' verbatim');}
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
+});
+test('COPY_AUDIT: the letter-suffixed first guide stays separate from purchase status',()=>{
+ assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
+ assert.deepEqual(approved['11-31a'],['점포 지원은 5일 단위로 고를 수 있다.',
+  '첫 지원은 Day4까지 아침, 발주 화면에서 무료로 고를 수 있다.']);
 });
 
 /* COPY_AUDIT §25 / COPY_WORLD_VOICE §RARE REFERENCE NPC (User 2026-09-28, v2.9.11): the Rare Reference customers and their
@@ -80,6 +85,7 @@ const COMPOSED={
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
  '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
+ '11-31a':"app.js relicTakeover(): Day + (expiryDay-1) + 까지, then the live morning/order free-pick phrase in its own span; UI guard and browser QA verify the composed User-approved sentence",
  '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
  '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
@@ -92,7 +98,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const src=walk('dist').map(read).join('\n').replace(/\\`/g,'`');
  const missing=new Set();let checked=0,sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
-  if((h=l.match(/^##\s+(\d+)-\d+\./))){sec=h[0].match(/\d+-\d+/)[0];mode=null;if(+h[1]>=16&&+h[1]<=20)sec=null;continue;}
+  if((h=l.match(/^##\s+((\d+)-\d+[a-z]?)\./))){sec=h[1];mode=null;if(+h[2]>=16&&+h[2]<=20)sec=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
   if(/^#{2,3}\s/.test(l)){mode=null;continue;}
