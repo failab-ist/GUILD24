@@ -39,8 +39,8 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladde
   ['water','생수',0,40,80,'drink',2,{survival:10,supply:2}],
   ['lunchbox','간단 도시락',1,100,200,'food',2,{survival:12,supply:6,loot:0.2}],
   ['guildlunch','길드 특제 도시락',2,185,370,'food',2,{survival:16,supply:7,loot:0.4}],
-  ['battlelunch','영웅 결전 도시락',3,210,420,'food',2,{combat:10,survival:18,supply:9}],
-  ['kingwater','왕도 천연암반수',3,185,370,'drink',3,{survival:24,supply:2}]]){ // 강인함 20 -> 24 (User 2026-09-26, v2.9.6 Epic Drink +4)
+  ['battlelunch','영웅 결전 도시락',3,210,420,'food',2,{combat:6,survival:18,supply:9}],
+  ['kingwater','왕도 천연암반수',3,185,370,'drink',3,{combat:6,survival:24,supply:2}]]){ // 강인함 20 -> 24 (User 2026-09-26, v2.9.6 Epic Drink +4)
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');

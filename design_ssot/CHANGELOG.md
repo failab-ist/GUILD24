@@ -46,9 +46,10 @@ and this table is their commit record.
   no longer stands in for a Counter. The Gate rows read `{능력치} 3당 대응 1 제공` everywhere; the Hazard Traits drop the factor
   too (용감함 / 겁쟁이 / 화염공포증 / 내열성 ±7 → ±6, 눈썰미 / 약시 화이트아웃 ±5 → ±4). DUNGEON_HAZARD §Hazard Defense / §HAZARD
   THREAT / Gate sentence, NPC_TRAIT, COPY_AUDIT, COPY_WORLD_VOICE, SALE, UI_UX; tests ui-guard, traits.
-- **영웅 결전 도시락 fights** (User: 영웅이랑 차이가 별로 없다 · 희귀는 소지금 획득도 있는데): 투력 +10 added (강인함 +18 and
-  피로 회복 9 unchanged, 210G) - a meal and a 하급 포션 in one slot, where 길드 특제 도시락 is the earning lunch. ITEM §ACTIVE CATALOG
-  / DI-Q-v28-1; test vocabulary.
+- **Every Epic Food / Drink fights** (User: 영웅이랑 차이가 별로 없다 · 희귀는 소지금 획득도 있는데 · 투력 6으로 통일): 영웅 결전 도시락,
+  왕도 천연암반수, 초고속 에너지드링크 and 대현자 허브엘릭서 add 투력 +6, Stats and 피로 회복 unchanged - so an adventurer strong in a
+  Hazard's Stat can answer it with that Stat's Epic Drink and a Counter for the other Hazard, and still fight; 길드 특제 도시락 stays
+  the earning lunch. ITEM §ACTIVE CATALOG / DI-Q-v28-1; test vocabulary.
 - **The Counter ladder re-cut for the steeper Threat** (User: 피로 회복 같은 게 달린 건 감안해서 깎고 · 전문 대응템에 메리트 · 이온음료는
   페널티도 없다): one value per rung for every Hazard - the Field Gear 중반 대응 28 (was 23 / 23 / 22), Tier 2 surely and 대응 at
   late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 - 컵라면 · 얼음컵 · 중화
