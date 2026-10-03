@@ -139,10 +139,10 @@ Wallet below (User 2026-10-02).
 When a selected NPC arrives for an ordinary visit:
 
 Fresh NPC:
-    Wallet = min(2000, round(180 + Level × 3 + randomInt(20, 60)))
+    Wallet = min(2000, round(180 + Level × 4 + randomInt(30, 70)))
 
 Returning NPC:
-    Wallet = min(2000, round(existing Wallet + Level × 3 + randomInt(20, 60)))
+    Wallet = min(2000, round(existing Wallet + Level × 4 + randomInt(30, 70)))
 
 Rules:
 - random range is inclusive 20..60 under the existing integer RNG convention (the floor keeps a losing regular able to buy
@@ -159,7 +159,7 @@ A long gap between visits left a returning adventurer behind the Gates and short
 living adventurer who was available (not on recovery Days) and was not among the Day's visitors banks one Away Day, at most
 **3**; the next ordinary visit adds, on top of the visit income above,
 
-    banked Days × (Level × 1.5 + 20)
+    banked Days × (Level × 2 + 25)
 
 and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half an ordinary visit's average income per Day,
 so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's

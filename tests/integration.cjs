@@ -1313,8 +1313,8 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
    Core Roster = alive only, Level desc then Rarity desc, top 6; recovering adventurers count.
    D11 roster (alive): L7R3 L7R2 L5R1 L4R0 L3R4(recovering) L3R1 | L3R0 L1R0, plus a dead L10R4.
    top 6 levels 7,7,5,4,3,3 -> avg 29/6; rarities 3,2,1,0,4,1 -> avg 11/6.
-   dayBase = 170 + 1 x 10 = 180 (v2.9.1 balance, User 2026-09-25 - was 90+5x10=140);
-   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777 (level coefficient .02 -> .03)
+   dayBase = 170 + 1 x 10 = 180;
+   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777
    charged = round(22.2777) x 10 = 220G. */
 test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Canonical formula',()=>{
  const g=fresh('core-roster-overhead'),s=g.run;

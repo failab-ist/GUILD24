@@ -25,7 +25,16 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
-| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54 | `v2.10.0` (set by the User) |
+| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55 | `v2.10.0` (set by the User) |
+
+## v2.10.0 quick patch 2 — the till breathes again (User 2026-10-03; the version stays 2.10.0)
+
+- **A thicker visit Wallet** (User, from a quick-patch-1 save stuck at 200~800G through DAY 18: 자금이 마르니까 진행이 잘 안 됨 · 운영비를
+  완화하든 지갑을 개선하든; then, after measuring the two apart: 지갑만 유지하고 운영비는 170G로): the visit income is Level × 4 + 30~70
+  (was Level × 3 + 20~60) and the Away Wallet keeps its half-a-visit rule, Level × 2 + 25 a banked Day (was Level × 1.5 + 20). The
+  operating base stays 170G: lowering it to 140G as well only fattened the till (cash +40G a Day) and took fresh-Run bankruptcy
+  from about 1.5% to 0.1%, with the same DAY 30 reach. The success Wallet × 1.25 and the 소지금 lunches are not touched.
+  ECONOMY_ORDER §Ordinary NPC Wallet on visit / §Away Wallet; test revision.
 
 ## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
 
