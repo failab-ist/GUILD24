@@ -321,7 +321,12 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
- assert.ok(/wears\('sponsorSign'\)\?D\.decorationParams\.sponsorSign\.budgetShare:0/.test(src)&&DATA.decorationParams.sponsorSign.budgetShare===.50,'sign: 50% of the purse (v2.10.0; 25% before) as a that-visit extra budget');
+ assert.equal(DATA.decorationParams.sponsorSign.budgetShare,.50,'sign: 50% of the purse as a that-visit extra budget');
+ /* the 추가 구매 budget an arrival gets while the sign is worn, on a Day with no Event */
+ {const a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.sponsorSign.price);Meta.buyDecoration(a,'sponsorSign');
+  const g=new Game(a);g.autosave=false;g.start('sign-budget');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];g.run.event=null;
+  const n=g.run.npcs[0];n.traits=[];n.money=400;n.injury=0;n.introduced=true;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
+  assert.equal(n.eventBudget,Math.round(n.money*.50),'the arrival may spend half its purse again, this visit only');}
  assert.ok(!/sponsorSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.sponsorSign),'and no longer adds ORDER candidates');
  assert.ok(/wears\('honorFrame'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so

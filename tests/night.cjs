@@ -518,7 +518,11 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* §GATE POWER SuccessEase (User 2026-10-02/03, v2.10.0): the whole ordinary Gate Power x .92 on DAY 1~7, x .90 on DAY 8~21, x .95 from DAY 22 */
  assert.deepEqual(Dungeon.GATE_EASE,{early:.92,mid:.90,late:.95,midFrom:8,lateFrom:22});
  for(const [day,ease] of [[1,.92],[7,.92],[8,.90],[21,.90],[22,.95],[29,.95]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
- assert.match(read('dist/systems/shop.js'),/golemCombat:1\)\*G\.Dungeon\.gateEase\(s\.day\)/,'makeDungeon applies SuccessEase once, after Family Combat');
+ /* makeDungeon applies SuccessEase once, on the finished Gate Power (read off real Gates, golem's Family Combat included) */
+ {const g=new Game();g.autosave=false;g.start('gate-ease');
+  for(const day of [3,8,22])for(const id of ['spider','golem'])for(const tier of [1,2]){g.run.day=day;const b=D.dungeonBy[id],gate=g.makeDungeon(id,tier);
+   const raw=(21+Dungeon.gateDayTerm(day)+(tier-1)*5+(id==='golem'?6+(tier-1)*8:0)+(b.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1);
+   assert.ok(Math.abs(gate.power-raw*Dungeon.gateEase(day))<1e-9,id+' T'+tier+' D'+day+': Gate Power x SuccessEase '+Dungeon.gateEase(day));}}
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
