@@ -5,6 +5,18 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### Settings wood / steel controls — project-generated, review candidate
+- source: generated for this project with OpenAI image generation from the User's settings-menu visual direction
+  (2026-10-03). No third-party asset licence is claimed.
+- shipped PNG files under `dist/ui/assets/presentation/settings/`: `wood-panel.png` (1254 × 1254),
+  `blue-key.png` and `red-key.png` (2172 × 724 each), `supply-backdrop.png` (1774 × 887). All retain their original
+  RGBA pixels and metadata; copied without resizing, cropping or re-encoding.
+- role: wood panel and blank steel keys are CSS nine-slice sources for Settings and its existing import/reset
+  confirmations only. Labels remain live, selectable UI text. The supply illustration sits behind Settings content
+  at reduced opacity with no pointer events. These are not a replacement skin for gameplay phases.
+- status: implementation candidate. Generated concept images are not browser evidence; final material / content-fit
+  acceptance requires actual mobile capture and User review.
+
 ### Wanted Sans 1.0.3 — information UI face
 - source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,

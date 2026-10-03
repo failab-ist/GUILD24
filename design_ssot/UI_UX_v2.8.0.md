@@ -1179,6 +1179,20 @@ Data Reset — and **not** 현재 지점 포기.
 destructive row apart in muted red, optional restrained brass marker. Settings = one utility panel of native controls (native
 `input[type=range]` may be reskinned, no slider framework). ~44px hit targets on mobile.
 
+User-directed visual target (2026-10-03): retain the existing fantasy-store concept and wood material. Menu / detailed
+utility surfaces use dark carved wood, aged brass corner joints, quiet blue steel utility controls and muted crimson
+destructive controls. No title icon. Menu rows may use purpose-made PNG icons; detailed settings do not add an icon to
+each control. A subdued transparent PNG supply / forest illustration may sit at the foot of a detailed menu, behind the
+content, with no pointer events or information role. Do not put that illustration into top-level menu rows. Generated
+concept images are visual targets; actual browser captures still require review before accepting the finish.
+
+Settings groups its existing controls in this order: `소리` (mute, BGM, SFX), `저장` (local-save explanation, export/import),
+`데이터 초기화` (existing reset action). Preserve the exact existing actions, save/audio behaviour, confirmation steps and
+build marker. Group boundaries are inset brass seams, not another panel. Native range inputs keep visible numeric values,
+a compact brass diamond thumb and an actual ~44px interactive area. Utility controls use hard depth; pressing reduces it,
+keyboard focus is visible, disabled controls remain readable, and destructive controls are muted red. Titles use Mulmaru; body and
+controls use Wanted Sans, with the existing numeric role where applicable. Gameplay phases retain their own materials.
+
 ### SETTINGS / DEBUG BOUNDARY
 
 Ordinary settings are localized and gameplay-facing: no developer Seed controls pre-Run, no technical runtime footer (the build

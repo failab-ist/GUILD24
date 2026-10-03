@@ -3630,3 +3630,68 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media(min-width:1024px){
  .relic-takeover .close:has([data-action=reroll-relics]) p{display:block;flex:1 1 auto}
  .relic-takeover .close:has([data-action=reroll-relics]) .stamp{flex:0 0 auto;min-width:150px;padding:10px 14px}}
+
+/* Settings: carved wood and brass, with raster nine-slice frames. These assets only skin
+   the existing controls; other menus and phase surfaces retain their own materials. */
+.modal.settings-wood{border:16px solid transparent;background:none;
+ border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
+ color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
+.settings-wood .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.settings-wood .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.settings-wood .modal-header .bare{padding:8px 12px;min-height:44px;color:#dfcba9;
+ background:#2d190d;box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07}
+.settings-wood .modal-header .bare:hover{background:#392213;color:#fff0d1}
+.settings-wood .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #76502c}
+.settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
+.settings-wood .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
+ background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}
+.settings-wood button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
+ border-image:url('assets/presentation/settings/blue-key.png') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
+ background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
+ box-shadow:0 3px 0 #110a06;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
+.settings-wood button:not(.bare):hover{background:none;filter:brightness(1.12)}
+.settings-wood button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
+.settings-wood button.danger{border-image-source:url('assets/presentation/settings/red-key.png');
+ color:#ffe9df;text-shadow:0 1px 0 #350e0c}
+.settings-wood button:disabled,.settings-wood button[aria-disabled="true"]{opacity:1;filter:saturate(.25) brightness(.75);
+ color:#e0d3bf;transform:none;box-shadow:none;cursor:default}
+.settings-wood button:focus-visible,.settings-wood input:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
+.settings-content{position:relative;isolation:isolate;display:grid;gap:0}
+.settings-content::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:url('assets/presentation/settings/supply-backdrop.png') right bottom / 100% auto no-repeat;opacity:.22}
+.settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
+.settings-group+.settings-group{padding-top:22px;box-shadow:0 -2px 0 #130b06,inset 0 1px 0 #97612e}
+.settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
+ width:6px;height:6px;background:#ad7d42;box-shadow:0 1px 0 #120b06;transform:rotate(45deg);pointer-events:none}
+.settings-wood .settings-group h3{margin:0;font:500 21px/1.3 var(--f-plate);color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.settings-group p{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
+.settings-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.settings-heading button{min-width:102px}
+.settings-save-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.settings-wood .settings-save-actions button{padding:6px 2px}
+.settings-reset button{justify-self:start;width:min(100%,222px)}
+.settings-note{margin:8px 0 0;font:400 13px/1.65 var(--ui);color:#dfcba9;max-width:30ch}
+.settings-panel .build-line{margin-top:12px;text-align:left;color:#af9777}
+.settings-panel .mixer{gap:8px}
+.settings-panel .mix-row{grid-template-columns:38px minmax(0,1fr) 52px;gap:10px}
+.settings-panel .mix-row label{color:#ead8b6;font-size:14px}
+.settings-panel .mix-row b{min-height:36px;display:flex;align-items:center;justify-content:center;
+ background:#1c1008;color:#ffc554;font-size:17px;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
+/* Native inputs keep keyboard behaviour and a 44px touch area around the thin rail. */
+.settings-panel .mix-row input[type=range]{appearance:none;-webkit-appearance:none;height:44px;
+ color:#ffc554;accent-color:#ffc554}
+.settings-panel input[type=range]::-webkit-slider-runnable-track{height:8px;
+ background:linear-gradient(to right,#ffc554 var(--mix-level,100%),#493018 var(--mix-level,100%));
+ border:1px solid #8d591f;border-radius:0;box-shadow:inset 0 1px 0 #ffe29b,0 2px 0 #100905}
+.settings-panel input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+ margin-top:-6px;border:3px solid #d48a2a;border-radius:0;background:#ffe5a0;
+ box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+.settings-panel input[type=range]::-moz-range-track{height:6px;background:#493018;
+ border:1px solid #8d591f;border-radius:0;box-shadow:0 2px 0 #100905}
+.settings-panel input[type=range]::-moz-range-progress{height:6px;background:#ffc554;box-shadow:inset 0 1px 0 #ffe29b}
+.settings-panel input[type=range]::-moz-range-thumb{width:12px;height:12px;border:3px solid #d48a2a;
+ border-radius:0;background:#ffe5a0;box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+@media(min-width:600px){
+ .settings-wood .modal-body{padding-left:18px;padding-right:18px}
+ .settings-wood button:not(.bare){font-size:15px}
+ .settings-wood .settings-group h3{font-size:23px}}
