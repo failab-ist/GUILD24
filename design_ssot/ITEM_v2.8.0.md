@@ -283,7 +283,7 @@ pressed-Stat share
 - 후반 하이브리드 (Epic, both Hazards): one slot reads 대응 on both Tier 2 Hazards late (about 0.8~0.9 on D21) - the broad
   answer that leaves the other slot free, at the cost of some incident chance; short of Tier 3
 
-Values by the pressed Stat (강인함 ÷3 for 독 · 부식 · 냉기; 기동 ÷2 for 속박 · 진창 · 어둠; 정신 ÷2 for 공포 · 화이트아웃 · 화염):
+Values by the pressed Stat (강인함 ÷4 for 독 · 부식 · 냉기; 기동 ÷3 for 속박 · 진창 · 어둠; 정신 ÷3 for 공포 · 화이트아웃 · 화염):
 
 | Rung | 강인함 | 기동 | 정신 |
 |---|---:|---:|---:|

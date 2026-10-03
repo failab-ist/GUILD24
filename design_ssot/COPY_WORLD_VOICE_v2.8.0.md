@@ -1204,24 +1204,24 @@ Use 점포지원 consistently in all active Player-facing SLOTH lines.
 
 Header / Intro -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-7.
 
-Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 39).
+Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 29).
 
 Authoritative Hazard wording (the MORNING short row with the Final's N):
 
 ```text
-독 · 대응 29 필요 · 강인함 3당 대응 1 제공
-속박 · 대응 29 필요 · 기동 2당 대응 1 제공
+독 · 대응 29 필요 · 강인함 4당 대응 1 제공
+속박 · 대응 29 필요 · 기동 3당 대응 1 제공
 
-부식 · 대응 29 필요 · 강인함 3당 대응 1 제공
-진창 · 대응 29 필요 · 기동 2당 대응 1 제공
+부식 · 대응 29 필요 · 강인함 4당 대응 1 제공
+진창 · 대응 29 필요 · 기동 3당 대응 1 제공
 
-화염 · 대응 29 필요 · 정신 2당 대응 1 제공
+화염 · 대응 29 필요 · 정신 3당 대응 1 제공
 
-공포 · 대응 29 필요 · 정신 2당 대응 1 제공
-어둠 · 대응 29 필요 · 기동 2당 대응 1 제공
+공포 · 대응 29 필요 · 정신 3당 대응 1 제공
+어둠 · 대응 29 필요 · 기동 3당 대응 1 제공
 
-냉기 · 대응 29 필요 · 강인함 3당 대응 1 제공
-화이트아웃 · 대응 29 필요 · 정신 2당 대응 1 제공
+냉기 · 대응 29 필요 · 강인함 4당 대응 1 제공
+화이트아웃 · 대응 29 필요 · 정신 3당 대응 1 제공
 ```
 
 Button:

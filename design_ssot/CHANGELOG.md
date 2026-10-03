@@ -37,8 +37,13 @@ and this table is their commit record.
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
 - **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
   curve A): Threat = (12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier − 1) × 6) × Stat-group factor - DAY 1~7 unchanged,
-  D21 T2 26 → 32, D29 T3 35 → 45, the Final (Day 30 / T2) 29 → 39. DUNGEON_HAZARD §HAZARD THREAT / DUN-Q71 / the `대응 N 필요`
-  rows, UI_UX, COPY_WORLD_VOICE; tests vocabulary, ui-guard.
+  D21 T2 26 → 32, D29 T3 35 → 45. The Final keeps the curve without the late term (Day 30 / T2 = 29): with it, a weak
+  third adventurer's Hazard gaps outweighed their Power and a full party read weaker than two. DUNGEON_HAZARD §HAZARD THREAT /
+  DUN-Q71; tests vocabulary, ui-guard, simulation.
+- **Core Stats answer a Hazard less** (User: 깡스탯 음식·음료로 채워지는 게 너무 크다 · 강인 4당 1, 나머지 3당 1): 강인함 ÷4 (was ÷3),
+  기동 / 정신 ÷3 (was ÷2) - an adventurer's own Stat and a Food / Drink's alike, so a stat Drink no longer stands in for a
+  Counter. The Gate rows read `강인함 4당 대응 1 제공` / `기동 · 정신 3당 대응 1 제공`. DUNGEON_HAZARD §Hazard Defense / §HAZARD
+  THREAT / Gate sentence, ITEM §COUNTER LADDER, COPY_AUDIT, COPY_WORLD_VOICE, SALE, UI_UX; test ui-guard.
 - **The Counter ladder re-cut for the steeper Threat** (User: 피로 회복 같은 게 달린 건 감안해서 깎고 · 전문 대응템에 메리트 · 이온음료는
   페널티도 없다): the Field Gear 중반 대응 rises to 강인함 28 / 기동 27 / 정신 32 (was 23 / 23 / 22) so each reads the same - Tier 2
   surely, 대응 at late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 -
