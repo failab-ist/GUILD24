@@ -2675,7 +2675,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
- case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
+ case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
+  // Preparation rendering returns before modal refresh; keep its mute label current too.
+  if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
