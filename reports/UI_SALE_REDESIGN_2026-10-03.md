@@ -1,5 +1,8 @@
 # SALE 캐릭터 복구·비교 공간·가독성 — 검토 후보
 
+> 후속 명판·희귀도 바·SALE 코치 수정은 [세부 보완 검토](UI_SALE_DETAILS_2026-10-03.md)와
+> [이미지 내장 PDF](UI_SALE_DETAILS_REVIEW_2026-10-03.pdf)를 본다. 아래는 선행 복구 기록이다.
+
 - 브랜치: `ui/design-trim`
 - 구현 HEAD: `7e9aef9291f7c6438747f1fee672b75e779da4ea`
 - 기준: 원래 BEFORE `3ce89d7`, 이전 축소 후보 `4c40236` / 문서 HEAD `61ab1c5`.
