@@ -2830,5 +2830,8 @@ document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');
  const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
 document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  game.save();if(el.dataset.mix==='sfx')sound('button');});
-window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};render();
+window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
+/* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
+(()=>{const bar=document.querySelector('.boot-bar'),fill=bar?.firstElementChild;
+ Preload.run((n,t)=>{if(!bar)return;const pct=Math.round(n/t*100);fill.style.width=pct+'%';bar.setAttribute('aria-valuenow',pct);}).then(render,render);})();
 })();
