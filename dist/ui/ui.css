@@ -958,7 +958,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    13px from ~394px) so the longest string fits without a breakpoint */
 .task-line{flex:0 0 auto;margin:0;padding:6px calc(var(--gutter) + 2px) 6px var(--gutter);font:600 13px/1.3 var(--ui);font-size:clamp(12px,3.3vw,13px);color:#e3c98f;letter-spacing:0;
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#00000066;box-shadow:inset 0 -1px 0 #ffffff14}
-.p-morning .task-line,.p-night .task-line,.p-closing .task-line{background:#00000059}
+.p-morning .task-line,.p-closing .task-line{background:#00000059}
 .p-order .task-line{padding-right:56px}
 /* Gate detail rows: the full Hazard sentence (COPY_AUDIT §4-16) */
 .hazards.full li .sentence{font:400 13px/1.4 var(--ui);color:#3c3527;overflow-wrap:anywhere}
@@ -1395,13 +1395,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a handful of stamped tokens. A death cools the whole room.
    ===================================================================== */
 .p-night{background:#0a0d16}
-.p-night .nightband{position:absolute;left:0;right:0;top:0;z-index:0;line-height:0;pointer-events:none}
-.p-night .nightband .band-art{display:block;width:100%;height:auto}
-.p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:56%;
+.p-night{--nb-head:50px;--nb-h:40vw}
+.p-night .nightband{position:absolute;left:0;right:0;top:0;height:var(--nb-h);z-index:0;pointer-events:none;
+ background:url('assets/presentation/night/store-night.png') center top/auto calc(var(--nb-h)/.74) no-repeat}
+.p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:22%;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
+@media(min-width:1024px){.p-night{--nb-h:min(56vw,260px)}.p-night .nightband{background-size:cover}}
 .p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;padding:0 var(--gutter) 24px;
- background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 calc(var(--sky) - 40px),#100c07 var(--sky),#140f08 100%);
- --sky:min(33vw,120px)}
+ background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 var(--sky),#100c07 calc(var(--sky) + 24px),#140f08 100%);
+ --sky:var(--nb-h)}
+.p-night .rail{margin-top:var(--sky)}
+.p-night .task-line{position:absolute;left:8px;right:58px;top:8px;box-sizing:border-box;min-height:34px;padding:6px 10px;display:flex;align-items:center;background:#0a0d16e6;box-shadow:inset 0 0 0 2px #3b2f21,3px 3px 0 #00000073}
+.p-night .menu-pin{background:#0f0c0af2}
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}
@@ -1655,9 +1660,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 3px 0 0 #3a4152}
 /* a death cools the room: the lamp light drains out of the scene and the figure with it */
 .p-night.cold{background:#080a10}
-.p-night.cold .nightband .band-art{filter:saturate(.35) brightness(.7)}
-.p-night.cold .stage-scroll{--sky:min(33vw,120px);
- background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 40px),#0c0e14 var(--sky),#0a0c12 100%)}
+.p-night.cold .nightband{filter:saturate(.35) brightness(.7)}
+.p-night.cold .stage-scroll{
+ background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 30px),#0c0e14 var(--sky),#0a0c12 100%)}
 .p-night.cold .returner{filter:grayscale(1) brightness(.42) contrast(1.1) drop-shadow(0 3px 0 #00000099)}
 .p-night.cold .verdict{text-shadow:2px 2px 0 #000000b3}
 /* =====================================================================
@@ -3618,7 +3623,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .sale-desk .front-side .dest-plate{background:#21180ff5}
 .p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px))) * .875);--frame:6px;--plateh:46px;--gapb:8px;gap:6px;padding-top:4px}
 .p-sale .face{box-shadow:inset 0 0 0 3px #2a2118,inset 0 0 0 7px #3b2f21,inset 0 0 0 10px #1d160d}
-.p-sale .who .nameplate{box-shadow:inset 4px 0 0 var(--rare,#b4bba6),inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080}
+.p-sale .who .nameplate{box-shadow:inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080}
+.p-sale .who .nameplate.regular{padding-right:44px}
+.who .regular-badge{position:absolute;right:6px;top:50%;width:32px;height:auto;transform:translateY(-50%);image-rendering:pixelated;pointer-events:none}
 .p-sale:not(.sale-desk) .face{margin-bottom:6px}
 .p-sale:not(.sale-desk) .who .nameplate{padding:4px 8px 4px 10px;gap:2px}
 .p-sale:not(.sale-desk) .who .nameplate b{font-size:14px;line-height:1.3;white-space:normal;overflow:visible;overflow-wrap:anywhere}

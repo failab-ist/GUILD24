@@ -1060,8 +1060,8 @@ function armSpeech(ms=SAY_MS){
  sayTimer=setTimeout(hideSpeech,ms);
 }
 function standee(n){
- const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
- return '<button class="who r'+n.rarity+(Presentation.returning(n)?' returning':'')+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
+ const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'',regular=Adventurer.isTrustedRegular(n);
+ return '<button class="who r'+n.rarity+(Presentation.returning(n)?' returning':'')+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+(regular?' 단골':'')+' 기록 보기">'
  +'<span class="face">'
   +'<span class="portrait">'
    +'<span class="pool" aria-hidden="true"></span>'
@@ -1070,7 +1070,7 @@ function standee(n){
    +'<span class="stand" aria-hidden="true"></span>'
    +'<span class="bracket" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
   +'</span>'
-  +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
+  +'<span class="nameplate'+(regular?' regular':'')+'">'+(regular?'<img class="regular-badge" src="ui/assets/presentation/sale/regular-badge.png" alt="" aria-hidden="true" draggable="false">':'')+(rank?'<i class="rank">'+E(rank)+'</i>':'')
    +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
  +'</span></button>';}
 /* SA-Q18 / UI_UX_v2.8 §EVENT TEMPORARY BUDGET. A 급여일 Wallet is two numbers: the persistent
@@ -1094,7 +1094,7 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  /* SA-Q04: n.status is already the Injury state in words (건강 / 부상 / 중상), so a second
     numeric 부상 N beside it said the same thing twice. */
  if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
- parts.push('단골도 '+n.loyalty+(Adventurer.isTrustedRegular(n)?' · 단골':''));
+ parts.push('단골도 '+n.loyalty);
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
     already picked a product - it reads here, before pricing, in the same block as the bag. */
  /* UI-Q109 §6. The status lines and the bag are two things, not four stacked rows: grouping
@@ -1106,9 +1106,9 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  /* META §DECORATION 의무실 현판: an Injury healed at the door says so once, in the customer's own
     state strip, under the bag where no speech balloon or menu pin sits - one line, no modal,
     nothing to dismiss. `healedBy` is reset on every arrival. */
- const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>'
-  :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대 덕분에 부상이 나았다.</p>'
-  :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단 덕분에 부상이 나았다.</p>':'';
+ const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판으로 부상 회복</p>'
+  :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대로 부상 회복</p>'
+  :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단으로 부상 회복</p>':'';
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
  +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n)+'</span></div>'
@@ -1132,7 +1132,7 @@ function nightScreen(){
  /* USER CONFIRMED 2026-09-22: the last result hands over to the day's close, so it names it. */
  +btn(last?'마감으로':'다음','night-next','stamp');
  return '<div class="stage p-night'+(r&&r.outcome==='사망'?' cold':'')+'">'+menuFab()
- +'<div class="nightband" aria-hidden="true">'+Scene.nightRoom()+'</div>'
+ +'<div class="nightband" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
   +taskLine('night')+rail
   +'<div class="beat-room">'

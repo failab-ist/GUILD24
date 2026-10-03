@@ -2621,7 +2621,11 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
   'the regular Flavor classification asks the owner');
  assert.ok(!/loyalty>=60/.test(copySrc),'and keeps no second 60 threshold of its own');
  assert.ok(!/loyalty>=60|loyalty >= 60/.test(app),'no UI surface carries a second 단골 threshold');
- assert.ok(/Adventurer\.isTrustedRegular\(n\)\?' · 단골'/.test(app),'the 단골 state asks the owner too');
+ /* User 2026-10-03: 단골 reads as a gold badge on the card nameplate, no longer as text in the state line */
+ const standee=fn('standee');
+ assert.ok(/regular=Adventurer\.isTrustedRegular\(n\)/.test(standee)&&/regular-badge/.test(standee),'the 단골 badge asks the owner too');
+ assert.ok(!/' · 단골'/.test(fn('kitLine')),'and the state line no longer repeats 단골');
+ assert.ok(/\.p-sale \.who \.nameplate\{box-shadow:inset 0 2px 0/.test(css),'the SALE nameplate has no rarity colour bar');
  /* 2026-09-23 Store Support rebalance: 귀환 적립제 has no Loyalty condition, and 평생 단골제 /
     프리미엄 멤버십 / 단골 묶음혜택 are conditioned on 단골 itself - asked of the owner, never a
     second number of their own */
@@ -3365,7 +3369,7 @@ test('UI_UX §RETIRED ACTIVE UI: no shipped UI file exposes Franchise Grade, Ach
    into the speech balloon), wraps instead of overflowing, and has its own quiet cue. */
 test('의무실 현판: the heal note sits in the kit under the bag, wraps, and has its own cue',()=>{
  const kit=fn('kitLine');
- assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판 덕분에 부상이 나았다.'),'the note reads the heal the arrival recorded');
+ assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판으로 부상 회복'),'the note reads the heal the arrival recorded');
  assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="slots"'),'it follows the bag, on the bag row');
  assert.ok(/\.kit \.heal-note\{flex:1 1 64px;[^}]*overflow-wrap:anywhere/.test(css),'beside the bag, wrapping');
  assert.ok(/@media\(min-width:1024px\)\{\.kit \.heal-note\{position:absolute;/.test(css),'on a desk it takes the empty foot of the strip');
