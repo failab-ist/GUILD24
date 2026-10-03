@@ -27,6 +27,15 @@ and this table is their commit record.
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1) | `v2.10.0` (set by the User) |
 
+## v2.10.0 quick patch 1 — no early ease, a softer opening roster (User 2026-10-03; the version stays 2.10.0)
+
+- **No SuccessEase on DAY 1~7** (User: 프레시 계정 DAY 1에 아무것도 안 줬는데 우세가 뜬다 · 완화 다 끄고): the early step is 1.00;
+  DAY 8~21 × 0.90 and DAY 22 on × 0.95 stay. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
+- **The opening roster is Lv1~2**: the ordinary spawn Level draws 1~2 on DAY 1 (it was 1~3 like every Day); DAY 2 on is
+  unchanged. With both, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
+  forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
+  Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
+
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 
 - **The hidden reputation is gone** (User: 평판처럼 몰래 하는 건 안 된다 · 싹 없앤다): the Run no longer keeps a 0~100 reputation

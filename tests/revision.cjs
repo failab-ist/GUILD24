@@ -731,4 +731,12 @@ test('a save holding expeditionCert loads with opsRoom in its place',()=>{
  assert.ok(!JSON.stringify(st).includes('expeditionCert'));
 });
 
+/* META §Exact spawn-Level model: the ordinary spawn Level is 1~2 on DAY 1 (the opening roster), 1~3 from DAY 2 */
+test('spawn Level: DAY 1 draws Lv1~2, DAY 2 on Lv1~3 (no Mastery)',()=>{
+ const a=Meta.fresh(),seen=day=>{const r=new RNG('spawn-'+day),ls=new Set();for(let i=0;i<400;i++)ls.add(Adventurer.create(r,i,day,a).level);return [...ls].sort();};
+ assert.deepEqual(seen(1),[1,2],'DAY 1: Lv1 and Lv2 only');assert.deepEqual(seen(2),[1,2,3],'DAY 2: Lv1~3 again');
+ for(let i=0;i<40;i++){const g=new Game(Meta.fresh());g.autosave=false;g.start('roster-'+i);
+  assert.ok(g.run.npcs.every(n=>n.level<=2),'a fresh account opens with no Lv3 adventurer');}
+});
+
 console.log(checks+' revision groups passed');

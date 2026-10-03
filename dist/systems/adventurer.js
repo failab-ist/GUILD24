@@ -58,14 +58,14 @@ function masterySpawnBonus(r,account,jobId){
  return 0;
 }
 function create(r,index,day,account,opts={}){
- /* META §wall — 명예 모험가 액자 (User 2026-09-26, v2.9.7): above 평범 40% -> 65%, 영웅 · 전설 the most; the weights are the
-    Decoration's own param, one owner. */
+ /* META §wall — 명예 모험가 액자: the weights are the Decoration's own param, one owner. */
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
- const spawnLevel=Math.max(1,r.int(1,3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
+ /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 on DAY 1 (the opening roster) */
+ const spawnLevel=Math.max(1,r.int(1,day===1?2:3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
  const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
- /* NPC_TRAIT §NPC RARITY (User 2026-09-26, v2.9.7): growth potential 1 + 0.10 x Rarity + a 0~0.10 roll (was 0.06) */
+ /* NPC_TRAIT §NPC RARITY: growth potential 1 + 0.10 x Rarity + a 0~0.10 roll */
  let potential=1+rarity*.10+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
  return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],introduced:false};
 }

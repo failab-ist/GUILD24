@@ -318,7 +318,7 @@ Gate Power
 
 FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
 FamilyCombat = golemCombat 0.90 for golem, else 1
-SuccessEase = 0.92 on DAY 1~7, 0.90 on DAY 8~21, 0.95 from DAY 22 (ordinary Gates; the Final's Boss Power is its own owner)
+SuccessEase = 1.00 on DAY 1~7, 0.90 on DAY 8~21, 0.95 from DAY 22 (ordinary Gates; the Final's Boss Power is its own owner)
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
@@ -1457,7 +1457,7 @@ PASS:
 - the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10`
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
-- SuccessEase multiplies the whole ordinary Gate Power once: 0.92 on DAY 1~7, 0.90 on DAY 8~21, 0.95 from DAY 22
+- SuccessEase multiplies the whole ordinary Gate Power once: 1.00 on DAY 1~7, 0.90 on DAY 8~21, 0.95 from DAY 22
 
 FAIL:
 - a single slope applied across all Days
