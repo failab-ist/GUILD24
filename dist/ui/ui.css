@@ -3869,11 +3869,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .who .nameplate.regular b{padding-right:14px;font-size:12px}
 /* SALE phone spacing (User 2026-10-03): 상태 hangs its second line under the first value, the cards keep a gap, the counter rule is thinner and
    clear of the cards, and the shelf head stays inside the shelf frame */
-.p-sale:not(.sale-desk) .vit{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em}
-.p-sale:not(.sale-desk) .vit>i{font-style:normal}
+.p-sale .vit{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em}
+.p-sale .vit>i{font-style:normal}
 .p-sale:not(.sale-desk) .front{padding-bottom:10px}
 .p-sale:not(.sale-desk) .front-side{gap:8px;justify-content:space-between}
 .p-sale:not(.sale-desk) .counter-edge{height:4px;margin-top:2px;
  background:linear-gradient(180deg,#d3ac71 0 1px,#b98d52 1px 2px,#7c5730 2px 3px,#4a331d 3px 4px)}
 .p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 8px}
 .p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
+/* SALE backdrop (User 2026-10-03): the store art is framed from the wall down - the ceiling and its lamps are the top fifth of the image and
+   hid the shop behind the cards - so it is enlarged and anchored below them; a phone shows about the middle half of the width */
+.p-sale:not(.sale-desk){background-size:auto 190%;background-position:center 42%}
+.sale-desk{background-size:auto 140%;background-position:center 63%}
