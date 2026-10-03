@@ -1248,7 +1248,7 @@ function changedRows(r){
 // every figure is monospace and right-aligned on a dotted leader, subtotals rule off,
 // and the money actually in the drawer is the last thing stamped on it.
 function closingReceipt(s){
- /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): the receipt is the Day's cash - what the store
+ /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: the receipt is the Day's cash - what the store
     started with, the Gold that moved, what it ends with - not an income statement. The opening is derived from the Day's own
     flows (end - ins + outs), so the tape always adds up. Stock and waste are counts: an expired Item was paid for when it was
     ordered, and printing its cost as a loss read as Gold leaving the drawer twice. */
@@ -1268,7 +1268,7 @@ function closingReceipt(s){
   +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
   +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'
   /* the stamped figure (UI_UX §CLOSING — RECEIPT STAMP) is 보유 자금, the Gold the Day ends with, in the purse box at the
-     largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 (User 2026-09-26) */
+     largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 */
   +'<div class="purse '+tone+'"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b>'
    +'<p class="pl"><span>영업 손익</span><b>'+(change>0?'+':'')+fmt(change)+'<i>G</i></b></p></div>'
   +'<div class="block info"><p>창고 재고 '+s.inventory.length+'개</p>'
@@ -2241,11 +2241,8 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
    return '<div class="slot" data-slot="'+E(slot)+'" tabindex="-1"><h4>'+E(SLOT_COPY[slot]||slot)+'</h4>'
     +options.map(d=>{const owned=Meta.decorationOwned(a,d.id),on=active===d.id;
       return '<div class="slot-option'+(on?' on':'')+(owned?'':' locked')+'">'
-       /* SA-Q36: this is a decision surface, so it carries only what the decision is made on -
-          name, exact effect, price / ownership and equipped state. The Flavor prose is not
-          deleted anywhere: d.text stays in the Decoration data for Codex / lore use, it simply
-          does not compete with the effect line while the player is comparing options. */
-       /* User 2026-10-03: the key sits beside the name and the effect line runs the card's full width below them */
+       /* UI_UX §DECORATION DECISION SURFACE: name, exact effect, price / ownership and equipped state only (d.text stays
+          in the data); the key sits beside the name and the effect line runs the card's full width below them */
        +'<b class="deco-name">'+E(d.name)+'</b>'
        +(owned
          ? (inRun?'<span class="muted">'+(on?'이번 영업에 적용 중':'미적용')+'</span>'
@@ -2259,7 +2256,6 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
                     +Math.max(0,Meta.storeCapital(a)-d.price).toLocaleString()+'.</p>'
                     +btn('구매 확정','deco-confirm','small active','data-id="'+d.id+'"')
                     +btn('취소','deco-cancel','small')+'</div>'
-                  /* User 2026-10-03: a short key - 구매 over a small price - so the effect line takes the width */
                   :btn('구매 <small>'+d.price.toLocaleString()+' 자본</small>','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
        +'<span class="smalltext deco-effect">'+E(d.effect)+'</span>'

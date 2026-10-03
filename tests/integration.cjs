@@ -1408,7 +1408,7 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.45&&up/all<.65,'about 55%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first two customers bring +200G more each (User 2026-10-03, v2.10.0; was 50G Store Gold)',()=>{
+test('알뜰 금고: the Day\'s first two customers bring +200G more each',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
  for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
  s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
@@ -1417,7 +1417,6 @@ test('알뜰 금고: the Day\'s first two customers bring +200G more each (User 
  s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
- assert.ok(!source('dist/ui/app.js').includes("'알뜰 금고'"),'the Store receives nothing, so the receipt has no row for it');
  assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 

@@ -8,6 +8,9 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
 const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
+/* render an app.js surface for real: its functions and top-level `const` lines, evaluated against a stub context */
+const constLine=name=>app.match(new RegExp('^const '+name+'=.*$','m'))[0];
+const render=(parts,expr,ctx)=>require('node:vm').runInNewContext(parts.join('\n')+';'+expr,ctx);
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
 test('§8.1: Playwright is a devDependency and never enters the shipped build',()=>{
@@ -2792,23 +2795,40 @@ test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>
 /* SA-Q36 — DECORATION DECISION SURFACE. The comparison carried Flavor prose beside the effect
    line, so the row the player decides on was half argument and half story. */
 test('SA-Q36: the Decoration comparison shows only what the decision is made on',()=>{
- const panel=fn('storePanel').replace(/\/\*[\s\S]*?\*\//g,'');
+ /* the real storePanel (with app.js's own btn / SLOT_COPY) for an account owning one sign, out of a Run and in one */
+ const Meta=globalThis.Meta,a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.trainingSign.price);Meta.buyDecoration(a,'trainingSign');
+ const panel=run=>render([constLine('btn'),constLine('SLOT_COPY'),fn('storePanel')],'storePanel()',{game:{account:a,run},Meta,D:DATA,E:globalThis.Art.esc,decoPending:null});
+ const out=panel(null),inRun=panel({phase:'sell'}),row=(html,id)=>html.split('<div class="slot-option').find(r=>r.includes('data-id="'+id+'"')||r.includes('>'+DATA.decorationBy[id].name+'<'));
  // what stays: name, exact effect, price / ownership, equipped state
- assert.ok(/<b class="deco-name">'\+E\(d\.name\)\+'<\/b>/.test(panel),'the name stays');
- assert.ok(/<span class="smalltext deco-effect">'\+E\(d\.effect\)\+'<\/span>/.test(panel),'the exact effect stays (its own full-width row, User 2026-10-03)');
- assert.ok(/d\.price\.toLocaleString\(\)/.test(panel),'the price stays');
- assert.ok(/Meta\.decorationOwned\(a,d\.id\)/.test(panel),'ownership state stays');
- assert.ok(/on\?'해제':'적용'/.test(panel)&&/on\?'이번 영업에 적용 중':'미적용'/.test(panel),'equipped state stays');
- // what goes: the Flavor prose, from THIS surface only
- assert.ok(!/d\.text/.test(panel),'the Flavor prose is not on the decision surface');
- assert.ok(!/class="tale"/.test(panel),'and neither is its slot');
+ for(const d of DATA.decorations){const r=row(out,d.id);
+  assert.ok(r.includes('<b class="deco-name">'+globalThis.Art.esc(d.name)+'</b>'),d.id+': the name stays');
+  assert.ok(r.includes('<span class="smalltext deco-effect">'+globalThis.Art.esc(d.effect)+'</span>'),d.id+': the exact effect stays, on its own row');
+  if(d.id!=='trainingSign')assert.ok(r.includes(d.price.toLocaleString()+' 자본')&&r.includes('data-action="deco-buy"'),d.id+': unowned - the price and the buy key stay');
+  // what goes: the Flavor prose, from THIS surface only
+  assert.ok(!r.includes(globalThis.Art.esc(d.text))&&!r.includes(d.text),d.id+': the Flavor prose is not on the decision surface');}
+ {const r=row(out,'sponsorSign');assert.ok(r.indexOf('deco-name')<r.indexOf('data-action="deco-buy"')&&r.indexOf('data-action="deco-buy"')<r.indexOf('deco-effect'),'the key sits beside the name, the effect line below them');}
+ assert.ok(/data-action="deco-unequip"[^>]*>해제</.test(row(out,'trainingSign')),'owned and worn: the 해제 key - equipped state stays');
+ Meta.equipDecoration(a,'sign',null);assert.ok(/data-action="deco-equip"[^>]*>적용</.test(row(panel(null),'trainingSign')),'owned, not worn: the 적용 key');Meta.equipDecoration(a,'sign','trainingSign');
+ assert.ok(row(inRun,'trainingSign').includes('이번 영업에 적용 중')&&row(inRun,'sponsorSign').includes(DATA.decorationBy.sponsorSign.price.toLocaleString()+' 자본'),'in a Run: worn state and price, no keys');
+ assert.ok(!out.includes('class="tale"'),'and neither is its slot');
  // the data itself is untouched and still available to lore-ready surfaces
  assert.ok(DATA.decorations.every(d=>d.text&&d.text.trim()),'every Decoration still carries its Flavor');
  assert.ok(read('dist/data/decorations.js').includes('text'),'the Flavor data was not deleted');
  assert.ok(/class="tale"/.test(app),'the Flavor slot still exists on the surfaces that are for it');
  // nothing was redesigned or added
- assert.ok(!/collection|컬렉션/i.test(panel),'no Collection screen was added');
+ assert.ok(!/collection|컬렉션/i.test(out),'no Collection screen was added');
  assert.equal((app.match(/function storePanel\(/g)||[]).length,1,'one Decoration surface, unchanged in shape');
+});
+
+/* META §counter — 알뜰 금고: the Gold goes to the customers' purses, so the Store receives nothing and the receipt has no row for it */
+test('알뜰 금고: the closing receipt of a Day it paid carries no row for it',()=>{
+ const Meta=globalThis.Meta,a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.thriftSafe.price);Meta.buyDecoration(a,'thriftSafe');
+ const g=new globalThis.Game(a);g.autosave=false;g.start('safe-receipt');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
+ const s=g.run,[x,y]=s.npcs,before=s.money;for(const n of [x,y]){n.traits=[];n.money=100;n.introduced=true;}
+ s.queue=[x.id,y.id];s.cursor=0;g.arrive();s.cursor=1;g.arrive();
+ assert.deepEqual(s.daily.safeWallets,[x.id,y.id],'the safe paid two customers today');assert.equal(s.money,before,'and the till did not move');
+ const tape=render([app.split('\n')[2],fn('closingReceipt')],'closingReceipt(s)',{DATA,Art:globalThis.Art,Copy:globalThis.Copy,game:g,s});
+ assert.ok(tape.includes('class="tape"')&&!tape.includes('알뜰 금고'),'no 알뜰 금고 row on the tape');
 });
 
 /* BOSS_v2.8 §INFORMATION CADENCE + COPY_AUDIT §14. Source carried D5 / D15 / D25 only; D0, D10
