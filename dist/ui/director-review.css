@@ -217,6 +217,7 @@
  aspect-ratio:2156/521;width:auto!important;left:50%!important;translate:-50% 0}
 .p-morning .daysign:before,.p-morning .daysign:after{content:'';position:absolute;top:-10px;
  width:4px;height:10px;background:#5b6a72;box-shadow:1px 0 0 #2a333a}
+@media (max-width:1023px){.p-morning .daysign{height:28%!important}}
 .p-morning .daysign:before{left:22%}
 .p-morning .daysign:after{right:22%}
 /* THE FLOAT SITS IN THE APERTURE, NOT ON ITS RIM. `.till` is a baseline flex line, and a
