@@ -313,6 +313,9 @@ The three price keys are the supplied key assets (`presentation/sale/till-*.png`
 drawn in CSS naming the role; the percentage is read by screen readers only. The amount is white and the `이익` line one step quieter, both centred in the key;
 pressed, the key moves down 3 px and darkens. On a desk the card's art box is shorter and the nameplate (job / level line, 단골 badge) larger, and the
 waiting count sits on its own dark plate.
+Desk figures (User 2026-10-03): card art 74% of its former height, nameplate 100px (Job 16px, Level 18px), 단골 badge 56px, Bag slots 68px;
+the status column and the card share top and bottom edges; stat values use the shelf price's type (600 16px); price-key ribbon 8px on phones,
+100×15px with 10px text on a desk. The 이익 line stays one step quieter; whether it may drop under 4.5:1 contrast is not decided.
 
 ### SALE — PRICE / SECONDARY INFORMATION LEGIBILITY (User 2026-10-03)
 
