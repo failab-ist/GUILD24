@@ -3955,3 +3955,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .counter-tray .tills button strong,.p-sale .counter-tray .tills button:not(:disabled) strong{color:#fff}
 .p-sale .counter-tray .tills button:disabled em,.p-sale .counter-tray .tills button[disabled] em{color:#1a0d04}
 .p-sale .counter-tray .tills button:disabled small,.p-sale .counter-tray .tills button:disabled strong{color:#f4e9d0}
+/* SALE desk card (User 2026-10-03): shorter art box, taller nameplate; the band shrinks by the same amount and the shelf below gets it */
+@media(min-width:1024px){
+ .stage.sale-desk .front{--arth:calc(var(--artw)*.74);--plateh:100px;--cardh:calc(var(--frame)*2 + var(--arth) + var(--gapb) + var(--plateh))}
+ .sale-desk .who .portrait{height:var(--arth)}
+ .sale-desk .who .nameplate{padding:10px 14px 10px 15px;gap:4px}
+ .sale-desk .who .nameplate b{font-size:22px}
+ .sale-desk .who .nameplate>span{font-size:15px}
+ .sale-desk .who .rank{font-size:12px}
+ .sale-desk .who .regular-badge{width:40px}
+}
