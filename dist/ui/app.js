@@ -314,7 +314,9 @@ const BOSS_HOLD=200;let bossHold=null; // UI_UX §BOSS REVEAL — MORNING LANDS 
    moment SALE opens) - and a held Boss reveal waits for its art as well as the shutter, never longer than BOSS_WAIT. */
 const BOSS_WAIT=1200,warmed=new Map();
 function warm(src){if(!src)return Promise.resolve();if(!warmed.has(src)){const im=new Image();im.src=src;warmed.set(src,(im.decode?im.decode():Promise.resolve()).catch(()=>{}));}return warmed.get(src);}
+const TILL_ART=['regular','discount','markup','off'].map(k=>'ui/assets/presentation/sale/till-'+k+'.png');
 function warmAhead(s,phase){warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount));
+ if(['morning','order','sell'].includes(phase))TILL_ART.forEach(warm); // the price keys' art is first needed the moment a product is tapped
  if(['morning','order','sell'].includes(phase))for(const n of s.npcs)if(n.alive)warm(Scene.npcArt(n));}
 function phaseMorning(A){
   const shutter=$('.band.ceiling .band-art');
@@ -2666,15 +2668,13 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   selected=reopen||selected!==id?id:null;cue=selected?'select':null;render();sound('button');
   const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
-  /* User 2026-10-03: the roomier tray must not cover the selected product. Only its opening
-     may move the phone list: show the selected row and its next peer
-     when both fit. An already-open comparison keeps its anchor and scroll unchanged. */
-  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=back.nextElementSibling;
-   const end=peer&&peer.getBoundingClientRect().bottom-row.top<=clip.height-8?peer.getBoundingClientRect().bottom:row.bottom;
-   if(end>clip.bottom-4)sc.scrollTop+=end-clip.bottom+4;
+  /* The tray's opening shrinks the list, so the tapped row may land under it: scroll only as far as keeps that row
+     in view, and leave the list alone when it already is (a reader looking at the stats stays where they are). */
+  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),was=sc.scrollTop;
+   if(row.bottom>clip.bottom-4)sc.scrollTop+=row.bottom-clip.bottom+4;
    else if(row.top<clip.top+4)sc.scrollTop+=row.top-clip.top-4;
-   const reading=$('.readout.core-mob')?.getBoundingClientRect();
-   if(reading&&reading.top<clip.top&&reading.bottom>clip.top)sc.scrollTop+=reading.bottom-clip.top+1;
+   const reading=$('.readout.core-mob')?.getBoundingClientRect(); // a correction that cuts the outlook's heading clears the whole outlook (forecast pin keeps it)
+   if(sc.scrollTop!==was&&reading&&reading.top<clip.top&&reading.bottom>clip.top)sc.scrollTop+=reading.bottom-clip.top+1;
    trayBase=sc.scrollTop;}
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */

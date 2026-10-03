@@ -52,7 +52,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   });
   await page.screenshot({path:path.join(out,`d${day}-${width}x${height}-selected.png`)});
   const tag=`D${day} ${width}x${height}`;
-  const floor=2; // UI_UX ribbon review: two ordinary rows after bounded opening, including short phones.
+  const floor=1; // UI_UX §SALE: opening scrolls only when the tray would clip the tapped row, so only that row is guaranteed whole.
   check(entry.phase==='sell'&&entry.day===day&&entry.stock>=6,tag+' representative fixture');
   check(entry.fullRows>=1,tag+' entry shelf row');
   check(measure.fullRows>=floor,tag+' selected comparison floor');
