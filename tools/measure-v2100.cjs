@@ -2,7 +2,8 @@
 // Best-hybrid Supports (relicPriority = the clear ranking of reports/relic-balance/v2913-qp13/EVALUATION.md) with the relic-aware
 // layer on, Decorations bought from earned Capital in a named order (cheapest first). Per arm it reports ordinary success by Day band,
 // D30 reach / clear by Boss, end reasons, accidents, a zombie line, visit Wallets and every Support's runs.
-//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--out file.json]
+//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--policies reader,expert] [--decos none,economy] [--out file.json]
+// Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const RANK=['fresh24','hub','expeditionMeal','kitchen','dawnRecovery','opsRoom','extraOrder','returnPoints','lifetime','member','rotation',
@@ -29,7 +30,7 @@ function worker({root,kind,policy,deco,T,R,part}){
    day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
    zombie:s.day>=25&&late.length?late.filter(ok).length/late.length<.35:false,
    cash:(s.reportHistory||[]).length?((s.reportHistory.at(-1).balance-700)/s.reportHistory.length):0,
-   deco:(this.account.store?.owned||[]).length,
+   deco:(this.account.store?.owned||[]).length,sales:s.settlement?.sales??s.stats.revenue,gain:s.settlement?.gain??0,rate:s.settlement?.rate??0,
    relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay])});
   return r;};
  G.Debug.trajectory({trajectories:T,runs:R,policy,build:'hybrid',prefix:'v2100-'+kind+'-'+part,purchaseOrder:DECO[deco],relicAware:true,relicPriority:RANK});
@@ -40,10 +41,11 @@ if(process.env.V2100_WORKER){process.on('message',j=>{const res=worker(j);proces
 else if(require.main===module){
  const args=process.argv.slice(2),flag=(k,d)=>{const i=args.indexOf(k);return i>=0?args[i+1]:d;};
  const here=path.resolve(__dirname,'..'),before=flag('--before',null),TT=+flag('--traj',200),FN=+flag('--fresh',1000),R=+flag('--runs',10),out=flag('--out',null);
+ const POL=flag('--policies','reader,expert').split(','),DECOS=flag('--decos',null)?.split(',');
  const cpus=Math.max(1,os.cpus().length),PARTS=4,jobs=[];
  const srcs=[['after',here],...(before?[['before',path.resolve(before)]]:[])];
  for(const [src,root] of srcs){
-  for(const policy of ['reader','expert'])for(const deco of (src==='after'?['none','economy','survival']:['none','survival']))
+  for(const policy of POL)for(const deco of DECOS||(src==='after'?['none','economy','survival']:['none','survival']))
    for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'traj',policy,deco,T:Math.ceil(TT/PARTS),R,part:p});
   for(const policy of ['reader','expert','balanced'])for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
  }
