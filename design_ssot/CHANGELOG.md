@@ -29,7 +29,7 @@ and this table is their commit record.
 ## v2.9.14 quick patch — 단골 배지 · NIGHT 배경 · 회복 문구 (User 2026-10-03)
 
 - SALE 손님 카드: 단골은 이름판 오른쪽 금빛 배지로 알린다. 상태줄의 `· 단골` 글자와 이름판 왼쪽 등급 색 띠는 뺀다. UI_UX §CURRENT CUSTOMER STATE, SALE §CURRENT CUSTOMER COMPACT STATE.
-- NIGHT: 절차 그림 대신 비 오는 밤 편의점 그림. 위쪽 머리띠(메뉴 키 · 오늘 할 일)와 겹치지 않고 귀환 줄 바로 위에서 끝난다. UI_UX §NIGHT LAYOUT.
+- NIGHT: 절차 그림 대신 비 오는 밤 편의점 그림. 맨 위까지 가득 채우고 귀환 줄 바로 위에서 끝난다. 메뉴 키는 더 진하게, 오늘 할 일 줄은 위쪽 어두운 그라데이션 위에 둔다. UI_UX §NIGHT LAYOUT.
 - 부상 회복 한 줄을 `의무실 현판으로 부상 회복` · `응급 처치대로 부상 회복` · `길드 의료단으로 부상 회복`으로 줄여 상태 칸이 세로로 늘지 않게 한다. COPY_AUDIT §9-4 · §9-4b · §13.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)

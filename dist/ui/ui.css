@@ -1395,15 +1395,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a handful of stamped tokens. A death cools the whole room.
    ===================================================================== */
 .p-night{background:#0a0d16}
-.p-night{--nb-head:50px;--nb-h:min(28.2vw,200px)}
-.p-night .nightband{position:absolute;left:0;right:0;top:var(--nb-head);height:var(--nb-h);z-index:0;pointer-events:none;
+.p-night{--nb-head:50px;--nb-h:min(41vw,230px)}
+.p-night .nightband{position:absolute;left:0;right:0;top:0;height:var(--nb-h);z-index:0;pointer-events:none;
  background:url('assets/presentation/night/store-night.png') center top/cover no-repeat}
 .p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:34%;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
 .p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;padding:0 var(--gutter) 24px;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 calc(var(--sky) - 30px),#100c07 var(--sky),#140f08 100%);
- --sky:calc(var(--nb-head) + var(--nb-h))}
-.p-night .task-line{position:absolute;left:0;right:0;top:0;height:var(--nb-head);box-sizing:border-box;display:flex;align-items:center;padding-right:56px;background:none}
+ --sky:var(--nb-h)}
+.p-night .task-line{position:absolute;left:0;right:0;top:0;height:var(--nb-head);box-sizing:border-box;display:flex;align-items:center;padding-right:56px;background:linear-gradient(180deg,#0a0d16cc 0,#0a0d1600 100%)}
+.p-night .menu-pin{background:#0f0c0af2}
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}

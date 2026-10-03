@@ -38,8 +38,7 @@ Regenerate the vendored copies with `npm run assets`.
 
 - `dist/ui/assets/presentation/sale/regular-badge.png`: User가 준 `픽셀 아트 단골 금빛 배지.png`(RGBA 1278×1230)의 투명 여백을 잘라 144×167로 줄임.
   SALE 손님 카드 이름판 오른쪽에 쓴다.
-- `dist/ui/assets/presentation/night/store-night.png`: User가 준 `비 내리는 밤의 편의점 풍경.png`(2048×768)에서 천장 윗부분과 아래 카운터를 잘라
-  (y 36~614) 1536×434로 줄임. NIGHT 배경 띠로 쓴다.
+- `dist/ui/assets/presentation/night/store-night.png`: User가 준 `비 내리는 밤의 편의점 풍경.png`(2048×768)를 1536×576으로 줄임. NIGHT 맨 위 배경으로 쓴다.
 - User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
 
 ### Settings wood / steel controls — project-generated, review candidate

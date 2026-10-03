@@ -770,9 +770,9 @@ The Outcome belongs to the adventurer's identity block, not a title bar:
 
 Directly above the name, one step stronger; no own row or vertical space, no long rule — important, not the headline.
 
-Backdrop: the rainy convenience-store night art (`presentation/night/store-night.png`) sits in its own band under a plain header strip
-that holds the menu key and the day's task line, so neither overlaps the art; the band ends where the return rail begins, with no
-empty stretch between them.
+Backdrop: the rainy convenience-store night art (`presentation/night/store-night.png`) fills the top of the screen edge to edge, behind the
+menu key and the task line, and ends where the return rail begins, with no empty stretch above or below it. The menu key is drawn more
+opaque here so it stays readable on the art; the task line sits on a dark top fade.
 
 Death has no bubble but keeps the message position and weight beside the character, as a neutral status message: no quotes,
 tail, bubble ground, accent bar, border, icon, badge, glow or blur. It carries only a small text-hugging status container (a
