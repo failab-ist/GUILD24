@@ -1805,9 +1805,14 @@ function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
+/* A redraw replaces the pin, and the observer only answers a frame later: for that frame the list's text sat where the pin
+   belongs and the pin then popped over it on every tap. The same measure, taken at once, keeps the pin in place across the redraw. */
+function pinNow(){const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');if(!pin||!src||!sc)return;
+ const r=src.getBoundingClientRect(),c=sc.getBoundingClientRect();pin.classList.toggle('show',!(r.bottom>=c.top&&r.top<=c.bottom));}
 function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');
  if(!pin||!src||!sc||typeof IntersectionObserver!=='function')return;syncForecastPin();
  /* the fold is for this stretch of scrolling only: once the readout is back on screen the next pin opens unfolded */
+ pinNow();
  pinWatch=new IntersectionObserver(([e])=>{pin.classList.toggle('show',!e.isIntersecting);if(e.isIntersecting&&pinFolded){pinFolded=false;syncForecastPin();}},{root:sc,threshold:0});pinWatch.observe(src);}
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
@@ -2676,6 +2681,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
    const reading=$('.readout.core-mob')?.getBoundingClientRect(); // a correction that cuts the outlook's heading clears the whole outlook (forecast pin keeps it)
    if(sc.scrollTop!==was&&reading&&reading.top<clip.top&&reading.bottom>clip.top)sc.scrollTop+=reading.bottom-clip.top+1;
    trayBase=sc.scrollTop;}
+  pinNow();
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
  case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?(tile.querySelector('svg')||tile).getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,tray:el.closest('.counter-tray'),
