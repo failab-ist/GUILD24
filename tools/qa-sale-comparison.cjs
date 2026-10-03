@@ -71,11 +71,12 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
    const tray=document.querySelector('.counter-tray'),tr=r(tray);
    const unclipped=texts.every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
    const shelf=[...document.querySelectorAll('.good .what')].every(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1);
-   const trayText=texts.filter(e=>tray.contains(e)).every(e=>r(e).left>=tr.left&&r(e).right<=tr.right+1&&r(e).top>=tr.top&&r(e).bottom<=tr.bottom);
+   const rr=e=>{const x=r(e);if(!e.matches('.tills .price-role'))return x;const k=r(e.closest('button'));return {left:Math.max(x.left,k.left),right:Math.min(x.right,k.right),top:Math.max(x.top,k.top),bottom:Math.min(x.bottom,k.bottom)};};
+   const trayText=texts.filter(e=>tray.contains(e)).every(e=>rr(e).left>=tr.left&&rr(e).right<=tr.right+1&&rr(e).top>=tr.top&&rr(e).bottom<=tr.bottom);
    const stock=document.querySelector('.tray-stock'),who=document.querySelector('.tray-who'),name=document.querySelector('.tray-what>b'),delta=document.querySelector('.tray-delta'),tills=document.querySelector('.tills');
    const fs=sel=>{const e=document.querySelector(sel);return e?parseFloat(getComputedStyle(e).fontSize):null;};
    const contrast=(fg,bg)=>{const lum=c=>c.match(/[\d.]+/g).slice(0,3).map(x=>Number(x)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((s,x,i)=>s+x*[.2126,.7152,.0722][i],0);const a=lum(fg),b=lum(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);};
-   const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>{const bg=getComputedStyle(t).backgroundColor;return contrast(getComputedStyle(t).color,bg==='rgba(0, 0, 0, 0)'?getComputedStyle(e).backgroundColor:bg);}));
+   const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>{const cs=getComputedStyle(t),bg=t.matches('em')&&cs.backgroundImage!=='none'?getComputedStyle(e).getPropertyValue('--rim-d').trim():cs.backgroundColor==='rgba(0, 0, 0, 0)'?(getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)'?(e.disabled?'#766055':'#8f5030'):getComputedStyle(e).backgroundColor):cs.backgroundColor;const rgb=h=>h[0]==='#'?'rgb('+[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(',')+')':h;return contrast(cs.color,rgb(bg));}));
    const send=document.querySelector('.dock [data-action="depart"]')||document.querySelector('.dock .stamp');
    const plate=document.querySelector('.nameplate'),pc=getComputedStyle(plate),dest=document.querySelector('.dest-plate'),dc=getComputedStyle(dest);
    const insetOnly=e=>getComputedStyle(e).boxShadow.replace(/rgba?\([^)]*\)/g,'color').split(',').every(s=>s==='none'||s.includes('inset'));

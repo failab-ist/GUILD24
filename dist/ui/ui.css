@@ -3914,24 +3914,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .good .price span,.p-sale .good .price em.expiry{color:#9c8f77}
 .p-sale .good .price em.expiry.soon{color:#d99a7c}
 
-/* SALE price keys (User 2026-10-03): drawn in CSS - a wooden key body lit from the top, a coloured rim per price role, a dark lip under it that
-   the press sinks into; the role flag carries no colour bar */
-.p-sale .counter-tray .tills button{--rim:#e2ab56;border:0;
- background:linear-gradient(180deg,#ffffff24 0 2px,#ffffff00 2px),linear-gradient(180deg,#9a5733 0,#864c2b 55%,#6e4024 100%);
- box-shadow:inset 0 0 0 2px var(--rim),inset 0 0 0 3px #2a180d,inset 0 -8px 0 -3px #00000038,0 4px 0 #1a0f08,0 5px 0 #00000066;
- clip-path:none;transition:transform .06s,box-shadow .06s,filter .06s}
-.p-sale .counter-tray .tills button:nth-child(1){--rim:#72b4d5}
-.p-sale .counter-tray .tills button:nth-child(3){--rim:#ef8b5c}
-.p-sale .counter-tray .tills button:not(:disabled):hover{background:linear-gradient(180deg,#ffffff2e 0 2px,#ffffff00 2px),linear-gradient(180deg,#a5603a 0,#915632 55%,#784629 100%);filter:none}
-.p-sale .counter-tray .tills button:not(:disabled):active{transform:translateY(3px);background:linear-gradient(180deg,#00000040 0 3px,#00000000 3px),linear-gradient(180deg,#7d4627 0,#6e4024 100%);
- box-shadow:inset 0 0 0 2px var(--rim),inset 0 0 0 3px #2a180d,0 1px 0 #1a0f08;filter:none}
-.p-sale .counter-tray .tills button:disabled{background:linear-gradient(180deg,#3a2a1e,#2c2018);box-shadow:inset 0 0 0 2px #5a4a3a,inset 0 0 0 3px #1a120c,0 2px 0 #00000080;filter:none}
-.p-sale .counter-tray .tills .price-role,.p-sale:not(.sale-desk) .counter-tray .tills .price-role{background:none;border:0;clip-path:none}
-.p-sale:not(.sale-desk) .counter-tray .tills{padding-bottom:5px}
-.p-sale:not(.sale-desk) .counter-tray .tills button{min-height:56px;padding:0 0 0 0}
 @media(min-width:1024px){
  .sale-desk .counter-tray .tills button{min-height:96px;padding:6px 0}
- .sale-desk .counter-tray .tills em{font-size:15px}
  .sale-desk .counter-tray .tills strong{font-size:28px}
  .sale-desk .counter-tray .tills small{font-size:15px}
  .sale-desk .counter-tray .tray-who,.sale-desk .counter-tray .tray-delta{font-size:16px}
@@ -3949,12 +3933,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .detail-stat strong,.p-sale:not(.sale-desk) .detail-stat strong,.sale-desk .detail-stat strong{font:600 16px/1.2 var(--ui)}
 /* SALE desk (User 2026-10-03): the column ends on the card's own bottom edge, not on the card slot's gap below it */
 @media(min-width:1024px){.sale-desk .front-side{margin-bottom:14px}}
-/* SALE phone price keys (User 2026-10-03): the same stacked key as the desk - role, price, profit - centred in the key asset instead of a side flag */
-.p-sale:not(.sale-desk) .counter-tray .tills button{grid-template-columns:minmax(0,1fr);row-gap:0;min-height:64px;padding:0;justify-items:center}
-.p-sale:not(.sale-desk) .counter-tray .tills .price-role{grid-column:1;grid-row:1;width:auto;flex-direction:row;align-self:end;padding:0;gap:4px;line-height:1.2}
-.p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:1;grid-row:2;align-self:center;text-align:center}
-.p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:1;grid-row:3;align-self:start;text-align:center}
-
-.p-sale:not(.sale-desk) .counter-tray .tills button{box-shadow:inset 0 0 0 2px var(--rim),inset 0 0 0 3px #2a180d,inset 0 -8px 0 -3px #00000038,0 4px 0 #1a0f08,0 5px 0 #00000066}
-.p-sale:not(.sale-desk) .counter-tray .tills button:not(:disabled):active{box-shadow:inset 0 0 0 2px var(--rim),inset 0 0 0 3px #2a180d,0 1px 0 #1a0f08}
-.p-sale:not(.sale-desk) .counter-tray .tills button:disabled{box-shadow:inset 0 0 0 2px #5a4a3a,inset 0 0 0 3px #1a120c,0 2px 0 #00000080}
+/* SALE price keys (User 2026-10-03): the key asset (rim per role, nine-sliced) with a CSS corner ribbon that names the role; price and profit centred.
+   Pressing sinks the whole key, a disabled key swaps to the asset's grey. */
+.p-sale .counter-tray .tills button,.p-sale:not(.sale-desk) .counter-tray .tills button{--rim:#e2ab56;--rim-d:#c98a2c;position:relative;border:solid transparent;border-width:7px;background:none;box-shadow:none;
+ clip-path:inset(0);min-height:54px;padding:0 0 0 10px;display:grid;grid-template-columns:minmax(0,1fr);row-gap:0;align-content:center;justify-items:center;
+ border-image:url('assets/presentation/sale/till-regular.png') 38 fill/7px stretch;transition:transform .06s,filter .06s}
+.p-sale .counter-tray .tills button:nth-child(1){--rim:#72b4d5;--rim-d:#4f97bd;border-image-source:url('assets/presentation/sale/till-discount.png')}
+.p-sale .counter-tray .tills button:nth-child(3){--rim:#ef8b5c;--rim-d:#d4673c;border-image-source:url('assets/presentation/sale/till-markup.png')}
+.p-sale .counter-tray .tills button:disabled{--rim:#b5a595;--rim-d:#a8998a;border-image-source:url('assets/presentation/sale/till-off.png');box-shadow:none;background:none;filter:none}
+.p-sale .counter-tray .tills button:not(:disabled):hover{background:none;filter:brightness(1.08)}
+.p-sale .counter-tray .tills button:not(:disabled):active{transform:translateY(3px);background:none;box-shadow:none;filter:brightness(.88)}
+.p-sale:not(.sale-desk) .counter-tray .tills button:not(:disabled):active{box-shadow:none}
+.p-sale .counter-tray .tills .price-role,.p-sale:not(.sale-desk) .counter-tray .tills .price-role{position:absolute;left:-32px;top:2px;width:80px;height:12px;margin:0;padding:0;display:block;
+ background:linear-gradient(180deg,#ffffff40 0 1px,#ffffff00 1px),linear-gradient(90deg,var(--rim),var(--rim-d));border:0;clip-path:none;transform:rotate(-45deg);
+ font:700 9px/12px var(--ui);letter-spacing:0;text-align:center;color:#1a0d04;white-space:nowrap;overflow:hidden}
+.p-sale .counter-tray .tills .price-role span{display:inline}
+.p-sale .counter-tray .tills .price-role .price-rate{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);font-size:0;line-height:0}
+.p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:1;grid-row:1;align-self:end;text-align:center;line-height:20px}
+.p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:1;grid-row:2;align-self:start;text-align:center}
+.p-sale .counter-tray .tills button small,.p-sale .counter-tray .tills button:not(:disabled) small{color:#f4e9d0}
+.p-sale .counter-tray .tills button:disabled em,.p-sale .counter-tray .tills button[disabled] em{color:#1a0d04}
+.p-sale .counter-tray .tills button:disabled small,.p-sale .counter-tray .tills button:disabled strong{color:#f4e9d0}
