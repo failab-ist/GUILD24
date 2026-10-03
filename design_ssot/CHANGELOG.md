@@ -49,7 +49,9 @@ and this table is their commit record.
 - **Every Epic Food / Drink fights** (User: 영웅이랑 차이가 별로 없다 · 희귀는 소지금 획득도 있는데 · 투력 6으로 통일): 영웅 결전 도시락,
   왕도 천연암반수, 초고속 에너지드링크 and 대현자 허브엘릭서 add 투력 +6, Stats and 피로 회복 unchanged - so an adventurer strong in a
   Hazard's Stat can answer it with that Stat's Epic Drink and a Counter for the other Hazard, and still fight; 길드 특제 도시락 stays
-  the earning lunch. ITEM §ACTIVE CATALOG / DI-Q-v28-1; test vocabulary.
+  the earning lunch. Their prices rise between 상급 포션 (195) and 최상급 포션 (235), as each now fights and answers a Stat group:
+  초고속 에너지드링크 / 대현자 허브엘릭서 175 → 205, 왕도 천연암반수 185 → 210, 영웅 결전 도시락 210 → 230 (Sell × 2). ITEM §ACTIVE
+  CATALOG / ITEM-Q prices / DI-Q-v28-1; test vocabulary.
 - **The Counter ladder re-cut for the steeper Threat** (User: 피로 회복 같은 게 달린 건 감안해서 깎고 · 전문 대응템에 메리트 · 이온음료는
   페널티도 없다): one value per rung for every Hazard - the Field Gear 중반 대응 28 (was 23 / 23 / 22), Tier 2 surely and 대응 at
   late Tier 3; a Food / Drink Counter reads 2 (초반) / 3 (중반) under its Field Gear rung for its 피로 회복 - 컵라면 · 얼음컵 · 중화

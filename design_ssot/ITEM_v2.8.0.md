@@ -580,8 +580,8 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | water | 생수 | Drink C | 40 / 80 | 강인함 +10, Supply 2 | 2d |
 | lunchbox | 간단 도시락 | Food U | 100 / 200 | 강인함 +12, Supply 6, 원정 소지금 획득 +20% | 2d |
 | guildlunch | 길드 특제 도시락 | Food R | 185 / 370 | 강인함 +16, Supply 7, 원정 소지금 획득 +40% | 2d |
-| battlelunch | 영웅 결전 도시락 | Food E | 210 / 420 | 투력 +6, 강인함 +18, Supply 9 | 2d |
-| kingwater | 왕도 천연암반수 | Drink E | 185 / 370 | 투력 +6, 강인함 +24, Supply 2 | 3d |
+| battlelunch | 영웅 결전 도시락 | Food E | 230 / 460 | 투력 +6, 강인함 +18, Supply 9 | 2d |
+| kingwater | 왕도 천연암반수 | Drink E | 210 / 420 | 투력 +6, 강인함 +24, Supply 2 | 3d |
 
 The meal 강인함 ladder rises readably by tier; the water route is more Stat-concentrated than the meal at the same broad
 stage, with much lower Supply (Fatigue recovery).
@@ -630,8 +630,8 @@ approved ITEM amendment; QA does not auto-tune it.
 | 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +18, 어둠 +18 | Crypt 후반 하이브리드 |
 | 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +18, 화이트아웃 +18 | Snow 후반 하이브리드 |
 | 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +18, 투력 +10 | Fire 후반 하이브리드 |
-| 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 투력 +6, 기동 +26, Supply 2 | Top-end mobility |
-| 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 투력 +6, 정신 +28, Supply 2 | Top-end spirit |
+| 38 | 초고속 에너지드링크 | Drink E | 205 / 410 | 투력 +6, 기동 +26, Supply 2 | Top-end mobility |
+| 39 | 대현자 허브엘릭서 | Drink E | 205 / 410 | 투력 +6, 정신 +28, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +35 | Top-end raw Power |
 
 Active catalog count is exactly 44. No active Item creates a separate poison Condition/cure subsystem.
@@ -977,7 +977,7 @@ PASS:
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
-간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 175 · 대현자 허브엘릭서 175
+간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 205 · 대현자 허브엘릭서 205 · 왕도 천연암반수 210 · 영웅 결전 도시락 230
 방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
 농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
 거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
@@ -1018,8 +1018,8 @@ Expect exactly:
 | 생수 | C | 40/80 | +10 | 2 | — |
 | 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
 | 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
-| 영웅 결전 도시락 | E | 210/420 | +18 | 9 | 투력 +6 (every Epic Food / Drink fights: 길드 특제 도시락 is the earning lunch) |
-| 왕도 천연암반수 | E | 185/370 | +24 | 2 | 투력 +6 |
+| 영웅 결전 도시락 | E | 230/460 | +18 | 9 | 투력 +6 (every Epic Food / Drink fights: 길드 특제 도시락 is the earning lunch) |
+| 왕도 천연암반수 | E | 210/420 | +24 | 2 | 투력 +6 |
 
 PASS:
 - active catalog count is 43
