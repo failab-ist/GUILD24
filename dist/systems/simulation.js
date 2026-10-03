@@ -210,7 +210,7 @@ function playRun(g,out,ctx){
     simulated player never makes that choice. When on, and ONLY while that Support is owned, a
     few small rules make the choice from state the player can see. Off, nothing below changes. */
  const aware=!!ctx.relicAware,owns=id=>aware&&g.has(id),RP=D.relicParams;
- /* BEST HYBRID, measurement input (ctx.relicPriority, default none; User 2026-10-02): a ranked Support list, best first. A ranked
+ /* BEST HYBRID, measurement input (ctx.relicPriority, default none): a ranked Support list, best first. A ranked
     candidate beats any unranked one and a higher rank beats a lower; the build's own tag score only breaks ties. Without it
     the build picks as before (hybrid follows the tags it already owns). */
  const priority=ctx.relicPriority||[];

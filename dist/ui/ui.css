@@ -2720,7 +2720,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* BATCH 1: the reading face takes one lit top seam of its own. Without it the reading and the
    key were the same unlit dark and the seam between them - the thing that makes the control
    read as the card's face rather than a second box - did no work at screenshot scale. */
-/* User 2026-10-03: name and key share the first row, the effect line takes the whole second row */
+/* UI_UX §DECORATION DECISION SURFACE: name and key share the first row, the effect line takes the whole second row */
 .slot-option>.deco-name{grid-column:1;grid-row:1;min-width:0;min-height:48px;display:flex;align-items:center} /* the key's height, so the row holds while the inline confirmation stands in for the key */
 .slot-option>button,.slot-option>.muted{grid-column:2;grid-row:1}
 .slot-option>.deco-effect{grid-column:1/-1;grid-row:2}
@@ -2782,7 +2782,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* a state word where a control would be keeps the control's place, so the row does not reflow
    between an in-Run store and a pre-Run one */
 .slot-option>.muted{align-self:center;text-align:right;white-space:nowrap}
-/* the price under 구매 (User 2026-10-03): the key is short and narrow, the effect line gets the width */
+/* the price under 구매: the key is short and narrow, the effect line gets the width */
 .slot-option>button small{display:block;margin-top:2px;font-size:11px;font-weight:600;white-space:nowrap;color:inherit;opacity:.8}
 
 /* UI_UX §DECORATION DECISION SURFACE + §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT. The

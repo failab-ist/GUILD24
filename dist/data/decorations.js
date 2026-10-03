@@ -6,8 +6,8 @@
    These are the only numeric truth for the four effects and their prices - no screen, harness or
    report may hold its own copy. */
 G.DATA.decorationSlots=['sign','wall','counter','display'];
-/* META §Prices — EXACT (User 2026-09-25, v2.9.1 balance; sign 1250 -> 1500 User 2026-10-03, v2.10.0: cheapest 500, dearest 3x,
-   total 3,750 - sign 1500 / wall 1000 / counter 750 / display 500, both Decorations of a Slot share the price). */
+/* META §Prices — EXACT: sign 1500 / wall 1000 / counter 750 / display 500 (cheapest 500, dearest 3x, total 3,750);
+   both Decorations of a Slot share the price. */
 G.DATA.decorations=[
  /* v2.9.7 (User 2026-09-26, META §INITIAL FOUR DECORATIONS): the sign economy Decoration is remade as 원정 지원금 간판; the wall
     and display economy Decorations swap Slots, names and art following the Slot. Ids are kept, so ownership carries over. */

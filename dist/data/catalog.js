@@ -266,14 +266,14 @@ G.DATA.bossTuning={
                                 //   = 90% of the median engaged Run's gross sales measured on
                                 //   the Stage 10 economy (median 20,909 across the engaged
                                 //   strategies, 200 seeds each), rounded to 100G.
- greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power (v2.10.0, User 2026-10-03: 11 -> 15, scaled with WRATH 180 -> 240)
+ greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power
  /* GLUTTONY v2.7: the Rare+ threshold is superseded. EVERY positive Core-Stat contribution
     that came from an Item is halved, whatever its Rarity, after the Item-side amplification
     has produced that contribution. No Rarity threshold remains. */
  gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
- firePairPower:24,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss (User 2026-09-30; v2.10.0 18 -> 24 with WRATH)
- slothBossPower:[267,252,228,199] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.10.0, User 2026-10-03: 200/189/171/149 x 4/3 with WRATH 180 -> 240)
+ firePairPower:24,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss
+ slothBossPower:[267,252,228,199] // SLOTH: effective Boss Power by break count [0,1,2,3]
 };
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
