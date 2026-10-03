@@ -2038,7 +2038,7 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
   &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
- assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'영업 설정 ends with the same pair, readable mid-Run (v2.9.7)');
+ assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'설정 ends with the same pair, readable mid-Run (v2.9.7)');
  assert.ok(/\.p-prep \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
  const wf=read('.github/workflows/pages.yml');
  assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');

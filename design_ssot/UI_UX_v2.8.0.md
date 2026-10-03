@@ -1303,7 +1303,7 @@ colour, silhouette and place vary by Phase.
 
 (acceptance -> UI_UX §QA UI-Q-v29-36.) So a play report can name its build, `v{version} · {commit}` shows small (10 px) and muted in
 the top-left of the opening screen (no Run: 새 점포 준비) above the room — not a control, taking no title space — and centred at the
-end of 영업 설정 (점포 메뉴 -> 설정) for mid-Run reading; nowhere else. `{version}` = CHANGELOG head; `{commit}` = first 7 hex of
+end of 설정 (점포 메뉴 -> 설정) for mid-Run reading; nowhere else. `{version}` = CHANGELOG head; `{commit}` = first 7 hex of
 the deployed commit, written into `build.js` by the Pages deploy (`dev` when unstamped). The console prints
 `GUILD24 v{version} · {commit}` on load; `Guild24.build` returns `{version, commit}`.
 
@@ -2417,10 +2417,10 @@ unowned Decorations cost more than the capital.
 #### UI-Q-v29-36 — BUILD MARKER
 
 PASS (→ UI_UX §BUILD MARKER): the opening screen shows `v{version} · {commit}` small and muted top-left at 360 / 390 / 1280, clear
-of the title, the menu button and the preparation board; 영업 설정 ends with the same pair before and during a Run, no other screen
+of the title, the menu button and the preparation board; 설정 ends with the same pair before and during a Run, no other screen
 shows it; the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair; the deployed
 site reads the deployed commit, a local build `dev`.
-FAIL: the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed
+FAIL: the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 설정; a deployed
 build reading `dev`.
 
 #### UI-Q-v29-45 — SALE SHELF LIP AND HEAD
