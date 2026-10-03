@@ -44,6 +44,9 @@ function endReveal(){const s=game.run;clearTimeout(endAt);
    half-finished purchase and spend the Capital a second time. */
 let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
+/* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
+const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
+const closeX=()=>btn(CLOSE_X,'dismiss','takeover-x','aria-label="창 닫기"');
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 /* v2.9.10 (User 2026-09-27/28): shelf life on stock counts down `폐기까지 N일` and then names its last two days - `내일까지`,
    `오늘까지` - so the day it is still sellable is never in doubt. (ORDER keeps `유통기한 N일`.) */
@@ -268,7 +271,7 @@ function anchorOffer(key,y0){
    that opened it. `previousFocus` used to be re-read on EVERY call, closing included - and at
    that moment the active element is a control INSIDE the sheet that renderModal() is about to
    remove, so the restore ran on a detached node and focus fell to <body>. It is captured only
-   when a sheet opens over the screen, so one sheet opening another (메뉴 -> 영업 설정, 도감 ->
+   when a sheet opens over the screen, so one sheet opening another (메뉴 -> 설정, 도감 ->
    새 점포 준비) still returns to the single origin the player came from. If that origin is gone
    by the time the sheet closes, the Phase's own content region takes focus rather than nothing. */
 function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
@@ -1893,7 +1896,7 @@ const relicRef=extra=>{const owned=game.ownedRelics();
  return '<button class="relic-ref" data-action="owned-relics"'+(extra?' '+extra:'')
   +' aria-label="보유 점포지원 '+owned.length+' / 7 · 효과 보기">점포지원 <b>'+owned.length+' / 7</b></button>';};
 /* COPY_AUDIT §1-3: one body for both confirmations that discard the Run's rewards */
-const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.</p>';
+const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.</p>';
 /* UI_UX §MENU — 이번 영업의 장식 (User 2026-09-24, v2.9.0): the Run's frozen loadout, read-only; an empty Slot reads 비어 있음 (COPY_AUDIT §1-7) */
 function loadoutModal(){const lo=game.run?.loadout||{};
  return '<ul class="effects">'+D.decorationSlots.map(slot=>{const d=lo[slot]&&D.decorationBy[lo[slot]];
@@ -1910,7 +1913,7 @@ function relicsModal(){
    return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
 function relicTakeover(){const s=game.run,w=s.relicWindow;
- if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5·10·15·20·25·30에 도착한다.</p></div></div><div class="close">'+btn('닫기','dismiss','stamp')+'</div></div>';
+ if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5·10·15·20·25·30에 도착한다.</p></div></div>'+closeX()+'</div>';
  if(!w.focusedRevealSeen){w.focusedRevealSeen=true;game.save();}
  const first=w.milestoneDay===0,until=w.expiryDay===31?'마왕성 출발 전까지':'DAY '+(w.expiryDay-1)+'까지';
  return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll">'
@@ -1944,9 +1947,9 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  /* UI_UX §MENU (User 2026-09-24, v2.9.0): the DAY 0 choice has no way back (it may be deferred, User 2026-10-01) - the
     return button to the pre-Run screen is retired; Decorations are managed from 새 점포 준비, before a Run. */
  /* a window already spent (bought, or a Sloth seal broken) has nothing left to defer: it closes plainly */
- +sealChoice() +'<div class="close">'+(w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')
+ +sealChoice() +(w.purchased||w.consumedBySealBreak?closeX():'')+'<div class="close">'+(w.purchased||w.consumedBySealBreak?''
   /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
-  :first?'<p class="first-support-note"><span>점포 지원은 5일 단위로 고를 수 있다.</span><span>첫 지원은 <b>Day'+(w.expiryDay-1)+'까지</b> </span><span>아침, 발주 화면에서 무료로 고를 수 있다.</span></p>'+btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
+  :first?btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
   :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): a footer key beside 나중에 결정, the same rank and look, one line, while the window
@@ -2350,9 +2353,9 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +`</div>`;}
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
- <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
+ <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
- <p class="settings-note">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
+ <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
 /* COPY_AUDIT_APPROVED_v2.8.0 §8 is the exact owner of the global guide. The long-form manual
    it replaces described retired rules, understated the refusal ceiling, and repeated what the
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
@@ -2521,15 +2524,15 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
  else if(modal==='codex'){title='도감';body=codex();if(preRunReturn)footer=btn('새 점포 준비로 돌아가기','store-return','stamp');}
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
- else if(modal==='settings'){title='영업 설정';body=settings();narrow=true;}
+ else if(modal==='settings'){title='설정';body=settings();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다.<br>현재 보급 상태를 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
  else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss','stamp')+btn(c.under,'final-commit-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','retire-go','danger');narrow=true;}
- else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
- else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
+ else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
+ else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체한다. 기존 진행을 남기려면 먼저 내보내야 한다.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- const utility=modal==='menu'?'menu-panel':['settings','resetConfirm','importConfirm'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':''):'';
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''} ${utility}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&!ownCancel.has(modal)&&!d0Owed()?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ const utility=modal==='menu'?'menu-panel':['roster','codex','help','loadout','abandonConfirm'].includes(modal)?'wood-frame':['settings','resetConfirm','importConfirm'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':''):'';
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''} ${utility}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&!ownCancel.has(modal)&&!d0Owed()?btn(CLOSE_X,'dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */

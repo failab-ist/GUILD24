@@ -44,7 +44,7 @@ for(const r of JSON.parse(fs.readFileSync(path.join(root,'reports/references/sto
   check(d0.cards.length===3&&d0.cards.every(c=>c.buttonHeight>=48&&c.actionClear),tag+' three candidates with separated effect/cost/selection');
   check(d0.background.includes(width<1024?'backroom-phone.jpg':'backroom-wide.jpg'),tag+' correct supplied background');
   check(width<1024?d0.cards.every(c=>c.buttonWidth>=120&&c.buttonWidth<c.width/2):d0.columns===1&&d0.rows===3&&d0.cards.every(c=>c.width>=Math.min(1000,width-64)-1&&c.height>=200),tag+' compact mobile choice / large desktop vertical contracts');
-  check(d0.notice?.text==='점포 지원은 5일 단위로 고를 수 있다.첫 지원은 Day4까지 아침, 발주 화면에서 무료로 고를 수 있다.'&&d0.notice.fontSize>=14&&d0.notice.contrast>=4.5&&d0.notice.phraseFit,tag+' exact first guide, readable contrast and complete phrase lines');
+  check(!d0.notice,tag+' no footer guide text; the coach owns the first-window explanation')
   if(width>=1024&&height>=880)check(d0.cards.at(-1).bottom<=d0.scroll.bottom+1,tag+' all three desktop D0 contracts fit above footer');
   check(await p.locator('.relic-plate .cost').allTextContents().then(a=>a.every(t=>t==='무료')),tag+' D0 live free prices');
   for(let i=0;i<3;i++){const key=p.locator('.relic-plate button').nth(i);await key.scrollIntoViewIfNeeded();check(await key.evaluate(e=>{const b=e.getBoundingClientRect(),f=document.querySelector('.relic-takeover .close').getBoundingClientRect();return b.top>=0&&b.bottom+3<=f.top;}),tag+' candidate '+i+' scrolls clear of footer');}

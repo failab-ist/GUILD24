@@ -59,10 +59,8 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
   assert.deepEqual(pool,approved[sec],name+' is COPY_AUDIT '+sec+' verbatim');}
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
 });
-test('COPY_AUDIT: the letter-suffixed first guide stays separate from purchase status',()=>{
+test('COPY_AUDIT: the letter-suffixed section id parses without attributing to its parent',()=>{
  assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
- assert.deepEqual(approved['11-31a'],['점포 지원은 5일 단위로 고를 수 있다.',
-  '첫 지원은 Day4까지 아침, 발주 화면에서 무료로 고를 수 있다.']);
 });
 
 /* COPY_AUDIT §25 / COPY_WORLD_VOICE §RARE REFERENCE NPC (User 2026-09-28, v2.9.11): the Rare Reference customers and their
@@ -85,7 +83,6 @@ const COMPOSED={
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
  '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
- '11-31a':"app.js relicTakeover(): Day + (expiryDay-1) + 까지, then the live morning/order free-pick phrase in its own span; UI guard and browser QA verify the composed User-approved sentence",
  '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
  '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
