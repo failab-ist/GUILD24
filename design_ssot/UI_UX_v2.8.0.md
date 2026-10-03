@@ -268,12 +268,19 @@ phone's NPC detail holds it); core environment signal visible without tap, never
 
 The phone nameplate scales with the card: name 14px, rarity 9px with a restrained letter gap, Level/Job 11px with readable
 line spacing. Keep every word intact and visually separated; no compressed glyphs, clipping or ellipsis (User 2026-10-03).
+Give the nameplate at least 4px of text clearance beyond its rarity accent, 4px top/bottom padding and a 2px line gap.
+SALE card/nameplate cast shadows never enter the neighbouring destination or lower decision plane. The phone destination
+keeps 5px top/bottom and 8px side padding; outlook labels, values and help keys stay inside their own face (User spacing review).
 
 SALE reuses the unmodified MORNING store room assets: portrait on phones, wide on desks. Information stays on dark,
 high-contrast planes so the room light never competes with destination, customer state or product text.
 
 Same-Customer rerenders keep scroll/focus; a new customer may start at the top. `손님 보내기`: the current customer exits left,
 then the next enters (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4).
+When a phone tray opens, minimally reveal the selected shelf row and, at 640px high or more, its next peer when both fit.
+The correction is not user shelf scrolling and does not fold the tray. Swapping an already-open selection preserves the anchor.
+If that correction crosses the outlook's heading, clear the whole outlook instead of leaving a cut heading; its existing
+forecast pin keeps the combat/environment reading available. The full detail remains reachable by scrolling back up.
 
 ### CURRENT CUSTOMER STATE
 
@@ -422,16 +429,19 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
   the edge, name, category or effect line (User 2026-10-03).
   The hand-over travels from the actual tray SVG bounds to the actual Bag SVG bounds, fitting its moving footprint;
   resized outer tiles must not enlarge the icon beyond the Bag slot.
-- tray, top to bottom: header (icon · name · kind, `{손님}에게 · 소지 {N}G` at right), the
+- tray, top to bottom: header (icon · name · kind; desk keeps `{손님}에게 · 소지 {N}G` at right), the
   `판매 후 변화` list (may be one wrapping line), `특수 효과` when any, the three price keys (§SALE — PRICE ROLE WORDS)
-- on phones, sell price / stock / shelf life sit at the lower right under the customer line, beside the change list;
-  long text wraps intact instead of clipping. Desktop keeps its existing header composition. All three price keys remain
+- on phones, Item name/kind and each change/special-effect block use the full tray width. A separate context row below the
+  Item puts customer/wallet at left and sell price/stock/shelf life at right, with a 12px column gap; long text wraps intact.
+  The band keeps 3px row gaps, 6px top and 10px bottom padding. Price keys keep 4px inner vertical padding, an 8px peer gap
+  and clearance for their 4px cast depth plus 3px press travel, never entering the lower lip/dock. Desktop keeps its existing
+  header composition. All three price keys remain
   directly reachable. The phone `손님 보내기` target is 48px high; safe-area padding stays outside it (User 2026-10-03).
 - empty: one prompt line on DAY 1~3 while the tutorial is not skipped (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-23), otherwise no
   height
 - the keys never move; a sale clears the tray (Item into the Bag) and shows the stub; a refusal keeps the Item with the
   refused key locked; the hand-over (§TRANSACTION BEAT A1) starts from the tray icon
-- height budget at 360: empty ≤ 48px, filled ≤ 200px, ≥ three shelf rows visible with it filled in the representative
+- height budget at 360: empty ≤ 48px, filled ≤ 200px, ≥ two shelf rows visible with it filled at 640 high in the representative
   comparison check; rows are one name line + one effect block. Long effects wrap intact instead of becoming unreadably small.
 - the effect block states every effect in ITEM order at the readable phone SALE step and wraps when needed; 구급키트 and 황금 1+1
   쿠폰 show their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`), tray `특수 효과` and codex in full
@@ -587,7 +597,8 @@ to current-customer decision information. Desktop may show more queue.
 On phones the optional Deep nomination disclosure follows the shelf, before Traits: it stays present and usable before
 the first purchase, without consuming the comparison area. A confirmed nomination still updates the destination and forecast;
 its payment remains readable in that disclosure. Desktop keeps its existing placement (User-approved SALE composition, 2026-10-03).
-One- and two-Hazard representative visits retain the three / two / one floor at 640 / 597 / 548. Long content may use the existing shelf scroll,
+The spacing review prioritizes readable planes over compression (User 2026-10-03). One- and two-Hazard representative visits
+retain two / one / one complete rows at 640 / 597 / 548 after the bounded opening correction. Long content may use the existing shelf scroll,
 but must never overflow its information planes or hide a price target. Preserve the character size above instead of shrinking it
 to meet a richer-visit row budget.
 
@@ -1460,7 +1471,7 @@ the Galaxy stage (360x597). On a portrait stage under 640 high:
   nearest the title toward the screen edge, hanging under the build mark, never covering the title
 - SALE stays sale-first (§MOBILE SALE PLAYABILITY): preserve the character scale (§SALE — MOBILE AUTHORITY), use the local
   readable type ladder and lower-right stock metadata, keys still 44 px or more. Representative one-/two-Hazard visits keep
-  3 / 2 / 1 complete shelf rows at 640 / 597 / 548 with the tray expanded. Longer product effects wrap intact and may scroll;
+  2 / 1 / 1 complete shelf rows at 640 / 597 / 548 with the tray expanded and opening correction applied. Longer product effects wrap intact and may scroll;
   the Bag, price keys and dock remain reachable. Below 700 high the tray folds on scroll.
 
 ## TOUCH / INTERACTION
@@ -3059,21 +3070,22 @@ long product names/effects, same-day expiry and special effects; review actual s
 PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
 - at entry the tray is empty: on DAY 1~3 with the tutorial active one line (`상품을 누르면 계산대에 올라온다.`, ≤ 48px at 360),
   otherwise no height; the shelf heading plus at least one row visible without a scroll
-- a tapped row fills the tray with the owner's contents and the shelf list does not move (no row changes height, scrollTop
-  unchanged); a second row swaps the contents, both rows staying put
-- the filled tray is ≤ 200px at 360; representative one-/two-Hazard visits keep 3 / 2 / 1 complete shelf rows at 640 / 597 / 548.
+- a tapped row fills the tray with the owner's contents; opening may minimally reveal the selected row/next peer as specified
+  above. No shelf row changes height; an already-open second-row swap preserves the scroll/anchor.
+- the filled tray is ≤ 200px at 360; representative one-/two-Hazard visits keep 2 / 1 / 1 complete shelf rows at 640 / 597 / 548.
   Long effects wrap intact; no ellipsis, clipped payload or forced font shrinking to reach the row count.
 - the phone character is 85–90% of the pre-trim presentation in width and height; both 44px Bag slots are visible, hittable
   and clear of the menu. Shelf names/effects are 14px/13px, outlook word 16–18px, environment number 14–15px, title 12px;
   full information stays readable on dark planes. The 48px customer-send target and all price keys stay inside the viewport.
-- phone price/stock/expiry sits under the customer and wallet at lower right, beside the effect change. Long names and
+- phone Item/change/special-effect lines use the full width; customer/wallet and price/stock/expiry share the separate context
+  row with a 12px gap. Nameplate/destination padding and price-key depth clearance meet the above contract. Long names and
   metadata wrap without overlapping the icon, neighbouring text or price keys. Deep nomination is reachable after the shelf
   before purchase; a confirmed nominee's destination and payment stay visible.
 - the price keys sit at the same place for every Item; the hand-over icon goes from the tray icon to the Bag slot; a successful
   sale clears the tray; a refusal keeps the Item with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
 - on 1280 the tray lies in the middle area on the counter, between the ledger and the shelf
 - FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
-FAIL: shelf rows change height or scrollTop when selected; the representative comparison misses its 3 / 2 / 1 floor; text,
+FAIL: shelf rows change height or an already-open swap changes scrollTop; the representative comparison misses its 2 / 1 / 1 floor; text,
 Bag slots or actions clip/overlap; the tray needs a drag, a scroll or a second tap to reach the price keys.
 
 #### UI-Q-v29-19 — GATE HAZARD REQUIREMENT NUMBER

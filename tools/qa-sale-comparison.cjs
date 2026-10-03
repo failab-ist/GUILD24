@@ -7,8 +7,8 @@ const out=path.resolve(process.argv[2]||path.join(root,'reports/ui/sale-comparis
 const port=Number(process.env.QA_PORT||5261),motion=process.env.QA_MOTION==='1';
 let checks=0;const check=(ok,message)=>{checks++;assert.ok(ok,message);};
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
-const sizes=motion?[[390,780],[1280,880]]:[[360,640],[360,597],[375,548],[360,780],[390,780],[412,780],[430,780],[1280,880]];
-const cases=[...sizes.map(size=>({size,day:5})),...(motion?sizes:[[360,640],[360,597],[375,548],[390,780],[1280,880]]).map(size=>({size,day:14}))];
+const sizes=process.env.QA_SIZES?JSON.parse(process.env.QA_SIZES):motion?[[390,780],[1280,880]]:[[360,640],[360,597],[375,548],[360,780],[390,780],[412,780],[430,780],[1280,880]];
+const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion?sizes:[[360,640],[360,597],[375,548],[390,780],[1280,880]]).map(size=>({size,day:14}))];
 (async()=>{
  fs.mkdirSync(out,{recursive:true});
  const server=spawn(process.execPath,[path.join(__dirname,'preview.cjs'),'--port',String(port)],{stdio:['ignore','pipe','inherit']});
@@ -51,7 +51,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(motion?sizes:[[360,640],[360
   });
   await page.screenshot({path:path.join(out,`d${day}-${width}x${height}-selected.png`)});
   const tag=`D${day} ${width}x${height}`;
-  const floor=height>=640?3:height>=597?2:1;
+  const floor=width>=1024||height>=640?2:1; // UI_UX spacing review: readable tray + bounded opening correction.
   check(entry.phase==='sell'&&entry.day===day&&entry.stock>=6,tag+' representative fixture');
   check(entry.fullRows>=1,tag+' entry shelf row');
   check(measure.fullRows>=floor,tag+' selected comparison floor');
@@ -76,8 +76,14 @@ const cases=[...sizes.map(size=>({size,day:5})),...(motion?sizes:[[360,640],[360
    const contrast=(fg,bg)=>{const lum=c=>c.match(/[\d.]+/g).slice(0,3).map(x=>Number(x)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((s,x,i)=>s+x*[.2126,.7152,.0722][i],0);const a=lum(fg),b=lum(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);};
    const priceContrast=[...document.querySelectorAll('.tills button')].flatMap(e=>[...e.querySelectorAll('em,small')].map(t=>contrast(getComputedStyle(t).color,getComputedStyle(e).backgroundColor)));
    const send=document.querySelector('.dock [data-action="depart"]')||document.querySelector('.dock .stamp');
+   const plate=document.querySelector('.nameplate'),pc=getComputedStyle(plate),dest=document.querySelector('.dest-plate'),dc=getComputedStyle(dest);
+   const insetOnly=e=>getComputedStyle(e).boxShadow.replace(/rgba?\([^)]*\)/g,'color').split(',').every(s=>s==='none'||s.includes('inset'));
+   const keys=[...document.querySelectorAll('.tills button')];
    return {face:box(document.querySelector('.face')),slots:slots.map(box),bag:slots.every(e=>onscreen(e)&&hit(e)&&(!menu||r(e).bottom<=r(menu).top||r(e).top>=r(menu).bottom||r(e).right<=r(menu).left||r(e).left>=r(menu).right)),
-    unclipped,shelf,trayText,metadata:r(stock).top>=r(who).bottom-1&&r(stock).left>=r(delta).right-1&&r(stock).bottom<=r(tills).top+1,
+    unclipped,shelf,trayText,metadata:Math.abs(r(stock).top-r(who).top)<=1&&r(stock).left>=r(who).right+11&&Math.max(r(stock).bottom,r(who).bottom)<=r(delta).top-2,
+    room:{plate:parseFloat(pc.paddingLeft)>=8&&parseFloat(pc.paddingTop)>=4&&parseFloat(pc.paddingBottom)>=4&&parseFloat(pc.gap)>=2,
+     cardShadow:insetOnly(document.querySelector('.face'))&&insetOnly(plate),destination:parseFloat(dc.paddingTop)>=5&&parseFloat(dc.paddingLeft)>=8,
+     fullDelta:r(delta).width>=tr.width-36,keysClear:keys.every(e=>r(e).bottom+7<=tr.bottom-2)},
     prices:[...document.querySelectorAll('.tills button')].every(e=>onscreen(e)&&hit(e)),send:onscreen(send)&&hit(send)&&r(send).height>=44,
     fonts:{name:fs('.good .what b'),effect:fs('.good .what span'),outlook:fs('.gs-row>b,.ro-combat>b'),environment:fs('.env-num'),title:fs('.shelf-head h2')},
     priceContrast,deep:!!document.querySelector('.deep-offer'),hscroll:document.documentElement.scrollWidth>innerWidth};
@@ -90,9 +96,22 @@ const cases=[...sizes.map(size=>({size,day:5})),...(motion?sizes:[[360,640],[360
   if(width<1024){
    const beforeWidth=Math.max(88,Math.min(width*.38,150,height*.9-300));
    check(geom.face.width>=beforeWidth*.85&&geom.face.width<=beforeWidth*.9,tag+' character width 85–90% of original');
-   check(geom.metadata,tag+' stock metadata below customer at lower right');
+   check(geom.metadata,tag+' separated customer/stock context above full-width effect');
+   check(geom.room.plate&&geom.room.cardShadow&&geom.room.destination,tag+' text padding and no card cast into neighbours');
+   check(geom.room.fullDelta&&geom.room.keysClear,tag+' full-width effects and price depth clear of dock');
+   const reading=await page.evaluate(()=>{const c=document.querySelector('.stage-scroll').getBoundingClientRect(),r=document.querySelector('.readout.core-mob').getBoundingClientRect(),p=document.querySelector('.forecast-pin');return {whole:r.top>=c.top-1||r.bottom<=c.top+1,pin:r.bottom>c.top+1||p.classList.contains('show')};});
+   check(reading.whole&&reading.pin,tag+' opening leaves whole outlook or its forecast pin');
    check(geom.fonts.name>=14&&geom.fonts.effect>=13&&geom.fonts.outlook>=16&&(geom.fonts.environment===null||geom.fonts.environment>=14)&&geom.fonts.title>=12,tag+' readable local type ladder');
   }
+  // A native held press must keep the key face/depth inside the tray; release on its background, without selling.
+  const key=await page.locator('.tills button:not(:disabled)').first().boundingBox();
+  await page.mouse.move(key.x+key.width/2,key.y+key.height/2);await page.mouse.down();await page.waitForTimeout(40);
+  const press=await page.evaluate(()=>{const t=document.querySelector('.counter-tray').getBoundingClientRect(),d=document.querySelector('.dock').getBoundingClientRect();
+   return [...document.querySelectorAll('.tills button')].every(e=>{const b=e.getBoundingClientRect(),sh=getComputedStyle(e).boxShadow.replace(/rgba?\([^)]*\)/g,'color').split(',').filter(s=>!s.includes('inset'));
+    const depth=Math.max(0,...sh.map(s=>{const n=s.match(/-?[\d.]+px/g)||[];return (parseFloat(n[1])||0)+(parseFloat(n[2])||0)+(parseFloat(n[3])||0);}));return b.bottom+depth<=t.bottom-2&&b.bottom+depth<d.top;});});
+  check(press,tag+' held price press and cast depth clear the lip/dock');
+  await page.screenshot({path:path.join(out,`d${day}-${width}x${height}-pressed.png`)});
+  const housing=await page.locator('.counter-tray').boundingBox();await page.mouse.move(housing.x+2,housing.y+2);await page.mouse.up();
   const rowGeometry=()=>page.locator('.goods [data-action="select"]').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().height));
   const heights=await rowGeometry();
   const scrollSelector=width>=1024?'.shelf-col':'.stage-scroll';
@@ -102,7 +121,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(motion?sizes:[[360,640],[360
   check(JSON.stringify(await rowGeometry())===JSON.stringify(heights),tag+' swap does not resize shelf rows');
   check(await page.locator(scrollSelector).evaluate(e=>e.scrollTop)===scrollBefore,tag+' swap preserves scroll');
   if(width<1024){
-   await page.locator(scrollSelector).evaluate(e=>e.scrollTop=80);await page.waitForTimeout(150);
+   await page.locator(scrollSelector).evaluate(e=>e.scrollTop+=80);await page.waitForTimeout(150);
    check(await page.locator('.counter-tray').evaluate(e=>e.classList.contains('folded')),tag+' scroll folds tray');
    await page.locator('.tray-unfold').click();
    check(await page.locator('.counter-tray').evaluate(e=>!e.classList.contains('folded')),tag+' strip reopens tray');

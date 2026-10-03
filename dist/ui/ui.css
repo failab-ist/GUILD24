@@ -3648,8 +3648,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .sale-desk .front-side .kit{background:#17110bf2}
 .sale-desk .front-side .dest-plate{background:#21180ff5}
 .p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px))) * .875);--frame:6px;--plateh:46px;--gapb:8px;gap:6px;padding-top:4px}
+.p-sale .face{box-shadow:inset 0 0 0 3px #2a2118,inset 0 0 0 7px #3b2f21,inset 0 0 0 10px #1d160d}
+.p-sale .who .nameplate{box-shadow:inset 4px 0 0 var(--rare,#b4bba6),inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080}
 .p-sale:not(.sale-desk) .face{margin-bottom:6px}
-.p-sale:not(.sale-desk) .who .nameplate{padding:2px 4px}
+.p-sale:not(.sale-desk) .who .nameplate{padding:4px 8px 4px 10px;gap:2px}
 .p-sale:not(.sale-desk) .who .nameplate b{font-size:14px;line-height:1.3;white-space:normal;overflow:visible;overflow-wrap:anywhere}
 .p-sale:not(.sale-desk) .who .rank{font-size:9px;line-height:1.2;letter-spacing:.12em}
 .p-sale:not(.sale-desk) .who .nameplate>span{font-size:11px;line-height:1.4}
@@ -3658,10 +3660,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .front-side .vitals{padding-right:44px;gap:2px}
 .p-sale:not(.sale-desk) .front-side .kit .slots{width:100%;grid-template-columns:minmax(0,1fr) 44px 44px;padding:6px 2px 0;gap:4px;align-items:center}
 .p-sale:not(.sale-desk) .front-side .kit .slot-label{grid-column:auto;margin:0;white-space:normal;font-size:12px}
-.p-sale:not(.sale-desk) .front-side .dest-plate{padding:2px 6px;gap:4px;background:#21180ff5}
-.p-sale:not(.sale-desk) .front-side .dest-plate>div{gap:0}
-.p-sale:not(.sale-desk) .front-side .dest-plate .hazards{margin-top:2px}
-.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li{padding:1px 4px;line-height:1.2}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:5px 8px;gap:6px;background:#21180ff5}
+.p-sale:not(.sale-desk) .front-side .dest-plate>div{gap:2px}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards{margin-top:3px}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li{padding:2px 6px;line-height:1.25}
 .p-sale:not(.sale-desk) .front-side .dest-plate .hazards .rate{line-height:1.25}
 .p-sale:not(.sale-desk) .counter-edge{height:6px;
  background:linear-gradient(180deg,#d3ac71 0 2px,#b98d52 2px 3px,#7c5730 3px 4px,#4a331d 4px 6px)}
@@ -3670,7 +3672,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .sale-deep{order:3;flex:0 0 auto}
 .p-sale:not(.sale-desk) .dossier.traits{order:4}
 .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{margin-top:2px}
-.p-sale:not(.sale-desk) .readout.ro2 .top>.fore{padding:2px 8px 3px;gap:0}
+.p-sale:not(.sale-desk) .readout.ro2 .top>.fore{padding:3px 10px 4px;gap:2px}
+.p-sale:not(.sale-desk) .readout.ro2 .ro-head{height:20px}
+.p-sale:not(.sale-desk) .readout.ro2 .ro-head .tip>summary{margin:-2px -2px -2px 0}
 .p-sale:not(.sale-desk) .readout.ro2 .top .ro-combat>b,
 .p-sale:not(.sale-desk) .readout.ro2 .top .gs-row>b{font-size:17px;line-height:18px}
 .p-sale:not(.sale-desk) .readout.ro2 .top b.env-num{font-size:14px;line-height:15px}
@@ -3679,27 +3683,27 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .detail-stat label{font-size:12px}
 .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
 .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding:2px 0}
-.p-sale:not(.sale-desk) .shelf-head{margin-bottom:2px;padding-top:1px;padding-bottom:1px}
+.p-sale:not(.sale-desk) .shelf-head{margin-bottom:3px;padding-top:2px;padding-bottom:2px}
 .p-sale:not(.sale-desk) .shelf-head h2{font-size:12px;line-height:1.25}
 .p-sale:not(.sale-desk) .good{min-height:48px;padding:4px 0}
 .p-sale:not(.sale-desk) .good .what b{font-size:14px;line-height:1.25}
 .p-sale:not(.sale-desk) .good .what span{font-size:13px;line-height:1.3;color:#e1d3b4;word-break:keep-all;overflow-wrap:normal}
 .p-sale:not(.sale-desk) .good .price span,.p-sale:not(.sale-desk) .good .price em.expiry{color:#b9a98b}
 .p-sale:not(.sale-desk) .good .price em.expiry.soon{color:#efa887}
-.p-sale:not(.sale-desk) .counter-tray{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:8px;row-gap:1px;padding-top:3px;padding-bottom:3px}
+.p-sale:not(.sale-desk) .counter-tray{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px;row-gap:3px;padding-top:6px;padding-bottom:10px}
 .p-sale:not(.sale-desk) .counter-tray.empty{display:block;padding-top:0;padding-bottom:0}
 .p-sale:not(.sale-desk) .tray-item,.p-sale:not(.sale-desk) .tray-what{display:contents}
 .p-sale:not(.sale-desk) .tray-icon{grid-column:1;grid-row:1;width:26px;height:26px;align-self:center}
 .p-sale .tray-icon{padding:1px 2px 3px;overflow:hidden}
 .p-sale .tray-icon>svg{display:block;width:100%;height:100%;max-width:32px;max-height:32px}
-.p-sale:not(.sale-desk) .tray-what>b{grid-column:1;grid-row:1;align-self:center;padding-left:32px;font-size:14px;line-height:1.25;white-space:normal;overflow:visible;overflow-wrap:anywhere}
-.p-sale:not(.sale-desk) .tray-who{grid-column:2;grid-row:1;align-self:center;min-width:0;font-size:12px;line-height:1.3;overflow-wrap:anywhere}
-.p-sale:not(.sale-desk) .tray-stock{grid-column:2;grid-row:2;text-align:right;align-self:start;font-size:11px;line-height:1.3;color:#bfb092;white-space:normal;overflow:visible;overflow-wrap:anywhere}
-.p-sale:not(.sale-desk) .tray-delta{grid-column:1;grid-row:2;min-width:0;margin:0;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+.p-sale:not(.sale-desk) .tray-what>b{grid-column:1 / -1;grid-row:1;align-self:center;padding-left:34px;font-size:14px;line-height:1.3;white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.p-sale:not(.sale-desk) .tray-who{grid-column:1;grid-row:2;align-self:start;min-width:0;text-align:left;font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+.p-sale:not(.sale-desk) .tray-stock{grid-column:2;grid-row:2;text-align:right;align-self:start;font-size:11px;line-height:1.4;color:#bfb092;white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.p-sale:not(.sale-desk) .tray-delta{grid-column:1 / -1;grid-row:3;min-width:0;margin:2px 0 0;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
 .p-sale:not(.sale-desk) .tray-delta .delta-src{margin:0 4px 0 0}
-.p-sale:not(.sale-desk) .tray-delta.special{grid-column:1 / -1;grid-row:3}
-.p-sale:not(.sale-desk) .counter-tray .tills{grid-column:1 / -1;margin-top:3px;gap:6px}
-.p-sale:not(.sale-desk) .counter-tray .tills button{min-height:48px;padding:2px;gap:2px}
+.p-sale:not(.sale-desk) .tray-delta.special{grid-column:1 / -1;grid-row:4}
+.p-sale:not(.sale-desk) .counter-tray .tills{grid-column:1 / -1;margin-top:4px;gap:8px}
+.p-sale:not(.sale-desk) .counter-tray .tills button{min-height:52px;padding:4px 2px;gap:2px}
 .p-sale:not(.sale-desk) .counter-tray .tills em,.p-sale:not(.sale-desk) .counter-tray .tills small{font-size:11px;line-height:1.15}
 .p-sale:not(.sale-desk) .counter-tray .tills strong{font-size:18px}
 /* The small price roles and profit figures need contrast even on a hovered key. */

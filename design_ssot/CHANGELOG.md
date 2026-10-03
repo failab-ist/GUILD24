@@ -28,6 +28,12 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **SALE spacing review on `ui/design-trim`** (User 2026-10-03): give the nameplate/destination real text clearance, remove
+  cast shadows entering neighbouring planes, and restore the phone tray's full-width Item/effect blocks plus a separate
+  customer/stock row. Reserve space for price-key depth/press above the dock. Readability takes priority over the old compact
+  row budget: representative 640/597/548-high visits keep 2/1/1 complete rows with a bounded tray-opening reveal; an open
+  swap keeps its anchor. UI_UX owns the new spacing/QA contract. Review evidence is PNG, without a new PDF (User).
+
 - **SALE resized details on `ui/design-trim`** (User 2026-10-03): scale the phone nameplate's name/rarity/Level-Job to
   14/9/11px without clipping, keep the full tray rarity edge clear of its SVG, and move the hand-over between actual icon
   bounds. SALE's nine coach marks hug the live resized target and use the actual desk/phone scroller. UI_UX §SALE — MOBILE

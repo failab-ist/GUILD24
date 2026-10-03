@@ -2649,10 +2649,21 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'select':{
   const y0=el.getBoundingClientRect().top;
   /* a folded tray opens on any shelf row - the one already on it too - rather than letting that row clear it */
+  const opening=!selected||trayFolded;
   const reopen=trayFolded&&selected===id;trayFolded=false;
   selected=reopen||selected!==id?id:null;cue=selected?'select':null;render();sound('button');
   const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
+  /* User 2026-10-03: the roomier tray must not cover the selected product. Only its opening
+     may move the phone list: show the selected row and, at 640 high or more, its next peer
+     when both fit. An already-open comparison keeps its anchor and scroll unchanged. */
+  if(opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=innerHeight>=640?back.nextElementSibling:null;
+   const end=peer&&peer.getBoundingClientRect().bottom-row.top<=clip.height-8?peer.getBoundingClientRect().bottom:row.bottom;
+   if(end>clip.bottom-4)sc.scrollTop+=end-clip.bottom+4;
+   else if(row.top<clip.top+4)sc.scrollTop+=row.top-clip.top-4;
+   const reading=$('.readout.core-mob')?.getBoundingClientRect();
+   if(reading&&reading.top<clip.top&&reading.bottom>clip.top)sc.scrollTop+=reading.bottom-clip.top+1;
+   trayBase=sc.scrollTop;}
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
  case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?(tile.querySelector('svg')||tile).getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,tray:el.closest('.counter-tray'),
