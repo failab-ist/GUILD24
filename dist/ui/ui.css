@@ -3850,7 +3850,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .face{margin-bottom:0}
 .p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
 .p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-evenly;padding:6px 8px;gap:0;font-size:11px}
-.p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .front-side .slots .slot-label{font-size:13px;padding-left:8px}
 .p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
 .p-sale:not(.sale-desk) .front-side .dest-plate{padding:7px 8px}
 .p-sale:not(.sale-desk) .front-side .dest-plate h3{font-size:12px;line-height:1.2}
@@ -4002,3 +4003,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .slot-option>button[data-action="deco-buy"]:active{background:#c4932c;
  box-shadow:inset 3px 0 0 #17130d,inset 0 5px 0 #9a6212,inset 0 -6px 0 #f7d77c,inset -5px 0 0 #9a6212}
 .modal.wood-frame .slot-option>button:disabled{background:#1b1009;color:#a8946f;box-shadow:inset 3px 0 0 #0b0907,inset 0 3px 0 #00000080,inset 0 -2px 0 #ffffff08}
+
+/* sentence-level line breaks for plain prose (sentenceBreaks in app.js) */
+.sent{display:inline-block;max-width:100%}
