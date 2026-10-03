@@ -3965,3 +3965,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .who .rank{font-size:12px}
  .sale-desk .who .regular-badge{width:40px}
 }
+/* SALE desk (User 2026-10-03): nameplate side lines and the 단골 badge grow into the taller plate; the waiting count gets its own dark plate; price-key ribbons are larger than on the phone */
+@media(min-width:1024px){
+ .sale-desk .who .nameplate>span{font-size:18px}
+ .sale-desk .who .rank{font-size:16px}
+ .sale-desk .who .regular-badge{width:56px}
+ .sale-desk .who .nameplate.regular{padding-right:68px}
+ .sale-desk .front>.line-up .left{background:#0d0a06d9;color:#f0e4c8;padding:3px 9px;box-shadow:inset 0 0 0 1px #3b2f21}
+ .sale-desk .counter-tray .tills .price-role,.sale-desk.p-sale .counter-tray .tills .price-role{left:-38px;top:0;width:100px;height:15px;font-size:10px;line-height:15px}
+}
