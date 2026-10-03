@@ -284,8 +284,9 @@ forecast pin keeps the combat/environment reading available. The full detail rem
 
 ### CURRENT CUSTOMER STATE
 
-Compact state: Injury (no `부상 1`-style number), Fatigue, Loyalty — `부상 · 피로 8 · 단골도 37`; 단골 at the owner threshold,
-no large Loyalty bar, no `?` / Loyalty popover (coach teaches it; global Help stays separate). No equipment text here (NPC
+Compact state: Injury (no `부상 1`-style number), Fatigue, Loyalty — `부상 · 피로 8 · 단골도 37`; 단골 (owner threshold) is the gold
+`regular-badge` on the right of the customer card's nameplate, not a word in this line, and the card has no rarity colour bar (the
+rarity word and the card frame already say it); no large Loyalty bar, no `?` / Loyalty popover (coach teaches it; global Help stays separate). No equipment text here (NPC
 detail and proven Stat-source attribution carry it).
 
 ### SALE — SHELF LIP (v2.9.9)
@@ -768,6 +769,10 @@ The Outcome belongs to the adventurer's identity block, not a title bar:
                       [dungeon · Lv]
 
 Directly above the name, one step stronger; no own row or vertical space, no long rule — important, not the headline.
+
+Backdrop: the rainy convenience-store night art (`presentation/night/store-night.png`) sits in its own band under a plain header strip
+that holds the menu key and the day's task line, so neither overlaps the art; the band ends where the return rail begins, with no
+empty stretch between them.
 
 Death has no bubble but keeps the message position and weight beside the character, as a neutral status message: no quotes,
 tail, bubble ground, accent bar, border, icon, badge, glow or blur. It carries only a small text-hugging status container (a

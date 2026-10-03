@@ -26,6 +26,12 @@ and this table is their commit record.
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 
+## v2.9.14 quick patch — 단골 배지 · NIGHT 배경 · 회복 문구 (User 2026-10-03)
+
+- SALE 손님 카드: 단골은 이름판 오른쪽 금빛 배지로 알린다. 상태줄의 `· 단골` 글자와 이름판 왼쪽 등급 색 띠는 뺀다. UI_UX §CURRENT CUSTOMER STATE, SALE §CURRENT CUSTOMER COMPACT STATE.
+- NIGHT: 절차 그림 대신 비 오는 밤 편의점 그림. 위쪽 머리띠(메뉴 키 · 오늘 할 일)와 겹치지 않고 귀환 줄 바로 위에서 끝난다. UI_UX §NIGHT LAYOUT.
+- 부상 회복 한 줄을 `의무실 현판으로 부상 회복` · `응급 처치대로 부상 회복` · `길드 의료단으로 부상 회복`으로 줄여 상태 칸이 세로로 늘지 않게 한다. COPY_AUDIT §9-4 · §9-4b · §13.
+
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
 - **SALE currency suffix correction on `ui/design-trim`** (User 2026-10-03): restore the existing Mulmaru Mono price
