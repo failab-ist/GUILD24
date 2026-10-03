@@ -293,10 +293,11 @@
 
 /* ---- start-up preload screen (ui/preload.js): shown only until the first render() replaces #app ---- */
 .boot{position:fixed;inset:0;display:grid;place-items:center;padding:24px 16px;box-sizing:border-box;background:linear-gradient(#0c0a08cc,#0c0a08cc),var(--soil)}
-.boot-plate{box-sizing:border-box;width:min(300px,86vw);padding:20px 18px 16px;text-align:center;background:var(--wood);
- border:4px solid var(--wood-line);box-shadow:inset 0 0 0 2px var(--wood-lit),0 4px 0 var(--wood-line)}
-.boot-title{margin:0 0 14px;font:500 24px/1.2 var(--f-sign);color:var(--text)}
-.boot-bar{height:14px;box-sizing:border-box;border:3px solid var(--wood-line);background:var(--wood-dark)}
-.boot-bar>i{display:block;height:100%;width:0;background:var(--yellow);transition:width .2s steps(8,end)}
-.boot-note{margin:12px 0 0;font:400 var(--t-sm)/1.4 var(--ui);color:var(--dim)}
+.boot-plate{box-sizing:border-box;width:min(320px,88vw);border:16px solid transparent;background:#24160d;background-clip:padding-box;
+ border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
+ padding:6px 4px 2px;text-align:center;box-shadow:0 -4px 0 #100a06;isolation:isolate}
+.boot-title{margin:0 0 14px;font:500 24px/1.2 var(--f-sign);color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.boot-bar{height:20px;box-sizing:border-box;padding:3px;background:#120b06;border:2px solid #0f0905;box-shadow:inset 0 2px 0 #00000080,0 1px 0 #a46b33}
+.boot-bar>i{display:block;height:100%;width:0;background:url('assets/presentation/morning/day-sign.png') center/100% 100% no-repeat;transition:width .2s ease-out}
+.boot-note{margin:12px 0 4px;font:400 var(--t-sm)/1.4 var(--ui);color:#d9c39a}
 @media (prefers-reduced-motion:reduce){.boot-bar>i{transition:none}}
