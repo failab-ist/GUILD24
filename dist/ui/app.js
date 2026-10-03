@@ -46,6 +46,7 @@ let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
+const closeX=()=>btn(CLOSE_X,'dismiss','takeover-x','aria-label="창 닫기"');
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 /* v2.9.10 (User 2026-09-27/28): shelf life on stock counts down `폐기까지 N일` and then names its last two days - `내일까지`,
    `오늘까지` - so the day it is still sellable is never in doubt. (ORDER keeps `유통기한 N일`.) */
@@ -1906,7 +1907,7 @@ function relicsModal(){
    return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
 function relicTakeover(){const s=game.run,w=s.relicWindow;
- if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5·10·15·20·25·30에 도착한다.</p></div></div><div class="close">'+btn('닫기','dismiss','stamp')+'</div></div>';
+ if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5·10·15·20·25·30에 도착한다.</p></div></div>'+closeX()+'</div>';
  if(!w.focusedRevealSeen){w.focusedRevealSeen=true;game.save();}
  const first=w.milestoneDay===0,until=w.expiryDay===31?'마왕성 출발 전까지':'DAY '+(w.expiryDay-1)+'까지';
  return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll">'
@@ -1940,7 +1941,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  /* UI_UX §MENU (User 2026-09-24, v2.9.0): the DAY 0 choice has no way back (it may be deferred, User 2026-10-01) - the
     return button to the pre-Run screen is retired; Decorations are managed from 새 점포 준비, before a Run. */
  /* a window already spent (bought, or a Sloth seal broken) has nothing left to defer: it closes plainly */
- +sealChoice() +'<div class="close">'+(w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')
+ +sealChoice() +(w.purchased||w.consumedBySealBreak?closeX():'')+'<div class="close">'+(w.purchased||w.consumedBySealBreak?''
   /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
   :first?btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
   :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}

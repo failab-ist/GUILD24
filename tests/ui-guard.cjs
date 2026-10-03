@@ -498,7 +498,7 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  // v2.9.10 quick patch (User 2026-09-28): a seal break closes the window like 구매; a spent window shows 닫기, not 나중에 결정
  assert.ok(app.includes("case'break-seal':game.breakSeal();setModal(null);render();"),'봉인 해제 closes the Store Support window');
- assert.ok(app.includes("w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')"),'a spent window offers 닫기 only');
+ assert.ok(app.includes("(w.purchased||w.consumedBySealBreak?closeX():'')"),'a spent window offers the X close only');
  // v2.9.13 quick patch 3 (User 2026-10-01): the DAY 0 free pick may wait - on DAY 0 its 나중에 결정 opens DAY 1, later it closes
  assert.ok(app.includes("btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')"),'the DAY 0 takeover offers 나중에 결정');
  assert.ok(app.includes("case'defer-relic':game.deferFoundationRelic();setModal(null);render();"),'deferring leaves the takeover for DAY 1');
