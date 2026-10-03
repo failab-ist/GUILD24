@@ -3975,40 +3975,26 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .counter-tray .tills .price-role,.sale-desk.p-sale .counter-tray .tills .price-role{left:-38px;top:0;width:100px;height:15px;font-size:10px;line-height:15px}
 }
 
-/* UI_UX §DECORATION surfaces take the wood-frame material (User 2026-10-03): the pre-Run Slot tags and Capital plate are wood plaques
-   on the room, and the 점포 장식 cards and keys are planks of the same wood as the sheet's tabs and footer keys. Material only: no copy,
-   size, order or hit area changes. */
-.p-prep .slot-tag,.p-prep .capital-plate{background:linear-gradient(180deg,#5a3a20 0,#42291a 55%,#2f1c10 100%);color:#f0dcb0;
- box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a66,0 3px 0 #00000080}
-.p-prep .slot-tag i{color:#d2b27e}
-.p-prep .slot-tag .can-buy{background:#2a180b;color:#ffd98a;box-shadow:inset 0 0 0 1px #ffc55499}
-.modal.wood-frame .slot-option{background:linear-gradient(180deg,#3b2615 0,#2a1a0e 100%);
- box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a40,3px 3px 0 #0000004d}
-.modal.wood-frame .slot-option.on{background:linear-gradient(180deg,#46301a 0,#32200f 100%);
- box-shadow:inset 0 0 0 2px #140b06,inset 0 0 0 3px #ffc554,inset 0 4px 0 #ffe29b33,3px 3px 0 #0000004d}
-.modal.wood-frame .slot-option.locked{background:#2a190d;box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a26,2px 2px 0 #0000004d}
-.modal.wood-frame .slot-option>button{background:linear-gradient(180deg,#6a4627 0,#4f3220 55%,#382214 100%);color:#f3e2bd;
- box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #c58f5a66}
-.modal.wood-frame .slot-option>button:hover{background:linear-gradient(180deg,#7a5230 0,#5c3b26 55%,#42291a 100%)}
-.modal.wood-frame .slot-option>button:active{transform:translateY(2px);background:linear-gradient(180deg,#4f3220 0,#42291a 100%);
- box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #00000059}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"],.modal.wood-frame .deco-confirm [data-action="deco-confirm"]{
- background:linear-gradient(180deg,#f4c95a 0,#d9a233 55%,#b17a1e 100%);color:#2b1806;
- box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #fff2b080}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"]:hover{background:linear-gradient(180deg,#f9d676 0,#e0aa3b 55%,#bb8423 100%)}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"]:active{background:linear-gradient(180deg,#b17a1e 0,#d9a233 100%);
- box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #00000059}
-.modal.wood-frame .slot-option>button:disabled{transform:none;background:#1b1009;color:#a8946f;box-shadow:inset 0 0 0 2px #140b06}
-.modal.wood-frame .decoration-panel .slot h4:before{background:#d29a35}
-.modal.wood-frame .decoration-panel .slot h4:after{background:#140b06;box-shadow:0 2px 0 #9b6a3a40}
-/* 점포 장식: Slot 머리줄은 나무 띠, 카드 사이는 한 칸 띄우고, 이름 줄과 효과 줄은 가는 홈으로 나눈다 */
+/* UI_UX §DECORATION DECISION SURFACE: 점포 장식 sheet material (User 2026-10-03). Slot heads are the SALE shelf plank cut thin, cards are
+   flat wood planks (equipped: gold edge), keys are flat colour blocks with no gradient. Material only: no copy, size, order or hit area changes. */
 .modal.wood-frame .decoration-panel{gap:18px}
-.modal.wood-frame .decoration-panel .slot h4{margin:0 0 10px;padding:7px 10px 6px;font-size:14px;color:#ffe8b7;
- background:linear-gradient(180deg,#5a3a20 0,#42291a 60%,#33200f 100%);box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a66}
-.modal.wood-frame .decoration-panel .slot h4:before{height:12px}
+.modal.wood-frame .decoration-panel .slot h4{margin:0 0 10px;padding:7px 12px 6px;line-height:1.2;font-size:14px;color:#ffe8b7;background:none;box-shadow:none;
+ border:solid transparent;border-width:0 14px;border-image:url('assets/presentation/sale/shelf-plank.png') 0 115 fill/0 14px stretch;margin-inline:0}
+.modal.wood-frame .decoration-panel .slot h4:before{height:12px;background:#d29a35}
 .modal.wood-frame .decoration-panel .slot h4:after{display:none}
 .modal.wood-frame .slot-option+.slot-option{margin-top:12px}
-.modal.wood-frame .slot-option{padding:10px 12px 13px 14px;row-gap:8px}
-.modal.wood-frame .slot-option>.deco-effect{padding-top:8px;box-shadow:inset 0 2px 0 #140b06,inset 0 3px 0 #9b6a3a26}
+.modal.wood-frame .slot-option{padding:10px 12px 13px 14px;row-gap:8px;background:#34200f;
+ box-shadow:inset 0 0 0 2px #140b06,3px 3px 0 #0000004d}
+.modal.wood-frame .slot-option.on{background:#3d2813;box-shadow:inset 0 0 0 2px #140b06,inset 0 0 0 3px #ffc554,3px 3px 0 #0000004d}
+.modal.wood-frame .slot-option.locked{background:#2a190d;box-shadow:inset 0 0 0 2px #140b06,2px 2px 0 #0000004d}
+.modal.wood-frame .slot-option>.deco-effect{padding-top:8px;box-shadow:inset 0 2px 0 #140b06}
 .modal.wood-frame .slot-option>.deco-name{font-size:16px;color:#fff0cf}
 .modal.wood-frame .slot-option.locked>.deco-name{color:#e2cfa6}
+.modal.wood-frame .slot-option>button{background:#5b3b22;color:#f3e2bd;box-shadow:inset 0 0 0 2px #140b06}
+.modal.wood-frame .slot-option>button:hover{background:#6a4528}
+.modal.wood-frame .slot-option>button:active{transform:translateY(2px);background:#4a301b;box-shadow:inset 0 0 0 2px #140b06}
+.modal.wood-frame .slot-option>button[data-action="deco-buy"],.modal.wood-frame .deco-confirm [data-action="deco-confirm"]{
+ background:#e3b441;color:#2b1806;box-shadow:inset 0 0 0 2px #140b06}
+.modal.wood-frame .slot-option>button[data-action="deco-buy"]:hover{background:#edc258}
+.modal.wood-frame .slot-option>button[data-action="deco-buy"]:active{background:#c99a2d}
+.modal.wood-frame .slot-option>button:disabled{transform:none;background:#1b1009;color:#a8946f;box-shadow:inset 0 0 0 2px #140b06}
