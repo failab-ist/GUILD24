@@ -958,7 +958,7 @@ Information truth first; Boss presence is co-equal except at D25, where art neve
 ### D25 — 최종 정찰 보고
 
 `최종 정찰 보고` (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
-Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 29).
+Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 39).
 `two Families` does NOT mean two Hazard keys. Never the Hazard formula, Final success % or Final Power.
 
 ### FINAL MODIFIER PREVIEW
@@ -3043,7 +3043,7 @@ PASS:
   than before yet larger than the name
 - N equals ceil(Hazard Threat) of that Gate on that Day (DUNGEON_HAZARD §HAZARD THREAT), so it rises with Day and Tier; n is 3 for
   강인함 and 2 for 기동 / 정신 (Stat n당 대응 1)
-- no `{위험} · {label}` row and no destination-plate `?` help; D25 / FINAL show N = 29 (Day 30 / T2); no per-customer remaining
+- no `{위험} · {label}` row and no destination-plate `?` help; D25 / FINAL show N = 39 (Day 30 / T2); no per-customer remaining
   need, no readiness number, no 0.75 / 0.40 threshold anywhere
 - no Item name and no verdict word
 

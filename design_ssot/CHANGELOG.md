@@ -35,6 +35,10 @@ and this table is their commit record.
   unchanged. With both, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
   forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
+- **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
+  curve A): Threat = (12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier − 1) × 6) × Stat-group factor - DAY 1~7 unchanged,
+  D21 T2 26 → 32, D29 T3 35 → 45, the Final (Day 30 / T2) 29 → 39. DUNGEON_HAZARD §HAZARD THREAT / DUN-Q71 / the `대응 N 필요`
+  rows, UI_UX, COPY_WORLD_VOICE; tests vocabulary, ui-guard.
 
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 

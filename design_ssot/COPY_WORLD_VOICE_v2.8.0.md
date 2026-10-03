@@ -1204,7 +1204,7 @@ Use 점포지원 consistently in all active Player-facing SLOTH lines.
 
 Header / Intro -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-7.
 
-Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 29).
+Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 39).
 
 Authoritative Hazard wording (the MORNING short row with the Final's N):
 

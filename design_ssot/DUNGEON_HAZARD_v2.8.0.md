@@ -119,7 +119,7 @@ Full Hazard sentence (Gate detail only; the Gate-level requirement number first)
 - e.g. `어둠 — 대응 13 필요 · 기동 2당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `화이트아웃 — 대응 13 필요 · 정신 2당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 
-Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need. The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+).
+Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 39). No label row and no per-customer remaining need. The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+).
 
 The destination plate has no help (`?`): the numbered row carries the detail itself.
 
@@ -344,24 +344,27 @@ For each canonical Hazard:
 
 ```text
 Hazard Threat
-= (12 + Day × 0.35 + (Tier - 1) × 6) × Stat-group factor
+= (12 + Day × 0.35 + max(0, Day − 7) × 0.45 + (Tier - 1) × 6) × Stat-group factor
 Stat-group factor: 강인함 (독 · 냉기 · 부식) 1.0 · 기동 (속박 · 진창 · 어둠) 1.1 · 정신 (공포 · 화염 · 화이트아웃) 1.2
 ```
 
 The factor follows the Stat the Hazard presses. 기동 and 정신 convert to Defense at ÷2 and 강인함 at ÷3, so without it an
 average adventurer would answer a 정신 Hazard far more on their own than a 강인함 one. The ÷3 / ÷2 conversion is unchanged;
 the Counter values carry the same factor (`ITEM_v2.8.0.md` §COUNTER LADDER). The anchors below are the 강인함 values; 기동 and
-정신 read them × 1.1 / × 1.2 (e.g. D29 T3 = 34.15 / 37.57 / 40.98).
+정신 read them × 1.1 / × 1.2 (e.g. D29 T3 = 44.05 / 48.46 / 52.86). The late term (from DAY 8) keeps one Counter from
+holding 충분 for the whole Run: past the opening week a single Counter reaches 충분 only on its own rung's Gates, and the
+late Tier 3 Gates ask for two slots of Counters or an adventurer strong in the pressed Stat.
 
 Reference anchors:
 
 ```text
 D1  T1 = 12.35
-D12 T1 = 16.20
-D18 T2 = 24.30
-D24 T2 = 26.40
-D29 T3 = 34.15
-D30 T2 = 28.50
+D7  T1 = 14.45
+D12 T1 = 18.45
+D18 T2 = 29.25
+D24 T2 = 34.05
+D29 T3 = 44.05
+D30 T2 = 38.85
 ```
 
 ## TIER CONTRACT
@@ -1316,7 +1319,7 @@ Inspect all 9 canonical Hazards in Gate/preparation UI on desktop and touch/mobi
 
 EXPECT:
 Every Hazard exposes the numbered short row, the same on every surface:
-- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 대응 1 제공` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / dark · 정신: fear / whiteout / fire)
+- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 대응 1 제공` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 39) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / dark · 정신: fear / whiteout / fire)
 - Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> <n>당 대응 1 제공 · <Hazard> 대응 상품이 막는다`
 - no `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` label row and no destination-plate `?` help survive
 - no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
@@ -1469,16 +1472,17 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = (12 + Day*.35 + (Tier-1)*6) × Stat-group factor (강인함 1.0 · 기동 1.1 · 정신 1.2)
+Threat = (12 + Day*.35 + max(0, Day-7)*.45 + (Tier-1)*6) × Stat-group factor (강인함 1.0 · 기동 1.1 · 정신 1.2)
 ```
 
 Exact anchors (강인함; 기동 × 1.1, 정신 × 1.2):
 - D1 T1 = 12.35
-- D12 T1 = 16.20
-- D18 T2 = 24.30
-- D24 T2 = 26.40
-- D29 T3 = 34.15
-- D30 T2 = 28.50
+- D7 T1 = 14.45
+- D12 T1 = 18.45
+- D18 T2 = 29.25
+- D24 T2 = 34.05
+- D29 T3 = 44.05
+- D30 T2 = 38.85
 
 PASS: runtime threat matches.
 
