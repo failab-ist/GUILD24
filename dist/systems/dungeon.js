@@ -390,6 +390,7 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 function stoneChance(e,d){return clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
+ if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
  const sAbility=preparedPower(se);
  const sAssist=ev.assist||0;
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
@@ -531,6 +532,10 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast};
  const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
+ /* META §display — 구급품 진열장 (User 2026-10-03, v2.10.0): worn, an adventurer who departs 만반의 준비 has 투력 x1.05 and
+    the failure Death roll is judged against x .50 instead of x .80 - an ordinary expedition only, never the Final */
+ const cabinet=!!run&&Object.values(run.loadout||{}).includes('aidCabinet');
+ if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
 
  const ability=preparedPower(e);
  /* RESULT-PROOF: this expedition's real random draws are named as they are drawn, in the
@@ -556,9 +561,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const dayFx=run?.event?.effects||{},dayEv={escapeCut:dayFx.escapeCut||0,outcomeFatigue:dayFx.outcomeFatigue||1,xpMult:dayFx.xpMult||1};
  const medicReady=!!run&&(run.daily?.medicSaves||0)<(dayFx.nightSaves||0);
  const aidKitReady=medicReady;
- /* META §display — 구급품 진열장 (User 2026-10-03, v2.10.0; was ten 부상 -> 무사 a Run): worn, 만반의 준비 lowers the rolled Death
-    chance to x .60 instead of x .80 */
- const preparedFactor=!!run&&Object.values(run.loadout||{}).includes('aidCabinet')?D.decorationParams.aidCabinet.preparedFactor:PREPARED.factor;
+ const preparedFactor=cabinet?D.decorationParams.aidCabinet.preparedFactor:PREPARED.factor;
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
@@ -722,7 +725,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */

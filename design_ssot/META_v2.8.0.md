@@ -430,12 +430,14 @@ counterfactual reads the same availability.
 
 ### display — 구급품 진열장 (id aidCabinet)
 ```text
-만반의 준비 preparedFactor 0.80 -> 0.60 while worn (DUNGEON_HAZARD §Preparation / Level Death reduction)
+while worn, an adventurer who departs 만반의 준비: 투력 × 1.05, and preparedFactor 0.80 -> 0.50
+(DUNGEON_HAZARD §Preparation / Level Death reduction)
 ```
 
-Only an adventurer who departs 만반의 준비 (healthy, Fatigue under 20, 2 Items in the Bag) is helped: the failure Death roll
-is judged against failureDeathChance × 0.60. No count, no new roll, and the SALE `실패 시 사망 위험` stays the raw chance.
-The RESULT-PROOF counterfactual reads the same factor.
+Only an adventurer who departs 만반의 준비 (healthy, Fatigue under 20, 2 Items in the Bag) is helped, on an ordinary
+expedition (not the Final): the prepared 투력 is × 1.05 before the combat roll, and the failure Death roll is judged against
+failureDeathChance × 0.50. No count, no new roll; the SALE outlook and `실패 시 사망 위험` stay the pre-supply readings. The
+RESULT-PROOF counterfactual reads the same two terms.
 
 ### Prices — EXACT
 

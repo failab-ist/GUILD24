@@ -63,8 +63,8 @@ and this table is their commit record.
   COPY_AUDIT §여덟 장식.
 - **Three Decorations rebalanced after the single-Decoration measurement** (User 2026-10-03): 알뜰 금고 now gives the Day's first
   customer +200G Wallet (+100G measured +0.7%p clear, so 200G) (was +50G Store Gold every morning, which moved clear by +0.9%p; the receipt loses its 알뜰 금고 row);
-  명예 모험가 액자 above-평범 chance 75% → 60% (weights [40, 32, 18, 8, 2]); 구급품 진열장 is remade: while worn, 만반의 준비 lowers
-  the rolled Death chance to × 0.60 instead of × 0.80 (was ten 부상 → 무사 a Run, the most zombie-prone piece). META §wall / §counter /
+  명예 모험가 액자 above-평범 chance 75% → 60% (weights [40, 32, 18, 8, 2]); 구급품 진열장 is remade: while worn, an adventurer who
+  departs 만반의 준비 has 투력 × 1.05 and the rolled Death chance × 0.50 instead of × 0.80 (× 0.60 alone measured +1.8%p clear) (was ten 부상 → 무사 a Run, the most zombie-prone piece). META §wall / §counter /
   §display, DUNGEON_HAZARD §Preparation / Level Death reduction, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, COPY_AUDIT 7-3 / 9-5;
   tests integration, revision.
 - **A short Decoration key** (User 2026-10-03: 버튼 영역을 줄이고 효과 영역을 넓게): the buy key reads `구매` over a small `{가격} 자본`

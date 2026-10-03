@@ -1367,8 +1367,8 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: 만반의 준비 lowers the rolled Death chance to x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
- assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(Dungeon.PREPARED.factor,.80);
+test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a rolled Death chance of x .50 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
+ assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.50);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.05);assert.equal(Dungeon.PREPARED.factor,.80);
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
  const npc=pack=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;n.fatigue=0;n.records=[];return n;};
  let saved=0,worse=0,diff=0;
@@ -1379,7 +1379,13 @@ test('구급품 진열장: 만반의 준비 lowers the rolled Death chance to x 
   // an adventurer who is not 만반의 준비 (one Item) gets nothing from it
   const a=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{}}).outcome,b=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{display:'aidCabinet'}}).outcome;
   if(a!==b)diff++;}
- assert.ok(saved>0,'a prepared failure inside the x .80 band but outside x .60 survives only with it');
+ assert.ok(saved>0,'a prepared failure inside the x .80 band but outside x .50 survives only with it');
+ /* the 투력 half: at an even Gate, a prepared departure wins at least as often with it, and sometimes only with it */
+ const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(['rice','water']),d).effects)};let won=0,lost=0;
+ for(let i=0;i<300;i++){const b=Dungeon.resolve(npc(['rice','water']),even,new RNG('cab-p-'+i),[],{loadout:{display:'aidCabinet'}});
+  const wa=Dungeon.resolve(npc(['rice','water']),even,new RNG('cab-p-'+i),[],{loadout:{}});
+  if(b.combatWon&&!wa.combatWon)won++;if(wa.combatWon&&!b.combatWon)lost++;}
+ assert.ok(won>0&&lost===0,'투력 x1.05 only ever turns a lost fight into a won one');
  assert.equal(worse,0,'it never turns a survival into a Death');
  assert.equal(diff,0,'without 만반의 준비 the outcome is the same with or without it');
  assert.ok(!/aidKitSaves/.test(source('dist/systems/dungeon.js')),'the old ten 부상 -> 무사 count is gone');

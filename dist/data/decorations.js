@@ -29,14 +29,14 @@ G.DATA.decorations=[
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
  {id:'memorialBook', kind:'survival', slot:'counter', name:'추모 방명록',   price:750, effect:'사망 한도 +1명',
   text:'계산대 옆 방명록과 초. 사람들은 이 점포가 잊지 않는다는 걸 안다.'},
- {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:'만반의 준비(건강 · 피로 20 미만 · 가방 2칸)로 떠나면 실패 시 사망 위험 -40% (기존 -20%)',
+ {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:'만반의 준비(건강 · 피로 20 미만 · 가방 2칸)로 떠나면 투력 +5%, 실패 시 사망 위험 -50% (기존 -20%)',
   text:'붉은 상자가 놓인 유리장. 챙길 걸 다 챙긴 손님일수록 무사히 돌아온다.'}];
 /* The numbers the four alternatives read. Presentation copy above states the same values. */
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance). Presentation copy above states the same values. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
 G.DATA.decorationParams={sponsorSign:{budgetShare:.25},thriftSafe:{firstWallet:200},honorFrame:{weights:[40,32,18,8,2]},
- memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.45},trainingSign:{levelBonus:1,chance:.40},aidCabinet:{preparedFactor:.60}};
+ memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.45},trainingSign:{levelBonus:1,chance:.40},aidCabinet:{preparedFactor:.50,powerMult:1.05}};
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */
 /* META_v2.8 §Day-reach conversion rate — DIRECTOR DOCUMENT BASELINE. The band is the Day the
