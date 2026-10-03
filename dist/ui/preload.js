@@ -17,7 +17,7 @@ function required(wide){
  return [P+'start/title-logo.png',P+'sale/regular-badge.png',
   ...(wide?[P+'morning/store-bg-wide.png',P+'sale/sale-bg.png',P+'night/store-rain-wide.jpg',P+'support/backroom-wide.jpg']
           :[P+'morning/store-bg-phone.png',P+'sale/sale-bg-phone.png',P+'night/store-rain-phone.jpg',P+'support/backroom-phone.jpg']),
-  P+'night/store-night.png',P+'sale/shelf-plank.png',
+  P+'morning/day-sign.png',P+'night/store-night.png',P+'sale/shelf-plank.png',
   ...['discount','markup','off','regular'].map(n=>P+'sale/till-'+n+'.png'),
   P+'settings/wood-panel.png',P+'settings/blue-key.png',P+'settings/red-key.png',P+'settings/supply-backdrop.png',
   P+'support/order-paper.png',P+'support/choice-tag-blank.png',P+'support/return-tag-blank.png',

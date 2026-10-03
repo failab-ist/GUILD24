@@ -213,8 +213,8 @@
    The sign is the same green plate on the same two hangers it hung from before, and the till
    is the same recessed display in a steel housing: the room changed owner, the readouts did
    not change what they are. */
-.p-morning .daysign{background:var(--sign);
- box-shadow:inset 0 3px 0 var(--sign-lit),inset 0 -4px 0 #14402a,0 4px 0 #00000080}
+.p-morning .daysign{background:url('assets/presentation/morning/day-sign.png') center/100% 100% no-repeat;
+ aspect-ratio:2156/521;width:auto!important;left:50%!important;translate:-50% 0}
 .p-morning .daysign:before,.p-morning .daysign:after{content:'';position:absolute;top:-10px;
  width:4px;height:10px;background:#5b6a72;box-shadow:1px 0 0 #2a333a}
 .p-morning .daysign:before{left:22%}
