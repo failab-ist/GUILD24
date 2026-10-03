@@ -1148,6 +1148,8 @@ flag, naming no Decoration; COPY_AUDIT §1-8).
 ### DECORATION DECISION SURFACE
 
 Name, exact effect, price / ownership, equipped state; no Flavor prose and no Collection screen for it (data may keep it).
+The key is short (User 2026-10-03): `구매` over a small `{가격} 자본` (or `적용` / `해제`) in a narrow fixed column (88 px phone,
+104 px desk), so the effect line takes the width.
 
 ### STORE GROWTH SURFACE
 

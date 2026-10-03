@@ -67,6 +67,9 @@ and this table is their commit record.
   the rolled Death chance to × 0.60 instead of × 0.80 (was ten 부상 → 무사 a Run, the most zombie-prone piece). META §wall / §counter /
   §display, DUNGEON_HAZARD §Preparation / Level Death reduction, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, COPY_AUDIT 7-3 / 9-5;
   tests integration, revision.
+- **A short Decoration key** (User 2026-10-03: 버튼 영역을 줄이고 효과 영역을 넓게): the buy key reads `구매` over a small `{가격} 자본`
+  (was `{가격} 자본으로 구매`) in a narrow fixed column, so the effect line gets the width; 구급품 진열장's effect line is shortened
+  to `…로 떠나면 실패 시 사망 위험 -40% (기존 -20%).`. UI_UX §DECORATION DECISION SURFACE, COPY_AUDIT 9-5.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 

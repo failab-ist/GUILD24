@@ -2258,7 +2258,8 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
                     +Math.max(0,Meta.storeCapital(a)-d.price).toLocaleString()+'.</p>'
                     +btn('구매 확정','deco-confirm','small active','data-id="'+d.id+'"')
                     +btn('취소','deco-cancel','small')+'</div>'
-                  :btn(d.price.toLocaleString()+' 자본으로 구매','deco-buy','small','data-id="'+d.id+'"'
+                  /* User 2026-10-03: a short key - 구매 over a small price - so the effect line takes the width */
+                  :btn('구매 <small>'+d.price.toLocaleString()+' 자본</small>','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
        +'</div>';}).join('')
     +'</div>';}).join('')
