@@ -274,10 +274,15 @@ function anchorOffer(key,y0){
    when a sheet opens over the screen, so one sheet opening another (메뉴 -> 설정, 도감 ->
    새 점포 준비) still returns to the single origin the player came from. If that origin is gone
    by the time the sheet closes, the Phase's own content region takes focus rather than nothing. */
-// Plain prose paragraphs break between sentences, never inside one when it fits (User 2026-10-03). A sentence
-// longer than the line still wraps within itself, so nothing overflows.
-function sentenceBreaks(root){for(const p of root.querySelectorAll('.settings-group p,.first-days p,.modal p,.smalltext,.none')){
- if(p.childElementCount||p.dataset.sent)continue;const parts=p.textContent.trim().split(/(?<=[.!?])\s+/);
+// Plain prose breaks between sentences, never inside one when it fits (User 2026-10-03). A sentence longer than the
+// line still wraps within itself, so nothing overflows. Any text-only block is eligible; one with its own authored
+// line breaks (\n), a one-line clip (nowrap, ellipsis, line clamp) or a flex/grid box keeps its setting, and a
+// button or heading keeps its label whole.
+const SENT_SKIP='button,summary,h1,h2,h3,h4,label,option,.sent';
+function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorAll('p,span,div,li,small,em')){
+ if(p.childElementCount||p.dataset.sent||!/[.!?][”’]?\s+\S/.test(p.textContent)||p.textContent.includes('\n')||p.matches(SENT_SKIP))continue;
+ const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
+ const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
 function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
@@ -618,7 +623,7 @@ function render(){
  /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
- if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
+ if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();sentenceBreaks($('#app'));requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;warmAhead(s,phase);
  const pop=document.getElementById('wh-pop');if(pop)pop.hidden=true; // its cell is redrawn closed
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
@@ -1402,7 +1407,7 @@ function paintCoach(step,target){
     120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
     and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
     measured height, which is why this is a style write and not a second paint. */
- const bub=root.querySelector('.coach-bubble');
+ const bub=root.querySelector('.coach-bubble');sentenceBreaks(bub);
  if(bub){const real=bub.getBoundingClientRect().height,rw=bub.getBoundingClientRect().width;
   bub.style.left=Math.max(12,Math.min(innerWidth-rw-12,left))+'px';
   bub.style.top=(bottom+real+12<floor?bottom+12:Math.max(12,top-real-12))+'px';}
@@ -2473,7 +2478,7 @@ const ownCancel=new Set(['underConfirm','bossConfirm']);
 let dossierShown=null;const stageKey=()=>game.run?game.run.day+':'+bossRevealStage():null;
 function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
- if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
+ if(modal==='relics'){root.innerHTML=relicTakeover();sentenceBreaks(root);document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
  let title='',body='',footer='',narrow=false,doc='';const s=game.run;
  /* UI_UX §GAME-LIKE INTERACTION LANGUAGE. A Boss beat is not the utility drawer the modal
     shell was written to be - it is a guild investigation record, so the shell takes its one
