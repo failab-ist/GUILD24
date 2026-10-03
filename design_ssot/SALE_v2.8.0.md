@@ -2,8 +2,8 @@
 
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
-DOC_VERSION=2.9.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
+DOC_VERSION=2.10.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY

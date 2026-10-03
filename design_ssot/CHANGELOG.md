@@ -26,8 +26,15 @@ and this table is their commit record.
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
+| v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR (this one) | `v2.10.1` (set by the User) |
 
-## SALE phone density (User 2026-10-03; the version stays 2.10.0)
+## v2.10.1 — design-trim presentation pass (User 2026-10-03)
+
+A presentation-only version: the `ui/design-trim` PRs (#57, #60, #62, #61, #63, docs #65). No rule, balance or save change.
+The entries below (SALE phone density; the v2.9.14 quick patch notes on 단골 배지, NIGHT art, sheets, ORDER parchment, CLOSING / END art; the
+v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, §MENU / SETTINGS VISUAL, §ORDER, §CLOSING own the presentation.
+
+## SALE phone density (User 2026-10-03; shipped in v2.10.1)
 
 - **A denser phone SALE** (User: 판매 중에 너무 다글다글한데): state and 소지 type one step smaller; the card and the side column end on
   one line; a shorter destination plate whose `{능력치} n당 대응 1 제공` tails move into one `?`; 손님 `■■■■■` with no `1/5` (the count
