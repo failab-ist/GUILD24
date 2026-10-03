@@ -191,7 +191,7 @@ Flow: select quantity → `발주 확정` (Inventory updates, cart clears, ORDER
 
 Available with an unconfirmed cart: clears only that cart, replaces the whole offer set, charges the current cost once, keeps
 confirmed Inventory; no reset-to-zero first. The `후보 전체 교환` key at the foot of the sheet is as wide as its words, right-aligned on a
-short margin (User 2026-10-03: it was the sheet's full width, wider than 영업 시작 under it, and took taps meant for the dock).
+short margin, so it never takes a tap meant for 영업 시작 below it (User 2026-10-03).
 
 ### ORDER Runtime continuity
 

@@ -1,15 +1,28 @@
 # WORK_STATE
 
-DATE: 2026-10-01
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) · V2_9_13_QUICK_PATCH_2(PR #42, 첫 판 가르치기, User 컨펌 2026-10-01) — v2.9.2~v2.9.13 태그는 User가 걸어야 함
+DATE: 2026-10-03
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_MERGED(PR #28 · #29 · #30, User 컨펌 2026-09-29) · V2_9_12_MERGED(PR #31 · #32, `f02eb8d`, User 컨펌 2026-09-30) · V2_9_13_MERGED(PR #34, User 컨펌 2026-10-01) · V2_9_13_QUICK_PATCH_2(PR #42, 첫 판 가르치기, User 컨펌 2026-10-01) · V2_9_14_MERGED(PR #50) · V2_10_0_MERGED(PR #52) · V2_10_0_QUICK_PATCH_1~3(PR #54 · #55 · #56, User 컨펌 2026-10-03) — v2.9.2~v2.9.13 태그는 User가 걸어야 함 (v2.9.14 · v2.10.0은 User가 걸었음)
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.12(PR #31 · #32, `f02eb8d`, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
-- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.9.13, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
+- repository: `failab-ist/GUILD24`. main = v2.10.0 퀵패치 3(PR #56, `dcc56b6`, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.0 퀵패치 3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `archive/v2.9.7/hazard-coverage-v297.md`, `archive/v2.9.7/counter-ladder-v297.md`.
+
+## v2.10.0 퀵패치 1~3 — 난이도 · 경제 재조정 (User 2026-10-03, 버전 2.10.0 유지)
+
+내용은 `design_ssot/CHANGELOG.md` §v2.10.0 quick patch 1 ~ 3, 측정 로그는 `reports/v2100-measure/`.
+
+| 퀵패치 | 내용 |
+|---|---|
+| 1 (PR #54) | SuccessEase D1~21 0.90 · D22+ 0.95, 위험 위협 후반 가산(D8부터, 최종전 제외), 능력치 → 대응 환산 모두 3당 1(계열 계수 없음), 대응 사다리 · 음식 · 음료 재조정(영웅 음식 · 음료 투력 +5), 능력치 부가 역할(강인함 사고 · 기동 퇴각 · 정신 사망), 레벨 · 지갑 스노우볼 완화, D1~4 신규 Lv1~2, 패배 사망 계수 완화(QP3에서 다시 올림) |
+| 2 (PR #55) | 방문 지갑 Level × 4 + 30~70, 미방문 지갑 적립, 운영비 기준 170G 유지 |
+| 3 (PR #56) | 발주 대응템 최대 4칸(추가 칸만큼 상한 증가), 신규 레벨 따라잡기(D5부터 Day 항 ×0.4), 실패 비용 강화(사망 계수 0.40 / 0.25, 퇴각 기본 0.40, 연속 부상 +12%p · 상한 40%p), 리롤 버튼 축소·우정렬 |
+
+QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리어 8.5 / 8.8%, 좀비 약 10%(`qp3-option1.log`).
+시험 뒤 버린 안: 신규 1티어 우선 배정, SuccessEase 0.85 / 0.90(`qp3-bundle.log`), 신규 Day 항 ×0.33(`qp3-option1-lv033.log`).
 
 ## v2.9.13 퀵패치 2 — 첫 판 가르치기 (User 2026-10-01, 버전 2.9.13 유지)
 
@@ -201,7 +214,8 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(a
 - 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
 
 다음 작업:
-1. v2.9.12는 PR #31 · #32로 머지했다(User 2026-09-30). User 플레이로 확인한다: 코치 정리 뒤 첫 판, 가격 사후 안내, END `이 점포의 기록`, D30 후보 보기, 화염 게이트 안내.
+1. v2.10.0 퀵패치 3(PR #56)을 User 플레이로 확인한다: 실패 비용(연속 부상 출발, 퇴각), 발주 대응템 4칸, 신규 레벨 따라잡기.
+   - 열린 관찰: Day 항 ×0.4라 D25 이후 신규가 Lv10 안팎으로 나와 기존 핵심 NPC와 비슷해진다. ×0.33은 D30 도달 16~19%로 너무 빡빡해서 버렸다. 플레이 뒤 상한이 필요한지 판단한다.
 2. 보류 · 결정 대기
    - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, `archive/v2.9.11/remeasure-v2911.md` §13-2) — User 플레이 뒤 판단(2026-09-29)
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만

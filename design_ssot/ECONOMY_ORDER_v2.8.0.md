@@ -145,7 +145,7 @@ Returning NPC:
     Wallet = min(2000, round(existing Wallet + Level × 4 + randomInt(30, 70)))
 
 Rules:
-- random range is inclusive 20..60 under the existing integer RNG convention (the floor keeps a losing regular able to buy
+- random range is inclusive 30..70 under the existing integer RNG convention (the floor keeps a losing regular able to buy
   basic preparation; the Wallet otherwise moves with expedition results)
 - persistent Wallet carries between visits
 - explicit Trait / Event / Store Support Wallet effects stay separate under their owners
@@ -389,7 +389,7 @@ than leave a slot empty.
 (User 2026-10-03.) One sheet holds at most `offerCounterMax` = 4 Hazard Counters (an Item with any Hazard 대응) on the six
 ordinary slots, plus one for every slot a Store Support or an Event adds (본사 추가발주권, 새벽 회수 계약, 암시장 상인, an Event's extra
 candidates): once the cap is on the sheet, every further slot draws from the non-Counter Items (Rarity first). A sheet may hold
-none. The Counter guarantee (three sheets without a known Hazard's Counter) still fires as before; on a sheet already at its
+none. The Counter guarantee (three sheets without a known Hazard's Counter) still fires; on a sheet already at its
 cap it takes a Counter's slot rather than one more.
 - Reroll uses the same current-Day Rarity band; it does not bypass Day progression
 - pity/guarantee systems operate on top of this Day-band table; no fixed all-Run Rarity table is used
@@ -853,13 +853,13 @@ FAIL:
 #### ECO-Q-v28-3B — ORDINARY NPC WALLET ON VISIT
 
 Fresh:
-    min(2000, 180 + Level ×3 + randomInt(20,60))
+    min(2000, round(180 + Level × 4 + randomInt(30, 70)))
 
 Returning:
-    min(2000, existing Wallet + Level ×3 + randomInt(20,60))
+    min(2000, round(existing Wallet + Level × 4 + randomInt(30, 70)))
 
 PASS:
-- 20 and 60 endpoints are reachable under existing integer RNG convention
+- 30 and 70 endpoints are reachable under existing integer RNG convention
 - returning NPC keeps persistent Wallet before visit income is added
 - cap 2000 remains
 - failed-expedition Loot is unchanged
