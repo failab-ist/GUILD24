@@ -685,20 +685,23 @@ test('RESCUE: clearing stock is a short-Closing action, priced at what that stoc
  assert.equal(s.rescueUsed,1,'one short Closing is one rescue');
 });
 
-test('RESCUE: it ends the moment the till reaches zero, and three Closings is the whole Run',()=>{
+test('RESCUE: once started it stays open past zero for that Closing, and three Closings is the whole Run',()=>{
  const g=fresh('rescue-cap'),s=g.run;
  for(let i=0;i<12;i++)g.stock('ramen',1);
  s.phase='closing';s.money=-10;
  const ids=s.inventory.map(x=>x.id);
  assert.equal(g.liquidate(ids[0]),true,'the first clears the deficit');
  assert.ok(s.money>=0);
- assert.equal(g.liquidate(ids[1]),false,'and nothing more may be sold once it is square');
+ /* v2.9.14 quick patch (User 2026-10-02): selling only to zero left nothing to order with - the started rescue stays open */
+ assert.equal(g.liquidate(ids[1]),true,'the same Closing may keep clearing past zero');
+ assert.equal(s.rescueUsed,1,'and it is still one rescue');
 
  /* The Closing above was the first rescue, so two remain; the one after that is refused with
     stock still on the shelf. */
  for(const day of [4,5]){s.day=day;s.money=-10;
   assert.equal(g.liquidate(s.inventory[0].id),true,'rescue on DAY '+day);}
  assert.equal(s.rescueUsed,DATA.balance.rescueLimit);
+ s.day=6;s.money=50;assert.equal(g.liquidate(s.inventory[0].id),false,'a square Closing that started no rescue clears nothing');
  s.day=7;s.money=-10;
  assert.equal(g.liquidate(s.inventory[0].id),false,'the fourth is refused');
  assert.ok(s.inventory.length,'with stock still on the shelf');
@@ -800,7 +803,7 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
  assert.ok(entry,'the snapshot is taken when the customer reaches the counter');
  for(const k of ['combat','worst','deathRisk','greatSignal','hazards'])
   assert.ok(k in entry,'the snapshot carries '+k);
- assert.ok(entry.deathRisk>=0&&entry.deathRisk<=0.40,'the Death risk is the conditional one, inside its caps');
+ assert.ok(entry.deathRisk>=0&&entry.deathRisk<=0.60,'the Death risk is the conditional one, inside its caps');
  // it is the SALE-entry state: the same calculation on the untouched NPC
  const fresh0=g.outlookFor({...n,pack:[]});
  assert.deepEqual({...entry,gate:undefined,day:undefined},{...fresh0,gate:undefined,day:undefined},
@@ -1133,8 +1136,7 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
  assert.equal(g.run.money,700,'nothing is paid before DAY 1 opens');
  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
- assert.equal(g.run.money,700+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
- assert.equal(g.run.daily.safeGold,DATA.decorationParams.thriftSafe.dailyGold,'and the DAY 1 ledger says so');
+ assert.equal(g.run.money,700,'the counter pays a customer, never the Store (v2.10.0)');
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
  // changing the Account mid-Run must not reach the Run that already started
@@ -1311,8 +1313,8 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
    Core Roster = alive only, Level desc then Rarity desc, top 6; recovering adventurers count.
    D11 roster (alive): L7R3 L7R2 L5R1 L4R0 L3R4(recovering) L3R1 | L3R0 L1R0, plus a dead L10R4.
    top 6 levels 7,7,5,4,3,3 -> avg 29/6; rarities 3,2,1,0,4,1 -> avg 11/6.
-   dayBase = 170 + 1 x 10 = 180 (v2.9.1 balance, User 2026-09-25 - was 90+5x10=140);
-   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777 (level coefficient .02 -> .03)
+   dayBase = 170 + 1 x 10 = 180;
+   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777
    charged = round(22.2777) x 10 = 220G. */
 test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Canonical formula',()=>{
  const g=fresh('core-roster-overhead'),s=g.run;
@@ -1343,15 +1345,15 @@ const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCap
  const g=new Game(a);g.autosave=false;g.start(seed);return past0(g);};
 /* past the D0 Store Support pick, so the Day's Gates exist for an arrival to read */
 const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
-test('추모 방명록: the Death line that ends a Run is two higher while it is worn',()=>{
+test('추모 방명록: the Death line that ends a Run is one higher while it is worn',()=>{
  // CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): both Runs start Day 1, so `base` is the
- // plain D1~10 segment limit; memorialBook adds +2 to it now (was +1).
+ // plain D1~10 segment limit; memorialBook adds +1 to it (v2.10.0, User 2026-10-03; was +2).
  const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBook'],'memorial');
- assert.equal(Meta.deathLimit(g.run),base+2);
+ assert.equal(Meta.deathLimit(g.run),base+1);
  assert.equal(Meta.deathLimit(fresh('memorial-plain-2').run),base,'without it the line is unchanged');
  g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the plain line the store still trades');
- const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
- assert.equal(h.run.phase,'end','at the bonused (+2) line, it closes');
+ const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+1;h.closeDay();
+ assert.equal(h.run.phase,'end','at the bonused (+1) line, it closes');
 });
 test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
  let healed=0,tries=0;
@@ -1365,30 +1367,34 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: an ordinary Injury the expedition would leave is not left, up to ten times per Run (User 2026-09-26, v2.9.7)',()=>{
+test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a rolled Death chance of x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
+ assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.05);assert.equal(Dungeon.PREPARED.factor,.80);
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
- const weak=(pack=[])=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;return n;};
- const find=want=>{for(let i=0;i<800;i++){const n=weak(),r=Dungeon.resolve(n,d,new RNG('aid-'+i));if(r.outcome===want&&(want!=='부상'||n.injury===1))return 'aid-'+i;}return null;};
- const hurt=find('부상'),dead=find('사망');
- assert.ok(hurt&&dead,'an Injury case and a Death case exist');
- const run={loadout:{display:'aidCabinet'}};
- const healed=weak(),rep=Dungeon.resolve(healed,d,new RNG(hurt),[],run);
- assert.equal(rep.outcome,'부상','the Outcome is the same 부상');assert.equal(healed.injury,0,'but no Injury is left');
- assert.equal(run.aidKitSaves,1,'one of ten is spent');assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
- const bare=weak();Dungeon.resolve(bare,d,new RNG(hurt),[],{loadout:{}});assert.equal(bare.injury,1,'without it the Injury stands');
- /* a carried 구급키트 settles first: the expedition it acted on spends nothing */
- const withKit=weak(['kit']),kitRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
- assert.equal(withKit.injury,0);assert.equal(kitRun.aidKitSaves||0,0,'the Item took it, the count is untouched');
- /* 사망 is not its business any more */
- const died=weak(),deadRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
- assert.equal(died.alive,false,'a Death stands');assert.equal(deadRun.aidKitSaves||0,0);
- /* the tenth is the last */
- const late={loadout:{display:'aidCabinet'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
- assert.equal(tenth.injury,0);assert.equal(late.aidKitSaves,10);
- const eleventh=weak();Dungeon.resolve(eleventh,d,new RNG(hurt),[],late);assert.equal(eleventh.injury,1,'an eleventh is not');
- assert.equal(DATA.decorationParams.aidCabinet.saves,10);
+ const npc=pack=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;n.fatigue=0;n.records=[];return n;};
+ let saved=0,worse=0,diff=0;
+ for(let i=0;i<600;i++){
+  const bare=Dungeon.resolve(npc(['rice','water']),d,new RNG('cab-'+i),[],{loadout:{}}).outcome;
+  const worn=Dungeon.resolve(npc(['rice','water']),d,new RNG('cab-'+i),[],{loadout:{display:'aidCabinet'}}).outcome;
+  if(bare==='사망'&&worn!=='사망')saved++;if(worn==='사망'&&bare!=='사망')worse++;
+  // an adventurer who is not 만반의 준비 (one Item) gets nothing from it
+  const a=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{}}).outcome,b=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{display:'aidCabinet'}}).outcome;
+  if(a!==b)diff++;}
+ assert.ok(saved>0,'a prepared failure inside the x .80 band but outside x .60 survives only with it');
+ /* the 투력 half: at an even Gate, a prepared departure wins at least as often with it, and sometimes only with it */
+ const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(['rice','water']),d).effects)};let won=0,lost=0;
+ for(let i=0;i<300;i++){const b=Dungeon.resolve(npc(['rice','water']),even,new RNG('cab-p-'+i),[],{loadout:{display:'aidCabinet'}});
+  const wa=Dungeon.resolve(npc(['rice','water']),even,new RNG('cab-p-'+i),[],{loadout:{}});
+  if(b.combatWon&&!wa.combatWon)won++;if(wa.combatWon&&!b.combatWon)lost++;}
+ assert.ok(won>0&&lost===0,'투력 x1.05 only ever turns a lost fight into a won one');
+ assert.equal(worse,0,'it never turns a survival into a Death');
+ assert.equal(diff,0,'without 만반의 준비 the outcome is the same with or without it');
+ /* the old ten 부상 -> 무사 a Run is gone: a 부상 the expedition leaves stays, with or without it */
+ {let hurt=0;for(let i=0;i<400&&hurt<3;i++){const a=npc([]),b=npc([]);
+   const ra=Dungeon.resolve(a,d,new RNG('cab-h-'+i),[],{loadout:{}}),rb=Dungeon.resolve(b,d,new RNG('cab-h-'+i),[],{loadout:{display:'aidCabinet'}});
+   if(ra.outcome==='부상'&&a.injury===1){hurt++;assert.equal(rb.outcome,'부상');assert.equal(b.injury,1,'the Injury stands with it worn');}}
+  assert.ok(hurt>0,'an ordinary Injury case was checked');}
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 40% chance (User 2026-09-30, v2.9.13; was 65%)',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 55% chance (User 2026-10-03, v2.10.0; 40% in v2.9.13, 65% before)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
@@ -1396,17 +1402,22 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
- assert.equal(P.chance,.40);
+ assert.equal(P.chance,.55);
  let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
   P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
- assert.ok(up/all>.30&&up/all<.50,'about 40%: '+(up/all));
+ assert.ok(up/all>.45&&up/all<.65,'about 55%: '+(up/all));
 });
-test('알뜰 금고: 50G every morning, on the receipt (v2.9.1 balance; was 40G)',()=>{
- const g=wearing(['thriftSafe'],'safe'),s=g.run;
- s.phase='closing';g.closeDay();
- assert.equal(s.day,2,'the Day turned');assert.equal(s.daily.safeGold,50,'the new morning pays into a fresh ledger');
- assert.ok(source('dist/ui/app.js').includes("['알뜰 금고',d.safeGold]"),'and the cash-flow receipt names it (v2.9.7)');
+test('알뜰 금고: the Day\'s first two customers bring +200G more each',()=>{
+ const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
+ for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
+ s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
+ assert.equal(a.money,300,'the first customer to reach the counter: +200G');
+ s.cursor=1;g.arrive();assert.equal(b.money,300,'the second too');
+ s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
+ const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
+ assert.equal(c.money,100,'without it, nothing');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
 test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estimate is tomorrow\'s real base cost (v2.9.7)',()=>{

@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.13
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.14
+DOC_VERSION=2.10.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -108,16 +108,16 @@ One non-투력 Stat per Hazard, 3 / 3 / 3:
 No pressure label row anywhere: `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` never appear. Every player-facing Hazard row is the numbered row below.
 
 Full Hazard sentence (Gate detail only; the Gate-level requirement number first):
-- `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for 강인함 (×1/3), 2 for 기동 / 정신 (×1/2)
+- `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for every Stat (×1/3)
 - e.g. `독 — 대응 13 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `냉기 — 대응 13 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `부식 — 대응 13 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `속박 — 대응 13 필요 · 기동 2당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `진창 — 대응 13 필요 · 기동 2당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 13 필요 · 정신 2당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `공포 — 대응 13 필요 · 정신 2당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `어둠 — 대응 13 필요 · 기동 2당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화이트아웃 — 대응 13 필요 · 정신 2당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 13 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 13 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 13 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 13 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 13 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 13 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 
 Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need. The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+).
 
@@ -286,9 +286,7 @@ For ordinary expedition Forecast, Resolve, and Great-Success prepared margin:
 ```text
 Prepared Power
 = 투력 × 0.50
-+ 강인함 × 0.34
-+ 기동 × 0.27
-+ 정신 × 0.20
++ (강인함 + 기동 + 정신) × 0.27
 ```
 
 Rules:
@@ -313,13 +311,13 @@ Full required Power (Source-exact):
 
 ```text
 Gate Power
-= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
-× Event danger multiplier × (1 + (50 - region) × 0.001)
+= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
+× Event danger multiplier
 
 FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
 FamilyCombat = golemCombat 0.90 for golem, else 1
+SuccessEase = 0.90 on DAY 1~21, 0.95 from DAY 22 (ordinary Gates; the Final's Boss Power is its own owner)
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
-region: 0..100, starts 50; each Night +2 per win, -4 per death, -1 per other result
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
@@ -344,24 +342,27 @@ For each canonical Hazard:
 
 ```text
 Hazard Threat
-= (12 + Day × 0.35 + (Tier - 1) × 6) × Stat-group factor
-Stat-group factor: 강인함 (독 · 냉기 · 부식) 1.0 · 기동 (속박 · 진창 · 어둠) 1.1 · 정신 (공포 · 화염 · 화이트아웃) 1.2
+= 12 + Day × 0.35 + LateTerm + (Tier - 1) × 6
+LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates; 0 for the Final (마왕성 keeps Day 30 / T2 = 28.50)
 ```
 
-The factor follows the Stat the Hazard presses. 기동 and 정신 convert to Defense at ÷2 and 강인함 at ÷3, so without it an
-average adventurer would answer a 정신 Hazard far more on their own than a 강인함 one. The ÷3 / ÷2 conversion is unchanged;
-the Counter values carry the same factor (`ITEM_v2.8.0.md` §COUNTER LADDER). The anchors below are the 강인함 values; 기동 and
-정신 read them × 1.1 / × 1.2 (e.g. D29 T3 = 34.15 / 37.57 / 40.98).
+Every Hazard reads the same Threat whatever Stat it presses: every Core Stat converts to Defense at ÷3, and an average
+adventurer's own share is about the same in 강인함, 기동 and 정신, so no Stat group needs its own factor. The ÷3 conversion keeps
+a Core Stat - an adventurer's own or a Food / Drink's - from standing in for a Counter (`ITEM_v2.8.0.md` §COUNTER LADDER).
+The late term (from DAY 8) keeps one Counter from
+holding 충분 for the whole Run: past the opening week a single Counter reaches 충분 only on its own rung's Gates, and the
+late Tier 3 Gates ask for two slots of Counters or an adventurer strong in the pressed Stat.
 
 Reference anchors:
 
 ```text
 D1  T1 = 12.35
-D12 T1 = 16.20
-D18 T2 = 24.30
-D24 T2 = 26.40
-D29 T3 = 34.15
-D30 T2 = 28.50
+D7  T1 = 14.45
+D12 T1 = 17.45
+D18 T2 = 27.05
+D24 T2 = 30.65
+D29 T3 = 39.65
+D30 T2 = 34.25 (ordinary formula; the Final reads 28.50)
 ```
 
 ## TIER CONTRACT
@@ -630,12 +631,12 @@ Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 3 / 3, no Gat
 | 독 | 강인함 ×1/3 |
 | 냉기 | 강인함 ×1/3 |
 | 부식 | 강인함 ×1/3 |
-| 속박 | 기동 ×1/2 |
-| 진창 | 기동 ×1/2 |
-| 화염 | 정신 ×1/2 |
-| 공포 | 정신 ×1/2 |
-| 어둠 | 기동 ×1/2 |
-| 화이트아웃 | 정신 ×1/2 |
+| 속박 | 기동 ×1/3 |
+| 진창 | 기동 ×1/3 |
+| 화염 | 정신 ×1/3 |
+| 공포 | 정신 ×1/3 |
+| 어둠 | 기동 ×1/3 |
+| 화이트아웃 | 정신 ×1/3 |
 
 Let:
 
@@ -668,19 +669,19 @@ Environment incident probability:
 
     environmentIncidentChance
     = clamp(
-        0.06
-        + hazardAggregate × 0.012
+        0.08
+        + hazardAggregate × 0.020
         - prepared 강인함 × 0.001,
         0.02,
-        0.48
+        0.60
       )
 
 When combat fails:
 
     escapeChance
     = clamp(
-        0.48
-        + prepared 기동 × 0.005
+        0.40
+        + prepared 기동 × 0.003
         + explicit escape modifier (Traits only; 귀환석's bonus is not read here)
         - Gate scale × 0.024,
         0.15,
@@ -725,7 +726,7 @@ their current owner ordering and are not redefined here.
 
 For a living adventurer:
 
-    baseEXP = 22 + Day × 4.6
+    baseEXP = 24.2 + Day × 5.06
 
 Outcome multiplier:
 
@@ -745,7 +746,7 @@ Ordinary expedition Wallet reward:
 
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
-    대성공 / 성공 = 1.00
+    대성공 / 성공 = 1.25
     퇴각 = 0.40
     부상 = 0.25
     중상 = 0.15
@@ -819,7 +820,7 @@ CombatDeficit
 )
 
 CombatDeathContribution
-= CombatDeficit × 0.18
+= CombatDeficit × 0.40
 ```
 
 `effectivePreparedPower` means the actual prepared state for the snapshot being calculated, including all already-applicable NPC-side modifiers and Item/Supply effects for that snapshot.
@@ -846,13 +847,25 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit × 0.12
+= EnvironmentDeficit × 0.25
 ```
 
 If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
 
 Use the same current Hazard Threat / Hazard Defense truth as ordinary readiness.
 Do not create a second Death-only Hazard table or hidden environment score.
+
+### Spirit steadiness
+
+정신 trims the failure Death chance after every term below (healthy, injured, 탈진, strain and their caps):
+
+```text
+failureDeathChance × (1 − min(0.15, prepared 정신 × 0.003))
+```
+
+Each Core Stat has one small side role besides its Hazards and Prepared Power: 강인함 lowers the incident chance
+(§Environment incident probability), 기동 raises the escape chance on a lost fight, 정신 this. The SALE snapshot reads the same
+number.
 
 ### Healthy / injured failure Death chance
 
@@ -864,7 +877,7 @@ healthyFailureDeathChance
     CombatDeathContribution
   + EnvironmentDeathContribution,
   0.00,
-  0.30
+  0.50
 )
 ```
 
@@ -875,7 +888,7 @@ failureDeathChance
 = clamp(
     healthyFailureDeathChance + 0.10,
     0.00,
-    0.40
+    0.60
 )
 ```
 
@@ -890,18 +903,18 @@ Fatigue 40 departure: if `fatigueBeforeExpedition = 40` (탈진), the same addit
 ```text
 injuryEscalation  = 0.10 if injury=1, else 0
 fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
-strainEscalation  = min(0.30, 0.08 × max(0, consecutiveInjuredDepartures − 1))
+strainEscalation  = min(0.40, 0.12 × max(0, consecutiveInjuredDepartures − 1))
   consecutiveInjuredDepartures = this departure, if begun at injury=1, plus the unbroken run of this adventurer's
     immediately preceding expeditions also begun at injury=1; 0 when this departure is healthy
   (only CONSECUTIVE injured departures count — a healthy departure, including the
-   return after a Severe-Injury rest, resets the chain; the first injured departure is free, every further one adds 8%p,
-   up to 30%p; Fatigue does not feed this term)
+   return after a Severe-Injury rest, resets the chain; the first injured departure is free, every further one adds 12%p,
+   up to 40%p; Fatigue does not feed this term)
 
 failureDeathChance
 = clamp(
     healthyFailureDeathChance + injuryEscalation + fatigueEscalation + strainEscalation,
     0.00,
-    0.30 + injuryEscalation + fatigueEscalation + strainEscalation
+    0.50 + injuryEscalation + fatigueEscalation + strainEscalation
 )
 ```
 
@@ -912,10 +925,10 @@ Meaning:
 - weak Hazard preparation independently raises the conditional failure Death risk
 - repeating expeditions with an already-injured NPC adds a visible material risk
 - departing at Fatigue 40 (탈진) adds the same visible material risk
-- sending an adventurer out injured again and again escalates further: +8%p per consecutive injured departure after the first, up to +30%p, and the cap rises with it; one healthy departure resets it
-- healthy conditional cap remains 30%
-- injured conditional cap remains 40%
-- Fatigue-40 conditional cap is 40%; injured and Fatigue-40 together 50%
+- sending an adventurer out injured again and again escalates further: +12%p per consecutive injured departure after the first, up to +40%p, and the cap rises with it; one healthy departure resets it
+- healthy conditional cap is 50%
+- injured conditional cap is 60%
+- Fatigue-40 conditional cap is 60%; injured and Fatigue-40 together 70%
 
 These caps are conditional failure-risk caps, not unconditional whole-expedition Death probabilities.
 
@@ -930,6 +943,7 @@ preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
   - departed without Injury (injury=0)
   - fatigueBeforeExpedition < 20
   - 2 or more Items in the Bag
+preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 is worn (META §display — 구급품 진열장)
 ```
 
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes
@@ -1315,7 +1329,7 @@ Inspect all 9 canonical Hazards in Gate/preparation UI on desktop and touch/mobi
 
 EXPECT:
 Every Hazard exposes the numbered short row, the same on every surface:
-- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 대응 1 제공` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / dark · 정신: fear / whiteout / fire)
+- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 대응 1 제공` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold · 기동: bind / mire / dark · 정신: fear / whiteout / fire)
 - Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> <n>당 대응 1 제공 · <Hazard> 대응 상품이 막는다`
 - no `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` label row and no destination-plate `?` help survive
 - no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
@@ -1337,9 +1351,9 @@ PASS:
 Controlled prepared states: vary one Core Stat at a time and read each Hazard's Defense.
 
 EXPECT:
-- 독 / 냉기 / 부식 Defense moves only with 강인함 (×1/3)
-- 속박 / 진창 / 어둠 Defense moves only with 기동 (×1/2)
-- 공포 / 화이트아웃 / 화염 Defense moves only with 정신 (×1/2)
+- 독 / 냉기 / 부식 Defense moves only with 강인함 (×1/4)
+- 속박 / 진창 / 어둠 Defense moves only with 기동 (×1/3)
+- 공포 / 화이트아웃 / 화염 Defense moves only with 정신 (×1/3)
 - no Hazard Defense moves with 투력
 - no Hazard reads a second Core Stat (no 정신 + 기동 split for 어둠 / 화이트아웃, no 강인함 for 화염)
 - every Family Tier Hazard set presses two different Stats (독거미 강인함 + 기동, 슬라임 강인함 + 기동, 설원 강인함 + 정신, 지하묘지 정신 + 기동), so no Gate is answered by one Stat
@@ -1439,7 +1453,7 @@ Controlled Stats with no other modifiers.
 
 EXPECT ordinary expedition prepared ability:
 ```text
-투력 .50 + 강인함 .34 + 기동 .27 + 정신 .20
+투력 .50 + 강인함 .27 + 기동 .27 + 정신 .27
 ```
 
 PASS:
@@ -1456,6 +1470,7 @@ PASS:
 - the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10`
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
+- SuccessEase multiplies the whole ordinary Gate Power once: 0.90 on DAY 1~21, 0.95 from DAY 22
 
 FAIL:
 - a single slope applied across all Days
@@ -1467,16 +1482,17 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = (12 + Day*.35 + (Tier-1)*6) × Stat-group factor (강인함 1.0 · 기동 1.1 · 정신 1.2)
+Threat = 12 + Day*.35 + LateTerm + (Tier-1)*6, LateTerm = max(0, Day-7)*.25 (ordinary Gates; 0 for the Final); no Stat-group factor
 ```
 
-Exact anchors (강인함; 기동 × 1.1, 정신 × 1.2):
+Exact anchors (every Hazard):
 - D1 T1 = 12.35
-- D12 T1 = 16.20
-- D18 T2 = 24.30
-- D24 T2 = 26.40
-- D29 T3 = 34.15
-- D30 T2 = 28.50
+- D7 T1 = 14.45
+- D12 T1 = 17.45
+- D18 T2 = 27.05
+- D24 T2 = 30.65
+- D29 T3 = 39.65
+- D30 T2 = 34.25 (ordinary formula); the Final (Day 30 / T2) = 28.50
 
 PASS: runtime threat matches.
 
@@ -1714,13 +1730,13 @@ chain broken once by a healthy departure, and a Fatigue 20+ departure chain.
 
 EXPECT:
 - the first injured departure adds nothing beyond the existing injured term
-- every further CONSECUTIVE injured departure adds +8%p to the conditional failure Death chance and to its cap, capped at +30%p
+- every further CONSECUTIVE injured departure adds +12%p to the conditional failure Death chance and to its cap, capped at +40%p
 - one healthy departure resets the chain; Fatigue 20+ departures add nothing to this term
 - the count comes from the adventurer's own records (this departure included); no new NPC field
 - NPC detail shows `연속 부상 출발 {n}회` (the current chain of consecutive injured departures; 0 after a healthy one) as an information row, no verdict
 
 PASS:
-- strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
+- strainEscalation equals min(0.40, 0.12·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
 
 #### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
 
@@ -1734,7 +1750,7 @@ Supply/Fatigue runtime arithmetic follows the current owner truth.
 #### DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
 
 Controlled seeded cases must verify (no Supply-deficit row):
-- environment incident chance uses the exact closure formula and 2%–48% clamp
+- environment incident chance uses the exact closure formula and 2%–60% clamp
 - escape chance uses the exact closure formula and 15%–94% clamp
 - failed-combat Severe branch uses 36% base before current modifiers
 - environment/other Severe branch uses 11% base before current modifiers
@@ -1742,10 +1758,10 @@ Controlled seeded cases must verify (no Supply-deficit row):
 - failure-conditioned Death still follows the separate current Death owner formula exactly once
 
 Reward PASS:
-- EXP base = 22 + Day×4.6
+- EXP base = 24.2 + Day×5.06
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
+- Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
@@ -1762,7 +1778,7 @@ Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 
 and the three near misses (injured / Fatigue 20 / one Item).
 
 PASS:
-- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 only when all three hold
+- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 (0.60 with 구급품 진열장) only when all three hold
 - Level never changes the Death roll or the SALE snapshot: Lv1 / Lv2 / Lv10 / Lv20 read the same chance
 - a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
 - the SALE `실패 시 사망 위험` never includes preparedFactor
@@ -1801,7 +1817,7 @@ CombatDeficit
 = clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
 
 CombatDeathContribution
-= CombatDeficit * 0.18
+= CombatDeficit * 0.40
 
 HazardDeficit_i
 = clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)
@@ -1810,13 +1826,13 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit * 0.12
+= EnvironmentDeficit * 0.25
 
 healthyFailureDeathChance
 = clamp(
     CombatDeathContribution + EnvironmentDeathContribution,
     0.00,
-    0.30
+    0.50
 )
 ```
 
@@ -1829,7 +1845,7 @@ PASS:
 - Combat contribution uses the same current prepared-combat truth as Forecast/Resolve before hidden combat variance
 - Environment contribution uses the same current Hazard Threat/Defense truth as readiness
 - healthy minimum may reach exactly 0%
-- healthy conditional cap is exactly 30%
+- healthy conditional cap is exactly 50%
 - an expedition that resolves as `성공 / 대성공` performs zero Death rolls
 - an expedition that enters the ordinary failure path performs exactly one Death roll
 - that failure Death roll is not additionally gated behind a separate failed-escape requirement
@@ -1843,9 +1859,9 @@ Controlled identical NPC/Gate state except departure Injury state.
 
 EXPECT when departure `injury=1`:
 - ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
-- failure Death chance adds +10%p to the healthy conditional formula and caps at 40%
+- failure Death chance adds +10%p to the healthy conditional formula and caps at 60%
 - Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
-- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 50%
+- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 70%
 - no extra independent Death/Severe roll is created
 - `성공 / 대성공` still performs no Death roll
 
@@ -1859,8 +1875,8 @@ Pre-supply SALE check:
 
 PASS:
 - injured departure is materially riskier than healthy departure when an expedition fails
-- healthy conditional cap remains 30%
-- injured conditional cap remains 40%
+- healthy conditional cap is 50%
+- injured conditional cap is 60%
 - exact pre-supply `실패 시 사망 위험` is player-visible while the post-supply actual conditional probability remains hidden
 
 #### DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY

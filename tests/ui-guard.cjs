@@ -8,6 +8,9 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
 const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
+/* render an app.js surface for real: its functions and top-level `const` lines, evaluated against a stub context */
+const constLine=name=>app.match(new RegExp('^const '+name+'=.*$','m'))[0];
+const render=(parts,expr,ctx)=>require('node:vm').runInNewContext(parts.join('\n')+';'+expr,ctx);
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
 test('§8.1: Playwright is a devDependency and never enters the shipped build',()=>{
@@ -725,7 +728,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.ok(!/노려볼 만합니다/.test(app.replace('Copy.great.signal','')),'no second copy of the wording');
  /* User 2026-10-02: inside the 전투 전망 box - a phone's quiet tag beside the word, the sentence kept for a screen reader */
  assert.equal(Copy.great.tag,'대성공 기회','the phone tag is the approved short form');
- assert.ok(/<b>'\+o\.combat\+'<\/b><i class="gs-tag" aria-hidden="true">'\+E\(Copy\.great\.tag\)/.test(app),'the tag sits beside the word and is not read twice');
+ assert.ok(/<span class="gs-row"><b>'\+o\.combat\+'<\/b><span class="ro-tags">'/.test(app)&&/<i class="gs-tag" aria-hidden="true">'\+E\(Copy\.great\.tag\)/.test(app),'the tag sits beside the word and is not read twice');
  assert.ok(/\.readout\.ro2 \.great-signal\{position:absolute;width:1px/.test(css)&&/@media\(min-width:1024px\)\{\n \.readout\.ro2 \.gs-tag\{display:none\}/.test(css),'phone: tag shown, sentence screen-reader only; desk: sentence shown, no tag');
  /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY names a Great Success signal CHANGE as one of
     the hypothetical answers the decision surface may not show, so the screen now reads the
@@ -900,7 +903,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
  assert.equal((codeOnly.match(/envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
- assert.ok(/<span class="pin-fore pin-plate env-meter">환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
+ assert.ok(/<span class="pin-fore pin-plate env-meter">'\+\(p\.hazards\.length\?'환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -1995,25 +1998,31 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
-/* UI-Q-v29-38 (UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT, User 2026-09-26, v2.9.5): one thin words-only line under the
-   readout .top, only for an injured departure with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
-test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail number, no %',()=>{
- const r=fn('readout'),top=r.indexOf("+'</div>'"),line=r.indexOf('class="strain"');
- assert.ok(top>0&&line>top&&r.indexOf('great-signal')<top,'directly under the readout .top (the Great Success signal sits inside it)');
- assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
+/* UI-Q-v29-38 (UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; v2.9.14 quick patch, User 2026-10-02): the strain words live in
+   the 전투 전망 box like the Great Success signal - a phone chip beside the word, a desk line under it - only for an injured departure
+   with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
+test('UI-Q-v29-38: SALE strain - in the 전투 전망 box, injured with a chain only, the NPC detail number, no %',()=>{
+ const r=fn('readout'),top=r.indexOf("+'</div>'"),combat=r.indexOf('class="fore ro-combat"'),env=r.indexOf('class="fore ro-env');
+ assert.ok(r.includes("const strain=n.injury===1?Dungeon.injuredStreak(n.records):0,strainText='연속 부상 출발 '+strain+'회';"),'injured departures, the same injuredStreak and wording');
+ for(const cls of ['st-tag','ro-strain']){const i=r.indexOf('class="'+cls+'"');assert.ok(i>combat&&i<env&&i<top,cls+' sits inside the 전투 전망 box');}
+ assert.ok(!r.includes('class="strain"'),'no loose line under the pair any more');
+ assert.ok(/\.readout\.ro2 \.ro-strain\{position:absolute/.test(css)&&/\.readout\.ro2 \.st-tag\{display:none\}/.test(css),'phone chip (line for a screen reader), desk line');
  assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
  assert.equal((r.match(/<span class="fore ro-(?:combat|env)/g)||[]).length,2,'the .top still holds the two boxes (전투 전망 and the 환경 대응 meter)');
- assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
- assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
+ assert.ok(!/strainText='[^;]*%/.test(r)&&(r.match(/E\(strainText\)/g)||[]).length===2,'no % in the words: the chip and the line print strainText only');
+ assert.ok(/\.readout\.ro2 \.ro-strain\{position:static;[^}]*font:500 12px/.test(css),'small on a desk');
 });
 /* UI-Q-v29-24 (UI_UX §SALE — FORECAST PIN, User 2026-09-28, v2.9.9 quick patch): the pin carries the readout's strain line under its
    two readings - the same condition, wording and number; inside .pin-full, so the folded chip stays `전망` */
 test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and wording, folded away with the readings',()=>{
  const p=fn('forecastPin');
  assert.ok(p.includes("streak=n.injury===1?Dungeon.injuredStreak(n.records):0"),'injured only, the same injuredStreak');
- assert.ok(p.includes("(streak>0?'<span class=\"pin-strain\">연속 부상 출발 '+streak+'회</span>':'')"),'a chain of 1 or more, the readout wording');
- assert.ok(p.indexOf('pin-strain')<p.indexOf('pin-chip')&&p.indexOf('pin-strain')>p.indexOf('pin-full'),'inside the full line, not the chip');
- assert.ok(/\.forecast-pin \.pin-strain\{[^}]*font:500 12px/.test(css),'small, as the readout line');
+ assert.ok(p.includes("(streak>0?'<i class=\"st-tag\">연속 부상 출발 '+streak+'회</i>':'')"),'a chain of 1 or more, the readout wording, as the readout chip');
+ assert.ok(p.includes("(o.greatSignal?'<i class=\"gs-tag\">'+E(Copy.great.tag)+'</i>':'')"),'the 대성공 기회 chip rides with it (v2.9.14 quick patch)');
+ assert.ok(/\.forecast-pin \.pin-plate \.pin-tags\{display:flex;flex-direction:column;align-items:flex-end;[^}]*margin-left:auto;align-self:center/.test(css)
+  &&/\.forecast-pin \.pin-plate\.env-meter:has\(\.pin-tags\)\{flex-wrap:nowrap/.test(css),'stacked at the right of the meter, never growing the strip (v2.9.14 quick patch)');
+ assert.ok(p.indexOf('pin-tags')<p.indexOf('pin-chip')&&p.indexOf('pin-tags')>p.indexOf('pin-full'),'inside the full line, not the folded chip');
+ assert.ok(/\.forecast-pin \.st-tag\{padding:2px 5px;font:600 11px/.test(css),'the readout chip\'s own look');
 });
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
@@ -2437,7 +2446,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.']])
+   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다. 강인함은 사고를, 기동은 패배 후 부상을, 정신은 사망을 조금씩 줄여 준다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
@@ -2792,23 +2801,40 @@ test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>
 /* SA-Q36 — DECORATION DECISION SURFACE. The comparison carried Flavor prose beside the effect
    line, so the row the player decides on was half argument and half story. */
 test('SA-Q36: the Decoration comparison shows only what the decision is made on',()=>{
- const panel=fn('storePanel').replace(/\/\*[\s\S]*?\*\//g,'');
+ /* the real storePanel (with app.js's own btn / SLOT_COPY) for an account owning one sign, out of a Run and in one */
+ const Meta=globalThis.Meta,a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.trainingSign.price);Meta.buyDecoration(a,'trainingSign');
+ const panel=run=>render([constLine('btn'),constLine('SLOT_COPY'),fn('storePanel')],'storePanel()',{game:{account:a,run},Meta,D:DATA,E:globalThis.Art.esc,decoPending:null});
+ const out=panel(null),inRun=panel({phase:'sell'}),row=(html,id)=>html.split('<div class="slot-option').find(r=>r.includes('data-id="'+id+'"')||r.includes('>'+DATA.decorationBy[id].name+'<'));
  // what stays: name, exact effect, price / ownership, equipped state
- assert.ok(/<b>'\+E\(d\.name\)\+'<\/b>/.test(panel),'the name stays');
- assert.ok(/<span class="smalltext">'\+E\(d\.effect\)\+'<\/span>/.test(panel),'the exact effect stays');
- assert.ok(/d\.price\.toLocaleString\(\)/.test(panel),'the price stays');
- assert.ok(/Meta\.decorationOwned\(a,d\.id\)/.test(panel),'ownership state stays');
- assert.ok(/on\?'해제':'적용'/.test(panel)&&/on\?'이번 영업에 적용 중':'미적용'/.test(panel),'equipped state stays');
- // what goes: the Flavor prose, from THIS surface only
- assert.ok(!/d\.text/.test(panel),'the Flavor prose is not on the decision surface');
- assert.ok(!/class="tale"/.test(panel),'and neither is its slot');
+ for(const d of DATA.decorations){const r=row(out,d.id);
+  assert.ok(r.includes('<b class="deco-name">'+globalThis.Art.esc(d.name)+'</b>'),d.id+': the name stays');
+  assert.ok(r.includes('<span class="smalltext deco-effect">'+globalThis.Art.esc(d.effect)+'</span>'),d.id+': the exact effect stays, on its own row');
+  if(d.id!=='trainingSign')assert.ok(r.includes(d.price.toLocaleString()+' 자본')&&r.includes('data-action="deco-buy"'),d.id+': unowned - the price and the buy key stay');
+  // what goes: the Flavor prose, from THIS surface only
+  assert.ok(!r.includes(globalThis.Art.esc(d.text))&&!r.includes(d.text),d.id+': the Flavor prose is not on the decision surface');}
+ {const r=row(out,'sponsorSign');assert.ok(r.indexOf('deco-name')<r.indexOf('data-action="deco-buy"')&&r.indexOf('data-action="deco-buy"')<r.indexOf('deco-effect'),'the key sits beside the name, the effect line below them');}
+ assert.ok(/data-action="deco-unequip"[^>]*>해제</.test(row(out,'trainingSign')),'owned and worn: the 해제 key - equipped state stays');
+ Meta.equipDecoration(a,'sign',null);assert.ok(/data-action="deco-equip"[^>]*>적용</.test(row(panel(null),'trainingSign')),'owned, not worn: the 적용 key');Meta.equipDecoration(a,'sign','trainingSign');
+ assert.ok(row(inRun,'trainingSign').includes('이번 영업에 적용 중')&&row(inRun,'sponsorSign').includes(DATA.decorationBy.sponsorSign.price.toLocaleString()+' 자본'),'in a Run: worn state and price, no keys');
+ assert.ok(!out.includes('class="tale"'),'and neither is its slot');
  // the data itself is untouched and still available to lore-ready surfaces
  assert.ok(DATA.decorations.every(d=>d.text&&d.text.trim()),'every Decoration still carries its Flavor');
  assert.ok(read('dist/data/decorations.js').includes('text'),'the Flavor data was not deleted');
  assert.ok(/class="tale"/.test(app),'the Flavor slot still exists on the surfaces that are for it');
  // nothing was redesigned or added
- assert.ok(!/collection|컬렉션/i.test(panel),'no Collection screen was added');
+ assert.ok(!/collection|컬렉션/i.test(out),'no Collection screen was added');
  assert.equal((app.match(/function storePanel\(/g)||[]).length,1,'one Decoration surface, unchanged in shape');
+});
+
+/* META §counter — 알뜰 금고: the Gold goes to the customers' purses, so the Store receives nothing and the receipt has no row for it */
+test('알뜰 금고: the closing receipt of a Day it paid carries no row for it',()=>{
+ const Meta=globalThis.Meta,a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.thriftSafe.price);Meta.buyDecoration(a,'thriftSafe');
+ const g=new globalThis.Game(a);g.autosave=false;g.start('safe-receipt');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
+ const s=g.run,[x,y]=s.npcs,before=s.money;for(const n of [x,y]){n.traits=[];n.money=100;n.introduced=true;}
+ s.queue=[x.id,y.id];s.cursor=0;g.arrive();s.cursor=1;g.arrive();
+ assert.deepEqual(s.daily.safeWallets,[x.id,y.id],'the safe paid two customers today');assert.equal(s.money,before,'and the till did not move');
+ const tape=render([app.split('\n')[2],fn('closingReceipt')],'closingReceipt(s)',{DATA,Art:globalThis.Art,Copy:globalThis.Copy,game:g,s});
+ assert.ok(tape.includes('class="tape"')&&!tape.includes('알뜰 금고'),'no 알뜰 금고 row on the tape');
 });
 
 /* BOSS_v2.8 §INFORMATION CADENCE + COPY_AUDIT §14. Source carried D5 / D15 / D25 only; D0, D10
@@ -3480,7 +3506,7 @@ test('UI-Q-v29-25: a desk draws its own SALE - the customer behind the counter, 
 test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
  const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
  assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n,st\?st\.item:null\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
- assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('>전투<b>')&&pin.includes('>환경\'+envMeter')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
+ assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('>전투<b>')&&pin.includes("'환경'+envMeter(p,d,pre)")&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
  assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
  assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
  assert.ok(/aria-expanded/.test(sync),'the fold state is announced');
@@ -3522,9 +3548,9 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['confirm','[data-action="confirm-order"]']],'one step, on the confirm key');
  assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
- // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)
- const rate={survival:3,mobility:2,spirit:2};
- for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',2],fear:['spirit',2],dark:['mobility',2]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
+ // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 for every Stat (Stat n당 대응 1)
+ const rate={survival:3,mobility:3,spirit:3};
+ for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',3],fear:['spirit',3],dark:['mobility',3]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
  for(const [day,tier] of [[1,1],[6,2],[18,3]]){const d={day,tier};
   for(const k of Object.keys(DATA.hazards)){const st=Presentation.hazardStat[k],need=Math.ceil(Dungeon.hazardState(k,{},d).threat);
    assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공 · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
@@ -3542,8 +3568,8 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  const plate=fn('destPlate');
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
  assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');
- // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29)
- assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
+ // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29, no late term)
+ assert.equal(Presentation.hazardShort('poison',{day:30,tier:2,family:'final'}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
  assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalThreat')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');

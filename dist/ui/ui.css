@@ -663,6 +663,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  font:600 14px/1 var(--ui);letter-spacing:.02em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.8}
 .rubber:hover{background:#00000008;opacity:1}
 .rubber:disabled{opacity:.28}
+/* UI_UX §ORDER Reroll UX: the 후보 전체 교환 key is as wide as its words, at the sheet's right edge, on a short margin */
+.rubber[data-action="reroll"]{width:auto;max-width:calc(100% - 32px);margin:8px 16px 4px auto;padding:9px 16px}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
 .p-order .dock{position:relative;display:flex;flex-wrap:wrap;gap:10px;padding-top:16px;
  background:var(--tex-paper),#e6ddc6;box-shadow:0 -5px 0 #00000059}
@@ -1270,7 +1272,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  min-height:44px;padding:8px 12px;background:#0d0904;color:#9c8d70;font:500 13px/1.3 var(--ui);word-break:keep-all;text-align:left;
  box-shadow:inset 0 0 0 1px #ffffff1f,0 4px 12px #0009}
 .forecast-pin .pin-full{display:flex;flex:1;flex-wrap:wrap;gap:2px 16px}
-.forecast-pin .pin-strain{flex:1 0 100%;font:500 12px/1.3 var(--ui);color:#b3a282}
 .forecast-pin .pin-fore{flex:1 1 46%}
 .forecast-pin.folded{left:auto}
 .forecast-pin.show{display:inline-flex}
@@ -1895,7 +1896,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 1px #0000003d,inset 0 3px 0 #0000004d,inset 0 -2px 0 #ffffff12}
 .modal:has(.tabs) .slot-option.on{background:#1d18104d;
  box-shadow:inset 0 0 0 1px #00000059,inset 0 0 0 2px var(--gold),inset 0 3px 0 #00000047}
-.modal:has(.tabs) .slot-option>div:first-child{box-shadow:inset 0 2px 0 #ffffff12}
 /* the key is the card's own control, built like the sheet's Action at a smaller measure:
    a dark rim, one lit edge, a hard bottom, and a press that collapses it */
 .modal:has(.tabs) .slot-option>button{background:#3f382c;color:#efe3c8;
@@ -2723,14 +2723,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    at screenshot scale four cards read as one soft column rather than four built objects. It
    takes the same two-part edge the Batch uses everywhere else - a hard outer line and one
    lit seam inside it - over a 4px hard cast. Nothing about the two-track geometry moves. */
-.slot-option{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,38%);align-items:stretch;
+.slot-option{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;row-gap:4px;align-items:center;padding:10px 10px 12px 13px;
  background:#17140f;
  box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 3px #453c2e,4px 4px 0 #00000073}
 /* BATCH 1: the reading face takes one lit top seam of its own. Without it the reading and the
    key were the same unlit dark and the seam between them - the thing that makes the control
    read as the card's face rather than a second box - did no work at screenshot scale. */
-.slot-option>div:first-child{min-width:0;padding:11px 13px;align-self:center;
- box-shadow:inset 0 2px 0 #ffffff0d}
+/* UI_UX §DECORATION DECISION SURFACE: name and key share the first row, the effect line takes the whole second row */
+.slot-option>.deco-name{grid-column:1;grid-row:1;min-width:0;min-height:48px;display:flex;align-items:center} /* the key's height, so the row holds while the inline confirmation stands in for the key */
+.slot-option>button,.slot-option>.muted{grid-column:2;grid-row:1}
+.slot-option>.deco-effect{grid-column:1/-1;grid-row:2}
 .slot-option+.slot-option{margin-top:8px}
 /* equipped: the same construction, with the seam in gold - the state arrives on the edge the
    card already has rather than on a new one. The label (해제) and the contrast carry the rest. */
@@ -2741,7 +2743,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    darker fill, a seam one step quieter, a shorter cast. Every word on it stays legible. */
 .slot-option.locked{opacity:1;background:#191510;
  box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 3px #322b22,2px 2px 0 #0000005c}
-.slot-option.locked>div:first-child b{color:#cdbfa4}
+.slot-option.locked>.deco-name{color:#cdbfa4}
 .slot-option.locked span.smalltext{color:#b7a98d}
 .slot-option b{display:block}
 /* the control is the card's right-hand face: full height, flush to the edge, its own ruled
@@ -2754,7 +2756,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    The DEFAULT face is neutral, because two different things live in it: buying a Decoration,
    and moving one you already own in or out of its Slot. Only the first is a purchase, so only
    the first takes the YELLOW family below. */
-.slot-option>button{align-self:stretch;min-height:0;margin:0;padding:10px 12px;
+.slot-option>button{align-self:center;min-width:64px;height:48px;min-height:48px;margin:0;padding:6px 10px; /* 구매 + price and 해제 / 적용 are one height, so buying never resizes the card */
+ 
  white-space:normal;font-size:13px;line-height:1.35;text-align:center;
  clip-path:none;filter:none;
  background:#3c362d;color:#efe3c8;font-weight:600;
@@ -2787,7 +2790,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    more colour on the key. */
 /* a state word where a control would be keeps the control's place, so the row does not reflow
    between an in-Run store and a pre-Run one */
-.slot-option>.muted{align-self:center;padding:11px 13px 11px 0;text-align:right;white-space:nowrap}
+.slot-option>.muted{align-self:center;text-align:right;white-space:nowrap}
+/* the price under 구매: the key is short and narrow, the effect line gets the width */
+.slot-option>button small{display:block;margin-top:2px;font-size:11px;font-weight:600;white-space:nowrap;color:inherit;opacity:.8}
 
 /* UI_UX §DECORATION DECISION SURFACE + §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT. The
    purchase/equip comparison is decided on this exact effect line, so it is Function: 14-15px,
@@ -2803,7 +2808,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the confirmation replaces the control, and it carries a sentence, so it takes the whole card
    instead of being squeezed into the control's track. Every card does this the same way, at
    every width - that is the point of the change above. */
-.slot-option>.deco-confirm{grid-column:1/-1;padding:11px 13px;justify-items:stretch;text-align:left;
+.slot-option>.deco-confirm{grid-column:1/-1;grid-row:3;padding:8px 0 0;justify-items:stretch;text-align:left;
  box-shadow:inset 0 2px 0 #2f2a22}
 .slot-option>.deco-confirm p{text-align:left}
 /* USER 2026-09-23: this line is store state, not an Action. It no longer carries the 점포 관리
@@ -3007,8 +3012,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .form-head{grid-template-columns:minmax(0,1fr) auto}
  .form-head h1{font-size:40px}
  /* past the phone the label fits on one line again, so the control takes only what it needs */
- .slot-option{grid-template-columns:minmax(0,1fr) auto}
- .slot-option>button{padding:10px 16px;white-space:nowrap;font-size:14px}
+ .slot-option>button{padding:6px 12px;white-space:nowrap;font-size:14px}
  /* MORNING on a wide screen: the extra width goes to the notices, and the decision keeps a
     size that reads across a desk. A wide window is not a reason to set the whole game
     smaller so that more of the shop fits in it. */
@@ -3719,7 +3723,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    sentence for a screen reader only; a desk shows the sentence under the word and no tag */
 .readout.ro2 .gs-row{display:flex;align-items:center;gap:8px;min-width:0}
 .readout.ro2 .top .ro-combat .gs-row>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
-.readout.ro2 .gs-tag{padding:2px 5px;font:600 11px/1.2 var(--ui);font-style:normal;color:#d9bf78;background:#2e2410;
+.readout.ro2 .gs-tag,.forecast-pin .gs-tag{padding:2px 5px;font:600 11px/1.2 var(--ui);font-style:normal;color:#d9bf78;background:#2e2410;
  box-shadow:inset 0 0 0 1px #6b5428;white-space:nowrap}
 .readout.ro2 .great-signal{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
 @media(min-width:1024px){
@@ -3800,3 +3804,23 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .settings-wood .modal-body{padding-left:18px;padding-right:18px}
  .settings-wood button:not(.bare){font-size:15px}
  .settings-wood .settings-group h3{font-size:23px}}
+
+/* v2.9.14 quick patch (User 2026-10-02): 연속 부상 출발 lives in the 전투 전망 box like the Great Success signal - a phone shows a quiet
+   red chip beside the word (the line stays for a screen reader), a desk the line under it; on the pin it takes the bottom right */
+.readout.ro2 .st-tag,.forecast-pin .st-tag{padding:2px 5px;font:600 11px/1.2 var(--ui);font-style:normal;color:#e0a08a;background:#2e1610;
+ box-shadow:inset 0 0 0 1px #6b3428;white-space:nowrap}
+.readout.ro2 .ro-strain{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+/* the strip never grows for them (User 2026-10-02): the chips stand in a small column at the right of the meter, the meter's
+   Hazards stacking beside them inside the strip's own height */
+.forecast-pin .pin-plate.env-meter:has(.pin-tags){flex-wrap:nowrap;padding-top:3px;padding-bottom:3px}
+.forecast-pin .pin-plate.env-meter:has(.pin-tags) .env-meter-list{flex:1 1 auto;min-width:0;row-gap:0}
+.forecast-pin .pin-plate.env-meter:has(.pin-tags) .env-row,.forecast-pin .pin-plate.env-meter:has(.pin-tags) b.env-num{line-height:17px}
+.forecast-pin .pin-plate .pin-tags{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none;margin-left:auto;align-self:center}
+.forecast-pin .pin-tags .st-tag,.forecast-pin .pin-tags .gs-tag{padding:1px 4px;font-size:10px;line-height:1.25}
+@media(min-width:1024px){
+ .readout.ro2 .st-tag{display:none}
+ .readout.ro2 .ro-strain{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;
+  font:500 12px/1.3 var(--ui);color:#b3a282}}
+/* both chips on one customer (an injured adventurer the fight still favours) is rare; then they stack, left-aligned on the first
+   chip, beside the word rather than running out of the box (User 2026-10-02) */
+.readout.ro2 .ro-tags{display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px;min-width:0}

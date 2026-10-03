@@ -93,6 +93,22 @@ Do not accept Presentation quality from Source inspection or the implementer's s
 
 ---
 
+# 2B. 코드 읽기 · 소스 가드 정리 (User 2026-10-01)
+
+`dist/` 코드는 주석이 절반 가까이 된다. 코드를 읽을 때는 주석을 뺀 함수부터 본다.
+
+```text
+node tools/fn.cjs <파일> <함수...>            # 주석을 뺀 함수
+node tools/fn.cjs <파일> <함수...> --keep-comments   # 원문
+```
+
+`tests/`의 소스 글자 검사(`ui-guard.cjs`의 `fn()` 슬라이스 등)와 코드 안의 긴 주석은 한꺼번에 고치지 않는다.
+함수를 고칠 때만 그 함수에 걸린 것을 정리한다.
+- 소스 글자 검사: 검사 내용(assertion)은 그대로 두고 새 위치로 옮기거나, 동작 검사로 바꾼다.
+- 주석: 설계 근거(Canonical 섹션 이름)는 남기고, 날짜 · 경위 서술을 줄인다.
+
+---
+
 # 3. SCOPE / CHANGE DISCIPLINE
 
 Before implementation:
