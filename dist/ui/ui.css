@@ -1230,7 +1230,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .good .what span.densest{font-size:11px;letter-spacing:-.03em}
 .good:has(.what .densest){gap:6px}
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
-.good .price b{font:650 16px/1.15 var(--ui);font-variant-numeric:tabular-nums;color:var(--gold)}
+.good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
+.p-sale .good .price b{display:inline-flex;align-items:center;justify-content:flex-end;gap:2px}
+.p-sale .good .price b .price-unit{font:500 10px/1 var(--ui);color:inherit;transform:translateY(1px)}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}
 .good .price em.expiry{font:400 11px/1 var(--ui);font-style:normal;color:#8d8067}
 .good .price em.expiry.soon{color:#a8442f;font-weight:600}
@@ -1376,7 +1378,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* v2.9.0 PRICE ROLE WORDS: the face is the role word (할인 50% / 정가 / 바가지 150%), so it is set in
    the information face, not the LED numerals */
 .tills em{font:600 12px/1.2 var(--ui);font-style:normal;color:var(--key,#a2947c);white-space:nowrap}
-.tills strong{font:650 22px/1.15 var(--ui);font-variant-numeric:tabular-nums;color:#f6ecd3}
+.tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
+.p-sale .tills strong{display:inline-flex;align-items:center;justify-content:center;gap:2px}
+.p-sale .tills strong .price-unit{font:500 13px/1 var(--ui);color:inherit;transform:translateY(2px)}
 .tills small{font:400 12px/1.3 var(--ui);color:#b3a688}
 .tills button[disabled] em{color:#6d6250}
 .tills button[disabled] strong,.tills button[disabled] small{color:inherit}
@@ -3689,6 +3693,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .counter-tray .tills .price-block{grid-column:1 / -1;grid-row:3;white-space:normal;padding:2px 4px 0;word-break:keep-all}
 .p-sale:not(.sale-desk) .counter-tray .tills em,.p-sale:not(.sale-desk) .counter-tray .tills small{font-size:11px;line-height:1.15}
 .p-sale:not(.sale-desk) .counter-tray .tills strong{font-size:18px}
+.p-sale:not(.sale-desk) .counter-tray .tills strong .price-unit{font-size:11px}
 /* The small price roles and profit figures need contrast even on a hovered key. */
 .p-sale .counter-tray .tills button:not(:disabled) small{color:#d7c9aa}
 .p-sale .counter-tray .tills button:nth-child(1){--key:#a6dcf0}

@@ -303,8 +303,9 @@ The phone title and quantity use a common 20px line box; the support plate retai
 
 ### SALE — PRICE / SECONDARY INFORMATION LEGIBILITY (User 2026-10-03)
 
-Shelf prices and the three sale amounts use Wanted Sans with tabular numerals, following TYPOGRAPHY — EXACT PAIR.
-The live `G` suffix must read as currency, rather than resembling a digit in the atmospheric display face.
+User clarification: retain the existing Mulmaru Mono numeric display for shelf prices and the three sale amounts.
+Separate only the live `G` suffix in smaller Wanted Sans: shelf number/unit 16/10px, phone key 18/11px,
+desktop key 22/13px. Keep a small gap and aligned suffix so currency differs from the digits without replacing their font.
 On phones, stock/expiry and the tray's effect-category labels retain readable warm-ink contrast on their dark planes.
 This finishing pass preserves the fixed character, shelf-row space, ribbon geometry, full effects and purchase rules.
 

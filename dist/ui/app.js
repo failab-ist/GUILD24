@@ -1725,7 +1725,7 @@ function shelf(isFinal=false){
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
   +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b>'+(noop?'<span><em class="noop">'+E(Copy.finalPrep.noEffect)+'</em></span>':shelfEffects(Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects,undefined,it.category)))+'</span>'
-  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span><em class="expiry'+(left<=1?' soon':'')+'">'+lastSaleDay(left)+'</em></span></button>'+(open&&isFinal?till():'');}).join('')
+  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+(isFinal?'G':'<span class="price-unit">G</span>')+'</b><span>재고 '+st.count+'</span><em class="expiry'+(left<=1?' soon':'')+'">'+lastSaleDay(left)+'</em></span></button>'+(open&&isFinal?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 /* ITEM §PRESENTATION ORDER / UI_UX §SALE (User 2026-09-25): the shelf row states EVERY effect line, like the ORDER row
    and the codex - it used to stop at two, so a third effect (불룡볶음면's 냉기 대응) only appeared on the tray. The row
@@ -1753,7 +1753,7 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
       extra depth; `pct` stays the mode's number, the word is what the coach already says. */
    /* `refused`: the first 바가지 refusal's lesson anchors here (UI_UX §SALE PRICE LESSONS) */
    const face=game.run.phase==='sell'?'<em class="price-role"><span>'+role.split(' ')[0]+'</span>'+(mode==='full'?'':' <span class="price-rate">'+pct+'%</span>')+'</em>':'<em>'+role+'</em>';
-   return btn(face+'<strong>'+q.price+'G</strong><small'+(blocked?' class="price-block"':'')+'>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
+   return btn(face+'<strong>'+q.price+'<span class="price-unit">G</span></strong><small'+(blocked?' class="price-block"':'')+'>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
     'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');}
 /* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): the chosen Item sits on a fixed tray above the dock,
    outside the scrolled column - header line, the one delta list on one wrapping line, 특수 효과, then

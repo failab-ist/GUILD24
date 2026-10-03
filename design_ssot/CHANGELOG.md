@@ -28,6 +28,10 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **SALE currency suffix correction on `ui/design-trim`** (User 2026-10-03): restore the existing Mulmaru Mono price
+  digits. Only G uses smaller Wanted Sans with a small gap; retain the preceding stock/expiry/category contrast pass.
+  UI_UX's local price rule follows this newer instruction; gameplay and final-supply markup stay unchanged.
+
 - **SALE information legibility on `ui/design-trim`** (User 2026-10-03): use the canonical Wanted Sans information face
   for shelf/till prices so the live G suffix remains identifiable; raise phone stock/expiry and tray-category contrast.
   Preserve character size, shelf rows, complete effects, three price ribbons and gameplay. Store Support's current
