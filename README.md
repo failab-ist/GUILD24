@@ -25,8 +25,7 @@ Detailed Rule / Numeric / UX / QA truth is intentionally not duplicated in this 
 - `dist/`
 - root `index.html` redirects to `dist/index.html`
 - no build step is required for runtime
-- deploy: a push to `main` runs `.github/workflows/pages.yml` (npm test + audit gate), stamps the commit into `dist/build.js`,
-  then publishes `dist/` to GitHub Pages; the opening screen shows `v{version} · {commit}` and the console prints it
+- deploy: none configured (the GitHub Pages workflow was removed); the opening screen shows `v{version} · {commit}` and the console prints it
 
 ## Development
 
