@@ -274,6 +274,11 @@ function anchorOffer(key,y0){
    when a sheet opens over the screen, so one sheet opening another (메뉴 -> 설정, 도감 ->
    새 점포 준비) still returns to the single origin the player came from. If that origin is gone
    by the time the sheet closes, the Phase's own content region takes focus rather than nothing. */
+// Plain prose paragraphs break between sentences, never inside one when it fits (User 2026-10-03). A sentence
+// longer than the line still wraps within itself, so nothing overflows.
+function sentenceBreaks(root){for(const p of root.querySelectorAll('.settings-group p,.first-days p,.modal p,.smalltext,.none')){
+ if(p.childElementCount||p.dataset.sent)continue;const parts=p.textContent.trim().split(/(?<=[.!?])\s+/);
+ if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
 function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
@@ -314,7 +319,9 @@ const BOSS_HOLD=200;let bossHold=null; // UI_UX §BOSS REVEAL — MORNING LANDS 
    moment SALE opens) - and a held Boss reveal waits for its art as well as the shutter, never longer than BOSS_WAIT. */
 const BOSS_WAIT=1200,warmed=new Map();
 function warm(src){if(!src)return Promise.resolve();if(!warmed.has(src)){const im=new Image();im.src=src;warmed.set(src,(im.decode?im.decode():Promise.resolve()).catch(()=>{}));}return warmed.get(src);}
+const TILL_ART=['regular','discount','markup','off'].map(k=>'ui/assets/presentation/sale/till-'+k+'.png');
 function warmAhead(s,phase){warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount));
+ if(['morning','order','sell'].includes(phase))TILL_ART.forEach(warm); // the price keys' art is first needed the moment a product is tapped
  if(['morning','order','sell'].includes(phase))for(const n of s.npcs)if(n.alive)warm(Scene.npcArt(n));}
 function phaseMorning(A){
   const shutter=$('.band.ceiling .band-art');
@@ -634,7 +641,7 @@ function render(){
     control's place among its namesakes: the quantity dial alone puts 30 buttons under
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
  const focusHold=holdFocus($('#app'));
- $('#app').innerHTML=phaseScreen(phase);
+ $('#app').innerHTML=phaseScreen(phase);sentenceBreaks($('#app'));
  if(phase!=='final')finalOrdered=false;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
@@ -1803,9 +1810,14 @@ function forecastPin(n,extra=null){const o=n.outlook||game.outlookFor(n),streak=
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
+/* A redraw replaces the pin, and the observer only answers a frame later: for that frame the list's text sat where the pin
+   belongs and the pin then popped over it on every tap. The same measure, taken at once, keeps the pin in place across the redraw. */
+function pinNow(){const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');if(!pin||!src||!sc)return;
+ const r=src.getBoundingClientRect(),c=sc.getBoundingClientRect();pin.classList.toggle('show',!(r.bottom>=c.top&&r.top<=c.bottom));}
 function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');
  if(!pin||!src||!sc||typeof IntersectionObserver!=='function')return;syncForecastPin();
  /* the fold is for this stretch of scrolling only: once the readout is back on screen the next pin opens unfolded */
+ pinNow();
  pinWatch=new IntersectionObserver(([e])=>{pin.classList.toggle('show',!e.isIntersecting);if(e.isIntersecting&&pinFolded){pinFolded=false;syncForecastPin();}},{root:sc,threshold:0});pinWatch.observe(src);}
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
@@ -2533,6 +2545,7 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
  const utility=modal==='menu'?'menu-panel':['roster','codex','help','loadout','abandonConfirm'].includes(modal)?'wood-frame':['settings','resetConfirm','importConfirm'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':''):'';
  root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''} ${utility}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&!ownCancel.has(modal)&&!d0Owed()?btn(CLOSE_X,'dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ sentenceBreaks(root);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */
@@ -2666,16 +2679,15 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   selected=reopen||selected!==id?id:null;cue=selected?'select':null;render();sound('button');
   const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
-  /* User 2026-10-03: the roomier tray must not cover the selected product. Only its opening
-     may move the phone list: show the selected row and its next peer
-     when both fit. An already-open comparison keeps its anchor and scroll unchanged. */
-  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=back.nextElementSibling;
-   const end=peer&&peer.getBoundingClientRect().bottom-row.top<=clip.height-8?peer.getBoundingClientRect().bottom:row.bottom;
-   if(end>clip.bottom-4)sc.scrollTop+=end-clip.bottom+4;
+  /* The tray's opening shrinks the list, so the tapped row may land under it: scroll only as far as keeps that row
+     in view, and leave the list alone when it already is (a reader looking at the stats stays where they are). */
+  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),was=sc.scrollTop;
+   if(row.bottom>clip.bottom-4)sc.scrollTop+=row.bottom-clip.bottom+4;
    else if(row.top<clip.top+4)sc.scrollTop+=row.top-clip.top-4;
-   const reading=$('.readout.core-mob')?.getBoundingClientRect();
-   if(reading&&reading.top<clip.top&&reading.bottom>clip.top)sc.scrollTop+=reading.bottom-clip.top+1;
+   const reading=$('.readout.core-mob')?.getBoundingClientRect(); // a correction that cuts the outlook's heading clears the whole outlook (forecast pin keeps it)
+   if(sc.scrollTop!==was&&reading&&reading.top<clip.top&&reading.bottom>clip.top)sc.scrollTop+=reading.bottom-clip.top+1;
    trayBase=sc.scrollTop;}
+  pinNow();
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
  case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?(tile.querySelector('svg')||tile).getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,tray:el.closest('.counter-tray'),
@@ -2830,5 +2842,8 @@ document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');
  const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
 document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  game.save();if(el.dataset.mix==='sfx')sound('button');});
-window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};render();
+window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
+/* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
+(()=>{const bar=document.querySelector('.boot-bar'),fill=bar?.firstElementChild;
+ Preload.run((n,t)=>{if(!bar)return;const pct=Math.round(n/t*100);fill.style.width=pct+'%';bar.setAttribute('aria-valuenow',pct);}).then(render,render);})();
 })();
