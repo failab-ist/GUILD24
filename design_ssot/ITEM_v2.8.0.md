@@ -584,7 +584,7 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | water | 생수 | Drink C | 40 / 80 | 강인함 +10, Supply 2 | 2d |
 | lunchbox | 간단 도시락 | Food U | 100 / 200 | 강인함 +12, Supply 6, 원정 소지금 획득 +20% | 2d |
 | guildlunch | 길드 특제 도시락 | Food R | 185 / 370 | 강인함 +16, Supply 7, 원정 소지금 획득 +40% | 2d |
-| battlelunch | 영웅 결전 도시락 | Food E | 210 / 420 | 강인함 +18, Supply 9 | 2d |
+| battlelunch | 영웅 결전 도시락 | Food E | 210 / 420 | 투력 +10, 강인함 +18, Supply 9 | 2d |
 | kingwater | 왕도 천연암반수 | Drink E | 185 / 370 | 강인함 +24, Supply 2 | 3d |
 
 The meal 강인함 ladder rises readably by tier; the water route is more Stat-concentrated than the meal at the same broad
@@ -1022,7 +1022,7 @@ Expect exactly:
 | 생수 | C | 40/80 | +10 | 2 | — |
 | 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
 | 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
-| 영웅 결전 도시락 | E | 210/420 | +18 | 9 | — |
+| 영웅 결전 도시락 | E | 210/420 | +18 | 9 | 투력 +10 (the fighting lunch: a meal and a 하급 포션 in one slot; 길드 특제 도시락 is the earning one) |
 | 왕도 천연암반수 | E | 185/370 | +24 | 2 | — |
 
 PASS:
