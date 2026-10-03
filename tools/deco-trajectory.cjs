@@ -7,12 +7,11 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{for
 const root=path.resolve(__dirname,'..');
 const ORDERS={
  none:[],
- economy:['honorFrame','thriftSafe','guildShelf','sponsorSign'],
+ // one piece a Slot, cheapest first (display 500 -> counter 750 -> wall 1000 -> sign 1250; User 2026-10-02)
+ economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],
  survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],
- // mixed: the stronger single of each Slot, cheapest first (User 2026-09-24 combination check)
- mixA:['honorFrame','memorialBook','infirmaryPlaque','trainingSign'],
- // mixed the other way round: economy where the economy piece is closest
- mixB:['aidCabinet','thriftSafe','infirmaryPlaque','sponsorSign'],
+ // the v2.9.1 mixA / mixB orders named ids of the old Decoration set (mixA put two wall pieces in); they are gone until a
+ // mixed order is chosen from the single-Decoration measurement (tools/deco-single.cjs)
 };
 function load(){for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
  require(path.join(root,'dist',f+'.js'));return globalThis.GUILD24||globalThis;}

@@ -67,3 +67,4 @@ function summary(res){
     +' | 좀비 '+p(rs.filter(r=>r.zombie).length,rs.length)+' | 사망/런 '+(sum(rs,r=>r.deaths)/rs.length).toFixed(2)+' | 장식 '+(sum(rs,r=>r.deco)/rs.length).toFixed(1));}}
  return L.join('\n');
 }
+module.exports={RANK,DECO,BANDS};
