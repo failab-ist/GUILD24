@@ -31,7 +31,8 @@ and this table is their commit record.
 
 - **At most four Hazard Counters on a sheet** (User: 쓸모없는 대응템만 나와서 답답할 수 있겠다 · 발주 전체에서 대응템이 차지할 수 있는 칸은 최대
   4칸 · 보정은 똑같이 · 0칸도 될 수 있게): once four Items with any Hazard 대응 are on the sheet (ordinary and extra slots alike),
-  every further slot draws from the rest; a sheet may hold none. About half of a six-slot sheet was Counters, of which a third
+  every further slot draws from the rest; a sheet may hold none. Every slot a Store Support or an Event adds raises the cap by
+  one (User: 발주 칸 자체가 늘면 대응템 한도도 늘게). About half of a six-slot sheet was Counters, of which a third
   to two thirds fit no Gate open that Day. The Counter guarantee is unchanged; on a sheet already at four it takes a Counter's
   slot. ECONOMY_ORDER §ORDER OFFER VARIETY; test revision.
 - **The 후보 전체 교환 key is narrow and right-aligned** (User: 리롤이 영업 시작보다 넓어서 자꾸 누른다 · 우정렬 · 세로 여백 줄이자): as wide

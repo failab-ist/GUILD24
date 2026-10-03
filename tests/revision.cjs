@@ -752,6 +752,10 @@ test('ORDER sheet: at most offerCounterMax Hazard Counters, the guarantee still 
  assert.ok(max<=4,'never more than four Counters on a sheet: '+max);
  assert.ok(max===4,'the cap is reached, not just never approached');
  assert.ok(guaranteed>0&&sheets>500,'enough sheets were drawn: '+sheets);
+ /* an added slot raises the cap one for one: 본사 추가발주권 (+extraOffers) */
+ let wide=0;for(let i=0;i<150;i++){const g=fresh('counter-cap-wide-'+i),s=g.run;s.facilities=['extraOrder'];s.day=20;g.generateOffers({advancePity:false});
+  const c=s.offers.filter(isC).length;assert.equal(g.counterCap,4+DATA.relicParams.extraOrder.extraOffers);assert.ok(c<=g.counterCap);wide=Math.max(wide,c);}
+ assert.ok(wide>4,'with 본사 추가발주권 the sheet can carry more than four Counters: '+wide);
 });
 
 console.log(checks+' revision groups passed');
