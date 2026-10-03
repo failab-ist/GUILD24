@@ -3601,6 +3601,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .forecast-pin .pin-plate{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;flex:none}
 .forecast-pin .pin-plate+.pin-plate{box-shadow:inset 1px 0 0 #5a452b}
 .forecast-pin .pin-plate.env-meter{flex:1 1 0;min-width:0}
+.forecast-pin .pin-full:has(.pin-plate):has(.pin-strain){flex-wrap:wrap}
+.forecast-pin .pin-full:has(.pin-plate) .pin-strain{flex:1 0 100%;min-width:0;padding:3px 8px 5px;box-shadow:inset 0 1px 0 #5a452b}
 .forecast-pin .pin-plate .env-meter-list{display:inline-flex;flex-direction:row;flex-wrap:wrap;gap:2px 8px;margin:0}
 .forecast-pin .pin-plate .env-row{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap}
 .forecast-pin .pin-plate b,.forecast-pin .pin-plate .env-row b{margin:0}
