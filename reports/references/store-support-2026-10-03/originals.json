@@ -1,0 +1,38 @@
+[
+  {
+    "attachment": "1-16833.jpg",
+    "repository_path": "reports/references/store-support-2026-10-03/selection-reference.jpg",
+    "bytes": 131749,
+    "dimensions": [
+      720,
+      1280
+    ],
+    "format": "JPEG",
+    "sha256": "9e06b8c56cefc6514ea0563eb87f6c4ce14e899834ddf03bc32d1dd986b47e2d",
+    "byte_identical": true
+  },
+  {
+    "attachment": "2-16831.jpg",
+    "repository_path": "dist/ui/assets/presentation/support/backroom-phone.jpg",
+    "bytes": 136917,
+    "dimensions": [
+      720,
+      1280
+    ],
+    "format": "JPEG",
+    "sha256": "8f12b150b7dcded4e1aa75d80e219f868222cf1ae8483bcf2533b48802c6a495",
+    "byte_identical": true
+  },
+  {
+    "attachment": "3-16832.jpg",
+    "repository_path": "dist/ui/assets/presentation/support/backroom-wide.jpg",
+    "bytes": 169910,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "format": "JPEG",
+    "sha256": "f641d3bed70bb0854b7d1f839bfa12e2501a24c86aa68a3a2ac5d3d96f9ff123",
+    "byte_identical": true
+  }
+]

@@ -1,0 +1,28 @@
+diff --git a/dist/ui/ui.css b/dist/ui/ui.css
+index 617e981..d76854b 100644
+--- a/dist/ui/ui.css
++++ b/dist/ui/ui.css
+@@ -3444,6 +3444,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
+ 
+ /* Mobile dest-plate compact */
+ @media(max-width:1023px){
++ /* Mobile comparison room: reclaim empty seams without shrinking decision text or targets. */
++ .p-sale .front{--gapb:6px}
++ .p-sale .face{margin-bottom:4px}
++ .p-sale .front-side{padding-left:4px;padding-bottom:4px}
++ .p-sale .front-side .kit{gap:4px;padding:6px}
++ .p-sale .front-side .vitals{flex-basis:76px}
++ .p-sale .stage-scroll{padding-top:8px;padding-bottom:14px}
++ .p-sale .dossier:not(.traits){margin-bottom:6px}
+   .dest-plate { padding: 8px; flex-direction: row; align-items: center; gap: 8px; }
+   .dest-plate h3 { font-size: 14px; margin: 0; }
+   .dest-plate label { display: none; } /* the caps label is dropped on a phone for compactness */
+@@ -3499,7 +3507,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
+    with it. A narrower card costs the face a little scale and buys the column the width it
+    needs. The portrait is still contained at its own aspect ratio: nothing is cropped or
+    stretched, the whole sticker is on the card, and --plateh keeps the nameplate clear of it. */
+-.p-sale .front{--cardw:max(88px,min(38vw,150px,calc(90dvh - 300px)));--plateh:52px;padding-top:4px}
++.p-sale .front{--cardw:max(88px,min(32vw,128px,calc(90dvh - 300px)));--plateh:52px;padding-top:4px}
+ .p-sale .front-side{gap:6px}
+ /* the divider is a rule between two halves of the screen, not a shelf of its own */
+ .p-sale .counter-edge{height:12px;

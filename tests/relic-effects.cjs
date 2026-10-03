@@ -226,7 +226,7 @@ test('RELIC 32 응급 처치대: an injured arrival recovers at 20%, only while 
  assert.equal(DATA.relicBy.firstAidDesk.kind,'keystone');assert.deepEqual(DATA.relicBy.firstAidDesk.tags,['expedition']);
  assert.equal(DATA.relicBy.firstAidDesk.price,300);
  const app=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/ui/app.js'),'utf8');
- assert.ok(app.includes("n.healedBy==='firstAidDesk'?'<p class=\"heal-note\" role=\"status\">응급 처치대 덕분에 부상이 나았다.</p>'"),'COPY_AUDIT §9-4b on the state strip');
+ assert.ok(app.includes("n.healedBy==='firstAidDesk'?'<p class=\"heal-note\" role=\"status\">응급 처치대로 부상 회복</p>'"),'COPY_AUDIT §9-4b on the state strip');
 });
 
 /* 2026-09-23 remake: 첫 방문 쿠폰 replaces 신입 모집 게시판 (REL-Q-v28-3 seating retired with it).

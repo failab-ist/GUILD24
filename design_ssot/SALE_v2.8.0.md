@@ -93,7 +93,7 @@ Mobile current-customer state includes Injury state (without numeric duplication
 
     부상 · 피로 8 · 단골도 37
 
-- If Loyalty >= 51, show the existing 단골 state/badge.
+- If Loyalty >= 51, show the 단골 badge on the customer card's nameplate (right side); the state line does not repeat 단골.
 - Normal SALE places no separate Loyalty `?` / popover trigger beside this value; the tutorial/coach teaches its
   contextual meaning. The global compact Help may retain its separately owned reference text.
 - Equipment text is not part of the compact top strip; it stays readable in NPC detail and may appear as a proven Core-Stat source.
@@ -408,7 +408,7 @@ Stat touch/click detail may show actual source, actual applied value and calcula
 
 ### STAT GRID PRESSURE TAG
 
-Under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag names the pressing Hazard(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two). 투력 never carries a tag. No number, no verdict. The tag is the one place the Stat grid links to the Gate.
+The four Stat cells carry no Hazard tag (User 2026-10-03); the 환경 대응 meter and the destination plate state the Gate's pressure.
 
 ## NPC DETAIL — CONDITION TRUTH
 

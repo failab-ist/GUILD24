@@ -27,6 +27,20 @@ and this table is their commit record.
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
 
+## SALE phone density (User 2026-10-03; the version stays 2.10.0)
+
+- **A denser phone SALE** (User: 판매 중에 너무 다글다글한데): state and 소지 type one step smaller; the card and the side column end on
+  one line; a shorter destination plate whose `{능력치} n당 대응 1 제공` tails move into one `?`; 손님 `■■■■■` with no `1/5` (the count
+  stays as its screen-reader label); a smaller 보유 골드 figure and a 44 px `손님 보내기`; shelf rows put `재고 N · 폐기까지 N일` on one
+  line and the phone tray header drops them. UI_UX §SALE destination plate, §PRIMARY ACTION GRAMMAR, UI-Q-v28-3; test ui-guard.
+- **SALE price keys and desk card** (User 2026-10-03): price keys use the key asset set with a corner ribbon (role name, no visible %), amount centred, `이익` line quieter, 3 px press; on a desk the card art is shorter with a larger nameplate and 단골 badge, and the waiting count has a dark plate. Phone ribbon smaller than the desk ribbon.
+- **SALE backdrop, shelf head, desk column, type ladder** (User 2026-10-03): the SALE backdrop is the wide store art without its ceiling, side
+  shelves at the edges, dimmed under the cards; the shelf head is the wooden plank asset across the whole shelf frame; on a desk the
+  status / outlook / destination column is as tall as the card and one width, with larger type, and the waiting deck is larger; stats, item
+  effects and stock / expiry sit one step quieter than names and prices; stat values use the shelf price's type; the three price keys are the supplied
+  wood-and-colour key assets with no flag colour bar; the phone backdrop is the portrait store art; the tray's bottom rule is the same 4 px board edge as
+  the rule between the halves. UI_UX §SALE.
+
 ## v2.10.0 quick patch 3 — a tidier ORDER sheet, costlier failures (User 2026-10-03; the version stays 2.10.0)
 
 - **At most four Hazard Counters on a sheet** (User: 쓸모없는 대응템만 나와서 답답할 수 있겠다 · 발주 전체에서 대응템이 차지할 수 있는 칸은 최대
@@ -194,7 +208,67 @@ and this table is their commit record.
   Tier 3 just for 강인함, short for 정신 - left to the 정신 Jobs). The order holds: 중반 대응 > 후반 하이브리드 > 초반 rungs.
   ITEM §COUNTER LADDER and catalogue rows; reports/ITEM-PRICES.md regenerated.
 
+## v2.9.14 quick patch — 단골 배지 · NIGHT 배경 · 회복 문구 (User 2026-10-03)
+
+- SALE 손님 카드: 단골은 이름판 오른쪽 금빛 배지로 알린다. 상태줄의 `· 단골` 글자와 이름판 왼쪽 등급 색 띠는 뺀다. UI_UX §CURRENT CUSTOMER STATE, SALE §CURRENT CUSTOMER COMPACT STATE.
+- NIGHT: 절차 그림 대신 비 오는 밤 편의점 그림. 맨 위까지 가득 채우고 귀환 줄 바로 위에서 끝난다. 메뉴 키는 더 진하게, 오늘 할 일 줄은 위쪽 어두운 그라데이션 위에 둔다. UI_UX §NIGHT LAYOUT.
+- 부상 회복 한 줄을 `의무실 현판으로 부상 회복` · `응급 처치대로 부상 회복` · `길드 의료단으로 부상 회복`으로 줄여 상태 칸이 세로로 늘지 않게 한다. COPY_AUDIT §9-4 · §9-4b · §13.
+
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
+
+- **SALE currency suffix correction on `ui/design-trim`** (User 2026-10-03): restore the existing Mulmaru Mono price
+  digits. Only G uses smaller Wanted Sans with a small gap; retain the preceding stock/expiry/category contrast pass.
+  UI_UX's local price rule follows this newer instruction; gameplay and final-supply markup stay unchanged.
+
+- **SALE information legibility on `ui/design-trim`** (User 2026-10-03): use the canonical Wanted Sans information face
+  for shelf/till prices so the live G suffix remains identifiable; raise phone stock/expiry and tray-category contrast.
+  Preserve character size, shelf rows, complete effects, three price ribbons and gameplay. Store Support's current
+  design is acceptable per the User's latest clarification; this batch leaves it unchanged.
+
+- **Store Support desktop stack / readable first guide on `ui/design-trim`** (User 2026-10-03): enlarge desktop contracts,
+  stack all three vertically, and use a wide blank paper asset plus desktop type steps. Short viewports scroll without
+  squeezing. Replace the first-window footer wording with the User's two sentences about 5-day choices and the Day4 free
+  pick in morning/order. Dark 14px text sits on an ivory slip with complete phrase breaks. UI_UX / COPY_AUDIT own the
+  presentation/copy; prices and acquisition/save rules stay unchanged. Visual approval remains separate.
+
+- **Store Support contract sheets on `ui/design-trim`** (User 2026-10-03): replace the gray panels and full-width yellow
+  keys with clipped blank paper contracts, compact gold choice/purchase tags and live text for every price. Zero-cost
+  first support reads 무료; later costs use the existing candidatePrices. Remove the enclosing brown footer and use
+  compact wood reroll/defer tags. Supplied backgrounds, game data and acquisition flows stay unchanged. UI_UX owns this
+  presentation proposal; final visual approval remains separate from implementation QA.
+
+- **Store Support warehouse selection on `ui/design-trim`** (User 2026-10-03): preserve all three supplied JPEGs byte for byte,
+  apply portrait/wide warehouse backgrounds to the selection takeover, and adapt the reference to a restrained wood title,
+  thin-edged slate candidates and full-width yellow choice keys. Desktop keeps three equal candidates; the defer/reroll footer
+  stays separate from the scroll. RELIC values, three-candidate rule and acquisition/save flows are unchanged. UI_UX owns the
+  presentation; original hashes/roles are recorded under reports/references and ASSETS.
+
+- **SALE price ribbons on `ui/design-trim`** (User 2026-10-03): retain the fixed character and shelf/support band, centre its
+  mixed-font elements, remove repeated customer/wallet/base price from the phone tray, and place stock/life beside the Item.
+  The phone's three equal price keys carry role/percentage on an internal left ribbon, price/profit in two right-hand lines,
+  with lighter 2px depth and 48px targets. Numberless utility descriptions replace only their redundant no-change row; numeric
+  no-change warnings remain. Bounded opening reveals the next shelf peer whenever both fit, also on short phones. UI_UX / COPY
+  own the contract. Review remains PNG; final visual approval is separate.
+
+- **SALE spacing review on `ui/design-trim`** (User 2026-10-03): give the nameplate/destination real text clearance, remove
+  cast shadows entering neighbouring planes, and restore the phone tray's full-width Item/effect blocks plus a separate
+  customer/stock row. Reserve space for price-key depth/press above the dock. Readability takes priority over the old compact
+  row budget: representative 640/597/548-high visits keep 2/1/1 complete rows with a bounded tray-opening reveal; an open
+  swap keeps its anchor. UI_UX owns the new spacing/QA contract. Review evidence is PNG, without a new PDF (User).
+  Runtime follow-up: a reopened strip resets its scroll baseline so the larger band's settling does not immediately fold
+  it again; subsequent user scroll still folds. The new opening reveal is explicitly SALE-only, preserving FINAL selection.
+
+- **SALE resized details on `ui/design-trim`** (User 2026-10-03): scale the phone nameplate's name/rarity/Level-Job to
+  14/9/11px without clipping, keep the full tray rarity edge clear of its SVG, and move the hand-over between actual icon
+  bounds. SALE's nine coach marks hug the live resized target and use the actual desk/phone scroller. UI_UX §SALE — MOBILE
+  AUTHORITY, §COUNTER TRAY and UI-Q-v28-27 own the behavior. Final visual review remains separate.
+
+- **SALE design candidate on `ui/design-trim`** (User 2026-10-03): restore the phone character to about 85–90% of the pre-trim
+  size, keep both Bag targets clear of the menu, and recover comparison space through a readable local type ladder and
+  aligned tray metadata. Deep nomination follows the phone shelf, still before purchase; desks keep the control placement.
+  SALE reuses MORNING's untouched portrait/wide room assets behind dark information planes. UI_UX §SALE — MOBILE AUTHORITY,
+  §COUNTER TRAY, §MOBILE SALE DENSITY, §FUNCTION / FLAVOR, §SHORT PHONE and UI-Q-v29-18 own the approved behavior.
+  Implementation approval does not close final visual review; no balance/version/main/release change.
 
 - **카리냐 → 카리냥** (User): renamed in place - the same F/021 portrait - in the shipped pool and the production name pool
   (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the F NAME_INDEX, the id mapping, their checksums). A Run saved earlier

@@ -260,19 +260,34 @@ and receive the hand-over (size only; capacity unchanged). Composition → §SAL
 
 ### SALE — MOBILE AUTHORITY
 
-Compact Character/status footprint, no artwork crop; enlarged Bag in the customer-state strip at every width, never
+Character width and height on phones remain about 85–90% of the pre-trim `3ce89d7` presentation (User 2026-10-03):
+character appeal takes priority over shrinking the portrait to reach a row count. No artwork crop. The enlarged Bag in the customer-state strip at every width, never
 overflowing; compact Expected Destination; Forecast in the decision flow (the `지난 원정` quick surface is desk-only — the
 phone's NPC detail holds it); core environment signal visible without tap, never duplicated; ~44px repeat targets. The outlook
 (`전투 전망` / `환경 대응`) and the four Core Stats are ONE recessed plate with one seam, not two boxes; the shelf keeps the room
 (acceptance -> UI_UX §QA UI-Q-v29-43).
 
+The phone nameplate scales with the card: name 14px, rarity 9px with a restrained letter gap, Level/Job 11px with readable
+line spacing. Keep every word intact and visually separated; no compressed glyphs, clipping or ellipsis (User 2026-10-03).
+Give the nameplate at least 4px of text clearance beyond its rarity accent, 4px top/bottom padding and a 2px line gap.
+SALE card/nameplate cast shadows never enter the neighbouring destination or lower decision plane. The phone destination
+keeps 5px top/bottom and 8px side padding; outlook labels, values and help keys stay inside their own face (User spacing review).
+
+SALE reuses the unmodified MORNING store room assets: portrait on phones, wide on desks. Information stays on dark,
+high-contrast planes so the room light never competes with destination, customer state or product text.
+
 Same-Customer rerenders keep scroll/focus; a new customer may start at the top. `손님 보내기`: the current customer exits left,
 then the next enters (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4).
+When a phone tray opens, minimally reveal the selected shelf row and its next peer when both fit, including short phones.
+The correction is not user shelf scrolling and does not fold the tray. Swapping an already-open selection preserves the anchor.
+If that correction crosses the outlook's heading, clear the whole outlook instead of leaving a cut heading; its existing
+forecast pin keeps the combat/environment reading available. The full detail remains reachable by scrolling back up.
 
 ### CURRENT CUSTOMER STATE
 
-Compact state: Injury (no `부상 1`-style number), Fatigue, Loyalty — `부상 · 피로 8 · 단골도 37`; 단골 at the owner threshold,
-no large Loyalty bar, no `?` / Loyalty popover (coach teaches it; global Help stays separate). No equipment text here (NPC
+Compact state: Injury (no `부상 1`-style number), Fatigue, Loyalty — `부상 · 피로 8 · 단골도 37`; 단골 (owner threshold) is the gold
+`regular-badge` on the right of the customer card's nameplate, not a word in this line, and the card has no rarity colour bar (the
+rarity word and the card frame already say it); no large Loyalty bar, no `?` / Loyalty popover (coach teaches it; global Help stays separate). No equipment text here (NPC
 detail and proven Stat-source attribution carry it).
 
 ### SALE — SHELF LIP (v2.9.9)
@@ -283,8 +298,26 @@ is not turned to wood (price and stock legibility first).
 
 ### SALE — SHELF HEAD (v2.9.9)
 
-(acceptance -> UI_UX §QA UI-Q-v29-45.) The `진열대 {N}종 · {M}개` head is one step lower and its `점포지원 {n} / {m}` plate
+(acceptance -> UI_UX §QA UI-Q-v29-45.) The SALE `진열대` head (no `{N}종 · {M}개` count, User 2026-10-03) is one step lower and its `점포지원 {n} / {m}` plate
 compact; the plate keeps its frame (a control) and an about-44 px target through an invisible margin.
+Title, quantity and support plate align on their vertical centres, rather than mixing the plate and LED font baselines.
+The phone title and quantity use a common 20px line box; the support plate retains its 24px visible height.
+The head is the wooden plank asset (`presentation/sale/shelf-plank.png`) across the full shelf frame width (User 2026-10-03).
+The SALE backdrop is `presentation/sale/sale-bg.png` without its ceiling, the side shelves at the edges, dimmed; on a desk the status / outlook /
+destination column is one width and ends on the card's bottom, with larger type, and the waiting deck is larger. Stats, item effects and
+stock / expiry are one step quieter than names and prices.
+The three price keys are the supplied key assets (`presentation/sale/till-*.png`: 할인 blue, 정가 gold, 바가지 orange, disabled grey) with a small corner ribbon
+drawn in CSS naming the role; the percentage is read by screen readers only. The amount is white and the `이익` line one step quieter, both centred in the key;
+pressed, the key moves down 3 px and darkens. On a desk the card's art box is shorter and the nameplate (job / level line, 단골 badge) larger, and the
+waiting count sits on its own dark plate.
+
+### SALE — PRICE / SECONDARY INFORMATION LEGIBILITY (User 2026-10-03)
+
+User clarification: retain the existing Mulmaru Mono numeric display for shelf prices and the three sale amounts.
+Separate only the live `G` suffix in smaller Wanted Sans: shelf number/unit 16/10px, phone key 18/11px,
+desktop key 22/13px. Keep a small gap and aligned suffix so currency differs from the digits without replacing their font.
+On phones, stock/expiry and the tray's effect-category labels retain readable warm-ink contrast on their dark planes.
+This finishing pass preserves the fixed character, shelf-row space, ribbon geometry, full effects and purchase rules.
 
 ### SALE STAT SOURCE UX
 
@@ -375,7 +408,7 @@ Item: Core Stat +N / Hazard Counter +N / 피로 회복 N / explicit penalty
 ```
 
 Every Hazard row, the SALE destination plate included, states the Gate facts
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the plate has no `?`; no per-customer remaining need. This customer's own
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; below 900px the `{능력치} {n}당 대응 1 제공` part of every row reads in the one `?` on the plate and the row keeps `{위험}` and `대응 {N} 필요` (User 2026-10-03); no per-customer remaining need. This customer's own
 number is the readout's 환경 대응 meter (§SALE — ENVIRONMENT METER, User 2026-10-02), not the plate.
 
 ### SALE — DECISION-ONLY ITEM DETAIL
@@ -410,23 +443,44 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - §SALE — SHELF ORDER: by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
   Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
-- shelf life in each row's price column: `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
+- shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
 - row and tray name the category in a small tag after the name (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`); the icon
   tile's bottom edge is the rarity colour
-- tray, top to bottom: header (icon · name · kind · sell price · stock · shelf life, `{손님}에게 · 소지 {N}G` at right), the
+  The entire icon stays inside its tile above the uninterrupted 3px rarity edge at every SALE size; the icon never covers
+  the edge, name, category or effect line (User 2026-10-03).
+  The hand-over travels from the actual tray SVG bounds to the actual Bag SVG bounds, fitting its moving footprint;
+  resized outer tiles must not enlarge the icon beyond the Bag slot.
+- tray, top to bottom: header (icon · name · kind; desk keeps `{손님}에게 · 소지 {N}G` at right), the
   `판매 후 변화` list (may be one wrapping line), `특수 효과` when any, the three price keys (§SALE — PRICE ROLE WORDS)
+- on phones, the header is icon / name-and-kind / stock-and-shelf-life, with 8px gaps. Stock and shelf life occupy two
+  11px lines at right; the name stays 14px and wraps intact. Customer/wallet remain on the fixed character area; do not repeat
+  them on the tray. The full-price key supplies the base selling price, so do not repeat that price in the phone header.
+  Each 13px change/special-effect block keeps the full tray width. When there are no direct changes and the remaining effects
+  are exclusively numberless utilities, their full special-effect description replaces the generic no-change row. An unapplied
+  numeric effect or an Item with no explanatory effect retains `현재 준비 변화 없음` (COPY §4-8).
+  The band keeps 3px row gaps, 6px top and 10px bottom padding. Phone price keys are equal peers with a 48px minimum target:
+  role and percentage form a narrow left ribbon inside the key; price and profit occupy two lines at right. A disabled reason
+  wraps across the full key below them. Keep 4px inner vertical padding, an 8px peer gap and clearance for their 2px cast depth
+  plus 3px press travel, never entering the lower lip/dock. Ribbon labels are 11px, percentage 10px, price 18px, profit/reason 11px.
+  No role/percentage, actual price or disabled reason is omitted. Desktop keeps its existing
+  header composition. All three price keys remain
+  directly reachable. The phone `손님 보내기` target is 44px high; safe-area padding stays outside it (User 2026-10-03).
 - empty: one prompt line on DAY 1~3 while the tutorial is not skipped (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-23), otherwise no
   height
 - the keys never move; a sale clears the tray (Item into the Bag) and shows the stub; a refusal keeps the Item with the
   refused key locked; the hand-over (§TRANSACTION BEAT A1) starts from the tray icon
-- height budget at 360: empty ≤ 48px, filled ≤ 200px, ≥ three shelf rows visible with it filled; rows are one name line + one
-  effect line
-- the effect line states every effect in ITEM order, stepping its type down to stay one line at 360; 구급키트 and 황금 1+1
+- height budget at 360: empty ≤ 48px, filled ≤ 200px, ≥ two shelf rows visible with it filled at 640 / 597 / 548 high in the representative
+  comparison check; rows are one name line + one effect block. Long effects wrap intact instead of becoming unreadably small.
+- the effect block states every effect in ITEM order at the readable phone SALE step and wraps when needed; 구급키트 and 황금 1+1
   쿠폰 show their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`), tray `특수 효과` and codex in full
-- COUNTER TRAY FOLD (phone): a filled tray folds to its header (Item, customer, wallet, ▲) when the shelf scrolls past 32px or
+- COUNTER TRAY FOLD (phone): a filled tray folds to its header (Item, kind, ▲) when the shelf scrolls past 32px or
   on a tap outside tray, rows, dock or overlay; the strip or any row (the selected one included) reopens it; the selection
   never changes and nothing is saved; a desk (≥1024) never folds
+  The phone Deep control completes its native click before the outside-tap fold: the summary/key must not move out from
+  under the pointer between pointerdown and pointerup.
+  Reopening the strip resets the scroll baseline and lets its layout settle, as a shelf-row opening does; the expansion
+  itself must never refold the tray before a price tap. Subsequent user scrolling still folds it after 32px.
 - COUNTER FEEL (contract -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H2; acceptance -> UI_UX §QA UI-Q-v29-31): the pressed key
   goes down 3px in 60 ms and back in 60 ms (일반, no hold). On a sale the pressed tray holds inert for that press (icon hidden:
   the Item travels as A1), then the counter redraws; the A8 stub stamps in from the key's landing frame. A refused key presses
@@ -572,6 +626,13 @@ Presentation only; capacity and mechanics unchanged.
 
 Mobile drops the decorative waiting-customer card/fan and keeps the queue count in the Dock only (never removed); the space goes
 to current-customer decision information. Desktop may show more queue.
+On phones the optional Deep nomination disclosure follows the shelf, before Traits: it stays present and usable before
+the first purchase, without consuming the comparison area. A confirmed nomination still updates the destination and forecast;
+its payment remains readable in that disclosure. Desktop keeps its existing placement (User-approved SALE composition, 2026-10-03).
+The spacing review prioritizes readable planes over compression (User 2026-10-03). One- and two-Hazard representative visits
+retain two complete rows at 640 / 597 / 548 after the bounded opening correction. Long content may use the existing shelf scroll,
+but must never overflow its information planes or hide a price target. Preserve the character size above instead of shrinking it
+to meet a richer-visit row budget.
 
 ### BAG PRESENTATION
 
@@ -612,9 +673,8 @@ tutorial coach). Logic -> DUNGEON_HAZARD_v2.8.0.md.
 
 ## STAT PRESENTATION
 
-Core stats 투력 / 강인함 / 기동 / 정신 in a clear 2×2. Pressure tag: when the customer's Gate presses a Stat, the pressing Hazard
-name(s) sit beside the Stat name on the same line (`강인함  독`; `냉기`, `독 · 속박`), ellipsis-clipped, never adding a line or
-overflow; the value stays larger than the name; never on 투력; no number or verdict — the only Gate link in the grid. No wall of
+Core stats 투력 / 강인함 / 기동 / 정신 in a clear 2×2. No Stat cell carries a Hazard tag (User 2026-10-03): the readout's 환경 대응
+meter and the destination plate state the Gate's pressure; the value stays larger than the name. No wall of
 equal-priority internal coefficients; Hazard detail appears where the destination makes it relevant.
 
 ## TRAIT PRESENTATION
@@ -720,6 +780,10 @@ The Outcome belongs to the adventurer's identity block, not a title bar:
                       [dungeon · Lv]
 
 Directly above the name, one step stronger; no own row or vertical space, no long rule — important, not the headline.
+
+Backdrop: the rainy convenience-store night art (`presentation/night/store-night.png`) fills the top of the screen edge to edge, behind the
+menu key and the task line, and ends where the return rail begins, with no empty stretch above or below it. The menu key is drawn more
+opaque here so it stays readable on the art; the task line sits on a dark top fade.
 
 Death has no bubble but keeps the message position and weight beside the character, as a neutral status message: no quotes,
 tail, bubble ground, accent bar, border, icon, badge, glow or blur. It carries only a small text-hugging status container (a
@@ -879,7 +943,25 @@ block at any width (FINAL preparation keeps its list).
 
 ### RELIC VISUAL
 
-Metal fixture/plate language; purchase reads as a metal/brass transaction.
+User 2026-10-03: replace the gray candidate windows and full-width yellow purchase bars with blank, clipped ivory
+contract sheets and compact gold paper choice/purchase tags at the lower right. The name, full effect/condition and
+price are live text: zero-priced first-window candidates read `무료`; later candidates show their actual calculated `NG`
+price from candidatePrices. Never bake `무료`, any price or any action label into art. The price shares a bottom row with
+the action tag, with no overlap. Titles remain 22px, effects 14px with intact wrapping and dark readable ink on cream.
+Use real text-free raster materials for the paper/clip and tags. No nested ornamental borders, blur, green state or card fade.
+Owned/unavailable tags retain the same footprint, lose purchase art and press affordance, and name their existing cause.
+The supplied phone/wide warehouse JPEGs remain byte-identical; viewport framing is CSS only. Keep the wood title plate.
+User 2026-10-03 follow-up: desktop stacks three large contracts vertically in one column up to 1000px wide, using a wide
+blank paper asset. Desktop titles/effects/prices use 28/18/22px and purchase targets are 184×54px. Cards use at least 200px
+height and grow with the available viewport (capped at 270px); shorter windows scroll instead of compressing content.
+Keep all three D0 cards substantially visible at 1280×880 and every action scrollable above the dock at shorter heights.
+The footer carries no separate guide text: the coach mark owns the first-window explanation (User 2026-10-03). Mobile contract layout stays at the approved size. All purchase targets
+remain at least 48px high. Remove the footer's brown enclosing plane and full-width orange defer bar; keep a compact wooden return tag. The footer remains outside the candidate scroll; later windows keep reroll/defer peers.
+Candidate count, effects, prices, acquisition timing, unavailable causes and save/reload behavior remain owned by RELIC/COPY.
+Acceptance: capture D0 and D5 at 360×640, 375×548, 390×780, 430×780, 1280×700 and 1280×880. Every candidate's button
+scrolls clear of the fixed footer, all catalogue names/conditions/prices wrap without clipping, owned/unavailable states keep
+their control footprint, and the D0 coach clears its title and footer. Verify defer/reload, the real paid reroll and persisted
+candidates, the SLOTH seal fold/reopen, and the D0 selection-to-briefing transition with motion and reduced motion.
 
 ## EVENT PRESENTATION
 
@@ -1185,6 +1267,20 @@ Data Reset — and **not** 현재 지점 포기.
 destructive row apart in muted red, optional restrained brass marker. Settings = one utility panel of native controls (native
 `input[type=range]` may be reskinned, no slider framework). ~44px hit targets on mobile.
 
+User-directed visual target (2026-10-03): retain the existing fantasy-store concept and wood material. Menu / detailed
+utility surfaces use dark carved wood, aged brass corner joints, quiet blue steel utility controls and muted crimson
+destructive controls. No title icon. Menu rows may use purpose-made PNG icons; detailed settings do not add an icon to
+each control. A subdued transparent PNG supply / forest illustration may sit at the foot of a detailed menu, behind the
+content, with no pointer events or information role. Do not put that illustration into top-level menu rows. Generated
+concept images are visual targets; actual browser captures still require review before accepting the finish.
+
+Settings groups its existing controls in this order: `소리` (mute, BGM, SFX), `저장` (local-save explanation, export/import),
+`데이터 초기화` (existing reset action). Preserve the exact existing actions, save/audio behaviour, confirmation steps and
+build marker. Group boundaries are inset brass seams, not another panel. Native range inputs keep visible numeric values,
+a compact brass diamond thumb and an actual ~44px interactive area. Utility controls use hard depth; pressing reduces it,
+keyboard focus is visible, disabled controls remain readable, and destructive controls are muted red. Titles use Mulmaru; body and
+controls use Wanted Sans, with the existing numeric role where applicable. Gameplay phases retain their own materials.
+
 ### SETTINGS / DEBUG BOUNDARY
 
 Ordinary settings are localized and gameplay-facing: no developer Seed controls pre-Run, no technical runtime footer (the build
@@ -1205,7 +1301,7 @@ plate under the logo.
 colour, silhouette and place vary by Phase.
 - shared: one hard cast down-right at 45 degrees, visible (a notched cut takes the cast in); the press moves the face into it
   by the depth less 1 px, leaving 1 px; label weight 600
-- size by consequence: inside the Day (`문 열기`, `영업 시작`, `손님 보내기`, `다음`) 56 px tall on phone / 60 px desk; across a
+- size by consequence: inside the Day (`문 열기`, `영업 시작`, `다음`) 56 px tall on phone / 60 px desk, `손님 보내기` 44 px on phone / 60 px desk; across a
   Day or Run boundary (`다음 날`, `다음 점포 열기`, FINAL gate bar) 64 / 72 px; `첫 점포지원 고르기` 64 px everywhere (the
   preparation plates sit right above the dock); ORDER labels may step down on the narrowest phones so the Gold never wraps
 - the one pair: on D30's last order `원정대 후보 보기` shares the gate bar with `원정대 선택` (a view, not a second flow
@@ -1225,7 +1321,7 @@ colour, silhouette and place vary by Phase.
 
 (acceptance -> UI_UX §QA UI-Q-v29-36.) So a play report can name its build, `v{version} · {commit}` shows small (10 px) and muted in
 the top-left of the opening screen (no Run: 새 점포 준비) above the room — not a control, taking no title space — and centred at the
-end of 영업 설정 (점포 메뉴 -> 설정) for mid-Run reading; nowhere else. `{version}` = CHANGELOG head; `{commit}` = first 7 hex of
+end of 설정 (점포 메뉴 -> 설정) for mid-Run reading; nowhere else. `{version}` = CHANGELOG head; `{commit}` = first 7 hex of
 the deployed commit, written into `build.js` by the Pages deploy (`dev` when unstamped). The console prints
 `GUILD24 v{version} · {commit}` on load; `Guild24.build` returns `{version, commit}`.
 
@@ -1386,6 +1482,10 @@ On decision surfaces Function reads before Flavor.
 | Death Narration | 13–14px class | dim/report; no quotation marks or bubble |
 
 Exception: Boss D5 Flavor is primary reveal content and is not demoted.
+Phone SALE exception (User 2026-10-03): the stamped combat word and environment numbers may use a smaller,
+readable scale (about 16–18px and 14–15px); shelf titles use a crisp 12px plate step, Item names/effects 14px/13px.
+This is a local density correction, not a global type reduction. Keep exact effects and risk information, high contrast,
+full words, and the touch targets; verify readability and overflow in actual short-phone captures, including two Hazards.
 
 ## NAVIGATION
 
@@ -1394,7 +1494,8 @@ with it. The Store is the home-space anchor outside pure management screens.
 
 ## INFORMATION DENSITY
 
-Never solve density by shrinking text. Mobile: vertical stacking, clear hierarchy, collapsible secondary detail, no narrow
+Avoid indiscriminate text shrinking; the approved phone SALE exception above requires actual readability and overflow review.
+Mobile: vertical stacking, clear hierarchy, collapsible secondary detail, no narrow
 multi-column compression. PC may be wider with the same priority.
 
 ## RESPONSIVE RULE
@@ -1423,9 +1524,10 @@ the Galaxy stage (360x597). On a portrait stage under 640 high:
 - 새 점포 준비: the note takes the short-desk tighter step so the status line stays on the board; the 간판 keeps its gap from
   the title; the title is at most 180 px; an empty 간판's tag (wider once it carries `들일 수 있음`) runs from the piece edge
   nearest the title toward the screen edge, hanging under the build mark, never covering the title
-- SALE stays sale-first (§MOBILE SALE PLAYABILITY); under 700 high the filled tray takes one tighter step (same content, less
-  air, smaller icon, keys still 44 px or more), leaving 3 / 2 / 1 shelf rows at 640 / 597 / 548. UI-Q-v29-18's three-row floor
-  holds from 640 up; below, the tray folds on scroll
+- SALE stays sale-first (§MOBILE SALE PLAYABILITY): preserve the character scale (§SALE — MOBILE AUTHORITY), use the local
+  readable type ladder and lower-right stock metadata, keys still 44 px or more. Representative one-/two-Hazard visits keep
+  two complete shelf rows at 640 / 597 / 548 with the tray expanded and opening correction applied. Longer product effects wrap intact and may scroll;
+  the Bag, price keys and dock remain reachable. Below 700 high the tray folds on scroll.
 
 ## TOUCH / INTERACTION
 
@@ -1926,7 +2028,7 @@ PASS:
   overflows or collides at 360 / 390 / 412 / 1024 / 1280
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
-At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress/count; no
+At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress: the label `손님` beside the pips, the count `{n} / {N}` as the pips' screen-reader label only (User 2026-10-03); no
 duplicate queue count consumes vertical space. Desktop may show a richer queue presentation.
 
 #### UI-Q-v28-4 — CURRENT CUSTOMER STATE
@@ -2071,9 +2173,7 @@ SALE at 360, 390 and 1280, before and after one sale. PASS:
 #### UI-Q-v29-5 — STAT GRID PRESSURE TAG
 Customers whose Gate presses one Stat through one Hazard, one Stat through two Hazards, and a Stat the Gate does not press.
 PASS:
-- under a pressed Stat cell a small tag shows the pressing Hazard icon + name only (e.g. `냉기`; two Hazards joined as `독 · 속박`),
-  under the Stat that Hazard actually presses (강인함 / 기동 / 정신 per `DUNGEON_HAZARD_v2.8.0.md`)
-- 투력 and an unpressed Stat never carry a tag; the tag carries no number and no verdict word
+- no Stat cell carries a Hazard tag, pressed or not
 
 #### UI-Q-v29-6 — MATCHING-EFFECT EMPHASIS — RETIRED
 
@@ -2333,10 +2433,10 @@ unowned Decorations cost more than the capital.
 #### UI-Q-v29-36 — BUILD MARKER
 
 PASS (→ UI_UX §BUILD MARKER): the opening screen shows `v{version} · {commit}` small and muted top-left at 360 / 390 / 1280, clear
-of the title, the menu button and the preparation board; 영업 설정 ends with the same pair before and during a Run, no other screen
+of the title, the menu button and the preparation board; 설정 ends with the same pair before and during a Run, no other screen
 shows it; the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair; the deployed
 site reads the deployed commit, a local build `dev`.
-FAIL: the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed
+FAIL: the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 설정; a deployed
 build reading `dev`.
 
 #### UI-Q-v29-45 — SALE SHELF LIP AND HEAD
@@ -2355,7 +2455,7 @@ SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작
 PASS:
 - per → UI_UX §PRIMARY ACTION GRAMMAR: equal right and down depth - 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 / the
   gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음 (3 px for ORDER's phone row), 3 px for 손님 보내기; heights 56 px (phone) /
-  60 px (desk) inside the Day (ORDER's phone row 48 px), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
+  60 px (desk) inside the Day (ORDER's phone row 48 px, SALE 손님 보내기 44 px on a phone), 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; inside the Day a 3 px lit top edge, a 4 px deep foot and
   no outline (NIGHT flat), labels on a 2 px drop; each Phase keeps its own face (wood / steel on paper with a frost edge / counter
   key / muted cobalt / BRICK / gate bar); `영업 시작` and `발주 확정` share the steel face and frost edge; `첫 점포지원 고르기`,
   `다음 날` and `다음 점포 열기` the same BRICK build (only the rivets differ)
@@ -2921,6 +3021,10 @@ PASS:
 - contextual missing targets skip cleanly and do not block later lessons
 - the lesson explains how to read the system, not which gameplay answer to choose
 - the same step stays semantically correct at phone and desktop layouts
+- SALE's nine first/contextual marks fit the resized live target with at most a 4px surround: destination, Stats, combat,
+  environment, payday wallet, returning card, filled Bag slot, refused price and discount receipt. Use the actual phone or
+  desk scroller for automatic positioning, never the desk's zero-size `display:contents` wrapper. Copy, target and dock
+  remain separate after scroll, resize and phase-entry motion (User 2026-10-03).
 
 FAIL examples: text explains Hazard readiness while only an unrelated destination heading is highlighted; one button is discussed
 while the whole card/column is spotlighted without need; only part of a tall meaningful target is cut out; automatic scroll puts
@@ -3013,20 +3117,32 @@ FAIL: the list starts open on a fresh account, or the summary line hides inside 
 
 #### UI-Q-v29-18 — COUNTER TRAY
 
-SETUP: SALE at 360, 390 and 1280: entry, tap one shelf row, tap a second row, one successful sale, one refusal.
+SETUP: SALE at 360x640, 360x597, 375x548, 390x780 and 1280x880: DAY 5 and DAY 14 (two Hazards and Deep nomination),
+entry, tap one shelf row, tap a second row, one successful sale, one refusal. Include the longest production customer name,
+long product names/effects, same-day expiry and special effects; review actual screenshots for readability.
 PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
 - at entry the tray is empty: on DAY 1~3 with the tutorial active one line (`상품을 누르면 계산대에 올라온다.`, ≤ 48px at 360),
   otherwise no height; the shelf heading plus at least one row visible without a scroll
-- a tapped row fills the tray with the owner's contents and the shelf list does not move (no row changes height, scrollTop
-  unchanged); a second row swaps the contents, both rows staying put
-- the filled tray is ≤ 200px at 360 with at least three shelf rows visible above it; on a portrait stage under 700 high the
-  tighter step (about 124px at 360) with at least three rows above it from 640 high up
+- a tapped row fills the tray with the owner's contents; opening may minimally reveal the selected row/next peer as specified
+  above. No shelf row changes height; an already-open second-row swap preserves the scroll/anchor.
+- the filled tray is ≤ 200px at 360; representative one-/two-Hazard visits keep two complete shelf rows at 640 / 597 / 548.
+  Long effects wrap intact; no ellipsis, clipped payload or forced font shrinking to reach the row count.
+- the phone character is 85–90% of the pre-trim presentation in width and height; both 44px Bag slots are visible, hittable
+  and clear of the menu. Shelf names/effects are 14px/13px, outlook word 16–18px, environment number 14–15px, title 12px;
+  full information stays readable on dark planes. The 48px customer-send target and all price keys stay inside the viewport.
+- phone changes/special effects use the full width; the tray header repeats no stock/expiry, customer/wallet or base
+  price (stock/expiry live on the shelf row, User 2026-10-03). The shelf title/count/support centres align. Nameplate/destination padding and price-key depth clearance meet the above contract. Long names and
+  metadata wrap without overlapping the icon, neighbouring text or price keys. Deep nomination is reachable after the shelf
+  before purchase; a confirmed nominee's destination and payment stay visible.
+- role and percentage remain together on each phone key's internal left ribbon, with price/profit in two right-hand lines;
+  disabled causes wrap intact across the key. Test every catalogue Item and all five closed-key causes. Numberless utilities
+  retain their complete conditions without the redundant no-change row; an unapplied numeric effect retains its warning.
 - the price keys sit at the same place for every Item; the hand-over icon goes from the tray icon to the Bag slot; a successful
   sale clears the tray; a refusal keeps the Item with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
 - on 1280 the tray lies in the middle area on the counter, between the ledger and the shelf
 - FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
-FAIL: the shelf list moves or changes height when a row is tapped; the filled tray hides all but two shelf rows at 360; the tray
-needs a drag, a scroll or a second tap to reach the price keys.
+FAIL: shelf rows change height or an already-open swap changes scrollTop; the representative comparison misses its 2 / 1 / 1 floor; text,
+Bag slots or actions clip/overlap; the tray needs a drag, a scroll or a second tap to reach the price keys.
 
 #### UI-Q-v29-19 — GATE HAZARD REQUIREMENT NUMBER
 

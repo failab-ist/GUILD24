@@ -228,7 +228,7 @@ P.finalForecast=function(){const s=this.run;if(s.phase!=='final'||!s.finalCommit
  const t=this.finalPreRoll();return G.Dungeon.band(t.power/t.bossPower);};
 P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const cap=this.finalRequired();
- if(!cap)return this.end(false,'출전할 수 있는 모험가가 없어 마왕성 원정을 시작하지 못했습니다.');
+ if(!cap)return this.end(false,'출전할 수 있는 모험가가 없어 마왕성 원정을 시작하지 못했다.');
  /* The resolver enforces the commitment boundary itself: a non-empty party is never
     auto-committed here, and an uncommitted one does not resolve. */
  if(!s.finalCommitted)throw Error('먼저 원정대를 확정해 주세요.');

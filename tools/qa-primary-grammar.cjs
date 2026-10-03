@@ -22,7 +22,8 @@ const ACTION={
  // on a phone ORDER's slim dock row sets both Actions at 48 px with a 3 px cast and 15 px labels; the desk keeps the Day's size
  order:{sel:'.p-order .dock [data-action="open-store"]',step:'day',depth:4,phone:{h:48,depth:3,font:15}},
  commit:{sel:'.p-order .dock [data-action="confirm-order"]',step:'day',depth:4,phone:{h:48,depth:3,font:15}},
- sell:{sel:'.p-sale .dock [data-action="depart"]',step:'day',depth:3},
+ // on a phone SALE's 손님 보내기 is 44 px with 15 px label (UI_UX §PRIMARY ACTION GRAMMAR, User 2026-10-03); the desk keeps the Day's size
+ sell:{sel:'.p-sale .dock [data-action="depart"]',step:'day',depth:3,phone:{h:44,depth:3,font:15}},
  night:{sel:'.p-night .dock .stamp',step:'day',depth:4},
  closing:{sel:'.p-closing .dock .stamp',step:'edge',depth:5},
  // the flow Action, never 원정대 후보 보기 beside it on the last order; with that pair a phone steps both to 16 px (User 2026-09-30)

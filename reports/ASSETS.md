@@ -5,6 +5,64 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 점포지원 PC 세로 배열용 넓은 계약서 — 프로젝트 생성 (2026-10-03 후속)
+
+- `dist/ui/assets/presentation/support/contract-wide-blank.png`: RGBA 2172×724, 기존 무지 계약서를 참고한
+  OpenAI 이미지 생성 에셋. PC 후보를 넓게 쌓을 때 쓰며 모바일에는 기존 승인 종이를 유지한다.
+- 이름·효과·가격·무료·행동 라벨은 없으며 모두 라이브 텍스트다. 생성 원본을 변환 없이 복사했다.
+  재질은 절제된 크림 종이와 작은 집게이며 외곽은 투명하다. 제3자 라이선스를 추정하지 않는다.
+- 해시·원본 일치 기록은 `reports/references/store-support-2026-10-03/contract-assets.json`에 있다.
+
+### 점포지원 계약서·표찰 — 프로젝트 생성 제안 (2026-10-03)
+
+- OpenAI 이미지 생성으로 제작한 글자 없는 RGBA PNG. 별도 제3자 라이선스를 추정하지 않는다.
+- `dist/ui/assets/presentation/support/contract-blank.png`: 1536×1024, 무지 크림 종이와 작은 금속 집게.
+- 같은 폴더 `choice-tag-blank.png`, `return-tag-blank.png`: 각 2172×724, 무지 금색 종이 표찰과 목재 표찰.
+- 생성 원본을 리사이즈·크롭·재인코딩 없이 그대로 복사했다. CSS에서 화면 크기에 맞춰 표시한다.
+- 이름·효과·무료/실제 가격·선택/구매·나중에 결정은 모두 런타임 텍스트이며 이미지에 넣지 않는다.
+  프롬프트도 모든 글자·숫자·가격·무료 문구를 배제하고 균일한 중앙 글자 영역, 투명 외곽, 절제된 픽셀 재질을 요청했다.
+- 점포지원 선택 화면의 구현 제안이며 실제 화면 검증 후에도 최종 시각 컨펌은 별도로 남긴다.
+
+### 점포지원 창고 배경·시각 참고 — User 제공 원본 (2026-10-03)
+
+- 1번 `16833.jpg`는 구성 참고이며 `reports/references/store-support-2026-10-03/selection-reference.jpg`에 보존한다.
+  참고 그림의 효과·가격·후보 개수는 게임 규칙이 아니며 현행 RELIC / COPY / 게임 데이터를 따른다.
+- 2번 `16831.jpg`: `dist/ui/assets/presentation/support/backroom-phone.jpg`, JPEG 720×1280, 136,917 bytes.
+- 3번 `16832.jpg`: `dist/ui/assets/presentation/support/backroom-wide.jpg`, JPEG 1280×720, 169,910 bytes.
+- 세 첨부 모두 변환·재압축·리사이즈 없이 바이트 그대로 복사했다. 원본/레포 사본의 SHA-256 일치와 JPEG 디코딩을 확인했다.
+  정확한 해시·크기·경로는 `reports/references/store-support-2026-10-03/originals.json`에 기록한다.
+- User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
+  배경은 점포지원 선택 화면에만 적용하며 라이브 UI 텍스트·선택 동작과 분리한다.
+
+### 단골 배지 · NIGHT 편의점 배경 — User 제공 원본 (2026-10-03)
+
+- `dist/ui/assets/presentation/sale/regular-badge.png`: User가 준 `픽셀 아트 단골 금빛 배지.png`(RGBA 1278×1230)의 투명 여백을 잘라 144×167로 줄임.
+  SALE 손님 카드 이름판 오른쪽에 쓴다.
+- `dist/ui/assets/presentation/night/store-night.png`: User가 준 `비 내리는 밤의 편의점 풍경.png`(2048×768)를 1536×576으로 줄임. NIGHT 맨 위 배경으로 쓴다.
+- User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
+
+### Settings wood / steel controls — project-generated, review candidate
+- source: generated for this project with OpenAI image generation from the User's settings-menu visual direction
+  (2026-10-03). No third-party asset licence is claimed.
+- shipped PNG files under `dist/ui/assets/presentation/settings/`: `wood-panel.png` (1254 × 1254),
+  `blue-key.png` and `red-key.png` (2172 × 724 each), `supply-backdrop.png` (1774 × 887). All retain their original
+  RGBA pixels and metadata; copied without resizing, cropping or re-encoding.
+- role: wood panel is a CSS nine-slice source for Settings, its existing import/reset confirmations and the store
+  menu candidate; blank steel keys remain confined to Settings and its confirmations. Labels remain live, selectable UI text. The supply illustration sits behind Settings content
+  at reduced opacity with no pointer events. These are not a replacement skin for gameplay phases.
+- status: implementation candidate. Generated concept images are not browser evidence; final material / content-fit
+  acceptance requires actual mobile capture and User review.
+
+### Store menu destination icons — project-generated, review candidate
+- source: seven OpenAI-generated PNGs retained from the interrupted menu-design session (2026-10-03).
+  No third-party asset licence is claimed. Original RGBA pixels and metadata are copied without re-encoding.
+- shipped at `dist/ui/assets/presentation/menu/`, each 1254 × 1254: `roster.png` (scroll and quill),
+  `codex.png` (bound book), `support.png` (supply stall), `decor.png` (banner), `guide.png` (open book),
+  `settings.png` (gear), `abandon.png` (signpost).
+- role: decorative destination markers on existing menu rows only, displayed at 40px with empty alt text;
+  the live row label carries the accessible name. No title icon, new action or detailed-settings icon is added.
+- status: implementation candidate; runtime captures and User review determine visual acceptance.
+
 ### Wanted Sans 1.0.3 — information UI face
 - source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
@@ -217,6 +275,8 @@ flatter than the shared Action geometry it replaced.
     counter face 76-90.7%, floor 90.7-100%
   These are what the live layer is seated against, per breakpoint.
 - adopted: both `store-bg-*` files, as the MORNING room, in `dist/ui/director-review.css`.
+  SALE also reuses the portrait/wide room in `dist/ui/ui.css` (User 2026-10-03): the previous generated shelf-strip SVG is
+  hidden there; opaque information planes retain contrast. Asset bytes are untouched. Final visual approval is pending.
   PHONE takes the portrait file and DESKTOP the wide one at the sheet's existing 1024
   breakpoint. The room is owned by the MORNING stage, so it runs behind the Action dock as
   well, and `cover` crops horizontally only at every shipped width - no authored zone is lost

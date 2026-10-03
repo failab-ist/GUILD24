@@ -155,14 +155,14 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  const back=ruleFor('.modal-footer button:not(.stamp)[data-action="dismiss"]{');
  assert.ok(/background:var\(--brown\)/.test(back),'the way back is BROWN');
  assert.ok(/:not\(\.stamp\)/.test(back),'and a 확인 that wears .stamp is not swept up with it');
- assert.ok(/background:var\(--brown\)/.test(ruleFor('.relic-takeover .close .stamp{')),
-  'deferring a Store Support purchase is the same role');
+ assert.ok(/return-tag-blank\.png/.test(ruleFor('.relic-takeover .close .stamp{')),
+  'User 2026-10-03: deferring is a compact wooden return tag');
  // the footer's remaining controls carry no face at all: a utility is the neutral control
  const footerRest=ruleFor('.modal-footer button:not(.stamp){');
  assert.ok(!/background:/.test(footerRest),'a plain footer utility takes no family of its own');
  assert.ok(!/#3a2c1d/.test(footerRest),'and the retired dead brown is not its default');
  // YELLOW: a purchase, inside a card, never a screen's Action
- assert.ok(/background:var\(--yellow\)/.test(ruleFor('.relic-plate .stamp{')),'a Store Support purchase is YELLOW');
+ assert.ok(/choice-tag-blank\.png/.test(ruleFor('.relic-plate .stamp{')),'User 2026-10-03: Store Support purchase uses a compact gold paper tag');
  assert.ok(/background:var\(--yellow\)/.test(ruleFor('.slot-option>button[data-action="deco-buy"]')),
   'and so is a Decoration purchase');
  /* ...but only the purchase. Equipping something already owned is a state change, so the
@@ -318,7 +318,7 @@ test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row,
  assert.equal(Presentation.hazardRows(['cold']).at(0).pressure,'','without a Gate there is no row text to invent');
  assert.ok(/const pressCell=h=>h\.need\?'<span class="press"><b class="need">'[^;]*<small class="rate">/.test(app),'the short row renders as need over rate (User 2026-09-25)');
  assert.ok(/\.hazards \.press \.rate\{display:block;font-size:11px/.test(read('dist/ui/ui.css'))&&/@media\(min-width:900px\)\{\.hazards \.press \.need,\.hazards \.press \.rate\{display:inline/.test(read('dist/ui/ui.css')),'two lines on a phone, one line at 900px+');
- assert.ok(/\.detail-stat label \.press\{display:inline;[^}]*text-overflow:ellipsis/.test(read('dist/ui/ui.css'))&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid tag is inline beside the name and the value is 18px');
+ assert.ok(!/class="press">'\+pressed|pressedBy\(/.test(app)&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid carries no Hazard tag and the value is 18px');
 });
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
@@ -501,11 +501,11 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  // v2.9.10 quick patch (User 2026-09-28): a seal break closes the window like 구매; a spent window shows 닫기, not 나중에 결정
  assert.ok(app.includes("case'break-seal':game.breakSeal();setModal(null);render();"),'봉인 해제 closes the Store Support window');
- assert.ok(app.includes("w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp')"),'a spent window offers 닫기 only');
+ assert.ok(app.includes("(w.purchased||w.consumedBySealBreak?closeX():'')"),'a spent window offers the X close only');
  // v2.9.13 quick patch 3 (User 2026-10-01): the DAY 0 free pick may wait - on DAY 0 its 나중에 결정 opens DAY 1, later it closes
  assert.ok(app.includes("btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')"),'the DAY 0 takeover offers 나중에 결정');
  assert.ok(app.includes("case'defer-relic':game.deferFoundationRelic();setModal(null);render();"),'deferring leaves the takeover for DAY 1');
- assert.ok(app.includes("'<p>지금 안 골라도 된다. '+until+' 아침·발주 화면에서 무료로 고를 수 있다.</p>'"),'the defer line names its last Day');
+ assert.ok(!app.includes('first-support-note'),'User 2026-10-03: no footer guide text; the coach owns the first-window explanation');
  // and the owned list carries the SLOTH seal count once the seals are revealed; the chip does not
  assert.ok(/function sealCount\(\)\{const s=game\.run;if\(s\?\.bossId!=='SLOTH'\|\|!s\.bossReveal\?\.traitSeen\)return '';/.test(app)
   &&app.includes("'<p class=\"seal-count\">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>'"),'SLOTH seal count in the owned list');
@@ -690,7 +690,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
     answers, and it states what is lost AND what survives. */
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.'),
+ assert.ok(app.includes('이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
  assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
@@ -698,7 +698,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
- assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다."),
+ assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
   'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
@@ -902,8 +902,11 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
  assert.equal((codeOnly.match(/envMeter\(p,d,pre\)/g)||[]).length,2,'the meter is rendered in the readout and in the pin that mirrors it, nowhere else');
  assert.ok(/<span class="pin-fore pin-plate env-meter">'\+\(p\.hazards\.length\?'환경'\+envMeter\(p,d,pre\)/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin, its own `환경` plate');
- assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
+ /* User 2026-10-03: below 900px the `{능력치} n당 대응 1 제공` tail of each row reads in the plate's one `?` (rateTip); the rows' name and `대응 N 필요` are never hidden */
+ assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).filter(r=>!/\.press \.rate\{display:none\}/.test(r)).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
+ assert.ok(/\.p-sale \.front-side \.dest-plate \.hazards \.press \.rate\{display:none\}/.test(css)&&/rateTip\(d\)/.test(plate)&&/@media\(min-width:900px\)\{\n \.p-sale \.front-side \.dest-plate \.hazards \.press \.rate\{display:inline\}/.test(css),
+  'the rate tail hides only below 900px, where the plate `?` carries it');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
     read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
     calculation moved into the systems layer with it. */
@@ -1890,7 +1893,7 @@ test('SALE counter tray folds while the shelf is read and opens on any row',()=>
  assert.ok(/function foldTray\(\)\{if\(!selected\|\|trayFolded\|\|innerWidth>=1024/.test(app),'only a filled tray folds, and never on a desk');
  assert.ok(/Math\.abs\(sc\.scrollTop-trayBase\)>32\)foldTray\(\)/.test(fn('watchTray')),'a shelf scroll past 32px folds it');
  assert.ok(/performance\.now\(\)<trayArm/.test(fn('watchTray')),'the anchoring scroll of a pick does not fold it');
- assert.ok(/if\(!ev\.target\.closest\('\.counter-tray,\[data-action="select"\],\.dock,#modal-root,#coach-root'\)\)foldTray\(\)/.test(app),'a tap outside the tray folds it');
+ assert.ok(/if\(!ev\.target\.closest\('\.counter-tray,\[data-action="select"\],\.dock,\.sale-deep,#modal-root,#coach-root'\)\)foldTray\(\)/.test(app)&&/if\(ev\.target\.closest\('\.sale-deep'\)\)setTimeout\(foldTray,0\)/.test(app),'outside taps fold; the moved phone Deep control completes its native click before folding');
  assert.ok(/case'tray-open':trayFolded=false;syncTray\(\)/.test(app),'the folded strip opens it again');
  assert.ok(/const reopen=trayFolded&&selected===id;trayFolded=false;/.test(app),'any shelf row opens it again');
  assert.ok(/\.p-sale \.counter-tray\.folded \.tray-delta,\.p-sale \.counter-tray\.folded \.tills\{display:none\}/.test(css),'folded, only the header line stays');
@@ -1902,7 +1905,7 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  const sh=fn('shelf'),se=fn('shelfEffects');
  assert.ok(!/\.slice\(0,2\)/.test(sh),'no effect is cut from the shelf row');
  assert.ok(/shelfEffects\(Presentation\.rows\(/.test(sh),'the row hands every row to one owner');
- assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'a longer line steps down instead of wrapping');
+ assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'desk density classes remain; the approved phone SALE override wraps at its readable step');
  for(const [c,px] of [['tight',13],['dense',12],['densest',11]])assert.ok(new RegExp('\\.good \\.what span\\.'+c+'\\{font-size:'+px+'px').test(css),c+' is '+px+'px');
  assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소모품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
  // the core is the approved line's own words, not new copy
@@ -2047,7 +2050,7 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
   &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
- assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'영업 설정 ends with the same pair, readable mid-Run (v2.9.7)');
+ assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'설정 ends with the same pair, readable mid-Run (v2.9.7)');
  assert.ok(/\.p-prep \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
  const wf=read('.github/workflows/pages.yml');
  assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
@@ -2561,7 +2564,7 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\(CLOSE_X,'dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
  // no blank stage: with no Run the render itself draws preparation
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
@@ -2630,7 +2633,11 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
   'the regular Flavor classification asks the owner');
  assert.ok(!/loyalty>=60/.test(copySrc),'and keeps no second 60 threshold of its own');
  assert.ok(!/loyalty>=60|loyalty >= 60/.test(app),'no UI surface carries a second 단골 threshold');
- assert.ok(/Adventurer\.isTrustedRegular\(n\)\?' · 단골'/.test(app),'the 단골 state asks the owner too');
+ /* User 2026-10-03: 단골 reads as a gold badge on the card nameplate, no longer as text in the state line */
+ const standee=fn('standee');
+ assert.ok(/regular=Adventurer\.isTrustedRegular\(n\)/.test(standee)&&/regular-badge/.test(standee),'the 단골 badge asks the owner too');
+ assert.ok(!/' · 단골'/.test(fn('kitLine')),'and the state line no longer repeats 단골');
+ assert.ok(/\.p-sale \.who \.nameplate\{box-shadow:inset 0 2px 0/.test(css),'the SALE nameplate has no rarity colour bar');
  /* 2026-09-23 Store Support rebalance: 귀환 적립제 has no Loyalty condition, and 평생 단골제 /
     프리미엄 멤버십 / 단골 묶음혜택 are conditioned on 단골 itself - asked of the owner, never a
     second number of their own */
@@ -2884,7 +2891,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.ok(/st==='d0'\)s\.bossReveal\.d0Seen=true/.test(app),'dismissing D0 persists its own marker, not a BOSS_BEATS entry');
  /* CORE_RUN §D0 — closing does not consume the beat, and ordinary Morning does not go on past
     it: no 닫기, no Escape and no dismiss while D0 is the open report */
- assert.ok(/!d0Owed\(\)\?btn\('닫기'/.test(app),'D0 carries no 닫기');
+ assert.ok(/!d0Owed\(\)\?btn\(CLOSE_X/.test(app),'D0 carries no 닫기');
  assert.ok(/game\.run\?\.phase!=='foundation'&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
  assert.ok(/phase==='foundation'\|\|d0Owed\(\)\)return/.test(app),'dismiss does not close D0');
  // the cadence table, and D30 reusing D25
@@ -2982,7 +2989,7 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  assert.ok(app.includes("'보유 장식 없음'"),'§1-1 the empty Decoration state');
  assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
  assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
- assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.'),'§1-5 body');
+ assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.'),'§1-5 body');
  assert.ok(app.includes("btn('전부 지우기','reset-go','danger')"),'§1-5 confirm');
  assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
  assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');
@@ -3263,7 +3270,10 @@ test('UI-Q-v29-43: the SALE phone outlook and Core Stats are one plate, the desk
  assert.ok(/>\.readout\{margin:0;padding:9px 12px 7px;background:none;box-shadow:none\}/.test(block),'the outlook has no box of its own');
  assert.ok(/>\.detail-stats\{margin:0;padding:2px 12px 8px;background:none;box-shadow:inset 0 1px 0 #ffffff26\}/.test(block),'the grid has no box, only the seam');
  assert.ok(/@media\(min-width:1024px\)\{\n \.p-sale \.dossier:not\(\.traits\)\{background:none;box-shadow:none\}/.test(css),'and the desk column is restored as it was');
- assert.ok(/'<div class="dossier">'\+returningSummary\(n\)\+readout\(n,st\?st\.item:null,'core-mob'\)\+statGrid\(n\)\+deepOfferUI\(n\)\+'<\/div>'/.test(fn('saleScreen')),'the same content in the same order');
+ const sale=fn('saleScreen');
+ assert.ok(/'<div class="dossier">'\+returningSummary\(n\)\+readout\(n,st\?st\.item:null,'core-mob'\)\+statGrid\(n\)\+'<\/div>'/.test(sale),'the customer outlook and stats keep their reading order');
+ assert.ok(sale.indexOf("shelf()")<sale.indexOf("deepOfferUI(n)"),'the optional phone Deep disclosure follows comparison (User 2026-10-03)');
+ assert.ok(fn('saleDesk').includes('statGrid(n)+deepOfferUI(n)'),'the desk keeps its existing Deep placement');
 });
 
 test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, dock Action, the way back from the ending',()=>{
@@ -3309,109 +3319,30 @@ test('OPENING: the preparation scene starts on the three axes, with no franchise
  assert.ok(/Meta\.storeCapital\(a\)/.test(intro),'and the Capital display stays');
 });
 
-/* UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Two things this screen kept regressing to are
-   asserted directly rather than described: green as the selected/state colour, and a disabled
-   action that still reads 구매. The Canonical surface / border / text / action values are
-   checked at their exact strings, because the spec states them as exact. */
-test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact planes and the caused labels',()=>{
- const from=css.indexOf('/* ---- STORE SUPPORT — FINAL VISUAL SPEC'),
-       to=css.indexOf('.relic-takeover .close{');
- assert.ok(from>0&&to>from,'the Store Support block is where the spec says it is');
- // declarations only: the block's own prose names the banned treatments in order to ban them
+/* User 2026-10-03 / UI_UX §RELIC VISUAL: blank contract materials and live prices. */
+test('UI_UX Store Support: contract/tag hierarchy, readable states and live free/paid prices',()=>{
+ const from=css.indexOf('/* ---- STORE SUPPORT — CONTRACT SHEETS'),to=css.indexOf('.relic-takeover .close{');
+ assert.ok(from>0&&to>from,'contract selection block exists');
  const block=css.slice(from,to).replace(/\/\*[\s\S]*?\*\//g,'');
- // GREEN BAN. No green token and no green literal carries state, selection or action here.
- assert.ok(!/--sign(-lit)?\)/.test(block),'no --sign / --sign-lit treatment survives on this screen');
+ assert.ok(!/--sign(-lit)?\)|gradient|blur|drop-shadow|opacity:\.[0-9]/.test(block),'no green state, soft depth or whole-card fade');
  for(const banned of ['#27382f','#2c5c40','#7ddc9f','#9ce4b6','#4f9e6d','#3d8b5b','#d8f5e3','#e9fbef'])
-  assert.ok(!block.includes(banned),'the banned green '+banned+' is gone');
- // the superseded first palette is not kept alongside the amended one
- for(const gone of ['#273033','#58666a','#a9843d','#c7a653','#191f21','#343f42','#b6c0c1','#899597',
-   '#242b2d','#394549','#707d80','#b08f45','#faf6e9','#c2a15c','#8f7539'])
-  assert.ok(!block.includes(gone),'the superseded '+gone+' is gone');
- // ORNAMENT BAN. The left accent bar, the sheen and the blur are all expressible in one sheet,
- // so each is checked as a shape rather than trusted to a comment.
- assert.ok(!/inset \d+px 0 0 /.test(block),'no vertical accent / left status strip');
- assert.ok(!/gradient|blur|drop-shadow/.test(block),'no gradient, blur or soft glow');
- assert.ok(!/inset 0 \d+px 0 #f|inset -?\dpx -?\dpx 0 #f/i.test(block),'no inset sheen band');
- assert.ok(!/opacity:\.[0-9]/.test(block),'no whole-element opacity fade');
- assert.ok(/opacity:1/.test(block),'the base sheet\'s disabled fade is switched off explicitly');
- // EXACT STATE HIERARCHY, at the amended Canonical values.
- assert.ok(/\.relic-plate\{[^}]*background:#20272b/.test(block),'AVAILABLE surface #20272B');
- assert.ok(/\.relic-plate\{[^}]*inset 0 0 0 2px #465158/.test(block),'AVAILABLE border #465158');
- assert.ok(/\.relic-plate h3\{[^}]*color:#f1ece2/.test(block),'title #F1ECE2');
- assert.ok(/\.relic-plate p\{[^}]*color:#b8c0c2/.test(block),'Function #B8C0C2');
- assert.ok(/\.relic-plate \.cost\{[^}]*color:#d2a347/.test(block),'price #D2A347');
- /* The control's HUE is the one thing on this screen Canonical hands to implementation -
-    "No literal colour value is Canonical for this screen. The exact hue / saturation /
-    brightness may be tuned" - so this asserts the grammar Canonical does own, and the exact
-    values only as the current tune. USER DIRECTION 2026-09-22 retired #C4973E over a #765821
-    brown offset, which still read as a brown box on a phone; the plane is a clean gold and the
-    depth is the card's own slate. */
+  assert.ok(!block.includes(banned),'no green state literal '+banned);
+ assert.ok(/contract-blank\.png/.test(block)&&/choice-tag-blank\.png/.test(block),'blank authored contract and choice materials');
+ assert.ok(/\.relic-plate h3\{[^}]*22px/.test(block)&&/\.relic-plate p\{[^}]*14px/.test(block),'readable title and effect steps remain');
+ assert.ok(/grid-template-columns:minmax\(0,1fr\) 132px/.test(block),'cost and compact action have separate columns');
  const ctrl=(block.match(/\.relic-plate \.stamp\{[^}]*\}/)||[''])[0];
- /* USER DIRECTION 2026-09-22, final: acquiring a Store Support is a PURCHASE, so the one
-    control here takes the YELLOW family - a clean gold-yellow, not the mustard the retired gold
-    read as and not the flow Action, which belongs to whole screens rather than to a card.
-    What stays screen-specific is the GRAMMAR Canonical owns: a flat plane with a hard offset
-    and nothing else, so this control keeps neither the notch nor the drop shadow the base
-    control carries, which §ORNAMENT BAN rules out here. */
- assert.ok(/background:var\(--yellow\)/.test(ctrl),'the one control is the purchase family');
- assert.ok(!/var\(--brick\)/.test(ctrl),'never the flow Action, which is not what this is');
- assert.ok(/inset 0 0 0 2px var\(--yellow-lit\),3px 3px 0 var\(--yellow-deep\)/.test(ctrl),
-  'with a lit pixel edge over a hard offset in its own deep tone');
- assert.ok(/clip-path:none/.test(ctrl)&&/filter:none/.test(ctrl),
-  'and it drops the base control\'s notch and drop shadow, which this screen bans');
- /* the grammar, independent of the tune: it is the strongest pop on the screen, it has real
-    pixel depth, and no part of it is brown or olive - the tone this screen is required to be
-    free of, and the one the previous values kept reading as */
- assert.ok(/inset 0 0 0 2px (#[0-9a-f]{6}|var\(--[a-z-]+\)),\dpx \dpx 0 (#[0-9a-f]{6}|var\(--[a-z-]+\))/.test(ctrl),
-  'the AVAILABLE control keeps a hard edge plus a hard offset - its depth is the affordance');
- const brownish=hex=>{const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
-  // a muddy brown/olive: the blue channel starved AND the plane dark enough to read as dirt
-  return b<r*0.45&&Math.max(r,g,b)<0.62*255;};
- // the PLANES only - the ink on a gold control is a warm near-black on purpose, and reading it
- // as a brown box would be reading the letters instead of the button
- const tok=n=>(css.match(new RegExp('--'+n+':(#[0-9a-f]{6})'))||[])[1];
- const planes=[...ctrl.replace(/color:[^;]*/g,'').matchAll(/#([0-9a-f]{6})/g)].map(m=>m[1])
-  .concat(['yellow','yellow-lit','yellow-deep'].filter(n=>ctrl.includes('var(--'+n+')')).map(n=>tok(n).slice(1)));
- assert.ok(planes.length>=3,'the control names its plane, its edge and its offset');
- for(const hex of planes)
-  assert.ok(!brownish(hex),'no brown/olive value survives in the one control: #'+hex);
- assert.ok(!/#c4973e|#765821|#e3b341|#f6d878|#21c7f3|#f2644b/.test(block),
-  'and every retired plane - brown, muddy gold, cyan, coral - is gone from the screen');
- /* the defer control shares the takeover, so it answers to the same slate palette */
- const defer=(css.match(/\.relic-takeover \.close \.stamp\{[^}]*\}/)||[''])[0];
- assert.ok(defer&&!/#3a2c1d|#6b5335/.test(defer),'the defer control is no longer the dead brown box');
- assert.ok(/background:var\(--brown\)/.test(defer),'it is the back/defer family');
- assert.ok(!/var\(--yellow\)|var\(--brick\)/.test(defer),'and never competes with the purchase beside it');
- // affordance only on the control that can be pressed - :hover/:active still match a disabled one
- assert.ok(/\.relic-plate \.stamp:not\(\[disabled\]\):hover/.test(block)
-  &&/\.relic-plate \.stamp:not\(\[disabled\]\):active/.test(block),
-  'hover and active are scoped away from a disabled control');
- assert.ok(/\.relic-plate\.owned\{[^}]*background:#20272b/.test(block),
-  'SELECTED keeps the AVAILABLE surface - it is never a filled card');
- assert.ok(/\.relic-plate\.owned\{[^}]*inset 0 0 0 2px #b98b3e/.test(block),'and carries the #B98B3E outline');
- assert.ok(/\.relic-plate\.owned h3\{color:#f6f0e5/.test(block),
-  'with the raised title contrast, so the state is not the outline alone');
- const owned=(block.match(/\.relic-plate\.owned \.stamp\[disabled\]\{[^}]*\}/)||[''])[0];
- assert.ok(/background:#171c1f/.test(owned)&&/color:#d2a347/.test(owned)
-  &&/inset 0 0 0 2px #b98b3e/.test(owned),'the state control is charcoal with a muted-gold edge and ink');
- assert.ok(!/min-width|min-height|font:|padding:/.test(owned),
-  'and keeps the AVAILABLE footprint exactly - never a smaller status chip');
- assert.ok(!/\dpx \dpx 0 /.test(owned),'with no hard press shadow');
- assert.ok(/\.relic-plate\.unavailable\{[^}]*background:#171c1f/.test(block),'UNAVAILABLE surface #171C1F');
- assert.ok(/\.relic-plate\.unavailable\{[^}]*inset 0 0 0 2px #303a3e/.test(block),'border #303A3E');
- assert.ok(/\.relic-plate\.unavailable h3\{color:#aeb8ba/.test(block),'title #AEB8BA, still legible');
- assert.ok(/\.relic-plate\.unavailable p\{color:#828e91/.test(block),'Function #828E91, still legible');
- assert.ok(/\.relic-plate \.stamp\[disabled\]\{background:#23292c;color:#697579/.test(block),
-  'and the dead plane at #23292C / #697579');
- assert.ok(!/\.relic-plate \.stamp\[disabled\]\{[^}]*\dpx \dpx 0 /.test(block),
-  'which carries no hard offset, so it cannot read as pressable');
- // DISABLED COPY, COPY_AUDIT §11-31 / §11-31b: the cause is named, never left as 구매.
- const win=app.slice(app.indexOf('relic-choices'),app.indexOf('function sealChoice'));
- assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),
-  'the two disabled causes are separated from the one blocked flag');
- assert.ok(win.includes("mine?'\ubcf4\uc720 \uc911':spent?'\uc120\ud0dd \uc885\ub8cc':poor?'\uace8\ub4dc \ubd80\uc871':price?'\uad6c\ub9e4':'\uc120\ud0dd'"),
-  'and the approved labels are adopted verbatim, in that order - a free card 선택, a priced one 구매 (User 2026-10-02)');
- assert.ok(!/mine\?'\ubcf4\uc720 \uc911':'\uad6c\ub9e4'/.test(win),'the old two-way label is gone');
+ assert.ok(/min-height:48px/.test(ctrl)&&/width:132px/.test(ctrl),'compact key retains a 48px hit target');
+ assert.ok(/\.relic-plate \.stamp:not\(\[disabled\]\):hover/.test(block)&&/\.relic-plate \.stamp:not\(\[disabled\]\):active\{transform:translate/.test(block),'only enabled controls press');
+ const disabled=(block.match(/\.relic-plate \.stamp\[disabled\]\{[^}]*\}/)||[''])[0];
+ assert.ok(/opacity:1/.test(disabled)&&/transform:none/.test(disabled)&&/box-shadow:none/.test(disabled),'disabled control stays legible without press depth');
+ assert.ok(!/min-width|min-height|font:|padding:/.test(disabled),'owned/unavailable keep the action footprint');
+ const footer=(css.match(/\.relic-takeover \.close\{[^}]*\}/)||[''])[0];
+ assert.ok(/background:transparent;box-shadow:none/.test(footer),'footer has no enclosing brown panel');
+ assert.ok(/return-tag-blank\.png/.test(css),'defer uses a compact wooden tag');
+ const win=fn('relicTakeover');
+ assert.ok(win.includes("price?fmt(price)+'G':'무료'"),'free or actual calculated price is rendered as text');
+ assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),'disabled causes remain separate');
+ assert.ok(win.includes("mine?'보유 중':spent?'선택 종료':poor?'골드 부족':price?'구매':'선택'"),'owned/spent/poor/free/paid actions name their cause');
 });
 
 
@@ -3467,7 +3398,7 @@ test('UI_UX §RETIRED ACTIVE UI: no shipped UI file exposes Franchise Grade, Ach
    into the speech balloon), wraps instead of overflowing, and has its own quiet cue. */
 test('의무실 현판: the heal note sits in the kit under the bag, wraps, and has its own cue',()=>{
  const kit=fn('kitLine');
- assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판 덕분에 부상이 나았다.'),'the note reads the heal the arrival recorded');
+ assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판으로 부상 회복'),'the note reads the heal the arrival recorded');
  assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="slots"'),'it follows the bag, on the bag row');
  assert.ok(/\.kit \.heal-note\{flex:1 1 64px;[^}]*overflow-wrap:anywhere/.test(css),'beside the bag, wrapping');
  assert.ok(/@media\(min-width:1024px\)\{\.kit \.heal-note\{position:absolute;/.test(css),'on a desk it takes the empty foot of the strip');
@@ -3519,7 +3450,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  const css=read('dist/ui/ui.css'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  const sell=app.slice(app.indexOf("case'sell':"),app.indexOf("\n case'",app.indexOf("case'sell':")+1));
  // the click handler records what the screen showed before the commit, and only that
- assert.ok(/const tile=\$\('\.counter-tray \.tray-icon'\)/.test(sell)&&/from:tile\?tile\.getBoundingClientRect\(\):null/.test(sell),"the tray icon's place is read before the state moves (v2.9.0 counter tray)");
+ assert.ok(/const tile=\$\('\.counter-tray \.tray-icon'\)/.test(sell)&&sell.includes("from:tile?(tile.querySelector('svg')||tile).getBoundingClientRect():null"),"the actual tray SVG's place is read before the state moves (User 2026-10-03: resized SALE icons)");
  assert.ok(/gold:s\.money/.test(sell)&&/stats:\[\.\.\.document\.querySelectorAll\('\.detail-stats \.detail-stat strong'\)\]/.test(sell),'so are the Gold and the four Stat readings');
  assert.ok(/handoff=seen;showStub\(\);render\(\);/.test(sell),'and they are handed to the draw that follows (the receipt stub is placed before that draw so playCue can animate it)');
  assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
@@ -3527,6 +3458,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  const cue=['cueSelect','cueOrder','cueSale','cueRefuse','playCue'].map(fn).join('');
  // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
  assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from the counter tray to the Bag slot it fills, in the state strip');
+ assert.ok(cue.includes('(slot.firstElementChild||slot).getBoundingClientRect()')&&/\.handoff>svg\{display:block;width:100%;height:100%;max-width:100%;max-height:100%\}/.test(css),'the travelling SVG fits its footprint and lands at the actual Bag icon size');
  assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
  assert.ok(/\.dock \.on-hand b/.test(cue)&&/duration:320/.test(cue)&&/gold\.textContent=fmt\(box\.v\)/.test(cue),'the dock Gold counts to its new value');
  assert.ok(/\.detail-stats \.detail-stat/.test(cue)&&/duration:300/.test(cue),'the changed Stat cells pulse once and keep the new value');
@@ -3594,7 +3526,7 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
  assert.ok(/\.p-sale \.counter-tray\{flex:0 0 auto;/.test(css)&&/\.tray-empty\{margin:0;min-height:44px/.test(css),'fixed band, 44px when empty');
  assert.ok(/\.counter-tray \.tills button\{min-height:64px/.test(css)&&/\.good\{[^}]*padding:8px 0/.test(css)&&/\.good \.tile\{width:38px/.test(css),'compact keys and rows keep the 360 budget');
  assert.ok(/\.sale-desk>\.counter-tray\{grid-area:tray;align-self:start;display:block;/.test(css)&&/\.sale-desk>\.counter-mat\{grid-area:tray;/.test(css),'on a desk the tray lies in the middle area on the counter (User 2026-09-30)');
- assert.ok(/\.good \.what span\{font:600 14px/.test(css),'the effect line keeps its Function class (UI_UX §FUNCTION / FLAVOR)');
+ assert.ok(/\.good \.what span\{font:600 14px/.test(css)&&css.includes('.p-sale:not(.sale-desk) .good .what span{font-size:13px;line-height:1.3;')&&css.includes('word-break:keep-all;overflow-wrap:normal'),'desk effects keep the Function class; the approved phone SALE step is 13px and wraps intact (UI_UX §FUNCTION / FLAVOR)');
 });
 
 

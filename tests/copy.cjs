@@ -48,7 +48,7 @@ const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3'
  'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
-  if((h=l.match(/^##\s+(\d+-\d+)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
+  if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
   const q=l.match(/^>\s*(.+?)\s*$/);if(q&&mode==='현재')out[sec].push(q[1]);}
@@ -58,6 +58,9 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
   assert.ok(sec,name+' has an approved owner section');
   assert.deepEqual(pool,approved[sec],name+' is COPY_AUDIT '+sec+' verbatim');}
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
+});
+test('COPY_AUDIT: the letter-suffixed section id parses without attributing to its parent',()=>{
+ assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
 });
 
 /* COPY_AUDIT §25 / COPY_WORLD_VOICE §RARE REFERENCE NPC (User 2026-09-28, v2.9.11): the Rare Reference customers and their
@@ -92,7 +95,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const src=walk('dist').map(read).join('\n').replace(/\\`/g,'`');
  const missing=new Set();let checked=0,sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
-  if((h=l.match(/^##\s+(\d+)-\d+\./))){sec=h[0].match(/\d+-\d+/)[0];mode=null;if(+h[1]>=16&&+h[1]<=20)sec=null;continue;}
+  if((h=l.match(/^##\s+((\d+)-\d+[a-z]?)\./))){sec=h[1];mode=null;if(+h[2]>=16&&+h[2]<=20)sec=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
   if(/^#{2,3}\s/.test(l)){mode=null;continue;}

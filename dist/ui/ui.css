@@ -188,8 +188,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
 .menu-pin{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:calc(env(safe-area-inset-right) + 6px);z-index:30;
- width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#0f0c0acc;color:var(--dim);
- box-shadow:inset 2px 2px 0 #ffffff14,inset -2px -2px 0 #00000080,3px 3px 0 #00000073}
+ width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#2d190d;color:#dfcba9;
+ box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07,3px 3px 0 #00000073}
 .dock{flex-shrink:0;padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom))}
 
 /* ---- hazard pressure: burned into the notice, always inline, never hover-only ---- */
@@ -508,17 +508,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* BATCH 2A §ORDER MAJOR OBJECT. At 78px the clip read as a lost pill on an 860px sheet, so
    the fixture scales with the form it holds: one steel bar across the head of the paper, with
    the two screws that actually hold it. It is the only fixture on the document. */
-.clip{position:relative;z-index:3;width:clamp(78px,26vw,180px);height:24px;margin:0 auto -10px;
+.clip{position:relative;z-index:3;width:clamp(78px,26vw,180px);height:24px;margin:0 auto -24px;
  background:linear-gradient(180deg,#9aa3ab 0 9px,#6e777f 9px 24px);
  box-shadow:inset 2px 2px 0 #cfd6dc,inset -2px -2px 0 #454d54,4px 5px 0 #00000080}
 .clip:before,.clip:after{content:'';position:absolute;top:7px;width:8px;height:8px;background:#5a646c;
  box-shadow:inset 0 0 0 2px #2b3238,inset 3px 3px 0 #99a4ac,3px 0 0 #2b323859,-3px 0 0 #2b323859}
 .clip:before{left:13px}.clip:after{right:13px}
-.form{position:relative;background:var(--tex-paper),#efe7d2;color:var(--ink);box-shadow:5px 6px 0 #00000080;padding:0 0 4px}
-.form:before,.form:after{content:'';display:block;height:8px;
- background:linear-gradient(-45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x,
-            linear-gradient(45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x}
-.form:before{transform:scaleY(-1)}
+.form{position:relative;color:var(--ink);padding:0 0 4px;border:26px solid transparent;margin:0 -12px;
+ border-image:url('assets/presentation/support/order-paper.png') 52 fill / 26px / 0 stretch}
+
 /* the document says what it is and nothing more */
 /* the 76px right margin existed to clear the letterhead seal, which §ORNAMENT RESTRAINT removed */
 /* BATCH 2A. A printed letterhead: the title and the DAY / branch line sit on one baseline once
@@ -903,7 +901,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
  background-origin:content-box}
-/* UI_UX §BUILD MARKER (User 2026-09-26, v2.9.7): the same pair at the foot of 영업 설정, readable mid-Run */
+/* UI_UX §BUILD MARKER (User 2026-09-26, v2.9.7): the same pair at the foot of 설정, readable mid-Run */
 .build-line{margin:4px 0 0;text-align:center;font-size:11px;line-height:1.3;letter-spacing:.04em;color:var(--muted);user-select:text}
 /* USER 2026-09-23: the menu pin was the last browser-like control left on this stage - a dark
    rounded-looking chip with a generic bevel. On the OPENING it is a small iron fixture in the
@@ -955,11 +953,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* v2.9.0 TRANSACTION BEAT A1: the travelling Item icon - a fixed ghost of the shelf tile that
    playCue moves onto the Bag slot and removes; it takes no input and holds no state */
 .handoff{position:fixed;z-index:70;display:grid;place-items:center;pointer-events:none;transform-origin:center;will-change:transform}
+.handoff>svg{display:block;width:100%;height:100%;max-width:100%;max-height:100%}
 /* v2.9.0 TASK LINE (DAY 1~3): one fixed text line, never two - nowrap, and the size follows the width (12px at 360,
    13px from ~394px) so the longest string fits without a breakpoint */
 .task-line{flex:0 0 auto;margin:0;padding:6px calc(var(--gutter) + 2px) 6px var(--gutter);font:600 13px/1.3 var(--ui);font-size:clamp(12px,3.3vw,13px);color:#e3c98f;letter-spacing:0;
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#00000066;box-shadow:inset 0 -1px 0 #ffffff14}
-.p-morning .task-line,.p-night .task-line,.p-closing .task-line{background:#00000059}
+.p-morning .task-line,.p-closing .task-line{background:#00000059}
 .p-order .task-line{padding-right:56px}
 /* Gate detail rows: the full Hazard sentence (COPY_AUDIT §4-16) */
 .hazards.full li .sentence{font:400 13px/1.4 var(--ui);color:#3c3527;overflow-wrap:anywhere}
@@ -1005,9 +1004,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .dock .queue{display:grid;gap:5px}
 .p-sale .dock .queue span{font:400 12px/1 var(--ui);color:#a2947c;font-variant-numeric:tabular-nums}
 /* the store float, on the strip that is already pinned here - a value, not a panel */
-.p-sale .dock .on-hand{display:flex;align-items:baseline;gap:5px;
+.p-sale .dock .on-hand{display:flex;align-items:baseline;gap:0;
  font:400 12px/1 var(--ui);color:#a2947c;white-space:nowrap}
-.p-sale .dock .on-hand b{font:500 18px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
+.p-sale .dock .on-hand b{margin-left:5px;font:600 18px/1 var(--ui);color:var(--gold);font-variant-numeric:tabular-nums}
 /* UI_UX §PHASE VISUAL LANGUAGE (SALE reads register / commerce gold-amber) + §GAME-LIKE
    INTERACTION LANGUAGE + §GLOBAL PRESENTATION §1 / §3 / §7 / §15. Sending the customer off is the
    register key at the end of the transaction - but it is not the decision SALE is asking for.
@@ -1062,7 +1061,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .detail-stat label{display:flex;align-items:baseline;gap:6px;min-width:0;font:400 13px/1 var(--ui);color:#a2947c;overflow:hidden}
 /* v2.9.0 STAT GRID PRESSURE TAG: the Hazard name(s) under a pressed Stat, in the Hazard's own
    warm tone; no number, no verdict */
-.detail-stat label .press{display:inline;margin:0;font:600 11px/1.2 var(--ui);color:#d98a5a;font-style:normal;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 /* v2.9.0 MATCHING-EFFECT EMPHASIS: the effect that answers the Gate reads in the ink weight */
 .detail-stat strong{margin-left:auto;flex:none;font:600 18px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .trait-list{margin:0 0 12px;display:grid}
@@ -1231,7 +1229,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .good .what span.densest{font-size:11px;letter-spacing:-.03em}
 .good:has(.what .densest){gap:6px}
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
-.good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
+.good .price b{font:600 16px/1 var(--ui);color:var(--gold);font-variant-numeric:tabular-nums}
+.p-sale .good .price b{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:0}
+.p-sale .good .price b .price-unit{font:600 12px/1 var(--ui);color:inherit}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}
 .good .price em.expiry{font:400 11px/1 var(--ui);font-style:normal;color:#8d8067}
 .good .price em.expiry.soon{color:#a8442f;font-weight:600}
@@ -1303,7 +1303,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .tray-who b{color:#f6e9ca;font-weight:600}
 .tray-who .npc-wallet b,.tray-who>b+b{color:var(--gold)}
 .tray-delta{margin:6px 0 0;font:600 14px/1.45 var(--ui);color:#d8c9a6}
-.tray-delta .delta-src{margin:0 8px 0 0}
+.tray-delta .delta-src{margin:0 8px 0 0;color:#cdbd9e;letter-spacing:.03em}
 .tray-delta b{font-weight:600;color:#f2e7cd;font-variant-numeric:tabular-nums}
 .tray-delta i{font-style:normal;color:#8d8067}
 .tray-delta b.effect-bad{color:var(--tone-cost)}
@@ -1376,7 +1376,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* v2.9.0 PRICE ROLE WORDS: the face is the role word (할인 50% / 정가 / 바가지 150%), so it is set in
    the information face, not the LED numerals */
 .tills em{font:600 12px/1.2 var(--ui);font-style:normal;color:var(--key,#a2947c);white-space:nowrap}
-.tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
+.tills strong{font:600 22px/1.1 var(--ui);color:#f6ecd3;font-variant-numeric:tabular-nums}
+.p-sale .tills strong{display:inline-flex;align-items:baseline;justify-content:center;gap:0}
+.p-sale .tills strong .price-unit{font:600 14px/1 var(--ui);color:inherit}
 .tills small{font:400 12px/1.3 var(--ui);color:#b3a688}
 .tills button[disabled] em{color:#6d6250}
 .tills button[disabled] strong,.tills button[disabled] small{color:inherit}
@@ -1391,13 +1393,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a handful of stamped tokens. A death cools the whole room.
    ===================================================================== */
 .p-night{background:#0a0d16}
-.p-night .nightband{position:absolute;left:0;right:0;top:0;z-index:0;line-height:0;pointer-events:none}
-.p-night .nightband .band-art{display:block;width:100%;height:auto}
-.p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:56%;
+.p-night{--nb-head:50px;--nb-h:40vw}
+.p-night .nightband{position:absolute;left:0;right:0;top:0;height:var(--nb-h);z-index:0;pointer-events:none;
+ background:url('assets/presentation/night/store-night.png') center top/auto calc(var(--nb-h)/.74) no-repeat}
+.p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:22%;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
+@media(min-width:1024px){.p-night{--nb-h:min(56vw,260px)}.p-night .nightband{background-size:cover}}
 .p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;padding:0 var(--gutter) 24px;
- background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 calc(var(--sky) - 40px),#100c07 var(--sky),#140f08 100%);
- --sky:min(33vw,120px)}
+ background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 var(--sky),#100c07 calc(var(--sky) + 24px),#140f08 100%);
+ --sky:var(--nb-h)}
+.p-night .rail{margin-top:var(--sky)}
+.p-night .task-line{position:absolute;left:8px;right:58px;top:8px;box-sizing:border-box;min-height:34px;padding:6px 10px;display:flex;align-items:center;background:#0a0d16e6;box-shadow:inset 0 0 0 2px #3b2f21,3px 3px 0 #00000073}
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}
@@ -1651,9 +1657,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 3px 0 0 #3a4152}
 /* a death cools the room: the lamp light drains out of the scene and the figure with it */
 .p-night.cold{background:#080a10}
-.p-night.cold .nightband .band-art{filter:saturate(.35) brightness(.7)}
-.p-night.cold .stage-scroll{--sky:min(33vw,120px);
- background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 40px),#0c0e14 var(--sky),#0a0c12 100%)}
+.p-night.cold .nightband{filter:saturate(.35) brightness(.7)}
+.p-night.cold .stage-scroll{
+ background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 30px),#0c0e14 var(--sky),#0a0c12 100%)}
 .p-night.cold .returner{filter:grayscale(1) brightness(.42) contrast(1.1) drop-shadow(0 3px 0 #00000099)}
 .p-night.cold .verdict{text-shadow:2px 2px 0 #000000b3}
 /* =====================================================================
@@ -1672,7 +1678,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    than the screen), the dock follows immediately under it on the paper's own axis, and both
    lose their separate grounds so nothing but a seam sits between them. The receipt keeps its
    344px object width; the Action takes that same measure so the two read as one column. */
-.p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
+.p-closing{justify-content:center}
 /* BATCH 3 CLOSING: a till that runs longer than the screen (a Great Success day prints one more
    row) rode up under the menu pin, which then covered the receipt's torn top edge. The stage
    keeps the pin's own 6 + 44px clear above the paper; a short till still centres. The desktop
@@ -1737,7 +1743,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .row.open{align-items:center;padding:8px 12px;box-shadow:inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var(--px-cut)}
 .print .row.open span{color:#2c2418;font-weight:600;letter-spacing:.08em}
 .print .row.open b{font-size:18px;line-height:1}
-.print .row.open b i{font-style:normal;font-size:12px;margin-left:3px;color:#7a715d}
+.print .row b i{font-style:normal;font-size:12px;margin-left:3px;color:#7a715d}
 .p-closing .purse{flex-wrap:wrap;row-gap:9px}
 .p-closing .purse>b{font-size:22px;color:#f3ecd8}
 .p-closing .purse .pl{flex:1 0 100%;display:flex;align-items:baseline;margin:0}
@@ -1969,8 +1975,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    reading this comment used to describe is gone - see §PIXEL / 2D GAME UI LANGUAGE.
    ===================================================================== */
 .relic-takeover{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;
- background:#120c06;overflow:hidden}
-.relic-takeover .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 var(--gutter) 20px}
+ background:#120c06 url('assets/presentation/support/backroom-phone.jpg') center / cover no-repeat;overflow:hidden;isolation:isolate}
+.relic-takeover:before{content:'';position:absolute;inset:0;z-index:-1;background:#100c0959;pointer-events:none}
+.relic-takeover .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 16px 8px;scroll-padding:12px}
+.relic-takeover .scroll>*{max-width:1120px;margin-left:auto;margin-right:auto}
 .relic-open{position:relative;margin:0 calc(var(--gutter) * -1) 18px;padding:22px var(--gutter) 18px;
  background:var(--tex-wood),#4a3627;background-size:32px 12px;text-align:center;
  box-shadow:inset 0 2px 0 #7a5f45,inset 0 -2px 0 #1d140c,0 3px 0 #0e1315}
@@ -1980,107 +1988,70 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-open h2{font:500 28px/1.15 var(--f-sign);-webkit-font-smoothing:none;color:#f8efd8;
  text-shadow:1px 2px 0 #00000066}
 .relic-open p{margin-top:8px;font:400 13px/1.6 var(--ui);color:#d3bf98}
+.relic-takeover .relic-open{width:min(100%,640px);margin:20px auto 18px;padding:16px 18px;
+ background:var(--tex-wood),#37271b;box-shadow:inset 0 0 0 1px #9a7947,0 3px 0 #130e0b}
+.relic-takeover .relic-open .label{margin-bottom:8px;letter-spacing:.12em}
+.relic-takeover .relic-open h2{font-size:28px;line-height:1.25}
+.relic-takeover .relic-open p{color:#e7dbc2;font-size:14px;line-height:1.5}
 .discovery{margin:0 0 14px;padding:9px 12px;font:400 13px/1.5 var(--ui);color:#e8d9b0;
  background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
 .relic-choices{display:grid;gap:12px}
-/* ---- STORE SUPPORT — FINAL VISUAL SPEC ------------------------------------
-   UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Every value below is the Canonical one, at the
-   amended palette. The superseded palette is not kept anywhere alongside it.
-
-   The screen is a restrained 2D pixel game selection panel. The game feel is made by flat
-   colour planes, hard edges, a hard offset shadow, a clear state hierarchy and a compact game
-   control - and by nothing else. No gradient, no blur, no inset sheen, no bevel, no soft glow,
-   no badge, no seal, no vertical accent bar, and no whole-element opacity.
-
-   GREEN IS BANNED ON THIS SCREEN as a state, selection, border, button or status colour,
-   `--sign` / `--sign-lit` included. The palette is slate / charcoal / muted gold / warm ivory.
-   This is a Store Support Presentation decision only; the game's semantic benefit green is
-   untouched.
-
-     AVAILABLE    #20272B slate, #465158 edge     the one real control: the YELLOW family, depth
-     SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
-     UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
-
-   SELECTED is never a filled card, a tint or a left strip; it is the gold outline, the raised
-   title contrast and the state control together - never the outline alone.
-   ---------------------------------------------------------------------------- */
-.relic-plate{position:relative;padding:14px 15px 13px;background:#20272b;
- box-shadow:inset 0 0 0 2px #465158,3px 3px 0 #10161a}
-/* the certificate's subject, left-aligned like every other record in the game */
-.relic-plate h3{font:500 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f1ece2;
- padding:0}
-/* UI_UX §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT, and §CARD CONTENT: the exact Function is
-   the comparison this choice is made on, so it stays one step under the title, never dim. */
-.relic-plate p{margin-top:7px;font:600 14px/1.6 var(--ui);color:#b8c0c2}
-/* the price, struck on the panel as a ruled line rather than a box inside a box */
-.relic-plate .cost{display:block;margin:11px 0 10px;padding:9px 0 0;letter-spacing:.06em;
- font:500 20px/1 var(--f-led);color:#d2a347;box-shadow:inset 0 1px 0 #46515899}
-
-/* AVAILABLE - the only control on the screen that looks pressable. USER DIRECTION 2026-09-22:
-   the previous #C4973E plane over a #765821 offset still read as a brown/olive box on a phone,
-   which is the tone that was to be gone. Canonical owns the state grammar here and says in so
-   many words that no literal colour value is Canonical for this screen, so the hue is tuned and
-   the grammar is untouched: one clean gold plane (#E3B341) with a bright pixel edge, and the
-   depth taken in the CARD'S OWN slate shadow (#10161A) instead of a brown one - the brown was
-   most of what made it muddy. Still a compact plane, not a full-width bar: the bar is the SaaS
-   CTA silhouette this spec rules out. 138 x 48 stays well above the phone touch minimum. */
-.relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
- font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:var(--yellow);color:var(--yellow-ink);transform:none;clip-path:none;filter:none;
- box-shadow:inset 0 0 0 2px var(--yellow-lit),3px 3px 0 var(--yellow-deep)}
-/* affordance belongs only to the control that can actually be pressed - :hover and :active
-   still match a disabled button, so both are scoped away from one */
-.relic-plate .stamp:not([disabled]):hover{background:#f7d669}
-/* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
-.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#dcb53c;
- box-shadow:inset 0 0 0 2px var(--yellow-deep),1px 1px 0 var(--yellow-deep)}
-
-/* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
-   state is the muted-gold outline, a slightly raised title contrast, and the control losing
-   every pressable cue while keeping its shape. */
-.relic-plate.owned{background:#20272b;
- box-shadow:inset 0 0 0 2px #b98b3e,3px 3px 0 #10161a}
-.relic-plate.owned h3{color:#f6f0e5}
-.relic-plate.owned .cost{color:#d2a347;box-shadow:inset 0 1px 0 #b98b3e66}
-/* the committed control keeps the AVAILABLE footprint exactly. Shrinking it left a hole beside
-   a card of unchanged height and read as a web status chip; the state is carried by the
-   charcoal fill, the muted-gold edge and ink, and the absence of any depth or press - not by
-   becoming smaller. `opacity:.4` from the base sheet is off. */
-.relic-plate.owned .stamp[disabled]{background:#171c1f;color:#d2a347;opacity:1;transform:none;
- clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #b98b3e}
-
-/* UNAVAILABLE. The panel recedes on its own lightness, not on opacity, and the title and the
-   Function stay fully legible at the Canonical values. */
-.relic-plate.unavailable{background:#171c1f;
- box-shadow:inset 0 0 0 2px #303a3e,1px 1px 0 #10161a}
-.relic-plate.unavailable h3{color:#aeb8ba}
-.relic-plate.unavailable p{color:#828e91}
-/* the price steps back with the panel - it is not actionable here - but stays muted gold,
-   because gold is what a price is in this game */
-.relic-plate.unavailable .cost{color:#b98b3e;box-shadow:inset 0 1px 0 #303a3e}
-
-/* DISABLED ACTION, general. A dead plane at the Canonical values: no depth, no lit edge, no
-   press. It names its own cause (선택 종료 / 골드 부족) rather than staying 구매, and it is never
-   faded by whole-element opacity. */
-.relic-plate .stamp[disabled]{background:#23292c;color:#697579;opacity:1;transform:none;
- clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #394347}
-
-.relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
- padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));background:#0c0805;
- box-shadow:inset 0 3px 0 #ffffff12}
-.relic-takeover .close p{flex:1 1 auto;font:400 13px/1.5 var(--ui);color:#a2947c}
-/* the defer control sits on the same takeover, so it answers to the same palette: slate, not
-   brown. It stays plainly secondary - no gold, no depth competition with the one real control. */
-/* BROWN. Deferring is a step under the purchase it sits beside, so it takes the back/defer
-   family - a rich chestnut that belongs to the wood, not the dead #3A2C1D it used to be and
-   not a second bid for the eye. It keeps this screen's flat grammar like the control above it. */
-.relic-takeover .close .stamp{flex:0 0 auto;min-height:50px;min-width:150px;font:600 16px/1 var(--ui);
- clip-path:none;filter:none;
- background:var(--brown);color:var(--brown-ink);
- box-shadow:inset 0 0 0 2px var(--brown-lit),3px 3px 0 var(--brown-deep)}
-.relic-takeover .close .stamp:hover{background:#87502f}
-.relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#653a24;
- box-shadow:inset 0 0 0 2px var(--brown-deep),1px 1px 0 var(--brown-deep)}
+/* ---- STORE SUPPORT — CONTRACT SHEETS (User 2026-10-03) --------------------
+   Blank raster materials only. Names, effects, free/paid cost and action causes stay live.
+   A compact purchase tag replaces the full-width web button; secondary wood tags float
+   over the room without a footer panel. No green state, blur, decorative frame or fade. */
+.relic-plate{position:relative;padding:34px 22px 20px;
+ background:transparent url('assets/presentation/support/contract-blank.png') center / 100% 100% no-repeat;
+ display:grid;grid-template-columns:minmax(0,1fr) 132px;grid-template-rows:auto 1fr auto;
+ gap:10px 16px;align-items:start;box-shadow:none}
+.relic-plate h3{grid-column:1/-1;padding:0 0 8px;font:500 22px/1.35 var(--f-plate);
+ -webkit-font-smoothing:none;color:#392a1c;border-bottom:1px solid #80674966}
+.relic-plate p{grid-column:1/-1;align-self:start;margin:0;font:600 14px/1.6 var(--ui);
+ color:#534638;word-break:keep-all;overflow-wrap:normal}
+.relic-plate .cost{display:flex;align-items:center;min-height:48px;margin:0;padding:0;
+ font:600 18px/1.3 var(--ui);color:#684117;letter-spacing:.03em;box-shadow:none}
+.relic-plate .stamp{width:132px;min-width:132px;min-height:48px;padding:10px 12px 10px 24px;
+ font:600 16px/1.2 var(--ui);letter-spacing:0;color:#392a1c;
+ background:transparent url('assets/presentation/support/choice-tag-blank.png') center / 100% 100% no-repeat;
+ transform:none;clip-path:none;filter:none;box-shadow:none}
+.relic-plate .stamp:not([disabled]):hover{text-decoration:underline;text-underline-offset:4px}
+.relic-plate .stamp:not([disabled]):active{transform:translate(0,2px)}
+/* Same paper and footprint; a committed tag is ink instead of purchase gold. */
+.relic-plate.owned{box-shadow:none}
+.relic-plate.owned h3{color:#392a1c}
+.relic-plate.owned .stamp[disabled]{color:#684117;border:1px solid #9b743c}
+.relic-plate.unavailable{box-shadow:none}
+.relic-plate.unavailable h3{color:#655a4b}
+.relic-plate.unavailable p{color:#655a4b}
+.relic-plate .stamp[disabled]{background:#e3d5b9;color:#655a4b;opacity:1;transform:none;
+ clip-path:none;filter:none;box-shadow:none;border:1px solid #958570}
+.relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;
+ width:calc(100% - 32px);max-width:1120px;align-self:center;margin:8px 0 max(12px,env(safe-area-inset-bottom));
+ padding:0;background:transparent;box-shadow:none}
+.relic-takeover .close p{flex:1 1 100%;font:600 13px/1.5 var(--ui);color:#f5e8ce;text-align:center;
+ text-shadow:1px 1px 0 #21150f,-1px -1px 0 #21150f}
+.relic-takeover .close .stamp{flex:0 0 auto;min-height:48px;min-width:168px;padding:10px 16px 10px 26px;
+ font:600 15px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;
+ background:transparent url('assets/presentation/support/return-tag-blank.png') center / 100% 100% no-repeat;
+ clip-path:none;filter:none;box-shadow:none}
+.relic-takeover .close .stamp:hover{text-decoration:underline;text-underline-offset:4px}
+.relic-takeover .close .stamp:active{transform:translate(0,2px)}
+@media(min-width:1024px){
+ .relic-takeover{background-image:url('assets/presentation/support/backroom-wide.jpg')}
+ .relic-takeover .scroll{padding-left:32px;padding-right:32px}
+ .relic-takeover .relic-open{margin-top:16px;margin-bottom:12px;padding:12px 18px}
+ .relic-takeover .relic-open h2{font-size:32px}
+ .relic-takeover .relic-choices{grid-template-columns:minmax(0,1fr);gap:12px;width:min(100%,1000px)}
+ .relic-takeover .relic-plate{padding:40px 36px 18px;min-height:clamp(200px,calc((100dvh - 258px)/3),270px);
+  grid-template-columns:minmax(0,1fr) 184px;gap:8px 20px;
+  background-image:url('assets/presentation/support/contract-wide-blank.png')}
+ .relic-takeover .relic-plate h3{font-size:28px;line-height:1.3}
+ .relic-takeover .relic-plate p{font-size:18px;line-height:1.5}
+ .relic-takeover .relic-plate .cost{font-size:22px;min-height:54px}
+ .relic-takeover .relic-plate .stamp{width:184px;min-width:184px;min-height:54px;font-size:18px}
+ .relic-takeover .close{max-width:1000px;margin-bottom:16px}
+ .relic-takeover .close p{flex:1 1 360px;text-align:left}
+}
 
 /* =====================================================================
    FINAL — 제0게이트. Not a shop screen: the mouth of the gate itself, cold stone and
@@ -2368,6 +2339,33 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-list button.danger{margin-top:13px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .menu-list button.danger:hover{background:#6b322b}
+/* The store menu owns wood navigation rows, not the blue utility keys in Settings.
+   Its PNG icons only identify destinations; names and actions stay live controls. */
+.modal.menu-panel{border:14px solid transparent;background:#24160d;background-clip:padding-box;
+ border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 14px / 0 stretch;
+ box-shadow:0 -4px 0 #100a06;isolation:isolate}
+.menu-panel .modal-header{padding:2px 6px 10px;box-shadow:0 2px 0 #100905,inset 0 -1px 0 #986532}
+.menu-panel .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.menu-panel .modal-header .bare{padding:8px 10px;color:#ead8b6;background:#2d190e;
+ box-shadow:inset 0 0 0 1px #8b6037,0 2px 0 #100905}
+.menu-panel .modal-header .bare:hover{background:#412816;color:#fff0d1}
+.menu-panel .modal-body{padding:14px 6px max(8px,env(safe-area-inset-bottom));color:#efdfbf}
+.menu-panel .menu-list{gap:8px}
+.menu-panel .menu-list button{display:flex;align-items:center;gap:10px;min-height:56px;
+ padding:5px 9px;border:2px solid #85603c;background:#422b19;color:#f6e8cf;
+ font:600 15px/1.35 var(--ui);box-shadow:inset 0 1px 0 #b27d45,0 3px 0 #110a06;
+ text-shadow:0 1px 0 #170d06;clip-path:none}
+.menu-panel .menu-list button::after{content:"";flex:0 0 auto;width:7px;height:7px;margin:0 3px 0 auto;
+ border-top:2px solid #d2a362;border-right:2px solid #d2a362;transform:rotate(45deg);pointer-events:none}
+.menu-panel .menu-list button:hover{background:#503520}
+.menu-panel .menu-list button:active,.menu-panel .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 1px 0 #b27d45,0 1px 0 #110a06}
+.menu-panel button:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
+.menu-panel .menu-icon{display:block;flex:0 0 40px;width:40px;height:40px;object-fit:contain;image-rendering:pixelated;pointer-events:none}
+.menu-panel .menu-label{min-width:0;overflow-wrap:anywhere}
+.menu-panel .menu-list button.danger{margin-top:6px;border-color:#a55745;background:#572620;color:#ffe5dd;
+ box-shadow:inset 0 1px 0 #b96d54,0 3px 0 #110a06;text-shadow:0 1px 0 #300f0b}
+.menu-panel .menu-list button.danger::after{border-color:#e5957d}
+.menu-panel .menu-list button.danger:hover{background:#693029}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is off the 발주서, held apart like a game's storage - a
    steel rack of 칸, one cell per slot the store has, a held unit in each (icon, days left), the empty cells the room left.
    It reads apart from the 발주서 by material and value - the existing steel texture, dark against the paper - with one hard
@@ -2460,11 +2458,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-order .dock .stock-handle,.p-order .dock .stock-sheet{display:none}
 }
 }
-.lost-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:11px;
+.lost-count{display:block;margin-bottom:12px;
  padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;
  font:400 15px/1.4 var(--ui);color:#efe3c8}
 .lost-count b{font-variant-numeric:tabular-nums;color:var(--gold)}
-.lost-count span{font-size:13px;color:#a2947c}
+.lost-count span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:#b8a888}
 .lost-count.near{box-shadow:inset 0 0 0 2px #8a2f26}
 .lost-count.near b{color:#e8907c}
 /* META progression, inside the codex: the grade, each Job's mastery, and the Job x Boss grid
@@ -2830,6 +2828,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    screen rather than pinned to the top of an empty one - auto margins, so a long ending
    scrolls normally instead of having its head clipped. */
 .p-end{justify-content:center}
+/* the closing receipt and the ending share the rainy store, the same room as NIGHT */
+.p-closing,.p-end{background:linear-gradient(#0c0a0873,#0c0a0873),#120e0a url('assets/presentation/night/store-rain-phone.jpg') center / cover no-repeat}
+@media(min-width:1024px){.p-closing,.p-end{background-image:linear-gradient(#0c0a0873,#0c0a0873),url('assets/presentation/night/store-rain-wide.jpg')}}
 .p-end .stage-scroll{flex:0 1 auto;display:flex;flex-direction:column;padding:58px var(--gutter) 10px}
 /* BATCH 3 END: the tape's top used to ride up under the menu pin on a phone as soon as a party or
    a settlement made the ending longer than the screen; the pin's 6 + 44px stay clear above it. */
@@ -2838,7 +2839,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .end-tape{margin-bottom:20px}
 /* who went, and what the store put in their hands before they did */
 .sent-off{width:100%;max-width:344px;margin:0 auto 20px}
-.sent-off h3{margin-bottom:10px;font:600 13px/1 var(--ui);letter-spacing:.14em;color:#a2947c}
+.sent-off h3{margin-bottom:10px;font:600 13px/1 var(--ui);letter-spacing:.14em;color:#f3e6c8;text-shadow:0 1px 0 #000c,0 0 6px #000b;padding-left:16px}
+@media(min-width:1024px){.sent-off h3{padding-left:0}}
 /* BATCH 3 END — ONE ROSTER. Each member was its own bordered dark card, so the party read as a
    stack (or, on a desk, a grid) of web cards under the tape. They are one roster plate now: a
    flat recessed plane, the members seated on it and parted by a seam - read-only, nothing that
@@ -3464,7 +3466,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .front-side .readout.core-desk{display:none}
 .dossier .readout.core-mob{display:block;margin:0 0 14px}
 .kit .npc-wallet{color:#9c8d70}
-.kit .npc-wallet b{color:var(--gold);font:500 15px/1 var(--f-led);margin-left:5px}
+.kit .npc-wallet b{color:var(--gold);font:600 15px/1 var(--ui);font-variant-numeric:tabular-nums;margin-left:5px}
 /* the environment pressure a phone folds away - a real control, at thumb size */
 
 /* Phone: the top band is a face and a status line, not a stage. The band is shortened by
@@ -3614,6 +3616,104 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{padding:4px 9px 5px;gap:2px}
 .readout.ro2 .env-meter-list{row-gap:0}
 .readout.ro2 .top b.env-num{line-height:16px}
+/* UI_UX §SALE — MOBILE AUTHORITY (User 2026-10-03): keep the character near the
+   pre-trim size. Density comes from a readable type ladder and aligned information. */
+.p-sale{isolation:isolate;background:#17110b url('assets/presentation/morning/store-bg-phone.png') center/cover no-repeat}
+.p-sale .front{background:none}
+.p-sale .front .backwall{display:none}
+.p-sale .stage-scroll{background:#21170ded}
+.sale-desk{background-image:url('assets/presentation/morning/store-bg-wide.png')}
+.sale-desk .front-side .kit{background:#17110bf2}
+.sale-desk .front-side .dest-plate{background:#21180ff5}
+.p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px))) * .875);--frame:6px;--plateh:46px;--gapb:8px;gap:6px;padding-top:4px}
+.p-sale .face{box-shadow:inset 0 0 0 3px #2a2118,inset 0 0 0 7px #3b2f21,inset 0 0 0 10px #1d160d}
+.p-sale .who .nameplate{box-shadow:inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080}
+.p-sale .who .nameplate.regular{padding-right:44px}
+.who .regular-badge{position:absolute;right:6px;top:50%;width:32px;height:auto;transform:translateY(-50%);image-rendering:pixelated;pointer-events:none}
+.p-sale:not(.sale-desk) .face{margin-bottom:6px}
+.p-sale:not(.sale-desk) .who .nameplate{padding:4px 8px 4px 10px;gap:2px}
+.p-sale:not(.sale-desk) .who .nameplate b{font-size:14px;line-height:1.3;white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.p-sale:not(.sale-desk) .who .rank{font-size:9px;line-height:1.2;letter-spacing:.12em}
+.p-sale:not(.sale-desk) .who .nameplate>span{font-size:11px;line-height:1.4}
+.p-sale:not(.sale-desk) .front-side{padding:0 0 2px;gap:2px}
+.p-sale:not(.sale-desk) .front-side .kit{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding:4px 4px 2px;font-size:12px;background:#17110bf2}
+.p-sale:not(.sale-desk) .front-side .vitals{padding-right:44px;gap:2px}
+.p-sale:not(.sale-desk) .front-side .kit .slots{width:100%;grid-template-columns:minmax(0,1fr) 44px 44px;padding:6px 2px 0;gap:4px;align-items:center}
+.p-sale:not(.sale-desk) .front-side .kit .slot-label{grid-column:auto;margin:0;white-space:normal;font-size:12px}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:5px 8px;gap:6px;background:#21180ff5}
+.p-sale:not(.sale-desk) .front-side .dest-plate>div{gap:2px}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards{margin-top:3px}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li{padding:2px 6px;line-height:1.25}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards .rate{line-height:1.25}
+.p-sale:not(.sale-desk) .counter-edge{height:6px;
+ background:linear-gradient(180deg,#d3ac71 0 2px,#b98d52 2px 3px,#7c5730 3px 4px,#4a331d 4px 6px)}
+.p-sale:not(.sale-desk) .stage-scroll{padding-top:0;padding-bottom:8px}
+.p-sale:not(.sale-desk) .dossier:not(.traits){margin-bottom:2px}
+.p-sale:not(.sale-desk) .sale-deep{order:3;flex:0 0 auto}
+.p-sale:not(.sale-desk) .dossier.traits{order:4}
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{margin-top:2px}
+.p-sale:not(.sale-desk) .readout.ro2 .top>.fore{padding:3px 10px 4px;gap:2px}
+.p-sale:not(.sale-desk) .readout.ro2 .ro-head{height:20px}
+.p-sale:not(.sale-desk) .readout.ro2 .ro-head .tip>summary{margin:-2px -2px -2px 0}
+.p-sale:not(.sale-desk) .readout.ro2 .top .ro-combat>b,
+.p-sale:not(.sale-desk) .readout.ro2 .top .gs-row>b{font-size:17px;line-height:18px}
+.p-sale:not(.sale-desk) .readout.ro2 .top b.env-num{font-size:14px;line-height:15px}
+.p-sale:not(.sale-desk) .readout.ro2 .env-row i{font-size:12px}
+.p-sale:not(.sale-desk) .detail-stat strong{font-size:16px}
+.p-sale:not(.sale-desk) .detail-stat label{font-size:12px}
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding:2px 0}
+.p-sale .shelf-head{align-items:center}
+.p-sale:not(.sale-desk) .shelf-head{margin-bottom:3px;padding-top:2px;padding-bottom:2px}
+.p-sale:not(.sale-desk) .shelf-head h2{font-size:12px;line-height:20px}
+.p-sale:not(.sale-desk) .shelf-head>span{line-height:20px}
+.p-sale:not(.sale-desk) .good{min-height:48px;padding:4px 0}
+.p-sale:not(.sale-desk) .good .what b{font-size:14px;line-height:1.25}
+.p-sale:not(.sale-desk) .good .what span{font-size:13px;line-height:1.3;color:#e1d3b4;word-break:keep-all;overflow-wrap:normal}
+.p-sale:not(.sale-desk) .good .price span,.p-sale:not(.sale-desk) .good .price em.expiry{color:#cdbd9e}
+.p-sale:not(.sale-desk) .good .price em.expiry.soon{color:#efa887}
+.p-sale:not(.sale-desk) .counter-tray{display:grid;grid-template-columns:26px minmax(0,1fr) max-content;column-gap:8px;row-gap:3px;padding-top:6px;padding-bottom:10px}
+.p-sale:not(.sale-desk) .counter-tray.empty{display:block;padding-top:0;padding-bottom:0}
+.p-sale:not(.sale-desk) .tray-item,.p-sale:not(.sale-desk) .tray-what{display:contents}
+.p-sale:not(.sale-desk) .tray-icon{grid-column:1;grid-row:1;width:26px;height:26px;align-self:center}
+.p-sale .tray-icon{padding:1px 2px 3px;overflow:hidden}
+.p-sale .tray-icon>svg{display:block;width:100%;height:100%;max-width:32px;max-height:32px}
+.p-sale:not(.sale-desk) .tray-what>b{grid-column:2;grid-row:1;align-self:center;min-width:0;font-size:14px;line-height:1.3;white-space:normal;overflow:visible;word-break:keep-all;overflow-wrap:normal}
+.p-sale:not(.sale-desk) .tray-who{display:none}
+.p-sale:not(.sale-desk) .tray-stock{grid-column:3;grid-row:1;text-align:right;align-self:center;font-size:11px;line-height:1.4;color:#d4c5a6;white-space:normal;overflow:visible}
+.p-sale:not(.sale-desk) .tray-stock .stock-base,.p-sale:not(.sale-desk) .tray-stock .stock-sep{display:none}
+.p-sale:not(.sale-desk) .tray-stock .stock-count,.p-sale:not(.sale-desk) .tray-stock .stock-life{display:block}
+.p-sale:not(.sale-desk) .tray-delta{grid-column:1 / -1;min-width:0;margin:2px 0 0;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.p-sale:not(.sale-desk) .tray-delta .delta-src{margin:0 4px 0 0}
+.p-sale:not(.sale-desk) .tray-delta.special{grid-column:1 / -1}
+.p-sale:not(.sale-desk) .counter-tray .tills{grid-column:1 / -1;margin-top:4px;gap:8px}
+.p-sale:not(.sale-desk) .counter-tray .tills button{min-height:48px;padding:4px 3px 4px 0;grid-template-columns:40px minmax(0,1fr);column-gap:3px;row-gap:1px;align-content:center;
+ box-shadow:inset 0 1px 0 #82673b,inset 0 -1px 0 #2f2410,2px 2px 0 #000000a6}
+.p-sale:not(.sale-desk) .counter-tray .tills button:not(:disabled):active{box-shadow:inset 0 1px 0 #5d4926,inset 0 -1px 0 #281e0d}
+.p-sale:not(.sale-desk) .counter-tray .tills button:disabled{box-shadow:inset 0 2px 0 #000000a6,inset 0 -1px 0 #ffffff0d}
+.p-sale:not(.sale-desk) .counter-tray .tills .price-role{grid-column:1;grid-row:1 / span 2;align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:2px;width:40px;padding:2px 5px 2px 2px;
+ background:#292219;border-left:2px solid var(--key);clip-path:polygon(0 0,100% 0,calc(100% - 4px) 50%,100% 100%,0 100%)}
+.p-sale:not(.sale-desk) .counter-tray .tills .price-rate{font-size:10px;line-height:1.2}
+.p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:2;grid-row:1;align-self:end;line-height:19px}
+.p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:2;grid-row:2;align-self:start;white-space:nowrap}
+.p-sale:not(.sale-desk) .counter-tray .tills .price-block{grid-column:1 / -1;grid-row:3;white-space:normal;padding:2px 4px 0;word-break:keep-all}
+.p-sale:not(.sale-desk) .counter-tray .tills em,.p-sale:not(.sale-desk) .counter-tray .tills small{font-size:11px;line-height:1.15}
+.p-sale:not(.sale-desk) .counter-tray .tills strong{font-size:18px}
+.p-sale:not(.sale-desk) .counter-tray .tills strong .price-unit{font-size:11px}
+/* The small price roles and profit figures need contrast even on a hovered key. */
+.p-sale .counter-tray .tills button:not(:disabled) small{color:#d7c9aa}
+.p-sale .counter-tray .tills button:nth-child(1){--key:#a6dcf0}
+.p-sale .counter-tray .tills button:nth-child(2){--key:#f7ca69}
+.p-sale .counter-tray .tills button:nth-child(3){--key:#ffc49e}
+.p-sale .counter-tray .tills button:disabled em{color:#9c8e74}
+.p-sale:not(.sale-desk) .counter-tray.folded{min-height:44px}
+.p-sale:not(.sale-desk) .counter-tray.folded .tray-stock{display:none}
+.p-sale:not(.sale-desk) .counter-tray.folded .tray-what>b{grid-column:2 / -1;padding-right:16px;position:relative}
+.p-sale:not(.sale-desk) .counter-tray.folded .tray-what>b:after{content:'';position:absolute;right:0;top:50%;margin-top:-3px;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:6px solid #d6bd84}
+.p-sale:not(.sale-desk) .deep-offer{margin-bottom:2px}
+.p-sale:not(.sale-desk) .deep-offer>summary{min-height:44px;padding:5px 12px}
+.p-sale:not(.sale-desk) .dock{padding-top:5px;padding-bottom:max(5px,env(safe-area-inset-bottom))}
+.p-sale:not(.sale-desk) .dock .stamp{min-height:48px;padding-top:10px;padding-bottom:10px;font-size:16px}
 /* the Great Success signal inside the 전투 전망 box (User 2026-10-02): a phone shows a quiet tag beside the word and keeps the
    sentence for a screen reader only; a desk shows the sentence under the word and no tag */
 .readout.ro2 .gs-row{display:flex;align-items:center;gap:8px;min-width:0}
@@ -3634,6 +3734,96 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media(min-width:1024px){
  .relic-takeover .close:has([data-action=reroll-relics]) p{display:block;flex:1 1 auto}
  .relic-takeover .close:has([data-action=reroll-relics]) .stamp{flex:0 0 auto;min-width:150px;padding:10px 14px}}
+
+/* Settings: carved wood and brass, with raster nine-slice frames. These assets only skin
+   the existing controls; the sheets the store menu opens (roster, codex, guide, decoration, abandon) take the same frame, header and footer keys via .wood-frame; phase surfaces keep their own materials. */
+.modal.settings-wood,.modal.wood-frame{border:16px solid transparent;background:#24160d;background-clip:padding-box;
+ border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
+ color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
+.settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.settings-wood .modal-header h2,.wood-frame .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{padding:8px 12px;min-height:44px;color:#dfcba9;
+ background:#2d190d;box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07}
+.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:#392213;color:#fff0d1}
+.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #76502c}
+/* the sheets a menu opens share the menu's carved wood: header on the wood itself, tab chips as wooden keys with the same brass edge */
+.modal.wood-frame .modal-header{background:none;margin:0;padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.modal.wood-frame .modal-header h2{font-size:23px}
+.modal.wood-frame .modal-body{color:#dfcba9}
+.modal.wood-frame .tabs .small{background:linear-gradient(180deg,#5a3a20 0,#42291a 55%,#2f1c10 100%);color:#e6d3ae;
+ box-shadow:inset 0 0 0 2px #140b06,inset 0 2px 0 #9b6a3a66}
+.modal.wood-frame .tabs .small:hover{background:linear-gradient(180deg,#6a4627 0,#4f3220 55%,#382214 100%);color:#fff0d1}
+.modal.wood-frame .tabs .small.active{background:linear-gradient(180deg,#7a5224 0,#573817 55%,#3f2910 100%);color:#fff0c8;
+ box-shadow:inset 0 0 0 2px #140b06,inset 0 0 0 3px #ffc554,inset 0 3px 0 #ffe29b40}
+/* the close control is a bare light X, no key and no plate: it reads against the dark wood and cannot be mistaken for an action */
+.menu-panel .modal-header .bare,.settings-wood .modal-header .bare,.wood-frame .modal-header .bare{flex:0 0 auto;display:grid;place-items:center;width:44px;min-width:44px;min-height:44px;padding:0;
+ background:none;box-shadow:none;color:#f1e6cc;filter:drop-shadow(0 2px 0 #0f0905)}
+.menu-panel .modal-header .bare:hover,.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:none;color:#fff;filter:drop-shadow(0 2px 0 #0f0905) brightness(1.1)}
+.menu-panel .modal-header .bare:active,.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:none}
+.relic-takeover .takeover-x{position:absolute;top:max(10px,env(safe-area-inset-top));right:10px;z-index:3;display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;
+ background:#140905e6;color:#f1e6cc;box-shadow:inset 0 0 0 2px #ffffff33;filter:drop-shadow(0 2px 0 #0f0905)}
+.relic-takeover .takeover-x:hover{background:#140905;color:#fff}
+.relic-takeover .takeover-x:active{transform:translateY(2px)}
+.relic-takeover .close:empty{display:none}
+.modal-header .bare .x-icon,.takeover-x .x-icon{display:block;width:16px;height:16px}
+/* one vertical rhythm for the carved sheets: 14px under the header rule, 16px above the footer rule, 12px between stacked blocks */
+.modal.wood-frame .modal-body,.modal.wood-frame:has(.tabs) .modal-body{padding:16px 12px max(14px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-body p+p{margin-top:8px}
+.settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
+.settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
+ background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}
+.settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
+ border-image:url('assets/presentation/settings/blue-key.png') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
+ background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
+ box-shadow:0 3px 0 #110a06;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
+.settings-wood button:not(.bare):hover,.wood-frame .modal-footer button:not(.bare):hover{background:none;filter:brightness(1.12)}
+.settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
+.settings-wood button.danger,.wood-frame .modal-footer button.danger{border-image-source:url('assets/presentation/settings/red-key.png');
+ color:#ffe9df;text-shadow:0 1px 0 #350e0c}
+.settings-wood button:disabled,.settings-wood button[aria-disabled="true"],.wood-frame .modal-footer button:disabled{opacity:1;filter:saturate(.25) brightness(.75);
+ color:#e0d3bf;transform:none;box-shadow:none;cursor:default}
+.settings-wood button:focus-visible,.settings-wood input:focus-visible,.wood-frame button:focus-visible,.wood-frame input:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
+.settings-content{position:relative;isolation:isolate;display:grid;gap:0}
+.settings-content::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:url('assets/presentation/settings/supply-backdrop.png') right bottom / 100% auto no-repeat;opacity:.22}
+.settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
+.settings-group+.settings-group{padding-top:22px;box-shadow:0 -2px 0 #130b06,inset 0 1px 0 #97612e}
+.settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
+ width:6px;height:6px;background:#ad7d42;box-shadow:0 1px 0 #120b06;transform:rotate(45deg);pointer-events:none}
+.settings-wood .settings-group h3{margin:0;font:500 21px/1.3 var(--f-plate);color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.settings-group p{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
+.settings-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.settings-heading button{min-width:102px}
+.settings-save-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.settings-wood .settings-save-actions button{padding:6px 2px}
+.settings-reset button{justify-self:start;width:min(100%,222px)}
+.settings-note{margin:8px 0 0;font:400 13px/1.65 var(--ui);color:#dfcba9;max-width:30ch}
+.settings-panel .build-line{margin-top:12px;text-align:left;color:#af9777}
+.settings-panel .mixer{gap:8px}
+.settings-panel .mix-row{grid-template-columns:38px minmax(0,1fr) 52px;gap:10px}
+.settings-panel .mix-row label{color:#ead8b6;font-size:14px}
+.settings-panel .mix-row b{min-height:36px;display:flex;align-items:center;justify-content:center;
+ background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
+/* Native inputs keep keyboard behaviour and a 44px touch area around the thin rail. */
+.settings-panel .mix-row input[type=range]{appearance:none;-webkit-appearance:none;height:44px;
+ color:#ffc554;accent-color:#ffc554}
+.settings-panel input[type=range]::-webkit-slider-runnable-track{height:8px;
+ background:linear-gradient(to right,#ffc554 var(--mix-level,100%),#493018 var(--mix-level,100%));
+ border:1px solid #8d591f;border-radius:0;box-shadow:inset 0 1px 0 #ffe29b,0 2px 0 #100905}
+.settings-panel input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+ margin-top:-6px;border:3px solid #d48a2a;border-radius:0;background:#ffe5a0;
+ box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+.settings-panel input[type=range]::-moz-range-track{height:6px;background:#493018;
+ border:1px solid #8d591f;border-radius:0;box-shadow:0 2px 0 #100905}
+.settings-panel input[type=range]::-moz-range-progress{height:6px;background:#ffc554;box-shadow:inset 0 1px 0 #ffe29b}
+.settings-panel input[type=range]::-moz-range-thumb{width:12px;height:12px;border:3px solid #d48a2a;
+ border-radius:0;background:#ffe5a0;box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+@media(min-width:600px){
+ .settings-wood .modal-body{padding-left:18px;padding-right:18px}
+ .settings-wood button:not(.bare){font-size:15px}
+ .settings-wood .settings-group h3{font-size:23px}}
+
 /* v2.9.14 quick patch (User 2026-10-02): 연속 부상 출발 lives in the 전투 전망 box like the Great Success signal - a phone shows a quiet
    red chip beside the word (the line stays for a screen reader), a desk the line under it; on the pin it takes the bottom right */
 .readout.ro2 .st-tag,.forecast-pin .st-tag{padding:2px 5px;font:600 11px/1.2 var(--ui);font-style:normal;color:#e0a08a;background:#2e1610;
@@ -3653,3 +3843,134 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* both chips on one customer (an injured adventurer the fight still favours) is rare; then they stack, left-aligned on the first
    chip, beside the word rather than running out of the box (User 2026-10-02) */
 .readout.ro2 .ro-tags{display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px;min-width:0}
+
+/* SALE phone density (User 2026-10-03): smaller state type, a shorter destination plate, a card and a side column that end on one
+   line, 손님 as a label on the pips (the count is the pips' own aria-label), a smaller 보유 골드 figure and a 44px send key. */
+.p-sale .dock .queue .q-line{display:flex;align-items:center;gap:6px}
+.p-sale:not(.sale-desk) .face{margin-bottom:0}
+.p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
+.p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-evenly;padding:6px 8px;gap:0;font-size:11px}
+.p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:7px 8px}
+.p-sale:not(.sale-desk) .front-side .dest-plate h3{font-size:12px;line-height:1.2}
+.p-sale:not(.sale-desk) .front-side .dest-plate .hazards li,.p-sale:not(.sale-desk) .front-side .dest-plate .hazards .press .need{font-size:11px}
+.p-sale:not(.sale-desk) .dock .on-hand b{font-size:15px}
+.p-sale:not(.sale-desk) .dock .stamp{min-height:44px;padding-top:8px;padding-bottom:8px;font-size:15px}
+.p-sale .front-side .dest-plate .hazards .press .rate{display:none}
+.p-sale .front-side .dest-plate .rate-tip{margin:0}
+.p-sale .front-side .dest-plate .rate-tip>summary{position:absolute;right:4px;top:2px;min-width:28px;min-height:28px;width:28px;height:28px}
+@media(min-width:900px){
+ .p-sale .front-side .dest-plate .hazards .press .rate{display:inline}
+ .p-sale .front-side .dest-plate .rate-tip{display:none}}
+.p-sale:not(.sale-desk) .counter-tray .tray-stock{display:none}
+/* SALE phone spacing (User 2026-10-03): 상태 hangs its second line under the first value, the cards keep a gap, the counter rule is thinner and
+   clear of the cards, and the shelf head stays inside the shelf frame */
+.p-sale .vit{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em}
+.p-sale .vit>i{font-style:normal}
+.p-sale:not(.sale-desk) .front{padding-bottom:10px}
+.p-sale:not(.sale-desk) .front-side{gap:8px;justify-content:space-between}
+.p-sale:not(.sale-desk) .counter-edge{height:4px;margin-top:2px;
+ background:linear-gradient(180deg,#d3ac71 0 1px,#b98d52 1px 2px,#7c5730 2px 3px,#4a331d 3px 4px)}
+.p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 8px}
+.p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
+/* SALE backdrop (User 2026-10-03): one wide store art for phone and desk, framed from the wall down (no ceiling), the side shelves
+   showing at the edges; a dim layer keeps the bright room behind the dark cards */
+.p-sale{background:linear-gradient(#0d0a0638,#0d0a0648),url('assets/presentation/sale/sale-bg-phone.png') center -70px/100% auto no-repeat #1d1710}
+.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.png') center calc(-10vw)/100% auto no-repeat #17110b}
+/* SALE shelf head (User 2026-10-03): the wooden plank asset spans the whole frame width */
+.p-sale .shelf-head{margin:0;padding:6px 16px;border:solid transparent;border-width:0 14px;
+ border-image:url('assets/presentation/sale/shelf-plank.png') 0 115 fill/0 14px stretch;
+ background:none;box-shadow:none}
+.p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 12px}
+.p-sale .shelf{padding:0 0 8px;background:#1b140ce6;box-shadow:inset 0 0 0 2px #6a4126,inset 0 0 0 4px #2a1710,3px 3px 0 #00000066}
+.p-sale .shelf-head{margin:0 -2px}
+.p-sale .shelf>.goods{padding:4px 11px 0}
+.p-sale .shelf-head>span{background:#0e0a0699}
+
+/* SALE desk (User 2026-10-03): the status / outlook / destination column is as tall as the card and as wide as its own box, type larger;
+   the waiting deck is bigger on a desk */
+@media(min-width:1024px){
+ .sale-desk .front-side{align-self:stretch;max-width:none;width:100%;display:flex;flex-direction:column;gap:10px;padding:0}
+ .sale-desk .front-side>*{margin:0;width:auto;box-sizing:border-box}
+ .sale-desk .front-side>.kit,.sale-desk .front-side>.readout,.sale-desk .front-side>.dest-plate{align-self:stretch;width:auto}
+ .sale-desk .front-side .kit{flex:1 1 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:17px}
+ .sale-desk .front-side .kit .vitals{font-size:17px}
+ .sale-desk .front-side .kit .npc-wallet,.sale-desk .front-side .kit .slot-label{font-size:16px}
+ .sale-desk .front-side .readout.core-desk .ro-combat>b,.sale-desk .front-side .readout.core-desk .gs-row>b{font-size:26px}
+ .sale-desk .front-side .readout.core-desk b.env-num{font-size:22px}
+ .sale-desk .front-side .readout.core-desk i,.sale-desk .front-side .readout.core-desk label{font-size:15px}
+ .sale-desk .front-side .dest-plate h3{font-size:20px}
+ .sale-desk .front-side .dest-plate .hazards li{font-size:15px}
+ .sale-desk .front>.line-up{--deck:.4}
+ .stage.sale-desk .front{--cardw:max(200px,min(300px,calc(100dvh - 480px)))}
+ .sale-desk .front>.line-up .left{font-size:16px}
+}
+/* SALE type ladder (User 2026-10-03): stats, item effects and stock/expiry sit one step below names and prices */
+.p-sale .detail-stat label{font-size:11px;color:#b4a78d}
+.p-sale .detail-stat strong{font:600 16px/1.2 var(--ui);font-variant-numeric:tabular-nums;color:#e0d4b8}
+.p-sale .good .what span{font-size:12px}
+@media(min-width:1024px){.p-sale .good .what span{font-size:13px}}
+.p-sale .good .price span,.p-sale .good .price em.expiry{color:#9c8f77}
+.p-sale .good .price em.expiry.soon{color:#d99a7c}
+
+@media(min-width:1024px){
+ .sale-desk .counter-tray .tills button{min-height:96px;padding:6px 0}
+ .sale-desk .counter-tray .tills strong{font-size:28px}
+ .sale-desk .counter-tray .tills small{font-size:15px}
+ .sale-desk .counter-tray .tray-who,.sale-desk .counter-tray .tray-delta{font-size:16px}
+ .sale-desk .front-side .kit .slots i{width:68px;height:68px;flex:0 0 68px}
+ .sale-desk .front-side .kit .slots{gap:12px;padding:10px 12px;width:auto;flex:0 0 auto;display:flex;flex-flow:row wrap;max-width:190px}
+ .sale-desk .front-side .kit .slots .slot-label{flex:0 0 100%;margin:0}
+ .sale-desk .detail-stat label{font-size:16px}
+ .sale-desk .dossier.traits,.sale-desk .dossier.traits *{font-size:16px}
+ .sale-desk .dossier.traits h3,.sale-desk .dossier.traits b{font-size:18px}
+ .sale-desk .dock .queue,.sale-desk .dock .on-hand{font-size:17px}
+ .sale-desk .dock .on-hand b{font-size:30px}
+}
+/* SALE section rules (User 2026-10-03): the rule under the tray above 손님 보내기 is the same 4px board edge as the one between the two halves */
+.p-sale:not(.sale-desk) .counter-tray{box-shadow:inset 0 4px 0 #000000b3,inset 0 -1px 0 #4a331d,inset 0 -2px 0 #7c5730,inset 0 -3px 0 #b98d52,inset 0 -4px 0 #d3ac71}
+.p-sale .detail-stat strong,.p-sale:not(.sale-desk) .detail-stat strong,.sale-desk .detail-stat strong{font:600 16px/1.2 var(--ui)}
+/* SALE desk (User 2026-10-03): the column ends on the card's own bottom edge, not on the card slot's gap below it */
+@media(min-width:1024px){.sale-desk .front-side{margin-bottom:14px}}
+/* SALE price keys (User 2026-10-03): the key asset (rim per role, nine-sliced) with a CSS corner ribbon that names the role; price and profit centred.
+   Pressing sinks the whole key, a disabled key swaps to the asset's grey. */
+.p-sale .counter-tray .tills button,.p-sale:not(.sale-desk) .counter-tray .tills button{--rim:#e2ab56;--rim-d:#c98a2c;position:relative;border:solid transparent;border-width:7px;background:none;box-shadow:none;
+ clip-path:inset(0);min-height:54px;padding:0;display:grid;grid-template-columns:minmax(0,1fr);row-gap:0;align-content:center;justify-items:center;
+ border-image:url('assets/presentation/sale/till-regular.png') 38 fill/7px stretch;transition:transform .06s,filter .06s}
+.p-sale .counter-tray .tills button:nth-child(1){--rim:#72b4d5;--rim-d:#4f97bd;border-image-source:url('assets/presentation/sale/till-discount.png')}
+.p-sale .counter-tray .tills button:nth-child(3){--rim:#ef8b5c;--rim-d:#d4673c;border-image-source:url('assets/presentation/sale/till-markup.png')}
+.p-sale .counter-tray .tills button:disabled{--rim:#b5a595;--rim-d:#a8998a;border-image-source:url('assets/presentation/sale/till-off.png');box-shadow:none;background:none;filter:none}
+.p-sale .counter-tray .tills button:not(:disabled):hover{background:none;filter:brightness(1.08)}
+.p-sale .counter-tray .tills button:not(:disabled):active{transform:translateY(3px);background:none;box-shadow:none;filter:brightness(.88)}
+.p-sale:not(.sale-desk) .counter-tray .tills button:not(:disabled):active{box-shadow:none}
+.p-sale .counter-tray .tills .price-role,.p-sale:not(.sale-desk) .counter-tray .tills .price-role{position:absolute;left:-36px;top:-2px;width:80px;height:11px;margin:0;padding:0;display:block;
+ background:linear-gradient(180deg,#ffffff40 0 1px,#ffffff00 1px),linear-gradient(90deg,var(--rim),var(--rim-d));border:0;clip-path:none;transform:rotate(-45deg);
+ font:700 8px/11px var(--ui);letter-spacing:0;text-align:center;color:#1a0d04;white-space:nowrap;overflow:hidden}
+.p-sale .counter-tray .tills .price-role span{display:inline}
+.p-sale .counter-tray .tills .price-role .price-rate{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);font-size:0;line-height:0}
+.p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:1;grid-row:1;align-self:end;text-align:center;line-height:20px}
+.p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:1;grid-row:2;align-self:start;text-align:center}
+.p-sale .counter-tray .tills button small,.p-sale .counter-tray .tills button:not(:disabled) small{color:#efe0c6;font-weight:400}
+.p-sale .counter-tray .tills button strong,.p-sale .counter-tray .tills button:not(:disabled) strong{color:#fff}
+.p-sale .counter-tray .tills button:disabled em,.p-sale .counter-tray .tills button[disabled] em{color:#1a0d04}
+.p-sale .counter-tray .tills button:disabled small,.p-sale .counter-tray .tills button:disabled strong{color:#f4e9d0}
+/* SALE desk card (User 2026-10-03): shorter art box, taller nameplate; the band shrinks by the same amount and the shelf below gets it */
+@media(min-width:1024px){
+ .stage.sale-desk .front{--arth:calc(var(--artw)*.74);--plateh:100px;--cardh:calc(var(--frame)*2 + var(--arth) + var(--gapb) + var(--plateh))}
+ .sale-desk .who .portrait{height:var(--arth)}
+ .sale-desk .who .nameplate{padding:10px 14px 10px 15px;gap:4px}
+ .sale-desk .who .nameplate b{font-size:22px}
+ .sale-desk .who .nameplate>span{font-size:15px}
+ .sale-desk .who .rank{font-size:12px}
+ .sale-desk .who .regular-badge{width:40px}
+}
+/* SALE desk (User 2026-10-03): nameplate side lines and the 단골 badge grow into the taller plate; the waiting count gets its own dark plate; price-key ribbons are larger than on the phone */
+@media(min-width:1024px){
+ .sale-desk .who .nameplate>span{font-size:18px}
+ .sale-desk .who .rank{font-size:16px}
+ .sale-desk .who .regular-badge{width:56px}
+ .sale-desk .who .nameplate.regular{padding-right:68px}
+ .sale-desk .front>.line-up .left{background:#0d0a06d9;color:#f0e4c8;padding:3px 9px;box-shadow:inset 0 0 0 1px #3b2f21}
+ .sale-desk .counter-tray .tills .price-role,.sale-desk.p-sale .counter-tray .tills .price-role{left:-38px;top:0;width:100px;height:15px;font-size:10px;line-height:15px}
+}
