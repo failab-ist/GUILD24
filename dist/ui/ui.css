@@ -1061,7 +1061,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .detail-stat label{display:flex;align-items:baseline;gap:6px;min-width:0;font:400 13px/1 var(--ui);color:#a2947c;overflow:hidden}
 /* v2.9.0 STAT GRID PRESSURE TAG: the Hazard name(s) under a pressed Stat, in the Hazard's own
    warm tone; no number, no verdict */
-.detail-stat label .press{display:inline;margin:0;font:600 11px/1.2 var(--ui);color:#d98a5a;font-style:normal;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 /* v2.9.0 MATCHING-EFFECT EMPHASIS: the effect that answers the Gate reads in the ink weight */
 .detail-stat strong{margin-left:auto;flex:none;font:600 18px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .trait-list{margin:0 0 12px;display:grid}
@@ -3848,13 +3847,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* SALE phone density (User 2026-10-03): smaller state type, a shorter destination plate, a card and a side column that end on one
    line, 손님 as a label on the pips (the count is the pips' own aria-label), a smaller 보유 골드 figure and a 44px send key. */
 .p-sale .dock .queue .q-line{display:flex;align-items:center;gap:6px}
-.p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px)))*.86)}
+.p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px)))*.8)}
 .p-sale:not(.sale-desk) .face{margin-bottom:0}
 .p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
-.p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-between;font-size:11px}
+.p-sale:not(.sale-desk) .front-side .kit{flex:none;padding:8px 8px 6px;gap:8px;font-size:11px}
 .p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
 .p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
-.p-sale:not(.sale-desk) .front-side .dest-plate{padding:4px 8px}
+.p-sale:not(.sale-desk) .front-side .dest-plate{padding:7px 8px}
 .p-sale:not(.sale-desk) .front-side .dest-plate h3{font-size:12px;line-height:1.2}
 .p-sale:not(.sale-desk) .front-side .dest-plate .hazards li,.p-sale:not(.sale-desk) .front-side .dest-plate .hazards .press .need{font-size:11px}
 .p-sale:not(.sale-desk) .dock .on-hand b{font-size:15px}
@@ -3865,9 +3864,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media(min-width:900px){
  .p-sale .front-side .dest-plate .hazards .press .rate{display:inline}
  .p-sale .front-side .dest-plate .rate-tip{display:none}}
-.p-sale:not(.sale-desk) .good .price{grid-template-columns:auto auto;justify-content:end;column-gap:0}
-.p-sale:not(.sale-desk) .good .price b{grid-column:1/-1}
-.p-sale:not(.sale-desk) .good .price em.expiry::before{content:'·';margin:0 4px}
 .p-sale:not(.sale-desk) .counter-tray .tray-stock{display:none}
-.p-sale:not(.sale-desk) .who .regular-badge{width:24px;right:3px}
-.p-sale:not(.sale-desk) .who .nameplate.regular b{padding-right:20px;font-size:13px}
+.p-sale:not(.sale-desk) .who .regular-badge{width:20px;right:2px}
+.p-sale:not(.sale-desk) .who .nameplate.regular b{padding-right:14px;font-size:12px}
+/* SALE phone spacing (User 2026-10-03): 상태 hangs its second line under the first value, the cards keep a gap, the counter rule is thinner and
+   clear of the cards, and the shelf head stays inside the shelf frame */
+.p-sale:not(.sale-desk) .vit{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em}
+.p-sale:not(.sale-desk) .vit>i{font-style:normal}
+.p-sale:not(.sale-desk) .front{padding-bottom:10px}
+.p-sale:not(.sale-desk) .front-side{gap:8px;justify-content:space-between}
+.p-sale:not(.sale-desk) .counter-edge{height:4px;margin-top:2px;
+ background:linear-gradient(180deg,#d3ac71 0 1px,#b98d52 1px 2px,#7c5730 2px 3px,#4a331d 3px 4px)}
+.p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 8px}
+.p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}

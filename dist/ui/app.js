@@ -1113,7 +1113,7 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판으로 부상 회복</p>'
   :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대로 부상 회복</p>'
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단으로 부상 회복</p>':'';
- return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
+ return '<div class="kit"><div class="vitals"><span class="vit"><i>상태</i><span>'+parts.map(x=>'<b>'+x+'</b>').join(' · ')+'</span></span>'
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
  +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
@@ -1488,7 +1488,6 @@ function statGrid(n){
    /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
       presses, a small tag with the pressing Hazard name(s) - the one place the grid links to
       the Gate. No number, no verdict; 투력 is never pressed. */
-   const pressed = gate ? Presentation.pressedBy(Presentation.known(gate,game)) : {};
    /* One display rule for every stat the player reads: a plain value is a whole number, and a
       value something moved keeps the one decimal that shows it moved. Presentation owns it, so
       this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
@@ -1511,8 +1510,7 @@ function statGrid(n){
        never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
-    const press = pressed[k] ? '<i class="press">'+pressed[k].map(h=>E(D.hazards[h])).join(' · ')+'</i>' : '';
-    const face = '<label>'+label+press+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    const face = '<label>'+label+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
@@ -1725,7 +1723,7 @@ function shelf(isFinal=false){
       style whatever the customer's Gate; the row states what the Item does, in its fixed category order. */
    const effectText=r=>E(r.label+' '+r.text);
    return '<section class="shelf">'
-   +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
+   +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2>'+(isFinal?'<span>'+stocks.length+'종 · '+s.inventory.length+'개</span>':'')
    +(isFinal?'':relicRef())+'</div><div class="goods">'
  /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
     held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */

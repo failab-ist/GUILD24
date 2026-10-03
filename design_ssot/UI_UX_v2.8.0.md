@@ -298,7 +298,7 @@ is not turned to wood (price and stock legibility first).
 
 ### SALE — SHELF HEAD (v2.9.9)
 
-(acceptance -> UI_UX §QA UI-Q-v29-45.) The `진열대 {N}종 · {M}개` head is one step lower and its `점포지원 {n} / {m}` plate
+(acceptance -> UI_UX §QA UI-Q-v29-45.) The SALE `진열대` head (no `{N}종 · {M}개` count, User 2026-10-03) is one step lower and its `점포지원 {n} / {m}` plate
 compact; the plate keeps its frame (a control) and an about-44 px target through an invisible margin.
 Title, quantity and support plate align on their vertical centres, rather than mixing the plate and LED font baselines.
 The phone title and quantity use a common 20px line box; the support plate retains its 24px visible height.
@@ -665,9 +665,8 @@ tutorial coach). Logic -> DUNGEON_HAZARD_v2.8.0.md.
 
 ## STAT PRESENTATION
 
-Core stats 투력 / 강인함 / 기동 / 정신 in a clear 2×2. Pressure tag: when the customer's Gate presses a Stat, the pressing Hazard
-name(s) sit beside the Stat name on the same line (`강인함  독`; `냉기`, `독 · 속박`), ellipsis-clipped, never adding a line or
-overflow; the value stays larger than the name; never on 투력; no number or verdict — the only Gate link in the grid. No wall of
+Core stats 투력 / 강인함 / 기동 / 정신 in a clear 2×2. No Stat cell carries a Hazard tag (User 2026-10-03): the readout's 환경 대응
+meter and the destination plate state the Gate's pressure; the value stays larger than the name. No wall of
 equal-priority internal coefficients; Hazard detail appears where the destination makes it relevant.
 
 ## TRAIT PRESENTATION
@@ -2166,9 +2165,7 @@ SALE at 360, 390 and 1280, before and after one sale. PASS:
 #### UI-Q-v29-5 — STAT GRID PRESSURE TAG
 Customers whose Gate presses one Stat through one Hazard, one Stat through two Hazards, and a Stat the Gate does not press.
 PASS:
-- under a pressed Stat cell a small tag shows the pressing Hazard icon + name only (e.g. `냉기`; two Hazards joined as `독 · 속박`),
-  under the Stat that Hazard actually presses (강인함 / 기동 / 정신 per `DUNGEON_HAZARD_v2.8.0.md`)
-- 투력 and an unpressed Stat never carry a tag; the tag carries no number and no verdict word
+- no Stat cell carries a Hazard tag, pressed or not
 
 #### UI-Q-v29-6 — MATCHING-EFFECT EMPHASIS — RETIRED
 

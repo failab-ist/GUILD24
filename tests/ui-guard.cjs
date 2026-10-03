@@ -318,7 +318,7 @@ test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row,
  assert.equal(Presentation.hazardRows(['cold']).at(0).pressure,'','without a Gate there is no row text to invent');
  assert.ok(/const pressCell=h=>h\.need\?'<span class="press"><b class="need">'[^;]*<small class="rate">/.test(app),'the short row renders as need over rate (User 2026-09-25)');
  assert.ok(/\.hazards \.press \.rate\{display:block;font-size:11px/.test(read('dist/ui/ui.css'))&&/@media\(min-width:900px\)\{\.hazards \.press \.need,\.hazards \.press \.rate\{display:inline/.test(read('dist/ui/ui.css')),'two lines on a phone, one line at 900px+');
- assert.ok(/\.detail-stat label \.press\{display:inline;[^}]*text-overflow:ellipsis/.test(read('dist/ui/ui.css'))&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid tag is inline beside the name and the value is 18px');
+ assert.ok(!/class="press">'\+pressed|pressedBy\(/.test(app)&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid carries no Hazard tag and the value is 18px');
 });
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
