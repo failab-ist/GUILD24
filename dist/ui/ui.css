@@ -3847,10 +3847,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* SALE phone density (User 2026-10-03): smaller state type, a shorter destination plate, a card and a side column that end on one
    line, 손님 as a label on the pips (the count is the pips' own aria-label), a smaller 보유 골드 figure and a 44px send key. */
 .p-sale .dock .queue .q-line{display:flex;align-items:center;gap:6px}
-.p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px)))*.8)}
 .p-sale:not(.sale-desk) .face{margin-bottom:0}
 .p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
-.p-sale:not(.sale-desk) .front-side .kit{flex:none;padding:8px 8px 6px;gap:8px;font-size:11px}
+.p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-evenly;padding:6px 8px;gap:0;font-size:11px}
 .p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
 .p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
 .p-sale:not(.sale-desk) .front-side .dest-plate{padding:7px 8px}
@@ -3865,8 +3864,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-sale .front-side .dest-plate .hazards .press .rate{display:inline}
  .p-sale .front-side .dest-plate .rate-tip{display:none}}
 .p-sale:not(.sale-desk) .counter-tray .tray-stock{display:none}
-.p-sale:not(.sale-desk) .who .regular-badge{width:20px;right:2px}
-.p-sale:not(.sale-desk) .who .nameplate.regular b{padding-right:14px;font-size:12px}
 /* SALE phone spacing (User 2026-10-03): 상태 hangs its second line under the first value, the cards keep a gap, the counter rule is thinner and
    clear of the cards, and the shelf head stays inside the shelf frame */
 .p-sale .vit{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em}

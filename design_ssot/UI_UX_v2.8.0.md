@@ -3122,8 +3122,8 @@ PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
 - the phone character is 85–90% of the pre-trim presentation in width and height; both 44px Bag slots are visible, hittable
   and clear of the menu. Shelf names/effects are 14px/13px, outlook word 16–18px, environment number 14–15px, title 12px;
   full information stays readable on dark planes. The 48px customer-send target and all price keys stay inside the viewport.
-- phone changes/special effects use the full width; stock/expiry sit at right of the Item without repeated customer/wallet/base
-  price. The shelf title/count/support centres align. Nameplate/destination padding and price-key depth clearance meet the above contract. Long names and
+- phone changes/special effects use the full width; the tray header repeats no stock/expiry, customer/wallet or base
+  price (stock/expiry live on the shelf row, User 2026-10-03). The shelf title/count/support centres align. Nameplate/destination padding and price-key depth clearance meet the above contract. Long names and
   metadata wrap without overlapping the icon, neighbouring text or price keys. Deep nomination is reachable after the shelf
   before purchase; a confirmed nominee's destination and payment stay visible.
 - role and percentage remain together on each phone key's internal left ribbon, with price/profit in two right-hand lines;

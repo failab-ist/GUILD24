@@ -19,7 +19,8 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:width<1024?2:1,isMobile:width<1024,hasTouch:width<1024,locale:'ko-KR',reducedMotion:motion?'no-preference':'reduce'});
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(`http://127.0.0.1:${port}/`,{waitUntil:'load'});
-  await page.evaluate(()=>{Guild24.game.start('qa-sale-compare-d5');Guild24.game.account.tutorial.skipped=true;Guild24.render();});
+  // the DAY 14 seed is one whose STEP bot still reaches a DAY 14 SALE under v2.10.0's failure rates (the DAY 5 seed's run ends on DAY 7); this one also offers the Deep nomination
+  await page.evaluate(seed=>{Guild24.game.start(seed);Guild24.game.account.tutorial.skipped=true;Guild24.render();},day===14?'qa-sale-compare-d14-14':'qa-sale-compare-d5');
   if(await page.locator('.p-prep [data-action="start"]').count())await page.locator('.p-prep [data-action="start"]').click();
   await page.locator('#modal-root [data-action="buy-relic"]').first().click();
   await page.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();});
@@ -80,7 +81,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
    const insetOnly=e=>getComputedStyle(e).boxShadow.replace(/rgba?\([^)]*\)/g,'color').split(',').every(s=>s==='none'||s.includes('inset'));
    const keys=[...document.querySelectorAll('.tills button')];
    return {face:box(document.querySelector('.face')),slots:slots.map(box),bag:slots.every(e=>onscreen(e)&&hit(e)&&(!menu||r(e).bottom<=r(menu).top||r(e).top>=r(menu).bottom||r(e).right<=r(menu).left||r(e).left>=r(menu).right)),
-    unclipped,shelf,trayText,metadata:r(who).width===0&&r(stock).left>=r(name).right+7&&Math.max(r(stock).bottom,r(name).bottom)<=r(delta).top-2,
+    unclipped,shelf,trayText,metadata:r(who).width===0&&r(stock).width===0&&r(name).bottom<=r(delta).top-2,
     room:{plate:parseFloat(pc.paddingLeft)>=8&&parseFloat(pc.paddingTop)>=4&&parseFloat(pc.paddingBottom)>=4&&parseFloat(pc.gap)>=2,
      cardShadow:insetOnly(document.querySelector('.face'))&&insetOnly(plate),destination:parseFloat(dc.paddingTop)>=5&&parseFloat(dc.paddingLeft)>=8,
      fullDelta:r(delta).width>=tr.width-36,keysClear:keys.every(e=>r(e).bottom+7<=tr.bottom-2)},
@@ -96,7 +97,7 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
   if(width<1024){
    const beforeWidth=Math.max(88,Math.min(width*.38,150,height*.9-300));
    check(geom.face.width>=beforeWidth*.85&&geom.face.width<=beforeWidth*.9,tag+' character width 85–90% of original');
-   check(geom.metadata,tag+' stock and expiry at right of name without duplicate customer');
+   check(geom.metadata,tag+' tray header carries no stock or expiry and no duplicate customer (the shelf row has them)');
    check(geom.room.plate&&geom.room.cardShadow&&geom.room.destination,tag+' text padding and no card cast into neighbours');
    check(geom.room.fullDelta&&geom.room.keysClear,tag+' full-width effects and price depth clear of dock');
    const reading=await page.evaluate(()=>{const c=document.querySelector('.stage-scroll').getBoundingClientRect(),r=document.querySelector('.readout.core-mob').getBoundingClientRect(),p=document.querySelector('.forecast-pin');return {whole:r.top>=c.top-1||r.bottom<=c.top+1,pin:r.bottom>c.top+1||p.classList.contains('show')};});
