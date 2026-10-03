@@ -2019,7 +2019,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
     shows the same figures and cannot appear to earn again. */
  const st=s.settlement;
  const settle=st?'<div class="block settlement"><h4>점포 자본 정산</h4>'
-  +row('총매출',st.sales.toLocaleString()+'G')
+  +row('총매출',st.sales.toLocaleString()+'<i>G</i>')
   +row('DAY '+st.day+' 도달 비율','×'+Math.round(st.rate*100)+'%')
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
