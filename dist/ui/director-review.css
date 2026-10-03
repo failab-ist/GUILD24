@@ -213,10 +213,11 @@
    The sign is the same green plate on the same two hangers it hung from before, and the till
    is the same recessed display in a steel housing: the room changed owner, the readouts did
    not change what they are. */
-.p-morning .daysign{background:var(--sign);
- box-shadow:inset 0 3px 0 var(--sign-lit),inset 0 -4px 0 #14402a,0 4px 0 #00000080}
+.p-morning .daysign{background:url('assets/presentation/morning/day-sign.png') center/100% 100% no-repeat;
+ aspect-ratio:2156/521;width:auto!important;left:50%!important;translate:-50% 0}
 .p-morning .daysign:before,.p-morning .daysign:after{content:'';position:absolute;top:-10px;
  width:4px;height:10px;background:#5b6a72;box-shadow:1px 0 0 #2a333a}
+@media (max-width:1023px){.p-morning .daysign{height:28%!important}}
 .p-morning .daysign:before{left:22%}
 .p-morning .daysign:after{right:22%}
 /* THE FLOAT SITS IN THE APERTURE, NOT ON ITS RIM. `.till` is a baseline flex line, and a
@@ -289,3 +290,19 @@
  .p-morning{--plate-h:25px}
  .p-morning .branchplate{padding:5px 13px;font-size:15px;letter-spacing:.02em}
 }
+
+/* ---- start-up preload screen (ui/preload.js): shown only until the first render() replaces #app ---- */
+.boot{position:fixed;inset:0;display:grid;place-items:center;padding:24px 16px;box-sizing:border-box;background:linear-gradient(#0c0a08cc,#0c0a08cc),var(--soil)}
+.boot-plate{box-sizing:border-box;width:min(320px,88vw);border:16px solid transparent;background:#24160d;background-clip:padding-box;
+ border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
+ padding:6px 4px 2px;text-align:center;box-shadow:0 -4px 0 #100a06;isolation:isolate}
+.boot-title{margin:0 0 14px;font:500 24px/1.2 var(--f-sign);color:#ffe8b7;text-shadow:0 2px 0 #100905}
+.boot-bar{height:20px;box-sizing:border-box;padding:3px;background:#120b06;border:2px solid #0f0905;box-shadow:inset 0 2px 0 #00000080,0 1px 0 #a46b33}
+.boot-bar>i{display:block;height:100%;width:0;background:url('assets/presentation/morning/day-sign.png') center/100% 100% no-repeat;transition:width .2s ease-out}
+.boot-note{margin:12px 0 4px;font:400 var(--t-sm)/1.4 var(--ui);color:#d9c39a}
+@media (prefers-reduced-motion:reduce){.boot-bar>i{transition:none}}
+@media (min-width:1024px){
+ .boot-plate{width:560px;border-width:24px;border-image-width:24px;padding:12px 10px 6px}
+ .boot-title{margin-bottom:24px;font-size:48px}
+ .boot-bar{height:32px;padding:4px}
+ .boot-note{margin:20px 0 8px;font-size:18px}}

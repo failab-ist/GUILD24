@@ -281,8 +281,9 @@ high-contrast planes so the room light never competes with destination, customer
 
 Same-Customer rerenders keep scroll/focus; a new customer may start at the top. `손님 보내기`: the current customer exits left,
 then the next enters (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4).
-When a phone tray opens, minimally reveal the selected shelf row and its next peer when both fit, including short phones.
-The correction is not user shelf scrolling and does not fold the tray. Swapping an already-open selection preserves the anchor.
+When a phone tray opens, the list scrolls only when the tray would clip the tapped shelf row, and then only as far as keeps that
+row whole; a row that stays whole leaves the list where the Player put it (stats or shelf). The correction is not user shelf
+scrolling and does not fold the tray. Swapping an already-open selection preserves the anchor.
 If that correction crosses the outlook's heading, clear the whole outlook instead of leaving a cut heading; its existing
 forecast pin keeps the combat/environment reading available. The full detail remains reachable by scrolling back up.
 
@@ -3140,8 +3141,7 @@ long product names/effects, same-day expiry and special effects; review actual s
 PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
 - at entry the tray is empty: on DAY 1~3 with the tutorial active one line (`상품을 누르면 계산대에 올라온다.`, ≤ 48px at 360),
   otherwise no height; the shelf heading plus at least one row visible without a scroll
-- a tapped row fills the tray with the owner's contents; opening may minimally reveal the selected row/next peer as specified
-  above. No shelf row changes height; an already-open second-row swap preserves the scroll/anchor.
+- a tapped row fills the tray with the owner's contents; opening scrolls only as specified above (the tapped row, only when the tray would clip it). No shelf row changes height; an already-open second-row swap preserves the scroll/anchor.
 - the filled tray is ≤ 200px at 360; representative one-/two-Hazard visits keep two complete shelf rows at 640 / 597 / 548.
   Long effects wrap intact; no ellipsis, clipped payload or forced font shrinking to reach the row count.
 - the phone character is 85–90% of the pre-trim presentation in width and height; both 44px Bag slots are visible, hittable

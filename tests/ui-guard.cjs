@@ -3509,6 +3509,7 @@ test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the
  assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n,st\?st\.item:null\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
  assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('>전투<b>')&&pin.includes("'환경'+envMeter(p,d,pre)")&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry 전투 전망, the live 환경 대응 meter (User 2026-10-02), and folds to a 전망 chip');
  assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
+ assert.ok(/pinNow\(\);\s*pinWatch=new IntersectionObserver/.test(watch)&&/'show',!\(r\.bottom>=c\.top&&r\.top<=c\.bottom\)/.test(fn('pinNow')),'a redraw measures the pin at once, so it is never absent for the frame the observer takes to answer');
  assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
  assert.ok(/aria-expanded/.test(sync),'the fold state is announced');
  assert.ok(/if\(e\.isIntersecting&&pinFolded\)\{pinFolded=false;syncForecastPin\(\);\}/.test(watch),'the fold clears once the readout is back on screen, so the next pin opens unfolded');
