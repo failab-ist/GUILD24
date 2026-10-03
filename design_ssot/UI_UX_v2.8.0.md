@@ -180,6 +180,9 @@ Full-offer reroll + cost/state 6. sticky `발주 XXXG · 발주 확정`.
 claimed destination (a liar's or pilgrimage-rerouted true Gate stays hidden), summing to the visitor count; no name, Job,
 Trait or Wallet. Exact line -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
+The form sits on the torn-parchment sheet shared with Store Support (`presentation/support/order-paper.png`, nine-slice, the
+clip above it overlapping the top edge); there are no CSS tear strips or flat paper under it (User 2026-10-03).
+
 Compact offer cards; quantity targets≈44px. Readable before commit: current Gold · selected spend · Gold after · **today
 expected operating cost** · warehouse used / remaining · shelf life / expiry · today Gate / Hazard · Reroll cost/state. No
 Phase round trip to re-check Gates, no next-day emphasis, no scroll ping-pong to buy.
@@ -782,8 +785,8 @@ The Outcome belongs to the adventurer's identity block, not a title bar:
 Directly above the name, one step stronger; no own row or vertical space, no long rule — important, not the headline.
 
 Backdrop: the rainy convenience-store night art (`presentation/night/store-night.png`) fills the top of the screen edge to edge, behind the
-menu key and the task line, and ends where the return rail begins, with no empty stretch above or below it. The menu key is drawn more
-opaque here so it stays readable on the art; the task line sits on a dark top fade.
+menu key and the task line, and ends where the return rail begins, with no empty stretch above or below it. The menu key is the same
+brass-edged dark wood as on every phase (§MENU / SETTINGS VISUAL); the task line sits on a dark top fade.
 
 Death has no bubble but keeps the message position and weight beside the character, as a neutral status message: no quotes,
 tail, bubble ground, accent bar, border, icon, badge, glow or blur. It carries only a small text-hugging status container (a
@@ -878,6 +881,11 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 question=`오늘 장사는 어땠을까?` — economics-first; the expedition story is Night's. Primary: the cash-flow receipt — opening
 Gold, Gold in and out, closing Gold with the Day's change, stock / waste counts, tomorrow's operating estimate (NIGHT_CLOSING
 §CLOSING — CASH FLOW RECEIPT — EXACT); figures without an accounting-explanation footer.
+
+The CLOSING receipt and the END tape stand on the rainy convenience-store art NIGHT uses (`presentation/night/store-rain-phone.jpg` on
+phones, `store-rain-wide.jpg` from 1024px), covered and dimmed; the wood texture the receipt had is gone. The `보낸 손님` heading is
+lit by its colour and shadow alone and, on phones, indents to the receipt's text line. The END `총매출` figure sets its `G` unit small
+(the same rule as SALE prices).
 
 ### CLOSING — RECEIPT STAMP (v2.9.2 H4)
 
@@ -1273,6 +1281,12 @@ destructive controls. No title icon. Menu rows may use purpose-made PNG icons; d
 each control. A subdued transparent PNG supply / forest illustration may sit at the foot of a detailed menu, behind the
 content, with no pointer events or information role. Do not put that illustration into top-level menu rows. Generated
 concept images are visual targets; actual browser captures still require review before accepting the finish.
+
+The sheets the store menu opens (설정, 모험가 수첩, 현재 지점 포기 and the like) share one carved-wood frame and one vertical rhythm.
+Their close control is a bare light 44px `✕` with a soft drop shadow: no key, no plate, no brass fill, so it reads against the dark wood
+and cannot be mistaken for an action. A Store Support window closes with the same `✕` when it is spent (on a dark plate over its art).
+The settings title matches its menu button's name. The menu key (`☰`) is brass-edged dark wood on every phase, over art included.
+Sheet text speaks in the plain `~다` voice (COPY_AUDIT §1-3 and the settings / reset / import rows); roster and abandon lines sit on separate lines.
 
 Settings groups its existing controls in this order: `소리` (mute, BGM, SFX), `저장` (local-save explanation, export/import),
 `데이터 초기화` (existing reset action). Preserve the exact existing actions, save/audio behaviour, confirmation steps and
