@@ -1,11 +1,11 @@
 # WORK_STATE
 
 DATE: 2026-10-03
-STATE: V2_10_0_QUICK_PATCH_3_MERGED (PR #56, `dcc56b6`, User 컨펌 2026-10-03). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+STATE: V2_10_1_MERGED (디자인 정리, User 컨펌 2026-10-03). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.10.0 퀵패치 3(PR #56, `dcc56b6`, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. main = v2.10.1(디자인 정리, PR #64 · #66 + 버전 PR, Pages 배포). 직전은 v2.10.0 퀵패치 3(PR #56, `dcc56b6`). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.0 퀵패치 3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - 밸런스 측정: `tools/measure-v2100.cjs --traj 200 --fresh 1000`(reader · expert · balanced 봇, 두 조건을 동시에 돌리면 13~17분). 최신 기준 로그는 `reports/v2100-measure/qp3-option1.log`. 측정은 User 컨펌 뒤에만 돌린다(AGENTS 9-A).
@@ -18,6 +18,7 @@ STATE: V2_10_0_QUICK_PATCH_3_MERGED (PR #56, `dcc56b6`, User 컨펌 2026-10-03).
 | v2.10.0 (PR #52) | 성공 메타: 숨은 평판 제거, 게이트 성공 상향, 대응 따라 사고 증가, 지갑이 결과를 따라감, 준비 부족 실패 비용, 마왕전 보정, 장식 재조정(추모 방명록 +1 · 알뜰 금고 등), 장식 구매 키 축소 |
 | 퀵패치 1 (PR #54) | SuccessEase D1~21 0.90 · D22+ 0.95, 위험 위협 후반 가산(D8부터, 최종전 제외), 능력치 → 대응 환산 모두 3당 1(계열 계수 없음), 대응 사다리 · 음식 · 음료 재조정(영웅 음식 · 음료 투력 +5), 능력치 부가 역할(강인함 사고 · 기동 퇴각 · 정신 사망), 레벨 · 지갑 스노우볼 완화, D1~4 신규 Lv1~2 |
 | 퀵패치 2 (PR #55) | 방문 지갑 Level × 4 + 30~70, 미방문 지갑 적립 상향, 운영비 기준 170G 유지 |
+| v2.10.1 (PR #64 · #66) | 디자인 정리: 판매 화면 폰·PC, 단골 배지, 밤·마감·END 편의점 배경, 나무 시트, 발주서 양피지(규칙 · 밸런스 변경 없음) |
 | 퀵패치 3 (PR #56) | 발주 대응템 최대 4칸(추가 칸만큼 상한 증가), 신규 레벨 따라잡기(D5부터 Day 항 ×0.4), 실패 비용 강화(사망 계수 0.40 / 0.25, 퇴각 기본 0.40, 연속 부상 +12%p · 상한 40%p), 리롤 버튼 축소 · 우정렬 |
 
 QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리어 8.5 / 8.8%, 좀비 약 10%.
@@ -81,7 +82,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 
 ### User 할 일
 
-1. 태그(User 2026-10-01): 새 버전이 main에 머지된 직후 그 머지 커밋에 붙인다(GitHub Releases, 대상 `main`). v2.10.0까지 붙어 있다. 퀵패치는 버전을 올리지 않으므로 태그도 새로 붙이지 않는다.
+1. 태그(User 2026-10-01): 새 버전이 main에 머지된 직후 그 머지 커밋에 붙인다(GitHub Releases, 대상 `main`). v2.10.0까지 붙어 있고, v2.10.1은 main 머지 뒤 User가 붙인다. 퀵패치는 버전을 올리지 않으므로 태그도 새로 붙이지 않는다.
 2. 실기기 BGM 청취(UI-Q114 · UI-Q-v29-47, §v3.0 사운드).
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
