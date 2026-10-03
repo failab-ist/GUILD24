@@ -306,6 +306,10 @@ The head is the wooden plank asset (`presentation/sale/shelf-plank.png`) across 
 The SALE backdrop is `presentation/sale/sale-bg.png` without its ceiling, the side shelves at the edges, dimmed; on a desk the status / outlook /
 destination column is one width and ends on the card's bottom, with larger type, and the waiting deck is larger. Stats, item effects and
 stock / expiry are one step quieter than names and prices.
+The three price keys are the supplied key assets (`presentation/sale/till-*.png`: 할인 blue, 정가 gold, 바가지 orange, disabled grey) with a small corner ribbon
+drawn in CSS naming the role; the percentage is read by screen readers only. The amount is white and the `이익` line one step quieter, both centred in the key;
+pressed, the key moves down 3 px and darkens. On a desk the card's art box is shorter and the nameplate (job / level line, 단골 badge) larger, and the
+waiting count sits on its own dark plate.
 
 ### SALE — PRICE / SECONDARY INFORMATION LEGIBILITY (User 2026-10-03)
 

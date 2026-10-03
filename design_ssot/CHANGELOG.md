@@ -33,6 +33,7 @@ and this table is their commit record.
   one line; a shorter destination plate whose `{능력치} n당 대응 1 제공` tails move into one `?`; 손님 `■■■■■` with no `1/5` (the count
   stays as its screen-reader label); a smaller 보유 골드 figure and a 44 px `손님 보내기`; shelf rows put `재고 N · 폐기까지 N일` on one
   line and the phone tray header drops them. UI_UX §SALE destination plate, §PRIMARY ACTION GRAMMAR, UI-Q-v28-3; test ui-guard.
+- **SALE price keys and desk card** (User 2026-10-03): price keys use the key asset set with a corner ribbon (role name, no visible %), amount centred, `이익` line quieter, 3 px press; on a desk the card art is shorter with a larger nameplate and 단골 badge, and the waiting count has a dark plate. Phone ribbon smaller than the desk ribbon.
 - **SALE backdrop, shelf head, desk column, type ladder** (User 2026-10-03): the SALE backdrop is the wide store art without its ceiling, side
   shelves at the edges, dimmed under the cards; the shelf head is the wooden plank asset across the whole shelf frame; on a desk the
   status / outlook / destination column is as tall as the card and one width, with larger type, and the waiting deck is larger; stats, item
