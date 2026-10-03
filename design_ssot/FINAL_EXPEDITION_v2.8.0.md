@@ -414,9 +414,7 @@ Reasoning boundary:
 ```text
 Individual Final Power
 = 투력 × 0.50
-+ 강인함 × 0.34
-+ 기동 × 0.27
-+ 정신 × 0.20
++ (강인함 + 기동 + 정신) × 0.27
 - FinalMeanHazardGap × 2.50
 ```
 
@@ -615,7 +613,7 @@ No `환경피해 ×0.35` path contributes in parallel.
 ### FINAL-Q73 — INDIVIDUAL FINAL POWER
 PASS exact:
 ```text
-투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*2.50
+투력*.50 + (강인함 + 기동 + 정신)*.27 - FinalMeanHazardGap*2.50
 ```
 using the Boss modifier ordering owned by current BOSS.
 

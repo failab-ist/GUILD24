@@ -36,11 +36,11 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladde
     shelf lives from ITEM §SHELF LIFE — EXACT are unchanged). */
  for(const [id,name,rarity,buy,sell,category,days,fx] of [
   ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:5}],
-  ['water','생수',0,40,80,'drink',2,{survival:10,supply:2}],
-  ['lunchbox','간단 도시락',1,100,200,'food',2,{survival:12,supply:6,loot:0.2}],
-  ['guildlunch','길드 특제 도시락',2,185,370,'food',2,{survival:16,supply:7,loot:0.4}],
-  ['battlelunch','영웅 결전 도시락',3,230,460,'food',2,{combat:6,survival:18,supply:9}],
-  ['kingwater','왕도 천연암반수',3,210,420,'drink',3,{combat:6,survival:24,supply:2}]]){
+  ['water','생수',0,40,80,'drink',2,{survival:12,supply:2}],
+  ['lunchbox','간단 도시락',1,90,180,'food',2,{survival:9,supply:6,loot:0.1}],
+  ['guildlunch','길드 특제 도시락',2,165,330,'food',2,{survival:12,supply:7,loot:0.25}],
+  ['battlelunch','영웅 결전 도시락',3,205,410,'food',2,{combat:5,survival:15,supply:9}],
+  ['kingwater','왕도 천연암반수',3,180,360,'drink',3,{combat:5,survival:20,supply:2}]]){
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
@@ -166,9 +166,9 @@ test('DUN-Q70/Q71: prepared Power weights and the Hazard Threat curve',()=>{
     .58/.32/.24/.16 stat weighting anywhere is invalid in v2.7. */
  assert.equal(Dungeon.preparedPower({combat:100,survival:100,mobility:100,spirit:100}),131);
  assert.equal(Dungeon.preparedPower({combat:1,survival:0,mobility:0,spirit:0}),.50);
- assert.equal(Dungeon.preparedPower({combat:0,survival:1,mobility:0,spirit:0}),.34);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:1,mobility:0,spirit:0}),.27);
  assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:1,spirit:0}),.27);
- assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:0,spirit:1}),.20);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:0,spirit:1}),.27);
  const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/dungeon.js'),'utf8');
  assert.ok(!/(combat|survival|mobility|spirit)\s*\*\s*\.(58|32|24|16)\b/.test(src),'no stale ordinary-expedition stat weight survives');
  /* DUNGEON_HAZARD §HAZARD THREAT: 12 + Day*.35 + max(0, Day-7)*.45 + (Tier-1)*6, at the owner's own anchors. */

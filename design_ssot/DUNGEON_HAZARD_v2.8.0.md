@@ -286,9 +286,7 @@ For ordinary expedition Forecast, Resolve, and Great-Success prepared margin:
 ```text
 Prepared Power
 = 투력 × 0.50
-+ 강인함 × 0.34
-+ 기동 × 0.27
-+ 정신 × 0.20
++ (강인함 + 기동 + 정신) × 0.27
 ```
 
 Rules:
@@ -683,7 +681,7 @@ When combat fails:
     escapeChance
     = clamp(
         0.48
-        + prepared 기동 × 0.005
+        + prepared 기동 × 0.003
         + explicit escape modifier (Traits only; 귀환석's bonus is not read here)
         - Gate scale × 0.024,
         0.15,
@@ -856,6 +854,18 @@ If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
 
 Use the same current Hazard Threat / Hazard Defense truth as ordinary readiness.
 Do not create a second Death-only Hazard table or hidden environment score.
+
+### Spirit steadiness
+
+정신 trims the failure Death chance after every term below (healthy, injured, 탈진, strain and their caps):
+
+```text
+failureDeathChance × (1 − min(0.15, prepared 정신 × 0.003))
+```
+
+Each Core Stat has one small side role besides its Hazards and Prepared Power: 강인함 lowers the incident chance
+(§Environment incident probability), 기동 raises the escape chance on a lost fight, 정신 this. The SALE snapshot reads the same
+number.
 
 ### Healthy / injured failure Death chance
 
@@ -1443,7 +1453,7 @@ Controlled Stats with no other modifiers.
 
 EXPECT ordinary expedition prepared ability:
 ```text
-투력 .50 + 강인함 .34 + 기동 .27 + 정신 .20
+투력 .50 + 강인함 .27 + 기동 .27 + 정신 .27
 ```
 
 PASS:

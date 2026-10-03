@@ -264,6 +264,14 @@ Canonical Dungeon behavior -> `DUNGEON_HAZARD_v2.8.0.md`.
 
 Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동, 화염 -> 정신) -> `DUNGEON_HAZARD_v2.8.0.md`
 
+### STAT FOOD / DRINK LADDER
+
+Every Core Stat counts alike (Prepared Power .27 each, Hazard Defense ÷3), so a Stat Food / Drink carries one value per Rarity
+whatever Stat it raises: Drink (the Stat line, 피로 회복 2) Common 12 · Uncommon 17 · Epic 20 with 투력 +5; Food (the 피로 회복
+line) Common 6 · Uncommon 9 · Rare 12 · Epic 15 with 투력 +5. What tells two of them apart is the Stat's own role (강인함
+fewer incidents, 기동 more retreats on a lost fight, 정신 a lower failure Death chance - `DUNGEON_HAZARD_v2.8.0.md`), the
+lunch line's 원정 소지금 (간단 도시락 +10%, 길드 특제 도시락 +25%) and the Epic 투력.
+
 ### COUNTER LADDER
 
 Every Gate family carries the same four rungs; 화염 골렘 광산 has one Hazard, so it has no early hybrid. A Tier 1 Gate
@@ -577,11 +585,11 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | ID | Item | Category/Rarity | Buy / Sell | Effect | Shelf |
 |---|---|---|---:|---|---:|
 | rice | 삼각김밥 | Food C | 35 / 70 | 강인함 +6, Supply 5 | 2d |
-| water | 생수 | Drink C | 40 / 80 | 강인함 +10, Supply 2 | 2d |
-| lunchbox | 간단 도시락 | Food U | 100 / 200 | 강인함 +12, Supply 6, 원정 소지금 획득 +20% | 2d |
-| guildlunch | 길드 특제 도시락 | Food R | 185 / 370 | 강인함 +16, Supply 7, 원정 소지금 획득 +40% | 2d |
-| battlelunch | 영웅 결전 도시락 | Food E | 230 / 460 | 투력 +6, 강인함 +18, Supply 9 | 2d |
-| kingwater | 왕도 천연암반수 | Drink E | 210 / 420 | 투력 +6, 강인함 +24, Supply 2 | 3d |
+| water | 생수 | Drink C | 40 / 80 | 강인함 +12, Supply 2 | 2d |
+| lunchbox | 간단 도시락 | Food U | 90 / 180 | 강인함 +9, Supply 6, 원정 소지금 획득 +10% | 2d |
+| guildlunch | 길드 특제 도시락 | Food R | 165 / 330 | 강인함 +12, Supply 7, 원정 소지금 획득 +25% | 2d |
+| battlelunch | 영웅 결전 도시락 | Food E | 205 / 410 | 투력 +5, 강인함 +15, Supply 9 | 2d |
+| kingwater | 왕도 천연암반수 | Drink E | 180 / 360 | 투력 +5, 강인함 +20, Supply 2 | 3d |
 
 The meal 강인함 ladder rises readably by tier; the water route is more Stat-concentrated than the meal at the same broad
 stage, with much lower Supply (Fatigue recovery).
@@ -597,9 +605,9 @@ approved ITEM amendment; QA does not auto-tune it.
 |---:|---|---|---:|---|---|
 | 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold 초반 대응 |
 | 5 | 초코바 | Food C | 30 / 60 | 기동 +6, Supply 5 | — |
-| 44 | 녹차 양갱 | Food C | 30 / 60 | 정신 +8, Supply 5 | — |
+| 44 | 녹차 양갱 | Food C | 30 / 60 | 정신 +6, Supply 5 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +12, Supply 2 | Stat route |
-| 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +15, Supply 2 | Stat route |
+| 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +12, Supply 2 | Stat route |
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +10 | — |
 | 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +10, Supply 1 | Fire 초반 대응 |
 | 41 | 중화 탄산수 | Drink C | 35 / 70 | 부식 +10, Supply 1 | Corrosion 초반 대응 |
@@ -630,8 +638,8 @@ approved ITEM amendment; QA does not auto-tune it.
 | 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +18, 어둠 +18 | Crypt 후반 하이브리드 |
 | 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +18, 화이트아웃 +18 | Snow 후반 하이브리드 |
 | 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +18, 투력 +10 | Fire 후반 하이브리드 |
-| 38 | 초고속 에너지드링크 | Drink E | 205 / 410 | 투력 +6, 기동 +26, Supply 2 | Top-end mobility |
-| 39 | 대현자 허브엘릭서 | Drink E | 205 / 410 | 투력 +6, 정신 +28, Supply 2 | Top-end spirit |
+| 38 | 초고속 에너지드링크 | Drink E | 180 / 360 | 투력 +5, 기동 +20, Supply 2 | Top-end mobility |
+| 39 | 대현자 허브엘릭서 | Drink E | 180 / 360 | 투력 +5, 정신 +20, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +35 | Top-end raw Power |
 
 Active catalog count is exactly 44. No active Item creates a separate poison Condition/cure subsystem.
@@ -977,7 +985,7 @@ PASS:
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
-간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 205 · 대현자 허브엘릭서 205 · 왕도 천연암반수 210 · 영웅 결전 도시락 230
+간단 도시락 90 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 165 · 초고속 에너지드링크 / 대현자 허브엘릭서 / 왕도 천연암반수 180 · 영웅 결전 도시락 205
 방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
 농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
 거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
@@ -1015,11 +1023,11 @@ Expect exactly:
 | Item | Rarity | Buy/Sell | 강인함 | Supply (`피로 회복 N`) | Extra |
 |---|---|---:|---:|---:|---|
 | 삼각김밥 | C | 35/70 | +6 | 5 | — |
-| 생수 | C | 40/80 | +10 | 2 | — |
-| 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
-| 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
-| 영웅 결전 도시락 | E | 230/460 | +18 | 9 | 투력 +6 (every Epic Food / Drink fights: 길드 특제 도시락 is the earning lunch) |
-| 왕도 천연암반수 | E | 210/420 | +24 | 2 | 투력 +6 |
+| 생수 | C | 40/80 | +12 | 2 | — |
+| 간단 도시락 | U | 90/180 | +9 | 6 | expedition Wallet +10% |
+| 길드 특제 도시락 | R | 165/330 | +12 | 7 | expedition Wallet +25% |
+| 영웅 결전 도시락 | E | 205/410 | +15 | 9 | 투력 +5 (every Epic Food / Drink fights: 길드 특제 도시락 is the earning lunch) |
+| 왕도 천연암반수 | E | 180/360 | +20 | 2 | 투력 +5 |
 
 PASS:
 - active catalog count is 43

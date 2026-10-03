@@ -4,7 +4,7 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
    read the same prepared ability before hidden combat noise, and three copies of the weights
    is how they drifted apart before - so there is one. 투력 remains the strongest single lever,
    and no Player-facing aggregate Power Stat is created from it. */
-const preparedPower=e=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20;
+const preparedPower=e=>e.combat*.50+(e.survival+e.mobility+e.spirit)*.27;
 const STAT_KEYS=['combat','survival','mobility','spirit'];
 /* Trait keys that describe how somebody SHOPS, not how they perform on an expedition. They are
    read by the store, never summed into a prepared effect. */
@@ -278,7 +278,7 @@ function greatSuccessSignal(n,d,facilities=[]){
    DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet reward: GREAT / WIN EXP multipliers and WALLET_MULT by Outcome. */
 const GREAT={xp:1.00},WIN={xp:.90};
 const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
-const DEATH={combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10};
+const DEATH={combat:.40,environment:.20,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation (User 2026-09-25,
    v2.9.1 balance): only CONSECUTIVE injured departures count now. A healthy departure - including
    the return after a Severe-Injury rest - resets the chain; the first injured departure is free,
@@ -335,8 +335,10 @@ function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.
   ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
  const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit*DEATH.environment,0,DEATH.cap);
  const extra=(departedInjured?DEATH.injured:0)+(departedExhausted?DEATH.exhausted:0)+(strain||0);
- return {combatDeficit,environmentDeficit,healthy,exhausted:!!departedExhausted,strain:strain||0,
-  chance:extra?clamp(healthy+extra,0,DEATH.cap+extra):healthy};
+ /* DUNGEON_HAZARD §Spirit steadiness: 정신 trims the failure Death chance a little, at most DEATH.spiritMax */
+ const steady=1-Math.min(DEATH.spiritMax,Math.max(0,p.effects.spirit||0)*DEATH.spirit);
+ return {combatDeficit,environmentDeficit,healthy,exhausted:!!departedExhausted,strain:strain||0,steady,
+  chance:(extra?clamp(healthy+extra,0,DEATH.cap+extra):healthy)*steady};
 }
 /* DUNGEON_HAZARD §Pre-supply player-facing failure Death risk (User 2026-09-25, v2.9.1 balance):
    the SALE snapshot is the raw failureDeathChance and never includes preparedFactor, which
@@ -365,7 +367,7 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 /* ITEM v2.9.10 (User 2026-09-28): 귀환석 - an expedition that ends in neither 성공 nor 대성공 (부상/중상/사망) rolls once more
    for a retreat, at the adventurer's own retreat chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that
    chance is. One formula for the real resolution and its proof. */
-function stoneChance(e,d){return clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);}
+function stoneChance(e,d){return clamp(.48+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
  if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
@@ -374,7 +376,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
  const sCombatSuccess=sAbility*(1+sAssist)*sNoise>=d.power;
  const sEnvironment=envChance(sp.hazard,se.survival)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
- const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-se.itemEscape-(d.scale||1)*.024-(ev.escapeCut||0),.15,.94);
+ const sEscapeChance=clamp(.48+se.mobility*.003+se.escape-se.itemEscape-(d.scale||1)*.024-(ev.escapeCut||0),.15,.94);
  /* mirrors resolve()'s real order exactly: SUCCESS-vs-FAILURE first (never escape/injury
     evidence to decide THAT), then one Death roll immediately on entering failure, and only a
     Death miss goes on to settle which non-Death tier. Any evidence the actual expedition
@@ -586,7 +588,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     p.events.push({id:'prepared',text:G.Copy.josa(n.name,'은','는')+' 만반의 준비 덕분에 목숨을 건졌다.'});
    }
   }else if(!combatSuccess){
-   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.005+e.escape-e.itemEscape-(d.scale||1)*.024-dayEv.escapeCut,.15,.94);
+   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.003+e.escape-e.itemEscape-(d.scale||1)*.024-dayEv.escapeCut,.15,.94);
    outcome=escapeRoll<escapeChance?'퇴각':'부상';
    if(outcome==='부상'){
     injuryRoll=r.next();

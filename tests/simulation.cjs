@@ -144,7 +144,7 @@ test('the harness measures Prepared Power with the game helper, never its own co
   'the helper is what the harness reads');
  // and the helper it reads is the approved one
  assert.equal(Dungeon.preparedPower({combat:100,survival:50,mobility:30,spirit:20}),
-  100*.50+50*.34+30*.27+20*.20,'with the approved v2.7 coefficients');
+  100*.50+(50+30+20)*.27,'with the approved coefficients (투력 .50, every other Stat .27)');
 });
 
 test('the simulation observes the run and never rewrites it',()=>{

@@ -174,7 +174,7 @@ returning customer; pricing is taught after the fact (§26-3). The first ORDER h
 No GATES · STOCK · OFFER · QUANTITY · 후보 교환 · `gold` · HAZARD · 전망 (§3-4) · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact).
 
 ### STATS (anchor = the SALE 능력치 grid — the first time a customer's Stats are on screen)
-> 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
+> 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다. 강인함은 사고를, 기동은 패배 후 부상을, 정신은 사망을 조금씩 줄여 준다.
 
 ### RETURNING (재방문 손님, contextual on the returning customer's card)
 > 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.

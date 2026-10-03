@@ -15,15 +15,15 @@ items:[
    Item without exception, so a shipped Sell price is never hand-edited apart from its Buy price
    again. */
 item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:6,supply:5}),
-item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:10,supply:2}),
+item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:12,supply:2}),
 item('ramen','컵라면',0,45,90,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:3}),
-item('lunchbox','간단 도시락',1,100,200,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.2}),
+item('lunchbox','간단 도시락',1,90,180,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:9,supply:6,loot:0.1}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:6,supply:5}),
 /* ITEM §ACTIVE CATALOG (User 2026-10-01, v2.9.13 quick patch): the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
-item('yanggaeng','녹차 양갱',0,30,60,'food',2,'yanggaeng','용사픽','어르신 손님은 꼭 두 개씩 사 간다.',{spirit:8,supply:5}),
+item('yanggaeng','녹차 양갱',0,30,60,'food',2,'yanggaeng','용사픽','어르신 손님은 꼭 두 개씩 사 간다.',{spirit:6,supply:5}),
 item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
-item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
+item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:12,supply:2}),
 item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:10,potion:1}),
 item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
 /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
@@ -53,7 +53,7 @@ item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨�
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:18,potion:1}),
-item('guildlunch','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
+item('guildlunch','길드 특제 도시락',2,165,330,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:12,supply:7,loot:0.25}),
 item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:23,supply:1}),
 item('worldcharm','세계수 생환부적',3,300,600,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
@@ -66,10 +66,10 @@ item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안
 item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:18,whiteout:18}),
 item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
-item('battlelunch','영웅 결전 도시락',3,230,460,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{combat:6,survival:18,supply:9}),
-item('kingwater','왕도 천연암반수',3,210,420,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{combat:6,survival:24,supply:2}),
-item('hyperenergy','초고속 에너지드링크',3,205,410,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{combat:6,mobility:26,supply:2}),
-item('sageelixir','대현자 허브엘릭서',3,205,410,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{combat:6,spirit:28,supply:2}),
+item('battlelunch','영웅 결전 도시락',3,205,410,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{combat:5,survival:15,supply:9}),
+item('kingwater','왕도 천연암반수',3,180,360,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{combat:5,survival:20,supply:2}),
+item('hyperenergy','초고속 에너지드링크',3,180,360,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{combat:5,mobility:20,supply:2}),
+item('sageelixir','대현자 허브엘릭서',3,180,360,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{combat:5,spirit:20,supply:2}),
 item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:35,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a

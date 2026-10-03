@@ -65,6 +65,19 @@ and this table is their commit record.
   warrior reached Lv23 in 18 expeditions, about one Level per late success; a 성공 / 대성공 pays the expedition Wallet reward × 1.25
   (was × 1.5) - the same warrior brought home +867G on D28. DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet; tests night, revision.
 
+- **Every Core Stat counts alike, each with one small side role** (User: 가중치는 없애되 직업별 특색은 살리기 · 능력치당 역할이 게임
+  판도를 바꿀 만큼 크지 않게 · 코치에도 알려 줘): Prepared Power = 투력 × 0.50 + (강인함 + 기동 + 정신) × 0.27 (was .34 / .27 / .20;
+  the average adventurer moves under 1%, a Job at most ±3%), the Final's individual Power the same. Side roles, small: 강인함 keeps
+  its incident cut (× 0.001), 기동's escape on a lost fight drops to × 0.003 (was × 0.005), and 정신 now trims the failure Death
+  chance by × 0.003, at most 15%. The SALE STATS coach adds one sentence naming the three roles, no numbers. DUNGEON_HAZARD
+  §PREPARED POWER / escape / §Spirit steadiness, FINAL_EXPEDITION §INDIVIDUAL FINAL POWER, COPY_AUDIT §3-7; tests vocabulary,
+  final, night, simulation, relic-effects, ui-guard.
+- **One Stat Food / Drink value per Rarity** (User: 등급마다 올려 주는 스탯은 높게 · 도시락 강인함도 깎고 · 영웅 투력 5): Drink 12 / 17 / 20
+  + 투력 5, Food 6 / 9 / 12 / 15 + 투력 5 - 생수 10 → 12, 진정 허브티 15 → 12, 녹차 양갱 8 → 6, 간단 도시락 12 → 9 (원정 소지금 +20% → +10%,
+  100 → 90G), 길드 특제 도시락 16 → 12 (+40% → +25%, 185 → 165G), 영웅 결전 도시락 18 → 15, 왕도 천연암반수 24 → 20, 초고속 에너지드링크
+  26 → 20, 대현자 허브엘릭서 28 → 20 (the four Epics 투력 6 → 5; 205G / 180G / 180G / 180G). ITEM §STAT FOOD / DRINK LADDER /
+  §ACTIVE CATALOG / DI-Q-v28-1; tests vocabulary, relic-effects.
+
 ## v2.10.0 — success meta (User 2026-10-02 ~ 2026-10-03)
 
 - **The hidden reputation is gone** (User: 평판처럼 몰래 하는 건 안 된다 · 싹 없앤다): the Run no longer keeps a 0~100 reputation

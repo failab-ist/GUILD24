@@ -223,8 +223,8 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
      Hazard COUNT, not by sqrt(count), so a Family pair is not penalised for holding more
      entries. The v2.6 aggregate-gap path is superseded. */
   const meanGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
-  const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+p.effects.survival*.34
-   +p.effects.mobility*.27+p.effects.spirit*.20-meanGap(p)*2.50,0); // FINAL-Q72 2.50 (User 2026-09-30, v2.9.13; was 1.70)
+  const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+(p.effects.survival
+   +p.effects.mobility+p.effects.spirit)*.27-meanGap(p)*2.50,0); // FINAL-Q72 2.50 (User 2026-09-30, v2.9.13; was 1.70)
   g.commitFinalParty();g.boss();
   /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
      participants untouched - it is the one Run where the party sum can be checked against the
@@ -495,8 +495,8 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.50 (v2
  assert.ok(/individualPower=\(e,meanGap\)=>G\.Dungeon\.preparedPower\(e\)-meanGap\*2\.50/.test(src),
   'the Final contribution reads the Prepared Power helper');
  const e={combat:100,survival:50,mobility:30,spirit:20};
- assert.equal(Dungeon.preparedPower(e),100*.50+50*.34+30*.27+20*.20,
-  'and that helper carries the approved v2.7 coefficients');
+ assert.equal(Dungeon.preparedPower(e),100*.50+(50+30+20)*.27,
+  'and that helper carries the approved coefficients (투력 .50, every other Stat .27)');
  /* The point of the mean: a Family pair with MORE Hazards is not penalised for the count. Two
     parties equally unprepared per Hazard must take the same penalty whether the pair carries
     three Hazards or four - under the old sqrt path the four-Hazard pair paid more. */
