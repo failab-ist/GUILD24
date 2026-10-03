@@ -36,7 +36,9 @@ and this table is their commit record.
 - **SALE backdrop, shelf head, desk column, type ladder** (User 2026-10-03): the SALE backdrop is the wide store art without its ceiling, side
   shelves at the edges, dimmed under the cards; the shelf head is the wooden plank asset across the whole shelf frame; on a desk the
   status / outlook / destination column is as tall as the card and one width, with larger type, and the waiting deck is larger; stats, item
-  effects and stock / expiry sit one step quieter than names and prices. UI_UX §SALE.
+  effects and stock / expiry sit one step quieter than names and prices; stat values use the shelf price's type; the three price keys are the supplied
+  wood-and-colour key assets with no flag colour bar; the phone backdrop is the portrait store art; the tray's bottom rule is the same 4 px board edge as
+  the rule between the halves. UI_UX §SALE.
 
 ## v2.10.0 quick patch 3 — a tidier ORDER sheet, costlier failures (User 2026-10-03; the version stays 2.10.0)
 
