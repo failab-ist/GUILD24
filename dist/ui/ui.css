@@ -3850,7 +3850,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .face{margin-bottom:0}
 .p-sale:not(.sale-desk) .front-side{align-self:stretch;justify-content:space-between;padding:0}
 .p-sale:not(.sale-desk) .front-side .kit{flex:1 1 auto;align-content:space-evenly;padding:6px 8px;gap:0;font-size:11px}
-.p-sale:not(.sale-desk) .front-side .slots .slot-label,.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .front-side .kit .npc-wallet{font-size:11px}
+.p-sale:not(.sale-desk) .front-side .slots .slot-label{font-size:13px;padding-left:8px}
 .p-sale:not(.sale-desk) .kit .npc-wallet b{font-size:13px}
 .p-sale:not(.sale-desk) .front-side .dest-plate{padding:7px 8px}
 .p-sale:not(.sale-desk) .front-side .dest-plate h3{font-size:12px;line-height:1.2}
@@ -3974,3 +3975,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .front>.line-up .left{background:#0d0a06d9;color:#f0e4c8;padding:3px 9px;box-shadow:inset 0 0 0 1px #3b2f21}
  .sale-desk .counter-tray .tills .price-role,.sale-desk.p-sale .counter-tray .tills .price-role{left:-38px;top:0;width:100px;height:15px;font-size:10px;line-height:15px}
 }
+
+/* sentence-level line breaks for plain prose (sentenceBreaks in app.js) */
+.sent{display:inline-block;max-width:100%}
