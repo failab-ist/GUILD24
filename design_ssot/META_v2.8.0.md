@@ -110,8 +110,8 @@ change an already-created NPC. It improves the chance that a newly generated NPC
 starting Level. Mastery rank is the number of distinct Bosses cleared with that Job, from 0 through 7.
 
 For each newly generated NPC:
-1. resolve the ordinary spawn Level = max(1, randomInt(1, 3) + floor((Day − 1) × 0.25)), randomInt(1, 2) on DAY 1
-   (the opening roster); the royal profile adds +3 (EVENT)
+1. resolve the ordinary spawn Level = max(1, randomInt(1, 3) + floor((Day − 1) × 0.25)), randomInt(1, 2) on DAY 1~4
+   (the opening roster and the first newcomers); the royal profile adds +3 (EVENT)
 2. read Mastery for that NPC's Job
 3. make one mutually exclusive Mastery bonus roll
 4. add at most one of +1 / +2 / +3 Levels

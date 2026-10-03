@@ -61,8 +61,8 @@ function create(r,index,day,account,opts={}){
  /* META §wall — 명예 모험가 액자: the weights are the Decoration's own param, one owner. */
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
- /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 on DAY 1 (the opening roster) */
- const spawnLevel=Math.max(1,r.int(1,day===1?2:3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
+ /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 on DAY 1~4 */
+ const spawnLevel=Math.max(1,r.int(1,day<=4?2:3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
  const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  /* NPC_TRAIT §NPC RARITY: growth potential 1 + 0.10 x Rarity + a 0~0.10 roll */

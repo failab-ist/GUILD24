@@ -33,8 +33,8 @@ and this table is their commit record.
   D21까지 통일): × 0.90 on DAY 1~21 (was 0.92 on DAY 1~7, 0.90 on DAY 8~21), × 0.95 from DAY 22 unchanged. Taking the early ease
   away altogether, with the Lv1~2 roster, dropped DAY 1~7 success from 54% to 26% and ended fresh Runs on the death limit around
   DAY 9; the roster alone keeps the empty-Bag DAY 1 forecast off 우세. DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE / DUN-Q; test night.
-- **The opening roster is Lv1~2**: the ordinary spawn Level draws 1~2 on DAY 1 (it was 1~3 like every Day); DAY 2 on is
-  unchanged. With it, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (also with the × 0.90 ease) (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
+- **The opening roster is Lv1~2**: the ordinary spawn Level draws 1~2 on DAY 1~4 (it was 1~3 like every Day; User: Lv1~2 구간을
+  좀 더 넓히자), so the first newcomers start low too; DAY 5 on is unchanged. With it, an empty Bag on DAY 1 reads 접전 or 불리, never 우세 (also with the × 0.90 ease) (NPC_TRAIT §GROWTH TARGET: a newcomer's noItem
   forecast ≈ 접전~불리). META §Exact spawn-Level model; tests revision, events (the rookie Level guard reads behaviour now; the
   Gate-cover check plays 40 Runs, as harder opening Days end some Runs before enough multi-Gate Days are seen).
 - **A steeper Hazard Threat from DAY 8** (User: 수치가 보여서 초록색 만들기 게임이 됐다 · 이후부터 대응+포션 1개가 답이 되지 않게;
