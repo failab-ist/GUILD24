@@ -680,7 +680,7 @@ When combat fails:
 
     escapeChance
     = clamp(
-        0.48
+        0.40
         + prepared 기동 × 0.003
         + explicit escape modifier (Traits only; 귀환석's bonus is not read here)
         - Gate scale × 0.024,
@@ -820,7 +820,7 @@ CombatDeficit
 )
 
 CombatDeathContribution
-= CombatDeficit × 0.30
+= CombatDeficit × 0.40
 ```
 
 `effectivePreparedPower` means the actual prepared state for the snapshot being calculated, including all already-applicable NPC-side modifiers and Item/Supply effects for that snapshot.
@@ -847,7 +847,7 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit × 0.20
+= EnvironmentDeficit × 0.25
 ```
 
 If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
@@ -903,12 +903,12 @@ Fatigue 40 departure: if `fatigueBeforeExpedition = 40` (탈진), the same addit
 ```text
 injuryEscalation  = 0.10 if injury=1, else 0
 fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
-strainEscalation  = min(0.30, 0.08 × max(0, consecutiveInjuredDepartures − 1))
+strainEscalation  = min(0.40, 0.12 × max(0, consecutiveInjuredDepartures − 1))
   consecutiveInjuredDepartures = this departure, if begun at injury=1, plus the unbroken run of this adventurer's
     immediately preceding expeditions also begun at injury=1; 0 when this departure is healthy
   (only CONSECUTIVE injured departures count — a healthy departure, including the
-   return after a Severe-Injury rest, resets the chain; the first injured departure is free, every further one adds 8%p,
-   up to 30%p; Fatigue does not feed this term)
+   return after a Severe-Injury rest, resets the chain; the first injured departure is free, every further one adds 12%p,
+   up to 40%p; Fatigue does not feed this term)
 
 failureDeathChance
 = clamp(
@@ -925,7 +925,7 @@ Meaning:
 - weak Hazard preparation independently raises the conditional failure Death risk
 - repeating expeditions with an already-injured NPC adds a visible material risk
 - departing at Fatigue 40 (탈진) adds the same visible material risk
-- sending an adventurer out injured again and again escalates further: +8%p per consecutive injured departure after the first, up to +30%p, and the cap rises with it; one healthy departure resets it
+- sending an adventurer out injured again and again escalates further: +12%p per consecutive injured departure after the first, up to +40%p, and the cap rises with it; one healthy departure resets it
 - healthy conditional cap is 50%
 - injured conditional cap is 60%
 - Fatigue-40 conditional cap is 60%; injured and Fatigue-40 together 70%
@@ -1730,13 +1730,13 @@ chain broken once by a healthy departure, and a Fatigue 20+ departure chain.
 
 EXPECT:
 - the first injured departure adds nothing beyond the existing injured term
-- every further CONSECUTIVE injured departure adds +8%p to the conditional failure Death chance and to its cap, capped at +30%p
+- every further CONSECUTIVE injured departure adds +12%p to the conditional failure Death chance and to its cap, capped at +40%p
 - one healthy departure resets the chain; Fatigue 20+ departures add nothing to this term
 - the count comes from the adventurer's own records (this departure included); no new NPC field
 - NPC detail shows `연속 부상 출발 {n}회` (the current chain of consecutive injured departures; 0 after a healthy one) as an information row, no verdict
 
 PASS:
-- strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
+- strainEscalation equals min(0.40, 0.12·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
 
 #### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
 
@@ -1817,7 +1817,7 @@ CombatDeficit
 = clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
 
 CombatDeathContribution
-= CombatDeficit * 0.30
+= CombatDeficit * 0.40
 
 HazardDeficit_i
 = clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)
@@ -1826,7 +1826,7 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit * 0.20
+= EnvironmentDeficit * 0.25
 
 healthyFailureDeathChance
 = clamp(

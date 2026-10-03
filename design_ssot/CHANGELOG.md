@@ -25,7 +25,28 @@ and this table is their commit record.
 | v2.9.12 | 2026-09-30 | `39ddcce` (PR #31), `f02eb8d` (PR #32) | - |
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
-| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55 | `v2.10.0` (set by the User) |
+| v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
+
+## v2.10.0 quick patch 3 — a tidier ORDER sheet, costlier failures (User 2026-10-03; the version stays 2.10.0)
+
+- **At most four Hazard Counters on a sheet** (User: 쓸모없는 대응템만 나와서 답답할 수 있겠다 · 발주 전체에서 대응템이 차지할 수 있는 칸은 최대
+  4칸 · 보정은 똑같이 · 0칸도 될 수 있게): once four Items with any Hazard 대응 are on the sheet (ordinary and extra slots alike),
+  every further slot draws from the rest; a sheet may hold none. Every slot a Store Support or an Event adds raises the cap by
+  one (User: 발주 칸 자체가 늘면 대응템 한도도 늘게). About half of a six-slot sheet was Counters, of which a third
+  to two thirds fit no Gate open that Day. The Counter guarantee is unchanged; on a sheet already at four it takes a Counter's
+  slot. ECONOMY_ORDER §ORDER OFFER VARIETY; test revision.
+- **Newcomers keep up** (User, from a main-build save that ended on the death limit at DAY 19 - the four Lv10+ adventurers
+  won 69% with no death, the eleven others 2% with all nine deaths: 신규 레벨 따라잡기): the spawn Day term is
+  floor((Day − 1) × 0.4) from DAY 5 (was × 0.25; DAY 1~4 stay Lv1~2 with no Day term). Sending newcomers to Tier I Gates was
+  tried and dropped (User: 레벨 최저선이 올라갔으니 괜히 복잡해진다). META §Exact spawn-Level model; test events.
+- **A misstep costs more** (User: 대응을 잘하면 이기나 삐끗하면 페널티가 크게 · 실패 시 부상·중상·사망 확률 키우고 · 연속 부상 출전도 폭 키우기;
+  부상이 중상으로 번지는 36%는 유지): the failure Death coefficients CombatDeficit × 0.30 → 0.40 and EnvironmentDeficit
+  × 0.20 → 0.25 (cap 0.50 unchanged); the escape base on a lost fight 0.48 → 0.40; strainEscalation +8%p → +12%p per
+  consecutive injured departure, cap 30%p → 40%p. SuccessEase stays 0.90 / 0.95: a 0.85 / 0.90 trial raised every success band
+  by 8~10%p and fresh D30 from ~46% to ~58% (reports/v2100-measure/qp3-bundle.log). DUNGEON_HAZARD §ORDINARY EXPEDITION
+  FAILURE DEATH RISK, §Healthy / injured failure Death chance, escapeChance; test night.
+- **The 후보 전체 교환 key is narrow and right-aligned** (User: 리롤이 영업 시작보다 넓어서 자꾸 누른다 · 우정렬 · 세로 여백 줄이자): as wide
+  as its words (296 → 155px on a 360px phone), at the sheet's right edge, its margin 12 / 6 → 8 / 4px. UI_UX §ORDER Reroll UX.
 
 ## v2.10.0 quick patch 2 — the till breathes again (User 2026-10-03; the version stays 2.10.0)
 

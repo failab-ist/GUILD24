@@ -663,6 +663,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  font:600 14px/1 var(--ui);letter-spacing:.02em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.8}
 .rubber:hover{background:#00000008;opacity:1}
 .rubber:disabled{opacity:.28}
+/* UI_UX §ORDER Reroll UX: the 후보 전체 교환 key is as wide as its words, at the sheet's right edge, on a short margin */
+.rubber[data-action="reroll"]{width:auto;max-width:calc(100% - 32px);margin:8px 16px 4px auto;padding:9px 16px}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
 .p-order .dock{position:relative;display:flex;flex-wrap:wrap;gap:10px;padding-top:16px;
  background:var(--tex-paper),#e6ddc6;box-shadow:0 -5px 0 #00000059}

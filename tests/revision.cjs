@@ -739,4 +739,23 @@ test('spawn Level: DAY 1~4 draw Lv1~2, DAY 5 on Lv1~3 + the Day term (no Mastery
   assert.ok(g.run.npcs.every(n=>n.level<=2),'a fresh account opens with no Lv3 adventurer');}
 });
 
+/* ECONOMY_ORDER §ORDER OFFER VARIETY: at most four Hazard Counters on a sheet; the Counter guarantee still fires */
+test('ORDER sheet: at most offerCounterMax Hazard Counters, the guarantee still delivers, a sheet may hold none',()=>{
+ const H=Object.keys(DATA.hazards),isC=o=>Relics.directCounter(DATA.itemBy[o.item],H);
+ assert.equal(DATA.balance.offerCounterMax,4);
+ let sheets=0,max=0,zero=0,guaranteed=0;
+ for(let i=0;i<120;i++){const g=fresh('counter-cap-'+i),s=g.run;
+  for(const day of [3,9,15,21,27]){s.day=day;
+   for(let k=0;k<4;k++){s.pity.counter=k===3?3:0;const known=Relics.known(g);if(k===3)for(const h of known)s.pity.hazards[h]=3;
+    g.generateOffers({advancePity:false});sheets++;const c=s.offers.filter(isC).length;max=Math.max(max,c);if(!c)zero++;
+    if(k===3&&known.length)assert.ok(s.offers.some(o=>Relics.directCounter(DATA.itemBy[o.item],known)),'the guarantee still puts a known Hazard\'s Counter on the sheet');if(k===3)guaranteed++;}}}
+ assert.ok(max<=4,'never more than four Counters on a sheet: '+max);
+ assert.ok(max===4,'the cap is reached, not just never approached');
+ assert.ok(guaranteed>0&&sheets>500,'enough sheets were drawn: '+sheets);
+ /* an added slot raises the cap one for one: 본사 추가발주권 (+extraOffers) */
+ let wide=0;for(let i=0;i<150;i++){const g=fresh('counter-cap-wide-'+i),s=g.run;s.facilities=['extraOrder'];s.day=20;g.generateOffers({advancePity:false});
+  const c=s.offers.filter(isC).length;assert.equal(g.counterCap,4+DATA.relicParams.extraOrder.extraOffers);assert.ok(c<=g.counterCap);wide=Math.max(wide,c);}
+ assert.ok(wide>4,'with 본사 추가발주권 the sheet can carry more than four Counters: '+wide);
+});
+
 console.log(checks+' revision groups passed');
