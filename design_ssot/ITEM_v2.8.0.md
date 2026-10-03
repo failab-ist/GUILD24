@@ -900,10 +900,10 @@ PASS:
 - 농축 해독제 = Field Gear
 - 구급키트 = Insurance
 
-#### ITEM-Q71 — ACTIVE CATALOG EXACT 43
+#### ITEM-Q71 — ACTIVE CATALOG EXACT 44
 
 PASS:
-- exactly 43 active Items
+- exactly 44 active Items
 - 붕대 inactive/retired
 - 마석 보조배터리 inactive/retired
 - 진정 허브티 active
