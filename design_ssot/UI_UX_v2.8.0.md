@@ -450,6 +450,8 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
   never changes and nothing is saved; a desk (≥1024) never folds
   The phone Deep control completes its native click before the outside-tap fold: the summary/key must not move out from
   under the pointer between pointerdown and pointerup.
+  Reopening the strip resets the scroll baseline and lets its layout settle, as a shelf-row opening does; the expansion
+  itself must never refold the tray before a price tap. Subsequent user scrolling still folds it after 32px.
 - COUNTER FEEL (contract -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H2; acceptance -> UI_UX §QA UI-Q-v29-31): the pressed key
   goes down 3px in 60 ms and back in 60 ms (일반, no hold). On a sale the pressed tray holds inert for that press (icon hidden:
   the Item travels as A1), then the counter redraws; the A8 stub stamps in from the key's landing frame. A refused key presses

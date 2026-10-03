@@ -2657,7 +2657,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   /* User 2026-10-03: the roomier tray must not cover the selected product. Only its opening
      may move the phone list: show the selected row and, at 640 high or more, its next peer
      when both fit. An already-open comparison keeps its anchor and scroll unchanged. */
-  if(opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=innerHeight>=640?back.nextElementSibling:null;
+  if(s.phase==='sell'&&opening&&selected&&innerWidth<1024&&sc&&back){const clip=sc.getBoundingClientRect(),row=back.getBoundingClientRect(),peer=innerHeight>=640?back.nextElementSibling:null;
    const end=peer&&peer.getBoundingClientRect().bottom-row.top<=clip.height-8?peer.getBoundingClientRect().bottom:row.bottom;
    if(end>clip.bottom-4)sc.scrollTop+=end-clip.bottom+4;
    else if(row.top<clip.top+4)sc.scrollTop+=row.top-clip.top-4;
@@ -2707,7 +2707,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'final-commit':if(s.team.length<3){setModal('underConfirm');break;}   // a full party falls through
  case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;
  case'forecast-pin':pinFolded=!pinFolded;syncForecastPin();break;
- case'tray-open':trayFolded=false;syncTray();sound('ui');break;
+ case'tray-open':trayFolded=false;syncTray();trayBase=$('.p-sale .stage-scroll')?.scrollTop||0;trayArm=performance.now()+300;sound('ui');break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this

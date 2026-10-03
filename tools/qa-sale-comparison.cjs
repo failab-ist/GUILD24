@@ -124,7 +124,12 @@ const cases=[...sizes.map(size=>({size,day:5})),...(process.env.QA_SIZES||motion
    await page.locator(scrollSelector).evaluate(e=>e.scrollTop+=80);await page.waitForTimeout(150);
    check(await page.locator('.counter-tray').evaluate(e=>e.classList.contains('folded')),tag+' scroll folds tray');
    await page.locator('.tray-unfold').click();
+   await page.waitForTimeout(450);
    check(await page.locator('.counter-tray').evaluate(e=>!e.classList.contains('folded')),tag+' strip reopens tray');
+   await page.locator(scrollSelector).evaluate(e=>e.scrollTop+=80);await page.waitForTimeout(150);
+   check(await page.locator('.counter-tray').evaluate(e=>e.classList.contains('folded')),tag+' user scroll still folds after settled reopen');
+   await page.locator('.tray-unfold').click();await page.waitForTimeout(450);
+   check(await page.locator('.counter-tray').evaluate(e=>!e.classList.contains('folded')),tag+' second reopening remains usable');
   }
   let rich=null;
   if(day===14){
