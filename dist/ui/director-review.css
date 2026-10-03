@@ -301,3 +301,8 @@
 .boot-bar>i{display:block;height:100%;width:0;background:url('assets/presentation/morning/day-sign.png') center/100% 100% no-repeat;transition:width .2s ease-out}
 .boot-note{margin:12px 0 4px;font:400 var(--t-sm)/1.4 var(--ui);color:#d9c39a}
 @media (prefers-reduced-motion:reduce){.boot-bar>i{transition:none}}
+@media (min-width:1024px){
+ .boot-plate{width:560px;border-width:24px;border-image-width:24px;padding:12px 10px 6px}
+ .boot-title{margin-bottom:24px;font-size:48px}
+ .boot-bar{height:32px;padding:4px}
+ .boot-note{margin:20px 0 8px;font-size:18px}}
