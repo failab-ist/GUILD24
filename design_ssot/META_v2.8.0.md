@@ -419,7 +419,7 @@ counter and counted in the Day's record (UI_UX owns the presentation).
 
 ### counter — 추모 방명록 (id memorialBook)
 ```text
-every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED)
+every segment Death limit +1 (5 / 8 / 11 -> 6 / 9 / 12; CORE_RUN §DEATH LIMIT — SEGMENTED)
 ```
 
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the RESULT-PROOF

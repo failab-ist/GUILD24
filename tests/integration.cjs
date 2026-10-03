@@ -1346,15 +1346,15 @@ const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCap
  const g=new Game(a);g.autosave=false;g.start(seed);return past0(g);};
 /* past the D0 Store Support pick, so the Day's Gates exist for an arrival to read */
 const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
-test('추모 방명록: the Death line that ends a Run is two higher while it is worn',()=>{
+test('추모 방명록: the Death line that ends a Run is one higher while it is worn',()=>{
  // CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): both Runs start Day 1, so `base` is the
- // plain D1~10 segment limit; memorialBook adds +2 to it now (was +1).
+ // plain D1~10 segment limit; memorialBook adds +1 to it (v2.10.0, User 2026-10-03; was +2).
  const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBook'],'memorial');
- assert.equal(Meta.deathLimit(g.run),base+2);
+ assert.equal(Meta.deathLimit(g.run),base+1);
  assert.equal(Meta.deathLimit(fresh('memorial-plain-2').run),base,'without it the line is unchanged');
  g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the plain line the store still trades');
- const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
- assert.equal(h.run.phase,'end','at the bonused (+2) line, it closes');
+ const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+1;h.closeDay();
+ assert.equal(h.run.phase,'end','at the bonused (+1) line, it closes');
 });
 test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
  let healed=0,tries=0;

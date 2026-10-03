@@ -58,6 +58,9 @@ and this table is their commit record.
 - **Measured against the updated targets** (User 2026-10-03: 목표를 지금 수치 정도에 맞춰): reader / expert fresh Runs read ordinary
   success 54 / 48 / 50 / 46% by Day band, D30 reach 46%, clear-given-reach 60~63%, overall clear 27~29%; the targets are now those
   figures (`GAME_VISION.md` §Difficulty Curve, its reference lines; measured in `reports/v2100-measure/README.md`).
+- **추모 방명록 사망 한도 +2 → +1** (User 2026-10-03, after the single-Decoration measurement: alone it was the strongest piece,
+  클리어 +22.9%p, with the Death limit now ending half the Runs; `reports/v2100-measure/deco-single.log`). META §counter — 추모 방명록,
+  COPY_AUDIT §여덟 장식.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 
