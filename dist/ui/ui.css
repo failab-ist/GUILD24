@@ -1678,7 +1678,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    than the screen), the dock follows immediately under it on the paper's own axis, and both
    lose their separate grounds so nothing but a seam sits between them. The receipt keeps its
    344px object width; the Action takes that same measure so the two read as one column. */
-.p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
+.p-closing{justify-content:center}
 /* BATCH 3 CLOSING: a till that runs longer than the screen (a Great Success day prints one more
    row) rode up under the menu pin, which then covered the receipt's torn top edge. The stage
    keeps the pin's own 6 + 44px clear above the paper; a short till still centres. The desktop
@@ -2824,6 +2824,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    screen rather than pinned to the top of an empty one - auto margins, so a long ending
    scrolls normally instead of having its head clipped. */
 .p-end{justify-content:center}
+/* the closing receipt and the ending share the rainy store, the same room as NIGHT */
+.p-closing,.p-end{background:linear-gradient(#0c0a0873,#0c0a0873),#120e0a url('assets/presentation/night/store-rain-phone.jpg') center / cover no-repeat}
+@media(min-width:1024px){.p-closing,.p-end{background-image:linear-gradient(#0c0a0873,#0c0a0873),url('assets/presentation/night/store-rain-wide.jpg')}}
 .p-end .stage-scroll{flex:0 1 auto;display:flex;flex-direction:column;padding:58px var(--gutter) 10px}
 /* BATCH 3 END: the tape's top used to ride up under the menu pin on a phone as soon as a party or
    a settlement made the ending longer than the screen; the pin's 6 + 44px stay clear above it. */
