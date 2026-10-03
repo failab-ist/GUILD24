@@ -28,6 +28,12 @@ and this table is their commit record.
 
 ## v2.9.14 — play feedback (User 2026-10-02; worked as v2.9.13 quick patch 13)
 
+- **Store Support warehouse selection on `ui/design-trim`** (User 2026-10-03): preserve all three supplied JPEGs byte for byte,
+  apply portrait/wide warehouse backgrounds to the selection takeover, and adapt the reference to a restrained wood title,
+  thin-edged slate candidates and full-width yellow choice keys. Desktop keeps three equal candidates; the defer/reroll footer
+  stays separate from the scroll. RELIC values, three-candidate rule and acquisition/save flows are unchanged. UI_UX owns the
+  presentation; original hashes/roles are recorded under reports/references and ASSETS.
+
 - **SALE price ribbons on `ui/design-trim`** (User 2026-10-03): retain the fixed character and shelf/support band, centre its
   mixed-font elements, remove repeated customer/wallet/base price from the phone tray, and place stock/life beside the Item.
   The phone's three equal price keys carry role/percentage on an internal left ribbon, price/profit in two right-hand lines,

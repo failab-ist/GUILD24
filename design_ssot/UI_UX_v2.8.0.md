@@ -920,6 +920,19 @@ block at any width (FINAL preparation keeps its list).
 ### RELIC VISUAL
 
 Metal fixture/plate language; purchase reads as a metal/brass transaction.
+The selection takeover uses the supplied warehouse background: portrait on phones, wide from 1024px. The original JPEGs
+remain byte-identical; viewport framing is CSS only. A restrained wood title plate sits over the room, followed by three
+slate candidate plates. Keep one thin separation edge on available cards, the gold owned outline and the established
+yellow purchase / brown defer state grammar. Do not copy the reference's multiple nested borders, stars, chains or effect values.
+On phones the choice key spans the candidate's inner width and remains at least 48px high. Titles use the 22px plate step;
+effect/condition text remains 14px and wraps intact. Desktop shows three equal columns within a bounded 1120px composition,
+with actions aligned at the card foot. The footer stays outside the candidate scroll, on a restrained wood plane: D0 keeps
+the defer explanation and a full-width phone key; later windows retain the existing peer reroll/defer controls.
+Candidate count, effects, prices, acquisition timing, unavailable causes and save/reload behavior remain owned by RELIC/COPY.
+Acceptance: capture D0 and D5 at 360×640, 375×548, 390×780, 430×780, 1280×700 and 1280×880. Every candidate's button
+scrolls clear of the fixed footer, all catalogue names/conditions/prices wrap without clipping, owned/unavailable states keep
+their control footprint, and the D0 coach clears its title and footer. Verify defer/reload, the real paid reroll and persisted
+candidates, the SLOTH seal fold/reopen, and the D0 selection-to-briefing transition with motion and reduced motion.
 
 ## EVENT PRESENTATION
 

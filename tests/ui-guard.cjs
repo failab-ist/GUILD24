@@ -3313,7 +3313,7 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
  assert.ok(/opacity:1/.test(block),'the base sheet\'s disabled fade is switched off explicitly');
  // EXACT STATE HIERARCHY, at the amended Canonical values.
  assert.ok(/\.relic-plate\{[^}]*background:#20272b/.test(block),'AVAILABLE surface #20272B');
- assert.ok(/\.relic-plate\{[^}]*inset 0 0 0 2px #465158/.test(block),'AVAILABLE border #465158');
+ assert.ok(/\.relic-plate\{[^}]*inset 0 0 0 1px #465158/.test(block),'AVAILABLE uses the approved thin edge #465158');
  assert.ok(/\.relic-plate h3\{[^}]*color:#f1ece2/.test(block),'title #F1ECE2');
  assert.ok(/\.relic-plate p\{[^}]*color:#b8c0c2/.test(block),'Function #B8C0C2');
  assert.ok(/\.relic-plate \.cost\{[^}]*color:#d2a347/.test(block),'price #D2A347');

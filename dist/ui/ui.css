@@ -1970,8 +1970,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    reading this comment used to describe is gone - see §PIXEL / 2D GAME UI LANGUAGE.
    ===================================================================== */
 .relic-takeover{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;
- background:#120c06;overflow:hidden}
-.relic-takeover .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 var(--gutter) 20px}
+ background:#120c06 url('assets/presentation/support/backroom-phone.jpg') center / cover no-repeat;overflow:hidden;isolation:isolate}
+.relic-takeover:before{content:'';position:absolute;inset:0;z-index:-1;background:#100c0959;pointer-events:none}
+.relic-takeover .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 16px 8px;scroll-padding:12px}
+.relic-takeover .scroll>*{max-width:1120px;margin-left:auto;margin-right:auto}
 .relic-open{position:relative;margin:0 calc(var(--gutter) * -1) 18px;padding:22px var(--gutter) 18px;
  background:var(--tex-wood),#4a3627;background-size:32px 12px;text-align:center;
  box-shadow:inset 0 2px 0 #7a5f45,inset 0 -2px 0 #1d140c,0 3px 0 #0e1315}
@@ -1981,6 +1983,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-open h2{font:500 28px/1.15 var(--f-sign);-webkit-font-smoothing:none;color:#f8efd8;
  text-shadow:1px 2px 0 #00000066}
 .relic-open p{margin-top:8px;font:400 13px/1.6 var(--ui);color:#d3bf98}
+.relic-takeover .relic-open{width:min(100%,640px);margin:20px auto 18px;padding:16px 18px;
+ background:var(--tex-wood),#37271b;box-shadow:inset 0 0 0 1px #9a7947,0 3px 0 #130e0b}
+.relic-takeover .relic-open .label{margin-bottom:8px;letter-spacing:.12em}
+.relic-takeover .relic-open h2{font-size:28px;line-height:1.25}
+.relic-takeover .relic-open p{color:#e7dbc2;font-size:14px;line-height:1.5}
 .discovery{margin:0 0 14px;padding:9px 12px;font:400 13px/1.5 var(--ui);color:#e8d9b0;
  background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
 .relic-choices{display:grid;gap:12px}
@@ -2006,26 +2013,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    title contrast and the state control together - never the outline alone.
    ---------------------------------------------------------------------------- */
 .relic-plate{position:relative;padding:14px 15px 13px;background:#20272b;
- box-shadow:inset 0 0 0 2px #465158,3px 3px 0 #10161a}
+ display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #465158,2px 2px 0 #10161a}
 /* the certificate's subject, left-aligned like every other record in the game */
-.relic-plate h3{font:500 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f1ece2;
+.relic-plate h3{font:500 22px/1.35 var(--f-plate);-webkit-font-smoothing:none;color:#f1ece2;
  padding:0}
 /* UI_UX §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT, and §CARD CONTENT: the exact Function is
    the comparison this choice is made on, so it stays one step under the title, never dim. */
-.relic-plate p{margin-top:7px;font:600 14px/1.6 var(--ui);color:#b8c0c2}
+.relic-plate p{flex:1 1 auto;margin-top:10px;font:600 14px/1.6 var(--ui);color:#b8c0c2;word-break:keep-all;overflow-wrap:normal}
 /* the price, struck on the panel as a ruled line rather than a box inside a box */
 .relic-plate .cost{display:block;margin:11px 0 10px;padding:9px 0 0;letter-spacing:.06em;
  font:500 20px/1 var(--f-led);color:#d2a347;box-shadow:inset 0 1px 0 #46515899}
 
-/* AVAILABLE - the only control on the screen that looks pressable. USER DIRECTION 2026-09-22:
-   the previous #C4973E plane over a #765821 offset still read as a brown/olive box on a phone,
-   which is the tone that was to be gone. Canonical owns the state grammar here and says in so
-   many words that no literal colour value is Canonical for this screen, so the hue is tuned and
-   the grammar is untouched: one clean gold plane (#E3B341) with a bright pixel edge, and the
-   depth taken in the CARD'S OWN slate shadow (#10161A) instead of a brown one - the brown was
-   most of what made it muddy. Still a compact plane, not a full-width bar: the bar is the SaaS
-   CTA silhouette this spec rules out. 138 x 48 stays well above the phone touch minimum. */
-.relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
+/* AVAILABLE: the yellow purchase family carries a hard edge and one hard depth. The supplied
+   reference's choice composition uses the card's inner width; keep a 48px target and the same
+   footprint for owned/unavailable states. No ornamental frame is added around the key. */
+.relic-plate .stamp{width:100%;min-width:138px;min-height:48px;padding:0 18px;
  font:600 16px/1 var(--ui);letter-spacing:.06em;
  background:var(--yellow);color:var(--yellow-ink);transform:none;clip-path:none;filter:none;
  box-shadow:inset 0 0 0 2px var(--yellow-lit),3px 3px 0 var(--yellow-deep)}
@@ -2067,9 +2069,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #394347}
 
 .relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
- padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));background:#0c0805;
- box-shadow:inset 0 3px 0 #ffffff12}
-.relic-takeover .close p{flex:1 1 auto;font:400 13px/1.5 var(--ui);color:#a2947c}
+ width:calc(100% - 32px);max-width:1120px;align-self:center;margin:12px 0 max(14px,env(safe-area-inset-bottom));
+ padding:12px 14px;background:#21150ff5;box-shadow:inset 0 0 0 1px #8c6e45}
+.relic-takeover .close p{flex:1 1 100%;font:400 13px/1.5 var(--ui);color:#d4c5a8;text-align:center}
+.relic-takeover .close:not(:has([data-action=reroll-relics])) .stamp{width:100%}
 /* the defer control sits on the same takeover, so it answers to the same palette: slate, not
    brown. It stays plainly secondary - no gold, no depth competition with the one real control. */
 /* BROWN. Deferring is a step under the purchase it sits beside, so it takes the back/defer
@@ -2082,6 +2085,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-takeover .close .stamp:hover{background:#87502f}
 .relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#653a24;
  box-shadow:inset 0 0 0 2px var(--brown-deep),1px 1px 0 var(--brown-deep)}
+@media(min-width:1024px){
+ .relic-takeover{background-image:url('assets/presentation/support/backroom-wide.jpg')}
+ .relic-takeover .scroll{padding-left:32px;padding-right:32px}
+ .relic-takeover .relic-open{margin-top:32px;margin-bottom:28px;padding:20px 24px}
+ .relic-takeover .relic-open h2{font-size:32px}
+ .relic-takeover .relic-choices{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+ .relic-takeover .relic-plate{padding:20px}
+ .relic-takeover .close{margin-bottom:24px;padding:16px 20px}
+ .relic-takeover .close p{flex:1 1 360px;text-align:left}
+ .relic-takeover .close:not(:has([data-action=reroll-relics])) .stamp{width:auto;min-width:200px}
+}
 
 /* =====================================================================
    FINAL — 제0게이트. Not a shop screen: the mouth of the gate itself, cold stone and
