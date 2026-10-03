@@ -273,10 +273,10 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  assert.equal(Object.keys(Meta.storeLoadout(a)).length,DATA.decorationSlots.length,'one entry per Slot, always');
  for(const d of DATA.decorations)assert.ok(DATA.decorationSlots.includes(d.slot),d.id+' belongs to a real Slot');
  // the four approved effects and prices, read from the data rather than restated
- // prices re-tuned 2026-09-25, v2.9.1 balance: cheapest 500, dearest 2.5x, total 3,500
+ // prices re-tuned 2026-09-25, v2.9.1 balance; sign 1250 -> 1500 (User 2026-10-03, v2.10.0): cheapest 500, dearest 3x, total 3,750
  assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
-  [['sign',1250],['wall',1000],['counter',750],['display',500],
-   ['sign',1250],['wall',1000],['counter',750],['display',500]],
+  [['sign',1500],['wall',1000],['counter',750],['display',500],
+   ['sign',1500],['wall',1000],['counter',750],['display',500]],
   'the approved prices ship: each Slot\'s survival alternative costs what its economy Decoration costs (User 2026-09-24)');
 });
 

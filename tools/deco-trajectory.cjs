@@ -7,7 +7,7 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{for
 const root=path.resolve(__dirname,'..');
 const ORDERS={
  none:[],
- // one piece a Slot, cheapest first (display 500 -> counter 750 -> wall 1000 -> sign 1250; User 2026-10-02)
+ // one piece a Slot, cheapest first (display 500 -> counter 750 -> wall 1000 -> sign 1500; User 2026-10-02/03)
  economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],
  survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],
  // the v2.9.1 mixA / mixB orders named ids of the old Decoration set (mixA put two wall pieces in); they are gone until a

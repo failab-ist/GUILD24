@@ -441,10 +441,10 @@ RESULT-PROOF counterfactual reads the same two terms.
 
 ### Prices — EXACT
 
-`DIRECTOR DOCUMENT BASELINE` (cheapest 500, dearest 2.5×, total 3,500)
+`DIRECTOR DOCUMENT BASELINE` (cheapest 500, dearest 3×, total 3,750; sign 1250 -> 1500 User 2026-10-03, money gathers faster late)
 
 ```text
-sign    원정 지원금 간판 / 훈련소 제휴 간판   1250 Store Capital
+sign    원정 지원금 간판 / 훈련소 제휴 간판   1500 Store Capital
 wall    명예 모험가 액자 / 의무실 현판        1000 Store Capital
 counter 알뜰 금고 / 추모 방명록             750 Store Capital
 display 길드 추천 매대 / 구급품 진열장       500 Store Capital

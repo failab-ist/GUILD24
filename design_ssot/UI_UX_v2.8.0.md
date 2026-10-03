@@ -825,7 +825,7 @@ motion matches). No `어제보다 +N` line (deferred, v3.0+ router).
 
 The END tape's `점포 자본 정산` (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; rates 1 / 2 / 3 / 4 / 5%) counts
 `현재 점포 자본` up from the prior total in 320 ms, a quiet `ui` cue at each Decoration price it passes (500 / 750 / 1000 /
-1250, read from META_v2.8.0.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
+1500, read from META_v2.8.0.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
 
 ### END — THIS RUN BLOCK (v2.9.12)
 

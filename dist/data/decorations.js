@@ -6,12 +6,12 @@
    These are the only numeric truth for the four effects and their prices - no screen, harness or
    report may hold its own copy. */
 G.DATA.decorationSlots=['sign','wall','counter','display'];
-/* META §Prices — EXACT (User 2026-09-25, v2.9.1 balance: cheapest 500, dearest 2.5x, total 3,500 -
-   sign 1250 / wall 1000 / counter 750 / display 500, both Decorations of a Slot share the price). */
+/* META §Prices — EXACT (User 2026-09-25, v2.9.1 balance; sign 1250 -> 1500 User 2026-10-03, v2.10.0: cheapest 500, dearest 3x,
+   total 3,750 - sign 1500 / wall 1000 / counter 750 / display 500, both Decorations of a Slot share the price). */
 G.DATA.decorations=[
  /* v2.9.7 (User 2026-09-26, META §INITIAL FOUR DECORATIONS): the sign economy Decoration is remade as 원정 지원금 간판; the wall
     and display economy Decorations swap Slots, names and art following the Slot. Ids are kept, so ownership carries over. */
- {id:'sponsorSign', kind:'economy', slot:'sign',    name:'원정 지원금 간판',  price:1250, effect:'방문 모험가마다 현재 소지금의 50%만큼 추가 구매 가능',
+ {id:'sponsorSign', kind:'economy', slot:'sign',    name:'원정 지원금 간판',  price:1500, effect:'방문 모험가마다 현재 소지금의 50%만큼 추가 구매 가능',
   text:'길드 원정 지원금이 되는 가게. 모험가들이 하나씩 더 집어 간다.'},
  {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:'평범보다 높은 등급의 모험가 등장 확률 60%로 증가 (기존 40%)',
   text:'이름난 모험가의 초상. 저 벽에 걸리고 싶은 사람이 문을 연다.'},
@@ -23,7 +23,7 @@ G.DATA.decorations=[
     ONE Decoration, so each Slot is a choice between running the store and keeping people alive.
     Same price as the economy Decoration of the same Slot, and the stronger effect sits in the
     dearer Slot. Ids are kept from the first placement; names and Slots follow the effect. */
- {id:'trainingSign', kind:'survival', slot:'sign',   name:'훈련소 제휴 간판', price:1250, effect:'처음 찾아오는 모험가 55% 확률로 레벨 +1',
+ {id:'trainingSign', kind:'survival', slot:'sign',   name:'훈련소 제휴 간판', price:1500, effect:'처음 찾아오는 모험가 55% 확률로 레벨 +1',
   text:'길드 훈련소 문장을 건 간판. 조금 더 단련된 사람이 문을 연다.'},
  {id:'infirmaryPlaque', kind:'survival', slot:'wall', name:'의무실 현판',     price:1000, effect:'부상 모험가가 방문하면 40% 확률로 부상 회복',
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
