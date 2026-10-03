@@ -1,5 +1,8 @@
 # SALE 명판·희귀도·코치 보완 — 검토 후보
 
+> 최신 여백·계산대 재정리와 PNG 비교 이미지는 [후속 검토](UI_SALE_SPACING_2026-10-03.md)를 본다.
+> 아래는 선행 명판·희귀도·코치 수정 기록이다.
+
 - 브랜치: `ui/design-trim`
 - 구현 HEAD: `9ee55f374807a092915eedaa057c273c007a9ac6`
 - BEFORE: `ee02b7ce237855fb71f7628805fd66dadcb6edd0`
