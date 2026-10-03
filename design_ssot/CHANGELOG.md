@@ -33,6 +33,10 @@ and this table is their commit record.
   one line; a shorter destination plate whose `{능력치} n당 대응 1 제공` tails move into one `?`; 손님 `■■■■■` with no `1/5` (the count
   stays as its screen-reader label); a smaller 보유 골드 figure and a 44 px `손님 보내기`; shelf rows put `재고 N · 폐기까지 N일` on one
   line and the phone tray header drops them. UI_UX §SALE destination plate, §PRIMARY ACTION GRAMMAR, UI-Q-v28-3; test ui-guard.
+- **SALE backdrop, shelf head, desk column, type ladder** (User 2026-10-03): the SALE backdrop is the wide store art without its ceiling, side
+  shelves at the edges, dimmed under the cards; the shelf head is the wooden plank asset across the whole shelf frame; on a desk the
+  status / outlook / destination column is as tall as the card and one width, with larger type, and the waiting deck is larger; stats, item
+  effects and stock / expiry sit one step quieter than names and prices. UI_UX §SALE.
 
 ## v2.10.0 quick patch 3 — a tidier ORDER sheet, costlier failures (User 2026-10-03; the version stays 2.10.0)
 

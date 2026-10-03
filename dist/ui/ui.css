@@ -3874,7 +3874,39 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:linear-gradient(180deg,#d3ac71 0 1px,#b98d52 1px 2px,#7c5730 2px 3px,#4a331d 3px 4px)}
 .p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 8px}
 .p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
-/* SALE backdrop (User 2026-10-03): the store art is framed from the wall down - the ceiling and its lamps are the top fifth of the image and
-   hid the shop behind the cards - so it is enlarged and anchored below them; a phone shows about the middle half of the width */
-.p-sale:not(.sale-desk){background-size:auto 190%;background-position:center 42%}
-.sale-desk{background-size:auto 140%;background-position:center 63%}
+/* SALE backdrop (User 2026-10-03): one wide store art for phone and desk, framed from the wall down (no ceiling), the side shelves
+   showing at the edges; a dim layer keeps the bright room behind the dark cards */
+.p-sale{background:linear-gradient(#0d0a06a6,#0d0a06bd),url('assets/presentation/sale/sale-bg.png') right 80% bottom/auto 100% no-repeat #17110b}
+.p-sale.sale-desk{background:linear-gradient(#0d0a0680,#0d0a06a0),url('assets/presentation/sale/sale-bg.png') center bottom/auto 118% no-repeat #17110b}
+/* SALE shelf head (User 2026-10-03): the wooden plank asset spans the whole frame width */
+.p-sale .shelf-head{margin:0;padding:6px 16px;border:solid transparent;border-width:0 14px;
+ border-image:url('assets/presentation/sale/shelf-plank.png') 0 105 fill/0 14px stretch;
+ background:none;box-shadow:none}
+.p-sale:not(.sale-desk) .shelf-head{margin:0 0 6px;padding:2px 12px}
+.p-sale .shelf{padding:0 0 11px;box-shadow:none;background:#1b140ccc}
+.p-sale .shelf>.goods{padding:0 11px}
+.p-sale .shelf-head>span{background:#0e0a0699}
+
+/* SALE desk (User 2026-10-03): the status / outlook / destination column is as tall as the card and as wide as its own box, type larger;
+   the waiting deck is bigger on a desk */
+@media(min-width:1024px){
+ .sale-desk .front-side{align-self:stretch;max-width:none;width:100%;display:flex;flex-direction:column;gap:10px;padding:0}
+ .sale-desk .front-side>*{margin:0;width:auto;box-sizing:border-box}
+ .sale-desk .front-side>.kit,.sale-desk .front-side>.readout,.sale-desk .front-side>.dest-plate{align-self:stretch;width:auto}
+ .sale-desk .front-side .kit{flex:1 1 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:17px}
+ .sale-desk .front-side .kit .vitals{font-size:17px}
+ .sale-desk .front-side .kit .npc-wallet,.sale-desk .front-side .kit .slot-label{font-size:16px}
+ .sale-desk .front-side .readout.core-desk .ro-combat>b,.sale-desk .front-side .readout.core-desk .gs-row>b{font-size:26px}
+ .sale-desk .front-side .readout.core-desk b.env-num{font-size:22px}
+ .sale-desk .front-side .readout.core-desk i,.sale-desk .front-side .readout.core-desk label{font-size:15px}
+ .sale-desk .front-side .dest-plate h3{font-size:20px}
+ .sale-desk .front-side .dest-plate .hazards li{font-size:15px}
+ .sale-desk .front>.line-up{--deck:.4}
+}
+/* SALE type ladder (User 2026-10-03): stats, item effects and stock/expiry sit one step below names and prices */
+.p-sale .detail-stat label{font-size:11px;color:#b4a78d}
+.p-sale .detail-stat strong{font-size:15px;color:#e0d4b8;font-weight:500}
+.p-sale .good .what span{font-size:12px}
+@media(min-width:1024px){.p-sale .good .what span{font-size:13px}}
+.p-sale .good .price span,.p-sale .good .price em.expiry{color:#9c8f77}
+.p-sale .good .price em.expiry.soon{color:#d99a7c}
