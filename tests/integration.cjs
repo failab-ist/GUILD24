@@ -1136,8 +1136,7 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
  assert.equal(g.run.money,700,'nothing is paid before DAY 1 opens');
  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
- assert.equal(g.run.money,700+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
- assert.equal(g.run.daily.safeGold,DATA.decorationParams.thriftSafe.dailyGold,'and the DAY 1 ledger says so');
+ assert.equal(g.run.money,700,'the counter pays a customer, never the Store (v2.10.0)');
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
  // changing the Account mid-Run must not reach the Run that already started
@@ -1368,28 +1367,22 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: an ordinary Injury the expedition would leave is not left, up to ten times per Run (User 2026-09-26, v2.9.7)',()=>{
+test('구급품 진열장: 만반의 준비 lowers the rolled Death chance to x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
+ assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(Dungeon.PREPARED.factor,.80);
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
- const weak=(pack=[])=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;return n;};
- const find=want=>{for(let i=0;i<800;i++){const n=weak(),r=Dungeon.resolve(n,d,new RNG('aid-'+i));if(r.outcome===want&&(want!=='부상'||n.injury===1))return 'aid-'+i;}return null;};
- const hurt=find('부상'),dead=find('사망');
- assert.ok(hurt&&dead,'an Injury case and a Death case exist');
- const run={loadout:{display:'aidCabinet'}};
- const healed=weak(),rep=Dungeon.resolve(healed,d,new RNG(hurt),[],run);
- assert.equal(rep.outcome,'부상','the Outcome is the same 부상');assert.equal(healed.injury,0,'but no Injury is left');
- assert.equal(run.aidKitSaves,1,'one of ten is spent');assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
- const bare=weak();Dungeon.resolve(bare,d,new RNG(hurt),[],{loadout:{}});assert.equal(bare.injury,1,'without it the Injury stands');
- /* a carried 구급키트 settles first: the expedition it acted on spends nothing */
- const withKit=weak(['kit']),kitRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
- assert.equal(withKit.injury,0);assert.equal(kitRun.aidKitSaves||0,0,'the Item took it, the count is untouched');
- /* 사망 is not its business any more */
- const died=weak(),deadRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
- assert.equal(died.alive,false,'a Death stands');assert.equal(deadRun.aidKitSaves||0,0);
- /* the tenth is the last */
- const late={loadout:{display:'aidCabinet'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
- assert.equal(tenth.injury,0);assert.equal(late.aidKitSaves,10);
- const eleventh=weak();Dungeon.resolve(eleventh,d,new RNG(hurt),[],late);assert.equal(eleventh.injury,1,'an eleventh is not');
- assert.equal(DATA.decorationParams.aidCabinet.saves,10);
+ const npc=pack=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;n.fatigue=0;n.records=[];return n;};
+ let saved=0,worse=0,diff=0;
+ for(let i=0;i<600;i++){
+  const bare=Dungeon.resolve(npc(['rice','water']),d,new RNG('cab-'+i),[],{loadout:{}}).outcome;
+  const worn=Dungeon.resolve(npc(['rice','water']),d,new RNG('cab-'+i),[],{loadout:{display:'aidCabinet'}}).outcome;
+  if(bare==='사망'&&worn!=='사망')saved++;if(worn==='사망'&&bare!=='사망')worse++;
+  // an adventurer who is not 만반의 준비 (one Item) gets nothing from it
+  const a=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{}}).outcome,b=Dungeon.resolve(npc(['rice']),d,new RNG('cab-'+i),[],{loadout:{display:'aidCabinet'}}).outcome;
+  if(a!==b)diff++;}
+ assert.ok(saved>0,'a prepared failure inside the x .80 band but outside x .60 survives only with it');
+ assert.equal(worse,0,'it never turns a survival into a Death');
+ assert.equal(diff,0,'without 만반의 준비 the outcome is the same with or without it');
+ assert.ok(!/aidKitSaves/.test(source('dist/systems/dungeon.js')),'the old ten 부상 -> 무사 count is gone');
 });
 test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 40% chance (User 2026-09-30, v2.9.13; was 65%)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
@@ -1405,11 +1398,16 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.30&&up/all<.50,'about 40%: '+(up/all));
 });
-test('알뜰 금고: 50G every morning, on the receipt (v2.9.1 balance; was 40G)',()=>{
- const g=wearing(['thriftSafe'],'safe'),s=g.run;
- s.phase='closing';g.closeDay();
- assert.equal(s.day,2,'the Day turned');assert.equal(s.daily.safeGold,50,'the new morning pays into a fresh ledger');
- assert.ok(source('dist/ui/app.js').includes("['알뜰 금고',d.safeGold]"),'and the cash-flow receipt names it (v2.9.7)');
+test('알뜰 금고: the Day\'s first customer brings +100G more, once a Day (User 2026-10-03, v2.10.0; was 50G Store Gold)',()=>{
+ const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b]=s.npcs;
+ for(const n of [a,b]){n.traits=[];n.money=100;n.introduced=true;}
+ s.queue=[a.id,b.id];s.cursor=0;g.arrive();
+ assert.equal(a.money,200,'the first customer to reach the counter: +100G');assert.equal(s.daily.safeWallet,a.id);
+ s.cursor=1;g.arrive();assert.equal(b.money,100,'the second gets nothing');
+ const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
+ assert.equal(c.money,100,'without it, nothing');
+ assert.ok(!source('dist/ui/app.js').includes("'알뜰 금고'"),'the Store receives nothing, so the receipt has no row for it');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,100);
 });
 
 test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estimate is tomorrow\'s real base cost (v2.9.7)',()=>{

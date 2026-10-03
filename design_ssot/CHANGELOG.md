@@ -61,6 +61,12 @@ and this table is their commit record.
 - **추모 방명록 사망 한도 +2 → +1** (User 2026-10-03, after the single-Decoration measurement: alone it was the strongest piece,
   클리어 +22.9%p, with the Death limit now ending half the Runs; `reports/v2100-measure/deco-single.log`). META §counter — 추모 방명록,
   COPY_AUDIT §여덟 장식.
+- **Three Decorations rebalanced after the single-Decoration measurement** (User 2026-10-03): 알뜰 금고 now gives the Day's first
+  customer +100G Wallet (was +50G Store Gold every morning, which moved clear by +0.9%p; the receipt loses its 알뜰 금고 row);
+  명예 모험가 액자 above-평범 chance 75% → 60% (weights [40, 32, 18, 8, 2]); 구급품 진열장 is remade: while worn, 만반의 준비 lowers
+  the rolled Death chance to × 0.60 instead of × 0.80 (was ten 부상 → 무사 a Run, the most zombie-prone piece). META §wall / §counter /
+  §display, DUNGEON_HAZARD §Preparation / Level Death reduction, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, COPY_AUDIT 7-3 / 9-5;
+  tests integration, revision.
 
 ## v2.9.14 quick patch 1 — the strain words find a home (User 2026-10-02; the version stays 2.9.14)
 

@@ -225,7 +225,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
     Day's flags, and each adventurer's own per-Day state (spoiled stock left the night before - nightDiscard). */
  morningReset(){const s=this.run;
-  s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};if(this.wears('thriftSafe')){const g=D.decorationParams.thriftSafe.dailyGold;s.money+=g;s.daily.safeGold=g;}s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.halfPriceUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
+  s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.halfPriceUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
   /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11): nothing is discarded in the morning any more - see nightDiscard(). */
   /* v2.9.0 rest recovery (DUNGEON_HAZARD §SUPPLY -> FATIGUE 6): a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
   s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;n.feast=0;});
@@ -446,7 +446,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;n.money=Math.min(2000,n.money);
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
+ /* META §counter — 알뜰 금고 (User 2026-10-03, v2.10.0; was +50G Store Gold every morning): the Day's first customer to reach
+    the counter brings +100G more, once a Day */
+ if(this.wears('thriftSafe')&&!this.run.daily.safeWallet){n.money+=D.decorationParams.thriftSafe.firstWallet;this.run.daily.safeWallet=n.id;}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
     door. The roll is drawn only while the Decoration is worn and only for an injured arrival. */
  n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}

@@ -1253,7 +1253,7 @@ function closingReceipt(s){
     flows (end - ins + outs), so the tape always adds up. Stock and waste are counts: an expired Item was paid for when it was
     ordered, and printing its cost as a loss read as Gold leaving the drawer twice. */
  const d=s.daily;
- const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['알뜰 금고',d.safeGold],['재고 정리',d.liquidation]];
+ const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['재고 정리',d.liquidation]];
  const outs=[['발주',d.spent,true],['발주 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
  const total=rows=>rows.reduce((t,r)=>t+(r[1]||0),0),change=total(ins)-total(outs),open=s.money-change;
  const line=(r,sign)=>r[1]||r[2]?'<div class="row"><span>'+E(r[0])+'</span><b>'+(r[1]?sign:'')+fmt(r[1]||0)+'</b></div>':'';

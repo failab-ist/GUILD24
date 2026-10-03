@@ -495,7 +495,7 @@ ends with, and by what moved in between - not by cost of goods sold, margin or a
 
 1. `영업 전 자금 {N}G` in a light filled box (the pair of the 보유 자금 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
 2. the Gold that moved today, inflows then outflows; 매출 / 발주 / 운영비 always print, every other row only when it moved:
-   in - 매출, 본사 지원·수당, 대성공 본사 보상, 알뜰 금고, 재고 정리; out - 발주, 발주 교환, 점포지원 투자, 원정 후원, 운영비
+   in - 매출, 본사 지원·수당, 대성공 본사 보상, 재고 정리; out - 발주, 발주 교환, 점포지원 투자, 원정 후원, 운영비
 3. the `보유 자금 {N}G` box - the Day's end Gold, the receipt's largest figure and its stamp (UI_UX §CLOSING — RECEIPT
    STAMP) - with `영업 손익 ±{N}G` inside it: the end Gold less the opening. Only the 영업 손익 figure is coloured: green
    above 0, red below 0, gold at exactly 0

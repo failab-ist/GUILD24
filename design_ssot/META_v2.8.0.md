@@ -375,18 +375,21 @@ two shares add.
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [25, 30, 26, 13, 6]
+rare-NPC rarity weights = [40, 32, 18, 8, 2]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 평범 40% -> 75%), 영웅 and 전설 the most. This
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 평범 40% -> 60%), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
 ### counter — 알뜰 금고
 ```text
-every morning, store Gold +50G (DAY 1 included), shown on the day's receipt
+each Day, the first customer to reach the counter: Wallet +100G (cap 2000)
 ```
+
+Once a Day, on that customer's arrival with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
+has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
@@ -427,12 +430,12 @@ counterfactual reads the same availability.
 
 ### display — 구급품 진열장 (id aidCabinet)
 ```text
-up to ten times per Run, an expedition that would leave an ordinary Injury (부상) leaves none (무사)
+만반의 준비 preparedFactor 0.80 -> 0.60 while worn (DUNGEON_HAZARD §Preparation / Level Death reduction)
 ```
 
-It is 구급키트's `부상 -> 무사` step (ITEM §INSURANCE HIERARCHY), taken in order and counted per Run. A carried 구급키트
-settles first, and an expedition it already acted on spends nothing; 중상 and 사망 are not touched. The RESULT-PROOF
-counterfactual reads the same availability.
+Only an adventurer who departs 만반의 준비 (healthy, Fatigue under 20, 2 Items in the Bag) is helped: the failure Death roll
+is judged against failureDeathChance × 0.60. No count, no new roll, and the SALE `실패 시 사망 위험` stays the raw chance.
+The RESULT-PROOF counterfactual reads the same factor.
 
 ### Prices — EXACT
 

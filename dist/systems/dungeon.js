@@ -418,7 +418,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   /* DUNGEON_HAZARD §Preparation / Level Death reduction: the shadow Bag can lose 만반의 준비
      (2+ Items in the Bag) that the real Bag had, which is exactly the path that proves a second
      sold Item kept the death roll out of the removed band. */
-  const sPrepared=fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition)?PREPARED.factor:1;
+  const sPrepared=fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition)?(ev.preparedFactor??PREPARED.factor):1;
   const sRolled=sDeathChance*sPrepared;
   if(ev.deathRoll<sRolled){
    sOutcome=ev.firstRunGuard?'중상':'사망'; // the real path's first-run guard (resolve) applies here too
@@ -555,7 +555,10 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* Today's Event, read once for the resolution (EVENT 24~55, v2.9.11): escapeCut / outcomeFatigue / xpMult / nightSaves */
  const dayFx=run?.event?.effects||{},dayEv={escapeCut:dayFx.escapeCut||0,outcomeFatigue:dayFx.outcomeFatigue||1,xpMult:dayFx.xpMult||1};
  const medicReady=!!run&&(run.daily?.medicSaves||0)<(dayFx.nightSaves||0);
- const aidKitReady=medicReady||(!!run&&(run.aidKitSaves||0)<D.decorationParams.aidCabinet.saves&&Object.values(run.loadout||{}).includes('aidCabinet'));
+ const aidKitReady=medicReady;
+ /* META §display — 구급품 진열장 (User 2026-10-03, v2.10.0; was ten 부상 -> 무사 a Run): worn, 만반의 준비 lowers the rolled Death
+    chance to x .60 instead of x .80 */
+ const preparedFactor=!!run&&Object.values(run.loadout||{}).includes('aidCabinet')?D.decorationParams.aidCabinet.preparedFactor:PREPARED.factor;
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
@@ -590,7 +593,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
      chance. A roll that only clears the raw chance - inside failureDeathChance but outside the
      reduced band - is not a second Death roll; it settles 중상/부상 the same as any other
      non-Death failure, via one extra draw (bandRoll). */
-  const prepared=fullyPrepared(n,e.fatigueBeforeExpedition)?PREPARED.factor:1;
+  const prepared=fullyPrepared(n,e.fatigueBeforeExpedition)?preparedFactor:1;
   const rolledDeathChance=deathChance*prepared;
   if(deathRoll<rolledDeathChance){
    /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): on the account's first Run no one dies on DAY 1~2 - the Death settles
@@ -645,13 +648,11 @@ function resolve(n,d,r,facilities=[],run,assist=0){
   if(kit.from){aftercare={from:kit.from,to:kit.injury,outcomeFrom:outcome};outcome=kit.tier;
    p.why.push(kit.from===2?'구급키트가 중상을 부상으로 완화':'구급키트가 남을 부상을 제거');
    p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),text:kit.from===2?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.'});}
-  /* META §display — 구급품 진열장 (User 2026-09-26, v2.9.7): up to ten times per Run, an ordinary Injury the expedition would
-     leave is not left - 구급키트's 부상 -> 무사 step. A carried 구급키트 settles first, so an expedition it acted on spends nothing. */
+  /* EVENT nightSaves (길드 의무관): an ordinary Injury the expedition would leave is not left - 구급키트's 부상 -> 무사 step.
+     A carried 구급키트 settles first, so an expedition it acted on spends nothing. */
   else if(outcome==='부상'&&aidKitReady){aftercare={from:1,to:0,outcomeFrom:outcome};
-   if(medicReady){run.daily.medicSaves=(run.daily.medicSaves||0)+1;
-    p.why.push('길드 의무관이 남을 부상을 제거');p.events.push({id:'medic',items:[],text:'길드 의무관이 남을 부상을 없앴다.'});}
-   else{run.aidKitSaves=(run.aidKitSaves||0)+1;
-    p.why.push('구급품 진열장이 남을 부상을 제거');p.events.push({id:'aidKit',items:[],text:'구급품 진열장이 남을 부상을 없앴다.'});}}}
+   run.daily.medicSaves=(run.daily.medicSaves||0)+1;
+   p.why.push('길드 의무관이 남을 부상을 제거');p.events.push({id:'medic',items:[],text:'길드 의무관이 남을 부상을 없앴다.'});}}
  /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
     after combat let a later environmental injury overwrite it, and judging it on the post-noise
     score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,
@@ -721,7 +722,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
