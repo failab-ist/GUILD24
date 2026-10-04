@@ -486,16 +486,16 @@ test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is pai
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): from DAY 5 an open window redraws its three for 300G, doubling within the
    window and back to 300G on the next; never on DAY 0; the spend is Store Support investment and survives a reload. */
 test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0 offers 일반 only; D5+ cards roll 60 / 28 / 12',()=>{
- const offered=DATA.relics.filter(r=>!DATA.relicRetired.includes(r.id)),count=gr=>offered.filter(r=>r.grade===gr).length;
- assert.deepEqual([count('common'),count('rare'),count('epic')],[17,10,7]);
- assert.deepEqual(DATA.relicGradeChance,{common:.60,rare:.28,epic:.12});
- assert.deepEqual(DATA.relicGradeNames,{common:'일반',rare:'희귀',epic:'영웅'});
- for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('grade-d0-'+i);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].grade==='common'),'D0 is 일반 only');}
- const g=new Game();g.autosave=false;g.start('grade-share');const n={common:0,rare:0,epic:0};let cards=0;
- for(let i=0;i<1500;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);for(const id of g.run.relicWindow.candidateIds){n[DATA.relicBy[id].grade]++;cards++;}}
- for(const [gr,want] of Object.entries(DATA.relicGradeChance))assert.ok(Math.abs(n[gr]/cards-want)<.03,gr+' share '+(n[gr]/cards).toFixed(3));
- // 영웅 can come from D5 (the retired Keystone-from-D10 rule is gone)
- assert.ok(n.epic>0,'영웅 on D5');
+ // the 등급 is an Item rarity index (0 일반 · 2 희귀 · 3 영웅), so it reads the Item rarity names
+ const offered=DATA.relics.filter(r=>!DATA.relicRetired.includes(r.id)),count=x=>offered.filter(r=>r.rarity===x).length;
+ assert.deepEqual([count(0),count(2),count(3)],[17,10,7]);
+ assert.deepEqual(DATA.relicRarityChance,{0:.60,2:.28,3:.12});
+ assert.deepEqual([0,2,3].map(x=>DATA.rarities[x]),['일반','희귀','영웅']);
+ for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('grade-d0-'+i);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'D0 is 일반 only');}
+ const g=new Game();g.autosave=false;g.start('grade-share');const n={0:0,2:0,3:0};let cards=0;
+ for(let i=0;i<1500;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);for(const id of g.run.relicWindow.candidateIds){n[DATA.relicBy[id].rarity]++;cards++;}}
+ for(const [x,want] of Object.entries(DATA.relicRarityChance))assert.ok(Math.abs(n[x]/cards-want)<.03,DATA.rarities[x]+' share '+(n[x]/cards).toFixed(3));
+ assert.ok(n[3]>0,'영웅 on D5 (the Keystone-from-D10 rule is gone)');
 });
 test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
  const g=new Game();g.autosave=false;g.start('relic-reroll');

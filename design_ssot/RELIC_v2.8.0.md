@@ -218,8 +218,9 @@ buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약�
 
 ## GRADE
 
-Every Store Support has a Player-facing grade: 일반 · 희귀 · 영웅. The grade follows measured contribution (single ownership,
-`reports/relic-balance/v2104-grade/`), not the internal kind.
+Every Store Support has a Player-facing 등급: 일반 · 희귀 · 영웅, held as the Item rarity index (0 · 2 · 3) so it reads the Item
+rarity names and colours. The 등급 follows measured contribution (single ownership, `reports/relic-balance/v2104-grade/`), not
+the internal kind.
 
 ```text
 영웅 (7)  : 24시간 신선체계 · 물류 본부계약 · 평생 단골제 · 왕도 프리미엄 인증 · 원정 작전실 · 지역 거점점 계약 · 응급 처치대

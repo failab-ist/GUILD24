@@ -940,6 +940,10 @@ Buy or `나중에 결정`; deferring never rerolls candidates/prices; Save/Reloa
 Cards never show internal taxonomy (Foundation / Hybrid / Keystone / Utility; Rotation / VIP / Premium / Expedition / Fresh /
 Customer Axis; `신선식품 · 기반`-style labels); synergy is discovered from effects.
 
+The card does show the support's 등급 (RELIC §GRADE, User 2026-10-04): the word `일반` / `희귀` / `영웅` directly under the name, in
+the Item rarity colour's paper shade, and the divider under it drawn 3px in the same colour. The owned list (보유 점포지원) shows
+the same word under each name. All three D5 cards still fit at 1280×880.
+
 Owned Relic Quick View — Morning=YES, Order=YES, Sale=YES, readOnly=YES: name + actual effect/condition; a condition-type
 support adds one runtime status line (RELIC §QUICK VIEW STATUS LINE; lines COPY_AUDIT §11-32); no HUD, badge or verdict word;
 no purchase/defer/timing change during Sale. A Relic reads as a Run-build choice, not a settings menu. Authoritative ->

@@ -50,15 +50,15 @@ const rows=[
 ['rescueContract','길드 구조대 계약','hybrid',['expedition'],200,p=>'원정에서 사망 결과가 나오면 '+pct(p.rescueContract.chance)+' 확률로 중상으로 바뀌어 돌아온다.']
 ];
 /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
-/* RELIC §GRADE (User 2026-10-04): the Player-facing grade, matched to measured contribution. kind / tags stay the internal
-   build taxonomy; a window draws a grade per card first (D.relicGradeChance), then a support of that grade. */
+/* RELIC §GRADE (User 2026-10-04): the Player-facing 등급, matched to measured contribution, held as an Item rarity index
+   (0 일반 · 2 희귀 · 3 영웅) so it reads the Item rarity names and colours. kind / tags stay the internal build taxonomy; a
+   window draws a rarity per card first (D.relicRarityChance), then a support of that rarity. */
 const GRADE={epic:['fresh24','logisticsHQ','lifetime','royalCert','opsRoom','hub','firstAidDesk'],
  rare:['kitchen','extraOrder','returnPoints','dawnRecovery','groupOrder','premiumMember','expeditionMeal','supplyCert','coldcase','rescueContract','memberBundle']};
-const gradeOf=id=>GRADE.epic.includes(id)?'epic':GRADE.rare.includes(id)?'rare':'common';
-D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,grade:gradeOf(id),tags,price,
+const rarityOf=id=>GRADE.epic.includes(id)?3:GRADE.rare.includes(id)?2:0;
+D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,rarity:rarityOf(id),tags,price,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})},'description',{get:()=>copy(D.relicParams),enumerable:true}));
-D.relicGradeChance={common:.60,rare:.28,epic:.12};
-D.relicGradeNames={common:'일반',rare:'희귀',epic:'영웅'};
+D.relicRarityChance={0:.60,2:.28,3:.12};
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 /* Effect STRENGTH of every support, read by its use sites. The trigger conditions (3+ of one
    SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;
