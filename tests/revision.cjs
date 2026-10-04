@@ -758,4 +758,18 @@ test('ORDER sheet: at most offerCounterMax Hazard Counters, the guarantee still 
  assert.ok(wide>4,'with 본사 추가발주권 the sheet can carry more than four Counters: '+wide);
 });
 
+/* UI_UX §BUILD MARKER: a save names the build that wrote it; the field is metadata only */
+test('a save carries build {version, commit}, and loads with or without it',()=>{
+ const g=fresh('build-in-save'),had=globalThis.GUILD24_BUILD;
+ try{
+  globalThis.GUILD24_BUILD={version:'9.9.9',commit:'abc1234'};
+  const out=JSON.parse(Save.export(g.account,g.run));
+  assert.deepEqual(out.build,{version:'9.9.9',commit:'abc1234'},'export names the build');
+  assert.deepEqual(Save.import(JSON.stringify(out)).build,{version:'9.9.9',commit:'abc1234'},'import keeps it for a reader');
+  delete out.build;assert.ok(Save.import(JSON.stringify(out)).run,'a save without build still loads');
+  delete globalThis.GUILD24_BUILD;
+  assert.equal(JSON.parse(Save.export(g.account,g.run)).build,undefined,'no build marker, no field');
+ }finally{if(had===undefined)delete globalThis.GUILD24_BUILD;else globalThis.GUILD24_BUILD=had;}
+});
+
 console.log(checks+' revision groups passed');

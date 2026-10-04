@@ -29,6 +29,12 @@ and this table is their commit record.
 | v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR #67 | `v2.10.1` (set by the User) |
 | v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one) | `v2.10.2` (set by the User) |
 
+## v2.10.2 quick patch 1 — a save names its build (User 2026-10-04; the version stays 2.10.2)
+
+- **Every save carries `build: {version, commit}`** (User: 세이브에 빌드 정보도 넣게): the autosave and `저장 내보내기` write the same
+  pair the build marker shows, beside the save `version`. Read-only metadata - never validated, and a save without it still loads;
+  no new save generation. `tools/save-check.cjs` prints it at the top of its report. UI_UX §BUILD MARKER; test revision.
+
 ## v2.10.2 — SALE phone spacing, line breaks and loading (User 2026-10-04)
 
 A presentation-only version: the `ui/design-trim` PRs #68~#74 (loading screen, bag text, decoration window, ORDER / SALE scroll fixes, SALE phone spacing, restored Stat change colours, the 추가 구매 wallet line, an opaque lower area, and sentence-level line breaks for every plain sentence block). No rule, balance or save change.
