@@ -865,8 +865,8 @@ function deepSlip(){
 function eventSlip(e){
  return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
  +'<span class="stamp-line">오늘의 사건</span><b>'+E(e.name)+'</b>'
- +'<span class="flavor">'+E(e.reveal)+'</span>'
- +'<span class="effect">'+E(e.description)+'</span></button>';}
+ +'<span class="effect"><i>효과</i><span>'+E(e.description)+'</span></span>'
+ +'<span class="flavor"><span>'+E(e.reveal)+'</span></span></button>';}
 /* Owned store support used to sit on the counter as a row of brass plates, which is where
    the float is. It crowded the till off its own surface, so the counter now carries the
    register and nothing else and the standing list lives in the store menu instead - the same
@@ -1944,7 +1944,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>'
  +status+'<div class="tills">'+actions+'</div></div>';}
-function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
+function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(e.description)+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</details>';}
 /* UI-Q111. Both screens that take a commitment - the order and the sale - need what the
    store is already running to be checkable in one tap before committing, and neither had it:
