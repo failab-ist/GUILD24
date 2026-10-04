@@ -4066,7 +4066,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media (min-width:1024px){
  .pro-cap{font-size:clamp(30px,2vw,40px);padding:24px}
  .prologue[data-scene="1"] .pro-art{transform:scale(1.2)}
- .prologue{--f5:clamp(26px,1.7vw,34px)}
+ .prologue{--f5:clamp(30px,2vw,40px)}
+ .prologue[data-scene="3"] .pro-cap{font-size:var(--f5)}
  .prologue[data-scene="2"] .pro-cap,.prologue[data-scene="5"] .pro-cap{font-size:var(--f5)}
  .pro-npc{width:auto;height:58%;bottom:20%}
  .pro-skip{top:24px;right:24px;font-size:15px;padding:10px 18px}

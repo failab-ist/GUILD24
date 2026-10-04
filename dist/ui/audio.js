@@ -203,7 +203,7 @@ function noiseVoice(when,duration,volume,spec,bus){
   const d=noiseBuf.getChannelData(0);let seed=1;
   for(let i=0;i<n;i++){seed=(seed*1103515245+12345)&0x7fffffff;d[i]=seed/0x3fffffff-1;}}
  const src=ctx.createBufferSource();src.buffer=noiseBuf;src.loop=true;
- const f=ctx.createBiquadFilter();f.type=spec.filter||'bandpass';f.frequency.value=spec.hz??1200;f.Q.value=spec.q??1;
+ const f=ctx.createBiquadFilter();f.type=spec.filter||'bandpass';f.frequency.setValueAtTime(spec.hz??1200,when);f.Q.value=spec.q??1;if(spec.to)f.frequency.exponentialRampToValueAtTime(spec.to,when+duration);
  const g=ctx.createGain();g.gain.setValueAtTime(0,when);g.gain.linearRampToValueAtTime(volume,when+.008);g.gain.exponentialRampToValueAtTime(.0001,when+duration);
  src.connect(f);f.connect(g);g.connect(bus||sfxBus||ctx.destination);src.start(when);src.stop(when+duration+.02);}
 /* A decision cue has to be readable over its own phase bed on a phone speaker. Pulling the
@@ -271,7 +271,7 @@ const shape={
  /* the recorded door is the body; the two notes stay as the fallback when it has not loaded */
  depart:{gain:.9,dur:.2,type:'sine',step:.1,sampleGain:.8},
  /* UI_UX §PROLOGUE scene 3: the music cuts and a falling wah-wah answers the joke */
- page:{noise:[{at:0,dur:.14,gain:.5,hz:2600,q:.7},{at:.05,dur:.14,gain:.8,hz:3400,q:.7},{at:.1,dur:.14,gain:1,hz:4400,q:.7},{at:.15,dur:.16,gain:.8,hz:5600,q:.7},{at:.2,dur:.22,gain:.5,hz:7000,q:.8,filter:'highpass'}]},
+ page:{noise:[{at:0,dur:.3,gain:.55,hz:700,to:3200,q:.8},{at:.03,dur:.04,gain:.7,hz:5200,q:.5,filter:'highpass'},{at:.07,dur:.03,gain:.5,hz:6000,q:.5,filter:'highpass'},{at:.1,dur:.05,gain:.8,hz:4800,q:.5,filter:'highpass'},{at:.15,dur:.03,gain:.55,hz:6200,q:.5,filter:'highpass'},{at:.19,dur:.04,gain:.7,hz:5000,q:.5,filter:'highpass'},{at:.27,dur:.1,gain:1,hz:2600,to:700,q:.9}]},
  gag:{cut:250,gain:.7,dur:.24,type:'square',over:[.3],step:.17,sampleGain:.8},
  return:{gain:.95,dur:.22,type:'sine',step:.1,hit:1},
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
