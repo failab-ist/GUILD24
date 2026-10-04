@@ -704,8 +704,13 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
   trainingSign:'처음 찾아오는 모험가는 55% 확률로 레벨 +1로 온다',
   infirmaryPlaque:'부상당한 손님이 가게에 오면 40% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
-  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)'};
- assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all eight Decorations are audited');
+  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)',
+  /* 운영형 (User 2026-10-04) */
+  heroSign:'첫 점포지원을 영웅 등급 3장 중에서 고른다',
+  cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다',
+  voucher:'밤마다 살아 있는 모든 손님의 피로가 3 줄어든다',
+  rerollCoupon:'점포지원 후보 교환이 창마다 처음 한 번 무료'};
+ assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
  for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');
  for(const d of DATA.decorations)assert.ok(!d.effect.endsWith('.'),d.id+' has no closing period');
  const swap=(obj,key,value,read)=>{const was=obj[key];obj[key]=value;try{return read();}finally{obj[key]=was;}};

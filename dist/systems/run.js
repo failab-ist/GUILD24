@@ -223,6 +223,8 @@ P.finalPreRoll=function(packs){const s=this.run,d=s.dungeons[0];
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
  const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
  const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
+ /* META 단골 감사 현수막 reaches the Final party too: 투력 x(1 + floor(단골도 / 10) x 3%) */
+ if(this.wears('cheerBanner'))snapshots.forEach((e,i)=>{e.combat*=1+Math.floor((team[i].loyalty||0)/10)*D.decorationParams.cheerBanner.perTen;});
  const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,finalMeanHazardGap(preparations[i])),0); // 5-6
  const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7
  return {d,team,preparations,context,snapshots,power,bossPower};};

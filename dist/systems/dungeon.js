@@ -352,10 +352,13 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 /* ITEM §귀환석: an expedition that ends in 부상/중상/사망 rolls once more for a retreat, at the adventurer's own retreat
    chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that chance is. One formula for the real resolution
    and its proof. */
+/* META 단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%), read where 구급품 진열장's power bonus is */
+const cheer=(on,loyalty)=>on?1+Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen:1;
 function stoneChance(e,d){return clamp(.40+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
  if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+ se.combat*=cheer(ev.banner,departure.loyalty);
  const sAbility=preparedPower(se);
  const sAssist=ev.assist||0;
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
@@ -498,6 +501,7 @@ function combatProof(departure,pack,d,facilities,ev){
  const items=[...new Set(pack.filter((_,i)=>{
   const sp=prepare({...departure,pack:pack.filter((_,j)=>j!==i)},d,facilities),se=sp.effects;
   if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack:pack.filter((_,j)=>j!==i)},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+  se.combat*=cheer(ev.banner,departure.loyalty);
   const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
   return preparedPower(se)*(1+(ev.assist||0))*sNoise<d.power;
  }))];
@@ -511,12 +515,13 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     which by the time resultProof() runs has already been mutated by this same resolution
     (growth, injury/aftercare, fatigue, equipment). Only Bag composition may differ between
     the actual and shadow preparation states. */
- const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast};
+ const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast,loyalty:n.loyalty};
  const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
  /* META §display — 구급품 진열장: a 만반의 준비 departure gets 투력 x powerMult and preparedFactor (ordinary expeditions only) */
  const cabinet=!!run&&Object.values(run.loadout||{}).includes('aidCabinet');
  if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
+ const banner=!!run&&Object.values(run.loadout||{}).includes('cheerBanner');e.combat*=cheer(banner,n.loyalty);
 
  const ability=preparedPower(e);
  /* RESULT-PROOF: this expedition's real random draws are named as they are drawn, in the
@@ -703,8 +708,8 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
- const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,combatSuccess});
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll,greatRoll,aidKitReady,preparedFactor,cabinet,banner,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
+ const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,banner,combatSuccess});
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */

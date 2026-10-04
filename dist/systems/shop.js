@@ -629,6 +629,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,D.balance.returnLoyalty);if(n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
+ /* META 휴식 바우처 꽂이: every living adventurer rests 3 Fatigue off overnight, visitor or not */
+ if(this.wears('voucher'))for(const n of s.npcs)if(n.alive)n.fatigue=Math.max(0,(n.fatigue||0)-D.decorationParams.voucher.fatigue);
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;

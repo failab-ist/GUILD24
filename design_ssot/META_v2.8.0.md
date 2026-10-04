@@ -358,15 +358,15 @@ Decoration ownership and Decoration activation are separate.
 
 Active Slot set: `sign` · `wall` · `counter` · `display`
 
-Each Slot holds two Decorations: an economy Decoration and a survival / combat alternative. A Slot wears exactly one, so
-the pick is a choice between running the store and keeping its people alive. Account/Save/data/UI structures must not
-assume two per Slot forever.
+Each Slot holds three Decorations: an economy Decoration, a survival / combat alternative and an 운영형 (operation)
+Decoration. A Slot wears exactly one, so the pick is a choice between running the store, keeping its people alive and
+what 본사 sends. Account/Save/data/UI structures must not assume a fixed count per Slot.
 
 The Decoration system adds no Decoration levels, upgrades, rarity ladder, random Decoration shop or free-placement
 furniture editing.
 
 Decoration ids and art files read as the current names: `sponsorSign`, `honorFrame`, `guildShelf`, `thriftSafe`,
-`trainingSign`, `infirmaryPlaque`, `memorialBook`, `aidCabinet`.
+`trainingSign`, `infirmaryPlaque`, `memorialBook`, `aidCabinet`, `heroSign`, `cheerBanner`, `voucher`, `rerollCoupon`.
 
 ## INITIAL FOUR DECORATIONS — EXACT EFFECT IDENTITY
 
@@ -451,18 +451,49 @@ expedition (not the Final): the prepared 투력 is × 1.05 before the combat rol
 failureDeathChance × 0.60. No count, no new roll; the SALE outlook and `실패 시 사망 위험` stay the pre-supply readings. The
 RESULT-PROOF counterfactual reads the same two terms.
 
+## OPERATION DECORATIONS — EXACT EFFECT IDENTITY
+
+운영형: each is something 본사 did for the store. One per Slot, beside that Slot's other two. They change how the
+점포지원 window is drawn or priced, or reach every adventurer; they never inject a Relic id, mark a Relic as owned or take
+a Relic slot (the boundary above holds).
+
+### sign — 본사 특별 지원 간판 (id heroSign)
+```text
+the DAY 0 free 점포지원 pick is drawn from 영웅 (3 cards) instead of 일반
+```
+
+Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says.
+
+### wall — 단골 감사 현수막 (id cheerBanner)
+```text
+투력 × (1 + floor(단골도 / 10) × 3%)
+```
+
+Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF
+counterfactual reads the same term.
+
+### counter — 휴식 바우처 꽂이 (id voucher)
+```text
+every Night: every living adventurer's Fatigue -3 (visitors or not, 중상 recovery included; floor 0)
+```
+
+### display — 지원 교환 쿠폰함 (id rerollCoupon)
+```text
+each 점포지원 window: the first candidate reroll is free, then 300G, 600G ... (RELIC §CANDIDATE REROLL from its first step)
+```
+
 ### Prices — EXACT
 
 `DIRECTOR DOCUMENT BASELINE` (cheapest 500, dearest 3×, total 3,750; sign 1250 -> 1500 User 2026-10-03, money gathers faster late)
 
 ```text
-sign    원정 지원금 간판 / 훈련소 제휴 간판   1500 Store Capital
-wall    명예 모험가 액자 / 의무실 현판        1000 Store Capital
-counter 알뜰 금고 / 추모 방명록             750 Store Capital
-display 길드 추천 매대 / 구급품 진열장       500 Store Capital
+sign    원정 지원금 간판 / 훈련소 제휴 간판 / 본사 특별 지원 간판   1500 Store Capital
+wall    명예 모험가 액자 / 의무실 현판 / 단골 감사 현수막          1000 Store Capital
+counter 알뜰 금고 / 추모 방명록 / 휴식 바우처 꽂이               750 Store Capital
+display 길드 추천 매대 / 구급품 진열장 / 지원 교환 쿠폰함         500 Store Capital
 ```
 
-Both Decorations of a Slot cost the same, so price never decides between them. The display Slot is the cheapest so a
+Every Decoration of a Slot costs the same, so price never decides between them. The display Slot is the cheapest so a
 first Decoration is the earliest within reach.
 
 ## STORE-GROWTH VISUAL PROJECTION — PRESENTATION ONLY

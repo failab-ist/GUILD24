@@ -35,17 +35,20 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
 /* The candidate draw, one owner: the window and its reroll read the same pool rules. `avoid` is the set kept off this
    draw when at least three others remain - the previous window's three for a new window, the three on the table for a
    reroll. Picks are drawn first, then prices, so a window draws exactly as it always has. */
+/* META 본사 특별 지원 간판: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
+const heroDay0=g=>!!g.wears&&g.wears('heroSign');
 /* RELIC §GRADE: each card rolls its 등급 first (DAY 0: 일반 only), then draws within it; a 등급 with nothing left
    falls back to the whole pool. Diversity and build bias work inside the 등급, as they did inside the window. */
-const rarityFor=(g,day)=>{if(day===0)return 0;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
-function drawCandidates(g,day,avoid){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===0)&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags),want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool;let eligible=base;if((i===1||day===0&&i===2)&&base.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=base.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=g.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
+const rarityFor=(g,day)=>{if(day===0)return heroDay0(g)?3:0;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
+function drawCandidates(g,day,avoid){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0))&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags),want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool;let eligible=base;if((i===1||day===0&&i===2)&&base.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=base.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=g.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
  return {candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+g.rng.next()*.3)))};}
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
  s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),...drawCandidates(this,day,previous),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): an open, unspent window from DAY 5 on may redraw its three for Gold - 300G,
    doubling with each reroll of the same window, back to 300G on the next window. The DAY 0 free pick has none. The redraw
    keeps every pool rule and leaves the three on the table out when it can; the spend is 점포지원 investment. */
-P.relicRerollPrice=function(){const w=this.run.relicWindow;return D.balance.relicReroll.base*2**(w?.rerolls||0);};
+/* META 지원 교환 쿠폰함: the window's first redraw is free, then the ordinary curve from its first step (0 -> 300 -> 600...) */
+P.relicRerollPrice=function(){const w=this.run.relicWindow,n=w?.rerolls||0;if(this.wears('rerollCoupon')){if(!n)return 0;return D.balance.relicReroll.base*2**(n-1);}return D.balance.relicReroll.base*2**n;};
 P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.milestoneDay!==0&&this.canBuyRelic();};
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');

@@ -1,5 +1,5 @@
 // LIVE STORE DECORATION SEATING (UI_UX §LIVE STORE DECORATION SEATING; UI-Q-v29-40) - runtime regression.
-// Dev-only. Both Decoration sets are equipped and a Run is played to its first MORNING at the phone widths in the heights a
+// Dev-only. Each Decoration set is equipped and a Run is played to its first MORNING at the phone widths in the heights a
 // phone browser actually leaves (bars showing: the painting is then cropped at the top and bottom, not the sides) and at the
 // portrait and landscape tablet sizes and the desk widths. At each size: the till housing stands on the painted counter top (the painting is
 // cropped top and bottom on a tablet, and the counter band follows it), the sign and the plaque sit on the point of the
@@ -15,7 +15,8 @@ const results=[];const check=(name,ok,detail='')=>{results.push({name,ok});conso
 function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
  return new Promise((res,rej)=>{child.stdout.on('data',d=>String(d).includes('ready')&&res(child));setTimeout(()=>rej(Error('preview server did not start')),8000);});}
 const SIZES=[[360,640],[360,740],[375,667],[390,664],[390,844],[412,915],[430,740],[768,1024],[820,1180],[900,700],[1023,768],[1024,768],[1280,880],[1920,1080]];
-const SETS={economy:['sponsorSign','honorFrame','thriftSafe','guildShelf'],survival:['trainingSign','infirmaryPlaque','memorialBook','aidCabinet']};
+const SETS={economy:['sponsorSign','honorFrame','thriftSafe','guildShelf'],survival:['trainingSign','infirmaryPlaque','memorialBook','aidCabinet'],
+ operation:['heroSign','cheerBanner','voucher','rerollCoupon']};
 // the file's own points (ui.css §.decoplate.sign / .wall), per file
 // and the painted counter top the till's feet stand on, as a band of the file's height
 const POINT={phone:{ar:941/1672,sign:[.15,.113],wall:[.76,.55],counter:[.742,.762]},wide:{ar:1672/941,sign:[.29,.093],wall:[.629,.44],counter:[.827,.855]}};

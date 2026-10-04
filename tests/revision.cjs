@@ -276,8 +276,9 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  // prices re-tuned 2026-09-25, v2.9.1 balance; sign 1250 -> 1500 (User 2026-10-03, v2.10.0): cheapest 500, dearest 3x, total 3,750
  assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
   [['sign',1500],['wall',1000],['counter',750],['display',500],
+   ['sign',1500],['wall',1000],['counter',750],['display',500],
    ['sign',1500],['wall',1000],['counter',750],['display',500]],
-  'the approved prices ship: each Slot\'s survival alternative costs what its economy Decoration costs (User 2026-09-24)');
+  'the approved prices ship: each Slot\'s survival and 운영형 alternatives cost what its economy Decoration costs (User 2026-09-24 / 2026-10-04)');
 });
 
 test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{

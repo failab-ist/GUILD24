@@ -31,12 +31,21 @@ G.DATA.decorations=[
  {id:'memorialBook', kind:'survival', slot:'counter', name:'추모 방명록',   price:750, effect:p=>'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 '+p.memorialBook.deathLimitBonus+'명 늘어난다',
   text:'계산대 옆 방명록과 초. 사람들은 이 점포가 잊지 않는다는 걸 안다.'},
  {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:p=>'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +'+pct(p.aidCabinet.powerMult-1)+'. 원정에 실패해도 죽을 확률이 '+pct(1-p.aidCabinet.preparedFactor)+' 줄어든다 (기존 20%)',
-  text:'붉은 상자가 놓인 유리장. 챙길 걸 다 챙긴 손님일수록 무사히 돌아온다.'}];
+  text:'붉은 상자가 놓인 유리장. 챙길 걸 다 챙긴 손님일수록 무사히 돌아온다.'},
+ /* META §OPERATION DECORATIONS (User 2026-10-04): 운영형 - something 본사 did for the store, one per Slot, the Slot's price */
+ {id:'heroSign', kind:'operation', slot:'sign', name:'본사 특별 지원 간판', price:1500, effect:()=>'첫 점포지원을 영웅 등급 3장 중에서 고른다',
+  text:'본사가 우수 점포로 골라 특별 지원을 보내 준 간판.'},
+ {id:'cheerBanner', kind:'operation', slot:'wall', name:'단골 감사 현수막', price:1000, effect:p=>'손님의 투력이 단골도 10마다 '+pct(p.cheerBanner.perTen)+' 오른다',
+  text:'본사가 보내 준 단골 감사 현수막. 단골일수록 어깨에 힘이 들어간다.'},
+ {id:'voucher', kind:'operation', slot:'counter', name:'휴식 바우처 꽂이', price:750, effect:p=>'밤마다 살아 있는 모든 손님의 피로가 '+p.voucher.fatigue+' 줄어든다',
+  text:'본사가 제휴 여관 휴식 바우처를 보내 왔다. 손님들이 한 장씩 집어 간다.'},
+ {id:'rerollCoupon', kind:'operation', slot:'display', name:'지원 교환 쿠폰함', price:500, effect:()=>'점포지원 후보 교환이 창마다 처음 한 번 무료',
+  text:'본사가 보내 준 지원 교환 쿠폰. 마음에 안 들면 한 번은 그냥 바꾼다.'}];
 /* The numbers the four alternatives read; the effect copy above reads them. */
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance); the effect copy above reads them. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={sponsorSign:{budgetShare:.50},thriftSafe:{firstWallet:200,customers:2},honorFrame:{weights:[40,32,18,8,2]},
+G.DATA.decorationParams={cheerBanner:{perTen:.03},voucher:{fatigue:3},sponsorSign:{budgetShare:.50},thriftSafe:{firstWallet:200,customers:2},honorFrame:{weights:[40,32,18,8,2]},
  memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.40},trainingSign:{levelBonus:1,chance:.55},aidCabinet:{preparedFactor:.60,powerMult:1.05}};
 /* META §INITIAL FOUR DECORATIONS copy (User 2026-10-04): who gains first, no closing period (COPY_AUDIT §9-5); every
    number is read from decorationParams / D.balance when the card is drawn, so `effect` is a getter over the live tables. */
