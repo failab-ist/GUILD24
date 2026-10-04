@@ -129,7 +129,8 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
-beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item. The desk rack shows every
+beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item, in the SALE shelf's order
+(§SALE — SHELF ORDER: today's Hazard answers first, User 2026-10-04). The desk rack shows every
 store slot, the empty ones as empty cells; the phone sheet draws only held units, so it takes as many rows as the stock needs
 (one while it fits) and the room left reads in the header's `N / M칸`; while it is open the 발주서 scrolls up above it by the
 sheet's own height, no more (User 2026-10-02: a fixed 45% left an empty stretch under a one-row sheet). Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
@@ -447,7 +448,8 @@ One counter tray, a fixed band directly above the dock outside the scrolled colu
 LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen keeps its per-row panel
 (FINAL_EXPEDITION_v2.8.0.md §3).
 - tapping a shelf row puts its Item on the tray; the row is only highlighted; rows never change height
-- §SALE — SHELF ORDER: by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
+- §SALE — SHELF ORDER (User 2026-10-04): an Item that answers a Hazard of today's open Gates leads, in the Gates' Hazard order (any kind —
+  a Food or Drink with a Hazard line counts); the rest follow by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
   Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
 - shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
@@ -3117,9 +3119,9 @@ FAIL: a badge / word / reorder marks the fit, or any effect is emphasised.
 
 SETUP: ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's
 customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
-PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `{N}명 · {Gate}` with no per-Gate count; two or
-more `{N}명 · {Gate A} {a} · {Gate B} {b}`, summing to N; an Event-closed Gate beside one open Gate
-`{N}명 · {Gate} {n} · {닫힌 Gate} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
+PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `전체 {N}명 {Hazard}{Tier}` with no count; two or
+more `전체 {N}명 {Hazard}{Tier} {a}명 …` (a Tier II-III Gate lists both Hazards with its one count); an Event-closed Gate beside one open Gate
+`전체 {N}명 {Hazard}{Tier} {n}명 {닫힌 Gate의 Hazard}{Tier} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
 rerouted customer's true Gate; no name, Job, Trait, Wallet or individual destination of a future customer (UI-Q91 / UI-Q101,
 narrowed to the individual).
 FAIL: per-Gate counts on a one-Gate day with no closed Gate, no count on the open Gate beside a closed one, a count that exposes a

@@ -1586,7 +1586,7 @@ function statGrid(n){
    told once that Day: the ORDER `kit` mark sits on its cell (desk) or the 창고 handle (phone, where the sheet starts folded).
    A save from before `lessonKitDay` had the lesson on DAY 3. */
 const lessonKit=()=>{const s=game.run;return !!(s?.firstRun&&s.lessonInjured&&(s.lessonKitDay??3)===s.day);};
-function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=groupStock().map(g=>g.item),units=[];let kit=lessonKit();
+function stockSlots(full=false){const s=game.run,cap=game.capacity(),order=shelfOrder(groupStock()).map(g=>g.item),units=[];let kit=lessonKit();
  for(const item of order)units.push(...s.inventory.filter(x=>x.item===item).sort((a,b)=>(a.expires??99)-(b.expires??99)));
  return '<ol class="wh-slots">'+units.map((st,i)=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day,
    label=E(it.name)+(left===null?'':' · '+left+'일');
@@ -1636,8 +1636,14 @@ function orderScreen(){
    hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
 function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
-function todayLine(counts,tag='em'){const s=game.run,shut=(s.closedGates||[]).map(d=>E(d.name)+' 오늘 폐쇄');
- return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).concat(shut).join(' · '):E(s.dungeons.map(d=>d.name).join(' / '))+(shut.length?' · '+shut.join(' · '):''));}
+/* User 2026-10-04: the Gates read as their Hazards - `부식I 3명` (name and Tier set tight, then the visitors) - so what is bought
+   against is what is counted. `전체 N명` leads, stronger, in a column of its own; the Hazards run beside it and, when the line
+   runs out, wrap under the first Hazard rather than under the total. Each reading is one unbreakable chip; a Tier II-III Gate's
+   two Hazards sit side by side, both carrying the Gate's one count; a closed Gate comes last. */
+function todayLine(counts,tag='em'){const s=game.run,hz=d=>d.hazards.map(h=>E(D.hazards[h])+['','I','II','III'][d.tier||1]),
+ chips=s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
+  .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>'));
+ return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+chips.join('')+'</span></span>';}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
@@ -1758,11 +1764,14 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
    mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
    and the next Day sorts afresh. */
 const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
-function shelfOrder(stocks){const s=game.run,key=s.seed+':'+s.day+':'+s.phase;
+/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04) */
+const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];
+function shelfOrder(stocks,byHazard=true){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,hz=byHazard?todayHazards():[];
  if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
  for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
- const rank=st=>{const it=D.itemBy[st.item];return [SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity];};
- return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2];});}
+ const rank=st=>{const it=D.itemBy[st.item],c=Object.keys(it.effects).map(k=>hz.indexOf(k)).filter(i=>i>=0);
+  return [c.length?Math.min(...c):hz.length,SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity];};
+ return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];});}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    /* SALE §MATCHING-EFFECT EMPHASIS — RETIRED (User 2026-09-24, v2.9.0): every effect text keeps the default
@@ -1773,7 +1782,7 @@ function shelf(isFinal=false){
    +(isFinal?'':relicRef())+'</div><div class="goods">'
  /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
     held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
- +shelfOrder(stocks).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
+ +shelfOrder(stocks,!isFinal).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'

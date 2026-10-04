@@ -3049,10 +3049,13 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
  assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("left<=1?'오늘까지':left===2?'내일까지':'폐기까지 '+left+'일'"),'§4-10 the shelf-life state stays, as the last sale day (v2.9.10), and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
  // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
- assert.ok(fn('shelf').includes('+shelfOrder(stocks).map(st=>{'),'the shelf reads its order from shelfOrder');
+ assert.ok(fn('shelf').includes('+shelfOrder(stocks,!isFinal).map(st=>{'),'the shelf reads its order from shelfOrder (today\'s Hazard order off in the Final)');
  assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');
  assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at))at[st.item]=st.expires;'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
- assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2];')&&fn('shelfOrder').includes('-it.rarity'),'kind, then nearest discard, then higher Rarity; ties stay stable');
+ assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];')&&fn('shelfOrder').includes('-it.rarity'),'today\'s Hazard, then kind, then nearest discard, then higher Rarity; ties stay stable');
+ // UI_UX §SALE — SHELF ORDER (User 2026-10-04): an Item answering a Hazard of today's open Gates leads, in Gate order; the warehouse reads the same order
+ assert.ok(fn('shelfOrder').includes('hz.indexOf(k)')&&fn('shelfOrder').includes('c.length?Math.min(...c):hz.length')&&app.includes('const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];'),'an Item that counters a Hazard of today\'s open Gates sorts first, by that Hazard\'s Gate order');
+ assert.ok(fn('stockSlots').includes('shelfOrder(groupStock())'),'the warehouse reads the shelf\'s order');
  assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">'+lastSaleDay(left)+'</em>`),'every row carries its last sale day (v2.9.10), emphasized on its last day');
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
@@ -3616,7 +3619,8 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/relics.js'))&&!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/dungeon.js')),'the 기동-for-속박/진창 Counter exception is gone');
  assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
- assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.concat\(shut\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of+fn('todayLine')),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one (a closed Gate follows as {Gate} 오늘 폐쇄, User 2026-09-30)');
+ // User 2026-10-04: 전체 N명 then the Hazards beside it - `부식I 3명` (name and Tier tight, a space, the visitors), wrapping under the first Hazard
+assert.ok(fn('todayLine').includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&fn('todayLine').includes("' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes("전체 '+s.queue.length+'명")&&fn('todayLine').includes('class="tl-chips"'),'전체 {N}명, then the Hazards beside it: {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
@@ -3680,7 +3684,7 @@ test('EVENT 게이트 임시 폐쇄: the closed Gate stays on the MORNING board,
  const cp=fn('closedPlates');
  assert.ok(/game\.run\.closedGates\|\|\[\]/.test(cp)&&/class="slip gate closed"/.test(cp)&&/<span class="closed-stamp">오늘 폐쇄<\/span>/.test(cp)&&!/hazard/.test(cp),'a faded plate, the stamp, no Hazard rows');
  assert.ok(/gatePlate\(d\)\)\.join\(''\)\+closedPlates\(\)/.test(fn('morningScreen'))&&/gatePlate\(d,true\)\)\.join\(''\)\+closedPlates\(\)/.test(app),'on the board and in the window, after the open Gates');
- assert.ok(/E\(d\.name\)\+' 오늘 폐쇄'/.test(fn('todayLine')),'and on the 오늘 line');
+ assert.ok(fn('todayLine').includes('오늘 폐쇄')&&fn('todayLine').includes('s.closedGates'),'and on the 오늘 line');
  assert.ok(/s\.closedGates\.push\(\.\.\.s\.dungeons\.splice\(this\.rng\.pick\(open\),1\)\)/.test(read('dist/systems/shop.js')),'the record is the same pick, so no roll moves');
 });
 // UI_UX §DESK STAGE WIDTH (User 2026-09-30): one cap token, height-bound; FINAL's room and NIGHT's band keep 1120
