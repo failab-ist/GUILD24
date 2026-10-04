@@ -2656,8 +2656,10 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
     second number of their own */
  assert.ok(!/loyalty>=(30|50|60)/.test(shop),'no Store Support keeps a Loyalty threshold of its own');
  assert.ok(/facilities\.includes\('lifetime'\)&&G\.Adventurer\.isTrustedRegular\(n\)/.test(read('dist/systems/dungeon.js'))&&/was&&this\.has\('lifetime'\)\?G\.Adventurer\.TRUSTED_REGULAR/.test(shop),'평생 단골제 asks the 단골 owner');
- assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&G\.Adventurer\.isTrustedRegular\(n\)/.test(shop),'so does 프리미엄 멤버십');
- for(const id of ['lifetime','premiumMember','memberBundle'])
+ // 프리미엄 멤버십 (User 2026-10-04) reads 다시 온 손님 - the arrival flag, not a Loyalty number
+ assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&!n\.newToday/.test(shop),'프리미엄 멤버십 asks 다시 온 손님');
+ assert.ok(DATA.relicBy.premiumMember.description.startsWith('다시 온 손님'),'and says so in its copy');
+ for(const id of ['lifetime','memberBundle'])
   assert.ok(DATA.relicBy[id].description.startsWith('단골'),id+' says 단골 in its copy');
 
  // the compact state: Injury, Fatigue, Loyalty - and no progress bar
@@ -3105,7 +3107,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  for(const gone of ['방문 골드','단골 보너스'])
   assert.ok(!surfaces.includes(gone),'the generic label is gone: '+gone);
  // weighting mechanics say how much more often, as a multiplier (COPY_AUDIT §11 문장 틀, User 2026-10-04: no 가중치 / bare +N%)
- for(const id of ['member','rareContract','hazardBoard','coldcase'])assert.ok(/\d(\.\d+)?배 자주/.test(DATA.relicBy[id].description),id+' states its weighting as N배 자주');
+ for(const id of ['rareContract','hazardBoard'])assert.ok(/\d(\.\d+)?배 자주/.test(DATA.relicBy[id].description),id+' states its weighting as N배 자주');
+ assert.ok(/2배가 된다/.test(DATA.relicBy.member.description),'회원 관리대장 states its doubling');
 });
 
 /* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */

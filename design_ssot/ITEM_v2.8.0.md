@@ -678,7 +678,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
 - Insurance / Special: 구급키트 4, 귀환석 4, 세계수 생환부적 5, 황금 1+1 쿠폰 5
-- 대형 냉장고 and 냉장 유통 계약 extend Food/Drink exactly as `RELIC_v2.8.0.md` states; nothing else moves a shelf life
+- 대형 냉장고 extends Food/Drink exactly as `RELIC_v2.8.0.md` states; nothing else moves a shelf life
 
 | ID | Item | Category | Shelf |
 |---|---|---|---:|

@@ -322,7 +322,8 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
 - 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 
 4. 회원 관리대장 · tag=VIP · identityPreReveal=NO
-- 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
+- 회원 관리대장: from the Day it is acquired, the 단골도 term of the visit weight counts double (`1 + 단골도 × 0.06` instead of
+  `× 0.03`, CORE_RUN visitor draw); the met / unmet shares themselves do not move
 
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약 · tag=Premium
@@ -404,8 +405,9 @@ base 3 -> 4 · base 4 -> 4 · base 5 -> 5 · base 6 -> 6
   pays the other half (recorded on that sale)
 
 15. 프리미엄 멤버십 · tags=[VIP,Premium] · 150AutoSuccess=NO
-- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +40G; that customer's Rare+
-  Item purchase intent +15%p
+- 프리미엄 멤버십: a 다시 온 손님 (not on a first visit)
+  arrives with NPC Wallet +25G and Rare+ purchase intent +15%p; when that customer buys a Rare+ Item at 100% or 50%, 단골도
+  +10 on top of the purchase gain (단골 스탬프 기계 multiplies the total; a 150% sale takes no bonus)
 
 16. 귀환 적립제 · tags=[VIP,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=a customer who bought today survives expedition -> long-term customer value up
@@ -418,33 +420,28 @@ channel=prefer existing loyalty/wallet/revisit systems
 17. 원정 도시락 코너 · tags=[Fresh,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-per Food/Drink Item in the Bag:
-  Food:  Supply +2 (피로 회복 +2)
-  Drink: Supply +1 (피로 회복 +1)
+per Food/Drink Item in the Bag (with or without its own Hazard Counter):
   +2 defence on every Hazard of the Gate the adventurer actually goes to
   at the 마왕성 (the Final) the +2 goes to one Hazard only: the adventurer's most 취약 one - the largest gap before this
     bonus, the Final's own Hazard order on a tie
-Food/Drink ORDER price +3G flat, after any percentage modifier (24시간 신선체계 x1.15 first); the offers on the table are
-  repriced once at acquisition (User 2026-10-02: the Fresh line clears more and pays more)
+Food/Drink ORDER price ×1.15 (with 24시간 신선체계 ×1.15 too); the offers on the table are repriced once at acquisition
+no Supply (피로 회복) bonus
 ```
 
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 
-18. 냉장 유통 계약 · tags=[Fresh,Premium] · eligible=Uncommon+ Food/Drink · singleSkuDependency=NO
-- Uncommon+ Food/Drink offer weight +80%
-- Uncommon+ Food/Drink purchase intent +16%p
-- no Stat effect
-- shelf life +1 day
-- on acquisition, currently owned non-expired eligible stock extends exactly once
-- future eligible stock receives the extension
+18. 고급 식자재 유통 계약 (id coldcase) · tags=[Fresh,Premium] · eligible=Uncommon+ Food/Drink
+- the Day's first ORDER sheet carries one extra Uncommon+ Food/Drink slot (never on a Reroll; the 새벽 회수 계약 rule)
+- an Uncommon+ Food/Drink sale pays the store 15% of the charged price on top (HQ commission)
+- no offer weight, no purchase intent, no shelf life, no Stat effect
 
 Eligibility: category in [Food, Drink] and rarity >= Uncommon. Do not use a retired fresh boolean/property.
 
 19. 길드 납품 인증 · tags=[Premium,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=Rare+ expedition-response items gain premium-economy viability
 - Price = 220G
-- HQ commission = 20% of Item list price
+- HQ commission = 40% of Item list price
 - buyer NPC Wallet +30G
 
 20. 새벽 회수 계약 · tags=[Fresh,Rotation]
@@ -644,18 +641,18 @@ The following 21 Store Support base prices are the approved baseline.
 | guarantee | 길드 보증 진열대 | 140G |
 | hazardBoard | 원정 위험 게시판 | 60G |
 | fieldRepair | 야전 정비대 | 80G |
-| kitchen | 즉석식품 코너 | 170G |
+| kitchen | 즉석식품 코너 | 200G |
 | board | 길드 전광판 | 110G |
 | firstVisitCoupon | 첫 방문 쿠폰 | 110G |
 | groupOrder | 단체 주문 창구 | 200G |
 | memberBundle | 단골 묶음혜택 | 190G |
 | premiumMember | 프리미엄 멤버십 | 200G |
 | expeditionMeal | 원정 도시락 코너 | 200G |
-| coldcase | 냉장 유통 계약 | 180G |
+| coldcase | 고급 식자재 유통 계약 | 180G |
 | dawnRecovery | 새벽 회수 계약 | 190G |
 | fresh24 | 24시간 신선체계 | 360G |
 | warehouse | 후방 창고 증설 | 130G |
-| extraOrder | 본사 추가발주권 | 130G |
+| extraOrder | 본사 추가발주권 | 190G |
 | rerollTicket | 발주 교환권 | 120G |
 | fieldStretcher | 야전 들것 | 80G |
 
@@ -958,7 +955,7 @@ PASS: No excluded facility is offered, owned, or applied as a hidden modifier.
 
 Expected:
 - rareContract -> 희귀상품 입고 계약
-- coldcase -> 냉장 유통 계약
+- coldcase -> 고급 식자재 유통 계약
 - the wall Decoration is 명예 모험가 액자; no Store Support is named 쇼케이스
 
 No active Store Support uses 쇼케이스 in these two names.
@@ -969,7 +966,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
-- 회원 관리대장 -> returning revisit weight +70% from next Day
+- 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
 - 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
@@ -981,9 +978,9 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
-- 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item; at the 마왕성 the +2 lands on the adventurer's most 취약 Hazard only - the largest gap before the bonus, the Final's Hazard order on a tie
-- 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
+- 프리미엄 멤버십 -> 다시 온 손님 arrival NPC Wallet +25G; Rare+ purchase intent +15%p; a Rare+ purchase at 100% / 50% 단골도 +10
+- 원정 도시락 코너 -> flat +2 on every Hazard of the actual Gate per Food/Drink Item (one Hazard at the 마왕성); Food/Drink ORDER price ×1.15
+- 고급 식자재 유통 계약 -> one extra Uncommon+ Food/Drink slot on the Day's first ORDER sheet; Uncommon+ Food/Drink sale +15% HQ commission
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
 - 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15; no shelf life
@@ -1186,8 +1183,8 @@ Insurance, RiskReward penalty or unrelated attached effects.
 PASS: Fresh does not become a blanket whole-item multiplier.
 
 #### REL-Q33 — COLD DISTRIBUTION ELIGIBILITY
-SETUP: Own 냉장 유통 계약 and generate Order offers repeatedly.
-EXPECT: Eligibility targets Uncommon+ Food/Drink, purchase intent +16%p and shelf-life relief as defined in RELIC.
+SETUP: Own 고급 식자재 유통 계약 and generate Order offers repeatedly.
+EXPECT: the first sheet carries one extra Uncommon+ Food/Drink slot, and an Uncommon+ Food/Drink sale pays 15% on top.
 PASS: Effect has a meaningful multi-SKU pool and is not dependent on one or two Rare items.
 
 #### REL-Q76 — COLD DISTRIBUTION / DAWN RECOVERY CATEGORY

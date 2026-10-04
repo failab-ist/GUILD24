@@ -25,7 +25,12 @@ test('후방 창고 증설 adds 5 warehouse slots (User 2026-09-26, v2.9.2 fourt
 });
 test('offer weights and quantities match relevant product roles',()=>{
  const g=fresh(),s=g.run,potion=DATA.itemBy.lowpotion,premium=DATA.itemBy.guildlunch;
- for(const [id,it]of [['rareContract',premium],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
+ for(const [id,it]of [['rareContract',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
+ // RELIC 고급 식자재 유통 계약 (User 2026-10-04): no order weighting - one extra Uncommon+ Food/Drink slot on the Day's first sheet
+ s.facilities=['coldcase'];assert.equal(Relics.offerWeight(g,premium),1,'고급 식자재 does not weight the draw');
+ s.facilities=[];g.generateOffers(true);const plainCount=s.offers.length;s.facilities=['coldcase'];g.generateOffers(true);
+ assert.equal(s.offers.length,plainCount+1,'one extra slot on the first sheet');const extra=DATA.itemBy[s.offers.at(-1).item];
+ assert.ok(['food','drink'].includes(extra.category)&&extra.rarity>=1,'and it is an Uncommon+ Food/Drink');
  s.dungeons=[g.makeDungeon('spider',1)];s.facilities=[];const base=Relics.offerWeight(g,DATA.itemBy.antidote);s.facilities=['hazardBoard'];assert.ok(Relics.offerWeight(g,DATA.itemBy.antidote)>base);
  s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['extraOrder'];g.generateOffers();assert.equal(s.offers.length,n+2);
 });
@@ -39,7 +44,7 @@ test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
   assert.ok(e.survival>base.survival,id+' raises the Food native Core Stat');
   assert.equal(e.cold,base.cold,id+' does not touch the Hazard Counter');
   assert.equal(e.supply,base.supply,id+' does not touch Supply');}
- const it=DATA.itemBy.guildlunch;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.ok(Relics.shelf(g,it)>f);assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
+ const it=DATA.itemBy.guildlunch;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.equal(Relics.shelf(g,it),f,'only 대형 냉장고 extends the shelf');assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
 });
 test('premium guarantee obeys wallet, daily limit and never guarantees acceptance',()=>{
  const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.guildlunch;n.traits=[];n.money=999;
@@ -281,7 +286,7 @@ test('REMAKE 새벽 회수 계약: 50% recovery of expiring Food/Drink, and +1 F
 
 /* SA-Q16 / REL-Q-v28-9. The acquisition-time predicate named a retired `fresh` property, so it
    disagreed with the future-stock shelf path that has always keyed on Food/Drink. */
-test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly once, on category',()=>{
+test('SA-Q16: buying 고급 식자재 유통 계약 extends no stock; 대형 냉장고 extends owned Food/Drink once, on category',()=>{
  const g=fresh('coldcase-acquire'),s=g.run;
  const uncommonFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity>=1&&i.days);
  const commonFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity===0&&i.days);
@@ -293,28 +298,20 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
  s.phase='order';s.money=9999;
  s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['coldcase'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
  g.buyRelic('coldcase');
- const after=s.inventory.map(st=>st.expires);
- for(let i=0;i<s.inventory.length;i++){
-  const st=s.inventory[i],it=DATA.itemBy[st.item];
-  const eligible=['food','drink'].includes(it.category)&&it.rarity>=1&&before[i]!==null&&before[i]>s.day;
-  assert.equal(after[i]-before[i],eligible?1:0,st.item+' ('+it.rarity+') extension');
- }
- assert.equal(after[0],before[0],'an already-expired stock is not revived');
- // exactly once: replaying the acquisition path cannot extend the same stock again
- const again=s.inventory.map(st=>st.expires);
+ assert.deepEqual(s.inventory.map(st=>st.expires),before,'고급 식자재 유통 계약 leaves every date alone');
  s.relicWindow={milestoneDay:10,slothSealOpportunity:false,candidateIds:['fridge'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
  g.buyRelic('fridge');
  for(let i=0;i<s.inventory.length;i++){
   const st=s.inventory[i],it=DATA.itemBy[st.item];
   const eligible=['food','drink'].includes(it.category)&&before[i]!==null&&before[i]>s.day;
-  assert.equal(s.inventory[i].expires-again[i],eligible?2:0,st.item+' takes 대형 냉장고 (+2) once, and coldcase not twice');
+  assert.equal(s.inventory[i].expires-before[i],eligible?2:0,st.item+' takes 대형 냉장고 (+2) once');
  }
  assert.ok(!DATA.items.some(it=>'fresh' in it),'no Item carries the retired fresh property');
 });
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the charged 150% price (royalCert)',()=>{
+test('REL-Q-v28-5 / 7: HQ commission is 40% of list (supplyCert), 40% of the charged 150% price (royalCert), 15% of the price (고급 식자재)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -333,7 +330,10 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the 
  assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.40),'royalCert pays 40% of the charged 150% price');
  assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.40),'at any rarity');
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
- assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.20),'supplyCert pays 20% of list');
+ assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.40),'supplyCert pays 40% of list (User 2026-10-04)');
+ const fineFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity>=1),plainFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity===0);
+ assert.equal(sale(['coldcase'],'full',fineFood),Math.round(fineFood.sell*.15),'고급 식자재 pays 15% of an Uncommon+ Food/Drink price');
+ assert.equal(sale(['coldcase'],'full',plainFood),0,'and nothing on a Common one');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
  // neither inherited rate survives on the Gold path
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
@@ -374,25 +374,25 @@ test('REL §17: 원정 도시락 코너 - the 마왕성 takes the +2 on the most
 });
 
 test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the catalogue',()=>{
- /* User-approved Store Support rebalance 2026-09-23 */
+ /* User-approved Store Support rebalance 2026-09-23; 즉석식품 200 · 추가발주권 190 with their move to 희귀 (User 2026-10-04) */
  for(const [id,price] of [['bulk',130],['rotation',80],['stamp',130],['member',130],['rareContract',140],
-                          ['guarantee',140],['hazardBoard',60],['fieldRepair',80],['fridge',60],['kitchen',170],
+                          ['guarantee',140],['hazardBoard',60],['fieldRepair',80],['fridge',60],['kitchen',200],
                           ['board',110],['firstVisitCoupon',110],['groupOrder',200],['memberBundle',190],
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
                           ['supplyCert',220],['dawnRecovery',190],['logisticsHQ',300],['lifetime',310],
                           ['royalCert',320],['opsRoom',290],['fresh24',360],['hub',340],
-                          ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130],
+                          ['warehouse',130],['extraOrder',190],['rerollTicket',120],['efficiency',130],
                           ['fieldStretcher',80],['firstAidDesk',300]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
 });
 
 /* ---- User-approved Store Support rebalance 2026-09-23: structural reworks ------------------ */
 /* One accepted sale on a stubbed stream, read off the ledger / wallet / history. */
-function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999}={}){
+function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999,newToday}={}){
  const g=fresh('rework-sale'),s=g.run,n=s.npcs[0];
  s.facilities=[...facilities];s.dayFacilities=[...facilities];
  n.traits=[];n.money=money;n.introduced=true;n.visits=2;n.pack=[];n.refused=[];n.loyalty=loyalty;
- n.history=history.map(h=>({day:s.day,...h}));n.destination=0;n.claimedDestination=0;
+ n.history=history.map(h=>({day:s.day,...h}));n.destination=0;n.claimedDestination=0;if(newToday!==undefined)n.newToday=newToday;
  s.queue=[n.id];s.cursor=0;s.phase='sell';s.daily.commission=0;
  g.stock(itemId,1);
  g.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
@@ -422,12 +422,16 @@ test('즉석식품 코너 takes overheadBase +10% (User 2026-10-02), added to hu
  assert.equal(kitchen.g.run.daily.operating,charged(b*.10),'kitchen takes 10% of the base');
  assert.equal(both.g.run.daily.operating,charged(b*.20),'with hub: 10% + 10% of the same base');
 });
-test('원정 도시락 코너: Food/Drink ORDER price +3G flat (User 2026-10-02), after 24시간 신선체계 x1.15; other Items untouched',()=>{
+test('원정 도시락 코너: Food/Drink ORDER price x1.15 (User 2026-10-04), with 24시간 신선체계 x1.15 too; other Items untouched',()=>{
  const g=fresh('meal-price'),s=g.run;
  for(const id of ['rice','guildlunch','lowpotion','rope']){const it=DATA.itemBy[id],f=['food','drink'].includes(it.category);
   s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['expeditionMeal'];
-  assert.equal(g.offerFor(it).price,plain+(f?3:0),id+' +3G only on Food/Drink');
-  s.facilities=['expeditionMeal','fresh24'];assert.equal(g.offerFor(it).price,f?Math.round(it.buy*1.15)+3:plain,id+' flat after the x1.15');}
+  assert.equal(g.offerFor(it).price,f?Math.round(it.buy*1.15):plain,id+' x1.15 only on Food/Drink');
+  s.facilities=['expeditionMeal','fresh24'];assert.equal(g.offerFor(it).price,f?Math.round(it.buy*1.15*1.15):plain,id+' with 24시간 신선체계');}
+ // acquisition reprices the Food/Drink offers already on the table, once
+ s.facilities=[];s.phase='order';s.money=9999;s.offers=[{item:'rice',price:35,quantity:3},{item:'rope',price:50,quantity:3}];
+ s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['expeditionMeal'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
+ g.buyRelic('expeditionMeal');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.15),50]);
 });
 test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x1.25), no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
@@ -441,14 +445,11 @@ test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x
  s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['fresh24'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
  g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.15),50]);
 });
-test('REWORK 냉장 유통 계약: Uncommon+ Food/Drink purchase intent +16%p, no stat effect',()=>{
+test('REWORK 고급 식자재 유통 계약 (User 2026-10-04): no purchase intent, no stat effect',()=>{
  const g=fresh('coldcase-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
- /* read at 150%, where no 0.97 cap or Counter floor hides the term */
  const delta=id=>{g.run.facilities=[];const a=g.interest(n,DATA.itemBy[id],'overcharge').chance;g.run.facilities=['coldcase'];return g.interest(n,DATA.itemBy[id],'overcharge').chance-a;};
- assert.ok(Math.abs(delta('energy')-.16)<1e-9,'Uncommon drink +16%p');
- assert.ok(Math.abs(delta('lunchbox')-.16)<1e-9,'Uncommon food +16%p');
- assert.equal(delta('rice'),0,'Common food untouched');assert.equal(delta('rope'),0,'non-Food untouched');
+ for(const id of ['energy','lunchbox','rice','rope'])assert.equal(delta(id),0,id+' intent untouched');
  const p={...n,pack:['guildlunch']},d=g.run.dungeons[0];
  assert.deepEqual(Dungeon.prepare(p,d,['coldcase']).effects,Dungeon.prepare(p,d,[]).effects,'no stat effect');
 });
@@ -467,21 +468,28 @@ test('REWORK 단골 묶음혜택: a 단골 second paid purchase is half for the 
  assert.equal(q.price,495);assert.equal(q.debit,248,'at 150% too, half of the charged price');
  g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.guildlunch,'overcharge').debit,495);
 });
-test('REWORK 프리미엄 멤버십: a 단골 arrives with +40G, and Rare+ intent +15%p for 단골 only',()=>{
- const arrive=(loyalty,fac)=>{const g=fresh('premium-member'),s=g.run,n=s.npcs[0];n.traits=[];n.loyalty=loyalty;n.money=100;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n.money;};
- assert.equal(arrive(51,['premiumMember'])-arrive(51,[]),40);
- assert.equal(arrive(50,['premiumMember'])-arrive(50,[]),0,'not 단골, no Gold');
- const g=fresh('premium-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.injury=0;
+test('REWORK 프리미엄 멤버십 (User 2026-10-04): a returning customer arrives with +25G, Rare+ intent +15%p, and a Rare+ purchase at 100% / 50% adds 단골도 +10',()=>{
+ const arrive=(introduced,fac)=>{const g=fresh('premium-member'),s=g.run,n=s.npcs[0];n.traits=[];n.loyalty=0;n.introduced=introduced;n.money=100;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n.money;};
+ assert.equal(arrive(true,['premiumMember'])-arrive(true,[]),25,'다시 온 손님 +25G');
+ assert.equal(arrive(false,['premiumMember'])-arrive(false,[]),0,'a first visit gets nothing');
+ const g=fresh('premium-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.injury=0;n.loyalty=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
  const it=DATA.items.find(i=>i.rarity>=2&&!['food','drink'].includes(i.category)&&!i.effects.fear);
- const delta=l=>{n.loyalty=l;g.run.facilities=[];const a=g.interest(n,it,'overcharge').chance;g.run.facilities=['premiumMember'];return g.interest(n,it,'overcharge').chance-a;};
- assert.ok(Math.abs(delta(51)-.15)<1e-9,'단골 +15%p');assert.equal(delta(50),0,'Loyalty 50 is not 단골');
+ const delta=fresh=>{n.newToday=fresh;g.run.facilities=[];const a=g.interest(n,it,'overcharge').chance;g.run.facilities=['premiumMember'];return g.interest(n,it,'overcharge').chance-a;};
+ assert.ok(Math.abs(delta(false)-.15)<1e-9,'다시 온 손님 +15%p');assert.equal(delta(true),0,'not on a first visit');
+ const rare=it.id,gain=(fac,mode,newToday=false)=>sellOnce(fac,mode,rare,{loyalty:10,newToday}).last.loyalty;
+ assert.equal(gain(['premiumMember'],'full')-gain([],'full'),10,'정가 Rare+ purchase +10');
+ assert.equal(gain(['premiumMember'],'half')-gain([],'half'),10,'할인 Rare+ purchase +10');
+ assert.equal(gain(['premiumMember'],'overcharge'),gain([],'overcharge'),'바가지 takes no bonus');
+ assert.equal(gain(['premiumMember'],'full',true),gain([],'full',true),'a first visit takes none');
+ assert.equal(sellOnce(['premiumMember'],'full','rice',{loyalty:10,newToday:false}).last.loyalty,sellOnce([],'full','rice',{loyalty:10,newToday:false}).last.loyalty,'a Common purchase takes none');
+ assert.equal(gain(['premiumMember','stamp'],'full'),Math.round((1+10)*DATA.relicParams.stamp.loyaltyMult),'단골 스탬프 기계 multiplies it too');
 });
 test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150% flat intent penalty eased by +10%p',()=>{
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const plain=sellOnce([],'full',insured.id),cert=sellOnce(['supplyCert'],'full',insured.id);
  assert.equal(cert.n.money-plain.n.money,30,'the buyer of a qualifying sale gets +30G');
- assert.equal(cert.s.daily.commission,Math.round(insured.sell*.20));
+ assert.equal(cert.s.daily.commission,Math.round(insured.sell*.40));
  const common=sellOnce(['supplyCert'],'full','rice');assert.equal(common.n.money,sellOnce([],'full','rice').n.money,'a non-qualifying sale gives nothing');
  // 왕도 프리미엄 인증: +10%p on 150% only; the price burden and the 바가지 Loyalty -4 stay
  const g=fresh('royal-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;

@@ -96,12 +96,11 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
       retreat roll reads only the Traits and the stone's second roll reads both */
    if(k==='escape')e.itemEscape+=value;
   }
-  /* 원정 도시락 코너: per Food Item in the Bag a flat Supply +2, per Drink +1, and per Food/Drink a flat +2 on every
-     Hazard of the Gate the adventurer actually goes to (v2.9.11, User 2026-09-28; was +2 for both and +4). Flat, so no
-     Counter multiplier reads it. At the 마왕성 (the Final) the +2 goes to one Hazard only - counted here, placed in
-     prepare() once the adventurer's Stats exist (v2.9.11, User 2026-09-29). */
+  /* RELIC 원정 도시락 코너: per Food/Drink in the Bag a flat Hazard defense on every Hazard of the Gate the adventurer goes
+     to. Flat, so no Counter multiplier reads it. At the 마왕성 it goes to one Hazard only - counted here, placed in
+     prepare() once the adventurer's Stats exist. */
   if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)){
-   const p=D.relicParams.expeditionMeal;finalSupply+=item.category==='drink'?p.drinkSupplyPerItem:p.supplyPerItem;
+   const p=D.relicParams.expeditionMeal;
    if(d.family==='final')mealFinal++;else for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
