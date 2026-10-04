@@ -164,11 +164,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.closeGate)return s.dungeons.filter(d=>!d.temporary).length>=2;
   if(fx.shelfCut)return s.inventory.some(x=>x.expires!==null&&['food','drink'].includes(D.itemBy[x.item].category));
   return true;}
- /* EVENT §DEEP EXPEDITION DAY EXCLUSION: a Day this Run actually holds a 심층원정 produces no
-    Normal Event, whether or not the player later nominates anyone. rollEvent draws before it
-    asks this, so suppressing an Event costs the run stream no draw. The 35% chance is NOT
-    compensated for the days this removes - Stage 9 measures the real count. */
- eventEligibleDay(day){return day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day);}
+ /* EVENT §EVENT TIMING / FREQUENCY · §DEEP EXPEDITION DAY EXCLUSION: DAY 1~29 except the Store Support windows and this
+    Run's 심층원정 Days; the account's first Run keeps DAY 1 quiet so 본사 1+1 행사 (DAY 2) stays its first Event. rollEvent
+    draws before it asks this, so a suppressed Day costs the run stream no draw. */
+ eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day)&&!(this.run.firstRun&&day===1);}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
     Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),

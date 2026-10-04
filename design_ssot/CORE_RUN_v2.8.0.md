@@ -182,7 +182,7 @@ draws a living adventurer takes).
 
 - DAY 1: one Common Item that counters the first Gate's Hazard joins the warehouse after the DAY 0 pick (독 방진마스크 ·
   부식 중화 탄산수 · 냉기 컵라면 · 화염 얼음컵 · 공포 집중 사탕). It is ordinary visible stock, not a hidden resource.
-- DAY 2: the Day's Normal Event is `본사 1+1 행사` (EVENT §02), the one Event before DAY 3 (EVENT §EVENT TIMING / FREQUENCY).
+- DAY 2: the Day's Normal Event is `본사 1+1 행사` (EVENT §02), the Run's first Event - DAY 1 of the first Run holds none (EVENT §EVENT TIMING / FREQUENCY).
   The ordinary Event roll still draws and its result is ignored, and no pick is drawn; it is revealed and logged like any
   Event, so the Run never meets it twice. The first Event slip carries the first Event coach mark (UI_UX §FIRST EVENT
   TUTORIAL).

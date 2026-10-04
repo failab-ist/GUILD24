@@ -567,8 +567,10 @@ test('정가 final purchase chance is x 0.90 of the unscaled one; 50% / 150% unc
 /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run finds one Common Counter for the first Gate's Hazard
    in the DAY 1 warehouse; a later Run does not, and the Run's own stream is the same either way. */
 test('first-Run lesson: DAY 1 warehouse holds one Common Counter for the first Gate, first Run only, stream untouched',()=>{
- const run=runs=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start('lesson-probe');g.buyRelic(g.run.relicWindow.candidateIds[0]);return g.run;};
- const first=run(0),later=run(1),h=first.dungeons[0].hazards[0];
+ const run=(runs,seed)=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g.run;};
+ // a later Run may meet an ordinary Event on DAY 1 (the first Run may not): compare on a seed where it does not
+ let k=0;while(k<50&&run(1,'lesson-probe-'+k).event)k++;
+ const first=run(0,'lesson-probe-'+k),later=run(1,'lesson-probe-'+k),h=first.dungeons[0].hazards[0];
  assert.equal(first.firstRun,true);assert.equal(later.firstRun,false);
  const extra=first.inventory.filter(u=>!later.inventory.some(v=>v.id===u.id));
  assert.equal(extra.length,1,'exactly one extra unit on the first Run');
@@ -587,12 +589,17 @@ test('first-Run lesson: DAY 2 brings 본사 1+1 행사 on the first Run only, st
  const first=run(0),later=run(1);
  assert.equal(first.day,2);assert.equal(first.event?.id,'oneplus','the first Run: 본사 1+1 행사 on DAY 2');
  assert.equal(first.eventSeen,false,'revealed like any Event');assert.deepEqual(first.eventLog,['oneplus'],'and logged, so the Run never meets it twice');
- assert.equal(later.event,null,'a later Run: DAY 2 has no Event');
+ assert.equal(later.firstRun,false,'a later Run: DAY 2 is an ordinary Event Day (its roll may still draw 1+1 from the catalog)');
  assert.ok(first.offers.some(o=>o.promo),'one offer carries the 1+1 promo');
- assert.deepEqual(first.offers.map(o=>o.item),later.offers.map(o=>o.item),'the same offers');
- assert.deepEqual(first.queue,later.queue,'the same visitors');assert.equal(first.rngState,later.rngState,'the same stream');
+ // the lesson adds no draw: on a seed whose ordinary DAY 1~2 rolls stay quiet, both Runs open DAY 2 on the same stream
+ const at=(runs,seed)=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);g.nextDay();return g.run;};
+ let k=0;while(k<50&&(at(1,'lesson-event-'+k).eventLog||[]).length)k++;   // a later Run met no Event on DAY 1 or 2
+ const qf=at(0,'lesson-event-'+k),ql=at(1,'lesson-event-'+k);
+ assert.equal(qf.event?.id,'oneplus');assert.equal(ql.event,null);
+ assert.deepEqual(qf.offers.map(o=>o.item),ql.offers.map(o=>o.item),'the same offers');
+ assert.deepEqual(qf.queue,ql.queue,'the same visitors');assert.equal(qf.rngState,ql.rngState,'the same stream');
  const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-event');sim.buyRelic(sim.run.relicWindow.candidateIds[0]);sim.nextDay();
- assert.equal(sim.run.event,null,'measurement harnesses: no DAY 2 Event');
+ assert.equal(sim.run.firstRun,false,'measurement harnesses: no DAY 2 lesson');
 });
 test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death settles as 중상',()=>{
  const g=fresh('lesson-death'),base=g.run.npcs[0];
