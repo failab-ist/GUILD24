@@ -194,7 +194,7 @@ Flow: select quantity → `발주 확정` (Inventory updates, cart clears, ORDER
 ### ORDER Reroll UX
 
 Available with an unconfirmed cart: clears only that cart, replaces the whole offer set, charges the current cost once, keeps
-confirmed Inventory; no reset-to-zero first. The `후보 전체 교환` key at the foot of the sheet is as wide as its words, right-aligned on a
+confirmed Inventory; no reset-to-zero first. The `발주 후보 교환` key at the foot of the sheet is as wide as its words, right-aligned on a
 short margin, so it never takes a tap meant for 영업 시작 below it (User 2026-10-03).
 
 ### ORDER Runtime continuity
@@ -1406,7 +1406,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md §3.
 
 (§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`
 or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
-register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `후보 전체 교환` and gains a refresh icon (an
+register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `발주 후보 교환` and gains a refresh icon (an
 inline SVG like the close X, no asset), and the mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
@@ -1433,7 +1433,7 @@ screen says it; otherwise none, or taught after the fact.
   대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
   sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 시작 골드와 보유 골드를 비교한다.` (first clause only; the receipt gains no row)
-- no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
+- no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 발주 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken

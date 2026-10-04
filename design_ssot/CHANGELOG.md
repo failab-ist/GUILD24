@@ -45,9 +45,9 @@ and this table is their commit record.
 
 - **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
   set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final,
-  `후보 교환`, `요구 전력`, `상품` (not 아이템 / 보급 on screen), `이번 점포의 장식`.
+  `발주 후보 교환` / `점포지원 후보 교환` (the bare `후보 교환` is retired), `요구 전력`, `상품` = the goods and `보급` = handing goods over, `이번 점포의 장식`.
 - **Names aligned to it in Source, owners and tests**: 이번 영업의 장식 -> 이번 점포의 장식 (menu, modal, store panel, END), the store end screen reads
-  `점포 종료` (the day-end key and receipt head keep `영업 종료`), 한 영업 -> 한 점포 (stock modal), 발주 교환 -> 후보 교환 (closing receipt row, POS event, block
+  `점포 종료` (the day-end key and receipt head keep `영업 종료`), 한 영업 -> 한 점포 (stock modal), 발주 교환 / 후보 전체 교환 -> 발주 후보 교환 (button, closing receipt row, POS event, block
   reason), 요구 전투력 -> 요구 전력, 아이템 보강 -> 상품 보강, 마지막 보급 -> 마지막 상품, 마왕성 원정 -> 최종 원정. NPC_TRAIT's 150% Loyalty line is -4
   (it said -3; §NPC-Q-v28-2B and Source already said -4, a refused 150% -2). The 점주 가이드 lines, the 보유 골드 / 손님 소지금 / 생환 / 유료 구매 names and
   the 마왕 특성 lines (최종전, 아이템) are aligned by the threads that are rewriting them.

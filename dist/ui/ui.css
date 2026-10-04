@@ -668,7 +668,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .rubber:hover{background:#00000008;opacity:1}
 .rubber:disabled{opacity:.28}
 .rubber .reroll-icon{display:inline-block;vertical-align:-2px;margin-right:6px}
-/* UI_UX §ORDER Reroll UX: the 후보 전체 교환 key is as wide as its words, at the sheet's right edge, on a short margin */
+/* UI_UX §ORDER Reroll UX: the 발주 후보 교환 key is as wide as its words, at the sheet's right edge, on a short margin */
 .rubber[data-action="reroll"]{width:auto;max-width:calc(100% - 32px);margin:8px 16px 4px auto;padding:9px 16px}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
 .p-order .dock{position:relative;display:flex;flex-wrap:wrap;gap:10px;padding-top:16px;
@@ -3734,7 +3734,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .readout.ro2 .gs-tag{display:none}
  .readout.ro2 .great-signal{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;
   font:600 12px/1.3 var(--ui);color:#e6c766}}
-/* RELIC §CANDIDATE REROLL (User 2026-10-02): on a phone the two footer keys - 후보 전체 교환 and 나중에 결정 - share one row in
+/* RELIC §CANDIDATE REROLL (User 2026-10-02): on a phone the two footer keys - 발주 후보 교환 and 나중에 결정 - share one row in
    equal halves under the note, the label wrapping inside its key rather than stacking the keys */
 /* the footer never grows for it: on a phone the two keys take the row and the defer note steps aside (나중에 결정 still says it) */
 .relic-takeover .close:has([data-action=reroll-relics]) p{display:none}

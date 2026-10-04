@@ -36,7 +36,7 @@ P.nextDay=function(){
 /* 발주 교환권: the free Rerolls come first, then the ordinary curve from its FIRST step
    (50 -> 100 -> 200 ...), not from the step the free use would otherwise have consumed. */
 P.rerollPrice=function(){const n=this.run.rerollCount||0,free=this.has('rerollTicket')?D.relicParams.rerollTicket.freeRerolls:0;return n<free?0:D.balance.rerollBase*2**Math.min(20,n-free);};
-P.reroll=function(){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간에 교환할 수 있습니다.');/* EVENT 43 포스기 먹통 (v2.9.11) */if(s.event?.effects.noReroll)throw Error('오늘은 후보 교환을 할 수 없습니다.');const price=this.rerollPrice();if(s.money<price)throw Error('교환 비용이 부족합니다.');this.generateOffers({advancePity:false});s.cart={};s.money-=price;s.daily.rerollSpent=(s.daily.rerollSpent||0)+price;s.stats.spent+=price;s.rerollCount=(s.rerollCount||0)+1;this.save();};
+P.reroll=function(){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간에 교환할 수 있습니다.');/* EVENT 43 포스기 먹통 (v2.9.11) */if(s.event?.effects.noReroll)throw Error('오늘은 발주 후보 교환을 할 수 없습니다.');const price=this.rerollPrice();if(s.money<price)throw Error('교환 비용이 부족합니다.');this.generateOffers({advancePity:false});s.cart={};s.money-=price;s.daily.rerollSpent=(s.daily.rerollSpent||0)+price;s.stats.spent+=price;s.rerollCount=(s.rerollCount||0)+1;this.save();};
 /* 재고 정리 is an emergency, not a savings account. It exists so a Closing that came up short
    makes the player decide what to give up, and it stops being available the moment the till is
    square again. The rules are enforced here rather than in the UI: CLOSING only, only while the
