@@ -3,7 +3,7 @@
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
 DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -143,6 +143,10 @@ Each of the two Items would have been enough alone (no single removal changes th
 two slots, so this is what a whole-Bag proof means; User 2026-10-02): both are named, never `챙긴 보급`:
     {Item A}·{Item B} 덕분에 부상을 피했다.
     {Item} 2개 덕분에 부상을 피했다.        (the same Item twice)
+
+The fight alone (User 2026-10-04; DUNGEON_HAZARD_v2.8.0.md §COMBAT PROOF): when no worse Outcome is proven but removing an Item would have
+lost the combat check, and only then:
+    {Item} 덕분에 전투에서 이겼다.
 
 Do not use vague Hero claims such as `부식 위험 감소` / `환경을 철저한 준비로 극복했다`.
 A hidden risk decrease without a proven resolved difference is not Hero feedback.

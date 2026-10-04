@@ -3,7 +3,7 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
 DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -1183,6 +1183,12 @@ No same-seed full rerun is used because branch-dependent RNG consumption is not 
 the same path.
 
 Under-reporting is preferred to false causality.
+
+## COMBAT PROOF (User 2026-10-04)
+
+The fight is proven on its own. With the same recorded noise roll (and the same hidden assist), if removing an Item from the Bag
+would have lost the combat check the real expedition won, that Item is named. It needs no roll the real path never drew, so it
+holds on a plain `성공` where the outcome proof above is UNPROVEN. It is stored beside the result proof (`combatHero`), never inside it.
 
 ## SHADOW SET — NORMAL BAG
 
