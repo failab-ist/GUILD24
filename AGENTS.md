@@ -324,8 +324,8 @@ node tools/measure-v2100.cjs --traj 200 --fresh 1000
 - 결과 JSON을 더 읽을 때는 `tools/measure-v2100-detail.cjs` · `tools/measure-v2100-relic-landmark.cjs`(재생 없이 읽기만)를 쓴다.
 - User가 준 세이브는 `node tools/save-check.cjs <save.json> [--out report.md]`로 읽는다. 재생 없이 세이브만 읽으므로 9-A 컨펌 대상이 아니다.
   보고서 §2 `밸런스 지표`가 이 측정과 같은 기준(구간 성공률 · 사망 · 부상 출발 · 상위 4명 대 나머지 · 현금 / 일)이다.
-- 이름에 지난 버전이 붙은 측정 도구(`tools/measure-*-v29xx` · `-v30` · `remeasure-v2911`)와 `npm run balance` · `longitudinal` · `mastery`는
-  지난 질문용이다. 기준 측정으로 쓰지 않는다. 특정 레버만 볼 때는 이 도구를 본떠 스크래치에서 만든다.
+- 지난 질문용 측정 도구는 `archive/<버전>/tools/`에 있다(목록 `archive/README.md`). `npm run balance` · `longitudinal` · `mastery`도
+  지난 하네스다. 둘 다 기준 측정으로 쓰지 않는다. 특정 레버만 볼 때는 이 도구를 본떠 스크래치에서 만든다.
 
 ---
 

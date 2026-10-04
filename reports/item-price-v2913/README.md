@@ -1,6 +1,6 @@
 # 상품 가격 재검토 — 기여도 측정 (v2.9.13, User 2026-09-30)
 
-측정 전용이다. 가격은 바꾸지 않았다. 도구는 `tools/measure-item-value-v2913.cjs`다.
+측정 전용이다. 가격은 바꾸지 않았다. 도구는 `archive/v2.9.13/tools/measure-item-value-v2913.cjs`다.
 
 ## 1차 측정은 쓰지 않는다
 - 봇 출발 표본의 대부분이 전투에서 지는 약한 모험가였다. 그래서 대응템은 과소평가되고, 포션·스탯 음료는 과대평가됐다.
@@ -73,7 +73,7 @@
 - 나머지는 유지. 1차 측정에서 나온 중반 대응 95 → 70, 초반 하이브리드 75 → 55 안은 철회한다.
 
 ## 3차 — 상황 빈도로 가중한 한 판 기대 기여 (User 2026-09-30)
-도구는 `tools/measure-item-value-context-v2913.cjs --runs 150 --per 150 --k 30`이고 원자료 `item-value-context.json`은 v2.9.13 마감 때 지웠다(git 기록에 있다).
+도구는 `archive/v2.9.13/tools/measure-item-value-context-v2913.cjs --runs 150 --per 150 --k 30`이고 원자료 `item-value-context.json`은 v2.9.13 마감 때 지웠다(git 기록에 있다).
 
 ### 상황이 나오는 비율 (출발 기준)
 | 구간 | 봇 템 없는 전력비 강함 / 중간 / 약함 | 봇 템 든 전력비 reader / expert 강함 | User 0930 템 든 전력비 강함 / 중간 / 약함 |

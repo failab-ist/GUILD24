@@ -3,8 +3,8 @@
 측정 전용이다. 모든 값은 메모리 패치이고 게임 파일과 Canonical은 바꾸지 않았다. 채택은 User 결정이다.
 
 - 도구
-  - `tools/measure-hazard-refit-v2912.cjs`: 곡선, 위험 재조정, Final
-  - `tools/measure-capital-v2912.cjs`: 여러 판 이어 가는 Capital 측정
+  - `archive/v2.9.12/tools/measure-hazard-refit-v2912.cjs`: 곡선, 위험 재조정, Final
+  - `archive/v2.9.12/tools/measure-capital-v2912.cjs`: 여러 판 이어 가는 Capital 측정
 - 봇
   - `reader`: 새 계정 300판
   - `expert`: 0930 Run 3 시작 계정 300판(`reports/expert-bot-calibration-v2912.md`)
