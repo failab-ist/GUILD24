@@ -26,7 +26,12 @@ and this table is their commit record.
 | v2.9.13 | 2026-10-01 | `f20f89a` (PR #34); quick patch PR #37; quick patch 2 PR #42 | `v2.9.13` |
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
-| v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR (this one) | `v2.10.1` (set by the User) |
+| v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR #67 | `v2.10.1` (set by the User) |
+| v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one) | `v2.10.2` (set by the User) |
+
+## v2.10.2 — SALE phone spacing, line breaks and loading (User 2026-10-04)
+
+A presentation-only version: the `ui/design-trim` PRs #68~#74 (loading screen, bag text, decoration window, ORDER / SALE scroll fixes, SALE phone spacing, restored Stat change colours, the 추가 구매 wallet line, an opaque lower area, and sentence-level line breaks for every plain sentence block). No rule, balance or save change.
 
 ## v2.10.1 — design-trim presentation pass (User 2026-10-03)
 
