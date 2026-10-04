@@ -8,7 +8,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
 
-> 용어(이름과 뜻, 쓰지 않는 말)는 `GLOSSARY_v2.8.0.md`가 정한다. 이 문서의 §PLAYER-FACING TERMINOLOGY와 어긋나면 GLOSSARY를 따른다.
+> 용어(이름과 뜻, 쓰지 않는 말)는 `GLOSSARY_v2.8.0.md`가 정한다. 이 문서에는 용어 정의를 두지 않는다.
 >
 > Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Authoritative Design Spec.
 >
@@ -178,51 +178,9 @@ Night causality -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## PLAYER-FACING TERMINOLOGY
 
-Source 내부 이름과 Player UI 용어를 구분한다.
+용어(능력치 이름, 잠긴 용어, 심층원정, 원정 후원금, 상품 갈래, 쓰지 않는 말)는 `GLOSSARY_v2.8.0.md`가 정한다. 이 문서는 용어를 두 번 정하지 않는다.
 
-- `combat` = **투력**
-- `survival` = **강인함**
-- `mobility` = **기동**
-- `spirit` = **정신**
-- Monster Knowledge has no player-facing term: no screen shows it
-- Item Supply value = **피로 회복 N**
-- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 상단 도착`)
-
-실제 싸움 / battle 자체는 **전투**라고 쓴다.
-
-내부 계산용 Power / Party Power는 Director / Work 내부 표현이며, Player에게 별도 능력치로 노출하지 않는다.
-
-### LOCKED PLAYER TERMS
-
-Use:
-- 강인함, not player-facing 생존 Stat
-- 점포지원, not 유물
-- 심층원정
-- 원정 소지금 획득 for expedition-Wallet modifiers
-- 귀환 후 피로 for the settled NIGHT value
-
-Do not expose:
-- 성장 잠재력
-- 남은 특성
-- internal potion marker
-- internal fatigue accounting labels
-
-### Deep Expedition
-Locked term=`심층원정`.
-
-Do not rename to `긴급의뢰`, `길드 긴급의뢰`, `특별원정`, `고난도 의뢰`.
-
-### Sponsorship
-Preferred concept=`원정 후원금`.
-
-It is a Store Gold sink, not a refundable deposit.
-
-Deep Expedition voice communicates:
-- deeper/harder version of today's Gate
-- optional nomination
-- Store sponsorship
-- NPC Growth/Wallet return
-- **unlike normal Great Success**, no Store Gold payout even on Deep Great Success
+아래는 용어가 아니라 문구 규칙이라 이 문서가 맡는다.
 
 ### Great Success opportunity
 Exact required signal:
@@ -250,25 +208,6 @@ Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.8.0.md` §1-3.
 The function remains the current Run-only abandon action; Account/Meta preservation and Full Data Reset remain separate mechanics.
 
 Do not imply XP, settlement, compensation or reward.
-
-### ITEM CATEGORY TERMINOLOGY
-
-Authoritative player-facing category identities are owned by `ITEM_v2.8.0.md`:
-
-```text
-Food
-Drink
-Potion
-Field Gear
-Insurance
-Special
-```
-
-`Medical` is not an active category.
-Do not remap the Potion line to `Special` merely because stale Source used that key.
-
-This owner does not create a second localized-category taxonomy.
-Exact Korean display strings, where needed, must preserve these six identities and follow approved existing copy style; they must not invent a seventh category or restore `Medical`.
 
 ## DATA — 사실은 표시한다
 

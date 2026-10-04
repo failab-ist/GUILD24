@@ -88,7 +88,7 @@ function report(save){
 
  L.push('## 3. 현금 흐름','');
  const k=key=>sum(hist,d=>d[key]);
- head(['매출','유물 추가 지급','발주','운영비','후보 교환','점포지원','폐기 원가','할인액','바가지 초과분','대성공 수입','기타 수입']);
+ head(['매출','유물 추가 지급','발주','운영비','발주 후보 교환','점포지원','폐기 원가','할인액','바가지 초과분','대성공 수입','기타 수입']);
  row([k('revenue'),k('commission'),k('spent'),k('operating'),k('rerollSpent'),k('relicSpent'),k('wasteCost'),k('discount'),k('overcharge'),k('greatSuccess'),k('subsidy')+k('liquidation')].map(v=>v+'G'));
  L.push('');head(['DAY','매출','발주','운영비','교환','지원','할인','판매 수','잔액']);
  for(const d of hist)row([d.day,d.revenue||0,d.spent||0,d.operating||0,d.rerollSpent||0,d.relicSpent||0,d.discount||0,d.sales||0,d.balance]);

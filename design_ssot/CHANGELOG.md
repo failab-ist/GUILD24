@@ -43,10 +43,19 @@ and this table is their commit record.
 
 ## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
-- **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: what each thing is called, what it must not be called, and the known places where
-  Source or documents still use another name. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final.
-  Terms still being decided in other threads are marked `결정 대기`. Linked from SPEC_INDEX (authority, file set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md.
-  Other owners and Source are not changed here; each is aligned after its own change lands.
+- **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
+  set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final,
+  `발주 후보 교환` / `점포지원 후보 교환` (the bare `후보 교환` is retired), `요구 전력`, `상품` = the goods and `보급` = handing goods over, `이번 점포의 장식`.
+- **마왕의 능력 = 「마왕 권능」** (User 2026-10-04): 「특성」은 모험가의 개성만 가리킨다. The forecast line reads `마왕의 권능`. The 마왕 report, 도감 탭 and coach
+  lines that still say 특성 are aligned by the 마왕 조사 thread.
+- **원정 소지금 획득 -> 손님 소지금 획득** (the NIGHT result row; the same Gold as 손님 소지금, User 2026-10-04).
+- **COPY_WORLD_VOICE no longer defines terms**: §PLAYER-FACING TERMINOLOGY (Stat names, locked terms, 심층원정, 원정 후원금, item categories) moved into GLOSSARY;
+  the Great Success signal and Run abandon copy rules stay in COPY_WORLD_VOICE. COPY_AUDIT §22 keeps its exact replacement records.
+- **Names aligned to it in Source, owners and tests**: 이번 영업의 장식 -> 이번 점포의 장식 (menu, modal, store panel, END), the store end screen reads
+  `점포 종료` (the day-end key and receipt head keep `영업 종료`), 한 영업 -> 한 점포 (stock modal), 발주 교환 / 후보 전체 교환 -> 발주 후보 교환 (button, closing receipt row, POS event, block
+  reason), 요구 전투력 -> 요구 전력, 아이템 보강 -> 상품 보강, 마지막 보급 -> 마지막 상품, 마왕성 원정 -> 최종 원정. NPC_TRAIT's 150% Loyalty line is -4
+  (it said -3; §NPC-Q-v28-2B and Source already said -4, a refused 150% -2). The 점주 가이드 lines, the 보유 골드 / 손님 소지금 / 생환 / 유료 구매 names and
+  the 마왕 특성 lines (최종전, 아이템) are aligned by the threads that are rewriting them.
 
 ## After v2.10.3 — the fight is named on its own, coach spread, 안내 switch (User 2026-10-04; the version stays 2.10.3)
 

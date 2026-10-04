@@ -99,14 +99,14 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     check(`${kind} @${tag} resolved ${won?'CLEAR':'FAIL'}: win / finalReport.cleared / Lock / bossDebug agree`,
      s.phase==='end'&&s.win===won&&s.report&&s.report.cleared===won&&!!s.lock&&!!s.debug&&(s.debug.assault>=s.debug.bossPower)===won,
      JSON.stringify({win:s.win,cleared:s.report&&s.report.cleared,assault:s.debug&&Math.round(s.debug.assault*10)/10,bossPower:s.debug&&s.debug.bossPower}));
-    check(`${kind} @${tag} END headline / reason read the resolved result`,dom.closed===(won?'마왕이 쓰러졌다.':'마왕을 토벌하지 못했다.')&&dom.reason===s.reason&&dom.head.includes(won?'제0게이트 폐쇄':'영업 종료'),JSON.stringify({closed:dom.closed,reason:dom.reason}));
+    check(`${kind} @${tag} END headline / reason read the resolved result`,dom.closed===(won?'마왕이 쓰러졌다.':'마왕을 토벌하지 못했다.')&&dom.reason===s.reason&&dom.head.includes(won?'제0게이트 폐쇄':'점포 종료'),JSON.stringify({closed:dom.closed,reason:dom.reason}));
     // 3 one resolution
     check(`${kind} @${tag} one resolution: boss() 1, Final Roll 1, end() 1, settlement 1, Meta.finish 1, Store Capital added 1`,
      q.boss===1&&q.draws===1&&q.end===1&&q.settle===1&&q.finish===1&&q.capital===1,JSON.stringify({boss:q.boss,roll:q.draws,end:q.end,settle:q.settle,finish:q.finish,capital:q.capital}));
     check(`${kind} @${tag} the Final cue once, nothing replays it on END`,q.cues.filter(x=>x==='final').length===1,JSON.stringify(q.cues));
     // 4 party and last supply = the Final snapshot
     const expect=await p.evaluate(team=>team.map(m=>({name:m.name,who:'Lv.'+m.level+' '+DATA.jobBy[m.job].name,
-     carried:m.pack.length?'마지막 보급 · '+m.pack.map(i=>DATA.itemBy[i].name).join(' · '):'빈손으로 갔다'})),pre.team);
+     carried:m.pack.length?'마지막 상품 · '+m.pack.map(i=>DATA.itemBy[i].name).join(' · '):'빈손으로 갔다'})),pre.team);
     check(`${kind} @${tag} sent-off heading follows the result`,dom.sentH===(won?'제0게이트를 닫고 온 사람들':'마왕성으로 보낸 사람들'),dom.sentH);
     check(`${kind} @${tag} exactly the departed members, their Final Lv / Job, their actual last Bag`,JSON.stringify(dom.goers)===JSON.stringify(expect),JSON.stringify(dom.goers));
     check(`${kind} @${tag} the evidence is the finalReport snapshot (live packs are already cleared)`,

@@ -295,7 +295,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(/getAttribute\('aria-disabled'\)==='true'/.test(app),'the click listener answers a blocked control with the toast and nothing else');
  assert.ok(!/'비싼 상품일수록|일반 부상의 투력 페널티를 대체/.test(read('dist/data/catalog.js')),'no Trait flavor note survives');
  assert.ok(/tr\.note\?`<em class="tone-cost">/.test(fn('traitRows')),'the one remaining note (거짓말쟁이) renders as an effect row');
- assert.ok(order.includes('후보 전체 교환'),'the reroll names its full-offer scope');
+ assert.ok(order.includes('발주 후보 교환'),'the reroll names its full-offer scope');
  assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
  assert.ok(order.includes('발주 교환권'),'the free first use is called out');
  assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
@@ -546,7 +546,8 @@ test('SALE: the customer line is a balloon on the character, not a system notifi
  assert.ok(/\n\.p-sale \.say\{top:70px;max-width:calc\(100% - var\(--gutter\) - 122px\);padding:6px 10px 7px;font-size:14px;line-height:1\.4\}/.test(css),'SALE balloon: under the wallet line, clear of the slot pictures, 14px, tight padding');
  assert.ok(/\.p-sale \.say\{left:var\(--gutter\);top:8px;bottom:auto;max-width:min\(calc\(100% - var\(--gutter\) - 52px\),560px\);padding:9px 13px 10px;font-size:15px;line-height:1\.5\}/.test(read('dist/ui/director-review.css')),'the wide-screen SALE rule (director-review.css, 900px+) restores the full-size balloon');
  assert.ok(/playCue\(\);placeSpeech\(\);armSpeech\(sayMs\)/.test(app)&&/function placeSpeech\(\)\{[\s\S]*?\.npc-wallet b[\s\S]*?classList\.remove\('up'\)/.test(app),'every draw measures the SALE balloon: up top unless it would cover a wallet G amount');
- assert.ok(/@media\(max-width:899px\)\{\n \.p-sale \.say\.up\{top:2px;[^}]*\}\n \.p-sale \.say\.up:after\{top:100%;[^}]*border-top-color/.test(css),'the up balloon (phone only) sits at the top with its tail down');
+ assert.ok(/\n\.p-sale \.say\.up\{top:2px;[^}]*\}\n\.p-sale \.say\.up:after\{top:100%;[^}]*border-top-color/.test(css),'the up balloon sits at the top with its tail down');
+ assert.ok(/function placeSpeech\(\)\{\n const say=\$\('\.p-sale \.say'\);if\(!say\|\|matchMedia\('\(min-width:900px\)'\)\.matches\)return;/.test(app),'only a phone measures it; the wide screen keeps its own balloon');
  assert.ok(/\.say\{[^}]*background:color-mix\(in srgb,var\(--paper\) 88%,transparent\)/.test(css),'the 88% background compromise is unchanged');
  // It must not eat the decision: no clipping, no ellipsis, no shrink-to-fit.
  assert.ok(!/\.say[^{]*\{[^}]*text-overflow/.test(css),'a sentence is never ellipsised');
@@ -693,7 +694,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
     answers, and it states what is lost AND what survives. */
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
+ assert.ok(app.includes('이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
  assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
@@ -701,7 +702,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
- assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
+ assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
   'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
@@ -837,11 +838,11 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
  assert.ok(menu.includes("btn('현재 지점 포기','abandon','danger')"),'the store abandon is in the menu and confirms first');
  // v2.9.0 F5 (User 2026-09-24): exact composition and routing
- assert.ok(menu.includes("btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 영업의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')"),'menu rows: 모험가 수첩 / 도감 / 점포지원 / 이번 영업의 장식 / 점주 가이드 / 설정 / 현재 지점 포기');
+ assert.ok(menu.includes("btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 점포의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')"),'menu rows: 모험가 수첩 / 도감 / 점포지원 / 이번 점포의 장식 / 점주 가이드 / 설정 / 현재 지점 포기');
  const act5=app.slice(app.indexOf('async function action(el)'));
  assert.ok(act5.includes("case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;"),'점포지원 opens the selection only while purchasable, else the owned list');
  assert.ok(act5.includes("case'abandon-go':game.abandon();")&&!/case'abandon-go':[^\n]*game\.(start|end)\(/.test(act5),'abandon discards the Run at once and starts nothing');
- assert.ok(fn('loadoutModal').includes("'비어 있음'")&&fn('loadoutModal').includes('D.decorationSlots.map(')&&!fn('loadoutModal').includes('data-action'),'이번 영업의 장식 is read-only, four Slots, empty reads 비어 있음');
+ assert.ok(fn('loadoutModal').includes("'비어 있음'")&&fn('loadoutModal').includes('D.decorationSlots.map(')&&!fn('loadoutModal').includes('data-action'),'이번 점포의 장식 is read-only, four Slots, empty reads 비어 있음');
  assert.ok(app.includes("modal==='abandonConfirm'")&&app.includes("btn('지점 포기','abandon-go','danger')"),'the §1-3 confirm guards the abandon');
  assert.ok(!menu.includes('모든 게임 데이터 초기화') && !menu.includes('Full Data Reset'),'full reset is removed from menu');
 });
@@ -1825,8 +1826,8 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
  for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* User 2026-10-04: the reroll key is told again, once, on DAY 2 (the kit is DAY 3), and the key keeps its name and gains the refresh mark */
- assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 후보 전체 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]"),'the DAY 2 reroll mark, verbatim');
- assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'후보 전체 교환 · '"),'the 후보 전체 교환 key carries the refresh icon and keeps its name');
+ assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]"),'the DAY 2 reroll mark, verbatim');
+ assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'발주 후보 교환 · '"),'the 발주 후보 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']]"),'CLOSING keeps its first clause only');
@@ -2828,7 +2829,7 @@ test('SA-Q36: the Decoration comparison shows only what the decision is made on'
  {const r=row(out,'sponsorSign');assert.ok(r.indexOf('deco-name')<r.indexOf('data-action="deco-buy"')&&r.indexOf('data-action="deco-buy"')<r.indexOf('deco-effect'),'the key sits beside the name, the effect line below them');}
  assert.ok(/data-action="deco-unequip"[^>]*>해제</.test(row(out,'trainingSign')),'owned and worn: the 해제 key - equipped state stays');
  Meta.equipDecoration(a,'sign',null);assert.ok(/data-action="deco-equip"[^>]*>적용</.test(row(panel(null),'trainingSign')),'owned, not worn: the 적용 key');Meta.equipDecoration(a,'sign','trainingSign');
- assert.ok(row(inRun,'trainingSign').includes('이번 영업에 적용 중')&&row(inRun,'sponsorSign').includes(DATA.decorationBy.sponsorSign.price.toLocaleString()+' 자본'),'in a Run: worn state and price, no keys');
+ assert.ok(row(inRun,'trainingSign').includes('이번 점포에 적용 중')&&row(inRun,'sponsorSign').includes(DATA.decorationBy.sponsorSign.price.toLocaleString()+' 자본'),'in a Run: worn state and price, no keys');
  assert.ok(!out.includes('class="tale"'),'and neither is its slot');
  // the data itself is untouched and still available to lore-ready surfaces
  assert.ok(DATA.decorations.every(d=>d.text&&d.text.trim()),'every Decoration still carries its Flavor');
@@ -3006,8 +3007,8 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
  assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');
  assert.ok(app.includes("'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.'"),'§1-6 completion');
- assert.ok(app.includes("'이번 영업의 장식은 고정됨.'"),'§9-1 active-Run line');
- assert.ok(app.includes("'장식은 영업 시작 전에 변경할 수 있습니다.'"),'§9-1 pre-Run line');
+ assert.ok(app.includes("'이번 점포의 장식은 고정됨.'"),'§9-1 active-Run line');
+ assert.ok(app.includes("'장식은 점포를 열기 전에 변경할 수 있습니다.'"),'§9-1 pre-Run line');
  assert.ok(!app.includes('장식은 영업 밖에서만')&&!app.includes('지금은 영업 중이라 확인만 됩니다'),'and the old pair is gone');
  assert.ok(!app.includes('비워 둘 수 있습니다'),'§9-2 the empty Slot explains itself');
  // mechanics untouched: the same two destructive actions, through the same handlers
@@ -3021,7 +3022,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  const steps=fn('coachSteps')||app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach'));
  for(const line of [
   '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
-  '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.',
   '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
   '다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
@@ -3112,7 +3113,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  const h=fn('help');
  for(const line of [
   'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
-  '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
   '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
@@ -3167,7 +3168,7 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  const pres=read('dist/ui/presentation.js');
  assert.ok(pres.includes("'예상보다 큰 성과를 내고 돌아왔다.'"),'§6-2 the Great Success outcome');
  assert.ok(!pres.includes('예상보다 일찍 게이트에서 나왔다'),'and the time-saving reading is gone');
- assert.ok(pres.includes("label:'원정 소지금 획득'"),'§6-8 the Wallet reward label');
+ assert.ok(pres.includes("label:'손님 소지금 획득'"),'§6-8 the Wallet reward label');
  assert.ok(!pres.includes('NPC 소지금 획득'),'and the internal NPC wording is gone');
 });
 
@@ -3566,7 +3567,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  // first-ORDER coach (UI_UX §TUTORIAL — COACH DIET, User 2026-09-30): 발주 확정 alone; the gold mark stays retired
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
  assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['confirm','[data-action="confirm-order"]']],'one step, on the confirm key');
- assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
+ assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 for every Stat (Stat n당 대응 1)
  const rate={survival:3,mobility:3,spirit:3};

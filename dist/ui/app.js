@@ -65,7 +65,7 @@ let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
-/* User 2026-10-04: the ORDER 후보 전체 교환 key keeps its name and gains this refresh mark */
+/* User 2026-10-04: the ORDER 발주 후보 교환 key keeps its name and gains this refresh mark */
 const REROLL_ICON='<svg class="reroll-icon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 1-1.5-3.6M12 1.8V5H8.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" fill="none"/></svg>';
 const closeX=()=>btn(CLOSE_X,'dismiss','takeover-x','aria-label="창 닫기"');
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
@@ -685,7 +685,7 @@ function render(){
  syncWatchers(phase);
 }
 function phaseScreen(phase){
- return phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
+ return phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 점포에 쓸 지원 하나를 고르세요.</p></div>','');
 }
 /* The warehouse is a native disclosure, but its preference is an account-level presentation
    choice: it opens for a new player and, once folded, stays folded on later Days and reloads
@@ -1093,7 +1093,7 @@ function hideSpeech(){
 /* SALE phone balloon: it goes up over the backwall when it leaves the customer's money
    readable, and hangs under the wallet line (ui.css .p-sale .say) when it would cover a G amount. */
 function placeSpeech(){
- const say=$('.p-sale .say');if(!say)return;
+ const say=$('.p-sale .say');if(!say||matchMedia('(min-width:900px)').matches)return;
  say.classList.add('up');
  const r=say.getBoundingClientRect();
  if([...document.querySelectorAll('.p-sale .npc-wallet b')].some(b=>{const w=b.getBoundingClientRect();
@@ -1301,7 +1301,7 @@ function closingReceipt(s){
     ordered, and printing its cost as a loss read as Gold leaving the drawer twice. */
  const d=s.daily;
  const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['재고 정리',d.liquidation]];
- const outs=[['발주',d.spent,true],['발주 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
+ const outs=[['발주',d.spent,true],['발주 후보 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
  const total=rows=>rows.reduce((t,r)=>t+(r[1]||0),0),change=total(ins)-total(outs),open=s.money-change;
  const line=(r,sign)=>r[1]||r[2]?'<div class="row"><span>'+E(r[0])+'</span><b>'+(r[1]?sign:'')+fmt(r[1]||0)+'</b></div>':'';
  const tomorrow=s.day<29?game.tomorrowOperatingCost():null,tone=change>0?'gain':change<0?'loss':'even';
@@ -1353,12 +1353,12 @@ const coachSteps={
   ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다.'],
   ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
-    effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
- order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],
+    effect line, the 최대 key and the priced 발주 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
+ order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
   ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
   /* User 2026-10-04: the reroll key is told once, on DAY 2 - a day with no other ORDER mark (the kit is DAY 3) */
-  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 후보 전체 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]],
+  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1755,7 +1755,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
    +'<ol class="lines">'+s.offers.map((o,i)=>orderOffer(s,o,i)).join('')+'</ol>'
- +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>'+REROLL_ICON+'후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
+ +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>'+REROLL_ICON+'발주 후보 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
 /* v2.9.10 (User 2026-09-27): every Item names its category (음식 / 음료 / 포션 / 야외장비 / 보험), the words the Events and
@@ -1971,8 +1971,8 @@ const relicRef=extra=>{const owned=game.ownedRelics();
  return '<button class="relic-ref" data-action="owned-relics"'+(extra?' '+extra:'')
   +' aria-label="보유 점포지원 '+owned.length+' / 7 · 효과 보기">점포지원 <b>'+owned.length+' / 7</b></button>';};
 /* COPY_AUDIT §1-3: one body for both confirmations that discard the Run's rewards */
-const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.</p>';
-/* UI_UX §MENU — 이번 영업의 장식 (User 2026-09-24, v2.9.0): the Run's frozen loadout, read-only; an empty Slot reads 비어 있음 (COPY_AUDIT §1-7) */
+const ABANDON_BODY='<p>이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.</p>';
+/* UI_UX §MENU — 이번 점포의 장식 (User 2026-09-24, v2.9.0): the Run's frozen loadout, read-only; an empty Slot reads 비어 있음 (COPY_AUDIT §1-7) */
 function loadoutModal(){const lo=game.run?.loadout||{};
  return '<ul class="effects">'+D.decorationSlots.map(slot=>{const d=lo[slot]&&D.decorationBy[lo[slot]];
   return '<li class="deco-line'+(d?'':' empty')+'"><span>'+E(SLOT_COPY[slot]||slot)+'</span><b>'+(d?E(d.name):'비어 있음')+'</b>'+(d?'<p class="smalltext">'+E(d.effect)+'</p>':'')+'</li>';}).join('')+'</ul>';}
@@ -2000,7 +2000,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
     window was open until DAY N. A disabled action says why it is disabled, on the line that
     would otherwise contradict it. The seven is the same literal ownedRelicView prints - it
     is the rule's own number, not a balance parameter to be promoted. */
- +'<p>'+(first?(s.phase==='foundation'?'이번 영업에 쓸 지원 하나를 고르세요.':until+' 무료로 고를 수 있다.')
+ +'<p>'+(first?(s.phase==='foundation'?'이번 점포에 쓸 지원 하나를 고르세요.':until+' 무료로 고를 수 있다.')
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
    :until+' 구매할 수 있다 · 보유 골드 '+fmt(s.money)+'G')+'</p></div>'
  +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
@@ -2028,10 +2028,10 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): a footer key beside 나중에 결정, the same rank and look, one line, while the window
-   can still be bought from (never DAY 0). A short wallet greys it the way ORDER's 후보 전체 교환 does - the label keeps its one
+   can still be bought from (never DAY 0). A short wallet greys it the way ORDER's 발주 후보 교환 does - the label keeps its one
    line and a tap says the cause and the shortfall (COPY_AUDIT §11-31c) */
 function relicReroll(){if(!game.canRerollRelics())return '';const price=game.relicRerollPrice(),lack=price-game.run.money;
- return btn('후보 전체 교환 · '+fmt(price)+'G','reroll-relics','stamp',lack>0?'aria-disabled="true" data-reason="relicMoney" data-lack="'+lack+'"':'');}
+ return btn('후보 교환 · '+fmt(price)+'G','reroll-relics','stamp',lack>0?'aria-disabled="true" data-reason="relicMoney" data-lack="'+lack+'"':'');}
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
    acquisition can be spent on, so it sits beside the candidates and says as much.
    Shown only on a Run that is actually facing SLOTH, and only on an opportunity Day. */
@@ -2061,7 +2061,7 @@ function finalSeal(){const s=game.run;if(!s.finalReport)return '';const b=D.boss
  return '<span class="seal '+(s.win?'won':'lost')+'" aria-hidden="true"><b>'+E(b?.name||'')+'</b></span>';}
 function endBanner(){const s=game.run,a=game.account;
  return '<div class="tape end-tape"><div class="tear top"></div><div class="print">'+finalSeal()
- +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제0게이트 폐쇄':'영업 종료')+' · '+E(s.branch)+'</span></div>'
+ +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제0게이트 폐쇄':'점포 종료')+' · '+E(s.branch)+'</span></div>'
  +'<p class="closed">'+E(endHeadline())+'</p>'
  +'<p class="reason">'+E(s.endReason)+'</p>'
  +ledger()+'</div><div class="tear bottom"></div></div>';}
@@ -2225,7 +2225,7 @@ function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)r
    const carried=(m.items||[]).map(id=>D.itemBy[id]?.name).filter(Boolean);
    return '<article class="goer">'+portrait(n,88)
     +'<div><b>'+E(m.name)+'</b><span class="who-line">Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span>'
-    +'<span class="carried">'+(carried.length?'마지막 보급 · '+E(carried.join(' · ')):'빈손으로 갔다')+'</span></div>'
+    +'<span class="carried">'+(carried.length?'마지막 상품 · '+E(carried.join(' · ')):'빈손으로 갔다')+'</span></div>'
     +'</article>';}).join('')+'</div></section>';}
 /* BATCH 3 END: a bankruptcy or death-limit closure is decided at closeDay(), after the last
    NIGHT and CLOSING were already read, yet the ending printed that whole night again under the
@@ -2234,14 +2234,14 @@ function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)r
    one -> the next store (PRESENTATION_POLISH_BATCH3 §END); NIGHT stays the owner of those
    records. A Final ending never had them (run.js clears s.results there). */
 function endScreen(){
- return stage('end','영업 종료','',endBanner()+sentOff(),btn('다음 점포 열기','new','stamp'));}
+ return stage('end','점포 종료','',endBanner()+sentOff(),btn('다음 점포 열기','new','stamp'));}
 /* The failure line is not a hidden threshold: the book that already lists the dead says how
    many that is, and how many the store has. */
 function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업을 시작하면 모험가 수첩이 열린다.</p>';
  const lost=s.stats.deaths,limit=Meta.deathLimit(s);
  return '<p class="lost-count'+(lost>=limit-2?' near':'')+'">돌아오지 못한 사람 <b>'+lost+' / '+limit+'</b>'
  +'<span>'+limit+'명에 이르면 소문이 퍼져 이 점포의 영업이 끝난다.</span></p>'
- +'<p class="smalltext">이름을 누르면 마지막 보급과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
+ +'<p class="smalltext">이름을 누르면 마지막 상품과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
  +s.npcs.filter(n=>n.introduced).sort((a,b)=>Number(b.alive)-Number(a.alive)||b.loyalty-a.loyalty).map(n=>npcCard(n)).join('')+'</div>';}
 function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  let cond=[];
@@ -2271,7 +2271,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
     reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
  cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
- return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
+ return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'상품 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
    this reads the same truth the gate itself reads. */
 /* 길드 특제 도시락 / 세계수 생환부적 open on the account flag the run sets on reaching DAY 10 / 14 (Meta.itemUnlocked), not on metaUnlock. */
@@ -2319,7 +2319,7 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
  const loadout=Meta.storeLoadout(a);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+Meta.storeCapital(a).toLocaleString()+'</b>'
- +' · '+(inRun?'이번 영업의 장식은 고정됨.':'장식은 영업 시작 전에 변경할 수 있습니다.')+'</p>'
+ +' · '+(inRun?'이번 점포의 장식은 고정됨.':'장식은 점포를 열기 전에 변경할 수 있습니다.')+'</p>'
  +D.decorationSlots.map(slot=>{
    const options=D.decorations.filter(d=>d.slot===slot),active=loadout[slot];
    /* a stable handle so a Slot row elsewhere can open this panel already on that Slot */
@@ -2330,7 +2330,7 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
           in the data); the key sits beside the name and the effect line runs the card's full width below them */
        +'<b class="deco-name">'+E(d.name)+'</b>'
        +(owned
-         ? (inRun?'<span class="muted">'+(on?'이번 영업에 적용 중':'미적용')+'</span>'
+         ? (inRun?'<span class="muted">'+(on?'이번 점포에 적용 중':'미적용')+'</span>'
                  :btn(on?'해제':'적용',on?'deco-unequip':'deco-equip','small'+(on?'':' active'),'data-id="'+d.id+'"'))
          : (inRun?'<span class="muted">'+d.price.toLocaleString()+' 자본</span>'
                  :decoPending===d.id
@@ -2377,7 +2377,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
-function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에 시작할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 시작한 마감에서는 잔고가 0 이상이 된 뒤에도 계속 정리할 수 있습니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
+function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에 시작할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 시작한 마감에서는 잔고가 0 이상이 된 뒤에도 계속 정리할 수 있습니다. 한 점포에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The store the Run is about to open, as the
@@ -2408,7 +2408,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
     +'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</b>'
     +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>'
-    +'<p class="prep-status">'+(owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
+    +'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="store-capital capital-plate"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
@@ -2438,7 +2438,7 @@ function settings(){return `<div class="settings-content">
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -2566,7 +2566,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
    let itemV=0;for(const st of p.itemStats)if(st.stats[k])itemV+=st.stats[k];
    body='<div class="stack"><div class="row wrap" style="justify-content:space-between"><span>기본</span><strong>'+n.stats[k]+'</strong></div>';
    if(k==='combat'&&n.equipment.power)body+='<div class="row wrap" style="justify-content:space-between"><span>장비</span><strong>+'+n.equipment.power+'</strong></div>';
-   if(itemV)body+='<div class="row wrap" style="justify-content:space-between"><span>아이템 보강</span><strong>'+(itemV>0?'+':'')+Presentation.stat(itemV,true)+'</strong></div>';
+   if(itemV)body+='<div class="row wrap" style="justify-content:space-between"><span>상품 보강</span><strong>'+(itemV>0?'+':'')+Presentation.stat(itemV,true)+'</strong></div>';
    body+='<hr style="border:0;border-top:1px solid var(--line);margin:4px 0"><div class="row wrap" style="justify-content:space-between"><span>현재 적용값</span><strong>'+Presentation.stat(p.effects[k],true)+'</strong></div>';
    if(p.why.length)body+='<div class="muted" style="margin-top:12px;font-size:13px;line-height:1.4">변화 원인<br>'+p.why.map(w=>'- '+E(w)).join('<br>')+'</div>';
    body+='</div>';footer=btn('확인','shop','stamp');narrow=true;
@@ -2576,14 +2576,14 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
 else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
    /* UI_UX §MENU / SETTINGS — EXACT COMPOSITION (User 2026-09-24, v2.9.0): 점포지원 routes to the selection
-      only while a window is purchasable; 이번 영업의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
+      only while a window is purchasable; 이번 점포의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
       (§1-3) and then discards the Run at once. */
-   else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 영업의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')
+   else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 점포의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')
       +(game.run?btn('현재 지점 포기','abandon','danger'):'')+'</div>';
       const icons={roster:'roster',codex:'codex',relics:'support',loadout:'decor',help:'guide',settings:'settings',abandon:'abandon'};
       body=body.replace(/(<button[^>]*data-action="([^"]+)"[^>]*>)([^<]+)/g,(_,open,action,label)=>open+'<img class="menu-icon" src="ui/assets/presentation/menu/'+icons[action]+'.webp" alt="" aria-hidden="true"><span class="menu-label">'+label+'</span>');
       narrow=true;}
-   else if(modal==='loadout'){title='이번 영업의 장식';body=loadoutModal();footer=btn('확인','dismiss','stamp');narrow=true;}
+   else if(modal==='loadout'){title='이번 점포의 장식';body=loadoutModal();footer=btn('확인','dismiss','stamp');narrow=true;}
    else if(modal==='abandonConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','abandon-go','danger');narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}
  /* D30 last order (User 2026-09-30): the muster's own candidates, read only - each card opens the notebook, nothing is picked */
@@ -2836,9 +2836,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
-const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'점포지원 후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
  /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
- cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 교환을 할 수 없습니다.'};
+ cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 후보 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
  /* H2: a price key has its own press (KEY_PRESS, playCue) - the 정가 key's `stamp` class must not add a second one */
