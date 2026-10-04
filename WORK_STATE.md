@@ -5,7 +5,7 @@ STATE: V2_10_2_MERGED + 이후 5건(#81 ~ #90)이 main에 있고 버전 번호�
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.10.2(로딩 화면 · 가방 글씨 · 판매 화면 여백 · 문장 단위 줄바꿈, PR #75 + 버전 PR, Pages 배포). 직전은 v2.10.1(PR #64 · #66 · #67). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. main = v2.10.2 + 이후 PR #81 ~ #90(버전 번호는 그대로)(로딩 화면 · 가방 글씨 · 판매 화면 여백 · 문장 단위 줄바꿈, PR #75 + 버전 PR, Pages 배포). 직전은 v2.10.1(PR #64 · #66 · #67). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.0 퀵패치 3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - 밸런스 기준 로그: `reports/v2100-measure/qp3-option1.log`(측정 방법은 `AGENTS.md` §9-B).
