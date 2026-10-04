@@ -8,6 +8,8 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
 
+> 용어(이름과 뜻, 쓰지 않는 말)는 `GLOSSARY_v2.8.0.md`가 정한다. 이 문서의 §PLAYER-FACING TERMINOLOGY와 어긋나면 GLOSSARY를 따른다.
+>
 > Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Authoritative Design Spec.
 >
 > 이 문서는 Gameplay Rule / Balance / Item Effect / Trait Function / NPC progression을 변경하지 않는다.

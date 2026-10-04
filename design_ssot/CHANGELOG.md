@@ -41,6 +41,13 @@ and this table is their commit record.
 - **v2.10.1 design work diaries leave `reports/`**: the 2026-10-03 `UI_DESIGN_*`, `UI_SALE_*` and `UI_SUPPORT_*` hand-offs, review PDFs, capture
   images and QA JSON (about 50 MB, nothing reads them; git keeps them). The component catalog `UI_COMPONENTS.md` moves to `archive/v2.10.1/`.
 
+## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
+
+- **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: what each thing is called, what it must not be called, and the known places where
+  Source or documents still use another name. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final.
+  Terms still being decided in other threads are marked `결정 대기`. Linked from SPEC_INDEX (authority, file set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md.
+  Other owners and Source are not changed here; each is aligned after its own change lands.
+
 ## After v2.10.3 — the fight is named on its own, coach spread, 안내 switch (User 2026-10-04; the version stays 2.10.3)
 
 - **Combat proof** (PR #94 / #95): with the same recorded noise roll, an Item whose removal would have lost the combat check is named on

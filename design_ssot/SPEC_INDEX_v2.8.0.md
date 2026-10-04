@@ -18,6 +18,8 @@ EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 3. current Source
 4. older chat / proposal / report / historical spec
 
+NAMES = GLOSSARY_v2.8.0.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
+
 DESIGN TRUTH = current routed Design SSOT.
 IMPLEMENTATION TRUTH = current Source.
 
@@ -273,6 +275,7 @@ Versions are managed the way a maintained project does it, not by renaming files
 
 Core / Run / Meta:
 - SPEC_INDEX_v2.8.0.md (this index; §GAME CORE)
+- GLOSSARY_v2.8.0.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
 - META_v2.8.0.md
 
@@ -316,6 +319,7 @@ SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
 UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.8.0.md
 PRESENTATION PRINCIPLES / VISUAL CONSTRUCTION / ASSET QUALITY / ORNAMENT BUDGET / AUDIO PRESENTATION / VISUAL REVIEW -> PRESENTATION_PRINCIPLES_v2.8.0.md
+TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.8.0.md
 COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
 EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.8.0.md
 EVENT -> EVENT_v2.8.0.md
