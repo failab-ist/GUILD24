@@ -25,7 +25,7 @@ let preRunReturn=false;
    that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
 let prepOpen=false;
 /* UI_UX §PROLOGUE (User 2026-10-04): five scenes before every new store - at start-up with no Run (in place of the
-   loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on, 건너뛰기 ends it.
+   loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on (every scene says so), 건너뛰기 ends it.
    Scenes 1~2 play the Boss track, scene 3 is silence, and from scene 4 the title runs on into the store screen. */
 let prologue=null;
 const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,'open','depart'];
@@ -40,6 +40,7 @@ function prologueScreen(){const i=prologue.i,art=[1,2,null,4][i],
    :i===4?'<img class="pro-art" src="ui/assets/presentation/morning/store-bg-'+(proWide()?'wide':'phone')+'.png" alt=""><img class="pro-npc" src="ui/assets/npc/normal/F/003.webp" alt="">':'';
  return '<div class="prologue" data-scene="'+(i+1)+'" data-action="prologue-next">'+img
   +'<div class="pro-cap">'+Copy.prologue.scenes[i].map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
+  +'<p class="pro-hint">'+E(matchMedia('(hover:hover) and (pointer:fine)').matches?Copy.prologue.click:Copy.prologue.tap)+'</p>'
   +'<button type="button" class="pro-skip" data-action="prologue-skip">'+E(Copy.prologue.skip)+'</button></div>';}
 /* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
    screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */

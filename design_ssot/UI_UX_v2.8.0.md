@@ -1224,7 +1224,8 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
 | 5 | the store inside with one customer | 오는 모험가마다 팔고, 먹이고, 키운다. / 단골이 되면 또 오고, 또 오면 더 강해진다. | depart (door) |
 
 - Scenes 1~3 keep the caption at the screen's centre; scenes 4~5 under the picture. One sentence per line, no wrap.
-- A tap anywhere goes to the next scene; `건너뛰기` (top right) ends it. It ends on the store screen.
+- A tap anywhere goes to the next scene, and every scene says so at the bottom: `탭하여 넘기기` on a touch screen,
+  `클릭하여 넘기기` with a mouse. `건너뛰기` (top right) ends it. It ends on the store screen.
 - Copy owner: `Copy.prologue`. Art: `dist/ui/assets/presentation/prologue/` (phone and wide per scene).
 
 ### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
