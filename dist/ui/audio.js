@@ -13,8 +13,8 @@
 
    AUDIO VOICE asks the material cues for mechanical / paper / register / fixture sound. An
    oscillator can imply that material; it cannot be it, so those cues play a recorded object
-   from dist/ui/assets/audio (CC0-1.0, vendored by tools/vendor-assets.py, recorded in
-   reports/ASSETS.md). They ship with the build the way the fonts do, so the game still needs
+   from dist/ui/assets/audio (CC0-1.0; provenance is recorded in reports/ASSETS.md;
+   package cues are vendored by tools/vendor-assets.py). They ship with the build the way the fonts do, so the game still needs
    no network, which the page promises in its <noscript>. Every sampled cue keeps a synthesised
    shape behind it, so a cold first press, a blocked load or a decode failure is thinner, never
    silent. The tonal families - NIGHT outcomes, the Boss motif - stay synthesised, because those
@@ -162,7 +162,7 @@ const sample={order:'stamp',sale:'register',overcharge:'register',
  half:'register',refusal:'refuse',support:'secure',purchase:'cart',unlock:'unlock',
  open:'shutter',close:'settle',final:'gate',button:'key',
  /* v2.9.0 TRANSACTION BEAT A4: 손님 보내기 carries a recorded utility object (door / step family) */
- depart:'door'};
+ depart:'door',page:'page-turn'};
 const buffers=new Map(),lastAt=new Map();
 /* Fetched once, on the first unmuted sync, so a muted player downloads nothing. A failure is
    swallowed on purpose: the synthesised shape is already this cue's fallback. */
@@ -271,7 +271,7 @@ const shape={
  /* the recorded door is the body; the two notes stay as the fallback when it has not loaded */
  depart:{gain:.9,dur:.2,type:'sine',step:.1,sampleGain:.8},
  /* UI_UX §PROLOGUE scene 3: the music cuts and a falling wah-wah answers the joke */
- page:{noise:[{at:0,dur:.3,gain:.55,hz:700,to:3200,q:.8},{at:.03,dur:.04,gain:.7,hz:5200,q:.5,filter:'highpass'},{at:.07,dur:.03,gain:.5,hz:6000,q:.5,filter:'highpass'},{at:.1,dur:.05,gain:.8,hz:4800,q:.5,filter:'highpass'},{at:.15,dur:.03,gain:.55,hz:6200,q:.5,filter:'highpass'},{at:.19,dur:.04,gain:.7,hz:5000,q:.5,filter:'highpass'},{at:.27,dur:.1,gain:1,hz:2600,to:700,q:.9}]},
+ page:{sampleGain:1,noiseFallback:true,noise:[{at:0,dur:.3,gain:.55,hz:700,to:3200,q:.8},{at:.03,dur:.04,gain:.7,hz:5200,q:.5,filter:'highpass'},{at:.07,dur:.03,gain:.5,hz:6000,q:.5,filter:'highpass'},{at:.1,dur:.05,gain:.8,hz:4800,q:.5,filter:'highpass'},{at:.15,dur:.03,gain:.55,hz:6200,q:.5,filter:'highpass'},{at:.19,dur:.04,gain:.7,hz:5000,q:.5,filter:'highpass'},{at:.27,dur:.1,gain:1,hz:2600,to:700,q:.9}]},
  gag:{cut:250,gain:.7,dur:.24,type:'square',over:[.3],step:.17,sampleGain:.8},
  return:{gain:.95,dur:.22,type:'sine',step:.1,hit:1},
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
@@ -333,7 +333,7 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
      cannot play is heard through them at the same pitch (User 2026-09-29, SFX LEVELS) */
   if(sh.over)sh.over.forEach((g,k)=>g&&tone(hz*(k+2),at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1)*g,'sine',out,hit?{...sh,attack:.002}:sh));
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',out);});
- for(const nz of [].concat(sh.noise||[]))noiseVoice(t0+(nz.at??0),nz.dur??.09,SFX_VOICE*(nz.gain??1),nz,out);
+ if(!body||!sh.noiseFallback)for(const nz of [].concat(sh.noise||[]))noiseVoice(t0+(nz.at??0),nz.dur??.09,SFX_VOICE*(nz.gain??1),nz,out);
  /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is
     the register's impact (x1.3, like `hit`); 바가지's run starts `tickLate` later on a lower first tick (`tickLow`) - the
     whole run moves, so the 70 ms spacing that states the count is kept. */
