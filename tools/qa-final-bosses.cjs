@@ -9,8 +9,8 @@
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/final-bosses');
 const ALL=['WRATH','PRIDE','ENVY','GREED','GLUTTONY','LUST','SLOTH'];
-const FILE={WRATH:'B001_WRATH_BACKDROP.png',PRIDE:'B002_PRIDE_BACKDROP.png',ENVY:'B003_ENVY_BACKDROP.png',
- GREED:'B004_GREED_BACKDROP.png',GLUTTONY:'B005_GLUTTONY_BACKDROP.png',LUST:'B006_LUST_BACKDROP.png',SLOTH:'B007_SLOTH_BACKDROP.png'};
+const FILE={WRATH:'B001_WRATH_BACKDROP.webp',PRIDE:'B002_PRIDE_BACKDROP.webp',ENVY:'B003_ENVY_BACKDROP.webp',
+ GREED:'B004_GREED_BACKDROP.webp',GLUTTONY:'B005_GLUTTONY_BACKDROP.webp',LUST:'B006_LUST_BACKDROP.webp',SLOTH:'B007_SLOTH_BACKDROP.webp'};
 const WANT=(!process.argv[3]||process.argv[3]==='all')?ALL:process.argv[3].split(',');
 const WIDTHS=(process.argv[4]||'390,1280').split(',').map(Number);
 const PORT=Number(process.env.QA_PORT||5192),FIXED_NOW=1790112000000;

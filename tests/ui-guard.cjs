@@ -155,14 +155,14 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  const back=ruleFor('.modal-footer button:not(.stamp)[data-action="dismiss"]{');
  assert.ok(/background:var\(--brown\)/.test(back),'the way back is BROWN');
  assert.ok(/:not\(\.stamp\)/.test(back),'and a 확인 that wears .stamp is not swept up with it');
- assert.ok(/return-tag-blank\.png/.test(ruleFor('.relic-takeover .close .stamp{')),
+ assert.ok(/return-tag-blank\.webp/.test(ruleFor('.relic-takeover .close .stamp{')),
   'User 2026-10-03: deferring is a compact wooden return tag');
  // the footer's remaining controls carry no face at all: a utility is the neutral control
  const footerRest=ruleFor('.modal-footer button:not(.stamp){');
  assert.ok(!/background:/.test(footerRest),'a plain footer utility takes no family of its own');
  assert.ok(!/#3a2c1d/.test(footerRest),'and the retired dead brown is not its default');
  // YELLOW: a purchase, inside a card, never a screen's Action
- assert.ok(/choice-tag-blank\.png/.test(ruleFor('.relic-plate .stamp{')),'User 2026-10-03: Store Support purchase uses a compact gold paper tag');
+ assert.ok(/choice-tag-blank\.webp/.test(ruleFor('.relic-plate .stamp{')),'User 2026-10-03: Store Support purchase uses a compact gold paper tag');
  assert.ok(/background:var\(--yellow\)/.test(ruleFor('.slot-option>button[data-action="deco-buy"]')),
   'and so is a Decoration purchase');
  /* ...but only the purchase. Equipping something already owned is a state change, so the
@@ -3338,7 +3338,7 @@ test('UI_UX Store Support: contract/tag hierarchy, readable states and live free
  assert.ok(!/--sign(-lit)?\)|gradient|blur|drop-shadow|opacity:\.[0-9]/.test(block),'no green state, soft depth or whole-card fade');
  for(const banned of ['#27382f','#2c5c40','#7ddc9f','#9ce4b6','#4f9e6d','#3d8b5b','#d8f5e3','#e9fbef'])
   assert.ok(!block.includes(banned),'no green state literal '+banned);
- assert.ok(/contract-blank\.png/.test(block)&&/choice-tag-blank\.png/.test(block),'blank authored contract and choice materials');
+ assert.ok(/contract-blank\.webp/.test(block)&&/choice-tag-blank\.webp/.test(block),'blank authored contract and choice materials');
  assert.ok(/\.relic-plate h3\{[^}]*22px/.test(block)&&/\.relic-plate p\{[^}]*14px/.test(block),'readable title and effect steps remain');
  assert.ok(/grid-template-columns:minmax\(0,1fr\) 132px/.test(block),'cost and compact action have separate columns');
  const ctrl=(block.match(/\.relic-plate \.stamp\{[^}]*\}/)||[''])[0];
@@ -3349,7 +3349,7 @@ test('UI_UX Store Support: contract/tag hierarchy, readable states and live free
  assert.ok(!/min-width|min-height|font:|padding:/.test(disabled),'owned/unavailable keep the action footprint');
  const footer=(css.match(/\.relic-takeover \.close\{[^}]*\}/)||[''])[0];
  assert.ok(/background:transparent;box-shadow:none/.test(footer),'footer has no enclosing brown panel');
- assert.ok(/return-tag-blank\.png/.test(css),'defer uses a compact wooden tag');
+ assert.ok(/return-tag-blank\.webp/.test(css),'defer uses a compact wooden tag');
  const win=fn('relicTakeover');
  assert.ok(win.includes("price?fmt(price)+'G':'무료'"),'free or actual calculated price is rendered as text');
  assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),'disabled causes remain separate');
