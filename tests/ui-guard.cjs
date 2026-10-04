@@ -2474,7 +2474,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
  assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2]`)
-  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2]`)
+  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3]`)
   &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
@@ -3822,5 +3822,11 @@ test('ending: the music before holds until the result lands, then the ending cue
  assert.ok(/!motionOK\(\)\?0:s\?\.finalReport\?FINAL_SEAL\.hold\+STAMP_FALL:ENDING_HOLD/.test(r),'the Final seal\'s landing frame, or one beat on any other ending');
  assert.ok(/Sound\.play\(game\.run\.win\?'endwin':'endfail'/.test(r)&&/Sound\.sync\(st\.muted,audioPhase\(\),st\)/.test(r),'then the cue and the ending track');
  assert.ok(/if\(phase==='end'&&arrived\)endReveal\(\);/.test(fn('render')),'armed on arrival');
+});
+test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
+ const set=fn('settings');
+ assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
+ assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
+ assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');
 });
 console.log(count+' ui guard groups passed');
