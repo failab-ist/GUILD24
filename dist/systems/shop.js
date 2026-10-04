@@ -621,7 +621,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
-  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,1);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,D.balance.returnLoyalty);if(n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}

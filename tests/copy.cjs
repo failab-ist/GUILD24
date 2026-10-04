@@ -22,6 +22,8 @@ const POOL_MIN={
  'visit.trait.frugal':6,'visit.trait.thrifty':6,'visit.trait.coward':6,'visit.trait.liar':6,
  'visit.trait.eater':6,'visit.trait.greed':6,'visit.trait.shy':6,'visit.trait.social':6,
  'visit.trait.collector':6,'visit.trait.aloof':6,
+ 'visit.trait.impulse':6,'visit.trait.rich':6,'visit.trait.honest':6,'visit.trait.pyrophobia':6,
+ 'visit.trait.coldhand':6,'visit.trait.potionbody':6,'visit.trait.clumsy':6,'visit.trait.reckless':6,
  'sale.full':20,'sale.half':20,'sale.overcharge':20,
  'sale.refuse.price':12,'sale.refuse.need':12,'sale.refuse.choice':12,
  'night.plain':16,'night.great':10,'night.retreat':12,'night.hurt':12,'night.severe':8,
@@ -43,6 +45,8 @@ test('§11.1/§11.2: every repeated situation has a real Variant Pool at its v2.
 const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3','visit.regular':'16-4','visit.helped':'16-5',
  'visit.trait.frugal':'17-1','visit.trait.thrifty':'17-2','visit.trait.coward':'17-3','visit.trait.liar':'17-4','visit.trait.eater':'17-5',
  'visit.trait.greed':'17-6','visit.trait.shy':'17-7','visit.trait.social':'17-8','visit.trait.collector':'17-9','visit.trait.aloof':'17-10',
+ 'visit.trait.impulse':'17-11','visit.trait.rich':'17-12','visit.trait.honest':'17-13','visit.trait.pyrophobia':'17-14',
+ 'visit.trait.coldhand':'17-15','visit.trait.potionbody':'17-16','visit.trait.clumsy':'17-17','visit.trait.reckless':'17-18',
  'sale.full':'18-1','sale.half':'18-2','sale.overcharge':'18-3','sale.refuse.price':'18-4','sale.refuse.overcharge':'18-4a','sale.refuse.need':'18-5','sale.refuse.choice':'18-6',
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
  'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
@@ -58,6 +62,30 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
   assert.ok(sec,name+' has an approved owner section');
   assert.deepEqual(pool,approved[sec],name+' is COPY_AUDIT '+sec+' verbatim');}
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
+});
+/* COPY_WORLD_VOICE §DIALOGUE EXPOSURE — OCCASIONAL (User 2026-10-04): the `가끔` list under a §16-§18 pool is the set
+   of its long lines that come up on 1 pick in 5; every other pick uses the pool's other lines. */
+const occasionalDoc=(()=>{const out={};let sec=null,mode=null;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+  if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];mode=null;continue;}
+  if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
+  if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
+  const q=l.match(/^>\s*(.+?)\s*$/);if(q&&mode==='가끔')(out[sec]??=[]).push(q[1]);}
+ return out;})();
+test('COPY_AUDIT `가끔`: occasional lines are the approved list, each in its own pool, picked 1 in 5',()=>{
+ assert.deepEqual([...Copy.occasional].sort(),Object.values(occasionalDoc).flat().sort(),'Source OCCASIONAL is every COPY_AUDIT 가끔 line');
+ for(const [sec,lines] of Object.entries(occasionalDoc))for(const l of lines)assert.ok(approved[sec].includes(l),l+' is also in §'+sec+' 현재');
+ for(const [name,pool] of allPools){const occ=pool.filter(l=>Copy.occasional.has(l));if(!occ.length)continue;
+  assert.ok(occ.length<pool.length,name+' keeps ordinary lines');
+  let hit=0;for(let i=0;i<2000;i++)if(Copy.occasional.has(Copy.pick(pool,'k'+i)))hit++;
+  assert.ok(hit>2000*.15&&hit<2000*.25,name+': occasional lines come up about 1 pick in 5 ('+hit+'/2000)');}
+ const frequent=['sale.full','sale.half','sale.overcharge','sale.refuse.price','sale.refuse.overcharge','sale.refuse.need','sale.refuse.choice','visit.back','visit.regular'];
+ for(const [name,pool] of allPools)if(frequent.includes(name))for(const l of pool)if(!Copy.occasional.has(l))
+  assert.ok(l.replace(/[“”]/g,'').length<=16,name+': a frequent line fits one balloon row (16 letters): '+l);
+});
+test('COPY_AUDIT §17: every Trait arrival pool belongs to a Trait the build has',()=>{
+ const cat=read('dist/data/catalog.js');
+ for(const id of Object.keys(V.trait))assert.ok(cat.includes("['"+id+"','"),id+' is an active Trait');
 });
 test('COPY_AUDIT: the letter-suffixed section id parses without attributing to its parent',()=>{
  assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
@@ -82,9 +110,8 @@ const COMPOSED={
  '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
- '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
  '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
- '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};
+ '8-4':"app.js help(): the 단골 line wraps Copy.loyalty.rule() and the 단골 threshold (Adventurer.TRUSTED_REGULAR) (User 2026-10-04)"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set
    comparison below stays exact. */
@@ -93,6 +120,10 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const walk=d=>fs.readdirSync(path.join(root,d),{withFileTypes:true}).flatMap(e=>e.isDirectory()?
   (e.name==='vendor'?[]:walk(d+'/'+e.name)):/\.(js|html)$/.test(e.name)?[d+'/'+e.name]:[]);
  const src=walk('dist').map(read).join('\n').replace(/\\`/g,'`');
+ /* Decoration / Store Support / Loyalty copy is built from the live values (User 2026-10-04), so the shipped line is the
+    rendered one: the data getters and Copy.loyalty are read here as the Player sees them. */
+ const rendered=[...DATA.relics.map(r=>r.description),...DATA.decorations.map(d=>d.name+' — '+d.effect),
+  Copy.loyalty.sale(),Copy.loyalty.coach()].join('\n');
  const missing=new Set();let checked=0,sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
   if((h=l.match(/^##\s+((\d+)-\d+[a-z]?)\./))){sec=h[1];mode=null;if(+h[2]>=16&&+h[2]<=20)sec=null;continue;}
@@ -100,7 +131,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
   if(/^#{2,3}\s/.test(l)){mode=null;continue;}
   const q=l.match(/^>\s*(.+?)\s*$/);if(!q||!sec||!mode||!mode.startsWith('현재')||/[{}]|\*\*/.test(q[1]))continue;
-  checked++;if(!src.includes(q[1]))missing.add(sec);}
+  checked++;if(!src.includes(q[1])&&!rendered.includes(q[1]))missing.add(sec);}
  assert.ok(checked>=150,'the audit parse found the literal lines ('+checked+')');
  assert.deepEqual([...missing].sort(),Object.keys(COMPOSED).filter(k=>!(k in COINCIDENT)).sort(),'only the listed composed lines are absent as one literal');
 });
@@ -534,7 +565,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/능력치 효과 \+/.test(DATA.relicBy[id].description),id+' names the channel it does move (COPY_AUDIT §11-10 / §11-25 wording)');
+  assert.ok(/올려 주는 능력치가 \d+% 더 오른다/.test(DATA.relicBy[id].description),id+' names the channel it does move (COPY_AUDIT §11-10 / §11-25 wording, User 2026-10-04)');
   assert.ok(/피로 회복·위험 대응은 그대로/.test(DATA.relicBy[id].description)&&!/피로 회복 \+/.test(DATA.relicBy[id].description),
    id+' does not claim the Fatigue recovery it leaves unchanged (v2.9.0 wording)');
  }
@@ -590,46 +621,46 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
 });
 
-/* COPY_AUDIT_APPROVED_v2.8.0 §11 — STORE SUPPORT 30/30. The approved amendment is exact Player
+/* COPY_AUDIT_APPROVED_v2.8.0 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
    text, so this is equality, not a pattern: a paraphrase, a dropped middot or a stale number is
    a FAIL here rather than something a looser assertion can absorb. Price and name are pinned in
    the same table because §11 renames two rows and RELIC_v2.8 re-prices two more, and a row that
    reads right at the wrong price is still the wrong row. */
 test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are the approved text',()=>{
  const SUPPORTS=[
-  ['bulk','묶음발주 계약',130,'같은 상품을 3개 이상 발주하면 3번째부터 · 매입가 -20%.'],
-  ['rotation','회전 진열대',80,'전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1.'],
-  ['stamp','단골 스탬프 기계',130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.'],
-  ['member','회원 관리대장',130,'다음 날부터 · 이미 만난 손님의 재방문 가중치 +70%.'],
-  ['rareContract','희귀상품 입고 계약',140,'희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.'],
-  ['guarantee','길드 보증 진열대',140,'하루 첫 200G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
-  ['hazardBoard','원정 위험 게시판',60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
-  ['fieldRepair','야전 정비대',80,'판매한 상품의 위험 대응 수치 +40%.'],
-  ['fridge','대형 냉장고',60,'음식·음료 유통기한 +2일 (보유 재고도 1회 연장).'],
-  ['kitchen','즉석식품 코너',170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 기본 운영비 +10%.'],
-  ['board','길드 전광판',110,'하루 기본 최소 방문객 4명 (기존 3명).'],
-  ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
-  ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
-  ['memberBundle','단골 묶음혜택',190,'단골의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
-  ['premiumMember','프리미엄 멤버십',200,'단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
-  ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +20G.'],
-  ['expeditionMeal','원정 도시락 코너',200,'음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나) · 음식·음료 매입가 +3G.'],
-  ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
-  ['supplyCert','길드 납품 인증',220,'오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
-  ['dawnRecovery','새벽 회수 계약',190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
-  ['logisticsHQ','물류 본부계약',300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
-  ['lifetime','평생 단골제',310,'단골 · 모든 능력치 +10% · 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
-  ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
-  ['opsRoom','원정 작전실',290,'위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.'],
-  ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
-  ['hub','지역 거점점 계약',340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
-  ['warehouse','후방 창고 증설',130,'창고 용량 +5칸.'],
-  ['extraOrder','본사 추가발주권',130,'다음 후보 생성부터 · 발주 후보 +2개.'],
-  ['rerollTicket','발주 교환권',120,'매일 첫 발주 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
-  ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 · 기본 운영비 -30G.'],
+  ['bulk','묶음발주 계약',130,'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 20% 싸진다.'],
+  ['rotation','회전 진열대',80,'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 1개 늘어난다.'],
+  ['stamp','단골 스탬프 기계',130,'손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4). 원정 뒤에 오르는 단골도는 그대로.'],
+  ['member','회원 관리대장',130,'다음 날부터, 한 번 왔던 손님이 1.7배 자주 다시 찾아온다.'],
+  ['rareContract','희귀상품 입고 계약',140,'발주 후보에 희귀 이상 상품이 1.7배 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 10%를 더 받는다.'],
+  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 70%만 내고 가게는 전액을 받는다.'],
+  ['hazardBoard','원정 위험 게시판',60,'오늘 게이트 위험에 맞는 상품이 발주 후보에 1.5배 자주 나온다.'],
+  ['fieldRepair','야전 정비대',80,'가게에서 판 상품의 위험 대응 수치가 40% 높아진다.'],
+  ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
+  ['kitchen','즉석식품 코너',170,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 10% 오른다.'],
+  ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
+  ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
+  ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다.'],
+  ['memberBundle','단골 묶음혜택',190,'단골 손님이 오늘 두 번째 상품을 살 때, 손님은 반값만 내고 가게는 전액을 받는다.'],
+  ['premiumMember','프리미엄 멤버십',200,'단골 손님이 오면 그 손님의 손님 소지금 +40G, 희귀 이상 상품 구매 의사 +15%p.'],
+  ['returnPoints','귀환 적립제',240,'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +4, 손님 소지금 +20G.'],
+  ['expeditionMeal','원정 도시락 코너',200,'손님 가방의 음식·음료 1개마다 피로 회복 +2 (음료는 +1), 갈 게이트의 위험 대응도 모두 +2 (마왕성은 가장 약한 위험 하나만). 대신 음식·음료 매입가 +3G.'],
+  ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료가 발주 후보에 1.8배 자주 나오고, 그 상품의 구매 의사 +16%p, 유통기한 +1일 (이미 가진 재고도 한 번).'],
+  ['supplyCert','길드 납품 인증',220,'희귀 이상 상품 중 오늘 위험에 맞는 것이나 보험을 팔면, 가게가 정가의 20%를 더 받고 그 손님의 손님 소지금도 +30G.'],
+  ['dawnRecovery','새벽 회수 계약',190,'유통기한이 지난 음식·음료는 버리는 대신 매입가의 50%를 돌려받는다. 매일 첫 발주 후보에 음식이나 음료가 1칸 더 나온다.'],
+  ['logisticsHQ','물류 본부계약',300,'전날 판 상품 1개마다 오늘 발주 매입가가 3% 싸진다 (최대 30%).'],
+  ['lifetime','평생 단골제',310,'단골 손님의 능력치가 모두 10% 오른다. 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
+  ['royalCert','왕도 프리미엄 인증',320,'바가지(150%)로 팔면 가게가 판매가의 40%를 더 받고, 손님의 바가지 구매 의사 +10%p. 대신 기본 운영비가 10% 오른다.'],
+  ['opsRoom','원정 작전실',290,'손님의 위험 대응이 필요한 수치를 넘긴 만큼 투력이 오른다 (최대 +30%).'],
+  ['fresh24','24시간 신선체계',360,'음식·음료가 올려 주는 능력치가 50% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +15%.'],
+  ['hub','지역 거점점 계약',340,'다음 날부터 매일 손님이 45% 확률로 1명, 15% 확률로 2명 더 온다. 대신 기본 운영비가 10% 오른다.'],
+  ['warehouse','후방 창고 증설',130,'창고에 둘 수 있는 상품이 5칸 늘어난다.'],
+  ['extraOrder','본사 추가발주권',130,'다음 발주부터 발주 후보가 2개 늘어난다.'],
+  ['rerollTicket','발주 교환권',120,'매일 첫 발주 후보 교환은 무료. 그다음부터 50G → 100G → 200G… 로 오른다.'],
+  ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 하루 기본 운영비가 30G 적어진다.'],
   /* v2.9.11 (User 2026-09-28): COPY_AUDIT §11-30b / §11-30c */
-  ['fieldStretcher','야전 들것',80,'부상 모험가 · 투력 페널티 -15% → -8%.'],
-  ['firstAidDesk','응급 처치대',300,'부상 모험가가 방문하면 · 20% 확률로 부상 회복.']];
+  ['fieldStretcher','야전 들것',80,'부상당한 손님의 투력 감소 8% (기존 15%).'],
+  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 20% 확률로 부상이 낫는다 (중상은 제외).']];
  /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30c exact (32 since v2.9.11) */
  assert.equal(SUPPORTS.length,32,'§11 audits all 32 Store Supports');
  assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 32, in order');
@@ -658,6 +689,31 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  assert.ok(app.includes("poor?'골드 부족':price?'구매':'선택'"),'a free card is chosen (선택), a priced one bought (구매) - COPY_AUDIT §11-31b');
 });
 
+/* COPY_AUDIT §9-5 (User 2026-10-04): the eight Decoration lines, who gains first and no closing period; and a copy number is
+   the live value - changing a parameter rewrites the line (User 2026-10-04: copy follows the code value). */
+test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decoration / Store Support / Loyalty copy follows the values',()=>{
+ const EFFECTS={
+  sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
+  honorFrame:'새로 오는 모험가가 평범보다 높은 등급일 확률 60% (기존 40%)',
+  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 200G씩 늘어난다',
+  guildShelf:'매일 아침 35% 확률로 그날 손님이 1명 더 온다',
+  trainingSign:'처음 찾아오는 모험가는 55% 확률로 레벨 +1로 온다',
+  infirmaryPlaque:'부상당한 손님이 가게에 오면 40% 확률로 부상이 낫는다 (중상은 제외)',
+  memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
+  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)'};
+ assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all eight Decorations are audited');
+ for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');
+ for(const d of DATA.decorations)assert.ok(!d.effect.endsWith('.'),d.id+' has no closing period');
+ const swap=(obj,key,value,read)=>{const was=obj[key];obj[key]=value;try{return read();}finally{obj[key]=was;}};
+ assert.ok(swap(DATA.decorationParams.thriftSafe,'firstWallet',300,()=>DATA.decorationBy.thriftSafe.effect).includes('300G씩'),'알뜰 금고 reads its wallet value');
+ assert.ok(swap(DATA.relicParams.returnPoints,'loyaltyBonus',6,()=>DATA.relicBy.returnPoints.description).includes('단골도 +6'),'귀환 적립제 reads its Loyalty value');
+ assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
+ assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4·+1·-5.'),'the guide reads the 150% Loyalty');
+ assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-4.');
+ assert.equal(Copy.loyalty.rule(),'단골도는 손님이 상품을 살 때(정가 +1, 50% 할인 +4, 150% 바가지 -4)와 원정에서 살아 돌아왔을 때(+1) 바뀐다.');
+ assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도는 팔 때 정가 +1, 50% 할인 +4, 150% 바가지 -4, 원정에서 살아 돌아오면 +1.');
+});
+
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not
    have: an Item the customer is asking for, a price rule, or a remembered favourite SKU. They
    were replaced one for one (a since-superseded pool-size snapshot used to pin that here); the
@@ -670,11 +726,11 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
                     '비싼 게 좋은 거 아닌가요','이왕이면 좋은 걸로 봅시다','늘 먹던 걸로 주세요'])
   assert.ok(!lines.includes(gone),'the false implication is gone: '+gone);
  for(const [pool,line] of [
-  [V.trait.coward,'“오늘은 무사히 다녀오는 게 목표입니다.”'],
+  [V.trait.coward,'“무사히 다녀오는 게 목표입니다.”'],
   [V.trait.eater,'“원정 끝나면 밥부터 먹어야겠어요.”'],
-  [V.trait.eater,'“배고픈 채로 돌아오는 건 딱 질색입니다.”'],
-  [V.trait.greed,'“오늘은 빈손으로 돌아올 생각 없습니다.”'],
-  [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨 와야죠.”'],   // 4배치 띄어쓰기 (User 2026-09-29)
+  [V.trait.eater,'“배고픈 채 돌아오는 건 질색이에요.”'],
+  [V.trait.greed,'“빈손으로는 안 돌아옵니다.”'],
+  [V.trait.greed,'“이번엔 전리품 좀 챙겨 와야죠.”'],   // 대사 길이 정리 (User 2026-10-04)
   [V.regular,'“이 정도면 단골 맞죠?”']])
   assert.ok(pool.includes(line),'the approved replacement is in its own pool: '+line);
  // no Favorite-SKU state was invented by the replacement, then or since

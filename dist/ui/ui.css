@@ -836,19 +836,24 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  max-width:min(calc(100% - var(--gutter) - 52px),560px);
  font:400 15px/1.5 var(--ui);color:var(--ink);
  /* UI_UX §TRANSIENT SALE SPEECH OVERLAP. At phone width the balloon briefly overlaps the
-    compact customer-state strip - measured 360/390/412, balloon 8-50px against `.kit` top
-    31-33px - and clearing it would cost permanent empty height or compression of required
-    decision information. The approved compromise is a ~88% opaque BACKGROUND with the text
+    customer (on SALE, the portrait and the Bag label) - clearing it would cost permanent empty
+    height or compression of required decision information. The approved compromise is a ~88% opaque BACKGROUND with the text
     left fully opaque; never a lower opacity on the whole element, which would make the
     dialogue itself faint. `.say>span` re-asserts the text's own opacity for the same reason. */
  background:color-mix(in srgb,var(--paper) 88%,transparent);
  box-shadow:inset 0 0 0 2px #00000026,3px 4px 0 #00000073;
  overflow-wrap:anywhere}
-/* v2.9.0 R2 (User 2026-09-24): on SALE the balloon sits 2px from the top, one size smaller and tighter,
-   so a one-row line ends above the Bag slots (measured 360: 35px against the slots' 47px) and a two-row
-   line clears most of them. The approved overlap compromise above is unchanged; director-review.css
-   restores the full size on wide SALE screens (900px+). */
-.p-sale .say{top:2px;padding:6px 10px 7px;font-size:14px;line-height:1.4}
+/* SALE phone balloon, when it would cover the customer's money at the top: it hangs below the
+   customer-state and wallet lines, over the portrait. It runs to just short of the Bag slot pictures (the
+   Bag label may sit under it) and its tail points up at the face. One size smaller and tighter
+   than elsewhere. director-review.css restores the full size above the scene on 900px+. */
+.p-sale .say{top:70px;max-width:calc(100% - var(--gutter) - 122px);padding:6px 10px 7px;font-size:14px;line-height:1.4}
+.p-sale .say:after{top:auto;bottom:100%;border:9px solid transparent;border-bottom-color:var(--paper);border-top:0}
+/* placeSpeech() (app.js) adds .up when the balloon at the top leaves every G amount of the
+   wallet line uncovered: then it sits over the backwall as before, tail pointing down. Phone
+   only - the wide screen keeps its own balloon (director-review.css). */
+.p-sale .say.up{top:2px;max-width:min(calc(100% - var(--gutter) - 52px),560px)}
+.p-sale .say.up:after{top:100%;bottom:auto;border:9px solid transparent;border-top-color:var(--paper);border-bottom:0}
 .say>span{display:block;opacity:1}
 /* the tail: a solid wedge under the balloon, aimed at the card's centre */
 .say:after{content:'';position:absolute;top:100%;left:min(calc(var(--cardw) * .5), 60%);
