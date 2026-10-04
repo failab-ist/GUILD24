@@ -540,9 +540,10 @@ test('SALE: the customer line is a balloon on the character, not a system notifi
  assert.ok(!/say(Hidden|Key|Armed)/.test(read('dist/systems/save.js')+read('dist/systems/run.js')),
   'speech visibility never enters the Run or the Save schema');
  assert.ok(/\.say:after\{[^}]*border-top-color/.test(css),'it has a tail pointing down at the character');
+ assert.ok(/\n\.p-sale \.say:after\{top:auto;bottom:100%;[^}]*border-bottom-color:var\(--paper\)/.test(css),'on a SALE phone the balloon hangs under the wallet line, so its tail points up at the face');
  assert.ok(/\.say:after\{[^}]*var\(--cardw\)/.test(css),'the tail is aimed at the card, not at the room');
- // v2.9.0 R2 (User 2026-09-24): on SALE the balloon is 2px from the top, 14px, tight padding (mobile-first), restored at 900px
- assert.ok(/\n\.p-sale \.say\{top:2px;padding:6px 10px 7px;font-size:14px;line-height:1\.4\}/.test(css),'SALE balloon: top 2px, 14px, tight padding');
+ // SALE phone balloon: below the state / wallet lines, short of the Bag slot pictures, 14px, tight padding; restored at 900px
+ assert.ok(/\n\.p-sale \.say\{top:70px;max-width:calc\(100% - var\(--gutter\) - 122px\);padding:6px 10px 7px;font-size:14px;line-height:1\.4\}/.test(css),'SALE balloon: under the wallet line, clear of the slot pictures, 14px, tight padding');
  assert.ok(/\.p-sale \.say\{left:var\(--gutter\);top:8px;bottom:auto;max-width:min\(calc\(100% - var\(--gutter\) - 52px\),560px\);padding:9px 13px 10px;font-size:15px;line-height:1\.5\}/.test(read('dist/ui/director-review.css')),'the wide-screen SALE rule (director-review.css, 900px+) restores the full-size balloon');
  assert.ok(/\.say\{[^}]*background:color-mix\(in srgb,var\(--paper\) 88%,transparent\)/.test(css),'the 88% background compromise is unchanged');
  // It must not eat the decision: no clipping, no ellipsis, no shrink-to-fit.
