@@ -2979,6 +2979,7 @@ action separated; no new control framework.
 #### UI-Q-v28-19 — SETTINGS / DEBUG BOUNDARY
 Ordinary Player surface: \`소리 켜기 / 소리 끄기\`; \`전체 데이터 초기화\`; no reproducibility Seed control;
 no \`로컬 실행 지원 · 외부 연결 없음\` footer. No new Debug menu is required for PASS.
+Settings carries one `안내` switch (`안내 끄기` / `안내 다시 보기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. No new Save field.
 
 #### UI-Q-v28-19B — DEBUG / SEED REPRODUCTION PATH
 

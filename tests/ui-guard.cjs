@@ -3823,4 +3823,10 @@ test('ending: the music before holds until the result lands, then the ending cue
  assert.ok(/Sound\.play\(game\.run\.win\?'endwin':'endfail'/.test(r)&&/Sound\.sync\(st\.muted,audioPhase\(\),st\)/.test(r),'then the cue and the ending track');
  assert.ok(/if\(phase==='end'&&arrived\)endReveal\(\);/.test(fn('render')),'armed on arrival');
 });
+test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
+ const set=fn('settings');
+ assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
+ assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
+ assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');
+});
 console.log(count+' ui guard groups passed');
