@@ -35,7 +35,7 @@ and this table is their commit record.
   바가지 먼저가 정답): once a customer refuses an Item at 150%, that Item is not sold to them this visit at any price (`바가지를
   거절함` on the 정가 / 할인 keys), and the refusal costs Loyalty 2. A 바가지 sale costs Loyalty 4 (was 3). `바가지 first, 정가 if
   refused` had paid about 1.29 x list against 정가's 0.87; it is now about 0.99. The first-refusal coach and a 바가지-only refusal
-  pool (no line inviting a cheaper retry) follow. SALE §SAME-ITEM REFUSAL PRICE CEILING, NPC_TRAIT §NPC-Q-v28-2B, COPY_AUDIT
+  pool (no line inviting a cheaper retry, two of them witty) follow. SALE §SAME-ITEM REFUSAL PRICE CEILING, NPC_TRAIT §NPC-Q-v28-2B, COPY_AUDIT
   §18-4a · §26-3, UI_UX §SALE — REFUSAL PRICE CEILING UI; tests revision, integration, traits.
 - **왕도 프리미엄 인증 pays 40% of the 150% price** (was 45%; User: 바가지에 위험이 생겼으니 40%). 평생 단골제 is unchanged.
   RELIC §23 · REL-Q-v28-7; tests relic-effects, copy.
