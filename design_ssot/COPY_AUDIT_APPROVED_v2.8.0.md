@@ -2027,7 +2027,9 @@ _GREED_
 > 탐욕의 장부  
 > 누적 총매출이 {target}G에 못 미치면 그리드가 강해진다.  
 > 강해지는 데는 한도가 있고, 넘겨도 더 얻는 것은 없다.  
-> 목표 매출 {target}G · 현재 매출 {revenue}G  
+> 목표 매출 {target}G  
+> 현재 매출 {revenue}G  
+(two aligned label / value rows; 도감 card of a past 그리드 shows 목표 매출 only)  
 > 현재 매출은 도감 > 마왕에서 확인할 수 있다.
 
 _GLUTTONY_  

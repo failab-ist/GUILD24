@@ -254,7 +254,7 @@ Copy.boss={
  d15:{header:'2차 조사 보고',intro:'전투 기록에서 마왕 권능이 확인됐다.',button:'확인',
   label:'마왕 권능',
   guide:'마왕 권능은 마왕마다 다르다. 최종 원정은 이 마왕 권능을 감안해 준비한다.',
-  sales:'목표 매출 {target}G · 현재 매출 {revenue}G',salesTarget:'목표 매출 {target}G',salesNote:'현재 매출은 도감 > 마왕에서 확인할 수 있다.',
+  salesTarget:['목표 매출','{target}G'],salesNow:['현재 매출','{revenue}G'],salesNote:'현재 매출은 도감 > 마왕에서 확인할 수 있다.',
   trait:{
    WRATH:['권능 없음',[]],
    PRIDE:['오만의 갑주',['최종 원정에서 출전자 전원의 투력이 {pride}% 감소한다.']],

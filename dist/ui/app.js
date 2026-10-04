@@ -2491,7 +2491,7 @@ function bossFiled(){return '<p class="filed"><span>길드 조사부</span><b>DA
 function traitFill(text){const n=game.traitNumbers(),f={...n,target:n.target.toLocaleString(),revenue:(game.run?.stats.revenue||0).toLocaleString()};
  return text.replace(/\{(\w+)\}/g,(_,k)=>f[k]);}
 const traitLines=id=>Copy.boss.d15.trait[id][1].map(traitFill);
-const greedSales=live=>'<p class="greed-sales">'+E(traitFill(live?Copy.boss.d15.sales:Copy.boss.d15.salesTarget))+'</p>';
+const greedSales=live=>'<dl class="greed-sales">'+(live?[Copy.boss.d15.salesTarget,Copy.boss.d15.salesNow]:[Copy.boss.d15.salesTarget]).map(r=>'<div><dt>'+E(r[0])+'</dt><dd>'+E(traitFill(r[1]))+'</dd></div>').join('')+'</dl>';
 /* CODEX BOSS TAB: a shown D5 / D15 beat is kept on the Account, and the one-time guide line of a D15 / D25 report is spent */
 function logBossBeat(st){const s=game.run;
  if(st==='d5'||st==='d15')Meta.markBoss(game.account,s.bossId,st==='d5'?'identity':'trait');

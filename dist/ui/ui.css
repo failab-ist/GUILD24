@@ -4075,7 +4075,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-card .trait-k{font-size:11px;color:#bfae8a}
 .boss-card .trait-name b{font-size:15px;color:#f4e8cc}
 .boss-card .lock,.boss-none{color:#a39475}
-.boss-card .greed-sales{margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #d9c9a833;color:#f4e8cc;font-variant-numeric:tabular-nums}
+.greed-sales{margin:0}.greed-sales>div{display:flex;justify-content:space-between;gap:12px}.greed-sales dt,.greed-sales dd{margin:0}.greed-sales dd{font-weight:600;text-align:right}.boss-card .greed-sales{margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #d9c9a833;color:#f4e8cc;font-variant-numeric:tabular-nums}
 .boss-reveal .info-line{margin:0;font:600 15px/1.55 var(--ui);color:#3c3527}
 .boss-reveal.d5 .flavor{font-size:14.5px;color:#4a402e;padding:9px 12px}
 .boss-reveal .boss-guide{margin:4px 0 0;padding:9px 12px;background:#7a281f12;box-shadow:inset 3px 0 0 #7a281f66;font:500 14px/1.55 var(--ui);color:#3c3527}
