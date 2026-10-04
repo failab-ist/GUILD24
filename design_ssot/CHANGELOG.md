@@ -31,6 +31,11 @@ and this table is their commit record.
 | v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | (the User sets it; not yet on origin) |
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 
+## Docs / hygiene after v2.10.3 (User 2026-10-04, no build change)
+
+- **v2.10.1 design work diaries leave `reports/`**: the 2026-10-03 `UI_DESIGN_*`, `UI_SALE_*` and `UI_SUPPORT_*` hand-offs, review PDFs, capture
+  images and QA JSON (about 50 MB, nothing reads them; git keeps them). The component catalog `UI_COMPONENTS.md` moves to `archive/v2.10.1/`.
+
 ## After v2.10.3 — the fight is named on its own, coach spread, 안내 switch (User 2026-10-04; the version stays 2.10.3)
 
 - **Combat proof** (PR #94 / #95): with the same recorded noise roll, an Item whose removal would have lost the combat check is named on
