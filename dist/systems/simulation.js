@@ -454,8 +454,8 @@ function playRun(g,out,ctx){
    if(reader)while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){
     const base=readScore(n,n.pack,d),o=G.Dungeon.estimate(n,d,s.facilities),seen=new Set(),picks=[];
     /* 150% the way the User used it (16 of 270 sales, all from D10): one Item per visit, to a regular (12+ visits in the
-       User's Run; 8+ visits or loyalty 50+ here) whose purse covers it, the other slot at 정가. A refusal at 150% leaves
-       정가 open for the same Item (only higher prices close). */
+       User's Run; 8+ visits or loyalty 50+ here) whose purse covers it, the other slot at 정가. A refusal at 150% closes
+       that Item for the visit (SALE §SAME-ITEM REFUSAL PRICE CEILING), so the loop below moves on to another. */
     const overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),regular=n.visits>=8||n.loyalty>=50;
     const strong=s.day>=10&&regular&&!overToday;
     for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);const it=D.itemBy[st.item];
