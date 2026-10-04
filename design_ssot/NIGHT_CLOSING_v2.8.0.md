@@ -159,7 +159,7 @@ VERDICT STAMP.
 
 A rule is named once per account, on the NIGHT record of the first expedition it acted on - taught after it happened,
 not before. It is shown like the tutorial: a `점주 안내` coach mark over that record, one per rule, after the NIGHT result
-mark, persisted and skipped with the other coach marks; the record itself gains no line. One mark a night (User 2026-10-04): the first that applies in the order death, Severe, Injury, 만반의 준비, Wallet gain, 대성공, Hazard counter, Fatigue; a rule that waits is told the next night it acts (the 발견 수첩 entry is kept either way). `원정 소지금 획득`: the first Wallet gain row from DAY 2 on, a mark on that row (COPY_AUDIT §26-2). The mark lights what its rule is
+mark, persisted and skipped with the other coach marks; the record itself gains no line. One mark a night (User 2026-10-04): the first that applies in the order death, Severe, Injury, 만반의 준비, Wallet gain, 대성공, Hazard counter, Fatigue; a rule that waits is told the next night it acts (the 발견 수첩 entry is kept either way). `손님 소지금 획득`: the first Wallet gain row from DAY 2 on, a mark on that row (COPY_AUDIT §26-2). The mark lights what its rule is
 about (User 2026-10-02): the Fatigue rule the record's `귀환 후 피로` row, every other rule the record's Outcome block. Each rule is also kept in the
 발견 수첩 the first time. Triggers (proof, not presence): came back with an Injury (the first 부상 record, never a healthy return); came back with a
 Severe Injury (the first 중상 record - its own rule, User 2026-10-02: it rests unseen, then returns healthy); departed at Fatigue 10 or more;
@@ -393,7 +393,7 @@ canonical expedition balance. Do not imply loot that was not actually granted.
 
 ### NPC WALLET RESULT TERMINOLOGY
 
-Use `원정 소지금 획득`. Do not use `전리품` where it can be read as Store/Player Gold.
+Use `손님 소지금 획득`. Do not use `전리품` where it can be read as Store/Player Gold.
 
 ## RECENT EXPEDITION SNAPSHOT WRITE
 
@@ -499,7 +499,7 @@ ends with, and by what moved in between - not by cost of goods sold, margin or a
 
 1. `영업 시작 골드 {N}G` in a light filled box (the pair of the 보유 골드 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
 2. the Gold that moved today, inflows then outflows; 매출 / 발주 / 운영비 always print, every other row only when it moved:
-   in - 매출, 본사 지원·수당, 대성공 본사 보상, 재고 정리; out - 발주, 발주 교환, 점포지원 투자, 원정 후원, 운영비
+   in - 매출, 본사 지원·수당, 대성공 본사 보상, 재고 정리; out - 발주, 발주 후보 교환, 점포지원 투자, 원정 후원, 운영비
 3. the `보유 골드 {N}G` box - the Day's end Gold, the receipt's largest figure and its stamp (UI_UX §CLOSING — RECEIPT
    STAMP) - with `영업 손익 ±{N}G` inside it: the end Gold less the opening. Only the 영업 손익 figure is coloured: green
    above 0, red below 0, gold at exactly 0

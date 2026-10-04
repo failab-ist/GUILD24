@@ -35,7 +35,7 @@ const rows=[
 ['hub','지역 거점점 계약','keystone',['customer'],340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
 ['warehouse','후방 창고 증설','utility',[],130,'창고 용량 +5칸.'],
 ['extraOrder','본사 추가발주권','utility',[],130,'다음 후보 생성부터 · 발주 후보 +2개.'],
-['rerollTicket','발주 교환권','utility',[],120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
+['rerollTicket','발주 교환권','utility',[],120,'매일 첫 발주 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
 ['efficiency','운영 효율 매뉴얼','utility',[],130,'다음 날부터 · 기본 운영비 -30G.'],
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
 ['fieldStretcher','야전 들것','foundation',['expedition'],80,'부상 모험가 · 투력 페널티 -15% → -8%.'],

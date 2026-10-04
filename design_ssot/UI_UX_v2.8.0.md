@@ -194,7 +194,7 @@ Flow: select quantity → `발주 확정` (Inventory updates, cart clears, ORDER
 ### ORDER Reroll UX
 
 Available with an unconfirmed cart: clears only that cart, replaces the whole offer set, charges the current cost once, keeps
-confirmed Inventory; no reset-to-zero first. The `후보 전체 교환` key at the foot of the sheet is as wide as its words, right-aligned on a
+confirmed Inventory; no reset-to-zero first. The `발주 후보 교환` key at the foot of the sheet is as wide as its words, right-aligned on a
 short margin, so it never takes a tap meant for 영업 시작 below it (User 2026-10-03).
 
 ### ORDER Runtime continuity
@@ -522,7 +522,7 @@ A desk (≥1024) draws its own SALE from the phone's pieces (same texts, keys, a
 ### SALE SELECTED-ITEM INFORMATION
 
 One heading `판매 후 변화`, rows under it, no stacked analytical subheads. It lists only the Item's own effect rows
-(`피로 회복 2 → 9`, `강인함 17 → 23`, `원정 소지금 획득 0%p → 40%p`) — no `피로 완화` row and no `피로 {A} → 출발 {B}` line on
+(`피로 회복 2 → 9`, `강인함 17 → 23`, `손님 소지금 획득 0%p → 40%p`) — no `피로 완화` row and no `피로 {A} → 출발 {B}` line on
 tray, till or FINAL preparation; on the tray rows may join with ` · ` on one wrapping line. The frozen four-cell outlook never
 repaints for a selected Item. `특수 효과` and shelf life stay; conditional functions without a numeric delta stay under
 \`특수 효과\` (never \`이 손님에게는 지금 걸리지 않는 효과\`). Source/cause goes in the anchored popover; internal marker rows
@@ -749,7 +749,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md §8.
 ## NIGHT
 
 question=`내 선택이 어떻게 됐을까?` — one adventurer at a time: what happened → why → what changed. Result 정보: 원정 fatigue
-gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **원정 소지금 획득**. Routine success compact; growth / injury /
+gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **손님 소지금 획득**. Routine success compact; growth / injury /
 death / decisive Item / callback stronger. On 게이트 순례 주간 one compact Event line with the actual changed count, and affected
 cards show expected -> actual destination. No debug-log layout, modifier ledger, long mandatory animation or uniform weight.
 
@@ -873,7 +873,7 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
   cut in on that frame as the cause response. 만반의 준비 turning a Death into 부상 / 중상 prints `사망` first the same way and its
   own Outcome overstamps it (cue on the overstamp, no `rescue`); 강골 and 구급키트 only lower an injury and never reverse
 - one after-motion: with a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no reversal it settles once (160 ms) and
-  figures stand; otherwise REWARD figures (경험치, 원정 소지금 획득, 대성공 본사 보상, Deep reward) count up from 0 in 220 ms from
+  figures stand; otherwise REWARD figures (경험치, 손님 소지금 획득, 대성공 본사 보상, Deep reward) count up from 0 in 220 ms from
   the landing. GROWTH / AFTERMATH never count; a death has none. Everything ends by 770 ms
 - sound: the Outcome cue's first note lands on the landing frame (sharper attack, one step louder, at every setting); 사망
   keeps its restrained attack and starts with the tape; on a reversal the cue starts with the first print and `rescue` lands on
@@ -1026,7 +1026,7 @@ where to read it again, COPY_AUDIT §14-2) 4. short Flavor under it, readable si
 
 ### D15 — 길드 정보 보고
 
-`길드 정보 보고`: 1. a one-time 안내 line under the intro (what a 마왕 특성 is, COPY_AUDIT §14-4; spent once per Account, tied to 안내 끄기 / 다시 보기)
+`길드 정보 보고`: 1. a one-time 안내 line under the intro (what a 마왕 권능 is, COPY_AUDIT §14-4; spent once per Account, tied to 안내 끄기 / 다시 보기)
 2. the same BASE illustration 3. identity 4. exact Trait name 5. exact material effect, figures read from the tuning table 6. relevant current DATA
 (GREED: 목표 매출 · 현재 매출 line, then the line saying 도감 > 마왕 shows it again).
 The rule, not strategy advice. Never exact Final success %, hidden Final Power, internal Factor / Modifier terms.
@@ -1049,7 +1049,7 @@ that claims enough of a phone screen to read as a report, with neither tiny art 
 
 - Boss art sits on the paper; no floor line or divider under it
 - D5 Flavor: plain report text; no non-semantic coloured bar or tinted / bordered box
-- D15 Trait: `마왕 특성` label -> Trait name -> explanation; no side bar, box, tinted panel or card — type and spacing carry it (the 안내 line and the GREED sales line are the User-approved 2026-10-04 exceptions: a light tinted strip each)
+- D15 Trait: `마왕 권능` label (the codex card says just `권능`) -> Trait name -> explanation; no side bar, box, tinted panel or card — type and spacing carry it (the 안내 line and the GREED sales line are the User-approved 2026-10-04 exceptions: a light tinted strip each)
 - D25: each Family keeps its semantic left colour rule; no black rule above the Family section; a thin neutral divider
   between the two Families is allowed; Hazards are not decorative cards
 
@@ -1060,7 +1060,7 @@ Information truth first; Boss presence is co-equal except at D25, where art neve
 A codex tab after 점포지원 and before 점포 장식. It lists only the Bosses the Player has met (identity shown at D5, or any past clear); a Boss never
 met is absent, an empty tab says COPY_AUDIT §14-11. Order: the Boss order of the roster, except this Run's Boss first once its identity is shown.
 Each card: small art, Boss name (this Run's card carries an `이번 영업` mark), then the Trait name and sentences. No Flavor and no Final Hazards
-(they change every Run). A Trait not yet shown reads `DAY 15에 마왕 특성이 밝혀진다.` for this Run's Boss and `마왕 특성은 아직 확인하지 못했다.` for a Boss
+(they change every Run). A Trait not yet shown reads `DAY 15에 마왕 권능이 밝혀진다.` for this Run's Boss and `마왕 권능은 아직 확인하지 못했다.` for a Boss
 met in an earlier store. GREED's card adds 목표 매출, plus 현재 매출 on this Run's card. The record lives on the Account (`bossLog`); a save without it reads empty
 and a cleared Boss counts as known.
 
@@ -1255,7 +1255,7 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
   two lines level with the sign's plate and stays inside the stage (§RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the
   ceiling fixture
 - the board `새 점포 준비` holds the game's three lines as one pinned note, then `보유 장식 없음` /
-  `영업이 시작되면 이번 영업에는 고정됩니다.`, a save error pinned above when present; it ends above the Slot places (tighter, same type, on wide framings under
+  `점포를 열면 이번 점포에는 고정됩니다.`, a save error pinned above when present; it ends above the Slot places (tighter, same type, on wide framings under
   800 px high)
 - each Slot is its place in the room: an equipped Decoration drawn with a small Slot + Decoration tag, or an empty spot with
   `{Slot} · 비움`; each place is a control (§Pre-Run Decoration empty-slot interaction) with at least a 44 px target; tags
@@ -1292,16 +1292,16 @@ KNOWLEDGE).
 
 ## MENU / SETTINGS — EXACT COMPOSITION
 
-Top-level Menu exactly: 모험가 수첩 · 도감 · 점포지원 · 이번 영업의 장식 · 점주 가이드 · 설정 · 현재 지점 포기.
+Top-level Menu exactly: 모험가 수첩 · 도감 · 점포지원 · 이번 점포의 장식 · 점주 가이드 · 설정 · 현재 지점 포기.
 - 점포지원: an open, purchasable window (RELIC §reopenAllowed, `canBuyRelic`) opens the selection; otherwise the closable owned
   list `보유 점포지원`, never an empty selection
-- 이번 영업의 장식: read-only, the frozen four Slots as `{Slot 이름} · {장식 이름} · {효과 한 줄}`, empty `비어 있음` (COPY_AUDIT
+- 이번 점포의 장식: read-only, the frozen four Slots as `{Slot 이름} · {장식 이름} · {효과 한 줄}`, empty `비어 있음` (COPY_AUDIT
   §1-7); 영업 · 점포 vocabulary, never 런
 - 현재 지점 포기: COPY_AUDIT §1-3 confirm, then the Run is discarded at once (CORE_RUN §CURRENT RUN ABANDON) and 새 점포 준비
   shows with no Run (Decorations can be bought and equipped); a new Run starts only from `첫 점포지원 고르기`
 - the DAY 0 첫 점포지원 surface has no way back (no `장식 구성 다시 보기`, no generic close); its `나중에 결정` defers the free
   pick and opens DAY 1 (RELIC §ACQUISITION WINDOWS D0)
-- 점포지원, 이번 영업의 장식 and 현재 지점 포기 appear only while a Run exists
+- 점포지원, 이번 점포의 장식 and 현재 지점 포기 appear only while a Run exists
 
 Sound Toggle and Full Data Reset are not top-level. Settings: 저장 내보내기 · 저장 가져오기 · Sound On/Off · BGM · SFX · Full
 Data Reset — and **not** 현재 지점 포기.
@@ -1418,7 +1418,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md §3.
 
 (§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`
 or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
-register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `후보 전체 교환` and gains a refresh icon (an
+register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `발주 후보 교환` and gains a refresh icon (an
 inline SVG like the close X, no asset), and the mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
@@ -1445,11 +1445,11 @@ screen says it; otherwise none, or taught after the fact.
   대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
   sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 시작 골드와 보유 골드를 비교한다.` (first clause only; the receipt gains no row)
-- no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
+- no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 발주 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`원정 소지금 획득`); a NIGHT tells one mark, the most serious rule first
+- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`손님 소지금 획득`); a NIGHT tells one mark, the most serious rule first
 
 ### SALE PRICE LESSONS (v2.9.12)
 
@@ -1518,7 +1518,7 @@ COPY_WORLD_VOICE_v2.8.0.md.
 
 ### COPY / TUTORIAL UX RECOVERY
 
-Approved terms (never the old ones): 탐식 (not 폭식) · 원정 소지금 획득 (not 전리품) · 탈출 확률 (not 탈출 보정) · 부상 확률 (not
+Approved terms (never the old ones): 탐식 (not 폭식) · 손님 소지금 획득 (not 전리품) · 탈출 확률 (not 탈출 보정) · 부상 확률 (not
 부상 위험) · 1000G / 18칸 (not 1200G / 24칸) · 교환권 50G (not 30G) · 설정 (not 설정 · 저장). Tutorial/Help cover injury / Severe
 Injury, fatigue / recovery, ORDER confirm / Reroll / 영업 시작 separation, D10/D14 unlock, current Save/Reset; no Night
 single-skip instructions.
@@ -3245,9 +3245,9 @@ FAIL: an order that changes with the customer's Gate, or a recommendation word.
 SETUP: a Run on DAY 0 (first choice pending), a Run on a Day whose Store Support window is spent or closed, and a Run at SALE; the
 menu on each (→ UI_UX §MENU / SETTINGS — EXACT COMPOSITION, §RUN ABANDON UX).
 PASS:
-- menu rows exactly 모험가 수첩 / 도감 / 점포지원 / 이번 영업의 장식 / 점주 가이드 / 설정 / 현재 지점 포기
+- menu rows exactly 모험가 수첩 / 도감 / 점포지원 / 이번 점포의 장식 / 점주 가이드 / 설정 / 현재 지점 포기
 - 점포지원 opens the selection surface only while `canBuyRelic` holds, otherwise the owned list `보유 점포지원` with a close
-- 이번 영업의 장식 lists the four Slots with the frozen loadout and effect line, an empty Slot `비어 있음`, nothing editable
+- 이번 점포의 장식 lists the four Slots with the frozen loadout and effect line, an empty Slot `비어 있음`, nothing editable
 - DAY 0 첫 점포지원 has no `장식 구성 다시 보기` button and no close
 - 현재 지점 포기 → confirm (§1-3) → the Run is gone (`run = null`) on 새 점포 준비 with no Run, where a Decoration can be bought and
   equipped and no new Run has started until `첫 점포지원 고르기`; every other Run end (bankruptcy, death limit, 폐점, FINAL end)

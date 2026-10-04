@@ -237,9 +237,9 @@ Copy.boss={
     cadence, and nothing about the Boss itself. Verbatim. */
  d0:{header:'마왕 조사 개시',lead:'DAY 30에 마왕이 깨어난다. 길드 조사대가 그 정체를 추적한다.',
   /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-25): a DAY label over each of the two lines; the closing sentence stays deleted */
-  steps:[['DAY 05',['마왕의 정체가 밝혀진다.']],['DAY 15',['마왕 특성이 밝혀진다.']],['DAY 25',['최종 원정의 위험이 밝혀진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],button:'확인'},
+  steps:[['DAY 05',['마왕의 정체가 밝혀진다.']],['DAY 15',['마왕 권능이 밝혀진다.']],['DAY 25',['최종 원정의 위험이 밝혀진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
-  next:'DAY 15에 마왕 특성이 밝혀진다. 밝혀진 정보는 도감 > 마왕에서 다시 볼 수 있다.',
+  next:'DAY 15에 마왕 권능이 밝혀진다. 밝혀진 정보는 도감 > 마왕에서 다시 볼 수 있다.',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',
    PRIDE:'검은 갑주에는 아직 흠집 하나 남지 않았다.',
@@ -249,13 +249,14 @@ Copy.boss={
    LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
    SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
  /* one-tap information beats: they open a question the next report answers. */
- d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 특성이 밝혀진다.',next:'다음 보고 · DAY 15',button:'확인'},
+ d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 권능이 밝혀진다.',next:'다음 보고 · DAY 15',button:'확인'},
  d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다. DAY 25에 위험이 밝혀진다.',next:'최종 보고 · DAY 25',button:'확인'},
- d15:{header:'2차 조사 보고',intro:'전투 기록에서 마왕 특성이 확인됐다.',button:'확인',
-  guide:'마왕 특성은 마왕마다 다르다. 최종 원정은 이 마왕 특성을 감안해 준비한다.',
+ d15:{header:'2차 조사 보고',intro:'전투 기록에서 마왕 권능이 확인됐다.',button:'확인',
+  label:'마왕 권능',
+  guide:'마왕 권능은 마왕마다 다르다. 최종 원정은 이 마왕 권능을 감안해 준비한다.',
   sales:'목표 매출 {target}G · 현재 매출 {revenue}G',salesTarget:'목표 매출 {target}G',salesNote:'현재 매출은 도감 > 마왕에서 확인할 수 있다.',
   trait:{
-   WRATH:['특성 없음',[]],
+   WRATH:['권능 없음',[]],
    PRIDE:['오만의 갑주',['최종 원정에서 출전자 전원의 투력이 {pride}% 감소한다.']],
    ENVY:['질투의 시선',['최종 원정에서 가장 강한 출전자 한 명의 능력치가 모두 {envy}% 감소한다.']],
    GREED:['탐욕의 장부',['누적 총매출이 {target}G에 못 미치면 그리드가 강해진다.','강해지는 데는 한도가 있고, 넘겨도 더 얻는 것은 없다.']],
@@ -271,7 +272,7 @@ Copy.boss={
   guide:'최종 원정에는 두 가지 게이트의 위험이 함께 나온다.'},
  /* UI_UX §CODEX BOSS TAB: only Bosses the Player has met are listed, and only their Trait is kept (the Final Hazards change every Run) */
  guideLabel:'안내',
- codex:{none:'아직 만난 마왕이 없다. DAY 5에 첫 조사 보고가 온다.',now:'이번 영업',pending:'DAY 15에 마왕 특성이 밝혀진다.',unknown:'마왕 특성은 아직 확인하지 못했다.',label:'마왕 특성'}
+ codex:{none:'아직 만난 마왕이 없다. DAY 5에 첫 조사 보고가 온다.',now:'이번 영업',pending:'DAY 15에 마왕 권능이 밝혀진다.',unknown:'마왕 권능은 아직 확인하지 못했다.',label:'권능'}
 };
 
 /* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great
@@ -285,7 +286,7 @@ Copy.deep={
  header:'길드 심층원정 공고',
  intro:'오늘 하루, 길드가 더 깊은 구역의 정찰을 의뢰했다.',
  gate:'대상 게이트',
- note:'같은 게이트의 더 깊은 구역이다. 위험 특성은 그대로이고, 요구 전투력만 올라간다.',
+ note:'같은 게이트의 더 깊은 구역이다. 위험 특성은 그대로이고, 요구 전력만 올라간다.',
  cost:'후원금은 추천하는 모험가에 따라 달라진다. 희귀하고 노련한 모험가일수록 비싸다.',
  gain:'성공하면 그 모험가의 성장과 소지금이 늘어난다.',
  sink:'후원금은 돌려받지 않는다. 이 원정으로 가게가 버는 돈은 없다.',
@@ -314,7 +315,7 @@ Copy.finalPrep={
  underBody:'선택한 {N}명만 마왕성으로 향합니다.',
  back:'돌아가기',under:'이대로 확정',
  forecast:'토벌 전망',
- forecastWhy:['확정된 원정대의 능력과 보급,','확인된 위협과 마왕의 특성을 함께 반영한 전망.','보급이 바뀌면 전망도 함께 갱신된다.'],
+ forecastWhy:['확정된 원정대의 능력과 보급,','확인된 위협과 마왕의 권능을 함께 반영한 전망.','보급이 바뀌면 전망도 함께 갱신된다.'],
  noEffect:'마왕성에서는 효과 없음',
  noEffectWhy:'이번 원정에서는 효과를 발휘하지 않아 챙겨갈 수 없다.',
  wallet:'소지금 부족 · {need}G 필요 / {have}G 보유'

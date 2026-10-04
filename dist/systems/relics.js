@@ -45,7 +45,7 @@ P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===da
 P.relicRerollPrice=function(){const w=this.run.relicWindow;return D.balance.relicReroll.base*2**(w?.rerolls||0);};
 P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.milestoneDay!==0&&this.canBuyRelic();};
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
- const price=this.relicRerollPrice();if(s.money<price)throw Error('후보 교환 자금이 부족합니다.');
+ const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
  s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;
  Object.assign(w,drawCandidates(this,w.milestoneDay,w.candidateIds));w.rerolls=(w.rerolls||0)+1;this.save();};
 /* Sloth's seals are not a second choice path: they are the other thing this window's one

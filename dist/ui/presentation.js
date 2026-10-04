@@ -1,7 +1,7 @@
 (function(G){
 const D=G.DATA;
 /* v2.9.0 (COPY_AUDIT §4-13 / §4-18): Supply is shown as 피로 회복 N; the two Trait deltas name it too */
-const labels={supply:'피로 회복',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식의 피로 회복',supplyPerItem:'음식·음료의 피로 회복',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'퇴각 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'원정 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
+const labels={supply:'피로 회복',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식의 피로 회복',supplyPerItem:'음식·음료의 피로 회복',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'퇴각 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'손님 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
 const percent=new Set(['escape','injuryGuard','injuryRisk','loot','variance','rareLoot','priceBias','buyBias','rareBias','commonBias','combatPercent','survivalPercent','injuredCombatPercent','overchargeBias']);
 const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias']);
 const days=new Set(['recoveryDelta']);
@@ -240,7 +240,7 @@ function nightChanges(r, npc, facilities=[]){const out=[];
      if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:'피로 '+r.finalFatigue+' · '+band.name,extra:band.text});
   }
  if(r.xp)out.push({kind:'',group:'reward',label:'경험치',value:'+'+r.xp});
- if(r.loot)out.push({kind:'gain',group:'reward',label:'원정 소지금 획득',value:r.loot+'G'});
+ if(r.loot)out.push({kind:'gain',group:'reward',label:'손님 소지금 획득',value:r.loot+'G'});
  return out;}
 
 /* ---- SUPPLY IMPACT -------------------------------------------------------------
