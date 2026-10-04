@@ -70,7 +70,7 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
  /* result */ great:5.074,retreat:5.195,injury:8.199,severe:5.019,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
- /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:3,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,
  /* action */ depart:1.26,return:3.694,gold:4.203,spend:4.191,crate:5.353,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,
  /* utility */ button:0.711,ui:5.564,
  /* repeat */ quantity:6.357,quantset:7.962,};
@@ -153,7 +153,7 @@ const sfx={button:[440],ui:[1760,2217],fixture:[233,208],
  supply:[330],
  /* UI_UX §PROLOGUE scene 3: a falling wah-wah where the music cuts */
  gag:[330,311,294,247],
- /* UI_UX §PROLOGUE: a page turning - paper rustle, no pitch */
+ /* UI_UX §PROLOGUE: a page turning; the recorded body carries it, no pitched fallback */
  page:[]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
@@ -162,7 +162,9 @@ const sample={order:'stamp',sale:'register',overcharge:'register',
  half:'register',refusal:'refuse',support:'secure',purchase:'cart',unlock:'unlock',
  open:'shutter',close:'settle',final:'gate',button:'key',
  /* v2.9.0 TRANSACTION BEAT A4: 손님 보내기 carries a recorded utility object (door / step family) */
- depart:'door'};
+ depart:'door',
+ /* UI_UX §PROLOGUE: a page turning - Kenney RPG Audio bookFlip2 (CC0), reports/ASSETS.md */
+ page:'page'};
 const buffers=new Map(),lastAt=new Map();
 /* Fetched once, on the first unmuted sync, so a muted player downloads nothing. A failure is
    swallowed on purpose: the synthesised shape is already this cue's fallback. */
@@ -271,7 +273,7 @@ const shape={
  /* the recorded door is the body; the two notes stay as the fallback when it has not loaded */
  depart:{gain:.9,dur:.2,type:'sine',step:.1,sampleGain:.8},
  /* UI_UX §PROLOGUE scene 3: the music cuts and a falling wah-wah answers the joke */
- page:{noise:[{at:0,dur:.3,gain:.55,hz:700,to:3200,q:.8},{at:.03,dur:.04,gain:.7,hz:5200,q:.5,filter:'highpass'},{at:.07,dur:.03,gain:.5,hz:6000,q:.5,filter:'highpass'},{at:.1,dur:.05,gain:.8,hz:4800,q:.5,filter:'highpass'},{at:.15,dur:.03,gain:.55,hz:6200,q:.5,filter:'highpass'},{at:.19,dur:.04,gain:.7,hz:5000,q:.5,filter:'highpass'},{at:.27,dur:.1,gain:1,hz:2600,to:700,q:.9}]},
+ page:{sampleGain:1},
  gag:{cut:250,gain:.7,dur:.24,type:'square',over:[.3],step:.17,sampleGain:.8},
  return:{gain:.95,dur:.22,type:'sine',step:.1,hit:1},
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
