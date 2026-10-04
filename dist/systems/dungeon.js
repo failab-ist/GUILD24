@@ -495,6 +495,19 @@ function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutco
 /* `run`, when given, threads COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE recent-repeat tracking
    into the Night line below - see data/copy.js. Omitting it (every direct call in this repo's
    own tests) keeps the plain deterministic pick this function always returned. */
+/* RESULT-PROOF, combat: the fight alone. With the SAME noise roll, removing one Item from the Bag would have lost the fight the
+   real expedition won. Needs no roll the real path never drew (the Death / escape rolls a win skips), so a 투력 Item that
+   turned a loss into a win - which the outcome proof above cannot prove - is still named. */
+function combatProof(departure,pack,d,facilities,ev){
+ if(!ev.combatSuccess)return null;
+ const items=[...new Set(pack.filter((_,i)=>{
+  const sp=prepare({...departure,pack:pack.filter((_,j)=>j!==i)},d,facilities),se=sp.effects;
+  if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack:pack.filter((_,j)=>j!==i)},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
+  return preparedPower(se)*(1+(ev.assist||0))*sNoise<d.power;
+ }))];
+ return items.length?{items}:null;
+}
 function resolve(n,d,r,facilities=[],run,assist=0){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
  /* RESULT-PROOF DEPARTURE SNAPSHOT. This is the ONLY state prepare() actually reads off `n`
@@ -694,7 +707,8 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
  const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
+ const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,combatSuccess});
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
    /* escapeChance/escapeRoll/injuryRoll are now conditional too (only the combat-failure and

@@ -177,7 +177,9 @@ function nightWhy(r){const bits=[];
    not rendered here - the existing result copy that states that change directly already
    covers it; state proof exists only to make SA-Q25's helped-callback correct. */
 function heroLine(r){
- const hp=r.heroProof?.outcome;if(!hp)return null;
+ const hp=r.heroProof?.outcome;
+ /* the fight alone (User 2026-10-04): no worse Outcome proven, but without an Item the same roll loses the fight */
+ if(!hp){const ch=r.combatHero?.items;return ch?.length?ch.map(id=>D.itemBy[id].name).join('·')+' 덕분에 전투에서 이겼다.':null;}
  const said=hp.worse==='사망'?'살아 돌아왔다':hp.worse==='중상'?'중상을 피했다':
   hp.worse==='부상'?'부상을 피했다':hp.worse==='퇴각'?'원정을 성공했다':'대성공했다';
  /* User 2026-10-02: the Bag is two slots, so a whole-Bag proof (items:null - no single removal worsens it, removing both does)
