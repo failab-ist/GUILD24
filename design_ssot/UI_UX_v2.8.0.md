@@ -1015,17 +1015,20 @@ opens at once.
 
 Objective information, not spectacle: the first step of DAY 1 MORNING after the first Store Support choice (process ->
 CORE_RUN_v2.8.0.md; copy -> COPY_AUDIT_APPROVED_v2.8.0.md). No Boss art, silhouette, backdrop, fake portrait or timeline
-cards. Under the header `마왕 조사 개시` and lead line: a `DAY 05` label (the record's LED face) over its line, then a `DAY 30`
-label over its line, no closing sentence (§14-1); one `확인`. Compact like onboarding, yet the objective cannot be missed.
+cards. Under the header `마왕 조사 개시` and lead line: a DAY label (the record's LED face) over each of its four lines (DAY 05 / 15 / 25 / 30),
+no closing sentence (§14-1); one `확인`. Compact like onboarding, yet the objective cannot be missed.
 
 ### D5 — 길드 토벌 공고
 
-`in-world 길드 토벌 공고`: 1. Boss D5/D15 BASE illustration 2. fixed Boss name 3. short Flavor (may hint at the Trait; the
-Function stays hidden) 4. on to the D5 Relic reveal. The art is a primary game object, never an icon by a card.
+`in-world 길드 토벌 공고`: 1. Boss D5/D15 BASE illustration 2. fixed Boss name 3. the next-reveal line (when the Boss Trait is shown and
+where to read it again, COPY_AUDIT §14-2) 4. short Flavor under it, readable size (it may hint at the Trait; the Function stays hidden)
+5. on to the D5 Relic reveal. The art is a primary game object, never an icon by a card.
 
 ### D15 — 길드 정보 보고
 
-`길드 정보 보고`: 1. the same BASE illustration 2. identity 3. exact Trait name 4. exact material effect 5. relevant current DATA.
+`길드 정보 보고`: 1. a one-time 안내 line under the intro (what a 마왕 특성 is, COPY_AUDIT §14-4; spent once per Account, tied to 안내 끄기 / 다시 보기)
+2. the same BASE illustration 3. identity 4. exact Trait name 5. exact material effect, figures read from the tuning table 6. relevant current DATA
+(GREED: 목표 매출 · 현재 매출 line, then the line saying 도감 > 마왕 shows it again).
 The rule, not strategy advice. Never exact Final success %, hidden Final Power, internal Factor / Modifier terms.
 
 ### D5 / D10 / D15 / D20 / D25
@@ -1046,15 +1049,24 @@ that claims enough of a phone screen to read as a report, with neither tiny art 
 
 - Boss art sits on the paper; no floor line or divider under it
 - D5 Flavor: plain report text; no non-semantic coloured bar or tinted / bordered box
-- D15 Trait: `특성` label -> Trait name -> explanation; no side bar, box, tinted panel or card — type and spacing carry it
+- D15 Trait: `마왕 특성` label -> Trait name -> explanation; no side bar, box, tinted panel or card — type and spacing carry it (the 안내 line and the GREED sales line are the User-approved 2026-10-04 exceptions: a light tinted strip each)
 - D25: each Family keeps its semantic left colour rule; no black rule above the Family section; a thin neutral divider
   between the two Families is allowed; Hazards are not decorative cards
 
 Information truth first; Boss presence is co-equal except at D25, where art never buries the disclosure.
 
+### 도감 > 마왕
+
+A codex tab after 점포지원 and before 점포 장식. It lists only the Bosses the Player has met (identity shown at D5, or any past clear); a Boss never
+met is absent, an empty tab says COPY_AUDIT §14-11. Order: the Boss order of the roster, except this Run's Boss first once its identity is shown.
+Each card: small art, Boss name (this Run's card carries an `이번 영업` mark), then the Trait name and sentences. No Flavor and no Final Hazards
+(they change every Run). A Trait not yet shown reads `DAY 15에 마왕 특성이 밝혀진다.` for this Run's Boss and `마왕 특성은 아직 확인하지 못했다.` for a Boss
+met in an earlier store. GREED's card adds 목표 매출, plus 현재 매출 on this Run's card. The record lives on the Account (`bossLog`); a save without it reads empty
+and a cleared Boss counts as known.
+
 ### D25 — 최종 정찰 보고
 
-`최종 정찰 보고` (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
+`최종 정찰 보고` with a one-time 안내 line under the intro (COPY_AUDIT §14-7) (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
 Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 29).
 `two Families` does NOT mean two Hazard keys. Never the Hazard formula, Final success % or Final Power.
 
@@ -2958,7 +2970,7 @@ PASS: the UI matches META_v2.8.0.md and does not resurrect legacy progression tr
 
 #### UI-Q39 — MONSTER KNOWLEDGE — RETIRED FROM THE CODEX
 → UI_UX §META UI.
-PASS: the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회`
+PASS: the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 마왕 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회`
 progress line on any screen.
 
 ### MENU / SETTINGS / DEBUG
@@ -3133,8 +3145,7 @@ true Gate, or any individual identity.
 SETUP: fresh Run: the D0 Boss briefing after the first Store Support choice; then 점주 가이드 from the menu at 360 and 1280
 (→ UI_UX §D0 — FIRST MORNING BRIEFING, §GLOBAL HELP; copy COPY_AUDIT §14-1 / §8-0).
 PASS:
-- the briefing: header `마왕 조사 개시`, the lead line, a `DAY 05` label over exactly `첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.`,
-  a `DAY 30` label over exactly `성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.`, and the button;
+- the briefing: header `마왕 조사 개시`, the lead line, then a DAY label over each of its four lines (DAY 05 / 15 / 25 / 30, exact text COPY_AUDIT §14-1), and the button;
   `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
 - the labels read on the record's LED face (16px; 17px on a desk), the lines in the record's body weight (15px ink; 16px on a
   desk), never the secondary tone

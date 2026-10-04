@@ -2364,7 +2364,21 @@ function unlockBoard(){const {done,next}=unlockLists();
    notebook. Presentation owns turning an event into words; anything it cannot describe is
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+/* UI_UX §CODEX BOSS TAB: the Bosses the Player has met, this Run's Boss first once its identity is shown. Only the Trait is kept -
+   the Final Hazards change every Run - and a Boss never met is not listed at all. */
+function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=s?.bossId;
+ const known=id=>{const k=Meta.bossKnown(a,id);return id===cur?{identity:k.identity||!!r.identitySeen,trait:k.trait||!!r.traitSeen}:k;};
+ const ids=D.bosses.map(b=>b.id).filter(id=>known(id).identity);
+ if(!ids.length)return '<p class="boss-none">'+E(c.codex.none)+'</p>';
+ if(ids.includes(cur))ids.sort((x,y)=>(y===cur)-(x===cur));
+ return ids.map(id=>{const art=Scene.bossArt(id,1,0),now=id===cur,[name,raw]=c.d15.trait[id];
+  const trait=known(id).trait
+   ?'<p class="trait-name">'+(raw.length?'<span class="trait-k">'+E(c.codex.label)+'</span>':'')+'<b>'+E(name)+'</b></p>'
+    +traitLines(id).map(l=>'<p>'+E(l)+'</p>').join('')+(id==='GREED'?greedSales(now):'')
+   :'<p class="lock">'+E(now?c.codex.pending:c.codex.unknown)+'</p>';
+  return '<article class="boss-card'+(now?' now':'')+'">'+(art?'<img src="'+art+'" alt="">':'')
+   +'<div class="bc-text"><h3>'+E(D.bossBy[id].name)+(now?'<span class="now-tag">'+E(c.codex.now)+'</span>':'')+'</h3>'+trait+'</div></article>';}).join('');}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에 시작할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 시작한 마감에서는 잔고가 0 이상이 된 뒤에도 계속 정리할 수 있습니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */
@@ -2473,6 +2487,16 @@ function bossRevealStage(){const s=game.run;if(!s?.bossReveal)return null;
 const d0Owed=()=>modal==='boss'&&bossRevealStage()==='d0';
 function bossFiled(){return '<p class="filed"><span>길드 조사부</span><b>DAY '
  +String(game.run.day).padStart(2,'0')+'</b></p>';}
+/* BOSS §TRAIT NUMBERS: the figures in the Trait lines come from game.traitNumbers(), so a retune cannot leave the screen behind */
+function traitFill(text){const n=game.traitNumbers(),f={...n,target:n.target.toLocaleString(),revenue:(game.run?.stats.revenue||0).toLocaleString()};
+ return text.replace(/\{(\w+)\}/g,(_,k)=>f[k]);}
+const traitLines=id=>Copy.boss.d15.trait[id][1].map(traitFill);
+const greedSales=live=>'<p class="greed-sales">'+E(traitFill(live?Copy.boss.d15.sales:Copy.boss.d15.salesTarget))+'</p>';
+/* CODEX BOSS TAB: a shown D5 / D15 beat is kept on the Account, and the one-time guide line of a D15 / D25 report is spent */
+function logBossBeat(st){const s=game.run;
+ if(st==='d5'||st==='d15')Meta.markBoss(game.account,s.bossId,st==='d5'?'identity':'trait');
+ if(st==='d15'||st==='final')(game.account.tutorial??={})['coach-'+(st==='d15'?'traitCoach':'finalCoach')]=true;}
+function bossGuide(key,text){const tu=game.account.tutorial||{};return (tu.skipped||tu['coach-'+key])?'':'<p class="boss-guide"><b>'+E(Copy.boss.guideLabel)+'</b>'+E(text)+'</p>';}
 function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bossRevealStage();
  const art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const plate=art?'<figure class="boss-art"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'';
@@ -2482,22 +2506,22 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
     payload and only then met the subject. The information itself is unchanged and in the same
     order; only where the visual sits moved. */
  if(stage==='final'){const d=s.final||s.dungeons[0];
-  return '<div class="boss-reveal final">'+bossFiled()+'<p class="lede">'+E(c.final.intro)+'</p>'
+  return '<div class="boss-reveal final">'+bossFiled()+'<p class="lede">'+E(c.final.intro)+'</p>'+bossGuide('finalCoach',c.final.guide)
    +plate
    +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
      return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
       +hazardList(D.familyTiers[id][1],null,d)+'</article>';}).join('')
    +'</div></div>';}
- if(stage==='d15'){const [name,lines]=c.d15.trait[s.bossId];
-  return '<div class="boss-reveal d15">'+bossFiled()+'<p class="lede">'+E(c.d15.intro)+'</p>'
+ if(stage==='d15'){const name=c.d15.trait[s.bossId][0],lines=traitLines(s.bossId);
+  return '<div class="boss-reveal d15">'+bossFiled()+'<p class="lede">'+E(c.d15.intro)+'</p>'+bossGuide('traitCoach',c.d15.guide)
    +'<h3 class="boss-name">'+E(b.name)+'</h3>'
    +plate
    /* BATCH 4A: the Trait is D15's payload, so its name is set as the record's second subject
       under a small 특성 label, with its explanation attached in the same ruled entry - one
       entry, not a card. The line's text is unchanged; the dash only stops being visible
       once the label sits on its own line. */
-   +'<div class="trait"><p class="trait-name"><span class="trait-k">특성</span><span class="trait-sep"> — </span><b>'+E(name)+'</b></p>'
-   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div></div></div>';}
+   +'<div class="trait"><p class="trait-name">'+(lines.length?'<span class="trait-k">'+E(c.codex.label)+'</span><span class="trait-sep"> — </span>':'')+'<b>'+E(name)+'</b></p>'
+   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+(s.bossId==='GREED'?greedSales(true)+'<p>'+E(c.d15.salesNote)+'</p>':'')+'</div></div></div>';}
  /* D10 / D20 are one-tap information beats: they open the question the next report answers and
     disclose nothing new about the Boss. BATCH 4B (UI_UX §D5 / D10 / D15 / D20 / D25): the Boss
     stays the same full figure D5 and D15 show - the investigation is about the same subject -
@@ -2517,7 +2541,7 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
   +c.d0.steps.map(([day,lines])=>'<div class="d0-step"><b>'+E(day)+'</b>'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>').join('')+'</div>';
  return '<div class="boss-reveal d5">'+bossFiled()+'<p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
-  +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
+  +plate+'<p class="info-line">'+E(c.d5.next)+'</p><p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
 
 /* A decision sheet whose footer already carries its way back shows no second 닫기: the footer
    control is the one cancel owner (돌아가기 / 보급으로 돌아가기). Escape still dismisses it (the
@@ -2624,7 +2648,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'say-hide':hideSpeech();break;
  case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
- case'boss-seen':{const st=bossRevealStage();
+ case'boss-seen':{const st=bossRevealStage();logBossBeat(st);
   if(st==='d0')s.bossReveal.d0Seen=true;
   else{const beat=BOSS_BEATS.find(x=>x[1]===st);if(beat)s.bossReveal[beat[2]]=true;}
   /* UI_UX_v2.8 §BOSS / FINAL AUDIO: one motif, two strengths. D5 / D15 / D25 carry the major

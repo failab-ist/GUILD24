@@ -235,10 +235,11 @@ Copy.boss={
     D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
  /* COPY_AUDIT §14-1 D0 — the first-Morning briefing: the Run objective and the investigation
     cadence, and nothing about the Boss itself. Verbatim. */
- d0:{header:'마왕 조사 개시',lead:'길드 조사대가 마왕의 정체를 추적하러 출발했다.',
+ d0:{header:'마왕 조사 개시',lead:'DAY 30에 마왕이 깨어난다. 길드 조사대가 그 정체를 추적한다.',
   /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-25): a DAY label over each of the two lines; the closing sentence stays deleted */
-  steps:[['DAY 05',['첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],button:'확인'},
+  steps:[['DAY 05',['마왕의 정체가 밝혀진다.']],['DAY 15',['마왕 특성이 밝혀진다.']],['DAY 25',['최종 원정의 위험이 밝혀진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
+  next:'DAY 15에 마왕 특성이 밝혀진다. 밝혀진 정보는 도감 > 마왕에서 다시 볼 수 있다.',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',
    PRIDE:'검은 갑주에는 아직 흠집 하나 남지 않았다.',
@@ -248,23 +249,29 @@ Copy.boss={
    LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
    SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
  /* one-tap information beats: they open a question the next report answers. */
- d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다.',next:'다음 보고 · DAY 15',button:'확인'},
- d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.',next:'최종 보고 · DAY 25',button:'확인'},
- d15:{header:'2차 조사 보고',intro:'전투 기록에서 변칙이 확인됐다.',button:'확인',
+ d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 특성이 밝혀진다.',next:'다음 보고 · DAY 15',button:'확인'},
+ d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다. DAY 25에 위험이 밝혀진다.',next:'최종 보고 · DAY 25',button:'확인'},
+ d15:{header:'2차 조사 보고',intro:'전투 기록에서 마왕 특성이 확인됐다.',button:'확인',
+  guide:'마왕 특성은 마왕마다 다르다. 최종 원정은 이 마왕 특성을 감안해 준비한다.',
+  sales:'목표 매출 {target}G · 현재 매출 {revenue}G',salesTarget:'목표 매출 {target}G',salesNote:'현재 매출은 도감 > 마왕에서 확인할 수 있다.',
   trait:{
-   WRATH:['특수 효과 없음',['별도의 변칙은 확인되지 않았다.','래스는 순수한 전력으로 맞선다.']],
-   PRIDE:['오만의 갑주',['최종전에서 모든 출전자의 투력이 감소한다.','강인함·기동·정신은 그대로 적용된다.']],
-   ENVY:['질투의 시선',['최종전에서 가장 크게 기여하는 모험가 한 명이 표적이 된다.','표적의 투력·강인함·기동·정신은 최종전 동안 감소한다.']],
-   GREED:['탐욕의 장부',['최종전까지 누적 총매출이 목표에 미달하면, 부족한 만큼 그리드가 강해진다.','강화에는 한도가 있으며, 목표를 넘겨도 추가 이득은 없다.']],
+   WRATH:['특성 없음',[]],
+   PRIDE:['오만의 갑주',['최종 원정에서 출전자 전원의 투력이 {pride}% 감소한다.']],
+   ENVY:['질투의 시선',['최종 원정에서 가장 강한 출전자 한 명의 능력치가 모두 {envy}% 감소한다.']],
+   GREED:['탐욕의 장부',['누적 총매출이 {target}G에 못 미치면 그리드가 강해진다.','강해지는 데는 한도가 있고, 넘겨도 더 얻는 것은 없다.']],
    /* COPY_WORLD_VOICE_v2.7 §GLUTTONY: verbatim. v2.7 has no Rarity threshold for this Boss,
       so the inherited sentence claimed a Rarity boundary the mechanic does not have - every
       positive Core-Stat contribution from an Item is halved, whatever the Item cost. */
-   GLUTTONY:['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·피로 회복·보험 효과는 유지']],
-   LUST:['매혹의 권능',['단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.','단골은 영향을 받지 않는다.']],
-   SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 점포지원을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 점포지원은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
+   GLUTTONY:['탐식의 권능',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+   LUST:['매혹의 권능',['최종 원정에서 단골이 아닌 출전자의 능력치가 모두 {lust}% 감소한다.','단골은 영향을 받지 않는다.']],
+   SLOTH:['나태의 봉인',['슬로스에게는 봉인이 세 개 있다.','점포지원을 받는 날 대신 봉인 하나를 풀 수 있다. 풀 수 있는 날은 DAY 15·20·25 중 두 번과 DAY 30이다.','봉인을 풀면 그날 점포지원은 받지 못하고, 많이 풀수록 슬로스가 약해진다.']]}},
  /* The scouting report is the D25 disclosure now, so its button acknowledges the report
     rather than announcing a preparation that is still five days away. */
- final:{header:'최종 정찰 보고',intro:'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.',button:'확인'}
+ final:{header:'최종 정찰 보고',intro:'마왕성으로 향하는 최종 원정 환경이 확인됐다.',button:'확인',
+  guide:'최종 원정에는 두 가지 게이트의 위험이 함께 나온다.'},
+ /* UI_UX §CODEX BOSS TAB: only Bosses the Player has met are listed, and only their Trait is kept (the Final Hazards change every Run) */
+ guideLabel:'안내',
+ codex:{none:'아직 만난 마왕이 없다. DAY 5에 첫 조사 보고가 온다.',now:'이번 영업',pending:'DAY 15에 마왕 특성이 밝혀진다.',unknown:'마왕 특성은 아직 확인하지 못했다.',label:'마왕 특성'}
 };
 
 /* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great
