@@ -4048,7 +4048,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:linear-gradient(transparent,#08040ab8 25%,#08040ab8 75%,transparent);animation:pro-in .9s .25s ease-out both}
 .pro-cap p{margin:0;white-space:nowrap}.pro-cap p+p{margin-top:6px}
 .prologue[data-scene="2"] .pro-cap,.prologue[data-scene="5"] .pro-cap{font-size:var(--f5)}
-.prologue[data-scene="3"] .pro-cap{background:none;color:#bfb4a2;font-size:var(--f5);animation-delay:.6s}
+.prologue[data-scene="3"] .pro-cap{background:none;color:#bfb4a2;font-size:calc(var(--f5)*1.15);animation-delay:.6s}
 .prologue[data-scene="4"] .pro-cap,.prologue[data-scene="5"] .pro-cap{top:auto;bottom:6%;transform:none}
 /* scene 4 (one line) sits on scene 5's two-line centre */
 .prologue[data-scene="4"] .pro-cap{bottom:calc(6% + 1.55*var(--f5) + 3px - .775em)}
