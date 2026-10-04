@@ -27,8 +27,17 @@ and this table is their commit record.
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
 | v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR #67 | `v2.10.1` (set by the User) |
-| v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one); quick patch 1 PR #80 | `v2.10.2` (set by the User) |
-| v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | `v2.10.3` (set by the User) |
+| v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one); quick patch 1 PR #80 | (the User sets it; not yet on origin) |
+| v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | (the User sets it; not yet on origin) |
+| after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
+
+## After v2.10.3 — the fight is named on its own, coach spread, 안내 switch (User 2026-10-04; the version stays 2.10.3)
+
+- **Combat proof** (PR #94 / #95): with the same recorded noise roll, an Item whose removal would have lost the combat check is named on
+  the NIGHT result even on a plain `성공` (`{Item} 덕분에 전투에서 이겼다.`); it is stored beside the result proof as `combatHero`. The Stat coach
+  gets one potion sentence and the II Gate coach drops its duplicate Stat sentence. DUNGEON_HAZARD §COMBAT PROOF, NIGHT_CLOSING; test night.
+- **Coach spread and the 안내 switch** (PR #96 / #97): the 환경 대응 mark moves to DAY 3 and the Bag mark to DAY 4, so the marks spread over four
+  days. Settings gets a 안내 switch (끄기 / 다시 보기) on `tutorial.skipped`. UI_UX §TUTORIAL — COACH DIET; test ui-guard.
 
 ## v2.10.3 — a refused 바가지 costs the sale, a prologue before every store (User 2026-10-04)
 
