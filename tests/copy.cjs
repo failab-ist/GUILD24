@@ -682,8 +682,8 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
  assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4·+1·-5.'),'the guide reads the 150% Loyalty');
  assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-4.');
- assert.equal(Copy.loyalty.rule(),'단골도는 손님이 상품을 살 때(정가 +1, 50% 할인 +4, 150% -4)와 원정에서 살아 돌아왔을 때(+1) 바뀐다.');
- assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도는 팔 때 정가 +1, 50% 할인 +4, 150% -4, 원정에서 살아 돌아오면 +1.');
+ assert.equal(Copy.loyalty.rule(),'단골도는 손님이 상품을 살 때(정가 +1, 50% 할인 +4, 150% 바가지 -4)와 원정에서 살아 돌아왔을 때(+1) 바뀐다.');
+ assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도는 팔 때 정가 +1, 50% 할인 +4, 150% 바가지 -4, 원정에서 살아 돌아오면 +1.');
 });
 
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not

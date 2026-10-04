@@ -176,10 +176,10 @@ const Copy={
  loyalty:{
   sign:x=>(x>0?'+':'')+x,
   sale(){const P=G.DATA.pricing,s=this.sign;return '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 '+s(P.half.loyalty)+'·'+s(P.full.loyalty)+'·'+s(P.overcharge.loyalty)+'.';},
-  rule(){const P=G.DATA.pricing,s=this.sign;return '단골도는 손님이 상품을 살 때(정가 '+s(P.full.loyalty)+', 50% 할인 '+s(P.half.loyalty)+', 150% '+s(P.overcharge.loyalty)
+  rule(){const P=G.DATA.pricing,s=this.sign;return '단골도는 손님이 상품을 살 때(정가 '+s(P.full.loyalty)+', 50% 할인 '+s(P.half.loyalty)+', 150% 바가지 '+s(P.overcharge.loyalty)
    +')와 원정에서 살아 돌아왔을 때('+s(G.DATA.balance.returnLoyalty)+') 바뀐다.';},
   coach(){const P=G.DATA.pricing,s=this.sign;return '단골 손님. 단골도 '+G.Adventurer.TRUSTED_REGULAR+'부터 단골이 된다. 단골도는 팔 때 정가 '+s(P.full.loyalty)
-   +', 50% 할인 '+s(P.half.loyalty)+', 150% '+s(P.overcharge.loyalty)+', 원정에서 살아 돌아오면 '+s(G.DATA.balance.returnLoyalty)+'.';}},
+   +', 50% 할인 '+s(P.half.loyalty)+', 150% 바가지 '+s(P.overcharge.loyalty)+', 원정에서 살아 돌아오면 '+s(G.DATA.balance.returnLoyalty)+'.';}},
  lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule, named once per account by a coach mark on the NIGHT record
     of the first expedition it acted on - taught after it happened rather than before. Order = coach order on one record. */
