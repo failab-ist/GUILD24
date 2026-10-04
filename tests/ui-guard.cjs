@@ -3618,8 +3618,8 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/relics.js'))&&!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/dungeon.js')),'the 기동-for-속박/진창 Counter exception is gone');
  assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
- // User 2026-10-04: the Gates read as their Hazards - `부식I 3명` (name and Tier tight, a space, the visitors)
- assert.ok(fn('todayLine').includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&fn('todayLine').includes("t+' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes('s.dungeons.flatMap(hz)'),'{N}명 · {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one (a closed Gate follows as its Hazards 오늘 폐쇄)');
+ // User 2026-10-04: 전체 N명, then one row per Gate of its Hazards - `부식I 3명` (name and Tier tight, a space, the visitors)
+assert.ok(fn('todayLine').includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&fn('todayLine').includes("' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes("전체 '+s.queue.length+'명")&&fn('todayLine').includes('s.dungeons.map(d=>'),'전체 {N}명 on its own line, then one row per Gate: {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
@@ -3683,7 +3683,7 @@ test('EVENT 게이트 임시 폐쇄: the closed Gate stays on the MORNING board,
  const cp=fn('closedPlates');
  assert.ok(/game\.run\.closedGates\|\|\[\]/.test(cp)&&/class="slip gate closed"/.test(cp)&&/<span class="closed-stamp">오늘 폐쇄<\/span>/.test(cp)&&!/hazard/.test(cp),'a faded plate, the stamp, no Hazard rows');
  assert.ok(/gatePlate\(d\)\)\.join\(''\)\+closedPlates\(\)/.test(fn('morningScreen'))&&/gatePlate\(d,true\)\)\.join\(''\)\+closedPlates\(\)/.test(app),'on the board and in the window, after the open Gates');
- assert.ok(fn('todayLine').includes("' 오늘 폐쇄'")&&fn('todayLine').includes('s.closedGates'),'and on the 오늘 line');
+ assert.ok(fn('todayLine').includes('오늘 폐쇄')&&fn('todayLine').includes('s.closedGates'),'and on the 오늘 line');
  assert.ok(/s\.closedGates\.push\(\.\.\.s\.dungeons\.splice\(this\.rng\.pick\(open\),1\)\)/.test(read('dist/systems/shop.js')),'the record is the same pick, so no roll moves');
 });
 // UI_UX §DESK STAGE WIDTH (User 2026-09-30): one cap token, height-bound; FINAL's room and NIGHT's band keep 1120
