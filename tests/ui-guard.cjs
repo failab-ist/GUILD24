@@ -1839,7 +1839,7 @@ test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */
 test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verbatim, the rule only',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
+ assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
  assert.ok(morning.includes(`['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']`),'COPY_AUDIT §3-10 FIRE mark');
  const gp=fn('gatePlate');
  assert.ok(/data-tier="'\+\(d\.tier\|\|1\)\+'" data-family="'\+E\(d\.family\|\|''\)\+'"/.test(gp),'the plate carries its tier and Family - not its Hazard count, which an Event can raise on a tier I Gate (User 2026-10-02)');
@@ -2453,7 +2453,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
+   ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
    ['flow','원정은 싸움에서 이기고, 위험 사고도 없어야 성공이다. 어느 하나라도 틀어지면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
@@ -2474,7 +2474,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
  assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2]`)
-  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2]`)
+  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3]`)
   &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
@@ -3822,5 +3822,11 @@ test('ending: the music before holds until the result lands, then the ending cue
  assert.ok(/!motionOK\(\)\?0:s\?\.finalReport\?FINAL_SEAL\.hold\+STAMP_FALL:ENDING_HOLD/.test(r),'the Final seal\'s landing frame, or one beat on any other ending');
  assert.ok(/Sound\.play\(game\.run\.win\?'endwin':'endfail'/.test(r)&&/Sound\.sync\(st\.muted,audioPhase\(\),st\)/.test(r),'then the cue and the ending track');
  assert.ok(/if\(phase==='end'&&arrived\)endReveal\(\);/.test(fn('render')),'armed on arrival');
+});
+test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
+ const set=fn('settings');
+ assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
+ assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
+ assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');
 });
 console.log(count+' ui guard groups passed');

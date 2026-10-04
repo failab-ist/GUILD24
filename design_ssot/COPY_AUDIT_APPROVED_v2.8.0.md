@@ -149,7 +149,7 @@
 
 ## 3-4. 전망 안내
 
-**현재** (User 2026-10-02: 전망이 두 박스가 되어 안내도 두 개 — 전투 전망 박스, 환경 대응 박스 순서. User 2026-10-04: 첫 판 DAY 2 판매부터, DAY 1에는 §3-7 원정 흐름 안내가 먼저 간다)
+**현재** (User 2026-10-02: 전망이 두 박스가 되어 안내도 두 개 — 전투 전망 박스, 환경 대응 박스 순서. User 2026-10-04: 전투 전망은 첫 판 DAY 2, 환경 대응은 DAY 3 판매부터, DAY 1에는 §3-7 원정 흐름 안내가 먼저 간다)
 > 전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.  
 > 환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.
 
@@ -173,10 +173,10 @@
 Exact copy for these tutorial steps (rule owner: UI_UX §TUTORIAL — COACH DIET). The first SALE teaches two marks — 목적지
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY) and STATS; 가방 (§3-6) appears after the first sale and RETURNING on the first
 returning customer; pricing is taught after the fact (§26-3). The first ORDER has 발주 확정 (§3-2) alone.
-No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 SALE mark; 후보 교환 is the DAY 2 ORDER mark (§3-14).
+No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 (전투 전망) / DAY 3 (환경 대응) SALE mark; 후보 교환 is the DAY 2 ORDER mark (§3-14).
 
 ### STATS (anchor = the SALE 능력치 grid — the first time a customer's Stats are on screen)
-> 투력은 전투를, 강인함·기동·정신은 위험을 막는다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.
+> 투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.
 
 ### 원정 흐름 (FLOW, anchor = the SALE 전망 readout, 첫 판매 화면 · 정답 없음)
 (User 2026-10-04: 전투 전망 · 환경 대응 안내 앞에서 원정이 어떻게 갈리는지만 알린다. 상품 이름이나 해법은 쓰지 않는다)
@@ -235,7 +235,7 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 (규칙 owner UI_UX §GATE TIER / FIRE GATE TUTORIAL. 아침 게이트 판, 처음 그런 게이트가 나올 때 한 번씩)
 
 **현재**
-> II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.  
+> II 게이트부터는 위험이 두 가지다.  
 > 화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.
 
 ---
