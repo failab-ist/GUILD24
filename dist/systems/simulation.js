@@ -188,7 +188,7 @@ function playRun(g,out,ctx){
     contribution is shared with `reader` since 2026-09-30).
     Tried and dropped in calibration (no gain or worse): spending brakes loosened to `spender`'s, rerolling until every
     visitor Hazard has a Counter, Counters ordered right after the meals, 50% to the top roster in D1-10.
-    Calibrated with tools/calibrate-bot-v292.cjs --account (reports/expert-bot-calibration-v2912.md). */
+    Calibrated with tools/calibrate-bot-v292.cjs --account (archive/v2.9.12/expert-bot-calibration-v2912.md). */
  const expert=policy==='expert',reader=policy==='reader'||expert,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
  /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
     it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk
@@ -543,7 +543,7 @@ function playRun(g,out,ctx){
     if(!afford.length)break;
     /* reader / expert (User 2026-09-30): the Item that raises this adventurer's Final contribution most. itemValue scores a
        Counter by its raw points even where the Hazard is already answered, which handed Counters the Final slots over
-       potions and lowered the party (reports/balance-proposal-v2912.md §3); `balanced` keeps itemValue. */
+       potions and lowered the party (archive/v2.9.12/balance-proposal-v2912.md §3); `balanced` keeps itemValue. */
     const gain=x=>contribution(G.Dungeon.prepare({...copy(n),pack:[...n.pack,x.item]},s.dungeons[0],s.facilities));
     const st=afford.slice().sort(reader?(a,b)=>gain(b)-gain(a):(a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
     g.supplyFinal(n.id,st.id);act();}}

@@ -40,6 +40,12 @@ and this table is their commit record.
   leaves the repository and is kept outside it. Test ui-guard follows the new file names.
 - **v2.10.1 design work diaries leave `reports/`**: the 2026-10-03 `UI_DESIGN_*`, `UI_SALE_*` and `UI_SUPPORT_*` hand-offs, review PDFs, capture
   images and QA JSON (about 50 MB, nothing reads them; git keeps them). The component catalog `UI_COMPONENTS.md` moves to `archive/v2.10.1/`.
+- **Closed measurement reports leave `reports/`** (User 2026-10-04: 인사이트 있는 건 아카이브, 나머지는 정리): the reports with a decision basis
+  move to `archive/` (v2.8 relic rebalance, v2.9.1 decorations, v2.9.12 balance proposal and `expert` calibration, v2.9.13 Store
+  Support evaluation, counter ladder and item price, v3.0-prep §8 measurement, the v2.10.0 measurement and its rejected-option logs;
+  `archive/README.md`); their raw JSON and logs and the v2.10.0 quick-patch logs nobody cites are deleted (git keeps them). Live
+  references point to the new paths. `reports/` keeps the generated audits, the current baseline logs (`v2100-measure/v2102-*`, `v2103-*`)
+  and the Store Support grade draft (`relic-balance/v2104-grade/`).
 
 ## After v2.10.3 — 마왕 조사 도감 탭 (User 2026-10-04; the version stays 2.10.3)
 
@@ -148,7 +154,7 @@ v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, �
   부상이 중상으로 번지는 36%는 유지): the failure Death coefficients CombatDeficit × 0.30 → 0.40 and EnvironmentDeficit
   × 0.20 → 0.25 (cap 0.50 unchanged); the escape base on a lost fight 0.48 → 0.40; strainEscalation +8%p → +12%p per
   consecutive injured departure, cap 30%p → 40%p. SuccessEase stays 0.90 / 0.95: a 0.85 / 0.90 trial raised every success band
-  by 8~10%p and fresh D30 from ~46% to ~58% (reports/v2100-measure/qp3-bundle.log). DUNGEON_HAZARD §ORDINARY EXPEDITION
+  by 8~10%p and fresh D30 from ~46% to ~58% (archive/v2.10.0/v2100-measure/qp3-bundle.log). DUNGEON_HAZARD §ORDINARY EXPEDITION
   FAILURE DEATH RISK, §Healthy / injured failure Death chance, escapeChance; test night.
 - **The 후보 전체 교환 key is narrow and right-aligned** (User: 리롤이 영업 시작보다 넓어서 자꾸 누른다 · 우정렬 · 세로 여백 줄이자): as wide
   as its words (296 → 155px on a 360px phone), at the sheet's right edge, its margin 12 / 6 → 8 / 4px. UI_UX §ORDER Reroll UX.
@@ -245,15 +251,15 @@ v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, �
   DUN-Q77 / DUN-Q78; tests night, integration.
 - **The Final keeps pace** (User: 대응템·포션을 올리면 마왕전도 쉬워진다 · 도달 시 클리어는 좀 높게): WRATH 180 → 240 (User: 딱 떨어지게), the
   FIRE pair +18 → +24, the GREED shortfall cap +11 → +15 (255 at most), SLOTH by breaks 200/189/171/149 → 267/252/228/199 (all × 4/3).
-  The first pass (210) left clear-given-reach at 76%; on the grid measurement's reached parties (`reports/v2100-measure/grid.log`,
+  The first pass (210) left clear-given-reach at 76%; on the grid measurement's reached parties (`archive/v2.10.0/v2100-measure/grid.log`,
   arm 0.95 / 안1) 240 reads as about 57% clear-given-reach and 26% overall. BOSS §WRATH / §GREED / §SLOTH,
   FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT; tests final, simulation.
 - **Measured against the updated targets** (User 2026-10-03: 목표를 지금 수치 정도에 맞춰): reader / expert fresh Runs read ordinary
   success 54 / 48 / 50 / 46% by Day band, D30 reach 46%, clear-given-reach 60~63%, overall clear 27~29%; the targets are now those
-  figures (`GAME_VISION.md` §Difficulty Curve, its reference lines; measured in `reports/v2100-measure/README.md`). The all-Decorations / skilled line is
+  figures (`GAME_VISION.md` §Difficulty Curve, its reference lines; measured in `archive/v2.10.0/v2100-measure/README.md`). The all-Decorations / skilled line is
   re-read after the Decoration changes: D30 75~98%, clear-given-reach 40~75%, clear 40~57%.
 - **추모 방명록 사망 한도 +2 → +1** (User 2026-10-03, after the single-Decoration measurement: alone it was the strongest piece,
-  클리어 +22.9%p, with the Death limit now ending half the Runs; `reports/v2100-measure/deco-single.log`). META §counter — 추모 방명록,
+  클리어 +22.9%p, with the Death limit now ending half the Runs; `archive/v2.10.0/v2100-measure/deco-single.log`). META §counter — 추모 방명록,
   COPY_AUDIT §여덟 장식.
 - **Three Decorations rebalanced after the single-Decoration measurement** (User 2026-10-03): 알뜰 금고 now gives the Day's first
   customer +200G Wallet (+100G measured +0.7%p clear, so 200G) (was +50G Store Gold every morning, which moved clear by +0.9%p; the receipt loses its 알뜰 금고 row);
@@ -459,7 +465,7 @@ v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, �
   costs or support payouts, so 물류 본부계약 and the other economy supports read as zero - corrected). By line, clear %p /
   cash per Day: Fresh +5.3 / +1.9G (24시간 신선체계 and 원정 도시락 코너 lowest balance -132G / -141G), Expedition +2.9 /
   +9.7G, Customer +3.0 / +40.2G, VIP +2.1 / +11.1G, Rotation +1.9 / +40.7G, Premium +1.0 / +14.8G. Findings only, no other
-  value changed. `reports/relic-balance/v2913-qp13/EVALUATION.md`.
+  value changed. `archive/v2.9.13/relic-balance/EVALUATION.md`.
 
 ## v2.9.13 quick patch 12 — the kit lesson's visitor can pay (User 2026-10-02, PR #49; the version stays 2.9.13)
 
@@ -599,7 +605,7 @@ v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, �
   every Run filled all four Slots by about Run 5. META §Day-reach conversion rate, §sign; COPY_AUDIT decoration line.
 - **용사의 곡주 trade-off 기동 -4 → 강인함 -3**: 기동 widened the 어둠 gap of its own Gate. **세계수 생환부적 400 / 800 → 300 / 600**:
   it covered a weak departure at about half of 귀환석. Other Counter values and prices stay after a context-aware price review
-  (`reports/item-price-v2913/README.md`, `reports/counter-ladder-v2913/README.md`). ITEM §ACTIVE CATALOG, §세계수 생환부적,
+  (`archive/v2.9.13/item-price-v2913.md`, `archive/v2.9.13/counter-ladder-v2913.md`). ITEM §ACTIVE CATALOG, §세계수 생환부적,
   §ITEM ROLE NOTES, §PRESENTATION ORDER.
 - **환경 대응 per Hazard from T2**: on a two-Hazard Gate the SALE readout and the forecast pin name each Hazard with its own
   frozen state, since judgment sums both gaps; states only. The cell stays two lines (desk: states side by side under the
@@ -608,7 +614,7 @@ v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, �
   the User's habits, on the User's account) its upper reference. Harness defaults, `tests/simulation.cjs`, the measurement
   scripts and tools follow. META §Approved progression expectation: 1st Decoration Run 4, four Slots Run 9 (`reader`
   4 / 5 / 7 / 9, `expert` 4 / 6 / 7 / 9).
-- Shipped re-measure (300 seeds; `reports/balance-proposal-v2912.md` §10): `reader` D30 12.3%, clear 7.7%, Store Capital
+- Shipped re-measure (300 seeds; `archive/v2.9.12/balance-proposal-v2912.md` §10): `reader` D30 12.3%, clear 7.7%, Store Capital
   301 a Run; `expert` (0930 account) D30 30.3%, clear 18.0%, 489 a Run.
 
 ## Docs / hygiene after v2.9.12 (User 2026-09-30, no build change)
@@ -701,7 +707,7 @@ v2.9.14 SALE and Store Support notes) are this version's record; UI_UX §SALE, �
   next step. FINAL 준비 carries `자세히 보기` under the Stat grid, the supplied member's notebook (Traits, records).
 - **END replay line: a best 총매출** - META §BEST DAY, UI_UX §END — REPLAY NUDGE, COPY_AUDIT §10-3, UI-Q-v29-37 (User
   2026-09-30, "최고 총매출만"): half the endings printed no replay line, most of them after the Decorations were collected,
-  when a best Day was the only line left (`reports/v3-prep-measure-v2911.md` §2). The account now also keeps its best 총매출
+  when a best Day was the only line left (`archive/v3.0-prep/v3-prep-measure-v2911.md` §2). The account now also keeps its best 총매출
   (`bestSales`, recorded like the best Day), and a Run that beats it prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G` -
   third, after a Decoration newly in reach and a best Day; still one line at most, only when the Run opened nothing.
 - **The desk draws its own SALE** - UI_UX §SALE — DESK LAYOUT, UI-Q-v29-25 / UI-Q-v29-18 (User 2026-09-30, "설계안으로 가되

@@ -50,6 +50,6 @@ G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
    1/2/3/4/5% now that the Decoration prices above are cheaper - the v2.9.0 half-rate table is
    retired. A Decoration inside the first Run is still not a goal.
    v2.9.13 (User 2026-09-30): D25-29 4% -> 3% and D30 5% -> 3% - a player who reaches D30 every Run filled all four Slots
-   by about Run 5 (reports/balance-proposal-v2912.md §4). The longer Run still earns more through its Gross Sales. */
+   by about Run 5 (archive/v2.9.12/balance-proposal-v2912.md §4). The longer Run still earns more through its Gross Sales. */
 G.DATA.capitalRates=[{maxDay:9,rate:.01},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.03},{maxDay:30,rate:.03}];
 })(globalThis);
