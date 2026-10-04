@@ -153,6 +153,10 @@ const STATS=['combat','survival','mobility','spirit'];
    supply earlier: attenuating an Item before step 3 would quietly weaken its Hazard
    preparation too, and Counter, Supply, Insurance and Utility are explicitly out of scope.
    Every factor below is PASS3 and unset, so today every Boss returns the snapshot intact. */
+/* The Boss Trait figures as the Player reads them (percent off, target Gold), taken from the same tuning the modifiers below use,
+   so the Trait copy and the Final math cannot drift apart. */
+P.traitNumbers=function(){const t=D.bossTuning,off=f=>Math.round((1-f)*100);
+ return {pride:off(t.prideCombatFactor),envy:off(t.envyStatFactor),lust:off(t.lustStatFactor),gluttony:off(t.gluttonyStatFactor),target:t.greedRevenueTarget};};
 P.finalSnapshot=function(n,prep,d,context){
  const t=D.bossTuning,boss=this.run.bossId,e={...prep.effects};
  if(boss==='PRIDE'&&t.prideCombatFactor!=null)e.combat*=t.prideCombatFactor;

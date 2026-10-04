@@ -1464,4 +1464,32 @@ test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon
  assert.equal(h.run.dayUnlocked,undefined,'an account that already opened them records nothing');
 });
 
+/* META §BOSS LOG / UI_UX §도감 > 마왕: what the Player was shown about a Boss survives the Run, and a save without it reads empty */
+test('META §BOSS LOG: a shown D5 / D15 beat is kept on the Account, a clear counts as known, the save validates it',()=>{
+ const g=new Game();g.autosave=false;const id=DATA.bosses[0].id,other=DATA.bosses[1].id;
+ assert.deepEqual(g.account.bossLog,{},'a fresh account has seen no Boss');
+ assert.deepEqual(Meta.bossKnown(g.account,id),{identity:false,trait:false});
+ Meta.markBoss(g.account,id,'identity');
+ assert.deepEqual(Meta.bossKnown(g.account,id),{identity:true,trait:false},'D5 shows the identity only');
+ Meta.markBoss(g.account,id,'trait');
+ assert.deepEqual(Meta.bossKnown(g.account,id),{identity:true,trait:true},'D15 shows the Trait');
+ assert.deepEqual(Meta.bossKnown(g.account,other),{identity:false,trait:false},'another Boss stays unknown');
+ g.account.matrix[DATA.jobs[0].id][other]=true;
+ assert.deepEqual(Meta.bossKnown(g.account,other),{identity:true,trait:true},'a cleared Boss is fully known');
+ const round=Save.import(Save.export(copy(g.account),null));
+ assert.deepEqual(round.account.bossLog,g.account.bossLog,'the log round-trips');
+ const old=copy(g.account);delete old.bossLog;assert.ok(Save.import(Save.export(old,null)),'a save that predates the log reads empty');
+ for(const bad of [[],{NOPE:{identity:true}},{[id]:{identity:'yes'}},{[id]:{seen:true}},{[id]:null}]){
+  const acc=copy(g.account);acc.bossLog=bad;assert.throws(()=>Save.import(Save.export(acc,null)),'bossLog '+JSON.stringify(bad)+' is not a Boss log');}
+});
+
+test('BOSS §TRAIT NUMBERS: the Trait figures come from the tuning table the Final math reads',()=>{
+ const g=new Game();g.autosave=false;g.start('trait-numbers');const t=DATA.bossTuning,n=g.traitNumbers();
+ assert.deepEqual(n,{pride:Math.round((1-t.prideCombatFactor)*100),envy:Math.round((1-t.envyStatFactor)*100),lust:Math.round((1-t.lustStatFactor)*100),
+  gluttony:Math.round((1-t.gluttonyStatFactor)*100),target:t.greedRevenueTarget});
+ const lines=Object.values(Copy.boss.d15.trait).flatMap(([,l])=>l).join(' ');
+ assert.ok(!/\d/.test(lines.replace(/DAY \d+(·\d+)*/g,'').replace(/\{\w+\}/g,'')),'no Trait sentence types a number: every figure is a placeholder');
+ for(const k of lines.match(/\{\w+\}/g)||[])assert.ok(k.slice(1,-1) in n,k+' has a source in traitNumbers()');
+});
+
 console.log(count+' integration groups passed');

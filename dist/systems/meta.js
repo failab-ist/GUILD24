@@ -27,7 +27,7 @@ function freshStore(){
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,bestDay:0,bestSales:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false},
+  runs:0,wins:0,bestDay:0,bestSales:0,bossLog:{},discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false},
   store:freshStore(),
   /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
@@ -170,13 +170,17 @@ function finish(a,run,win){
 /* META §BEST DAY (User 2026-09-26, v2.9.4): the highest Day a Run reached, a personal record for the END replay line and
    nothing else. Recorded by the ending only, so a manual abandon (which never reaches it) cannot move it; the Run keeps
    the value it replaced so a reload reads the same comparison. */
+/* UI_UX §CODEX BOSS TAB: which Boss facts the Player has been shown, kept on the Account so the tab outlives the Run.
+   A Boss whose Trait was shown also had its identity shown. A save without bossLog reads as empty; a cleared Boss counts as fully known. */
+function markBoss(a,id,key){const log=a.bossLog??={};const row=log[id]??={};if(key==='trait')row.identity=true;row[key]=true;}
+function bossKnown(a,id){const row=a.bossLog?.[id]||{},won=JOBS().some(job=>a.matrix?.[job]?.[id]);return {identity:!!row.identity||won,trait:!!row.trait||won};}
 function recordBestDay(a,run){if(run.bestBefore!==undefined)return;run.bestBefore=a.bestDay||0;a.bestDay=Math.max(run.bestBefore,run.day);}
 /* META §BEST DAY — best 총매출 (User 2026-09-30): the same kind of record, on the ending's 총매출 (the END tape's own row) */
 function recordBestSales(a,run,sales){if(run.salesBefore!==undefined)return;run.salesBefore=a.bestSales||0;a.bestSales=Math.max(run.salesBefore,sales);}
 const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
-G.Meta={fresh,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
+G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

@@ -36,6 +36,11 @@ function accountOk(a,D){
  /* META §BEST DAY: absent on a save that predates it (reads 0), a Day when present; the best 총매출 likewise, a whole Gold amount */
  if(a.bestDay!==undefined&&!(Number.isInteger(a.bestDay)&&a.bestDay>=0&&a.bestDay<=30))return false;
  if(a.bestSales!==undefined&&!(Number.isInteger(a.bestSales)&&a.bestSales>=0))return false;
+ /* META §BOSS LOG: absent on a save that predates it (reads empty); when present, only known Bosses with boolean flags */
+ if(a.bossLog!==undefined){const ids=D.bosses.map(b=>b.id),l=a.bossLog;
+  if(!l||typeof l!=='object'||Array.isArray(l))return false;
+  for(const [id,row] of Object.entries(l))
+   if(!ids.includes(id)||!row||typeof row!=='object'||Object.entries(row).some(([k,v])=>!['identity','trait'].includes(k)||typeof v!=='boolean'))return false;}
  const m=a.matrix,jobs=D.jobs.map(j=>j.id),bosses=D.bosses.map(b=>b.id);
  if(!m||typeof m!=='object')return false;
  if(Object.keys(m).length!==jobs.length)return false;

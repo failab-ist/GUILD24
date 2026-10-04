@@ -1069,43 +1069,19 @@ D5 Flavor는 Trait을 암시할 수 있지만 exact Function을 공개하지 않
 
 ### D15
 
-Header / Intro / Button and GLUTTONY exact Function -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-4.
+Header / Intro / Button / 안내 line / every Boss Trait name and sentence -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-4.
+SLOTH seal lines -> §14-5. 도감 > 마왕 tab copy -> §14-11.
 
-#### 분노의 마왕 래스
+Voice rules for the Trait sentences:
+- say the effect only; no flavor and no "no effect" sentence (WRATH has no Trait and shows its name alone)
+- every figure (percent off, target Gold) is filled from the Boss tuning table, never typed into the sentence
+- 마왕의 능력은 「마왕 권능」, the Final is 「최종 원정」, Items are 「상품」 (GLOSSARY)
 
-**특성 — 특수 효과 없음**
-
-> 별도의 변칙은 확인되지 않았다.  
-> 래스는 순수한 전력으로 맞선다.
-
-#### 오만의 마왕 프라이드
-
-**특성 — 오만의 갑주**
-
-> 최종전에서 모든 출전자의 투력이 감소한다.  
-> 강인함·기동·정신은 그대로 적용된다.
-
-#### 질투의 마왕 엔비
-
-**특성 — 질투의 시선**
-
-> 최종전에서 가장 크게 기여하는 모험가 한 명이 표적이 된다.  
-> 표적의 투력·강인함·기동·정신은 최종전 동안 감소한다.
-
-#### 탐욕의 마왕 그리드
-
-**특성 — 탐욕의 장부**
-
-> 최종전까지 누적 총매출이 목표에 미달하면, 부족한 만큼 그리드가 강해진다.  
-> 강화에는 한도가 있으며, 목표를 넘겨도 추가 이득은 없다.
-
-DATA:
+GREED DATA, shown with the Trait and again in 도감 > 마왕 for this Run's Boss:
 
 ```text
 목표 매출      [value]G
 현재 매출      [value]G
-달성률         [value]%
-탐욕 강화      +[value]%
 ```
 
 #### GLUTTONY / 탐식
@@ -1127,26 +1103,10 @@ Current mechanic truth is:
 Exact D15 Trait name:
 
 ```text
-탐식의 권능
+탐식의 허기
 ```
 
 No Rare+-based Function sentence.
-
-#### 색욕의 마왕 러스트
-
-**특성 — 매혹의 권능**
-
-> 단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.  
-> 단골은 영향을 받지 않는다.
-
-#### 나태의 마왕 슬로스
-
-**특성 — 나태의 봉인**
-
-> 슬로스에게는 세 개의 봉인이 남아 있다.  
-
-Opportunity / Seal lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-5.
-Use 점포지원 consistently in all active Player-facing SLOTH lines.
 
 ### D25 — 최종 정찰 보고
 
