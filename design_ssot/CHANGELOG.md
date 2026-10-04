@@ -49,6 +49,12 @@ iOS first-touch audio, two NPC names exchanged (`ui/design-trim` #88~#90). Their
   `tools/qa-sale-details.cjs`.
 - **왕도 프리미엄 인증 pays 40% of the 150% price** (was 45%; User: 바가지에 위험이 생겼으니 40%). 평생 단골제 is unchanged.
   RELIC §23 · REL-Q-v28-7; tests relic-effects, copy.
+- **Measurement bots follow the rule** (PR #93; User: 중요도 높은 애들은 바가지 피하게): `reader` and `expert` keep 150% off the core
+  roster, Rare+ customers and an Item their Gate needs; `reader` from DAY 10 to regulars, `expert` from DAY 1 one Food / Drink to a
+  purse three times its price. Fresh 1000: D30 25.6 / 27.2%, clear 8.8 / 10.7%, cash 79 / 83 a Day; four Slots by Run 7~8
+  (`reports/v2100-measure/v2103-bots-baseline.log`, `v2103-full.log`). A 바가지-first bot drops to D30 7%
+  (`v2103-overcharge-first.log`). Behind early customers stay as they are - a 50% Bag saves about half of them
+  (`v2103-behind-bags.log`, User: 그냥 그대로).
 
 ## v2.10.2 quick patch 1 — a save names its build (User 2026-10-04; the version stays 2.10.2)
 
