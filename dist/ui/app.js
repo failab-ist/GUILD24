@@ -42,7 +42,7 @@ function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);
  const done=prologue.done;prologue=null;done();}
 function prologueScreen(){const i=prologue.i,art=[1,2,null,4][i],
   img=art?'<img class="pro-art" src="'+proArt(art)+'" alt="">'
-   :i===4?'<img class="pro-art" src="ui/assets/presentation/morning/store-bg-'+(proWide()?'wide':'phone')+'.png" alt=""><img class="pro-npc" src="ui/assets/npc/normal/F/003.webp" alt="">':'';
+   :i===4?'<img class="pro-art" src="ui/assets/presentation/morning/store-bg-'+(proWide()?'wide':'phone')+'.webp" alt=""><img class="pro-npc" src="ui/assets/npc/normal/F/003.webp" alt="">':'';
  return '<div class="prologue" data-scene="'+(i+1)+'" data-action="prologue-next">'+img
   +'<div class="pro-cap">'+Copy.prologue.scenes[i].map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
   +'<p class="pro-hint">'+E(matchMedia('(hover:hover) and (pointer:fine)').matches?Copy.prologue.click:Copy.prologue.tap)+'</p>'
