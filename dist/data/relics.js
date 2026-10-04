@@ -5,49 +5,53 @@ const D=G.DATA;
    Naming it lets the rule and the sentence read the same number - it belongs to this relic,
    not to D.balance: it is the existing threshold given a name, not a new tuning lever. */
 const GUARANTEE_MIN_PRICE=200;
-/* COPY_AUDIT §11-1 … §11-30 exact (User 2026-09-25, v2.9.0): condition first, then the effect, two clauses at most */
+/* COPY_AUDIT §11 (User 2026-10-04): who gains comes first, in plain words a newcomer reads at once. Every number is read
+   from relicParams / D.balance / D.pricing when the card is drawn (User 2026-10-04: copy follows the value, one place to
+   change), so a description is a function of the live tables, not a literal. A changed value reads `새 값 (기존 값)`. */
+const pct=x=>Math.round(x*100)+'%',pp=x=>Math.round(x*100)+'%p',times=x=>x+'배';
 const rows=[
-['bulk','묶음발주 계약','foundation',['rotation'],130,'같은 상품을 3개 이상 발주하면 3번째부터 · 매입가 -20%.'],
-['rotation','회전 진열대','foundation',['rotation'],80,'전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1.'],
-['stamp','단골 스탬프 기계','foundation',['vip'],130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.'],
-['member','회원 관리대장','foundation',['vip'],130,'다음 날부터 · 이미 만난 손님의 재방문 가중치 +70%.'],
-['rareContract','희귀상품 입고 계약','foundation',['premium'],140,'희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.'],
-['guarantee','길드 보증 진열대','foundation',['premium'],140,'하루 첫 '+GUARANTEE_MIN_PRICE+'G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
-['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
-['fieldRepair','야전 정비대','foundation',['expedition'],80,'판매한 상품의 위험 대응 수치 +40%.'],
-['fridge','대형 냉장고','foundation',['fresh'],60,'음식·음료 유통기한 +2일 (보유 재고도 1회 연장).'],
-['kitchen','즉석식품 코너','foundation',['fresh'],170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 기본 운영비 +10%.'],
-['board','길드 전광판','foundation',['customer'],110,'하루 기본 최소 방문객 4명 (기존 3명).'],
-['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
-['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
-['memberBundle','단골 묶음혜택','hybrid',['rotation','vip'],190,'단골의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
-['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,'단골 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
-['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +20G.'],
-['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,'음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2 (마왕성은 가장 취약한 위험 하나) · 음식·음료 매입가 +3G.'],
-['coldcase','냉장 유통 계약','hybrid',['fresh','premium'],180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
-['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,'오늘 위험에 대응하는 희귀 이상 상품·보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
-['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
-['logisticsHQ','물류 본부계약','keystone',['rotation'],300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
-['lifetime','평생 단골제','keystone',['vip'],310,'단골 · 모든 능력치 +10% · 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
-['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
-['opsRoom','원정 작전실','keystone',['expedition'],290,'위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.'],
-['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
-['hub','지역 거점점 계약','keystone',['customer'],340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
-['warehouse','후방 창고 증설','utility',[],130,'창고 용량 +5칸.'],
-['extraOrder','본사 추가발주권','utility',[],130,'다음 후보 생성부터 · 발주 후보 +2개.'],
-['rerollTicket','발주 교환권','utility',[],120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
-['efficiency','운영 효율 매뉴얼','utility',[],130,'다음 날부터 · 기본 운영비 -30G.'],
+['bulk','묶음발주 계약','foundation',['rotation'],130,p=>'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 '+pct(p.bulk.discount)+' 싸진다.'],
+['rotation','회전 진열대','foundation',['rotation'],80,p=>'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 '+p.rotation.supplyBonus+'개 늘어난다.'],
+['stamp','단골 스탬프 기계','foundation',['vip'],130,p=>{const up=m=>Math.round(D.pricing[m].loyalty*p.stamp.loyaltyMult);
+ return '손님의 구매로 오르는 단골도: 정가 +'+up('full')+' (기존 +'+D.pricing.full.loyalty+'), 50% 할인 +'+up('half')+' (기존 +'+D.pricing.half.loyalty+'). 원정 뒤에 오르는 단골도는 그대로.';}],
+['member','회원 관리대장','foundation',['vip'],130,p=>'다음 날부터, 한 번 왔던 손님이 '+times(p.member.revisitMult)+' 자주 다시 찾아온다.'],
+['rareContract','희귀상품 입고 계약','foundation',['premium'],140,p=>'발주 후보에 희귀 이상 상품이 '+times(p.rareContract.rareWeightMult)+' 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 '+pct(p.rareContract.hqBonus)+'를 더 받는다.'],
+['guarantee','길드 보증 진열대','foundation',['premium'],140,p=>'하루 한 번, '+GUARANTEE_MIN_PRICE+'G 이상에 파는 상품은 손님이 판매가의 '+pct(1-p.guarantee.subsidyRate)+'만 내고 가게는 전액을 받는다.'],
+['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,p=>'오늘 게이트 위험에 맞는 상품이 발주 후보에 '+times(p.hazardBoard.weightMult)+' 자주 나온다.'],
+['fieldRepair','야전 정비대','foundation',['expedition'],80,p=>'가게에서 판 상품의 위험 대응 수치가 '+pct(p.fieldRepair.counterMult-1)+' 높아진다.'],
+['fridge','대형 냉장고','foundation',['fresh'],60,p=>'음식·음료의 유통기한이 '+p.fridge.shelfDays+'일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
+['kitchen','즉석식품 코너','foundation',['fresh'],170,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.kitchen.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 '+pct(p.kitchen.overheadRate)+' 오른다.'],
+['board','길드 전광판','foundation',['customer'],110,p=>'손님 수가 적게 나와도 하루 기본 '+p.board.minVisitors+'명은 온다 (기존 3명).'],
+['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,p=>'처음 온 손님의 손님 소지금 +'+p.firstVisitCoupon.arrivalGold+'G, 그 손님의 구매 의사 +'+pp(p.firstVisitCoupon.intentBonus)+'.'],
+['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,p=>'매일 아침 '+pct(p.groupOrder.visitorChance)+' 확률로 손님이 1명 더 온다. 하루 '+p.groupOrder.commissionFrom+'번째 판매부터는 팔 때마다 가게가 '+p.groupOrder.commission+'G를 더 받는다.'],
+['memberBundle','단골 묶음혜택','hybrid',['rotation','vip'],190,p=>'단골 손님이 오늘 두 번째 상품을 살 때, 손님은 '+(p.memberBundle.payShare===.5?'반값':'판매가의 '+pct(1-p.memberBundle.payShare))+'만 내고 가게는 전액을 받는다.'],
+['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,p=>'단골 손님이 오면 그 손님의 손님 소지금 +'+p.premiumMember.arrivalGold+'G, 희귀 이상 상품 구매 의사 +'+pp(p.premiumMember.rareIntentBonus)+'.'],
+['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,p=>'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +'+p.returnPoints.loyaltyBonus+', 손님 소지금 +'+p.returnPoints.goldBonus+'G.'],
+['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,p=>'손님 가방의 음식·음료 1개마다 피로 회복 +'+p.expeditionMeal.supplyPerItem+' (음료는 +'+p.expeditionMeal.drinkSupplyPerItem+'), 갈 게이트의 위험 대응도 모두 +'+p.expeditionMeal.hazardDefense+' (마왕성은 가장 약한 위험 하나만). 대신 음식·음료 매입가 +'+p.expeditionMeal.orderPriceAdd+'G.'],
+['coldcase','냉장 유통 계약','hybrid',['fresh','premium'],180,p=>'고급 이상 음식·음료가 발주 후보에 '+times(p.coldcase.weightMult)+' 자주 나오고, 그 상품의 구매 의사 +'+pp(p.coldcase.intentBonus)+', 유통기한 +'+p.coldcase.shelfDays+'일 (이미 가진 재고도 한 번).'],
+['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,p=>'희귀 이상 상품 중 오늘 위험에 맞는 것이나 보험을 팔면, 가게가 정가의 '+pct(p.supplyCert.commissionRate)+'를 더 받고 그 손님의 손님 소지금도 +'+p.supplyCert.goldBonus+'G.'],
+['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,p=>'유통기한이 지난 음식·음료는 버리는 대신 매입가의 '+pct(p.dawnRecovery.refundRate)+'를 돌려받는다. 매일 첫 발주 후보에 음식이나 음료가 '+p.dawnRecovery.extraOffers+'칸 더 나온다.'],
+['logisticsHQ','물류 본부계약','keystone',['rotation'],300,p=>'전날 판 상품 1개마다 오늘 발주 매입가가 '+pct(p.logisticsHQ.perSale)+' 싸진다 (최대 '+pct(p.logisticsHQ.maxDiscount)+').'],
+['lifetime','평생 단골제','keystone',['vip'],310,p=>'단골 손님의 능력치가 모두 '+pct(p.lifetime.statBonus)+' 오른다. 한 번 단골이 되면 단골도가 '+G.Adventurer.TRUSTED_REGULAR+' 아래로 떨어지지 않는다.'],
+['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,p=>'바가지(150%)로 팔면 가게가 판매가의 '+pct(p.royalCert.commissionRate)+'를 더 받고, 손님의 바가지 구매 의사 +'+pp(p.royalCert.intentBonus)+'. 대신 기본 운영비가 '+pct(p.royalCert.overheadRate)+' 오른다.'],
+['opsRoom','원정 작전실','keystone',['expedition'],290,p=>'손님의 위험 대응이 필요한 수치를 넘긴 만큼 투력이 오른다 (최대 +'+pct(p.opsRoom.overshootCap*p.opsRoom.mult)+').'],
+['fresh24','24시간 신선체계','keystone',['fresh'],360,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.fresh24.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +'+pct(p.fresh24.orderPriceMult-1)+'.'],
+['hub','지역 거점점 계약','keystone',['customer'],340,p=>'다음 날부터 매일 손님이 '+pct(p.hub.p1)+' 확률로 1명, '+pct(p.hub.p2)+' 확률로 2명 더 온다. 대신 기본 운영비가 '+pct(p.hub.overheadRate)+' 오른다.'],
+['warehouse','후방 창고 증설','utility',[],130,p=>'창고에 둘 수 있는 상품이 '+p.warehouse.slots+'칸 늘어난다.'],
+['extraOrder','본사 추가발주권','utility',[],130,p=>'다음 발주부터 발주 후보가 '+p.extraOrder.extraOffers+'개 늘어난다.'],
+['rerollTicket','발주 교환권','utility',[],120,()=>{const b=D.balance.rerollBase;return '매일 첫 발주 후보 교환은 무료. 그다음부터 '+b+'G → '+b*2+'G → '+b*4+'G… 로 오른다.';}],
+['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
-['fieldStretcher','야전 들것','foundation',['expedition'],80,'부상 모험가 · 투력 페널티 -15% → -8%.'],
-['firstAidDesk','응급 처치대','keystone',['expedition'],300,'부상 모험가가 방문하면 · 20% 확률로 부상 회복.']
+['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 15%).'],
+['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).']
 ];
-D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
- ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})}));
+/* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
+D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,tags,price,
+ ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})},'description',{get:()=>copy(D.relicParams),enumerable:true}));
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 /* Effect STRENGTH of every support, read by its use sites. The trigger conditions (3+ of one
    SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;
-   only how strong the effect is lives here. Descriptions above are still literal copy - a
-   change here does not rewrite them. */
+   only how strong the effect is lives here, and the descriptions above read it. */
 D.relicParams={
  bulk:{discount:.20},
  rotation:{supplyBonus:1},
@@ -66,7 +70,7 @@ D.relicParams={
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},
  memberBundle:{payShare:.5},
  premiumMember:{rareIntentBonus:.15,arrivalGold:40},
- returnPoints:{loyaltyBonus:5,goldBonus:20}, /* User 2026-10-02: was 25G */
+ returnPoints:{loyaltyBonus:4,goldBonus:20}, /* User 2026-10-04: Loyalty 5 -> 4 with the returning-customer condition gone */
  expeditionMeal:{supplyPerItem:2,drinkSupplyPerItem:1,hazardDefense:2,orderPriceAdd:3}, /* User 2026-10-02: a flat Food/Drink order price +3G (5G measured too tight) */
  coldcase:{weightMult:1.8,shelfDays:1,intentBonus:.16},
  supplyCert:{commissionRate:.20,goldBonus:30},

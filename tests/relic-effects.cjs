@@ -48,11 +48,12 @@ test('premium guarantee obeys wallet, daily limit and never guarantees acceptanc
  n.money=999;n.loyalty=60;g.run.facilities=['premiumMember'];const member=g.interest(n,it,'overcharge');g.run.facilities=[];assert.ok(member.chance>g.interest(n,it,'overcharge').chance);assert.ok(member.chance<1);
 });
 function nightWith(facilities,visits=2,paid=true){const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=visits;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=60;n.money=100;n.destination=0;n.claimedDestination=0;n.history=paid?[{day:s.day,item:'rice',paid:35,mode:'half'}]:[];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return {g,n};}
-test('return points excludes first visit, no-sale and free transfer',()=>{
- for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?20:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?5:0);}
+/* User 2026-10-04: the returning-customer condition is gone (a first-visit buyer earns it too) and Loyalty is +4 */
+test('return points pays a paid buyer who survives, first visit included; excludes no-sale',()=>{
+ for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=paid;assert.equal(boost.n.money-base.n.money,eligible?20:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?4:0);}
  /* 2026-09-23 rebalance: the Loyalty >= 30 condition is gone - a low-Loyalty paid returner earns it too */
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
- const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,20);
+ const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,4,'no Loyalty threshold');assert.equal(lr.money-lb.money,20);
 });
 /* RELIC 22 (User 2026-10-02 remake): 평생 단골제 pays no Gold and weights no visit - a 단골's four Core Stats +10% (shown among
    each Stat's sources, the Final party included), and once a 단골, Loyalty does not drop below 51 while it is owned. */

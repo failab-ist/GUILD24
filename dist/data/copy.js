@@ -171,6 +171,15 @@ const Copy={
  pick,pools:{visit,sale,night},
  /* 카운터에 도착한 손님의 한마디. Callback > Trait > 상태 > 일반 순으로 고른다. */
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer of the account's first Run */
+ /* COPY_AUDIT §3 단골 / §8 (User 2026-10-04): how Loyalty moves, read from D.pricing / D.balance and the 단골 line, so the
+    guide and the 단골 mark follow the values. Order = the price keys' own order (50% · 100% · 150%). */
+ loyalty:{
+  sign:x=>(x>0?'+':'')+x,
+  sale(){const P=G.DATA.pricing,s=this.sign;return '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 '+s(P.half.loyalty)+'·'+s(P.full.loyalty)+'·'+s(P.overcharge.loyalty)+'.';},
+  rule(){const P=G.DATA.pricing,s=this.sign;return '단골도는 손님이 상품을 살 때(정가 '+s(P.full.loyalty)+', 50% 할인 '+s(P.half.loyalty)+', 150% '+s(P.overcharge.loyalty)
+   +')와 원정에서 살아 돌아왔을 때('+s(G.DATA.balance.returnLoyalty)+') 바뀐다.';},
+  coach(){const P=G.DATA.pricing,s=this.sign;return '단골 손님. 단골도 '+G.Adventurer.TRUSTED_REGULAR+'부터 단골이 된다. 단골도는 팔 때 정가 '+s(P.full.loyalty)
+   +', 50% 할인 '+s(P.half.loyalty)+', 150% '+s(P.overcharge.loyalty)+', 원정에서 살아 돌아오면 '+s(G.DATA.balance.returnLoyalty)+'.';}},
  lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule, named once per account by a coach mark on the NIGHT record
     of the first expedition it acted on - taught after it happened rather than before. Order = coach order on one record. */
