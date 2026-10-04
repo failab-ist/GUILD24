@@ -270,7 +270,7 @@ Every Core Stat counts alike (Prepared Power .27 each, Hazard Defense ÷3), so a
 whatever Stat it raises: Drink (the Stat line, 피로 회복 2) Common 12 · Uncommon 17 · Epic 20 with 투력 +5; Food (the 피로 회복
 line) Common 6 · Uncommon 9 · Rare 12 · Epic 15 with 투력 +5. What tells two of them apart is the Stat's own role (강인함
 fewer incidents, 기동 more retreats on a lost fight, 정신 a lower failure Death chance - `DUNGEON_HAZARD_v2.8.0.md`), the
-lunch line's 원정 소지금 (간단 도시락 +10%, 길드 특제 도시락 +25%) and the Epic 투력.
+lunch line's 손님 소지금 획득 (간단 도시락 +10%, 길드 특제 도시락 +25%) and the Epic 투력.
 
 ### COUNTER LADDER
 
