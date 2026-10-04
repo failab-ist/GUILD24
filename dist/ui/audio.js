@@ -347,6 +347,8 @@ function bgmLoad(key){if(decoded.key===key)return Promise.resolve(decoded.buf);
 /* the next phase's file, fetched while this one plays; a failed fetch is dropped, the phase change fetches again */
 function bgmAhead(key){const k=nextOf[key];if(!k||ahead.key===k||typeof fetch!=='function')return;
  const bytes=bgmFetch(k);ahead={key:k,bytes};bytes.catch(()=>{if(ahead.bytes===bytes)ahead={key:'',bytes:null};});}
+/* UI_UX §PROLOGUE: the Boss track is fetched and decoded as the prologue opens, so turning the sound on in scene 1 starts the music at once */
+function prefetch(key){if(!bgm[key]||decoded.key===key||typeof fetch!=='function')return;bgmLoad(key).catch(()=>{});}
 /* One pass from `from` to e. Scheduled on the audio clock; the next pass is queued 2 s ahead of the join. */
 function bgmPass(m,at,from,fadeIn){const t=bgm[m.key],src=ctx.createBufferSource(),g=ctx.createGain();
  src.buffer=m.buf;src.connect(g);g.connect(m.out);
@@ -401,5 +403,5 @@ function unlock(){if(!enabled||!ctx)return;
  if(ctx.state!=='running')ctx.resume().catch(()=>{});
  try{const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();s.buffer=b;s.connect(master||sfxBus);s.start(0);}catch(e){}}
 if(typeof document!=='undefined')for(const ev of ['touchend','click'])document.addEventListener(ev,unlock,{capture:true,passive:true});
-G.Sound={play,sync,wake,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+G.Sound={play,sync,wake,prefetch,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

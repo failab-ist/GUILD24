@@ -4057,7 +4057,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:#0000008c;color:#e8dcc8;font:500 var(--t-sm,13px)/1 var(--ui);cursor:pointer}
 .pro-sound{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:14px;display:grid;place-items:center;width:38px;height:34px;padding:0;border:0;
  background:#0000008c;color:#e8dcc8;cursor:pointer}
+.pro-sound,.pro-skip{box-shadow:none}
 .pro-sound:hover,.pro-skip:hover{background:#0000008c}
+.pro-sound:active,.pro-skip:active{box-shadow:none;transform:none}
 .pro-hint{position:absolute;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);margin:0;padding:6px 12px;
  background:none;text-shadow:0 1px 3px #000,0 0 6px #000;font:500 13px/1 var(--ui);color:#f3e9d6b3;white-space:nowrap;pointer-events:none}
 @keyframes pro-in{from{opacity:0}to{opacity:1}}

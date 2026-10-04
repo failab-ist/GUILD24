@@ -36,7 +36,7 @@ const proSoundBtn=()=>{const m=game.account.settings.muted;return '<button type=
 function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(prologue&&prologue.i===at)prologueStep(false);},PRO_HOLD[at]);}
 const proWide=()=>matchMedia('(min-width:1024px)').matches;
 const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
-function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));render();sound(PRO_CUE[0]);proTimer();}
+function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prefetch('boss');render();sound(PRO_CUE[0]);proTimer();}
 function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);
  if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);proTimer();return;}
  const done=prologue.done;prologue=null;done();}
