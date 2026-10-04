@@ -817,7 +817,7 @@ Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 전망 (§
 
 
 CLOSING (first clause only)
-영업 전 자금과 보유 자금을 비교한다.
+영업 시작 골드와 보유 골드를 비교한다.
 ```
 
 The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신.
