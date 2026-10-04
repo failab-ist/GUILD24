@@ -2475,7 +2475,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
  assert.deepEqual(ids,['destination','stats','forecast','envmeter','payday','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the two outlook boxes; the rest are contextual');
- assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지가 거절되면 그 상품은 오늘 그 손님에게 못 판다. 단골도도 깎인다.']`)
+ assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']`)
   &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
  assert.ok(/el\.className='receipt-stub'\+\(st\.mode==='half'\?' half':''\)/.test(fn('showStub'))&&/if\(activeCoach\)\{stubTimer=setTimeout\(drop,400\);return;\}/.test(fn('showStub')),'the 50% line carries its class and stays while a mark is open');
