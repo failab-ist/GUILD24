@@ -1279,3 +1279,23 @@ test('DUN-Q-v29-BC3: HIDDEN BAD-LUCK PREPARATION ASSIST (User 2026-09-25, v2.9.1
  const anyNpc=g.run.npcs[0];
  assert.equal(Object.keys(g.outlookFor(anyNpc)).some(k=>/assist/i.test(k)),false,'the outlook carries no assist field');
 });
+
+test('RESULT-PROOF, combat: a 투력 Item that turned a lost fight into a win is named, with no roll the win never drew',()=>{
+ const g=new Game();g.autosave=false;g.start('combat-proof');
+ const gate=g.makeDungeon('spider',1);
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const base=pack=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack,injury:0,fatigue:0,alive:true,recovery:0,level:1,xp:0}));
+ const power=e=>e.combat*.5+(e.survival+e.mobility+e.spirit)*.27;
+ const a=power(Dungeon.prepare(base(['midpotion']),gate,[]).effects),b=power(Dungeon.prepare(base([]),gate,[]).effects);
+ assert.ok(a>b,'the potion raises the prepared power, or there is nothing to prove');
+ // noise roll .5 = no noise; the Gate sits between the bare and the potion-carrying power
+ const mid={...gate,power:(a+b)/2};
+ const won=Dungeon.resolve(base(['midpotion']),mid,scripted([0.5,0.999,0.999]),[]);
+ assert.deepEqual(won.combatHero?.items,['midpotion'],'without the potion the same roll loses the fight');
+ assert.equal(won.heroProof?.outcome??null,null,'the outcome proof cannot say it - the win drew no Death / escape roll');
+ assert.equal(Presentation.heroLine(won),'중급 포션 덕분에 전투에서 이겼다.');
+ // a fight the bare adventurer wins anyway names nothing
+ const easy=Dungeon.resolve(base(['midpotion']),{...gate,power:b*.5},scripted([0.5,0.999,0.999]),[]);
+ assert.equal(easy.combatHero??null,null,'a win the potion did not decide is not credited');
+ assert.equal(Presentation.heroLine(easy),null);
+});

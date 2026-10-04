@@ -1184,6 +1184,12 @@ the same path.
 
 Under-reporting is preferred to false causality.
 
+## COMBAT PROOF (User 2026-10-04)
+
+The fight is proven on its own. With the same recorded noise roll (and the same hidden assist), if removing an Item from the Bag
+would have lost the combat check the real expedition won, that Item is named. It needs no roll the real path never drew, so it
+holds on a plain `성공` where the outcome proof above is UNPROVEN. It is stored beside the result proof (`combatHero`), never inside it.
+
 ## SHADOW SET — NORMAL BAG
 
 For actual Bag A+B, evaluate only what is needed:
