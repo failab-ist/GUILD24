@@ -26,6 +26,8 @@ function required(wide){
   ...[1,2,3,4,5].map(n=>A+'npc/npc-0'+n+'.png')];}
 function later(){
  const n=G.NPCAssets,out=BOSS.map(b=>P+'final/'+b+'_BACKDROP.png');
+ /* UI_UX §PROLOGUE: it fetches its own scenes when it plays; these are for the next new store */
+ for(const k of[1,2,4])for(const w of['phone','wide'])out.push(P+'prologue/scene'+k+'-'+w+'.webp');
  if(n){for(const sex of['M','F'])for(let i=1;i<=n.normal[sex];i++)out.push(n.base+'normal/'+sex+'/'+String(i).padStart(3,'0')+n.ext);}
  return out;}
 /* onProgress(done,total). On a slow link the game starts after CAP and the rest keeps loading behind it. */

@@ -838,7 +838,7 @@ NPC 이름도 World Voice의 일부다.
 normal Name Pool의 중심은 `한국어 어감` + `판타지식 변형` + `가끔 자연스러운 말장난`이다.
 목표는 정통 서양 High-Fantasy 인명록이 아니라, 한국어 Player가 읽자마자 기억하고 피식할 수 있는 생활형 Fantasy 이름.
 
-Tone Anchor 예시: 지오니아, 민자이, 고쉬스앵 — 방향 기준이며, 모든 이름을 Meme/실존인물 패러디로 만들라는 뜻이 아니다.
+Tone Anchor 예시: 지오닝, 민자이, 고쉬스앵 — 방향 기준이며, 모든 이름을 Meme/실존인물 패러디로 만들라는 뜻이 아니다.
 
 Good pool mix:
 - 한국어 어감이 남아 있는 Fantasy 변형

@@ -5,6 +5,13 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 프롤로그 장면 그림 — User 제공 원본 (2026-10-04)
+
+- `dist/ui/assets/presentation/prologue/scene{1,2,4}-{phone,wide}.webp`: User가 준 PNG(폰 941×1672, PC 1672×941)를
+  크기 그대로 WebP 품질 0.9로 다시 인코딩했다(장당 0.2~0.5MB). 장면 1은 User가 다시 그린 v2를 쓴다.
+- 장면 5는 기존 `morning/store-bg-*`와 손님 초상화 F/003을 쓴다. 글자는 모두 라이브 텍스트다.
+- User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
+
 ### 점포지원 PC 세로 배열용 넓은 계약서 — 프로젝트 생성 (2026-10-03 후속)
 
 - `dist/ui/assets/presentation/support/contract-wide-blank.png`: RGBA 2172×724, 기존 무지 계약서를 참고한

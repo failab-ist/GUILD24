@@ -824,7 +824,7 @@
       {
         "slot": "001",
         "gender": "F",
-        "name": "지오니아",
+        "name": "다래온",
         "original_id": "N026",
         "asset_filename": "001.png",
         "asset_path": "NORMAL/F/001.png"
@@ -840,7 +840,7 @@
       {
         "slot": "003",
         "gender": "F",
-        "name": "다래온",
+        "name": "지오닝",
         "original_id": "N028",
         "asset_filename": "003.png",
         "asset_path": "NORMAL/F/003.png"
