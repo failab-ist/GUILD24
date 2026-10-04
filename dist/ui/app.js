@@ -28,18 +28,22 @@ let prepOpen=false;
    loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on (every scene says so), 건너뛰기 ends it.
    Scenes 1~2 play the Boss track, scene 3 is silence, and from scene 4 the title runs on into the store screen. */
 let prologue=null;
-const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final','gag','open','depart'];
+const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,'page','page'];
 /* Auto-advance (User 2026-10-04): each scene moves on by itself after its reading time (ms); a tap still goes on at once. */
 const PRO_HOLD=[5500,7000,5000,4500,7500];
 const proSpeaker=m=>'<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>'+(m?'<path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>')+'</svg>';
-const proSoundBtn=()=>{const m=game.account.settings.muted;return '<button type="button" class="pro-sound" data-action="prologue-sound" aria-label="'+(m?'소리 켜기':'소리 끄기')+'">'+proSpeaker(m)+'</button>';};
+const proSoundBtn=()=>{const m=game.account.settings.muted||(!prologue.woke&&Sound.locked());return '<button type="button" class="pro-sound" data-action="prologue-sound" aria-label="'+(m?'소리 켜기':'소리 끄기')+'">'+proSpeaker(m)+'</button>';};
 function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(prologue&&prologue.i===at)prologueStep(false);},PRO_HOLD[at]);}
 const proWide=()=>matchMedia('(min-width:1024px)').matches;
 const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
+/* The browser keeps sound locked until the first tap: the speaker shows it as off, and that first tap starts the music from its beginning */
+function prologueWake(){if(!prologue||prologue.woke)return;prologue.woke=true;if(!game.account.settings.muted&&Sound.locked()){Sound.restart();sound('ui');}}
+/* scene 3: the gag lands when the caption has finished fading in, and the music cuts with it */
+function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},1600);}
 function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
-function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);
- if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);proTimer();return;}
- const done=prologue.done;prologue=null;done();}
+function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);clearTimeout(prologue.g);
+ if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);if(prologue.i===2)proGag();proTimer();return;}
+ const done=prologue.done;if(!skip)sound('page');prologue=null;done();}
 function prologueScreen(){const i=prologue.i,art=[1,2,null,4][i],
   img=art?'<img class="pro-art" src="'+proArt(art)+'" alt="">'
    :i===4?'<img class="pro-art" src="ui/assets/presentation/morning/store-bg-'+(proWide()?'wide':'phone')+'.webp" alt=""><img class="pro-npc" src="ui/assets/npc/normal/F/003.webp" alt="">':'';
@@ -49,7 +53,7 @@ function prologueScreen(){const i=prologue.i,art=[1,2,null,4][i],
   +proSoundBtn()+'<button type="button" class="pro-skip" data-action="prologue-skip">'+E(Copy.prologue.skip)+'</button></div>';}
 /* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
    screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */
-function audioPhase(){if(prologue)return prologue.i<2?'final':prologue.i===2?'hush':'prep';
+function audioPhase(){if(prologue)return prologue.i<2||(prologue.i===2&&!prologue.cut)?'final':prologue.i===2?'hush':'prep';
  const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
  if(s.phase==='end'&&!endRevealed)return endFrom;
  return s.phase==='end'?(s.win?'end-win':'end-fail'):s.phase;}
@@ -2690,9 +2694,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
  case'new':prepOpen=true;sound('newstore');startPrologue(render);break;
- case'prologue-next':prologueStep(false);break;
- case'prologue-skip':prologueStep(true);break;
- case'prologue-sound':{const st=game.account.settings;st.muted=!st.muted;game.save();sound('ui');const b=$('.pro-sound');if(b){b.innerHTML=proSpeaker(st.muted);b.setAttribute('aria-label',st.muted?'소리 켜기':'소리 끄기');}break;}
+ case'prologue-next':prologueWake();prologueStep(false);break;
+ case'prologue-skip':prologueWake();prologueStep(true);break;
+ case'prologue-sound':{const st=game.account.settings,was=!st.muted&&!prologue.woke&&Sound.locked();prologueWake();if(!was)st.muted=!st.muted;game.save();sound('ui');const b=$('.pro-sound');if(b){b.innerHTML=proSpeaker(st.muted);b.setAttribute('aria-label',st.muted?'소리 켜기':'소리 끄기');}break;}
  case'prep-back':prepOpen=false;sound('ui');render();break;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW: buying and equipping are only legal outside a Run, and
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on

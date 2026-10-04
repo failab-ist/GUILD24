@@ -149,6 +149,8 @@ Regenerate the vendored copies with `npm run assets`.
 | `key.mp3` | `mechanical/select` | ordinary pick |
 | `door.mp3` | `mechanical/send` | SALE 손님 보내기 — the customer leaves (v2.9.0 TRANSACTION BEAT A4) |
 
+- `page.mp3` — page turn of the prologue's scene changes (User 2026-10-04). Kenney "RPG Audio" `bookFlip2.ogg`, CC0 1.0
+  (https://kenney.nl/assets/rpg-audio), re-encoded mono mp3 64 kb/s (~7 KB). Added by hand, not by `npm run assets`.
 - Retired (User 2026-09-29, v2.9.11 quick patch): `tick.mp3` (ORDER quantity) and `soft.mp3` (utility navigation) were
   masked by the phase music even at their tier's loudest; both cues are now synthesised in `dist/ui/audio.js` and the files
   no longer ship.
