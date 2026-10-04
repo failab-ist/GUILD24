@@ -3302,7 +3302,8 @@ test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, d
  assert.ok(/\(fromEnd\?btn\('결과 다시 보기','prep-back','bare'\):''\)\+btn\('첫 점포지원 고르기','start','stamp'\)/.test(p),'the Action in the dock, and 결과 다시 보기 only from the ending');
  assert.ok(/const fromEnd=!!game\.run;/.test(p),'from the ending means a Run is still there');
  const act=app.slice(app.indexOf('async function action(el)'));
- assert.ok(/case'new':prepOpen=true;sound\('newstore'\);render\(\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
+ /* UI_UX §PROLOGUE (User 2026-10-04): the store comes after the prologue, which renders it when it ends */
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\);startPrologue\(render\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
  const back=act.slice(act.indexOf("case'new'"),act.indexOf("case'prep-back'")+60);
  assert.ok(!/game\.(start|end|abandon)|Meta\./.test(back),'and neither changes the Run or the Account');
 });

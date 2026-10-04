@@ -41,7 +41,8 @@ const tunes={
    the five tracks' mean - waveform, bass and drone made them differ by up to ~5 dB. */
 /* v3.0 BGM (User 2026-09-29): one recorded track per phase. The app hands the ending in as `end-win` / `end-fail`,
    and anything without a phase of its own - no Run, 첫 점포지원, the store about to open - is the title. */
-const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='end-fail'?'fail'
+/* UI_UX §PROLOGUE: `hush` is the prologue's turn - no music at all, not the title. */
+const trackFor=phase=>phase==='hush'?'':phase==='final'?'boss':phase==='end-win'?'succ':phase==='end-fail'?'fail'
  :phase==='night'?'night':phase==='order'?'order':phase==='sell'?'sale':phase==='closing'?'close'
  :phase==='morning'?'morning':'title';
 /* The recorded set: dist/ui/assets/bgm, the User's Gemini (Lyria) tracks (reports/ASSETS.md). An MP3 cut at a loop point
@@ -381,7 +382,7 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
  if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();
  const next=trackFor(phase);if(track===next)return;
- track=next;bedStop();bgmStop(BGM_SWAP,false);
+ track=next;bedStop();bgmStop(next?BGM_SWAP:.25,false);if(!next){pending='';return;}
  if(!bgm[next]||typeof fetch!=='function'){bedStart(next);return;}
  pending=next;
  bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);bgmAhead(next);})

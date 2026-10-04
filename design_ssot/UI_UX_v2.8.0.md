@@ -1209,6 +1209,24 @@ when wider). Pieces follow the painting under any crop:
 - covered: phone 360~430 at browser heights 640~932, the iPhone SE stage 375x548 (§SHORT PHONE), portrait tablet 768~912,
   landscape tablet 900~1023, desk 1024~1920
 
+### PROLOGUE (User 2026-10-04)
+
+Five full-screen scenes before every new store: at start-up when there is no Run (in place of the loading
+screen; the art keeps loading behind it, and the loading screen returns only if the prologue ends first) and
+after `다음 점포 열기`. A start-up with a Run in progress shows the loading screen as before.
+
+| scene | art | caption | cue |
+| --- | --- | --- | --- |
+| 1 | the seal breaking over the castle (enlarged from the top: phone 1.15, desk 1.2) | 봉인이 풀린다. / 30일 뒤, 마왕이 깨어난다. | rumble |
+| 2 | three adventurers facing the castle | 마왕 앞에 설 수 있는 자는 단 세 명. / 시련도, 전투도 모두 넘어선 자들뿐이다. | final (gate) |
+| 3 | black | …뭐, 그건 모험가들이 할 일이고. | none |
+| 4 | the store beside the dungeon gate, daylight | 나는 던전 앞에 편의점을 차렸다. | open (shutter) |
+| 5 | the store inside with one customer | 오는 모험가마다 팔고, 먹이고, 키운다. / 단골이 되면 또 오고, 또 오면 더 강해진다. | depart (door) |
+
+- Scenes 1~3 keep the caption at the screen's centre; scenes 4~5 under the picture. One sentence per line, no wrap.
+- A tap anywhere goes to the next scene; `건너뛰기` (top right) ends it. It ends on the store screen.
+- Copy owner: `Copy.prologue`. Art: `dist/ui/assets/presentation/prologue/` (phone and wide per scene).
+
 ### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
 
 (acceptance -> UI_UX §QA UI-Q-v29-42.) 새 점포 준비 is the store about to open — MORNING's painted room (same framing, bands and
@@ -1584,6 +1602,9 @@ Every phase plays a recorded track (`dist/ui/assets/bgm/`, provenance in `report
 
 | screen | track |
 | --- | --- |
+| PROLOGUE scenes 1~2 | BOSS |
+| PROLOGUE scene 3 | none (silence) |
+| PROLOGUE scenes 4~5 | TITLE, running on into the store screen |
 | no Run · 첫 점포지원 · the store about to open (NEW STORE PREPARATION) | TITLE |
 | MORNING | MORNING |
 | ORDER | ORDER |

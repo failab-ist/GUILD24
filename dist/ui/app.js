@@ -24,9 +24,27 @@ let preRunReturn=false;
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): the ending's `다음 점포 열기` shows the preparation scene over a Run
    that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
 let prepOpen=false;
+/* UI_UX §PROLOGUE (User 2026-10-04): five scenes before every new store - at start-up with no Run (in place of the
+   loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on, 건너뛰기 ends it.
+   Scenes 1~2 play the Boss track, scene 3 is silence, and from scene 4 the title runs on into the store screen. */
+let prologue=null;
+const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,'open','depart'];
+const proWide=()=>matchMedia('(min-width:1024px)').matches;
+const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
+function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));render();sound(PRO_CUE[0]);}
+function prologueStep(skip){if(!prologue)return;
+ if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);return;}
+ const done=prologue.done;prologue=null;done();}
+function prologueScreen(){const i=prologue.i,art=[1,2,null,4][i],
+  img=art?'<img class="pro-art" src="'+proArt(art)+'" alt="">'
+   :i===4?'<img class="pro-art" src="ui/assets/presentation/morning/store-bg-'+(proWide()?'wide':'phone')+'.png" alt=""><img class="pro-npc" src="ui/assets/npc/normal/F/003.webp" alt="">':'';
+ return '<div class="prologue" data-scene="'+(i+1)+'" data-action="prologue-next">'+img
+  +'<div class="pro-cap">'+Copy.prologue.scenes[i].map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
+  +'<button type="button" class="pro-skip" data-action="prologue-skip">'+E(Copy.prologue.skip)+'</button></div>';}
 /* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
    screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */
-function audioPhase(){const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
+function audioPhase(){if(prologue)return prologue.i<2?'final':prologue.i===2?'hush':'prep';
+ const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
  if(s.phase==='end'&&!endRevealed)return endFrom;
  return s.phase==='end'?(s.win?'end-win':'end-fail'):s.phase;}
 /* UI_UX §AUDIO FEEDBACK — PHASE BGM (User 2026-09-29): arriving at the ending, the music of the screen it came from (BOSS
@@ -625,6 +643,7 @@ function render(){
  /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
+ if(prologue){$('#app').innerHTML=prologueScreen();const c=$('#coach-root');if(c)c.innerHTML='';return;}
  if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();sentenceBreaks($('#app'));requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;warmAhead(s,phase);
  const pop=document.getElementById('wh-pop');if(pop)pop.hidden=true; // its cell is redrawn closed
@@ -2614,7 +2633,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
- case'new':prepOpen=true;sound('newstore');render();break;
+ case'new':prepOpen=true;sound('newstore');startPrologue(render);break;
+ case'prologue-next':prologueStep(false);break;
+ case'prologue-skip':prologueStep(true);break;
  case'prep-back':prepOpen=false;sound('ui');render();break;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW: buying and equipping are only legal outside a Run, and
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
@@ -2863,6 +2884,11 @@ document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]')
  game.save();if(el.dataset.mix==='sfx')sound('button');});
 window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
 /* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
-(()=>{const bar=document.querySelector('.boot-bar'),fill=bar?.firstElementChild;
- Preload.run((n,t)=>{if(!bar)return;const pct=Math.round(n/t*100);fill.style.width=pct+'%';bar.setAttribute('aria-valuenow',pct);}).then(render,render);})();
+/* UI_UX §PROLOGUE: with no Run the prologue takes the loading screen's place; if it ends before the art is in, the
+   loading screen comes back until it is. */
+(()=>{const boot=$('#app').innerHTML;let ready=false;
+ const loaded=Preload.run((n,t)=>{const bar=document.querySelector('.boot-bar');if(!bar)return;const pct=Math.round(n/t*100);bar.firstElementChild.style.width=pct+'%';bar.setAttribute('aria-valuenow',pct);});
+ loaded.then(()=>{ready=true;},()=>{ready=true;});
+ if(!game.run)startPrologue(()=>{if(ready)render();else{$('#app').innerHTML=boot;loaded.then(render,render);}});
+ else loaded.then(render,render);})();
 })();
