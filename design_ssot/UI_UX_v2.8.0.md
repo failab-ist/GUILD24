@@ -1243,7 +1243,7 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
   two lines level with the sign's plate and stays inside the stage (§RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the
   ceiling fixture
 - the board `새 점포 준비` holds the game's three lines as one pinned note, then `보유 장식 없음` /
-  `영업이 시작되면 이번 영업에는 고정됩니다.`, a save error pinned above when present; it ends above the Slot places (tighter, same type, on wide framings under
+  `점포를 열면 이번 점포에는 고정됩니다.`, a save error pinned above when present; it ends above the Slot places (tighter, same type, on wide framings under
   800 px high)
 - each Slot is its place in the room: an equipped Decoration drawn with a small Slot + Decoration tag, or an empty spot with
   `{Slot} · 비움`; each place is a control (§Pre-Run Decoration empty-slot interaction) with at least a 44 px target; tags
@@ -1280,16 +1280,16 @@ KNOWLEDGE).
 
 ## MENU / SETTINGS — EXACT COMPOSITION
 
-Top-level Menu exactly: 모험가 수첩 · 도감 · 점포지원 · 이번 영업의 장식 · 점주 가이드 · 설정 · 현재 지점 포기.
+Top-level Menu exactly: 모험가 수첩 · 도감 · 점포지원 · 이번 점포의 장식 · 점주 가이드 · 설정 · 현재 지점 포기.
 - 점포지원: an open, purchasable window (RELIC §reopenAllowed, `canBuyRelic`) opens the selection; otherwise the closable owned
   list `보유 점포지원`, never an empty selection
-- 이번 영업의 장식: read-only, the frozen four Slots as `{Slot 이름} · {장식 이름} · {효과 한 줄}`, empty `비어 있음` (COPY_AUDIT
+- 이번 점포의 장식: read-only, the frozen four Slots as `{Slot 이름} · {장식 이름} · {효과 한 줄}`, empty `비어 있음` (COPY_AUDIT
   §1-7); 영업 · 점포 vocabulary, never 런
 - 현재 지점 포기: COPY_AUDIT §1-3 confirm, then the Run is discarded at once (CORE_RUN §CURRENT RUN ABANDON) and 새 점포 준비
   shows with no Run (Decorations can be bought and equipped); a new Run starts only from `첫 점포지원 고르기`
 - the DAY 0 첫 점포지원 surface has no way back (no `장식 구성 다시 보기`, no generic close); its `나중에 결정` defers the free
   pick and opens DAY 1 (RELIC §ACQUISITION WINDOWS D0)
-- 점포지원, 이번 영업의 장식 and 현재 지점 포기 appear only while a Run exists
+- 점포지원, 이번 점포의 장식 and 현재 지점 포기 appear only while a Run exists
 
 Sound Toggle and Full Data Reset are not top-level. Settings: 저장 내보내기 · 저장 가져오기 · Sound On/Off · BGM · SFX · Full
 Data Reset — and **not** 현재 지점 포기.
@@ -3234,9 +3234,9 @@ FAIL: an order that changes with the customer's Gate, or a recommendation word.
 SETUP: a Run on DAY 0 (first choice pending), a Run on a Day whose Store Support window is spent or closed, and a Run at SALE; the
 menu on each (→ UI_UX §MENU / SETTINGS — EXACT COMPOSITION, §RUN ABANDON UX).
 PASS:
-- menu rows exactly 모험가 수첩 / 도감 / 점포지원 / 이번 영업의 장식 / 점주 가이드 / 설정 / 현재 지점 포기
+- menu rows exactly 모험가 수첩 / 도감 / 점포지원 / 이번 점포의 장식 / 점주 가이드 / 설정 / 현재 지점 포기
 - 점포지원 opens the selection surface only while `canBuyRelic` holds, otherwise the owned list `보유 점포지원` with a close
-- 이번 영업의 장식 lists the four Slots with the frozen loadout and effect line, an empty Slot `비어 있음`, nothing editable
+- 이번 점포의 장식 lists the four Slots with the frozen loadout and effect line, an empty Slot `비어 있음`, nothing editable
 - DAY 0 첫 점포지원 has no `장식 구성 다시 보기` button and no close
 - 현재 지점 포기 → confirm (§1-3) → the Run is gone (`run = null`) on 새 점포 준비 with no Run, where a Decoration can be bought and
   equipped and no new Run has started until `첫 점포지원 고르기`; every other Run end (bankruptcy, death limit, 폐점, FINAL end)

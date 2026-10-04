@@ -116,7 +116,7 @@ test('EVENT 24~55: every new Event effect moves its own channel',()=>{
  // ORDER: same-SKU cap, no reroll
  {const h=fresh('ev-order'),t=h.run;t.phase='order';t.money=99999;t.event=E('ordercap');const i=t.offers.findIndex(o=>o.quantity>=3);
   if(i>=0){assert.throws(()=>h.validateCart({[i]:3}),/2개까지만 발주/);assert.doesNotThrow(()=>h.validateCart({[i]:2}));assert.equal(h.quantityLimit(i).reason,'cap');}
-  t.event=E('noreroll');assert.throws(()=>h.reroll(),/발주 교환을 할 수 없습니다/);t.event=null;}
+  t.event=E('noreroll');assert.throws(()=>h.reroll(),/후보 교환을 할 수 없습니다/);t.event=null;}
  // SALE: 바가지 closed, drink intent up
  {const h=fresh('ev-sale'),t=h.run;t.phase='sell';const n=t.npcs[0];n.traits=[];n.money=9999;n.pack=[];n.refused=[];t.queue=[n.id];t.cursor=0;h.stock('water',1);
   t.event=E('pricewatch');assert.equal(h.sell(t.inventory.at(-1).id,'overcharge'),false,'가격 단속: no 바가지 sale');assert.equal(n.pack.length,0);

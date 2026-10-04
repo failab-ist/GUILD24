@@ -690,7 +690,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
     answers, and it states what is lost AND what survives. */
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
+ assert.ok(app.includes('이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
  assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
@@ -698,7 +698,7 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
- assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
+ assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
   'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
@@ -834,11 +834,11 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
  assert.ok(menu.includes("btn('현재 지점 포기','abandon','danger')"),'the store abandon is in the menu and confirms first');
  // v2.9.0 F5 (User 2026-09-24): exact composition and routing
- assert.ok(menu.includes("btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 영업의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')"),'menu rows: 모험가 수첩 / 도감 / 점포지원 / 이번 영업의 장식 / 점주 가이드 / 설정 / 현재 지점 포기');
+ assert.ok(menu.includes("btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 점포의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')"),'menu rows: 모험가 수첩 / 도감 / 점포지원 / 이번 점포의 장식 / 점주 가이드 / 설정 / 현재 지점 포기');
  const act5=app.slice(app.indexOf('async function action(el)'));
  assert.ok(act5.includes("case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;"),'점포지원 opens the selection only while purchasable, else the owned list');
  assert.ok(act5.includes("case'abandon-go':game.abandon();")&&!/case'abandon-go':[^\n]*game\.(start|end)\(/.test(act5),'abandon discards the Run at once and starts nothing');
- assert.ok(fn('loadoutModal').includes("'비어 있음'")&&fn('loadoutModal').includes('D.decorationSlots.map(')&&!fn('loadoutModal').includes('data-action'),'이번 영업의 장식 is read-only, four Slots, empty reads 비어 있음');
+ assert.ok(fn('loadoutModal').includes("'비어 있음'")&&fn('loadoutModal').includes('D.decorationSlots.map(')&&!fn('loadoutModal').includes('data-action'),'이번 점포의 장식 is read-only, four Slots, empty reads 비어 있음');
  assert.ok(app.includes("modal==='abandonConfirm'")&&app.includes("btn('지점 포기','abandon-go','danger')"),'the §1-3 confirm guards the abandon');
  assert.ok(!menu.includes('모든 게임 데이터 초기화') && !menu.includes('Full Data Reset'),'full reset is removed from menu');
 });
@@ -2825,7 +2825,7 @@ test('SA-Q36: the Decoration comparison shows only what the decision is made on'
  {const r=row(out,'sponsorSign');assert.ok(r.indexOf('deco-name')<r.indexOf('data-action="deco-buy"')&&r.indexOf('data-action="deco-buy"')<r.indexOf('deco-effect'),'the key sits beside the name, the effect line below them');}
  assert.ok(/data-action="deco-unequip"[^>]*>해제</.test(row(out,'trainingSign')),'owned and worn: the 해제 key - equipped state stays');
  Meta.equipDecoration(a,'sign',null);assert.ok(/data-action="deco-equip"[^>]*>적용</.test(row(panel(null),'trainingSign')),'owned, not worn: the 적용 key');Meta.equipDecoration(a,'sign','trainingSign');
- assert.ok(row(inRun,'trainingSign').includes('이번 영업에 적용 중')&&row(inRun,'sponsorSign').includes(DATA.decorationBy.sponsorSign.price.toLocaleString()+' 자본'),'in a Run: worn state and price, no keys');
+ assert.ok(row(inRun,'trainingSign').includes('이번 점포에 적용 중')&&row(inRun,'sponsorSign').includes(DATA.decorationBy.sponsorSign.price.toLocaleString()+' 자본'),'in a Run: worn state and price, no keys');
  assert.ok(!out.includes('class="tale"'),'and neither is its slot');
  // the data itself is untouched and still available to lore-ready surfaces
  assert.ok(DATA.decorations.every(d=>d.text&&d.text.trim()),'every Decoration still carries its Flavor');
@@ -3003,8 +3003,8 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
  assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');
  assert.ok(app.includes("'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.'"),'§1-6 completion');
- assert.ok(app.includes("'이번 영업의 장식은 고정됨.'"),'§9-1 active-Run line');
- assert.ok(app.includes("'장식은 영업 시작 전에 변경할 수 있습니다.'"),'§9-1 pre-Run line');
+ assert.ok(app.includes("'이번 점포의 장식은 고정됨.'"),'§9-1 active-Run line');
+ assert.ok(app.includes("'장식은 점포를 열기 전에 변경할 수 있습니다.'"),'§9-1 pre-Run line');
  assert.ok(!app.includes('장식은 영업 밖에서만')&&!app.includes('지금은 영업 중이라 확인만 됩니다'),'and the old pair is gone');
  assert.ok(!app.includes('비워 둘 수 있습니다'),'§9-2 the empty Slot explains itself');
  // mechanics untouched: the same two destructive actions, through the same handlers

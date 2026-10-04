@@ -617,9 +617,9 @@ Base Loyalty change on a successful ordinary paid purchase, before any explicitl
 
     50% sale  -> +4
     100% sale -> +1
-    150% sale -> -3
+    150% sale -> -4
 
-Refusal grants no purchase Loyalty change. Other visit/survival Loyalty changes are separate.
+A refusal grants no purchase Loyalty change, except a refused 150%, which costs 2 (§NPC-Q-v28-2B). Other visit/survival Loyalty changes are separate.
 
 ### Non-purchase Loyalty — exact
 
