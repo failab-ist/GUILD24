@@ -389,5 +389,12 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
 /* Coming back to the page (a call, another app) tries to resume the context at once rather than waiting for the next tap:
    iOS Safari leaves it `interrupted` (User 2026-09-29). A browser that refuses without a gesture resumes on the next tap (play). */
 function wake(){if(ctx&&enabled&&!document.hidden&&ctx.state!=='running')ctx.resume().catch(()=>{});}
+/* iOS Safari starts a context made outside a tap suspended, and `pointerdown` does not count as a gesture there: only
+   `touchend` / `click` may resume it. The first such tap resumes it and plays one silent sample, which opens the output.
+   The ringer switch is left at the Safari default (User 2026-09-29). */
+function unlock(){if(!enabled||!ctx)return;
+ if(ctx.state!=='running')ctx.resume().catch(()=>{});
+ try{const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();s.buffer=b;s.connect(master||sfxBus);s.start(0);}catch(e){}}
+if(typeof document!=='undefined')for(const ev of ['touchend','click'])document.addEventListener(ev,unlock,{capture:true,passive:true});
 G.Sound={play,sync,wake,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

@@ -1,7 +1,8 @@
 // Save balance check — READ-ONLY dev tool, never part of npm test. User 2026-10-02: the User hands in saves and each one
 // was being read by hand; this reads one save and writes the recurring checks as a Korean report. It plays nothing: every
 // number is read off the save (reportHistory, npcs[].records, the current roster) or computed from it with the game's own
-// formulas, so it is not a simulation (AGENTS §9-A).
+// formulas, so it is not a simulation (AGENTS §9-A). Its §2 reads the save on the same lines as the balance measurement
+// (tools/measure-v2100.cjs, AGENTS §9-B): success by Day band, deaths, injured departures, the four highest Levels against the rest.
 //   node tools/save-check.cjs <save.json> [--out report.md]
 // Accepts the in-game `저장 내보내기` file, the raw localStorage value, or a Playwright storageState that holds it.
 const fs=require('node:fs'),path=require('node:path');
@@ -9,6 +10,7 @@ const root=path.resolve(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])
  require(path.join(root,'dist',f+'.js'));
 const G=globalThis.GUILD24||globalThis,D=G.DATA;
+const {BANDS,split}=require('./measure-v2100.cjs');
 
 function readSave(file){
  const text=fs.readFileSync(file,'utf8');let raw=text;
@@ -31,9 +33,10 @@ function lowTrafficOdds(days,x){let dist=new Map([[0,1]]);
  for(let i=0;i<days;i++){const nx=new Map();for(const [v,p] of dist)for(let c=3;c<=6;c++)nx.set(v+c,(nx.get(v+c)||0)+p/4);dist=nx;}
  let p=0;for(const [v,q] of dist)if(v<=x)p+=q;return p;}
 
-// The lowest Level a newcomer can arrive at that Day (adventurer.js spawnLevel: randomInt(1,3) + floor((Day-1)/4)) - a
-// reference line for how far a returning adventurer has fallen behind, not a rule.
-const newcomerMin=day=>1+Math.floor((day-1)/4);
+// The lowest Level a newcomer can arrive at that Day - Adventurer.create itself with every roll at its low end (META §Exact
+// spawn-Level model, a fresh account so no Mastery bonus). A reference line for how far a returning adventurer has fallen behind.
+const LOW={next:()=>0,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()},FRESH=G.Meta.fresh();
+const newcomerMin=day=>G.Adventurer.create(LOW,0,day,FRESH).level;
 function departLevel(rec){const m=(rec.changes||[]).map(c=>/^Lv\.(\d+) → Lv\.(\d+)$/.exec(c)).find(Boolean);return m?+m[1]:rec.level;}
 
 // The game's own Morning weighting (shop.js visitor draw), drawn many times without replacement on a fixed seed.
@@ -58,6 +61,8 @@ function report(save){
  const hist=s.reportHistory||[];
 
  L.push('# 세이브 밸런스 점검 — '+s.branch+' · DAY '+s.day+' ('+s.phase+')','');
+ const bv=b=>b?'v'+b.version+' · '+b.commit:'기록 없음';
+ L.push('빌드: 마지막 저장 '+bv(save.build)+' · 런 시작 '+bv(s.startBuild)+(save.build&&s.startBuild?'':' (빌드 정보가 들어가기 전의 세이브는 기록이 없다)'),'');
  L.push('도구: `tools/save-check.cjs` · 세이브만 읽는다(재생·시뮬 없음). 승률은 저장된 준비 마진에 일반 전투 흔들림(±'+pct(W,1)+')만 적용한 값이다(지원·상품 변동폭은 기록에 없어 빠진다).','');
 
  L.push('## 1. 개요','');
@@ -67,7 +72,21 @@ function report(save){
  row(['단골(51+) 달성',(s.stats?.regulars||0)+'명']);row(['원정 기록',recs.length+'회']);
  L.push('');
 
- L.push('## 2. 현금 흐름','');
+ L.push('## 2. 밸런스 지표','');
+ L.push('밸런스 측정(`tools/measure-v2100.cjs`, AGENTS §9-B)과 같은 기준으로 이 세이브 하나를 읽는다. 심층 원정과 DAY 30은 뺀다.','');
+ const ord=recs.filter(r=>!r.deep&&r.day<30),ok=r=>r.outcome==='성공'||r.outcome==='대성공',rate=l=>l.length?pct(l.filter(ok).length/l.length)+' ('+l.length+'회)':'-';
+ const inj=ord.filter(r=>r.departedInjured),grp=split(npcs,ok),g=x=>(x[1]?pct(x[0]/x[1]):'-')+' ('+x[1]+'회) · 사망 '+x[2]+'명';
+ const late=ord.filter(r=>r.day>=20);
+ head(['항목','값']);
+ row(['구간별 원정 성공률',BANDS.map(([a,b])=>'D'+a+'~'+b+' '+rate(ord.filter(r=>r.day>=a&&r.day<=b))).join(' · ')]);
+ row(['사망 / 지금 사망 한도',(s.stats?.deaths||0)+' / '+G.Meta.deathLimit(s)+'명 (DAY 10까지 '+ord.filter(r=>r.day<=10&&r.outcome==='사망').length+'명)']);
+ row(['부상 출발',inj.length+'회 · 그중 사망 '+inj.filter(r=>r.outcome==='사망').length+'회']);
+ row(['상위 4명(레벨) 성공',g(grp.top)]);row(['나머지 성공',g(grp.rest)]);
+ row(['DAY 20부터 성공률',late.length?rate(late)+(s.day>=25&&late.filter(ok).length/late.length<.35?' — 좀비 기준(35%) 아래':''):'아직 없음']);
+ row(['현금 / 일',hist.length?Math.round((hist.at(-1).balance-700)/hist.length)+'G':'-']);
+ L.push('');
+
+ L.push('## 3. 현금 흐름','');
  const k=key=>sum(hist,d=>d[key]);
  head(['매출','유물 추가 지급','발주','운영비','후보 교환','점포지원','폐기 원가','할인액','바가지 초과분','대성공 수입','기타 수입']);
  row([k('revenue'),k('commission'),k('spent'),k('operating'),k('rerollSpent'),k('relicSpent'),k('wasteCost'),k('discount'),k('overcharge'),k('greatSuccess'),k('subsidy')+k('liquidation')].map(v=>v+'G'));
@@ -75,14 +94,14 @@ function report(save){
  for(const d of hist)row([d.day,d.revenue||0,d.spent||0,d.operating||0,d.rerollSpent||0,d.relicSpent||0,d.discount||0,d.sales||0,d.balance]);
  L.push('');
 
- L.push('## 3. 손님 흐름','');
+ L.push('## 4. 손님 흐름','');
  const byDay=new Map();for(const r of recs)if(!r.deep)byDay.set(r.day,(byDay.get(r.day)||0)+1);
  const days=hist.map(d=>d.day),seen=sum(days,d=>byDay.get(d)||0);
  if(days.length){L.push('마감한 '+days.length+'일 동안 원정 출발 '+seen+'명, 하루 평균 '+(seen/days.length).toFixed(2)+'명 (기본 방문 3~6명, 평균 4.5명).');
   L.push('기본 방문 수만으로 '+days.length+'일 합계가 '+seen+'명 이하일 확률: **'+pct(lowTrafficOdds(days.length,seen),1)+'** (점포지원·장식의 추가 방문은 빼고 본 값이라, 그런 지원이 있으면 실제보다 높게 나온다).','');}
  head(['DAY',...days]);row(['출발',...days.map(d=>byDay.get(d)||0)]);L.push('');
 
- L.push('## 4. 원정 기록 (준비 대 게이트)','');
+ L.push('## 5. 원정 기록 (준비 대 게이트)','');
  L.push('준비/요구 = 출발 시 준비 전력 ÷ 게이트 요구 전력. `승리 불가`는 최고 흔들림('+(1+W).toFixed(3)+'배)으로도 못 미치는 원정이다.','');
  head(['DAY','손님','출발 Lv','신규 최저 Lv','게이트','상품','결과','준비/요구','전투 승률','판정']);
  let impossible=0,belowFloor=0;
@@ -91,7 +110,7 @@ function report(save){
   row([r.day,r.name,lv,lv<fl?fl+' ▲':fl,r.dungeonName+(r.deep?' (심층)':''),(r.items||[]).map(item).join(' + ')||'-',r.outcome,ratio.toFixed(2),pct(odds),tag]);}
  L.push('','승리 불가 원정 **'+impossible+'회** / '+recs.length+'회 · 신규 손님 최저 레벨보다 낮게 출발 **'+belowFloor+'회** (▲).','');
 
- L.push('## 5. 손님 상태 · 성장 · 방문','');
+ L.push('## 6. 손님 상태 · 성장 · 방문','');
  const floorNow=newcomerMin(s.day),k2=Math.max(1,Math.round(s.expectedVisitors||4.5)),odds=visitOdds(s,k2);
  const alive=npcs.filter(n=>n.alive&&n.introduced),lv=alive.map(n=>n.level);
  L.push('오늘(DAY '+s.day+') 신규 손님 최저 레벨 **Lv'+floorNow+'** (그날 새 손님이 올 수 있는 가장 낮은 레벨, 참고선). 소개된 생존 손님 레벨: 최저 '+Math.min(...lv)+' · 하위 25% '+quant(lv,.25)?.toFixed(1)+' · 중앙 '+quant(lv,.5)?.toFixed(1)+' · 최고 '+Math.max(...lv)+'.');
@@ -103,7 +122,7 @@ function report(save){
   row([n.name,D.jobBy[n.job]?.name||n.job,D.npcRarities[n.rarity]||n.rarity,n.level,n.alive?(n.level-floorNow>=0?'+':'')+(n.level-floorNow):'-',n.loyalty,n.money+'G',dd.join(',')||'-',gap+'일',st,odds.has(n.id)?pct(odds.get(n.id)):'-']);}
  L.push('');
 
- L.push('## 6. 판매 가격','');
+ L.push('## 7. 판매 가격','');
  const sold=sum(hist,d=>d.sales),disc=k('discount'),over=k('overcharge');
  L.push('판매 '+sold+'개 · 할인액 '+disc+'G · 정가 초과 수입 '+over+'G. 할인이 투자였는지 지갑 부족이었는지는 판매 순간의 지갑이 기록에 없어 이 도구로는 가리지 않는다.','');
  return L.join('\n');
