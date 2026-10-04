@@ -558,8 +558,8 @@ three modes, no extra depth. Copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`; roles -> `
 ### SALE — REFUSAL PRICE CEILING UI
 
 Per `SALE_v2.8.0.md`, same ordinary customer + SKU + visit: 50% refused → 100% and 150% disabled; 100% refused → 150%
-disabled; 150% refused → lower prices stay usable. Disabled keys look distinct and take no input; the refused key shakes once
-and locks with `오늘 거절됨` / `더 싼 값을 거절함` (§TRANSACTION BEAT A6); the reason is readable; other SKUs unaffected; no
+disabled; 150% refused → 100% and 50% disabled too, labelled `바가지를 거절함`. Disabled keys look distinct and take no input; the
+refused key shakes once and locks with `오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함` (§TRANSACTION BEAT A6); the reason is readable; other SKUs unaffected; no
 carry-over to a later visit unless an owner defines it; absent from Final preparation; never invite a higher-price retry.
 
 ### GREAT SUCCESS OPPORTUNITY SIGNAL
@@ -2170,7 +2170,7 @@ PASS:
   customer-state strip (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and
   the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
 - purchase: the figure nods (translateY 4px, 180 ms x 2); refusal: it shakes its head (translateX ±4px, the bubble-shake timing)
-  and the refused price button shakes once and locks with the `오늘 거절됨` / `더 싼 값을 거절함` text
+  and the refused price button shakes once and locks with the `오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함` text
 - the reply line (buy / refuse) stays 5 seconds; the greeting 3 seconds
 - `손님 보내기`: the current customer exits left (240 ms), the next arrives with the entry (240~340 ms), `depart` plays a recorded
   utility cue (door / step family); entry may start the view at the top
@@ -3159,7 +3159,7 @@ PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
   disabled causes wrap intact across the key. Test every catalogue Item and all five closed-key causes. Numberless utilities
   retain their complete conditions without the redundant no-change row; an unapplied numeric effect retains its warning.
 - the price keys sit at the same place for every Item; the hand-over icon goes from the tray icon to the Bag slot; a successful
-  sale clears the tray; a refusal keeps the Item with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
+  sale clears the tray; a refusal keeps the Item with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함`)
 - on 1280 the tray lies in the middle area on the counter, between the ledger and the shelf
 - FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
 FAIL: shelf rows change height or an already-open swap changes scrollTop; the representative comparison misses its 2 / 1 / 1 floor; text,

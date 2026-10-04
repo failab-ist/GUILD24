@@ -1163,10 +1163,11 @@ For one successful ordinary paid purchase before explicit modifier effects:
 
     50% sale  -> Loyalty +4
     100% sale -> Loyalty +1
-    150% sale -> Loyalty -3
+    150% sale -> Loyalty -4
+    150% refused -> Loyalty -2 (the only refusal that moves Loyalty)
 
 PASS:
-- refusal does not apply the purchase Loyalty delta
+- a refusal does not apply the purchase Loyalty delta; a refused 150% applies -2
 - explicit Trait / Store Support modifiers apply only through their owned rules
 - UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.8.0.md
 

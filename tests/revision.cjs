@@ -777,4 +777,24 @@ test('a save carries build {version, commit} and the Run its startBuild, and loa
  }finally{if(had===undefined)delete globalThis.GUILD24_BUILD;else globalThis.GUILD24_BUILD=had;}
 });
 
+/* SALE §SAME-ITEM REFUSAL PRICE CEILING / NPC_TRAIT §NPC-Q-v28-2B: a refused 바가지 closes the SKU for that customer visit and
+   costs Loyalty 2; a sold 바가지 costs 4; other SKUs and a 정가 refusal keep the ordinary ceiling */
+test('a refused 바가지 closes the SKU and costs Loyalty 2; a sold one costs 4',()=>{
+ const visit=seed=>{const g=fresh(seed);for(let t=0;t<200&&g.run.phase!=='sell';t++){if(g.run.phase==='order'&&g.run.inventory.length)g.open();else break;}
+  const n=g.current();n.money=99999;n.loyalty=30;n.pack=[];n.refused=[];n.refusalReasons=[];return {g,n};};
+ {const {g,n}=visit('over-refused');const st=g.run.inventory[0],other=g.run.inventory.find(x=>x.item!==st.item);
+  const next=g.rng.next;g.rng.next=()=>.999;assert.equal(g.sell(st.id,'overcharge'),false,'refused');g.rng.next=next;
+  for(const m of ['half','full','overcharge'])assert.ok(n.refused.includes(st.item+':'+m),m+' is closed for this SKU');
+  assert.throws(()=>g.sell(st.id,'full'),/이미 거절한 조건/,'정가 cannot be tried after a refused 바가지');
+  assert.equal(n.loyalty,28,'a refused 바가지 costs Loyalty 2');
+  assert.ok(Copy.pools.sale.refuse.overcharge.includes(g.run.say.text),'the reply is a 바가지 refusal line');
+  if(other)assert.ok(!n.refused.some(k=>k.startsWith(other.item+':')),'another SKU is untouched');}
+ {const {g,n}=visit('full-refused');const st=g.run.inventory[0];
+  const next=g.rng.next;g.rng.next=()=>.999;g.sell(st.id,'full');g.rng.next=next;
+  assert.ok(!n.refused.includes(st.item+':half'),'a 정가 refusal still leaves 50% open');assert.equal(n.loyalty,30,'and moves no Loyalty');}
+ {const {g,n}=visit('over-sold');const st=g.run.inventory[0];
+  const next=g.rng.next;g.rng.next=()=>0;assert.equal(g.sell(st.id,'overcharge'),true);g.rng.next=next;
+  assert.equal(n.loyalty,26,'a sold 바가지 costs Loyalty 4');}
+});
+
 console.log(checks+' revision groups passed');

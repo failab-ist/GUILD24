@@ -1347,7 +1347,7 @@ const coachSteps={
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
  /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
- ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.'],
+ ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지가 거절되면 그 상품은 오늘 그 손님에게 못 판다. 단골도도 깎인다.'],
  ['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']],
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
     it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it).
@@ -1758,14 +1758,13 @@ const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
 /* the three price keys of an ordinary sale - one owner for the tray (SALE) and the FINAL panel's twin */
 function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
  return ['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100),role=PRICE_ROLE[mode];
-   /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
-      the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is
-      ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
+   /* SALE §SAME-ITEM REFUSAL PRICE CEILING: the reason a price is closed stays readable - 오늘 거절됨 for the refused price,
+      더 싼 값을 거절함 for one closed by a refusal at a LOWER price, 바가지를 거절함 for one closed by a refused 바가지. */
    const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
-   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
+   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult),overRefused=!said.some(x=>x.mode===mode)&&said.some(x=>x.mode==='overcharge');
    const blocked=mode==='overcharge'&&game.run.event?.effects.noOvercharge?'오늘 가격 단속'
     :q.debit>spendable(n)?'손님 소지금 부족'
-    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
+    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':overRefused?'바가지를 거절함':'오늘 거절됨')
     :full?'가방 가득':'';
    /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
       바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no

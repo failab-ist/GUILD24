@@ -313,7 +313,7 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 45% of the charged 150% price (royalCert, v2.9.11 User 2026-09-29; was 60%, 40%)',()=>{
+test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the charged 150% price (royalCert)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -329,8 +329,8 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 45% of the 
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const common=DATA.items.find(i=>i.rarity===0);
  assert.ok(plain&&insured,'the catalogue has both a plain Rare+ and a Rare+ insurance role');
- assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.45),'royalCert pays 45% of the charged 150% price');
- assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.45),'at any rarity');
+ assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.40),'royalCert pays 40% of the charged 150% price');
+ assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.40),'at any rarity');
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.20),'supplyCert pays 20% of list');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
@@ -482,7 +482,7 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
  assert.equal(cert.n.money-plain.n.money,30,'the buyer of a qualifying sale gets +30G');
  assert.equal(cert.s.daily.commission,Math.round(insured.sell*.20));
  const common=sellOnce(['supplyCert'],'full','rice');assert.equal(common.n.money,sellOnce([],'full','rice').n.money,'a non-qualifying sale gives nothing');
- // 왕도 프리미엄 인증: +10%p on 150% only (v2.9.11, User 2026-09-29; was +16%p); the price burden and Loyalty -3 stay
+ // 왕도 프리미엄 인증: +10%p on 150% only; the price burden and the 바가지 Loyalty -4 stay
  const g=fresh('royal-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
  for(const id of ['rice','rope','guildlunch']){const it=DATA.itemBy[id];
@@ -490,7 +490,7 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
   g.run.facilities=['royalCert'];const b=g.interest(n,it,'overcharge');
   assert.ok(Math.abs(b.chance-Math.min(.97,a.chance+.10))<1e-9,id+' 150% intent +10%p');assert.equal(b.price,a.price);assert.equal(b.debit,a.debit);
   assert.equal(g.interest(n,it,'full').chance,f,id+' 100% unchanged');}
- const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-3,'Loyalty -3 unchanged');
+ const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-4,'Loyalty -4 unchanged');
 });
 
 console.log(count+' Relic effect groups passed');

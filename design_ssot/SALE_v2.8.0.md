@@ -484,15 +484,17 @@ Player-facing valid reasons include:
 
 Do not use vague intermediate copy that obscures what happened.
 
-Presentation only: the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text, and the refusal reply stays 5 s (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT).
+Presentation only: the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함` text, and the refusal reply stays 5 s (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT).
 
 Logical retry rules:
 
 ### insufficient wallet
 If 50% is unaffordable: same Item at 100/150 is not a meaningful retry.
 
-### price resistance
-If 150% is refused because price is too high: 100/50 may remain available.
+### 바가지 refused
+If 150% is refused, the same Item is not sold to that customer this visit at any price (User 2026-10-04: a refusal that cost
+nothing made `바가지 first, 정가 if refused` the dominant play), and the customer's Loyalty drops by 2
+(`DATA.pricing.overcharge.refusalLoyalty`; NPC_TRAIT §NPC-Q-v28-2B).
 
 ### item not wanted
 Lowering price does not guarantee purchase.
@@ -508,7 +510,7 @@ Rule:
 ```text
 if a price mode is refused for the same SKU
 -> every higher price mode for that same SKU is disabled for that customer visit
--> lower price modes may still be attempted
+-> lower price modes may still be attempted, except after a refused 150%, which disables every price mode for that SKU
 ```
 
 Exact cases:
@@ -516,14 +518,14 @@ Exact cases:
 ```text
 50% refused  -> 100% disabled, 150% disabled
 100% refused -> 150% disabled, 50% may still be attempted
-150% refused -> 100% / 50% may still be attempted
+150% refused -> 100% disabled, 50% disabled (the SKU is closed for that customer visit)
 ```
 
 Rules:
 - the refused price mode itself also becomes unavailable for that Item
 - this lock applies only to the same customer + same SKU + current ordinary visit
 - it must not lock unrelated SKUs (other Item IDs are unaffected)
-- cheaper price modes remain eligible unless separately refused/blocked
+- cheaper price modes remain eligible unless separately refused/blocked or the refusal was at 150%
 - a new customer visit begins from that visit's normal pricing state unless another owner explicitly defines persistence
 - higher-price controls blocked by this rule must be visibly disabled
 - the reason for the disabled state must be readable in UI
@@ -536,7 +538,7 @@ same item. This is a coherence rule for the ordinary 50/100/150 pricing system, 
 
 Player help copy:
 
-    한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다.
+    한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.
 
 Do not describe the rule as only \`같은 상품·같은 가격\`.
 
