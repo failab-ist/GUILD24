@@ -465,12 +465,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slip.event .body{display:block;font:400 13px/1.6 var(--ui);color:#5f5440}
 /* EVENT §3-1: what happened, then what it switched on. The situation keeps the line breaks
    it was authored with; the effect is a stated fact, ruled off from the story above it. */
-.slip.event .flavor{display:block;white-space:pre-line;font:400 13px/1.7 var(--ui);color:#5f5440;font-style:italic}
-.slip.event .effect{display:block;margin-top:8px;padding-top:8px;border-top:1px dashed #b3a685;
- font:600 13px/1.6 var(--ui);color:#2c2418}
-.event-reveal .flavor{margin:0;white-space:pre-line;font:400 15px/1.7 var(--ui);color:#cbbba0;font-style:italic}
-.event-reveal .effect{margin:14px 0 0;padding-top:12px;border-top:1px dashed #ffffff26;
- font:600 14px/1.6 var(--ui);color:var(--gold)}
+.slip.event .effect{display:block;margin:2px -8px 0;padding:8px;background:#2f7a4d1a;border-bottom:1px dashed #b3a685;font:600 14px/1.6 var(--ui);color:#2c2418}
+.slip.event .effect i,.event-reveal .effect i{display:block;margin-bottom:2px;font:600 11px/1.3 var(--ui);font-style:normal;letter-spacing:.06em;color:#2f7a4d}
+.slip.event .effect>span,.slip.event .flavor>span,.event-reveal .effect>span,.event-reveal .flavor>span{display:block;white-space:pre-line}
+.slip.event .flavor{display:block;margin-top:12px;font:400 12px/1.7 var(--ui);color:#7a6d55}
+.event-reveal .effect{margin:0 -10px;padding:10px;background:#f2b1341f;border-bottom:1px dashed #ffffff26;font:600 16px/1.6 var(--ui);color:var(--gold)}
+.event-reveal .effect i{color:var(--gold)}
+.event-reveal .flavor{margin:16px 0 0;font:400 13px/1.7 var(--ui);color:#a79a82}
 /* ---- counter band: the till and the store support tray ---- */
 /* BATCH 1: the cap is the display's printed label and was two values off the housing it sits
    on - legible in the editor, not at phone scale. It keeps its size and spacing and gains the

@@ -1306,9 +1306,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     the situation and the effect apart already, so the notice says both and rules them off. */
  assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(e.description)'),
   'the notice says what happened as well as what it switched on');
- assert.ok(/\.slip\.event \.effect\{[^}]*border-top/.test(css),'and the two are set apart');
- assert.ok(/\.slip\.event \.flavor\{[^}]*white-space:pre-line/.test(css)
-        && /\.event-reveal \.flavor\{[^}]*white-space:pre-line/.test(css),
+ assert.ok(/\.slip\.event \.effect\{[^}]*border-bottom:1px dashed/.test(css),'and the two are set apart');
+ assert.ok(fn('eventSlip').indexOf('class="effect"')<fn('eventSlip').indexOf('class="flavor"')
+        && fn('eventReveal').indexOf('class="effect"')<fn('eventReveal').indexOf('class="flavor"'),'the effect leads and the situation follows');
+ assert.ok(/\.slip\.event \.flavor>span[^{]*\{[^}]*white-space:pre-line/.test(css)
+        && /\.event-reveal \.flavor>span[^{]*\{[^}]*white-space:pre-line/.test(css),
   'a situation authored across lines keeps its lines, on the board and in the reveal');
 
  // D-9. The slots say the count as well as showing it - a row of boxes has to be counted first.
