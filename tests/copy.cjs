@@ -22,6 +22,8 @@ const POOL_MIN={
  'visit.trait.frugal':6,'visit.trait.thrifty':6,'visit.trait.coward':6,'visit.trait.liar':6,
  'visit.trait.eater':6,'visit.trait.greed':6,'visit.trait.shy':6,'visit.trait.social':6,
  'visit.trait.collector':6,'visit.trait.aloof':6,
+ 'visit.trait.impulse':6,'visit.trait.rich':6,'visit.trait.honest':6,'visit.trait.pyrophobia':6,
+ 'visit.trait.coldhand':6,'visit.trait.potionbody':6,'visit.trait.clumsy':6,'visit.trait.reckless':6,
  'sale.full':20,'sale.half':20,'sale.overcharge':20,
  'sale.refuse.price':12,'sale.refuse.need':12,'sale.refuse.choice':12,
  'night.plain':16,'night.great':10,'night.retreat':12,'night.hurt':12,'night.severe':8,
@@ -43,6 +45,8 @@ test('§11.1/§11.2: every repeated situation has a real Variant Pool at its v2.
 const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3','visit.regular':'16-4','visit.helped':'16-5',
  'visit.trait.frugal':'17-1','visit.trait.thrifty':'17-2','visit.trait.coward':'17-3','visit.trait.liar':'17-4','visit.trait.eater':'17-5',
  'visit.trait.greed':'17-6','visit.trait.shy':'17-7','visit.trait.social':'17-8','visit.trait.collector':'17-9','visit.trait.aloof':'17-10',
+ 'visit.trait.impulse':'17-11','visit.trait.rich':'17-12','visit.trait.honest':'17-13','visit.trait.pyrophobia':'17-14',
+ 'visit.trait.coldhand':'17-15','visit.trait.potionbody':'17-16','visit.trait.clumsy':'17-17','visit.trait.reckless':'17-18',
  'sale.full':'18-1','sale.half':'18-2','sale.overcharge':'18-3','sale.refuse.price':'18-4','sale.refuse.overcharge':'18-4a','sale.refuse.need':'18-5','sale.refuse.choice':'18-6',
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
  'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
@@ -58,6 +62,30 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
   assert.ok(sec,name+' has an approved owner section');
   assert.deepEqual(pool,approved[sec],name+' is COPY_AUDIT '+sec+' verbatim');}
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
+});
+/* COPY_WORLD_VOICE §DIALOGUE EXPOSURE — OCCASIONAL (User 2026-10-04): the `가끔` list under a §16-§18 pool is the set
+   of its long lines that come up on 1 pick in 5; every other pick uses the pool's other lines. */
+const occasionalDoc=(()=>{const out={};let sec=null,mode=null;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+  if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];mode=null;continue;}
+  if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
+  if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
+  const q=l.match(/^>\s*(.+?)\s*$/);if(q&&mode==='가끔')(out[sec]??=[]).push(q[1]);}
+ return out;})();
+test('COPY_AUDIT `가끔`: occasional lines are the approved list, each in its own pool, picked 1 in 5',()=>{
+ assert.deepEqual([...Copy.occasional].sort(),Object.values(occasionalDoc).flat().sort(),'Source OCCASIONAL is every COPY_AUDIT 가끔 line');
+ for(const [sec,lines] of Object.entries(occasionalDoc))for(const l of lines)assert.ok(approved[sec].includes(l),l+' is also in §'+sec+' 현재');
+ for(const [name,pool] of allPools){const occ=pool.filter(l=>Copy.occasional.has(l));if(!occ.length)continue;
+  assert.ok(occ.length<pool.length,name+' keeps ordinary lines');
+  let hit=0;for(let i=0;i<2000;i++)if(Copy.occasional.has(Copy.pick(pool,'k'+i)))hit++;
+  assert.ok(hit>2000*.15&&hit<2000*.25,name+': occasional lines come up about 1 pick in 5 ('+hit+'/2000)');}
+ const frequent=['sale.full','sale.half','sale.overcharge','sale.refuse.price','sale.refuse.overcharge','sale.refuse.need','sale.refuse.choice','visit.back','visit.regular'];
+ for(const [name,pool] of allPools)if(frequent.includes(name))for(const l of pool)if(!Copy.occasional.has(l))
+  assert.ok(l.replace(/[“”]/g,'').length<=16,name+': a frequent line fits one balloon row (16 letters): '+l);
+});
+test('COPY_AUDIT §17: every Trait arrival pool belongs to a Trait the build has',()=>{
+ const cat=read('dist/data/catalog.js');
+ for(const id of Object.keys(V.trait))assert.ok(cat.includes("['"+id+"','"),id+' is an active Trait');
 });
 test('COPY_AUDIT: the letter-suffixed section id parses without attributing to its parent',()=>{
  assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
@@ -698,11 +726,11 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
                     '비싼 게 좋은 거 아닌가요','이왕이면 좋은 걸로 봅시다','늘 먹던 걸로 주세요'])
   assert.ok(!lines.includes(gone),'the false implication is gone: '+gone);
  for(const [pool,line] of [
-  [V.trait.coward,'“오늘은 무사히 다녀오는 게 목표입니다.”'],
+  [V.trait.coward,'“무사히 다녀오는 게 목표입니다.”'],
   [V.trait.eater,'“원정 끝나면 밥부터 먹어야겠어요.”'],
-  [V.trait.eater,'“배고픈 채로 돌아오는 건 딱 질색입니다.”'],
-  [V.trait.greed,'“오늘은 빈손으로 돌아올 생각 없습니다.”'],
-  [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨 와야죠.”'],   // 4배치 띄어쓰기 (User 2026-09-29)
+  [V.trait.eater,'“배고픈 채 돌아오는 건 질색이에요.”'],
+  [V.trait.greed,'“빈손으로는 안 돌아옵니다.”'],
+  [V.trait.greed,'“이번엔 전리품 좀 챙겨 와야죠.”'],   // 대사 길이 정리 (User 2026-10-04)
   [V.regular,'“이 정도면 단골 맞죠?”']])
   assert.ok(pool.includes(line),'the approved replacement is in its own pool: '+line);
  // no Favorite-SKU state was invented by the replacement, then or since
