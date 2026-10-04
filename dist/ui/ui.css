@@ -92,8 +92,7 @@ html,body{height:100%;margin:0}
 html{touch-action:manipulation}
 img{-webkit-touch-callout:none}
 body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-webkit-text-size-adjust:100%}
-/* v2.9.11 (User 2026-09-28): Korean breaks between words everywhere - 297 mid-word breaks across Events, Store Supports, the
-   guide and settings (archive/v2.9.11/text-audit-v2911.md); break-word still splits a token too long for its box. */
+/* Korean breaks between words everywhere; break-word still splits a token too long for its box. */
 body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
@@ -2644,7 +2643,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-prep .decoplate.sign{top:max(calc(env(safe-area-inset-top) + 26px),calc(50cqh + (var(--y) - .5) * var(--ph)))}
 }
 @media (max-height:699px) and (orientation:portrait){
- /* SALE (User 2026-09-30, archive/v3.0-prep/v3-prep-measure-v2911.md §4): a filled counter tray left 2 / 1 / 0 shelf rows above it
+ /* SALE: a filled counter tray left 2 / 1 / 0 shelf rows above it
     at 640 / 597 / 548. On a portrait stage under 700 high the tray takes one tighter step - the same lines, keys and
     order, less air and a smaller icon - so the shelf keeps more of the column; the keys stay 44 px or more */
  .p-sale .counter-tray{padding-top:5px;padding-bottom:6px}

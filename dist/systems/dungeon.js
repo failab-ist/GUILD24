@@ -289,18 +289,10 @@ function trailingRun(records,pred){
 }
 const injuredStreak=records=>trailingRun(records,x=>x.departedInjured);
 const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(injuredStreak(records)+1):0;
-/* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE. The Day term bends at D9: a party's prepared
-   ability stops growing long before Day 30 does, so a single slope left every late Gate further
-   out of reach than the one before it. Only this term changes (User 2026-09-25, v2.9.1 balance:
-   early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
-   D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
-   a fresh first Run cleared the Boss; v2.9.11, User 2026-09-28: early 1.50 -> 1.40 - the D11~20 readiness cliff, measured in
-   archive/v2.9.11/growth-injury-v2911.md - then 1.45 after the combined re-measure, archive/v2.9.11/remeasure-v2911.md §8); every other Gate Power term is what it was. */
-/* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in archive/v2.9.2/v292-bot-harness.md §9-10): DAY 11~20
-   climb at `mid` 1.10 per Day (the NPC-growth check of the Run Progression Arc); DAY 1~10 and DAY 21+ keep their slopes. */
-/* v2.9.13 (User 2026-09-30): DAY 21+ 0.80 -> 1.10 - the late Gates had fallen behind a grown roster
-   (archive/v2.9.12/balance-proposal-v2912.md §1). The DAY 9~10 step, which shared `late`, is its own `step` and keeps 0.80, so
-   DAY 1~10 does not move. */
+/* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE. The Day term bends at the knee (D9): a party's prepared ability stops
+   growing long before Day 30 does, so a single slope left every late Gate further out of reach than the one before it.
+   `early` per Day up to the knee, `step` on DAY 9~10, `mid` on DAY 11~20 (the NPC-growth check of the Run Progression
+   Arc), `late` from DAY 21. */
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
 /* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power) */
 const GATE_EASE={early:.90,late:.95,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:GATE_EASE.early;

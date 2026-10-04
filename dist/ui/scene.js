@@ -12,8 +12,7 @@ const rng=n=>{let s=n*2654435761%2147483647;return()=>(s=s*48271%2147483647)/214
    The production backdrop (assets/presentation/morning/store-bg-*.png) draws the whole room, and these
    bands' own art is hidden on MORNING and the preparation scene (director-review.css). The ceiling and
    counter frames still size their mounts (the DAY sign and the till anchor to them), so they keep their
-   viewBox and aspect; the wall frame keeps its own. The drawings they used to carry are archived in
-   archive/v2.9.13/unused-room-art.js (User 2026-10-01). */
+   viewBox and aspect; the wall frame keeps its own. */
 function ceiling(){return svg(360,92,'','band-art');}
 function wall(){return svg(360,250,'','band-art','xMidYMax');}
 function counter(){return svg(360,90,'','band-art');}
