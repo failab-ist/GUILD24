@@ -290,7 +290,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={loyaltyRevisit:.03,returnLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.35,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.175,rerollBase:50,golemCombat:.90,
+G.DATA.balance={finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.35,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.175,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

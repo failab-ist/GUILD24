@@ -315,7 +315,7 @@ test('FINAL party size 1 / 2 / 3 is measured at the same D30 state without chang
  // The counterfactual is arithmetic on copies: the run that produced it is unaffected.
  assert.equal(r.final.reached,r.reached30,'the real Final still resolved normally');
  assert.equal(r.final.cleared,r.wins,'and its clears still agree with the Run wins');
- // clearChance is the exact probability of power*roll >= bossPower for roll ~ U(0.88,1.12).
+ // clearChance is the exact probability of power*roll >= bossPower for roll ~ U(0.92,1.08).
  assert.equal(Debug.clearChance(100,230),0,'a hopeless party clears never');
  assert.equal(Debug.clearChance(1000,230),1,'an overwhelming party clears always');
  assert.ok(Math.abs(Debug.clearChance(230,230)-.5)<1e-9,'power equal to Boss Power is a coin flip');

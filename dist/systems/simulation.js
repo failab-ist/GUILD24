@@ -36,10 +36,9 @@ const SPEND={
  'expert':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
-/* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
-   chance of a given party is exact arithmetic. Sampling it would only add noise. */
-const ROLL_LO=.88,ROLL_HI=1.12;
-const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-bossPower/power)/(ROLL_HI-ROLL_LO)));
+/* Boss clear is `power * roll >= bossPower` with roll uniform on the Final roll band (FINAL_EXPEDITION §FINAL ROLL), so
+   the clear chance of a given party is exact arithmetic. Sampling it would only add noise. */
+const clearChance=(power,bossPower)=>{const {lo,hi}=D.balance.finalRoll;return power<=0?0:Math.max(0,Math.min(1,(hi-bossPower/power)/(hi-lo)));};
 /* The same contribution `run.js:boss()` sums, per adventurer. The four coefficients are not
    restated here at all: they are `Dungeon.preparedPower`, the one helper Forecast, Resolve and
    the Final all read. A copy of them is exactly how this harness came to report every Final
@@ -360,7 +359,7 @@ function playRun(g,out,ctx){
    const power=party.reduce((sum,n)=>sum+contribution(G.Dungeon.prepare(n,d,s.facilities)),0);
    const bucket=out.partySize[size];
    bucket.samples++;bucket.power+=power;bucket.chance+=clearChance(power,bossPower);
-   bucket.assaultLo+=power*ROLL_LO;bucket.assaultHi+=power*ROLL_HI;
+   bucket.assaultLo+=power*D.balance.finalRoll.lo;bucket.assaultHi+=power*D.balance.finalRoll.hi;
   }
   /* RUN-Q15. The two groups are read off the run's own history — a regular is someone who
      kept coming back and reached the canonical 단골 threshold; a newcomer has been to the
