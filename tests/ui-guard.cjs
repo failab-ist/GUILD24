@@ -1818,7 +1818,10 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
- for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','reroll','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
+ for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
+ /* User 2026-10-04: the reroll key is told again, once, on DAY 2 (the kit is DAY 3), and the key keeps its name and gains the refresh mark */
+ assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 후보 전체 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]"),'the DAY 2 reroll mark, verbatim');
+ assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'후보 전체 교환 · '"),'the 후보 전체 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
@@ -2436,7 +2439,10 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/'fatigue'/.test(fn('tray'))&&!/' prepared'/.test(fn('kitLine')),'and no anchor class is left for them');
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): they are taught after they act - a NIGHT coach mark per taught rule,
     anchored to the class the returning record carries, in Copy.learned order, after the NIGHT result mark */
- assert.ok(/night:\[\.\.\.Copy\.learned\.map\(\(\[k,text\]\)=>\['learn-'\+k,k==='fatigue'\?'\.beat \.told\.learn-fatigue ~ \.changed \.fatigue-row':'\.beat \.told\.learn-'\+k,text\]\)\]/.test(steps),'the NIGHT marks are the taught rules alone, one per rule (the result mark is retired, COACH DIET)');
+ assert.ok(steps.includes("night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text]),")&&steps.includes("['earn','.changed .tok.gain','이긴 손님은 소지금이 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]"),'the NIGHT marks are the taught rules plus the Wallet gain row (the result mark is retired, COACH DIET)');
+ /* User 2026-10-04: one NIGHT mark a night, the most serious rule first */
+ assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','prepared','earn','great','counter','fatigue'];"),'NIGHT priority: death, severe, injured, prepared, earn, great, counter, fatigue');
+ assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */
  assert.ok(/<details class="tip fatigue-row '\+c\.kind\+'"/.test(app),'the 귀환 후 피로 token is the Fatigue mark\'s anchor');
@@ -2447,13 +2453,14 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다. 강인함은 사고를, 기동은 패배 후 부상을, 정신은 사망을 조금씩 줄여 준다.']])
+   ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
+   ['flow','원정은 싸움에서 이기고, 위험 사고도 없어야 성공이다. 어느 하나라도 틀어지면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
  /* COPY_AUDIT §3-12 (User 2026-10-02): the DAY 3 HQ 구급키트 line is pinned exact too - it tells a gift that already
     arrived (what it is, once, what it does), not a pick, so it is the one mark that names an Item */
- const EXACT=['stats','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
+ const EXACT=['stats','flow','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
  assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
@@ -2466,15 +2473,15 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
- assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.']`)
-  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.']`)
+ assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2]`)
+  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2]`)
   &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); price is taught after the first refused 바가지 and the first 50% sale (COPY_AUDIT §26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','forecast','envmeter','payday','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the two outlook boxes; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','payday','returning','bag','price-refused','price-half'],'the first SALE reads destination, Stats and the flow; the two outlook boxes and the Bag start on DAY 2; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.']`)
   &&sell.includes(`['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']`),'the two price lessons, verbatim, on the refused 바가지 key and the 50% sale line');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
@@ -3011,7 +3018,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
   '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
   '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
   '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
-  '다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'])
+  '다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
  for(const gone of ['점포 매출에는 영향이 없다','준비가 끝나면 영업 시작을 누른다','보급을 더 챙기면 가능성이 커질 수 있다',
                     '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며',

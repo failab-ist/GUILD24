@@ -1383,9 +1383,10 @@ COPY_AUDIT_APPROVED_v2.8.0.md §3.
 
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 
-(§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`, `reroll`
-or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대`, the
-priced 후보 교환 key and the register say them. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
+(§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`
+or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
+register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `후보 전체 교환` and gains a refresh icon (an
+inline SVG like the close X, no asset), and the mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
@@ -1393,11 +1394,12 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): four marks (User 2026-10-02: the outlook is two), destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
-the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4). No Hazard or price marks (Hazard rows say what answers them, price comes after
-the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
-returning-customer mark (tap opens the notebook) the first returning customer. Never `독이면 X 아이템을 사세요`-style scripts.
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has three marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS) and
+`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
+does not move with a sale; COPY_AUDIT §3-4) start on DAY 2, the Bag mark (after the first sale) on DAY 3 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: reroll + the two outlook boxes; DAY 3: the kit, the payday customer, the Bag).
+No Hazard or price marks (Hazard rows say what answers them, price comes after
+the fact, §SALE PRICE LESSONS). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
 
@@ -1413,7 +1415,7 @@ screen says it; otherwise none, or taught after the fact.
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
+- after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`원정 소지금 획득`); a NIGHT tells one mark, the most serious rule first
 
 ### SALE PRICE LESSONS (v2.9.12)
 
