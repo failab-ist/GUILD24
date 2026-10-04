@@ -8,7 +8,7 @@ STATE: V2_10_3_MERGED (바가지 거절 대가 · 프롤로그, User 컨펌 2026
 - repository: `failab-ist/GUILD24`. main = v2.10.3(바가지 거절 대가 · 가격 키 코치 · 프롤로그 · 코치 DAY 1~4 분산). 직전은 v2.10.2(PR #75 · #80). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
-- 밸런스 기준 로그: `reports/v2100-measure/v2102-economy-check.log`(현금 · 자본 지표 포함), 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
+- 밸런스 기준 로그: `reports/v2100-measure/v2103-bots-baseline.log`(v2.10.3 바가지 규칙 + 봇 수정, 프레시), 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
 
 ## 최근 버전 (User 2026-10-02 ~ 10-04)
 

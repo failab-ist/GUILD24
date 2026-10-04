@@ -454,15 +454,17 @@ function playRun(g,out,ctx){
    if(reader)while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){
     const base=readScore(n,n.pack,d),o=G.Dungeon.estimate(n,d,s.facilities),seen=new Set(),picks=[];
     /* 150% the way the User used it (16 of 270 sales, all from D10): one Item per visit, to a regular (12+ visits in the
-       User's Run; 8+ visits or loyalty 50+ here) whose purse covers it, the other slot at 정가. A refusal at 150% leaves
-       정가 open for the same Item (only higher prices close). */
+       User's Run; 8+ visits or loyalty 50+ here) whose purse covers it, the other slot at 정가. A refused 150% closes that
+       Item for the visit (SALE §SAME-ITEM REFUSAL PRICE CEILING), so no bot risks it on a customer it cannot afford to lose
+       (the core roster, Rare+) or on an Item their Gate needs (RELIC §COUNTER JUDGEMENT 관련 준비). */
     const overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),regular=n.visits>=8||n.loyalty>=50;
-    const strong=s.day>=10&&regular&&!overToday;
+    const keep=topRoster(n)||n.rarity>=2,strong=s.day>=10&&regular&&!overToday&&!keep;
     for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);const it=D.itemBy[st.item];
      /* expert: from DAY 1, one meal or drink per visit at 150% to a purse holding three times its list price
         (the User's D1-10: 21% of sales at 150%, mostly 쌀밥 · 생수 · 커피) */
-     const cheapOver=expert&&!overToday&&['food','drink'].includes(it.category)&&n.money>=it.sell*3;
-     const modes=(strong||cheapOver)?['overcharge','full','half']:['full','half'];
+     const needed=!!d&&G.Relics.relatedPrep(it,d.hazards);
+     const cheapOver=expert&&!overToday&&!keep&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3;
+     const modes=((strong&&!needed)||cheapOver)?['overcharge','full','half']:['full','half'];
      const mode=modes.find(m=>!n.refused.includes(it.id+':'+m)&&g.interest(n,it,m).debit<=n.money);if(!mode)continue;
      /* 50% is a margin of zero (Sell = Buy x 2): it is the answer to a short purse, not to a first refusal */
      picks.push({st,mode,gain:readScore(n,[...n.pack,it.id],d)-base+(st.expires?1/(st.expires-s.day+1):0)-(mode==='half'?4:0)});}
