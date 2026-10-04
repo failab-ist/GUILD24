@@ -161,7 +161,7 @@
    the same physical room is suppressed, and only on this Surface. */
 .p-morning{isolation:isolate;background-color:#0f0b08;
  background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
-  url('assets/presentation/morning/store-bg-phone.png');
+  url('assets/presentation/morning/store-bg-phone.webp');
  background-size:auto,cover;background-position:0 0,50% 50%;background-repeat:no-repeat,no-repeat;
  background-origin:content-box}
 .p-morning .store{background:none}
@@ -276,7 +276,7 @@
    land at 85% of the stage. Same live layer, same order, same store - the other framing of it. */
 @media(min-width:1024px),(min-width:768px) and (orientation:landscape){
  .p-morning{background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
-   url('assets/presentation/morning/store-bg-wide.png')}
+   url('assets/presentation/morning/store-bg-wide.webp')}
  .p-morning .band.ceiling{flex:0 0 19%}
  .p-morning{--band-c:.30;--till-x:.32;--till-w:.36;--till-top:.233;--till-h:.267;--cap-top:.126;--cap-h:.107}
  .p-morning .store{--ar:1.7768}
@@ -294,7 +294,7 @@
 /* ---- start-up preload screen (ui/preload.js): shown only until the first render() replaces #app ---- */
 .boot{position:fixed;inset:0;display:grid;place-items:center;padding:24px 16px;box-sizing:border-box;background:linear-gradient(#0c0a08cc,#0c0a08cc),var(--soil)}
 .boot-plate{box-sizing:border-box;width:min(320px,88vw);border:16px solid transparent;background:#24160d;background-clip:padding-box;
- border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
+ border-image:url('assets/presentation/settings/wood-panel.webp') 150 fill / 16px / 0 stretch;
  padding:6px 4px 2px;text-align:center;box-shadow:0 -4px 0 #100a06;isolation:isolate}
 .boot-title{margin:0 0 14px;font:500 24px/1.2 var(--f-sign);color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .boot-bar{height:20px;box-sizing:border-box;padding:3px;background:#120b06;border:2px solid #0f0905;box-shadow:inset 0 2px 0 #00000080,0 1px 0 #a46b33}

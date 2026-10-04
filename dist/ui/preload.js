@@ -15,17 +15,17 @@ function one(src){return new Promise(done=>{const img=new Image();keep.push(img)
  img.src=src;});}
 function required(wide){
  return [P+'start/title-logo.png',P+'sale/regular-badge.png',
-  ...(wide?[P+'morning/store-bg-wide.png',P+'sale/sale-bg.png',P+'night/store-rain-wide.jpg',P+'support/backroom-wide.jpg']
-          :[P+'morning/store-bg-phone.png',P+'sale/sale-bg-phone.png',P+'night/store-rain-phone.jpg',P+'support/backroom-phone.jpg']),
-  P+'morning/day-sign.png',P+'night/store-night.png',P+'sale/shelf-plank.png',
+  ...(wide?[P+'morning/store-bg-wide.webp',P+'sale/sale-bg.webp',P+'night/store-rain-wide.jpg',P+'support/backroom-wide.jpg']
+          :[P+'morning/store-bg-phone.webp',P+'sale/sale-bg-phone.webp',P+'night/store-rain-phone.jpg',P+'support/backroom-phone.jpg']),
+  P+'morning/day-sign.png',P+'night/store-night.webp',P+'sale/shelf-plank.png',
   ...['discount','markup','off','regular'].map(n=>P+'sale/till-'+n+'.png'),
-  P+'settings/wood-panel.png',P+'settings/blue-key.png',P+'settings/red-key.png',P+'settings/supply-backdrop.png',
-  P+'support/order-paper.png',P+'support/choice-tag-blank.png',P+'support/return-tag-blank.png',
-  ...MENU.map(n=>P+'menu/'+n+'.png'),
+  P+'settings/wood-panel.webp',P+'settings/blue-key.webp',P+'settings/red-key.webp',P+'settings/supply-backdrop.webp',
+  P+'support/order-paper.png',P+'support/choice-tag-blank.webp',P+'support/return-tag-blank.webp',
+  ...MENU.map(n=>P+'menu/'+n+'.webp'),
   ...DECO.map(n=>A+'deco/'+n+'.svg'),
   ...[1,2,3,4,5].map(n=>A+'npc/npc-0'+n+'.png')];}
 function later(){
- const n=G.NPCAssets,out=BOSS.map(b=>P+'final/'+b+'_BACKDROP.png');
+ const n=G.NPCAssets,out=BOSS.map(b=>P+'final/'+b+'_BACKDROP.webp');
  /* UI_UX §PROLOGUE: it fetches its own scenes when it plays; these are for the next new store */
  for(const k of[1,2,4])for(const w of['phone','wide'])out.push(P+'prologue/scene'+k+'-'+w+'.webp');
  if(n){for(const sex of['M','F'])for(let i=1;i<=n.normal[sex];i++)out.push(n.base+'normal/'+sex+'/'+String(i).padStart(3,'0')+n.ext);}

@@ -14,7 +14,7 @@ Regenerate the vendored copies with `npm run assets`.
 
 ### 점포지원 PC 세로 배열용 넓은 계약서 — 프로젝트 생성 (2026-10-03 후속)
 
-- `dist/ui/assets/presentation/support/contract-wide-blank.png`: RGBA 2172×724, 기존 무지 계약서를 참고한
+- `dist/ui/assets/presentation/support/contract-wide-blank.webp`: RGBA 2172×724, 기존 무지 계약서를 참고한
   OpenAI 이미지 생성 에셋. PC 후보를 넓게 쌓을 때 쓰며 모바일에는 기존 승인 종이를 유지한다.
 - 이름·효과·가격·무료·행동 라벨은 없으며 모두 라이브 텍스트다. 생성 원본을 변환 없이 복사했다.
   재질은 절제된 크림 종이와 작은 집게이며 외곽은 투명하다. 제3자 라이선스를 추정하지 않는다.
@@ -23,8 +23,8 @@ Regenerate the vendored copies with `npm run assets`.
 ### 점포지원 계약서·표찰 — 프로젝트 생성 제안 (2026-10-03)
 
 - OpenAI 이미지 생성으로 제작한 글자 없는 RGBA PNG. 별도 제3자 라이선스를 추정하지 않는다.
-- `dist/ui/assets/presentation/support/contract-blank.png`: 1536×1024, 무지 크림 종이와 작은 금속 집게.
-- 같은 폴더 `choice-tag-blank.png`, `return-tag-blank.png`: 각 2172×724, 무지 금색 종이 표찰과 목재 표찰.
+- `dist/ui/assets/presentation/support/contract-blank.webp`: 1536×1024, 무지 크림 종이와 작은 금속 집게.
+- 같은 폴더 `choice-tag-blank.webp`, `return-tag-blank.webp`: 각 2172×724, 무지 금색 종이 표찰과 목재 표찰.
 - 생성 원본을 리사이즈·크롭·재인코딩 없이 그대로 복사했다. CSS에서 화면 크기에 맞춰 표시한다.
 - 이름·효과·무료/실제 가격·선택/구매·나중에 결정은 모두 런타임 텍스트이며 이미지에 넣지 않는다.
   프롬프트도 모든 글자·숫자·가격·무료 문구를 배제하고 균일한 중앙 글자 영역, 투명 외곽, 절제된 픽셀 재질을 요청했다.
@@ -45,14 +45,14 @@ Regenerate the vendored copies with `npm run assets`.
 
 - `dist/ui/assets/presentation/sale/regular-badge.png`: User가 준 `픽셀 아트 단골 금빛 배지.png`(RGBA 1278×1230)의 투명 여백을 잘라 144×167로 줄임.
   SALE 손님 카드 이름판 오른쪽에 쓴다.
-- `dist/ui/assets/presentation/night/store-night.png`: User가 준 `비 내리는 밤의 편의점 풍경.png`(2048×768)를 1536×576으로 줄임. NIGHT 맨 위 배경으로 쓴다.
+- `dist/ui/assets/presentation/night/store-night.webp`: User가 준 `비 내리는 밤의 편의점 풍경.png`(2048×768)를 1536×576으로 줄임. NIGHT 맨 위 배경으로 쓴다.
 - User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
 
 ### Settings wood / steel controls — project-generated, review candidate
 - source: generated for this project with OpenAI image generation from the User's settings-menu visual direction
   (2026-10-03). No third-party asset licence is claimed.
-- shipped PNG files under `dist/ui/assets/presentation/settings/`: `wood-panel.png` (1254 × 1254),
-  `blue-key.png` and `red-key.png` (2172 × 724 each), `supply-backdrop.png` (1774 × 887). All retain their original
+- shipped PNG files under `dist/ui/assets/presentation/settings/`: `wood-panel.webp` (1254 × 1254),
+  `blue-key.webp` and `red-key.webp` (2172 × 724 each), `supply-backdrop.webp` (1774 × 887). All retain their original
   RGBA pixels and metadata; copied without resizing, cropping or re-encoding.
 - role: wood panel is a CSS nine-slice source for Settings, its existing import/reset confirmations and the store
   menu candidate; blank steel keys remain confined to Settings and its confirmations. Labels remain live, selectable UI text. The supply illustration sits behind Settings content
@@ -260,8 +260,8 @@ flatter than the shared Action geometry it replaced.
 
 ### MORNING production art — user-provided, project-generated
 - shipped files:
-  - `dist/ui/assets/presentation/morning/store-bg-wide.png` — 1672x941, PNG RGB, no alpha, 1.28 MB
-  - `dist/ui/assets/presentation/morning/store-bg-phone.png` — 941x1672, PNG RGB, no alpha, 1.18 MB
+  - `dist/ui/assets/presentation/morning/store-bg-wide.webp` — 1672x941, PNG RGB, no alpha, 1.28 MB
+  - `dist/ui/assets/presentation/morning/store-bg-phone.webp` — 941x1672, PNG RGB, no alpha, 1.18 MB
 - evaluated and removed from the build:
   - `board-frame-panel.png` — 1774x887, PNG RGBA, 419 KB
   - `board-frame-plank.png` — 1774x887, PNG RGBA, 470 KB
@@ -288,7 +288,7 @@ flatter than the shared Action geometry it replaced.
   breakpoint. The room is owned by the MORNING stage, so it runs behind the Action dock as
   well, and `cover` crops horizontally only at every shipped width - no authored zone is lost
   vertically, which is also what makes the asset's own counter top a reliable seating plane
-  for the live till. `store-bg-wide.png` is reused by OPENING as the closed, unlit store the
+  for the live till. `store-bg-wide.webp` is reused by OPENING as the closed, unlit store the
   preparation sheet stands in. Neither file is altered in any use; the wide file was renamed
   from `store-bg.png`, bytes untouched.
   An earlier integration cropped it into the wall band to preserve the procedural ceiling.

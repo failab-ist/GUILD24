@@ -308,7 +308,7 @@ compact; the plate keeps its frame (a control) and an about-44 px target through
 Title, quantity and support plate align on their vertical centres, rather than mixing the plate and LED font baselines.
 The phone title and quantity use a common 20px line box; the support plate retains its 24px visible height.
 The head is the wooden plank asset (`presentation/sale/shelf-plank.png`) across the full shelf frame width (User 2026-10-03).
-The SALE backdrop is `presentation/sale/sale-bg.png` without its ceiling, the side shelves at the edges, dimmed; on a desk the status / outlook /
+The SALE backdrop is `presentation/sale/sale-bg.webp` without its ceiling, the side shelves at the edges, dimmed; on a desk the status / outlook /
 destination column is one width and ends on the card's bottom, with larger type, and the waiting deck is larger. Stats, item effects and
 stock / expiry are one step quieter than names and prices.
 The three price keys are the supplied key assets (`presentation/sale/till-*.png`: 할인 blue, 정가 gold, 바가지 orange, disabled grey) with a small corner ribbon
@@ -790,7 +790,7 @@ The Outcome belongs to the adventurer's identity block, not a title bar:
 
 Directly above the name, one step stronger; no own row or vertical space, no long rule — important, not the headline.
 
-Backdrop: the rainy convenience-store night art (`presentation/night/store-night.png`) fills the top of the screen edge to edge, behind the
+Backdrop: the rainy convenience-store night art (`presentation/night/store-night.webp`) fills the top of the screen edge to edge, behind the
 menu key and the task line, and ends where the return rail begins, with no empty stretch above or below it. The menu key is the same
 brass-edged dark wood as on every phase (§MENU / SETTINGS VISUAL); the task line sits on a dark top fade.
 
