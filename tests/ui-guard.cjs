@@ -664,7 +664,7 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
  const helpText=fn('help');
  /* COPY_AUDIT §8 replaced the long-form guide with the compact one; the visitor-source list it
     used to recite belongs to the Morning surface, which states it in context. What the guide
-    still owes the player is what a Run leaves behind, and it says so in §8-7's own terms. */
+    still owes the player is what a Run leaves behind, and it says so in §8-8's own terms. */
  const fresh=Meta.fresh(),carried=['본사 기록','해금','직업 숙련','점포 자본','보유 장식'];
  for(const t of carried)assert.ok(helpText.includes(t),'the Help names the persistent '+t);
  assert.ok(Object.keys(Meta.opened(fresh)).join()==='items,jobs','unlocks are Items and Jobs');
@@ -672,7 +672,7 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
  assert.ok(Array.isArray(Meta.ownedDecorations(fresh)),'so is the owned Decoration collection');
  assert.equal(typeof Meta.totalJobMastery(fresh),'number','so is Job Mastery');
  // the things it says do NOT carry really do not
- assert.ok(helpText.includes('모험가·재고·골드·점포지원은 새로 시작한다'),
+ assert.ok(helpText.includes('모험가·재고·보유 골드·점포지원은 새로 시작한다'),
   'and it names the per-Run things by their current term');
 }); 
 
@@ -2456,7 +2456,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
    ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
-   ['flow','원정은 싸움에서 이기고, 위험 사고도 없어야 성공이다. 어느 하나라도 틀어지면 다치거나 죽을 수 있다.']])
+   ['flow','원정은 게이트와의 한 판이다. 싸움에서 지면 실패하고, 이겨도 환경 위험에 당하면 실패한다. 실패하면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
@@ -3109,15 +3109,14 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  const h=fn('help');
  for(const line of [
   'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
-  '오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
   '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
-  '판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.',
-  '적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.',
-  '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.',
-  '점포 자본은 영업이 끝날 때 총매출의 일부가 쌓이고, 장식을 들이는 데 쓴다. 보유 골드와는 별개다.',
-  '실시간 제한 없음.'])
+  '판매한 상품은 그날 원정에서 쓰고 사라진다. 원정은 게이트와의 한 판이다. 싸움에서 지면 실패하고, 이겨도 환경 위험에 당하면 실패한다. 실패하면 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
+  '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다.',
+  '영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
+  '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
  assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
@@ -3136,7 +3135,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  /* v2.9.0 §8-0: the guide opens on 처음 3일 (five lines) and keeps the eight sections under a collapsed 자세히 */
  assert.ok(h.indexOf('<h3>처음 3일</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'처음 3일 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
- for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
+ for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
 });
 
