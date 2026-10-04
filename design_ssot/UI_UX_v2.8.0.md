@@ -1395,8 +1395,8 @@ Fatigue 10+ lowers 기동/정신.
 
 First SALE (§TUTORIAL — COACH DIET): four marks (User 2026-10-02: the outlook is two), destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
 the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4). No Hazard or price marks (Hazard rows say what answers them, price comes after
-the fact, §SALE PRICE LESSONS). The Bag mark follows the first sale; the
+does not move with a sale; COPY_AUDIT §3-4). The price keys carry one mark the first time they show (a refused 바가지 closes the
+Item, so it must be known before the choice; COPY_AUDIT §3-14). No Hazard marks (Hazard rows say what answers them). The Bag mark follows the first sale; the
 returning-customer mark (tap opens the notebook) the first returning customer. Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1407,19 +1407,20 @@ screen says it; otherwise none, or taught after the fact.
   Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
-  대응 - one mark each, User 2026-10-02); SALE Bag (after the first sale) and returning customer; FINAL
+  대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
+  sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
+- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
 
 ### SALE PRICE LESSONS (v2.9.12)
 
-Two contextual marks, once per account, persisted and reset with the rest (no pre-sale price mark): the first 150% (바가지)
-refusal, on the refused key (`오늘 거절됨`); the first 50% sale, on its change line (`단골도 +N · 소지금 A → B`, held while the
-mark is open). Words only; copy -> COPY_AUDIT_APPROVED_v2.8.0.md §26-3.
+One contextual mark, once per account, persisted and reset with the rest: the first 150% (바가지) refusal, on the refused key
+(`오늘 거절됨`). The price keys themselves carry the §TUTORIAL — COACH DIET mark before it. Words only; copy ->
+COPY_AUDIT_APPROVED_v2.8.0.md §26-3.
 
 ### TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED
 
@@ -2630,13 +2631,12 @@ before any tier II Gate; either mark on a closed Gate.
 Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
 PASS:
 - the marks shown are exactly the owner's list: DAY 0 one mark (`점포지원`); no MORNING 방문객 / 게이트 mark (Deep and the II / FIRE
-  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, then Bag after the
-  first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
+  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, the price keys
+  (§3-14) when they first show, then Bag after the first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
   receipt mark
 - DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads
   `전투 전망`
-- the first 150% refusal shows §26-3 line 1 on the refused key, the first 50% sale line 2 on its change line (staying until the
-  mark is closed); neither shows a second time on the account
+- the first 150% refusal shows §26-3 on the refused key; no 50% sale mark; neither price mark shows a second time on the account
 - `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the baseline (16)
 FAIL: a retired mark still shows, a mark names an Item, or a price lesson shows before its situation.
 

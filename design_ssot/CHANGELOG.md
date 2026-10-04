@@ -37,6 +37,11 @@ and this table is their commit record.
   refused` had paid about 1.29 x list against 정가's 0.87; it is now about 0.99. The payday and first-refusal coach lines (보수를 받은 손님이다 … · 거절된 상품은 오늘 이 손님에게 못 판다 …) and a 바가지-only refusal
   pool (no line inviting a cheaper retry, two of them witty) follow. SALE §SAME-ITEM REFUSAL PRICE CEILING, NPC_TRAIT §NPC-Q-v28-2B, COPY_AUDIT
   §18-4a · §26-3, UI_UX §SALE — REFUSAL PRICE CEILING UI; tests revision, integration, traits.
+- **The price keys are taught before the first sale** (User: 판매 과정을 알려 주는 코치가 없으면 DAY 1에 알려야): with a refused
+  바가지 closing the Item, the price rule must be known before the choice, so the price keys carry one mark the first time they
+  show - `세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.` The first-50%-sale lesson is
+  retired. UI_UX §TUTORIAL — COACH DIET · §SALE PRICE LESSONS · UI-Q-v29-53, COPY_AUDIT §3-14 · §26-3; test ui-guard,
+  `tools/qa-sale-details.cjs`.
 - **왕도 프리미엄 인증 pays 40% of the 150% price** (was 45%; User: 바가지에 위험이 생겼으니 40%). 평생 단골제 is unchanged.
   RELIC §23 · REL-Q-v28-7; tests relic-effects, copy.
 

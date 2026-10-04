@@ -265,6 +265,16 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
+## 3-14. 가격 키 (첫 SALE)
+
+(rule owner UI_UX §TUTORIAL — COACH DIET. 상품을 골라 가격 키 세 개가 처음 보일 때, 가격 키 위에 한 번. 바가지를 거절당하면 그
+상품은 그날 그 손님에게 팔 수 없어서, 고르기 전에 알아야 한다.)
+
+**현재**
+> 세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.
+
+---
+
 ## 4-1. 전투 전망 Help
 
 **현재** (two lines; the second line is the frozen SALE-entry value)
@@ -2857,8 +2867,7 @@ No Rare Reference customer and no line for one (COPY_WORLD_VOICE §RARE REFERENC
 
 **노출 위치**
 > SALE에서 그 일이 계정에서 처음 일어났을 때 `점주 안내` 코치 말풍선으로, 한 번씩 (rule owner: UI_UX §SALE PRICE
-> LESSONS). 첫 바가지 거절은 거절된 가격 키 위, 첫 50% 판매는 그 판매의 변화 줄(`단골도 +N · 소지금 A → B`) 위.
+> LESSONS). 첫 바가지 거절은 거절된 가격 키 위.
 
 **현재**
-> 거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.  
-> 할인은 단골도를 크게 올린다.
+> 거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.
