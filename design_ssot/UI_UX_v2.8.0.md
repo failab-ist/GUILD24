@@ -898,7 +898,7 @@ lit by its colour and shadow alone and, on phones, indents to the receipt's text
 (contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX §QA UI-Q-v29-33.)
 
 The receipt body prints as one pass within 200 ms behind one printer tick (never per row — it repeats for 30 Days). Only the
-closing `보유 자금` figure (its box also holds `영업 손익`) stamps (중요, the NIGHT fall reused): 100 ms hold, 90 ms fall, the
+closing `보유 골드` figure (its box also holds `영업 손익`) stamps (중요, the NIGHT fall reused): 100 ms hold, 90 ms fall, the
 tape gives and settles. It stays cream; `영업 손익` beneath is green up, red down, gold at exactly 0 (each set in CSS so reduced
 motion matches). No `어제보다 +N` line (deferred, v3.0+ router).
 
@@ -1432,7 +1432,7 @@ screen says it; otherwise none, or taught after the fact.
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
   대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
   sale) and returning customer; FINAL
-  `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
+  `토벌 전망`; CLOSING `영업 시작 골드와 보유 골드를 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
@@ -2597,7 +2597,7 @@ SETUP: CLOSING at 390 and 1280, motion on and reduced motion, one Day ending in 
 printing -> `다음 날`; the END settlement (`점포 자본 정산`) on an account whose prior Store Capital sits below at least one
 Decoration price and a Run that carries it past one or more; frames through the stamp landing and the settlement count.
 PASS (→ UI_UX §CLOSING — RECEIPT STAMP): all receipt rows are on screen together within 200 ms behind one printer tick, nothing row by
-row; only the `보유 자금` figure (the purse box) stamps - 100 ms hold, the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles; `영업 손익` green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and
+row; only the `보유 골드` figure (the purse box) stamps - 100 ms hold, the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles; `영업 손익` green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and
 figures at once; no `어제보다 +N` line; the END `현재 점포 자본` row counts from the prior total to the resolved one in 320 ms with one `ui` click per Decoration price it passes and none
 when it crosses no price.
 FAIL: a tick per receipt row, a second stamp anywhere on the receipt, a profit and a loss in the same colour, a click fired off a
@@ -2767,10 +2767,10 @@ Outcome type size.
 ### CLOSING
 
 #### UI-Q18 — CLOSING ECONOMICS
-EXPECT: the economic result is visually primary (→ UI_UX §CLOSING): 영업 전 자금 -> 매출 / 발주 / 운영비 (+ other moved rows) ->
-보유 자금 box (stamped) with 영업 손익 ±N (green / red, gold at 0); 창고 재고 and 오늘 폐기 on separate lines, 오늘 폐기 naming up
+EXPECT: the economic result is visually primary (→ UI_UX §CLOSING): 영업 시작 골드 -> 매출 / 발주 / 운영비 (+ other moved rows) ->
+보유 골드 box (stamped) with 영업 손익 ±N (green / red, gold at 0); 창고 재고 and 오늘 폐기 on separate lines, 오늘 폐기 naming up
 to three Items (×n from two) then 외 N종; 내일 운영비 예상 (not on DAY 29); no 판매 원가 / 판매 마진 / 폐기 원가 row;
-영업 전 자금 + ins - outs = 보유 자금 exactly; no page scroll at 390 x 780.
+영업 시작 골드 + ins - outs = 보유 골드 exactly; no page scroll at 390 x 780.
 PASS: the Night story is not duplicated as dominant content.
 
 #### UI-Q-v28-13 — CLOSING FOOTER

@@ -664,7 +664,7 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
  const helpText=fn('help');
  /* COPY_AUDIT §8 replaced the long-form guide with the compact one; the visitor-source list it
     used to recite belongs to the Morning surface, which states it in context. What the guide
-    still owes the player is what a Run leaves behind, and it says so in §8-7's own terms. */
+    still owes the player is what a Run leaves behind, and it says so in §8-8's own terms. */
  const fresh=Meta.fresh(),carried=['본사 기록','해금','직업 숙련','점포 자본','보유 장식'];
  for(const t of carried)assert.ok(helpText.includes(t),'the Help names the persistent '+t);
  assert.ok(Object.keys(Meta.opened(fresh)).join()==='items,jobs','unlocks are Items and Jobs');
@@ -672,7 +672,7 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
  assert.ok(Array.isArray(Meta.ownedDecorations(fresh)),'so is the owned Decoration collection');
  assert.equal(typeof Meta.totalJobMastery(fresh),'number','so is Job Mastery');
  // the things it says do NOT carry really do not
- assert.ok(helpText.includes('모험가·재고·골드·점포지원은 새로 시작한다'),
+ assert.ok(helpText.includes('모험가·재고·보유 골드·점포지원은 새로 시작한다'),
   'and it names the per-Run things by their current term');
 }); 
 
@@ -1826,7 +1826,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'후보 전체 교환 · '"),'the 후보 전체 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
- assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
+ assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']]"),'CLOSING keeps its first clause only');
  for(const id of ['relic-what','deep','event','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
   assert.ok(ids.has(id),'kept before the fact: '+id);
 });
@@ -1978,7 +1978,7 @@ test('UI-Q-v29-54: END 이 점포의 기록 - five rows, before the settlement, 
  assert.ok(/\(recs\.length\?row\('원정'/.test(b)&&/r\.outcome==='대성공'/.test(b),'no 원정 row without an expedition; 대성공 counted from the records');
  assert.ok(/n\.level>b\.level\|\|\(n\.level===b\.level&&n\.loyalty>b\.loyalty\)/.test(b)&&/s\.npcs\.filter\(n=>n\.introduced\)/.test(b),'the highest Level among the visited (dead included), a tie to the higher Loyalty');
  assert.ok(!/run\.\w*record|account\.\w*record/.test(b)&&!/this-run|runBlock/.test(read('dist/systems/run.js')+read('dist/systems/meta.js')),'no save field: presentation only');
- assert.ok(/'<div class="block settlement"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged');
+ assert.ok(/'<div class="block settlement'\+\(st\.reach\?' reach':''\)\+'"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged');
 });
 
 /* UI-Q-v29-37 (UI_UX §END — REPLAY NUDGE, User 2026-09-26, v2.9.4): show, never assign - one line at most, only when the
@@ -2103,17 +2103,17 @@ test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one mov
 });
 
 /* UI-Q18 (v2.9.7, User 2026-09-26, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the receipt is the Day's cash */
-test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 자금 with 영업 손익, counts, tomorrow',()=>{
+test('UI-Q18: CLOSING cash-flow receipt - 영업 시작 골드, what moved, 보유 골드 with 영업 손익, counts, tomorrow',()=>{
  const c=(fn('closingReceipt')+fn('closingDock')+fn('closingScreen')).replace(/\/\*[\s\S]*?\*\//g,'');
  for(const gone of ['판매 원가','판매 마진','폐기 원가','오늘 시작','오늘 끝','오늘 변화'])assert.ok(!c.includes(gone),'no '+gone+' row');
- for(const l of ['영업 전 자금','보유 자금','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
+ for(const l of ['영업 시작 골드','보유 골드','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
  assert.ok(/change=total\(ins\)-total\(outs\),open=s\.money-change/.test(c),'the opening is derived from the Day\'s own flows, so the tape adds up');
  assert.ok(/\['매출',d\.revenue,true\]/.test(c)&&/\['발주',d\.spent,true\]/.test(c)&&/\['운영비',d\.operating,true\]/.test(c),'매출 / 발주 / 운영비 always print');
  assert.ok(/const tomorrow=s\.day<29\?game\.tomorrowOperatingCost\(\):null,tone=change>0\?'gain':change<0\?'loss':'even'/.test(c),'no tomorrow line before the Final Day; 영업 손익 green / red / gold at 0');
- assert.ok(/'<div class="purse '\+tone\+'"><span>보유 자금<\/span><b>'\+fmt\(s\.money\)/.test(c),'보유 자금 is the purse figure');
- assert.ok(c.includes("fmt(change)+'<i>G</i></b>")&&c.includes("<span>영업 전 자금</span><b>'+fmt(open)+'<i>G</i></b>"),'the 영업 손익 G is set apart like the purse G - in the LED face a bare G reads as 6 (+5G as +56)');
+ assert.ok(/'<div class="purse '\+tone\+'"><span>보유 골드<\/span><b>'\+fmt\(s\.money\)/.test(c),'보유 골드 is the purse figure');
+ assert.ok(c.includes("fmt(change)+'<i>G</i></b>")&&c.includes("<span>영업 시작 골드</span><b>'+fmt(open)+'<i>G</i></b>"),'the 영업 손익 G is set apart like the purse G - in the LED face a bare G reads as 6 (+5G as +56)');
  assert.ok(/\(n>1\?' ×'\+n:''\)/.test(c)&&/' 외 '\+\(wasted\.length-3\)\+'종'/.test(c),'waste names: ×n from two, three kinds then 외 N종');
- assert.ok(/\.p-closing \.purse>b\{font-size:\d+px;color:#f3ecd8\}/.test(css)&&/\.print \.row\.open\{[^}]*inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var\(--px-cut\)\}/.test(css)&&/\.p-closing \.purse:after,\.p-closing \.purse \.pl:after\{content:/.test(css)&&/\.p-closing \.purse\.even \.pl b\{color:var\(--gold\)\}/.test(css),'one colour for 보유 자금, gold only for an even Day');
+ assert.ok(/\.p-closing \.purse>b\{font-size:\d+px;color:#f3ecd8\}/.test(css)&&/\.print \.row\.open\{[^}]*inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var\(--px-cut\)\}/.test(css)&&/\.p-closing \.purse:after,\.p-closing \.purse \.pl:after\{content:/.test(css)&&/\.p-closing \.purse\.even \.pl b\{color:var\(--gold\)\}/.test(css),'one colour for 보유 골드, gold only for an even Day');
 });
 
 /* UI-Q-v29-33 (v2.9.2 H4, UI_UX §CLOSING — RECEIPT STAMP): the receipt prints as one pass and only the profit/loss
@@ -2127,7 +2127,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
  assert.ok(/const row=\$\('\.p-closing \.tape \.purse'\),val=row\?\.querySelector\(':scope>b'\)/.test(closing)&&/if\(row\)A\(row,\{opacity:/.test(closing),'the scale lands on the number alone, never the full-width row - a whole-row scale overflows the card');
  assert.ok(/translateY:\[\{from:0,to:0,duration:land\},\{to:CLOSING_STAMP\.dip,duration:40,ease:'in\(2\)'\}/.test(closing),'the tape gives 4 px on the landing frame and settles');
- assert.ok(/\.p-closing \.purse\.gain \.pl b\{color:#6fcf93\}/.test(css)&&/\.p-closing \.purse\.loss \.pl b\{color:#e0645a\}/.test(css),'v2.9.7: 보유 자금 stamps in one colour; 영업 손익 alone is green / red - the end state a reduced-motion capture also shows');
+ assert.ok(/\.p-closing \.purse\.gain \.pl b\{color:#6fcf93\}/.test(css)&&/\.p-closing \.purse\.loss \.pl b\{color:#e0645a\}/.test(css),'v2.9.7: 보유 골드 stamps in one colour; 영업 손익 alone is green / red - the end state a reduced-motion capture also shows');
  const cs=bare(fn('closingSound'));
  assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&/sound\('receipt'\)/.test(cs),'one printer tick, and a stale timer is cleared first');
  assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
@@ -2336,7 +2336,7 @@ test('D-34: the store float is on the screen that spends it, and a closed window
  const win=fn('relicWindow')||app.slice(app.indexOf('relic-takeover'),app.indexOf('function sealChoice'));
  assert.ok(win.includes("game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다."),
   'a full store says so where it used to say the window is open until DAY N');
- assert.ok(win.includes('구매할 수 있다 · 자금'),'and still says the open case when it is open');
+ assert.ok(win.includes('구매할 수 있다 · 보유 골드'),'and still says the open case when it is open');
 });
 
 /* UI_UX §TUTORIAL / UI-Q105. The coach mark shipped for a long time with markup and no
@@ -2456,7 +2456,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
    ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
-   ['flow','원정은 싸움에서 이기고, 위험 사고도 없어야 성공이다. 어느 하나라도 틀어지면 다치거나 죽을 수 있다.']])
+   ['flow','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
@@ -2514,12 +2514,12 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  const walletChip=fn('walletChip');
  assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
  // both Wallet surfaces read that chip; neither prints a bare n.money any more
- assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
+ assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n,true\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
  assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
  assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
  assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
  // the two figures are printed side by side and never summed into one
- assert.ok(/소지 <b>'\+fmt\(n\.money\)\+'G<\/b>/.test(walletChip),'the persistent half is the real n.money');
+ assert.ok(/\(full\?'손님 소지금':'소지'\)\+' <b>'\+fmt\(n\.money\)\+'G<\/b>'/.test(walletChip),'the persistent half is the real n.money');
  assert.ok(/fmt\(b\)/.test(walletChip)&&/b=n\.eventBudget/.test(walletChip),'the temporary half is the real eventBudget');
  assert.ok(!/n\.money\+\(n\.eventBudget\|\|0\)/.test(walletChip)&&!/n\.money\+b/.test(walletChip),
   'the chip never renders one merged Wallet figure');
@@ -3109,14 +3109,14 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  const h=fn('help');
  for(const line of [
   'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
-  '오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
   '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
-  '판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.',
-  '적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.',
-  '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.',
-  '실시간 제한 없음.'])
+  '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
+  '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다.',
+  '영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
+  '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
  assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
@@ -3135,7 +3135,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  /* v2.9.0 §8-0: the guide opens on 처음 3일 (five lines) and keeps the eight sections under a collapsed 자세히 */
  assert.ok(h.indexOf('<h3>처음 3일</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'처음 3일 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
- for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
+ for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
 });
 

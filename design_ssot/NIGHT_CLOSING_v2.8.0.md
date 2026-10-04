@@ -26,7 +26,7 @@ causalityMustMatchActualResolution=YES
 
 NIGHT = `내 선택이 어떻게 됐을까?` — NPC 원정 이야기 / 생존 / 성장 / 부상 / 사망
 
-CLOSING = `오늘 장사는 어땠을까?` — 영업 전 자금 / 들어오고 나간 돈 / 보유 자금 · 영업 손익 / 창고 재고 / 오늘 폐기 (→ §CLOSING)
+CLOSING = `오늘 장사는 어땠을까?` — 영업 시작 골드 / 들어오고 나간 돈 / 보유 골드 · 영업 손익 / 창고 재고 / 오늘 폐기 (→ §CLOSING)
 
 둘의 역할을 분리한다.
 
@@ -497,10 +497,10 @@ Closing is economics-first and economics-only.
 The receipt is the Day's cash, not an income statement: the Day is read by what the store started with and what it
 ends with, and by what moved in between - not by cost of goods sold, margin or an accounting profit.
 
-1. `영업 전 자금 {N}G` in a light filled box (the pair of the 보유 자금 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
+1. `영업 시작 골드 {N}G` in a light filled box (the pair of the 보유 골드 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
 2. the Gold that moved today, inflows then outflows; 매출 / 발주 / 운영비 always print, every other row only when it moved:
    in - 매출, 본사 지원·수당, 대성공 본사 보상, 재고 정리; out - 발주, 후보 교환, 점포지원 투자, 원정 후원, 운영비
-3. the `보유 자금 {N}G` box - the Day's end Gold, the receipt's largest figure and its stamp (UI_UX §CLOSING — RECEIPT
+3. the `보유 골드 {N}G` box - the Day's end Gold, the receipt's largest figure and its stamp (UI_UX §CLOSING — RECEIPT
    STAMP) - with `영업 손익 ±{N}G` inside it: the end Gold less the opening. Only the 영업 손익 figure is coloured: green
    above 0, red below 0, gold at exactly 0
 4. `창고 재고 {n}개` on its own line, and `오늘 폐기 {n}개` on the next line when any - never Gold: an expired Item was
