@@ -326,10 +326,11 @@ test('NPC_TRAIT §TRAIT MODIFICATION: the normal order catalog holds no Trait-mo
  }
 });
 
-/* NPC_TRAIT / SALE §LOYALTY (User decision 2026-09-23): 50% sale +4, 100% +1, 150% -3; a visit
+/* NPC_TRAIT / SALE §LOYALTY: 50% sale +4, 100% +1, 150% -4 (a refused 150% -2); a visit
    without a paid purchase adds 0 on departure (one with a purchase keeps its +1); survival +1. */
 test('LOYALTY 2026-09-23: 50% +4, visit without purchase 0, survival +1',()=>{
- assert.deepEqual(['half','full','overcharge'].map(m=>DATA.pricing[m].loyalty),[4,1,-3]);
+ assert.deepEqual(['half','full','overcharge'].map(m=>DATA.pricing[m].loyalty),[4,1,-4]);
+ assert.equal(DATA.pricing.overcharge.refusalLoyalty,-2,'a refused 바가지 costs Loyalty 2');
  const setup=seed=>{const g=fresh(seed),s=g.run;g.run.facilities=[];g.beginOrder();s.phase='sell';const n=s.npcs[0];
   n.traits=[];n.loyalty=10;n.money=99999;n.pack=[];n.refused=[];n.history=[];n.introduced=true;n.visits=2;n.destination=0;n.claimedDestination=0;
   s.queue=[n.id,s.npcs[1].id];s.cursor=0;return {g,s,n};};

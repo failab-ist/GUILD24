@@ -3,7 +3,7 @@
 DOC=PRESENTATION_PRINCIPLES
 OWNER=presentation_system,presentation_principles,visual_construction,asset_quality,ornament_budget,audio_presentation,visual_review
 DOC_VERSION=2.9.12
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -400,7 +400,7 @@ General contract, every beat:
 | A3 | 계산대 counter | the Bag keeps its place in the customer-state strip beside the status line at every width, one step larger than the v2.8 Bag and never overflowing (UI_UX §BAG PRESENTATION); the counter edge under the front is unchanged; the hand-over (A1) lands on that Bag slot. §COMPOSITION LOCK holds |
 | A4 | 손님 교대 customer exit / entry | `손님 보내기`: the current customer exits left (240 ms), then the next arrives with the existing entry (240~340 ms); `depart` gets a recorded utility cue (door / step family). Entry may still start the view at the top (UI_UX §SALE — MOBILE AUTHORITY) |
 | A5 | 가격 소리 계열 price-mode sound family | 50% / 100% / 150% share the register family and differ by coin ticks (1 / 2 / 3); no mode sounds like the correct answer (§AUDIO PRESENTATION "peer choices") |
-| A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text; refusal reply stays 5 s (A2) |
+| A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함` text; refusal reply stays 5 s (A2) |
 | A7 | first-sale price coach | none: the PRICING coach keeps its two sentences and gains no hand-over clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
 | A8 | 영수증 조각 transaction result stub | on a price commit that succeeds, a paper receipt stub stamps in over the counter band (scale 1.12→1, ≤ 200 ms) reading `단골도 {±N} · 소지금 {A} → {B}` for that customer, stays about 2.5 s and fades (≤ 300 ms); the next sale's stub replaces it; no reserved height; under reduced motion it appears and disappears without motion. A refusal shows no stub — the reason-pool reply line (A2) is the result surface. Exact surface -> UI_UX §SALE — TRANSACTION RESULT STUB; copy -> COPY_AUDIT §4-24 |
 

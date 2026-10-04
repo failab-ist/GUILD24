@@ -304,7 +304,7 @@ G.DATA.balance={loyaltyRevisit:.03,visitWallet:{perLevel:4,min:30,max:70},awayWa
    100: a properly prepared product sold at list stops failing on intent RNG, because the
    economy's difficulty is meant to sit in what was ordered, what was kept in stock, and how
    each sale was priced - not in a die roll against a fair offer. */
-G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
+G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-4,refusalLoyalty:-2},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
   /* Only 정가 weighs the judged price against the purse. PROVISIONAL, reported for approval:
      intentPivot is the measured median 정가 burden and intentWeight is what a deviation from it
      is worth, so the term redistributes around ordinary weight instead of taxing every offer.

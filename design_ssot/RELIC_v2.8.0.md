@@ -3,7 +3,7 @@
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
 DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -473,10 +473,10 @@ effect=a 단골 is stronger, and stays a 단골
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
 - Price = 320G
-- HQ commission = 45% of the charged (150%) sale price
+- HQ commission = 40% of the charged (150%) sale price
 - the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16)
 - base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
-- the 1.5x price burden and Loyalty -3 are unchanged
+- the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
 
 24. 원정 작전실 (`opsRoom`) · tag=Expedition · User 2026-10-02 remake of 원정 전문 인증 (`expeditionCert`; a save's old id is
     read as `opsRoom` on load)
@@ -1068,10 +1068,10 @@ Expected: eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wa
 #### REL-Q-v28-7 — ROYAL PREMIUM
 
 Expected:
-    150% sale of any rarity -> HQ commission = 45% of the charged sale price
+    150% sale of any rarity -> HQ commission = 40% of the charged sale price
     the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16)
     the next Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's
-    the 1.5x price burden and Loyalty -3 are unchanged
+    the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
 
 #### REL-Q36 — PREMIUM POOL SUPPORT
 SETUP: Simulate Premium build with canonical Item catalog.

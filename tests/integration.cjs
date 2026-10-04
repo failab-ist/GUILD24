@@ -950,10 +950,10 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
      for(const higher of order.filter(m=>mults[m]>mults[mode]))
       assert.ok(n.refused.includes(st.item+':'+higher),
        mine.reason+' refusal at '+mode+' must close '+higher);
-     // every lower price is still open
+     // every lower price is still open - except after a refused 바가지, which closes the SKU
      for(const lower of order.filter(m=>mults[m]<mults[mode]))
-      assert.ok(!n.refused.includes(st.item+':'+lower),
-       'a refusal at '+mode+' leaves '+lower+' open');
+      assert.equal(n.refused.includes(st.item+':'+lower),mode==='overcharge',
+       'a refusal at '+mode+(mode==='overcharge'?' closes ':' leaves open ')+lower);
      // and nothing is locked for a SKU this customer never actually refused
      const refusedSkus=new Set((n.refusalReasons||[]).map(x=>x.item));
      for(const key of n.refused)

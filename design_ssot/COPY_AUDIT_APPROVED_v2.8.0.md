@@ -149,7 +149,7 @@
 
 ## 3-4. 전망 안내
 
-**현재** (User 2026-10-02: 전망이 두 박스가 되어 안내도 두 개 — 전투 전망 박스, 환경 대응 박스 순서. User 2026-10-04: 첫 판 DAY 2 판매부터, DAY 1에는 §3-7 원정 흐름 안내가 먼저 간다)
+**현재** (User 2026-10-02: 전망이 두 박스가 되어 안내도 두 개 — 전투 전망 박스, 환경 대응 박스 순서. User 2026-10-04: 전투 전망은 첫 판 DAY 2, 환경 대응은 DAY 3 판매부터, DAY 1에는 §3-7 원정 흐름 안내가 먼저 간다)
 > 전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.  
 > 환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.
 
@@ -173,7 +173,7 @@
 Exact copy for these tutorial steps (rule owner: UI_UX §TUTORIAL — COACH DIET). The first SALE teaches two marks — 목적지
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY) and STATS; 가방 (§3-6) appears after the first sale and RETURNING on the first
 returning customer; pricing is taught after the fact (§26-3). The first ORDER has 발주 확정 (§3-2) alone.
-No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 SALE mark; 후보 교환 is the DAY 2 ORDER mark (§3-14).
+No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 (전투 전망) / DAY 3 (환경 대응) SALE mark; 후보 교환 is the DAY 2 ORDER mark (§3-14).
 
 ### STATS (anchor = the SALE 능력치 grid — the first time a customer's Stats are on screen)
 > 투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.
@@ -265,7 +265,17 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 첫 바가지 1회 수락은 말하지 않는다 - 해 볼 만한 이유와 두 가지 대가만)
 
 **현재**
-> 오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.
+> 보수를 받은 손님이다. 바가지(150%)를 해 볼 만하다. 다만 거절되면 그 상품은 오늘 못 팔고, 팔려도 단골도가 깎인다.
+
+---
+
+## 3-14. 가격 키 (첫 SALE)
+
+(rule owner UI_UX §TUTORIAL — COACH DIET. 상품을 골라 가격 키 세 개가 처음 보일 때, 가격 키 위에 한 번. 바가지를 거절당하면 그
+상품은 그날 그 손님에게 팔 수 없어서, 고르기 전에 알아야 한다.)
+
+**현재**
+> 세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.
 
 ---
 
@@ -537,7 +547,7 @@ SALE 목적지 판(폰): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란�
 **현재**
 > 단골도 {±N} · 소지금 {A} → {B}
 
-예: `단골도 +1 · 소지금 230 → 140` / 바가지 `단골도 -3 · 소지금 230 → 95`
+예: `단골도 +1 · 소지금 230 → 140` / 바가지 `단골도 -4 · 소지금 230 → 95`
 
 ---
 
@@ -1135,7 +1145,7 @@ SALE 목적지 판(폰): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란�
 ## 11-23. 왕도 프리미엄 인증
 
 **현재**
-> 바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.
+> 바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.
 
 ---
 
@@ -2397,6 +2407,21 @@ MORNING 게이트 판의 도장, `위험 보기` 창의 판, ORDER `오늘` 줄�
 
 ---
 
+## 18-4a. 바가지 거절
+
+바가지(150%)를 거절한 손님은 그 상품을 그날 다른 값으로도 사지 않는다(SALE §SAME-ITEM REFUSAL PRICE CEILING). 그래서
+`조금만 싸면` 같은 다시 제안을 부르는 줄을 쓰지 않는다.
+
+**현재**
+> “그 값을 부르시다니, 이건 안 삽니다.”  
+> “장사 그렇게 하시면 곤란하죠.”  
+> “그 값 듣고 나니 이건 사기 싫네요.”  
+> “오늘 이건 안 사겠습니다.”  
+> “이 값이면 던전 보스가 더 양심적이겠어요.”  
+> “그 값이면 차라리 맨손으로 들어가죠.”
+
+---
+
 ## 18-5. 필요도 거절
 
 **현재**
@@ -2858,8 +2883,7 @@ No Rare Reference customer and no line for one (COPY_WORLD_VOICE §RARE REFERENC
 
 **노출 위치**
 > SALE에서 그 일이 계정에서 처음 일어났을 때 `점주 안내` 코치 말풍선으로, 한 번씩 (rule owner: UI_UX §SALE PRICE
-> LESSONS). 첫 바가지 거절은 거절된 가격 키 위, 첫 50% 판매는 그 판매의 변화 줄(`단골도 +N · 소지금 A → B`) 위.
+> LESSONS). 첫 바가지 거절은 거절된 가격 키 위.
 
 **현재**
-> 바가지는 거절될 수 있고 단골도가 깎인다.  
-> 할인은 단골도를 크게 올린다.
+> 거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.

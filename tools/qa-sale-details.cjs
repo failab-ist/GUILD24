@@ -74,10 +74,15 @@ const check=(ok,message)=>{checks++;if(!ok){failures.push(message);if(!capture)a
   await p.evaluate(()=>{Guild24.game.run.day=5;Guild24.game.account.tutorial.skipped=true;Guild24.render();});
   if(!await p.locator('.tills button').count())await p.locator('.goods [data-action="select"]').first().dispatchEvent('click');
   if(await p.locator('.counter-tray.folded').count())await p.locator('.tray-unfold').click();
+  // COPY_AUDIT §3-14: the price-key mark, the first time the three keys show
+  await p.evaluate(()=>{const t=Guild24.game.account.tutorial;t.skipped=false;for(const x of window.__saleCoaches)t['coach-'+x[0]]=x[0]!=='price';Guild24.render();});
+  await p.waitForTimeout(motion?700:200);coaches.push(await coach('price'));await p.locator('[data-action="coach-next"]').click();
   await p.evaluate(()=>{const g=Guild24.game,orig=g.interest.bind(g);g.interest=(...args)=>({...orig(...args),chance:0});const t=g.account.tutorial;t.skipped=false;for(const x of window.__saleCoaches)t['coach-'+x[0]]=x[0]!=='price-refused';});
   await p.locator('.tills [data-mode="overcharge"]').click();await p.waitForTimeout(motion?700:200);
   coaches.push(await coach('price-refused'));await p.locator('[data-action="coach-next"]').click();
-  await p.evaluate(()=>{const g=Guild24.game,orig=g.interest.bind(g);g.interest=(...args)=>({...orig(...args),chance:1});const t=g.account.tutorial;delete t['coach-bag'];delete t['coach-price-half'];});
+  await p.evaluate(()=>{const g=Guild24.game,orig=g.interest.bind(g);g.interest=(...args)=>({...orig(...args),chance:1});const t=g.account.tutorial;delete t['coach-bag'];});
+  // a refused 바가지 closes that Item (SALE §SAME-ITEM REFUSAL PRICE CEILING), so the 50% sale is another Item's
+  await p.locator('.goods [data-action="select"]').nth(1).dispatchEvent('click');await p.waitForTimeout(200);
   await p.locator('.tills [data-mode="half"]').click();
   if(motion){
    const fly=await p.locator('.handoff').evaluate(e=>{const a=e.getBoundingClientRect(),b=e.querySelector('svg').getBoundingClientRect();return {width:a.width,height:a.height,contained:b.left>=a.left-1&&b.right<=a.right+1&&b.top>=a.top-1&&b.bottom<=a.bottom+1};});
@@ -86,9 +91,8 @@ const check=(ok,message)=>{checks++;if(!ok){failures.push(message);if(!capture)a
   }
   await p.waitForTimeout(motion?700:200);
   coaches.push(await coach('bag'));await p.locator('[data-action="coach-next"]').click();await p.waitForTimeout(150);
-  coaches.push(await coach('price-half'));await p.locator('[data-action="coach-next"]').click();
   await p.reload({waitUntil:'load'});await p.waitForTimeout(motion?700:200);
-  check(await p.evaluate(()=>Guild24.game.account.tutorial['coach-price-half']===true),tag+' completed coach persists after reload');
+  check(await p.evaluate(()=>Guild24.game.account.tutorial['coach-price']===true),tag+' completed coach persists after reload');
   check(!await p.locator('.coach-focus').count(),tag+' completed SALE coaches do not reappear after reload');
   check(!errors.length,tag+' no page errors');results.push({width,height,icons,coaches,errors});console.log(tag+' captured 9 SALE coaches + resized returning card');await ctx.close();
  }}finally{await browser.close();server.kill();}

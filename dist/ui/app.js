@@ -1367,15 +1367,16 @@ const coachSteps={
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
- ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2],
+ ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3],
+ /* COPY_AUDIT §3-14: the first time the price keys show - a refused 바가지 closes the Item, so it is known before the choice */
+ ['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.'],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
- ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
+ ['payday','.npc-wallet.payday','보수를 받은 손님이다. 바가지(150%)를 해 볼 만하다. 다만 거절되면 그 상품은 오늘 못 팔고, 팔려도 단골도가 깎인다.'],
  ['returning','.who.returning','다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.',,4],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',,3],
- /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
- ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.'],
- ['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',,4],
+ /* UI_UX §SALE PRICE LESSONS: the first refused 바가지 is marked again where it happened */
+ ['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']],
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): a rule is taught after it first acts - a mark on the returning record
     it acted on, once per account; contextual like the SALE marks (only a record carrying its class shows it).
     COACH DIET (User 2026-09-30): the `한 명씩` result mark is retired - the record and its 전체 건너뛰기 key say it */
@@ -1801,14 +1802,13 @@ const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
 /* the three price keys of an ordinary sale - one owner for the tray (SALE) and the FINAL panel's twin */
 function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
  return ['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100),role=PRICE_ROLE[mode];
-   /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
-      the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is
-      ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
+   /* SALE §SAME-ITEM REFUSAL PRICE CEILING: the reason a price is closed stays readable - 오늘 거절됨 for the refused price,
+      더 싼 값을 거절함 for one closed by a refusal at a LOWER price, 바가지를 거절함 for one closed by a refused 바가지. */
    const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
-   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
+   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult),overRefused=!said.some(x=>x.mode===mode)&&said.some(x=>x.mode==='overcharge');
    const blocked=mode==='overcharge'&&game.run.event?.effects.noOvercharge?'오늘 가격 단속'
     :q.debit>spendable(n)?'손님 소지금 부족'
-    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
+    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':overRefused?'바가지를 거절함':'오늘 거절됨')
     :full?'가방 가득':'';
    /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
       바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
@@ -2411,8 +2411,10 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +row('bgm','BGM',Number.isFinite(st.bgm)?st.bgm:d.bgm)
   +row('sfx','SFX',Number.isFinite(st.sfx)?st.sfx:d.sfx)
   +`</div>`;}
+const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
+ <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 DAY 1~3 한 줄 안내가 나오지 않는다.':'처음 한 번씩 나오는 말풍선 안내다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
@@ -2766,6 +2768,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
+ case'coach-toggle':{const t=game.account.tutorial??={};if(t.skipped){t.skipped=false;for(const k of Object.keys(t))if(k.startsWith('coach-'))delete t[k];}else{t.skipped=true;$('#coach-root').innerHTML='';activeCoach=null;}game.save();sound('ui');render();break;}
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
   // Preparation rendering returns before modal refresh; keep its mute label current too.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
