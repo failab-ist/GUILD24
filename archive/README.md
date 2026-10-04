@@ -48,6 +48,7 @@ D10 fork 쌍 비교 틀은 `v2.9.2/tools/measure-package-v292.cjs`가 가장 최
 | `v3.0-prep/tools/measure-discovery-v30.cjs`, `measure-first-day-v30.cjs`, `measure-session-v30.cjs`, `measure-v3prep.cjs` | v3.0 준비 루브릭 측정(`reports/v3.0-prep.md` §9-5, `reports/v3-prep-measure-v2911.md`) | `tools/` |
 | `v2.10.0/tools/measure-v2100-grid.cjs` | v2.10.0 2차: 후반 완화 × 실패 사망 격자, 마왕 전력 역산 | `tools/` |
 | `v2.9.13/unused-room-art.js` | 더 이상 화면에 안 보이는 옛 그림 코드(아침 · 새 점포 준비의 천장 · 벽 · 계산대 그림, 쓰이지 않던 `Art.scene`). 그림 배경으로 바뀌어 숨겨져 있었다(User 2026-10-01) | `dist/ui/scene.js` · `dist/ui/art.js` |
+| `v2.10.1/UI_COMPONENTS.md` | v2.10.1 공통 UI 부품 카탈로그(역할 · 소스 위치 · 적용 상태). 안의 `UI_SALE_*` · `UI_SUPPORT_*` 링크는 지운 작업 일지를 가리킨다(git 기록에 있다) | `reports/` |
 
 ## 규칙
 
