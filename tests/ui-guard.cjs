@@ -621,7 +621,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  /* COPY_AUDIT_APPROVED §14 is the exact owner of the cadence copy; these three headers and the
     D15 intro were the pre-cadence wording it supersedes. */
  assert.equal(c.d5.header,'1차 조사 보고');
- assert.equal(c.d15.intro,'전투 기록에서 변칙이 확인됐다.');
+ assert.equal(c.d15.intro,'전투 기록에서 마왕 권능이 확인됐다.');
  assert.equal(c.final.header,'최종 정찰 보고');
  for(const b of DATA.bosses){
   assert.ok(c.d5.flavor[b.id],b.id+' has its D5 Flavor');
@@ -638,8 +638,8 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  assert.equal(glut.sin,'탐식','the Sin is 탐식');
  assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
  assert.deepEqual(c.d15.trait.GLUTTONY,
-['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·피로 회복·보험 효과는 유지']],
-  'the D15 Function is the exact Canonical copy');
+['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+  'the D15 Function is the exact Canonical copy; the figure is filled from the tuning table');
  // no retired wording survives anywhere a player can read
  const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
  for(const stale of ['폭식','[등급] 이상','등급 이상 보급품'])
@@ -2860,9 +2860,9 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  /* COPY_AUDIT §14-1, amended 2026-09-23 (D0 FIRST-MORNING BRIEFING): the old one-line
     objective is superseded by the briefing; the old strings are not kept as live copy. */
  assert.equal(c.d0.header,'마왕 조사 개시');
- assert.equal(c.d0.lead,'길드 조사대가 마왕의 정체를 추적하러 출발했다.');
+ assert.equal(c.d0.lead,'DAY 30에 마왕이 깨어난다. 길드 조사대가 그 정체를 추적한다.');
  /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-25): a DAY label over each of the two lines, no closing sentence */
- assert.deepEqual(c.d0.steps,[['DAY 05',['첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]]);assert.equal(c.d0.lines,undefined);
+ assert.deepEqual(c.d0.steps,[['DAY 05',['마왕의 정체가 밝혀진다.']],['DAY 15',['마왕 권능이 밝혀진다.']],['DAY 25',['최종 원정의 위험이 밝혀진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]]);assert.equal(c.d0.lines,undefined);
  assert.equal(c.d0.close,undefined);assert.ok(!app.includes('조사 정보를 확인하며 토벌대를 준비하고'),'the closing sentence is gone');
  assert.ok(!/토벌 예정|길드 정보원/.test(read('dist/data/copy.js')+app),'the superseded D0 lines are gone');
  assert.ok(!/class="boss-art"|class="boss-id"|b\.name/.test(fn('bossReveal').split("stage==='d0'")[1].split('</div>\';')[0]),
@@ -2873,19 +2873,19 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.equal(c.d5.sub,'토벌 대상 확인');
  assert.equal(c.d5.button,'확인');
  assert.equal(c.d10.header,'2차 조사 시작');
- assert.equal(c.d10.line,'{보스명}의 전투 기록을 추적한다.');
+ assert.equal(c.d10.line,'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 권능이 밝혀진다.');
  assert.equal(c.d10.next,'다음 보고 · DAY 15');
  assert.equal(c.d15.header,'2차 조사 보고');
- assert.equal(c.d15.intro,'전투 기록에서 변칙이 확인됐다.');
+ assert.equal(c.d15.intro,'전투 기록에서 마왕 권능이 확인됐다.');
  assert.equal(c.d15.button,'확인');
  assert.equal(c.d20.header,'최종 정찰 시작');
- assert.equal(c.d20.line,'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.');
+ assert.equal(c.d20.line,'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다. DAY 25에 위험이 밝혀진다.');
  assert.equal(c.d20.next,'최종 보고 · DAY 25');
  assert.equal(c.final.header,'최종 정찰 보고');
- assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.');
+ assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다.');
  // §14-5 / SA-Q22: the SLOTH lines say 점포지원, never 유물
  const sloth=c.d15.trait.SLOTH[1].join(' ');
- assert.ok(sloth.includes('점포지원을 받는 대신')&&sloth.includes('그때의 점포지원은 받을 수 없으며'),'SLOTH uses 점포지원');
+ assert.ok(sloth.includes('점포지원을 받는 날 대신')&&sloth.includes('그날 점포지원은 받지 못하고'),'SLOTH uses 점포지원');
  assert.ok(!/유물/.test(JSON.stringify(c)),'no active Boss copy says 유물');
  // §14-8 spacing
  assert.ok(!/제 0 게이트/.test(app+read('dist/data/copy.js')),'제0게이트 is written without spaces');
@@ -3594,7 +3594,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
  assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalThreat')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');
- assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.','COPY_AUDIT §14-7 intro');
+ assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다.','COPY_AUDIT §14-7 intro');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
  const of=(fn('orderOffer')+fn('orderForm'));
  // v2.9.0 F6 (User 2026-09-24): the today-fit / matching-effect emphasis is retired on ORDER and SALE

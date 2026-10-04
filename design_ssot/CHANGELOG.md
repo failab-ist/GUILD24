@@ -41,6 +41,16 @@ and this table is their commit record.
 - **v2.10.1 design work diaries leave `reports/`**: the 2026-10-03 `UI_DESIGN_*`, `UI_SALE_*` and `UI_SUPPORT_*` hand-offs, review PDFs, capture
   images and QA JSON (about 50 MB, nothing reads them; git keeps them). The component catalog `UI_COMPONENTS.md` moves to `archive/v2.10.1/`.
 
+## After v2.10.3 — 마왕 조사 도감 탭 (User 2026-10-04; the version stays 2.10.3)
+
+- **마왕 조사 is easier to take in** (User playtest feedback: 마왕 조사가 뭔지 모르겠다, 공개된 특성을 다시 볼 곳이 없다): the DAY 1 briefing now lists what DAY 5 / 15 / 25 reveal;
+  the D5 report says when the 마왕 권능 comes and where to read it again; D15 and D25 carry a one-time 안내 line (tied to 안내 끄기 / 다시 보기).
+  New codex tab **도감 > 마왕** lists the Bosses the Player has met (this Run's first once its identity is shown) with their Trait only; the shown beats are kept
+  on the Account (`bossLog`, absent in older saves, a cleared Boss counts as known). UI_UX §도감 > 마왕, COPY_AUDIT §14-1~§14-11, META §BOSS LOG (save contract); tests integration, ui-guard, copy.
+- **Boss Trait sentences rewritten** with the GLOSSARY names (최종 원정, 상품, 마왕 권능) and the figures shown: 프라이드 8%, 엔비 8% (가장 강한 출전자), 러스트 5%, 글러트니 50%,
+  그리드 목표 매출 18,800G with 현재 매출 (in the D15 report and the codex card). WRATH shows `권능 없음` alone. The figures are filled from `D.bossTuning` through
+  `game.traitNumbers()`, so a retune cannot leave the copy behind. The D25 intro drops `대응 수치는 마왕성 기준`.
+
 ## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
 - **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file

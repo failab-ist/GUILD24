@@ -207,6 +207,17 @@ Both:
 
 ---
 
+## BOSS LOG
+
+`bossLog` on the account records which Boss facts the Player has been shown, for 도감 > 마왕 (UI_UX §도감 > 마왕) only: no Power, unlock, price or reward reads it.
+
+- `bossLog[bossId] = {identity?, trait?}`, booleans; `identity` is set when the D5 report is acknowledged, `trait` (with `identity`) when the D15 report is
+- a Boss with a past clear on any job reads as fully known, with or without a log entry
+- a save without `bossLog` reads empty; when present, only known Boss ids with those two boolean keys are valid
+- Full Data Reset clears it; a manual 현재 지점 포기 keeps it
+
+---
+
 ## MONSTER KNOWLEDGE
 
 Monster/Family Knowledge is cross-run and keeps the supplied-survival rule. Gain only when:
