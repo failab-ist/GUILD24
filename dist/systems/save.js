@@ -225,11 +225,17 @@ const renameIds=raw=>Object.entries(RENAMED_IDS).reduce((s,[a,b])=>s.split('"'+a
    addressed by the name, so a Run saved before the rename carries the new name forward rather than drawing the
    placeholder. Only the Run's own copies of the name change; nothing else in the save does. */
 const RENAMED={'카리냐':'카리냥'};
+/* Two portraits whose names were exchanged (User 2026-10-04: F/001 지오니아 -> 다래온, F/003 다래온 -> 지오닝). An exchange
+   is not idempotent - the new 다래온 is an old name too - so it runs once per Run, marked by `npcNames`, which a new Run
+   is created with. */
+const SWAPPED={'지오니아':'다래온','다래온':'지오닝'};
 function renamedNpcs(r){
  if(!r||!Array.isArray(r.npcs))return;
- const to=x=>x&&typeof x.name==='string'&&RENAMED[x.name]?(x.name=RENAMED[x.name]):null;
- for(const n of r.npcs){to(n);(n.records||[]).forEach(to);}
- (r.results||[]).forEach(to);
+ const each=map=>{const to=x=>x&&typeof x.name==='string'&&map[x.name]?(x.name=map[x.name]):null;
+  for(const n of r.npcs){to(n);(n.records||[]).forEach(to);}
+  (r.results||[]).forEach(to);};
+ each(RENAMED);
+ if(!(r.npcNames>=2)){each(SWAPPED);r.npcNames=2;}
 }
 
 /* UI_UX §BUILD MARKER: every save the game writes (autosave and export) names the build that wrote it, so a save handed in

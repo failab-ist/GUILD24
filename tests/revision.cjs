@@ -687,6 +687,19 @@ test('a renamed customer keeps its portrait slot, and an older save carries the 
  assert.equal(state.run.npcs.filter(x=>x.name==='카리냐').length,0);
 });
 
+/* User 2026-10-04: F/001 지오니아 -> 다래온 and F/003 다래온 -> 지오닝 - an exchange, so it runs once per Run */
+test('the exchanged names keep each portrait, and an older save is moved once',()=>{
+ assert.ok(!Adventurer.names.includes('지오니아'),'the old name is gone');
+ assert.deepEqual(Adventurer.portraitOf('다래온'),{gender:'F',slot:1});assert.deepEqual(Adventurer.portraitOf('지오닝'),{gender:'F',slot:3});
+ const g=fresh('swap-test'),[a,b]=g.run.npcs;assert.equal(g.run.npcNames,2,'a new Run is already on the new names');
+ a.name='지오니아';b.name='다래온';b.records.push({name:'다래온',day:1,outcome:'성공'});delete g.run.npcNames;
+ const once=Save.import(Save.export(g.account,g.run)),f=id=>once.run.npcs.find(x=>x.id===id);
+ assert.equal(f(a.id).name,'다래온','the old 지오니아 keeps the F/001 portrait');assert.equal(f(b.id).name,'지오닝','the old 다래온 keeps F/003');
+ assert.equal(f(b.id).records.at(-1).name,'지오닝');
+ const twice=Save.import(Save.export(once.account,once.run));
+ assert.equal(twice.run.npcs.find(x=>x.id===a.id).name,'다래온','a second read changes nothing');
+});
+
 /* ECONOMY_ORDER §Known-Hazard Counter pity (User 2026-10-02): every sheet drawn counts, the Day's first and each Reroll */
 test('the Counter guarantee comes on the third sheet in a row without one, Rerolls included; Rare pity ignores Rerolls',()=>{
  const g=fresh('pity-sheets'),s=g.run,hz=Relics.known(g),has=()=>s.offers.some(o=>Relics.directCounter(DATA.itemBy[o.item],hz));

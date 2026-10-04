@@ -322,5 +322,13 @@ Copy.josa=function josa(word,withBatchim,without){const c=String(word||'').repla
 Copy.routeChangeLine=function routeChangeLine(n,claimed,actual){
  return (n.pilgrim?'순례 행렬을 따라 '+Copy.josa(n.name,'은','는')+' 예상 목적지 ':'거짓말쟁이 '+Copy.josa(n.name,'은','는')+' 말했던 ')+claimed+' 대신 '+Copy.josa(actual,'으로','로')+' 향했다.';
 }
+/* UI_UX §PROLOGUE (User 2026-10-04): the five scenes before a new store. One sentence per line; the first two
+   scenes read like any fantasy opening, the third turns it, the last two are the store. */
+Copy.prologue={skip:'건너뛰기',tap:'탭하여 넘기기',click:'클릭하여 넘기기',scenes:[
+ ['봉인이 풀린다.','30일 뒤, 마왕이 깨어난다.'],
+ ['마왕 앞에 설 수 있는 자는 단 세 명.','시련도, 전투도 모두 넘어선 자들뿐이다.'],
+ ['…뭐, 그건 모험가들이 할 일이고.'],
+ ['나는 던전 앞에 편의점을 차렸다.'],
+ ['오는 모험가마다 팔고, 먹이고, 키운다.','단골이 되면 또 오고, 또 오면 더 강해진다.']]};
 G.Copy=Copy;
 })(globalThis);

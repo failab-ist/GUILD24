@@ -129,7 +129,8 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
-beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item. The desk rack shows every
+beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item, in the SALE shelf's order
+(§SALE — SHELF ORDER: today's Hazard answers first, User 2026-10-04). The desk rack shows every
 store slot, the empty ones as empty cells; the phone sheet draws only held units, so it takes as many rows as the stock needs
 (one while it fits) and the room left reads in the header's `N / M칸`; while it is open the 발주서 scrolls up above it by the
 sheet's own height, no more (User 2026-10-02: a fixed 45% left an empty stretch under a one-row sheet). Cell icon = offer-row icon; the Item name is the cell's reader label (nothing
@@ -447,7 +448,8 @@ One counter tray, a fixed band directly above the dock outside the scrolled colu
 LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen keeps its per-row panel
 (FINAL_EXPEDITION_v2.8.0.md §3).
 - tapping a shelf row puts its Item on the tray; the row is only highlighted; rows never change height
-- §SALE — SHELF ORDER: by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
+- §SALE — SHELF ORDER (User 2026-10-04): an Item that answers a Hazard of today's open Gates leads, in the Gates' Hazard order (any kind —
+  a Food or Drink with a Hazard line counts); the rest follow by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
   Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
 - shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
@@ -1209,6 +1211,25 @@ when wider). Pieces follow the painting under any crop:
 - covered: phone 360~430 at browser heights 640~932, the iPhone SE stage 375x548 (§SHORT PHONE), portrait tablet 768~912,
   landscape tablet 900~1023, desk 1024~1920
 
+### PROLOGUE (User 2026-10-04)
+
+Five full-screen scenes before every new store: at start-up when there is no Run (in place of the loading
+screen; the art keeps loading behind it, and the loading screen returns only if the prologue ends first) and
+after `다음 점포 열기`. A start-up with a Run in progress shows the loading screen as before.
+
+| scene | art | caption | cue |
+| --- | --- | --- | --- |
+| 1 | the seal breaking over the castle (enlarged from the top: phone 1.15, desk 1.2) | 봉인이 풀린다. / 30일 뒤, 마왕이 깨어난다. | rumble |
+| 2 | three adventurers facing the castle | 마왕 앞에 설 수 있는 자는 단 세 명. / 시련도, 전투도 모두 넘어선 자들뿐이다. | final (gate) |
+| 3 | black | …뭐, 그건 모험가들이 할 일이고. | none |
+| 4 | the store beside the dungeon gate, daylight | 나는 던전 앞에 편의점을 차렸다. | open (shutter) |
+| 5 | the store inside with one customer | 오는 모험가마다 팔고, 먹이고, 키운다. / 단골이 되면 또 오고, 또 오면 더 강해진다. | depart (door) |
+
+- Scenes 1~3 keep the caption at the screen's centre; scenes 4~5 under the picture. One sentence per line, no wrap.
+- A tap anywhere goes to the next scene, and every scene says so at the bottom: `탭하여 넘기기` on a touch screen,
+  `클릭하여 넘기기` with a mouse. `건너뛰기` (top right) ends it. It ends on the store screen.
+- Copy owner: `Copy.prologue`. Art: `dist/ui/assets/presentation/prologue/` (phone and wide per scene).
+
 ### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
 
 (acceptance -> UI_UX §QA UI-Q-v29-42.) 새 점포 준비 is the store about to open — MORNING's painted room (same framing, bands and
@@ -1383,9 +1404,10 @@ COPY_AUDIT_APPROVED_v2.8.0.md §3.
 
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 
-(§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`, `reroll`
-or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대`, the
-priced 후보 교환 key and the register say them. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
+(§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`
+or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
+register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `후보 전체 교환` and gains a refresh icon (an
+inline SVG like the close X, no asset), and the mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
@@ -1393,11 +1415,12 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): four marks (User 2026-10-02: the outlook is two), destination, Stats (능력치 differ by Job / rarity / Level; 투력 drives combat,
-the other three answer Hazards; COPY_AUDIT §3-7 STATS) and the outlook (the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4). The price keys carry one mark the first time they show (a refused 바가지 closes the
-Item, so it must be known before the choice; COPY_AUDIT §3-14). No Hazard marks (Hazard rows say what answers them). The Bag mark follows the first sale; the
-returning-customer mark (tap opens the notebook) the first returning customer. Never `독이면 X 아이템을 사세요`-style scripts.
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has four marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS),
+`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer) and
+the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
+does not move with a sale; COPY_AUDIT §3-4) start on DAY 2, the Bag mark (after the first sale) on DAY 3 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: reroll + the two outlook boxes; DAY 3: the kit, the payday customer, the Bag).
+No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
 
@@ -1414,7 +1437,7 @@ screen says it; otherwise none, or taught after the fact.
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE)
+- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`원정 소지금 획득`); a NIGHT tells one mark, the most serious rule first
 
 ### SALE PRICE LESSONS (v2.9.12)
 
@@ -1583,6 +1606,9 @@ Every phase plays a recorded track (`dist/ui/assets/bgm/`, provenance in `report
 
 | screen | track |
 | --- | --- |
+| PROLOGUE scenes 1~2 | BOSS |
+| PROLOGUE scene 3 | none (silence) |
+| PROLOGUE scenes 4~5 | TITLE, running on into the store screen |
 | no Run · 첫 점포지원 · the store about to open (NEW STORE PREPARATION) | TITLE |
 | MORNING | MORNING |
 | ORDER | ORDER |
@@ -3093,9 +3119,9 @@ FAIL: a badge / word / reorder marks the fit, or any effect is emphasised.
 
 SETUP: ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's
 customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
-PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `{N}명 · {Gate}` with no per-Gate count; two or
-more `{N}명 · {Gate A} {a} · {Gate B} {b}`, summing to N; an Event-closed Gate beside one open Gate
-`{N}명 · {Gate} {n} · {닫힌 Gate} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
+PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `전체 {N}명 {Hazard}{Tier}` with no count; two or
+more `전체 {N}명 {Hazard}{Tier} {a}명 …` (a Tier II-III Gate lists both Hazards with its one count); an Event-closed Gate beside one open Gate
+`전체 {N}명 {Hazard}{Tier} {n}명 {닫힌 Gate의 Hazard}{Tier} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
 rerouted customer's true Gate; no name, Job, Trait, Wallet or individual destination of a future customer (UI-Q91 / UI-Q101,
 narrowed to the individual).
 FAIL: per-Gate counts on a one-Gate day with no closed Gate, no count on the open Gate beside a closed one, a count that exposes a

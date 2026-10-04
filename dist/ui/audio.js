@@ -41,7 +41,8 @@ const tunes={
    the five tracks' mean - waveform, bass and drone made them differ by up to ~5 dB. */
 /* v3.0 BGM (User 2026-09-29): one recorded track per phase. The app hands the ending in as `end-win` / `end-fail`,
    and anything without a phase of its own - no Run, 첫 점포지원, the store about to open - is the title. */
-const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='end-fail'?'fail'
+/* UI_UX §PROLOGUE: `hush` is the prologue's turn - no music at all, not the title. */
+const trackFor=phase=>phase==='hush'?'':phase==='final'?'boss':phase==='end-win'?'succ':phase==='end-fail'?'fail'
  :phase==='night'?'night':phase==='order'?'order':phase==='sell'?'sale':phase==='closing'?'close'
  :phase==='morning'?'morning':'title';
 /* The recorded set: dist/ui/assets/bgm, the User's Gemini (Lyria) tracks (reports/ASSETS.md). An MP3 cut at a loop point
@@ -381,7 +382,7 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
  if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();
  const next=trackFor(phase);if(track===next)return;
- track=next;bedStop();bgmStop(BGM_SWAP,false);
+ track=next;bedStop();bgmStop(next?BGM_SWAP:.25,false);if(!next){pending='';return;}
  if(!bgm[next]||typeof fetch!=='function'){bedStart(next);return;}
  pending=next;
  bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);bgmAhead(next);})
@@ -389,5 +390,12 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
 /* Coming back to the page (a call, another app) tries to resume the context at once rather than waiting for the next tap:
    iOS Safari leaves it `interrupted` (User 2026-09-29). A browser that refuses without a gesture resumes on the next tap (play). */
 function wake(){if(ctx&&enabled&&!document.hidden&&ctx.state!=='running')ctx.resume().catch(()=>{});}
+/* iOS Safari starts a context made outside a tap suspended, and `pointerdown` does not count as a gesture there: only
+   `touchend` / `click` may resume it. The first such tap resumes it and plays one silent sample, which opens the output.
+   The ringer switch is left at the Safari default (User 2026-09-29). */
+function unlock(){if(!enabled||!ctx)return;
+ if(ctx.state!=='running')ctx.resume().catch(()=>{});
+ try{const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();s.buffer=b;s.connect(master||sfxBus);s.start(0);}catch(e){}}
+if(typeof document!=='undefined')for(const ev of ['touchend','click'])document.addEventListener(ev,unlock,{capture:true,passive:true});
 G.Sound={play,sync,wake,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);
