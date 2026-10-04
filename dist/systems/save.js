@@ -232,13 +232,17 @@ function renamedNpcs(r){
  (r.results||[]).forEach(to);
 }
 
+/* UI_UX §BUILD MARKER: every save the game writes (autosave and export) names the build that wrote it, so a save handed in
+   for review says what it was played on. Read-only metadata: never validated, never needed to load. */
+const build=()=>{const b=G.GUILD24_BUILD;return b?{version:b.version,commit:b.commit}:undefined;};
+
 G.Save={
  error:null,
  migrate(s){if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
-   const json=JSON.stringify({version:VERSION,account,run});
+   const json=JSON.stringify({version:VERSION,build:build(),account,run});
    const previous=localStorage.getItem(KEY);
    if(previous)localStorage.setItem(BACKUP,previous);
    localStorage.setItem(KEY,json);
@@ -305,7 +309,7 @@ G.Save={
   }
  },
 
- export(account,run){return JSON.stringify({version:VERSION,account,run},null,2);},
+ export(account,run){return JSON.stringify({version:VERSION,build:build(),account,run},null,2);},
  import(raw){
   const s=JSON.parse(renameIds(raw));
   if(!this.valid(s))throw Error('이 버전의 저장 파일이 아닙니다.');
