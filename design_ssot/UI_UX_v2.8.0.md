@@ -3097,9 +3097,9 @@ FAIL: a badge / word / reorder marks the fit, or any effect is emphasised.
 
 SETUP: ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's
 customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
-PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `{N}명 · {Hazard}{Tier}` with no count; two or
-more `{N}명 · {Hazard}{Tier} {a}명 · …` (a Tier II-III Gate lists both Hazards with its one count); an Event-closed Gate beside one open Gate
-`{N}명 · {Hazard}{Tier} {n}명 · {닫힌 Gate의 Hazard}{Tier} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
+PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21 - one Gate `전체 {N}명 {Hazard}{Tier}` with no count; two or
+more `전체 {N}명 {Hazard}{Tier} {a}명 …` (a Tier II-III Gate lists both Hazards with its one count); an Event-closed Gate beside one open Gate
+`전체 {N}명 {Hazard}{Tier} {n}명 {닫힌 Gate의 Hazard}{Tier} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
 rerouted customer's true Gate; no name, Job, Trait, Wallet or individual destination of a future customer (UI-Q91 / UI-Q101,
 narrowed to the individual).
 FAIL: per-Gate counts on a one-Gate day with no closed Gate, no count on the open Gate beside a closed one, a count that exposes a

@@ -1617,12 +1617,13 @@ function orderScreen(){
 function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
 /* User 2026-10-04: the Gates read as their Hazards - `부식I 3명` (name and Tier set tight, then the visitors) - so what is bought
-   against is what is counted. `전체 N명` leads on a line of its own, stronger, so no Hazard's count reads as the total; below it
-   one row per Gate (a Tier II-III Gate's two Hazards side by side, both carrying the Gate's one count), a closed Gate last. */
+   against is what is counted. `전체 N명` leads, stronger, in a column of its own; the Hazards run beside it and, when the line
+   runs out, wrap under the first Hazard rather than under the total. Each reading is one unbreakable chip; a Tier II-III Gate's
+   two Hazards sit side by side, both carrying the Gate's one count; a closed Gate comes last. */
 function todayLine(counts,tag='em'){const s=game.run,hz=d=>d.hazards.map(h=>E(D.hazards[h])+['','I','II','III'][d.tier||1]),
- rows=s.dungeons.map(d=>'<span class="tl-row">'+hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>').join('')+'</span>')
-  .concat((s.closedGates||[]).map(d=>'<span class="tl-row shut"><span class="tl">'+hz(d).join(' · ')+' 오늘 폐쇄</span></span>'));
- return '<'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-rows">'+rows.join('')+'</span>';}
+ chips=s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
+  .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>'));
+ return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+chips.join('')+'</span></span>';}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
