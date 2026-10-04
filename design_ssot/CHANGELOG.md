@@ -28,6 +28,27 @@ and this table is their commit record.
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
 | v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR #67 | `v2.10.1` (set by the User) |
 | v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one); quick patch 1 PR #80 | `v2.10.2` (set by the User) |
+| v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | `v2.10.3` (set by the User) |
+
+## v2.10.3 — a refused 바가지 costs the sale, a prologue before every store (User 2026-10-04)
+
+Also in this version, from main: the five-scene prologue before every new store (PR #87); coach marks spread over DAY 1~4 with the
+expedition-flow and Wallet-gain marks, the ORDER 오늘 line by Hazard / Tier / headcount, the SALE customer line as pale figures,
+iOS first-touch audio, two NPC names exchanged (`ui/design-trim` #88~#90). Their owners: UI_UX §PROLOGUE, §TUTORIAL — COACH DIET, §ORDER, §SALE.
+
+- **A refused 바가지 closes the SKU** (User, from a second Run that sold 바가지 first and drowned in Gold: 거절당해도 손해가 없어서
+  바가지 먼저가 정답): once a customer refuses an Item at 150%, that Item is not sold to them this visit at any price (`바가지를
+  거절함` on the 정가 / 할인 keys), and the refusal costs Loyalty 2. A 바가지 sale costs Loyalty 4 (was 3). `바가지 first, 정가 if
+  refused` had paid about 1.29 x list against 정가's 0.87; it is now about 0.99. The payday and first-refusal coach lines (보수를 받은 손님이다 … · 거절된 상품은 오늘 이 손님에게 못 판다 …) and a 바가지-only refusal
+  pool (no line inviting a cheaper retry, two of them witty) follow. SALE §SAME-ITEM REFUSAL PRICE CEILING, NPC_TRAIT §NPC-Q-v28-2B, COPY_AUDIT
+  §18-4a · §26-3, UI_UX §SALE — REFUSAL PRICE CEILING UI; tests revision, integration, traits.
+- **The price keys are taught before the first sale** (User: 판매 과정을 알려 주는 코치가 없으면 DAY 1에 알려야): with a refused
+  바가지 closing the Item, the price rule must be known before the choice, so the price keys carry one mark the first time they
+  show - `세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.` The first-50%-sale lesson is
+  retired. UI_UX §TUTORIAL — COACH DIET · §SALE PRICE LESSONS · UI-Q-v29-53, COPY_AUDIT §3-14 · §26-3; test ui-guard,
+  `tools/qa-sale-details.cjs`.
+- **왕도 프리미엄 인증 pays 40% of the 150% price** (was 45%; User: 바가지에 위험이 생겼으니 40%). 평생 단골제 is unchanged.
+  RELIC §23 · REL-Q-v28-7; tests relic-effects, copy.
 
 ## v2.10.2 quick patch 1 — a save names its build (User 2026-10-04; the version stays 2.10.2)
 

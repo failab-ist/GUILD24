@@ -29,7 +29,7 @@ const rows=[
 ['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
 ['logisticsHQ','물류 본부계약','keystone',['rotation'],300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
 ['lifetime','평생 단골제','keystone',['vip'],310,'단골 · 모든 능력치 +10% · 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
-['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
+['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
 ['opsRoom','원정 작전실','keystone',['expedition'],290,'위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.'],
 ['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
 ['hub','지역 거점점 계약','keystone',['customer'],340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
@@ -73,7 +73,7 @@ D.relicParams={
  dawnRecovery:{refundRate:.5,extraOffers:1},
  logisticsHQ:{perSale:.03,maxDiscount:.30}, /* v2.9.11 remake (User 2026-09-29): was same-SKU 3+ -25% after 6 sales */
  lifetime:{statBonus:.10}, /* User 2026-10-02 remake: no Gold, no revisit weight - 단골 Stats +10%, and the 단골 line holds */
- royalCert:{commissionRate:.45,intentBonus:.10,overheadRate:.10},
+ royalCert:{commissionRate:.40,intentBonus:.10,overheadRate:.10},
  opsRoom:{overshootCap:.5,mult:.6,final:true}, /* User 2026-10-02: 원정 전문 인증 remade; 투력 +30% at most */
  fresh24:{statBonus:.50,orderPriceMult:1.15},
  hub:{p1:.45,p2:.15,overheadRate:.10},

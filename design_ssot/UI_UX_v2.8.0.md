@@ -3,7 +3,7 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
 DOC_VERSION=2.10.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -560,8 +560,8 @@ three modes, no extra depth. Copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`; roles -> `
 ### SALE — REFUSAL PRICE CEILING UI
 
 Per `SALE_v2.8.0.md`, same ordinary customer + SKU + visit: 50% refused → 100% and 150% disabled; 100% refused → 150%
-disabled; 150% refused → lower prices stay usable. Disabled keys look distinct and take no input; the refused key shakes once
-and locks with `오늘 거절됨` / `더 싼 값을 거절함` (§TRANSACTION BEAT A6); the reason is readable; other SKUs unaffected; no
+disabled; 150% refused → 100% and 50% disabled too, labelled `바가지를 거절함`. Disabled keys look distinct and take no input; the
+refused key shakes once and locks with `오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함` (§TRANSACTION BEAT A6); the reason is readable; other SKUs unaffected; no
 carry-over to a later visit unless an owner defines it; absent from Final preparation; never invite a higher-price retry.
 
 ### GREAT SUCCESS OPPORTUNITY SIGNAL
@@ -1415,12 +1415,12 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): DAY 1 has three marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS) and
-`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has four marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS),
+`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer) and
+the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
 does not move with a sale; COPY_AUDIT §3-4) start on DAY 2, the Bag mark (after the first sale) on DAY 3 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
 visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: reroll + the two outlook boxes; DAY 3: the kit, the payday customer, the Bag).
-No Hazard or price marks (Hazard rows say what answers them, price comes after
-the fact, §SALE PRICE LESSONS). Never `독이면 X 아이템을 사세요`-style scripts.
+No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
 
@@ -1430,19 +1430,20 @@ screen says it; otherwise none, or taught after the fact.
   Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
-  대응 - one mark each, User 2026-10-02); SALE Bag (after the first sale) and returning customer; FINAL
+  대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
+  sale) and returning customer; FINAL
   `토벌 전망`; CLOSING `영업 전 자금과 보유 자금을 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 후보 교환; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: price (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`원정 소지금 획득`); a NIGHT tells one mark, the most serious rule first
+- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`원정 소지금 획득`); a NIGHT tells one mark, the most serious rule first
 
 ### SALE PRICE LESSONS (v2.9.12)
 
-Two contextual marks, once per account, persisted and reset with the rest (no pre-sale price mark): the first 150% (바가지)
-refusal, on the refused key (`오늘 거절됨`); the first 50% sale, on its change line (`단골도 +N · 소지금 A → B`, held while the
-mark is open). Words only; copy -> COPY_AUDIT_APPROVED_v2.8.0.md §26-3.
+One contextual mark, once per account, persisted and reset with the rest: the first 150% (바가지) refusal, on the refused key
+(`오늘 거절됨`). The price keys themselves carry the §TUTORIAL — COACH DIET mark before it. Words only; copy ->
+COPY_AUDIT_APPROVED_v2.8.0.md §26-3.
 
 ### TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED
 
@@ -2196,7 +2197,7 @@ PASS:
   customer-state strip (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and
   the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
 - purchase: the figure nods (translateY 4px, 180 ms x 2); refusal: it shakes its head (translateX ±4px, the bubble-shake timing)
-  and the refused price button shakes once and locks with the `오늘 거절됨` / `더 싼 값을 거절함` text
+  and the refused price button shakes once and locks with the `오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함` text
 - the reply line (buy / refuse) stays 5 seconds; the greeting 3 seconds
 - `손님 보내기`: the current customer exits left (240 ms), the next arrives with the entry (240~340 ms), `depart` plays a recorded
   utility cue (door / step family); entry may start the view at the top
@@ -2656,13 +2657,12 @@ before any tier II Gate; either mark on a closed Gate.
 Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
 PASS:
 - the marks shown are exactly the owner's list: DAY 0 one mark (`점포지원`); no MORNING 방문객 / 게이트 mark (Deep and the II / FIRE
-  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, then Bag after the
-  first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
+  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, the price keys
+  (§3-14) when they first show, then Bag after the first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
   receipt mark
 - DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads
   `전투 전망`
-- the first 150% refusal shows §26-3 line 1 on the refused key, the first 50% sale line 2 on its change line (staying until the
-  mark is closed); neither shows a second time on the account
+- the first 150% refusal shows §26-3 on the refused key; no 50% sale mark; neither price mark shows a second time on the account
 - `node tools/measure-first-sale-v30.cjs`: fewer coach taps than the baseline (16)
 FAIL: a retired mark still shows, a mark names an Item, or a price lesson shows before its situation.
 
@@ -3185,7 +3185,7 @@ PASS (→ UI_UX §SALE — COUNTER TRAY, §SHORT PHONE, §SALE — DESK LAYOUT):
   disabled causes wrap intact across the key. Test every catalogue Item and all five closed-key causes. Numberless utilities
   retain their complete conditions without the redundant no-change row; an unapplied numeric effect retains its warning.
 - the price keys sit at the same place for every Item; the hand-over icon goes from the tray icon to the Bag slot; a successful
-  sale clears the tray; a refusal keeps the Item with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
+  sale clears the tray; a refusal keeps the Item with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함` / `바가지를 거절함`)
 - on 1280 the tray lies in the middle area on the counter, between the ledger and the shelf
 - FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
 FAIL: shelf rows change height or an already-open swap changes scrollTop; the representative comparison misses its 2 / 1 / 1 floor; text,

@@ -538,12 +538,12 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  const intent=this.interest(n,it,mode);if(n.money+(n.eventBudget||0)<intent.debit)throw Error('손님의 소지금이 부족합니다.');
  const accepted=this.rng.next()<intent.chance;
  if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
-  /* SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: ANY actual refusal of a SKU closes every
-     higher price for that SKU for the rest of the visit - the rule is about retry fishing, so
-     it cannot depend on WHY they said no. Source only applied it to a price refusal, which
-     left the paradox open: refuse at 50% for a Counter they do not need, then sell at 150%.
-     Lower prices stay open, and no other SKU is touched. */
-  for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day,s)};this.save();return false;}
+  /* SALE §SAME-ITEM REFUSAL PRICE CEILING: any refusal of a SKU closes every higher price for it this visit, whatever the
+     reason; a refused 바가지 closes the SKU outright and costs Loyalty (refusalLoyalty). No other SKU is touched. */
+  const over=mode==='overcharge';
+  for(const [other,rule]of Object.entries(D.pricing))if((over||rule.mult>D.pricing[mode].mult)&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);
+  if(over){const before=n.loyalty;this.loyal(n,D.pricing.overcharge.refusalLoyalty);s.daily.loyalty+=n.loyalty-before;}
+  s.say={npc:n.id,text:G.Copy.refuse(n,it.id,over?'overcharge':reason,s.day,s)};this.save();return false;}
  if(mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===s.day)n.lessonPaydayTaken=true;
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);

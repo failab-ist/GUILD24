@@ -43,7 +43,7 @@ test('§11.1/§11.2: every repeated situation has a real Variant Pool at its v2.
 const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3','visit.regular':'16-4','visit.helped':'16-5',
  'visit.trait.frugal':'17-1','visit.trait.thrifty':'17-2','visit.trait.coward':'17-3','visit.trait.liar':'17-4','visit.trait.eater':'17-5',
  'visit.trait.greed':'17-6','visit.trait.shy':'17-7','visit.trait.social':'17-8','visit.trait.collector':'17-9','visit.trait.aloof':'17-10',
- 'sale.full':'18-1','sale.half':'18-2','sale.overcharge':'18-3','sale.refuse.price':'18-4','sale.refuse.need':'18-5','sale.refuse.choice':'18-6',
+ 'sale.full':'18-1','sale.half':'18-2','sale.overcharge':'18-3','sale.refuse.price':'18-4','sale.refuse.overcharge':'18-4a','sale.refuse.need':'18-5','sale.refuse.choice':'18-6',
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
  'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
@@ -619,7 +619,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['dawnRecovery','새벽 회수 계약',190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
   ['logisticsHQ','물류 본부계약',300,'전날 판매 1건당 · 오늘 모든 발주 매입가 -3% (최대 -30%).'],
   ['lifetime','평생 단골제',310,'단골 · 모든 능력치 +10% · 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
-  ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 45% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
+  ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +10%p · 기본 운영비 +10%.'],
   ['opsRoom','원정 작전실',290,'위험 대응이 필요 수치를 넘긴 만큼 투력 +, 최대 +30%.'],
   ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
   ['hub','지역 거점점 계약',340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
