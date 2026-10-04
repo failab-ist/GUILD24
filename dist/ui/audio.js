@@ -70,7 +70,7 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
  /* result */ great:5.074,retreat:5.195,injury:8.199,severe:5.019,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
- /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,
  /* action */ depart:1.26,return:3.694,gold:4.203,spend:4.191,crate:5.353,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,
  /* utility */ button:0.711,ui:5.564,
  /* repeat */ quantity:6.357,quantset:7.962,};
@@ -150,7 +150,9 @@ const sfx={button:[440],ui:[1760,2217],fixture:[233,208],
     member's impact (a dry crack), `counter` the Boss's strike (lower and heavier), `collapse` a cleared Boss falling */
  rumble:[55],clash:[196,147],counter:[98,73],collapse:[147,110,82],
  /* v2.9.9 H7: one item landing in a member's bag - a short dry wooden tap, one per item */
- supply:[330]};
+ supply:[330],
+ /* UI_UX §PROLOGUE scene 3: a falling wah-wah where the music cuts */
+ gag:[330,311,294,247]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -266,6 +268,8 @@ const shape={
  spend:{gain:.9,dur:.16,type:'triangle',step:.07},
  /* the recorded door is the body; the two notes stay as the fallback when it has not loaded */
  depart:{gain:.9,dur:.2,type:'sine',step:.1,sampleGain:.8},
+ /* UI_UX §PROLOGUE scene 3: the music cuts and a falling wah-wah answers the joke */
+ gag:{cut:250,gain:.7,dur:.24,type:'square',over:[.3],step:.17,sampleGain:.8},
  return:{gain:.95,dur:.22,type:'sine',step:.1,hit:1},
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
     v2.9.2 H1: `hit` - the first note is the stamp's landing, so it starts at once and one step
@@ -382,7 +386,7 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
  if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();
  const next=trackFor(phase);if(track===next)return;
- track=next;bedStop();bgmStop(next?BGM_SWAP:.25,false);if(!next){pending='';return;}
+ track=next;bedStop();bgmStop(next?BGM_SWAP:.06,false);if(!next){pending='';return;}
  if(!bgm[next]||typeof fetch!=='function'){bedStart(next);return;}
  pending=next;
  bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);bgmAhead(next);})

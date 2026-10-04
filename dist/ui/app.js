@@ -28,7 +28,7 @@ let prepOpen=false;
    loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on (every scene says so), 건너뛰기 ends it.
    Scenes 1~2 play the Boss track, scene 3 is silence, and from scene 4 the title runs on into the store screen. */
 let prologue=null;
-const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,'open','depart'];
+const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final','gag','open','depart'];
 /* Auto-advance (User 2026-10-04): each scene moves on by itself after its reading time (ms); a tap still goes on at once. */
 const PRO_HOLD=[5500,7000,5000,4500,7500];
 const proSpeaker=m=>'<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>'+(m?'<path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>')+'</svg>';
