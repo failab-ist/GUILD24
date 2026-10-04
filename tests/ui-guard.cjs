@@ -540,10 +540,14 @@ test('SALE: the customer line is a balloon on the character, not a system notifi
  assert.ok(!/say(Hidden|Key|Armed)/.test(read('dist/systems/save.js')+read('dist/systems/run.js')),
   'speech visibility never enters the Run or the Save schema');
  assert.ok(/\.say:after\{[^}]*border-top-color/.test(css),'it has a tail pointing down at the character');
+ assert.ok(/\n\.p-sale \.say:after\{top:auto;bottom:100%;[^}]*border-bottom-color:var\(--paper\)/.test(css),'on a SALE phone the balloon hangs under the wallet line, so its tail points up at the face');
  assert.ok(/\.say:after\{[^}]*var\(--cardw\)/.test(css),'the tail is aimed at the card, not at the room');
- // v2.9.0 R2 (User 2026-09-24): on SALE the balloon is 2px from the top, 14px, tight padding (mobile-first), restored at 900px
- assert.ok(/\n\.p-sale \.say\{top:2px;padding:6px 10px 7px;font-size:14px;line-height:1\.4\}/.test(css),'SALE balloon: top 2px, 14px, tight padding');
+ // SALE phone balloon: below the state / wallet lines, short of the Bag slot pictures, 14px, tight padding; restored at 900px
+ assert.ok(/\n\.p-sale \.say\{top:70px;max-width:calc\(100% - var\(--gutter\) - 122px\);padding:6px 10px 7px;font-size:14px;line-height:1\.4\}/.test(css),'SALE balloon: under the wallet line, clear of the slot pictures, 14px, tight padding');
  assert.ok(/\.p-sale \.say\{left:var\(--gutter\);top:8px;bottom:auto;max-width:min\(calc\(100% - var\(--gutter\) - 52px\),560px\);padding:9px 13px 10px;font-size:15px;line-height:1\.5\}/.test(read('dist/ui/director-review.css')),'the wide-screen SALE rule (director-review.css, 900px+) restores the full-size balloon');
+ assert.ok(/playCue\(\);placeSpeech\(\);armSpeech\(sayMs\)/.test(app)&&/function placeSpeech\(\)\{[\s\S]*?\.npc-wallet b[\s\S]*?classList\.remove\('up'\)/.test(app),'every draw measures the SALE balloon: up top unless it would cover a wallet G amount');
+ assert.ok(/\n\.p-sale \.say\.up\{top:2px;[^}]*\}\n\.p-sale \.say\.up:after\{top:100%;[^}]*border-top-color/.test(css),'the up balloon sits at the top with its tail down');
+ assert.ok(/function placeSpeech\(\)\{\n const say=\$\('\.p-sale \.say'\);if\(!say\|\|matchMedia\('\(min-width:900px\)'\)\.matches\)return;/.test(app),'only a phone measures it; the wide screen keeps its own balloon');
  assert.ok(/\.say\{[^}]*background:color-mix\(in srgb,var\(--paper\) 88%,transparent\)/.test(css),'the 88% background compromise is unchanged');
  // It must not eat the decision: no clipping, no ellipsis, no shrink-to-fit.
  assert.ok(!/\.say[^{]*\{[^}]*text-overflow/.test(css),'a sentence is never ellipsised');
@@ -634,7 +638,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  assert.equal(glut.sin,'탐식','the Sin is 탐식');
  assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
  assert.deepEqual(c.d15.trait.GLUTTONY,
-['탐식의 권능',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
   'the D15 Function is the exact Canonical copy; the figure is filled from the tuning table');
  // no retired wording survives anywhere a player can read
  const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
@@ -2483,13 +2487,13 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     line itself); the price keys carry one mark when they first show (COPY_AUDIT §3-14), the first refused 바가지 another (§26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','price','payday','returning','bag','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']`)
   &&sell.includes(`['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.']`),'the price-key mark and the refused-바가지 lesson, verbatim');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
  assert.ok(/el\.className='receipt-stub'\+\(st\.mode==='half'\?' half':''\)/.test(fn('showStub'))&&/if\(activeCoach\)\{stubTimer=setTimeout\(drop,400\);return;\}/.test(fn('showStub')),'the 50% line carries its class and stays while a mark is open');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
- for(const [id,sel] of [['returning','.who.returning'],['bag','.slots .full']])
+ for(const [id,sel] of [['returning','.who.returning'],['bag','.slots .full'],['regular','.nameplate.regular']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */
@@ -3100,8 +3104,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  assert.ok(Presentation.traitText('honest').startsWith('정가·50% 구매 시 단골도 +1'),'정직한 names its own condition');
  for(const gone of ['방문 골드','단골 보너스'])
   assert.ok(!surfaces.includes(gone),'the generic label is gone: '+gone);
- // weighting mechanics keep their correct 가중치 wording
- assert.ok(/가중치/.test(JSON.stringify(DATA.relics.map(r=>r.description))),'real weighting still says 가중치');
+ // weighting mechanics say how much more often, as a multiplier (COPY_AUDIT §11 문장 틀, User 2026-10-04: no 가중치 / bare +N%)
+ for(const id of ['member','rareContract','hazardBoard','coldcase'])assert.ok(/\d(\.\d+)?배 자주/.test(DATA.relicBy[id].description),id+' states its weighting as N배 자주');
 });
 
 /* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */
@@ -3110,7 +3114,6 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  for(const line of [
   'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
   '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.',
-  '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
   '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
@@ -3120,6 +3123,9 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
  assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
+ /* COPY_AUDIT §8 (User 2026-10-04): the 판매 · 단골 Loyalty lines are read from the tables (Copy.loyalty, held in tests/copy.cjs) */
+ assert.ok(h.includes('${E(Copy.loyalty.sale())}')&&h.includes('${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터'),'the guide reads Copy.loyalty');
+ assert.ok(app.includes("['regular','.nameplate.regular',Copy.loyalty.coach(),,6]"),'the 단골 mark reads Copy.loyalty, DAY 6 at the earliest');
  assert.ok(!h.includes('같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다'),'the weaker rule is gone');
  // and it matches what the engine actually enforces
  assert.ok(shop.includes("rule.mult>D.pricing[mode].mult"),'the ceiling is the rule sell() applies');

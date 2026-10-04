@@ -652,6 +652,13 @@ Recent-repeat rule:
 - Dialogue selection must not consume Gameplay RNG.
 - Save/Load must not change an already-determined visible line.
 
+Occasional lines (User 2026-10-04):
+- A line listed under `가끔` in its COPY_AUDIT §16-§18 pool keeps its full length and is picked on 1 pick in 5
+  of that pool (the same key hash, no Gameplay RNG); the other picks use the pool's other lines.
+- When the recent-repeat rule leaves no eligible line in the chosen half, the other half is used.
+- A line that is not `가끔` in a SALE pool or in the `back` / `regular` arrival pools is 16 letters or fewer,
+  so the SALE balloon stays one row on a 360px phone.
+
 This is a readability/content-density rule, not a relationship or personality mechanic.
 
 ## CALLBACK
@@ -1096,7 +1103,7 @@ Current mechanic truth is:
 Exact D15 Trait name:
 
 ```text
-탐식의 권능
+탐식의 허기
 ```
 
 No Rare+-based Function sentence.
