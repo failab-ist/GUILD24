@@ -1,0 +1,91 @@
+{
+ "seeds": 1000,
+ "policy": "reader",
+ "account": "fresh",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "relics",
+ "overrides": {
+  "expeditionMeal": {
+   "supplyPerItem": 0,
+   "drinkSupplyPerItem": 0,
+   "hazardDefense": 4,
+   "orderPriceAdd": 0,
+   "orderPriceMult": 1.15
+  }
+ },
+ "results": {
+  "expeditionMeal": {
+   "gain": {
+    "base": 396.763,
+    "delta": 99.665,
+    "se": 8.60669332234775
+   },
+   "reached": {
+    "base": 0.161,
+    "delta": 0.179,
+    "se": 0.016710423041869253
+   },
+   "win": {
+    "base": 0.019,
+    "delta": 0.03,
+    "se": 0.007560235258056326
+   },
+   "deaths": {
+    "base": 7.891,
+    "delta": -0.091,
+    "se": 0.06492252254752515
+   },
+   "regulars": {
+    "base": 1.926,
+    "delta": 0.474,
+    "se": 0.06573922455920525
+   },
+   "sales": {
+    "base": 147.876,
+    "delta": 19.601,
+    "se": 1.6886222917645712
+   },
+   "margin": {
+    "base": 6907.502,
+    "delta": 679.798,
+    "se": 103.43384298705662
+   },
+   "finalRatio": {
+    "base": 0.12636988710970948,
+    "delta": 0.1554655371753677,
+    "se": 0.013903828795311731
+   },
+   "expWin": {
+    "base": 0.4201161883710084,
+    "delta": 0.018034038850294542,
+    "se": 0.0016554581976497033
+   },
+   "topLevel": {
+    "base": 9.904366666666672,
+    "delta": 1.3572500000000003,
+    "se": 0.11161497587842047
+   },
+   "cashDay": {
+    "base": 100.93524452110482,
+    "delta": -16.468917935061675,
+    "se": 1.4099685687963646
+   },
+   "squeeze": {
+    "base": 0,
+    "delta": 0.0011328524616867944,
+    "se": 0.0002934644702563911
+   },
+   "minCash": {
+    "base": 878.479,
+    "delta": -20.547,
+    "se": 3.624446219962613
+   },
+   "spend": {
+    "base": 0,
+    "delta": 0,
+    "se": 0
+   }
+  }
+ }
+}

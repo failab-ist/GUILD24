@@ -1,0 +1,33 @@
+diff --git a/dist/systems/simulation.js b/dist/systems/simulation.js
+index bf9a271..ec87348 100644
+--- a/dist/systems/simulation.js
++++ b/dist/systems/simulation.js
+@@ -463,7 +463,7 @@ function playRun(g,out,ctx){
+         (the User's D1-10: 21% of sales at 150%, mostly 쌀밥 · 생수 · 커피) */
+      const needed=!!d&&G.Relics.relatedPrep(it,d.hazards);
+      const cheapOver=expert&&!overToday&&!keep&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3;
+-     const modes=((strong&&!needed)||cheapOver)?['overcharge','full','half']:['full','half'];
++     const modes=((strong&&!needed)||cheapOver||(process.env.VIP_OVER&&G.Adventurer.isTrustedRegular(n)&&!overToday))?['overcharge','full','half']:['full','half'];
+      const mode=modes.find(m=>!n.refused.includes(it.id+':'+m)&&g.interest(n,it,m).debit<=n.money);if(!mode)continue;
+      /* 50% is a margin of zero (Sell = Buy x 2): it is the answer to a short purse, not to a first refusal */
+      picks.push({st,mode,gain:readScore(n,[...n.pack,it.id],d)-base+(st.expires?1/(st.expires-s.day+1):0)-(mode==='half'?4:0)});}
+diff --git a/tools/relic-contribution.cjs b/tools/relic-contribution.cjs
+index b3beda5..8481d75 100644
+--- a/tools/relic-contribution.cjs
++++ b/tools/relic-contribution.cjs
+@@ -62,9 +62,14 @@ function runArm(G,seeds,inject,overrides,policy,account,aware){
+   for(const id of list(inject.remove))if(w){const i=w.candidateIds.indexOf(id);if(i>=0){w.candidateIds.splice(i,1);w.candidatePrices.splice(i,1);}}
+   for(const id of list(inject.own))if(!s.facilities.includes(id))s.facilities.push(id);
+   return r;};
++ // forced regulars (the User saves: first 단골 D12~16, 3~4 by D30): D15 the two most-visiting living adventurers, D18 one more, D22 one more
++ const mg=P.morningGates,FORCE={15:2,18:1,22:1};
++ P.morningGates=function(){const s=this.run,k=FORCE[s.day];
++  if(k){const c=s.npcs.filter(n=>n.alive&&n.introduced&&n.loyalty<51).sort((a,b)=>b.visits-a.visits||b.level-a.level).slice(0,k);for(const n of c)n.loyalty=51;}
++  return mg.apply(this,arguments);};
+  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
+   rows.push(rowOf(s));return r;};
+- try{G.Debug.simulate(seeds,policy,accountFor(G,account),'adaptive','none',{relicAware:aware});}finally{P.start=start;P.end=end;}
++ try{G.Debug.simulate(seeds,policy,accountFor(G,account),'adaptive','none',{relicAware:aware});}finally{P.start=start;P.end=end;P.morningGates=mg;}
+  return rows;
+ }
+ if(process.env.RELIC_WORKER){
