@@ -31,10 +31,22 @@ and this table is their commit record.
 | v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | (the User sets it; not yet on origin) |
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 
-## Docs / hygiene after v2.10.3 (User 2026-10-04, no build change)
+## Docs / hygiene and asset weight after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
+- **Large background art ships as WebP** (User 2026-10-04: 배경 줄이자): the 27 presentation PNGs of 600 KB or more (boss rooms, store
+  and sale backdrops, night store, wood panel, keys, tags, contract and menu icons; 33.9 MB) are now WebP quality 95 (5.4 MB); small
+  PNGs and JPGs stay. Same pixels on screen (390 / 1280 captures of PREP, SALE, NIGHT, menu, settings differ in 0.0% of pixels by
+  more than 9%; all seven FINAL rooms load at 1672x941). `GUILD24_NPC_PRODUCTION/04_BOSS/BACKDROP` (the seven room originals, 14 MB)
+  leaves the repository and is kept outside it. Test ui-guard follows the new file names.
 - **v2.10.1 design work diaries leave `reports/`**: the 2026-10-03 `UI_DESIGN_*`, `UI_SALE_*` and `UI_SUPPORT_*` hand-offs, review PDFs, capture
   images and QA JSON (about 50 MB, nothing reads them; git keeps them). The component catalog `UI_COMPONENTS.md` moves to `archive/v2.10.1/`.
+
+## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
+
+- **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: what each thing is called, what it must not be called, and the known places where
+  Source or documents still use another name. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final.
+  Terms still being decided in other threads are marked `결정 대기`. Linked from SPEC_INDEX (authority, file set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md.
+  Other owners and Source are not changed here; each is aligned after its own change lands.
 
 ## After v2.10.3 — the fight is named on its own, coach spread, 안내 switch (User 2026-10-04; the version stays 2.10.3)
 

@@ -282,7 +282,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    shutter. The wall is the only band that grows, so the scenery takes what is left after
    the decision rather than before it. */
 /* PRESENTATION BATCH 1 NARROW FIX - MORNING is one authored room.
-   The production art (assets/presentation/morning/store-bg-wide.png, 1672x941) is a whole store,
+   The production art (assets/presentation/morning/store-bg-wide.webp, 1672x941) is a whole store,
    and its authored zones were measured before integration:
        0-19%    ceiling - soffit, three hanging fixtures, vent
        19-78%   wall    - fridge and shelving, the window and its morning light, door
@@ -903,7 +903,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-image:radial-gradient(38% 9% at 50% 11%,#ffe6b83d 0,#ffe6b814 52%,#00000000 78%),
   radial-gradient(74% 34% at 52% 41%,#ffd6a02e 0,#ffd6a00f 46%,#00000000 72%),
   linear-gradient(180deg,#0706058c 0,#09070699 24%,#0a0806b3 58%,#060504cc 100%),
-  url('assets/presentation/morning/store-bg-phone.png');
+  url('assets/presentation/morning/store-bg-phone.webp');
  background-size:auto,auto,auto,cover;
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
@@ -1404,7 +1404,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night{background:#0a0d16}
 .p-night{--nb-head:50px;--nb-h:40vw}
 .p-night .nightband{position:absolute;left:0;right:0;top:0;height:var(--nb-h);z-index:0;pointer-events:none;
- background:url('assets/presentation/night/store-night.png') center top/auto calc(var(--nb-h)/.74) no-repeat}
+ background:url('assets/presentation/night/store-night.webp') center top/auto calc(var(--nb-h)/.74) no-repeat}
 .p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:22%;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
 @media(min-width:1024px){.p-night{--nb-h:min(56vw,260px)}.p-night .nightband{background-size:cover}}
@@ -1941,7 +1941,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     portrait one's, so the pool that is let back in moves with it */
  .p-start{background-image:radial-gradient(62% 40% at 50% 49%,#ffd6a02e 0,#ffd6a00f 46%,#00000000 72%),
   linear-gradient(180deg,#070605cc 0,#09070694 26%,#0a0806a8 58%,#060504c4 100%),
-  url('assets/presentation/morning/store-bg-wide.png');
+  url('assets/presentation/morning/store-bg-wide.webp');
   background-size:auto,auto,cover;
   background-position:0 0,0 0,50% 50%;
   background-repeat:no-repeat,no-repeat,no-repeat}
@@ -2010,7 +2010,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    A compact purchase tag replaces the full-width web button; secondary wood tags float
    over the room without a footer panel. No green state, blur, decorative frame or fade. */
 .relic-plate{position:relative;padding:34px 22px 20px;
- background:transparent url('assets/presentation/support/contract-blank.png') center / 100% 100% no-repeat;
+ background:transparent url('assets/presentation/support/contract-blank.webp') center / 100% 100% no-repeat;
  display:grid;grid-template-columns:minmax(0,1fr) 132px;grid-template-rows:auto 1fr auto;
  gap:10px 16px;align-items:start;box-shadow:none}
 .relic-plate h3{grid-column:1/-1;padding:0 0 8px;font:500 22px/1.35 var(--f-plate);
@@ -2021,7 +2021,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:600 18px/1.3 var(--ui);color:#684117;letter-spacing:.03em;box-shadow:none}
 .relic-plate .stamp{width:132px;min-width:132px;min-height:48px;padding:10px 12px 10px 24px;
  font:600 16px/1.2 var(--ui);letter-spacing:0;color:#392a1c;
- background:transparent url('assets/presentation/support/choice-tag-blank.png') center / 100% 100% no-repeat;
+ background:transparent url('assets/presentation/support/choice-tag-blank.webp') center / 100% 100% no-repeat;
  transform:none;clip-path:none;filter:none;box-shadow:none}
 .relic-plate .stamp:not([disabled]):hover{text-decoration:underline;text-underline-offset:4px}
 .relic-plate .stamp:not([disabled]):active{transform:translate(0,2px)}
@@ -2041,7 +2041,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  text-shadow:1px 1px 0 #21150f,-1px -1px 0 #21150f}
 .relic-takeover .close .stamp{flex:0 0 auto;min-height:48px;min-width:168px;padding:10px 16px 10px 26px;
  font:600 15px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;
- background:transparent url('assets/presentation/support/return-tag-blank.png') center / 100% 100% no-repeat;
+ background:transparent url('assets/presentation/support/return-tag-blank.webp') center / 100% 100% no-repeat;
  clip-path:none;filter:none;box-shadow:none}
 .relic-takeover .close .stamp:hover{text-decoration:underline;text-underline-offset:4px}
 .relic-takeover .close .stamp:active{transform:translate(0,2px)}
@@ -2053,7 +2053,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .relic-takeover .relic-choices{grid-template-columns:minmax(0,1fr);gap:12px;width:min(100%,1000px)}
  .relic-takeover .relic-plate{padding:40px 36px 18px;min-height:clamp(200px,calc((100dvh - 258px)/3),270px);
   grid-template-columns:minmax(0,1fr) 184px;gap:8px 20px;
-  background-image:url('assets/presentation/support/contract-wide-blank.png')}
+  background-image:url('assets/presentation/support/contract-wide-blank.webp')}
  .relic-takeover .relic-plate h3{font-size:28px;line-height:1.3}
  .relic-takeover .relic-plate p{font-size:18px;line-height:1.5}
  .relic-takeover .relic-plate .cost{font-size:22px;min-height:54px}
@@ -2070,13 +2070,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    ===================================================================== */
 .p-final{background:#0d0a0c}
 .p-final .stage-scroll{padding:0 var(--gutter) 26px;background:linear-gradient(180deg,#1a1114 0,#120d10 44%,#0d0a0c 100%)}
-.p-final[data-boss="WRATH"]{--room:url('assets/presentation/final/B001_WRATH_BACKDROP.png')}
-.p-final[data-boss="PRIDE"]{--room:url('assets/presentation/final/B002_PRIDE_BACKDROP.png')}
-.p-final[data-boss="ENVY"]{--room:url('assets/presentation/final/B003_ENVY_BACKDROP.png')}
-.p-final[data-boss="GREED"]{--room:url('assets/presentation/final/B004_GREED_BACKDROP.png')}
-.p-final[data-boss="GLUTTONY"]{--room:url('assets/presentation/final/B005_GLUTTONY_BACKDROP.png')}
-.p-final[data-boss="LUST"]{--room:url('assets/presentation/final/B006_LUST_BACKDROP.png')}
-.p-final[data-boss="SLOTH"]{--room:url('assets/presentation/final/B007_SLOTH_BACKDROP.png')}
+.p-final[data-boss="WRATH"]{--room:url('assets/presentation/final/B001_WRATH_BACKDROP.webp')}
+.p-final[data-boss="PRIDE"]{--room:url('assets/presentation/final/B002_PRIDE_BACKDROP.webp')}
+.p-final[data-boss="ENVY"]{--room:url('assets/presentation/final/B003_ENVY_BACKDROP.webp')}
+.p-final[data-boss="GREED"]{--room:url('assets/presentation/final/B004_GREED_BACKDROP.webp')}
+.p-final[data-boss="GLUTTONY"]{--room:url('assets/presentation/final/B005_GLUTTONY_BACKDROP.webp')}
+.p-final[data-boss="LUST"]{--room:url('assets/presentation/final/B006_LUST_BACKDROP.webp')}
+.p-final[data-boss="SLOTH"]{--room:url('assets/presentation/final/B007_SLOTH_BACKDROP.webp')}
 /* BATCH 5-1 — THE BOSS'S DOMAIN (D30 FINAL only; PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET
    ROLE). The authored room is the wall behind the gate, not a card: it is the background of the
    Final's own scroll surface, scrolling with it, so the Boss (unchanged, foreground) stands in
@@ -2351,7 +2351,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* The store menu owns wood navigation rows, not the blue utility keys in Settings.
    Its PNG icons only identify destinations; names and actions stay live controls. */
 .modal.menu-panel{border:14px solid transparent;background:#24160d;background-clip:padding-box;
- border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 14px / 0 stretch;
+ border-image:url('assets/presentation/settings/wood-panel.webp') 150 fill / 14px / 0 stretch;
  box-shadow:0 -4px 0 #100a06;isolation:isolate}
 .menu-panel .modal-header{padding:2px 6px 10px;box-shadow:0 2px 0 #100905,inset 0 -1px 0 #986532}
 .menu-panel .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
@@ -3627,11 +3627,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout.ro2 .top b.env-num{line-height:16px}
 /* UI_UX §SALE — MOBILE AUTHORITY (User 2026-10-03): keep the character near the
    pre-trim size. Density comes from a readable type ladder and aligned information. */
-.p-sale{isolation:isolate;background:#17110b url('assets/presentation/morning/store-bg-phone.png') center/cover no-repeat}
+.p-sale{isolation:isolate;background:#17110b url('assets/presentation/morning/store-bg-phone.webp') center/cover no-repeat}
 .p-sale .front{background:none}
 .p-sale .front .backwall{display:none}
 .p-sale .stage-scroll{background:#21170d}
-.sale-desk{background-image:url('assets/presentation/morning/store-bg-wide.png')}
+.sale-desk{background-image:url('assets/presentation/morning/store-bg-wide.webp')}
 .sale-desk .front-side .kit{background:#17110bf2}
 .sale-desk .front-side .dest-plate{background:#21180ff5}
 .p-sale:not(.sale-desk) .front{--cardw:calc(max(88px,min(38vw,150px,calc(90dvh - 300px))) * .875);--frame:6px;--plateh:46px;--gapb:8px;gap:6px;padding-top:4px}
@@ -3747,7 +3747,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* Settings: carved wood and brass, with raster nine-slice frames. These assets only skin
    the existing controls; the sheets the store menu opens (roster, codex, guide, decoration, abandon) take the same frame, header and footer keys via .wood-frame; phase surfaces keep their own materials. */
 .modal.settings-wood,.modal.wood-frame{border:16px solid transparent;background:#24160d;background-clip:padding-box;
- border-image:url('assets/presentation/settings/wood-panel.png') 150 fill / 16px / 0 stretch;
+ border-image:url('assets/presentation/settings/wood-panel.webp') 150 fill / 16px / 0 stretch;
  color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
 .settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
 .settings-wood .modal-header h2,.wood-frame .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
@@ -3783,19 +3783,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
  background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
- border-image:url('assets/presentation/settings/blue-key.png') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
+ border-image:url('assets/presentation/settings/blue-key.webp') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
  background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
  box-shadow:0 3px 0 #110a06;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
 .settings-wood button:not(.bare):hover,.wood-frame .modal-footer button:not(.bare):hover{background:none;filter:brightness(1.12)}
 .settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
-.settings-wood button.danger,.wood-frame .modal-footer button.danger{border-image-source:url('assets/presentation/settings/red-key.png');
+.settings-wood button.danger,.wood-frame .modal-footer button.danger{border-image-source:url('assets/presentation/settings/red-key.webp');
  color:#ffe9df;text-shadow:0 1px 0 #350e0c}
 .settings-wood button:disabled,.settings-wood button[aria-disabled="true"],.wood-frame .modal-footer button:disabled{opacity:1;filter:saturate(.25) brightness(.75);
  color:#e0d3bf;transform:none;box-shadow:none;cursor:default}
 .settings-wood button:focus-visible,.settings-wood input:focus-visible,.wood-frame button:focus-visible,.wood-frame input:focus-visible{outline:2px solid #ffe4a2;outline-offset:3px}
 .settings-content{position:relative;isolation:isolate;display:grid;gap:0}
 .settings-content::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
- background:url('assets/presentation/settings/supply-backdrop.png') right bottom / 100% auto no-repeat;opacity:.22}
+ background:url('assets/presentation/settings/supply-backdrop.webp') right bottom / 100% auto no-repeat;opacity:.22}
 .settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
 .settings-group+.settings-group{padding-top:22px;box-shadow:0 -2px 0 #130b06,inset 0 1px 0 #97612e}
 .settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
@@ -3886,8 +3886,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .shelf-head .relic-ref{min-height:0;padding:2px 8px;align-self:center}
 /* SALE backdrop (User 2026-10-03): one wide store art for phone and desk, framed from the wall down (no ceiling), the side shelves
    showing at the edges; a dim layer keeps the bright room behind the dark cards */
-.p-sale{background:linear-gradient(#0d0a0638,#0d0a0648),url('assets/presentation/sale/sale-bg-phone.png') center -70px/100% auto no-repeat #1d1710}
-.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.png') center calc(-10vw)/100% auto no-repeat #17110b}
+.p-sale{background:linear-gradient(#0d0a0638,#0d0a0648),url('assets/presentation/sale/sale-bg-phone.webp') center -70px/100% auto no-repeat #1d1710}
+.p-sale.sale-desk{background:linear-gradient(#0d0a0660,#0d0a0680),url('assets/presentation/sale/sale-bg.webp') center calc(-10vw)/100% auto no-repeat #17110b}
 /* SALE shelf head (User 2026-10-03): the wooden plank asset spans the whole frame width */
 .p-sale .shelf-head{margin:0;padding:6px 16px;border:solid transparent;border-width:0 14px;
  border-image:url('assets/presentation/sale/shelf-plank.png') 0 115 fill/0 14px stretch;

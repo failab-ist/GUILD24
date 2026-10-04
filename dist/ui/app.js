@@ -2569,7 +2569,7 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
    else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 영업의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')
       +(game.run?btn('현재 지점 포기','abandon','danger'):'')+'</div>';
       const icons={roster:'roster',codex:'codex',relics:'support',loadout:'decor',help:'guide',settings:'settings',abandon:'abandon'};
-      body=body.replace(/(<button[^>]*data-action="([^"]+)"[^>]*>)([^<]+)/g,(_,open,action,label)=>open+'<img class="menu-icon" src="ui/assets/presentation/menu/'+icons[action]+'.png" alt="" aria-hidden="true"><span class="menu-label">'+label+'</span>');
+      body=body.replace(/(<button[^>]*data-action="([^"]+)"[^>]*>)([^<]+)/g,(_,open,action,label)=>open+'<img class="menu-icon" src="ui/assets/presentation/menu/'+icons[action]+'.webp" alt="" aria-hidden="true"><span class="menu-label">'+label+'</span>');
       narrow=true;}
    else if(modal==='loadout'){title='이번 영업의 장식';body=loadoutModal();footer=btn('확인','dismiss','stamp');narrow=true;}
    else if(modal==='abandonConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','abandon-go','danger');narrow=true;}

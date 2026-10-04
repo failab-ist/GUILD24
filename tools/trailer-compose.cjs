@@ -86,8 +86,8 @@ const STEPS=[[0.867,0.55,'L'],[1.467,0.68,'R'],[2.067,0.84,'L'],[2.667,1,'R']]; 
 const FOOT={L:{file:'footstep00.ogg',hit:0.028},R:{file:'footstep01.ogg',hit:0.038}},FOOT_DIR=path.join(ROOT,'assets-src/trailer/footsteps/kenney-rpg-audio');
 const STROKES=[[ulT,0.42]];   // the underline's swish (not a game cue)
 const THUDS=[[LOGO_LAND,1]];   // v8: a short low thud under the logo's stamp (the stamp sample alone is light); gone within 0.15 s
-const CONFIG={DUR,FPS,LOGO,shots:S,caps:CAP,room:'file://'+path.join(ROOT,'dist/ui/assets/presentation/final/B006_LUST_BACKDROP.png'),takes:Object.fromEntries(Object.entries(T).map(([k,t])=>[k,{dir:'file://'+t.dir,fps:t.fps,n:t.frames.length,w:t.size[0],h:t.size[1]}])),
- store:'file://'+path.join(ROOT,'dist/ui/assets/presentation/morning/store-bg-phone.png'),logo:'file://'+path.join(ROOT,'dist/ui/assets/presentation/start/title-logo.png'),
+const CONFIG={DUR,FPS,LOGO,shots:S,caps:CAP,room:'file://'+path.join(ROOT,'dist/ui/assets/presentation/final/B006_LUST_BACKDROP.webp'),takes:Object.fromEntries(Object.entries(T).map(([k,t])=>[k,{dir:'file://'+t.dir,fps:t.fps,n:t.frames.length,w:t.size[0],h:t.size[1]}])),
+ store:'file://'+path.join(ROOT,'dist/ui/assets/presentation/morning/store-bg-phone.webp'),logo:'file://'+path.join(ROOT,'dist/ui/assets/presentation/start/title-logo.png'),
  mul:'file://'+path.join(ROOT,'vendor/mulmaru/Mulmaru.woff2'),wsb:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-Black.ttf'),
  wsm:'file://'+path.join(ROOT,'node_modules/wanted-sans/fonts/ttf/WantedSans-SemiBold.ttf')};
 const PAGE=`<!doctype html><meta charset=utf-8><style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style><canvas id=c width=1080 height=1920></canvas><script>
