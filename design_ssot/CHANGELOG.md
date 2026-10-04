@@ -32,7 +32,8 @@ and this table is their commit record.
 ## v2.10.2 quick patch 1 — a save names its build (User 2026-10-04; the version stays 2.10.2)
 
 - **Every save carries `build: {version, commit}`** (User: 세이브에 빌드 정보도 넣게): the autosave and `저장 내보내기` write the same
-  pair the build marker shows, beside the save `version`. Read-only metadata - never validated, and a save without it still loads;
+  pair the build marker shows, beside the save `version`, and a new Run keeps the build it started on as `run.startBuild` (User:
+  시작 빌드도 남기고). Read-only metadata - never validated, and a save without it still loads;
   no new save generation. `tools/save-check.cjs` prints it at the top of its report. UI_UX §BUILD MARKER; test revision.
 
 ## v2.10.2 — SALE phone spacing, line breaks and loading (User 2026-10-04)

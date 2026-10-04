@@ -61,7 +61,8 @@ function report(save){
  const hist=s.reportHistory||[];
 
  L.push('# 세이브 밸런스 점검 — '+s.branch+' · DAY '+s.day+' ('+s.phase+')','');
- L.push('빌드: '+(save.build?'v'+save.build.version+' · '+save.build.commit:'기록 없음 (빌드 정보가 들어가기 전의 세이브)'),'');
+ const bv=b=>b?'v'+b.version+' · '+b.commit:'기록 없음';
+ L.push('빌드: 마지막 저장 '+bv(save.build)+' · 런 시작 '+bv(s.startBuild)+(save.build&&s.startBuild?'':' (빌드 정보가 들어가기 전의 세이브는 기록이 없다)'),'');
  L.push('도구: `tools/save-check.cjs` · 세이브만 읽는다(재생·시뮬 없음). 승률은 저장된 준비 마진에 일반 전투 흔들림(±'+pct(W,1)+')만 적용한 값이다(지원·상품 변동폭은 기록에 없어 빠진다).','');
 
  L.push('## 1. 개요','');

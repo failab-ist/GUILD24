@@ -1342,8 +1342,9 @@ the top-left of the opening screen (no Run: 새 점포 준비) above the room �
 end of 설정 (점포 메뉴 -> 설정) for mid-Run reading; nowhere else. `{version}` = CHANGELOG head; `{commit}` = first 7 hex of
 the deployed commit, written into `build.js` by the Pages deploy (`dev` when unstamped). The console prints
 `GUILD24 v{version} · {commit}` on load; `Guild24.build` returns `{version, commit}`. Every save the game writes (autosave and
-`저장 내보내기`) carries the same pair as `build: {version, commit}` beside the save `version`; it is read-only metadata, never
-validated, and a save without it still loads.
+`저장 내보내기`) carries the same pair as `build: {version, commit}` beside the save `version`, and a new Run keeps the build it
+started on as `run.startBuild` (a Run can outlive a deploy); both are read-only metadata, never validated, and a save without
+them still loads.
 
 ## RUN ABANDON UX
 
