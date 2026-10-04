@@ -843,12 +843,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:color-mix(in srgb,var(--paper) 88%,transparent);
  box-shadow:inset 0 0 0 2px #00000026,3px 4px 0 #00000073;
  overflow-wrap:anywhere}
-/* SALE phone balloon: it hangs below the customer-state and wallet lines, over the portrait,
-   so it never covers the customer's money. It runs to just short of the Bag slot pictures (the
+/* SALE phone balloon, when it would cover the customer's money at the top: it hangs below the
+   customer-state and wallet lines, over the portrait. It runs to just short of the Bag slot pictures (the
    Bag label may sit under it) and its tail points up at the face. One size smaller and tighter
    than elsewhere. director-review.css restores the full size above the scene on 900px+. */
 .p-sale .say{top:70px;max-width:calc(100% - var(--gutter) - 122px);padding:6px 10px 7px;font-size:14px;line-height:1.4}
 .p-sale .say:after{top:auto;bottom:100%;border:9px solid transparent;border-bottom-color:var(--paper);border-top:0}
+/* placeSpeech() (app.js) adds .up when the balloon at the top leaves every G amount of the
+   wallet line uncovered: then it sits over the backwall as before, tail pointing down. */
+@media(max-width:899px){
+ .p-sale .say.up{top:2px;max-width:min(calc(100% - var(--gutter) - 52px),560px)}
+ .p-sale .say.up:after{top:100%;bottom:auto;border:9px solid transparent;border-top-color:var(--paper);border-bottom:0}
+}
 .say>span{display:block;opacity:1}
 /* the tail: a solid wedge under the balloon, aimed at the card's centre */
 .say:after{content:'';position:absolute;top:100%;left:min(calc(var(--cardw) * .5), 60%);

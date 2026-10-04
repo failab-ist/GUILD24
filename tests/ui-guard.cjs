@@ -545,6 +545,8 @@ test('SALE: the customer line is a balloon on the character, not a system notifi
  // SALE phone balloon: below the state / wallet lines, short of the Bag slot pictures, 14px, tight padding; restored at 900px
  assert.ok(/\n\.p-sale \.say\{top:70px;max-width:calc\(100% - var\(--gutter\) - 122px\);padding:6px 10px 7px;font-size:14px;line-height:1\.4\}/.test(css),'SALE balloon: under the wallet line, clear of the slot pictures, 14px, tight padding');
  assert.ok(/\.p-sale \.say\{left:var\(--gutter\);top:8px;bottom:auto;max-width:min\(calc\(100% - var\(--gutter\) - 52px\),560px\);padding:9px 13px 10px;font-size:15px;line-height:1\.5\}/.test(read('dist/ui/director-review.css')),'the wide-screen SALE rule (director-review.css, 900px+) restores the full-size balloon');
+ assert.ok(/playCue\(\);placeSpeech\(\);armSpeech\(sayMs\)/.test(app)&&/function placeSpeech\(\)\{[\s\S]*?\.npc-wallet b[\s\S]*?classList\.remove\('up'\)/.test(app),'every draw measures the SALE balloon: up top unless it would cover a wallet G amount');
+ assert.ok(/@media\(max-width:899px\)\{\n \.p-sale \.say\.up\{top:2px;[^}]*\}\n \.p-sale \.say\.up:after\{top:100%;[^}]*border-top-color/.test(css),'the up balloon (phone only) sits at the top with its tail down');
  assert.ok(/\.say\{[^}]*background:color-mix\(in srgb,var\(--paper\) 88%,transparent\)/.test(css),'the 88% background compromise is unchanged');
  // It must not eat the decision: no clipping, no ellipsis, no shrink-to-fit.
  assert.ok(!/\.say[^{]*\{[^}]*text-overflow/.test(css),'a sentence is never ellipsised');

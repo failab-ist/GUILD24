@@ -681,7 +681,7 @@ function render(){
  if(!changed)restoreFocus($('#app'),focusHold);
  openOwedModal(s,phase,changed);
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
- renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
+ renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();placeSpeech();armSpeech(sayMs);
  syncWatchers(phase);
 }
 function phaseScreen(phase){
@@ -1089,6 +1089,15 @@ function hideSpeech(){
  if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}
  sayArmed=null;sayHidden=true;
  const el=$('.say');if(el)el.remove();
+}
+/* SALE phone balloon: it goes up over the backwall when it leaves the customer's money
+   readable, and hangs under the wallet line (ui.css .p-sale .say) when it would cover a G amount. */
+function placeSpeech(){
+ const say=$('.p-sale .say');if(!say)return;
+ say.classList.add('up');
+ const r=say.getBoundingClientRect();
+ if([...document.querySelectorAll('.p-sale .npc-wallet b')].some(b=>{const w=b.getBoundingClientRect();
+  return w.right>r.left&&w.left<r.right&&w.bottom>r.top&&w.top<r.bottom;}))say.classList.remove('up');
 }
 function armSpeech(ms=SAY_MS){
  if(!$('.say:not(.status)')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
