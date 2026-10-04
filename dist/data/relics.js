@@ -50,8 +50,15 @@ const rows=[
 ['rescueContract','길드 구조대 계약','hybrid',['expedition'],200,p=>'원정에서 사망 결과가 나오면 '+pct(p.rescueContract.chance)+' 확률로 중상으로 바뀌어 돌아온다.']
 ];
 /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
-D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,tags,price,
+/* RELIC §GRADE (User 2026-10-04): the Player-facing grade, matched to measured contribution. kind / tags stay the internal
+   build taxonomy; a window draws a grade per card first (D.relicGradeChance), then a support of that grade. */
+const GRADE={epic:['fresh24','logisticsHQ','lifetime','royalCert','opsRoom','hub','firstAidDesk'],
+ rare:['kitchen','extraOrder','returnPoints','dawnRecovery','groupOrder','premiumMember','expeditionMeal','supplyCert','coldcase','rescueContract','memberBundle']};
+const gradeOf=id=>GRADE.epic.includes(id)?'epic':GRADE.rare.includes(id)?'rare':'common';
+D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,grade:gradeOf(id),tags,price,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})},'description',{get:()=>copy(D.relicParams),enumerable:true}));
+D.relicGradeChance={common:.60,rare:.28,epic:.12};
+D.relicGradeNames={common:'일반',rare:'희귀',epic:'영웅'};
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 /* Effect STRENGTH of every support, read by its use sites. The trigger conditions (3+ of one
    SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;

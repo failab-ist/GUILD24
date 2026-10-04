@@ -485,6 +485,18 @@ test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is pai
    basePrice x a limited band (about +-15-20%), fixed for the window; buy<=1; maxOwned/run=7. */
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): from DAY 5 an open window redraws its three for 300G, doubling within the
    window and back to 300G on the next; never on DAY 0; the spend is Store Support investment and survives a reload. */
+test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0 offers 일반 only; D5+ cards roll 60 / 28 / 12',()=>{
+ const offered=DATA.relics.filter(r=>!DATA.relicRetired.includes(r.id)),count=gr=>offered.filter(r=>r.grade===gr).length;
+ assert.deepEqual([count('common'),count('rare'),count('epic')],[17,10,7]);
+ assert.deepEqual(DATA.relicGradeChance,{common:.60,rare:.28,epic:.12});
+ assert.deepEqual(DATA.relicGradeNames,{common:'일반',rare:'희귀',epic:'영웅'});
+ for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('grade-d0-'+i);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].grade==='common'),'D0 is 일반 only');}
+ const g=new Game();g.autosave=false;g.start('grade-share');const n={common:0,rare:0,epic:0};let cards=0;
+ for(let i=0;i<1500;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);for(const id of g.run.relicWindow.candidateIds){n[DATA.relicBy[id].grade]++;cards++;}}
+ for(const [gr,want] of Object.entries(DATA.relicGradeChance))assert.ok(Math.abs(n[gr]/cards-want)<.03,gr+' share '+(n[gr]/cards).toFixed(3));
+ // 영웅 can come from D5 (the retired Keystone-from-D10 rule is gone)
+ assert.ok(n.epic>0,'영웅 on D5');
+});
 test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
  const g=new Game();g.autosave=false;g.start('relic-reroll');
  assert.equal(g.canRerollRelics(),false,'the DAY 0 free pick has no reroll');
@@ -496,7 +508,7 @@ test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the nex
  g.rerollRelics();
  assert.equal(g.run.money,1700,'the first reroll costs 300G');assert.equal(g.run.stats.relicSpent,spent+300,'counted as Store Support investment');
  assert.equal(w.candidateIds.length,3);assert.ok(w.candidateIds.every(id=>!first.includes(id)),'the three on the table are left out when the pool allows');
- assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind!=='keystone'),'pool rules hold: no Keystone before DAY 10');
+ assert.ok(w.candidateIds.every(id=>!DATA.relicRetired.includes(id)&&!g.run.facilities.includes(id)),'pool rules hold: nothing retired or owned');
  assert.ok(w.candidatePrices.every(p=>p>0),'redrawn cards are priced');
  assert.equal(g.relicRerollPrice(),600,'the second doubles');
  const back=Save.import(Save.export(g.account,g.run));assert.equal(back.run.relicWindow.rerolls,1,'a reload keeps the count');

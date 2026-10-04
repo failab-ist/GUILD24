@@ -46,7 +46,7 @@ test('all effect keys presented and names readable',()=>{for(const it of DATA.it
 test('headless 30-day smoke',()=>{const a=Debug.simulate(3,'reader');assert.equal(a.runs,3);assert.ok(a.reached30>=0);assert.ok(Number.isFinite(a.averageMoney));});
 
 
-test('seven relic windows, stable offers, phase gating and no duplicate purchase',()=>{const g=new Game();g.autosave=false;g.start('window');assert.equal(g.run.phase,'foundation');const w=copy(g.run.relicWindow);assert.equal(w.candidateIds.length,3);assert.equal(new Set(w.candidateIds).size,3);assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind==='foundation'));g.buyRelic(w.candidateIds[0]);for(const day of [5,10,15,20,25,30]){g.run.day=day;g.morning();const offer=copy(g.run.relicWindow);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.relicWindow,offer);g.run.money=10000;const id=offer.candidateIds[0];g.buyRelic(id);assert.throws(()=>g.buyRelic(id));}assert.equal(g.run.facilities.length,7);assert.ok(g.run.relicWindow.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)));});
+test('seven relic windows, stable offers, phase gating and no duplicate purchase',()=>{const g=new Game();g.autosave=false;g.start('window');assert.equal(g.run.phase,'foundation');const w=copy(g.run.relicWindow);assert.equal(w.candidateIds.length,3);assert.equal(new Set(w.candidateIds).size,3);assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].grade==='common'));g.buyRelic(w.candidateIds[0]);for(const day of [5,10,15,20,25,30]){g.run.day=day;g.morning();const offer=copy(g.run.relicWindow);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.relicWindow,offer);g.run.money=10000;const id=offer.candidateIds[0];g.buyRelic(id);assert.throws(()=>g.buyRelic(id));}assert.equal(g.run.facilities.length,7);assert.ok(g.run.relicWindow.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)));});
 test('window deferral and expiration; purchases blocked during sale',()=>{const g=fresh();g.run.day=5;g.morning();const w=copy(g.run.relicWindow);g.run.day=9;g.morning();assert.deepEqual(g.run.relicWindow,w);g.beginOrder();g.open();assert.throws(()=>g.buyRelic(w.candidateIds[0]));g.run.day=10;g.morning();assert.equal(g.run.relicWindow.milestoneDay,10);});
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait until DAY 4 */
 test('DAY 0 free pick may be deferred until DAY 4 and expires at D5',()=>{const start=()=>{const g=new Game();g.autosave=false;g.start('defer-d0');return g;};
@@ -773,7 +773,7 @@ test('ORDER sheet: at most offerCounterMax Hazard Counters, the guarantee still 
  assert.ok(max===4,'the cap is reached, not just never approached');
  assert.ok(guaranteed>0&&sheets>500,'enough sheets were drawn: '+sheets);
  /* an added slot raises the cap one for one: 본사 추가발주권 (+extraOffers) */
- let wide=0;for(let i=0;i<150;i++){const g=fresh('counter-cap-wide-'+i),s=g.run;s.facilities=['extraOrder'];s.day=20;g.generateOffers({advancePity:false});
+ let wide=0;for(let i=0;i<150;i++){const g=fresh('counter-cap-wide-'+i),s=g.run;s.facilities=['extraOrder'];s.day=20;s.event=null;g.generateOffers({advancePity:false});
   const c=s.offers.filter(isC).length;assert.equal(g.counterCap,4+DATA.relicParams.extraOrder.extraOffers);assert.ok(c<=g.counterCap);wide=Math.max(wide,c);}
  assert.ok(wide>4,'with 본사 추가발주권 the sheet can carry more than four Counters: '+wide);
 });

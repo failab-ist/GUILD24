@@ -18,12 +18,11 @@ windows=[D0,D5,D10,D15,D20,D25,D30]
 maxOwned/run=7
 candidates/window=3
 
-D0: cost=0 · pick<=1 · eligible=Foundation · defer=YES (until DAY 4)
+D0: cost=0 · pick<=1 · eligible=일반 grade · defer=YES (until DAY 4)
 
-D5+: currency=G · buy<=1 · defer=YES · baseEligible=[Foundation,Hybrid,Utility] · KeystoneEligible=D10+ ·
-KeystoneStart=D10 · KeystoneSeparateHardRate=NO
+D5+: currency=G · buy<=1 · defer=YES · eligible=every grade · gradePerCard=일반 60% · 희귀 28% · 영웅 12% (§GRADE)
 
-pool=32 · Foundation=13 · Hybrid=8 · Keystone=7 · Utility=4 (§POOL ARCHITECTURE)
+offered=34 · 일반=17 · 희귀=10 · 영웅=7 (§GRADE) · internal kinds Foundation / Hybrid / Keystone / Utility (§POOL ARCHITECTURE)
 
 buildAxes=[Rotation,VIP,Premium,Expedition,Fresh,Customer]
 
@@ -61,7 +60,7 @@ economy/access/growth/item-value effects.
 ## ACQUISITION WINDOWS
 
 ### D0
-timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=Foundation · defer=YES · expiry=D5 window
+timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=일반 grade · defer=YES · expiry=D5 window
 
 Goal: 첫 선택부터 Run 방향을 제안.
 
@@ -212,33 +211,53 @@ buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약�
 
 - an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
 - price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
-- the redraw keeps every pool rule above (ownership, Keystone from D10, the D30 exclusions, diversity, build bias) and leaves
+- the redraw keeps every pool rule above (ownership, the grade roll, the D30 exclusions, diversity, build bias) and leaves
   the three on the table out when at least three others remain; the new three are priced as any window's
 - the spend is Store Support investment (the closing receipt's `점포지원 투자`); a reload never redraws for free
 - the key sits in the window's footer beside `나중에 결정`, the same rank and look (User 2026-10-02); copy -> COPY_AUDIT §11-31c
 
-Keystone:
-- D0/D5 eligible=NO; D10/D15/D20/D25/D30 eligible=YES
-- no separate fixed Keystone appearance probability; eligible Keystone competes in the normal candidate pool
-- related build pieces may softly raise weight
-- guaranteed completion=NO
+## GRADE
+
+Every Store Support has a Player-facing grade: 일반 · 희귀 · 영웅. The grade follows measured contribution (single ownership,
+`reports/relic-balance/v2104-grade/`), not the internal kind.
+
+```text
+영웅 (7)  : 24시간 신선체계 · 물류 본부계약 · 평생 단골제 · 왕도 프리미엄 인증 · 원정 작전실 · 지역 거점점 계약 · 응급 처치대
+희귀 (10) : 즉석식품 코너 · 본사 추가발주권 · 귀환 적립제 · 새벽 회수 계약 · 단체 주문 창구 · 프리미엄 멤버십 ·
+            원정 도시락 코너 · 길드 납품 인증 · 고급 식자재 유통 계약 · 길드 구조대 계약
+일반 (17) : 묶음발주 계약 · 회전 진열대 · 단골 스탬프 기계 · 회원 관리대장 · 희귀상품 입고 계약 · 길드 보증 진열대 ·
+            원정 위험 게시판 · 야전 정비대 · 대형 냉장고 · 길드 전광판 · 첫 방문 쿠폰 · 야전 들것 · 후방 창고 증설 ·
+            발주 교환권 · 운영 효율 매뉴얼 · 소문 수집 게시판 · 단골 추천 엽서함
+(retired 단골 묶음혜택 reads as 희귀 on a save that owns it)
+```
+
+Draw, per card of a window:
+1. roll the card's grade: D5+ 일반 60% · 희귀 28% · 영웅 12%; D0 always 일반
+2. draw one support of that grade from the eligible pool (ownership, the D30 exclusions, the cool-down of the last three);
+   when that grade has nothing left, draw from the whole eligible pool
+3. offer diversity and build bias apply inside the grade
+
+No grade is guaranteed in a window or a Run; 영웅 can come from D5. Presentation: the grade word under the support name, in the
+Item rarity colours (일반 / 희귀 / 영웅 = the Item 일반 / 희귀 / 영웅 colours), and a grade colour line (UI_UX §STORE SUPPORT WINDOW).
 
 ## POOL ARCHITECTURE
 
-total=32
+Internal build taxonomy (not shown to the Player; the grade above is what the Player reads):
 
-Foundation=13
-- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3)
-- early direction setters; D0 eligible
+total=35 (34 offered)
 
-Hybrid=8
-- connects 2 Build axes; pivot/flex value
+Foundation=14
+- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3) and 단골 추천 엽서함 (VIP)
+- early direction setters
+
+Hybrid=9
+- connects 2 Build axes; pivot/flex value; 길드 구조대 계약 holds one (Expedition); 단골 묶음혜택 retired
 
 Keystone=7
 - 1 per Primary Build, plus 응급 처치대 (Expedition holds 2)
-- build engine/completion piece; eligible from D10
+- build engine/completion piece
 
-Utility=4
+Utility=5 (소문 수집 게시판 joined)
 - general support; should not erase build identity
 
 ## BUILD COMPLETION FEEL
@@ -929,20 +948,19 @@ SETUP: Own several same-axis Relics and sample offers.
 EXPECT: Related pieces may be somewhat more likely.
 PASS: No guaranteed missing-piece completion.
 
-#### REL-Q12 — KEYSTONE TIMING
+#### REL-Q12 — GRADE DRAW
 SETUP: Inspect D0 and later windows.
 EXPECT:
-- D0/D5 Keystone=NO
-- D10+ Keystone eligible
-- no separate fixed Keystone quota/probability is required
-- normal candidate pool + soft build bias rules still apply
-PASS: No pre-D10 Keystone leak and no hidden guaranteed Keystone completion path.
+- D0 offers 일반 only
+- D5+ each card rolls 일반 60% · 희귀 28% · 영웅 12% and draws within that grade (whole pool when the grade is empty)
+- soft build bias and diversity still apply inside the grade
+PASS: no 희귀 / 영웅 on D0, the per-card grade shares hold, and no hidden guaranteed 영웅 path.
 
 ### POOL / BLUEPRINTS
 
 #### REL-Q14 — POOL SIZE
 SETUP: Inspect canonical pool.
-EXPECT: 32 total: Foundation 13 · Hybrid 8 · Keystone 7 · Utility 4 (§POOL ARCHITECTURE)
+EXPECT: 35 total (34 offered): Foundation 14 · Hybrid 9 · Keystone 7 · Utility 5; grades 일반 17 · 희귀 10 · 영웅 7 (§GRADE)
 PASS: Counts match.
 
 #### REL-Q15 — BUILD AXES
