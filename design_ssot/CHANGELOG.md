@@ -31,6 +31,26 @@ and this table is their commit record.
 | v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | (the User sets it; not yet on origin) |
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 
+## After v2.10.3 — 점포지원 등급, 점포지원 조정, 운영형 장식, 사건 · 결전 (User 2026-10-04; the version stays 2.10.3)
+
+- **사건 from DAY 1**: a Normal Event may fire from DAY 1. The account's first Run keeps DAY 1 quiet so the DAY 2 `본사 1+1 행사` lesson stays its
+  first Event. EVENT, CORE_RUN; tests events, revision.
+- **결전 흔들림 0.92 ~ 1.08** (`D.balance.finalRoll`), and the 토벌 전망 bands read it: 불리 when the ratio × 1.08 < 1, 우세 when × 0.92 ≥ 1, else 접전.
+  FINAL_EXPEDITION; tests final, simulation.
+- **점포지원 effects**: 원정 도시락 코너 = every Food / Drink sold +2 to every Hazard (마왕성: the weakest one), no Fatigue term, Food / Drink order price × 1.15;
+  회원 관리대장 = the 단골도 term of a return visit × 2; 프리미엄 멤버십 = for 다시 온 손님, 손님 소지금 +25G and Rare+ intent +15%p, a Rare+ purchase at 정가 or
+  할인 +10 단골도; 길드 납품 인증 commission 40%; 냉장 유통 계약 -> **고급 식자재 유통 계약** (one more Uncommon+ Food / Drink offer on the Day's first order
+  sheet, 15% commission on those sales); 즉석식품 170 -> 200G, 본사 추가발주권 130 -> 190G. RELIC, ITEM, NPC_TRAIT, COPY_AUDIT §11.
+- **New 점포지원**: 소문 수집 게시판 (일반 60G: an Event every eligible morning, first-Run DAY 1 included), 단골 추천 엽서함 (일반 80G: on a Day a 단골 visited,
+  the other visitors +5 단골도 at night), 길드 구조대 계약 (희귀 200G: a Death becomes 중상 with 30%). 단골 묶음혜택 leaves the windows (old saves keep it).
+  RELIC §ADDED / §RETIRED, COPY_AUDIT §11-30d~f.
+- **점포지원 등급** 일반 17 · 희귀 10 · 영웅 7: each card rolls its 등급 first (60 / 28 / 12), DAY 0 offers 일반 only, the D30 exclusions stay, the reroll
+  stays unlimited (300 -> 600 -> 1200). The card and the owned list show the 등급 word under the name in the item rarity colors, with a 등급-color
+  line. RELIC §GRADE, UI_UX §RELIC UI, GLOSSARY `점포지원 등급`; tests relic-order, revision.
+- **운영형 장식** (one per Slot, the Slot's price): 본사 특별 지원 간판 (the DAY 0 pick from 영웅), 단골 감사 현수막 (투력 × (1 + floor(단골도 / 10) × 3%),
+  the Final included), 휴식 바우처 꽂이 (every Night, every living adventurer Fatigue -3), 지원 교환 쿠폰함 (each window's first reroll free). Pixel art
+  in `ui/assets/deco/`. META §OPERATION DECORATIONS, COPY_AUDIT §9-5; tests integration, copy, ui-guard, night; `tools/qa-deco-seating.cjs` carries the set.
+
 ## Docs / hygiene and asset weight after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
 - **Large background art ships as WebP** (User 2026-10-04: 배경 줄이자): the 27 presentation PNGs of 600 KB or more (boss rooms, store
