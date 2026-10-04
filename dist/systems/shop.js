@@ -165,16 +165,17 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.shelfCut)return s.inventory.some(x=>x.expires!==null&&['food','drink'].includes(D.itemBy[x.item].category));
   return true;}
  /* EVENT §EVENT TIMING / FREQUENCY · §DEEP EXPEDITION DAY EXCLUSION: DAY 1~29 except the Store Support windows and this
-    Run's 심층원정 Days; the account's first Run keeps DAY 1 quiet so 본사 1+1 행사 (DAY 2) stays its first Event. rollEvent
+    Run's 심층원정 Days; the account's first Run keeps DAY 1 quiet so 본사 1+1 행사 (DAY 2) stays its first Event - unless 소문
+    수집 게시판 asks for an Event every morning (its card promises one). rollEvent
     draws before it asks this, so a suppressed Day costs the run stream no draw. */
- eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day)&&!(this.run.firstRun&&day===1);}
+ eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day)&&!(this.run.firstRun&&day===1&&!this.has('rumorBoard'));}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
     Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),
     so rolling alone records nothing; a save from before the log reads as an empty one. */
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-01): the account's first Run meets 본사 1+1 행사 on DAY 2, the one Event before
     DAY 3. The ordinary roll still draws and is ignored, and no pick is drawn, so the Run's stream is unchanged. */
- rollEvent(){const s=this.run,fired=this.rng.next()<.40;if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
+ rollEvent(){const s=this.run,fired=this.rng.next()<(this.has('rumorBoard')?D.relicParams.rumorBoard.eventChance:.40);if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
   if(!this.eventEligibleDay(s.day)||!fired)return null;
   const seen=s.eventLog||[],pool=D.events.filter(e=>!seen.includes(e.id)&&this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
  /* The Morning is an orchestration of six things that each belong to a different system, and
@@ -600,7 +601,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);
   /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
   s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
+ night(){const s=this.run;if(s.phase!=='sell')return;
+  /* RELIC 단골 추천 엽서함: on a Day a 단골 came, every other visitor of the Day gains 단골도 */
+  if(this.has('postcard')){const vs=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.alive),regs=vs.filter(n=>G.Adventurer.isTrustedRegular(n));
+   for(const n of vs)if(regs.some(m=>m!==n)){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}}const ev=s.event?.effects||{};s.results=[];
   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
      shown to the Player, never persisted past it. Deep expeditions neither count nor are assisted. */

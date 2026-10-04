@@ -114,7 +114,8 @@ Current explicit D30 no-effect exclusions:
 길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
 프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) · 새벽 회수 계약 (dawnRecovery) ·
 왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
-응급 처치대 (firstAidDesk; no SALE arrival on D30)
+응급 처치대 (firstAidDesk; no SALE arrival on D30) · 소문 수집 게시판 (rumorBoard; no Event on D30) ·
+단골 추천 엽서함 (postcard; no visitors on D30) · 길드 구조대 계약 (rescueContract; no ordinary expedition on D30)
 
 All other current supports are D30-eligible under ordinary acquisition eligibility. Future Store Supports are
 D30-eligible by default; one is removed from D30 only by adding it to the exclusion set after its actual
@@ -554,6 +555,28 @@ with 발주 교환권: 0 -> 50 -> 100 -> 200 -> 400 -> x2 thereafter
 Late acquisition may rationally be skipped; that alone is not a Balance Finding. Evaluate this support by whether
 earlier acquisition can repay its price and create meaningful remaining-Run economy value.
 
+### ADDED SUPPORTS (User 2026-10-04)
+
+33. 소문 수집 게시판 (rumorBoard) · tags=[] · Price = 60G
+- every Normal Event Day rolls an Event (chance 100% instead of 40%; EVENT §EVENT TIMING / FREQUENCY): every morning except
+  the Store Support window Days and this Run's 심층원정 Days, and on the account's first Run DAY 1 too
+- the Events themselves are the ordinary catalogue draw - good and bad alike; this is a variance pick, not a power pick
+
+34. 단골 추천 엽서함 (postcard) · tags=[VIP] · Price = 80G
+- on a Day a 단골 visited, every other visitor of that Day gains 단골도 +5 at the Night (before the expeditions); two 단골
+  on the same Day give each other the gain too
+- not a purchase gain: 단골 스탬프 기계 does not multiply it; 평생 단골제's floor and the 0~100 clamp apply
+
+35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 200G
+- an ordinary expedition whose Outcome is still 사망 after the Items (귀환석, 세계수 생환부적) rolls once more: 30% -> 중상
+  (the ordinary 중상: Injury 2, recovery Days); the 강골 Trait and 구급키트 then settle as usual
+- the report says so (`길드 구조대가 사망을 중상으로 바꿈`); the hero proof reads the same roll
+
+### RETIRED SUPPORTS
+
+단골 묶음혜택 (memberBundle) is no longer offered in any window (User 2026-10-04). A save that already owns it keeps it, and
+it plays as its blueprint above.
+
 ## FRESH NATIVE-STAT COMPOSITION
 
 Positive native Core Stat means the Item's own positive contribution to 투력/강인함/기동/정신 before unrelated effects.
@@ -609,7 +632,7 @@ Customer/VIP:
 
 ## ACTIVE POOL BOUNDARY
 
-activeRelicPool=the 32 canonical blueprints in this document only
+activeRelicPool=the 34 offered canonical blueprints in this document (35 blueprints, 단골 묶음혜택 retired)
 
 nonCanonicalFacilityActive=NO
 excludedFacilityNames=[포션 냉장고,마석 충전대,상권 분석대]
@@ -655,6 +678,9 @@ The following 21 Store Support base prices are the approved baseline.
 | extraOrder | 본사 추가발주권 | 190G |
 | rerollTicket | 발주 교환권 | 120G |
 | fieldStretcher | 야전 들것 | 80G |
+| rumorBoard | 소문 수집 게시판 | 60G |
+| postcard | 단골 추천 엽서함 | 80G |
+| rescueContract | 길드 구조대 계약 | 200G |
 
 The other 11 active support prices are exact in their Store Support entries above.
 Price should follow actual ROI, not label alone.

@@ -99,8 +99,8 @@ test('overhead matches day effects',()=>{
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
                  'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery',
-                 'royalCert','hub','efficiency','firstAidDesk'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16; 평생 단골제 left it on 2026-10-02)');
+                 'royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (19)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
@@ -115,7 +115,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
     everything else has exactly one candidate left, so its presence or absence is the answer. */
  const eligibleAtD30=(id,previousSales)=>{
   const g=fresh('d30-'+id);const s=g.run;
-  s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!==id).slice(0,29);
+  s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!==id);
   s.previousSales=previousSales;s.day=30;s.relicWindow=null;
   g.relicWindow(30);
   return s.relicWindow.candidateIds.includes(id);
@@ -502,6 +502,44 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
  const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-4,'Loyalty -4 unchanged');
 });
 
+/* RELIC 33 · 34 · 35 and the retired 단골 묶음혜택 (User 2026-10-04) */
+test('소문 수집 게시판: every Normal Event Day rolls an Event; window and 심층원정 Days stay quiet',()=>{
+ const g=fresh('rumor'),s=g.run;s.facilities=['rumorBoard'];s.firstRun=false;
+ const day=[...Array(30).keys()].find(d=>d>=3&&g.eventEligibleDay(d));s.day=day;
+ let fired=0;for(let i=0;i<300;i++)if(g.rollEvent())fired++;assert.equal(fired,300,'an Event every eligible morning');
+ s.day=10;assert.equal(g.rollEvent(),null,'none on a Store Support window Day');
+ s.firstRun=true;assert.equal(g.eventEligibleDay(1),true,'the first Run DAY 1 opens too, as the card promises');
+ s.facilities=[];assert.equal(g.eventEligibleDay(1),false,'without it the first Run DAY 1 stays quiet');
+});
+test('단골 추천 엽서함: a 단골 visit lifts every other visitor of the Day by 단골도 +5 at Night',()=>{
+ const night=(fac,regLoyalty)=>{const g=fresh('postcard'),s=g.run;const [a,b,c]=s.npcs;
+  for(const n of [a,b,c]){n.alive=true;n.introduced=true;n.history=[];n.pack=[];n.traits=[];n.recovery=0;n.destination=0;n.claimedDestination=0;n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};}
+  g.rng={next:()=>.5,int:a=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
+  a.loyalty=regLoyalty;b.loyalty=10;c.loyalty=20;s.queue=[a.id,b.id,c.id];s.cursor=3;s.phase='sell';s.facilities=fac;s.dayFacilities=fac;
+  const before=[a,b,c].map(n=>n.loyalty);g.night();return [a,b,c].map((n,i)=>n.loyalty-before[i]);};
+ const base=night([],60),card=night(['postcard'],60),none=night(['postcard'],40);
+ assert.deepEqual(card.map((v,i)=>v-base[i]),[0,5,5],'the others +5, the 단골 itself nothing');
+ assert.deepEqual(none,night([],40),'no 단골 that Day, no gain');
+});
+test('길드 구조대 계약: a Death that gets past the Items turns into 중상 on its own 30% roll',()=>{
+ assert.equal(DATA.relicParams.rescueContract.chance,.30);
+ const g=fresh('rescue'),base=g.run.npcs[0],copy=x=>JSON.parse(JSON.stringify(x));
+ const weak={...copy(base),traits:[],injury:0,fatigue:0,pack:[],level:1,stats:{combat:1,survival:1,mobility:1,spirit:1},equipment:{...base.equipment,power:0}};
+ const d={...g.makeDungeon('spider',3),hazards:['poison'],day:12,power:400};
+ const zero=()=>{let k=0;return {next:()=>(k++,0),int:a=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0,count:()=>k};};
+ const out=fac=>{const r=zero();const rep=Dungeon.resolve(copy(weak),d,r,fac,{firstRun:false,day:12});return {o:rep.outcome,draws:r.count(),why:rep.why};};
+ const plain=out([]);assert.equal(plain.o,'사망','sanity: the fixture dies');
+ const saved=out(['rescueContract']);assert.equal(saved.o,'중상','a roll under 30% carries the adventurer home in 중상');
+ assert.ok(saved.why.includes('길드 구조대가 사망을 중상으로 바꿈'),'and the report says so');
+ const keep=DATA.relicParams.rescueContract.chance;DATA.relicParams.rescueContract.chance=0;
+ try{assert.equal(out(['rescueContract']).o,'사망','a roll at or over the chance stays 사망');}finally{DATA.relicParams.rescueContract.chance=keep;}
+});
+test('단골 묶음혜택 is retired: never offered in any window, still readable on an owned save',()=>{
+ assert.deepEqual(DATA.relicRetired,['memberBundle']);
+ const g=fresh('retired'),s=g.run;s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!=='memberBundle'&&x!=='bulk'&&x!=='rotation');
+ for(const day of [5,10,20]){s.day=day;s.relicWindow=null;g.relicWindow(day);assert.ok(!s.relicWindow.candidateIds.includes('memberBundle'),'D'+day+' never offers it');}
+ assert.ok(DATA.relicBy.memberBundle.description,'an owned copy still reads its card');
+});
 console.log(count+' Relic effect groups passed');
 
 /* v2.9.11 (User 2026-09-29): 희귀상품 입고 계약 no longer raises the price the customer sees. A Rare+ sale is charged at

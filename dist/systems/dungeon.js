@@ -418,6 +418,10 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   if(ev.escapeItemRoll<stoneChance(se,d))sOutcome='퇴각';
  }
  if(['사망','중상'].includes(sOutcome)&&se.revive>=1)sOutcome='퇴각';
+ if(sOutcome==='사망'&&facilities.includes('rescueContract')){
+  if(ev.rescueRoll===undefined)return UNPROVEN;
+  if(ev.rescueRoll<D.relicParams.rescueContract.chance)sOutcome='중상';
+ }
  if(['부상','중상'].includes(sOutcome)&&se.injuryGuard>0){
   if(ev.injuryGuardRoll===undefined)return UNPROVEN;
   if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
@@ -539,7 +543,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const medicReady=!!run&&(run.daily?.medicSaves||0)<(dayFx.nightSaves||0);
  const aidKitReady=medicReady;
  const preparedFactor=cabinet?D.decorationParams.aidCabinet.preparedFactor:PREPARED.factor;
- let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
+ let injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
  /* DUNGEON_HAZARD §INJURED RE-EXPEDITION SEVERE ESCALATION: applies wherever the
@@ -615,6 +619,8 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* ITEM §세계수 생환부적: 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
  if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
  /* ITEM §INSURANCE HIERARCHY: only 강골's injuryGuard reaches this branch; 구급키트 is not on it */
+ /* RELIC 길드 구조대 계약: a Death that got past the Items turns into 중상 on its own roll */
+ if(outcome==='사망'&&facilities.includes('rescueContract')){rescueRoll=r.next();if(rescueRoll<D.relicParams.rescueContract.chance){outcome='중상';avoidedDeath=true;p.why.push('길드 구조대가 사망을 중상으로 바꿈');p.events.push({id:'rescue',text:'길드 구조대가 '+G.Copy.josa(n.name,'을','를')+' 업고 돌아왔다.'});}}
  if(['부상','중상'].includes(outcome)&&injuryGuardCheck()){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
  /* ITEM §Insurance resolution order step 4: 구급키트 lowers the settled
     non-death Outcome one step. XP, Loot and Fatigue follow the lowered Outcome; the report keeps
@@ -697,7 +703,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
  const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,combatSuccess});
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree

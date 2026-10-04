@@ -33,7 +33,8 @@ Canonical Event 55종은 모두 **자동 적용형 Day Event**다. Event 선택�
 ### Normal Event가 발생하지 않는 날
 
 Normal Daily Event는 D0 · D5 · D10 · D15 · D20 · D25 · D30, 그리고 실제 `심층원정` 발생일
-(D7 / D14 / D21 / D28 중 해당 Run에 배정된 날)에 발생하지 않는다. 계정 첫 Run의 D1도 발생하지 않는다.
+(D7 / D14 / D21 / D28 중 해당 Run에 배정된 날)에 발생하지 않는다. 계정 첫 Run의 D1도 발생하지 않는다(점포지원 소문 수집
+게시판을 가졌으면 발생한다).
 
 - D5 / D10 / D15 / D20 / D25는 Relic Window Day이므로 Event를 겹치지 않는다.
 - D30은 Final Day다. Boss reveal은 Normal Event가 아니며 `BOSS_v2.8.0.md`가 소유한다.
@@ -48,6 +49,7 @@ D1–D29 중 Relic Window Day가 아니며, 해당 Run의 실제 심층원정 �
 
 ```text
 dailyEventChance = 40%
+점포지원 소문 수집 게시판 보유 시 = 100% (RELIC §33)
 ```
 
 목표 평균:

@@ -43,7 +43,11 @@ const rows=[
 ['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
 ['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 15%).'],
-['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).']
+['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).'],
+/* RELIC 33 · 34 · 35 (User 2026-10-04): a troll pick, a 단골 build piece, and the 희귀 survival line */
+['rumorBoard','소문 수집 게시판','utility',[],60,()=>'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
+['postcard','단골 추천 엽서함','foundation',['vip'],80,p=>'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 '+p.postcard.loyalty+' 오른다.'],
+['rescueContract','길드 구조대 계약','hybrid',['expedition'],200,p=>'원정에서 사망 결과가 나오면 '+pct(p.rescueContract.chance)+' 확률로 중상으로 바뀌어 돌아온다.']
 ];
 /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
 D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,tags,price,
@@ -84,7 +88,10 @@ D.relicParams={
  warehouse:{slots:5}, /* v2.9.2 fourth pass (User 2026-09-26): +10 -> +5 */
  extraOrder:{extraOffers:2},
  rerollTicket:{freeRerolls:1},
- efficiency:{overheadCut:30}
+ efficiency:{overheadCut:30},
+ rumorBoard:{eventChance:1},
+ postcard:{loyalty:5},
+ rescueContract:{chance:.30}
 };
 /* The hub overhead rate used to be its own D.balance literal; it now reads through to the
    relic's parameter so there is one lever, under the old name as well. */
@@ -97,7 +104,9 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
    acquisition and the Final Lock through which it could change anything - not merely when it
    looks weak that late. A future support joins D30 by existing; it leaves only by being added
    here after its own D30-to-Final review. */
-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','royalCert','hub','efficiency','firstAidDesk'];
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
+/* RELIC §RETIRED (User 2026-10-04): no longer offered; kept so a save that owns it still reads and plays it */
+D.relicRetired=['memberBundle'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not
