@@ -1,7 +1,9 @@
-// v2.10.0 success-meta measurement — MEASUREMENT ONLY, dev tool, never part of npm test (AGENTS §9-A: run on User approval).
-// Best-hybrid Supports (relicPriority = the clear ranking of reports/relic-balance/v2913-qp13/EVALUATION.md) with the relic-aware
+// The standard balance measurement (AGENTS §9-B) — MEASUREMENT ONLY, dev tool, never part of npm test (AGENTS §9-A: run on
+// User approval). Best-hybrid Supports (relicPriority = the clear ranking of reports/relic-balance/v2913-qp13/EVALUATION.md) with the relic-aware
 // layer on, Decorations bought from earned Capital in a named order (cheapest first). Per arm it reports ordinary success by Day band,
-// D30 reach / clear by Boss, end reasons, accidents, a zombie line, visit Wallets and every Support's runs.
+// D30 reach / clear, deaths, a zombie line and the Decorations bought; a second line the end reasons (death limit, bankruptcy,
+// Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers
+// against the rest, cash per Day and the Capital gain. The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
 //   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--policies reader,expert] [--decos none,economy] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
@@ -11,6 +13,11 @@ const RANK=['fresh24','hub','expeditionMeal','kitchen','dawnRecovery','opsRoom',
  'firstVisitCoupon','fridge','rerollTicket','stamp','warehouse','logisticsHQ','memberBundle','fieldRepair','efficiency','rareContract'];
 const DECO={none:[],economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign']};
 const BANDS=[[1,7],[8,14],[15,21],[22,29]];
+// The four highest-Level adventurers at the Run's end against everyone else: [wins, expeditions, deaths] each
+function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),out={top:[0,0,0],rest:[0,0,0]};
+ for(const n of npcs){const t=out[top.has(n)?'top':'rest'];for(const x of n.records||[]){if(x.deep||x.day>=30)continue;t[1]++;if(ok(x))t[0]++;if(x.outcome==='사망')t[2]++;}}
+ return out;}
+const endKind=r=>r.win?'클리어':r.reach?'마왕실패':/소문/.test(r.end)?'사망한도':/자금/.test(r.end)?'파산':'기타';
 
 function worker({root,kind,policy,deco,T,R,part}){
  for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
@@ -29,6 +36,9 @@ function worker({root,kind,policy,deco,T,R,part}){
    out:['대성공','성공','퇴각','부상','중상','사망'].map(o=>recs.filter(x=>x.outcome===o).length),env:recs.filter(x=>x.environmentHurt).length,
    day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
    zombie:s.day>=25&&late.length?late.filter(ok).length/late.length<.35:false,
+   d10:recs.filter(x=>x.day<=10&&x.outcome==='사망').length,injDep:recs.filter(x=>x.departedInjured).length,
+   injDeath:recs.filter(x=>x.departedInjured&&x.outcome==='사망').length,
+   core:split(s.npcs,ok),
    cash:(s.reportHistory||[]).length?((s.reportHistory.at(-1).balance-700)/s.reportHistory.length):0,
    deco:(this.account.store?.owned||[]).length,sales:s.settlement?.sales??s.stats.revenue,gain:s.settlement?.gain??0,rate:s.settlement?.rate??0,
    relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay])});
@@ -61,12 +71,17 @@ else if(require.main===module){
 
 function summary(res){
  const L=[],p=(a,b)=>b?(100*a/b).toFixed(1)+'%':'-',sum=(xs,f)=>xs.reduce((v,x)=>v+f(x),0);
- L.push('','v2.10.0 measure · '+res.meta.sec+'s · traj '+res.meta.TT+'x'+res.meta.R+' · fresh '+res.meta.FN);
+ L.push('','balance measure · '+res.meta.sec+'s · traj '+res.meta.TT+'x'+res.meta.R+' · fresh '+res.meta.FN);
  for(const [key,a] of Object.entries(res.arms)){const idxs=key.includes('/traj/')?[0,4,9]:[0];
   for(const i of idxs){const rs=a.rows.filter(r=>r.idx===i);if(!rs.length)continue;
    const b=k=>p(sum(rs,r=>r.bands[k][0]),sum(rs,r=>r.bands[k][1])),reach=sum(rs,r=>r.reach),win=sum(rs,r=>r.win);
    L.push(key+(key.includes('/traj/')?' run'+(i+1):'')+' n='+rs.length+' | 성공 '+[0,1,2,3].map(b).join(' / ')+' | D30 '+p(reach,rs.length)+' 클리어|도달 '+p(win,reach)+' 클리어 '+p(win,rs.length)
-    +' | 좀비 '+p(rs.filter(r=>r.zombie).length,rs.length)+' | 사망/런 '+(sum(rs,r=>r.deaths)/rs.length).toFixed(2)+' | 장식 '+(sum(rs,r=>r.deco)/rs.length).toFixed(1));}}
+    +' | 좀비 '+p(rs.filter(r=>r.zombie).length,rs.length)+' | 사망/런 '+(sum(rs,r=>r.deaths)/rs.length).toFixed(2)+' | 장식 '+(sum(rs,r=>r.deco)/rs.length).toFixed(1));
+   const ends={};for(const r of rs)ends[endKind(r)]=(ends[endKind(r)]||0)+1;const ds=rs.map(r=>r.day).sort((a,b)=>a-b),avg=f=>(sum(rs,f)/rs.length);
+   const grp=g=>p(sum(rs,r=>r.core?.[g][0]||0),sum(rs,r=>r.core?.[g][1]||0))+' · 사망 '+avg(r=>r.core?.[g][2]||0).toFixed(2);
+   L.push('  └ 종료 '+Object.entries(ends).sort((a,b)=>b[1]-a[1]).map(([e,c])=>e+' '+p(c,rs.length)).join(' ')+' | 끝난 날 중앙 '+ds[ds.length>>1]
+    +' | D10까지 사망 '+avg(r=>r.d10||0).toFixed(2)+' | 부상 출발/런 '+avg(r=>r.injDep||0).toFixed(1)+' (사망 '+p(sum(rs,r=>r.injDeath||0),sum(rs,r=>r.injDep||0))+')'
+    +' | 상위 4명 성공 '+grp('top')+' · 나머지 '+grp('rest')+' | 현금/일 '+avg(r=>r.cash).toFixed(0)+' | 자본 '+avg(r=>r.gain).toFixed(0));}}
  return L.join('\n');
 }
-module.exports={RANK,DECO,BANDS};
+module.exports={RANK,DECO,BANDS,split,endKind};

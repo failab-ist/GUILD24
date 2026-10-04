@@ -1341,7 +1341,10 @@ colour, silhouette and place vary by Phase.
 the top-left of the opening screen (no Run: 새 점포 준비) above the room — not a control, taking no title space — and centred at the
 end of 설정 (점포 메뉴 -> 설정) for mid-Run reading; nowhere else. `{version}` = CHANGELOG head; `{commit}` = first 7 hex of
 the deployed commit, written into `build.js` by the Pages deploy (`dev` when unstamped). The console prints
-`GUILD24 v{version} · {commit}` on load; `Guild24.build` returns `{version, commit}`.
+`GUILD24 v{version} · {commit}` on load; `Guild24.build` returns `{version, commit}`. Every save the game writes (autosave and
+`저장 내보내기`) carries the same pair as `build: {version, commit}` beside the save `version`, and a new Run keeps the build it
+started on as `run.startBuild` (a Run can outlive a deploy); both are read-only metadata, never validated, and a save without
+them still loads.
 
 ## RUN ABANDON UX
 
@@ -2453,7 +2456,8 @@ unowned Decorations cost more than the capital.
 PASS (→ UI_UX §BUILD MARKER): the opening screen shows `v{version} · {commit}` small and muted top-left at 360 / 390 / 1280, clear
 of the title, the menu button and the preparation board; 설정 ends with the same pair before and during a Run, no other screen
 shows it; the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair; the deployed
-site reads the deployed commit, a local build `dev`.
+site reads the deployed commit, a local build `dev`; an exported save carries `build` with the same pair and loads with or
+without it.
 FAIL: the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 설정; a deployed
 build reading `dev`.
 

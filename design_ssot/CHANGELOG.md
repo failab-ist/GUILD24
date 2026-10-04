@@ -27,7 +27,14 @@ and this table is their commit record.
 | v2.9.14 | 2026-10-02 | PR #50 | `v2.9.14` (set by the User) |
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
 | v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR #67 | `v2.10.1` (set by the User) |
-| v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one) | `v2.10.2` (set by the User) |
+| v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one); quick patch 1 PR #80 | `v2.10.2` (set by the User) |
+
+## v2.10.2 quick patch 1 — a save names its build (User 2026-10-04; the version stays 2.10.2)
+
+- **Every save carries `build: {version, commit}`** (User: 세이브에 빌드 정보도 넣게): the autosave and `저장 내보내기` write the same
+  pair the build marker shows, beside the save `version`, and a new Run keeps the build it started on as `run.startBuild` (User:
+  시작 빌드도 남기고). Read-only metadata - never validated, and a save without it still loads;
+  no new save generation. `tools/save-check.cjs` prints it at the top of its report. UI_UX §BUILD MARKER; test revision.
 
 ## v2.10.2 — SALE phone spacing, line breaks and loading (User 2026-10-04)
 
