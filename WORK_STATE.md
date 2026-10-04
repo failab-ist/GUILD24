@@ -8,7 +8,7 @@ STATE: V2_10_2_MERGED (줄바꿈 · 판매 화면 정리, User 컨펌 2026-10-04
 - repository: `failab-ist/GUILD24`. main = v2.10.2(로딩 화면 · 가방 글씨 · 판매 화면 여백 · 문장 단위 줄바꿈, PR #75 + 버전 PR, Pages 배포). 직전은 v2.10.1(PR #64 · #66 · #67). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.0 퀵패치 3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
-- 밸런스 측정: `tools/measure-v2100.cjs --traj 200 --fresh 1000`(reader · expert · balanced 봇, 두 조건을 동시에 돌리면 13~17분). 최신 기준 로그는 `reports/v2100-measure/qp3-option1.log`. 측정은 User 컨펌 뒤에만 돌린다(AGENTS 9-A).
+- 밸런스 기준 로그: `reports/v2100-measure/qp3-option1.log`(측정 방법은 `AGENTS.md` §9-B).
 
 ## 최근 버전 (User 2026-10-02 ~ 10-03)
 
@@ -52,16 +52,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 
 ## Next
 
-**User 규칙 (2026-09-26~27):**
-- PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
-- 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
-
-- 검증 범위 (User 2026-10-01): 고친 부분과 꼭 필요한 검사만 돌린다.
-  - 바꾼 영역의 테스트, 화면을 바꿨으면 그 화면만 캡처(폰 · 데스크), 흐름을 바꿨으면 그 흐름의 `qa:runtime` 하네스만.
-  - 전체 `qa:runtime` · `qa:visual`은 큰 버전 업(x.y.0, 예: v3.0.0)에서만 한다. 패치 버전 · 퀵패치의 PR에는 돌리지 않는다.
-  - 보고에는 무엇을 돌렸는지 적고, 일부만 돌린 것을 전체 PASS라고 하지 않는다(AGENTS §5).
-- PR 전에 꼭 돌리는 것은 Pages `verify`와 같은 순서의 `npm test` → `npm run audit` → `git diff --exit-code`뿐이다. audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다(v2.9.11 PR #28, 2026-09-29).
-- 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
+검증 범위 · PR · 머지 규칙은 `AGENTS.md` §6-A, 밸런스 측정은 §9-B, 보고 · 핸드오프 언어는 §11-A.
 
 다음 작업:
 1. v2.10.0 퀵패치 3(PR #56)을 User 플레이로 확인한다: 실패 비용(연속 부상 출발, 퇴각), 발주 대응템 4칸, 신규 레벨 따라잡기.

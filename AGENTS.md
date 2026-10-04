@@ -211,6 +211,17 @@ STOP frozen QA
 
 Do not edit mid-run and continue calling it the same frozen QA.
 
+## 6-A. 검증 범위 · PR · 머지 (User 2026-09-26 ~ 10-01)
+
+- 검증은 고친 부분과 꼭 필요한 검사만 돌린다.
+  - 바꾼 영역의 테스트를 돌린다. 화면을 바꿨으면 그 화면만 캡처한다(폰 · 데스크). 흐름을 바꿨으면 그 흐름의 `qa:runtime` 하네스만 돌린다.
+  - 전체 `qa:runtime` · `qa:visual`은 큰 버전 업(x.y.0, 예: v3.0.0)에서만 돌린다. 패치 버전 · 퀵패치의 PR에는 돌리지 않는다.
+  - 보고에는 무엇을 돌렸는지 적는다. 일부만 돌린 것을 전체 PASS라고 하지 않는다(§5).
+- PR 전에는 Pages `verify`와 같은 순서로 `npm test` → `npm run audit` → `git diff --exit-code`를 돌린다.
+  audit가 Source에서 다시 만드는 보고서(`reports/ITEM-PRICES.md` 등)가 최신이 아니면 배포가 거부된다.
+- 이름 · 수치 · 문구는 적용 전에 초안을 보고하고 컨펌을 받는다. 화면 작업은 캡처를 보여 주고 확인받은 뒤 커밋한다.
+- PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
+
 ---
 
 # 7. RUNTIME VERIFICATION
@@ -294,6 +305,28 @@ After User-approved Design change:
 
 `npm test` · `npm run audit` · `qa:*` 같은 정해진 검증 절차는 여기에 해당하지 않는다.
 
+## 9-B. 밸런스는 `tools/measure-v2100.cjs`로 잰다 (User 2026-10-04)
+
+밸런스를 바꾸거나 판단할 때의 기준 측정이다. 돌리기 전 9-A대로 User 컨펌을 받는다.
+
+```text
+node tools/measure-v2100.cjs --traj 200 --fresh 1000
+```
+
+- 재는 것: 구간별(D1~7 / 8~14 / 15~21 / 22~29) 원정 성공률, D30 도달 · 클리어, 사망 / 런, 좀비, 장식.
+  둘째 줄(`└`)에 종료 이유(사망 한도 · 파산 · 마왕 실패), 끝난 날 중앙값, D10까지 사망, 부상 출발과 그 사망률,
+  상위 4명(레벨) 대 나머지의 성공률 · 사망, 현금 / 일, 자본. 방문 지갑 · 점포지원 궤적은 `--out` JSON에 남는다.
+- 규모: reader(기준) · expert · balanced 봇의 프레시 계정 1000판, reader · expert의 궤적 200 × 10런(장식 none / economy / survival)
+- 시간: 한 조건 5~8분, 두 조건을 동시에 돌리면 13~17분
+- 비교: 바꾸기 전과 비교할 때는 이전 커밋을 `git worktree`로 따로 꺼내 같은 명령을 함께 돌린다(또는 `--before <root>`).
+  아직 넣지 않은 후보는 worktree 사본에만 적용해서 재고, Production에는 컨펌 뒤에 넣는다.
+- 기록: 결과 로그는 `reports/v2100-measure/`에 남기고 커밋한다. 지금 기준 로그는 `WORK_STATE.md` §Current가 가리킨다.
+- 결과 JSON을 더 읽을 때는 `tools/measure-v2100-detail.cjs` · `tools/measure-v2100-relic-landmark.cjs`(재생 없이 읽기만)를 쓴다.
+- User가 준 세이브는 `node tools/save-check.cjs <save.json> [--out report.md]`로 읽는다. 재생 없이 세이브만 읽으므로 9-A 컨펌 대상이 아니다.
+  보고서 §2 `밸런스 지표`가 이 측정과 같은 기준(구간 성공률 · 사망 · 부상 출발 · 상위 4명 대 나머지 · 현금 / 일)이다.
+- 이름에 지난 버전이 붙은 측정 도구(`tools/measure-*-v29xx` · `-v30` · `remeasure-v2911`)와 `npm run balance` · `longitudinal` · `mastery`는
+  지난 질문용이다. 기준 측정으로 쓰지 않는다. 특정 레버만 볼 때는 이 도구를 본떠 스크래치에서 만든다.
+
 ---
 
 # 10. DOCUMENT / VERSION HYGIENE
@@ -330,7 +363,7 @@ ROOT CAUSE UNRESOLVED
 
 Never summarize a real failure as "PASS with notes".
 
-WORK final reports are DIRECTOR review packets, not work diaries.
+WORK final reports are review packets for the User, not work diaries.
 Default to:
 - Branch / HEAD
 - logical commit(s)
@@ -358,7 +391,7 @@ Include only what the receiving role needs now:
 Do not carry rejected, superseded, speculative, obsolete, or already-completed context into a handoff.
 Do not repeat AGENTS rules inside the handoff beyond "Read AGENTS.md first and follow it."
 
-WORK's own PASS is not final DIRECTOR approval.
+WORK's own PASS is not final User approval.
 If no next task was explicitly authorized, stop after the assigned scope.
 
 ## 11-A. LANGUAGE OF REPORTS / HANDOFFS — 한글 (User 2026-09-25)
