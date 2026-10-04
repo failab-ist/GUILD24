@@ -2456,7 +2456,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
    ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
-   ['flow','원정은 게이트와의 한 판이다. 싸움에서 지면 실패하고, 이겨도 환경 위험에 당하면 실패한다. 실패하면 다치거나 죽을 수 있다.']])
+   ['flow','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
@@ -3113,7 +3113,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
-  '판매한 상품은 그날 원정에서 쓰고 사라진다. 원정은 게이트와의 한 판이다. 싸움에서 지면 실패하고, 이겨도 환경 위험에 당하면 실패한다. 실패하면 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
+  '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
   '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다.',
   '영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
   '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
