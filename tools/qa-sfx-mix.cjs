@@ -22,7 +22,7 @@ const TIERS={
  result:{target:-19,margin:8,cues:['great','retreat','injury','severe','death','sealwin','sealfail','endwin','endfail','bossmajor','final','boss','collapse']},
  decision:{target:-21,margin:8,cues:['order','sale','overcharge','half','refusal','purchase','support','unlock','open','close','begin','newstore','bosscompact','rescue','gag']},
  action:{target:-25,margin:5,cues:['depart','return','gold','spend','crate','receipt','heal','fixture','rumble','clash','counter','supply']},
- utility:{target:-29,margin:3,cues:['button','ui']},
+ utility:{target:-29,margin:3,cues:['button','ui','page']},
  repeat:{target:-31,margin:3,cues:['quantity','quantset']}};
 const UNDER=1.5,OVER=3,LOW=280,FULL=6,SOLO=-4.5,CEIL=-1;
 /* UI_UX §AUDIO FEEDBACK — DISTINCT CUES (User 2026-09-29): cues that mean different things must not sound alike; cues that
