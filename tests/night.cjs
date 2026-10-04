@@ -1059,7 +1059,7 @@ test('RESULT-PROOF: the shadow carries the Day\'s 길드 연회 food bonus (n.fe
  const base=g.makeDungeon('spider',1),gate={...base,power:1e9,day:500};
  const x=D.items.find(it=>!['food','drink'].includes(it.category)&&Object.keys(it.effects).every(k=>!NOT_PATH.has(k))&&Object.keys(it.effects).length);
  assert.ok(x,'an Item that cannot touch the escape path exists');
- const mk=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['ramen',x.id],injury:0,fatigue:24,feast:2,alive:true,recovery:0,level:1,xp:0,records:[]}));
+ const mk=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['ramen',x.id],injury:0,fatigue:26,feast:2,alive:true,recovery:0,level:1,xp:0,records:[]}));
  const esc=e=>Math.min(.94,Math.max(.15,.40+e.mobility*.003+e.escape-e.itemEscape-(gate.scale||1)*.024));
  const withFeast=esc(Dungeon.prepare(mk(),gate,[]).effects),noFeast=esc(Dungeon.prepare({...mk(),feast:0},gate,[]).effects);
  assert.ok(withFeast>noFeast,'the banquet really moves the Fatigue band, or this proof has nothing to test');
