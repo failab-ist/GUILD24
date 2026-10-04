@@ -3116,6 +3116,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   '판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.',
   '적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.',
   '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.',
+  '점포 자본은 영업이 끝날 때 총매출의 일부가 쌓이고, 장식을 들이는 데 쓴다. 보유 골드와는 별개다.',
   '실시간 제한 없음.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
