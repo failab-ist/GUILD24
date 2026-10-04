@@ -1,0 +1,13 @@
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 8794dc6..822b00e 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -496,7 +496,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the DAY 3 payday customer of the account's first Run takes the first
+     150% offer it can pay for - once; every later one is decided as any customer's */
+  const payday=mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===this.run.day&&!n.lessonPaydayTaken;
+- if(this.has('coldcase')&&G.Relics.food(it)&&it.rarity>=1)need+=D.relicParams.coldcase.intentBonus;
++ if(this.has('coldcase')&&G.Relics.food(it))need+=D.relicParams.coldcase.intentBonus;
+  /* 첫 방문 쿠폰: the whole of an adventurer's first-ever visit */
+  if(this.has('firstVisitCoupon')&&n.newToday&&n.visits<=1)need+=D.relicParams.firstVisitCoupon.intentBonus;
+  if(this.run.event?.effects.foodDemand&&['food','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
