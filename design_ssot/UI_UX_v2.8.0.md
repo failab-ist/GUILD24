@@ -2643,7 +2643,7 @@ FAIL: a pick or release possible while ordering, or a second muster on the order
 Verify UI_UX §GATE TIER / FIRE GATE TUTORIAL on MORNING at 390 and 1280, tutorial on.
 
 PASS:
-- the first board with a tier II Gate that is not FIRE shows `II 게이트부터는 위험이 두 가지다. 위험마다 버티는 능력치가 다르다.`
+- the first board with a tier II Gate that is not FIRE shows `II 게이트부터는 위험이 두 가지다.`
   on that plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
 - each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks; neither names
   an Item
