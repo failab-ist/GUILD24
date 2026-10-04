@@ -28,8 +28,13 @@ and this table is their commit record.
 | v2.10.0 | 2026-10-03 | PR #52 (with v2.9.14 quick patch 1); quick patch 1 PR #54; quick patch 2 PR #55; quick patch 3 PR #56 | `v2.10.0` (set by the User) |
 | v2.10.1 | 2026-10-03 | PR #64 (`ui/design-trim`), docs PR #66; version bump PR #67 | `v2.10.1` (set by the User) |
 | v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one); quick patch 1 PR #80 | `v2.10.2` (set by the User) |
+| v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR (this one) | `v2.10.3` (set by the User) |
 
-## v2.10.2 quick patch 2 — a refused 바가지 costs the sale (User 2026-10-04; the version stays 2.10.2)
+## v2.10.3 — a refused 바가지 costs the sale, a prologue before every store (User 2026-10-04)
+
+Also in this version, from main: the five-scene prologue before every new store (PR #87); coach marks spread over DAY 1~4 with the
+expedition-flow and Wallet-gain marks, the ORDER 오늘 line by Hazard / Tier / headcount, the SALE customer line as pale figures,
+iOS first-touch audio, two NPC names exchanged (`ui/design-trim` #88~#90). Their owners: UI_UX §PROLOGUE, §TUTORIAL — COACH DIET, §ORDER, §SALE.
 
 - **A refused 바가지 closes the SKU** (User, from a second Run that sold 바가지 first and drowned in Gold: 거절당해도 손해가 없어서
   바가지 먼저가 정답): once a customer refuses an Item at 150%, that Item is not sold to them this visit at any price (`바가지를
