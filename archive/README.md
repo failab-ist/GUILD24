@@ -4,8 +4,10 @@
 이 폴더는 이미 닫힌 버전의 결정 근거와 측정 기록을 남겨 두는 곳이다. 보관한 파일은 옮기기만 했고 내용은 고치지 않았다.
 그래서 문서 안의 경로는 옮기기 전 위치(`reports/…`, `tools/…`)를 가리킨다. 아래 표로 옛 위치와 새 위치를 찾으면 된다.
 
-다음 밸런스 작업에 쓰는 `tools/calibrate-bot-v292.cjs`(User 런 보정)는 현행 도구라 `tools/`에 남겼다. D10 fork 쌍 비교 틀은
-`v2.9.2/tools/measure-package-v292.cjs`가 가장 최근 본이다. 그 레버(Gate 수·창고·Level 보정)는 4차 반영으로 이미 Source에 들어가 패치 지점이 없으므로, 새 질문에는 이 파일을 본떠 새 도구를 만든다.
+현행 측정 도구는 `tools/`에 있다: 기준 밸런스 측정 `tools/measure-v2100.cjs`(AGENTS §9-B), 세이브 점검 `tools/save-check.cjs`,
+봇 보정 `tools/calibrate-bot-v292.cjs`(User 런 보정), UI_UX 코치 QA가 쓰는 `tools/measure-first-sale-v30.cjs`, 한 레버만 보는
+`deco-single` · `deco-trajectory` · `relic-contribution` · `rarity-value`. 그 밖의 측정 도구는 2026-10-04에 이 폴더로 옮겼다(User).
+D10 fork 쌍 비교 틀은 `v2.9.2/tools/measure-package-v292.cjs`가 가장 최근 본이다.
 
 보관한 도구는 여기서 실행하지 않는다. `require('../dist/…')` 같은 상대 경로가 옛 위치 기준이고, 측정 대상 Source도 이미 바뀌었다.
 다시 돌려야 하면 해당 커밋을 checkout해서 원래 위치에서 실행한다.
@@ -37,7 +39,14 @@
 | `v2.9.9/fresh-run-d23-review-v299.md` | v2.9.9 새 계정 D23 리뷰 | `reports/` |
 | `v2.9.9/tools/measure-wallet-v299.cjs` | v2.9.9 실패 보상 배율 측정(CHANGELOG가 가리킨다) | `tools/` |
 | `v2.9.11/*.md` | v2.9.11 재측정(`remeasure-v2911`), 부상 · 성장, 문구 교정, 줄바꿈 점검, iPhone Safari, BGM · 효과음 믹스, 초안(`v2.9.11-drafts`) | `reports/` |
-| `v2.9.11/tools/measure-royalcert-v2911.cjs` | 왕도 프리미엄 인증 측정(CHANGELOG가 가리킨다). 곡선 재측정 `remeasure-v2911.cjs`는 현행이라 `tools/`에 남김 | `tools/` |
+| `v2.9.11/tools/measure-royalcert-v2911.cjs` | 왕도 프리미엄 인증 측정(CHANGELOG가 가리킨다) | `tools/` |
+| `v2.9.6/tools/deco-impact.cjs` | 장식 하나씩 영향(v2.9.6 장식 리뷰, v2.9.11 약한 장식 팔) | `tools/` |
+| `v2.9.7/tools/counter-ladder.cjs`, `hazard-coverage.cjs` | 대응 사다리 변형 · 위험 대응 범위 측정 | `tools/` |
+| `v2.9.11/tools/remeasure-v2911.cjs` | v2.9.10 대 v2.9.11 곡선 재측정(`reports/v3.0-prep.md` §9-5-3) | `tools/` |
+| `v2.9.12/tools/measure-capital-v2912.cjs`, `measure-counter-late-v2912.cjs`, `measure-hazard-refit-v2912.cjs`, `measure-firepair.cjs` | v2.9.12 Capital · 후반 대응 · 위험 재조정 · 화염 조합 측정(`reports/balance-proposal-v2912.md`, `reports/v3-prep-measure-v2911.md` §6) | `tools/` |
+| `v2.9.13/tools/check-t3-counters-v2913.cjs`, `measure-counter-ladder-v2913.cjs`, `measure-item-value-v2913.cjs`, `measure-item-value-context-v2913.cjs` | v2.9.13 대응 사다리 · 상품 가치 측정(`reports/counter-ladder-v2913/`, `reports/item-price-v2913/`) | `tools/` |
+| `v3.0-prep/tools/measure-discovery-v30.cjs`, `measure-first-day-v30.cjs`, `measure-session-v30.cjs`, `measure-v3prep.cjs` | v3.0 준비 루브릭 측정(`reports/v3.0-prep.md` §9-5, `reports/v3-prep-measure-v2911.md`) | `tools/` |
+| `v2.10.0/tools/measure-v2100-grid.cjs` | v2.10.0 2차: 후반 완화 × 실패 사망 격자, 마왕 전력 역산 | `tools/` |
 | `v2.9.13/unused-room-art.js` | 더 이상 화면에 안 보이는 옛 그림 코드(아침 · 새 점포 준비의 천장 · 벽 · 계산대 그림, 쓰이지 않던 `Art.scene`). 그림 배경으로 바뀌어 숨겨져 있었다(User 2026-10-01) | `dist/ui/scene.js` · `dist/ui/art.js` |
 
 ## 규칙

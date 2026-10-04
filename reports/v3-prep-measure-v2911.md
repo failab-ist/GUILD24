@@ -4,9 +4,9 @@ WORK 측정 기록이다. 수치 조정은 없다. 판정은 기준을 적어 �
 
 - 기준 빌드: 브랜치 `claude/v3-0-prep-planning-g42z7y` `8b99471`
   - main PR #30(왕도 인증 45% 등)은 이 브랜치에 없다. 이 측정에도 들어 있지 않다.
-- 도구: `tools/measure-v3prep.cjs`(측정 전용). 같은 시드로 두 번 돌리면 결과가 같다(확인함).
-  - `node tools/measure-v3prep.cjs curve <balanced|reader> 3000 <none|economy|survival>`
-  - `node tools/measure-v3prep.cjs nudge 120 20 <strong|weak|all>`
+- 도구: `archive/v3.0-prep/tools/measure-v3prep.cjs`(측정 전용). 같은 시드로 두 번 돌리면 결과가 같다(확인함).
+  - `node archive/v3.0-prep/tools/measure-v3prep.cjs curve <balanced|reader> 3000 <none|economy|survival>`
+  - `node archive/v3.0-prep/tools/measure-v3prep.cjs nudge 120 20 <strong|weak|all>`
 - 봇 두 개
   - `reader`: 재측정(`archive/v2.9.11/remeasure-v2911.md`)의 주 렌즈
   - `balanced`: 더 약한 봇
@@ -222,7 +222,7 @@ Run 순번별 빈 줄 비율 (8개 전부, 후)
 
 ## 6. 화염이 섞인 마왕전 (User 2026-09-30: "다른 위험과 동일하게", 측정만 · 결정은 FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT)
 
-도구: `tools/measure-firepair.cjs` (Debug.simulate, 새 계정, 3,000 Run). 판마다 원정대 공격력(`assault`)과 마왕 전력을 기록한다.
+도구: `archive/v2.9.12/tools/measure-firepair.cjs` (Debug.simulate, 새 계정, 3,000 Run). 판마다 원정대 공격력(`assault`)과 마왕 전력을 기록한다.
 - 마왕전 위험은 5개 계열 중 2개에서 나온다. 화염이 섞이면 위험이 3개, 아니면 4개다.
 - 보정 전 표의 `+b` 열: 같은 판에서 마왕 전력만 +b였을 때의 화염 조합 승률이다(봇의 선택은 다시 돌리지 않았다).
 
