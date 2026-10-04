@@ -369,7 +369,7 @@ function phaseFinal(A){
   if(gate)A(gate,{translateY:[10,0],opacity:[0,1],duration:220,ease:'outQuad'});
 }
  /* v2.9.2 H4 CLOSING receipt (UI_UX §CLOSING — RECEIPT STAMP): every row of the two figure blocks
-    settles together in one 200 ms pass - never a tick per row - and only the 보유 자금 figure (v2.9.7) lands as
+    settles together in one 200 ms pass - never a tick per row - and only the 보유 골드 figure (v2.9.7) lands as
     a stamp on a fixed 100 ms hold, reusing the NIGHT stamp's own 90 ms fall and card dip. */
 function phaseClosing(A){
   const printed=[...document.querySelectorAll('.p-closing .tape .print>.block')];
@@ -832,7 +832,7 @@ function morningScreen(){
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="branchplate">'+E(s.branch)+'</span>'
    +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유 골드</span>'
-   +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 자금 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
+   +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 골드 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
    +'</span></div>'
   /* The equipped Decorations sit on the PAINTED room, so they are placed in the painting's own
      coordinates (UI_UX §LIVE STORE) in one layer over it, not in the bands' frames. */
@@ -1117,7 +1117,7 @@ function standee(n){
    printed side by side and never summed into one figure - the temporary half is never relabelled
    소지금. The wording is the approved Event Function's own (오늘 방문 모험가 · 현재 소지금의 20%만큼
    추가 구매 가능), so nothing new is invented here. */
-function walletChip(n){const b=n.eventBudget||0,base='소지 <b>'+fmt(n.money)+'G</b>';
+function walletChip(n,full){const b=n.eventBudget||0,base=(full?'손님 소지금':'소지')+' <b>'+fmt(n.money)+'G</b>';
  return b>0?'<span class="wp">'+base+'</span> <span class="wp">추가 구매 <b>+'+fmt(b)+'G</b></span>':base;}
 /* what the customer can actually pay with right now: the same sum interest() and sell() use. */
 function spendable(n){return n.money+(n.eventBudget||0);}
@@ -1149,7 +1149,7 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단으로 부상 회복</p>':'';
  return '<div class="kit"><div class="vitals"><span class="vit"><i>상태</i><span>'+parts.map(x=>'<b>'+x+'</b>').join(' · ')+'</span></span>'
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
- +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n)+'</span></div>'
+ +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n,true)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
@@ -1302,12 +1302,12 @@ function closingReceipt(s){
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
   +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
-  +'<div class="block"><div class="row open"><span>영업 전 자금</span><b>'+fmt(open)+'<i>G</i></b></div></div>'
+  +'<div class="block"><div class="row open"><span>영업 시작 골드</span><b>'+fmt(open)+'<i>G</i></b></div></div>'
   +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
   +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'
-  /* the stamped figure (UI_UX §CLOSING — RECEIPT STAMP) is 보유 자금, the Gold the Day ends with, in the purse box at the
+  /* the stamped figure (UI_UX §CLOSING — RECEIPT STAMP) is 보유 골드, the Gold the Day ends with, in the purse box at the
      largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 */
-  +'<div class="purse '+tone+'"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b>'
+  +'<div class="purse '+tone+'"><span>보유 골드</span><b>'+fmt(s.money)+'<i>G</i></b>'
    +'<p class="pl"><span>영업 손익</span><b>'+(change>0?'+':'')+fmt(change)+'<i>G</i></b></p></div>'
   +'<div class="block info"><p>창고 재고 '+s.inventory.length+'개</p>'
    +(d.waste?'<p>오늘 폐기 '+d.waste+'개'+wasteNames+'</p>':'')
@@ -1390,11 +1390,14 @@ const coachSteps={
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
-    purse box that carries both 보유 자금 and 영업 손익. */
+    purse box that carries both 보유 골드 and 영업 손익. */
  /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
  final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
  /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
- closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']],
+ /* User 2026-10-04: the first Run end whose settlement carries 점포 자본 across a Decoration's price (settleStoreCapital's `reach`) - the
+    one place the 점포 자본 is explained, once: it can buy a Decoration, and how it builds up */
+ end:[['capital','.p-end .settlement.reach','점포 자본으로 장식을 들일 수 있다. 영업이 끝날 때 총매출의 일부가 쌓이고, 영업한 날이 길수록 그 비율이 오른다.']],
+ closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
     names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
@@ -1987,7 +1990,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
     is the rule's own number, not a balance parameter to be promoted. */
  +'<p>'+(first?(s.phase==='foundation'?'이번 영업에 쓸 지원 하나를 고르세요.':until+' 무료로 고를 수 있다.')
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
-   :until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
+   :until+' 구매할 수 있다 · 보유 골드 '+fmt(s.money)+'G')+'</p></div>'
  +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
  /* Three states, and the card has to say which one it is before the Player reads the label:
     the one taken (`owned`), one still open, and one that cannot be taken right now because the
@@ -2078,7 +2081,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
     not inputs. Printed from the settlement the Run recorded, not recomputed here, so a reload
     shows the same figures and cannot appear to earn again. */
  const st=s.settlement;
- const settle=st?'<div class="block settlement"><h4>점포 자본 정산</h4>'
+ const settle=st?'<div class="block settlement'+(st.reach?' reach':'')+'"><h4>점포 자본 정산</h4>'
   +row('총매출',st.sales.toLocaleString()+'<i>G</i>')
   +row('DAY '+st.day+' 도달 비율','×'+Math.round(st.rate*100)+'%')
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())

@@ -1826,7 +1826,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'후보 전체 교환 · '"),'the 후보 전체 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
- assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다.']]"),'CLOSING keeps its first clause only');
+ assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']]"),'CLOSING keeps its first clause only');
  for(const id of ['relic-what','deep','event','gatepair','gatefire','confirm','destination','stats','bag','returning','subjugation','receipt'])
   assert.ok(ids.has(id),'kept before the fact: '+id);
 });
@@ -1978,7 +1978,7 @@ test('UI-Q-v29-54: END 이 점포의 기록 - five rows, before the settlement, 
  assert.ok(/\(recs\.length\?row\('원정'/.test(b)&&/r\.outcome==='대성공'/.test(b),'no 원정 row without an expedition; 대성공 counted from the records');
  assert.ok(/n\.level>b\.level\|\|\(n\.level===b\.level&&n\.loyalty>b\.loyalty\)/.test(b)&&/s\.npcs\.filter\(n=>n\.introduced\)/.test(b),'the highest Level among the visited (dead included), a tie to the higher Loyalty');
  assert.ok(!/run\.\w*record|account\.\w*record/.test(b)&&!/this-run|runBlock/.test(read('dist/systems/run.js')+read('dist/systems/meta.js')),'no save field: presentation only');
- assert.ok(/'<div class="block settlement"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged');
+ assert.ok(/'<div class="block settlement'\+\(st\.reach\?' reach':''\)\+'"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged');
 });
 
 /* UI-Q-v29-37 (UI_UX §END — REPLAY NUDGE, User 2026-09-26, v2.9.4): show, never assign - one line at most, only when the
@@ -2103,17 +2103,17 @@ test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one mov
 });
 
 /* UI-Q18 (v2.9.7, User 2026-09-26, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the receipt is the Day's cash */
-test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 자금 with 영업 손익, counts, tomorrow',()=>{
+test('UI-Q18: CLOSING cash-flow receipt - 영업 시작 골드, what moved, 보유 골드 with 영업 손익, counts, tomorrow',()=>{
  const c=(fn('closingReceipt')+fn('closingDock')+fn('closingScreen')).replace(/\/\*[\s\S]*?\*\//g,'');
  for(const gone of ['판매 원가','판매 마진','폐기 원가','오늘 시작','오늘 끝','오늘 변화'])assert.ok(!c.includes(gone),'no '+gone+' row');
- for(const l of ['영업 전 자금','보유 자금','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
+ for(const l of ['영업 시작 골드','보유 골드','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
  assert.ok(/change=total\(ins\)-total\(outs\),open=s\.money-change/.test(c),'the opening is derived from the Day\'s own flows, so the tape adds up');
  assert.ok(/\['매출',d\.revenue,true\]/.test(c)&&/\['발주',d\.spent,true\]/.test(c)&&/\['운영비',d\.operating,true\]/.test(c),'매출 / 발주 / 운영비 always print');
  assert.ok(/const tomorrow=s\.day<29\?game\.tomorrowOperatingCost\(\):null,tone=change>0\?'gain':change<0\?'loss':'even'/.test(c),'no tomorrow line before the Final Day; 영업 손익 green / red / gold at 0');
- assert.ok(/'<div class="purse '\+tone\+'"><span>보유 자금<\/span><b>'\+fmt\(s\.money\)/.test(c),'보유 자금 is the purse figure');
- assert.ok(c.includes("fmt(change)+'<i>G</i></b>")&&c.includes("<span>영업 전 자금</span><b>'+fmt(open)+'<i>G</i></b>"),'the 영업 손익 G is set apart like the purse G - in the LED face a bare G reads as 6 (+5G as +56)');
+ assert.ok(/'<div class="purse '\+tone\+'"><span>보유 골드<\/span><b>'\+fmt\(s\.money\)/.test(c),'보유 골드 is the purse figure');
+ assert.ok(c.includes("fmt(change)+'<i>G</i></b>")&&c.includes("<span>영업 시작 골드</span><b>'+fmt(open)+'<i>G</i></b>"),'the 영업 손익 G is set apart like the purse G - in the LED face a bare G reads as 6 (+5G as +56)');
  assert.ok(/\(n>1\?' ×'\+n:''\)/.test(c)&&/' 외 '\+\(wasted\.length-3\)\+'종'/.test(c),'waste names: ×n from two, three kinds then 외 N종');
- assert.ok(/\.p-closing \.purse>b\{font-size:\d+px;color:#f3ecd8\}/.test(css)&&/\.print \.row\.open\{[^}]*inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var\(--px-cut\)\}/.test(css)&&/\.p-closing \.purse:after,\.p-closing \.purse \.pl:after\{content:/.test(css)&&/\.p-closing \.purse\.even \.pl b\{color:var\(--gold\)\}/.test(css),'one colour for 보유 자금, gold only for an even Day');
+ assert.ok(/\.p-closing \.purse>b\{font-size:\d+px;color:#f3ecd8\}/.test(css)&&/\.print \.row\.open\{[^}]*inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var\(--px-cut\)\}/.test(css)&&/\.p-closing \.purse:after,\.p-closing \.purse \.pl:after\{content:/.test(css)&&/\.p-closing \.purse\.even \.pl b\{color:var\(--gold\)\}/.test(css),'one colour for 보유 골드, gold only for an even Day');
 });
 
 /* UI-Q-v29-33 (v2.9.2 H4, UI_UX §CLOSING — RECEIPT STAMP): the receipt prints as one pass and only the profit/loss
@@ -2127,7 +2127,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
  assert.ok(/const row=\$\('\.p-closing \.tape \.purse'\),val=row\?\.querySelector\(':scope>b'\)/.test(closing)&&/if\(row\)A\(row,\{opacity:/.test(closing),'the scale lands on the number alone, never the full-width row - a whole-row scale overflows the card');
  assert.ok(/translateY:\[\{from:0,to:0,duration:land\},\{to:CLOSING_STAMP\.dip,duration:40,ease:'in\(2\)'\}/.test(closing),'the tape gives 4 px on the landing frame and settles');
- assert.ok(/\.p-closing \.purse\.gain \.pl b\{color:#6fcf93\}/.test(css)&&/\.p-closing \.purse\.loss \.pl b\{color:#e0645a\}/.test(css),'v2.9.7: 보유 자금 stamps in one colour; 영업 손익 alone is green / red - the end state a reduced-motion capture also shows');
+ assert.ok(/\.p-closing \.purse\.gain \.pl b\{color:#6fcf93\}/.test(css)&&/\.p-closing \.purse\.loss \.pl b\{color:#e0645a\}/.test(css),'v2.9.7: 보유 골드 stamps in one colour; 영업 손익 alone is green / red - the end state a reduced-motion capture also shows');
  const cs=bare(fn('closingSound'));
  assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&/sound\('receipt'\)/.test(cs),'one printer tick, and a stale timer is cleared first');
  assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
@@ -2336,7 +2336,7 @@ test('D-34: the store float is on the screen that spends it, and a closed window
  const win=fn('relicWindow')||app.slice(app.indexOf('relic-takeover'),app.indexOf('function sealChoice'));
  assert.ok(win.includes("game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다."),
   'a full store says so where it used to say the window is open until DAY N');
- assert.ok(win.includes('구매할 수 있다 · 자금'),'and still says the open case when it is open');
+ assert.ok(win.includes('구매할 수 있다 · 보유 골드'),'and still says the open case when it is open');
 });
 
 /* UI_UX §TUTORIAL / UI-Q105. The coach mark shipped for a long time with markup and no
@@ -2514,12 +2514,12 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  const walletChip=fn('walletChip');
  assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
  // both Wallet surfaces read that chip; neither prints a bare n.money any more
- assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
+ assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n,true\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
  assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
  assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
  assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
  // the two figures are printed side by side and never summed into one
- assert.ok(/소지 <b>'\+fmt\(n\.money\)\+'G<\/b>/.test(walletChip),'the persistent half is the real n.money');
+ assert.ok(/\(full\?'손님 소지금':'소지'\)\+' <b>'\+fmt\(n\.money\)\+'G<\/b>'/.test(walletChip),'the persistent half is the real n.money');
  assert.ok(/fmt\(b\)/.test(walletChip)&&/b=n\.eventBudget/.test(walletChip),'the temporary half is the real eventBudget');
  assert.ok(!/n\.money\+\(n\.eventBudget\|\|0\)/.test(walletChip)&&!/n\.money\+b/.test(walletChip),
   'the chip never renders one merged Wallet figure');
