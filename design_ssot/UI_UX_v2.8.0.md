@@ -522,7 +522,7 @@ A desk (≥1024) draws its own SALE from the phone's pieces (same texts, keys, a
 ### SALE SELECTED-ITEM INFORMATION
 
 One heading `판매 후 변화`, rows under it, no stacked analytical subheads. It lists only the Item's own effect rows
-(`피로 회복 2 → 9`, `강인함 17 → 23`, `원정 소지금 획득 0%p → 40%p`) — no `피로 완화` row and no `피로 {A} → 출발 {B}` line on
+(`피로 회복 2 → 9`, `강인함 17 → 23`, `손님 소지금 획득 0%p → 40%p`) — no `피로 완화` row and no `피로 {A} → 출발 {B}` line on
 tray, till or FINAL preparation; on the tray rows may join with ` · ` on one wrapping line. The frozen four-cell outlook never
 repaints for a selected Item. `특수 효과` and shelf life stay; conditional functions without a numeric delta stay under
 \`특수 효과\` (never \`이 손님에게는 지금 걸리지 않는 효과\`). Source/cause goes in the anchored popover; internal marker rows
@@ -749,7 +749,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md §8.
 ## NIGHT
 
 question=`내 선택이 어떻게 됐을까?` — one adventurer at a time: what happened → why → what changed. Result 정보: 원정 fatigue
-gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **원정 소지금 획득**. Routine success compact; growth / injury /
+gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **손님 소지금 획득**. Routine success compact; growth / injury /
 death / decisive Item / callback stronger. On 게이트 순례 주간 one compact Event line with the actual changed count, and affected
 cards show expected -> actual destination. No debug-log layout, modifier ledger, long mandatory animation or uniform weight.
 
@@ -873,7 +873,7 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
   cut in on that frame as the cause response. 만반의 준비 turning a Death into 부상 / 중상 prints `사망` first the same way and its
   own Outcome overstamps it (cue on the overstamp, no `rescue`); 강골 and 구급키트 only lower an injury and never reverse
 - one after-motion: with a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no reversal it settles once (160 ms) and
-  figures stand; otherwise REWARD figures (경험치, 원정 소지금 획득, 대성공 본사 보상, Deep reward) count up from 0 in 220 ms from
+  figures stand; otherwise REWARD figures (경험치, 손님 소지금 획득, 대성공 본사 보상, Deep reward) count up from 0 in 220 ms from
   the landing. GROWTH / AFTERMATH never count; a death has none. Everything ends by 770 ms
 - sound: the Outcome cue's first note lands on the landing frame (sharper attack, one step louder, at every setting); 사망
   keeps its restrained attack and starts with the tape; on a reversal the cue starts with the first print and `rescue` lands on
@@ -1437,7 +1437,7 @@ screen says it; otherwise none, or taught after the fact.
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`원정 소지금 획득`); a NIGHT tells one mark, the most serious rule first
+- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`손님 소지금 획득`); a NIGHT tells one mark, the most serious rule first
 
 ### SALE PRICE LESSONS (v2.9.12)
 
@@ -1506,7 +1506,7 @@ COPY_WORLD_VOICE_v2.8.0.md.
 
 ### COPY / TUTORIAL UX RECOVERY
 
-Approved terms (never the old ones): 탐식 (not 폭식) · 원정 소지금 획득 (not 전리품) · 탈출 확률 (not 탈출 보정) · 부상 확률 (not
+Approved terms (never the old ones): 탐식 (not 폭식) · 손님 소지금 획득 (not 전리품) · 탈출 확률 (not 탈출 보정) · 부상 확률 (not
 부상 위험) · 1000G / 18칸 (not 1200G / 24칸) · 교환권 50G (not 30G) · 설정 (not 설정 · 저장). Tutorial/Help cover injury / Severe
 Injury, fatigue / recovery, ORDER confirm / Reroll / 영업 시작 separation, D10/D14 unlock, current Save/Reset; no Night
 single-skip instructions.

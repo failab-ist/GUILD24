@@ -3162,7 +3162,7 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  const pres=read('dist/ui/presentation.js');
  assert.ok(pres.includes("'예상보다 큰 성과를 내고 돌아왔다.'"),'§6-2 the Great Success outcome');
  assert.ok(!pres.includes('예상보다 일찍 게이트에서 나왔다'),'and the time-saving reading is gone');
- assert.ok(pres.includes("label:'원정 소지금 획득'"),'§6-8 the Wallet reward label');
+ assert.ok(pres.includes("label:'손님 소지금 획득'"),'§6-8 the Wallet reward label');
  assert.ok(!pres.includes('NPC 소지금 획득'),'and the internal NPC wording is gone');
 });
 

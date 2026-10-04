@@ -452,8 +452,8 @@ Store Support direct Wallet grants, Event purchase budget, Store Gold / commissi
 non-expedition-loot Wallet source.
 
 Player-facing term:
-    원정 소지금 획득 +20%
-    원정 소지금 획득 +40%
+    손님 소지금 획득 +20%
+    손님 소지금 획득 +40%
 
 Do not say current 소지금 +20% / +40%.
 
@@ -586,8 +586,8 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 |---|---|---|---:|---|---:|
 | rice | 삼각김밥 | Food C | 35 / 70 | 강인함 +6, Supply 5 | 2d |
 | water | 생수 | Drink C | 40 / 80 | 강인함 +12, Supply 2 | 2d |
-| lunchbox | 간단 도시락 | Food U | 90 / 180 | 강인함 +9, Supply 6, 원정 소지금 획득 +10% | 2d |
-| guildlunch | 길드 특제 도시락 | Food R | 165 / 330 | 강인함 +12, Supply 7, 원정 소지금 획득 +25% | 2d |
+| lunchbox | 간단 도시락 | Food U | 90 / 180 | 강인함 +9, Supply 6, 손님 소지금 획득 +10% | 2d |
+| guildlunch | 길드 특제 도시락 | Food R | 165 / 330 | 강인함 +12, Supply 7, 손님 소지금 획득 +25% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 205 / 410 | 투력 +5, 강인함 +15, Supply 9 | 2d |
 | kingwater | 왕도 천연암반수 | Drink E | 180 / 360 | 투력 +5, 강인함 +20, Supply 2 | 3d |
 
@@ -829,7 +829,7 @@ reads the shelf's own kind order (대응 장비 → 음식·음료 → 포션) a
 1. Hazard Counter  (catalog order)
 2. 피로 회복 N
 3. Core Stat       (투력 · 강인함 · 기동 · 정신 — the stat panel's order)
-4. anything else   (e.g. 원정 소지금 획득; catalog order)
+4. anything else   (e.g. 손님 소지금 획득; catalog order)
 Insurance / Special: its one function line
 ```
 
@@ -1045,7 +1045,7 @@ PASS:
 - modifiers add with existing ordinary loot modifiers
 - Deep bonusWallet is not multiplied
 - Store Support/Event/direct Wallet grants are not multiplied
-- player copy says 원정 소지금 획득
+- player copy says 손님 소지금 획득
 
 #### DI-Q-v28-3 — MEAL VS WATER IDENTITY
 
