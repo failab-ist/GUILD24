@@ -46,6 +46,8 @@ let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
+/* User 2026-10-04: the ORDER 후보 전체 교환 key keeps its name and gains this refresh mark */
+const REROLL_ICON='<svg class="reroll-icon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 1-1.5-3.6M12 1.8V5H8.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" fill="none"/></svg>';
 const closeX=()=>btn(CLOSE_X,'dismiss','takeover-x','aria-label="창 닫기"');
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 /* v2.9.10 (User 2026-09-27/28): shelf life on stock counts down `폐기까지 N일` and then names its last two days - `내일까지`,
@@ -1307,6 +1309,7 @@ function closingScreen(){
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+taskLine('closing')+closingReceipt(s)+'</main>'
  +'<div class="dock">'+closingDock(s)+'</div></div>';
 }
+const NIGHT_MARKS=['death','severe','injured','prepared','earn','great','counter','fatigue'];
 const coachSteps={
  /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
@@ -1324,7 +1327,9 @@ const coachSteps={
     effect line, the 최대 key and the priced 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
-  ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사에서 구급키트 1개를 보내 줬다. 이번 한 번뿐이다. 원정에서 다쳐도 한 단계 가볍게 끝나게 해 준다 (중상 → 부상, 부상 → 무사). 오늘 첫 손님은 부상 중이다.']],
+  ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
+  /* User 2026-10-04: the reroll key is told once, on DAY 2 - a day with no other ORDER mark (the kit is DAY 3) */
+  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 후보 전체 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1336,16 +1341,18 @@ const coachSteps={
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  /* COPY_AUDIT §3-7 STATS: the first time a customer's Stats are on screen - what they are, that they differ per customer,
     투력 for combat, the other three for the Hazards and each one's side role. No number, no verdict. */
- ['stats','.dossier .detail-stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다. 강인함은 사고를, 기동은 패배 후 부상을, 정신은 사망을 조금씩 줄여 준다.'],
+ ['stats','.dossier .detail-stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
+ /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
+ ['flow','.readout','원정은 싸움에서 이기고, 위험 사고도 없어야 성공이다. 어느 하나라도 틀어지면 다치거나 죽을 수 있다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .ro-combat','전투 전망은 손님의 힘을 게이트의 요구 전력과 견준 것이다. 손님이 들어올 때 정해져서 바뀌지 않는다.'],
+ ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
- ['envmeter','.readout .ro-env','환경 대응은 상품을 고르면 오를 값이 미리 보이고, 팔면 그만큼 오른다. 뒤의 수치까지 채우면 그 위험을 막는다.'],
+ ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','오늘 보수를 받은 손님이다. 이런 손님에게는 바가지(150%)를 해 볼 만하다. 다만 거절당할 수 있고, 받아들여도 단골도가 깎인다.'],
- ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
+ ['returning','.who.returning','다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.',,4],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',,3],
  /* UI_UX §SALE PRICE LESSONS (User 2026-09-30): price is taught after it happens - the first refused 바가지, the first 50% sale */
  ['price-refused','.counter-tray [data-mode="overcharge"].refused','바가지는 거절될 수 있고 단골도가 깎인다.'],
  ['price-half','.receipt-stub.half','할인은 단골도를 크게 올린다.']],
@@ -1354,7 +1361,11 @@ const coachSteps={
     COACH DIET (User 2026-09-30): the `한 명씩` result mark is retired - the record and its 전체 건너뛰기 key say it */
  /* User 2026-10-02: a mark lights what it is about - the Fatigue rule the record's 귀환 후 피로 row (`.fatigue-row`, the only
     token carrying the Fatigue arithmetic), every other rule the record's outcome block it acted on */
- night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text])],
+ /* User 2026-10-04: one NIGHT mark a night, the most serious rule first (death ends the Run, a Severe Injury costs days, ...); the
+    rest wait for the next night they act. `earn` is the Wallet gain row - the first win that raised a customer's Wallet. */
+ night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text]),
+  ['earn','.changed .tok.gain','이긴 손님은 소지금이 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]
+  .sort((a,b)=>NIGHT_MARKS.indexOf(a[0].replace('learn-',''))-NIGHT_MARKS.indexOf(b[0].replace('learn-',''))),
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
@@ -1367,9 +1378,10 @@ const coachSteps={
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
     names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
     COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
- relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 무료이고, 지금 고르지 않아도 된다. DAY 4까지 아침·발주 화면의 점포지원에서 고를 수 있다. 이후 5일마다 새 후보가 온다.']]
+ relic:[['relic-what','.relic-open','점포지원은 영업 내내 적용된다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
 };
 let activeCoach=null;
+let nightMarked=null;
 let coachSettle=0,coachPainted=null,activeGroup=null;
 /* The target's own position, rounded - the one thing the whole overlay is measured from, so it
    is also what tells us whether a repaint is needed. */
@@ -1447,7 +1459,9 @@ function showCoach(){
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
     appeared there. */
  const visible=sel=>[...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);
- const step=steps.find(x=>!tutorial['coach-'+x[0]]&&visible(x[1]));if(!step)return;
+ const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&nightMarked?.[0]===game.run&&nightMarked[1]===day;
+ /* x[4] = the first DAY a mark may show; a NIGHT mark waits once one has been told this night */
+ const step=steps.find(x=>!tutorial['coach-'+x[0]]&&!(x[4]>day)&&!nightDone&&visible(x[1]));if(!step)return;
  const target=visible(step[1]);
  /* A target inside the phase's scroll area is judged against THAT area, not the window: the
     band above it (the SALE customer front, ~240px on a phone and ~400px on a desk) is a fixed
@@ -1467,7 +1481,7 @@ function finishCoach(skip=false){
  /* USER 2026-09-24: 건너뛰기 skips THIS screen's lesson only - every mark of the group on screen
     is marked done - and the next screen still teaches its own. `skipped` stays the whole-tutorial
     switch (reset / harness), no longer set by this button. */
- if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else t['coach-'+activeCoach[0]]=true;game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+ if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else{t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];}game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
@@ -1699,7 +1713,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
    +'<ol class="lines">'+s.offers.map((o,i)=>orderOffer(s,o,i)).join('')+'</ol>'
- +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
+ +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>'+REROLL_ICON+'후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
 /* v2.9.10 (User 2026-09-27): every Item names its category (음식 / 음료 / 포션 / 야외장비 / 보험), the words the Events and
