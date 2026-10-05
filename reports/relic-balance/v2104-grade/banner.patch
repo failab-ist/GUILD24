@@ -1,0 +1,32 @@
+diff --git a/dist/data/relics.js b/dist/data/relics.js
+index 15337ac..f53e79c 100644
+--- a/dist/data/relics.js
++++ b/dist/data/relics.js
+@@ -43,6 +43,7 @@ const rows=[
+ ['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
+ /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
+ ['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 15%).'],
++['banner','단골 응원 현수막','hybrid',['vip'],190,'손님의 투력이 단골도 10마다 2% 오른다.'],
+ ['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).']
+ ];
+ /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
+@@ -69,6 +70,7 @@ D.relicParams={
+  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
+  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},
+  memberBundle:{payShare:.5},
++ banner:{perTen:.02},
+  premiumMember:{rareIntentBonus:.15,arrivalGold:40},
+  returnPoints:{loyaltyBonus:4,goldBonus:20}, /* User 2026-10-04: Loyalty 5 -> 4 with the returning-customer condition gone */
+  expeditionMeal:{supplyPerItem:2,drinkSupplyPerItem:1,hazardDefense:2,orderPriceAdd:3}, /* User 2026-10-02: a flat Food/Drink order price +3G (5G measured too tight) */
+diff --git a/dist/systems/dungeon.js b/dist/systems/dungeon.js
+index d6f707b..75d47f9 100644
+--- a/dist/systems/dungeon.js
++++ b/dist/systems/dungeon.js
+@@ -199,6 +199,7 @@ function prepare(n,d,facilities=[]){
+  /* RELIC 평생 단골제 (User 2026-10-02): a 단골's four Core Stats +10%, before the Hazard reading - the Final party included */
+  const lifetime=facilities.includes('lifetime')&&G.Adventurer.isTrustedRegular(n)?D.relicParams.lifetime.statBonus:0;
+  if(lifetime)for(const k of STAT_KEYS)e[k]*=1+lifetime;
++ if(facilities.includes('banner'))e.combat*=1+Math.floor((n.loyalty||0)/10)*D.relicParams.banner.perTen;
+  /* RELIC 원정 도시락 코너 at the 마왕성 (v2.9.11, User 2026-09-29): every Food/Drink's +2 lands on this adventurer's most
+     취약 Hazard - the largest gap before the bonus, the Final's own Hazard order on a tie. */
+  if(mealFinal){const gaps=d.hazards.map(h=>hazardState(h,e,d).gap),i=gaps.indexOf(Math.max(...gaps)),h=d.hazards[i];

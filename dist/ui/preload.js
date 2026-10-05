@@ -5,7 +5,7 @@
    (the 1024px split in ui.css). */
 const A='ui/assets/',P=A+'presentation/';
 const MENU=['abandon','codex','decor','guide','roster','settings','support'];
-const DECO=['aidCabinet','guildShelf','honorFrame','infirmaryPlaque','memorialBook','sponsorSign','thriftSafe','trainingSign'];
+const DECO=['aidCabinet','guildShelf','honorFrame','infirmaryPlaque','memorialBook','sponsorSign','thriftSafe','trainingSign','heroSign','cheerBanner','voucher','rerollCoupon'];
 const BOSS=['B001_WRATH','B002_PRIDE','B003_ENVY','B004_GREED','B005_GLUTTONY','B006_LUST','B007_SLOTH'];
 const WIDE='(min-width:1024px)',CAP=15000;
 const keep=[];                       // hold the decoded images

@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
+DOC_VERSION=2.11.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -18,12 +18,11 @@ windows=[D0,D5,D10,D15,D20,D25,D30]
 maxOwned/run=7
 candidates/window=3
 
-D0: cost=0 · pick<=1 · eligible=Foundation · defer=YES (until DAY 4)
+D0: cost=0 · pick<=1 · eligible=일반 grade · defer=YES (until DAY 4)
 
-D5+: currency=G · buy<=1 · defer=YES · baseEligible=[Foundation,Hybrid,Utility] · KeystoneEligible=D10+ ·
-KeystoneStart=D10 · KeystoneSeparateHardRate=NO
+D5+: currency=G · buy<=1 · defer=YES · eligible=every grade · gradePerCard=일반 60% · 희귀 28% · 영웅 12% (§GRADE)
 
-pool=32 · Foundation=13 · Hybrid=8 · Keystone=7 · Utility=4 (§POOL ARCHITECTURE)
+offered=34 · 일반=17 · 희귀=10 · 영웅=7 (§GRADE) · internal kinds Foundation / Hybrid / Keystone / Utility (§POOL ARCHITECTURE)
 
 buildAxes=[Rotation,VIP,Premium,Expedition,Fresh,Customer]
 
@@ -61,7 +60,7 @@ economy/access/growth/item-value effects.
 ## ACQUISITION WINDOWS
 
 ### D0
-timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=Foundation · defer=YES · expiry=D5 window
+timing=before first business · cand=3 · pick<=1 · cost=0 · eligible=일반 grade · defer=YES · expiry=D5 window
 
 Goal: 첫 선택부터 Run 방향을 제안.
 
@@ -114,7 +113,8 @@ Current explicit D30 no-effect exclusions:
 길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
 프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) · 새벽 회수 계약 (dawnRecovery) ·
 왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
-응급 처치대 (firstAidDesk; no SALE arrival on D30)
+응급 처치대 (firstAidDesk; no SALE arrival on D30) · 소문 수집 게시판 (rumorBoard; no Event on D30) ·
+단골 추천 엽서함 (postcard; no visitors on D30) · 길드 구조대 계약 (rescueContract; no ordinary expedition on D30)
 
 All other current supports are D30-eligible under ordinary acquisition eligibility. Future Store Supports are
 D30-eligible by default; one is removed from D30 only by adding it to the exclusion set after its actual
@@ -211,33 +211,54 @@ buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약�
 
 - an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
 - price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
-- the redraw keeps every pool rule above (ownership, Keystone from D10, the D30 exclusions, diversity, build bias) and leaves
+- the redraw keeps every pool rule above (ownership, the grade roll, the D30 exclusions, diversity, build bias) and leaves
   the three on the table out when at least three others remain; the new three are priced as any window's
 - the spend is Store Support investment (the closing receipt's `점포지원 투자`); a reload never redraws for free
 - the key sits in the window's footer beside `나중에 결정`, the same rank and look (User 2026-10-02); copy -> COPY_AUDIT §11-31c
 
-Keystone:
-- D0/D5 eligible=NO; D10/D15/D20/D25/D30 eligible=YES
-- no separate fixed Keystone appearance probability; eligible Keystone competes in the normal candidate pool
-- related build pieces may softly raise weight
-- guaranteed completion=NO
+## GRADE
+
+Every Store Support has a Player-facing 등급: 일반 · 희귀 · 영웅, held as the Item rarity index (0 · 2 · 3) so it reads the Item
+rarity names and colours. The 등급 follows measured contribution (single ownership, `reports/relic-balance/v2104-grade/`), not
+the internal kind.
+
+```text
+영웅 (7)  : 24시간 신선체계 · 물류 본부계약 · 평생 단골제 · 왕도 프리미엄 인증 · 원정 작전실 · 지역 거점점 계약 · 응급 처치대
+희귀 (10) : 즉석식품 코너 · 본사 추가발주권 · 귀환 적립제 · 새벽 회수 계약 · 단체 주문 창구 · 프리미엄 멤버십 ·
+            원정 도시락 코너 · 길드 납품 인증 · 고급 식자재 유통 계약 · 길드 구조대 계약
+일반 (17) : 묶음발주 계약 · 회전 진열대 · 단골 스탬프 기계 · 회원 관리대장 · 희귀상품 입고 계약 · 길드 보증 진열대 ·
+            원정 위험 게시판 · 야전 정비대 · 대형 냉장고 · 길드 전광판 · 첫 방문 쿠폰 · 야전 들것 · 후방 창고 증설 ·
+            발주 교환권 · 운영 효율 매뉴얼 · 소문 수집 게시판 · 단골 추천 엽서함
+(retired 단골 묶음혜택 reads as 희귀 on a save that owns it)
+```
+
+Draw, per card of a window:
+1. roll the card's grade: D5+ 일반 60% · 희귀 28% · 영웅 12%; D0 always 일반
+2. draw one support of that grade from the eligible pool (ownership, the D30 exclusions, the cool-down of the last three);
+   when that grade has nothing left, draw from the whole eligible pool
+3. offer diversity and build bias apply inside the grade
+
+No grade is guaranteed in a window or a Run; 영웅 can come from D5. Presentation: the grade word under the support name, in the
+Item rarity colours (일반 / 희귀 / 영웅 = the Item 일반 / 희귀 / 영웅 colours), and a grade colour line (UI_UX §STORE SUPPORT WINDOW).
 
 ## POOL ARCHITECTURE
 
-total=32
+Internal build taxonomy (not shown to the Player; the grade above is what the Player reads):
 
-Foundation=13
-- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3)
-- early direction setters; D0 eligible
+total=35 (34 offered)
 
-Hybrid=8
-- connects 2 Build axes; pivot/flex value
+Foundation=14
+- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3) and 단골 추천 엽서함 (VIP)
+- early direction setters
+
+Hybrid=9
+- connects 2 Build axes; pivot/flex value; 길드 구조대 계약 holds one (Expedition); 단골 묶음혜택 retired
 
 Keystone=7
 - 1 per Primary Build, plus 응급 처치대 (Expedition holds 2)
-- build engine/completion piece; eligible from D10
+- build engine/completion piece
 
-Utility=4
+Utility=5 (소문 수집 게시판 joined)
 - general support; should not erase build identity
 
 ## BUILD COMPLETION FEEL
@@ -322,7 +343,8 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
 - 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 
 4. 회원 관리대장 · tag=VIP · identityPreReveal=NO
-- 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
+- 회원 관리대장: from the Day it is acquired, the 단골도 term of the visit weight counts double (`1 + 단골도 × 0.06` instead of
+  `× 0.03`, CORE_RUN visitor draw); the met / unmet shares themselves do not move
 
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약 · tag=Premium
@@ -404,8 +426,9 @@ base 3 -> 4 · base 4 -> 4 · base 5 -> 5 · base 6 -> 6
   pays the other half (recorded on that sale)
 
 15. 프리미엄 멤버십 · tags=[VIP,Premium] · 150AutoSuccess=NO
-- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +40G; that customer's Rare+
-  Item purchase intent +15%p
+- 프리미엄 멤버십: a 다시 온 손님 (not on a first visit)
+  arrives with NPC Wallet +25G and Rare+ purchase intent +15%p; when that customer buys a Rare+ Item at 100% or 50%, 단골도
+  +10 on top of the purchase gain (단골 스탬프 기계 multiplies the total; a 150% sale takes no bonus)
 
 16. 귀환 적립제 · tags=[VIP,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=a customer who bought today survives expedition -> long-term customer value up
@@ -418,33 +441,28 @@ channel=prefer existing loyalty/wallet/revisit systems
 17. 원정 도시락 코너 · tags=[Fresh,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-per Food/Drink Item in the Bag:
-  Food:  Supply +2 (피로 회복 +2)
-  Drink: Supply +1 (피로 회복 +1)
+per Food/Drink Item in the Bag (with or without its own Hazard Counter):
   +2 defence on every Hazard of the Gate the adventurer actually goes to
   at the 마왕성 (the Final) the +2 goes to one Hazard only: the adventurer's most 취약 one - the largest gap before this
     bonus, the Final's own Hazard order on a tie
-Food/Drink ORDER price +3G flat, after any percentage modifier (24시간 신선체계 x1.15 first); the offers on the table are
-  repriced once at acquisition (User 2026-10-02: the Fresh line clears more and pays more)
+Food/Drink ORDER price ×1.15 (with 24시간 신선체계 ×1.15 too); the offers on the table are repriced once at acquisition
+no Supply (피로 회복) bonus
 ```
 
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 
-18. 냉장 유통 계약 · tags=[Fresh,Premium] · eligible=Uncommon+ Food/Drink · singleSkuDependency=NO
-- Uncommon+ Food/Drink offer weight +80%
-- Uncommon+ Food/Drink purchase intent +16%p
-- no Stat effect
-- shelf life +1 day
-- on acquisition, currently owned non-expired eligible stock extends exactly once
-- future eligible stock receives the extension
+18. 고급 식자재 유통 계약 (id coldcase) · tags=[Fresh,Premium] · eligible=Uncommon+ Food/Drink
+- the Day's first ORDER sheet carries one extra Uncommon+ Food/Drink slot (never on a Reroll; the 새벽 회수 계약 rule)
+- an Uncommon+ Food/Drink sale pays the store 15% of the charged price on top (HQ commission)
+- no offer weight, no purchase intent, no shelf life, no Stat effect
 
 Eligibility: category in [Food, Drink] and rarity >= Uncommon. Do not use a retired fresh boolean/property.
 
 19. 길드 납품 인증 · tags=[Premium,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=Rare+ expedition-response items gain premium-economy viability
 - Price = 220G
-- HQ commission = 20% of Item list price
+- HQ commission = 40% of Item list price
 - buyer NPC Wallet +30G
 
 20. 새벽 회수 계약 · tags=[Fresh,Rotation]
@@ -557,6 +575,28 @@ with 발주 교환권: 0 -> 50 -> 100 -> 200 -> 400 -> x2 thereafter
 Late acquisition may rationally be skipped; that alone is not a Balance Finding. Evaluate this support by whether
 earlier acquisition can repay its price and create meaningful remaining-Run economy value.
 
+### ADDED SUPPORTS (User 2026-10-04)
+
+33. 소문 수집 게시판 (rumorBoard) · tags=[] · Price = 60G
+- every Normal Event Day rolls an Event (chance 100% instead of 40%; EVENT §EVENT TIMING / FREQUENCY): every morning except
+  the Store Support window Days and this Run's 심층원정 Days, and on the account's first Run DAY 1 too
+- the Events themselves are the ordinary catalogue draw - good and bad alike; this is a variance pick, not a power pick
+
+34. 단골 추천 엽서함 (postcard) · tags=[VIP] · Price = 80G
+- on a Day a 단골 visited, every other visitor of that Day gains 단골도 +5 at the Night (before the expeditions); two 단골
+  on the same Day give each other the gain too
+- not a purchase gain: 단골 스탬프 기계 does not multiply it; 평생 단골제's floor and the 0~100 clamp apply
+
+35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 240G
+- an ordinary expedition whose Outcome is still 사망 after the Items (귀환석, 세계수 생환부적) rolls once more: 15% -> 중상
+  (the ordinary 중상: Injury 2, recovery Days); the 강골 Trait and 구급키트 then settle as usual
+- the report says so (`길드 구조대가 사망을 중상으로 바꿈`); the hero proof reads the same roll
+
+### RETIRED SUPPORTS
+
+단골 묶음혜택 (memberBundle) is no longer offered in any window (User 2026-10-04). A save that already owns it keeps it, and
+it plays as its blueprint above.
+
 ## FRESH NATIVE-STAT COMPOSITION
 
 Positive native Core Stat means the Item's own positive contribution to 투력/강인함/기동/정신 before unrelated effects.
@@ -612,7 +652,7 @@ Customer/VIP:
 
 ## ACTIVE POOL BOUNDARY
 
-activeRelicPool=the 32 canonical blueprints in this document only
+activeRelicPool=the 34 offered canonical blueprints in this document (35 blueprints, 단골 묶음혜택 retired)
 
 nonCanonicalFacilityActive=NO
 excludedFacilityNames=[포션 냉장고,마석 충전대,상권 분석대]
@@ -644,20 +684,23 @@ The following 21 Store Support base prices are the approved baseline.
 | guarantee | 길드 보증 진열대 | 140G |
 | hazardBoard | 원정 위험 게시판 | 60G |
 | fieldRepair | 야전 정비대 | 80G |
-| kitchen | 즉석식품 코너 | 170G |
+| kitchen | 즉석식품 코너 | 200G |
 | board | 길드 전광판 | 110G |
 | firstVisitCoupon | 첫 방문 쿠폰 | 110G |
 | groupOrder | 단체 주문 창구 | 200G |
 | memberBundle | 단골 묶음혜택 | 190G |
 | premiumMember | 프리미엄 멤버십 | 200G |
 | expeditionMeal | 원정 도시락 코너 | 200G |
-| coldcase | 냉장 유통 계약 | 180G |
+| coldcase | 고급 식자재 유통 계약 | 180G |
 | dawnRecovery | 새벽 회수 계약 | 190G |
 | fresh24 | 24시간 신선체계 | 360G |
 | warehouse | 후방 창고 증설 | 130G |
-| extraOrder | 본사 추가발주권 | 130G |
+| extraOrder | 본사 추가발주권 | 190G |
 | rerollTicket | 발주 교환권 | 120G |
 | fieldStretcher | 야전 들것 | 80G |
+| rumorBoard | 소문 수집 게시판 | 60G |
+| postcard | 단골 추천 엽서함 | 80G |
+| rescueContract | 길드 구조대 계약 | 240G |
 
 The other 11 active support prices are exact in their Store Support entries above.
 Price should follow actual ROI, not label alone.
@@ -906,20 +949,19 @@ SETUP: Own several same-axis Relics and sample offers.
 EXPECT: Related pieces may be somewhat more likely.
 PASS: No guaranteed missing-piece completion.
 
-#### REL-Q12 — KEYSTONE TIMING
+#### REL-Q12 — GRADE DRAW
 SETUP: Inspect D0 and later windows.
 EXPECT:
-- D0/D5 Keystone=NO
-- D10+ Keystone eligible
-- no separate fixed Keystone quota/probability is required
-- normal candidate pool + soft build bias rules still apply
-PASS: No pre-D10 Keystone leak and no hidden guaranteed Keystone completion path.
+- D0 offers 일반 only
+- D5+ each card rolls 일반 60% · 희귀 28% · 영웅 12% and draws within that grade (whole pool when the grade is empty)
+- soft build bias and diversity still apply inside the grade
+PASS: no 희귀 / 영웅 on D0, the per-card grade shares hold, and no hidden guaranteed 영웅 path.
 
 ### POOL / BLUEPRINTS
 
 #### REL-Q14 — POOL SIZE
 SETUP: Inspect canonical pool.
-EXPECT: 32 total: Foundation 13 · Hybrid 8 · Keystone 7 · Utility 4 (§POOL ARCHITECTURE)
+EXPECT: 35 total (34 offered): Foundation 14 · Hybrid 9 · Keystone 7 · Utility 5; grades 일반 17 · 희귀 10 · 영웅 7 (§GRADE)
 PASS: Counts match.
 
 #### REL-Q15 — BUILD AXES
@@ -958,7 +1000,7 @@ PASS: No excluded facility is offered, owned, or applied as a hidden modifier.
 
 Expected:
 - rareContract -> 희귀상품 입고 계약
-- coldcase -> 냉장 유통 계약
+- coldcase -> 고급 식자재 유통 계약
 - the wall Decoration is 명예 모험가 액자; no Store Support is named 쇼케이스
 
 No active Store Support uses 쇼케이스 in these two names.
@@ -969,7 +1011,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
-- 회원 관리대장 -> returning revisit weight +70% from next Day
+- 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
 - 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
@@ -981,9 +1023,9 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
-- 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item; at the 마왕성 the +2 lands on the adventurer's most 취약 Hazard only - the largest gap before the bonus, the Final's Hazard order on a tie
-- 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
+- 프리미엄 멤버십 -> 다시 온 손님 arrival NPC Wallet +25G; Rare+ purchase intent +15%p; a Rare+ purchase at 100% / 50% 단골도 +10
+- 원정 도시락 코너 -> flat +2 on every Hazard of the actual Gate per Food/Drink Item (one Hazard at the 마왕성); Food/Drink ORDER price ×1.15
+- 고급 식자재 유통 계약 -> one extra Uncommon+ Food/Drink slot on the Day's first ORDER sheet; Uncommon+ Food/Drink sale +15% HQ commission
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
 - 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15; no shelf life
@@ -1186,8 +1228,8 @@ Insurance, RiskReward penalty or unrelated attached effects.
 PASS: Fresh does not become a blanket whole-item multiplier.
 
 #### REL-Q33 — COLD DISTRIBUTION ELIGIBILITY
-SETUP: Own 냉장 유통 계약 and generate Order offers repeatedly.
-EXPECT: Eligibility targets Uncommon+ Food/Drink, purchase intent +16%p and shelf-life relief as defined in RELIC.
+SETUP: Own 고급 식자재 유통 계약 and generate Order offers repeatedly.
+EXPECT: the first sheet carries one extra Uncommon+ Food/Drink slot, and an Uncommon+ Food/Drink sale pays 15% on top.
 PASS: Effect has a meaningful multi-SKU pool and is not dependent on one or two Rare items.
 
 #### REL-Q76 — COLD DISTRIBUTION / DAWN RECOVERY CATEGORY

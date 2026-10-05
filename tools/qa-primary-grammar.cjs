@@ -8,6 +8,7 @@
 // at rest and held (a notch clips a cast the style still declares). Reduced motion.
 //   node tools/qa-primary-grammar.cjs [out-dir]
 const {spawn}=require('node:child_process'),path=require('node:path'),fs=require('node:fs');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 const PORT=Number(process.env.QA_PORT||5198),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',OUT=process.argv[2]?path.resolve(process.argv[2]):null;
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
 const results=[];const check=(name,ok,detail='')=>{results.push({name,ok});console.log((ok?'PASS ':'FAIL ')+name+(detail?' - '+detail:''));};
@@ -49,7 +50,7 @@ const READ=`((sel,label)=>{const e=document.querySelector(sel);if(!e)return null
    const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:desk?1:2,isMobile:!desk,hasTouch:!desk,locale:'ko-KR',reducedMotion:'reduce'});
    await ctx.addInitScript(()=>{try{if(!sessionStorage.getItem('qa')){localStorage.clear();sessionStorage.setItem('qa','1');}}catch(e){}});
    const p=await ctx.newPage();p.setDefaultTimeout(10000);p.on('pageerror',e=>check(tag+' no page error',false,e.message));
-   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(p);
    await p.evaluate(()=>{(Guild24.game.account.tutorial??={}).skipped=true;Guild24.game.save();Guild24.render();});
    const clear=async()=>{for(let k=0;k<6;k++){const b=await p.$('#modal-root [data-action="boss-seen"]')||await p.$('#modal-root [data-action="event-seen"]')||await p.$('#modal-root [data-action="dismiss"]');if(!b)break;await b.click();await p.waitForTimeout(120);}};
    const measure=async ph=>{const A=ACTION[ph];await p.evaluate('Guild24.render()');await clear();await p.waitForTimeout(250);

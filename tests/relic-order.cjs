@@ -75,13 +75,16 @@ test('REL-Q40: owned Relic quick view is read-only name/effect data',()=>{
  g.run.phase='night';assert.equal(g.canBuyRelic(),false,'no Relic purchase during Night');
 });
 
-test('REL-Q33: 냉장 유통 계약 targets Uncommon+ Food/Drink, not a one-SKU Rare pool',()=>{
- const g=fresh('coldcase');g.run.facilities=['coldcase'];
+test('REL-Q33: 고급 식자재 유통 계약 targets Uncommon+ Food/Drink, not a one-SKU Rare pool',()=>{
+ const g=fresh('coldcase');
  const eligible=DATA.items.filter(it=>['food','drink'].includes(it.category)&&it.rarity>=1);
  assert.ok(eligible.length>=4,'multi-SKU pool, got '+eligible.length);
- for(const it of eligible)assert.ok(Relics.offerWeight(g,it)>1,it.id+' should be favoured');
- for(const it of DATA.items.filter(i=>['food','drink'].includes(i.category)&&i.rarity===0))assert.equal(Relics.offerWeight(g,it),1,it.id+' common Food/Drink is not favoured');
- assert.ok(Relics.shelf(g,DATA.itemBy.dragonramen)>0,'shelf-life relief reaches Uncommon Food');
+ // the extra first-sheet slot draws from that pool across Days (User 2026-10-04: no weighting, no shelf life)
+ const seen=new Set();g.run.facilities=['coldcase'];
+ for(let i=0;i<40;i++){g.generateOffers(true);const it=DATA.itemBy[g.run.offers.at(-1).item];assert.ok(['food','drink'].includes(it.category)&&it.rarity>=1,it.id);seen.add(it.id);}
+ assert.ok(seen.size>=2,'more than one SKU reaches the slot: '+[...seen]);
+ for(const it of DATA.items)assert.equal(Relics.offerWeight(g,it),Relics.offerWeight({...g,has:id=>false},it),it.id+' weight untouched');
+ assert.equal(Relics.shelf(g,DATA.itemBy.dragonramen),0,'no shelf-life effect');
 });
 
 // REL-Q77 kept only as the category helper check: Relics.field() still names Potion / Field Gear /
@@ -119,28 +122,21 @@ test('REMAKE 야전 정비대: Hazard Counter values x1.40 in any category, noth
  for(const it of [DATA.itemBy.lowpotion,DATA.itemBy.boots]){g.run.facilities=[];const st=g.rng.state,q=g.offerFor(it).quantity;g.run.facilities=['fieldRepair'];g.rng=new RNG(g.run.seed,st);assert.equal(g.offerFor(it).quantity,q);}
 });
 
-test('RELIC 17: 원정 도시락 코너 gives each Food Supply +2, each Drink +1 and +2 on every destination Hazard',()=>{
- /* 2026-09-23 rework: the old matching-Counter x1.25 and the Supply-Burden native-Stat +20% are
-    gone. Per Food/Drink Item in the Bag: Supply +2 (Food) / +1 (Drink), and +2 defence on EVERY Hazard
-    of the Gate the adventurer goes to - flat, whether or not the Item Counters anything.
-    v2.9.11 (User 2026-09-28): Drink Supply +2 -> +1, Hazard +4 -> +2. */
+test('RELIC 17: 원정 도시락 코너 gives +2 on every destination Hazard per Food/Drink, and no Supply (User 2026-10-04)',()=>{
  const g=fresh('meal'),n={...g.run.npcs[0],traits:[],pack:['dragonramen']};
  const cold={...g.makeDungeon('snow',2),requiredSupply:3},spider={...g.makeDungeon('spider',2),requiredSupply:0};
  for(const gate of [cold,spider]){
   const plain=Dungeon.prepare(n,gate),meal=Dungeon.prepare(n,gate,['expeditionMeal']);
   for(const h of gate.hazards)assert.equal((meal.effects[h]||0)-(plain.effects[h]||0),2,gate.family+' '+h+' +2');
-  assert.equal(meal.effects.supply-plain.effects.supply,2,'Supply +2 per Food');
+  assert.equal(meal.effects.supply,plain.effects.supply,'no Supply (피로 회복) bonus');
   const off=['poison','fire','cold','corrosion','bind','mire','fear','dark','whiteout'].filter(h=>!gate.hazards.includes(h));
   for(const h of off)assert.equal(meal.effects[h]||0,plain.effects[h]||0,h+' is not a Hazard of this Gate and is untouched');
   assert.deepEqual(meal.itemStats,plain.itemStats,'no native Core-Stat bonus remains');
  }
- // a Drink alone -> Supply +1 and the same +2 Hazard defence
+ // a Drink alone -> the same +2 Hazard defence; a Food and a Drink -> +4; a non-Food Item -> nothing
  const drink={...n,pack:['water']};
- assert.equal(Dungeon.prepare(drink,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(drink,cold).effects.supply,1,'Supply +1 per Drink');
  for(const h of cold.hazards)assert.equal(Dungeon.prepare(drink,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(drink,cold).effects[h]||0),2,h+' +2 for a Drink');
- // a Food and a Drink -> Supply +3, Hazard +4; a non-Food Item -> nothing
  const two={...n,pack:['dragonramen','water']};
- assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(two,cold).effects.supply,3,'Food + Drink give Supply +3');
  for(const h of cold.hazards)assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(two,cold).effects[h]||0),4,h+' +4 for two');
  const gear={...n,pack:['rope']};
  assert.deepEqual(Dungeon.prepare(gear,cold,['expeditionMeal']).effects,Dungeon.prepare(gear,cold).effects,'a non-Food/Drink Item takes nothing');
@@ -489,6 +485,18 @@ test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is pai
    basePrice x a limited band (about +-15-20%), fixed for the window; buy<=1; maxOwned/run=7. */
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): from DAY 5 an open window redraws its three for 300G, doubling within the
    window and back to 300G on the next; never on DAY 0; the spend is Store Support investment and survives a reload. */
+test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0 offers 일반 only; D5+ cards roll 60 / 28 / 12',()=>{
+ // the 등급 is an Item rarity index (0 일반 · 2 희귀 · 3 영웅), so it reads the Item rarity names
+ const offered=DATA.relics.filter(r=>!DATA.relicRetired.includes(r.id)),count=x=>offered.filter(r=>r.rarity===x).length;
+ assert.deepEqual([count(0),count(2),count(3)],[17,10,7]);
+ assert.deepEqual(DATA.relicRarityChance,{0:.60,2:.28,3:.12});
+ assert.deepEqual([0,2,3].map(x=>DATA.rarities[x]),['일반','희귀','영웅']);
+ for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('grade-d0-'+i);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'D0 is 일반 only');}
+ const g=new Game();g.autosave=false;g.start('grade-share');const n={0:0,2:0,3:0};let cards=0;
+ for(let i=0;i<1500;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);for(const id of g.run.relicWindow.candidateIds){n[DATA.relicBy[id].rarity]++;cards++;}}
+ for(const [x,want] of Object.entries(DATA.relicRarityChance))assert.ok(Math.abs(n[x]/cards-want)<.03,DATA.rarities[x]+' share '+(n[x]/cards).toFixed(3));
+ assert.ok(n[3]>0,'영웅 on D5 (the Keystone-from-D10 rule is gone)');
+});
 test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
  const g=new Game();g.autosave=false;g.start('relic-reroll');
  assert.equal(g.canRerollRelics(),false,'the DAY 0 free pick has no reroll');
@@ -500,7 +508,7 @@ test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the nex
  g.rerollRelics();
  assert.equal(g.run.money,1700,'the first reroll costs 300G');assert.equal(g.run.stats.relicSpent,spent+300,'counted as Store Support investment');
  assert.equal(w.candidateIds.length,3);assert.ok(w.candidateIds.every(id=>!first.includes(id)),'the three on the table are left out when the pool allows');
- assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind!=='keystone'),'pool rules hold: no Keystone before DAY 10');
+ assert.ok(w.candidateIds.every(id=>!DATA.relicRetired.includes(id)&&!g.run.facilities.includes(id)),'pool rules hold: nothing retired or owned');
  assert.ok(w.candidatePrices.every(p=>p>0),'redrawn cards are priced');
  assert.equal(g.relicRerollPrice(),600,'the second doubles');
  const back=Save.import(Save.export(g.account,g.run));assert.equal(back.run.relicWindow.rerolls,1,'a reload keeps the count');

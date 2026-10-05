@@ -631,22 +631,22 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['bulk','묶음발주 계약',130,'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 20% 싸진다.'],
   ['rotation','회전 진열대',80,'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 1개 늘어난다.'],
   ['stamp','단골 스탬프 기계',130,'손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4). 원정 뒤에 오르는 단골도는 그대로.'],
-  ['member','회원 관리대장',130,'다음 날부터, 한 번 왔던 손님이 1.7배 자주 다시 찾아온다.'],
+  ['member','회원 관리대장',130,'단골도가 손님이 다시 올 가능성에 주는 효과가 2배가 된다.'],
   ['rareContract','희귀상품 입고 계약',140,'발주 후보에 희귀 이상 상품이 1.7배 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 10%를 더 받는다.'],
   ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 70%만 내고 가게는 전액을 받는다.'],
   ['hazardBoard','원정 위험 게시판',60,'오늘 게이트 위험에 맞는 상품이 발주 후보에 1.5배 자주 나온다.'],
   ['fieldRepair','야전 정비대',80,'가게에서 판 상품의 위험 대응 수치가 40% 높아진다.'],
   ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-  ['kitchen','즉석식품 코너',170,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 10% 오른다.'],
+  ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 10% 오른다.'],
   ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
   ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다.'],
   ['memberBundle','단골 묶음혜택',190,'단골 손님이 오늘 두 번째 상품을 살 때, 손님은 반값만 내고 가게는 전액을 받는다.'],
-  ['premiumMember','프리미엄 멤버십',200,'단골 손님이 오면 그 손님의 손님 소지금 +40G, 희귀 이상 상품 구매 의사 +15%p.'],
+  ['premiumMember','프리미엄 멤버십',200,'다시 온 손님의 손님 소지금 +25G, 희귀 이상 상품 구매 의사 +15%p. 그 손님이 희귀 이상 상품을 정가나 할인으로 사면 단골도가 10 더 오른다.'],
   ['returnPoints','귀환 적립제',240,'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +4, 손님 소지금 +20G.'],
-  ['expeditionMeal','원정 도시락 코너',200,'손님 가방의 음식·음료 1개마다 피로 회복 +2 (음료는 +1), 갈 게이트의 위험 대응도 모두 +2 (마왕성은 가장 약한 위험 하나만). 대신 음식·음료 매입가 +3G.'],
-  ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료가 발주 후보에 1.8배 자주 나오고, 그 상품의 구매 의사 +16%p, 유통기한 +1일 (이미 가진 재고도 한 번).'],
-  ['supplyCert','길드 납품 인증',220,'희귀 이상 상품 중 오늘 위험에 맞는 것이나 보험을 팔면, 가게가 정가의 20%를 더 받고 그 손님의 손님 소지금도 +30G.'],
+  ['expeditionMeal','원정 도시락 코너',200,'모든 음식·음료가 기존 위험 대응이 없어도 모든 위험 대응을 2 올린다. 마왕성에서는 가장 약한 위험 하나만 올린다. 대신 음식·음료 매입가가 15% 오른다.'],
+  ['coldcase','고급 식자재 유통 계약',180,'매일 첫 발주 후보에 고급 이상 음식·음료가 1칸 더 나온다. 고급 이상 음식·음료를 팔면 가게가 판매가의 15%를 더 받는다.'],
+  ['supplyCert','길드 납품 인증',220,'희귀 이상 상품 중 오늘 위험에 맞는 것이나 보험을 팔면, 가게가 정가의 40%를 더 받고 그 손님의 손님 소지금도 +30G.'],
   ['dawnRecovery','새벽 회수 계약',190,'유통기한이 지난 음식·음료는 버리는 대신 매입가의 50%를 돌려받는다. 매일 첫 발주 후보에 음식이나 음료가 1칸 더 나온다.'],
   ['logisticsHQ','물류 본부계약',300,'전날 판 상품 1개마다 오늘 발주 매입가가 3% 싸진다 (최대 30%).'],
   ['lifetime','평생 단골제',310,'단골 손님의 능력치가 모두 10% 오른다. 한 번 단골이 되면 단골도가 51 아래로 떨어지지 않는다.'],
@@ -655,15 +655,19 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['fresh24','24시간 신선체계',360,'음식·음료가 올려 주는 능력치가 50% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +15%.'],
   ['hub','지역 거점점 계약',340,'다음 날부터 매일 손님이 45% 확률로 1명, 15% 확률로 2명 더 온다. 대신 기본 운영비가 10% 오른다.'],
   ['warehouse','후방 창고 증설',130,'창고에 둘 수 있는 상품이 5칸 늘어난다.'],
-  ['extraOrder','본사 추가발주권',130,'다음 발주부터 발주 후보가 2개 늘어난다.'],
+  ['extraOrder','본사 추가발주권',190,'다음 발주부터 발주 후보가 2개 늘어난다.'],
   ['rerollTicket','발주 교환권',120,'매일 첫 발주 후보 교환은 무료. 그다음부터 50G → 100G → 200G… 로 오른다.'],
   ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 하루 기본 운영비가 30G 적어진다.'],
   /* v2.9.11 (User 2026-09-28): COPY_AUDIT §11-30b / §11-30c */
   ['fieldStretcher','야전 들것',80,'부상당한 손님의 투력 감소 8% (기존 15%).'],
-  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 20% 확률로 부상이 낫는다 (중상은 제외).']];
+  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 20% 확률로 부상이 낫는다 (중상은 제외).'],
+  /* User 2026-10-04: COPY_AUDIT §11-30d / §11-30e / §11-30f */
+  ['rumorBoard','소문 수집 게시판',60,'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
+  ['postcard','단골 추천 엽서함',80,'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 5 오른다.'],
+  ['rescueContract','길드 구조대 계약',240,'원정에서 사망 결과가 나오면 15% 확률로 중상으로 바뀌어 돌아온다.']];
  /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30c exact (32 since v2.9.11) */
- assert.equal(SUPPORTS.length,32,'§11 audits all 32 Store Supports');
- assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 32, in order');
+ assert.equal(SUPPORTS.length,35,'§11 audits all 35 Store Supports (단골 묶음혜택 retired but still readable)');
+ assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 35, in order');
  for(const [id,name,price,description] of SUPPORTS){
   const r=DATA.relicBy[id];
   assert.ok(r,'the catalogue still has '+id);
@@ -700,8 +704,13 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
   trainingSign:'처음 찾아오는 모험가는 55% 확률로 레벨 +1로 온다',
   infirmaryPlaque:'부상당한 손님이 가게에 오면 40% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
-  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)'};
- assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all eight Decorations are audited');
+  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)',
+  /* 운영형 (User 2026-10-04) */
+  heroSign:'첫 점포지원을 영웅 등급 3장 중에서 고른다',
+  cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다',
+  voucher:'밤마다 살아 있는 모든 손님의 피로가 6 줄어든다',
+  rerollCoupon:'점포지원 후보 교환이 창마다 처음 한 번 무료'};
+ assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
  for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');
  for(const d of DATA.decorations)assert.ok(!d.effect.endsWith('.'),d.id+' has no closing period');
  const swap=(obj,key,value,read)=>{const was=obj[key];obj[key]=value;try{return read();}finally{obj[key]=was;}};

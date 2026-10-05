@@ -223,13 +223,18 @@ P.finalPreRoll=function(packs){const s=this.run,d=s.dungeons[0];
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
  const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
  const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
+ /* META 단골 감사 현수막 reaches the Final party too: 투력 x(1 + floor(단골도 / 10) x perTen) */
+ if(this.wears('cheerBanner'))snapshots.forEach((e,i)=>{e.combat*=1+Math.floor((team[i].loyalty||0)/10)*D.decorationParams.cheerBanner.perTen;});
  const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,finalMeanHazardGap(preparations[i])),0); // 5-6
  const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7
  return {d,team,preparations,context,snapshots,power,bossPower};};
-/* FINAL-Q77: the one party-wide 토벌 전망 - the committed party's pre-roll truth against the
-   effective Boss, in the shared 우세/접전/불리 bands. Null until the party is committed. */
+/* FINAL_EXPEDITION §Final subjugation forecast: the committed party's pre-roll truth against the effective Boss, banded by
+   the Final roll itself - 불리 cannot win even on the highest roll, 우세 wins even on the lowest, 접전 is decided by the roll.
+   Null until the party is committed. */
+const finalBand=ratio=>{const r=D.balance.finalRoll;return ratio*r.hi<1?'불리':ratio*r.lo>=1?'우세':'접전';};
 P.finalForecast=function(){const s=this.run;if(s.phase!=='final'||!s.finalCommitted||!s.team.length)return null;
- const t=this.finalPreRoll();return G.Dungeon.band(t.power/t.bossPower);};
+ const t=this.finalPreRoll();return finalBand(t.power/t.bossPower);};
+P.finalBand=finalBand;
 P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const cap=this.finalRequired();
  if(!cap)return this.end(false,'출전할 수 있는 모험가가 없어 최종 원정을 시작하지 못했다.');
@@ -238,7 +243,7 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  if(!s.finalCommitted)throw Error('먼저 원정대를 확정해 주세요.');
  if(!s.team.length||s.team.length>cap)throw Error('원정대를 1명 이상 선택해 주세요.');
  const {d,team,preparations,context,snapshots,power,bossPower}=this.finalPreRoll();
- const roll=.88+this.rng.next()*.24,assault=power*roll,cleared=assault>=bossPower; // 8-9
+ const R=D.balance.finalRoll,roll=R.lo+this.rng.next()*(R.hi-R.lo),assault=power*roll,cleared=assault>=bossPower; // 8-9
  /* Final Lock: what the Final was actually decided from, frozen. Reload may not re-roll
     it, re-target it, or re-read a later state (BOSS-Q02). Boss-specific entries join this
     as their Traits land; the committed sales figure is the one Economy already keeps. */

@@ -2,8 +2,8 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
+DOC_VERSION=2.11.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE / NON-NEGOTIABLE
@@ -223,15 +223,18 @@ The forecast:
 - consumes no Gameplay RNG;
 - exposes no Final Power number, Boss Power number, exact success probability or Final Roll.
 
-Reuse the existing shared qualitative forecast bands:
+The bands follow the Final Roll (§FINAL ROLL), so each label is true of the roll (User 2026-10-04: a 접전 Final that could not
+be won read as unfair):
 
 ```text
 ratio = current pre-roll Final Party Power / current effective Boss Power
 
-ratio > 1.2   -> 우세
-ratio >= 0.8  -> 접전
-otherwise     -> 불리
+ratio × 1.08 < 1    -> 불리   (cannot win even on the highest roll)
+ratio × 0.92 >= 1   -> 우세   (wins even on the lowest roll)
+otherwise           -> 접전   (the roll decides)
 ```
+
+Ordinary expeditions keep their own shared bands (DUNGEON_HAZARD).
 
 The ratio is a preview only.
 The actual result still resolves once with the authoritative Final Roll after Final Lock.
@@ -439,7 +442,7 @@ Party의 강점은 기존 Stats / Growth / Items / Traits / Conditions / Hazard 
 ## FINAL ROLL
 
 ```text
-Final Roll = 0.88 ~ 1.12
+Final Roll = 0.92 ~ 1.08
 
 Rolled Party Power
 =
@@ -555,10 +558,10 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 - 1~2인 Clear를 시스템적으로 금지하지 않는다.
 - 지나치게 쉽거나 사실상 절대 불가능할 때만 effective Boss Power / 계수를 검토한다.
 
-### FINAL ROLL 0.88~1.12
+### FINAL ROLL 0.92~1.08
 
 확인:
-- 30일 동안 준비한 결과가 마지막 ±12% 난수 때문에 과도하게 뒤집히지 않는가?
+- 30일 동안 준비한 결과가 마지막 ±8% 난수 때문에 과도하게 뒤집히지 않는가?
 - 적정한 긴장감을 주는 정도인가?
 - 플레이어가 `내 선택보다 운이 결정했다`고 느끼지 않는가?
 
@@ -676,7 +679,7 @@ PASS:
 - 1-person, 2-person and 3-person parties each use the actual committed party
 - the forecast updates after committed Final Item transfers
 - it uses the actual known Final Hazards and current Boss modifiers
-- it reuses the shared `우세 / 접전 / 불리` ratio bands without consuming RNG
+- it reads `우세 / 접전 / 불리` from the Final Roll bands (§Final subjugation forecast) without consuming RNG
 - it exposes no internal Final Power / Boss Power / exact probability / Final Roll
 - focused Item detail may show one participant's before/after delta without being labelled as the party forecast
 

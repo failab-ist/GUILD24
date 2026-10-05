@@ -1420,6 +1420,45 @@ test('알뜰 금고: the Day\'s first two customers bring +200G more each',()=>{
  assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
+/* ---- META §OPERATION DECORATIONS (User 2026-10-04) ---------------------------------------- */
+const account=ids=>{const a=Meta.fresh();for(const id of ids){Meta.addCapital(a,DATA.decorationBy[id].price);Meta.buyDecoration(a,id);Meta.equipDecoration(a,DATA.decorationBy[id].slot,id);}return a;};
+test('본사 우수 점포 훈장: the DAY 0 free pick is three 영웅 cards; without it, three 일반',()=>{
+ for(let i=0;i<20;i++){
+  const g=new Game(account(['heroSign']));g.autosave=false;g.start('hero-'+i);
+  const w=g.run.relicWindow;assert.equal(w.milestoneDay,0);assert.equal(w.candidateIds.length,3);
+  assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].rarity===3),'영웅 only: '+w.candidateIds);
+  assert.ok(w.candidatePrices.every(p=>p===0),'still free');
+  const h=new Game(Meta.fresh());h.autosave=false;h.start('hero-'+i);
+  assert.ok(h.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'일반 only without it');}
+});
+test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the expedition; under 단골도 10 nothing changes',()=>{
+ assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);
+ const g=past0(fresh('banner')),d=g.run.dungeons[0];
+ const npc=loyalty=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=['rice','water'];n.injury=0;n.fatigue=0;n.records=[];n.loyalty=loyalty;return n;};
+ const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(0),d).effects)*1.04};
+ let won=0,lost=0,diff=0;
+ for(let i=0;i<300;i++){
+  const b=Dungeon.resolve(npc(30),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),a=Dungeon.resolve(npc(30),even,new RNG('ban-'+i),[],{loadout:{}});
+  if(b.combatWon&&!a.combatWon)won++;if(a.combatWon&&!b.combatWon)lost++;
+  const c=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),e=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{}});
+  if(c.combatWon!==e.combatWon)diff++;}
+ assert.ok(won>0&&lost===0,'단골도 30 (x1.09) only ever turns a lost fight into a won one: '+won);
+ assert.equal(diff,0,'단골도 9 is floor 0 - the same fight');
+});
+test('휴식 바우처 꽂이: at night every living adventurer is 6 Fatigue lower than the same Day without it',()=>{
+ const drive=a=>{const g=new Game(a);g.autosave=false;g.start('voucher');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  g.run.npcs.forEach(n=>n.fatigue=40);let k=0;while(g.run.phase!=='night'&&k++<500)step(g);return g.run.npcs;};
+ const worn=drive(account(['voucher'])),bare=drive(Meta.fresh());
+ assert.equal(worn.length,bare.length);
+ worn.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,Math.max(0,bare[i].fatigue-6),n.name+': -6 overnight, visitor or not');});
+});
+test('지원 교환 쿠폰함: each window\'s first redraw is free, then 300G, 600G; without it 300G first',()=>{
+ const g=wearing(['rerollCoupon'],'coupon'),h=past0(fresh('coupon-plain'));
+ for(const x of [g,h]){x.run.relicWindow={...x.run.relicWindow,milestoneDay:5,rerolls:0};}
+ const at=(x,n)=>{x.run.relicWindow.rerolls=n;return x.relicRerollPrice();};
+ assert.deepEqual([0,1,2].map(n=>at(g,n)),[0,300,600]);
+ assert.deepEqual([0,1,2].map(n=>at(h,n)),[300,600,1200]);
+});
 test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estimate is tomorrow\'s real base cost (v2.9.7)',()=>{
  const g=wearing([],'cash-flow'),s=g.run;s.phase='closing';
  const t=g.tomorrowOperatingCost();g.closeDay();s.event=null;

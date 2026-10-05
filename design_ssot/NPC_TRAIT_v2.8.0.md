@@ -2,8 +2,8 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.9.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
+DOC_VERSION=2.11.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -650,7 +650,8 @@ Within the ordinary returning-NPC selection branch, Loyalty multiplies that NPC'
 
     1 + Loyalty × 0.03        (User 2026-10-02; was 0.025)
 
-This combines with explicit current Trait / Store Support revisit modifiers and does not guarantee a visit.
+회원 관리대장 doubles the Loyalty term (`1 + Loyalty × 0.06`, RELIC §4). This combines with explicit current Trait revisit
+modifiers and does not guarantee a visit.
 The introduced-vs-newcomer mixture is otherwise unchanged.
 
 ### LOYALTY PLAYER MEANING

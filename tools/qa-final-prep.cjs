@@ -5,6 +5,7 @@
 // press: pick members, 원정대 확정 (and the sub-3 confirm), focus a member, pick a stock line, 보급.
 //   node tools/qa-final-prep.cjs <out-dir> [widths] [BOSS]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
 const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
 const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
@@ -39,7 +40,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
  const server=await serve();
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox','--font-render-hinting=none']});
  try{
-  let seed=null;{const p=await (await browser.newContext()).newPage();await p.goto(`http://127.0.0.1:${PORT}/index.html`);
+  let seed=null;{const p=await (await browser.newContext()).newPage();await p.goto(`http://127.0.0.1:${PORT}/index.html`);await ready(p);
    for(let k=1;k<400&&!seed;k++){const id=await p.evaluate(s=>{Guild24.game.start(s);return Guild24.game.run.bossId;},'qa-final-'+k);if(id===BOSS)seed='qa-final-'+k;}}
   console.log('seed',seed,BOSS);
   for(const width of WIDTHS){
@@ -48,7 +49,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    await ctx.addInitScript(t=>{Date.now=()=>t;if(!sessionStorage.getItem('qa-fp')){localStorage.clear();sessionStorage.setItem('qa-fp','1');}},FIXED_NOW);
    const p=await ctx.newPage();p.on('pageerror',e=>check('no page error',false,e.message));
-   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(p);
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
    await p.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
    await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
@@ -64,7 +65,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     g.save();Guild24.render();})()`);
    const d30=await p.evaluate(k=>localStorage.getItem(k),KEY);
    /* the page saves on pagehide, so autosave is switched off in the page before the D30 save goes back */
-   const restore=async()=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,d30]);await p.reload({waitUntil:'load'});await p.waitForTimeout(250);};
+   const restore=async()=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,d30]);await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(250);};
    const shot=async(n,below=true)=>{await p.mouse.move(1,1);await p.waitForTimeout(250);await p.evaluate(`document.querySelector('.stage-scroll').scrollTop=0`);
     if(!below){await p.screenshot({path:path.join(OUT,`prep-${n}-${tag}.png`)});return;}
     await p.evaluate(`(()=>{const t=document.querySelector('.p-final .party-head');if(t)t.scrollIntoView({block:'start'});})()`);
@@ -138,7 +139,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`A @${tag} 이대로 확정 commits a 1-person party, no RNG / Gold / stock / Wallet moved`,a.committed&&a.team.length===1&&a.rng===before.rng&&a.gold===before.gold&&a.stock===before.stock&&JSON.stringify(a.packs)===JSON.stringify(before.packs));
    check(`FC @${tag} 1-person: exactly one 토벌 전망, no one-NPC readout`,u.forecasts===1&&['우세','접전','불리'].includes(u.forecast)&&!u.combat&&!u.death,u.forecast);
    check(`FC @${tag} 1-person label is the engine's`,await p.evaluate(`Guild24.game.finalForecast()`)===u.forecast);
-   await p.reload({waitUntil:'load'});await p.waitForTimeout(250);
+   await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(250);
    check(`A @${tag} reload stays in preparation with the 1-person party`,(await p.evaluate(acct)).committed&&!(await p.evaluate(ui)).roster);
 
    // ---- B: 2-person
@@ -257,7 +258,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     await p.screenshot({path:path.join(OUT,`prep-8-gluttony-${tag}.png`)});await p.click(`.p-final [data-action="select"][data-id="${r.id}"]`);note(`@${tag} GLUTTONY rice 강인함 on shelf`,(r.d>0?'+':'')+r.d);}}
 
    // ---- reload keeps everything, not back to selection
-   const pre=await p.evaluate(acct);await p.reload({waitUntil:'load'});await p.waitForTimeout(300);
+   const pre=await p.evaluate(acct);await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(300);
    const post=await p.evaluate(acct);
    check(`E @${tag} reload keeps party, transfer and accounting`,JSON.stringify(pre)===JSON.stringify(post));
    check(`E @${tag} reload stays in preparation`,post.committed&&!(await p.evaluate(ui)).roster);
@@ -280,10 +281,10 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    await p.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
 
    // ---- Save/Load in the browser: pre-commit, and the two legacy shapes (no finalCommitted field)
-   const load=async raw=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,raw]);await p.reload({waitUntil:'load'});await p.waitForTimeout(250);};
+   const load=async raw=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,raw]);await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(250);};
    await restore();await pickFinal(p,ids[0]);await pickFinal(p,ids[1]);
    const preRaw=await p.evaluate(k=>localStorage.getItem(k),KEY);
-   await p.reload({waitUntil:'load'});await p.waitForTimeout(250);
+   await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(250);
    a=await p.evaluate(acct);
    check(`SL @${tag} pre-commit reload: still selection, picks kept, uncommitted`,!a.committed&&a.team.length===2&&(await p.evaluate(ui)).roster);
    const legacyPre=JSON.parse(preRaw);delete legacyPre.run.finalCommitted;
@@ -297,21 +298,22 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    await load(JSON.stringify(postRaw));
    const back=await p.evaluate(`(()=>{const r=Guild24.game.run;return {c:r.finalCommitted,a:JSON.stringify([r.money,r.stats.revenue,r.inventory.length,r.npcs.map(n=>[n.money,n.pack,n.history.length])])};})()`);
    check(`SL @${tag} legacy post-transfer save restores preparation, nothing re-transacted`,back.c===true&&back.a===legacyAcct&&!(await p.evaluate(ui)).roster);
-   await p.reload({waitUntil:'load'});await p.waitForTimeout(250);
+   await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(250);
    check(`SL @${tag} and a second reload is the same (idempotent)`,await p.evaluate(`(()=>{const r=Guild24.game.run;return JSON.stringify([r.money,r.stats.revenue,r.inventory.length,r.npcs.map(n=>[n.money,n.pack,n.history.length])]);})()`)===legacyAcct);
 
    // ---- X: a visible label change. Controlled setup (like archive/v2.8/tools/qa-end-states.cjs "grown"): the three members'
    //      투력 is raised by one flat amount, chosen as the first at which the single best
-   //      affordable transfer crosses the shared 0.8 line - the label then moves 불리 -> 접전
+   //      affordable transfer crosses the 불리 line (FINAL_EXPEDITION: 불리 while ratio x the roll's top < 1, read from
+   //      D.balance.finalRoll) - the label then moves 불리 -> 접전
    //      through the real 보급 press, nothing about the Final is written.
    await restore();
    for(const id of ids.slice(0,3))await pickFinal(p,id);
    await p.click('.p-final .dock [data-action="final-commit"]');
-   const x=await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,team=s.team.map(id=>s.npcs.find(n=>n.id===id)),orig=team.map(n=>n.stats.combat),n=team[0];
+   const x=await p.evaluate(`(()=>{const line=1/DATA.balance.finalRoll.hi,g=Guild24.game,s=g.run,team=s.team.map(id=>s.npcs.find(n=>n.id===id)),orig=team.map(n=>n.stats.combat),n=team[0];
     const best=()=>{let b=null;for(const st of s.inventory){if(${JSON.stringify(NOOP)}.includes(st.item)||g.finalPrice(st.item)>n.money)continue;
      const t=g.finalPreRoll({[n.id]:[...n.pack,st.item]}),r=t.power/t.bossPower;if(!b||r>b.r)b={id:st.id,item:st.item,r};}return b;};
     for(let k=0;k<2000;k++){team.forEach((m,i)=>m.stats.combat=orig[i]+k);const t=g.finalPreRoll(),r=t.power/t.bossPower,b=best();
-     if(r<0.8&&b&&b.r>=0.8){g.save();Guild24.render();return {k,r,after:b.r,id:b.id,item:b.item,npc:n.id};}}
+     if(r<line&&b&&b.r>=line){g.save();Guild24.render();return {k,r,after:b.r,id:b.id,item:b.item,npc:n.id};}}
     team.forEach((m,i)=>m.stats.combat=orig[i]);return null;})()`);
    if(x){await p.click(`.p-final [data-action="supply-target"][data-id="${x.npc}"]`);
     const l0=(await p.evaluate(ui)).forecast;await shot('7c-cross-before');

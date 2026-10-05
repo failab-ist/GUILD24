@@ -1,0 +1,31 @@
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 8794dc6..2aa39ad 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -446,7 +446,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
+     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
+     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
+- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
++ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&!n.newToday)n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
+  /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +200G more each */
+  {const T=D.decorationParams.thriftSafe,paid=this.run.daily.safeWallets??=[];if(this.wears('thriftSafe')&&paid.length<T.customers&&!paid.includes(n.id)){n.money+=T.firstWallet;paid.push(n.id);}}n.money=Math.min(2000,n.money);
+  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
+@@ -492,7 +492,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+     capacity decision by itself. */
+   if(n.injury&&it.category==='insurance')need+=.25;
+  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
+- if(this.has('premiumMember')&&it.rarity>=2&&G.Adventurer.isTrustedRegular(n))need+=D.relicParams.premiumMember.rareIntentBonus;
++ if(this.has('premiumMember')&&it.rarity>=2&&!n.newToday)need+=D.relicParams.premiumMember.rareIntentBonus;
+  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the DAY 3 payday customer of the account's first Run takes the first
+     150% offer it can pay for - once; every later one is decided as any customer's */
+  const payday=mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===this.run.day&&!n.lessonPaydayTaken;
+@@ -547,7 +547,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+  if(mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===s.day)n.lessonPaydayTaken=true;
+  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
+  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
+- let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
++ let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('premiumMember')&&it.rarity>=2&&!n.newToday&&mode!=='overcharge')loyalty+=10;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
+  if(s.event?.effects.halfPrice&&mode==='half'&&!s.halfPriceUsed){s.money+=D.balance.halfPriceSupport;s.daily.subsidy+=D.balance.halfPriceSupport;s.halfPriceUsed=true;}
+  let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
+  /* 희귀상품 입고 계약 (v2.9.11, User 2026-09-29): a Rare+ sale is charged at the ordinary price and HQ pays the store 10%

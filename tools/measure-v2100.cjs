@@ -1,5 +1,5 @@
 // The standard balance measurement (AGENTS §9-B) — MEASUREMENT ONLY, dev tool, never part of npm test (AGENTS §9-A: run on
-// User approval). Best-hybrid Supports (relicPriority = the clear ranking of reports/relic-balance/v2913-qp13/EVALUATION.md) with the relic-aware
+// User approval). Best-hybrid Supports (relicPriority = the clear ranking of archive/v2.9.13/relic-balance/EVALUATION.md) with the relic-aware
 // layer on, Decorations bought from earned Capital in a named order (cheapest first). Per arm it reports ordinary success by Day band,
 // D30 reach / clear, deaths, a zombie line and the Decorations bought; a second line the end reasons (death limit, bankruptcy,
 // Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers

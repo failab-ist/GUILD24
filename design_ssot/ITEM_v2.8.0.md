@@ -2,8 +2,8 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
+DOC_VERSION=2.11.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -678,7 +678,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
 - Insurance / Special: 구급키트 4, 귀환석 4, 세계수 생환부적 5, 황금 1+1 쿠폰 5
-- 대형 냉장고 and 냉장 유통 계약 extend Food/Drink exactly as `RELIC_v2.8.0.md` states; nothing else moves a shelf life
+- 대형 냉장고 extends Food/Drink exactly as `RELIC_v2.8.0.md` states; nothing else moves a shelf life
 
 | ID | Item | Category | Shelf |
 |---|---|---|---:|

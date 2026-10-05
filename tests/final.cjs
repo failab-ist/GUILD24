@@ -113,13 +113,13 @@ test('FINAL-Q77: the party-wide 토벌 전망 is the resolution pre-roll truth, 
   const rng=g.rng.state,state=JSON.stringify(g.run);
   const label=g.finalForecast(),t=g.finalPreRoll();
   assert.ok(['우세','접전','불리'].includes(label));
-  assert.equal(label,Dungeon.band(t.power/t.bossPower),'the shared bands over the pre-roll ratio');
+  assert.equal(label,g.finalBand(t.power/t.bossPower),'the Final roll bands over the pre-roll ratio');
   assert.equal(g.rng.state,rng,'no RNG consumed');assert.equal(JSON.stringify(g.run),state,'no state written');
   // transfer changes the preview input, and the resolution then reads the same pre-roll truth
   g.run.money=5000;g.stock('guildlunch',1);const n=g.run.npcs.find(x=>x.id===g.run.team[0]);n.money=9999;
   const p0=g.finalPreRoll().power;g.supplyFinal(n.id,g.run.inventory.find(x=>x.item==='guildlunch').id);
   const after=g.finalPreRoll();assert.notEqual(after.power,p0,'the forecast input moves after a transfer');
-  const expect=Dungeon.band(after.power/after.bossPower);assert.equal(g.finalForecast(),expect);
+  const expect=g.finalBand(after.power/after.bossPower);assert.equal(g.finalForecast(),expect);
   g.boss();assert.ok(Math.abs(g.run.bossDebug.power-after.power)<1e-9&&Math.abs(g.run.bossDebug.bossPower-after.bossPower)<1e-9,
    'the resolution uses the exact pre-roll the forecast read');
  }
@@ -168,7 +168,7 @@ test('FINAL 10: a Boss clear ends the Run at once with no further expedition res
  }finally{Dungeon.resolve=original;}
 });
 
-test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rolled 0.88-1.12',()=>{
+test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rolled 0.92-1.08',()=>{
  const g=atFinal('power',5),team=g.finalEligible().slice(0,3);
  const stats={combat:60,survival:40,mobility:30,spirit:20};
  team.forEach((n,i)=>{n.stats={...stats};n.level=10;n.equipment={name:'x',power:0,tier:0};n.traits=[];n.injury=0;n.fatigue=0;n.pack=[];n.job=['warrior','archer','mage'][i];g.selectFinal(n.id);});
@@ -185,7 +185,7 @@ test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rol
   for(const n of k.finalEligible().slice(0,3))k.selectFinal(n.id);
   k.commitFinalParty();k.boss();
   const r=k.run.bossDebug.roll;
-  assert.ok(r>=.88&&r<=1.12,'roll '+r+' inside 0.88-1.12');
+  assert.ok(r>=.92&&r<=1.08,'roll '+r+' inside 0.92-1.08');
   /* Stage 10 switched the approved Boss numerics on, so the Power a Final is judged against is
      no longer always the WRATH baseline: SLOTH reads its seal table and GREED adds a shortfall
      up to its cap. Everything else still faces the baseline exactly. */
@@ -238,7 +238,7 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
   if(s.bossId==='SLOTH')assert.equal(bp,t.slothBossPower[s.sealBreakCount],'SLOTH reads its seal table');
   else if(s.bossId==='GREED')assert.ok(bp>=DATA.balance.bossPower&&bp<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
   else assert.equal(bp,DATA.balance.bossPower,s.bossId+' faces the baseline');
-  assert.ok(s.bossDebug.roll>=.88&&s.bossDebug.roll<=1.12,'the Final roll stays in its approved band');
+  assert.ok(s.bossDebug.roll>=.92&&s.bossDebug.roll<=1.08,'the Final roll stays in its approved band');
   assert.equal(s.bossDebug.assault,s.bossDebug.power*s.bossDebug.roll);
   assert.equal(s.finalReport.cleared,s.bossDebug.assault>=s.bossDebug.bossPower,'one CLEAR/FAIL, read straight off the comparison');
  }
@@ -518,8 +518,12 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.50 (v2
  // Final Power stays internal
  const app=read('dist/ui/app.js');
  assert.ok(!/Final Power|파이널 파워|최종 전투력/.test(app),'Final Power is never surfaced as a Player Stat');
- // the roll band is untouched
- assert.ok(/roll=\.88\+this\.rng\.next\(\)\*\.24/.test(src),'the inherited Final roll band stands: .88 ~ 1.12');
+ // FINAL §FINAL ROLL (User 2026-10-04): 0.92 ~ 1.08, and the forecast bands follow it
+ assert.deepEqual(DATA.balance.finalRoll,{lo:.92,hi:1.08});
+ const g0=atFinal('band-edges',5);
+ assert.equal(g0.finalBand(1/1.08-1e-6),'불리','below 1/1.08 even the highest roll loses');
+ assert.equal(g0.finalBand(1/1.08+1e-6),'접전');assert.equal(g0.finalBand(1/0.92-1e-6),'접전');
+ assert.equal(g0.finalBand(1/0.92+1e-6),'우세','above 1/0.92 even the lowest roll wins');
 });
 
 test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is really paid',()=>{

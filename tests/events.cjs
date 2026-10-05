@@ -7,7 +7,8 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
 function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
-const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
+// from DAY 3, past the first-Run DAY 1~2 lessons, so a forced Event never lands on 본사 1+1 행사's Day
+const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.run.day>=3&&g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
 const CATALOG=['물류대란','본사 1+1 행사','게이트 순례 주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
  "길드 의료단 순회","길드 의무관 당직","길드 위로금","길드 특별 수당","본사 물류 지원","보험 공동 구매","본사 원정용품 지원","길드 연회","원정 교대 근무","길드 휴양일","단골의 날","길드 현상금","마왕의 징조","입고 지연","가뭄","길드 세금 징수","장맛비","본사 발주 제한","포스기 먹통","가격 단속","퇴각로 붕괴","길드 소집령","냉장고 고장","야시장","원정 징발령","본사 재고 떨이","정예 토벌령","폭염","게이트 임시 폐쇄","길드 훈련 주간","유통기한 임박 특가","게이트 안정화 작업"];
 
@@ -25,14 +26,16 @@ test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic 
  const g=fresh(),deep=g.run.deep.days;
  assert.ok(deep.length>=2&&deep.length<=3,'the Run holds two or three Deep Days');
  for(let day=0;day<=30;day++){
-  const want=day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!deep.includes(day);
+  const want=day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!deep.includes(day)&&!(g.run.firstRun&&day===1);
   assert.equal(g.eventEligibleDay(day),want,'day '+day);
  }
- // 22 was the pre-Deep baseline; a Run now carries 19 or 20 eligible Days. The chance was not raised to compensate; it is
- // 40% since v2.9.11 (User 2026-09-28), a decision taken with the larger Event pool, not a compensation.
+ // DAY 1~29 hold 24 non-window Days; a Run carries 21 or 22 eligible Days (one fewer on the account's first Run).
  const eligible=[...Array(31).keys()].filter(d=>g.eventEligibleDay(d)).length;
- assert.equal(eligible,22-deep.length,'each Deep Day removes exactly one eligible Day');
- assert.ok(eligible>=19&&eligible<=20,'19-20 eligible Days per Run: '+eligible);
+ assert.equal(eligible,24-deep.length-(g.run.firstRun?1:0),'each Deep Day removes exactly one eligible Day');
+ assert.ok(eligible>=20&&eligible<=22,'20-22 eligible Days per Run: '+eligible);
+ // the account's first Run keeps DAY 1 quiet; a later Run may meet an Event on DAY 1
+ g.run.firstRun=true;assert.equal(g.eventEligibleDay(1),false,'first Run: no Event on DAY 1');
+ g.run.firstRun=false;assert.equal(g.eventEligibleDay(1),true,'later Run: DAY 1 is an ordinary Event Day');
  // suppression does not depend on anyone being nominated, and costs the run stream no draw
  for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
 });
@@ -46,7 +49,7 @@ test('EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): a Run never meets the 
  assert.ok(events>60,'Events did fire across the Runs: '+events);
  assert.equal(repeats,0,'no Event fired twice in one Run');
  // rolling alone records nothing: only the Morning that applies an Event writes the log
- const g=fresh('norepeat-roll'),s=g.run;s.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
+ const g=fresh('norepeat-roll'),s=g.run;s.day=[...Array(30).keys()].find(d=>d>=3&&g.eventEligibleDay(d));
  for(let i=0;i<50;i++)g.rollEvent();assert.deepEqual(s.eventLog,[],'rollEvent writes no log');
  // an Event in the log is out of the pool, the others are not
  const first=DATA.events.find(e=>g.eventEligible(e));s.eventLog=[first.id];
@@ -137,7 +140,7 @@ test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run 
  const g=fresh();
  const before=g.rng.state;g.run.day=g.run.deep.days[0];g.rollEvent();const deepCost=g.rng.state;
  const h=fresh();
- const start=h.rng.state;h.run.day=[...Array(30).keys()].find(d=>h.eventEligibleDay(d));h.rollEvent();
+ const start=h.rng.state;h.run.day=[...Array(30).keys()].find(d=>d>=3&&h.eventEligibleDay(d));h.rollEvent();
  assert.notEqual(before,deepCost,'a draw was still taken on the Deep Day');
  assert.notEqual(start,h.rng.state,'and on an ordinary eligible Day');
 });
@@ -145,7 +148,7 @@ test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run 
 test('EVENT-001: daily chance is 40% (v2.9.11; was 35%), never the retired 74%',()=>{
  // an ordinary eligible Day for this Run: D7 is a candidate Deep window, and on a Run that
  // actually holds it the chance is 0 by design rather than 40%.
- const g=fresh('rate');g.run.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
+ const g=fresh('rate');g.run.day=[...Array(30).keys()].find(d=>d>=3&&g.eventEligibleDay(d));
  let fired=0;const N=6000;
  for(let i=0;i<N;i++)if(g.rollEvent())fired++;
  const rate=fired/N;
@@ -154,7 +157,7 @@ test('EVENT-001: daily chance is 40% (v2.9.11; was 35%), never the retired 74%',
 });
 
 test('EVENT-003: rare easter eggs land clearly less often than an ordinary Event',()=>{
- const g=fresh('weight');g.run.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
+ const g=fresh('weight');g.run.day=[...Array(30).keys()].find(d=>d>=3&&g.eventEligibleDay(d));
  const seen={};for(let i=0;i<20000;i++){const e=g.rollEvent();if(e)seen[e.id]=(seen[e.id]||0)+1;}
  const rare=(seen.bard||0)+(seen.nightshift||0);
  const normal=Object.entries(seen).filter(([id])=>!['bard','nightshift'].includes(id));
@@ -421,7 +424,7 @@ test('EVENT §08 v2.9.0 (User 2026-09-25): on a morning with no existing slot th
  for(let i=0;i<40&&seen<3;i++){
   const g=fresh('no-slot-'+i);
   // reach a morning that can hold a Normal Event and is not a third-day intake (which would add a drawable body)
-  for(let d=0;d<12&&g.run.phase!=='end'&&!(g.eventEligibleDay(g.run.day+1)&&(g.run.day+1)%3!==0);d++){g.run.money=5000;advance(g);}
+  for(let d=0;d<12&&g.run.phase!=='end'&&!((g.run.day+1>=3&&g.eventEligibleDay(g.run.day+1))&&(g.run.day+1)%3!==0);d++){g.run.money=5000;advance(g);}
   if(g.run.phase==='end'||!g.eventEligibleDay(g.run.day+1))continue;
   for(const n of g.run.npcs){n.recovery=3;n.injury=2;}      // nobody can be drawn tomorrow
   const snap=Save.export(g.account,g.run);

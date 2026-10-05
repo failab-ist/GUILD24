@@ -28,6 +28,9 @@ async function endNow(page){
  await page.waitForSelector('[data-action="new"]');}
 async function toEnd(page,s){await page.evaluate(s=>Guild24.game.start(s),s);await endNow(page);}
 const click=async(page,sel)=>{await page.waitForSelector(sel);await page.click(sel);};
+// 다음 점포 열기 plays the prologue before the preparation scene (UI_UX §PROLOGUE); its 건너뛰기 opens the scene at once, so
+// the plan is made at the time the step sets, as before the prologue
+const newStore=async page=>{await click(page,'[data-action="new"]');await click(page,'[data-action="prologue-skip"]');await page.waitForSelector('.p-prep');};
 (async()=>{
  const playwright=require('playwright'),server=await serve();
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox']});
@@ -39,7 +42,7 @@ const click=async(page,sel)=>{await page.waitForSelector(sel);await page.click(s
    await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});return {ctx,page};};
   // A - the bug path
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-a');await at(page,T1);
-   await click(page,'[data-action="new"]');                                       // plan at T1
+   await newStore(page);                                       // plan at T1
    await click(page,'[data-action="prep-back"]');await at(page,T2);
    await click(page,'[data-action="menu"]');await click(page,'#modal-root [data-action="settings"]');
    await click(page,'#modal-root [data-action="reset"]');await click(page,'#modal-root [data-action="reset-go"]');
@@ -48,24 +51,24 @@ const click=async(page,sel)=>{await page.waitForSelector(sel);await page.click(s
    await ctx.close();}
   // B - reopening without a reset keeps the plan
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-b');await at(page,T1);
-   await click(page,'[data-action="new"]');await click(page,'[data-action="prep-back"]');await at(page,T2);
-   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');
+   await newStore(page);await click(page,'[data-action="prep-back"]');await at(page,T2);
+   await newStore(page);await click(page,'.p-prep [data-action="start"]');
    const s=await seed(page);check('B reopening the preparation scene keeps its memoized seed',s===seedAt(T1),'seed '+s);await ctx.close();}
   // C - Store Management before start keeps the plan
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-c');await at(page,T1);
-   await click(page,'[data-action="new"]');await at(page,T2);
+   await newStore(page);await at(page,T2);
    await click(page,'.p-prep [data-action="store-manage"]');await click(page,'#modal-root [data-action="store-return"]');
    await click(page,'.p-prep [data-action="start"]');
    const s=await seed(page);check('C a Store Management trip does not reroll the planned seed',s===seedAt(T1),'seed '+s);await ctx.close();}
   // D - start consumes the plan; the next Run plans its own
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-d');await at(page,T1);
-   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');const first=await seed(page);
+   await newStore(page);await click(page,'.p-prep [data-action="start"]');const first=await seed(page);
    await endNow(page);await at(page,T3);
-   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');const second=await seed(page);
+   await newStore(page);await click(page,'.p-prep [data-action="start"]');const second=await seed(page);
    check('D a started Run consumed its plan and the next Run plans its own',first===seedAt(T1)&&second===seedAt(T3),first+' -> '+second);await ctx.close();}
   // E - an in-progress Run keeps its persisted seed across a reload
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-e');await at(page,T1);
-   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');const before=await seed(page);
+   await newStore(page);await click(page,'.p-prep [data-action="start"]');const before=await seed(page);
    await page.evaluate(()=>Guild24.game.save());await at(page,T4);await page.reload({waitUntil:'load'});
    const after=await seed(page);check('E an in-progress Run reloads on its own persisted seed',before===after&&after===seedAt(T1),before+' / '+after);await ctx.close();}
  }finally{await browser.close();server.kill();}

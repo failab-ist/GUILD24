@@ -15,6 +15,7 @@
 // reduced motion shows no scene, and nothing of the scene is in the save.
 //   node tools/qa-final-clash.cjs [out-dir] [--video]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 const OUT=process.argv[2]&&!process.argv[2].startsWith('--')?path.resolve(process.argv[2]):null,VIDEO=process.argv.includes('--video');
 const PORT=Number(process.env.QA_PORT||5203),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',FIXED_NOW=1790112000000;
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
@@ -31,7 +32,7 @@ const RATIO={clear:1.05,close:.93,wide:.5},BAG={clear:()=>2,close:i=>i%3,wide:()
 async function finalSave(browser){
  const c=await browser.newContext({locale:'ko-KR'});const p=await c.newPage();
  await p.addInitScript(t=>{Date.now=()=>t;},FIXED_NOW);
- await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+ await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(p);
  await p.evaluate(()=>{localStorage.clear();(Guild24.game.account.tutorial??={}).skipped=true;Guild24.game.start('qa-h7-1');Guild24.render();});
  await p.click('#modal-root [data-action="buy-relic"]');
  await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();});
@@ -46,7 +47,7 @@ async function open(browser,save,[width,height],motion,video){
   reducedMotion:motion?'no-preference':'reduce',...(video?{recordVideo:{dir:video,size:{width,height}}}:{})});
  await c.addInitScript(([entries,t])=>{Date.now=()=>t;if(!sessionStorage.getItem('qa')){localStorage.clear();for(const [k,v] of JSON.parse(entries))localStorage.setItem(k,v);sessionStorage.setItem('qa','1');}},[save,FIXED_NOW]);
  const p=await c.newPage();p.setDefaultTimeout(8000);p.on('pageerror',e=>check(`${width}x${height} no page error`,false,e.message));
- await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await p.waitForTimeout(200);
+ await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(p);await p.waitForTimeout(200);
  return {c,p};}
 // muster k members, pin the outcome, and press the real 마왕성으로 출발 -> confirm
 async function depart(p,k,outcome){
@@ -138,7 +139,7 @@ const SIZES=[[360,640],[390,844],[1280,880],[1920,1080]];
    await c.close();}
   {const {c,p}=await open(browser,save,[390,844],true);await depart(p,2,'clear');await p.waitForTimeout(2000);
    check('nothing of the scene is in the save',await p.evaluate(()=>!Object.values(localStorage).some(v=>/clash/i.test(v||''))));
-   await p.reload({waitUntil:'load'});await p.waitForTimeout(400);
+   await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(400);
    check('a reload mid-scene opens the ending',await p.evaluate(()=>!!document.querySelector('.stage.p-end')&&!document.querySelector('.clash')&&Guild24.game.run.win===true));
    await c.close();}
   {const {c,p}=await open(browser,save,[390,844],false);await depart(p,3,'clear');await p.waitForTimeout(120);

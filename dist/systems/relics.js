@@ -35,14 +35,20 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
 /* The candidate draw, one owner: the window and its reroll read the same pool rules. `avoid` is the set kept off this
    draw when at least three others remain - the previous window's three for a new window, the three on the table for a
    reroll. Picks are drawn first, then prices, so a window draws exactly as it always has. */
-function drawCandidates(g,day,avoid){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&(day!==0||r.kind==='foundation')&&(r.kind!=='keystone'||day>=10)&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags);let eligible=pool;if((i===1||day===0&&i===2)&&pool.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=pool.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=g.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
+/* META 본사 우수 점포 훈장: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
+const heroDay0=g=>!!g.wears&&g.wears('heroSign');
+/* RELIC §GRADE: each card rolls its 등급 first (DAY 0: 일반 only), then draws within it; a 등급 with nothing left
+   falls back to the whole pool. Diversity and build bias work inside the 등급, as they did inside the window. */
+const rarityFor=(g,day)=>{if(day===0)return heroDay0(g)?3:0;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
+function drawCandidates(g,day,avoid){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0))&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags),want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool;let eligible=base;if((i===1||day===0&&i===2)&&base.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=base.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=g.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
  return {candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+g.rng.next()*.3)))};}
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
  s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),...drawCandidates(this,day,previous),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): an open, unspent window from DAY 5 on may redraw its three for Gold - 300G,
    doubling with each reroll of the same window, back to 300G on the next window. The DAY 0 free pick has none. The redraw
    keeps every pool rule and leaves the three on the table out when it can; the spend is 점포지원 investment. */
-P.relicRerollPrice=function(){const w=this.run.relicWindow;return D.balance.relicReroll.base*2**(w?.rerolls||0);};
+/* META 지원 교환 쿠폰함: the window's first redraw is free, then the ordinary curve from its first step (0 -> 300 -> 600...) */
+P.relicRerollPrice=function(){const w=this.run.relicWindow,n=w?.rerolls||0;if(this.wears('rerollCoupon')){if(!n)return 0;return D.balance.relicReroll.base*2**(n-1);}return D.balance.relicReroll.base*2**n;};
 P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.milestoneDay!==0&&this.canBuyRelic();};
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
@@ -73,17 +79,17 @@ P.canBuyRelic=function(){const s=this.run,w=s.relicWindow;return ['foundation','
 P.buyRelic=function(id){const s=this.run,w=s.relicWindow;if(!this.canBuyRelic()||!w.candidateIds.includes(id)||this.has(id))throw Error('지금 구매할 수 없는 점포지원입니다.');const price=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money<price)throw Error('점포지원 구매 자금이 부족합니다.');s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;s.facilities.push(id);w.purchased=id;
  /* META_v2.7 §FRANCHISE ACHIEVEMENT 4 */
 w.purchaseDay=s.phase==='foundation'?0:s.day;
- const extension=['fridge','coldcase'].includes(id)?D.relicParams[id].shelfDays:0;if(extension)for(const st of s.inventory){const it=D.itemBy[st.item];if(st.expires!==null&&st.expires>s.day&&food(it)&&(id!=='coldcase'||it.rarity>=1)){st.extensions??=[];if(!st.extensions.includes(id)){st.expires+=extension;st.extensions.push(id);}}}
+ const extension=id==='fridge'?D.relicParams[id].shelfDays:0;if(extension)for(const st of s.inventory){const it=D.itemBy[st.item];if(st.expires!==null&&st.expires>s.day&&food(it)&&(id!=='coldcase'||it.rarity>=1)){st.extensions??=[];if(!st.extensions.includes(id)){st.expires+=extension;st.extensions.push(id);}}}
  /* 24시간 신선체계: Food/Drink ORDER price x1.25 from acquisition, so the offers already on the
     table are repriced once here and every later offer is priced by offerFor. */
  if(id==='fresh24')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.fresh24.orderPriceMult);
  /* 원정 도시락 코너 (User 2026-10-02): the same once-only repricing, a flat +3G */
- if(id==='expeditionMeal')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price+=D.relicParams.expeditionMeal.orderPriceAdd;
+ if(id==='expeditionMeal')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.expeditionMeal.orderPriceMult);
  if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait. Deferring
    opens DAY 1 exactly as a pick does, and the D0 window stays open, still free, until the D5 window replaces it. */
 P.deferFoundationRelic=function(){if(this.run.phase!=='foundation')throw Error('지금은 점포지원 선택을 넘길 수 없습니다.');this.morning();this.save();};
 P.relicQuote=function(index,quantity,cart=this.run.cart||{}){const s=this.run,o=s.offers[index],it=D.itemBy[o.item];const entries=Object.keys(cart),skuTotal=entries.filter(i=>s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0),prior=entries.filter(i=>Number(i)<Number(index)&&s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0);let sum=0;for(let unit=1;unit<=quantity;unit++){let mult=1;if(skuTotal>=3){if(this.has('bulk')&&prior+unit>=3)mult*=1-D.relicParams.bulk.discount;}if(this.has('logisticsHQ')){const f=D.relicParams.logisticsHQ;mult*=1-Math.min(f.maxDiscount,f.perSale*(s.previousSales||0));}sum+=Math.round(o.price*Math.max(.45,mult));}return sum;};
 P.ownedRelics=function(){return this.run.facilities.map(id=>D.relicBy[id]).filter(Boolean).map(r=>({id:r.id,name:r.name,description:r.description}));};
-G.Relics={food,field,known,directCounter,relatedPrep,status,offerWeight(g,it){let w=1;const has=id=>g.has(id);if(has('rareContract')&&it.rarity>=2)w*=D.relicParams.rareContract.rareWeightMult;if(has('hazardBoard')&&relatedPrep(it,known(g)))w*=D.relicParams.hazardBoard.weightMult;if(has('coldcase')&&food(it)&&it.rarity>=1)w*=D.relicParams.coldcase.weightMult;return w;},shelf(g,it){if(!food(it))return 0;const p=D.relicParams;return (g.has('fridge')?p.fridge.shelfDays:0)+(g.has('coldcase')&&it.rarity>=1?p.coldcase.shelfDays:0);}};
+G.Relics={food,field,known,directCounter,relatedPrep,status,offerWeight(g,it){let w=1;const has=id=>g.has(id);if(has('rareContract')&&it.rarity>=2)w*=D.relicParams.rareContract.rareWeightMult;if(has('hazardBoard')&&relatedPrep(it,known(g)))w*=D.relicParams.hazardBoard.weightMult;return w;},shelf(g,it){if(!food(it))return 0;const p=D.relicParams;return g.has('fridge')?p.fridge.shelfDays:0;}};
 })(globalThis);

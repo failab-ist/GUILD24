@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.10.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
+DOC_VERSION=2.11.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -940,6 +940,10 @@ Buy or `나중에 결정`; deferring never rerolls candidates/prices; Save/Reloa
 Cards never show internal taxonomy (Foundation / Hybrid / Keystone / Utility; Rotation / VIP / Premium / Expedition / Fresh /
 Customer Axis; `신선식품 · 기반`-style labels); synergy is discovered from effects.
 
+The card does show the support's 등급 (RELIC §GRADE, User 2026-10-04): the word `일반` / `희귀` / `영웅` directly under the name, in
+the Item rarity colour's paper shade, and the divider under it drawn 3px in the same colour. The owned list (보유 점포지원) shows
+the same word under each name. All three D5 cards still fit at 1280×880.
+
 Owned Relic Quick View — Morning=YES, Order=YES, Sale=YES, readOnly=YES: name + actual effect/condition; a condition-type
 support adds one runtime status line (RELIC §QUICK VIEW STATUS LINE; lines COPY_AUDIT §11-32); no HUD, badge or verdict word;
 no purchase/defer/timing change during Sale. A Relic reads as a Run-build choice, not a settings menu. Authoritative ->
@@ -1223,6 +1227,42 @@ when wider). Pieces follow the painting under any crop:
 - covered: phone 360~430 at browser heights 640~932, the iPhone SE stage 375x548 (§SHORT PHONE), portrait tablet 768~912,
   landscape tablet 900~1023, desk 1024~1920
 
+### DECORATION ART (User 2026-10-05)
+
+Each Decoration is one pixel-art SVG (`dist/ui/assets/deco/<id>.svg`). The store draws every piece of a Slot at one width, so
+a new picture is drawn to match the others of its Slot, not on its own:
+- file: `shape-rendering="crispEdges"`, rectangles only (no text, script or external reference); one art pixel is 2 x 2 file
+  units, the light outline (§LIVE STORE DECORATION SEATING) is the half-unit ring around the silhouette
+- canvas width per Slot, so the art pixel is the same size within the Slot: 간판 80, 벽면 44, 계산대 48 (추모 방명록 56),
+  진열대 52; heights stay near the Slot's others (간판 44, 벽면 42, 계산대 34~40, 진열대 50)
+- the piece fills its canvas: it spans the width inside the outline, no wide empty margin (a narrow piece reads smaller
+  than its neighbours at the same width)
+- body colour runs straight to the light outline: no second, dark edge ring inside it. Volume is one lit row / column on top
+  and left and one shaded row / column at the bottom and right, in a lighter and a darker tone of the body's own hue
+- the near-black `#1b130c` (opaque) only for small inner detail (an icon's outline, a door seam, a slot) and a standing
+  piece's foot line and legs; a large area or a frame in it reads as a heavy border
+- hanging pieces (간판, 벽면) end with the half outline under them; standing pieces (계산대, 진열대) end with the whole opaque
+  foot line on the file's last row
+- colours chiefly from the pieces' shared palette: wood `#3f2a1a #6b4a2e #9a7148`, gold `#86652a #c8a35e #e3b23c #ecd59a`, red `#62201c
+  #a8322f #dc5d55`, paper `#b9a982 #d9cfb2 #f4efe6 #fbf4e2`, steel `#20272d #3a444c #6f7d87 #8e9aa3`, teal `#4d6f75 #6f9ea6`,
+  green `#2f7a4d #7fb069`, purple `#4f3a72 #7c5ea8 #a58bd0`, navy `#1c2840 #283a5c`
+- a framed 벽면 piece uses the one gold frame the others use, row for row, and a 간판 hangs on the same two grey rods with its
+  board at the same height; what is inside differs
+- a piece does not share its body colour with another piece of its Slot (two red signs read as one)
+- and no two pieces share an outline: 계산대 and 진열대 are not both a box on two legs with paper on top
+- what each piece shows is what the Decoration does (a 지원금 sign with a coin purse, a medical cross, a coupon box ...)
+
+| Slot | economy | survival | operation |
+|---|---|---|---|
+| 간판 | 원정 지원금 간판: teal board, trophy and coin purse | 훈련소 제휴 간판: red board, crossed swords | 단골 감사 현수막: cream banner board on the signs' two grey rods, red heart between brown thank-you lines, notched ends |
+| 벽면 | 명예 모험가 액자: gold frame, an adventurer's portrait | 의무실 현판: gold frame, red cross on paper | 본사 우수 점포 훈장: the wall's gold frame, a gold star medal on a red ribbon on navy |
+| 계산대 | 알뜰 금고: steel safe, gold dial | 추모 방명록: open book and candle | 휴식 바우처 꽂이: stepped wooden brochure stand, a voucher in each pocket |
+| 진열대 | 길드 추천 매대: wooden shelf of goods, trophy | 구급품 진열장: glass cabinet of red kits | 지원 교환 쿠폰함: tall purple ticket dispenser, swap arrows, a coupon strip |
+
+The four 운영형 pictures are drawn by `tools/deco-art.py` (art-pixel grids, written as the SVG files); `tools/deco-sheet.cjs`
+draws all twelve at their Slot widths side by side for review. Test ui-guard checks the file rules; `tools/qa-deco-seating.cjs`
+checks the seating.
+
 ### PROLOGUE (User 2026-10-04)
 
 Five full-screen scenes before every new store: at start-up when there is no Run (in place of the loading
@@ -1251,7 +1291,8 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
   height and the 간판 keeps its gap from it
 - tags and plates keep their 360x640 share of the stage: tag type grows with height past 640 px (and desk width), capped; the
   pixel-face plates step on their 12 px grid — branch plate 12 -> 18 px on a stage 800 high or 1000 wide and 24 px at 1000 by
-  1000, Capital plate 17 -> 24 px on the first step. Grown tags never reach the board; on the wide framing the 간판's tag stacks
+  1000, Capital plate 17 -> 24 px on the first step on a stage 400 wide or more (narrower, the 24 px plate is wider than the till
+  housing it stands for and crowds the counter pieces; its side padding also narrows with the stage). Grown tags never reach the board; on the wide framing the 간판's tag stacks
   two lines level with the sign's plate and stays inside the stage (§RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the
   ceiling fixture
 - the board `새 점포 준비` holds the game's three lines as one pinned note, then `보유 장식 없음` /

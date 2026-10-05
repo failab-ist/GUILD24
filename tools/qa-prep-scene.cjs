@@ -49,6 +49,12 @@ function judge(tag,m){
  // what is judged for overlap is what is drawn; the tap target may reach past it into bare room
  const small=Object.entries(m.hit).filter(([,q])=>q.w<43.5||q.h<43.5);
  check(tag+' every place is a 44 px target',!small.length,small.map(([s,q])=>s+' '+Math.round(q.w)+'x'+Math.round(q.h)).join(', '));}
+// a load with no Run opens on the prologue (UI_UX §PROLOGUE) once the loading screen is done; its 건너뛰기 ends it on the
+// preparation scene. A load with a Run (the ending) has none; 다음 점포 열기 from the ending plays it again.
+async function skipPrologue(p){
+ const has=()=>!!document.querySelector('[data-action="prologue-skip"]')||!!document.querySelector('.stage.p-prep')||!!(window.Guild24&&Guild24.game.run);
+ await p.waitForFunction(has,null,{timeout:15000});
+ const b=await p.$('[data-action="prologue-skip"]');if(b){await b.click();await p.waitForSelector('.stage.p-prep',{timeout:15000});}}
 (async()=>{
  const playwright=require('playwright'),server=await serve();if(OUT)fs.mkdirSync(OUT,{recursive:true});
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox','--font-render-hinting=none']});
@@ -58,9 +64,9 @@ function judge(tag,m){
    const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:desktop?1:2,isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    await ctx.addInitScript(()=>{try{if(!sessionStorage.getItem('qa')){localStorage.clear();sessionStorage.setItem('qa','1');}}catch(e){}});
    const p=await ctx.newPage();p.on('pageerror',e=>check(tag+' no page error',false,e.message));
-   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await skipPrologue(p);
    if(st==='dressed'){await p.evaluate(([own,eq])=>{const a=Guild24.game.account;for(const id of own){Meta.addCapital(a,DATA.decorationBy[id].price);Meta.buyDecoration(a,id);}
-     for(const id of eq)Meta.equipDecoration(a,DATA.decorationBy[id].slot,id);Guild24.game.save();},[OWN,EQUIP]);await p.reload({waitUntil:'load'});}
+     for(const id of eq)Meta.equipDecoration(a,DATA.decorationBy[id].slot,id);Guild24.game.save();},[OWN,EQUIP]);await p.reload({waitUntil:'load'});await skipPrologue(p);}
    await p.waitForTimeout(250);judge(tag,await p.evaluate(MEASURE));
    if(OUT)await p.screenshot({path:path.join(OUT,`prep-${width}x${height}-${st}.png`)});
    await ctx.close();}
@@ -70,13 +76,14 @@ function judge(tag,m){
    const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:desktop?1:2,isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    await ctx.addInitScript(()=>{try{if(!sessionStorage.getItem('qa')){localStorage.clear();sessionStorage.setItem('qa','1');}}catch(e){}});
    const p=await ctx.newPage();p.setDefaultTimeout(8000);p.on('pageerror',e=>check(tag+' no page error',false,e.message));
-   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await skipPrologue(p);
    await p.evaluate(()=>{(Guild24.game.account.tutorial??={}).skipped=true;Guild24.game.save();});
    await p.click('.p-prep [data-action="start"]');await p.click('#modal-root [data-action="buy-relic"]');
    await p.evaluate(()=>{Guild24.game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');Guild24.render();});
    for(let k=0;k<4;k++){const b=await p.$('#modal-root [data-action="boss-seen"]')||await p.$('#modal-root [data-action="dismiss"]');if(!b)break;await b.click();await p.waitForTimeout(100);}
    const before=await p.evaluate(()=>JSON.stringify(Guild24.game.run));
-   await p.click('.p-end [data-action="new"]');await p.waitForTimeout(200);
+   // 다음 점포 열기 plays the prologue too
+   await p.click('.p-end [data-action="new"]');await p.click('[data-action="prologue-skip"]');await p.waitForSelector('.stage.p-prep');await p.waitForTimeout(200);
    const m=await p.evaluate(MEASURE);judge(tag,m);
    check(tag+' 결과 다시 보기 is offered from the ending',!!m.items['.dock [data-action="prep-back"]']);
    await p.click('.p-prep .prep-slot[data-id="wall"]');await p.waitForTimeout(250);
@@ -88,7 +95,7 @@ function judge(tag,m){
    check(tag+' the ended Run is untouched',before===await p.evaluate(()=>JSON.stringify(Guild24.game.run)));
    // a reload on the preparation scene opened from the ending lands back on the ending: the scene is a view, not saved state
    await p.click('.p-end [data-action="new"]');await p.waitForTimeout(200);
-   await p.reload({waitUntil:'load'});await p.waitForTimeout(300);
+   await p.reload({waitUntil:'load'});await p.waitForSelector('.stage',{timeout:15000});await p.waitForTimeout(300);
    for(let k=0;k<4;k++){const b=await p.$('#modal-root [data-action="boss-seen"]')||await p.$('#modal-root [data-action="dismiss"]');if(!b)break;await b.click();await p.waitForTimeout(100);}
    check(tag+' a reload on the scene opened from the ending returns to the ending (nothing of the scene is saved)',await p.evaluate(()=>
     !!document.querySelector('.stage.p-end')&&!document.querySelector('.stage.p-prep')&&!Object.values(localStorage).some(v=>/prepOpen/.test(v||''))));

@@ -96,12 +96,11 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
       retreat roll reads only the Traits and the stone's second roll reads both */
    if(k==='escape')e.itemEscape+=value;
   }
-  /* 원정 도시락 코너: per Food Item in the Bag a flat Supply +2, per Drink +1, and per Food/Drink a flat +2 on every
-     Hazard of the Gate the adventurer actually goes to (v2.9.11, User 2026-09-28; was +2 for both and +4). Flat, so no
-     Counter multiplier reads it. At the 마왕성 (the Final) the +2 goes to one Hazard only - counted here, placed in
-     prepare() once the adventurer's Stats exist (v2.9.11, User 2026-09-29). */
+  /* RELIC 원정 도시락 코너: per Food/Drink in the Bag a flat Hazard defense on every Hazard of the Gate the adventurer goes
+     to. Flat, so no Counter multiplier reads it. At the 마왕성 it goes to one Hazard only - counted here, placed in
+     prepare() once the adventurer's Stats exist. */
   if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)){
-   const p=D.relicParams.expeditionMeal;finalSupply+=item.category==='drink'?p.drinkSupplyPerItem:p.supplyPerItem;
+   const p=D.relicParams.expeditionMeal;
    if(d.family==='final')mealFinal++;else for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
@@ -289,18 +288,10 @@ function trailingRun(records,pred){
 }
 const injuredStreak=records=>trailingRun(records,x=>x.departedInjured);
 const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(injuredStreak(records)+1):0;
-/* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE. The Day term bends at D9: a party's prepared
-   ability stops growing long before Day 30 does, so a single slope left every late Gate further
-   out of reach than the one before it. Only this term changes (User 2026-09-25, v2.9.1 balance:
-   early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
-   D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
-   a fresh first Run cleared the Boss; v2.9.11, User 2026-09-28: early 1.50 -> 1.40 - the D11~20 readiness cliff, measured in
-   archive/v2.9.11/growth-injury-v2911.md - then 1.45 after the combined re-measure, archive/v2.9.11/remeasure-v2911.md §8); every other Gate Power term is what it was. */
-/* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in archive/v2.9.2/v292-bot-harness.md §9-10): DAY 11~20
-   climb at `mid` 1.10 per Day (the NPC-growth check of the Run Progression Arc); DAY 1~10 and DAY 21+ keep their slopes. */
-/* v2.9.13 (User 2026-09-30): DAY 21+ 0.80 -> 1.10 - the late Gates had fallen behind a grown roster
-   (reports/balance-proposal-v2912.md §1). The DAY 9~10 step, which shared `late`, is its own `step` and keeps 0.80, so
-   DAY 1~10 does not move. */
+/* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE. The Day term bends at the knee (D9): a party's prepared ability stops
+   growing long before Day 30 does, so a single slope left every late Gate further out of reach than the one before it.
+   `early` per Day up to the knee, `step` on DAY 9~10, `mid` on DAY 11~20 (the NPC-growth check of the Run Progression
+   Arc), `late` from DAY 21. */
 const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
 /* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power) */
 const GATE_EASE={early:.90,late:.95,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:GATE_EASE.early;
@@ -361,10 +352,13 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 /* ITEM §귀환석: an expedition that ends in 부상/중상/사망 rolls once more for a retreat, at the adventurer's own retreat
    chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that chance is. One formula for the real resolution
    and its proof. */
+/* META 단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x perTen), read where 구급품 진열장's power bonus is */
+const cheer=(on,loyalty)=>on?1+Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen:1;
 function stoneChance(e,d){return clamp(.40+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
  if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+ se.combat*=cheer(ev.banner,departure.loyalty);
  const sAbility=preparedPower(se);
  const sAssist=ev.assist||0;
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
@@ -427,6 +421,10 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   if(ev.escapeItemRoll<stoneChance(se,d))sOutcome='퇴각';
  }
  if(['사망','중상'].includes(sOutcome)&&se.revive>=1)sOutcome='퇴각';
+ if(sOutcome==='사망'&&facilities.includes('rescueContract')){
+  if(ev.rescueRoll===undefined)return UNPROVEN;
+  if(ev.rescueRoll<D.relicParams.rescueContract.chance)sOutcome='중상';
+ }
  if(['부상','중상'].includes(sOutcome)&&se.injuryGuard>0){
   if(ev.injuryGuardRoll===undefined)return UNPROVEN;
   if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
@@ -503,6 +501,7 @@ function combatProof(departure,pack,d,facilities,ev){
  const items=[...new Set(pack.filter((_,i)=>{
   const sp=prepare({...departure,pack:pack.filter((_,j)=>j!==i)},d,facilities),se=sp.effects;
   if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack:pack.filter((_,j)=>j!==i)},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+  se.combat*=cheer(ev.banner,departure.loyalty);
   const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
   return preparedPower(se)*(1+(ev.assist||0))*sNoise<d.power;
  }))];
@@ -516,12 +515,13 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     which by the time resultProof() runs has already been mutated by this same resolution
     (growth, injury/aftercare, fatigue, equipment). Only Bag composition may differ between
     the actual and shadow preparation states. */
- const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast};
+ const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,feast:n.feast,loyalty:n.loyalty};
  const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
  /* META §display — 구급품 진열장: a 만반의 준비 departure gets 투력 x powerMult and preparedFactor (ordinary expeditions only) */
  const cabinet=!!run&&Object.values(run.loadout||{}).includes('aidCabinet');
  if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
+ const banner=!!run&&Object.values(run.loadout||{}).includes('cheerBanner');e.combat*=cheer(banner,n.loyalty);
 
  const ability=preparedPower(e);
  /* RESULT-PROOF: this expedition's real random draws are named as they are drawn, in the
@@ -548,7 +548,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const medicReady=!!run&&(run.daily?.medicSaves||0)<(dayFx.nightSaves||0);
  const aidKitReady=medicReady;
  const preparedFactor=cabinet?D.decorationParams.aidCabinet.preparedFactor:PREPARED.factor;
- let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
+ let injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
  /* DUNGEON_HAZARD §INJURED RE-EXPEDITION SEVERE ESCALATION: applies wherever the
@@ -624,6 +624,8 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* ITEM §세계수 생환부적: 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
  if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
  /* ITEM §INSURANCE HIERARCHY: only 강골's injuryGuard reaches this branch; 구급키트 is not on it */
+ /* RELIC 길드 구조대 계약: a Death that got past the Items turns into 중상 on its own roll */
+ if(outcome==='사망'&&facilities.includes('rescueContract')){rescueRoll=r.next();if(rescueRoll<D.relicParams.rescueContract.chance){outcome='중상';avoidedDeath=true;p.why.push('길드 구조대가 사망을 중상으로 바꿈');p.events.push({id:'rescue',text:'길드 구조대가 '+G.Copy.josa(n.name,'을','를')+' 업고 돌아왔다.'});}}
  if(['부상','중상'].includes(outcome)&&injuryGuardCheck()){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
  /* ITEM §Insurance resolution order step 4: 구급키트 lowers the settled
     non-death Outcome one step. XP, Loot and Fatigue follow the lowered Outcome; the report keeps
@@ -706,8 +708,8 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,preparedFactor,cabinet,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
- const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,combatSuccess});
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll,greatRoll,aidKitReady,preparedFactor,cabinet,banner,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
+ const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,banner,combatSuccess});
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */

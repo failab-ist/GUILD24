@@ -730,8 +730,8 @@ test('RESULT-PROOF: the departure snapshot freezes Equipment before the Outcome\
  const src=read('dist/systems/dungeon.js');
  assert.ok(/equipment:\{power:beforeEquipment,name:n\.equipment\.name\}/.test(src),
   'the departure snapshot captures equipment.power/name before this resolution\'s own equipment-tier win');
- assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury,feast:n\.feast\};/.test(src),
-  'stats/equipment/traits/fatigue/injury/feast are captured together, in one snapshot, before any of this resolution\'s own mutations (Level left it with the Level factor, v2.9.2 fourth pass)');
+ assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury,feast:n\.feast,loyalty:n\.loyalty\};/.test(src),
+  'stats/equipment/traits/fatigue/injury/feast/loyalty are captured together, in one snapshot, before any of this resolution\'s own mutations (Level left it with the Level factor, v2.9.2 fourth pass; loyalty for 단골 감사 현수막)');
  assert.ok(/prepare\(\{\.\.\.departure,pack\}/.test(src),
   'shadowOutcome() prepares every shadow against that frozen departure snapshot, never against `n`');
  // and live behaviourally: an equipment-tier win during THIS resolution must not change what a

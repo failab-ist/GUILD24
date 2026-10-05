@@ -36,10 +36,9 @@ const SPEND={
  'expert':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
-/* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
-   chance of a given party is exact arithmetic. Sampling it would only add noise. */
-const ROLL_LO=.88,ROLL_HI=1.12;
-const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-bossPower/power)/(ROLL_HI-ROLL_LO)));
+/* Boss clear is `power * roll >= bossPower` with roll uniform on the Final roll band (FINAL_EXPEDITION §FINAL ROLL), so
+   the clear chance of a given party is exact arithmetic. Sampling it would only add noise. */
+const clearChance=(power,bossPower)=>{const {lo,hi}=D.balance.finalRoll;return power<=0?0:Math.max(0,Math.min(1,(hi-bossPower/power)/(hi-lo)));};
 /* The same contribution `run.js:boss()` sums, per adventurer. The four coefficients are not
    restated here at all: they are `Dungeon.preparedPower`, the one helper Forecast, Resolve and
    the Final all read. A copy of them is exactly how this harness came to report every Final
@@ -178,9 +177,8 @@ function playRun(g,out,ctx){
     `balanced` skips: it fills a healthy, rested customer's Bag to reach 만반의 준비 even with an Item of little direct
     value to that Gate. It also drops to 50% whenever the wallet cannot cover the asked price (the `policy!=='balanced'`
     test below is left as is), where `balanced` does that only for its top roster or a crisis Item. (A till floor at the operating cost was tried and dropped: with Sell = Buy x 2, holding cash back
-    starves the shelf and spirals into bankruptcy - a player keeps ordering.) Adopted as the v2.9.2 review's primary lens after
-    the User's save (run-level revenue, knowledge, first-discovery Days) sat closer to it than to `balanced`
-    (archive/v2.9.2/v292-balance-review.md §2). */
+    starves the shelf and spirals into bankruptcy - a player keeps ordering.) It is the primary lens because the User's
+    save (run-level revenue, knowledge, first-discovery Days) sits closer to it than to `balanced`. */
  /* `expert` (User 2026-09-30, measurement only): the skilled-human lens. `skilled` above is not one - it only reads hidden
     Hazards and measures weaker than `reader` (counter-ladder-v297.md). `expert` is `reader` plus two things the User's
     0930 D30-clear save shows and `reader` does not do: a cheap meal at 150% to a customer who can easily pay it, from
@@ -188,7 +186,7 @@ function playRun(g,out,ctx){
     contribution is shared with `reader` since 2026-09-30).
     Tried and dropped in calibration (no gain or worse): spending brakes loosened to `spender`'s, rerolling until every
     visitor Hazard has a Counter, Counters ordered right after the meals, 50% to the top roster in D1-10.
-    Calibrated with tools/calibrate-bot-v292.cjs --account (reports/expert-bot-calibration-v2912.md). */
+    Calibrated with tools/calibrate-bot-v292.cjs --account. */
  const expert=policy==='expert',reader=policy==='reader'||expert,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
  /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
     it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk
@@ -361,7 +359,7 @@ function playRun(g,out,ctx){
    const power=party.reduce((sum,n)=>sum+contribution(G.Dungeon.prepare(n,d,s.facilities)),0);
    const bucket=out.partySize[size];
    bucket.samples++;bucket.power+=power;bucket.chance+=clearChance(power,bossPower);
-   bucket.assaultLo+=power*ROLL_LO;bucket.assaultHi+=power*ROLL_HI;
+   bucket.assaultLo+=power*D.balance.finalRoll.lo;bucket.assaultHi+=power*D.balance.finalRoll.hi;
   }
   /* RUN-Q15. The two groups are read off the run's own history — a regular is someone who
      kept coming back and reached the canonical 단골 threshold; a newcomer has been to the
@@ -543,7 +541,7 @@ function playRun(g,out,ctx){
     if(!afford.length)break;
     /* reader / expert (User 2026-09-30): the Item that raises this adventurer's Final contribution most. itemValue scores a
        Counter by its raw points even where the Hazard is already answered, which handed Counters the Final slots over
-       potions and lowered the party (reports/balance-proposal-v2912.md §3); `balanced` keeps itemValue. */
+       potions and lowered the party; `balanced` keeps itemValue. */
     const gain=x=>contribution(G.Dungeon.prepare({...copy(n),pack:[...n.pack,x.item]},s.dungeons[0],s.facilities));
     const st=afford.slice().sort(reader?(a,b)=>gain(b)-gain(a):(a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
     g.supplyFinal(n.id,st.id);act();}}

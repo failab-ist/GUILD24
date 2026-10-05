@@ -46,7 +46,7 @@ test('all effect keys presented and names readable',()=>{for(const it of DATA.it
 test('headless 30-day smoke',()=>{const a=Debug.simulate(3,'reader');assert.equal(a.runs,3);assert.ok(a.reached30>=0);assert.ok(Number.isFinite(a.averageMoney));});
 
 
-test('seven relic windows, stable offers, phase gating and no duplicate purchase',()=>{const g=new Game();g.autosave=false;g.start('window');assert.equal(g.run.phase,'foundation');const w=copy(g.run.relicWindow);assert.equal(w.candidateIds.length,3);assert.equal(new Set(w.candidateIds).size,3);assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind==='foundation'));g.buyRelic(w.candidateIds[0]);for(const day of [5,10,15,20,25,30]){g.run.day=day;g.morning();const offer=copy(g.run.relicWindow);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.relicWindow,offer);g.run.money=10000;const id=offer.candidateIds[0];g.buyRelic(id);assert.throws(()=>g.buyRelic(id));}assert.equal(g.run.facilities.length,7);assert.ok(g.run.relicWindow.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)));});
+test('seven relic windows, stable offers, phase gating and no duplicate purchase',()=>{const g=new Game();g.autosave=false;g.start('window');assert.equal(g.run.phase,'foundation');const w=copy(g.run.relicWindow);assert.equal(w.candidateIds.length,3);assert.equal(new Set(w.candidateIds).size,3);assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].rarity===0));g.buyRelic(w.candidateIds[0]);for(const day of [5,10,15,20,25,30]){g.run.day=day;g.morning();const offer=copy(g.run.relicWindow);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.relicWindow,offer);g.run.money=10000;const id=offer.candidateIds[0];g.buyRelic(id);assert.throws(()=>g.buyRelic(id));}assert.equal(g.run.facilities.length,7);assert.ok(g.run.relicWindow.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)));});
 test('window deferral and expiration; purchases blocked during sale',()=>{const g=fresh();g.run.day=5;g.morning();const w=copy(g.run.relicWindow);g.run.day=9;g.morning();assert.deepEqual(g.run.relicWindow,w);g.beginOrder();g.open();assert.throws(()=>g.buyRelic(w.candidateIds[0]));g.run.day=10;g.morning();assert.equal(g.run.relicWindow.milestoneDay,10);});
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait until DAY 4 */
 test('DAY 0 free pick may be deferred until DAY 4 and expires at D5',()=>{const start=()=>{const g=new Game();g.autosave=false;g.start('defer-d0');return g;};
@@ -276,8 +276,9 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  // prices re-tuned 2026-09-25, v2.9.1 balance; sign 1250 -> 1500 (User 2026-10-03, v2.10.0): cheapest 500, dearest 3x, total 3,750
  assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
   [['sign',1500],['wall',1000],['counter',750],['display',500],
+   ['sign',1500],['wall',1000],['counter',750],['display',500],
    ['sign',1500],['wall',1000],['counter',750],['display',500]],
-  'the approved prices ship: each Slot\'s survival alternative costs what its economy Decoration costs (User 2026-09-24)');
+  'the approved prices ship: each Slot\'s survival and 운영형 alternatives cost what its economy Decoration costs (User 2026-09-24 / 2026-10-04)');
 });
 
 test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
@@ -567,8 +568,10 @@ test('정가 final purchase chance is x 0.90 of the unscaled one; 50% / 150% unc
 /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run finds one Common Counter for the first Gate's Hazard
    in the DAY 1 warehouse; a later Run does not, and the Run's own stream is the same either way. */
 test('first-Run lesson: DAY 1 warehouse holds one Common Counter for the first Gate, first Run only, stream untouched',()=>{
- const run=runs=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start('lesson-probe');g.buyRelic(g.run.relicWindow.candidateIds[0]);return g.run;};
- const first=run(0),later=run(1),h=first.dungeons[0].hazards[0];
+ const run=(runs,seed)=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g.run;};
+ // a later Run may meet an ordinary Event on DAY 1 (the first Run may not): compare on a seed where it does not
+ let k=0;while(k<50&&run(1,'lesson-probe-'+k).event)k++;
+ const first=run(0,'lesson-probe-'+k),later=run(1,'lesson-probe-'+k),h=first.dungeons[0].hazards[0];
  assert.equal(first.firstRun,true);assert.equal(later.firstRun,false);
  const extra=first.inventory.filter(u=>!later.inventory.some(v=>v.id===u.id));
  assert.equal(extra.length,1,'exactly one extra unit on the first Run');
@@ -587,12 +590,17 @@ test('first-Run lesson: DAY 2 brings 본사 1+1 행사 on the first Run only, st
  const first=run(0),later=run(1);
  assert.equal(first.day,2);assert.equal(first.event?.id,'oneplus','the first Run: 본사 1+1 행사 on DAY 2');
  assert.equal(first.eventSeen,false,'revealed like any Event');assert.deepEqual(first.eventLog,['oneplus'],'and logged, so the Run never meets it twice');
- assert.equal(later.event,null,'a later Run: DAY 2 has no Event');
+ assert.equal(later.firstRun,false,'a later Run: DAY 2 is an ordinary Event Day (its roll may still draw 1+1 from the catalog)');
  assert.ok(first.offers.some(o=>o.promo),'one offer carries the 1+1 promo');
- assert.deepEqual(first.offers.map(o=>o.item),later.offers.map(o=>o.item),'the same offers');
- assert.deepEqual(first.queue,later.queue,'the same visitors');assert.equal(first.rngState,later.rngState,'the same stream');
+ // the lesson adds no draw: on a seed whose ordinary DAY 1~2 rolls stay quiet, both Runs open DAY 2 on the same stream
+ const at=(runs,seed)=>{const acc=Meta.fresh();acc.runs=runs;const g=new Game(acc);g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);g.nextDay();return g.run;};
+ let k=0;while(k<50&&(at(1,'lesson-event-'+k).eventLog||[]).length)k++;   // a later Run met no Event on DAY 1 or 2
+ const qf=at(0,'lesson-event-'+k),ql=at(1,'lesson-event-'+k);
+ assert.equal(qf.event?.id,'oneplus');assert.equal(ql.event,null);
+ assert.deepEqual(qf.offers.map(o=>o.item),ql.offers.map(o=>o.item),'the same offers');
+ assert.deepEqual(qf.queue,ql.queue,'the same visitors');assert.equal(qf.rngState,ql.rngState,'the same stream');
  const sim=new Game(Meta.fresh());sim.autosave=false;sim.lessons=false;sim.start('lesson-event');sim.buyRelic(sim.run.relicWindow.candidateIds[0]);sim.nextDay();
- assert.equal(sim.run.event,null,'measurement harnesses: no DAY 2 Event');
+ assert.equal(sim.run.firstRun,false,'measurement harnesses: no DAY 2 lesson');
 });
 test('first-Run lesson: no one dies on DAY 1~2 of the first Run - the Death settles as 중상',()=>{
  const g=fresh('lesson-death'),base=g.run.npcs[0];
@@ -766,7 +774,7 @@ test('ORDER sheet: at most offerCounterMax Hazard Counters, the guarantee still 
  assert.ok(max===4,'the cap is reached, not just never approached');
  assert.ok(guaranteed>0&&sheets>500,'enough sheets were drawn: '+sheets);
  /* an added slot raises the cap one for one: 본사 추가발주권 (+extraOffers) */
- let wide=0;for(let i=0;i<150;i++){const g=fresh('counter-cap-wide-'+i),s=g.run;s.facilities=['extraOrder'];s.day=20;g.generateOffers({advancePity:false});
+ let wide=0;for(let i=0;i<150;i++){const g=fresh('counter-cap-wide-'+i),s=g.run;s.facilities=['extraOrder'];s.day=20;s.event=null;g.generateOffers({advancePity:false});
   const c=s.offers.filter(isC).length;assert.equal(g.counterCap,4+DATA.relicParams.extraOrder.extraOffers);assert.ok(c<=g.counterCap);wide=Math.max(wide,c);}
  assert.ok(wide>4,'with 본사 추가발주권 the sheet can carry more than four Counters: '+wide);
 });

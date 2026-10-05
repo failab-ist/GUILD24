@@ -12,8 +12,7 @@ const rng=n=>{let s=n*2654435761%2147483647;return()=>(s=s*48271%2147483647)/214
    The production backdrop (assets/presentation/morning/store-bg-*.png) draws the whole room, and these
    bands' own art is hidden on MORNING and the preparation scene (director-review.css). The ceiling and
    counter frames still size their mounts (the DAY sign and the till anchor to them), so they keep their
-   viewBox and aspect; the wall frame keeps its own. The drawings they used to carry are archived in
-   archive/v2.9.13/unused-room-art.js (User 2026-10-01). */
+   viewBox and aspect; the wall frame keeps its own. */
 function ceiling(){return svg(360,92,'','band-art');}
 function wall(){return svg(360,250,'','band-art','xMidYMax');}
 function counter(){return svg(360,90,'','band-art');}
@@ -23,7 +22,7 @@ function counter(){return svg(360,90,'','band-art');}
    painted room's palette with a dark outline, so an equipped Decoration reads as a fitting of
    this store. No <text> in the files: the name is read in 점포 관리. The picture resolves through
    slot() like every other scene asset, so replacing a file changes no screen. */
-const DECO_IDS=['sponsorSign','guildShelf','thriftSafe','honorFrame','trainingSign','infirmaryPlaque','memorialBook','aidCabinet'];
+const DECO_IDS=['sponsorSign','guildShelf','thriftSafe','honorFrame','trainingSign','infirmaryPlaque','memorialBook','aidCabinet','heroSign','cheerBanner','voucher','rerollCoupon'];
 const decoArt=Object.fromEntries(DECO_IDS.map(id=>[id,'ui/assets/deco/'+id+'.svg']));
 function decoration(id){if(!decoArt[id])return '';manifest['deco.'+id]??=decoArt[id];return slot('deco.'+id,()=>'','deco-art');}
 /* ---- a cardboard stock box that holds an item pictogram ---- */

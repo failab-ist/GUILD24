@@ -49,6 +49,13 @@ D10 fork 쌍 비교 틀은 `v2.9.2/tools/measure-package-v292.cjs`가 가장 최
 | `v2.10.0/tools/measure-v2100-grid.cjs` | v2.10.0 2차: 후반 완화 × 실패 사망 격자, 마왕 전력 역산 | `tools/` |
 | `v2.9.13/unused-room-art.js` | 더 이상 화면에 안 보이는 옛 그림 코드(아침 · 새 점포 준비의 천장 · 벽 · 계산대 그림, 쓰이지 않던 `Art.scene`). 그림 배경으로 바뀌어 숨겨져 있었다(User 2026-10-01) | `dist/ui/scene.js` · `dist/ui/art.js` |
 | `v2.10.1/UI_COMPONENTS.md` | v2.10.1 공통 UI 부품 카탈로그(역할 · 소스 위치 · 적용 상태). 안의 `UI_SALE_*` · `UI_SUPPORT_*` 링크는 지운 작업 일지를 가리킨다(git 기록에 있다) | `reports/` |
+| `v2.8/relic-balance/REPORT.md`, `FINAL_PROPOSAL.md` | 점포지원 1차 리밸런스(2026-09-23) 측정 보고서와 User 승인 최종안(가격 ×0.7 근거) | `reports/relic-balance/` |
+| `v2.9.1-balance/deco-balance-REPORT.md` | v2.9.1 장식 단독 · 세트 · 연속 플레이 측정 보고서 | `reports/deco-balance/` |
+| `v2.9.12/balance-proposal-v2912.md`, `expert-bot-calibration-v2912.md` | v2.9.12 후반 곡선 · 위험 재조정 · Final · Capital 제안 측정, `expert` 봇 보정 근거 | `reports/` |
+| `v2.9.13/relic-balance/*.md` | v2.9.13 점포지원 평가표(`EVALUATION.md`, `measure-v2100.cjs`의 구매 순위 근거)와 측정 기록 | `reports/relic-balance/v2913-qp13/` |
+| `v2.9.13/counter-ladder-v2913.md`, `item-price-v2913.md` | v2.9.13 대응 사다리 · 상품 가격 기여도 재검수 | `reports/counter-ladder-v2913/`, `reports/item-price-v2913/` |
+| `v3.0-prep/v3-prep-measure-v2911.md` | v3.0 준비 §8 측정 · 캡처 검토(곡선, 화염 조합, SALE 트레이 높이) | `reports/` |
+| `v2.10.0/v2100-measure/` | v2.10.0 성공 메타 측정 보고(`README.md`)와 그 로그, 버린 안 로그(`qp3-bundle`, `qp3-option1-lv033`) | `reports/v2100-measure/` |
 
 ## 규칙
 

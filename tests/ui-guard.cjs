@@ -1431,7 +1431,9 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  assert.ok(/\.decoplate\.display\{left:min\(var\(--spot\),calc\(var\(--till-l\) - var\(--gap\)/.test(css),'the display piece stops at the gap left of the till');
  assert.ok(/\.decoplate\.counter\{left:max\(var\(--spot\),calc\(var\(--till-r\) \+ var\(--gap\)\)\)/.test(css),'the counter piece stops at the gap right of it');
  // and the 간판 stops at the gap left of the DAY sign, read from the sign's published anchor
- assert.ok(fn('morningScreen').includes("'<div class=\"store\" style=\"--daysign-x:'+Scene.anchors.daysign.left/100+'\">'"),'the DAY sign edge comes from Scene.anchors');
+ /* MORNING's DAY sign is centred with its width from its height, so the 간판's line is that sign's left edge
+    (tools/qa-deco-seating.cjs measures it against the drawn sign) */
+ assert.ok(/\.p-morning:not\(\.p-prep\) \.deco-layer\{--ceil:\.21;--daysign-h:\.348;--sign-l:calc\(50cqw - 100cqh \* var\(--ceil\) \* var\(--daysign-h\) \* 2156 \/ 521 \/ 2\)\}/.test(css),'the DAY sign edge is the centred sign\'s half width left of the centre');
  assert.ok(/\.decoplate\.sign\{left:min\([^;]*calc\(var\(--sign-l\) - var\(--gap\)/.test(css),'the 간판 keeps the gap from the DAY sign');
  const review=read('dist/ui/director-review.css');
  /* v2.9.9 tablets (User 2026-09-27): the counter band is the painting's, moved down by what the crop takes off its top; a
@@ -2656,8 +2658,10 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
     second number of their own */
  assert.ok(!/loyalty>=(30|50|60)/.test(shop),'no Store Support keeps a Loyalty threshold of its own');
  assert.ok(/facilities\.includes\('lifetime'\)&&G\.Adventurer\.isTrustedRegular\(n\)/.test(read('dist/systems/dungeon.js'))&&/was&&this\.has\('lifetime'\)\?G\.Adventurer\.TRUSTED_REGULAR/.test(shop),'평생 단골제 asks the 단골 owner');
- assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&G\.Adventurer\.isTrustedRegular\(n\)/.test(shop),'so does 프리미엄 멤버십');
- for(const id of ['lifetime','premiumMember','memberBundle'])
+ // 프리미엄 멤버십 (User 2026-10-04) reads 다시 온 손님 - the arrival flag, not a Loyalty number
+ assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&!n\.newToday/.test(shop),'프리미엄 멤버십 asks 다시 온 손님');
+ assert.ok(DATA.relicBy.premiumMember.description.startsWith('다시 온 손님'),'and says so in its copy');
+ for(const id of ['lifetime','memberBundle'])
   assert.ok(DATA.relicBy[id].description.startsWith('단골'),id+' says 단골 in its copy');
 
  // the compact state: Injury, Fatigue, Loyalty - and no progress bar
@@ -3105,7 +3109,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  for(const gone of ['방문 골드','단골 보너스'])
   assert.ok(!surfaces.includes(gone),'the generic label is gone: '+gone);
  // weighting mechanics say how much more often, as a multiplier (COPY_AUDIT §11 문장 틀, User 2026-10-04: no 가중치 / bare +N%)
- for(const id of ['member','rareContract','hazardBoard','coldcase'])assert.ok(/\d(\.\d+)?배 자주/.test(DATA.relicBy[id].description),id+' states its weighting as N배 자주');
+ for(const id of ['rareContract','hazardBoard'])assert.ok(/\d(\.\d+)?배 자주/.test(DATA.relicBy[id].description),id+' states its weighting as N배 자주');
+ assert.ok(/2배가 된다/.test(DATA.relicBy.member.description),'회원 관리대장 states its doubling');
 });
 
 /* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */
@@ -3200,6 +3205,8 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(/\.p-prep \.slot-tag\{[^}]*font:500 min\(20px,max\(11px,1\.72cqh,1\.4cqw\)\)/.test(css),'the tags grow with the stage');
  assert.ok(/@container \(min-height:800px\) or \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:18px\}\n \.p-prep \.capital-plate\{font-size:24px;/.test(css)
   &&/@container \(min-height:1000px\) and \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:24px\}/.test(css),'the plates step 12 / 18 / 24 and 17 / 24');
+ // the 24 px Capital plate is wider than the till it stands for: a stage under 400 wide keeps 17 px (User 2026-10-05)
+ assert.ok(/@container \(min-height:800px\) and \(max-width:399\.98px\)\{\n \.p-prep \.capital-plate\{font-size:17px;/.test(css),'a phone under 400 wide keeps the 17 px plate');
  assert.ok(/\.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{grid-auto-flow:row;gap:1px;top:72%\}\n \.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{font-size:min\(15px,/.test(css),'the desk 간판 tag stacks and stops growing where it would leave the stage');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');

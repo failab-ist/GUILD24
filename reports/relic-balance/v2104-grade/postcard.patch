@@ -1,0 +1,33 @@
+diff --git a/dist/data/relics.js b/dist/data/relics.js
+index 15337ac..a5dc7be 100644
+--- a/dist/data/relics.js
++++ b/dist/data/relics.js
+@@ -43,6 +43,7 @@ const rows=[
+ ['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
+ /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
+ ['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 15%).'],
++['postcard','단골 추천 엽서함','hybrid',['vip'],190,'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 5 오른다.'],
+ ['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).']
+ ];
+ /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
+@@ -69,6 +70,7 @@ D.relicParams={
+  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
+  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},
+  memberBundle:{payShare:.5},
++ postcard:{loyalty:5},
+  premiumMember:{rareIntentBonus:.15,arrivalGold:40},
+  returnPoints:{loyaltyBonus:4,goldBonus:20}, /* User 2026-10-04: Loyalty 5 -> 4 with the returning-customer condition gone */
+  expeditionMeal:{supplyPerItem:2,drinkSupplyPerItem:1,hazardDefense:2,orderPriceAdd:3}, /* User 2026-10-02: a flat Food/Drink order price +3G (5G measured too tight) */
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 8794dc6..98a4788 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -599,7 +599,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+   s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);
+   /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
+   s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
+- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
++ night(){const s=this.run;if(s.phase!=='sell')return;if(this.has('postcard')){const vs=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.alive);const regs=vs.filter(n=>G.Adventurer.isTrustedRegular(n));for(const n of vs)if(regs.some(m=>m!==n)){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}}const ev=s.event?.effects||{};s.results=[];
+   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
+      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
+      shown to the Player, never persisted past it. Deep expeditions neither count nor are assisted. */

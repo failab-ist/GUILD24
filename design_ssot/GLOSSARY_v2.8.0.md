@@ -2,8 +2,8 @@
 
 DOC=GLOSSARY
 OWNER=game_terms,player_term_names
-DOC_VERSION=2.10.3
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.10.3
+DOC_VERSION=2.11.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -107,6 +107,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 ## 가게 꾸밈과 안내
 
 - **점포지원**: 이번 점포 안에서만 쓰는 가게 강화. DAY 0에 무료 1개, 이후 DAY 5, 10, 15, 20, 25, 30에 구매 기회. 쓰지 않는 말: 유물.
+- **점포지원 등급**: 일반 · 희귀 · 영웅 셋. 상품 등급과 같은 이름과 색을 쓴다. 기초 · 혼합 · 키스톤 · 편의는 내부 분류라 화면에 쓰지 않는다.
 - **장식**: 점포 자본으로 사서 영구히 모으는 것. 새 점포 준비에서 네 칸을 골라 끼운다. 점포지원과 합치지 않는다. 메뉴 이름은 「이번 점포의 장식」.
 - **코치**: 필요한 때 한 번만 뜨는 안내. 설정에서 끄고 다시 볼 수 있다.
 - **점주 가이드**: 언제든 여는 도움말.
