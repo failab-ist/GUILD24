@@ -3203,6 +3203,8 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(/\.p-prep \.slot-tag\{[^}]*font:500 min\(20px,max\(11px,1\.72cqh,1\.4cqw\)\)/.test(css),'the tags grow with the stage');
  assert.ok(/@container \(min-height:800px\) or \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:18px\}\n \.p-prep \.capital-plate\{font-size:24px;/.test(css)
   &&/@container \(min-height:1000px\) and \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:24px\}/.test(css),'the plates step 12 / 18 / 24 and 17 / 24');
+ // the 24 px Capital plate is wider than the till it stands for: a stage under 400 wide keeps 17 px (User 2026-10-05)
+ assert.ok(/@container \(min-height:800px\) and \(max-width:399\.98px\)\{\n \.p-prep \.capital-plate\{font-size:17px;/.test(css),'a phone under 400 wide keeps the 17 px plate');
  assert.ok(/\.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{grid-auto-flow:row;gap:1px;top:72%\}\n \.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{font-size:min\(15px,/.test(css),'the desk 간판 tag stacks and stops growing where it would leave the stage');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');

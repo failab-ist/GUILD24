@@ -2672,7 +2672,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the Store Capital is a small plate on the counter where the till will stand, not the till: before a Run there is no
    float, and a register showing the Capital would read as the Run's money */
 .p-prep .capital-plate{position:absolute;z-index:2;left:50%;transform:translateX(-50%);margin:0;
- bottom:calc((1 - var(--till-top) - var(--till-h)) * 100%);padding:9px 16px 8px;gap:9px;white-space:nowrap;
+ bottom:calc((1 - var(--till-top) - var(--till-h)) * 100%);padding:9px min(16px,3.4cqw) 8px;gap:9px;white-space:nowrap;
  font:500 17px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
 .p-prep .capital-plate b{color:var(--gold);font-weight:500}
 /* the branch plate is MORNING's, on the counter front; centred under the Capital here, because the Slot tags hang at the
@@ -2686,6 +2686,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @container (min-height:800px) or (min-width:1000px){
  .p-morning.p-prep .opening .branchplate{font-size:18px}
  .p-prep .capital-plate{font-size:24px;padding:.5em .9em .45em}
+}
+/* the 24 px Capital plate is wider than the till housing it stands for: under 400 wide it stays 17 px, so the counter
+   pieces keep their gap */
+@container (min-height:800px) and (max-width:399.98px){
+ .p-prep .capital-plate{font-size:17px;padding:9px min(16px,3.4cqw) 8px}
 }
 @container (min-height:1000px) and (min-width:1000px){
  .p-morning.p-prep .opening .branchplate{font-size:24px}

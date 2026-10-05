@@ -1255,7 +1255,8 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
   height and the 간판 keeps its gap from it
 - tags and plates keep their 360x640 share of the stage: tag type grows with height past 640 px (and desk width), capped; the
   pixel-face plates step on their 12 px grid — branch plate 12 -> 18 px on a stage 800 high or 1000 wide and 24 px at 1000 by
-  1000, Capital plate 17 -> 24 px on the first step. Grown tags never reach the board; on the wide framing the 간판's tag stacks
+  1000, Capital plate 17 -> 24 px on the first step on a stage 400 wide or more (narrower, the 24 px plate is wider than the till
+  housing it stands for and crowds the counter pieces; its side padding also narrows with the stage). Grown tags never reach the board; on the wide framing the 간판's tag stacks
   two lines level with the sign's plate and stays inside the stage (§RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the
   ceiling fixture
 - the board `새 점포 준비` holds the game's three lines as one pinned note, then `보유 장식 없음` /
