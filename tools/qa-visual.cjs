@@ -3,6 +3,7 @@
 // from the outside through tools/preview.cjs. Never part of `npm test`.
 // Chromium is preinstalled at /opt/pw-browsers — never run `playwright install`.
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // The gate runs 360 / 390 / 430 x 780 (and 375 x 548 / 360 x 597, below). QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
 // hand — e.g. a landscape phone, a 320 handset, a tablet — without editing this file.
 const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
@@ -80,7 +81,7 @@ async function drive(page,target,seed){
     Date.now() when no Run exists, so freeze the capture clock before app.js loads. This is
     harness-only and never changes Production Source or gameplay RNG. */
  await page.addInitScript(fixedNow=>{try{localStorage.clear();}catch(e){};Date.now=()=>fixedNow;},FIXED_NOW);
- await page.reload({waitUntil:'load'});
+ await page.reload({waitUntil:'load'});await ready(page);
  /* The pre-Run panel used to carry a <details> holding a Seed field, and this drove it. SA-Q35
     retired that control as a dev surface, so both waits hung and the whole gate timed out before
     its first capture. app.js names the supported route in its place, so the harness takes it. */
@@ -503,7 +504,7 @@ async function d25OrderProbe(page){
     every navigation, and this probe has to reload INTO a saved Run to prove the disclosure is
     not replayed. */
  await page.evaluate(`(()=>{try{localStorage.clear();}catch(e){}})()`);
- await page.reload({waitUntil:'load'});
+ await page.reload({waitUntil:'load'});await ready(page);
  await page.waitForTimeout(200);
  // same retired Seed control as drive(): plant the planned store, then press the real button
  await page.evaluate(`(()=>{Guild24.game.start('qa-d25-order');Guild24.render();})()`);
@@ -549,7 +550,7 @@ async function d25OrderProbe(page){
 
  // a reload cannot replay the disclosure, and cannot reroll what it disclosed
  await page.evaluate(`Guild24.game.save()`);
- await page.reload({waitUntil:'load'});
+ await page.reload({waitUntil:'load'});await ready(page);
  await page.waitForTimeout(200);
  if(!await page.evaluate(`!!Guild24.game.run`)){fails.push('the Run did not survive a reload at all');return {fails};}
  const reloaded=await seen();
@@ -659,7 +660,7 @@ async function coachProbe(page,label){
     const body=t.slice(t.indexOf('const coachSteps={'),t.indexOf('let activeCoach=null;'));
     window.__coachTable=new Function('return '+body.replace(/^const coachSteps=/,'').replace(/;\s*$/,''))();
    });}catch(e){}});});
- await page.reload({waitUntil:'load'});
+ await page.reload({waitUntil:'load'});await ready(page);
  await page.waitForFunction(`!!window.Guild24&&!!window.__coachTable`);
 
  // ---- Deep Expedition coach: a Morning that actually carries a Deep notice
@@ -795,7 +796,7 @@ async function focusProbe(page){
     isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    const page=await context.newPage();
    page.on('pageerror',e=>{console.error(`  page error @${size}: ${e.message}`);failed++;});
-   await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(page);
    for(const screen of SCREENS){
     await drive(page,screen,SEED_OVERRIDE[screen]||'qa-v24-'+screen);
     const file=path.join(OUT,`${screen}-${size}.png`);
@@ -811,7 +812,7 @@ async function focusProbe(page){
   const ctx=await browser.newContext({viewport:{width:390,height:HEIGHT},deviceScaleFactor:1,isMobile:true,hasTouch:true,locale:'ko-KR'});
   const kb=await ctx.newPage();
   kb.on('pageerror',e=>{console.error('  page error @focus: '+e.message);failed++;});
-  await kb.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+  await kb.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(kb);
   const focus=await focusProbe(kb);
   failed+=focus.fails.length;
   console.log(`${focus.fails.length?'FAIL':'PASS'} keyboard focus across a redraw${focus.fails.length?'\n  - '+focus.fails.join('\n  - '):''}${focus.warn.length?'\n  ? '+focus.warn.join('\n  ? '):''}`);
@@ -824,7 +825,7 @@ async function focusProbe(page){
     isMobile:vp.isMobile,hasTouch:vp.hasTouch,locale:'ko-KR'});
    const cpage=await cctx.newPage();
    cpage.on('pageerror',e=>{console.error(`  page error @coach ${label}: ${e.message}`);failed++;});
-   await cpage.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await cpage.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(cpage);
    const c=await coachProbe(cpage,label);
    coachSeen.push(...c.captured);
    failed+=c.fails.length;
@@ -843,7 +844,7 @@ async function focusProbe(page){
   const d25ctx=await browser.newContext({viewport:{width:390,height:HEIGHT},deviceScaleFactor:1,isMobile:true,hasTouch:true,locale:'ko-KR'});
   const d25page=await d25ctx.newPage();
   d25page.on('pageerror',e=>{console.error('  page error @d25: '+e.message);failed++;});
-  await d25page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+  await d25page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(d25page);
   const d25=await d25OrderProbe(d25page);
   await d25ctx.close();
   failed+=d25.fails.length;
