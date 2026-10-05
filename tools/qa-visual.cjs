@@ -657,8 +657,10 @@ async function coachProbe(page,label){
   addEventListener('load',()=>{try{
    const src=[...document.scripts].map(x=>x.src).find(x=>/app\.js$/.test(x));
    fetch(src).then(r=>r.text()).then(t=>{
+    // the table reads the NIGHT mark order defined just above it, so that line comes with it
+    const marks=t.slice(t.indexOf('const NIGHT_MARKS='),t.indexOf('const coachSteps={'));
     const body=t.slice(t.indexOf('const coachSteps={'),t.indexOf('let activeCoach=null;'));
-    window.__coachTable=new Function('return '+body.replace(/^const coachSteps=/,'').replace(/;\s*$/,''))();
+    window.__coachTable=new Function(marks+'return '+body.replace(/^const coachSteps=/,'').replace(/;\s*$/,''))();
    });}catch(e){}});});
  await page.reload({waitUntil:'load'});await ready(page);
  await page.waitForFunction(`!!window.Guild24&&!!window.__coachTable`);
