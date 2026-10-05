@@ -59,7 +59,8 @@ and this table is their commit record.
   line is now that sign's real left edge (360~430 phones had it 3~12 px over the sign and its hangers). UI_UX §LIVE STORE DECORATION
   SEATING is unchanged; `tools/qa-deco-seating.cjs` passes on phones again.
 - **Runtime QA after the prologue and the loading screen**: `tools/qa-ready.cjs` waits out the loading screen and skips the prologue;
-  qa-d0-flow, qa-day-flip, qa-final-prep, qa-boss-confirm, qa-final-end, qa-primary-grammar and qa-final-clash use it, qa-reset-seed skips the prologue after 다음 점포 열기 (their checks unchanged); qa-visual's coach probe carries NIGHT_MARKS, and its desk SALE art box is checked as UI_UX says (shorter than wide, portrait fitted whole; phones stay square). On a phone the SALE speech balloon keeps to the card width when it would cover the state line; qa-bgm reads the
+  qa-d0-flow, qa-day-flip, qa-final-prep, qa-boss-confirm, qa-final-end, qa-primary-grammar and qa-final-clash use it, qa-reset-seed skips the prologue after 다음 점포 열기 (their checks unchanged); qa-visual's coach probe carries NIGHT_MARKS, and its desk SALE art box is checked as UI_UX says (shorter than wide, portrait fitted whole; phones stay square). qa-visual reads the SALE speech balloon as the transient overlay it is and checks PR #105's placement instead (never over a 소지금
+  G amount); qa-bgm reads the
   prologue's BOSS after 다음 점포 열기 (UI_UX §PHASE BGM); qa-final-prep's 불리 line is read from `D.balance.finalRoll`.
 - **새 점포 준비 Capital plate**: its 24 px step needs a stage 400 wide (390x844 overlapped the counter pieces). UI_UX §NEW STORE
   PREPARATION — STORE SCENE. `tools/qa-prep-scene.cjs` and `tools/qa-store-support.cjs` skip the prologue again.

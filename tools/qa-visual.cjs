@@ -297,9 +297,16 @@ async function audit(page,width,screen,desktop){
   // A takeover paints over the screen it opened from. Text on the screen underneath is not
   // colliding with the modal's text - it is behind it - so the two are never compared.
   const surface=el=>el.closest('#modal-root')?'modal':'stage';
+  // the customer's speech balloon is a transient overlay allowed over the card (UI_UX §TRANSIENT SALE SPEECH OVERLAP; its
+  // phone placement is the User's PR #105 rule, checked on its own below), so its text is not a collision
   const leaves=[...document.querySelectorAll(ROOTS)].filter(el=>vis(el)&&layout(el)
    &&el.children.length===0&&(el.textContent||'').trim().length>1
-   &&getComputedStyle(el).position!=='absolute');
+   &&getComputedStyle(el).position!=='absolute'&&!el.closest('.say'));
+  // PR #105 (User 2026-10-04): on a phone the SALE balloon never covers a 소지금 G amount - up top unless it would, then under the wallet line
+  {const say=document.querySelector('.p-sale .say');
+   if(say&&vis(say)&&innerWidth<900){const r=say.getBoundingClientRect();
+    for(const b of document.querySelectorAll('.p-sale .npc-wallet b')){const w=b.getBoundingClientRect();
+     if(w.right>r.left&&w.left<r.right&&w.bottom>r.top&&w.top<r.bottom){fails.push('the speech balloon covers a 소지금 G amount');break;}}}}
   const layer=new Map(leaves.map(el=>[el,pinned(el)]));
   // An inline run that wraps has one box per line; its bounding rect is the union of them
   // and spills across lines it does not occupy, which reads as a collision that is not
