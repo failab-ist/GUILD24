@@ -35,7 +35,7 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
 /* The candidate draw, one owner: the window and its reroll read the same pool rules. `avoid` is the set kept off this
    draw when at least three others remain - the previous window's three for a new window, the three on the table for a
    reroll. Picks are drawn first, then prices, so a window draws exactly as it always has. */
-/* META 본사 특별 지원 간판: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
+/* META 본사 우수 점포 훈장: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
 const heroDay0=g=>!!g.wears&&g.wears('heroSign');
 /* RELIC §GRADE: each card rolls its 등급 first (DAY 0: 일반 only), then draws within it; a 등급 with nothing left
    falls back to the whole pool. Diversity and build bias work inside the 등급, as they did inside the window. */

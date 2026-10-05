@@ -1234,7 +1234,7 @@ a new picture is drawn to match the others of its Slot, not on its own:
 - file: `shape-rendering="crispEdges"`, rectangles only (no text, script or external reference); one art pixel is 2 x 2 file
   units, the light outline (§LIVE STORE DECORATION SEATING) is the half-unit ring around the silhouette
 - canvas width per Slot, so the art pixel is the same size within the Slot: 간판 80, 벽면 44, 계산대 48 (추모 방명록 56),
-  진열대 52; heights stay near the Slot's others (간판 44, 벽면 42, 계산대 34~40, 진열대 50)
+  진열대 52; heights stay near the Slot's others (간판 44, 벽면 42~44, 계산대 34~40, 진열대 50)
 - the piece fills its canvas: it spans the width inside the outline, no wide empty margin (a narrow piece reads smaller
   than its neighbours at the same width)
 - body colour runs straight to the light outline: no second, dark edge ring inside it. Volume is one lit row / column on top
@@ -1250,8 +1250,8 @@ a new picture is drawn to match the others of its Slot, not on its own:
 
 | Slot | economy | survival | operation |
 |---|---|---|---|
-| 간판 | 원정 지원금 간판: teal board, trophy and coin purse | 훈련소 제휴 간판: red board, crossed swords | 본사 특별 지원 간판: purple board, gold star between ribbon lines |
-| 벽면 | 명예 모험가 액자: gold frame, an adventurer's portrait | 의무실 현판: gold frame, red cross on paper | 단골 감사 현수막: red swallowtail banner on a rod, heart |
+| 간판 | 원정 지원금 간판: teal board, trophy and coin purse | 훈련소 제휴 간판: red board, crossed swords | 단골 감사 현수막: red banner on two chains, heart between thank-you lines, gold fringe |
+| 벽면 | 명예 모험가 액자: gold frame, an adventurer's portrait | 의무실 현판: gold frame, red cross on paper | 본사 우수 점포 훈장: gold star medal on a purple neck ribbon |
 | 계산대 | 알뜰 금고: steel safe, gold dial | 추모 방명록: open book and candle | 휴식 바우처 꽂이: wooden stand, three vouchers |
 | 진열대 | 길드 추천 매대: wooden shelf of goods, trophy | 구급품 진열장: glass cabinet of red kits | 지원 교환 쿠폰함: red coupon box, tickets standing up |
 

@@ -1,4 +1,4 @@
-# The four 운영형 Decoration pictures (heroSign, cheerBanner, voucher, rerollCoupon), drawn as art-pixel grids and
+# The four 운영형 Decoration pictures (cheerBanner on the sign, heroSign on the wall, voucher, rerollCoupon), drawn as art-pixel grids and
 # written as the SVG files the store reads. The drawing rules are UI_UX §DECORATION ART. Dev tool, not part of npm test.
 #   python3 tools/deco-art.py dist/ui/assets/deco
 # Each art pixel is 2x2 file units; the silhouette gets the light outline (half an art pixel, #1b130c at 55%) the room
@@ -52,28 +52,47 @@ def svg(p,standing):
     return ''.join(out)
 
 def heroSign():
-    # sign Slot: 80 wide like the other signs; body colour runs to the light outline, lit top / shaded bottom-right
-    p=Pic(38,20)
-    for y in range(5): p.set(6,y,'s' if y%2==0 else 'S'); p.set(31,y,'s' if y%2==0 else 'S')
-    p.rect(0,5,38,15,'P'); p.rect(0,5,38,1,'p'); p.rect(0,6,1,13,'p')
-    p.rect(0,19,38,1,'Q'); p.rect(37,6,1,14,'Q')
-    p.rect(2,7,34,1,'G'); p.rect(2,17,34,1,'G')
-    p.stamp(15,8,["....K....","...KYK...","KKKKgKKKK","KYYggggYK",".KYgggYK.","..KgYgK..",".KgK.KgK.","KK.....KK"])
-    p.rect(4,11,8,1,'C'); p.rect(4,13,6,1,'c'); p.rect(26,11,8,1,'C'); p.rect(28,13,6,1,'c')
-    for x,y in ((2,9),(35,9),(2,15),(35,15)): p.set(x,y,'g')
+    # wall Slot (44 wide like the frame and the plaque): 본사 우수 점포 훈장 - a star medal on a neck ribbon, hung from a wall hook
+    import math
+    p=Pic(20,20)
+    # the ribbon: two broad straps from the hook's corners down to the medal, purple with a gold edge stripe
+    for k,y in enumerate(range(0,8)):
+        a=1+k; w=5
+        p.rect(a,y,w,1,'P'); p.set(a,y,'p'); p.set(a+w-1,y,'G')
+        b=18-k; p.rect(b-w+1,y,w,1,'Q'); p.set(b-w+1,y,'G'); p.set(b,y,'P')
+    p.rect(7,7,6,2,'P'); p.rect(7,7,6,1,'p')
+    # the star: five points around (9.5, 12.6), lit top-left, shaded bottom-right, a purple gem in the middle
+    cx,cy,R,r=9.5,12.6,9.4,4.1
+    pts=[(cx+(R if i%2==0 else r)*math.sin(i*math.pi/5),cy-(R if i%2==0 else r)*math.cos(i*math.pi/5)) for i in range(10)]
+    def inside(x,y):
+        c=False
+        for i in range(10):
+            (x1,y1),(x2,y2)=pts[i],pts[(i+1)%10]
+            if (y1>y)!=(y2>y) and x<(x2-x1)*(y-y1)/(y2-y1)+x1: c=not c
+        return c
+    cells={(x,y) for y in range(20) for x in range(20) if inside(x+.5,y+.5) and y>=6}
+    for (x,y) in cells:
+        k='g'
+        if (x-1,y) not in cells or (x,y-1) not in cells: k='Y'
+        if (x+1,y) not in cells or (x,y+1) not in cells: k='H'
+        p.set(x,y,k)
+    p.rect(9,12,2,2,'P'); p.set(9,12,'p'); p.set(10,13,'Q')
     return p
 def cheerBanner():
-    # wall Slot: 44 wide like the frame and the plaque
-    p=Pic(20,19)
-    p.rect(0,0,20,1,'W'); p.set(0,0,'G'); p.set(19,0,'G')
-    p.rect(1,1,18,14,'R'); p.rect(1,1,18,1,'r'); p.rect(1,2,1,13,'r'); p.rect(18,2,1,13,'M')
-    p.rect(2,12,16,1,'g'); p.rect(2,13,16,1,'G')
-    # swallowtail: the notch widens to the bottom, both tails alike
-    for k,y in enumerate(range(15,19)):
-        a=9-k; b=10+k
-        p.rect(1,y,a-1,1,'R'); p.rect(b+1,y,18-b,1,'R'); p.set(1,y,'r'); p.set(18,y,'M')
-    p.stamp(5,3,[".KK..KK.","KCCKKCCK","KCrCCCCK","KCCCCCCK",".KCCCCK.","..KCCK..","...KK..."])
-    for x,y in ((3,3),(16,3),(3,10),(16,10)): p.set(x,y,'Y')
+    # sign Slot (80 wide like the other signs): 단골 감사 현수막 - a long banner hung from the ceiling on two chains
+    p=Pic(38,20)
+    for y in range(5): p.set(6,y,'s' if y%2==0 else 'S'); p.set(31,y,'s' if y%2==0 else 'S')
+    p.rect(1,5,36,1,'W'); p.set(0,5,'G'); p.set(37,5,'G')
+    p.rect(1,6,36,12,'R'); p.rect(1,6,36,1,'r'); p.rect(1,7,1,11,'r'); p.rect(36,7,1,11,'M'); p.rect(1,17,36,1,'M')
+    p.rect(3,8,32,1,'g'); p.rect(3,15,32,1,'g')
+    # the ends are cut in a notch, as a banner's are
+    for y,w in ((10,1),(11,2),(12,1)):
+        for x in range(1,1+w): p.g[y][x]=None
+        for x in range(37-w,37): p.g[y][x]=None
+    p.stamp(15,9,[".KK..KK.","KCCKKCCK","KCrCCCCK","KCCCCCCK",".KCCCCK.","..KCCK.."])
+    p.rect(5,11,8,1,'C'); p.rect(6,13,6,1,'c'); p.rect(25,11,8,1,'C'); p.rect(26,13,6,1,'c')
+    p.rect(1,18,36,1,'g'); p.set(1,18,'G'); p.set(36,18,'H')
+    for x in range(2,36,3): p.set(x,19,'g')
     return p
 def voucher():
     # counter Slot: 48 wide like the safe; the stand fills the width and the vouchers stand tall in it

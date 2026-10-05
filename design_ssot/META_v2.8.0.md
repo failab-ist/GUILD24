@@ -455,22 +455,23 @@ RESULT-PROOF counterfactual reads the same two terms.
 
 운영형: each is something 본사 did for the store. One per Slot, beside that Slot's other two. They change how the
 점포지원 window is drawn or priced, or reach every adventurer; they never inject a Relic id, mark a Relic as owned or take
-a Relic slot (the boundary above holds).
+a Relic slot (the boundary above holds). The one with the larger measured effect, 단골 감사 현수막, sits on the dearer
+간판 (User 2026-10-05); the ids stay as they were.
 
-### sign — 본사 특별 지원 간판 (id heroSign)
-```text
-the DAY 0 free 점포지원 pick is drawn from 영웅 (3 cards) instead of 일반
-```
-
-Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says.
-
-### wall — 단골 감사 현수막 (id cheerBanner)
+### sign — 단골 감사 현수막 (id cheerBanner)
 ```text
 투력 × (1 + floor(단골도 / 10) × 3%)
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF
 counterfactual reads the same term.
+
+### wall — 본사 우수 점포 훈장 (id heroSign)
+```text
+the DAY 0 free 점포지원 pick is drawn from 영웅 (3 cards) instead of 일반
+```
+
+Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
@@ -487,8 +488,8 @@ each 점포지원 window: the first candidate reroll is free, then 300G, 600G ..
 `DIRECTOR DOCUMENT BASELINE` (cheapest 500, dearest 3×, total 3,750; sign 1250 -> 1500 User 2026-10-03, money gathers faster late)
 
 ```text
-sign    원정 지원금 간판 / 훈련소 제휴 간판 / 본사 특별 지원 간판   1500 Store Capital
-wall    명예 모험가 액자 / 의무실 현판 / 단골 감사 현수막          1000 Store Capital
+sign    원정 지원금 간판 / 훈련소 제휴 간판 / 단골 감사 현수막       1500 Store Capital
+wall    명예 모험가 액자 / 의무실 현판 / 본사 우수 점포 훈장        1000 Store Capital
 counter 알뜰 금고 / 추모 방명록 / 휴식 바우처 꽂이               750 Store Capital
 display 길드 추천 매대 / 구급품 진열장 / 지원 교환 쿠폰함         500 Store Capital
 ```

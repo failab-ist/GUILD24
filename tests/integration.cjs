@@ -1422,7 +1422,7 @@ test('알뜰 금고: the Day\'s first two customers bring +200G more each',()=>{
 
 /* ---- META §OPERATION DECORATIONS (User 2026-10-04) ---------------------------------------- */
 const account=ids=>{const a=Meta.fresh();for(const id of ids){Meta.addCapital(a,DATA.decorationBy[id].price);Meta.buyDecoration(a,id);Meta.equipDecoration(a,DATA.decorationBy[id].slot,id);}return a;};
-test('본사 특별 지원 간판: the DAY 0 free pick is three 영웅 cards; without it, three 일반',()=>{
+test('본사 우수 점포 훈장: the DAY 0 free pick is three 영웅 cards; without it, three 일반',()=>{
  for(let i=0;i<20;i++){
   const g=new Game(account(['heroSign']));g.autosave=false;g.start('hero-'+i);
   const w=g.run.relicWindow;assert.equal(w.milestoneDay,0);assert.equal(w.candidateIds.length,3);

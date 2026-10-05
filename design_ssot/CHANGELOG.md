@@ -47,8 +47,8 @@ and this table is their commit record.
 - **점포지원 등급** 일반 17 · 희귀 10 · 영웅 7: each card rolls its 등급 first (60 / 28 / 12), DAY 0 offers 일반 only, the D30 exclusions stay, the reroll
   stays unlimited (300 -> 600 -> 1200). The card and the owned list show the 등급 word under the name in the item rarity colors, with a 등급-color
   line. RELIC §GRADE, UI_UX §RELIC UI, GLOSSARY `점포지원 등급`; tests relic-order, revision.
-- **운영형 장식** (one per Slot, the Slot's price): 본사 특별 지원 간판 (the DAY 0 pick from 영웅), 단골 감사 현수막 (투력 × (1 + floor(단골도 / 10) × 3%),
-  the Final included), 휴식 바우처 꽂이 (every Night, every living adventurer Fatigue -6; measured at -3 first, D30 +0.7%p, User 2026-10-05), 지원 교환 쿠폰함 (each window's first reroll free). Pixel art
+- **운영형 장식** (one per Slot, the Slot's price): 단골 감사 현수막 on the 간판 (투력 × (1 + floor(단골도 / 10) × 3%), the Final included; on the dearer Slot as the stronger, User 2026-10-05), 본사 우수 점포 훈장 on the 벽면 (the DAY 0 pick from 영웅),
+  휴식 바우처 꽂이 (every Night, every living adventurer Fatigue -6; measured at -3 first, D30 +0.7%p, User 2026-10-05), 지원 교환 쿠폰함 (each window's first reroll free). Pixel art
   in `ui/assets/deco/`. META §OPERATION DECORATIONS, COPY_AUDIT §9-5; tests integration, copy, ui-guard, night; `tools/qa-deco-seating.cjs` carries the set.
 - **Decoration art rules written down** (User 2026-10-05): UI_UX §DECORATION ART - the Slot's canvas width, body colour to the light
   outline with no dark edge ring, lit top-left / shaded bottom-right, near-black only for detail and a standing foot line, the
