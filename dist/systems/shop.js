@@ -154,6 +154,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
   if(fx.poison)return s.dungeons.some(d=>!d.hazards.includes('poison'));
   if(fx.pilgrimage)return s.dungeons.length>=2&&s.expectedVisitors>=3;
+  if(fx.unknown)return s.npcs.some(n=>n.alive&&!n.recovery);
   if(fx.audit)return s.stats.waste>=6;
   if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22;
   /* EVENT 24~55 (v2.9.11): an Event whose subject is absent today is out of the pool (NO FALSE ATTRIBUTION) */
@@ -178,11 +179,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  rollEvent(){const s=this.run,fired=this.rng.next()<(this.has('rumorBoard')?D.relicParams.rumorBoard.eventChance:.40);if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
   if(!this.eventEligibleDay(s.day)||!fired)return null;
   const seen=s.eventLog||[],pool=D.events.filter(e=>!seen.includes(e.id)&&this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
- /* The Morning is an orchestration of six things that each belong to a different system, and
-    it had them all inline: the Day's state reset, the Gates, the Final state, how many people
-    are coming, the Event, and who actually arrives. Each is a method below now, in the order
-    the Day happens. Nothing here decides a rule - every rule, every number and every RNG draw
-    stayed exactly where it was, in the same sequence - so a Day is bit-for-bit what it was. */
+ /* CORE_RUN §MORNING: Event, intake, retained Gates, then Deep designation. */
  morning(){const s=this.run;
   this.morningReset();
   const ids=this.morningGates();
@@ -191,8 +188,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(ids===null){this.generateOffers();this.save();return;}
   const visitors=this.morningVisitors();
   this.morningEvent(ids);
-  this.morningDeep();
   this.morningQueue(visitors);
+  this.morningDeep();
   this.firstRunLessons();
   this.save();
  }
@@ -264,7 +261,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  /* Today's Event, and everything it does to a Day that is otherwise already decided. */
  morningEvent(ids){const s=this.run;
   s.event=this.rollEvent();s.eventSeen=!s.event;if(s.event)(s.eventLog??=[]).push(s.event.id);s.pilgrimage=0;s.closedGates=[];const ev=s.event?.effects||{};
-  if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
+  if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='고위험 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
   /* EVENT 52 게이트 임시 폐쇄 / 55 게이트 안정화 작업: before the day's multipliers, so they read the final Gates */
   /* the closed Gate is kept aside for the screens (`오늘 폐쇄`); it takes no visitor and no expedition */
   if(ev.closeGate){const open=s.dungeons.map((d,i)=>i).filter(i=>!s.dungeons[i].temporary);if(open.length>=2)s.closedGates.push(...s.dungeons.splice(this.rng.pick(open),1));}
@@ -284,7 +281,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     a stream derived from the seed and the Day, which keeps the run stream's draw count on a
     Deep Day identical to any other Day. Family, Tier and Hazards are the base Gate's. */
  morningDeep(){const s=this.run;
-  if(!this.deepDay(s.day))return;
+  if(!this.deepDay(s.day)||!s.dungeons.length)return;
   const top=Math.max(...s.dungeons.map(d=>d.tier));
   const pool=s.dungeons.map((d,i)=>i).filter(i=>s.dungeons[i].tier===top);
   s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};
@@ -302,7 +299,6 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      un-met adventurer and raise their Rarity floor and potential on a 60% roll, invisibly and
      with no routed Design owner. Nothing compensates for it: Rarity and potential are now only
      ever what Adventurer.create rolled. */
-  this.generateOffers();
   let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
   let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
   /* EVENT 45 길드 소집령: the highest-Level adventurer does not come today; the headcount is drawn from the rest */
@@ -333,21 +329,25 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   else if((ev.rookie||ev.royal)&&arrival&&!selected.length)selected.push(arrival);
   /* EVENT 34 단골의 날: one trusted regular not already coming joins today's visitors */
   if(ev.regularVisit){const reg=available.filter(n=>!selected.includes(n)&&n.introduced&&G.Adventurer.isTrustedRegular(n));if(reg.length)selected.push(this.rng.pick(reg));}
+  /* NPC_TRAIT §DESTINATION: expected destinations cover all retained Gates.
+     Keep the Event Gate; remove random ordinary Gates when intake cannot fill them. */
+  while(s.dungeons.length>selected.length){
+   const ordinary=s.dungeons.map((d,i)=>i).filter(i=>!s.dungeons[i].temporary);
+   if(!ordinary.length)break;s.dungeons.splice(this.rng.pick(ordinary),1);}
+  this.generateOffers();
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
-  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
+  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
 n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,this.rng)+this.awayWallet(n)));n.awayDays=0;n.newToday=!n.introduced;}
   /* ECONOMY_ORDER §Away Wallet: an adventurer who could have come and did not earns elsewhere - each such
      Day banks one, up to a few, paid on the next visit. Counted after the draw, so it adds no RNG draw. */
   for(const n of s.npcs)if(n.alive&&!n.recovery&&n.introduced&&!selected.includes(n))n.awayDays=Math.min(D.balance.awayWallet.maxDays,(n.awayDays||0)+1);
-  /* NPC_TRAIT destinationDefault / SALE §EXPECTED DESTINATION: every open Gate is claimed by at
-     least one visitor whenever there are as many visitors as Gates - the per-Gate count on MORNING / ORDER was
-     showing Gates nobody would visit. The ordinary draw above is untouched; only a Day that left a Gate empty
-     moves one visitor into it, picked at random from a Gate that holds two or more and never one a 거짓말쟁이
-     already sent elsewhere, so the stream of every other Day is unchanged. */
-  if(s.dungeons.length>1&&selected.length>=s.dungeons.length)for(let g=0;g<s.dungeons.length;g++){
+  /* NPC_TRAIT §DESTINATION: establish expected coverage before actual-only overrides. */
+  if(selected.length>=s.dungeons.length)for(let g=0;g<s.dungeons.length;g++){
    if(selected.some(n=>n.claimedDestination===g))continue;
-   const movable=selected.filter(n=>n.destination===n.claimedDestination&&selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1);
-   if(!movable.length)continue;const n=this.rng.pick(movable);n.destination=n.claimedDestination=g;}
+   const movable=selected.filter(n=>selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1);
+   const n=this.rng.pick(movable);n.destination=n.claimedDestination=g;}
+  for(const n of selected)if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){
+   const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);n.destination=this.rng.pick(others);}
   /* EVENT §03 게이트 순례 주간: "actual destination changes to a different currently open Gate"
      reads against the expected/reported destination (claimedDestination) - the one thing the
      Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may
@@ -421,7 +421,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   const rates=band.weights.map((w,v)=>v===2?w+(s.pity.rare>=5?3:0):w);const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('rareContract')&&v>=2?D.relicParams.rareContract.rareWeightMult:1));pool=pool.filter(it=>it.rarity===rarity);
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
  order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?2:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
- open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';this.arrive();if(!s.queue.length)this.night();this.save();}
+ open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';if(s.queue.length)this.arrive();else{this.night();this.finishNight();}this.save();}
  /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY. The expedition outlook the decision surface
     shows is a SALE-ENTRY snapshot, taken before this visit's first transaction and frozen for
     the whole visit: Combat Forecast, Hazard Readiness, the exact 실패 시 사망 위험 % and the
@@ -607,6 +607,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   /* RELIC 단골 추천 엽서함: on a Day a 단골 came, every other visitor of the Day gains 단골도 */
   if(this.has('postcard')){const vs=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.alive),regs=vs.filter(n=>G.Adventurer.isTrustedRegular(n));
    for(const n of vs)if(regs.some(m=>m!==n)){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}}const ev=s.event?.effects||{};s.results=[];
+  s.daily.noVisitors=!s.queue.length;s.daily.recoveryOnly=s.daily.noVisitors&&s.npcs.some(n=>n.alive)&&s.npcs.filter(n=>n.alive).every(n=>n.recovery>0);
   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
      shown to the Player, never persisted past it. Deep expeditions neither count nor are assisted. */

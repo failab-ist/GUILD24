@@ -1317,6 +1317,7 @@ function closingReceipt(s){
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
   +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
+  +(d.noVisitors?'<div class="block"><p>'+E(d.recoveryOnly?'모두 중상이라 방문할 손님이 없어서 영업을 못했다.':'오늘은 원정에 나선 손님이 없었다.')+'</p></div>':'')
   +'<div class="block"><div class="row open"><span>영업 시작 골드</span><b>'+fmt(open)+'<i>G</i></b></div></div>'
   +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
   +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'

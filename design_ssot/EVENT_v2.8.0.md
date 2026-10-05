@@ -567,7 +567,7 @@ EFFECT:
 
 최소 방문객: 1. 추가 Loyalty / Growth Penalty는 없다.
 
-### 14. 미확인 게이트
+### 14. 고위험 게이트 발견
 
 TYPE: Dungeon / RiskReward
 
@@ -577,7 +577,9 @@ EFFECT:
 오늘 고위험 · 고보상 임시 Gate 1개 추가
 ```
 
-`미확인`이라는 이름 때문에 기존 Canonical이 공개하도록 한 정보를 추가로 숨기지 않는다.
+Gate / Hazard information remains public under ordinary disclosure rules. The Event is eligible only when at least
+one living adventurer is available outside recovery. Its temporary Gate must receive at least one expected visitor;
+when intake is too small, ordinary Gates are removed first (NPC_TRAIT §DESTINATION).
 Gate / Hazard 정보 공개와 NPC Destination은 일반 Canonical Rule을 따른다.
 
 Add exactly one temporary ordinary Gate for the Day.
@@ -980,7 +982,7 @@ Do not broaden category events to unrelated Items merely to preserve old source 
 
 ### Mixed / RiskReward
 
-게이트 순례 주간 · 몬스터 범람 · 한파 · 독안개 · 신입 모험가 시즌 · 암시장 상인 · 미확인 게이트 · 야시장 ·
+게이트 순례 주간 · 몬스터 범람 · 한파 · 독안개 · 신입 모험가 시즌 · 암시장 상인 · 고위험 게이트 발견 · 야시장 ·
 원정 징발령 · 본사 재고 떨이 · 정예 토벌령 · 폭염 · 게이트 임시 폐쇄 · 길드 훈련 주간 · 유통기한 임박 특가 ·
 게이트 안정화 작업
 
@@ -1172,7 +1174,7 @@ Controlled seeded Event cases PASS only if:
 - royal profile uses ordinary spawn Level +3 and Rarity weights 40/36/17/6/1
 - 본사 재고 감사 is eligible at cumulative waste >=6 and charges min(100G, waste×5G)
 - 왕도 축제 applies Food/Drink purchase intent +20%p only
-- 미확인 게이트 adds exactly one temporary eligible-Family Gate with required Power ×1.16 and reward ×1.50
+- 고위험 게이트 발견 adds exactly one temporary eligible-Family Gate with required Power ×1.16 and reward ×1.50
 - Save/Load does not duplicate an Event effect or create a second Event roll
 
 QA must not tune these values while validating them.

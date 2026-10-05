@@ -733,6 +733,7 @@ test('NPC-Q66 — MAJOR INJURY RECOVERY', () => {
  n.injury = 2;
  n.status = '중상';
  n.recovery = 1;
+ g.run.queue=g.run.queue.filter(id=>id!==n.id);
  g.beginOrder();
  g.open();
  while(g.run.phase === 'sell') g.depart();

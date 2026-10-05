@@ -32,6 +32,10 @@ CLOSING = `오늘 장사는 어땠을까?` — 영업 시작 골드 / 들어오�
 
 ## NIGHT FLOW
 
+A Day with no visitors skips the empty Night report after Order and settles directly into Closing.
+Rest, expiry and operating costs still settle exactly once. The receipt states the no-trading reason;
+when every living adventurer is recovering from Severe Injury: `모두 중상이라 방문할 손님이 없어서 영업을 못했다.`
+
 원정 결과는 NPC 1명씩 짧게 보여준다:
 resolve/precompute → adventurer result card → NEXT → next adventurer.
 

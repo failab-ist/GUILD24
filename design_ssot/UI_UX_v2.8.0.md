@@ -888,6 +888,9 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 
 ## CLOSING
 
+On a zero-visitor Day, Order settles directly into Closing. The receipt places the no-trading reason after its header,
+before the opening-Gold row; it does not show an empty Night report. NIGHT_CLOSING owns settlement and reason copy.
+
 question=`오늘 장사는 어땠을까?` — economics-first; the expedition story is Night's. Primary: the cash-flow receipt — opening
 Gold, Gold in and out, closing Gold with the Day's change, stock / waste counts, tomorrow's operating estimate (NIGHT_CLOSING
 §CLOSING — CASH FLOW RECEIPT — EXACT); figures without an accounting-explanation footer.
