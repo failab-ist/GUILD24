@@ -30,8 +30,9 @@ and this table is their commit record.
 | v2.10.2 | 2026-10-04 | PR #75 (`ui/design-trim`: #68~#74); version bump PR (this one); quick patch 1 PR #80 | (the User sets it; not yet on origin) |
 | v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | (the User sets it; not yet on origin) |
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
+| v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 
-## After v2.10.3 — 점포지원 등급, 점포지원 조정, 운영형 장식, 사건 · 결전 (User 2026-10-04; the version stays 2.10.3)
+## v2.11.0 — 점포지원 등급, 점포지원 조정, 운영형 장식, 사건 · 결전 (User 2026-10-04 ~ 10-05)
 
 - **사건 from DAY 1**: a Normal Event may fire from DAY 1. The account's first Run keeps DAY 1 quiet so the DAY 2 `본사 1+1 행사` lesson stays its
   first Event. EVENT, CORE_RUN; tests events, revision.
