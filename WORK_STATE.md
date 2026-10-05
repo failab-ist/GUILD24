@@ -5,7 +5,7 @@ STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User �
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 승인 버전은 v2.11.1(마이너 UI 피드백 · 첫 마왕성 단계별 코치, `codex/minor-ui-feedback`의 main 머지 PR). 직전은 v2.11.0(PR #111, 이후 UI PR #112 · #113 포함). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. 현행 승인 버전은 v2.11.1(마이너 UI 피드백 · 첫 마왕성 단계별 코치, `codex/minor-ui-v2111`의 main 머지 PR). 직전은 v2.11.0(PR #111, 이후 UI PR #112 · #113 포함). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - 밸런스 기준 로그: `reports/v2100-measure/v2103-bots-baseline.log`(v2.10.3 바가지 규칙 + 봇 수정, 프레시), 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
