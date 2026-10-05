@@ -50,6 +50,12 @@ and this table is their commit record.
 - **운영형 장식** (one per Slot, the Slot's price): 본사 특별 지원 간판 (the DAY 0 pick from 영웅), 단골 감사 현수막 (투력 × (1 + floor(단골도 / 10) × 3%),
   the Final included), 휴식 바우처 꽂이 (every Night, every living adventurer Fatigue -3), 지원 교환 쿠폰함 (each window's first reroll free). Pixel art
   in `ui/assets/deco/`. META §OPERATION DECORATIONS, COPY_AUDIT §9-5; tests integration, copy, ui-guard, night; `tools/qa-deco-seating.cjs` carries the set.
+- **Decoration art rules written down** (User 2026-10-05): UI_UX §DECORATION ART - the Slot's canvas width, body colour to the light
+  outline with no dark edge ring, lit top-left / shaded bottom-right, near-black only for detail and a standing foot line, the
+  palette and what each of the twelve shows. The four 운영형 pictures follow it (`tools/deco-art.py`); `tools/deco-sheet.cjs` lays all twelve
+  side by side at their Slot widths.
+- **새 점포 준비 Capital plate**: its 24 px step needs a stage 400 wide (390x844 overlapped the counter pieces). UI_UX §NEW STORE
+  PREPARATION — STORE SCENE. `tools/qa-prep-scene.cjs` and `tools/qa-store-support.cjs` skip the prologue again.
 
 ## Docs / hygiene and asset weight after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 

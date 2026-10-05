@@ -1227,6 +1227,38 @@ when wider). Pieces follow the painting under any crop:
 - covered: phone 360~430 at browser heights 640~932, the iPhone SE stage 375x548 (§SHORT PHONE), portrait tablet 768~912,
   landscape tablet 900~1023, desk 1024~1920
 
+### DECORATION ART (User 2026-10-05)
+
+Each Decoration is one pixel-art SVG (`dist/ui/assets/deco/<id>.svg`). The store draws every piece of a Slot at one width, so
+a new picture is drawn to match the others of its Slot, not on its own:
+- file: `shape-rendering="crispEdges"`, rectangles only (no text, script or external reference); one art pixel is 2 x 2 file
+  units, the light outline (§LIVE STORE DECORATION SEATING) is the half-unit ring around the silhouette
+- canvas width per Slot, so the art pixel is the same size within the Slot: 간판 80, 벽면 44, 계산대 48 (추모 방명록 56),
+  진열대 52; heights stay near the Slot's others (간판 44, 벽면 42, 계산대 34~40, 진열대 50)
+- the piece fills its canvas: it spans the width inside the outline, no wide empty margin (a narrow piece reads smaller
+  than its neighbours at the same width)
+- body colour runs straight to the light outline: no second, dark edge ring inside it. Volume is one lit row / column on top
+  and left and one shaded row / column at the bottom and right, in a lighter and a darker tone of the body's own hue
+- the near-black `#1b130c` (opaque) only for small inner detail (an icon's outline, a door seam, a slot) and a standing
+  piece's foot line and legs; a large area or a frame in it reads as a heavy border
+- hanging pieces (간판, 벽면) end with the half outline under them; standing pieces (계산대, 진열대) end with the whole opaque
+  foot line on the file's last row
+- colours chiefly from the pieces' shared palette: wood `#3f2a1a #6b4a2e #9a7148`, gold `#86652a #c8a35e #e3b23c #ecd59a`, red `#62201c
+  #a8322f #dc5d55`, paper `#b9a982 #d9cfb2 #f4efe6 #fbf4e2`, steel `#20272d #3a444c #6f7d87 #8e9aa3`, teal `#4d6f75 #6f9ea6`,
+  green `#2f7a4d #7fb069`, purple `#4f3a72 #7c5ea8 #a58bd0`
+- what each piece shows is what the Decoration does (a 지원금 sign with a coin purse, a medical cross, a coupon box ...)
+
+| Slot | economy | survival | operation |
+|---|---|---|---|
+| 간판 | 원정 지원금 간판: teal board, trophy and coin purse | 훈련소 제휴 간판: red board, crossed swords | 본사 특별 지원 간판: purple board, gold star between ribbon lines |
+| 벽면 | 명예 모험가 액자: gold frame, an adventurer's portrait | 의무실 현판: gold frame, red cross on paper | 단골 감사 현수막: red swallowtail banner on a rod, heart |
+| 계산대 | 알뜰 금고: steel safe, gold dial | 추모 방명록: open book and candle | 휴식 바우처 꽂이: wooden stand, three vouchers |
+| 진열대 | 길드 추천 매대: wooden shelf of goods, trophy | 구급품 진열장: glass cabinet of red kits | 지원 교환 쿠폰함: red coupon box, tickets standing up |
+
+The four 운영형 pictures are drawn by `tools/deco-art.py` (art-pixel grids, written as the SVG files); `tools/deco-sheet.cjs`
+draws all twelve at their Slot widths side by side for review. Test ui-guard checks the file rules; `tools/qa-deco-seating.cjs`
+checks the seating.
+
 ### PROLOGUE (User 2026-10-04)
 
 Five full-screen scenes before every new store: at start-up when there is no Run (in place of the loading
