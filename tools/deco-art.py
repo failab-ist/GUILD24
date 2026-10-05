@@ -6,7 +6,7 @@
 import sys,os
 PAL={'K':'#1b130c','W':'#6b4a2e','w':'#9a7148','B':'#3f2a1a','G':'#c8a35e','g':'#e3b23c','Y':'#ecd59a',
  'R':'#a8322f','r':'#dc5d55','M':'#62201c','P':'#7c5ea8','p':'#a58bd0','C':'#f4efe6','c':'#d9cfb2',
- 'E':'#2f7a4d','e':'#7fb069','T':'#6f9ea6','t':'#b8dde2','S':'#3a444c','s':'#8e9aa3','O':'#d98a3d','H':'#86652a','n':'#b9a982','Q':'#4f3a72'}
+ 'E':'#2f7a4d','e':'#7fb069','T':'#6f9ea6','t':'#b8dde2','S':'#3a444c','s':'#8e9aa3','O':'#d98a3d','H':'#86652a','n':'#b9a982','Q':'#4f3a72','F':'#fbf4e2','N':'#283a5c','V':'#1c2840'}
 class Pic:
     def __init__(s,cols,rows): s.c,s.r=cols,rows; s.g=[[None]*cols for _ in range(rows)]
     def set(s,x,y,k):
@@ -52,71 +52,92 @@ def svg(p,standing):
     return ''.join(out)
 
 def heroSign():
-    # wall Slot (44 wide like the frame and the plaque): 본사 우수 점포 훈장 - a star medal on a neck ribbon, hung from a wall hook
-    import math
-    p=Pic(20,20)
-    # the ribbon: two broad straps from the hook's corners down to the medal, purple with a gold edge stripe
-    for k,y in enumerate(range(0,8)):
-        a=1+k; w=5
-        p.rect(a,y,w,1,'P'); p.set(a,y,'p'); p.set(a+w-1,y,'G')
-        b=18-k; p.rect(b-w+1,y,w,1,'Q'); p.set(b-w+1,y,'G'); p.set(b,y,'P')
-    p.rect(7,7,6,2,'P'); p.rect(7,7,6,1,'p')
-    # the star: five points around (9.5, 12.6), lit top-left, shaded bottom-right, a purple gem in the middle
-    cx,cy,R,r=9.5,12.6,9.4,4.1
-    pts=[(cx+(R if i%2==0 else r)*math.sin(i*math.pi/5),cy-(R if i%2==0 else r)*math.cos(i*math.pi/5)) for i in range(10)]
-    def inside(x,y):
-        c=False
-        for i in range(10):
-            (x1,y1),(x2,y2)=pts[i],pts[(i+1)%10]
-            if (y1>y)!=(y2>y) and x<(x2-x1)*(y-y1)/(y2-y1)+x1: c=not c
-        return c
-    cells={(x,y) for y in range(20) for x in range(20) if inside(x+.5,y+.5) and y>=6}
+    # wall Slot: 본사 우수 점포 훈장 - the same gold frame as 명예 모험가 액자 and 의무실 현판 (rows and columns as they are),
+    # with a star medal on a red ribbon on navy velvet inside
+    p=Pic(20,19)
+    p.rect(0,0,20,19,'G'); p.rect(0,0,20,1,'Y'); p.rect(0,1,1,17,'Y'); p.rect(19,1,1,17,'H'); p.rect(0,18,20,1,'H')
+    p.rect(2,2,16,15,'K'); p.rect(3,3,14,13,'N'); p.rect(3,3,14,1,'V')
+    # the ribbon: two straps from the top of the frame down behind the star, red with a gold stripe
+    for k,y in enumerate(range(3,6)):
+        p.rect(4+k,y,3,1,'R'); p.set(5+k,y,'g')
+        p.rect(13-k,y,3,1,'M'); p.set(14-k,y,'g')
+    # the star, drawn by hand on its two centre columns so both halves match: the left facet lit, the right shaded
+    STAR=[".....##.....",
+          ".....##.....",
+          "....####....",
+          "...######...",
+          "############",
+          ".##########.",
+          "..########..",
+          "..########..",
+          ".####..####.",
+          ".###....###.",
+          "##........##"]
+    x0,y0=4,4
+    cells={(x+x0,y+y0) for y,row in enumerate(STAR) for x,c in enumerate(row) if c=='#'}
     for (x,y) in cells:
-        k='g'
+        k='g' if x<=9 else 'O'
         if (x-1,y) not in cells or (x,y-1) not in cells: k='Y'
         if (x+1,y) not in cells or (x,y+1) not in cells: k='H'
         p.set(x,y,k)
-    p.rect(9,12,2,2,'P'); p.set(9,12,'p'); p.set(10,13,'Q')
     return p
 def cheerBanner():
-    # sign Slot (80 wide like the other signs): 단골 감사 현수막 - a long banner hung from the ceiling on two chains
+    # sign Slot (80 wide like the other signs): 단골 감사 현수막 - a long cream banner hung from the ceiling on two chains,
+    # a red heart between brown thank-you lines (cream, so it is not mistaken for the red 훈련소 sign or the teal 지원금 sign)
     p=Pic(38,20)
     for y in range(5): p.set(6,y,'s' if y%2==0 else 'S'); p.set(31,y,'s' if y%2==0 else 'S')
     p.rect(1,5,36,1,'W'); p.set(0,5,'G'); p.set(37,5,'G')
-    p.rect(1,6,36,12,'R'); p.rect(1,6,36,1,'r'); p.rect(1,7,1,11,'r'); p.rect(36,7,1,11,'M'); p.rect(1,17,36,1,'M')
-    p.rect(3,8,32,1,'g'); p.rect(3,15,32,1,'g')
+    p.rect(1,6,36,12,'C'); p.rect(1,6,36,1,'F'); p.rect(1,7,1,11,'F'); p.rect(36,7,1,11,'c'); p.rect(1,17,36,1,'c')
+    p.rect(3,8,32,1,'R'); p.rect(3,15,32,1,'R')
     # the ends are cut in a notch, as a banner's are
     for y,w in ((10,1),(11,2),(12,1)):
         for x in range(1,1+w): p.g[y][x]=None
         for x in range(37-w,37): p.g[y][x]=None
-    p.stamp(15,9,[".KK..KK.","KCCKKCCK","KCrCCCCK","KCCCCCCK",".KCCCCK.","..KCCK.."])
-    p.rect(5,11,8,1,'C'); p.rect(6,13,6,1,'c'); p.rect(25,11,8,1,'C'); p.rect(26,13,6,1,'c')
+    p.stamp(15,9,[".KK..KK.","KRRKKRRK","KRrRRRRK","KRRRRRRK",".KRRRRK.","..KRRK.."])
+    p.rect(5,11,8,1,'W'); p.rect(6,13,6,1,'w'); p.rect(25,11,8,1,'W'); p.rect(26,13,6,1,'w')
     p.rect(1,18,36,1,'g'); p.set(1,18,'G'); p.set(36,18,'H')
     for x in range(2,36,3): p.set(x,19,'g')
     return p
 def voucher():
-    # counter Slot: 48 wide like the safe; the stand fills the width and the vouchers stand tall in it
-    p=Pic(22,19)
-    def card(x,y,w,band):
-        p.rect(x,y,w,13-y,'C'); p.rect(x+w-1,y+1,1,12-y,'c')
-        p.rect(x+1,y+2,w-2,1,band); p.rect(x+1,y+4,w-3,1,'c'); p.rect(x+1,y+6,w-2,1,'c'); p.rect(x+1,y+8,w-3,1,'c')
-    card(1,3,6,'E'); card(7,0,7,'T'); card(14,2,7,'P')
-    p.rect(9,4,3,1,'g'); p.rect(10,5,1,1,'g'); p.rect(9,6,3,1,'g')
-    p.rect(0,11,22,6,'w'); p.rect(0,11,22,1,'G'); p.rect(0,12,1,5,'G'); p.rect(21,12,1,5,'W'); p.rect(0,16,22,1,'W')
-    p.rect(3,13,16,1,'W'); p.rect(3,14,16,1,'B')
-    p.rect(0,17,22,1,'K'); p.rect(1,18,2,1,'K'); p.rect(19,18,2,1,'K')
+    # counter Slot (48 wide like the safe): 휴식 바우처 꽂이 - a stepped wooden brochure stand, one voucher standing in each of
+    # its three pockets, the back pocket highest (a stair-step outline, not a box on legs)
+    p=Pic(22,18)
+    for n,(x,top,band) in enumerate(((1,7,'E'),(8,3,'T'),(15,0,'P'))):
+        # the voucher: paper, a coloured band, two lines; its pocket hides its foot
+        p.rect(x,top,6,9,'C'); p.rect(x+5,top+1,1,8,'c'); p.rect(x,top,6,1,'F')
+        p.rect(x+1,top+2,4,1,band); p.rect(x+1,top+4,3,1,'c'); p.rect(x+1,top+6,4,1,'c')
+    # the pockets, each a step higher than the one in front of it
+    for x,y in ((0,11),(7,8),(14,5)):
+        w=22-x; p.rect(x,y,w,3,'w'); p.rect(x,y,w,1,'G'); p.rect(x,y+2,w,1,'W'); p.set(21,y+1,'W')
+    p.rect(0,14,22,3,'w'); p.rect(0,14,22,1,'G'); p.rect(0,16,22,1,'W'); p.rect(14,8,8,6,'W'); p.rect(7,11,15,3,'W')
+    p.rect(0,17,22,1,'K')
     return p
 def rerollCoupon():
-    # display Slot: 52 wide like the shelf and the cabinet; a coupon box with its tickets standing up
+    # display Slot (52 wide like the shelf and the cabinet): 지원 교환 쿠폰함 - a tall purple ticket dispenser with a rounded top,
+    # the swap arrows on its face and a strip of coupons running out of its mouth (not a box of papers, and not red and white
+    # like the 구급품 진열장's kits)
     p=Pic(24,24)
-    p.rect(4,2,6,10,'C'); p.rect(4,2,6,1,'Y'); p.rect(9,3,1,9,'c'); p.rect(5,5,4,1,'e'); p.rect(5,7,3,1,'c')
-    p.rect(11,0,7,12,'Y'); p.rect(11,0,7,1,'e'); p.rect(17,1,1,11,'O'); p.rect(12,3,5,1,'O'); p.rect(12,5,4,1,'g')
-    p.rect(1,10,22,12,'R'); p.rect(1,10,22,1,'r'); p.rect(1,11,1,11,'r'); p.rect(22,11,1,11,'M'); p.rect(1,21,22,1,'M')
-    p.rect(2,13,20,1,'g'); p.rect(2,19,20,1,'g')
-    p.stamp(7,15,["CCCCCCCCCC","C.CC.CC.CC","CCCCCCCCCC"])
-    p.rect(1,22,22,1,'K'); p.rect(2,23,2,1,'K'); p.rect(20,23,2,1,'K')
+    p.rect(6,0,12,1,'P'); p.rect(4,1,16,1,'P'); p.rect(3,2,18,1,'P'); p.rect(2,3,20,19,'P')
+    p.rect(6,0,12,1,'p'); p.rect(4,1,2,1,'p'); p.rect(3,2,1,1,'p'); p.rect(2,3,1,19,'p')
+    p.rect(18,1,2,1,'Q'); p.set(20,2,'Q'); p.rect(21,3,1,19,'Q'); p.rect(2,21,20,1,'Q')
+    p.rect(3,12,18,1,'G')
+    # the face: a cream disc with the swap arrows
+    p.stamp(7,2,["..CCCCCC..",
+                 ".CCCCCRCC.",
+                 "CRRRRRRRCC",
+                 "CCCCCCRCCC",
+                 "CCCCCCCCCC",
+                 "CCCRCCCCCC",
+                 "CCRRRRRRRC",
+                 ".CCRCCCCC.",
+                 "..CCCCCC.."])
+    # the mouth and the coupon strip running out of it, down the front
+    p.rect(5,13,14,2,'K'); p.rect(6,14,12,8,'Y'); p.rect(6,14,12,1,'C')
+    for y in (16,19): p.rect(6,y,12,1,'H')
+    p.rect(8,15,3,1,'O'); p.rect(8,17,4,1,'O'); p.rect(8,20,3,1,'O')
+    p.rect(17,15,1,7,'H')
+    p.rect(1,22,22,1,'K'); p.rect(2,23,3,1,'K'); p.rect(19,23,3,1,'K')
     return p
-
 out=sys.argv[1]
 for name,fn,standing in (('heroSign',heroSign,False),('cheerBanner',cheerBanner,False),('voucher',voucher,True),('rerollCoupon',rerollCoupon,True)):
     open(os.path.join(out,name+'.svg'),'w').write(svg(fn(),standing))
