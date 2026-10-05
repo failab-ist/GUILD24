@@ -32,6 +32,13 @@ and this table is their commit record.
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 
+## After v2.11.0 (User 2026-10-05; the version stays 2.11.0)
+
+- 점포지원 등급 is a stamp in front of the name (card and owned list), the contract text stands further in; the owned list carried no
+  등급 (`undefined`) and now does (PR #112). Deploys put the commit on font / style / script URLs so no stale font is kept.
+- PROLOGUE scene 5: the customer stands on the painted counter top at every size (the store file's counter top read through the
+  cover crop, phone 75.2%, wide 80.5% of the file), not at a fixed share of the screen.
+
 ## v2.11.0 — 점포지원 등급, 점포지원 조정, 운영형 장식, 사건 · 결전 (User 2026-10-04 ~ 10-05)
 
 - **사건 from DAY 1**: a Normal Event may fire from DAY 1. The account's first Run keeps DAY 1 quiet so the DAY 2 `본사 1+1 행사` lesson stays its
