@@ -5,14 +5,15 @@
 //     the old pass fades out over `xf` and the new one fades in (5 ms, BOSS 1 s) - checked by releasing the
 //     2 s-ahead pass timer early instead of waiting three minutes
 //   - one track at a time; a phase change fades the old track out, and the next one starts only after that fade
-//   - leaving the ending for the next store (다음 점포 열기) does the same: the title comes in after the ending track's fade
+//   - leaving the ending for the next store (다음 점포 열기) does the same: the prologue's BOSS comes in after the ending track's
+//     fade, and the title after its 건너뛰기
 //   - the next phase's file is fetched ahead (bytes only), so the day's chain never waits on the network
 //   - mute and a hidden page stop the music; coming back resumes the same track
 //   - coming back to the page resumes a suspended context without waiting for a tap (iOS `interrupted`)
 //   - a file that cannot load falls back to the synthesised bed, never silence
 //   - no page error, no console error
 //   node tools/qa-bgm.cjs [out-dir]
-const {spawn}=require('node:child_process'),path=require('node:path');
+const {spawn}=require('node:child_process'),path=require('node:path'),{ready}=require('./qa-ready.cjs');
 const PORT=Number(process.env.QA_PORT||5193),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const results=[];const check=(name,ok,detail='')=>{results.push(ok);console.log((ok?'PASS ':'FAIL ')+name+(detail?' - '+detail:''));};
 function serve(){
@@ -47,6 +48,9 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   p.on('console',m=>{if(m.type()==='error'&&!(blocking&&/Failed to load resource/.test(m.text())))errors.push(m.text());});
   p.on('request',r=>{const m=r.url().match(/assets\/bgm\/(\w+)\.mp3/);if(m)fetched.push(m[1]);});
   await p.goto(`http://127.0.0.1:${PORT}/index.html`);
+  // with no Run the prologue comes first (UI_UX §PROLOGUE); it is skipped here, and the BOSS bytes it asked for ahead are
+  // not the title's fetch, so the fetch log starts after it
+  await ready(p);fetched.length=0;
   const music=await p.evaluate(()=>Sound.music),fades=await p.evaluate(()=>Sound.fades);
   // a new account starts muted (META settings); the player turns sound on
   check('a new account starts muted and plays nothing',await p.evaluate(()=>Guild24.game.account.settings.muted&&__bgm.starts.length===0));
@@ -137,10 +141,15 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   {await waitStart(await p.evaluate(()=>__bgm.starts.length));await p.waitForTimeout(400);
    const n=await p.evaluate(()=>__bgm.starts.length);
    const at=await p.evaluate(()=>{const b=document.querySelector('[data-action="new"]');const t=__bgm.ctx.currentTime;b&&b.click();return b?t:null;});
+   // 다음 점포 열기 plays the prologue (UI_UX §PROLOGUE), whose scenes 1~2 are BOSS (§PHASE BGM)
    const ok=at!==null&&await waitStart(n+1),s=ok&&await p.evaluate(k=>__bgm.starts[k],n);
-   check(`다음 점포 열기: the title starts after the ending track's ${fades.out} s fade-out (never both at once)`,
+   check(`다음 점포 열기: the prologue's BOSS starts after the ending track's ${fades.out} s fade-out (never both at once)`,
     !!s&&s.when>=at+fades.out-.05,s?`starts ${(s.when-at).toFixed(2)} s after the press`:'no start');
-   check('and at its loop start',!!s&&Math.abs(s.offset-music.title.s)<.002,s&&s.offset.toFixed(3));}
+   check('and at its loop start',!!s&&Math.abs(s.offset-music.boss.s)<.002,s&&s.offset.toFixed(3));
+   // 건너뛰기 ends it on the store screen, where the title plays from its loop start
+   const m=await p.evaluate(()=>__bgm.starts.length);await p.click('[data-action="prologue-skip"]');
+   const t=await waitStart(m+1)&&await p.evaluate(k=>__bgm.starts[k],m);
+   check('건너뛰기: the title comes in at its loop start',!!t&&Math.abs(t.offset-music.title.s)<.002,t&&t.offset.toFixed(3));}
   check('no page or console error',errors.length===0,errors.slice(0,3).join(' | '));
  }finally{await browser.close();server.kill();}
  const failed=results.filter(x=>!x).length;
