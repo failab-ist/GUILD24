@@ -67,7 +67,7 @@ test('REL-Q40: owned Relic quick view is read-only name/effect data',()=>{
  const owned=g.ownedRelics();
  assert.equal(owned.length,2);
  for(const r of owned){
-  assert.deepEqual(Object.keys(r).sort(),['description','id','name'],'no internal taxonomy leaks through the quick view');
+  assert.deepEqual(Object.keys(r).sort(),['description','id','name','rarity'],'no internal taxonomy leaks through the quick view (the 등급 is player-facing, RELIC §GRADE)');
   assert.ok(r.description.length);
  }
  // Sale must not permit a purchase; the window itself stays closed to buying there.
@@ -492,6 +492,10 @@ test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0
  assert.deepEqual(DATA.relicRarityChance,{0:.60,2:.28,3:.12});
  assert.deepEqual([0,2,3].map(x=>DATA.rarities[x]),['일반','희귀','영웅']);
  for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('grade-d0-'+i);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'D0 is 일반 only');}
+ {const g=new Game();g.autosave=false;g.start('grade-owned');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities.push('fresh24');
+  // the owned list (보유 점포지원) stamps each support's 등급, so it carries it (it read `undefined` in v2.11.0)
+  assert.deepEqual(g.ownedRelics().map(r=>r.rarity),g.run.facilities.map(id=>DATA.relicBy[id].rarity));
+  assert.ok(g.ownedRelics().every(r=>DATA.rarities[r.rarity]),'every owned support has a 등급 word');}
  const g=new Game();g.autosave=false;g.start('grade-share');const n={0:0,2:0,3:0};let cards=0;
  for(let i=0;i<1500;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);for(const id of g.run.relicWindow.candidateIds){n[DATA.relicBy[id].rarity]++;cards++;}}
  for(const [x,want] of Object.entries(DATA.relicRarityChance))assert.ok(Math.abs(n[x]/cards-want)<.03,DATA.rarities[x]+' share '+(n[x]/cards).toFixed(3));
