@@ -521,15 +521,15 @@ test('단골 추천 엽서함: a 단골 visit lifts every other visitor of the D
  assert.deepEqual(card.map((v,i)=>v-base[i]),[0,5,5],'the others +5, the 단골 itself nothing');
  assert.deepEqual(none,night([],40),'no 단골 that Day, no gain');
 });
-test('길드 구조대 계약: a Death that gets past the Items turns into 중상 on its own 30% roll',()=>{
- assert.equal(DATA.relicParams.rescueContract.chance,.30);
+test('길드 구조대 계약: a Death that gets past the Items turns into 중상 on its own 15% roll',()=>{
+ assert.equal(DATA.relicParams.rescueContract.chance,.15);
  const g=fresh('rescue'),base=g.run.npcs[0],copy=x=>JSON.parse(JSON.stringify(x));
  const weak={...copy(base),traits:[],injury:0,fatigue:0,pack:[],level:1,stats:{combat:1,survival:1,mobility:1,spirit:1},equipment:{...base.equipment,power:0}};
  const d={...g.makeDungeon('spider',3),hazards:['poison'],day:12,power:400};
  const zero=()=>{let k=0;return {next:()=>(k++,0),int:a=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0,count:()=>k};};
  const out=fac=>{const r=zero();const rep=Dungeon.resolve(copy(weak),d,r,fac,{firstRun:false,day:12});return {o:rep.outcome,draws:r.count(),why:rep.why};};
  const plain=out([]);assert.equal(plain.o,'사망','sanity: the fixture dies');
- const saved=out(['rescueContract']);assert.equal(saved.o,'중상','a roll under 30% carries the adventurer home in 중상');
+ const saved=out(['rescueContract']);assert.equal(saved.o,'중상','a roll under 15% carries the adventurer home in 중상');
  assert.ok(saved.why.includes('길드 구조대가 사망을 중상으로 바꿈'),'and the report says so');
  const keep=DATA.relicParams.rescueContract.chance;DATA.relicParams.rescueContract.chance=0;
  try{assert.equal(out(['rescueContract']).o,'사망','a roll at or over the chance stays 사망');}finally{DATA.relicParams.rescueContract.chance=keep;}

@@ -42,12 +42,12 @@ and this table is their commit record.
   할인 +10 단골도; 길드 납품 인증 commission 40%; 냉장 유통 계약 -> **고급 식자재 유통 계약** (one more Uncommon+ Food / Drink offer on the Day's first order
   sheet, 15% commission on those sales); 즉석식품 170 -> 200G, 본사 추가발주권 130 -> 190G. RELIC, ITEM, NPC_TRAIT, COPY_AUDIT §11.
 - **New 점포지원**: 소문 수집 게시판 (일반 60G: an Event every eligible morning, first-Run DAY 1 included), 단골 추천 엽서함 (일반 80G: on a Day a 단골 visited,
-  the other visitors +5 단골도 at night), 길드 구조대 계약 (희귀 200G: a Death becomes 중상 with 30%). 단골 묶음혜택 leaves the windows (old saves keep it).
+  the other visitors +5 단골도 at night), 길드 구조대 계약 (희귀 200G: a Death becomes 중상 with 15% - measured at 30% first, D30 +36.5%p, User 2026-10-05). 단골 묶음혜택 leaves the windows (old saves keep it).
   RELIC §ADDED / §RETIRED, COPY_AUDIT §11-30d~f.
 - **점포지원 등급** 일반 17 · 희귀 10 · 영웅 7: each card rolls its 등급 first (60 / 28 / 12), DAY 0 offers 일반 only, the D30 exclusions stay, the reroll
   stays unlimited (300 -> 600 -> 1200). The card and the owned list show the 등급 word under the name in the item rarity colors, with a 등급-color
   line. RELIC §GRADE, UI_UX §RELIC UI, GLOSSARY `점포지원 등급`; tests relic-order, revision.
-- **운영형 장식** (one per Slot, the Slot's price): 본사 특별 지원 간판 (the DAY 0 pick from 영웅), 단골 감사 현수막 (투력 × (1 + floor(단골도 / 10) × 3%),
+- **운영형 장식** (one per Slot, the Slot's price): 본사 특별 지원 간판 (the DAY 0 pick from 영웅), 단골 감사 현수막 (투력 × (1 + floor(단골도 / 10) × 2% - measured at 3% first, 클리어 +9.5%p, User 2026-10-05),
   the Final included), 휴식 바우처 꽂이 (every Night, every living adventurer Fatigue -3), 지원 교환 쿠폰함 (each window's first reroll free). Pixel art
   in `ui/assets/deco/`. META §OPERATION DECORATIONS, COPY_AUDIT §9-5; tests integration, copy, ui-guard, night; `tools/qa-deco-seating.cjs` carries the set.
 - **Decoration art rules written down** (User 2026-10-05): UI_UX §DECORATION ART - the Slot's canvas width, body colour to the light

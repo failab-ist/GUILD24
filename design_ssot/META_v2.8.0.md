@@ -466,7 +466,7 @@ Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says
 
 ### wall — 단골 감사 현수막 (id cheerBanner)
 ```text
-투력 × (1 + floor(단골도 / 10) × 3%)
+투력 × (1 + floor(단골도 / 10) × 2%)
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF

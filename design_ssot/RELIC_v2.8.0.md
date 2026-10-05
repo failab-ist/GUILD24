@@ -588,7 +588,7 @@ earlier acquisition can repay its price and create meaningful remaining-Run econ
 - not a purchase gain: 단골 스탬프 기계 does not multiply it; 평생 단골제's floor and the 0~100 clamp apply
 
 35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 200G
-- an ordinary expedition whose Outcome is still 사망 after the Items (귀환석, 세계수 생환부적) rolls once more: 30% -> 중상
+- an ordinary expedition whose Outcome is still 사망 after the Items (귀환석, 세계수 생환부적) rolls once more: 15% -> 중상
   (the ordinary 중상: Injury 2, recovery Days); the 강골 Trait and 구급키트 then settle as usual
 - the report says so (`길드 구조대가 사망을 중상으로 바꿈`); the hero proof reads the same roll
 

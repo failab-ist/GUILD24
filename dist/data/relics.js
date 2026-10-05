@@ -98,7 +98,7 @@ D.relicParams={
  efficiency:{overheadCut:30},
  rumorBoard:{eventChance:1},
  postcard:{loyalty:5},
- rescueContract:{chance:.30}
+ rescueContract:{chance:.15}
 };
 /* The hub overhead rate used to be its own D.balance literal; it now reads through to the
    relic's parameter so there is one lever, under the old name as well. */

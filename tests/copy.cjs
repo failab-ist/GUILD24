@@ -664,7 +664,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   /* User 2026-10-04: COPY_AUDIT §11-30d / §11-30e / §11-30f */
   ['rumorBoard','소문 수집 게시판',60,'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
   ['postcard','단골 추천 엽서함',80,'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 5 오른다.'],
-  ['rescueContract','길드 구조대 계약',200,'원정에서 사망 결과가 나오면 30% 확률로 중상으로 바뀌어 돌아온다.']];
+  ['rescueContract','길드 구조대 계약',200,'원정에서 사망 결과가 나오면 15% 확률로 중상으로 바뀌어 돌아온다.']];
  /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30c exact (32 since v2.9.11) */
  assert.equal(SUPPORTS.length,35,'§11 audits all 35 Store Supports (단골 묶음혜택 retired but still readable)');
  assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 35, in order');
@@ -707,7 +707,7 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
   aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)',
   /* 운영형 (User 2026-10-04) */
   heroSign:'첫 점포지원을 영웅 등급 3장 중에서 고른다',
-  cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다',
+  cheerBanner:'손님의 투력이 단골도 10마다 2% 오른다',
   voucher:'밤마다 살아 있는 모든 손님의 피로가 3 줄어든다',
   rerollCoupon:'점포지원 후보 교환이 창마다 처음 한 번 무료'};
  assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
