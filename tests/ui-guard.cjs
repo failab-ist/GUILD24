@@ -1431,7 +1431,9 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  assert.ok(/\.decoplate\.display\{left:min\(var\(--spot\),calc\(var\(--till-l\) - var\(--gap\)/.test(css),'the display piece stops at the gap left of the till');
  assert.ok(/\.decoplate\.counter\{left:max\(var\(--spot\),calc\(var\(--till-r\) \+ var\(--gap\)\)\)/.test(css),'the counter piece stops at the gap right of it');
  // and the 간판 stops at the gap left of the DAY sign, read from the sign's published anchor
- assert.ok(fn('morningScreen').includes("'<div class=\"store\" style=\"--daysign-x:'+Scene.anchors.daysign.left/100+'\">'"),'the DAY sign edge comes from Scene.anchors');
+ /* MORNING's DAY sign is centred with its width from its height, so the 간판's line is that sign's left edge
+    (tools/qa-deco-seating.cjs measures it against the drawn sign) */
+ assert.ok(/\.p-morning:not\(\.p-prep\) \.deco-layer\{--ceil:\.21;--daysign-h:\.348;--sign-l:calc\(50cqw - 100cqh \* var\(--ceil\) \* var\(--daysign-h\) \* 2156 \/ 521 \/ 2\)\}/.test(css),'the DAY sign edge is the centred sign\'s half width left of the centre');
  assert.ok(/\.decoplate\.sign\{left:min\([^;]*calc\(var\(--sign-l\) - var\(--gap\)/.test(css),'the 간판 keeps the gap from the DAY sign');
  const review=read('dist/ui/director-review.css');
  /* v2.9.9 tablets (User 2026-09-27): the counter band is the painting's, moved down by what the crop takes off its top; a

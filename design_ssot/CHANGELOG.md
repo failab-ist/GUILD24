@@ -55,6 +55,12 @@ and this table is their commit record.
   outline with no dark edge ring, lit top-left / shaded bottom-right, near-black only for detail and a standing foot line, the
   palette and what each of the twelve shows. The four 운영형 pictures follow it (`tools/deco-art.py`); `tools/deco-sheet.cjs` lays all twelve
   side by side at their Slot widths.
+- **간판 on a phone kept off the DAY sign again**: MORNING's DAY sign is centred and as wide as its height (2156:521), so the 간판's
+  line is now that sign's real left edge (360~430 phones had it 3~12 px over the sign and its hangers). UI_UX §LIVE STORE DECORATION
+  SEATING is unchanged; `tools/qa-deco-seating.cjs` passes on phones again.
+- **Runtime QA after the prologue and the loading screen**: `tools/qa-ready.cjs` waits out the loading screen and skips the prologue;
+  qa-d0-flow, qa-day-flip, qa-final-prep, qa-boss-confirm and qa-final-end use it (their checks unchanged); qa-bgm reads the
+  prologue's BOSS after 다음 점포 열기 (UI_UX §PHASE BGM); qa-final-prep's 불리 line is read from `D.balance.finalRoll`.
 - **새 점포 준비 Capital plate**: its 24 px step needs a stage 400 wide (390x844 overlapped the counter pieces). UI_UX §NEW STORE
   PREPARATION — STORE SCENE. `tools/qa-prep-scene.cjs` and `tools/qa-store-support.cjs` skip the prologue again.
 

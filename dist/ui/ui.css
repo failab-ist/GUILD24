@@ -2531,6 +2531,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    DAY sign than the gap - on a short phone the painting's spot comes right up to it */
 .decoplate.sign{left:min(calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar)),
  calc(var(--sign-l) - var(--gap) - var(--w) * var(--ph) * var(--ar)))}
+/* MORNING's DAY sign is centred and as wide as its height x 2156/521 (director-review.css §.p-morning .daysign), so its
+   left edge is half that width left of the centre: the sign is --daysign-h of the ceiling band (28% on a stage under 1024),
+   the band --ceil of the store (19% on the wide framing) */
+.p-morning:not(.p-prep) .deco-layer{--ceil:.21;--daysign-h:.348;--sign-l:calc(50cqw - 100cqh * var(--ceil) * var(--daysign-h) * 2156 / 521 / 2)}
+@media (max-width:1023px){.p-morning:not(.p-prep) .deco-layer{--daysign-h:.28}}
+@media (min-width:1024px),(min-width:768px) and (orientation:landscape){.p-morning:not(.p-prep) .deco-layer{--ceil:.19}}
 /* The display and counter pieces stand on the counter top with the till, so their feet are on the housing's
    base line and they are sized by the same counter mount. Each keeps its painted spot (--cx, the piece's centre as
    a fraction of the file's width) until that spot would bring it closer to the housing than the gap; then it

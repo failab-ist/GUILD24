@@ -827,8 +827,7 @@ function deathLimitItem(labelled){const s=game.run,n=s.stats.deaths,limit=Meta.d
 function morningScreen(){
  const s=game.run;
  return '<div class="stage p-morning">'+menuFab()
- /* the DAY sign's published left edge, for the 간판 Decoration that hangs beside it (UI_UX §LIVE STORE DECORATION SEATING) */
- +'<div class="store" style="--daysign-x:'+Scene.anchors.daysign.left/100+'">'
+ +'<div class="store">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
