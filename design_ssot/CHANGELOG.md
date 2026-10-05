@@ -42,7 +42,7 @@ and this table is their commit record.
   할인 +10 단골도; 길드 납품 인증 commission 40%; 냉장 유통 계약 -> **고급 식자재 유통 계약** (one more Uncommon+ Food / Drink offer on the Day's first order
   sheet, 15% commission on those sales); 즉석식품 170 -> 200G, 본사 추가발주권 130 -> 190G. RELIC, ITEM, NPC_TRAIT, COPY_AUDIT §11.
 - **New 점포지원**: 소문 수집 게시판 (일반 60G: an Event every eligible morning, first-Run DAY 1 included), 단골 추천 엽서함 (일반 80G: on a Day a 단골 visited,
-  the other visitors +5 단골도 at night), 길드 구조대 계약 (희귀 200G: a Death becomes 중상 with 15% - measured at 30% first, D30 +36.5%p, User 2026-10-05). 단골 묶음혜택 leaves the windows (old saves keep it).
+  the other visitors +5 단골도 at night), 길드 구조대 계약 (희귀 240G: a Death becomes 중상 with 15% - measured at 30% first, D30 +36.5%p, User 2026-10-05). 단골 묶음혜택 leaves the windows (old saves keep it).
   RELIC §ADDED / §RETIRED, COPY_AUDIT §11-30d~f.
 - **점포지원 등급** 일반 17 · 희귀 10 · 영웅 7: each card rolls its 등급 first (60 / 28 / 12), DAY 0 offers 일반 only, the D30 exclusions stay, the reroll
   stays unlimited (300 -> 600 -> 1200). The card and the owned list show the 등급 word under the name in the item rarity colors, with a 등급-color

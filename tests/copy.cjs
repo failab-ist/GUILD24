@@ -664,7 +664,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   /* User 2026-10-04: COPY_AUDIT §11-30d / §11-30e / §11-30f */
   ['rumorBoard','소문 수집 게시판',60,'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
   ['postcard','단골 추천 엽서함',80,'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 5 오른다.'],
-  ['rescueContract','길드 구조대 계약',200,'원정에서 사망 결과가 나오면 15% 확률로 중상으로 바뀌어 돌아온다.']];
+  ['rescueContract','길드 구조대 계약',240,'원정에서 사망 결과가 나오면 15% 확률로 중상으로 바뀌어 돌아온다.']];
  /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30c exact (32 since v2.9.11) */
  assert.equal(SUPPORTS.length,35,'§11 audits all 35 Store Supports (단골 묶음혜택 retired but still readable)');
  assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 35, in order');

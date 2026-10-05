@@ -587,7 +587,7 @@ earlier acquisition can repay its price and create meaningful remaining-Run econ
   on the same Day give each other the gain too
 - not a purchase gain: 단골 스탬프 기계 does not multiply it; 평생 단골제's floor and the 0~100 clamp apply
 
-35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 200G
+35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 240G
 - an ordinary expedition whose Outcome is still 사망 after the Items (귀환석, 세계수 생환부적) rolls once more: 15% -> 중상
   (the ordinary 중상: Injury 2, recovery Days); the 강골 Trait and 구급키트 then settle as usual
 - the report says so (`길드 구조대가 사망을 중상으로 바꿈`); the hero proof reads the same roll
@@ -700,7 +700,7 @@ The following 21 Store Support base prices are the approved baseline.
 | fieldStretcher | 야전 들것 | 80G |
 | rumorBoard | 소문 수집 게시판 | 60G |
 | postcard | 단골 추천 엽서함 | 80G |
-| rescueContract | 길드 구조대 계약 | 200G |
+| rescueContract | 길드 구조대 계약 | 240G |
 
 The other 11 active support prices are exact in their Store Support entries above.
 Price should follow actual ROI, not label alone.
