@@ -8,15 +8,20 @@ for(const r of JSON.parse(fs.readFileSync(path.join(root,'reports/references/sto
  const data=fs.readFileSync(path.join(root,r.repository_path));
  check(data.length===r.bytes&&require('node:crypto').createHash('sha256').update(data).digest('hex')===r.sha256,r.repository_path+' original bytes retained');
 }
+// a load with no Run opens on the prologue (UI_UX §PROLOGUE) once the loading screen is done; 건너뛰기 ends it on the
+// preparation scene
+async function skipPrologue(p){
+ await p.waitForFunction(()=>!!document.querySelector('[data-action="prologue-skip"]')||!!document.querySelector('.stage.p-prep'),null,{timeout:15000});
+ const b=await p.$('[data-action="prologue-skip"]');if(b){await b.click();await p.waitForSelector('.stage.p-prep',{timeout:15000});}}
 (async()=>{fs.mkdirSync(out,{recursive:true});
  const server=spawn(process.execPath,[path.join(__dirname,'preview.cjs'),'--port',String(port)],{stdio:['ignore','pipe','inherit']});
  await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('preview timeout')),8000);server.once('error',reject);server.stdout.on('data',d=>{if(String(d).includes('ready')){clearTimeout(t);resolve();}});});
- const browser=await chromium.launch({executablePath:process.env.QA_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--font-render-hinting=none']});
+ const browser=await chromium.launch({executablePath:process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',args:['--no-sandbox','--font-render-hinting=none']});
  try{for(const [width,height]of sizes){
   const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:width<1024?2:1,isMobile:width<1024,hasTouch:width<1024,locale:'ko-KR',reducedMotion:motion?'no-preference':'reduce'}),p=await ctx.newPage(),errors=[];
   p.on('pageerror',e=>errors.push(e.message));
   if(process.env.QA_BASELINE_CSS)await p.route('**/ui.css',r=>r.fulfill({contentType:'text/css',body:fs.readFileSync(process.env.QA_BASELINE_CSS,'utf8')}));
-  await p.goto(`http://127.0.0.1:${port}/`,{waitUntil:'load'});
+  await p.goto(`http://127.0.0.1:${port}/`,{waitUntil:'load'});await skipPrologue(p);
   await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.start('qa-support-design');Guild24.render();});
   if(await p.locator('.p-prep [data-action="start"]').count())await p.locator('.p-prep [data-action="start"]').click();
   await p.waitForTimeout(300);
