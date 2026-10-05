@@ -4062,7 +4062,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .prologue{--f5:clamp(15px,4.6vw,19px);position:fixed;inset:0;overflow:hidden;background:#050306;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 .pro-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;animation:pro-in .7s ease-out both}
 .prologue[data-scene="1"] .pro-art{transform:scale(1.15);transform-origin:50% 0}
-.pro-npc{position:absolute;left:50%;bottom:24%;width:min(62vw,340px);transform:translateX(-50%);animation:pro-in .7s ease-out both}
+.prologue{--pro-ar:.5628;--pro-c:.752}
+/* scene 5: the customer stands on the painted counter top at every size - the store file is `cover`ed (drawn height
+   max(stage height, width / aspect)); the feet stand on the painted counter top, --pro-c of it (a little in front of its back
+   edge: phone file 74.2~76.0%, wide 77.15~82.7%), and
+   the art's own transparent foot (8 of its 363 x 345 px) is taken off */
+.pro-npc{position:absolute;left:50%;--npc-w:min(62vw,340px);width:var(--npc-w);
+ bottom:calc(50% - (var(--pro-c) - .5) * max(100%, 100vw / var(--pro-ar)) - var(--npc-w) * 8 / 363);
+ transform:translateX(-50%);animation:pro-in .7s ease-out both}
 .pro-cap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);padding:18px 12px;text-align:center;
  font:500 clamp(17px,5.4vw,22px)/1.55 var(--f-sign);color:#f3e9d6;text-shadow:0 2px 0 #000,0 0 8px #000;word-break:keep-all;
  background:linear-gradient(transparent,#08040ab8 25%,#08040ab8 75%,transparent);animation:pro-in .9s .25s ease-out both}
@@ -4089,7 +4096,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .prologue{--f5:clamp(30px,2vw,40px)}
  .prologue[data-scene="3"] .pro-cap{font-size:var(--f5)}
  .prologue[data-scene="2"] .pro-cap,.prologue[data-scene="5"] .pro-cap{font-size:var(--f5)}
- .pro-npc{width:auto;height:58%;bottom:20%}
+ .prologue{--pro-ar:1.7768;--pro-c:.805}
+ .pro-npc{width:auto;height:58%;bottom:calc(50% - (var(--pro-c) - .5) * max(100%, 100vw / var(--pro-ar)) - 58% * 8 / 345)}
  .pro-skip{top:24px;right:24px;font-size:15px;padding:10px 18px}
  .pro-sound{top:24px;left:24px;width:46px;height:40px}
  .pro-hint{bottom:18px;font-size:15px}}
