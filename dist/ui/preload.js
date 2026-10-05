@@ -20,7 +20,7 @@ function required(wide){
   P+'morning/day-sign.png',P+'night/store-night.webp',P+'sale/shelf-plank.png',
   ...['discount','markup','off','regular'].map(n=>P+'sale/till-'+n+'.png'),
   P+'settings/wood-panel.webp',P+'settings/blue-key.webp',P+'settings/red-key.webp',P+'settings/supply-backdrop.webp',
-  P+'support/order-paper.png',P+'support/choice-tag-blank.webp',P+'support/return-tag-blank.webp',
+  P+'support/order-paper.png',P+'support/choice-tag-blank.webp',P+'support/return-tag-blank.webp',P+'order/reroll.png',
   ...MENU.map(n=>P+'menu/'+n+'.webp'),
   ...DECO.map(n=>A+'deco/'+n+'.svg'),
   ...[1,2,3,4,5].map(n=>A+'npc/npc-0'+n+'.png')];}

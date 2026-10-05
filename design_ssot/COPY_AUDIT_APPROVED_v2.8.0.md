@@ -173,7 +173,7 @@
 Exact copy for these tutorial steps (rule owner: UI_UX §TUTORIAL — COACH DIET). The first SALE teaches two marks — 목적지
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY) and STATS; 가방 (§3-6) appears after the first sale and RETURNING on the first
 returning customer; pricing is taught after the fact (§26-3). The first ORDER has 발주 확정 (§3-2) alone.
-No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 (전투 전망) / DAY 3 (환경 대응) SALE mark; 발주 후보 교환 is the DAY 2 ORDER mark (§3-14).
+No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 (전투 전망) / DAY 3 (환경 대응) SALE mark; 발주 후보 교환 is the DAY 4 ORDER mark (§3-14).
 
 ### STATS (anchor = the SALE 능력치 grid — the first time a customer's Stats are on screen)
 > 투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.
@@ -283,9 +283,9 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
-## 3-14. 발주 후보 교환 (첫 판 DAY 2 발주)
+## 3-14. 발주 후보 교환 (첫 판 DAY 4 발주)
 
-(User 2026-10-04. 키 이름은 `발주 후보 교환` 그대로, 앞에 새로고침 아이콘만. 계정에서 처음 DAY 2 이상 발주 화면에 한 번)
+(키 이름은 `발주 후보 교환` 그대로, 앞에 원호에 틈을 둔 새로고침 아이콘. 화살표 머리는 원호에 이어진다. 계정에서 처음 DAY 4 이상 발주 화면에 한 번. 다른 발주 코치가 있어도 같은 날 순서대로 안내한다.)
 
 **현재**
 > 후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.
@@ -556,12 +556,15 @@ SALE 목적지 판(폰): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란�
 ## 4-24. 판매 직후 영수증 조각 (손님 한 명마다)
 
 **노출 위치**
-> 판매 성공 직후 계산대 띠 위에 약 2.5초 겹쳐 보이는 영수증 조각. 그 손님의 단골도 변화와 소지금 변화. 거절 시에는 없음(손님 대사가 결과). 하루 끝 정산이 아니다.
+> 판매 성공 직후 계산대 띠 위에 약 2.5초 겹쳐 보이는 영수증 조각. 그 손님의 단골도 변화와 소지금 변화. 단골도가 줄어든 거절에도 같은 위치에 실제 감소량만 기존 디자인·폰트·노란 표시를 유지하고 감소 숫자만 차분한 빨강으로 표시한다. 하루 끝 정산이 아니다.
 
 **현재**
 > 단골도 {±N} · 소지금 {A} → {B}
 
 예: `단골도 +1 · 소지금 230 → 140` / 바가지 `단골도 -4 · 소지금 230 → 95`
+
+**현재 — 바가지 거절**
+> 단골도 {−N}
 
 ---
 
@@ -723,16 +726,19 @@ SALE 목적지 판(폰): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란�
 > 귀환 후 피로 {N}  
 > 귀환 후 피로 {N} · {band}
 
-**현재 — 상세를 열었을 때**
-> 출발 {N}  
-> 원정에서 +{N}  
-> 음식·음료로 -{N}  
-> → 귀환 후 {N}
+**현재 — 상세 오버레이**
+> 오늘 피로 변화
+> 오늘 시작 {N}
+> {실제 영향 원인} {±N}
+> 귀환 후 피로 {N}
+
+음식·음료는 `출발 전`과 `원정 후` 사용분을 구분한다. 사건·특성·장식은 해당 이름으로 표시한다.
+밑에 작은 글씨로 `피로 단계`와 다섯 구간·페널티를 표시한다(수치 owner: DUNGEON_HAZARD).
 
 **현재 — 다음 원정 안내 (B5)** (shown from 10 up, whenever a band penalty applies)
-> 피로 {N} · {band} — 다음 원정 {effect}
+> {band} — 다음 원정 {effect}
 
-예: `피로 12 · 지침 — 다음 원정 기동·정신 -15%` / `피로 22 · 과로 — 다음 원정 기동·정신 -40%` / `피로 33 · 소진 — 다음 원정 기동·정신 -40% · 투력·강인함 -20%` / `피로 40 · 탈진 — 다음 원정 모든 능력치 -40% · 실패 시 사망 위험 +10%p`
+예: `지침 — 다음 원정 기동·정신 -15%` / `과로 — 다음 원정 기동·정신 -40%` / `소진 — 다음 원정 기동·정신 -40% · 투력·강인함 -20%` / `탈진 — 다음 원정 모든 능력치 -40% · 실패 시 사망 위험 +10%p`
 
 ---
 
@@ -3071,6 +3077,31 @@ The D0 Boss objective appears after the first support choice (or its deferral) a
 
 ## 14-9. D30 원정대 선택 / 마왕성 준비
 
+**첫 마왕성 Coach — 단계별 안내**
+
+DAY 30 점포지원:
+> 오늘은 최종 원정이다. 점포지원과 마지막 발주를 확인한 뒤, 원정대를 선택해 보급하고 마왕성으로 출발한다.
+
+마지막 발주 · 원정대 후보 보기:
+> 원정대에게는 상품을 반값에 판다. 모험가에게 살 소지금이 있는지 원정대 후보 보기에서 확인하자.
+
+마지막 발주 · 상품 경계:
+> 구급키트·귀환석·세계수 생환부적은 마왕성에서 효과가 없어 챙길 수 없다. 마지막 발주 후보에도 나오지 않는다.
+
+원정대 선택 · 모험가 카드:
+> 피로·부상은 능력에 영향을 준다. 모험가를 눌러 피로와 부상, 소지금을 확인하자.
+
+원정대 선택 · 확정:
+> 최대 3명까지 고를 수 있다. 원정대 확정 뒤에는 교체할 수 없다.
+
+원정대 준비 · 개인별 환경 대응:
+> 확인된 위험은 원정대 각자에게 적용된다. 각 모험가의 대응 수치를 확인하자.
+
+원정대 준비 · 토벌 전망과 보급:
+> 전체 토벌 전망과 각 모험가들의 환경 대응을 함께 본다. 모험가마다 필요한 준비가 다를 수 있으니, 각 모험가들의 능력치와 대응 수치를 보고 상품을 보급한다.
+
+Reuse the existing `subjugation` Coach ID and forecast target. The detailed forecast explanation remains in its `?` Help below. Staged triggers and skip boundaries -> UI_UX §FIRST-EVER FINAL EXPEDITION COACH.
+
 **원정대 선택 안내**
 > 최대 3명까지 출전할 수 있다.  
 > 원정대를 확정하면 토벌 전망을 확인할 수 있다.
@@ -3096,13 +3127,13 @@ Buttons:
 **토벌 전망**
 > **토벌 전망 · {우세|접전|불리}**
 
-**첫 등장 Coach / `?` Help**
+**`?` Help — 토벌 전망 설명**
 > 확정된 원정대의 능력과 보급, 확인된 위협과 마왕의 권능을 함께 반영한 전망.  
 > 보급이 바뀌면 전망도 함께 갱신된다.
 
 Placement:
-- 첫 토벌 전망 활성화 시 Coach로 1회 안내
-- 이후 같은 설명은 전망의 anchored `?` Help로 재확인
+- 첫 토벌 전망 활성화 시 위의 `토벌 전망과 보급` Coach로 1회 안내
+- 전망의 anchored `?` Help는 위의 상세 전망 설명을 제공
 - 상시 설명문은 두지 않음
 
 **마왕성에서 효과가 없는 Item**

@@ -40,7 +40,7 @@ test('the pixel font subset covers every character this build can render',()=>{
   for(const ch of read(file))chars.add(ch);
  }
  const face=path.join(root,'dist/ui/fonts/Mulmaru.woff2');
- const cmap=execFileSync('python3',['-c',
+ const cmap=execFileSync(process.env.QA_PYTHON||'python3',['-c',
   "import sys\nfrom fontTools.ttLib import TTFont\nf=TTFont(sys.argv[1])\nsys.stdout.buffer.write(''.join(chr(c) for c in f.getBestCmap()).encode('utf-8'))",face],
   {encoding:'utf8',maxBuffer:1<<22});
  const have=new Set(cmap);
@@ -66,7 +66,7 @@ test('the start-up preload names only shipped files and leaves out none of the s
  for(const wide of [false,true])for(const f of G.Preload.required(wide))listed.add(f);
  for(const f of G.Preload.later())listed.add(f);
  for(const f of listed)assert.ok(fs.existsSync(path.join(root,'dist',f)),'preload file exists: '+f);
- for(const f of walk('dist/ui/assets/presentation').concat(walk('dist/ui/assets/deco')).map(f=>f.replace(/^dist\//,'').replace(/\\/g,'/')))
+ for(const f of walk('dist/ui/assets/presentation').concat(walk('dist/ui/assets/deco')).map(f=>f.replace(/\\/g,'/').replace(/^dist\//,'')))
   assert.ok(listed.has(f)||/support\/contract-/.test(f),'screen art is preloaded: '+f); // those two names trip the retired-UI scan on any JS that lists it
 });
 console.log(count+' asset groups passed');

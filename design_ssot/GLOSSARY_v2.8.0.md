@@ -2,8 +2,8 @@
 
 DOC=GLOSSARY
 OWNER=game_terms,player_term_names
-DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
+DOC_VERSION=2.11.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -98,6 +98,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 - **마왕**: 이번 점포의 최종 상대. 래스(분노), 프라이드(오만), 엔비(질투), 그리드(탐욕), 글러트니(탐식), 러스트(색욕), 슬로스(나태). 쓰지 않는 말: 보스.
 - **마왕 권능**: 마왕의 능력. 마왕마다 하나씩 있고 이름이 따로 있다(탐식의 허기, 오만의 갑주 등). 쓰지 않는 말: 마왕 특성, 마왕의 특성.
 - **최종 원정**: DAY 30, 마왕성으로 가는 원정. 쓰지 않는 말: 최종전, 마왕성 원정.
+- **토벌 전망**: 확정된 원정대 전체의 능력과 보급, 확인된 위협과 마왕 권능을 반영한 최종 원정의 정성적 전망. 모험가 한 명의 전투 전망과 구분한다.
 - **마왕 조사**: DAY 5에 정체, DAY 15에 권능, DAY 25에 최종 원정 위험이 밝혀진다. 이름과 안내 문구는 정하는 중이다.
 
 ## 화면에 쓰지 않는 말

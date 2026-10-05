@@ -460,8 +460,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(n.injury===1&&this.has('firstAidDesk')&&this.rng.next()<D.relicParams.firstAidDesk.healChance){n.injury=0;n.status='건강';n.healedBy='firstAidDesk';this.run.daily.firstAidHeals=(this.run.daily.firstAidHeals||0)+1;}
  /* EVENT 24 길드 의료단 순회 / 33 길드 휴양일 / 31 길드 연회: at the door, from today's Event */
  {const dv=this.run.event?.effects||{};
+  n.fatigueArrival={day:this.run.day,before:n.fatigue||0};
   if(n.injury===1&&dv.healVisitors){n.injury=0;n.status='건강';n.healedBy='medcorps';}
   if(dv.arrivalFatigue)n.fatigue=Math.max(0,(n.fatigue||0)-dv.arrivalFatigue);
+  n.fatigueArrival.recovered=n.fatigueArrival.before-(n.fatigue||0);
   n.feast=dv.feast||0;}const ev=this.run.event?.effects||{};
   /* META §sign — 원정 지원금 간판: the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
@@ -630,7 +632,12 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
  /* META 휴식 바우처 꽂이: every living adventurer rests its Fatigue off overnight (decorationParams.voucher), visitor or not */
- if(this.wears('voucher'))for(const n of s.npcs)if(n.alive)n.fatigue=Math.max(0,(n.fatigue||0)-D.decorationParams.voucher.fatigue);
+ if(this.wears('voucher'))for(const n of s.npcs)if(n.alive){
+  const before=n.fatigue||0;n.fatigue=Math.max(0,before-D.decorationParams.voucher.fatigue);
+  const rep=s.results.find(r=>r.npcId===n.id);
+  if(rep){if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
+   rep.settledFatigue=n.fatigue;n.records.at(-1).settledFatigue=n.fatigue;}
+ }
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;

@@ -2,8 +2,8 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
+DOC_VERSION=2.11.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE / NON-NEGOTIABLE
@@ -107,8 +107,10 @@ of the adventurer being supplied; the order form is not repeated there.
 The last order is chosen for the people who can go, so they can be read while ordering: `원정대 후보 보기`, beside
 `원정대 선택` and the same bar, opens the muster's own candidates read only - each card opens the notebook, whose footer
 returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on 출전 NPC 선택.
+Candidate and selection cards show current NPC Wallet; the notebook also shows it with condition details.
 In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits, records),
 footer `돌아가기`.
+Each committed participant's card shows their own Hazard current/required values beside the Bag. These readings use step 3 of §FINAL CALCULATION ORDER, before participant-side Boss modifiers, and update on committed supplies. They do not replace or multiply the party-wide subjugation forecast.
 
 Final must remain the culmination of the shop-management decisions learned during the Run, not an opaque separate
 combat interaction.

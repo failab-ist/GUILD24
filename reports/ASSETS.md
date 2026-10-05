@@ -5,6 +5,13 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 발주 후보 교환 아이콘 — 프로젝트 생성 (2026-10-05)
+
+- `dist/ui/assets/presentation/order/reroll.png`: OpenAI 내장 이미지 생성 도구로 제작한 RGBA PNG, 1254×1254, 342,574 bytes.
+- 원호의 윗부분에 틈이 있고, 원호와 연결된 삼각형 화살표 머리가 있는 금갈색 아이콘. 배경은 투명하며 글자는 없다.
+- 생성 원본을 변환 없이 복사했고 버튼에서는 16px로 표시한다. 원본/프롬프트 기록은 `reports/reroll-icon-generation.md`에 있다.
+- 프로젝트 생성 에셋이며 제3자 라이선스를 추정하지 않는다. 기존 시작 시점 preload에 포함했다. User가 최종 화면을 컨펌했다(2026-10-05).
+
 ### 프롤로그 장면 그림 — User 제공 원본 (2026-10-04)
 
 - `dist/ui/assets/presentation/prologue/scene{1,2,4}-{phone,wide}.webp`: User가 준 PNG(폰 941×1672, PC 1672×941)를

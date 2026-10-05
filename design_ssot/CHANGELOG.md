@@ -31,8 +31,16 @@ and this table is their commit record.
 | v2.10.3 | 2026-10-04 | prologue PR #87, `ui/design-trim` #88~#90; 바가지 + version PR #92 | (the User sets it; not yet on origin) |
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
+| v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
-## After v2.11.0 (User 2026-10-05; the version stays 2.11.0)
+## v2.11.1 — Minor feedback / first Final Expedition coaches (User 2026-10-05)
+
+- NIGHT Fatigue opens a daily-cause overlay with a smaller five-band reference; the numeric Fatigue is not repeated in the next-decision line. Resolved source rows and overnight settlement are recorded without changing calculations; older saves retain their recorded expedition chain.
+- SALE omits `건강` from compact state and shows an actual refusal Loyalty loss in the existing receipt style, with only the loss number in muted red.
+- ORDER places `위험 보기` beside 점포지원, uses a generated transparent refresh image with an open arc and a distinct triangular head, and teaches 발주 후보 교환 from DAY 4 even alongside another ORDER mark.
+- D30 adds first-ever staged coaches for support, last order, party selection and each participant's environment preparation; candidate Wallets and per-participant Hazard current/required values are readable on their own cards.
+
+## After v2.11.0 (User 2026-10-05; ships in v2.11.1)
 
 - 점포지원 등급 is a stamp in front of the name (card and owned list), the contract text stands further in; the owned list carried no
   등급 (`undefined`) and now does (PR #112). Deploys put the commit on font / style / script URLs so no stale font is kept.

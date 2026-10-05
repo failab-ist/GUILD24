@@ -133,6 +133,29 @@ const FATIGUE_BANDS=[
  {min:10,name:'지침',mobility:.15,combat:0,text:'기동·정신 -15%'},
  {min:0,name:'정상',mobility:0,combat:0,text:''}];
 function fatigueBand(f){const b=FATIGUE_BANDS.find(x=>(f||0)>=x.min)||FATIGUE_BANDS[FATIGUE_BANDS.length-1];return {...b,exhausted:b.min>=FATIGUE_MAX};}
+function fatigueBands(){return FATIGUE_BANDS.map((b,i)=>({...b,max:i?FATIGUE_BANDS[i-1].min-1:FATIGUE_MAX})).reverse();}
+/* NIGHT_CLOSING §FATIGUE RESULT: record causes at resolution, without changing the calculation. */
+function fatigueLedger(n,run,outcome,e,baseline,raw,buffer,final){
+ const arrival=n.fatigueArrival?.day===run?.day?n.fatigueArrival:null;
+ const rows=[{label:'오늘 시작',value:arrival?arrival.before:e.beforeFatigue}];
+ const add=(label,delta)=>{if(delta)rows.push({label,delta});};
+ if(arrival?.recovered)add(run.event.name,-arrival.recovered);
+ const hasFood=n.pack.some(id=>D.itemBy[id].category==='food');
+ const foodSources=n.traits.filter(id=>D.traitBy[id].effects.supplyPerItem||(hasFood&&D.traitBy[id].effects.foodSupplyDelta)).map(id=>D.traitBy[id].name);
+ if(hasFood&&n.feast>1&&run?.event)foodSources.push(run.event.name);
+ const food='음식·음료'+(foodSources.length?' ('+foodSources.join(' · ')+')':'');
+ add(food+' · 출발 전',-e.preRecovery);
+ add(outcome,baseline);
+ const severe=outcome==='중상'||outcome==='사망';
+ let adjusted=baseline;
+ if(!severe){for(const id of n.traits){const v=D.traitBy[id].effects.fatigue||0;add(D.traitBy[id].name,v);adjusted+=v;}
+  const bounded=Math.max(0,adjusted);add('피로 하한 0',bounded-adjusted);adjusted=bounded;
+  if((run?.event?.effects.outcomeFatigue||1)!==1)add(run.event.name,raw-adjusted);
+ }
+ add(food+' · 원정 후',-buffer);
+ add('피로 상한 40',final-(e.fatigueBeforeExpedition+Math.max(0,raw-buffer)));
+ return rows;
+}
 
 /* ---- 5. Condition modifiers -----------------------------------------------------------
    What the adventurer's own condition does to their own base Stats - percentages on the
@@ -695,6 +718,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const beforeFatigue=e.beforeFatigue!==undefined?e.beforeFatigue:(n.fatigue||0);
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
+ const fatigueRows=fatigueLedger(n,run,outcome,e,outcomeBaseline,rawOutcomeFatigueGain,outcomeBufferUsed,finalFatigue);
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((24.2+d.day*5.06)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
@@ -723,6 +747,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */
+ report.fatigueLedger=fatigueRows;report.settledFatigue=finalFatigue;
  {const {debug:_dev,...record}=report;n.records.push(record);}
  /* A death line that implies a shopkeeping history is only used when that history exists;
    otherwise a history-independent variant. Chosen from state, never from a roll, so no
@@ -730,5 +755,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

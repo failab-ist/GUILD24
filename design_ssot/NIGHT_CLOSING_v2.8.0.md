@@ -2,8 +2,8 @@
 
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
-DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
+DOC_VERSION=2.11.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -302,20 +302,23 @@ From Fatigue 20 up the main line also names the band (`정상` / `지침` are no
 
     귀환 후 피로 22 · 과로
 
-Under the settled value, one next-decision line `피로 {N} · {band} — 다음 원정 {effect}` whenever a
+Under the settled value, one next-decision line `{band} — 다음 원정 {effect}` whenever a
 Fatigue band penalty applies (10 and up; nothing at 정상):
 
-    피로 12 · 지침 — 다음 원정 기동·정신 -15%
-    피로 22 · 과로 — 다음 원정 기동·정신 -40%
+    지침 — 다음 원정 기동·정신 -15%
+    과로 — 다음 원정 기동·정신 -40%
 
 Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
 
-On demand, the same result may expand to:
-
-    출발 8
-    원정에서 +5
-    음식·음료로 -2
-    -> 귀환 후 11
+Tapping the settled Fatigue row opens an overlay: today's starting value, actual source-labelled
+changes (arrival Event, Food/Drink before departure, Outcome, Trait, result Event, Food/Drink buffer,
+clamp and overnight Decoration where applicable), then the settled value. Each recovery is counted
+once and uses the actual amount removed, including the zero floor. The main value and next-decision
+band include any overnight Decoration recovery. `finalFatigue` remains the expedition result;
+`settledFatigue` and `fatigueLedger` record the subsequent Night settlement without changing rules.
+Below the daily changes, smaller type explains all five canonical bands and penalties. Both surfaces
+read the one DUNGEON_HAZARD band definition. Old saves without the daily ledger show only their
+recorded expedition chain; missing causes are never reconstructed from current state.
 
 Player-facing labels not used: 밤 피로 · 보급 회복 · 보급 완화 · 원정 결과 +N when N is actually Fatigue gain ·
 최종 피로 as a competing second name. Exact arithmetic/fields are unchanged internally.
