@@ -8,6 +8,7 @@
 //   reload with the sheet open does not resolve.
 //   node tools/qa-boss-confirm.cjs <out-dir> [widths] [BOSS]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
 const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
 const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
@@ -37,7 +38,7 @@ const SPY=`(()=>{const g=Guild24.game;window.__qa={boss:0,draws:0,cues:[],locks:
  const server=await serve();
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox','--font-render-hinting=none']});
  try{
-  let seed=null;{const p=await (await browser.newContext()).newPage();await p.goto(`http://127.0.0.1:${PORT}/index.html`);
+  let seed=null;{const p=await (await browser.newContext()).newPage();await p.goto(`http://127.0.0.1:${PORT}/index.html`);await ready(p);
    for(let k=1;k<400&&!seed;k++){const id=await p.evaluate(s=>{Guild24.game.start(s);return Guild24.game.run.bossId;},'qa-final-'+k);if(id===BOSS)seed='qa-final-'+k;}}
   console.log('seed',seed,BOSS);
   for(const width of WIDTHS){
@@ -46,7 +47,7 @@ const SPY=`(()=>{const g=Guild24.game;window.__qa={boss:0,draws:0,cues:[],locks:
     isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    await ctx.addInitScript(t=>{Date.now=()=>t;if(!sessionStorage.getItem('qa-bc')){localStorage.clear();sessionStorage.setItem('qa-bc','1');}},FIXED_NOW);
    const p=await ctx.newPage();p.on('pageerror',e=>check('no page error',false,e.message));
-   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(p);
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
    await p.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
    await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
@@ -104,7 +105,7 @@ const SPY=`(()=>{const g=Guild24.game;window.__qa={boss:0,draws:0,cues:[],locks:
    check(`C @${tag} Escape returns to preparation, state unchanged, nothing resolved`,!(await p.evaluate(`!!document.querySelector('#modal-root .modal')`))&&await p.evaluate(state)===s0&&await p.evaluate(`__qa.boss===0`));
 
    // reload with the sheet open: back in preparation, never resolved
-   await open();await p.reload({waitUntil:'load'});await p.waitForTimeout(300);
+   await open();await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(300);
    const r=await p.evaluate(`(()=>{const s=Guild24.game.run;return {phase:s.phase,lock:!!s.finalLock,committed:!!s.finalCommitted,modal:!!document.querySelector('#modal-root .modal'),prep:!!document.querySelector('.p-final .final-team')};})()`);
    check(`S @${tag} reload with the confirm open: preparation, no Final Lock, no resolution`,r.phase==='final'&&!r.lock&&r.committed&&r.prep,JSON.stringify(r));
    await p.evaluate(SPY);
