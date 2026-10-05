@@ -82,22 +82,23 @@ def heroSign():
         p.set(x,y,k)
     return p
 def cheerBanner():
-    # sign Slot (80 wide like the other signs): 단골 감사 현수막 - a long cream banner hung from the ceiling on two chains,
-    # a red heart between brown thank-you lines (cream, so it is not mistaken for the red 훈련소 sign or the teal 지원금 sign)
+    # sign Slot (80 wide like the other signs): 단골 감사 현수막 - a cream banner the size of the other two signs' boards
+    # (art rows 6~19), hung on the same two grey rods (SIGN_HANGERS, added to the file as they are), a red heart between
+    # brown thank-you lines (cream, so it is not mistaken for the red 훈련소 sign or the teal 지원금 sign)
     p=Pic(38,20)
-    for y in range(5): p.set(6,y,'s' if y%2==0 else 'S'); p.set(31,y,'s' if y%2==0 else 'S')
-    p.rect(1,5,36,1,'W'); p.set(0,5,'G'); p.set(37,5,'G')
-    p.rect(1,6,36,12,'C'); p.rect(1,6,36,1,'F'); p.rect(1,7,1,11,'F'); p.rect(36,7,1,11,'c'); p.rect(1,17,36,1,'c')
-    p.rect(3,8,32,1,'R'); p.rect(3,15,32,1,'R')
+    p.rect(0,6,38,14,'C'); p.rect(0,6,38,1,'F'); p.rect(0,19,38,1,'c'); p.rect(37,7,1,12,'c')
+    p.rect(2,8,34,1,'R'); p.rect(2,17,34,1,'R')
     # the ends are cut in a notch, as a banner's are
-    for y,w in ((10,1),(11,2),(12,1)):
-        for x in range(1,1+w): p.g[y][x]=None
-        for x in range(37-w,37): p.g[y][x]=None
-    p.stamp(15,9,[".KK..KK.","KRRKKRRK","KRrRRRRK","KRRRRRRK",".KRRRRK.","..KRRK.."])
-    p.rect(5,11,8,1,'W'); p.rect(6,13,6,1,'w'); p.rect(25,11,8,1,'W'); p.rect(26,13,6,1,'w')
-    p.rect(1,18,36,1,'g'); p.set(1,18,'G'); p.set(36,18,'H')
-    for x in range(2,36,3): p.set(x,19,'g')
+    for y,w in ((11,1),(12,2),(13,2),(14,1)):
+        for x in range(0,w): p.g[y][x]=None
+        for x in range(38-w,38): p.g[y][x]=None
+    p.stamp(15,10,[".KK..KK.","KRRKKRRK","KRrRRRRK","KRRRRRRK",".KRRRRK.","..KRRK.."])
+    p.rect(4,12,8,1,'W'); p.rect(5,14,6,1,'w'); p.rect(26,12,8,1,'W'); p.rect(27,14,6,1,'w')
+    for x in range(1,37,3): p.set(x,19,'g')
     return p
+# the two grey rods every sign hangs from, as the other signs' files draw them (x 12 and 66, rows 0~12)
+SIGN_HANGERS=''.join('<rect x="%d" y="%d" width="2" height="1" fill="%s"%s/>'%(x,y,c,o) for x in (12,66) for y,c,o in
+    [(y,'#8e9aa3','') for y in range(10)]+[(10,'#6f7d87',''),(11,'#6f7d87',''),(12,'#1b130c',' opacity="0.55"')])
 def voucher():
     # counter Slot (48 wide like the safe): 휴식 바우처 꽂이 - a stepped wooden brochure stand, one voucher standing in each of
     # its three pockets, the back pocket highest (a stair-step outline, not a box on legs)
@@ -140,5 +141,7 @@ def rerollCoupon():
     return p
 out=sys.argv[1]
 for name,fn,standing in (('heroSign',heroSign,False),('cheerBanner',cheerBanner,False),('voucher',voucher,True),('rerollCoupon',rerollCoupon,True)):
-    open(os.path.join(out,name+'.svg'),'w').write(svg(fn(),standing))
+    art=svg(fn(),standing)
+    if name=='cheerBanner': art=art.replace('shape-rendering="crispEdges">','shape-rendering="crispEdges">'+SIGN_HANGERS,1)
+    open(os.path.join(out,name+'.svg'),'w').write(art)
     print(name,'ok')

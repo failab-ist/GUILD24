@@ -1246,14 +1246,15 @@ a new picture is drawn to match the others of its Slot, not on its own:
 - colours chiefly from the pieces' shared palette: wood `#3f2a1a #6b4a2e #9a7148`, gold `#86652a #c8a35e #e3b23c #ecd59a`, red `#62201c
   #a8322f #dc5d55`, paper `#b9a982 #d9cfb2 #f4efe6 #fbf4e2`, steel `#20272d #3a444c #6f7d87 #8e9aa3`, teal `#4d6f75 #6f9ea6`,
   green `#2f7a4d #7fb069`, purple `#4f3a72 #7c5ea8 #a58bd0`, navy `#1c2840 #283a5c`
-- a framed 벽면 piece uses the one gold frame the others use, row for row; what is inside it differs
+- a framed 벽면 piece uses the one gold frame the others use, row for row, and a 간판 hangs on the same two grey rods with its
+  board at the same height; what is inside differs
 - a piece does not share its body colour with another piece of its Slot (two red signs read as one)
 - and no two pieces share an outline: 계산대 and 진열대 are not both a box on two legs with paper on top
 - what each piece shows is what the Decoration does (a 지원금 sign with a coin purse, a medical cross, a coupon box ...)
 
 | Slot | economy | survival | operation |
 |---|---|---|---|
-| 간판 | 원정 지원금 간판: teal board, trophy and coin purse | 훈련소 제휴 간판: red board, crossed swords | 단골 감사 현수막: cream banner on two chains, red heart between brown thank-you lines, gold fringe |
+| 간판 | 원정 지원금 간판: teal board, trophy and coin purse | 훈련소 제휴 간판: red board, crossed swords | 단골 감사 현수막: cream banner board on the signs' two grey rods, red heart between brown thank-you lines, notched ends |
 | 벽면 | 명예 모험가 액자: gold frame, an adventurer's portrait | 의무실 현판: gold frame, red cross on paper | 본사 우수 점포 훈장: the wall's gold frame, a gold star medal on a red ribbon on navy |
 | 계산대 | 알뜰 금고: steel safe, gold dial | 추모 방명록: open book and candle | 휴식 바우처 꽂이: stepped wooden brochure stand, a voucher in each pocket |
 | 진열대 | 길드 추천 매대: wooden shelf of goods, trophy | 구급품 진열장: glass cabinet of red kits | 지원 교환 쿠폰함: tall purple ticket dispenser, swap arrows, a coupon strip |
