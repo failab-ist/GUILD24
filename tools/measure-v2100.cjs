@@ -19,12 +19,38 @@ function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level)
  return out;}
 const endKind=r=>r.win?'클리어':r.reach?'마왕실패':/소문/.test(r.end)?'사망한도':/자금/.test(r.end)?'파산':'기타';
 
+// 직업 비교는 노출/희귀도/시작 레벨을 함께 읽는다. 서로 다른 직업의 성과를 인과 효과로 해석하지 않는다.
+function jobMetrics(s,initial,jobBy,preparedPower){
+ const jobs={},get=id=>jobs[id]??={name:jobBy[id].name,npcs:0,alive:0,exp:0,wins:0,combatLoss:0,env:0,deaths:0,
+  firstLevel:0,level:0,levelGain:0,potential:0,mastery:0,firstDay:0,bands:BANDS.map(()=>[0,0,0,0,0]),rarities:{},
+  finalRuns:0,finalWins:0,finalPicks:0,finalLevel:0,finalGap:0,finalPower:0};
+ for(const n of s.npcs){const rs=(n.records||[]).filter(r=>!r.deep&&r.day<30);if(!rs.length)continue;
+  const start=initial.get(n);if(!start)throw Error('직업 시작 상태 누락: '+n.id);
+  const b=get(n.job);b.npcs++;b.alive+=!!n.alive;b.firstLevel+=start.level;b.level+=n.level;b.levelGain+=n.level-start.level;
+  b.potential+=n.potential;b.mastery+=start.mastery;b.firstDay+=start.day;
+  const rarity=b.rarities[n.rarity]??={npcs:0,exp:0,wins:0,combatLoss:0,env:0,deaths:0};rarity.npcs++;
+  for(const r of rs){const win=Number(r.outcome==='성공'||r.outcome==='대성공'),loss=Number(r.combatWon===false),env=Number(!!r.environmentHurt),dead=Number(r.outcome==='사망');
+   for(const x of [b,rarity]){x.exp++;x.wins+=win;x.combatLoss+=loss;x.env+=env;x.deaths+=dead;}
+   const band=BANDS.findIndex(([a,z])=>r.day>=a&&r.day<=z);const t=b.bands[band];t[0]+=win;t[1]++;t[2]+=loss;t[3]+=env;t[4]+=dead;}}
+ const members=[],hazards=s.dungeons[0]?.hazards||[];
+ for(const m of s.finalLock?.members||[]){const n=s.npcs.find(n=>n.id===m.npcId);if(!n||!hazards.length)throw Error('최종 직업 상태 누락');
+  const gap=m.hazard/Math.sqrt(hazards.length),power=preparedPower(m.stats)-2.5*gap,b=get(n.job);
+  b.finalPicks++;b.finalLevel+=n.level;b.finalGap+=gap;b.finalPower+=power;
+  members.push({job:n.job,level:n.level,rarity:n.rarity,potential:n.potential,regular:m.regular,gap,power});}
+ for(const id of new Set(members.map(m=>m.job))){const b=get(id);b.finalRuns++;b.finalWins+=!!s.win;}
+ const final=members.length?{power:s.bossDebug.power,bossPower:s.bossDebug.bossPower,fire:s.finalLock.families.includes('golem'),members}:null;
+ if(final&&Math.abs(members.reduce((a,m)=>a+m.power,0)-final.power)>1e-6)throw Error('최종 직업 기여 합계 불일치');
+ return {jobs,final};
+}
+
 function worker({root,kind,policy,deco,T,R,part}){
  for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
   require(path.join(root,'dist',f+'.js'));
- const G=globalThis.GUILD24||globalThis,P=G.Game.prototype,end=P.end,open=P.open,seen=new WeakSet(),rows=[];let k=0;const wallets={};
+ const G=globalThis.GUILD24||globalThis,P=G.Game.prototype,end=P.end,open=P.open,seen=new WeakSet(),initial=new WeakMap(),rows=[];let k=0;const wallets={};
  P.open=function(){const s=this.run;
-  for(const id of s.queue){const n=s.npcs.find(x=>x.id===id);if(!n||!n.introduced)continue;const last=(n.records||[]).slice(-2);
+  for(const id of s.queue){const n=s.npcs.find(x=>x.id===id);if(!n)continue;
+   if(!initial.has(n))initial.set(n,{level:n.level,day:s.day,mastery:G.Meta.jobMastery(this.account,n.job)});
+   if(!n.introduced)continue;const last=(n.records||[]).slice(-2);
    const key=(k%R)+'|'+BANDS.findIndex(([a,b])=>s.day>=a&&s.day<=b)+'|'+(last.length===2&&last.every(r=>!r.won)?'losing':'other');
    (wallets[key]??=new Array(201).fill(0))[Math.min(200,Math.floor(Math.max(0,n.money)/10))]++;}
   return open.apply(this,arguments);};
@@ -32,7 +58,7 @@ function worker({root,kind,policy,deco,T,R,part}){
   const recs=s.npcs.flatMap(n=>n.records||[]).filter(x=>!x.deep&&x.day<30),ok=x=>x.outcome==='성공'||x.outcome==='대성공';
   const band=([a,b])=>{const l=recs.filter(x=>x.day>=a&&x.day<=b);return [l.filter(ok).length,l.length];};
   const late=recs.filter(x=>x.day>=20);
-  rows.push({idx:k++%R,bands:BANDS.map(band),all:band([1,29]),
+  rows.push({seed:s.seed,idx:k++%R,bands:BANDS.map(band),all:band([1,29]),...jobMetrics(s,initial,G.DATA.jobBy,G.Dungeon.preparedPower),
    out:['대성공','성공','퇴각','부상','중상','사망'].map(o=>recs.filter(x=>x.outcome===o).length),env:recs.filter(x=>x.environmentHurt).length,
    day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
    zombie:s.day>=25&&late.length?late.filter(ok).length/late.length<.35:false,
@@ -59,13 +85,13 @@ else if(require.main===module){
    for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'traj',policy,deco,T:Math.ceil(TT/PARTS),R,part:p});
   for(const policy of ['reader','expert','balanced'])for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
  }
- const acc={},t0=Date.now();let live=0,done=0;const total=jobs.length;
- const finish=()=>{const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000)},arms:acc};
+ const acc={},t0=Date.now();let live=0,done=0,failed=false;const total=jobs.length;
+ const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:2},arms:acc};
   if(out)fs.writeFileSync(out,JSON.stringify(res));console.log(summary(res));};
  const next=()=>{if(!jobs.length){if(!live)finish();return;}const j=jobs.shift();live++;
-  const c=fork(__filename,[],{env:{...process.env,V2100_WORKER:'1'}});
-  c.on('message',m=>{const key=[m.j.src,m.j.kind,m.j.policy,m.j.deco].join('/');const a=acc[key]??={rows:[],wallets:{}};a.rows.push(...m.rows);for(const [w,h] of Object.entries(m.wallets)){const t=a.wallets[w]??=new Array(201).fill(0);h.forEach((v,i)=>t[i]+=v);}});
-  c.on('exit',()=>{live--;done++;process.stderr.write('\r'+done+'/'+total+' jobs · '+Math.round((Date.now()-t0)/1000)+'s');next();});c.send(j);};
+  const c=fork(__filename,[],{env:{...process.env,V2100_WORKER:'1'}});let received=false;
+  c.on('message',m=>{received=true;const key=[m.j.src,m.j.kind,m.j.policy,m.j.deco].join('/');const a=acc[key]??={rows:[],wallets:{}};a.rows.push(...m.rows);for(const [w,h] of Object.entries(m.wallets)){const t=a.wallets[w]??=new Array(201).fill(0);h.forEach((v,i)=>t[i]+=v);}});
+  c.on('exit',code=>{if(code||!received){failed=true;process.stderr.write('\n측정 worker 실패: '+JSON.stringify(j)+' code='+code+'\n');}live--;done++;process.stderr.write('\r'+done+'/'+total+' jobs · '+Math.round((Date.now()-t0)/1000)+'s');next();});c.send(j);};
  for(let i=0;i<cpus;i++)next();
 }
 
@@ -84,4 +110,4 @@ function summary(res){
     +' | 상위 4명 성공 '+grp('top')+' · 나머지 '+grp('rest')+' | 현금/일 '+avg(r=>r.cash).toFixed(0)+' | 자본 '+avg(r=>r.gain).toFixed(0));}}
  return L.join('\n');
 }
-module.exports={RANK,DECO,BANDS,split,endKind};
+module.exports={RANK,DECO,BANDS,split,endKind,jobMetrics};
