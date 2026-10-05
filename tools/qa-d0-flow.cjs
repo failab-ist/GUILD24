@@ -8,6 +8,7 @@
 //     -> no retroactive D0
 // Captures D0 at 390 and 1280.   node tools/qa-d0-flow.cjs <out-dir>
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/d0-flow');
 const PORT=Number(process.env.QA_PORT||5194),FIXED_NOW=1790112000000;
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
@@ -32,7 +33,7 @@ async function scenario(browser,width,seed){
  await ctx.addInitScript(t=>{Date.now=()=>t;if(!sessionStorage.getItem('qa-d0')){localStorage.clear();sessionStorage.setItem('qa-d0','1');}},FIXED_NOW);
  const page=await ctx.newPage();
  page.on('pageerror',e=>check('no page error',false,e.message));
- await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+ await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(page);
  await fresh(page,seed);
  return {ctx,page};}
 async function fresh(page,seed){
@@ -61,7 +62,7 @@ async function fresh(page,seed){
   st=await page.evaluate(state);
   check('1 Escape does not close or consume D0',/\bd0\b/.test(st.modal||'')&&!st.d0Seen);
   // 2
-  await page.reload({waitUntil:'load'});await page.waitForTimeout(200);
+  await page.reload({waitUntil:'load'});await ready(page);await page.waitForTimeout(200);
   st=await page.evaluate(state);
   check('2 reload with D0 unacknowledged: D0 again',/\bd0\b/.test(st.modal||'')&&st.day===1&&!st.d0Seen);
   check('2 opening and reloading D0 changed nothing in the Run',await page.evaluate(`JSON.stringify(Guild24.game.run)`)===before);
@@ -73,7 +74,7 @@ async function fresh(page,seed){
   check('3 the seen marker is in the save',await page.evaluate(`(()=>{for(const k of Object.keys(localStorage)){const v=localStorage.getItem(k);if(v&&v.includes('"d0Seen":true'))return true;}return false;})()`));
   st=await page.evaluate(state);
   check('3 after 확인 the ordinary Morning resumes (no Boss report open)',!/boss-reveal/.test(st.modal||'')&&st.phase==='morning',String(st.modal));
-  await page.reload({waitUntil:'load'});await page.waitForTimeout(200);
+  await page.reload({waitUntil:'load'});await ready(page);await page.waitForTimeout(200);
   st=await page.evaluate(state);
   check('3 reload after 확인: no D0',!/\bd0\b/.test(st.modal||''),String(st.modal));
   await ctx.close();
@@ -84,7 +85,7 @@ async function fresh(page,seed){
    if(s.phase==='morning')g.beginOrder();else if(s.phase==='order'){try{g.confirmOrder();}catch(e){}g.open();}
    else if(s.phase==='sell'){g.depart();}else if(s.phase==='night')g.finishNight();else if(s.phase==='closing')g.closeDay();}
    delete s.bossReveal.d0Seen; if(s.event)s.eventSeen=true; g.save();})()`);
-  await page.reload({waitUntil:'load'});await page.waitForTimeout(200);
+  await page.reload({waitUntil:'load'});await ready(page);await page.waitForTimeout(200);
   st=await page.evaluate(state);
   check('4 a save past DAY 1 without the D0 marker gets no retroactive D0',st.day>=3&&!/\bd0\b/.test(st.modal||''),JSON.stringify({day:st.day,modal:st.modal}));
   await ctx.close();
