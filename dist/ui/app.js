@@ -1995,7 +1995,7 @@ function relicsModal(){
    const owned=game.ownedRelics();
    if(!owned.length) return '<div class="owned-relics">'+sealCount()+'<p class="muted" style="padding:16px;text-align:center">보유한 점포지원이 없다.</p></div>';
    /* RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): one runtime line for a condition-type support, none otherwise */
-   return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b>'+relicRarity(r)+'<p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
+   return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+relicRarity(r)+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
 function relicTakeover(){const s=game.run,w=s.relicWindow;
  if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5·10·15·20·25·30에 도착한다.</p></div></div>'+closeX()+'</div>';
@@ -2026,7 +2026,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
      different facts, and the Player needs to know which one applies. */
   /* COPY_AUDIT §11-31b (User 2026-10-02): a free card is chosen, not bought - its key reads 선택 under the 무료 price */
   const label=mine?'보유 중':spent?'선택 종료':poor?'골드 부족':price?'구매':'선택';
-  return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+E(r.name)+'</h3>'+relicRarity(r)+'<p>'+E(r.description)+'</p>'
+  return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+relicRarity(r)+'<span>'+E(r.name)+'</span></h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
   +btn(label,'buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
  /* UI_UX §MENU (User 2026-09-24, v2.9.0): the DAY 0 choice has no way back (it may be deferred, User 2026-10-01) - the

@@ -81,6 +81,15 @@ jobs:
         run: |
           sed -i "s/commit:'dev'/commit:'${GITHUB_SHA::7}'/" dist/build.js
           grep -q "commit:'${GITHUB_SHA::7}'" dist/build.js
+      # Every file keeps one URL from deploy to deploy, so a browser could keep an older cached font (a new name's glyph then
+      # falls back to another face) or script. The commit goes on the fonts, styles and scripts as a version, here only.
+      - name: Stamp asset versions
+        run: |
+          V=${GITHUB_SHA::7}
+          sed -i -E "s#(href|src)=\"((ui|data|systems)/[^\"?]+\.(css|js|woff2)|build\.js)\"#\1=\"\2?v=$V\"#g" dist/index.html
+          sed -i -E "s#url\('(fonts/[^'?]+\.woff2)'\)#url('\1?v=$V')#g" dist/ui/ui.css
+          grep -q "ui/ui.css?v=$V" dist/index.html
+          grep -q "fonts/Mulmaru.woff2?v=$V" dist/ui/ui.css
       # dist/ is the site root, so the game is served at the Pages root rather than under /dist.
       - uses: actions/upload-pages-artifact@v3
         with:
