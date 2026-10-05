@@ -10,6 +10,7 @@
 // its last supply against the Final snapshot, no FINAL leak, and reload idempotence.
 //   node tools/qa-final-end.cjs <out-dir> [widths] [BOSS]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
 const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
 const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
@@ -49,7 +50,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
  const server=await serve();
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox','--font-render-hinting=none']});
  try{
-  let seed=null;{const p=await (await browser.newContext()).newPage();await p.goto(`http://127.0.0.1:${PORT}/index.html`);
+  let seed=null;{const p=await (await browser.newContext()).newPage();await p.goto(`http://127.0.0.1:${PORT}/index.html`);await ready(p);
    for(let k=1;k<400&&!seed;k++){const id=await p.evaluate(s=>{Guild24.game.start(s);return Guild24.game.run.bossId;},'qa-final-'+k);if(id===BOSS)seed='qa-final-'+k;}}
   console.log('seed',seed,BOSS);
   for(const width of WIDTHS){
@@ -58,7 +59,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    await ctx.addInitScript(t=>{Date.now=()=>t;if(!sessionStorage.getItem('qa-fe')){localStorage.clear();sessionStorage.setItem('qa-fe','1');}},FIXED_NOW);
    const p=await ctx.newPage();p.on('pageerror',e=>check('no page error',false,e.message));
-   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+   await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});await ready(p);
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
    await p.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
    await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
@@ -70,7 +71,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     for(const it of DATA.items.filter(x=>x.sell>0).slice(0,40))s.inventory.push({id:'qa-'+it.id,item:it.id,cost:Math.round(it.sell*.5),expires:null});
     g.save();Guild24.render();})()`);
    const d30=await p.evaluate(k=>localStorage.getItem(k),KEY),acct0=await p.evaluate(k=>localStorage.getItem(k),KEY);
-   const restore=async raw=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,raw]);await p.reload({waitUntil:'load'});await p.waitForTimeout(250);};
+   const restore=async raw=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,raw]);await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(250);};
 
    for(const kind of ['clear','fail']){
     await restore(d30);
@@ -130,7 +131,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
      await p.evaluate(`document.querySelector('.stage-scroll').scrollTop=1e6`);await p.waitForTimeout(150);
      await p.screenshot({path:path.join(OUT,`end-${kind}-${tag}-scrolled.png`)});}
     // 13 reload
-    await p.reload({waitUntil:'load'});await p.waitForTimeout(300);
+    await p.reload({waitUntil:'load'});await ready(p);await p.waitForTimeout(300);
     const s2=await p.evaluate(ENDED),a2=await p.evaluate(ACCOUNT);
     check(`${kind} @${tag} reload: still ended, same Lock / Roll / report / settlement / unlocks, account unchanged`,s2===JSON.stringify(s)&&JSON.stringify(a2)===JSON.stringify(a1),JSON.stringify({a1,a2}));
     check(`${kind} @${tag} reload shows the same END`,await p.evaluate(`!!document.querySelector('.stage.p-end')&&!document.querySelector('.p-final')&&(document.querySelector('.end-tape .closed')||{}).innerText===${JSON.stringify(dom.closed)}`));
@@ -140,7 +141,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
 
    // NON-FINAL: a natural Run to its own end from the archive/v2.8/tools/qa-end-states.cjs baseline seed
    await p.evaluate(`(()=>{Guild24.game.autosave=false;})()`);
-   await p.evaluate(()=>localStorage.clear());await p.reload({waitUntil:'load'});
+   await p.evaluate(()=>localStorage.clear());await p.reload({waitUntil:'load'});await ready(p);
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-end-1');
    await p.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
    await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
