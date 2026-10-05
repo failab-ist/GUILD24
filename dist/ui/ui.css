@@ -853,8 +853,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    only - the wide screen keeps its own balloon (director-review.css). */
 .p-sale .say.up{top:2px;max-width:min(calc(100% - var(--gutter) - 52px),560px)}
 .p-sale .say.up:after{top:100%;bottom:auto;border:9px solid transparent;border-top-color:var(--paper);border-bottom:0}
-/* .narrow: up top but no wider than the customer card, so the state line beside it stays readable (placeSpeech) */
-.p-sale .say.up.narrow{max-width:var(--cardw)}
 .say>span{display:block;opacity:1}
 /* the tail: a solid wedge under the balloon, aimed at the card's centre */
 .say:after{content:'';position:absolute;top:100%;left:min(calc(var(--cardw) * .5), 60%);
