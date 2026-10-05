@@ -345,7 +345,13 @@ async function audit(page,width,screen,desktop){
    if(art&&plate){
     const a=art.getBoundingClientRect(),p=plate.getBoundingClientRect();
     if(a.bottom>p.top+0.5)fails.push(`the NPC payload runs into the nameplate by ${Math.round(a.bottom-p.top)}px`);
-    if(Math.abs(a.width-a.height)>1.5)fails.push(`the NPC payload box is not square: ${Math.round(a.width)}x${Math.round(a.height)}`);
+    // UI_UX §SALE (User 2026-10-03): on a desk the card's art box is shorter than it is wide, the portrait fitted whole in it;
+    // on a phone it stays square
+    if(document.querySelector('.sale-desk')){
+     if(a.height>a.width+1.5)fails.push(`the desk NPC art box is taller than wide: ${Math.round(a.width)}x${Math.round(a.height)}`);
+     const im=art.querySelector('img')||(art.tagName==='IMG'?art:null);
+     if(im&&getComputedStyle(im).objectFit!=='contain')fails.push('the desk NPC portrait is not fitted whole (object-fit '+getComputedStyle(im).objectFit+')');}
+    else if(Math.abs(a.width-a.height)>1.5)fails.push(`the NPC payload box is not square: ${Math.round(a.width)}x${Math.round(a.height)}`);
     const out={left:fr.left-a.left,right:a.right-fr.right,top:fr.top-a.top,bottom:a.bottom-fr.bottom};
     for(const [side,px] of Object.entries(out))
      if(px>1)fails.push(`the NPC payload leaves the card at the ${side} by ${Math.round(px)}px`);
