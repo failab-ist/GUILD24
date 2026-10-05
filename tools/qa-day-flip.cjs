@@ -4,6 +4,7 @@
 // MORNING and a reload do not roll it, reduced motion never starts it, and nothing errors. 390 and 1280; 390 reduced.
 //   node tools/qa-day-flip.cjs [out-dir]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 const ROOT=path.resolve(__dirname,'..'),OUT=process.argv[2]||null,PORT=Number(process.env.QA_PORT||5253);
 const EXE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const STEP=fs.readFileSync(ROOT+'/tools/qa-final-bosses.cjs','utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
@@ -14,7 +15,7 @@ const res=[];const check=(n,ok,d='')=>{res.push(ok);console.log((ok?'PASS ':'FAI
  try{for(const [w,h,m,rm] of [[390,844,true,'no-preference'],[1280,880,false,'no-preference'],[390,844,true,'reduce']]){
   const c=await b.newContext({viewport:{width:w,height:h},deviceScaleFactor:2,isMobile:m,hasTouch:m,locale:'ko-KR',reducedMotion:rm});const p=await c.newPage();
   const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',x=>{if(x.type()==='error')errs.push(x.text());});
-  await p.goto(`http://127.0.0.1:${PORT}/index.html`);
+  await p.goto(`http://127.0.0.1:${PORT}/index.html`);await ready(p);
   await p.evaluate(()=>{localStorage.clear();(Guild24.game.account.tutorial??={}).skipped=true;Guild24.game.start('qa-flip-2');Guild24.render();});
   await p.click('#modal-root [data-action="buy-relic"]').catch(()=>{});
   // play to a CLOSING, then press 다음 날 like a player
@@ -37,7 +38,7 @@ const res=[];const check=(n,ok,d='')=>{res.push(ok);console.log((ok?'PASS ':'FAI
    await p.evaluate(()=>Guild24.render());
    check(tag+' a redraw of the same MORNING does not roll again',await p.evaluate(()=>!document.querySelector('.daysign b').classList.contains('flip')));
    // a reload lands on the still sign
-   await p.reload();await p.waitForTimeout(300);
+   await p.reload();await ready(p);await p.waitForTimeout(300);
    check(tag+' a reload lands on the still sign',await p.evaluate(()=>{const b=document.querySelector('.daysign b');return !!b&&!b.classList.contains('flip');}));
    if(OUT)await p.screenshot({path:path.join(OUT,`day-flip-${w}.png`)});}
   check(tag+' no page or console error',errs.length===0,errs.slice(0,2).join(' | '));await c.close();}}
