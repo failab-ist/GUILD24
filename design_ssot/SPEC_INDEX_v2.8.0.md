@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
+DOC_VERSION=2.11.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_11_0_CLOSED_2026-10-05 (tag v2.11.0 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
-SOURCE_ADOPTION_STATUS=V2_11_0_ADOPTED (every version through v2.11.0, the v2.10.0 quick patches 1~3 the design-trim presentation pass and the v2.10.2 line-break pass are adopted in Source on main)
+FREEZE_STATUS=V2_11_1_CLOSED_2026-10-05 (tag v2.11.1 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_11_1_ADOPTED (the User-approved minor feedback and first Final Expedition coaches are implemented; every earlier version and the after-v2.11.0 presentation patches remain adopted)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
