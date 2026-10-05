@@ -18,4 +18,4 @@
 
 기존 RUNTIME UX BUG: 모바일에서 원정대 카드가 메뉴 버튼 아래로 스크롤될 때 소지금 끝이 일부 가려진다. 기준 main에서도 재현되며 이번 변경의 회귀는 아니다. 이번 패치 범위에서는 고치지 않았다.
 
-남은 실행: 논리 단위 커밋, 2.11.1 버전 표기, 최종 Pages 검증 순서 확인, PR 생성과 승인된 main 머지. 새 밸런스 측정은 실행하지 않는다.
+구현 커밋: `bf816ab5`. 패치 버전은 `2.11.1`이며 배포 marker와 Canonical header, CHANGELOG 및 WORK_STATE를 맞췄다. 릴리스 기록은 CHANGELOG §RELEASE RECORD를 참조한다. 새 밸런스 측정은 실행하지 않는다.

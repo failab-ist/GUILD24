@@ -1,11 +1,11 @@
 # WORK_STATE
 
 DATE: 2026-10-05
-STATE: V2_11_0 (점포지원 등급 · 운영형 장식, User 컨펌 2026-10-05; PR #111). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User 화면·main 머지·패치 버전 컨펌 2026-10-05). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.11.0(점포지원 등급 · 점포지원 조정 · 운영형 장식 · 사건 DAY 1 · 결전 흔들림 ±8%, PR #111). 직전은 v2.10.3(PR #92). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. 현행 승인 버전은 v2.11.1(마이너 UI 피드백 · 첫 마왕성 단계별 코치, `codex/minor-ui-feedback`의 main 머지 PR). 직전은 v2.11.0(PR #111, 이후 UI PR #112 · #113 포함). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - 밸런스 기준 로그: `reports/v2100-measure/v2103-bots-baseline.log`(v2.10.3 바가지 규칙 + 봇 수정, 프레시), 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
@@ -14,6 +14,7 @@ STATE: V2_11_0 (점포지원 등급 · 운영형 장식, User 컨펌 2026-10-05;
 
 | 버전 | 내용 |
 |---|---|
+| v2.11.1 (User 2026-10-05 컨펌) | 밤 피로 변화 오버레이 · 실제 원인 기록 · 장식 반영, 바가지 거절 영수증 · 건강 표기 생략, 발주 위험 보기 압축 · 리롤 PNG · DAY 4 안내, 첫 마왕성 단계별 코치 · 개인별 환경 대응 · 소지금 표기. 판정·밸런스 변경 없음 |
 | v2.9.14 (PR #50) | 플레이 피드백: 환경 대응을 SALE에 숫자로(선택 상품 미리보기), 미방문 지갑, 대응템 보장이 리롤까지 셈, 야전 정비대 모든 대응 강화, 원정 전문 인증 → 원정 작전실, 무료 점포지원은 `선택` |
 | v2.10.0 (PR #52) | 성공 메타: 숨은 평판 제거, 게이트 성공 상향, 대응 따라 사고 증가, 지갑이 결과를 따라감, 준비 부족 실패 비용, 마왕전 보정, 장식 재조정(추모 방명록 +1 · 알뜰 금고 등), 장식 구매 키 축소 |
 | 퀵패치 1 (PR #54) | SuccessEase D1~21 0.90 · D22+ 0.95, 위험 위협 후반 가산(D8부터, 최종전 제외), 능력치 → 대응 환산 모두 3당 1(계열 계수 없음), 대응 사다리 · 음식 · 음료 재조정(영웅 음식 · 음료 투력 +5), 능력치 부가 역할(강인함 사고 · 기동 퇴각 · 정신 사망), 레벨 · 지갑 스노우볼 완화, D1~4 신규 Lv1~2 |
