@@ -2597,27 +2597,14 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
 test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is stated once',()=>{
  const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
  assert.ok(block.length,'there is a phone-width density block');
- /* SA-Q10's original 120 / 96 phone caps were reviewed on a handset and superseded by the USER
-    amendment of 2026-09-22 (UI_UX §BOSS INFORMATION PRESENTATION): the beat is a takeover with
-    the screen dimmed behind it, so the art grows to 240 / 200 on a phone and 300 / 260 on the
-    desk. What SA-Q10 exists to protect is unchanged and is asserted below - the caps are real
-    ceilings, and art may not push the information or the acknowledgement off the first
-    viewport, which the runtime Boss QA measures. */
- assert.ok(/\.boss-art img\{max-height:240px\}/.test(block),'D5 / D15 Boss art is capped at the amended 240px on phone');
- assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(block),'the D25 reveal is capped at 200px');
- // the width-only constraint that caused it is no longer the only one
+ /* UI_UX §BOSS INFORMATION PRESENTATION: common art caps; runtime density is checked by qa-boss-report-density. */
+ assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(block),'phone art scales with viewport height under the common cap');
+ assert.ok(!/\.boss-reveal\.(?:final|d\d+) \.boss-art img\{/.test(css),'no investigation Day has its own image-size exception');
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
- // the caps are real ceilings, not overridden later at the same width. The count used to be
- // the check, which also forbade a cap at a DIFFERENT width - and UI-Q-v28-28 needs one: past
- // 720px the art was capped on width only, so it grew to its own aspect (408px in D5, 461px in
- // D25 at 1280x880) and overflowed the modal body. The phone block is what these baselines own,
- // so the ceiling is asserted there, and the desktop pair is asserted on its own below.
- assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,2,
-  'exactly the two baseline height caps at phone width, and no third');
+ assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,1,'one common height cap at phone width');
  const wide=css.slice(css.indexOf('@media (min-width:720px){'));
- assert.ok(/\.boss-art img\{max-height:300px\}/.test(wide),'the desk caps D5 / D15 art height too, higher than the phone');
- assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:260px\}/.test(wide),'and the D25 reveal lower, as on phone');
+ assert.ok(/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(wide),'all desk reports share a supporting image cap');
  // the reports themselves are untouched: art is still a figure beside the information
  assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
  assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
@@ -2922,14 +2909,11 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  // the reports reuse the existing shell
  assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
  assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and D5/D10/D15/D20/D25 are consumed by the existing one');
- /* UI_UX §D5 / D10 / D15 / D20 / D25 and UI-Q-v28-10, amended 2026-09-23 (BATCH 4B): the 64px
-    D10 / D20 identity thumbnail is retired. The two concise beats reuse the same full Boss-art
-    figure as D5 / D15 under the same caps (240 phone / 300 desk) - lower importance comes from
-    shorter content, never from a smaller Boss. The superseded 64px expectation is not kept. */
+ /* UI_UX §D5 / D10 / D15 / D20 / D25: shorter beats keep the common full illustration. */
  const compact=fn('bossReveal').split("stage==='d10'||stage==='d20'")[1].split("stage==='d0'")[0];
  assert.ok(/\+plate/.test(compact)&&!/boss-id/.test(compact),'D10 / D20 carry the shared full Boss-art figure, not a thumbnail');
  assert.ok(!/\.boss-id\b/.test(css)&&!/max-width:64px;max-height:64px/.test(css),'the 64px thumbnail rule is gone');
- assert.ok(/\.boss-art img\{max-height:240px\}/.test(css)&&/\.boss-art img\{max-height:300px\}/.test(css),
+ assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(css),
   'the shared phone / desk caps (240 / 300) are the ones D10 / D20 now use');
  assert.ok(!/\.boss-reveal\.d(10|20)[^{]*\.boss-art img\{/.test(css),'no D10 / D20-only art size - one art family');
 });

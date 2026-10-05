@@ -3266,7 +3266,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    not an icon beside a card, so the art gets real room - but the decision the reveal
    leads into has to stay reachable, so on a phone the facts come first and the art
    sits under them rather than pushing them off the screen (UI_UX RESPONSIVE RULE). */
-.boss-reveal{display:flex;flex-direction:column;gap:12px}
+.boss-reveal{display:flex;flex-direction:column;gap:8px}
 /* Ink on the record's own stock. The RANKS are unchanged - lede secondary, the name the
    subject, the Trait the payload, Flavor last and italic - only the ground moved from the
    panel's dark wood to paper, so every colour is the paper ink scale the slips already use. */
@@ -3284,7 +3284,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* The major beat's visual anchor (UI_UX §BOSS INFORMATION PRESENTATION, amended): centred, and
    the report information reads directly under it. §ORNAMENT RESTRAINT: no corner brackets and no
    frame - the art is separated from the paper by its own ground and one hairline, nothing else. */
-.boss-art{margin:4px 0 2px;align-self:center;display:flex;justify-content:center;
+.boss-art{margin:0;align-self:center;display:flex;justify-content:center;
  max-width:100%;background:#2c241810;padding:8px;box-shadow:inset 0 0 0 1px #2c24182e}
 /* the plate hugs the photograph. `width:100%` made the mat as wide as its column while the
    height cap shrank the image inside it, so a 568px mat carried a 215px portrait and the rest
@@ -3298,21 +3298,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 4px 0 0 var(--fam,#8a2f26),inset 0 0 0 1px #2c24181f}
 .boss-reveal .fam-card .hazards li{color:#5f5440}
 .boss-reveal .fam-card .hazards .press{color:#8a7c60}
-.boss-reveal .fam-card b{display:block;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
+.boss-reveal .fam-card>b{display:block;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
  -webkit-font-smoothing:none;color:var(--ink)}
 .boss-reveal .fam-card .hazards{margin:0}
-/* SA-Q10 — BOSS MOBILE ART CROWDING. The art was constrained on width alone, so near-square
-   pieces ate the whole first viewport and pushed the report and its acknowledgement control off
-   the bottom at 360x800. The v2.8 baselines cap the height on phone instead: D5/D15 120px, the
-   D25 family reveal 96px - it carries the most information of the three. Information stays
-   primary and the art stays supporting; nothing about the reports themselves changes. */
+/* UI_UX §BOSS INFORMATION PRESENTATION: every investigation shares one viewport-bounded art cap. */
 @media (max-width:719px){
- /* USER AMENDMENT 2026-09-22, UI_UX §BOSS INFORMATION PRESENTATION: the 120 / 96 caps were
-    reviewed on a real handset and read too small. The beat is a takeover with the screen dimmed
-    behind it, so the art grows to the amended 240 / 200 - still bounded by the same rule, that
-    art may not push the information or the acknowledgement past the first viewport. */
- .boss-art img{max-height:240px}
- .boss-reveal.final .boss-art img{max-height:200px}
+ .boss-art img{max-height:clamp(100px,calc(100dvh - 560px),240px)}
  /* SA-Q12 — MOBILE QUEUE DUPLICATION. The waiting fan and its 대기 N say on the sale surface
     what the Dock already says underneath it, and on a phone the two cost a band of height each
     to state one number twice. The decorative line is suppressed at phone width only; the Dock
@@ -3321,16 +3312,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 }
 @media (min-width:720px){
  .boss-art img{max-width:420px}
- /* UI-Q-v28-28 / UI_UX §BOSS INFORMATION PRESENTATION: information is primary, art supporting.
-    Past 720px the art was capped on WIDTH only, so a near-square piece grew to its own aspect:
-    measured at 1280x880 it took 408px of D5's 532px report and 461px of D25's, which pushed
-    both bodies past the modal's own scroll (D15 628/626, D25 660/626) and put the D25 Final
-    Family / Hazard disclosure - the information that has to be read before the same-Day
-    decisions - above a portrait taller than the screen could hold. The desktop gets height
-    caps in the same 120:96 proportion the approved mobile baselines use, at twice their scale;
-    the exact mobile baselines above are untouched. */
- .boss-art img{max-height:300px}
- .boss-reveal.final .boss-art img{max-height:260px}
+ /* UI_UX §BOSS INFORMATION PRESENTATION: the same cap across investigation days. */
+ .boss-art img{max-height:clamp(200px,calc(100dvh - 510px),300px)}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}
 }
 /* =====================================================================
@@ -3412,11 +3395,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal.final .fams{gap:0;margin:0;box-shadow:none}
 .boss-reveal.final .fam-card{padding:11px 0 11px 13px;background:none;box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
 .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26),inset 0 1px 0 #2c241833}
-.boss-reveal.final .fam-card b{margin-bottom:7px;font-size:18px}
-/* BATCH 4B — D10 / D20, the concise investigation beats. The Boss is the same full figure on the
-   same record (the shared .boss-art caps: 240 phone / 300 desk); what makes them quieter is the
-   rest - one plain report line instead of a name, Trait or Family payload, the small next-report
-   note, a lighter acknowledgement and a shorter sheet. No name card, no accent, no filler. */
+.boss-reveal.final .fam-card>b{margin-bottom:5px;font-size:16px}
+/* UI_UX §BOSS INFORMATION PRESENTATION: D10 / D20 keep the shared illustration and shorter report text. */
 .boss-reveal.d10 .lede,.boss-reveal.d20 .lede{font:400 15px/1.6 var(--ui);color:#3c3527}
 .modal.doc:has(.boss-reveal.d10) .approve,.modal.doc:has(.boss-reveal.d20) .approve{min-height:50px;min-width:148px;font-size:16px}
 /* D0 — the first-Morning briefing (UI_UX §BOSS INFORMATION PRESENTATION / D0): the same record,
@@ -3429,9 +3409,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .d0-step b{display:block;margin-bottom:4px;font:500 16px/1 var(--f-led);letter-spacing:.06em;color:#7a281f}
 .boss-reveal .d0-step p{margin:0;font:400 15px/1.6 var(--ui);color:#3c3527}
 /* the pressure each Hazard puts on the party is part of the disclosure, not a footnote */
-.boss-reveal.final .fam-card .hazards .press{font-size:14px;color:#5f5440}
+.boss-reveal.final .fam-card .hazards li{gap:6px;font:600 14px/1.4 var(--ui)}
+.boss-reveal.final .fam-card .hazards b{margin:0;font:600 14px/1.4 var(--ui);color:var(--ink)}
+.boss-reveal.final .fam-card .hazards .press{font:600 14px/1.4 var(--ui);color:var(--ink)}
+.boss-reveal.final .fam-card .hazards .rate{font:400 13px/1.4 var(--ui);color:#5f5440}
 /* D5's owned line is the record's own note, not a tinted slip laid on it */
-.boss-reveal.d5 .flavor{background:none;padding:0;box-shadow:none}
+.boss-reveal.d5 .flavor{background:none;padding:7px 0 0;box-shadow:none;border-top:2px dotted #8a7c60;
+ font-size:14.5px;color:#4a402e;text-align:left}
 @media (min-width:720px){
  .boss-reveal.final .fams{column-gap:22px}
  .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
@@ -3452,8 +3436,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .boss-reveal .trait-name b{font-size:26px}
  .boss-reveal .trait-body p{font-size:16px}
  .boss-reveal.final .lede{font-size:17px}
- .boss-reveal.final .fam-card b{font-size:19px}
- .boss-reveal.final .fam-card .hazards li{font-size:17px}
+ .boss-reveal.final .fam-card>b{font-size:17px}
+ .boss-reveal.final .fam-card .hazards li,.boss-reveal.final .fam-card .hazards b,
  .boss-reveal.final .fam-card .hazards .press{font-size:15px}
 }
 
@@ -4156,7 +4140,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-card .lock,.boss-none{color:#a39475}
 .greed-sales{margin:0}.greed-sales>div{display:flex;justify-content:space-between;gap:12px}.greed-sales dt,.greed-sales dd{margin:0}.greed-sales dd{font-weight:600;text-align:right}.boss-card .greed-sales{margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #d9c9a833;color:#f4e8cc;font-variant-numeric:tabular-nums}
 .boss-reveal .info-line{margin:0;font:600 15px/1.55 var(--ui);color:#3c3527}
-.boss-reveal.d5 .flavor{font-size:14.5px;color:#4a402e;padding:9px 12px}
 .boss-reveal .boss-guide{margin:4px 0 0;padding:9px 12px;background:#7a281f12;box-shadow:inset 3px 0 0 #7a281f66;font:500 14px/1.55 var(--ui);color:#3c3527}
 .boss-reveal .boss-guide b{display:block;font:700 11px/1 var(--ui);letter-spacing:.06em;color:#7a281f;margin-bottom:5px}
 .boss-reveal .greed-sales{margin-top:4px;padding:8px 12px;background:#2c24180f;font:600 14px/1.5 var(--ui);color:#3c3527;font-variant-numeric:tabular-nums}

@@ -1045,11 +1045,10 @@ The rule, not strategy advice. Never exact Final success %, hidden Final Power, 
 D5/D15/D25 are major beats; D10/D20 are shorter (fewer lines, lighter hierarchy, shorter dossier) but keep the same centered
 Boss art as D5/D15 — never a thumbnail. D25 is information-first (the Family/Hazard disclosure is the payload).
 
-DIRECTOR DOCUMENT BASELINE — EXACT:
-- mobile D5/D10/D15/D20 Boss art max-height: 240px
-- mobile D25 Boss art max-height: 200px
-- desktop D5/D10/D15/D20 Boss art max-height: 300px
-- desktop D25 Boss art max-height: 260px
+All D5/D10/D15/D20/D25 investigation reports share one art-size rule across every Boss:
+- mobile: max-height follows the available viewport height (100dvh minus 560px reserved for report text and controls), bounded between 100px and 240px
+- desktop: max-height follows the available viewport height (100dvh minus 510px reserved for report text and controls), bounded between 200px and 300px
+- keep the illustration aspect ratio; do not shrink only the overflowing Boss or investigation Day
 
 At 360x800 art alone never pushes core information or the acknowledgement below the first viewport. The sheet is a takeover
 that claims enough of a phone screen to read as a report, with neither tiny art in an empty sheet nor art that buries the text.
@@ -1057,7 +1056,7 @@ that claims enough of a phone screen to read as a report, with neither tiny art 
 ### DOCUMENT DETAIL — USER APPROVED
 
 - Boss art sits on the paper; no floor line or divider under it
-- D5 Flavor: plain report text; no non-semantic coloured bar or tinted / bordered box
+- D5 Flavor: plain report text, aligned to the explanation above it, with one dotted horizontal divider between Function and Flavor; no indentation, non-semantic coloured bar or tinted box
 - D15 Trait: `마왕 권능` label (the codex card says just `권능`) -> Trait name -> explanation; no side bar, box, tinted panel or card — type and spacing carry it (the 안내 line and the GREED sales line are the User-approved 2026-10-04 exceptions: a light tinted strip each)
 - D25: each Family keeps its semantic left colour rule; no black rule above the Family section; a thin neutral divider
   between the two Families is allowed; Hazards are not decorative cards
@@ -1078,6 +1077,7 @@ and a cleared Boss counts as known.
 `최종 정찰 보고` with a one-time 안내 line under the intro (COPY_AUDIT §14-7) (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
 Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 29).
 `two Families` does NOT mean two Hazard keys. Never the Hazard formula, Final success % or Final Power.
+Hazard names and required Counter values use the Function/Effect information face (14px on phone, 15px on desk, weight 600); conversion explanations use the Secondary factual face (13px, weight 400). Family headings keep the plate face (16px on phone, 17px on desk); do not let their typography inherit into nested Hazard values. Keep at least 4.5:1 contrast for required information.
 
 ### FINAL MODIFIER PREVIEW
 
@@ -2905,10 +2905,12 @@ or exposing exact success probability.
 #### UI-Q-v28-10 — BOSS MOBILE DENSITY
 At 360x800:
 - D0 has no Boss art and presents the objective/cadence as basic dossier information
-- D5/D10/D15/D20 Boss art max-height baseline 240px; D25 200px; D5/D10/D15/D20 reuse the same centered Boss-art family
+- D5/D10/D15/D20/D25 reuse the same centered Boss-art family and the common viewport-bounded mobile cap in §D5 / D10 / D15 / D20 / D25
 - D10/D20 are compact because their report payload is shorter, not because the Boss becomes a 64px icon
 - no small-Boss + wide-empty-space composition; core information and acknowledgement are not pushed off the first viewport solely
   by art
+- reduce image size and empty spacing before body type; without first-time guidance, every Boss report fits without body scrolling at 360x640 and 390x780; first-time guidance may add scrolling without shrinking the illustration further
+- D5 explanation and Flavor share the same left text edge, separated by a dotted line
 
 #### UI-Q-v28-24 — BOSS / FINAL PRESENTATION PAYOFF
 Around D0 / D5 / D10 / D15 / D20 / D25 / D30, PASS:
