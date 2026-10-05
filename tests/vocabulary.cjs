@@ -67,9 +67,8 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
   lowpotion:3,midpotion:4,highpotion:5,toppotion:5,battery:5,rope:5,mask:3,hood:4,webgloves:4,holylight:4,cloak:4,coating:5,boots:5,snowgoggles:5,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,worldcharm:5,coupon:5};
  assert.equal(Object.keys(shelf).length,44);
  for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
- // the redistributed Fatigue recovery (ITEM §SUPPLY MODEL contract) and the two price / Stat moves
- // (v2.9.1 balance, User 2026-09-25: rice/ramen/bar/premium/lava (now lunchbox / guildlunch / dragonramen) Supply each +1)
- const supply={soda:2,rice:5,ramen:5,lunchbox:6,choco:5,yanggaeng:5,candy:5,dragonramen:7,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:2,energy:2,wine:2,ion:2,kingwater:2,hyperenergy:2,sageelixir:2};
+ // ITEM §ACTIVE CATALOG: direct-counter Food/Drink recovery is distinct from the Stat line.
+ const supply={soda:1,rice:5,ramen:3,lunchbox:6,choco:5,yanggaeng:5,candy:2,dragonramen:3,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,kingwater:2,hyperenergy:2,sageelixir:2};
  for(const [id,v] of Object.entries(supply))assert.equal(DATA.itemBy[id].effects.supply,v,id+' 피로 회복');
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');

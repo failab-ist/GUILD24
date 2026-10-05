@@ -33,6 +33,11 @@ and this table is their commit record.
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-feedback`) | (the User sets it) |
 
+## After v2.11.1 — Counter Food / Drink recovery rollback (User 2026-10-06)
+
+- Counter Food / Drink Supply returns to the values before PR #107: 컵라면 5→3, 집중 사탕 5→2, 불룡볶음면 7→3, 얼음컵 / 중화 탄산수 / 용사의 곡주 / 쿨링 이온음료 2→1. Prices, direct Counters and Core Stats stay unchanged. ITEM §COUNTER LADDER / §ACTIVE CATALOG; tests vocabulary, night.
+- Growth cost and late Gate slope are simulation-only candidates; no change to live growth, Boss, Job or environment parameters is adopted here.
+
 ## v2.11.1 — Minor feedback / first Final Expedition coaches (User 2026-10-05)
 
 - NIGHT Fatigue opens a daily-cause overlay with a smaller five-band reference; the numeric Fatigue is not repeated in the next-decision line. Resolved source rows and overnight settlement are recorded without changing calculations; older saves retain their recorded expedition chain.
