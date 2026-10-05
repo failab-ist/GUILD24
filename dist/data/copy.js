@@ -334,6 +334,15 @@ Copy.deep={
    `Final`. The forecast explanation is taught once by the coach and kept behind its ? (User
    decision 2026-09-23: no standing explanation line). */
 Copy.finalPrep={
+ coach:{
+  intro:'오늘은 최종 원정이다. 점포지원과 마지막 발주를 확인한 뒤, 원정대를 선택해 보급하고 마왕성으로 출발한다.',
+  order:'원정대에게는 상품을 반값에 판다. 모험가에게 살 소지금이 있는지 원정대 후보 보기에서 확인하자.',
+  noEffect:'구급키트·귀환석·세계수 생환부적은 마왕성에서 효과가 없어 챙길 수 없다. 마지막 발주 후보에도 나오지 않는다.',
+  roster:'피로·부상은 능력에 영향을 준다. 모험가를 눌러 피로와 부상, 소지금을 확인하자.',
+  commit:'최대 3명까지 고를 수 있다. 원정대 확정 뒤에는 교체할 수 없다.',
+  environment:'확인된 위험은 원정대 각자에게 적용된다. 각 모험가의 대응 수치를 확인하자.',
+  preparation:'전체 토벌 전망과 각 모험가들의 환경 대응을 함께 본다. 모험가마다 필요한 준비가 다를 수 있으니, 각 모험가들의 능력치와 대응 수치를 보고 상품을 보급한다.'
+ },
  cap:'최대 3명까지 출전할 수 있다.',
  unlock:'원정대를 확정하면 토벌 전망을 확인할 수 있다.',
  underTitle:'3명보다 적은 인원으로 출전할까요?',

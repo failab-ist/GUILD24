@@ -498,7 +498,7 @@ test('SALE: a reaction leaves the screen without leaving the Run',()=>{
   'only a new speaker/line pair re-shows the balloon');
  // What writes a line is the engine: the next thing this customer says, or the next customer.
  const shop=read('dist/systems/shop.js');
- assert.ok(/arrive\(\)\{.*?\.say=/.test(shop.replace(/\n/g,'')),'a new customer sets their own line');
+ assert.ok(/arrive\(\)\{.*?\.say=/.test(shop.replace(/\r?\n/g,'')),'a new customer sets their own line');
  assert.ok(/s\.say=null/.test(shop),'the line is cleared when the day turns over, not by a timer');
 });
 

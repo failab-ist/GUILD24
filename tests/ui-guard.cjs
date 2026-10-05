@@ -5,7 +5,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene','ui/art'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
-const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8').replace(/\r\n/g,'\n');
 const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
 const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
 /* render an app.js surface for real: its functions and top-level `const` lines, evaluated against a stub context */
@@ -1827,8 +1827,8 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
  for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
- /* User 2026-10-04: the reroll key is told again, once, on DAY 2 (the kit is DAY 3), and the key keeps its name and gains the refresh mark */
- assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]"),'the DAY 2 reroll mark, verbatim');
+ /* COPY_AUDIT §3-14: the first eligible DAY is 4, even with another ORDER mark. */
+ assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,4]"),'the DAY 4 reroll mark, verbatim');
  assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'발주 후보 교환 · '"),'the 발주 후보 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
@@ -2453,7 +2453,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */
- assert.ok(/<details class="tip fatigue-row '\+c\.kind\+'"/.test(app),'the 귀환 후 피로 token is the Fatigue mark\'s anchor');
+ assert.ok(/<button class="fatigue-row tok '\+c\.kind\+'" data-action="fatigue"/.test(fn('changedRows')),'the 귀환 후 피로 token remains the Fatigue mark\'s anchor and opens an overlay');
  assert.ok(!/class="learned"|<b>발견<\/b>/.test(app),'no inline 발견 line on the record (User 2026-09-30: shown like the tutorial)');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
@@ -2668,7 +2668,9 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  const kit=fn('kitLine');
  /* SA-Q04: the Injury state is n.status in words (건강 / 부상 / 중상); a second numeric 부상 N
     beside it was the duplication the finding names. */
- assert.ok(/const slots=Adventurer\.slots\(n\),parts=\[n\.status\]/.test(kit),'the Injury state is in the compact state');
+ const state=n=>render([fn('kitLine')],'\nkitLine(n)',{n,Adventurer:{slots:()=>2},game:{run:{}},walletChip:()=>'',E:s=>s});
+ assert.ok(!state({status:'건강',injury:0,fatigue:10,loyalty:0,pack:[]}).includes('건강'),'the compact state omits healthy even with Fatigue');
+ assert.ok(state({status:'부상',injury:1,fatigue:10,loyalty:0,pack:[]}).includes('부상'),'the compact state retains an active Injury');
  assert.ok(!/부상 '\+n\.injury/.test(kit),'and it is not also stated as a number');
  assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
  assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
@@ -3091,7 +3093,7 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  // SA-Q04: one human-readable Injury state, never duplicated as a number
  const kit=fn('kitLine');
  assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
- assert.ok(/parts=\[n\.status\]/.test(kit),'it carries the state word itself');
+ assert.ok(/parts=n\.injury\?\[n\.status\]:\[\]/.test(kit),'it carries an active Injury state word itself');
  // SA-Q20: the exact First Aid primary function
  assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)'"),
   'the First Aid primary function is the approved sentence (COPY_AUDIT §4-22, User 2026-09-25)');
@@ -3443,8 +3445,9 @@ test('DAY 0 Store Support tutorial: one mark over the takeover, DAY 0 only, no a
  assert.ok(!/relic-card|relic-buy/.test(steps),'the card and key marks are gone');
  for(const r of DATA.relics)assert.ok(!steps.includes(r.name),'no Store Support is named as the answer: '+r.name);
  const show=fn('showCoach');
- assert.ok(/const relicD0=modal==='relics'&&game\.run\?\.phase==='foundation';/.test(show),'the exception is the DAY 0 takeover alone');
- assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0\)\|\|bossHold\)return;/.test(show),'every other modal (and a held Boss reveal, UI-Q-v29-35) still has no mark over it, and a skipped tutorial stays skipped');
+ assert.ok(/const relicD0=modal==='relics'&&game\.run\?\.phase==='foundation';/.test(show),'the original exception remains the DAY 0 takeover');
+ assert.ok(/relicD30=modal==='relics'&&s\?\.phase==='final'&&s.day===30&&s.relicWindow\?\.milestoneDay===30/.test(show),'the new exception is limited to the DAY 30 Store Support takeover');
+ assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0&&!relicD30\)\|\|bossHold\)return;/.test(show),'other modals and a held Boss reveal still suppress marks, and a skipped tutorial stays skipped');
  assert.ok(/relicD0\?coachSteps\.relic:/.test(show),'the takeover reads its own lesson');
  assert.ok(/\.coach-layer\.over-takeover\{z-index:80\}/.test(css)&&/\.relic-takeover\{[^}]*z-index:70/.test(css),'the mark sits above the takeover it teaches');
  /* USER 2026-09-24: 건너뛰기 skips this screen's lesson only, never the whole tutorial */
@@ -3621,7 +3624,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
   assert.deepEqual(ks,[...ks].sort((a,b)=>a-b),it.name+' follows Counter -> 피로 회복 -> stat -> rest');}
  // §TRANSACTION RESULT STUB
  assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money,mode:el\.dataset\.mode\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
- assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('cueSale').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
+ assert.ok(fn('showStub').includes("el.textContent='단골도 '")&&fn('showStub').includes("delta+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('cueSale').includes("$('.receipt-stub')"),'§4-24 sale format, refusal Loyalty only, about 2.5 s');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)

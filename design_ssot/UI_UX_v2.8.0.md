@@ -181,6 +181,8 @@ Full-offer reroll + cost/state 6. sticky `발주 XXXG · 발주 확정`.
 claimed destination (a liar's or pilgrimage-rerouted true Gate stays hidden), summing to the visitor count; no name, Job,
 Trait or Wallet. Exact line -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
+`위험 보기` shares the row with `점포지원`, directly above the visitor-count column rather than the `오늘` label. Both references use a close dotted underline; the reference row and today's brief keep a compact vertical gap.
+
 The form sits on the torn-parchment sheet shared with Store Support (`presentation/support/order-paper.png`, nine-slice, the
 clip above it overlapping the top edge); there are no CSS tear strips or flat paper under it (User 2026-10-03).
 
@@ -290,7 +292,7 @@ forecast pin keeps the combat/environment reading available. The full detail rem
 
 ### CURRENT CUSTOMER STATE
 
-Compact state: Injury (no `부상 1`-style number), Fatigue, Loyalty — `부상 · 피로 8 · 단골도 37`; 단골 (owner threshold) is the gold
+Compact state: active Injury only (omit `건강`, no `부상 1`-style number), Fatigue, Loyalty — `부상 · 피로 8 · 단골도 37`; 단골 (owner threshold) is the gold
 `regular-badge` on the right of the customer card's nameplate, not a word in this line, and the card has no rarity colour bar (the
 rarity word and the card frame already say it); no large Loyalty bar, no `?` / Loyalty popover (coach teaches it; global Help stays separate). No equipment text here (NPC
 detail and proven Stat-source attribution carry it).
@@ -434,7 +436,8 @@ reorder; fixed per-category order (`ITEM_v2.8.0.md` §PRESENTATION ORDER) for ev
 
 Each successful sale stamps a paper receipt stub (`.receipt-stub`) over the counter band for about 2.5 seconds:
 `단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). No reserved height, never blocks input, replaced by the next stub; under
-`prefers-reduced-motion` no motion. A refusal shows the customer's reply line (engine reason pool), no stub.
+`prefers-reduced-motion` no motion. A refusal shows the customer's reply line (engine reason pool); when Loyalty actually
+decreases, the same stub location shows only `단골도 {−N}`, the existing receipt style, with only the negative number in muted red, for about 2.5 seconds, without new motion.
 
 ### SALE — CUSTOMER ARRIVAL (v2.9.10)
 
@@ -664,8 +667,9 @@ answer:
     귀환 후 피로 N
     귀환 후 피로 N · {band}
 
-Band from 20 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6; resolved arithmetic in the shared
-popover.
+Band from 20 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6. The Fatigue row opens an overlay
+of actual daily causes (Function/Effect: 15px / 600), with the five bands in smaller type below (14px / 600, readable contrast). The overlay starts with a compact starting-to-settled row (15px / 600 figures; secondary labels 13px / 400), then lists the actual deltas; rule text keeps at least 4.5:1 contrast on a solid dark plane. NIGHT_CLOSING §FATIGUE RESULT owns the recorded path
+and settled value; the inline next-decision line does not repeat the numeric Fatigue.
 
 ## DANGER DETAIL BOUNDARY
 
@@ -1111,6 +1115,19 @@ threat board and order form untouched; reduced motion shows the settled state.
 
 ## FINAL PARTY / PREPARATION PRESENTATION — D30
 
+### FIRST-EVER FINAL EXPEDITION COACH
+
+Each stage teaches its decision once per account, using the existing `tutorial['coach-'+id]` completion state:
+- D30 support takeover: the Final process, anchored to `.relic-open`; only the D30 window in the Final phase admits this modal exception, alongside the existing D0 support exception.
+- Last order: the fixed half-price transfer and candidate Wallet check on `원정대 후보 보기`, then the no-effect Item boundary on the last-order form heading.
+- Roster: Fatigue / Injury / Wallet inspection on a visible candidate card, then the three-member cap and irreversible commitment on `원정대 확정`.
+- Committed preparation: every Hazard applies to each participant, anchored to that participant's environment meters. Reuse the existing party-wide `subjugation` Coach ID and forecast target to teach reading the overall forecast with each participant's environment meters and choosing supplies from their own needs. The detailed forecast explanation remains in its anchored `?` Help.
+
+Support, last order, roster and preparation are separate skip groups. `안내 건너뛰기` completes only the current stage;
+future stages remain eligible. No new Run / Account flag or migration is required. Completion survives save/load and new
+Runs; settings `안내 끄기` suppresses all marks and `안내 다시 보기` clears the existing `coach-*` records.
+Ordinary modals and Boss reveal holds still suppress coaches. Exact approved copy -> COPY_AUDIT §14-9.
+
 ### PARTY SELECTION
 
 A selection surface, not a rarity gallery: up to 3 participants, 1 or 2 allowed even with 3+ eligible; count reads as capacity
@@ -1119,6 +1136,7 @@ or overflowing); no rarity-coloured frames; unselected cards neutral, selected c
 - the last order carries `원정대 후보 보기` beside `원정대 선택` (same bar): a read-only sheet of the candidates, each opening the
   notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW); a phone puts both on one row at a smaller face
 - FINAL 준비 carries a quiet `자세히 보기` text control under the supplied member's Stat grid, opening that notebook read only
+- last-order candidate and party-selection cards show the adventurer's Wallet; the FINAL notebook also carries that Wallet beside condition information
 
 No ordinary `전투 전망` while the party is provisional. Guidance copy -> COPY_AUDIT_APPROVED.
 
@@ -1131,8 +1149,8 @@ is no longer main content, and no swapping.
 ### PARTY-WIDE SUBJUGATION FORECAST
 
 After commitment one compact party-level `토벌 전망` (not per-NPC, not a dashboard): hidden before, covers the whole 1/2/3
-party, updates as supplies commit, `우세 / 접전 / 불리` only, no Final Power, Boss Power, probability or Final Roll. Taught once
-by the Coach when first active, then via the same anchored `?`; no standing paragraph. Item detail may still show that
+party, updates as supplies commit, `우세 / 접전 / 불리` only, no Final Power, Boss Power, probability or Final Roll. The first
+Coach teaches reading this forecast together with individual environment meters; its anchored `?` keeps the detailed forecast explanation. No standing paragraph. Item detail may still show that
 member's concrete delta. Not here: one-NPC `전투 전망`, failure-to-death risk, any one-NPC environment forecast posing as the
 party's.
 
@@ -1155,6 +1173,8 @@ commit transfer
   same fixed amount exactly once
 - two slots, may stay empty; no later free-equip screen; no-effect Items blocked/marked per `FINAL_EXPEDITION_v2.8.0.md`;
   Boss-changed Items show current Final truth; no GREED-only counter panel
+- each committed member's card shows their own `환경 대응` beside the Bag, one current/required number per disclosed Hazard; Hazards from the same Family share one horizontal row. On phones the Bag uses two compact 36px icon slots to preserve that row; reuse the ordinary meter's required-value rounding and sufficient/insufficient colours
+- meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
 
 ### FINAL ITEM / WALLET FEEDBACK
 
@@ -1460,8 +1480,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md §3.
 
 (§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`
 or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
-register say them. The `reroll` mark (User 2026-10-04) is the DAY 2 ORDER's: the key keeps the name `발주 후보 교환` and gains a refresh icon (an
-inline SVG like the close X, no asset), and the mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
+register say them. The `reroll` mark is the DAY 4 ORDER's, even when another ORDER coach appears that day: the key keeps the name `발주 후보 교환` and gains a transparent local raster refresh icon with an open arc and a distinct attached triangular arrowhead. The mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
@@ -1473,7 +1492,7 @@ First SALE (§TUTORIAL — COACH DIET): DAY 1 has four marks, destination, Stats
 `flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer) and
 the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
 does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망) and DAY 3 (환경 대응), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
-visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: reroll + 전투 전망; DAY 3: the kit, the payday customer, 환경 대응; DAY 4: the Bag, the returning customer).
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: 전투 전망; DAY 3: the payday customer, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1485,9 +1504,9 @@ screen says it; otherwise none, or taught after the fact.
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
   대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
-  sale) and returning customer; FINAL
-  `토벌 전망`; CLOSING `영업 시작 골드와 보유 골드를 비교한다.` (first clause only; the receipt gains no row)
-- no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity, 발주 후보 교환; SALE
+  sale) and returning customer; FINAL staged support / last order / roster / preparation marks (§FIRST-EVER FINAL EXPEDITION COACH),
+  including the existing `토벌 전망`; CLOSING `영업 시작 골드와 보유 골드를 비교한다.` (first clause only; the receipt gains no row)
+- no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
@@ -2420,8 +2439,8 @@ single Outcome is predicted as guaranteed.
 #### UI-Q-v28-8 — FATIGUE
 SALE: no hypothetical Outcome fatigue matrix; current Fatigue readable in the status strip; a chosen Food/Drink lists its own
 `피로 회복 N` row on the counter tray and no `피로 {A} → 출발 {B}` line; no always-on Fatigue line, no `보급 X / 필요 Y` cell.
-NIGHT: main label 귀환 후 피로, with ` · {band}` from Fatigue 20 up; detailed path on demand; the recovery row is `음식·음료로 -N`,
-never `남은 보급으로`; 보급 회복 / 보급 완화 / 밤 피로 absent as primary labels.
+NIGHT: main label 귀환 후 피로, with ` · {band}` from Fatigue 20 up; detailed path on demand; the recovery rows identify `음식·음료` before departure and after the Outcome,
+never `남은 보급으로`; 보급 회복 / 보급 완화 / 밤 피로 absent as primary labels. The daily overlay separates pre-departure recovery, outcome buffer, actual Event/Trait/Decoration causes and clamps, with smaller five-band reference below.
 
 #### UI-Q32 — PLAYER STAT TERMINOLOGY
 NPC profile, Item previews, growth/result displays and any stat labels.
@@ -2756,7 +2775,7 @@ SETUP: SALE at 390 and 1280, motion on and reduced motion: one sale each at 50% 
 unfolded; frames at 0 / 60 / 120 / 200 / 320 ms.
 PASS (→ UI_UX §SALE — COUNTER TRAY, COUNTER FEEL): the pressed key moves 3px down and back within 120 ms (60 ms each way); on a sale the pressed tray
 shows for that press only and takes no input; the result stub (A8) starts at the key landing and is settled by 260 ms, none on a
-refusal; the refused key is pressed and shakes once where it locks; the first coin tick is louder; 바가지's ticks start 40 ms later with
+ordinary refusal (a Loyalty loss shows only its quiet delta); the refused key is pressed and shakes once where it locks; the first coin tick is louder; 바가지's ticks start 40 ms later with
 a lower first tick; the counts stay 1 / 2 / 3; a fifth sale looks and sounds exactly like the first; reduced motion ends identical (tray
 cleared, stub text, Gold, Bag).
 FAIL: a second press on the 정가 key, a pressed tray that answers a tap, a stub before the key lands, any escalation with the sale
@@ -3310,7 +3329,7 @@ PASS:
   OFFER / §8-0)
 - each successful sale shows one receipt stub over the counter band for about 2.5 s, `단골도 {±N} · 소지금 {A} → {B}` with that
   customer's real values; a second sale to the same customer replaces it; nothing reserves height, input never blocked
-- a refusal shows no stub; the reply line comes from the engine's reason pool (가격 / 필요도 / 일반 선택) and stays 5 s
+- a refusal shows only its actual Loyalty loss at the stub location, if any; no Wallet row, no new motion; the reply line comes from the engine's reason pool (가격 / 필요도 / 일반 선택) and stays 5 s
 - reduced motion: the stub appears and disappears without motion, numbers identical
 FAIL: any fit emphasis, any recommendation word, a stub at the end of the day instead of per customer, or a stub whose numbers
 differ from the customer's record.
