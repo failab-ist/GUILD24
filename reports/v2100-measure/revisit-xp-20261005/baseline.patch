@@ -1,0 +1,82 @@
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 6d0bf726..30c902d8 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -1,4 +1,8 @@
+ (function(G){
++// ISOLATED MEASUREMENT CANDIDATE. Not production.
++const RV_VISIT=false,RV_XP=false;
++const rvFloor=day=>day<=4?1:1+Math.floor((day-1)*.4);
++const rvBonus=n=>RV_VISIT?Math.min(.5,Math.max(0,((n._rvEligibleDays||0)-4)*.1)):0;
+ /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer - +200G to spend this visit only, +20%p on 150% */
+ const LESSON={paydayBudget:200};
+ /* Stage 10, approved (§O). Stage 9 measured FIRE as the hardest Family for all six Jobs and by
+@@ -318,7 +322,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
+   const capacity=seats?available.filter(n=>n!==arrival).length:available.length;
+   /* RELIC 회원 관리대장: the 단골도 term of the met share counts double (the met / unmet shares themselves do not move) */
+   const lr=D.balance.loyaltyRevisit*(this.has('member')?D.relicParams.member.loyaltyRevisitMult:1);
+-  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*lr,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*lr)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1);});selected.push(n);}
++  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*lr+rvBonus(n),0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*lr+rvBonus(n))/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1);});selected.push(n);}
+   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
+      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
+      event is bit-for-bit what it was. */
+@@ -333,6 +337,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
+   else if((ev.rookie||ev.royal)&&arrival&&!selected.length)selected.push(arrival);
+   /* EVENT 34 단골의 날: one trusted regular not already coming joins today's visitors */
+   if(ev.regularVisit){const reg=available.filter(n=>!selected.includes(n)&&n.introduced&&G.Adventurer.isTrustedRegular(n));if(reg.length)selected.push(this.rng.pick(reg));}
++  // Instrument the real morning selection, including explicit event seats.
++  const exp=s._rvExposure??={regularEligible:0,regularVisits:0,otherEligible:0,otherVisits:0,absence7:0,absence10:0};
++  for(const n of available.filter(n=>n.introduced)){const reg=G.Adventurer.isTrustedRegular(n);exp[reg?'regularEligible':'otherEligible']++;if(selected.includes(n))exp[reg?'regularVisits':'otherVisits']++;if((n._rvEligibleDays||0)>=7)exp.absence7++;if((n._rvEligibleDays||0)>=10)exp.absence10++;}
++  const visits=s._rvVisits??=[];
++  for(const n of selected){const missed=n._rvEligibleDays||0;visits.push({id:n.id,day:s.day,known:n.introduced,loyalty:n.loyalty,level:n.level,missed});
++   if(RV_XP&&n.introduced&&missed>=5&&n.level<rvFloor(s.day)&&!n._rvCatchup)n._rvCatchup={day:s.day,target:rvFloor(s.day)};n._rvEligibleDays=0;}
++  for(const n of available)if(n.introduced&&!selected.includes(n))n._rvEligibleDays=(n._rvEligibleDays||0)+1;
+   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
+   for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
+ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,this.rng)+this.awayWallet(n)));n.awayDays=0;n.newToday=!n.introduced;}
+diff --git a/dist/systems/dungeon.js b/dist/systems/dungeon.js
+index fac2eb7a..b8e6cdd0 100644
+--- a/dist/systems/dungeon.js
++++ b/dist/systems/dungeon.js
+@@ -696,7 +696,10 @@ function resolve(n,d,r,facilities=[],run,assist=0){
+  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
+  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
+  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((24.2+d.day*5.06)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
+- const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
++ const baseXP=xp;let catchupBonus=0;const catchupTarget=n._rvCatchup?.target??null;
++ if(n._rvCatchup&&n.alive&&!d.deep&&d.day<30){let needed=-n.xp;for(let lv=n.level;lv<catchupTarget;lv++)needed+=18+lv*7;catchupBonus=Math.min(baseXP,Math.max(0,needed-baseXP));xp+=catchupBonus;}
++ const changes=G.Adventurer.grow(n,xp,r);
++ if(n._rvCatchup&&n.level>=catchupTarget)delete n._rvCatchup;/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
+  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
+  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
+  n.money+=loot;
+@@ -710,7 +713,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
+     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
+  const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,bandRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,rescueRoll,greatRoll,aidKitReady,preparedFactor,cabinet,banner,escapeCut:dayEv.escapeCut,strain,assist,firstRunGuard},severeEscalation,outcome,aftercare);
+  const combatHero=combatProof(departure,departurePack,d,facilities,{noiseRoll,assist,cabinet,banner,combatSuccess});
+- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
++ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,baseXP,catchupBonus,catchupTarget,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
+     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
+     with the live pre-reload object (JSON has no `undefined`). */
+    /* escapeChance/escapeRoll/injuryRoll are now conditional too (only the combat-failure and
+diff --git a/tools/measure-v2100.cjs b/tools/measure-v2100.cjs
+index 413cf5ee..9c57a664 100644
+--- a/tools/measure-v2100.cjs
++++ b/tools/measure-v2100.cjs
+@@ -32,7 +32,7 @@ function worker({root,kind,policy,deco,T,R,part}){
+   const recs=s.npcs.flatMap(n=>n.records||[]).filter(x=>!x.deep&&x.day<30),ok=x=>x.outcome==='성공'||x.outcome==='대성공';
+   const band=([a,b])=>{const l=recs.filter(x=>x.day>=a&&x.day<=b);return [l.filter(ok).length,l.length];};
+   const late=recs.filter(x=>x.day>=20);
+-  rows.push({idx:k++%R,bands:BANDS.map(band),all:band([1,29]),
++  rows.push({seed:s.seed,idx:k++%R,bands:BANDS.map(band),all:band([1,29]),
+    out:['대성공','성공','퇴각','부상','중상','사망'].map(o=>recs.filter(x=>x.outcome===o).length),env:recs.filter(x=>x.environmentHurt).length,
+    day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
+    zombie:s.day>=25&&late.length?late.filter(ok).length/late.length<.35:false,
+@@ -41,6 +41,7 @@ function worker({root,kind,policy,deco,T,R,part}){
+    core:split(s.npcs,ok),
+    cash:(s.reportHistory||[]).length?((s.reportHistory.at(-1).balance-700)/s.reportHistory.length):0,
+    deco:(this.account.store?.owned||[]).length,sales:s.settlement?.sales??s.stats.revenue,gain:s.settlement?.gain??0,rate:s.settlement?.rate??0,
++   revisit:{exposure:s._rvExposure||{},visits:s._rvVisits||[],xpBonus:recs.reduce((v,r)=>v+(r.catchupBonus||0),0),xpBoosted:recs.filter(r=>r.catchupBonus>0).length,finalPower:s.bossDebug?.power??null,bossPower:s.bossDebug?.bossPower??null,team:(s.finalReport?.members||[]).map(m=>({name:m.name,level:m.level,id:m.npcId})),regulars:s.npcs.filter(n=>n.alive&&n.introduced&&G.Adventurer.isTrustedRegular(n)).length},
+    relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay])});
+   return r;};
+  G.Debug.trajectory({trajectories:T,runs:R,policy,build:'hybrid',prefix:'v2100-'+kind+'-'+part,purchaseOrder:DECO[deco],relicAware:true,relicPriority:RANK});

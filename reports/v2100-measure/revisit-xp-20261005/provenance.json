@@ -1,0 +1,78 @@
+{
+  "commit": "177d1ab297157c96a80da9049674a9f5feeb23a5",
+  "arms": {
+    "baseline": {
+      "visit": false,
+      "xp": false,
+      "files": [
+        {
+          "file": "dist/systems/shop.js",
+          "sha256": "0fcd2d92976f477e637b93cc655e27c6eb98f48fb150c5ad08c763dea26927ae"
+        },
+        {
+          "file": "dist/systems/dungeon.js",
+          "sha256": "3f50fd42ea3d925d879773e189cc466c3c98f81102ff5d90fb3603eb508fa9ca"
+        },
+        {
+          "file": "tools/measure-v2100.cjs",
+          "sha256": "ddcd2ed9d2d361de5fc70a41934a8d5881ddebcb81d5c5af1bfffeab4d359c12"
+        }
+      ]
+    },
+    "visit": {
+      "visit": true,
+      "xp": false,
+      "files": [
+        {
+          "file": "dist/systems/shop.js",
+          "sha256": "b2fb62b74f0a6d09882feb77b19e1cb1a3dd4664f7d4f8a59119726ade11d8be"
+        },
+        {
+          "file": "dist/systems/dungeon.js",
+          "sha256": "3f50fd42ea3d925d879773e189cc466c3c98f81102ff5d90fb3603eb508fa9ca"
+        },
+        {
+          "file": "tools/measure-v2100.cjs",
+          "sha256": "ddcd2ed9d2d361de5fc70a41934a8d5881ddebcb81d5c5af1bfffeab4d359c12"
+        }
+      ]
+    },
+    "xp": {
+      "visit": false,
+      "xp": true,
+      "files": [
+        {
+          "file": "dist/systems/shop.js",
+          "sha256": "acb6c80e4515e6c06cf1a7c9a3c71e90ce419324c003d28fda2e837334905c7a"
+        },
+        {
+          "file": "dist/systems/dungeon.js",
+          "sha256": "3f50fd42ea3d925d879773e189cc466c3c98f81102ff5d90fb3603eb508fa9ca"
+        },
+        {
+          "file": "tools/measure-v2100.cjs",
+          "sha256": "ddcd2ed9d2d361de5fc70a41934a8d5881ddebcb81d5c5af1bfffeab4d359c12"
+        }
+      ]
+    },
+    "both": {
+      "visit": true,
+      "xp": true,
+      "files": [
+        {
+          "file": "dist/systems/shop.js",
+          "sha256": "b2c74080c8066a3c573cd360b6409d7e0b96ee9309ca31a32a0a7dcc622ad287"
+        },
+        {
+          "file": "dist/systems/dungeon.js",
+          "sha256": "3f50fd42ea3d925d879773e189cc466c3c98f81102ff5d90fb3603eb508fa9ca"
+        },
+        {
+          "file": "tools/measure-v2100.cjs",
+          "sha256": "ddcd2ed9d2d361de5fc70a41934a8d5881ddebcb81d5c5af1bfffeab4d359c12"
+        }
+      ]
+    }
+  },
+  "changes": []
+}
