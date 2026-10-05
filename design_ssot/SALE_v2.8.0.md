@@ -2,7 +2,7 @@
 
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
-DOC_VERSION=2.10.1
+DOC_VERSION=2.11.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
@@ -94,6 +94,7 @@ Mobile current-customer state includes Injury state (without numeric duplication
     부상 · 피로 8 · 단골도 37
 
 - If Loyalty >= 51, show the 단골 badge on the customer card's nameplate (right side); the state line does not repeat 단골.
+- Omit `건강`; name the Injury state only while injured. Fatigue and Loyalty remain visible as before.
 - Normal SALE places no separate Loyalty `?` / popover trigger beside this value; the tutorial/coach teaches its
   contextual meaning. The global compact Help may retain its separately owned reference text.
 - Equipment text is not part of the compact top strip; it stays readable in NPC detail and may appear as a proven Core-Stat source.
@@ -554,7 +555,7 @@ No partial state where Gold changed but stock did not, or stock changed without 
 The real result of the player's own price choice is shown at the moment of each sale or refusal, for that customer, never as a summary at the end of the day.
 
 - sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
-- refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). No new pool is added.
+- refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). A refusal that reduces Loyalty also shows `단골도 {−N}` at the receipt-stub location for about 2.5 seconds, small and muted red, without a Wallet row or new motion. Use the actual clamped decrease. No new reply pool is added.
 - both are presentation of the resolved state: no gameplay rule, Save field or RNG draw.
 
 ## SALE FINALIZATION

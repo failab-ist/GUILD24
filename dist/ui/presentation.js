@@ -208,6 +208,16 @@ function nightChange(text){
     keeps its own legacy `전투 +N` wording - nothing is renamed in the Save or the resolution. */
  m=/^(.+?)\s*·\s*전투\s*(\+\d+)$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'장비',value:m[1],extra:'투력 '+m[2]};
  return {kind:'up',group:'grew',label:'변화',value:text};}
+function fatigueRows(r){
+ if(r.fatigueLedger)return r.fatigueLedger;
+ // Older saves retain only the expedition chain; never invent missing daily causes.
+ const rows=[{label:'출발',value:r.fatigueBeforeExpedition}];
+ if(r.rawOutcomeFatigueGain)rows.push({label:r.outcome,delta:r.rawOutcomeFatigueGain});
+ if(r.outcomeBufferUsed)rows.push({label:'음식·음료 · 원정 후',delta:-r.outcomeBufferUsed});
+ const capped=r.finalFatigue-(r.fatigueBeforeExpedition+r.actualOutcomeFatigueGain);
+ if(capped)rows.push({label:'피로 상한 40',delta:capped});
+ return rows;
+}
 function nightChanges(r, npc, facilities=[]){const out=[];
  for(const c of (r.changes||[]).slice(0,3))out.push(nightChange(c));
  for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
@@ -221,23 +231,12 @@ function nightChanges(r, npc, facilities=[]){const out=[];
    }
   }
   if(r.finalFatigue!==undefined){
-   /* NIGHT_CLOSING §FATIGUE RESULT — SUPERSEDES v2.7 PLAYER LABELS. The runtime's own
-      accounting fields (보급 회복 / 보급 완화 / 원정 결과 / 최종 피로) are not a settled Player
-      result - they are four competing names for one number. The Player reads one settled
-      value, 귀환 후 피로, and the resolved arithmetic behind it is on-demand detail through the
-      same shared anchored tip every other ? on this screen already uses - never a second name
-      for the primary figure and never a permanent second row. */
-     /* v2.9.0 (COPY_AUDIT §6-6 / NIGHT_CLOSING §FATIGUE RESULT): the band is named from 20 up, the
-        on-demand recovery row is 음식·음료로 -N, and one next-decision line follows whenever a band
-        penalty applies (10 and up). Band names / effects come from the one owner, Dungeon.fatigueBand. */
-     const band=G.Dungeon.fatigueBand(r.finalFatigue);
-     const steps=['출발 '+r.fatigueBeforeExpedition];
-   if(r.rawOutcomeFatigueGain>0)steps.push('원정에서 +'+r.rawOutcomeFatigueGain);
-     if(r.outcomeBufferUsed>0)steps.push('음식·음료로 -'+r.outcomeBufferUsed);
-     steps.push('귀환 후 '+r.finalFatigue);
-     out.push({kind:r.netFatigueDelta>0?'down':'up',group:'after',label:'귀환 후 피로',value:r.finalFatigue+(band.min>=20?' · '+band.name:''),
-      detail:steps.join(' → ')});
-     if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:'피로 '+r.finalFatigue+' · '+band.name,extra:band.text});
+   /* NIGHT_CLOSING §FATIGUE RESULT / COPY_AUDIT §6-6: one settled value, daily causes on demand;
+      band from 20 up, next-decision penalty from 10 up, thresholds owned by Dungeon. */
+     const settled=r.settledFatigue??r.finalFatigue,band=G.Dungeon.fatigueBand(settled);
+     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=20?' · '+band.name:''),
+      detail:true});
+     if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:band.name,extra:band.text});
   }
  if(r.xp)out.push({kind:'',group:'reward',label:'경험치',value:'+'+r.xp});
  if(r.loot)out.push({kind:'gain',group:'reward',label:'손님 소지금 획득',value:r.loot+'G'});
@@ -298,5 +297,5 @@ function amount(key,value,moved=true){
    re-exported here for the screens. */
 const josa=G.Copy.josa,routeChangeLine=G.Copy.routeChangeLine;
 G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
- eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
+ eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,fatigueRows,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

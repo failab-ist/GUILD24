@@ -11,6 +11,31 @@ const D=DATA,P=Presentation;
 let groups=0;const test=(name,fn)=>{fn();groups++;console.log('PASS '+name);};
 
 const OUTCOMES=['대성공','성공','퇴각','부상','중상','사망'];
+test('daily Fatigue causes survive saves and reconcile without double-counting recovery',()=>{
+ const g=new Game();g.autosave=false;g.start('fatigue-ledger');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ const s=g.run,n=s.npcs[0];s.facilities=[];s.queue=[n.id];s.cursor=0;s.day=4;s.phase='sell';
+ n.traits=['weary'];n.fatigue=12;n.injury=0;n.recovery=0;n.pack=['water'];
+ s.event=D.events.find(e=>e.id==='spaday');g.arrive();
+ assert.equal(n.fatigue,4);s.loadout={counter:'voucher'};g.night();
+ const r=s.results[0],sum=rows=>rows.reduce((v,x)=>x.value??v+x.delta,0);
+ assert.equal(r.fatigueLedger[0].value,12);
+ assert.equal(r.fatigueLedger.find(x=>x.label===s.event.name).delta,-8);
+ assert.equal(sum(r.fatigueLedger),n.fatigue,'arrival, food, outcome and decoration sum to the live state');
+ assert.equal(r.settledFatigue,n.fatigue);
+ const saved=Save.import(Save.export(g.account,s));
+ assert.deepEqual(saved.run.results[0].fatigueLedger,r.fatigueLedger);
+ assert.equal(saved.run.npcs.find(x=>x.id===n.id).records.at(-1).settledFatigue,r.settledFatigue);
+ assert.deepEqual(saved.run.npcs.find(x=>x.id===n.id).records.at(-1).fatigueLedger,r.fatigueLedger);
+ const restored=P.nightChanges(saved.run.results[0],n).find(x=>x.label==='귀환 후 피로');
+ assert.ok(String(restored.value).startsWith(String(n.fatigue)));
+ for(const event of [null,D.events.find(e=>e.id==='shiftrest')])for(const traits of [[],['weary'],['stamina']]){
+  const a=JSON.parse(JSON.stringify(n));a.fatigue=39;a.fatigueArrival=null;a.alive=true;a.injury=0;a.pack=[];a.traits=traits;a.records=[];
+  const q=Dungeon.resolve(a,s.dungeons[0],new RNG('fatigue-causes'),[],{day:s.day,event});
+  assert.equal(sum(q.fatigueLedger),q.finalFatigue,'trait, rounded event and cap reconcile');
+ }
+ const old={outcome:'퇴각',fatigueBeforeExpedition:8,rawOutcomeFatigueGain:7,outcomeBufferUsed:2,actualOutcomeFatigueGain:5,finalFatigue:13};
+ assert.equal(sum(P.fatigueRows(old)),13,'older report uses only recorded expedition fields');
+});
 // A death must never carry a living adventurer's line. Membership in the living pool is the
 // real rule, so it stays true as variants are added; the literal pattern is kept as a second
 // net for the pinned fixtures, which are written by hand rather than drawn from a pool.
@@ -399,6 +424,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
   assert.equal(r.netFatigueDelta,r.finalFatigue-r.beforeFatigue,'the net delta is not the actual gain');
   assert.equal(r.fatigueRecovery,undefined,'the ambiguous combined field is gone');
   assert.equal(r.postOutcomeFatigueGain,undefined,'no second live name for the same value');
+  assert.equal(r.fatigueLedger.reduce((v,x)=>x.value??v+x.delta,0),r.finalFatigue,'recorded causes reconcile, including the upper clamp');
  }
  // v2.9.1 balance (User 2026-09-25): 중상 now joins 사망 at a final result-Fatigue gain of exactly
  // 0, and no Trait - weary's own +fatigue included - may raise either of them.

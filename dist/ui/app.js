@@ -75,7 +75,7 @@ const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
 /* User 2026-10-04: the ORDER 발주 후보 교환 key keeps its name and gains this refresh mark */
-const REROLL_ICON='<svg class="reroll-icon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 1-1.5-3.6M12 1.8V5H8.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" fill="none"/></svg>';
+const REROLL_ICON='<img class="reroll-icon" src="ui/assets/presentation/order/reroll.png" width="16" height="16" alt="" aria-hidden="true" draggable="false">';
 const closeX=()=>btn(CLOSE_X,'dismiss','takeover-x','aria-label="창 닫기"');
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 /* v2.9.10 (User 2026-09-27/28): shelf life on stock counts down `폐기까지 N일` and then names its last two days - `내일까지`,
@@ -516,7 +516,11 @@ function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
  /* `half`: the first 50% sale's lesson anchors to this line (UI_UX §SALE PRICE LESSONS) */
  const el=document.createElement('div');el.className='receipt-stub'+(st.mode==='half'?' half':'');el.setAttribute('role','status');
- el.textContent='단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to;
+ if(st.refused)el.classList.add('refused');
+ const delta=(st.loyalty>=0?'+':'')+st.loyalty;
+ el.textContent='단골도 ';
+ if(st.refused){const value=document.createElement('span');value.className='loyalty-delta';value.textContent=delta;el.appendChild(value);}
+ else el.appendChild(document.createTextNode(delta+' · 소지금 '+st.from+' → '+st.to));
  const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
  document.body.appendChild(el);
  /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
@@ -1145,9 +1149,8 @@ function spendable(n){return n.money+(n.eventBudget||0);}
    than as a progress bar. Normal SALE shows the value alone: no separate `?` / Loyalty
    popover trigger competes with the Bag for the same row. The meaning is taught by the
    tutorial/coach and stays available in the compact Help under its own owner. */
-function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
- /* SA-Q04: n.status is already the Injury state in words (건강 / 부상 / 중상), so a second
-    numeric 부상 N beside it said the same thing twice. */
+function kitLine(n){const slots=Adventurer.slots(n),parts=n.injury?[n.status]:[];
+ /* SALE §CURRENT CUSTOMER COMPACT STATE: only an active Injury is named. */
  if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  parts.push('단골도 '+n.loyalty);
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
@@ -1271,17 +1274,12 @@ function changedRows(r){
   if(r.deep.bonusWallet)extra.push({kind:'gold',group:'reward',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
  }
  const n = game.run.npcs.find(x=>x.id===r.npcId);
- /* NIGHT_CLOSING §FATIGUE RESULT. The settled 귀환 후 피로 token is the only one carrying a
-    `detail` - the resolved 출발 -> ... -> 귀환 후 arithmetic - so it alone joins the one shared
-    anchored tip (same exclusive group, same out-of-flow balloon, same hover/focus/tap and
-    outside-tap/Escape behavior everywhere else on screen already uses). Every other token
-    stays the plain stamped chip it always was. */
+ /* NIGHT_CLOSING §FATIGUE RESULT: the settled value opens the recorded daily causes. */
  const stamp=c=>c.note
   /* v2.9.0 NIGHT next-decision line (COPY_AUDIT §6-6): one sentence under the settled Fatigue, not a chip */
   ?'<p class="next-decision">'+E(c.value+' — '+c.label+' '+c.extra)+'</p>'
   :c.detail
-  ?'<details class="tip fatigue-row '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
-   +'<p><span>'+E(c.detail)+'</span></p></details>'
+  ?'<button class="fatigue-row tok '+c.kind+'" data-action="fatigue" data-id="'+E(r.npcId)+'" aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></button>'
   /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
      of words (`장비 보강된 전사 장비 전투 +5`). The effect is its own element after a middle dot
      now, so the two facts read apart without a second card or badge. */
@@ -1365,8 +1363,8 @@ const coachSteps={
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
   ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
-  /* User 2026-10-04: the reroll key is told once, on DAY 2 - a day with no other ORDER mark (the kit is DAY 3) */
-  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,2]],
+  /* COPY_AUDIT §3-14: DAY 4, independently of other ORDER marks. */
+  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,4]],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1411,8 +1409,14 @@ const coachSteps={
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
     purse box that carries both 보유 골드 and 영업 손익. */
- /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
- final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
+ /* UI_UX §FIRST-EVER FINAL EXPEDITION COACH; COPY_AUDIT §14-9. Each stage has its own skip boundary. */
+ finalRelic:[['final-intro','.relic-open',Copy.finalPrep.coach.intro]],
+ finalOrder:[['final-order','[data-action="final-roster"]',Copy.finalPrep.coach.order],
+  ['final-no-effect','.final-order .form-head',Copy.finalPrep.coach.noEffect]],
+ finalRoster:[['final-roster','.final-roster .npc-card',Copy.finalPrep.coach.roster],
+  ['final-commit','[data-action="final-commit"]',Copy.finalPrep.coach.commit]],
+ final:[['final-environment','.final-environments',Copy.finalPrep.coach.environment],
+  ['subjugation','.final-forecast .top',Copy.finalPrep.coach.preparation]],
  /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
  /* User 2026-10-04: the first Run end whose settlement carries 점포 자본 across a Decoration's price (settleStoreCapital's `reach`) - the
     one place the 점포 자본 is explained, once: it can buy a Decoration, and how it builds up */
@@ -1490,14 +1494,12 @@ function showCoach(){
  const root=$('#coach-root');if(!root)return;root.innerHTML='';activeCoach=null;
  cancelAnimationFrame(coachSettle);
  const tutorial=game.account.tutorial||{};
- /* A mark never sits over a modal - except the DAY 0 Store Support takeover, which IS the first
-    screen of a new store and has its own lesson. */
+ /* UI_UX §FIRST-EVER FINAL EXPEDITION COACH: only the D0 / D30 support takeovers admit a coach. */
  const relicD0=modal==='relics'&&game.run?.phase==='foundation';
- if(tutorial.skipped||(modal&&!relicD0)||bossHold)return; // a held Boss reveal is a modal on its way
- /* Skip a step whose target is not on this screen rather than stopping at it: a contextual
-    mark (a Deep notice, a Great Success signal) only exists on some Days, and stopping would
-    hold back every mark behind it until that Day came. */
- const steps=relicD0?coachSteps.relic:(coachSteps[game.run?.phase]||[]);activeGroup=steps;
+ const s=game.run,relicD30=modal==='relics'&&s?.phase==='final'&&s.day===30&&s.relicWindow?.milestoneDay===30;
+ if(tutorial.skipped||(modal&&!relicD0&&!relicD30)||bossHold)return;
+ const finalGroup=s?.finalCommitted?'final':finalOrdered||s?.team?.length?'finalRoster':'finalOrder';
+ const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);activeGroup=steps;
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
@@ -1750,10 +1752,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div><span>보유 골드</span><b>'+fmt(s.money)+'</b></div>'
    +'<div class="pick"><span>발주 금액</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
    +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
-   +'<div class="ref-row">'+relicRef()+'</div>'
+   +'<div class="ref-row"><button class="look" data-action="gates">위험 보기</button>'+relicRef()+'</div>'
    // today only: who is coming and where (no next-day block, User 2026-09-24)
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
-     +'<p>'+todayLine(counts,'b')+'<button class="look" data-action="gates">위험 보기</button></p></div></div>'
+     +'<p>'+todayLine(counts,'b')+'</p></div></div>'
    /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
       so they sit with the other planning signals on ORDER rather than arriving on D30. It is
       the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */
@@ -1861,6 +1863,12 @@ function envMeter(p,d,pre=null){const whole=x=>Math.max(0,Math.floor(x+1e-9));
   return '<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'
   +'<b class="env-num'+(now>=need?' ok':'')+'">'+now+(then!==null&&then!==now?'<em>→</em><span class="pre'+(then>=need?' ok':'')+'">'+then+'</span>':'')
   +'<small>/'+need+'</small></b></span>';}).join('')+'</span>';}
+function finalEnvironment(p,d){
+ const groups=(d.families||[]).map(id=>({id,hazards:p.hazards.filter(h=>(D.familyTiers[id]?.[1]||[]).includes(h.key))}));
+ const other=p.hazards.filter(h=>!groups.some(g=>g.hazards.includes(h)));
+ if(other.length)groups.push({id:'',hazards:other});
+ return groups.filter(g=>g.hazards.length).map(g=>'<span class="env-family" data-family="'+E(g.id)+'"'+(g.id?' aria-label="'+E(D.dungeonBy[g.id].name)+'"':'')+'>'+envMeter({hazards:g.hazards},d)+'</span>').join('');
+}
 function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes(l)?'lack':'ok')+'">'+E(l)+'</b>';
  return o.hazards.length>1?'<span class="env-list">'+o.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'+b(h.label)+'</span>').join('')+'</span>':b(o.worst);}
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
@@ -2136,10 +2144,10 @@ function replayLine(){const s=game.run,st=s.settlement;
    원정대 선택 - a dead promise on an unavailable control, the same defect the approved Store
    Support state fixed by not leaving a dead 구매. The row already states the cause on the line
    above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
-function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',blocked=muster&&(!n.alive||n.recovery);
+function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',finalView=muster||action==='final-view',blocked=muster&&(!n.alive||n.recovery);
  /* the FINAL muster card opens the adventurer's notebook; picking happens there (User 2026-09-25) */
  const call=!muster?'기록 보기':s.team.includes(n.id)?'선택됨':'기록 보기';
- return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
+ return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
 /* FINAL-Q77: the one party-wide 토벌 전망, in the place and treatment the ordinary 전투 전망 reads
@@ -2166,6 +2174,7 @@ function finalMuster(s,need,committed){
     prepared, one at a time, against the shelf. */
  const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명';
  const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
+ const preparation=committed?game.finalPreRoll():null;
  return (!committed&&!finalOrdered&&!s.team.length
   /* step 1: the last order, open - the same form as ORDER, confirmed on its own 발주 확정 */
   ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order open">'+orderForm()+'</div>'
@@ -2173,15 +2182,16 @@ function finalMuster(s,need,committed){
   ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+E(pickCount)+'</span></div>'
    /* v2.8: the party is provisional - capacity, not a quota, and where the forecast will be */
    +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'</p></div>'
-   +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
+   +'<div class="npc-grid final-roster">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
   :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'
    +finalForecastView()
-   +'<div class="final-team">'+s.team.map(id=>{const n=s.npcs.find(x=>x.id===id),slots=Adventurer.slots(n);
+   +'<div class="final-team">'+s.team.map((id,index)=>{const n=s.npcs.find(x=>x.id===id),slots=Adventurer.slots(n);
     return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'
     +'<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span>'
     +'<span class="wallet">'+walletChip(n)+'</span></span>'
-    +'<span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
-    +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></button>';}).join('')+'</div>'
+    +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
+    +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
+    +'<span class="final-environments"><span class="env-caption">환경 대응</span>'+finalEnvironment(preparation.preparations[index],preparation.d)+'</span></div></button>';}).join('')+'</div>'
    /* the adventurer being supplied reads the same Stat grid SALE shows (User 2026-09-25) */
    +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))
     /* User 2026-09-30: Stats alone do not decide who carries what - the same notebook (Traits, records) opens here, read only */
@@ -2276,6 +2286,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook&&n.outlook.day===game.run.day)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
+ if(game.run.phase==='final')cond.push('손님 소지금 '+fmt(n.money)+'G');
  /* DUNGEON_HAZARD §STRAIN (v2.9.1 balance): an information row, no verdict - consecutive
     expeditions this adventurer began injured, counted back from the most recent record and
     reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
@@ -2570,6 +2581,14 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    keydown handler is separate). */
 const ownCancel=new Set(['underConfirm','bossConfirm']);
 let dossierShown=null;const stageKey=()=>game.run?game.run.day+':'+bossRevealStage():null;
+function fatigueModal(r){
+ const settled=r.settledFatigue??r.finalFatigue,rows=Presentation.fatigueRows(r),start=rows[0];
+ const row=(label,value,kind='')=>'<div class="'+kind+'"><span>'+E(label)+'</span><b>'+E(value)+'</b></div>';
+ const changes=rows.slice(1).map(x=>row(x.label,(x.delta>0?'+':'')+x.delta,x.delta>0?'harm':'benefit'));
+ return '<div class="fatigue-overview"><div><span>'+E(start.label)+'</span><b>'+E(start.value)+'</b></div><i aria-hidden="true">→</i><div><span>귀환 후 피로</span><b>'+E(settled)+'</b></div></div>'
+ +'<div class="fatigue-ledger">'+changes.join('')+'</div>'
+ +'<div class="fatigue-bands"><h3>피로 단계</h3>'+Dungeon.fatigueBands().map(b=>'<p><b>'+E(b.name)+' '+b.min+(b.max>b.min?'~'+b.max:'')+'</b><span>'+E(b.text||'페널티 없음')+'</span></p>').join('')+'</div>';
+}
 function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
  if(modal==='relics'){root.innerHTML=relicTakeover();sentenceBreaks(root);document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
@@ -2609,6 +2628,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
 else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
+else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal.slice(8));title='오늘 피로 변화';body=r?fatigueModal(r):'';narrow=true;}
    /* UI_UX §MENU / SETTINGS — EXACT COMPOSITION (User 2026-09-24, v2.9.0): 점포지원 routes to the selection
       only while a window is purchasable; 이번 점포의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
       (§1-3) and then discards the Run at once. */
@@ -2754,6 +2774,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'event-seen':setModal(null);render();break;
  case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
+ case'fatigue':sound('ui');setModal('fatigue:'+id);break;
  case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;
  case'loadout':sound('ui');setModal('loadout');break;
  case'abandon':sound('ui');setModal('abandonConfirm');break;
@@ -2797,7 +2818,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   /* SALE §TRANSACTION RESULT — PER CUSTOMER (User 2026-09-24, v2.9.0): the customer's own Loyalty and Wallet
      before the commit, so the receipt stub can state the real result of this price choice. */
   const who=game.current(),wasM=who?who.money:0,wasL=who?who.loyalty:0;
-  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money,mode:el.dataset.mode};}else{sound('refusal');cue='refuse';}handoff=seen;showStub();render();break;}
+  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money,mode:el.dataset.mode};}else{sound('refusal');cue='refuse';if(who.loyalty!==wasL)stub={loyalty:who.loyalty-wasL,refused:true};}handoff=seen;showStub();render();break;}
  /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already
     displayed - so it owes that result its own Outcome cue. It used to play the generic return
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary

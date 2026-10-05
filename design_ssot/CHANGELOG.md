@@ -34,6 +34,11 @@ and this table is their commit record.
 
 ## After v2.11.0 (User 2026-10-05; the version stays 2.11.0)
 
+- NIGHT Fatigue opens a daily-cause overlay with a smaller five-band reference; the numeric Fatigue is not repeated in the next-decision line. Resolved source rows and overnight settlement are recorded without changing calculations; older saves retain their recorded expedition chain.
+- SALE omits `건강` from compact state and shows an actual refusal Loyalty loss in the existing receipt style, with only the loss number in muted red.
+- ORDER places `위험 보기` beside 점포지원, uses a generated transparent refresh image with an open arc and a distinct triangular head, and teaches 발주 후보 교환 from DAY 4 even alongside another ORDER mark.
+- D30 adds first-ever staged coaches for support, last order, party selection and each participant's environment preparation; candidate Wallets and per-participant Hazard current/required values are readable on their own cards.
+
 - 점포지원 등급 is a stamp in front of the name (card and owned list), the contract text stands further in; the owned list carried no
   등급 (`undefined`) and now does (PR #112). Deploys put the commit on font / style / script URLs so no stale font is kept.
 - PROLOGUE scene 5: the customer stands on the painted counter top at every size (the store file's counter top read through the
