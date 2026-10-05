@@ -1,0 +1,3537 @@
+{
+  "standard": {
+    "baseline": {
+      "traj/reader/none/run1": {
+        "n": 200,
+        "bands": [
+          45.81155977830562,
+          43.51079751977763,
+          48.35886214442013,
+          37.485448195576254
+        ],
+        "reach": 25,
+        "clear": 6.5,
+        "clearGivenReach": 26,
+        "deaths": 7.615,
+        "core": {
+          "top": 67.29208250166334,
+          "rest": 25.764616881011563
+        },
+        "regularDailyVisit": 67.4644467568505,
+        "otherDailyVisit": 50.85623769158318,
+        "premiumRatio": 1.3265717209752623,
+        "absence7Exposure": 1.3033039899394079,
+        "absence10Exposure": 0.33535307343470144,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8752893518518519,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.685,
+        "finalSamples": 50,
+        "finalPowerMedian": 217.8761351688447,
+        "finalRatioMedian": 0.8835446393343525,
+        "cash": 83.54817368364964
+      },
+      "traj/reader/none/run5": {
+        "n": 200,
+        "bands": [
+          47.38841405508072,
+          44.54069298952458,
+          48.843537414965986,
+          43.68005266622778
+        ],
+        "reach": 29.5,
+        "clear": 8,
+        "clearGivenReach": 27.11864406779661,
+        "deaths": 7.88,
+        "core": {
+          "top": 69.64395712701737,
+          "rest": 27.070257137072282
+        },
+        "regularDailyVisit": 66.49002493765586,
+        "otherDailyVisit": 51.95725215560863,
+        "premiumRatio": 1.2797063389442247,
+        "absence7Exposure": 0.9816918060979543,
+        "absence10Exposure": 0.2042205582028591,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6747728487439871,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.78,
+        "finalSamples": 59,
+        "finalPowerMedian": 227.668658418975,
+        "finalRatioMedian": 0.9245380620894058,
+        "cash": 90.32638319717508
+      },
+      "traj/reader/none/run10": {
+        "n": 200,
+        "bands": [
+          47.00285442435776,
+          43.72224465078724,
+          49.106644332774984,
+          40.836120401337794
+        ],
+        "reach": 26.5,
+        "clear": 7,
+        "clearGivenReach": 26.41509433962264,
+        "deaths": 7.945,
+        "core": {
+          "top": 69.27247509771782,
+          "rest": 26.421573578426422
+        },
+        "regularDailyVisit": 67.1485696708705,
+        "otherDailyVisit": 51.63214446214814,
+        "premiumRatio": 1.300518705359944,
+        "absence7Exposure": 1.413733410271206,
+        "absence10Exposure": 0.4291690709751875,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8568922474866744,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.77,
+        "finalSamples": 53,
+        "finalPowerMedian": 231.7112472416869,
+        "finalRatioMedian": 0.9201238240354817,
+        "cash": 82.90401299420229
+      },
+      "traj/reader/economy/run1": {
+        "n": 200,
+        "bands": [
+          45.81155977830562,
+          43.51079751977763,
+          48.35886214442013,
+          37.485448195576254
+        ],
+        "reach": 25,
+        "clear": 6.5,
+        "clearGivenReach": 26,
+        "deaths": 7.615,
+        "core": {
+          "top": 67.29208250166334,
+          "rest": 25.764616881011563
+        },
+        "regularDailyVisit": 67.4644467568505,
+        "otherDailyVisit": 50.85623769158318,
+        "premiumRatio": 1.3265717209752623,
+        "absence7Exposure": 1.3033039899394079,
+        "absence10Exposure": 0.33535307343470144,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8752893518518519,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.685,
+        "finalSamples": 50,
+        "finalPowerMedian": 217.8761351688447,
+        "finalRatioMedian": 0.8835446393343525,
+        "cash": 83.54817368364964
+      },
+      "traj/reader/economy/run5": {
+        "n": 200,
+        "bands": [
+          49.882249043273475,
+          50.430228208005985,
+          53.64797081623347,
+          44.17513682564503
+        ],
+        "reach": 38.5,
+        "clear": 14,
+        "clearGivenReach": 36.36363636363637,
+        "deaths": 7.775,
+        "core": {
+          "top": 70.76306913996628,
+          "rest": 31.439080459770114
+        },
+        "regularDailyVisit": 69.11803192881445,
+        "otherDailyVisit": 53.53076838598675,
+        "premiumRatio": 1.2911832580177969,
+        "absence7Exposure": 0.8703192240991714,
+        "absence10Exposure": 0.17342154280942898,
+        "returnMissP95": 3,
+        "returnAfter7": 0.5908248378127896,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 2.235,
+        "finalSamples": 77,
+        "finalPowerMedian": 235.27452968792716,
+        "finalRatioMedian": 0.9454956974558318,
+        "cash": 215.36483756582268
+      },
+      "traj/reader/economy/run10": {
+        "n": 200,
+        "bands": [
+          52.53118121790169,
+          51.850594227504246,
+          54.73906369915579,
+          45.80826313678299
+        ],
+        "reach": 47,
+        "clear": 17,
+        "clearGivenReach": 36.170212765957444,
+        "deaths": 8.305,
+        "core": {
+          "top": 72.420615293303,
+          "rest": 34.78192902923245
+        },
+        "regularDailyVisit": 66.79129096107323,
+        "otherDailyVisit": 52.97626642848029,
+        "premiumRatio": 1.260777617298563,
+        "absence7Exposure": 0.9583507452291405,
+        "absence10Exposure": 0.22287226633235827,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6719609040928528,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 2.555,
+        "finalSamples": 94,
+        "finalPowerMedian": 241.3378379753934,
+        "finalRatioMedian": 0.9714775904332772,
+        "cash": 285.91913157120865
+      },
+      "traj/reader/survival/run1": {
+        "n": 200,
+        "bands": [
+          45.81155977830562,
+          43.51079751977763,
+          48.35886214442013,
+          37.485448195576254
+        ],
+        "reach": 25,
+        "clear": 6.5,
+        "clearGivenReach": 26,
+        "deaths": 7.615,
+        "core": {
+          "top": 67.29208250166334,
+          "rest": 25.764616881011563
+        },
+        "regularDailyVisit": 67.4644467568505,
+        "otherDailyVisit": 50.85623769158318,
+        "premiumRatio": 1.3265717209752623,
+        "absence7Exposure": 1.3033039899394079,
+        "absence10Exposure": 0.33535307343470144,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8752893518518519,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.685,
+        "finalSamples": 50,
+        "finalPowerMedian": 217.8761351688447,
+        "finalRatioMedian": 0.8835446393343525,
+        "cash": 83.54817368364964
+      },
+      "traj/reader/survival/run5": {
+        "n": 200,
+        "bands": [
+          51.06382978723404,
+          47.761702127659575,
+          49.04663016801963,
+          41.3926499032882
+        ],
+        "reach": 57.5,
+        "clear": 18.5,
+        "clearGivenReach": 32.17391304347826,
+        "deaths": 8.505,
+        "core": {
+          "top": 69.89765794135013,
+          "rest": 29.389221556886227
+        },
+        "regularDailyVisit": 64.61422939740942,
+        "otherDailyVisit": 48.92562492303904,
+        "premiumRatio": 1.3206623216167166,
+        "absence7Exposure": 1.6344450027769697,
+        "absence10Exposure": 0.46018354447118565,
+        "returnMissP95": 4,
+        "returnAfter7": 0.982673907421774,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 2.925,
+        "finalSamples": 115,
+        "finalPowerMedian": 229.59117172186117,
+        "finalRatioMedian": 0.9316578475425445,
+        "cash": 112.89442372123689
+      },
+      "traj/reader/survival/run10": {
+        "n": 200,
+        "bands": [
+          60.723270440251575,
+          53.8210624417521,
+          53.8367284423342,
+          42.74281063483451
+        ],
+        "reach": 93.5,
+        "clear": 23,
+        "clearGivenReach": 24.59893048128342,
+        "deaths": 7.595,
+        "core": {
+          "top": 71.47297530651011,
+          "rest": 37.80512006350467
+        },
+        "regularDailyVisit": 59.16968964127368,
+        "otherDailyVisit": 44.04846084947909,
+        "premiumRatio": 1.3432862011561844,
+        "absence7Exposure": 2.632898193266358,
+        "absence10Exposure": 0.8000962521807135,
+        "returnMissP95": 4,
+        "returnAfter7": 1.6109475142906635,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 3.805,
+        "finalSamples": 187,
+        "finalPowerMedian": 227.14000915658218,
+        "finalRatioMedian": 0.8904092467225777,
+        "cash": 143.43300506718114
+      },
+      "traj/expert/none/run1": {
+        "n": 200,
+        "bands": [
+          45.66043712385176,
+          43.764125744812,
+          47.42841256602725,
+          40.96728307254623
+        ],
+        "reach": 26,
+        "clear": 8.5,
+        "clearGivenReach": 32.69230769230769,
+        "deaths": 7.825,
+        "core": {
+          "top": 68.51111666250313,
+          "rest": 24.895659432387312
+        },
+        "regularDailyVisit": 67.50235036038859,
+        "otherDailyVisit": 50.99373027906405,
+        "premiumRatio": 1.3237382319548077,
+        "absence7Exposure": 1.2031601072696962,
+        "absence10Exposure": 0.2138145973762412,
+        "returnMissP95": 4,
+        "returnAfter7": 0.9042334566378956,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.765,
+        "finalSamples": 52,
+        "finalPowerMedian": 231.28318202850676,
+        "finalRatioMedian": 0.916019922260935,
+        "cash": 86.6254339609605
+      },
+      "traj/expert/none/run5": {
+        "n": 200,
+        "bands": [
+          47.78200253485424,
+          44.22184732180514,
+          47.297692082968155,
+          42.40529606472968
+        ],
+        "reach": 21.5,
+        "clear": 11.5,
+        "clearGivenReach": 53.48837209302326,
+        "deaths": 7.89,
+        "core": {
+          "top": 68.79756468797565,
+          "rest": 26.428264604810998
+        },
+        "regularDailyVisit": 70.25515554002097,
+        "otherDailyVisit": 52.23433825101561,
+        "premiumRatio": 1.3449994370064595,
+        "absence7Exposure": 0.9944372475805837,
+        "absence10Exposure": 0.22860626381162844,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6608084358523726,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.595,
+        "finalSamples": 43,
+        "finalPowerMedian": 252.38039914668892,
+        "finalRatioMedian": 0.9996876477906498,
+        "cash": 91.70004164085952
+      },
+      "traj/expert/none/run10": {
+        "n": 200,
+        "bands": [
+          47.019445329933056,
+          45.24442626303948,
+          49.486301369863014,
+          40.26471612678509
+        ],
+        "reach": 25.5,
+        "clear": 7.5,
+        "clearGivenReach": 29.41176470588235,
+        "deaths": 7.91,
+        "core": {
+          "top": 68.7586816517237,
+          "rest": 27.10260941885851
+        },
+        "regularDailyVisit": 70.85714285714286,
+        "otherDailyVisit": 51.59479251423922,
+        "premiumRatio": 1.3733390407101178,
+        "absence7Exposure": 1.2938798015070758,
+        "absence10Exposure": 0.4227164124241867,
+        "returnMissP95": 3,
+        "returnAfter7": 0.75642965204236,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.515,
+        "finalSamples": 51,
+        "finalPowerMedian": 242.07334680552526,
+        "finalRatioMedian": 0.9391267737095219,
+        "cash": 88.49506332532876
+      },
+      "traj/expert/economy/run1": {
+        "n": 200,
+        "bands": [
+          45.66043712385176,
+          43.764125744812,
+          47.42841256602725,
+          40.96728307254623
+        ],
+        "reach": 26,
+        "clear": 8.5,
+        "clearGivenReach": 32.69230769230769,
+        "deaths": 7.825,
+        "core": {
+          "top": 68.51111666250313,
+          "rest": 24.895659432387312
+        },
+        "regularDailyVisit": 67.50235036038859,
+        "otherDailyVisit": 50.99373027906405,
+        "premiumRatio": 1.3237382319548077,
+        "absence7Exposure": 1.2031601072696962,
+        "absence10Exposure": 0.2138145973762412,
+        "returnMissP95": 4,
+        "returnAfter7": 0.9042334566378956,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.765,
+        "finalSamples": 52,
+        "finalPowerMedian": 231.28318202850676,
+        "finalRatioMedian": 0.916019922260935,
+        "cash": 86.62543396096049
+      },
+      "traj/expert/economy/run5": {
+        "n": 200,
+        "bands": [
+          49.5313197440857,
+          49.72634870992963,
+          51.48285449490269,
+          44.944401344711665
+        ],
+        "reach": 37.5,
+        "clear": 18.5,
+        "clearGivenReach": 49.333333333333336,
+        "deaths": 7.76,
+        "core": {
+          "top": 71.54453463805181,
+          "rest": 30.824340255735923
+        },
+        "regularDailyVisit": 69.70149253731343,
+        "otherDailyVisit": 53.83142467872003,
+        "premiumRatio": 1.2948104746123683,
+        "absence7Exposure": 0.7604812010358278,
+        "absence10Exposure": 0.13111744845445308,
+        "returnMissP95": 3,
+        "returnAfter7": 0.5721363689984664,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.835,
+        "finalSamples": 75,
+        "finalPowerMedian": 255.42698983846054,
+        "finalRatioMedian": 1.0031442300279696,
+        "cash": 217.69862467564772
+      },
+      "traj/expert/economy/run10": {
+        "n": 200,
+        "bands": [
+          53.825818769275955,
+          53.212290502793294,
+          54.492926877864114,
+          46.43005396430054
+        ],
+        "reach": 44.5,
+        "clear": 25.5,
+        "clearGivenReach": 57.30337078651685,
+        "deaths": 7.995,
+        "core": {
+          "top": 73.71607107986722,
+          "rest": 34.083415759973626
+        },
+        "regularDailyVisit": 71.29262490087233,
+        "otherDailyVisit": 52.47521596378821,
+        "premiumRatio": 1.3585961218352969,
+        "absence7Exposure": 1.0183762871934916,
+        "absence10Exposure": 0.20196848153837402,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6994101988621536,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 2.2,
+        "finalSamples": 89,
+        "finalPowerMedian": 264.3801513195389,
+        "finalRatioMedian": 1.0059010340046146,
+        "cash": 307.9643710111397
+      },
+      "fresh/reader/none": {
+        "n": 1000,
+        "bands": [
+          46.72216770599221,
+          44.14145717937793,
+          48.13314547375837,
+          41.31437927954748
+        ],
+        "reach": 24.4,
+        "clear": 8.2,
+        "clearGivenReach": 33.60655737704918,
+        "deaths": 7.703,
+        "core": {
+          "top": 69.17200082593433,
+          "rest": 25.797764336247248
+        },
+        "regularDailyVisit": 66.52892561983471,
+        "otherDailyVisit": 51.44039511833322,
+        "premiumRatio": 1.2933206571759783,
+        "absence7Exposure": 1.2037426408746845,
+        "absence10Exposure": 0.26958428451279587,
+        "returnMissP95": 3,
+        "returnAfter7": 0.806303311501846,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.681,
+        "finalSamples": 244,
+        "finalPowerMedian": 234.820187885041,
+        "finalRatioMedian": 0.9213757940601166,
+        "cash": 88.74175441071158
+      },
+      "traj/expert/survival/run1": {
+        "n": 200,
+        "bands": [
+          45.66043712385176,
+          43.764125744812,
+          47.42841256602725,
+          40.96728307254623
+        ],
+        "reach": 26,
+        "clear": 8.5,
+        "clearGivenReach": 32.69230769230769,
+        "deaths": 7.825,
+        "core": {
+          "top": 68.51111666250313,
+          "rest": 24.895659432387312
+        },
+        "regularDailyVisit": 67.50235036038859,
+        "otherDailyVisit": 50.99373027906405,
+        "premiumRatio": 1.3237382319548077,
+        "absence7Exposure": 1.2031601072696962,
+        "absence10Exposure": 0.2138145973762412,
+        "returnMissP95": 4,
+        "returnAfter7": 0.9042334566378956,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.765,
+        "finalSamples": 52,
+        "finalPowerMedian": 231.28318202850676,
+        "finalRatioMedian": 0.916019922260935,
+        "cash": 86.6254339609605
+      },
+      "traj/expert/survival/run5": {
+        "n": 200,
+        "bands": [
+          51.70777988614801,
+          46.69234634064646,
+          49.37839937839938,
+          42.16844143272023
+        ],
+        "reach": 60,
+        "clear": 19.5,
+        "clearGivenReach": 32.5,
+        "deaths": 8.395,
+        "core": {
+          "top": 69.30545922916873,
+          "rest": 30.227726727926488
+        },
+        "regularDailyVisit": 66.15512235586894,
+        "otherDailyVisit": 49.25117148019969,
+        "premiumRatio": 1.3432192649968762,
+        "absence7Exposure": 1.3663170816321084,
+        "absence10Exposure": 0.333573506257839,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8613979554771418,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 2.65,
+        "finalSamples": 120,
+        "finalPowerMedian": 238.12699167408613,
+        "finalRatioMedian": 0.9388904369621953,
+        "cash": 111.46431087168239
+      },
+      "traj/expert/survival/run10": {
+        "n": 200,
+        "bands": [
+          60.689004247286455,
+          53.84493670886076,
+          51.92926045016077,
+          42.615080485738495
+        ],
+        "reach": 91.5,
+        "clear": 25,
+        "clearGivenReach": 27.3224043715847,
+        "deaths": 7.34,
+        "core": {
+          "top": 71.9385449615906,
+          "rest": 37.20665146841893
+        },
+        "regularDailyVisit": 60.08190008190008,
+        "otherDailyVisit": 43.097658585951514,
+        "premiumRatio": 1.3940873368346953,
+        "absence7Exposure": 2.7166569187019745,
+        "absence10Exposure": 0.7522739648669907,
+        "returnMissP95": 4,
+        "returnAfter7": 1.8566455413728467,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 3.16,
+        "finalSamples": 183,
+        "finalPowerMedian": 232.11103797700147,
+        "finalRatioMedian": 0.9153143736385638,
+        "cash": 129.7773238308526
+      },
+      "fresh/balanced/none": {
+        "n": 1000,
+        "bands": [
+          43.64977549711353,
+          40.92561811759817,
+          42.327497425334705,
+          34.4
+        ],
+        "reach": 6.7,
+        "clear": 0.6,
+        "clearGivenReach": 8.955223880597014,
+        "deaths": 7.212,
+        "core": {
+          "top": 66.5784073608261,
+          "rest": 21.435220676815245
+        },
+        "regularDailyVisit": 70.4756242568371,
+        "otherDailyVisit": 54.66876351484176,
+        "premiumRatio": 1.2891388011309972,
+        "absence7Exposure": 0.7018727144347606,
+        "absence10Exposure": 0.11908651160830022,
+        "returnMissP95": 3,
+        "returnAfter7": 0.5243966619051199,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.092,
+        "finalSamples": 67,
+        "finalPowerMedian": 191.25501244934804,
+        "finalRatioMedian": 0.7380604352039253,
+        "cash": 53.034082413000206
+      },
+      "fresh/expert/none": {
+        "n": 1000,
+        "bands": [
+          47.02265884962763,
+          44.606769956214215,
+          47.86672084518489,
+          40.847570445972934
+        ],
+        "reach": 25.2,
+        "clear": 10.5,
+        "clearGivenReach": 41.666666666666664,
+        "deaths": 7.735,
+        "core": {
+          "top": 69.42146656825065,
+          "rest": 25.503570970363086
+        },
+        "regularDailyVisit": 68.54867897213174,
+        "otherDailyVisit": 51.28051719266757,
+        "premiumRatio": 1.336739228167014,
+        "absence7Exposure": 1.2261753020714536,
+        "absence10Exposure": 0.30337589540612864,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8007642381500941,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 1.635,
+        "finalSamples": 252,
+        "finalPowerMedian": 239.09238346146753,
+        "finalRatioMedian": 0.943592415127765,
+        "cash": 92.90863083722886
+      }
+    },
+    "xp": {
+      "traj/reader/none/run1": {
+        "n": 200,
+        "bands": [
+          45.81155977830562,
+          43.509820666097355,
+          48.01901743264659,
+          38.64678899082569
+        ],
+        "reach": 25.5,
+        "clear": 6.5,
+        "clearGivenReach": 25.49019607843137,
+        "deaths": 7.63,
+        "core": {
+          "top": 67.53091344236138,
+          "rest": 25.710887663531192
+        },
+        "regularDailyVisit": 67.26149622512011,
+        "otherDailyVisit": 51.00751879699248,
+        "premiumRatio": 1.3186584607813938,
+        "absence7Exposure": 1.3135285807018213,
+        "absence10Exposure": 0.31692695406468363,
+        "returnMissP95": 3,
+        "returnAfter7": 0.896471949103528,
+        "xpBonusPerRun": 33.835,
+        "xpBoostedPerRun": 0.785,
+        "regulars": 1.635,
+        "finalSamples": 51,
+        "finalPowerMedian": 233.49242688660402,
+        "finalRatioMedian": 0.888272317093229,
+        "cash": 82.41719048105865
+      },
+      "traj/reader/none/run5": {
+        "n": 200,
+        "bands": [
+          47.413383958234455,
+          44.23663346208579,
+          48.82943143812709,
+          43.32865168539326
+        ],
+        "reach": 25.5,
+        "clear": 6,
+        "clearGivenReach": 23.529411764705884,
+        "deaths": 7.87,
+        "core": {
+          "top": 69.65332653581443,
+          "rest": 27.4059003051882
+        },
+        "regularDailyVisit": 66.46566164154103,
+        "otherDailyVisit": 51.837168430947806,
+        "premiumRatio": 1.2822008542013597,
+        "absence7Exposure": 0.983534897275244,
+        "absence10Exposure": 0.17485064840448783,
+        "returnMissP95": 3,
+        "returnAfter7": 0.7158928206177132,
+        "xpBonusPerRun": 31.595,
+        "xpBoostedPerRun": 0.755,
+        "regulars": 1.72,
+        "finalSamples": 51,
+        "finalPowerMedian": 226.44975275482994,
+        "finalRatioMedian": 0.9166624898209221,
+        "cash": 88.92393266228528
+      },
+      "traj/reader/none/run10": {
+        "n": 200,
+        "bands": [
+          47.117834394904456,
+          43.95471087747675,
+          48.319911135795614,
+          39.68617195161818
+        ],
+        "reach": 28,
+        "clear": 8,
+        "clearGivenReach": 28.571428571428573,
+        "deaths": 7.945,
+        "core": {
+          "top": 68.69739982414269,
+          "rest": 26.377833753148614
+        },
+        "regularDailyVisit": 66.6038328620798,
+        "otherDailyVisit": 51.640606011504495,
+        "premiumRatio": 1.2897569956332773,
+        "absence7Exposure": 1.3778750583085149,
+        "absence10Exposure": 0.4018802253399835,
+        "returnMissP95": 3,
+        "returnAfter7": 0.847457627118644,
+        "xpBonusPerRun": 31.795,
+        "xpBoostedPerRun": 0.835,
+        "regulars": 1.815,
+        "finalSamples": 56,
+        "finalPowerMedian": 233.1734445492801,
+        "finalRatioMedian": 0.9222428414198574,
+        "cash": 83.11340337716014
+      },
+      "traj/reader/economy/run1": {
+        "n": 200,
+        "bands": [
+          45.81155977830562,
+          43.509820666097355,
+          48.01901743264659,
+          38.64678899082569
+        ],
+        "reach": 25.5,
+        "clear": 6.5,
+        "clearGivenReach": 25.49019607843137,
+        "deaths": 7.63,
+        "core": {
+          "top": 67.53091344236138,
+          "rest": 25.710887663531192
+        },
+        "regularDailyVisit": 67.26149622512011,
+        "otherDailyVisit": 51.00751879699248,
+        "premiumRatio": 1.3186584607813938,
+        "absence7Exposure": 1.3135285807018213,
+        "absence10Exposure": 0.31692695406468363,
+        "returnMissP95": 3,
+        "returnAfter7": 0.896471949103528,
+        "xpBonusPerRun": 33.835,
+        "xpBoostedPerRun": 0.785,
+        "regulars": 1.635,
+        "finalSamples": 51,
+        "finalPowerMedian": 233.49242688660402,
+        "finalRatioMedian": 0.888272317093229,
+        "cash": 82.41719048105863
+      },
+      "traj/reader/economy/run5": {
+        "n": 200,
+        "bands": [
+          49.66770048737262,
+          50.62977099236641,
+          52.94117647058823,
+          43.81512156024579
+        ],
+        "reach": 36.5,
+        "clear": 12.5,
+        "clearGivenReach": 34.24657534246575,
+        "deaths": 7.735,
+        "core": {
+          "top": 70.47362755651238,
+          "rest": 31.351502706738845
+        },
+        "regularDailyVisit": 69.36862420733388,
+        "otherDailyVisit": 53.108760549883904,
+        "premiumRatio": 1.306161610421645,
+        "absence7Exposure": 0.9622886866059818,
+        "absence10Exposure": 0.19830949284785435,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6498877466619402,
+        "xpBonusPerRun": 34.635,
+        "xpBoostedPerRun": 0.795,
+        "regulars": 2.17,
+        "finalSamples": 73,
+        "finalPowerMedian": 231.4688270891662,
+        "finalRatioMedian": 0.9317380491494008,
+        "cash": 211.47400282081912
+      },
+      "traj/reader/economy/run10": {
+        "n": 200,
+        "bands": [
+          52.725153016613234,
+          52.66182186919047,
+          55.581260844418736,
+          46.81933842239186
+        ],
+        "reach": 52,
+        "clear": 18,
+        "clearGivenReach": 34.61538461538461,
+        "deaths": 8.155,
+        "core": {
+          "top": 72.24109482674949,
+          "rest": 35.750078296273095
+        },
+        "regularDailyVisit": 66.26923910687188,
+        "otherDailyVisit": 52.499608211879014,
+        "premiumRatio": 1.2622806410177596,
+        "absence7Exposure": 1.0077222191795827,
+        "absence10Exposure": 0.2574073059860891,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6967233806230121,
+        "xpBonusPerRun": 36.49,
+        "xpBoostedPerRun": 0.86,
+        "regulars": 2.695,
+        "finalSamples": 104,
+        "finalPowerMedian": 239.03628914251772,
+        "finalRatioMedian": 0.9704363791992087,
+        "cash": 281.93698198353763
+      },
+      "traj/reader/survival/run1": {
+        "n": 200,
+        "bands": [
+          45.81155977830562,
+          43.509820666097355,
+          48.01901743264659,
+          38.64678899082569
+        ],
+        "reach": 25.5,
+        "clear": 6.5,
+        "clearGivenReach": 25.49019607843137,
+        "deaths": 7.63,
+        "core": {
+          "top": 67.53091344236138,
+          "rest": 25.710887663531192
+        },
+        "regularDailyVisit": 67.26149622512011,
+        "otherDailyVisit": 51.00751879699248,
+        "premiumRatio": 1.3186584607813938,
+        "absence7Exposure": 1.3135285807018213,
+        "absence10Exposure": 0.31692695406468363,
+        "returnMissP95": 3,
+        "returnAfter7": 0.896471949103528,
+        "xpBonusPerRun": 33.835,
+        "xpBoostedPerRun": 0.785,
+        "regulars": 1.635,
+        "finalSamples": 51,
+        "finalPowerMedian": 233.49242688660402,
+        "finalRatioMedian": 0.888272317093229,
+        "cash": 82.41719048105863
+      },
+      "traj/reader/survival/run5": {
+        "n": 200,
+        "bands": [
+          51.338582677165356,
+          47.800438226866675,
+          49.59880574734092,
+          41.8892760356175
+        ],
+        "reach": 56,
+        "clear": 18,
+        "clearGivenReach": 32.142857142857146,
+        "deaths": 8.355,
+        "core": {
+          "top": 69.68855385836143,
+          "rest": 30.583058305830583
+        },
+        "regularDailyVisit": 64.24861185742432,
+        "otherDailyVisit": 48.78198818897638,
+        "premiumRatio": 1.3170560332336567,
+        "absence7Exposure": 1.4988843680273,
+        "absence10Exposure": 0.3543772148575929,
+        "returnMissP95": 4,
+        "returnAfter7": 0.956445724276238,
+        "xpBonusPerRun": 56.74,
+        "xpBoostedPerRun": 1.28,
+        "regulars": 3.04,
+        "finalSamples": 112,
+        "finalPowerMedian": 231.43390538437512,
+        "finalRatioMedian": 0.930466773536033,
+        "cash": 117.74873932383234
+      },
+      "traj/reader/survival/run10": {
+        "n": 200,
+        "bands": [
+          60.23925704391626,
+          53.569211669770326,
+          53.9828431372549,
+          43.037627025542434
+        ],
+        "reach": 94.5,
+        "clear": 16.5,
+        "clearGivenReach": 17.46031746031746,
+        "deaths": 7.56,
+        "core": {
+          "top": 71.07510786299198,
+          "rest": 38.459016393442624
+        },
+        "regularDailyVisit": 58.5503651646686,
+        "otherDailyVisit": 43.7959612466441,
+        "premiumRatio": 1.336889601187942,
+        "absence7Exposure": 2.4195480316218156,
+        "absence10Exposure": 0.6428172163219675,
+        "returnMissP95": 4,
+        "returnAfter7": 1.6254509105132775,
+        "xpBonusPerRun": 83.08,
+        "xpBoostedPerRun": 1.815,
+        "regulars": 3.765,
+        "finalSamples": 189,
+        "finalPowerMedian": 221.00339647015636,
+        "finalRatioMedian": 0.8680507802931189,
+        "cash": 144.1893673089925
+      },
+      "traj/expert/none/run1": {
+        "n": 200,
+        "bands": [
+          45.66043712385176,
+          43.73973727422003,
+          47.66177270255574,
+          40.84166954122111
+        ],
+        "reach": 26.5,
+        "clear": 9.5,
+        "clearGivenReach": 35.84905660377358,
+        "deaths": 7.87,
+        "core": {
+          "top": 69.19825978868863,
+          "rest": 24.531796665980654
+        },
+        "regularDailyVisit": 67.17464187747638,
+        "otherDailyVisit": 51.17131798737014,
+        "premiumRatio": 1.3127401153524345,
+        "absence7Exposure": 1.1895349672967728,
+        "absence10Exposure": 0.23359447998274996,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8602004876727174,
+        "xpBonusPerRun": 36.945,
+        "xpBoostedPerRun": 0.88,
+        "regulars": 1.835,
+        "finalSamples": 53,
+        "finalPowerMedian": 234.232432871219,
+        "finalRatioMedian": 0.9256798294967219,
+        "cash": 88.10738057582337
+      },
+      "traj/expert/none/run5": {
+        "n": 200,
+        "bands": [
+          47.60697305863708,
+          44.41182637869574,
+          46.79245283018868,
+          39.94864269992663
+        ],
+        "reach": 23,
+        "clear": 9.5,
+        "clearGivenReach": 41.30434782608695,
+        "deaths": 7.88,
+        "core": {
+          "top": 68.48089945061965,
+          "rest": 26.138172556510664
+        },
+        "regularDailyVisit": 69.93418773813647,
+        "otherDailyVisit": 51.90125338753388,
+        "premiumRatio": 1.3474469916160814,
+        "absence7Exposure": 1.150813115496359,
+        "absence10Exposure": 0.3282647247481417,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6864667974222471,
+        "xpBonusPerRun": 29.39,
+        "xpBoostedPerRun": 0.715,
+        "regulars": 1.685,
+        "finalSamples": 46,
+        "finalPowerMedian": 243.27092758037085,
+        "finalRatioMedian": 0.9464624437794165,
+        "cash": 88.54682941190744
+      },
+      "traj/expert/none/run10": {
+        "n": 200,
+        "bands": [
+          46.610304673791674,
+          45.15201314708299,
+          49.98567745631624,
+          40.21621621621622
+        ],
+        "reach": 26,
+        "clear": 8,
+        "clearGivenReach": 30.76923076923077,
+        "deaths": 7.815,
+        "core": {
+          "top": 69.356695229569,
+          "rest": 26.69031719532554
+        },
+        "regularDailyVisit": 68.73145400593472,
+        "otherDailyVisit": 51.81518151815182,
+        "premiumRatio": 1.326473284318358,
+        "absence7Exposure": 1.1768636768636769,
+        "absence10Exposure": 0.3007128007128007,
+        "returnMissP95": 3,
+        "returnAfter7": 0.7493235273711233,
+        "xpBonusPerRun": 34.915,
+        "xpBoostedPerRun": 0.805,
+        "regulars": 1.65,
+        "finalSamples": 52,
+        "finalPowerMedian": 235.00338222100115,
+        "finalRatioMedian": 0.9270715251045624,
+        "cash": 87.04621831226734
+      },
+      "traj/expert/economy/run1": {
+        "n": 200,
+        "bands": [
+          45.66043712385176,
+          43.73973727422003,
+          47.66177270255574,
+          40.84166954122111
+        ],
+        "reach": 26.5,
+        "clear": 9.5,
+        "clearGivenReach": 35.84905660377358,
+        "deaths": 7.87,
+        "core": {
+          "top": 69.19825978868863,
+          "rest": 24.531796665980654
+        },
+        "regularDailyVisit": 67.17464187747638,
+        "otherDailyVisit": 51.17131798737014,
+        "premiumRatio": 1.3127401153524345,
+        "absence7Exposure": 1.1895349672967728,
+        "absence10Exposure": 0.23359447998274996,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8602004876727174,
+        "xpBonusPerRun": 36.945,
+        "xpBoostedPerRun": 0.88,
+        "regulars": 1.835,
+        "finalSamples": 53,
+        "finalPowerMedian": 234.232432871219,
+        "finalRatioMedian": 0.9256798294967219,
+        "cash": 88.10738057582341
+      },
+      "traj/expert/economy/run5": {
+        "n": 200,
+        "bands": [
+          49.844190532719985,
+          49.96116504854369,
+          52.5383707201889,
+          44.7531696789857
+        ],
+        "reach": 35.5,
+        "clear": 17.5,
+        "clearGivenReach": 49.29577464788732,
+        "deaths": 7.765,
+        "core": {
+          "top": 71.96531791907515,
+          "rest": 30.844485463774802
+        },
+        "regularDailyVisit": 69.5966285370259,
+        "otherDailyVisit": 54.12737614129621,
+        "premiumRatio": 1.2857935022630347,
+        "absence7Exposure": 0.6756306995939559,
+        "absence10Exposure": 0.09319044132330427,
+        "returnMissP95": 3,
+        "returnAfter7": 0.530488168325684,
+        "xpBonusPerRun": 27.92,
+        "xpBoostedPerRun": 0.675,
+        "regulars": 1.85,
+        "finalSamples": 71,
+        "finalPowerMedian": 257.9091385596657,
+        "finalRatioMedian": 1.0058958865566043,
+        "cash": 215.49118035464886
+      },
+      "traj/expert/economy/run10": {
+        "n": 200,
+        "bands": [
+          53.61957796014068,
+          52.93609671848014,
+          55.0930558335001,
+          47.08350818296265
+        ],
+        "reach": 43,
+        "clear": 23.5,
+        "clearGivenReach": 54.651162790697676,
+        "deaths": 8.075,
+        "core": {
+          "top": 73.80603574567829,
+          "rest": 34.30548690064261
+        },
+        "regularDailyVisit": 71.54579142403388,
+        "otherDailyVisit": 52.719062259800154,
+        "premiumRatio": 1.3571142648830774,
+        "absence7Exposure": 0.9713730643963202,
+        "absence10Exposure": 0.19141763327809838,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6731371321227301,
+        "xpBonusPerRun": 41.88,
+        "xpBoostedPerRun": 0.935,
+        "regulars": 2.155,
+        "finalSamples": 86,
+        "finalPowerMedian": 262.54207155957477,
+        "finalRatioMedian": 1.0041734238415843,
+        "cash": 307.31479812428415
+      },
+      "fresh/reader/none": {
+        "n": 1000,
+        "bands": [
+          46.72216770599221,
+          44.14433604566949,
+          48.20458924505167,
+          41.62662006698704
+        ],
+        "reach": 25.9,
+        "clear": 9.4,
+        "clearGivenReach": 36.293436293436294,
+        "deaths": 7.654,
+        "core": {
+          "top": 69.0986241481291,
+          "rest": 25.9906462585034
+        },
+        "regularDailyVisit": 66.24807962059982,
+        "otherDailyVisit": 51.30952880459866,
+        "premiumRatio": 1.2911457416202636,
+        "absence7Exposure": 1.2412775093934514,
+        "absence10Exposure": 0.28105803065545415,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8302725827106289,
+        "xpBonusPerRun": 36.961,
+        "xpBoostedPerRun": 0.853,
+        "regulars": 1.722,
+        "finalSamples": 259,
+        "finalPowerMedian": 235.14832371750464,
+        "finalRatioMedian": 0.9328204951174992,
+        "cash": 88.91970980742286
+      },
+      "fresh/expert/none": {
+        "n": 1000,
+        "bands": [
+          47.02265884962763,
+          44.667059516794346,
+          47.99171366095063,
+          40.873885722636274
+        ],
+        "reach": 26.2,
+        "clear": 10.1,
+        "clearGivenReach": 38.54961832061068,
+        "deaths": 7.721,
+        "core": {
+          "top": 69.35898414637249,
+          "rest": 25.760407816482584
+        },
+        "regularDailyVisit": 68.27274682727469,
+        "otherDailyVisit": 51.26372308125057,
+        "premiumRatio": 1.3317945463903513,
+        "absence7Exposure": 1.2283044058744994,
+        "absence10Exposure": 0.2937249666221629,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8183420529893966,
+        "xpBonusPerRun": 34.837,
+        "xpBoostedPerRun": 0.821,
+        "regulars": 1.669,
+        "finalSamples": 262,
+        "finalPowerMedian": 239.09238346146753,
+        "finalRatioMedian": 0.938403196206764,
+        "cash": 92.85418668233702
+      },
+      "traj/expert/survival/run1": {
+        "n": 200,
+        "bands": [
+          45.66043712385176,
+          43.73973727422003,
+          47.66177270255574,
+          40.84166954122111
+        ],
+        "reach": 26.5,
+        "clear": 9.5,
+        "clearGivenReach": 35.84905660377358,
+        "deaths": 7.87,
+        "core": {
+          "top": 69.19825978868863,
+          "rest": 24.531796665980654
+        },
+        "regularDailyVisit": 67.17464187747638,
+        "otherDailyVisit": 51.17131798737014,
+        "premiumRatio": 1.3127401153524345,
+        "absence7Exposure": 1.1895349672967728,
+        "absence10Exposure": 0.23359447998274996,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8602004876727174,
+        "xpBonusPerRun": 36.945,
+        "xpBoostedPerRun": 0.88,
+        "regulars": 1.835,
+        "finalSamples": 53,
+        "finalPowerMedian": 234.232432871219,
+        "finalRatioMedian": 0.9256798294967219,
+        "cash": 88.10738057582337
+      },
+      "traj/expert/survival/run5": {
+        "n": 200,
+        "bands": [
+          51.49454372924245,
+          45.99064483795523,
+          49.27842986338272,
+          41.518481518481515
+        ],
+        "reach": 57,
+        "clear": 17,
+        "clearGivenReach": 29.82456140350877,
+        "deaths": 8.51,
+        "core": {
+          "top": 69.18961759461067,
+          "rest": 29.507932672948378
+        },
+        "regularDailyVisit": 66.15321421236393,
+        "otherDailyVisit": 49.28203069511781,
+        "premiumRatio": 1.3423394547521657,
+        "absence7Exposure": 1.4093203049500698,
+        "absence10Exposure": 0.34897455170192204,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8967674661105318,
+        "xpBonusPerRun": 56.015,
+        "xpBoostedPerRun": 1.25,
+        "regulars": 2.65,
+        "finalSamples": 114,
+        "finalPowerMedian": 232.36487081044328,
+        "finalRatioMedian": 0.9251790717024106,
+        "cash": 110.28130731664665
+      },
+      "traj/expert/survival/run10": {
+        "n": 200,
+        "bands": [
+          60.607969759017166,
+          54.218401782871695,
+          52.12765957446808,
+          42.891600454029515
+        ],
+        "reach": 91,
+        "clear": 24.5,
+        "clearGivenReach": 26.923076923076923,
+        "deaths": 7.28,
+        "core": {
+          "top": 72.11007513352041,
+          "rest": 37.37530331625775
+        },
+        "regularDailyVisit": 58.922116332566546,
+        "otherDailyVisit": 43.44617954846045,
+        "premiumRatio": 1.3562093823887098,
+        "absence7Exposure": 2.687920622979485,
+        "absence10Exposure": 0.7848240245613322,
+        "returnMissP95": 4,
+        "returnAfter7": 1.734648139847602,
+        "xpBonusPerRun": 90.755,
+        "xpBoostedPerRun": 1.955,
+        "regulars": 3.31,
+        "finalSamples": 182,
+        "finalPowerMedian": 236.35081279558577,
+        "finalRatioMedian": 0.9186692270698548,
+        "cash": 130.96977625069528
+      },
+      "fresh/balanced/none": {
+        "n": 1000,
+        "bands": [
+          43.64977549711353,
+          40.9227735104837,
+          42.18040233614536,
+          34.47504302925989
+        ],
+        "reach": 6.8,
+        "clear": 0.8,
+        "clearGivenReach": 11.764705882352942,
+        "deaths": 7.213,
+        "core": {
+          "top": 66.42029894083875,
+          "rest": 21.552615820131745
+        },
+        "regularDailyVisit": 70.56080214527223,
+        "otherDailyVisit": 54.56082441027292,
+        "premiumRatio": 1.2932502928234122,
+        "absence7Exposure": 0.722331560654914,
+        "absence10Exposure": 0.129810309451028,
+        "returnMissP95": 3,
+        "returnAfter7": 0.5178441233104635,
+        "xpBonusPerRun": 16.445,
+        "xpBoostedPerRun": 0.436,
+        "regulars": 1.095,
+        "finalSamples": 68,
+        "finalPowerMedian": 187.98247969161758,
+        "finalRatioMedian": 0.7548179795842213,
+        "cash": 53.426870651638104
+      }
+    },
+    "xp2": {
+      "traj/reader/none/run1": {
+        "n": 200,
+        "bands": [
+          45.82739509105305,
+          43.65655702691158,
+          47.9014598540146,
+          39.00917431192661
+        ],
+        "reach": 25,
+        "clear": 6,
+        "clearGivenReach": 24,
+        "deaths": 7.685,
+        "core": {
+          "top": 67.49412072119154,
+          "rest": 25.758871312526722
+        },
+        "regularDailyVisit": 68.18635607321131,
+        "otherDailyVisit": 51.251652522495625,
+        "premiumRatio": 1.3304225857553105,
+        "absence7Exposure": 1.1869660542829061,
+        "absence10Exposure": 0.26839041354804566,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8246250088860454,
+        "xpBonusPerRun": 69.41,
+        "xpBoostedPerRun": 2.115,
+        "regulars": 1.665,
+        "finalSamples": 50,
+        "finalPowerMedian": 228.72457150025272,
+        "finalRatioMedian": 0.8912127646122281,
+        "cash": 84.66176208084167
+      },
+      "traj/reader/none/run5": {
+        "n": 200,
+        "bands": [
+          47.431642168484274,
+          44.590761750405186,
+          48.56670341786108,
+          42.28284278535535
+        ],
+        "reach": 26.5,
+        "clear": 8,
+        "clearGivenReach": 30.18867924528302,
+        "deaths": 7.835,
+        "core": {
+          "top": 69.44935589795404,
+          "rest": 27.08269289886259
+        },
+        "regularDailyVisit": 66.42101890419737,
+        "otherDailyVisit": 51.70333278607782,
+        "premiumRatio": 1.284656429770473,
+        "absence7Exposure": 1.084227760596689,
+        "absence10Exposure": 0.2401309805348372,
+        "returnMissP95": 3,
+        "returnAfter7": 0.7293796864349011,
+        "xpBonusPerRun": 73.76,
+        "xpBoostedPerRun": 2.295,
+        "regulars": 1.77,
+        "finalSamples": 53,
+        "finalPowerMedian": 231.37708528764608,
+        "finalRatioMedian": 0.9233163829954792,
+        "cash": 87.88100205004132
+      },
+      "traj/reader/none/run10": {
+        "n": 200,
+        "bands": [
+          46.909843899330994,
+          44.58443405811827,
+          48.67768595041322,
+          41.33105802047782
+        ],
+        "reach": 27,
+        "clear": 8.5,
+        "clearGivenReach": 31.48148148148148,
+        "deaths": 7.845,
+        "core": {
+          "top": 69.44027986006996,
+          "rest": 26.232701178882625
+        },
+        "regularDailyVisit": 66.69868715978227,
+        "otherDailyVisit": 51.62604939277855,
+        "premiumRatio": 1.2919579929955298,
+        "absence7Exposure": 1.3340081703481437,
+        "absence10Exposure": 0.38682621741802536,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8745169818995322,
+        "xpBonusPerRun": 76.3,
+        "xpBoostedPerRun": 2.385,
+        "regulars": 1.74,
+        "finalSamples": 54,
+        "finalPowerMedian": 243.30573579371026,
+        "finalRatioMedian": 0.9316603339338536,
+        "cash": 83.66798383293815
+      },
+      "traj/reader/economy/run1": {
+        "n": 200,
+        "bands": [
+          45.82739509105305,
+          43.65655702691158,
+          47.9014598540146,
+          39.00917431192661
+        ],
+        "reach": 25,
+        "clear": 6,
+        "clearGivenReach": 24,
+        "deaths": 7.685,
+        "core": {
+          "top": 67.49412072119154,
+          "rest": 25.758871312526722
+        },
+        "regularDailyVisit": 68.18635607321131,
+        "otherDailyVisit": 51.251652522495625,
+        "premiumRatio": 1.3304225857553105,
+        "absence7Exposure": 1.1869660542829061,
+        "absence10Exposure": 0.26839041354804566,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8246250088860454,
+        "xpBonusPerRun": 69.41,
+        "xpBoostedPerRun": 2.115,
+        "regulars": 1.665,
+        "finalSamples": 50,
+        "finalPowerMedian": 228.72457150025272,
+        "finalRatioMedian": 0.8912127646122281,
+        "cash": 84.66176208084167
+      },
+      "traj/reader/economy/run5": {
+        "n": 200,
+        "bands": [
+          49.35925762262483,
+          51.19204054815093,
+          51.95672191528545,
+          44.16624937406109
+        ],
+        "reach": 36.5,
+        "clear": 13.5,
+        "clearGivenReach": 36.986301369863014,
+        "deaths": 7.945,
+        "core": {
+          "top": 70.4855195911414,
+          "rest": 31.45000903995661
+        },
+        "regularDailyVisit": 69.88714560968896,
+        "otherDailyVisit": 53.14956390653602,
+        "premiumRatio": 1.3149147513719235,
+        "absence7Exposure": 1.0668698799771386,
+        "absence10Exposure": 0.21273893440020322,
+        "returnMissP95": 3,
+        "returnAfter7": 0.7436444341961146,
+        "xpBonusPerRun": 75.225,
+        "xpBoostedPerRun": 2.2,
+        "regulars": 2.03,
+        "finalSamples": 73,
+        "finalPowerMedian": 244.78952730739724,
+        "finalRatioMedian": 0.9912127906392013,
+        "cash": 211.44210719285581
+      },
+      "traj/reader/economy/run10": {
+        "n": 200,
+        "bands": [
+          52.661764705882355,
+          52.521080709000174,
+          55.44535571237841,
+          46.13605704374638
+        ],
+        "reach": 53,
+        "clear": 21,
+        "clearGivenReach": 39.62264150943396,
+        "deaths": 8.125,
+        "core": {
+          "top": 71.65713177542906,
+          "rest": 35.695208169677926
+        },
+        "regularDailyVisit": 65.92239323650553,
+        "otherDailyVisit": 51.805736232422724,
+        "premiumRatio": 1.2724921607280986,
+        "absence7Exposure": 1.2141250440391338,
+        "absence10Exposure": 0.3089514620992439,
+        "returnMissP95": 3,
+        "returnAfter7": 0.7740173015632115,
+        "xpBonusPerRun": 77.89,
+        "xpBoostedPerRun": 2.255,
+        "regulars": 2.675,
+        "finalSamples": 106,
+        "finalPowerMedian": 241.58631952909556,
+        "finalRatioMedian": 0.980823144147534,
+        "cash": 278.49443070816534
+      },
+      "traj/reader/survival/run1": {
+        "n": 200,
+        "bands": [
+          45.82739509105305,
+          43.65655702691158,
+          47.9014598540146,
+          39.00917431192661
+        ],
+        "reach": 25,
+        "clear": 6,
+        "clearGivenReach": 24,
+        "deaths": 7.685,
+        "core": {
+          "top": 67.49412072119154,
+          "rest": 25.758871312526722
+        },
+        "regularDailyVisit": 68.18635607321131,
+        "otherDailyVisit": 51.251652522495625,
+        "premiumRatio": 1.3304225857553105,
+        "absence7Exposure": 1.1869660542829061,
+        "absence10Exposure": 0.26839041354804566,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8246250088860454,
+        "xpBonusPerRun": 69.41,
+        "xpBoostedPerRun": 2.115,
+        "regulars": 1.665,
+        "finalSamples": 50,
+        "finalPowerMedian": 228.72457150025272,
+        "finalRatioMedian": 0.8912127646122281,
+        "cash": 84.66176208084167
+      },
+      "traj/reader/survival/run5": {
+        "n": 200,
+        "bands": [
+          50.92082480717771,
+          47.52136752136752,
+          49.271028037383175,
+          41.3862842434271
+        ],
+        "reach": 59.5,
+        "clear": 18,
+        "clearGivenReach": 30.252100840336134,
+        "deaths": 8.57,
+        "core": {
+          "top": 69.0274119598088,
+          "rest": 30.029040106742013
+        },
+        "regularDailyVisit": 65.41119557705598,
+        "otherDailyVisit": 48.84688906702843,
+        "premiumRatio": 1.3391066826650468,
+        "absence7Exposure": 1.5043692114489038,
+        "absence10Exposure": 0.3715137878708597,
+        "returnMissP95": 4,
+        "returnAfter7": 0.9883335880584849,
+        "xpBonusPerRun": 118.17,
+        "xpBoostedPerRun": 3.345,
+        "regulars": 3.045,
+        "finalSamples": 119,
+        "finalPowerMedian": 222.60462934946864,
+        "finalRatioMedian": 0.904167860324735,
+        "cash": 118.84101208930468
+      },
+      "traj/reader/survival/run10": {
+        "n": 200,
+        "bands": [
+          59.936908517350155,
+          54.4078639413325,
+          53.730886850152906,
+          44.13453650533224
+        ],
+        "reach": 96,
+        "clear": 19.5,
+        "clearGivenReach": 20.3125,
+        "deaths": 7.445,
+        "core": {
+          "top": 71.78187538232982,
+          "rest": 38.357519788918204
+        },
+        "regularDailyVisit": 59.044603524229075,
+        "otherDailyVisit": 43.37888948186649,
+        "premiumRatio": 1.361136816305804,
+        "absence7Exposure": 2.577391235281269,
+        "absence10Exposure": 0.7426381525386708,
+        "returnMissP95": 4,
+        "returnAfter7": 1.6185172293769579,
+        "xpBonusPerRun": 146.61,
+        "xpBoostedPerRun": 3.805,
+        "regulars": 3.81,
+        "finalSamples": 192,
+        "finalPowerMedian": 217.89260580000388,
+        "finalRatioMedian": 0.8670533034769968,
+        "cash": 143.91223594610264
+      },
+      "traj/expert/none/run1": {
+        "n": 200,
+        "bands": [
+          45.67627494456763,
+          44.04346934590937,
+          47.1351961614451,
+          40.68493150684932
+        ],
+        "reach": 27,
+        "clear": 10,
+        "clearGivenReach": 37.03703703703704,
+        "deaths": 7.795,
+        "core": {
+          "top": 68.99068713818274,
+          "rest": 24.80428512566955
+        },
+        "regularDailyVisit": 67.08244599939154,
+        "otherDailyVisit": 50.822348283883606,
+        "premiumRatio": 1.319939913533358,
+        "absence7Exposure": 1.2594458438287153,
+        "absence10Exposure": 0.2734796689456639,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8459544276163188,
+        "xpBonusPerRun": 80.13,
+        "xpBoostedPerRun": 2.305,
+        "regulars": 1.76,
+        "finalSamples": 54,
+        "finalPowerMedian": 237.1252799052038,
+        "finalRatioMedian": 0.9300622209344238,
+        "cash": 87.59094430654378
+      },
+      "traj/expert/none/run5": {
+        "n": 200,
+        "bands": [
+          47.83159227603672,
+          44.57881567973311,
+          47.91974033638241,
+          42.419542458317174
+        ],
+        "reach": 23,
+        "clear": 9,
+        "clearGivenReach": 39.130434782608695,
+        "deaths": 7.735,
+        "core": {
+          "top": 69.05036524413687,
+          "rest": 26.834788231490464
+        },
+        "regularDailyVisit": 68.6380533964177,
+        "otherDailyVisit": 51.762539084250655,
+        "premiumRatio": 1.326017900410562,
+        "absence7Exposure": 1.1176157530601383,
+        "absence10Exposure": 0.33072302896677563,
+        "returnMissP95": 3,
+        "returnAfter7": 0.6588268631340323,
+        "xpBonusPerRun": 68.96,
+        "xpBoostedPerRun": 2.085,
+        "regulars": 1.615,
+        "finalSamples": 46,
+        "finalPowerMedian": 245.79310485804217,
+        "finalRatioMedian": 0.9365107609866311,
+        "cash": 91.99701653993398
+      },
+      "traj/expert/none/run10": {
+        "n": 200,
+        "bands": [
+          46.7124162144909,
+          45.536816125051416,
+          49.51289398280802,
+          39.705340699815835
+        ],
+        "reach": 26.5,
+        "clear": 8,
+        "clearGivenReach": 30.18867924528302,
+        "deaths": 7.65,
+        "core": {
+          "top": 69.33282306416635,
+          "rest": 26.458816094375393
+        },
+        "regularDailyVisit": 69.48757763975155,
+        "otherDailyVisit": 51.35090946249745,
+        "premiumRatio": 1.353190787993729,
+        "absence7Exposure": 1.2721423024296439,
+        "absence10Exposure": 0.33282792796124405,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8499965164077197,
+        "xpBonusPerRun": 75.755,
+        "xpBoostedPerRun": 2.235,
+        "regulars": 1.555,
+        "finalSamples": 53,
+        "finalPowerMedian": 233.96697815147508,
+        "finalRatioMedian": 0.8912163413277108,
+        "cash": 86.29483844718405
+      },
+      "traj/expert/economy/run1": {
+        "n": 200,
+        "bands": [
+          45.67627494456763,
+          44.04346934590937,
+          47.1351961614451,
+          40.68493150684932
+        ],
+        "reach": 27,
+        "clear": 10,
+        "clearGivenReach": 37.03703703703704,
+        "deaths": 7.795,
+        "core": {
+          "top": 68.99068713818274,
+          "rest": 24.80428512566955
+        },
+        "regularDailyVisit": 67.08244599939154,
+        "otherDailyVisit": 50.822348283883606,
+        "premiumRatio": 1.319939913533358,
+        "absence7Exposure": 1.2594458438287153,
+        "absence10Exposure": 0.2734796689456639,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8459544276163188,
+        "xpBonusPerRun": 80.13,
+        "xpBoostedPerRun": 2.305,
+        "regulars": 1.76,
+        "finalSamples": 54,
+        "finalPowerMedian": 237.1252799052038,
+        "finalRatioMedian": 0.9300622209344238,
+        "cash": 87.59094430654378
+      },
+      "traj/expert/economy/run5": {
+        "n": 200,
+        "bands": [
+          49.81423688512409,
+          49.981549815498155,
+          52.73069679849341,
+          46.97133585722012
+        ],
+        "reach": 38,
+        "clear": 18.5,
+        "clearGivenReach": 48.68421052631579,
+        "deaths": 7.7,
+        "core": {
+          "top": 72.30701658065225,
+          "rest": 31.425191117582816
+        },
+        "regularDailyVisit": 70.95914742451154,
+        "otherDailyVisit": 54.092237138947446,
+        "premiumRatio": 1.3118175763786188,
+        "absence7Exposure": 0.7002662984515238,
+        "absence10Exposure": 0.11177959693592399,
+        "returnMissP95": 3,
+        "returnAfter7": 0.5228220642659931,
+        "xpBonusPerRun": 68.56,
+        "xpBoostedPerRun": 2.095,
+        "regulars": 2.06,
+        "finalSamples": 76,
+        "finalPowerMedian": 255.71744775747916,
+        "finalRatioMedian": 1.0044237788843695,
+        "cash": 222.77788155172254
+      },
+      "traj/expert/economy/run10": {
+        "n": 200,
+        "bands": [
+          53.715870930062785,
+          52.15100965759438,
+          55.251328156926846,
+          46.56209712075634
+        ],
+        "reach": 45,
+        "clear": 25.5,
+        "clearGivenReach": 56.666666666666664,
+        "deaths": 7.895,
+        "core": {
+          "top": 73.47260543949547,
+          "rest": 34.02545210984595
+        },
+        "regularDailyVisit": 70.05758157389636,
+        "otherDailyVisit": 52.03743792181332,
+        "premiumRatio": 1.3462919077445443,
+        "absence7Exposure": 1.3120739325137625,
+        "absence10Exposure": 0.3280184831284406,
+        "returnMissP95": 3,
+        "returnAfter7": 0.7724459023332099,
+        "xpBonusPerRun": 86.095,
+        "xpBoostedPerRun": 2.365,
+        "regulars": 2.145,
+        "finalSamples": 90,
+        "finalPowerMedian": 262.7059573287927,
+        "finalRatioMedian": 1.014126373919279,
+        "cash": 303.6444904356496
+      },
+      "fresh/reader/none": {
+        "n": 1000,
+        "bands": [
+          46.744325915608876,
+          44.407096966344724,
+          48.36292367996311,
+          40.76248459810104
+        ],
+        "reach": 26.3,
+        "clear": 9.1,
+        "clearGivenReach": 34.60076045627376,
+        "deaths": 7.662,
+        "core": {
+          "top": 68.87457835019933,
+          "rest": 26.03859299042605
+        },
+        "regularDailyVisit": 66.0453701247015,
+        "otherDailyVisit": 50.96203330179126,
+        "premiumRatio": 1.295972037331958,
+        "absence7Exposure": 1.2873478421246773,
+        "absence10Exposure": 0.3179638509774991,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8352837301865373,
+        "xpBonusPerRun": 80.463,
+        "xpBoostedPerRun": 2.311,
+        "regulars": 1.719,
+        "finalSamples": 263,
+        "finalPowerMedian": 233.83397189502998,
+        "finalRatioMedian": 0.9214088801512648,
+        "cash": 88.93086528649273
+      },
+      "fresh/expert/none": {
+        "n": 1000,
+        "bands": [
+          47.04167326889558,
+          44.734955509636066,
+          48.43489747860548,
+          41.2397761515282
+        ],
+        "reach": 25.8,
+        "clear": 10.7,
+        "clearGivenReach": 41.47286821705426,
+        "deaths": 7.738,
+        "core": {
+          "top": 69.39493670886075,
+          "rest": 25.939682068043382
+        },
+        "regularDailyVisit": 68.28799316336705,
+        "otherDailyVisit": 51.14515757236474,
+        "premiumRatio": 1.3351800327674637,
+        "absence7Exposure": 1.223525939045089,
+        "absence10Exposure": 0.2892775440926869,
+        "returnMissP95": 3,
+        "returnAfter7": 0.8255012968179156,
+        "xpBonusPerRun": 75.023,
+        "xpBoostedPerRun": 2.222,
+        "regulars": 1.648,
+        "finalSamples": 258,
+        "finalPowerMedian": 243.62806328202157,
+        "finalRatioMedian": 0.9567307714161584,
+        "cash": 93.33901547236123
+      },
+      "fresh/balanced/none": {
+        "n": 1000,
+        "bands": [
+          43.659397049390634,
+          40.97035040431267,
+          43.3294297811008,
+          33.39303158580267
+        ],
+        "reach": 7.7,
+        "clear": 0.9,
+        "clearGivenReach": 11.688311688311689,
+        "deaths": 7.246,
+        "core": {
+          "top": 66.49075652287924,
+          "rest": 21.75128336065794
+        },
+        "regularDailyVisit": 70.33530132560989,
+        "otherDailyVisit": 54.37376989499312,
+        "premiumRatio": 1.293552046537177,
+        "absence7Exposure": 0.8072174738841406,
+        "absence10Exposure": 0.1930302654940336,
+        "returnMissP95": 3,
+        "returnAfter7": 0.5193317069564575,
+        "xpBonusPerRun": 43.277,
+        "xpBoostedPerRun": 1.448,
+        "regulars": 1.121,
+        "finalSamples": 77,
+        "finalPowerMedian": 185.32861880355222,
+        "finalRatioMedian": 0.7380604352039253,
+        "cash": 53.190877520113325
+      },
+      "traj/expert/survival/run1": {
+        "n": 200,
+        "bands": [
+          45.67627494456763,
+          44.04346934590937,
+          47.1351961614451,
+          40.68493150684932
+        ],
+        "reach": 27,
+        "clear": 10,
+        "clearGivenReach": 37.03703703703704,
+        "deaths": 7.795,
+        "core": {
+          "top": 68.99068713818274,
+          "rest": 24.80428512566955
+        },
+        "regularDailyVisit": 67.08244599939154,
+        "otherDailyVisit": 50.822348283883606,
+        "premiumRatio": 1.319939913533358,
+        "absence7Exposure": 1.2594458438287153,
+        "absence10Exposure": 0.2734796689456639,
+        "returnMissP95": 4,
+        "returnAfter7": 0.8459544276163188,
+        "xpBonusPerRun": 80.13,
+        "xpBoostedPerRun": 2.305,
+        "regulars": 1.76,
+        "finalSamples": 54,
+        "finalPowerMedian": 237.1252799052038,
+        "finalRatioMedian": 0.9300622209344238,
+        "cash": 87.59094430654375
+      },
+      "traj/expert/survival/run5": {
+        "n": 200,
+        "bands": [
+          50.893563182033844,
+          46.6422262956174,
+          50.46997889890658,
+          42.50147029994119
+        ],
+        "reach": 59,
+        "clear": 20,
+        "clearGivenReach": 33.898305084745765,
+        "deaths": 8.45,
+        "core": {
+          "top": 69.36427457098284,
+          "rest": 29.89823937974479
+        },
+        "regularDailyVisit": 66.39327865573115,
+        "otherDailyVisit": 49.26164565157074,
+        "premiumRatio": 1.3477681830877724,
+        "absence7Exposure": 1.5573245004808205,
+        "absence10Exposure": 0.37664280371834596,
+        "returnMissP95": 4,
+        "returnAfter7": 0.9741942170173075,
+        "xpBonusPerRun": 115.39,
+        "xpBoostedPerRun": 3.11,
+        "regulars": 2.72,
+        "finalSamples": 118,
+        "finalPowerMedian": 240.163877553612,
+        "finalRatioMedian": 0.9458453835202858,
+        "cash": 107.61527124575859
+      },
+      "traj/expert/survival/run10": {
+        "n": 200,
+        "bands": [
+          61.30811662726556,
+          54.40479949479002,
+          51.98532929357359,
+          43.42825080656473
+        ],
+        "reach": 93,
+        "clear": 27.5,
+        "clearGivenReach": 29.56989247311828,
+        "deaths": 7.31,
+        "core": {
+          "top": 73.29621980784772,
+          "rest": 37.003078570472496
+        },
+        "regularDailyVisit": 60.335471139615194,
+        "otherDailyVisit": 43.49442379182156,
+        "premiumRatio": 1.3872001484236314,
+        "absence7Exposure": 2.526827292974286,
+        "absence10Exposure": 0.7288924883579672,
+        "returnMissP95": 4,
+        "returnAfter7": 1.6706656002843687,
+        "xpBonusPerRun": 156.9,
+        "xpBoostedPerRun": 3.975,
+        "regulars": 3.26,
+        "finalSamples": 186,
+        "finalPowerMedian": 232.72999792887992,
+        "finalRatioMedian": 0.9176219036062945,
+        "cash": 140.2352151733961
+      }
+    }
+  },
+  "profile": {
+    "baseline": {
+      "reader": {
+        "n": 1000,
+        "bands": [
+          50.68648444388462,
+          47.50819882965725,
+          49.593387102171945,
+          41.81281094527363
+        ],
+        "reach": 78.4,
+        "clear": 22.3,
+        "clearGivenReach": 28.443877551020407,
+        "deaths": 8.314,
+        "core": null,
+        "regularDailyVisit": 63.56943386646357,
+        "otherDailyVisit": 47.518818256972544,
+        "premiumRatio": 1.3377738798699161,
+        "absence7Exposure": 1.7963932843028008,
+        "absence10Exposure": 0.49216254364460293,
+        "returnMissP95": 4,
+        "returnAfter7": 1.1117111413195284,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 3.313,
+        "finalSamples": 784,
+        "finalPowerMedian": 223.89884327084414,
+        "finalRatioMedian": 0.8949869461281956,
+        "cash": 3814.033
+      },
+      "expert": {
+        "n": 1000,
+        "bands": [
+          50.69164989939638,
+          47.33318239156451,
+          49.18350683813023,
+          41.30127742380967
+        ],
+        "reach": 77.4,
+        "clear": 23.8,
+        "clearGivenReach": 30.74935400516796,
+        "deaths": 8.366,
+        "core": null,
+        "regularDailyVisit": 64.9687435597994,
+        "otherDailyVisit": 47.38868728604109,
+        "premiumRatio": 1.370975802044146,
+        "absence7Exposure": 1.7502955317468847,
+        "absence10Exposure": 0.4364057732652403,
+        "returnMissP95": 4,
+        "returnAfter7": 1.1516801201426694,
+        "xpBonusPerRun": 0,
+        "xpBoostedPerRun": 0,
+        "regulars": 3.104,
+        "finalSamples": 774,
+        "finalPowerMedian": 228.2129689028633,
+        "finalRatioMedian": 0.9223688428936908,
+        "cash": 3769.998
+      }
+    },
+    "xp": {
+      "reader": {
+        "n": 1000,
+        "bands": [
+          50.68648444388462,
+          47.53929730946029,
+          49.44819744498696,
+          41.69248884481904
+        ],
+        "reach": 79,
+        "clear": 22,
+        "clearGivenReach": 27.848101265822784,
+        "deaths": 8.289,
+        "core": null,
+        "regularDailyVisit": 63.29081713794968,
+        "otherDailyVisit": 47.37257488202129,
+        "premiumRatio": 1.3360223145052148,
+        "absence7Exposure": 1.8417040151550155,
+        "absence10Exposure": 0.5040890819202514,
+        "returnMissP95": 4,
+        "returnAfter7": 1.1382552332772264,
+        "xpBonusPerRun": 79.105,
+        "xpBoostedPerRun": 1.7,
+        "regulars": 3.301,
+        "finalSamples": 790,
+        "finalPowerMedian": 222.41420120728185,
+        "finalRatioMedian": 0.8985337206033022,
+        "cash": 3784.451
+      },
+      "expert": {
+        "n": 1000,
+        "bands": [
+          50.69164989939638,
+          47.41721854304636,
+          49.44984257033551,
+          41.386859063299724
+        ],
+        "reach": 78.6,
+        "clear": 23.8,
+        "clearGivenReach": 30.279898218829516,
+        "deaths": 8.318,
+        "core": null,
+        "regularDailyVisit": 65.03226687608837,
+        "otherDailyVisit": 47.28676352329384,
+        "premiumRatio": 1.375274221168741,
+        "absence7Exposure": 1.7380465857647915,
+        "absence10Exposure": 0.4420411737722237,
+        "returnMissP95": 4,
+        "returnAfter7": 1.1543123543123543,
+        "xpBonusPerRun": 82.461,
+        "xpBoostedPerRun": 1.796,
+        "regulars": 3.113,
+        "finalSamples": 786,
+        "finalPowerMedian": 227.87038553569403,
+        "finalRatioMedian": 0.9196740422540222,
+        "cash": 3806.699
+      }
+    },
+    "xp2": {
+      "reader": {
+        "n": 1000,
+        "bands": [
+          50.70222949993702,
+          47.94836477785964,
+          49.66757529419586,
+          41.18368974933268
+        ],
+        "reach": 80.8,
+        "clear": 21.1,
+        "clearGivenReach": 26.113861386138613,
+        "deaths": 8.125,
+        "core": null,
+        "regularDailyVisit": 63.12838663200426,
+        "otherDailyVisit": 47.18028478721407,
+        "premiumRatio": 1.3380247049528653,
+        "absence7Exposure": 1.8783599380901357,
+        "absence10Exposure": 0.49729373299997254,
+        "returnMissP95": 4,
+        "returnAfter7": 1.1764161849710983,
+        "xpBonusPerRun": 155.153,
+        "xpBoostedPerRun": 4.075,
+        "regulars": 3.412,
+        "finalSamples": 808,
+        "finalPowerMedian": 221.87769482457543,
+        "finalRatioMedian": 0.8899864810161975,
+        "cash": 3795.705
+      },
+      "expert": {
+        "n": 1000,
+        "bands": [
+          50.7010814889336,
+          47.689231463862995,
+          49.89031757281226,
+          41.448467966573816
+        ],
+        "reach": 78.9,
+        "clear": 22.7,
+        "clearGivenReach": 28.770595690747783,
+        "deaths": 8.214,
+        "core": null,
+        "regularDailyVisit": 64.57655826558266,
+        "otherDailyVisit": 47.06020432660247,
+        "premiumRatio": 1.3722115997927877,
+        "absence7Exposure": 1.8367017721752357,
+        "absence10Exposure": 0.4668955822367663,
+        "returnMissP95": 4,
+        "returnAfter7": 1.2053134467490096,
+        "xpBonusPerRun": 165.427,
+        "xpBoostedPerRun": 4.346,
+        "regulars": 3.143,
+        "finalSamples": 789,
+        "finalPowerMedian": 226.73776435322458,
+        "finalRatioMedian": 0.9126703845447299,
+        "cash": 3823.225
+      }
+    }
+  },
+  "pairedStandard": {
+    "xp": {
+      "traj/reader/none/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -1.3894071618163382,
+          "hi": 1.3894071618163382
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -2.098414282580741,
+          "hi": 3.098414282580741
+        },
+        "deaths": {
+          "delta": 0.015,
+          "lo": -0.0982835558238728,
+          "hi": 0.1282835558238728
+        },
+        "bothReached": 47,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/none/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -2,
+          "lo": -3.945170026542871,
+          "hi": -0.05482997345712878
+        },
+        "reachPP": {
+          "delta": -4,
+          "lo": -7.633771245873447,
+          "hi": -0.366228754126554
+        },
+        "deaths": {
+          "delta": -0.01,
+          "lo": -0.14962677890338483,
+          "hi": 0.1296267789033848
+        },
+        "bothReached": 48,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/none/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -1.7753386320615134,
+          "hi": 3.775338632061514
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -2.2993363609872244,
+          "hi": 5.299336360987224
+        },
+        "deaths": {
+          "delta": 0,
+          "lo": -0.1258161696393336,
+          "hi": 0.1258161696393336
+        },
+        "bothReached": 47,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -1.3894071618163382,
+          "hi": 1.3894071618163382
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -2.0984142825807415,
+          "hi": 3.098414282580742
+        },
+        "deaths": {
+          "delta": 0.015,
+          "lo": -0.0982835558238728,
+          "hi": 0.1282835558238728
+        },
+        "bothReached": 47,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -1.5,
+          "lo": -5.0361708842493895,
+          "hi": 2.0361708842493895
+        },
+        "reachPP": {
+          "delta": -2,
+          "lo": -5.920000000000009,
+          "hi": 1.9200000000000088
+        },
+        "deaths": {
+          "delta": -0.04,
+          "lo": -0.22160354190422824,
+          "hi": 0.14160354190422822
+        },
+        "bothReached": 67,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -2.4005012932251795,
+          "hi": 4.40050129322518
+        },
+        "reachPP": {
+          "delta": 5,
+          "lo": 0.038824097891880516,
+          "hi": 9.96117590210812
+        },
+        "deaths": {
+          "delta": -0.15,
+          "lo": -0.3695746916794615,
+          "hi": 0.06957469167946151
+        },
+        "bothReached": 86,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -1.3894071618163382,
+          "hi": 1.3894071618163382
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -2.0984142825807415,
+          "hi": 3.098414282580742
+        },
+        "deaths": {
+          "delta": 0.015,
+          "lo": -0.0982835558238728,
+          "hi": 0.1282835558238728
+        },
+        "bothReached": 47,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -4.550187414238049,
+          "hi": 3.55018741423805
+        },
+        "reachPP": {
+          "delta": -1.5,
+          "lo": -5.545418278154457,
+          "hi": 2.545418278154457
+        },
+        "deaths": {
+          "delta": -0.15,
+          "lo": -0.379882862896011,
+          "hi": 0.07988286289601099
+        },
+        "bothReached": 105,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": -6.5,
+          "lo": -12.071072269424974,
+          "hi": -0.9289277305750278
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -0.9600000000000078,
+          "hi": 2.960000000000008
+        },
+        "deaths": {
+          "delta": -0.035,
+          "lo": -0.2725754208730671,
+          "hi": 0.2025754208730671
+        },
+        "bothReached": 186,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -0.9600000000000068,
+          "hi": 2.960000000000007
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.0416258367929316,
+          "hi": 4.041625836792932
+        },
+        "deaths": {
+          "delta": 0.045,
+          "lo": -0.08920371449749319,
+          "hi": 0.17920371449749317
+        },
+        "bothReached": 46,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -2,
+          "lo": -5.094356672408738,
+          "hi": 1.0943566724087375
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -2.03617088424939,
+          "hi": 5.0361708842493895
+        },
+        "deaths": {
+          "delta": -0.01,
+          "lo": -0.1890071984179044,
+          "hi": 0.16900719841790438
+        },
+        "bothReached": 38,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -2.757707983618657,
+          "hi": 3.757707983618657
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.3044139928700975,
+          "hi": 4.3044139928700975
+        },
+        "deaths": {
+          "delta": -0.095,
+          "lo": -0.26493846891178136,
+          "hi": 0.07493846891178135
+        },
+        "bothReached": 44,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -0.9600000000000037,
+          "hi": 2.9600000000000035
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.0416258367929325,
+          "hi": 4.0416258367929325
+        },
+        "deaths": {
+          "delta": 0.045,
+          "lo": -0.08920371449749316,
+          "hi": 0.17920371449749317
+        },
+        "bothReached": 46,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -1,
+          "lo": -4.92737998770671,
+          "hi": 2.9273799877067104
+        },
+        "reachPP": {
+          "delta": -2,
+          "lo": -5.920000000000006,
+          "hi": 1.9200000000000055
+        },
+        "deaths": {
+          "delta": 0.005,
+          "lo": -0.15851232738246399,
+          "hi": 0.168512327382464
+        },
+        "bothReached": 65,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": -2,
+          "lo": -6.599756165702655,
+          "hi": 2.5997561657026558
+        },
+        "reachPP": {
+          "delta": -1.5,
+          "lo": -6.207097388959122,
+          "hi": 3.2070973889591214
+        },
+        "deaths": {
+          "delta": 0.08,
+          "lo": -0.09920659535601765,
+          "hi": 0.25920659535601764
+        },
+        "bothReached": 76,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/reader/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 1.2,
+          "lo": 0.20286491668663198,
+          "hi": 2.197135083313368
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -0.00338303853694346,
+          "hi": 3.0033830385369433
+        },
+        "deaths": {
+          "delta": -0.049,
+          "lo": -0.1027966392704674,
+          "hi": 0.004796639270467383
+        },
+        "bothReached": 222,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -0.9600000000000023,
+          "hi": 2.960000000000002
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.0416258367929325,
+          "hi": 4.0416258367929325
+        },
+        "deaths": {
+          "delta": 0.045,
+          "lo": -0.08920371449749324,
+          "hi": 0.17920371449749323
+        },
+        "bothReached": 46,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -2.5,
+          "lo": -6.988774384772182,
+          "hi": 1.9887743847721824
+        },
+        "reachPP": {
+          "delta": -3,
+          "lo": -7.992207797504766,
+          "hi": 1.9922077975047663
+        },
+        "deaths": {
+          "delta": 0.115,
+          "lo": -0.08881116050336528,
+          "hi": 0.3188111605033653
+        },
+        "bothReached": 104,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -5.41180487557053,
+          "hi": 4.411804875570531
+        },
+        "reachPP": {
+          "delta": -0.5,
+          "lo": -2.695746916794614,
+          "hi": 1.695746916794614
+        },
+        "deaths": {
+          "delta": -0.06,
+          "lo": -0.32676617506873706,
+          "hi": 0.20676617506873707
+        },
+        "bothReached": 180,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/balanced/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0.2,
+          "lo": -0.1919999999999992,
+          "hi": 0.5919999999999992
+        },
+        "reachPP": {
+          "delta": 0.1,
+          "lo": -0.840432877986513,
+          "hi": 1.0404328779865128
+        },
+        "deaths": {
+          "delta": 0.001,
+          "lo": -0.03456891488513668,
+          "hi": 0.03656891488513668
+        },
+        "bothReached": 56,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/expert/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -0.4,
+          "lo": -1.473786925959871,
+          "hi": 0.6737869259598711
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -0.29928847857224394,
+          "hi": 2.299288478572244
+        },
+        "deaths": {
+          "delta": -0.014,
+          "lo": -0.0573994765056097,
+          "hi": 0.0293994765056097
+        },
+        "bothReached": 235,
+        "medianFinalPowerDeltaCommon": 0
+      }
+    },
+    "xp2": {
+      "traj/reader/none/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -3.75770798361865,
+          "hi": 2.7577079836186504
+        },
+        "reachPP": {
+          "delta": 0,
+          "lo": -4.168221485449015,
+          "hi": 4.168221485449015
+        },
+        "deaths": {
+          "delta": 0.07,
+          "lo": -0.08750632371447886,
+          "hi": 0.22750632371447888
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/none/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -3.92983690379795,
+          "hi": 3.92983690379795
+        },
+        "reachPP": {
+          "delta": -3,
+          "lo": -8.364983058321851,
+          "hi": 2.3649830583218505
+        },
+        "deaths": {
+          "delta": -0.045,
+          "lo": -0.2713060226317387,
+          "hi": 0.18130602263173867
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/none/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1.5,
+          "lo": -2.545418278154458,
+          "hi": 5.545418278154457
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -5.475662365254388,
+          "hi": 6.475662365254388
+        },
+        "deaths": {
+          "delta": -0.1,
+          "lo": -0.3231718359061208,
+          "hi": 0.1231718359061208
+        },
+        "bothReached": 35,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -3.7577079836186495,
+          "hi": 2.7577079836186495
+        },
+        "reachPP": {
+          "delta": 0,
+          "lo": -4.168221485449015,
+          "hi": 4.168221485449015
+        },
+        "deaths": {
+          "delta": 0.07,
+          "lo": -0.08750632371447886,
+          "hi": 0.22750632371447888
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -5.604535179326813,
+          "hi": 4.604535179326814
+        },
+        "reachPP": {
+          "delta": -2,
+          "lo": -8.657565915527828,
+          "hi": 4.657565915527827
+        },
+        "deaths": {
+          "delta": 0.17,
+          "lo": -0.11478102104906665,
+          "hi": 0.4547810210490667
+        },
+        "bothReached": 52,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 4,
+          "lo": -1.3523743850546306,
+          "hi": 9.352374385054631
+        },
+        "reachPP": {
+          "delta": 6,
+          "lo": -0.7554342167832795,
+          "hi": 12.755434216783279
+        },
+        "deaths": {
+          "delta": -0.18,
+          "lo": -0.4567537243102579,
+          "hi": 0.09675372431025792
+        },
+        "bothReached": 76,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -3.7577079836186495,
+          "hi": 2.7577079836186495
+        },
+        "reachPP": {
+          "delta": 0,
+          "lo": -4.168221485449015,
+          "hi": 4.168221485449015
+        },
+        "deaths": {
+          "delta": 0.07,
+          "lo": -0.08750632371447886,
+          "hi": 0.22750632371447888
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -5.969660311170893,
+          "hi": 4.969660311170894
+        },
+        "reachPP": {
+          "delta": 2,
+          "lo": -3.373971141450767,
+          "hi": 7.373971141450767
+        },
+        "deaths": {
+          "delta": 0.065,
+          "lo": -0.2258071011001132,
+          "hi": 0.3558071011001132
+        },
+        "bothReached": 102,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": -3.5000000000000004,
+          "lo": -10.217823139878975,
+          "hi": 3.217823139878975
+        },
+        "reachPP": {
+          "delta": 2.5,
+          "lo": -0.07602982285555629,
+          "hi": 5.076029822855556
+        },
+        "deaths": {
+          "delta": -0.15,
+          "lo": -0.4501730489175909,
+          "hi": 0.1501730489175909
+        },
+        "bothReached": 186,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1.5,
+          "lo": -1.0909742836804663,
+          "hi": 4.090974283680467
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -3.8110417388612725,
+          "hi": 5.811041738861273
+        },
+        "deaths": {
+          "delta": -0.03,
+          "lo": -0.23130107654229137,
+          "hi": 0.17130107654229138
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -2.5,
+          "lo": -7.198887925743006,
+          "hi": 2.1988879257430045
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -4.139949213927235,
+          "hi": 7.139949213927236
+        },
+        "deaths": {
+          "delta": -0.155,
+          "lo": -0.39001012017126946,
+          "hi": 0.08001012017126943
+        },
+        "bothReached": 28,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -2.757707983618653,
+          "hi": 3.757707983618653
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -4.8931176961693685,
+          "hi": 6.893117696169368
+        },
+        "deaths": {
+          "delta": -0.26,
+          "lo": -0.5090257987482645,
+          "hi": -0.010974201251735566
+        },
+        "bothReached": 34,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1.5,
+          "lo": -1.0909742836804663,
+          "hi": 4.090974283680467
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -3.8110417388612725,
+          "hi": 5.811041738861273
+        },
+        "deaths": {
+          "delta": -0.03,
+          "lo": -0.23130107654229137,
+          "hi": 0.17130107654229138
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -5.198685570246719,
+          "hi": 5.198685570246719
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -5.143370994441585,
+          "hi": 6.143370994441585
+        },
+        "deaths": {
+          "delta": -0.06,
+          "lo": -0.33425926038977755,
+          "hi": 0.21425926038977755
+        },
+        "bothReached": 59,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -5.894755355696925,
+          "hi": 5.894755355696925
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -5.942041406839704,
+          "hi": 6.942041406839704
+        },
+        "deaths": {
+          "delta": -0.1,
+          "lo": -0.380990208881799,
+          "hi": 0.18099020888179904
+        },
+        "bothReached": 68,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/reader/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0.8999999999999999,
+          "lo": -0.5532309466097353,
+          "hi": 2.353230946609735
+        },
+        "reachPP": {
+          "delta": 1.9,
+          "lo": -0.30676996029437126,
+          "hi": 4.106769960294371
+        },
+        "deaths": {
+          "delta": -0.041,
+          "lo": -0.12112037909012593,
+          "hi": 0.03912037909012594
+        },
+        "bothReached": 190,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1.5,
+          "lo": -1.0909742836804632,
+          "hi": 4.090974283680463
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -3.8110417388612725,
+          "hi": 5.811041738861273
+        },
+        "deaths": {
+          "delta": -0.03,
+          "lo": -0.23130107654229137,
+          "hi": 0.17130107654229138
+        },
+        "bothReached": 41,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -5.31189198473364,
+          "hi": 6.311891984733639
+        },
+        "reachPP": {
+          "delta": -1,
+          "lo": -7.661913950767996,
+          "hi": 5.661913950767996
+        },
+        "deaths": {
+          "delta": 0.055,
+          "lo": -0.25790902205018296,
+          "hi": 0.36790902205018294
+        },
+        "bothReached": 96,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 2.5,
+          "lo": -4.081376954184073,
+          "hi": 9.081376954184073
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -1.7517767852831767,
+          "hi": 4.751776785283177
+        },
+        "deaths": {
+          "delta": -0.03,
+          "lo": -0.32764136930812926,
+          "hi": 0.2676413693081292
+        },
+        "bothReached": 179,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/balanced/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0.3,
+          "lo": -0.28800000000000464,
+          "hi": 0.8880000000000048
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -0.4921504324004844,
+          "hi": 2.4921504324004844
+        },
+        "deaths": {
+          "delta": 0.034,
+          "lo": -0.025957414904263745,
+          "hi": 0.09395741490426375
+        },
+        "bothReached": 43,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/expert/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0.2,
+          "lo": -1.440627317215572,
+          "hi": 1.840627317215572
+        },
+        "reachPP": {
+          "delta": 0.6,
+          "lo": -1.5117131330643063,
+          "hi": 2.7117131330643063
+        },
+        "deaths": {
+          "delta": 0.003,
+          "lo": -0.07492254968460285,
+          "hi": 0.08092254968460286
+        },
+        "bothReached": 197,
+        "medianFinalPowerDeltaCommon": 0
+      }
+    }
+  },
+  "pairedProfile": {
+    "xp": {
+      "reader": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -0.3,
+          "lo": -1.9522470082212762,
+          "hi": 1.3522470082212763
+        },
+        "reachPP": {
+          "delta": 0.6,
+          "lo": -0.5428329235243085,
+          "hi": 1.7428329235243085
+        },
+        "deaths": {
+          "delta": -0.025,
+          "lo": -0.09843539035476356,
+          "hi": 0.048435390354763554
+        },
+        "bothReached": 770,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "expert": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0,
+          "lo": -1.9412718862994272,
+          "hi": 1.9412718862994272
+        },
+        "reachPP": {
+          "delta": 1.2,
+          "lo": -0.1846245994063715,
+          "hi": 2.584624599406372
+        },
+        "deaths": {
+          "delta": -0.048,
+          "lo": -0.12932033663697468,
+          "hi": 0.03332033663697469
+        },
+        "bothReached": 755,
+        "medianFinalPowerDeltaCommon": 0
+      }
+    },
+    "xp2": {
+      "reader": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -1.2,
+          "lo": -3.725450850441979,
+          "hi": 1.3254508504419793
+        },
+        "reachPP": {
+          "delta": 2.4,
+          "lo": 0.3675307344721667,
+          "hi": 4.432469265527833
+        },
+        "deaths": {
+          "delta": -0.189,
+          "lo": -0.30768841369715116,
+          "hi": -0.07031158630284885
+        },
+        "bothReached": 742,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "expert": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -1.0999999999999999,
+          "lo": -3.7950396848474925,
+          "hi": 1.595039684847493
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -0.6190844529935402,
+          "hi": 3.61908445299354
+        },
+        "deaths": {
+          "delta": -0.152,
+          "lo": -0.2754467511681612,
+          "hi": -0.02855324883183878
+        },
+        "bothReached": 723,
+        "medianFinalPowerDeltaCommon": 0
+      }
+    }
+  },
+  "pairedAgainstXP5": {
+    "standard": {
+      "traj/reader/none/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -3.4465588480846856,
+          "hi": 2.446558848084685
+        },
+        "reachPP": {
+          "delta": -0.5,
+          "lo": -4.0416258367929325,
+          "hi": 3.041625836792933
+        },
+        "deaths": {
+          "delta": 0.055,
+          "lo": -0.05545350007307099,
+          "hi": 0.165453500073071
+        },
+        "bothReached": 44,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/none/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 2,
+          "lo": -1.3919751587219742,
+          "hi": 5.391975158721975
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -4.007651632688902,
+          "hi": 6.007651632688902
+        },
+        "deaths": {
+          "delta": -0.035,
+          "lo": -0.22417251757862494,
+          "hi": 0.15417251757862493
+        },
+        "bothReached": 39,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/none/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -3.041625836792934,
+          "hi": 4.041625836792933
+        },
+        "reachPP": {
+          "delta": -1,
+          "lo": -6.379356782830536,
+          "hi": 4.379356782830536
+        },
+        "deaths": {
+          "delta": -0.1,
+          "lo": -0.3129920846902614,
+          "hi": 0.1129920846902614
+        },
+        "bothReached": 40,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -3.446558848084681,
+          "hi": 2.446558848084681
+        },
+        "reachPP": {
+          "delta": -0.5,
+          "lo": -4.041625836792932,
+          "hi": 3.0416258367929316
+        },
+        "deaths": {
+          "delta": 0.055,
+          "lo": -0.055453500073070906,
+          "hi": 0.1654535000730709
+        },
+        "bothReached": 44,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -3.165905163244321,
+          "hi": 5.165905163244322
+        },
+        "reachPP": {
+          "delta": 0,
+          "lo": -5.728672485158412,
+          "hi": 5.728672485158412
+        },
+        "deaths": {
+          "delta": 0.21,
+          "lo": -0.03604278583675555,
+          "hi": 0.4560427858367555
+        },
+        "bothReached": 56,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/economy/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 3,
+          "lo": -2.181948567360926,
+          "hi": 8.181948567360925
+        },
+        "reachPP": {
+          "delta": 1,
+          "lo": -4.726987333633447,
+          "hi": 6.726987333633448
+        },
+        "deaths": {
+          "delta": -0.03,
+          "lo": -0.29722529745140147,
+          "hi": 0.23722529745140145
+        },
+        "bothReached": 88,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -3.446558848084681,
+          "hi": 2.446558848084681
+        },
+        "reachPP": {
+          "delta": -0.5,
+          "lo": -4.041625836792932,
+          "hi": 3.0416258367929316
+        },
+        "deaths": {
+          "delta": 0.055,
+          "lo": -0.05545350007307099,
+          "hi": 0.165453500073071
+        },
+        "bothReached": 44,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -5.009578764425701,
+          "hi": 5.009578764425701
+        },
+        "reachPP": {
+          "delta": 3.5000000000000004,
+          "lo": -0.9758539231870145,
+          "hi": 7.975853923187016
+        },
+        "deaths": {
+          "delta": 0.215,
+          "lo": -0.05544499008729423,
+          "hi": 0.48544499008729425
+        },
+        "bothReached": 105,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/reader/survival/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 3,
+          "lo": -2.3649830583218456,
+          "hi": 8.364983058321846
+        },
+        "reachPP": {
+          "delta": 1.5,
+          "lo": -0.6869374653581075,
+          "hi": 3.6869374653581075
+        },
+        "deaths": {
+          "delta": -0.115,
+          "lo": -0.36516178523901255,
+          "hi": 0.13516178523901257
+        },
+        "bothReached": 188,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -2.0984142825807406,
+          "hi": 3.0984142825807406
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.5501874142380507,
+          "hi": 4.55018741423805
+        },
+        "deaths": {
+          "delta": -0.075,
+          "lo": -0.23153970228654397,
+          "hi": 0.08153970228654396
+        },
+        "bothReached": 45,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": -0.5,
+          "lo": -4.304413992870099,
+          "hi": 3.3044139928700997
+        },
+        "reachPP": {
+          "delta": 0,
+          "lo": -4.813047593331941,
+          "hi": 4.813047593331941
+        },
+        "deaths": {
+          "delta": -0.145,
+          "lo": -0.3617642162053869,
+          "hi": 0.07176421620538692
+        },
+        "bothReached": 34,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/none/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0,
+          "lo": -3.403338591418608,
+          "hi": 3.403338591418608
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -4.6045351793268114,
+          "hi": 5.6045351793268114
+        },
+        "deaths": {
+          "delta": -0.165,
+          "lo": -0.38633805563971985,
+          "hi": 0.05633805563971983
+        },
+        "bothReached": 39,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -2.098414282580741,
+          "hi": 3.098414282580741
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.5501874142380507,
+          "hi": 4.55018741423805
+        },
+        "deaths": {
+          "delta": -0.075,
+          "lo": -0.2315397022865439,
+          "hi": 0.08153970228654393
+        },
+        "bothReached": 45,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 1,
+          "lo": -3.8110417388612725,
+          "hi": 5.811041738861273
+        },
+        "reachPP": {
+          "delta": 2.5,
+          "lo": -2.3999999999999924,
+          "hi": 7.399999999999992
+        },
+        "deaths": {
+          "delta": -0.065,
+          "lo": -0.3116256418870127,
+          "hi": 0.18162564188701272
+        },
+        "bothReached": 61,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/economy/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 2,
+          "lo": -3.373971141450771,
+          "hi": 7.37397114145077
+        },
+        "reachPP": {
+          "delta": 2,
+          "lo": -3.888201984737384,
+          "hi": 7.8882019847373845
+        },
+        "deaths": {
+          "delta": -0.18,
+          "lo": -0.43798114690962237,
+          "hi": 0.07798114690962238
+        },
+        "bothReached": 70,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/reader/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -0.3,
+          "lo": -1.5555025059881464,
+          "hi": 0.9555025059881462
+        },
+        "reachPP": {
+          "delta": 0.4,
+          "lo": -1.501079547901004,
+          "hi": 2.301079547901004
+        },
+        "deaths": {
+          "delta": 0.008,
+          "lo": -0.06232067074718737,
+          "hi": 0.07832067074718738
+        },
+        "bothReached": 214,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/expert/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0.6,
+          "lo": -0.8405402390007075,
+          "hi": 2.0405402390007077
+        },
+        "reachPP": {
+          "delta": -0.4,
+          "lo": -2.3212007589932915,
+          "hi": 1.5212007589932914
+        },
+        "deaths": {
+          "delta": 0.017,
+          "lo": -0.051905832782075584,
+          "hi": 0.08590583278207559
+        },
+        "bothReached": 212,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run1": {
+        "n": 200,
+        "clearPP": {
+          "delta": 0.5,
+          "lo": -2.098414282580741,
+          "hi": 3.098414282580741
+        },
+        "reachPP": {
+          "delta": 0.5,
+          "lo": -3.550187414238054,
+          "hi": 4.550187414238054
+        },
+        "deaths": {
+          "delta": -0.075,
+          "lo": -0.23153970228654402,
+          "hi": 0.08153970228654404
+        },
+        "bothReached": 45,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run5": {
+        "n": 200,
+        "clearPP": {
+          "delta": 3,
+          "lo": -2.1819485673609225,
+          "hi": 8.181948567360923
+        },
+        "reachPP": {
+          "delta": 2,
+          "lo": -4.207400996848707,
+          "hi": 8.207400996848708
+        },
+        "deaths": {
+          "delta": -0.06,
+          "lo": -0.32964523724673733,
+          "hi": 0.20964523724673734
+        },
+        "bothReached": 96,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "traj/expert/survival/run10": {
+        "n": 200,
+        "clearPP": {
+          "delta": 3,
+          "lo": -3.041924549454967,
+          "hi": 9.041924549454967
+        },
+        "reachPP": {
+          "delta": 2,
+          "lo": -1.0943566724087295,
+          "hi": 5.09435667240873
+        },
+        "deaths": {
+          "delta": 0.03,
+          "lo": -0.25164554651076365,
+          "hi": 0.3116455465107637
+        },
+        "bothReached": 179,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "fresh/balanced/none": {
+        "n": 1000,
+        "clearPP": {
+          "delta": 0.1,
+          "lo": -0.4882615367637343,
+          "hi": 0.6882615367637344
+        },
+        "reachPP": {
+          "delta": 0.8999999999999999,
+          "lo": -0.38468935183987757,
+          "hi": 2.1846893518398773
+        },
+        "deaths": {
+          "delta": 0.033,
+          "lo": -0.0190274095929147,
+          "hi": 0.0850274095929147
+        },
+        "bothReached": 51,
+        "medianFinalPowerDeltaCommon": 0
+      }
+    },
+    "profile": {
+      "reader": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -0.8999999999999999,
+          "lo": -3.091732647016037,
+          "hi": 1.291732647016037
+        },
+        "reachPP": {
+          "delta": 1.7999999999999998,
+          "lo": -0.056998023062411474,
+          "hi": 3.6569980230624113
+        },
+        "deaths": {
+          "delta": -0.164,
+          "lo": -0.2734835758448711,
+          "hi": -0.05451642415512892
+        },
+        "bothReached": 754,
+        "medianFinalPowerDeltaCommon": 0
+      },
+      "expert": {
+        "n": 1000,
+        "clearPP": {
+          "delta": -1.0999999999999999,
+          "lo": -3.4765840645379518,
+          "hi": 1.2765840645379518
+        },
+        "reachPP": {
+          "delta": 0.3,
+          "lo": -1.6112370557006057,
+          "hi": 2.2112370557006056
+        },
+        "deaths": {
+          "delta": -0.104,
+          "lo": -0.21622540441359855,
+          "hi": 0.00822540441359855
+        },
+        "bothReached": 740,
+        "medianFinalPowerDeltaCommon": 0
+      }
+    }
+  }
+}

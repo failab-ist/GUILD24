@@ -1,0 +1,717 @@
+{
+  "method": "저장 방문·상품·결과 고정, 성장 경험치만 가산. 방문 변화·생존 변화는 재현하지 않는다.",
+  "baseline": {
+    "power": 153.55672283544723,
+    "bossPower": 264,
+    "maxAssault": 165.84126066228302,
+    "actualAssault": 165.65450518853456,
+    "party": [
+      {
+        "id": "npc-4",
+        "name": "파도르",
+        "level": 20
+      },
+      {
+        "id": "npc-3",
+        "name": "메도르",
+        "level": 14
+      },
+      {
+        "id": "npc-19",
+        "name": "호두안",
+        "level": 13
+      }
+    ],
+    "target": "npc-4"
+  },
+  "xp": {
+    "power": 153.55672283544723,
+    "bossPower": 264,
+    "maxAssault": 165.84126066228302,
+    "actualAssault": 165.65450518853456,
+    "party": [
+      {
+        "id": "npc-4",
+        "name": "파도르",
+        "level": 20
+      },
+      {
+        "id": "npc-3",
+        "name": "메도르",
+        "level": 14
+      },
+      {
+        "id": "npc-19",
+        "name": "호두안",
+        "level": 13
+      }
+    ],
+    "target": "npc-4"
+  },
+  "details": [
+    {
+      "id": "npc-1",
+      "name": "달고네",
+      "alive": false,
+      "oldLevel": 12,
+      "newLevel": 12,
+      "oldXP": 13,
+      "newXP": 13,
+      "extraXP": 0,
+      "events": [
+        {
+          "kind": "start",
+          "day": 10,
+          "missed": 3,
+          "level": 3,
+          "target": 4
+        },
+        {
+          "kind": "complete",
+          "day": 10,
+          "level": 4,
+          "target": 4
+        }
+      ]
+    },
+    {
+      "id": "npc-2",
+      "name": "노르게",
+      "alive": false,
+      "oldLevel": 3,
+      "newLevel": 3,
+      "oldXP": 23,
+      "newXP": 23,
+      "extraXP": 0,
+      "events": [
+        {
+          "kind": "start",
+          "day": 11,
+          "missed": 2,
+          "level": 3,
+          "target": 5
+        }
+      ]
+    },
+    {
+      "id": "npc-3",
+      "name": "메도르",
+      "alive": true,
+      "oldLevel": 14,
+      "newLevel": 14,
+      "oldXP": 55,
+      "newXP": 55,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-4",
+      "name": "파도르",
+      "alive": true,
+      "oldLevel": 20,
+      "newLevel": 20,
+      "oldXP": 12,
+      "newXP": 12,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-5",
+      "name": "계산도",
+      "alive": false,
+      "oldLevel": 5,
+      "newLevel": 5,
+      "oldXP": 19,
+      "newXP": 48,
+      "extraXP": 29,
+      "events": [
+        {
+          "kind": "start",
+          "day": 12,
+          "missed": 8,
+          "level": 3,
+          "target": 5
+        },
+        {
+          "kind": "bonus",
+          "day": 12,
+          "base": 42,
+          "bonus": 29,
+          "level": 5,
+          "target": 5
+        },
+        {
+          "kind": "complete",
+          "day": 12,
+          "level": 5,
+          "target": 5
+        },
+        {
+          "kind": "start",
+          "day": 18,
+          "missed": 3,
+          "level": 5,
+          "target": 7
+        }
+      ]
+    },
+    {
+      "id": "npc-6",
+      "name": "옥수렌",
+      "alive": false,
+      "oldLevel": 2,
+      "newLevel": 2,
+      "oldXP": 30,
+      "newXP": 30,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-7",
+      "name": "모카벨",
+      "alive": false,
+      "oldLevel": 5,
+      "newLevel": 5,
+      "oldXP": 38,
+      "newXP": 38,
+      "extraXP": 0,
+      "events": [
+        {
+          "kind": "start",
+          "day": 11,
+          "missed": 2,
+          "level": 4,
+          "target": 5
+        },
+        {
+          "kind": "complete",
+          "day": 11,
+          "level": 5,
+          "target": 5
+        }
+      ]
+    },
+    {
+      "id": "npc-8",
+      "name": "목레아",
+      "alive": false,
+      "oldLevel": 10,
+      "newLevel": 11,
+      "oldXP": 9,
+      "newXP": 42,
+      "extraXP": 121,
+      "events": [
+        {
+          "kind": "start",
+          "day": 14,
+          "missed": 8,
+          "level": 3,
+          "target": 6
+        },
+        {
+          "kind": "bonus",
+          "day": 14,
+          "base": 48,
+          "bonus": 48,
+          "level": 5,
+          "target": 6
+        },
+        {
+          "kind": "complete",
+          "day": 15,
+          "level": 6,
+          "target": 6
+        },
+        {
+          "kind": "start",
+          "day": 24,
+          "missed": 2,
+          "level": 8,
+          "target": 10
+        },
+        {
+          "kind": "bonus",
+          "day": 24,
+          "base": 73,
+          "bonus": 73,
+          "level": 9,
+          "target": 10
+        },
+        {
+          "kind": "complete",
+          "day": 25,
+          "level": 10,
+          "target": 10
+        },
+        {
+          "kind": "start",
+          "day": 29,
+          "missed": 2,
+          "level": 11,
+          "target": 12
+        }
+      ]
+    },
+    {
+      "id": "npc-9",
+      "name": "참케르",
+      "alive": false,
+      "oldLevel": 8,
+      "newLevel": 8,
+      "oldXP": 52,
+      "newXP": 52,
+      "extraXP": 0,
+      "events": [
+        {
+          "kind": "start",
+          "day": 10,
+          "missed": 6,
+          "level": 3,
+          "target": 4
+        },
+        {
+          "kind": "complete",
+          "day": 10,
+          "level": 5,
+          "target": 4
+        }
+      ]
+    },
+    {
+      "id": "npc-10",
+      "name": "쿠레미",
+      "alive": false,
+      "oldLevel": 7,
+      "newLevel": 7,
+      "oldXP": 30,
+      "newXP": 30,
+      "extraXP": 0,
+      "events": [
+        {
+          "kind": "start",
+          "day": 15,
+          "missed": 4,
+          "level": 5,
+          "target": 6
+        },
+        {
+          "kind": "complete",
+          "day": 15,
+          "level": 6,
+          "target": 6
+        }
+      ]
+    },
+    {
+      "id": "npc-11",
+      "name": "야간도",
+      "alive": false,
+      "oldLevel": 12,
+      "newLevel": 12,
+      "oldXP": 12,
+      "newXP": 12,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-12",
+      "name": "부엔기",
+      "alive": true,
+      "oldLevel": 9,
+      "newLevel": 10,
+      "oldXP": 33,
+      "newXP": 71,
+      "extraXP": 119,
+      "events": [
+        {
+          "kind": "start",
+          "day": 22,
+          "missed": 13,
+          "level": 7,
+          "target": 9
+        },
+        {
+          "kind": "bonus",
+          "day": 22,
+          "base": 85,
+          "bonus": 43,
+          "level": 9,
+          "target": 9
+        },
+        {
+          "kind": "complete",
+          "day": 22,
+          "level": 9,
+          "target": 9
+        },
+        {
+          "kind": "start",
+          "day": 27,
+          "missed": 4,
+          "level": 9,
+          "target": 11
+        },
+        {
+          "kind": "bonus",
+          "day": 27,
+          "base": 76,
+          "bonus": 76,
+          "level": 10,
+          "target": 11
+        }
+      ]
+    },
+    {
+      "id": "npc-13",
+      "name": "제시콧",
+      "alive": true,
+      "oldLevel": 15,
+      "newLevel": 15,
+      "oldXP": 33,
+      "newXP": 33,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-14",
+      "name": "벤기르",
+      "alive": false,
+      "oldLevel": 7,
+      "newLevel": 8,
+      "oldXP": 44,
+      "newXP": 47,
+      "extraXP": 70,
+      "events": [
+        {
+          "kind": "start",
+          "day": 23,
+          "missed": 9,
+          "level": 6,
+          "target": 9
+        },
+        {
+          "kind": "bonus",
+          "day": 23,
+          "base": 70,
+          "bonus": 70,
+          "level": 8,
+          "target": 9
+        }
+      ]
+    },
+    {
+      "id": "npc-15",
+      "name": "세냥",
+      "alive": true,
+      "oldLevel": 12,
+      "newLevel": 12,
+      "oldXP": 68,
+      "newXP": 68,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-16",
+      "name": "장마르",
+      "alive": true,
+      "oldLevel": 10,
+      "newLevel": 11,
+      "oldXP": 87,
+      "newXP": 0,
+      "extraXP": 1,
+      "events": [
+        {
+          "kind": "start",
+          "day": 22,
+          "missed": 2,
+          "level": 8,
+          "target": 9
+        },
+        {
+          "kind": "complete",
+          "day": 22,
+          "level": 10,
+          "target": 9
+        },
+        {
+          "kind": "start",
+          "day": 28,
+          "missed": 2,
+          "level": 10,
+          "target": 11
+        },
+        {
+          "kind": "bonus",
+          "day": 28,
+          "base": 83,
+          "bonus": 1,
+          "level": 11,
+          "target": 11
+        },
+        {
+          "kind": "complete",
+          "day": 28,
+          "level": 11,
+          "target": 11
+        }
+      ]
+    },
+    {
+      "id": "npc-17",
+      "name": "도하르",
+      "alive": true,
+      "oldLevel": 10,
+      "newLevel": 10,
+      "oldXP": 73,
+      "newXP": 73,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-18",
+      "name": "문호젠",
+      "alive": true,
+      "oldLevel": 13,
+      "newLevel": 13,
+      "oldXP": 102,
+      "newXP": 102,
+      "extraXP": 0,
+      "events": []
+    },
+    {
+      "id": "npc-19",
+      "name": "호두안",
+      "alive": true,
+      "oldLevel": 13,
+      "newLevel": 13,
+      "oldXP": 37,
+      "newXP": 37,
+      "extraXP": 0,
+      "events": []
+    }
+  ],
+  "changed": [
+    {
+      "id": "npc-5",
+      "name": "계산도",
+      "alive": false,
+      "oldLevel": 5,
+      "newLevel": 5,
+      "oldXP": 19,
+      "newXP": 48,
+      "extraXP": 29,
+      "events": [
+        {
+          "kind": "start",
+          "day": 12,
+          "missed": 8,
+          "level": 3,
+          "target": 5
+        },
+        {
+          "kind": "bonus",
+          "day": 12,
+          "base": 42,
+          "bonus": 29,
+          "level": 5,
+          "target": 5
+        },
+        {
+          "kind": "complete",
+          "day": 12,
+          "level": 5,
+          "target": 5
+        },
+        {
+          "kind": "start",
+          "day": 18,
+          "missed": 3,
+          "level": 5,
+          "target": 7
+        }
+      ]
+    },
+    {
+      "id": "npc-8",
+      "name": "목레아",
+      "alive": false,
+      "oldLevel": 10,
+      "newLevel": 11,
+      "oldXP": 9,
+      "newXP": 42,
+      "extraXP": 121,
+      "events": [
+        {
+          "kind": "start",
+          "day": 14,
+          "missed": 8,
+          "level": 3,
+          "target": 6
+        },
+        {
+          "kind": "bonus",
+          "day": 14,
+          "base": 48,
+          "bonus": 48,
+          "level": 5,
+          "target": 6
+        },
+        {
+          "kind": "complete",
+          "day": 15,
+          "level": 6,
+          "target": 6
+        },
+        {
+          "kind": "start",
+          "day": 24,
+          "missed": 2,
+          "level": 8,
+          "target": 10
+        },
+        {
+          "kind": "bonus",
+          "day": 24,
+          "base": 73,
+          "bonus": 73,
+          "level": 9,
+          "target": 10
+        },
+        {
+          "kind": "complete",
+          "day": 25,
+          "level": 10,
+          "target": 10
+        },
+        {
+          "kind": "start",
+          "day": 29,
+          "missed": 2,
+          "level": 11,
+          "target": 12
+        }
+      ]
+    },
+    {
+      "id": "npc-12",
+      "name": "부엔기",
+      "alive": true,
+      "oldLevel": 9,
+      "newLevel": 10,
+      "oldXP": 33,
+      "newXP": 71,
+      "extraXP": 119,
+      "events": [
+        {
+          "kind": "start",
+          "day": 22,
+          "missed": 13,
+          "level": 7,
+          "target": 9
+        },
+        {
+          "kind": "bonus",
+          "day": 22,
+          "base": 85,
+          "bonus": 43,
+          "level": 9,
+          "target": 9
+        },
+        {
+          "kind": "complete",
+          "day": 22,
+          "level": 9,
+          "target": 9
+        },
+        {
+          "kind": "start",
+          "day": 27,
+          "missed": 4,
+          "level": 9,
+          "target": 11
+        },
+        {
+          "kind": "bonus",
+          "day": 27,
+          "base": 76,
+          "bonus": 76,
+          "level": 10,
+          "target": 11
+        }
+      ]
+    },
+    {
+      "id": "npc-14",
+      "name": "벤기르",
+      "alive": false,
+      "oldLevel": 7,
+      "newLevel": 8,
+      "oldXP": 44,
+      "newXP": 47,
+      "extraXP": 70,
+      "events": [
+        {
+          "kind": "start",
+          "day": 23,
+          "missed": 9,
+          "level": 6,
+          "target": 9
+        },
+        {
+          "kind": "bonus",
+          "day": 23,
+          "base": 70,
+          "bonus": 70,
+          "level": 8,
+          "target": 9
+        }
+      ]
+    },
+    {
+      "id": "npc-16",
+      "name": "장마르",
+      "alive": true,
+      "oldLevel": 10,
+      "newLevel": 11,
+      "oldXP": 87,
+      "newXP": 0,
+      "extraXP": 1,
+      "events": [
+        {
+          "kind": "start",
+          "day": 22,
+          "missed": 2,
+          "level": 8,
+          "target": 9
+        },
+        {
+          "kind": "complete",
+          "day": 22,
+          "level": 10,
+          "target": 9
+        },
+        {
+          "kind": "start",
+          "day": 28,
+          "missed": 2,
+          "level": 10,
+          "target": 11
+        },
+        {
+          "kind": "bonus",
+          "day": 28,
+          "base": 83,
+          "bonus": 1,
+          "level": 11,
+          "target": 11
+        },
+        {
+          "kind": "complete",
+          "day": 28,
+          "level": 11,
+          "target": 11
+        }
+      ]
+    }
+  ]
+}

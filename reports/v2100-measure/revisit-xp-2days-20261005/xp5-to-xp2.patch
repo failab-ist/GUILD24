@@ -1,0 +1,13 @@
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 1f4a69f..5f13675 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -342,7 +342,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
+   for(const n of available.filter(n=>n.introduced)){const reg=G.Adventurer.isTrustedRegular(n);exp[reg?'regularEligible':'otherEligible']++;if(selected.includes(n))exp[reg?'regularVisits':'otherVisits']++;if((n._rvEligibleDays||0)>=7)exp.absence7++;if((n._rvEligibleDays||0)>=10)exp.absence10++;}
+   const visits=s._rvVisits??=[];
+   for(const n of selected){const missed=n._rvEligibleDays||0;visits.push({id:n.id,day:s.day,known:n.introduced,loyalty:n.loyalty,level:n.level,missed});
+-   if(RV_XP&&n.introduced&&missed>=5&&n.level<rvFloor(s.day)&&!n._rvCatchup)n._rvCatchup={day:s.day,target:rvFloor(s.day)};n._rvEligibleDays=0;}
++   if(RV_XP&&n.introduced&&missed>=2&&n.level<rvFloor(s.day)&&!n._rvCatchup)n._rvCatchup={day:s.day,target:rvFloor(s.day)};n._rvEligibleDays=0;}
+   for(const n of available)if(n.introduced&&!selected.includes(n))n._rvEligibleDays=(n._rvEligibleDays||0)+1;
+   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
+   for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER §Ordinary NPC Wallet on visit: visitIncome (+ the Away Wallet bank), cap 2000 */
