@@ -1431,8 +1431,8 @@ test('본사 특별 지원 간판: the DAY 0 free pick is three 영웅 cards; wi
   const h=new Game(Meta.fresh());h.autosave=false;h.start('hero-'+i);
   assert.ok(h.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'일반 only without it');}
 });
-test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 2%) on the expedition; under 단골도 10 nothing changes',()=>{
- assert.equal(DATA.decorationParams.cheerBanner.perTen,.02);
+test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the expedition; under 단골도 10 nothing changes',()=>{
+ assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);
  const g=past0(fresh('banner')),d=g.run.dungeons[0];
  const npc=loyalty=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=['rice','water'];n.injury=0;n.fatigue=0;n.records=[];n.loyalty=loyalty;return n;};
  const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(0),d).effects)*1.04};
@@ -1442,15 +1442,15 @@ test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 2%) on the e
   if(b.combatWon&&!a.combatWon)won++;if(a.combatWon&&!b.combatWon)lost++;
   const c=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),e=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{}});
   if(c.combatWon!==e.combatWon)diff++;}
- assert.ok(won>0&&lost===0,'단골도 30 (x1.06) only ever turns a lost fight into a won one: '+won);
+ assert.ok(won>0&&lost===0,'단골도 30 (x1.09) only ever turns a lost fight into a won one: '+won);
  assert.equal(diff,0,'단골도 9 is floor 0 - the same fight');
 });
-test('휴식 바우처 꽂이: at night every living adventurer is 3 Fatigue lower than the same Day without it',()=>{
+test('휴식 바우처 꽂이: at night every living adventurer is 6 Fatigue lower than the same Day without it',()=>{
  const drive=a=>{const g=new Game(a);g.autosave=false;g.start('voucher');g.buyRelic(g.run.relicWindow.candidateIds[0]);
   g.run.npcs.forEach(n=>n.fatigue=40);let k=0;while(g.run.phase!=='night'&&k++<500)step(g);return g.run.npcs;};
  const worn=drive(account(['voucher'])),bare=drive(Meta.fresh());
  assert.equal(worn.length,bare.length);
- worn.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,Math.max(0,bare[i].fatigue-3),n.name+': -3 overnight, visitor or not');});
+ worn.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,Math.max(0,bare[i].fatigue-6),n.name+': -6 overnight, visitor or not');});
 });
 test('지원 교환 쿠폰함: each window\'s first redraw is free, then 300G, 600G; without it 300G first',()=>{
  const g=wearing(['rerollCoupon'],'coupon'),h=past0(fresh('coupon-plain'));

@@ -466,7 +466,7 @@ Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says
 
 ### wall — 단골 감사 현수막 (id cheerBanner)
 ```text
-투력 × (1 + floor(단골도 / 10) × 2%)
+투력 × (1 + floor(단골도 / 10) × 3%)
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF
@@ -474,7 +474,7 @@ counterfactual reads the same term.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-every Night: every living adventurer's Fatigue -3 (visitors or not, 중상 recovery included; floor 0)
+every Night: every living adventurer's Fatigue -6 (visitors or not, 중상 recovery included; floor 0)
 ```
 
 ### display — 지원 교환 쿠폰함 (id rerollCoupon)
