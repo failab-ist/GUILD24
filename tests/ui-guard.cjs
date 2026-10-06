@@ -1859,20 +1859,24 @@ test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verba
 
 test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
  const f=fn('finalMuster')+fn('finalDock')+fn('finalScreen');
- const dockParts=[constLine('btn'),fn('finalDock')],dockCtx={stockSheetKey:()=>'<button data-action="stock-sheet">창고</button>',relicWindowLink:()=>'',finalOrdered:false,s:{team:[],cart:{0:1}}};
+ const dockParts=[constLine('btn'),fn('finalIsOrdering'),fn('finalDock')],dockCtx={stockSheetKey:()=>'<button data-action="stock-sheet">창고</button>',relicWindowLink:()=>'',finalOrdered:false,s:{team:[],cart:{0:1}}};
  const pending=render(dockParts,'finalDock(s,3,false)',dockCtx);
  assert.deepEqual([...pending.matchAll(/data-action="([^"]+)"/g)].map(x=>x[1]),['stock-sheet','confirm-order','final-ordered'],'last order has warehouse, confirm and next actions');
  assert.match(pending,/<button[^>]*data-action="final-ordered"[^>]*disabled[^>]*>원정대 꾸리기<\/button>/,'moving on waits for a pending cart');
  for(const cart of [{},{0:0}]){const ready=render(dockParts,'finalDock(s,3,false)',{...dockCtx,s:{team:[],cart}});assert.match(ready,/<button[^>]*data-action="confirm-order"[^>]*disabled/);assert.doesNotMatch(ready,/<button[^>]*data-action="final-ordered"[^>]*disabled/,'an empty or zero-valued cart permits next');}
- const mustParts=[fn('finalMuster')],base={E:String,Copy,game:{finalPreRoll:()=>{throw Error('uncommitted party must not produce a preparation');}},finalOrdered:false,supplyNPC:null,orderForm:()=>'<form data-order-form></form>',stockSide:()=>'<aside data-warehouse></aside>',npcCard:()=>'<button data-candidate></button>'};
+ const mustParts=[fn('finalIsOrdering'),fn('finalMuster')],base={E:String,Copy,game:{finalPreRoll:()=>{throw Error('uncommitted party must not produce a preparation');}},finalOrdered:false,supplyNPC:null,orderForm:()=>'<form data-order-form></form>',stockSide:()=>'<aside data-warehouse></aside>',npcCard:()=>'<button data-candidate></button>'};
  const opening=render(mustParts,'finalMuster(s,3,false)',{...base,s:{team:[],npcs:[]}});assert.match(opening,/<form data-order-form>/,'D30 opens on last order');assert.match(opening,/<aside data-warehouse>/,'D30 shares the warehouse');assert.doesNotMatch(opening,/final-roster/,'selection does not begin before next');
  const choosing=render(mustParts,'finalMuster(s,3,false)',{...base,finalOrdered:true,s:{team:[],npcs:[{alive:true,introduced:true,level:1}]}});assert.match(choosing,/final-roster/);assert.match(choosing,/data-candidate/);assert.doesNotMatch(choosing,/data-order-form/,'selection follows last order');
+ for(const [mode,team,committed,want] of [[null,[],false,true],[true,[],false,false],[false,['n1','n2'],false,true],[null,['n1'],false,false],[true,['n1'],true,false],[false,['n1'],true,false]]){const state={team,finalCommitted:committed},saved=JSON.stringify(state);assert.equal(render([fn('finalIsOrdering')],'finalIsOrdering(s)',{finalOrdered:mode,s:state}),want);assert.equal(JSON.stringify(state),saved,'presentation step never changes the run');}
+ const returned=render(mustParts,'finalMuster(s,3,false)',{...base,s:{team:['n1','n2'],npcs:[]}});assert.match(returned,/<form data-order-form>/,'explicit back opens Order with provisional members');assert.doesNotMatch(returned,/final-roster/);
+ const rosterDock=render(dockParts,'finalDock(s,3,false)',{...dockCtx,Copy,finalOrdered:true,s:{team:['n1'],cart:{}}});assert.match(rosterDock,/<button[^>]*data-action="final-order-back"[^>]*>발주로 돌아가기<\/button>/,'roster exposes the approved return action');
+ const committedDock=render(dockParts,'finalDock(s,3,true)',{...dockCtx,Copy,finalOrdered:true,s:{team:['n1'],cart:{},finalCommitted:true}});assert.doesNotMatch(committedDock,/final-order-back/,'commitment removes the return action');
  assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
  assert.ok(/case'final-npc':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'the notebook is the ordinary adventurer notebook');
  assert.ok(/btn\(inTeam\?'원정대에서 빼기':'원정대 선택','final-team','stamp'/.test(app),'the pick / release is the notebook footer');
  assert.ok(/case'final-team':game\.selectFinal\(id\)/.test(app),'and goes through the one selection rule');
  assert.ok(/'<div class="final-stats">'\+statGrid\(/.test(f)&&!/details class="final-order"/.test(f),'FINAL 준비 shows the Stat grid and no second order form');
- assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
+ assert.ok(/if\(phase!=='final'\)finalOrdered=null;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
  /* User 2026-09-30: the candidates can be read while ordering (view only), and a confirmed member's notebook from the prep */
  const form=render([constLine('btn'),fn('finalRiskSummary'),fn('orderForm')],'orderForm()',{game:{run:{phase:'final',day:30,branch:'fixture',money:100,cart:{},inventory:[],offers:[],dungeons:[{day:30,family:'final',scale:4.6,families:['spider'],hazards:['poison','web']}],final:{familyNames:['독거미 동굴']}},cartTotal:()=>0,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,Presentation,E:String,fmt:String,railShown:'',railFolded:()=>false,relicRef:()=>'',REROLL_ICON:''});
  assert.match(form,/<div class="form-head"><h1>발주서<\/h1><button[^>]*data-action="final-roster"[^>]*>원정대 후보 보기<\/button><span class="docno">/,'candidate viewer is in the heading beside the title');
@@ -1880,7 +1884,7 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
  const m=app.slice(app.indexOf("else if(modal==='finalRoster')"),app.indexOf("else if(modal.startsWith('npc:'))"));
  assert.ok(/npcCard\(n,'final-view'\)/.test(m)&&/n\.alive&&n\.introduced/.test(m)&&!/final-npc|final-team|selectFinal/.test(m),'the candidates are the muster\'s own list, with no pick on it');
  assert.ok(/case'final-view':case'final-detail':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'each opens the ordinary notebook');
- assert.ok(/s\?\.phase==='final'&&!s\.finalCommitted&&n&&\(finalOrdered\|\|s\.team\.length\)\)/.test(app),'the notebook picks only on the muster step, never while ordering');
+ assert.ok(/s\?\.phase==='final'&&!s\.finalCommitted&&n&&!finalIsOrdering\(s\)/.test(app),'the notebook picks only on the muster step, never while ordering');
  assert.ok(/btn\('자세히 보기','final-detail','bare more','data-id="'\+supplyNPC\+'"'\)/.test(f),'FINAL 준비: 자세히 보기 opens the supplied member\'s notebook');
 });
 
@@ -1902,10 +1906,10 @@ test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only
  // one type ladder (User 2026-09-29): every label in one column and style, every value in one face and size
  assert.ok(/\.death-limit-row \.rail-line\{display:grid;grid-template-columns:44px 1fr/.test(css)&&/\.death-limit-row \.rail-line i\{[^}]*font:600 11px/.test(css)&&/\.death-limit-row \.rail-line b\{[^}]*font:500 13px/.test(css),'one label column, one value size');
  const calls=[];const watchCtx={watchForecastPin:()=>calls.push('salePin'),watchTray:()=>calls.push('tray'),pinWatch:null,watchOrderToday:()=>calls.push('orderRail'),watchStockSheet:()=>calls.push('warehouse'),orderWatch:null,sheetWatch:null,railShown:'',finalPinWatch:null,finalPinFolded:false,watchFinalPin:()=>calls.push('finalPin'),finalOrdered:false,game:{run:{finalCommitted:false,team:[]}}};
- render([fn('syncWatchers')],"syncWatchers('order')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'ordinary Order keeps both existing watchers');
- calls.length=0;render([fn('syncWatchers')],"syncWatchers('final')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'Final last order shares the same watchers');
- calls.length=0;render([fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,finalOrdered:true});assert.deepEqual(calls,[],'roster never keeps the Order watchers');
- calls.length=0;render([fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,game:{run:{finalCommitted:true,team:['n1']}}});assert.deepEqual(calls,['finalPin'],'committed preparation watches only the member pin');
+ render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('order')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'ordinary Order keeps both existing watchers');
+ calls.length=0;render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('final')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'Final last order shares the same watchers');
+ calls.length=0;render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,finalOrdered:true});assert.deepEqual(calls,[],'roster never keeps the Order watchers');
+ calls.length=0;render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,game:{run:{finalCommitted:true,team:['n1']}}});assert.deepEqual(calls,['finalPin'],'committed preparation watches only the member pin');
  /* User 2026-10-02: the room under the 발주서 is the open sheet's own height, not the 45% it may reach */
  assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(var\(--sheet-h,45dvh\) \+ 30px\)\}/.test(css)
   &&/host\.style\.setProperty\('--sheet-h'/.test(fn('watchStockSheet')),'the sheet reports its own height as the room under the form');

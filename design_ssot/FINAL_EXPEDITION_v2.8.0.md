@@ -101,7 +101,10 @@ Player-facing Final flow is:
 
 D30 opens on the last order - the ordinary order form, optional, confirmed on its own 발주 확정; `원정대 꾸리기` moves on
 once no cart is pending. In 원정대 꾸리기 a roster card opens that adventurer's notebook (Stats, Traits, equipment,
-condition, expedition records) and the pick or release is made from the notebook's footer. FINAL 준비 shows the Stat grid
+condition, expedition records) and the pick or release is made from the notebook's footer. Before commitment, `발주로 돌아가기` returns
+to the same last-order sheet with all provisional members, confirmed stock, remaining quantities and Gold preserved.
+The Player may confirm an additional order, then resume 원정대 꾸리기 with those members still selected. Candidate
+notebooks remain view-only in Order even when provisional members exist. After commitment there is no return to Order. FINAL 준비 shows the Stat grid
 of the adventurer being supplied; the order form is not repeated there.
 
 The last order is chosen for the people who can go, so they can be read while ordering: `원정대 후보 보기`, beside

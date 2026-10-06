@@ -1144,7 +1144,8 @@ A selection surface, not a rarity gallery: up to 3 participants, 1 or 2 allowed 
 (`선택 1명 · 최대 3명`) and is never under the menu pin. Rarity stays as text (at most one restrained step, never above the name
 or overflowing); no rarity-coloured frames; unselected cards neutral, selected cards alone carry the strong frame.
 - the last order carries `원정대 후보 보기` beside its form heading: a read-only sheet of the candidates, each opening the
-  notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW). The phone dock holds 창고 / 발주 확정 / 원정대 꾸리기;
+  notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW). The candidate control is a clearly framed secondary
+  action next to the title, rather than a small underlined label. The phone dock holds 창고 / 발주 확정 / 원정대 꾸리기;
   the warehouse, form references and folded floating rail reuse ordinary ORDER. The rail shows only the Final Hazard names and required-response numbers
   and post-order Gold, with no Family names, Tiers or ordinary visitor counts. Support purchase/Seal choices remain available through
   the existing D30 arrival and Store menu; support effects keep their form reference.
@@ -1153,6 +1154,9 @@ or overflowing); no rarity-coloured frames; unselected cards neutral, selected c
   omitting the healthy label; the FINAL notebook retains full condition information
 
 No ordinary `전투 전망` while the party is provisional. Guidance copy -> COPY_AUDIT_APPROVED.
+
+Before commitment, the roster dock also carries `발주로 돌아가기` beside `원정대 확정`, with the return affordance
+explained in the existing roster guidance block. Returning preserves provisional members and the last-order sheet.
 
 ### PARTY COMMITMENT
 
@@ -1437,8 +1441,8 @@ colour, silhouette and place vary by Phase.
 - size by consequence: inside the Day (`문 열기`, `영업 시작`, `다음`) 56 px tall on phone / 60 px desk, `손님 보내기` 44 px on phone / 60 px desk; across a
   Day or Run boundary (`다음 날`, `다음 점포 열기`, FINAL gate bar) 64 / 72 px; `첫 점포지원 고르기` 64 px everywhere (the
   preparation plates sit right above the dock); ORDER labels may step down on the narrowest phones so the Gold never wraps
-- the one pair: on D30's last order `원정대 후보 보기` shares the gate bar with `원정대 선택` (a view, not a second flow
-  Action), both on one smaller row on a phone
+- D30 last order: `원정대 후보 보기` is the secondary action beside the form title; the phone dock holds
+  `창고` / `발주 확정` / `원정대 꾸리기`. Before commitment, the roster dock pairs `발주로 돌아가기` with `원정대 확정`.
 - depth 5 px across a boundary, 4 px inside the Day, `손님 보내기` 3 px (under the price keys, §SALE — COUNTER TRAY);
   `발주 확정` and `영업 시작` are never enabled together and share the 4 px - on a phone ORDER's slim dock row (User 2026-10-02)
   sets both, and the `창고` key, at 48 px (Android's touch target) with a 3 px cast, a 2 px lit top and a 3 px foot, labels 15 px
@@ -2726,11 +2730,13 @@ tap closes it; a second copy of the warehouse on screen.
 #### UI-Q-v29-51 — D30 CANDIDATES / FINAL 준비 NOTEBOOK (User 2026-09-30)
 
 Verify FINAL_EXPEDITION §D30 PLAYER FLOW and UI_UX §PARTY SELECTION at 360 / 390 and 1280.
-PASS: the last order's dock carries `원정대 후보 보기` beside `원정대 선택` on one bar, one row on a phone, neither label wrapping; it
+PASS: `원정대 후보 보기` is a framed secondary action beside the last-order form title, with no label wrapping; it
 opens `원정대 후보` (the muster's alive, visited candidates), each card opening the notebook whose footer is `원정대 후보 보기`,
 never `원정대 선택` / `원정대에서 빼기`, with nothing about the party changing; on the muster step the notebook picks and releases;
 FINAL 준비: `자세히 보기` under the Stat grid opens the supplied member's notebook with `돌아가기`; no console or runtime error.
-FAIL: a pick or release possible while ordering, or a second muster on the order step.
+PASS: before commitment `발주로 돌아가기` restores the same order sheet with provisional members retained; additional order confirmation
+then `원정대 꾸리기` preserves those members. After commitment the return action is absent.
+FAIL: a pick or release possible while ordering, a second muster on the order step, or lost members/order state when returning.
 
 #### UI-Q-v29-52 — GATE TIER / FIRE GATE TUTORIAL (User 2026-09-30)
 

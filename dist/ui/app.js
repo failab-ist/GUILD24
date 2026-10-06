@@ -505,7 +505,7 @@ let trayFolded=false,trayArm=0,trayBase=0;
 /* FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): the last order comes first, the way an ordinary Day starts.
    Which step is showing is presentation: the muster opens once the player moves on from the order - or at once when
    a saved party pick exists - and the confirmed party is the prep. Nothing new is saved. */
-let finalOrdered=false,finalPinFolded=false,finalPinWatch=null;
+let finalOrdered=null,finalPinFolded=false,finalPinWatch=null;
 function syncTray(){const t=$('.p-sale .counter-tray');if(!t)return;t.classList.toggle('folded',trayFolded);
  t.querySelector('.tray-unfold')?.setAttribute('aria-expanded',String(!trayFolded));}
 function foldTray(){if(!selected||trayFolded||innerWidth>=1024||game.run?.phase!=='sell')return;trayFolded=true;syncTray();}
@@ -682,7 +682,7 @@ function render(){
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
  const focusHold=holdFocus($('#app'));
  $('#app').innerHTML=phaseScreen(phase);sentenceBreaks($('#app'));
- if(phase!=='final')finalOrdered=false;
+ if(phase!=='final')finalOrdered=null;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
  if(phase==='end'&&arrived)endReveal();
@@ -728,7 +728,7 @@ function openOwedModal(s,phase,changed){
 }
 function syncWatchers(phase){
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order'||phase==='final'&&!game.run.finalCommitted&&!finalOrdered&&!game.run.team.length){watchOrderToday();watchStockSheet();}else{orderWatch?.disconnect();orderWatch=null;railShown='';sheetWatch?.disconnect();sheetWatch=null;}
+ if(phase==='order'||phase==='final'&&finalIsOrdering(game.run)){watchOrderToday();watchStockSheet();}else{orderWatch?.disconnect();orderWatch=null;railShown='';sheetWatch?.disconnect();sheetWatch=null;}
  if(phase==='final'&&game.run.finalCommitted)watchFinalPin();else{finalPinWatch?.disconnect();finalPinWatch=null;finalPinFolded=false;}
 }
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-10-02): the rows under an open phone sheet scroll up above it, and the room left
@@ -1500,7 +1500,7 @@ function showCoach(){
  const relicD0=modal==='relics'&&game.run?.phase==='foundation';
  const s=game.run,relicD30=modal==='relics'&&s?.phase==='final'&&s.day===30&&s.relicWindow?.milestoneDay===30;
  if(tutorial.skipped||(modal&&!relicD0&&!relicD30)||bossHold)return;
- const finalGroup=s?.finalCommitted?'final':finalOrdered||s?.team?.length?'finalRoster':'finalOrder';
+ const finalGroup=s?.finalCommitted?'final':finalIsOrdering(s)?'finalOrder':'finalRoster';
  const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);activeGroup=steps;
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
@@ -2192,13 +2192,14 @@ function watchFinalPin(){finalPinWatch?.disconnect();finalPinWatch=null;const pi
  if(!pin||!src||!sc)return;const sync=()=>{const show=src.getBoundingClientRect().bottom<=sc.getBoundingClientRect().top+2;pin.classList.toggle('show',show);host.style.height=show?Math.ceil(pin.getBoundingClientRect().height+4)+'px':'0px';};
  sync();if(typeof IntersectionObserver==='function'){finalPinWatch=new IntersectionObserver(sync,{root:sc,threshold:0});finalPinWatch.observe(src);}
 }
+function finalIsOrdering(s){return !!s&&!s.finalCommitted&&(finalOrdered===false||(finalOrdered===null&&!s.team.length));}
 function finalMuster(s,need,committed){
  const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명',roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level),preparation=committed?game.finalPreRoll():null;
- return (!committed&&!finalOrdered&&!s.team.length
+ return (finalIsOrdering(s)
  ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order-layout"><div class="order-desk final-order open">'+orderForm()+'</div>'+stockSide()+'</div>'
  :!committed
  ?'<div class="party-head"><h2>원정대 꾸리기</h2><span class="count">'+E(pickCount)+'</span></div>'
- +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'</p></div>'
+ +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'<br>'+E(Copy.finalPrep.returnNote)+'</p></div>'
  +'<div class="npc-grid final-roster">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
  :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'+finalForecastView()
  +'<div class="final-team">'+s.team.map((id,index)=>{const n=s.npcs.find(x=>x.id===id);return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'+finalMemberBody(n,preparation.preparations[index],preparation.d)+'</button>';}).join('')+'</div>'
@@ -2206,8 +2207,8 @@ function finalMuster(s,need,committed){
 }
 function finalDock(s,need,committed){const ready=s.team.length>0&&s.team.length<=need,held=Object.values(s.cart||{}).some(q=>q>0);
  if(!need)return relicWindowLink()+btn('출전 불가 · 런 종료','boss','danger');
- if(!committed&&!finalOrdered&&!s.team.length)return stockSheetKey()+btn('발주 확정','confirm-order','stamp',held?'':'disabled')+btn('원정대 꾸리기','final-ordered','stamp leave',held?'disabled':'');
- return relicWindowLink()+(committed?btn('최종 원정 보내기','boss','stamp'):btn('원정대 확정','final-commit','stamp',ready?'':'disabled'));
+ if(finalIsOrdering(s))return stockSheetKey()+btn('발주 확정','confirm-order','stamp',held?'':'disabled')+btn('원정대 꾸리기','final-ordered','stamp leave',held?'disabled':'');
+ return relicWindowLink()+(committed?btn('최종 원정 보내기','boss','stamp'):btn(Copy.finalPrep.returnOrder,'final-order-back','stamp final-order-back')+btn('원정대 확정','final-commit','stamp',ready?'':'disabled'));
 }
 function finalScreen(){
  const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
@@ -2218,7 +2219,7 @@ function finalScreen(){
     from the Run exactly as the D5 / D15 reveals do - Scene.bossArt reads bossId, day and
     sealBreakCount, so SLOTH shows the form its broken seals earned and the others their
     battle form - and the castle stays as the place, under the name of who is in it. */
- const ordering=!committed&&!finalOrdered&&!s.team.length,b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
+ const ordering=finalIsOrdering(s),b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const body='<div class="gate-zero">'
  +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
       :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
@@ -2641,7 +2642,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
    +s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level).map(n=>npcCard(n,'final-view')).join('')+'</div>';}
  else if(modal.startsWith('npc:')){const id=modal.slice(4),s=game.run,n=s?.npcs.find(x=>x.id===id);title='우리 점포의 모험가';body=npcDetail(id);
   /* FINAL muster (User 2026-09-25): the notebook is where a member is taken on or let go */
-  if(s?.phase==='final'&&!s.finalCommitted&&n&&(finalOrdered||s.team.length)){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
+  if(s?.phase==='final'&&!s.finalCommitted&&n&&!finalIsOrdering(s)){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
    footer=btn(inTeam?'원정대에서 빼기':'원정대 선택','final-team','stamp','data-id="'+id+'" '+(out||full?'disabled':''));}
   /* read only on D30 before the muster (back to the candidates) and after the party is confirmed (back to the prep) */
   else if(s?.phase==='final'&&!s.finalCommitted)footer=btn('원정대 후보 보기','final-roster');
@@ -2840,6 +2841,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
+ case'final-order-back':if(s.phase!=='final'||s.finalCommitted)break;finalOrdered=false;sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
  case'final-npc':sound('ui');setModal('npc:'+id);break;
  case'final-roster':sound('ui');setModal('finalRoster');break;
