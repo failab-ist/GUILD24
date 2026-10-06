@@ -199,8 +199,8 @@ draws a living adventurer takes).
   decided as any customer's (User 2026-10-02), its SALE mark on its wallet (COPY_AUDIT §3-13; it does not say the first is
   sure) - and the arrival line
   COPY_AUDIT §26-1. The Day's count of visitors is unchanged.
-- measurement harnesses (`reader` and the other bots, the multi-Run trajectory) switch the lessons off, so balance
-  measurements stay on the ordinary Run.
+- the standard balance runner `tools/measure-v2100.cjs` enables the same first-Run lessons as player accounts: fresh accounts
+  use them and later settled Runs do not. Direct `Debug.simulate` / `Debug.trajectory` defaults remain ordinary for regression QA.
 
 ## RUN START EFFECT APPLICATION
 
