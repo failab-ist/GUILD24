@@ -1,0 +1,334 @@
+{
+  "baseline": {
+    "reader": {
+      "warrior": {
+        "name": "전사",
+        "late": {
+          "wins": 1046,
+          "exp": 2883,
+          "combatLoss": 1276,
+          "env": 1095,
+          "deaths": 361,
+          "success": 0.36281651057925773,
+          "deathRate": 0.12521678806798472
+        },
+        "d30": {
+          "runs": 208,
+          "exposedNPCs": 938,
+          "alive": 448,
+          "aliveRate": 0.47761194029850745,
+          "finalPicks": 130,
+          "selectionAmongAlive": 0.29017857142857145
+        }
+      },
+      "archer": {
+        "name": "궁수",
+        "late": {
+          "wins": 1124,
+          "exp": 2875,
+          "combatLoss": 1212,
+          "env": 1068,
+          "deaths": 337,
+          "success": 0.3909565217391304,
+          "deathRate": 0.11721739130434783
+        },
+        "d30": {
+          "runs": 208,
+          "exposedNPCs": 929,
+          "alive": 441,
+          "aliveRate": 0.4747039827771798,
+          "finalPicks": 136,
+          "selectionAmongAlive": 0.30839002267573695
+        }
+      },
+      "mage": {
+        "name": "마법사",
+        "late": {
+          "wins": 1589,
+          "exp": 3558,
+          "combatLoss": 1076,
+          "env": 1351,
+          "deaths": 327,
+          "success": 0.4465992130410343,
+          "deathRate": 0.09190556492411467
+        },
+        "d30": {
+          "runs": 208,
+          "exposedNPCs": 974,
+          "alive": 563,
+          "aliveRate": 0.5780287474332649,
+          "finalPicks": 215,
+          "selectionAmongAlive": 0.38188277087033745
+        }
+      },
+      "priest": {
+        "name": "사제",
+        "late": {
+          "wins": 1239,
+          "exp": 3106,
+          "combatLoss": 1411,
+          "env": 1010,
+          "deaths": 323,
+          "success": 0.39890534449452675,
+          "deathRate": 0.10399227301996136
+        },
+        "d30": {
+          "runs": 208,
+          "exposedNPCs": 929,
+          "alive": 502,
+          "aliveRate": 0.5403659849300323,
+          "finalPicks": 143,
+          "selectionAmongAlive": 0.2848605577689243
+        }
+      }
+    },
+    "expert": {
+      "warrior": {
+        "name": "전사",
+        "late": {
+          "wins": 1180,
+          "exp": 3145,
+          "combatLoss": 1372,
+          "env": 1194,
+          "deaths": 373,
+          "success": 0.3751987281399046,
+          "deathRate": 0.11860095389507154
+        },
+        "d30": {
+          "runs": 226,
+          "exposedNPCs": 1021,
+          "alive": 497,
+          "aliveRate": 0.48677766895200786,
+          "finalPicks": 137,
+          "selectionAmongAlive": 0.27565392354124746
+        }
+      },
+      "archer": {
+        "name": "궁수",
+        "late": {
+          "wins": 1250,
+          "exp": 3151,
+          "combatLoss": 1315,
+          "env": 1148,
+          "deaths": 336,
+          "success": 0.3966994604887337,
+          "deathRate": 0.10663281497937163
+        },
+        "d30": {
+          "runs": 226,
+          "exposedNPCs": 1013,
+          "alive": 513,
+          "aliveRate": 0.506416584402764,
+          "finalPicks": 159,
+          "selectionAmongAlive": 0.30994152046783624
+        }
+      },
+      "mage": {
+        "name": "마법사",
+        "late": {
+          "wins": 1699,
+          "exp": 3734,
+          "combatLoss": 1127,
+          "env": 1409,
+          "deaths": 313,
+          "success": 0.4550080342795929,
+          "deathRate": 0.0838243170862346
+        },
+        "d30": {
+          "runs": 226,
+          "exposedNPCs": 1109,
+          "alive": 625,
+          "aliveRate": 0.563570784490532,
+          "finalPicks": 237,
+          "selectionAmongAlive": 0.3792
+        }
+      },
+      "priest": {
+        "name": "사제",
+        "late": {
+          "wins": 1126,
+          "exp": 2956,
+          "combatLoss": 1402,
+          "env": 976,
+          "deaths": 334,
+          "success": 0.38092016238159676,
+          "deathRate": 0.11299052774018944
+        },
+        "d30": {
+          "runs": 226,
+          "exposedNPCs": 948,
+          "alive": 459,
+          "aliveRate": 0.48417721518987344,
+          "finalPicks": 144,
+          "selectionAmongAlive": 0.3137254901960784
+        }
+      }
+    }
+  },
+  "growth": {
+    "reader": {
+      "warrior": {
+        "name": "전사",
+        "late": {
+          "wins": 802,
+          "exp": 2332,
+          "combatLoss": 1130,
+          "env": 881,
+          "deaths": 297,
+          "success": 0.3439108061749571,
+          "deathRate": 0.12735849056603774
+        },
+        "d30": {
+          "runs": 161,
+          "exposedNPCs": 697,
+          "alive": 324,
+          "aliveRate": 0.4648493543758967,
+          "finalPicks": 113,
+          "selectionAmongAlive": 0.3487654320987654
+        }
+      },
+      "archer": {
+        "name": "궁수",
+        "late": {
+          "wins": 950,
+          "exp": 2508,
+          "combatLoss": 1106,
+          "env": 932,
+          "deaths": 283,
+          "success": 0.3787878787878788,
+          "deathRate": 0.11283891547049442
+        },
+        "d30": {
+          "runs": 161,
+          "exposedNPCs": 721,
+          "alive": 352,
+          "aliveRate": 0.4882108183079057,
+          "finalPicks": 113,
+          "selectionAmongAlive": 0.3210227272727273
+        }
+      },
+      "mage": {
+        "name": "마법사",
+        "late": {
+          "wins": 1264,
+          "exp": 3008,
+          "combatLoss": 1003,
+          "env": 1168,
+          "deaths": 288,
+          "success": 0.42021276595744683,
+          "deathRate": 0.09574468085106383
+        },
+        "d30": {
+          "runs": 161,
+          "exposedNPCs": 750,
+          "alive": 408,
+          "aliveRate": 0.544,
+          "finalPicks": 153,
+          "selectionAmongAlive": 0.375
+        }
+      },
+      "priest": {
+        "name": "사제",
+        "late": {
+          "wins": 990,
+          "exp": 2601,
+          "combatLoss": 1257,
+          "env": 843,
+          "deaths": 286,
+          "success": 0.3806228373702422,
+          "deathRate": 0.10995770857362552
+        },
+        "d30": {
+          "runs": 161,
+          "exposedNPCs": 754,
+          "alive": 376,
+          "aliveRate": 0.4986737400530504,
+          "finalPicks": 104,
+          "selectionAmongAlive": 0.2765957446808511
+        }
+      }
+    },
+    "expert": {
+      "warrior": {
+        "name": "전사",
+        "late": {
+          "wins": 766,
+          "exp": 2307,
+          "combatLoss": 1135,
+          "env": 900,
+          "deaths": 307,
+          "success": 0.3320329432162982,
+          "deathRate": 0.1330732553099263
+        },
+        "d30": {
+          "runs": 155,
+          "exposedNPCs": 690,
+          "alive": 346,
+          "aliveRate": 0.5014492753623189,
+          "finalPicks": 77,
+          "selectionAmongAlive": 0.22254335260115607
+        }
+      },
+      "archer": {
+        "name": "궁수",
+        "late": {
+          "wins": 816,
+          "exp": 2302,
+          "combatLoss": 1093,
+          "env": 833,
+          "deaths": 294,
+          "success": 0.35447437011294525,
+          "deathRate": 0.12771503040834056
+        },
+        "d30": {
+          "runs": 155,
+          "exposedNPCs": 710,
+          "alive": 314,
+          "aliveRate": 0.4422535211267606,
+          "finalPicks": 114,
+          "selectionAmongAlive": 0.3630573248407643
+        }
+      },
+      "mage": {
+        "name": "마법사",
+        "late": {
+          "wins": 1221,
+          "exp": 2869,
+          "combatLoss": 972,
+          "env": 1105,
+          "deaths": 293,
+          "success": 0.4255838271174625,
+          "deathRate": 0.1021261763680725
+        },
+        "d30": {
+          "runs": 155,
+          "exposedNPCs": 732,
+          "alive": 394,
+          "aliveRate": 0.5382513661202186,
+          "finalPicks": 147,
+          "selectionAmongAlive": 0.3730964467005076
+        }
+      },
+      "priest": {
+        "name": "사제",
+        "late": {
+          "wins": 870,
+          "exp": 2318,
+          "combatLoss": 1145,
+          "env": 748,
+          "deaths": 249,
+          "success": 0.37532355478861085,
+          "deathRate": 0.10742018981880933
+        },
+        "d30": {
+          "runs": 155,
+          "exposedNPCs": 684,
+          "alive": 346,
+          "aliveRate": 0.5058479532163743,
+          "finalPicks": 127,
+          "selectionAmongAlive": 0.3670520231213873
+        }
+      }
+    }
+  }
+}

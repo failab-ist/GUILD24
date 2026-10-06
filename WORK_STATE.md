@@ -10,6 +10,7 @@ STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User �
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - 로컬 후속 작업(User 2026-10-06): 대응 음식·음료 7종 피로 회복만 PR #107 이전으로 복원(`3b09af23`), 가격·직접 대응은 유지. 직업 계측 도구 `eac6111b`로 기준+성장 비용 ×8+후반 전투 1.00/1.05, 60,000런 측정 완료. 후보는 Production 미적용이고 직업·마왕·환경 변경도 미적용. main 머지/배포는 아직 하지 않았다. 결과 `reports/v2100-measure/fresh-candidates-20261006/REPORT.md`.
 - 로컬 롤백 밸런스 기준 로그: `reports/v2100-measure/fresh-candidates-20261006/baseline.log`(도구 `eac6111b`, 확정 회복 롤백 기준). 이전 배포 버전 기준은 `reports/v2100-measure/v2103-bots-baseline.log`. 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
+- 후속 결정/읽기(User 2026-10-06): 균형 봇은 기준 평가와 기본 측정에서 제외(`1aa258e0`). 기존 데이터의 프레시 도달/도달 시 클리어·직업 후반 사망/종료 생존은 `reports/v2100-measure/fresh-candidates-20261006/FOLLOWUP.md`. D30 생존 난이도와 도달 후 마왕전 난이도를 분리하는 방향이며 마왕/성장 새 수치는 아직 미적용. 추가 시뮬 없음.
 
 ## 최근 버전 (User 2026-10-02 ~ 10-04)
 
