@@ -4,7 +4,7 @@
 // D30 reach / clear, deaths, a zombie line and the Decorations bought; a second line the end reasons (death limit, bankruptcy,
 // Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers
 // against the rest, cash per Day and the Capital gain. The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
-//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--policies reader,expert] [--decos none,economy] [--out file.json]
+//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,expert] [--decos none,economy] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
@@ -86,6 +86,7 @@ else if(require.main===module){
  const here=path.resolve(__dirname,'..'),before=flag('--before',null),TT=+flag('--traj',200),FN=+flag('--fresh',1000),R=+flag('--runs',10),out=flag('--out',null);
  const POL=flag('--policies','reader,expert').split(','),DECOS=flag('--decos',null)?.split(',');
  const cpus=Math.max(1,os.cpus().length),PARTS=4,jobs=[];
+ const WORKERS=+flag('--workers',cpus);if(!Number.isInteger(WORKERS)||WORKERS<1)throw Error('--workers는 양의 정수여야 합니다.');
  const srcs=[['after',here],...(before?[['before',path.resolve(before)]]:[])];
  for(const [src,root] of srcs){
   for(const policy of POL)for(const deco of DECOS||(src==='after'?['none','economy','survival']:['none','survival']))
@@ -93,13 +94,13 @@ else if(require.main===module){
   for(const policy of POL)for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
  }
  const acc={},t0=Date.now();let live=0,done=0,failed=false;const total=jobs.length;
- const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:3,firstRunLessons:true},arms:acc};
+ const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:3,firstRunLessons:true,workers:WORKERS},arms:acc};
   if(out)fs.writeFileSync(out,JSON.stringify(res));console.log(summary(res));};
  const next=()=>{if(!jobs.length){if(!live)finish();return;}const j=jobs.shift();live++;
   const c=fork(__filename,[],{env:{...process.env,V2100_WORKER:'1'}});let received=false;
   c.on('message',m=>{received=true;const key=[m.j.src,m.j.kind,m.j.policy,m.j.deco].join('/');const a=acc[key]??={rows:[],wallets:{}};a.rows.push(...m.rows);for(const [w,h] of Object.entries(m.wallets)){const t=a.wallets[w]??=new Array(201).fill(0);h.forEach((v,i)=>t[i]+=v);}});
   c.on('exit',code=>{if(code||!received){failed=true;process.stderr.write('\n측정 worker 실패: '+JSON.stringify(j)+' code='+code+'\n');}live--;done++;process.stderr.write('\r'+done+'/'+total+' jobs · '+Math.round((Date.now()-t0)/1000)+'s');next();});c.send(j);};
- for(let i=0;i<cpus;i++)next();
+ for(let i=0;i<Math.min(WORKERS,total);i++)next();
 }
 
 function summary(res){
