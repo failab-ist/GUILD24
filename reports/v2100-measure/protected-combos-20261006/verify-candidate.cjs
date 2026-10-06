@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),path=require('node:path');
+const root=process.argv[2],name=process.argv[3];
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])require(path.join(root,'dist',f+'.js'));
+const growth=name!=='baseline',mage=['mage31','full5'].includes(name),factor=name==='boss10'?.9:['boss5','full5'].includes(name)?.95:1;
+const n={job:'warrior',level:1,xp:0,potential:1,stats:{combat:17,survival:18,mobility:9,spirit:10}};
+Adventurer.grow(n,growth?25:24);assert.equal(n.level,1);Adventurer.grow(n,1);assert.equal(n.level,2);assert.equal(n.xp,0);
+assert.ok(Math.abs(Dungeon.gateDayTerm(20)-24.85)<1e-9);assert.ok(Math.abs(Dungeon.gateDayTerm(29)-(growth?34.3:34.75))<1e-9);
+assert.deepEqual(DATA.jobBy.mage.growth,[mage?3.1:3.3,1.6,1.8,2.7]);
+const check=(boss,fire,breaks,want)=>{const run={bossId:boss,final:{families:fire?['golem','spider']:['spider','snow']},stats:{revenue:0},sealBreakCount:breaks};assert.ok(Math.abs(Game.prototype.effectiveBossPower.call({run},0)-want*factor)<1e-9,boss+' '+fire+' '+breaks);};
+check('WRATH',false,0,240);check('WRATH',true,0,264);check('GREED',false,0,255);check('SLOTH',false,0,267);check('SLOTH',false,3,199);
+console.log('PASS '+name+': EXP boundary / D20-D29 / mage / Boss-Fire-Greed-Sloth');
