@@ -1,0 +1,11 @@
+1/32 jobs · 118s2/32 jobs · 121s3/32 jobs · 123s4/32 jobs · 139s5/32 jobs · 163s6/32 jobs · 165s7/32 jobs · 170s8/32 jobs · 171s
+측정 worker 실패: {"src":"after","root":"C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0","kind":"traj","policy":"expert","deco":"none","T":50,"R":10,"part":1} code=1
+9/32 jobs · 179s
+측정 worker 실패: {"src":"after","root":"C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0","kind":"traj","policy":"reader","deco":"survival","T":50,"R":10,"part":1} code=1
+10/32 jobs · 181s
+측정 worker 실패: {"src":"after","root":"C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0","kind":"traj","policy":"expert","deco":"none","T":50,"R":10,"part":0} code=1
+11/32 jobs · 189s
+측정 worker 실패: {"src":"after","root":"C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0","kind":"traj","policy":"expert","deco":"none","T":50,"R":10,"part":3} code=1
+12/32 jobs · 208s
+측정 worker 실패: {"src":"after","root":"C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0","kind":"traj","policy":"expert","deco":"economy","T":50,"R":10,"part":2} code=1
+13/32 jobs · 238s

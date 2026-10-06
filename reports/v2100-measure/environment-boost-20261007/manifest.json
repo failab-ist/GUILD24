@@ -24,7 +24,45 @@
         "seconds": 429.103
       },
       "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\env20.json"
+    },
+    "potion0": {
+      "head": "0d6bf9b3131f105c1c4c94f5b46085da94249d81",
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0.json",
+      "bytes": 43862353,
+      "sha256": "a1907d41264ab7675f5a497740af65da40992245cdf1f933e658fd77e7ac14ca",
+      "exit": {
+        "code": 0,
+        "signal": null,
+        "seconds": 403.458
+      },
+      "job": {
+        "InJob": false,
+        "Started": "2026-10-06T19:05:45.0959019Z",
+        "Pid": 23252,
+        "ProbeOk": true
+      },
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --workers 4 --out C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion0.json"
+    },
+    "potion1": {
+      "head": "c84e93e083bbe06982870dd112ca9f5b369dd78d",
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion1.json",
+      "bytes": 44071741,
+      "sha256": "9b298434d37d04bc68ecd9e3f1ac6b6b71df2e31eb9716e15376599b6dee4ecf",
+      "exit": {
+        "code": 0,
+        "signal": null,
+        "seconds": 405.241
+      },
+      "job": {
+        "Started": "2026-10-06T19:05:45.1322375Z",
+        "ProbeOk": true,
+        "InJob": false,
+        "Pid": 17552
+      },
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --workers 4 --out C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\potion1.json"
     }
   },
-  "interrupted": "초기 중단 실행은 제외. 같은 후보에서 재시작."
+  "interrupted": "초기 중단 실행은 제외. 같은 후보에서 재시작.",
+  "potionDiff": "dist/data/relics.js | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+  "validNewRuns": 56000
 }
