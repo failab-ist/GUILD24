@@ -1,6 +1,6 @@
 # WORK_STATE
 
-DATE: 2026-10-05
+DATE: 2026-10-06
 STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User 화면·main 머지·패치 버전 컨펌 2026-10-05). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
@@ -8,8 +8,8 @@ STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User �
 - repository: `failab-ist/GUILD24`. 현행 승인 버전은 v2.11.1(마이너 UI 피드백 · 첫 마왕성 단계별 코치, `codex/minor-ui-feedback`의 main 머지 PR). 직전은 v2.11.0(PR #111, 이후 UI PR #112 · #113 포함). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
-- 로컬 후속 작업(User 2026-10-06): 대응 음식·음료 7종 피로 회복만 PR #107 이전으로 복원. 가격·직접 대응은 유지. 성장 비용 ×8 / 후반 전투 상승 1.00·1.05는 분리 시뮬 후보이며 Production 미적용. 직업·마왕·환경 변경도 미적용. main 머지/배포는 아직 하지 않았다.
-- 밸런스 기준 로그: `reports/v2100-measure/v2103-bots-baseline.log`(v2.10.3 바가지 규칙 + 봇 수정, 프레시), 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
+- 로컬 후속 작업(User 2026-10-06): 대응 음식·음료 7종 피로 회복만 PR #107 이전으로 복원(`3b09af23`), 가격·직접 대응은 유지. 직업 계측 도구 `eac6111b`로 기준+성장 비용 ×8+후반 전투 1.00/1.05, 60,000런 측정 완료. 후보는 Production 미적용이고 직업·마왕·환경 변경도 미적용. main 머지/배포는 아직 하지 않았다. 결과 `reports/v2100-measure/fresh-candidates-20261006/REPORT.md`.
+- 로컬 롤백 밸런스 기준 로그: `reports/v2100-measure/fresh-candidates-20261006/baseline.log`(도구 `eac6111b`, 확정 회복 롤백 기준). 이전 배포 버전 기준은 `reports/v2100-measure/v2103-bots-baseline.log`. 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
 
 ## 최근 버전 (User 2026-10-02 ~ 10-04)
 

@@ -1,0 +1,38 @@
+{
+  "sourceBase": "3b09af23",
+  "harness": "eac6111b",
+  "conditions": {
+    "baseline": {
+      "head": "eac6111b",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/baseline.json",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/baseline.json",
+      "sha256": "9115567831ee77ad5defc7428479f4d1ddc8c1d7aee8c1b05235b8d7fb9f0f50",
+      "seconds": 514,
+      "runs": 15000
+    },
+    "growth": {
+      "head": "791d776f",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/growth.json",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/growth.json",
+      "sha256": "83360976da4a8e1550af668ef0d39354d3d0600e83f5cb66d979950f54cf91e2",
+      "seconds": 490,
+      "runs": 15000
+    },
+    "late100": {
+      "head": "f83598b0",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/late100.json",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/late100.json",
+      "sha256": "a059386e46595edc1558e141fdb4e74f50ea793e6f11a040652bc5b15cd081b4",
+      "seconds": 456,
+      "runs": 15000
+    },
+    "late105": {
+      "head": "e2dfcbd3",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/late105.json",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/fresh-candidates-20261006/late105.json",
+      "sha256": "475220d087ad8a905b2ac0ad4f7b0d0eef74bbc36d451d211eb7cfc118af6552",
+      "seconds": 459,
+      "runs": 15000
+    }
+  }
+}
