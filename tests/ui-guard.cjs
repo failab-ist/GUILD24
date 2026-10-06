@@ -857,7 +857,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     (`속박 전문` sitting above `속박 대응 +16`). The sweep narrows to roles accordingly. */
  /* B5-2 closeout (User 2026-09-23): the Final transfer's action face is `50% / {price}G / 보급`
     - the verb of the action, not the 보급 role chip. That one face is set aside, nothing else. */
- const finalFace="<strong>'+finalPrice+'G</strong><small>보급</small>','supply'";
+ const finalFace="<em class=\"price-role\"><span>보급</span><span class=\"price-rate\">50%</span></em><strong>'+finalPrice+'<span class=\"price-unit\">G</span></strong><small>50%</small>','supply'";
  assert.equal(app.split(finalFace).length-1,1,'the Final transfer face is the one exempt place');
  const swept=app.replace(finalFace,'');
  for(const label of Object.values(DATA.roles))
@@ -1859,8 +1859,14 @@ test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verba
 
 test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
  const f=fn('finalMuster')+fn('finalDock')+fn('finalScreen');
- assert.ok(/!committed&&!finalOrdered&&!s\.team\.length\s*\n?\s*\/\*[^*]*\*\/\s*\?'<div class="party-head"><h2>마지막 발주<\/h2><\/div><div class="final-order open">'\+orderForm\(\)/.test(f),'D30 opens on the last order');
- assert.ok(/btn\('원정대 선택','final-ordered','stamp',Object\.values\(s\.cart\|\|\{\}\)\.some\(q=>q>0\)\?'disabled':''\)/.test(f),'moving on waits for a pending cart');
+ const dockParts=[constLine('btn'),fn('finalDock')],dockCtx={stockSheetKey:()=>'<button data-action="stock-sheet">창고</button>',relicWindowLink:()=>'',finalOrdered:false,s:{team:[],cart:{0:1}}};
+ const pending=render(dockParts,'finalDock(s,3,false)',dockCtx);
+ assert.deepEqual([...pending.matchAll(/data-action="([^"]+)"/g)].map(x=>x[1]),['stock-sheet','confirm-order','final-ordered'],'last order has warehouse, confirm and next actions');
+ assert.match(pending,/<button[^>]*data-action="final-ordered"[^>]*disabled[^>]*>원정대 꾸리기<\/button>/,'moving on waits for a pending cart');
+ for(const cart of [{},{0:0}]){const ready=render(dockParts,'finalDock(s,3,false)',{...dockCtx,s:{team:[],cart}});assert.match(ready,/<button[^>]*data-action="confirm-order"[^>]*disabled/);assert.doesNotMatch(ready,/<button[^>]*data-action="final-ordered"[^>]*disabled/,'an empty or zero-valued cart permits next');}
+ const mustParts=[fn('finalMuster')],base={E:String,Copy,game:{finalPreRoll:()=>{throw Error('uncommitted party must not produce a preparation');}},finalOrdered:false,supplyNPC:null,orderForm:()=>'<form data-order-form></form>',stockSide:()=>'<aside data-warehouse></aside>',npcCard:()=>'<button data-candidate></button>'};
+ const opening=render(mustParts,'finalMuster(s,3,false)',{...base,s:{team:[],npcs:[]}});assert.match(opening,/<form data-order-form>/,'D30 opens on last order');assert.match(opening,/<aside data-warehouse>/,'D30 shares the warehouse');assert.doesNotMatch(opening,/final-roster/,'selection does not begin before next');
+ const choosing=render(mustParts,'finalMuster(s,3,false)',{...base,finalOrdered:true,s:{team:[],npcs:[{alive:true,introduced:true,level:1}]}});assert.match(choosing,/final-roster/);assert.match(choosing,/data-candidate/);assert.doesNotMatch(choosing,/data-order-form/,'selection follows last order');
  assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
  assert.ok(/case'final-npc':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'the notebook is the ordinary adventurer notebook');
  assert.ok(/btn\(inTeam\?'원정대에서 빼기':'원정대 선택','final-team','stamp'/.test(app),'the pick / release is the notebook footer');
@@ -1868,7 +1874,9 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
  assert.ok(/'<div class="final-stats">'\+statGrid\(/.test(f)&&!/details class="final-order"/.test(f),'FINAL 준비 shows the Stat grid and no second order form');
  assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
  /* User 2026-09-30: the candidates can be read while ordering (view only), and a confirmed member's notebook from the prep */
- assert.ok(/btn\('원정대 후보 보기','final-roster','stamp'\)\+btn\('원정대 선택','final-ordered'/.test(f),'원정대 후보 보기 sits beside 원정대 선택, the same bar');
+ const form=render([constLine('btn'),fn('finalRiskSummary'),fn('orderForm')],'orderForm()',{game:{run:{phase:'final',day:30,branch:'fixture',money:100,cart:{},inventory:[],offers:[],dungeons:[{day:30,family:'final',scale:4.6,families:['spider'],hazards:['poison','web']}],final:{familyNames:['독거미 동굴']}},cartTotal:()=>0,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,Presentation,E:String,fmt:String,railShown:'',railFolded:()=>false,relicRef:()=>'',REROLL_ICON:''});
+ assert.match(form,/<div class="form-head"><h1>발주서<\/h1><button[^>]*data-action="final-roster"[^>]*>원정대 후보 보기<\/button><span class="docno">/,'candidate viewer is in the heading beside the title');
+ assert.doesNotMatch(form,/전체 0명|오늘[^<]*0명/,'Final order does not expose an empty ordinary queue');
  const m=app.slice(app.indexOf("else if(modal==='finalRoster')"),app.indexOf("else if(modal.startsWith('npc:'))"));
  assert.ok(/npcCard\(n,'final-view'\)/.test(m)&&/n\.alive&&n\.introduced/.test(m)&&!/final-npc|final-team|selectFinal/.test(m),'the candidates are the muster\'s own list, with no pick on it');
  assert.ok(/case'final-view':case'final-detail':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'each opens the ordinary notebook');
@@ -1879,13 +1887,13 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=(fn('orderOffer')+fn('orderForm'));
- assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+\(railFolded\(\)\?' folded':''\)\+'">'[\s\S]{0,400}?\+'<span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
-  'Death first, then 오늘, then 발주 후 last - each a label and a value; 발주 후 is the ledger\'s own `after`, short in the ledger\'s warning');
+ const ordinary=render([constLine('btn'),fn('orderForm')],'orderForm()',{game:{run:{phase:'order',day:1,branch:'fixture',money:100,inventory:[],offers:[],dungeons:[],cart:{}},cartTotal:()=>20,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,gateCounts:()=>new Map(),todayLine:()=>'<span>전체 3명</span>',railShown:'',railFolded:()=>false,deathLimitItem:()=>'<i>사망</i><b>0 / 5</b>',relicRef:()=>'',fmt:String,E:String,REROLL_ICON:''});
+ assert.match(ordinary,/<span class="rail-line"><i>사망<\/i><b>0 \/ 5<\/b><\/span><span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b><span>전체 3명<\/span><\/b><\/span><span class="rail-line rail-gold" aria-hidden="true"><i>발주 후<\/i><b>80G<\/b><\/span>/,'Death first, then Today, then exact post-cart Gold from 100 minus 20');
  // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
  assert.ok(/const railFolded=\(\)=>game\.account\.settings\.orderRailFolded===true;/.test(app)&&/'<span class="rail-chip">요약<\/span><\/button>'/.test(of),'a 요약 chip, folded state on the account');
  assert.ok(/case'rail-fold':\{const st=game\.account\.settings,f=!railFolded\(\);st\.orderRailFolded=f;game\.save\(\);/.test(app),'one tap folds or opens it and saves the choice');
  assert.ok(/\.death-limit-row\.folded \.rail-line\{display:none\}/.test(css)&&/\n\.death-limit-row \.rail-fold\{right:26px\}\n\.death-limit-row\.folded\{margin-right:42px\}/.test(css)&&/ \.death-limit-row \.rail-fold\{right:0\}\n \.death-limit-row\.folded\{margin-right:16px\}/.test(css),'every line folds; on a phone the key and chip clear the menu pin');
- assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
+ assert.equal((ordinary.match(/전체 3명/g)||[]).length,2,'the same expected visitor count is written in both ordinary Today surfaces');
  const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/const gone=!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w)&&/rail\.classList\.toggle\(e\.target===brief\?'show-today':'show-gold',gone\)/.test(w),'each shown only once its own source has gone above, under the rail');
  assert.ok(/orderWatch\.observe\(brief\);if\(out\)orderWatch\.observe\(out\)/.test(w)&&/\$\('\.p-order #order-register \.out'\)/.test(w),'발주 후 watches the ledger line, 오늘 its own block');
  assert.ok(/edge=\(parseFloat\(getComputedStyle\(sc\)\.paddingTop\)\|\|0\)\+h/.test(w)&&/if\(rail\.offsetHeight!==h\)watchOrderToday\(\)/.test(w),'measured against the stuck rail\'s real edge, set again when the rail grows or shrinks');
@@ -1893,7 +1901,11 @@ test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only
  assert.ok(/\.death-limit-row \.rail-today,\.death-limit-row \.rail-gold\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today,\.board-rail\.show-gold \.rail-gold\{display:grid\}/.test(css)&&/\.rail-gold\.short b\{color:/.test(css),'hidden by default, set apart by a rule, short reads as short');
  // one type ladder (User 2026-09-29): every label in one column and style, every value in one face and size
  assert.ok(/\.death-limit-row \.rail-line\{display:grid;grid-template-columns:44px 1fr/.test(css)&&/\.death-limit-row \.rail-line i\{[^}]*font:600 11px/.test(css)&&/\.death-limit-row \.rail-line b\{[^}]*font:500 13px/.test(css),'one label column, one value size');
- assert.ok(/if\(phase==='order'\)\{watchOrderToday\(\);watchStockSheet\(\);\}/.test(app),'watched on ORDER only');
+ const calls=[];const watchCtx={watchForecastPin:()=>calls.push('salePin'),watchTray:()=>calls.push('tray'),pinWatch:null,watchOrderToday:()=>calls.push('orderRail'),watchStockSheet:()=>calls.push('warehouse'),orderWatch:null,sheetWatch:null,railShown:'',finalPinWatch:null,finalPinFolded:false,watchFinalPin:()=>calls.push('finalPin'),finalOrdered:false,game:{run:{finalCommitted:false,team:[]}}};
+ render([fn('syncWatchers')],"syncWatchers('order')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'ordinary Order keeps both existing watchers');
+ calls.length=0;render([fn('syncWatchers')],"syncWatchers('final')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'Final last order shares the same watchers');
+ calls.length=0;render([fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,finalOrdered:true});assert.deepEqual(calls,[],'roster never keeps the Order watchers');
+ calls.length=0;render([fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,game:{run:{finalCommitted:true,team:['n1']}}});assert.deepEqual(calls,['finalPin'],'committed preparation watches only the member pin');
  /* User 2026-10-02: the room under the 발주서 is the open sheet's own height, not the 45% it may reach */
  assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(var\(--sheet-h,45dvh\) \+ 30px\)\}/.test(css)
   &&/host\.style\.setProperty\('--sheet-h'/.test(fn('watchStockSheet')),'the sheet reports its own height as the room under the form');
@@ -2430,7 +2442,9 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  const tillEmitted=fn('till').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
  assert.ok(!/이 상품이 직접/.test(tillEmitted)&&!/보급이 상태에 미치는 영향/.test(tillEmitted),
   'the old per-group analytical headings are gone');
- assert.ok(tillEmitted.includes('<h4>판매 후 변화</h4>'),'one heading covers the whole list');
+ for(const phase of ['sell','final']){const n={id:'n1',name:'fixture',money:100,pack:[]},ctx={game:{run:{phase,day:1,bossId:'WRATH',inventory:[{id:'st',item:'lowpotion',expires:3}],npcs:[n],facilities:[],dungeons:[{}]},current:()=>n,claimedGateFor:()=>({}),finalPrice:()=>70,finalNoEffect:()=>false},selected:'st',supplyNPC:'n1',D:DATA,E:String,Copy,Adventurer:{slots:()=>2},Presentation:{preview:()=>({direct:[]}),rows:()=>[]},finalItemTruth:()=>({}),walletChip:()=>'<b>100G</b>',lastSaleDay:()=>'',priceKeys:()=>'<button>판매</button>'};
+ const emitted=render([constLine('btn'),fn('till')],'till()',ctx);assert.equal((emitted.match(/<h4>/g)||[]).length,1,'one heading covers the whole list in '+phase);assert.match(emitted,new RegExp('<h4>'+(phase==='final'?'보급':'판매')+' 후 변화</h4>'),'the title names the actual action');}
+
  assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&!/moved\.derived|moved\.departure/.test(tillEmitted),
   'the till lists the Item\'s own rows only (User 2026-09-25)');
  assert.ok(!/moved\.derived|moved\.departure/.test(fn('tray')),'and so does the counter tray');

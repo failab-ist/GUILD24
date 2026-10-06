@@ -94,22 +94,26 @@ Player-facing Final flow is:
 
 ```text
 마지막 발주
--> 출전 NPC 선택
--> FINAL 준비
+-> 원정대 꾸리기
+-> 원정대 준비
 -> 결과
 ```
 
-D30 opens on the last order - the ordinary order form, optional, confirmed on its own 발주 확정; `원정대 선택` moves on
-once no cart is pending. In 출전 NPC 선택 a roster card opens that adventurer's notebook (Stats, Traits, equipment,
+D30 opens on the last order - the ordinary order form, optional, confirmed on its own 발주 확정; `원정대 꾸리기` moves on
+once no cart is pending. In 원정대 꾸리기 a roster card opens that adventurer's notebook (Stats, Traits, equipment,
 condition, expedition records) and the pick or release is made from the notebook's footer. FINAL 준비 shows the Stat grid
 of the adventurer being supplied; the order form is not repeated there.
 
 The last order is chosen for the people who can go, so they can be read while ordering: `원정대 후보 보기`, beside
-`원정대 선택` and the same bar, opens the muster's own candidates read only - each card opens the notebook, whose footer
-returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on 출전 NPC 선택.
-Candidate and selection cards show current NPC Wallet; the notebook also shows it with condition details.
+the order-form heading, opens the muster's own candidates read only - each card opens the notebook, whose footer
+returns to the candidates (`원정대 후보 보기`) instead of picking. The pick and `원정대 확정` stay on 원정대 꾸리기.
+Candidate and selection cards show current NPC Wallet, active Injury/Severe Injury, and the Fatigue band only above
+10; no healthy label on these cards. The notebook retains full condition details. Last-order actions use the ordinary
+warehouse and order confirmation, then 원정대 꾸리기. After commitment and supplies, departure reads 최종 원정 보내기.
 In FINAL 준비, `자세히 보기` under the Stat grid opens the supplied adventurer's notebook read only (Traits, records),
 footer `돌아가기`.
+While supplying, the selected participant's card floats above the scrolling shelf once the original card has passed
+out of view; it carries the same committed Wallet, Bag and Hazard readings, and can fold.
 Each committed participant's card shows their own Hazard current/required values beside the Bag. These readings use step 3 of §FINAL CALCULATION ORDER, before participant-side Boss modifiers, and update on committed supplies. They do not replace or multiply the party-wide subjugation forecast.
 
 Final must remain the culmination of the shop-management decisions learned during the Run, not an opaque separate

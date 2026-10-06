@@ -1087,6 +1087,10 @@ Hazard names and required Counter values use the Function/Effect information fac
 
 ### FINAL MODIFIER PREVIEW
 
+Final threat views in Order and preparation include a compact 마왕 권능 name and an expandable existing D15 effect
+explanation with current tuning values; GREED includes its current sales and SLOTH its broken seals. Hazard Function
+rows use 14px / 600 Wanted Sans on phones, 15px on desks; stat conversion lines use 13px / 400.
+
 Before Final Lock, every Boss-changed visible value shows `original → applied`:
 - PRIDE: each participant's 투력
 - ENVY: targeted participant's 투력 / 강인함 / 기동 / 정신
@@ -1139,10 +1143,14 @@ Ordinary modals and Boss reveal holds still suppress coaches. Exact approved cop
 A selection surface, not a rarity gallery: up to 3 participants, 1 or 2 allowed even with 3+ eligible; count reads as capacity
 (`선택 1명 · 최대 3명`) and is never under the menu pin. Rarity stays as text (at most one restrained step, never above the name
 or overflowing); no rarity-coloured frames; unselected cards neutral, selected cards alone carry the strong frame.
-- the last order carries `원정대 후보 보기` beside `원정대 선택` (same bar): a read-only sheet of the candidates, each opening the
-  notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW); a phone puts both on one row at a smaller face
+- the last order carries `원정대 후보 보기` beside its form heading: a read-only sheet of the candidates, each opening the
+  notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW). The phone dock holds 창고 / 발주 확정 / 원정대 꾸리기;
+  the warehouse, form references and folded floating rail reuse ordinary ORDER. The rail shows only the Final Hazard names and required-response numbers
+  and post-order Gold, with no Family names, Tiers or ordinary visitor counts. Support purchase/Seal choices remain available through
+  the existing D30 arrival and Store menu; support effects keep their form reference.
 - FINAL 준비 carries a quiet `자세히 보기` text control under the supplied member's Stat grid, opening that notebook read only
-- last-order candidate and party-selection cards show the adventurer's Wallet; the FINAL notebook also carries that Wallet beside condition information
+- last-order candidate and party-selection cards show Wallet, active Injury/Severe Injury and Fatigue band above 10,
+  omitting the healthy label; the FINAL notebook retains full condition information
 
 No ordinary `전투 전망` while the party is provisional. Guidance copy -> COPY_AUDIT_APPROVED.
 
@@ -1180,9 +1188,15 @@ commit transfer
 - two slots, may stay empty; no later free-equip screen; no-effect Items blocked/marked per `FINAL_EXPEDITION_v2.8.0.md`;
   Boss-changed Items show current Final truth; no GREED-only counter panel
 - each committed member's card shows their own `환경 대응` beside the Bag, one current/required number per disclosed Hazard; Hazards from the same Family share one horizontal row. On phones the Bag uses two compact 36px icon slots to preserve that row; reuse the ordinary meter's required-value rounding and sufficient/insufficient colours
+- while the supplied member's card is above the scroll viewport, a folded/expanded brown rail repeats that same card
+  with Wallet, Bag and environment readings. It reserves space above the scrolling shelf and clears the menu pin;
+  focused unsold Items never change it, a paid transfer updates it, and changing target updates the named participant.
+- the shelf/header and fixed-price transfer key reuse current SALE material assets; departure reads 최종 원정 보내기.
 - meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
 
 ### FINAL ITEM / WALLET FEEDBACK
+
+Keep expiry information on stock rows. The expanded post-supply change panel omits its duplicate expiry line on D30.
 
 No-effect Item: visibly blocked with the Demon-Castle wording (`Final` never player-facing). Insufficient Wallet: exact
 required/owned Gold in the Item area, transfer disabled, inline status, no refusal speech or alert modal; no SALE chatter.
