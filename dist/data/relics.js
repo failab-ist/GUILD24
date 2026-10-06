@@ -28,9 +28,9 @@ const rows=[
 ['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,p=>'다시 온 손님의 손님 소지금 +'+p.premiumMember.arrivalGold+'G, 희귀 이상 상품 구매 의사 +'+pp(p.premiumMember.rareIntentBonus)+'. 그 손님이 희귀 이상 상품을 정가나 할인으로 사면 단골도가 '+p.premiumMember.rareLoyalty+' 더 오른다.'],
 ['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,p=>'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +'+p.returnPoints.loyaltyBonus+', 손님 소지금 +'+p.returnPoints.goldBonus+'G.'],
 ['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,p=>'모든 음식·음료가 기존 위험 대응이 없어도 모든 위험 대응을 '+p.expeditionMeal.hazardDefense+' 올린다. 마왕성에서는 가장 약한 위험 하나만 올린다. 대신 음식·음료 매입가가 '+pct(p.expeditionMeal.orderPriceMult-1)+' 오른다.'],
-['coldcase','고급 식자재 유통 계약','hybrid',['fresh','premium'],180,p=>'매일 첫 발주 후보에 고급 이상 음식·음료가 '+p.coldcase.extraOffers+'칸 더 나온다. 고급 이상 음식·음료를 팔면 가게가 판매가의 '+pct(p.coldcase.commissionRate)+'를 더 받는다.'],
+['coldcase','전문 포션 유통 계약','utility',['expedition','rotation'],180,p=>'포션만 나오는 발주 칸이 '+p.coldcase.extraOffers+'칸 늘어난다.'],
 ['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,p=>'희귀 이상 상품 중 오늘 위험에 맞는 것이나 보험을 팔면, 가게가 정가의 '+pct(p.supplyCert.commissionRate)+'를 더 받고 그 손님의 손님 소지금도 +'+p.supplyCert.goldBonus+'G.'],
-['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,p=>'유통기한이 지난 음식·음료는 버리는 대신 매입가의 '+pct(p.dawnRecovery.refundRate)+'를 돌려받는다. 매일 첫 발주 후보에 음식이나 음료가 '+p.dawnRecovery.extraOffers+'칸 더 나온다.'],
+['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,p=>'유통기한이 지난 음식·음료는 버리는 대신 매입가의 '+pct(p.dawnRecovery.refundRate)+'를 돌려받는다. 음식이나 음료만 나오는 발주 칸이 '+p.dawnRecovery.extraOffers+'칸 늘어난다.'],
 ['logisticsHQ','물류 본부계약','keystone',['rotation'],300,p=>'전날 판 상품 1개마다 오늘 발주 매입가가 '+pct(p.logisticsHQ.perSale)+' 싸진다 (최대 '+pct(p.logisticsHQ.maxDiscount)+').'],
 ['lifetime','평생 단골제','keystone',['vip'],310,p=>'단골 손님의 능력치가 모두 '+pct(p.lifetime.statBonus)+' 오른다. 한 번 단골이 되면 단골도가 '+G.Adventurer.TRUSTED_REGULAR+' 아래로 떨어지지 않는다.'],
 ['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,p=>'바가지(150%)로 팔면 가게가 판매가의 '+pct(p.royalCert.commissionRate)+'를 더 받고, 손님의 바가지 구매 의사 +'+pp(p.royalCert.intentBonus)+'. 대신 기본 운영비가 '+pct(p.royalCert.overheadRate)+' 오른다.'],
@@ -38,7 +38,7 @@ const rows=[
 ['fresh24','24시간 신선체계','keystone',['fresh'],360,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.fresh24.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +'+pct(p.fresh24.orderPriceMult-1)+'.'],
 ['hub','지역 거점점 계약','keystone',['customer'],340,p=>'다음 날부터 매일 손님이 '+pct(p.hub.p1)+' 확률로 1명, '+pct(p.hub.p2)+' 확률로 2명 더 온다. 대신 기본 운영비가 '+pct(p.hub.overheadRate)+' 오른다.'],
 ['warehouse','후방 창고 증설','utility',[],130,p=>'창고에 둘 수 있는 상품이 '+p.warehouse.slots+'칸 늘어난다.'],
-['extraOrder','본사 추가발주권','utility',[],190,p=>'다음 발주부터 발주 후보가 '+p.extraOrder.extraOffers+'개 늘어난다.'],
+['extraOrder','본사 추가발주권','utility',[],190,p=>'발주 칸이 '+p.extraOrder.extraOffers+'칸 늘어난다.'],
 ['rerollTicket','발주 교환권','utility',[],120,()=>{const b=D.balance.rerollBase;return '매일 첫 발주 후보 교환은 무료. 그다음부터 '+b+'G → '+b*2+'G → '+b*4+'G… 로 오른다.';}],
 ['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
@@ -83,7 +83,7 @@ D.relicParams={
  premiumMember:{rareIntentBonus:.15,arrivalGold:25,rareLoyalty:10},
  returnPoints:{loyaltyBonus:4,goldBonus:20}, /* User 2026-10-04: Loyalty 5 -> 4 with the returning-customer condition gone */
  expeditionMeal:{hazardDefense:2,orderPriceMult:1.15},
- coldcase:{extraOffers:1,commissionRate:.15},
+ coldcase:{extraOffers:1},
  supplyCert:{commissionRate:.40,goldBonus:30},
  dawnRecovery:{refundRate:.5,extraOffers:1},
  logisticsHQ:{perSale:.03,maxDiscount:.30}, /* v2.9.11 remake (User 2026-09-29): was same-SKU 3+ -25% after 6 sales */
@@ -111,7 +111,7 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
    acquisition and the Final Lock through which it could change anything - not merely when it
    looks weak that late. A future support joins D30 by existing; it leaves only by being added
    here after its own D30-to-Final review. */
-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
 /* RELIC §RETIRED (User 2026-10-04): no longer offered; kept so a save that owns it still reads and plays it */
 D.relicRetired=['memberBundle'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};

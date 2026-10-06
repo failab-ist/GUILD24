@@ -1431,7 +1431,7 @@ Repeated identical prep demand is not dominant unless intentional.
 
 #### DI-Q-v28-12 — GATE COUNT / TIER DISTRIBUTION EXACT
 
-Gate count PASS:
+Gate count PASS (generation before visitor coverage; NPC_TRAIT §DESTINATION may remove ordinary Gates when intake is insufficient):
 - D1–3 exactly 1
 - D4–7 1/2 at 50% / 50%
 - D8–18 exactly 2

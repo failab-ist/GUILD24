@@ -75,15 +75,14 @@ test('REL-Q40: owned Relic quick view is read-only name/effect data',()=>{
  g.run.phase='night';assert.equal(g.canBuyRelic(),false,'no Relic purchase during Night');
 });
 
-test('REL-Q33: 고급 식자재 유통 계약 targets Uncommon+ Food/Drink, not a one-SKU Rare pool',()=>{
- const g=fresh('coldcase');
- const eligible=DATA.items.filter(it=>['food','drink'].includes(it.category)&&it.rarity>=1);
- assert.ok(eligible.length>=4,'multi-SKU pool, got '+eligible.length);
- // the extra first-sheet slot draws from that pool across Days (User 2026-10-04: no weighting, no shelf life)
+test('REL-Q33: 전문 포션 유통 계약 supplies an independent Potion slot of any unlocked rarity',()=>{
+ const g=fresh('coldcase'),eligible=DATA.items.filter(it=>it.category==='potion');
+ assert.ok(eligible.some(it=>it.rarity===0),'Common Potions are in the pool');
+ assert.ok(eligible.some(it=>it.rarity>=2),'higher-grade Potions are in the pool');
  const seen=new Set();g.run.facilities=['coldcase'];
- for(let i=0;i<40;i++){g.generateOffers(true);const it=DATA.itemBy[g.run.offers.at(-1).item];assert.ok(['food','drink'].includes(it.category)&&it.rarity>=1,it.id);seen.add(it.id);}
- assert.ok(seen.size>=2,'more than one SKU reaches the slot: '+[...seen]);
- for(const it of DATA.items)assert.equal(Relics.offerWeight(g,it),Relics.offerWeight({...g,has:id=>false},it),it.id+' weight untouched');
+ for(let i=0;i<40;i++){g.generateOffers();const it=DATA.itemBy[g.run.offers.at(-1).item];assert.equal(it.category,'potion',it.id);assert.equal(g.run.offers.at(-1).origin,'coldcase');seen.add(it.id);}
+ assert.ok(seen.size>=2,'more than one Potion reaches the slot');
+ for(const it of DATA.items)assert.equal(Relics.offerWeight(g,it),Relics.offerWeight({...g,has:()=>false},it),it.id+' weight untouched');
  assert.equal(Relics.shelf(g,DATA.itemBy.dragonramen),0,'no shelf-life effect');
 });
 
@@ -550,4 +549,42 @@ test('ECONOMY_ORDER §RELIC GOLD SINK: D0 is free, every D5+ Store Support costs
  assert.throws(()=>g.buyRelic(g.run.relicWindow.candidateIds[0]),'and the purchase is refused');
 });
 
+
+test('REL-Q-v28-9: support acquisition appends rows immediately without replacing cart or existing offers',()=>{
+ for(const day of [1,5,30])for(const ids of [['dawnRecovery','coldcase','extraOrder'],['coldcase','dawnRecovery','extraOrder'],['extraOrder','coldcase','dawnRecovery']]){
+  const g=fresh('append-'+day+'-'+ids.join('-')),s=g.run;s.firstRun=false;s.facilities=[];s.day=day;
+  if(day===30)g.morning();else g.generateOffers();s.phase=day===30?'final':'order';s.money=99999;
+  for(const id of ids){const old=copy(s.offers),oldCount=old.length,oldInventory=copy(s.inventory),oldPity=copy(s.pity);
+   s.cart={0:1};s.relicWindow={milestoneDay:day===1?0:day,slothSealOpportunity:false,candidateIds:[id],candidatePrices:[day===1?0:DATA.relicBy[id].price],purchased:null,focusedRevealSeen:true,expiryDay:day===1?5:day===30?31:day+5};
+   g.buyRelic(id);const extras=s.offers.slice(oldCount);
+   assert.deepEqual(s.offers.slice(0,oldCount),old,'all prior rows, prices and remaining quantities retained');assert.deepEqual(s.cart,{0:1},'cart stays on its old row');assert.deepEqual(s.inventory,oldInventory,'stock and expiry retained');
+   assert.equal(extras.length,DATA.relicParams[id].extraOffers);
+   for(const o of extras){const it=DATA.itemBy[o.item];if(id==='dawnRecovery'){assert.ok(Relics.food(it));assert.equal(o.origin,id);}if(id==='coldcase'){assert.equal(it.category,'potion');assert.equal(o.origin,id);}if(id==='extraOrder')assert.equal(o.origin,undefined);
+    if(day===30)assert.equal(g.finalNoEffect(o.item),false);assert.ok(g.account.discovered.includes(o.item),'new rows are discovered');}
+   assert.ok(s.pity.rare<=oldPity.rare,'acquisition never advances Rare pity');for(const h of Object.keys(oldPity.hazards||{}))assert.ok((s.pity.hazards[h]||0)<=oldPity.hazards[h],'acquisition never advances Counter pity');
+   const imported=Save.import(Save.export(g.account,s));assert.deepEqual(imported.run.offers,s.offers);assert.deepEqual(imported.run.cart,s.cart);
+   s.cart={};
+  }
+  assert.equal(s.offers.length,10,'both category slots and generic +2 stack');
+ }
+});
+test('REL-Q-v28-9: every support combination survives Rerolls, Events and ordinary Counter pity',()=>{
+ const support=['extraOrder','dawnRecovery','coldcase'];
+ for(const day of [1,15,30])for(let mask=0;mask<8;mask++)for(const event of [null,DATA.events.find(e=>e.effects.offers===2),DATA.events.find(e=>e.effects.blackmarket),DATA.events.find(e=>e.effects.offers===-3)]){
+  const g=fresh('slot-combo-'+day+'-'+mask+'-'+event?.id),s=g.run;s.day=day;s.firstRun=false;s.facilities=support.filter((_,i)=>mask&(1<<i));s.event=day===30?null:event;
+  s.phase=day===30?'final':'order';s.money=99999;s.cart={};s.dungeons=day===30?[g.makeFinal()]:[g.makeDungeon('spider',2)];if(day===30)s.final=s.dungeons[0];
+  const ev=s.event?.effects||{},ordinary=Math.max(3,6+(g.has('extraOrder')?2:0)+(ev.offers||0)),want=ordinary+(ev.blackmarket?1:0)+(g.has('dawnRecovery')?1:0)+(g.has('coldcase')?1:0);
+  g.generateOffers();
+  for(let roll=0;roll<3;roll++){
+   if(roll)g.reroll();assert.equal(s.offers.length,want,'slot count retained on sheet '+roll);
+   for(const id of ['dawnRecovery','coldcase']){const rows=s.offers.filter(o=>o.origin===id);assert.equal(rows.length,g.has(id)?1:0);for(const o of rows)assert.ok(id==='coldcase'?DATA.itemBy[o.item].category==='potion':Relics.food(DATA.itemBy[o.item]));}
+   for(const o of s.offers){assert.ok(Number.isFinite(o.price));assert.ok(o.quantity>0);if(day===30)assert.equal(g.finalNoEffect(o.item),false);}
+   const cap=DATA.balance.offerCounterMax+Math.max(0,ordinary-DATA.balance.orderOffers)+(ev.blackmarket?1:0)+(g.has('dawnRecovery')?1:0)+(g.has('coldcase')?1:0);assert.equal(g.offerCounterCap(),cap,'cap follows the Canonical added-slot formula');assert.ok(s.offers.filter(o=>Relics.directCounter(DATA.itemBy[o.item],Object.keys(DATA.hazards))).length<=cap,'Counter cap grows with all added slots');
+  }
+  if(day===15&&mask===7&&ev.offers===2){assert.equal(want,12,'maximum current combination is twelve total slots');s.inventory=[];s.cart={};s.offers.forEach((o,i)=>g.setQuantity(i,1));const cost=g.cartTotal(),money=s.money;g.confirmOrder();assert.equal(s.inventory.length,12,'all twelve rows can be ordered atomically');assert.equal(s.money,money-cost);assert.deepEqual(s.cart,{});}
+ }
+ const legacy=fresh('old-contract-save');legacy.run.facilities=['coldcase','dawnRecovery'];legacy.run.phase='order';legacy.run.money=9999;legacy.run.cart={};legacy.generateOffers();legacy.run.offers.forEach(o=>{delete o.origin;});const restored=Save.import(Save.export(legacy.account,legacy.run)),resumed=new Game(restored.account,restored.run);resumed.autosave=false;resumed.reroll();assert.equal(resumed.run.offers.length,8);assert.deepEqual(resumed.run.offers.slice(-2).map(o=>o.origin),['dawnRecovery','coldcase'],'old saved ownership works without old provenance');
+ const g=fresh('category-pity'),s=g.run;s.facilities=['dawnRecovery','coldcase'];s.event=null;s.pity={rare:5,counter:5,npc:0,hazards:{poison:5,web:5}};s.dungeons=[g.makeDungeon('spider',2)];
+ g.generateOffers();assert.equal(s.offers.length,8);assert.deepEqual(s.offers.slice(-2).map(o=>o.origin),['dawnRecovery','coldcase'],'ordinary guarantee cannot consume either category slot');
+});
 console.log(count+' relic/order groups passed');

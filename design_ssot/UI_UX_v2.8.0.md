@@ -128,6 +128,9 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
+Contract-origin added rows show a quiet bordered source chip above the purchase-price tag: 새벽 회수 / 포션 계약,
+13px / 500 Wanted Sans with readable parchment contrast. Ordinary added rows need no source label.
+
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
 beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item, in the SALE shelf's order
 (§SALE — SHELF ORDER: today's Hazard answers first, User 2026-10-04). The desk rack shows every
@@ -888,6 +891,9 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 
 ## CLOSING
 
+On a zero-visitor Day, Order settles directly into Closing. The receipt places the no-trading reason after its header,
+before the opening-Gold row; it does not show an empty Night report. NIGHT_CLOSING owns settlement and reason copy.
+
 question=`오늘 장사는 어땠을까?` — economics-first; the expedition story is Night's. Primary: the cash-flow receipt — opening
 Gold, Gold in and out, closing Gold with the Day's change, stock / waste counts, tomorrow's operating estimate (NIGHT_CLOSING
 §CLOSING — CASH FLOW RECEIPT — EXACT); figures without an accounting-explanation footer.
@@ -1045,11 +1051,10 @@ The rule, not strategy advice. Never exact Final success %, hidden Final Power, 
 D5/D15/D25 are major beats; D10/D20 are shorter (fewer lines, lighter hierarchy, shorter dossier) but keep the same centered
 Boss art as D5/D15 — never a thumbnail. D25 is information-first (the Family/Hazard disclosure is the payload).
 
-DIRECTOR DOCUMENT BASELINE — EXACT:
-- mobile D5/D10/D15/D20 Boss art max-height: 240px
-- mobile D25 Boss art max-height: 200px
-- desktop D5/D10/D15/D20 Boss art max-height: 300px
-- desktop D25 Boss art max-height: 260px
+All D5/D10/D15/D20/D25 investigation reports share one art-size rule across every Boss:
+- mobile: max-height follows the available viewport height (100dvh minus 560px reserved for report text and controls), bounded between 100px and 240px
+- desktop: max-height follows the available viewport height (100dvh minus 510px reserved for report text and controls), bounded between 200px and 300px
+- keep the illustration aspect ratio; do not shrink only the overflowing Boss or investigation Day
 
 At 360x800 art alone never pushes core information or the acknowledgement below the first viewport. The sheet is a takeover
 that claims enough of a phone screen to read as a report, with neither tiny art in an empty sheet nor art that buries the text.
@@ -1057,7 +1062,7 @@ that claims enough of a phone screen to read as a report, with neither tiny art 
 ### DOCUMENT DETAIL — USER APPROVED
 
 - Boss art sits on the paper; no floor line or divider under it
-- D5 Flavor: plain report text; no non-semantic coloured bar or tinted / bordered box
+- D5 Flavor: plain report text, aligned to the explanation above it, with one dotted horizontal divider between Function and Flavor; no indentation, non-semantic coloured bar or tinted box
 - D15 Trait: `마왕 권능` label (the codex card says just `권능`) -> Trait name -> explanation; no side bar, box, tinted panel or card — type and spacing carry it (the 안내 line and the GREED sales line are the User-approved 2026-10-04 exceptions: a light tinted strip each)
 - D25: each Family keeps its semantic left colour rule; no black rule above the Family section; a thin neutral divider
   between the two Families is allowed; Hazards are not decorative cards
@@ -1078,8 +1083,13 @@ and a cleared Boss counts as known.
 `최종 정찰 보고` with a one-time 안내 line under the intro (COPY_AUDIT §14-7) (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
 Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 29).
 `two Families` does NOT mean two Hazard keys. Never the Hazard formula, Final success % or Final Power.
+Hazard names and required Counter values use the Function/Effect information face (14px on phone, 15px on desk, weight 600); conversion explanations use the Secondary factual face (13px, weight 400). Family headings keep the plate face (16px on phone, 17px on desk); do not let their typography inherit into nested Hazard values. Keep at least 4.5:1 contrast for required information.
 
 ### FINAL MODIFIER PREVIEW
+
+Final threat views in Order and preparation include a compact 마왕 권능 name and an expandable existing D15 effect
+explanation with current tuning values; GREED includes its current sales and SLOTH its broken seals. Hazard Function
+rows use 14px / 600 Wanted Sans on phones, 15px on desks; stat conversion lines use 13px / 400.
 
 Before Final Lock, every Boss-changed visible value shows `original → applied`:
 - PRIDE: each participant's 투력
@@ -1133,12 +1143,20 @@ Ordinary modals and Boss reveal holds still suppress coaches. Exact approved cop
 A selection surface, not a rarity gallery: up to 3 participants, 1 or 2 allowed even with 3+ eligible; count reads as capacity
 (`선택 1명 · 최대 3명`) and is never under the menu pin. Rarity stays as text (at most one restrained step, never above the name
 or overflowing); no rarity-coloured frames; unselected cards neutral, selected cards alone carry the strong frame.
-- the last order carries `원정대 후보 보기` beside `원정대 선택` (same bar): a read-only sheet of the candidates, each opening the
-  notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW); a phone puts both on one row at a smaller face
+- the last order carries `원정대 후보 보기` beside its form heading: a read-only sheet of the candidates, each opening the
+  notebook with no pick (FINAL_EXPEDITION §D30 PLAYER FLOW). The candidate control is a clearly framed secondary
+  action next to the title, rather than a small underlined label. The phone dock holds 창고 / 발주 확정 / 원정대 꾸리기;
+  the warehouse, form references and folded floating rail reuse ordinary ORDER. The rail shows only the Final Hazard names and required-response numbers
+  and post-order Gold, with no Family names, Tiers or ordinary visitor counts. Support purchase/Seal choices remain available through
+  the existing D30 arrival and Store menu; support effects keep their form reference.
 - FINAL 준비 carries a quiet `자세히 보기` text control under the supplied member's Stat grid, opening that notebook read only
-- last-order candidate and party-selection cards show the adventurer's Wallet; the FINAL notebook also carries that Wallet beside condition information
+- last-order candidate and party-selection cards show Wallet, active Injury/Severe Injury and Fatigue band above 10,
+  omitting the healthy label; the FINAL notebook retains full condition information
 
 No ordinary `전투 전망` while the party is provisional. Guidance copy -> COPY_AUDIT_APPROVED.
+
+Before commitment, the roster dock also carries `발주로 돌아가기` beside `원정대 확정`, with the return affordance
+explained in the existing roster guidance block. Returning preserves provisional members and the last-order sheet.
 
 ### PARTY COMMITMENT
 
@@ -1174,9 +1192,15 @@ commit transfer
 - two slots, may stay empty; no later free-equip screen; no-effect Items blocked/marked per `FINAL_EXPEDITION_v2.8.0.md`;
   Boss-changed Items show current Final truth; no GREED-only counter panel
 - each committed member's card shows their own `환경 대응` beside the Bag, one current/required number per disclosed Hazard; Hazards from the same Family share one horizontal row. On phones the Bag uses two compact 36px icon slots to preserve that row; reuse the ordinary meter's required-value rounding and sufficient/insufficient colours
+- while the supplied member's card is above the scroll viewport, a folded/expanded brown rail repeats that same card
+  with Wallet, Bag and environment readings. It reserves space above the scrolling shelf and clears the menu pin;
+  focused unsold Items never change it, a paid transfer updates it, and changing target updates the named participant.
+- the shelf/header and fixed-price transfer key reuse current SALE material assets; departure reads 최종 원정 보내기.
 - meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
 
 ### FINAL ITEM / WALLET FEEDBACK
+
+Keep expiry information on stock rows. The expanded post-supply change panel omits its duplicate expiry line on D30.
 
 No-effect Item: visibly blocked with the Demon-Castle wording (`Final` never player-facing). Insufficient Wallet: exact
 required/owned Gold in the Item area, transfer disabled, inline status, no refusal speech or alert modal; no SALE chatter.
@@ -1417,8 +1441,8 @@ colour, silhouette and place vary by Phase.
 - size by consequence: inside the Day (`문 열기`, `영업 시작`, `다음`) 56 px tall on phone / 60 px desk, `손님 보내기` 44 px on phone / 60 px desk; across a
   Day or Run boundary (`다음 날`, `다음 점포 열기`, FINAL gate bar) 64 / 72 px; `첫 점포지원 고르기` 64 px everywhere (the
   preparation plates sit right above the dock); ORDER labels may step down on the narrowest phones so the Gold never wraps
-- the one pair: on D30's last order `원정대 후보 보기` shares the gate bar with `원정대 선택` (a view, not a second flow
-  Action), both on one smaller row on a phone
+- D30 last order: `원정대 후보 보기` is the secondary action beside the form title; the phone dock holds
+  `창고` / `발주 확정` / `원정대 꾸리기`. Before commitment, the roster dock pairs `발주로 돌아가기` with `원정대 확정`.
 - depth 5 px across a boundary, 4 px inside the Day, `손님 보내기` 3 px (under the price keys, §SALE — COUNTER TRAY);
   `발주 확정` and `영업 시작` are never enabled together and share the 4 px - on a phone ORDER's slim dock row (User 2026-10-02)
   sets both, and the `창고` key, at 48 px (Android's touch target) with a 3 px cast, a 2 px lit top and a 3 px foot, labels 15 px
@@ -2706,11 +2730,13 @@ tap closes it; a second copy of the warehouse on screen.
 #### UI-Q-v29-51 — D30 CANDIDATES / FINAL 준비 NOTEBOOK (User 2026-09-30)
 
 Verify FINAL_EXPEDITION §D30 PLAYER FLOW and UI_UX §PARTY SELECTION at 360 / 390 and 1280.
-PASS: the last order's dock carries `원정대 후보 보기` beside `원정대 선택` on one bar, one row on a phone, neither label wrapping; it
+PASS: `원정대 후보 보기` is a framed secondary action beside the last-order form title, with no label wrapping; it
 opens `원정대 후보` (the muster's alive, visited candidates), each card opening the notebook whose footer is `원정대 후보 보기`,
 never `원정대 선택` / `원정대에서 빼기`, with nothing about the party changing; on the muster step the notebook picks and releases;
 FINAL 준비: `자세히 보기` under the Stat grid opens the supplied member's notebook with `돌아가기`; no console or runtime error.
-FAIL: a pick or release possible while ordering, or a second muster on the order step.
+PASS: before commitment `발주로 돌아가기` restores the same order sheet with provisional members retained; additional order confirmation
+then `원정대 꾸리기` preserves those members. After commitment the return action is absent.
+FAIL: a pick or release possible while ordering, a second muster on the order step, or lost members/order state when returning.
 
 #### UI-Q-v29-52 — GATE TIER / FIRE GATE TUTORIAL (User 2026-09-30)
 
@@ -2905,10 +2931,12 @@ or exposing exact success probability.
 #### UI-Q-v28-10 — BOSS MOBILE DENSITY
 At 360x800:
 - D0 has no Boss art and presents the objective/cadence as basic dossier information
-- D5/D10/D15/D20 Boss art max-height baseline 240px; D25 200px; D5/D10/D15/D20 reuse the same centered Boss-art family
+- D5/D10/D15/D20/D25 reuse the same centered Boss-art family and the common viewport-bounded mobile cap in §D5 / D10 / D15 / D20 / D25
 - D10/D20 are compact because their report payload is shorter, not because the Boss becomes a 64px icon
 - no small-Boss + wide-empty-space composition; core information and acknowledgement are not pushed off the first viewport solely
   by art
+- reduce image size and empty spacing before body type; without first-time guidance, every Boss report fits without body scrolling at 360x640 and 390x780; first-time guidance may add scrolling without shrinking the illustration further
+- D5 explanation and Flavor share the same left text edge, separated by a dotted line
 
 #### UI-Q-v28-24 — BOSS / FINAL PRESENTATION PAYOFF
 Around D0 / D5 / D10 / D15 / D20 / D25 / D30, PASS:

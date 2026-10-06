@@ -9,7 +9,7 @@ function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.fin
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 // from DAY 3, past the first-Run DAY 1~2 lessons, so a forced Event never lands on 본사 1+1 행사's Day
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.run.day>=3&&g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
-const CATALOG=['물류대란','본사 1+1 행사','게이트 순례 주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
+const CATALOG=['물류대란','본사 1+1 행사','게이트 순례 주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','고위험 게이트 발견','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
  "길드 의료단 순회","길드 의무관 당직","길드 위로금","길드 특별 수당","본사 물류 지원","보험 공동 구매","본사 원정용품 지원","길드 연회","원정 교대 근무","길드 휴양일","단골의 날","길드 현상금","마왕의 징조","입고 지연","가뭄","길드 세금 징수","장맛비","본사 발주 제한","포스기 먹통","가격 단속","퇴각로 붕괴","길드 소집령","냉장고 고장","야시장","원정 징발령","본사 재고 떨이","정예 토벌령","폭염","게이트 임시 폐쇄","길드 훈련 주간","유통기한 임박 특가","게이트 안정화 작업"];
 
 test('EVENT-003: catalog is exactly the canonical 55 (23 → 55 in v2.9.11) with the two rare easter eggs at 0.35',()=>{
@@ -231,6 +231,7 @@ test('EVENT 18 + RICH: arrival order applies rich +50, cap 2000, then eventBudge
    let guard=0;while(guard++<60){g.run.money=5000;advance(g);if(g.run.event?.id==='payday')break;}
    const n = g.run.npcs[0];
    n.traits = ['rich'];
+   n.destination=n.claimedDestination=0;
    n.money = 1980;
    g.run.queue = [n.id];
    g.run.cursor = 0;
@@ -568,7 +569,59 @@ test('NPC_TRAIT destinationDefault (User 2026-09-25): with as many visitors as G
    s.money=5000;advance(g);}}
  assert.ok(days>50,'enough multi-Gate Days were seen: '+days);
  assert.equal(covered,days,'every multi-Gate Day with enough visitors covers every Gate');
- const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(/n\.destination===n\.claimedDestination&&selected\.filter/.test(src),'a visitor a 거짓말쟁이 roll already diverted is never the one moved');
+
+});
+
+test('DESTINATION: insufficient intake removes ordinary Gates and always keeps the Event Gate',()=>{
+ for(const people of [1,2,3,4])for(const event of [false,true]){
+  const g=fresh('coverage-cap-'+people+'-'+event),s=g.run;s.day=8;s.firstRun=false;
+  s.npcs=s.npcs.slice(0,people);while(s.npcs.length<people)g.addNPC();
+  s.npcs.forEach(n=>{n.alive=true;n.recovery=0;n.traits=[];});
+  s.dungeons=['spider','slime','crypt'].map(id=>g.makeDungeon(id,2));
+  if(event){const d=g.makeDungeon('snow',2);d.temporary=true;s.dungeons.push(d);}
+  s.event=event?DATA.events.find(e=>e.id==='unknown'):null;s.expectedVisitors=people;
+  const offered=[];g.generateOffers=()=>{offered.push(...s.dungeons);};
+  g.morningQueue({rawVisitors:people,baseVisitors:people,hubExtra:0,decoExtra:0});
+  assert.equal(s.queue.length,people,'intake is unchanged');
+  assert.equal(s.dungeons.length,Math.min(people,event?4:3));
+  assert.equal(s.dungeons.filter(d=>d.temporary).length,event?1:0,'Event Gate retained');
+  assert.deepEqual(offered,s.dungeons,'offers use the final retained Gates');
+  for(let i=0;i<s.dungeons.length;i++)assert.ok(s.queue.some(id=>s.npcs.find(n=>n.id===id).claimedDestination===i),'expected visitor on Gate '+i);
+  for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);assert.ok(s.dungeons[n.destination]);assert.equal(n.destination,n.claimedDestination);}
+ }
+});
+test('DESTINATION: all-liar roster covers expected Gates while actual counts may be zero',()=>{
+ const g=fresh('all-liars'),s=g.run;s.day=8;s.firstRun=false;s.event=null;s.expectedVisitors=3;
+ s.npcs=s.npcs.slice(0,3);while(s.npcs.length<3)g.addNPC();s.npcs.forEach(n=>{n.alive=true;n.recovery=0;n.traits=['liar'];});
+ s.dungeons=['spider','slime','crypt'].map(id=>g.makeDungeon(id,2));
+ g.rng={int:a=>a,pick:a=>a[0],weighted:a=>a[0],next:()=>0};g.generateOffers=()=>{};g.visitIncome=()=>0;
+ g.morningQueue({rawVisitors:3,baseVisitors:3,hubExtra:0,decoExtra:0});
+ const people=s.queue.map(id=>s.npcs.find(n=>n.id===id));
+ assert.equal(new Set(people.map(n=>n.claimedDestination)).size,3,'every expected Gate is covered even when every visitor lies');
+ for(const n of people)assert.notEqual(n.destination,n.claimedDestination,'the actual-only override is retained');
+ assert.ok(new Set(people.map(n=>n.destination)).size<3,'actual zero-visitor Gates are allowed');
+});
+test('DESTINATION: Deep designation follows Gate pruning and remains a highest-Tier open Gate',()=>{
+ const g=fresh('coverage-deep'),s=g.run;s.day=s.deep.days[0];s.firstRun=false;s.event=null;s.expectedVisitors=1;
+ s.npcs=s.npcs.slice(0,1);s.npcs[0].alive=true;s.npcs[0].recovery=0;
+ s.dungeons=['spider','slime','crypt'].map((id,i)=>g.makeDungeon(id,i+1));
+ g.morningQueue({rawVisitors:1,baseVisitors:1,hubExtra:0,decoExtra:0});g.morningDeep();
+ assert.equal(s.dungeons.length,1);assert.equal(s.deep.today.gateIndex,0);
+ assert.equal(s.dungeons[s.deep.today.gateIndex].tier,Math.max(...s.dungeons.map(d=>d.tier)));
+ const reloaded=Save.import(Save.export(g.account,s));assert.equal(reloaded.run.deep.today.gateIndex,0);
+});
+
+test('DESTINATION: no available visitor leaves no Gate and Order settles directly into Closing',()=>{
+ const g=fresh('no-visitors'),s=g.run;s.day=8;s.firstRun=false;g.rollEvent=()=>null;
+ s.npcs.forEach(n=>{n.alive=true;n.injury=2;n.recovery=3;n.status='중상';n.fatigue=14;});
+ g.morning();assert.equal(s.queue.length,0);assert.equal(s.dungeons.length,0);assert.equal(s.deep.today,null);
+ assert.equal(g.eventEligible(DATA.events.find(e=>e.id==='unknown')),false,'Event cannot create a Gate without a visitor');
+ assert.ok(s.offers.length>=DATA.balance.orderOffers,'Order is still available');
+ g.beginOrder();const money=s.money;g.finishOrder();
+ assert.equal(s.phase,'closing');assert.equal(s.results.length,0);assert.equal(s.daily.noVisitors,true);assert.equal(s.daily.recoveryOnly,true);
+ assert.equal(s.money,money-s.daily.operating,'cost settles once');
+ assert.ok(s.npcs.every(n=>n.fatigue===14),'Severe-Injury rest does not change fatigue (DUNGEON_HAZARD §SUPPLY)');
+ const before=s.money;g.finishNight();assert.equal(s.money,before,'repeated finish does not settle twice');
+ const reloaded=Save.import(Save.export(g.account,s));assert.equal(reloaded.run.daily.recoveryOnly,true);assert.equal(reloaded.run.phase,'closing');
 });
 console.log(count+' event groups passed');

@@ -336,8 +336,8 @@ const TASK_LINE={morning:'오늘 할 일 — 열린 게이트의 위험을 본�
 function taskLine(phase){const s=game.run,t=game.account.tutorial||{};
  if(!s||t.skipped||!(s.day>=1&&s.day<=3)||!TASK_LINE[phase])return '';
  return '<p class="task-line">'+E(TASK_LINE[phase])+'</p>';}
-function stage(phase,label,head,body,dock,attrs=''){
- return '<div class="stage p-'+phase+'"'+attrs+'>'+menuFab()+(head||'')
+function stage(phase,label,head,body,dock,attrs='',classes=''){
+ return '<div class="stage p-'+phase+(classes?' '+classes:'')+'"'+attrs+'>'+menuFab()+(head||'')
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="'+label+'">'+body+'</main>'
  +(dock?'<div class="dock">'+dock+'</div>':'')+'</div>';
 }
@@ -505,7 +505,7 @@ let trayFolded=false,trayArm=0,trayBase=0;
 /* FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): the last order comes first, the way an ordinary Day starts.
    Which step is showing is presentation: the muster opens once the player moves on from the order - or at once when
    a saved party pick exists - and the confirmed party is the prep. Nothing new is saved. */
-let finalOrdered=false;
+let finalOrdered=null,finalPinFolded=false,finalPinWatch=null;
 function syncTray(){const t=$('.p-sale .counter-tray');if(!t)return;t.classList.toggle('folded',trayFolded);
  t.querySelector('.tray-unfold')?.setAttribute('aria-expanded',String(!trayFolded));}
 function foldTray(){if(!selected||trayFolded||innerWidth>=1024||game.run?.phase!=='sell')return;trayFolded=true;syncTray();}
@@ -682,7 +682,7 @@ function render(){
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
  const focusHold=holdFocus($('#app'));
  $('#app').innerHTML=phaseScreen(phase);sentenceBreaks($('#app'));
- if(phase!=='final')finalOrdered=false;
+ if(phase!=='final')finalOrdered=null;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
  if(phase==='end'&&arrived)endReveal();
@@ -728,7 +728,8 @@ function openOwedModal(s,phase,changed){
 }
 function syncWatchers(phase){
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order'){watchOrderToday();watchStockSheet();}else{orderWatch?.disconnect();orderWatch=null;railShown='';sheetWatch?.disconnect();sheetWatch=null;}
+ if(phase==='order'||phase==='final'&&finalIsOrdering(game.run)){watchOrderToday();watchStockSheet();}else{orderWatch?.disconnect();orderWatch=null;railShown='';sheetWatch?.disconnect();sheetWatch=null;}
+ if(phase==='final'&&game.run.finalCommitted)watchFinalPin();else{finalPinWatch?.disconnect();finalPinWatch=null;finalPinFolded=false;}
 }
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-10-02): the rows under an open phone sheet scroll up above it, and the room left
    under the 발주서 is the sheet's own height - it takes only the rows the stock needs - not the 45% it may reach at most,
@@ -1317,6 +1318,7 @@ function closingReceipt(s){
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
   +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
+  +(d.noVisitors?'<div class="block"><p>'+E(d.recoveryOnly?'모두 중상이라 방문할 손님이 없어서 영업을 못했다.':'오늘은 원정에 나선 손님이 없었다.')+'</p></div>':'')
   +'<div class="block"><div class="row open"><span>영업 시작 골드</span><b>'+fmt(open)+'<i>G</i></b></div></div>'
   +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
   +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'
@@ -1498,7 +1500,7 @@ function showCoach(){
  const relicD0=modal==='relics'&&game.run?.phase==='foundation';
  const s=game.run,relicD30=modal==='relics'&&s?.phase==='final'&&s.day===30&&s.relicWindow?.milestoneDay===30;
  if(tutorial.skipped||(modal&&!relicD0&&!relicD30)||bossHold)return;
- const finalGroup=s?.finalCommitted?'final':finalOrdered||s?.team?.length?'finalRoster':'finalOrder';
+ const finalGroup=s?.finalCommitted?'final':finalIsOrdering(s)?'finalOrder':'finalRoster';
  const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);activeGroup=steps;
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
@@ -1702,7 +1704,7 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
     +'<span class="col">'
      /* UI_UX §ORDER — ITEM INFORMATION HIERARCHY (User 2026-09-26, v2.9.6, COPY_AUDIT §4-26): the tag is what 발주 spends, labelled;
          the sale price is the smaller muted tag under it; floated so the name, rarity and effects wrap beside it */
-     +'<span class="prices">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')
+     +'<span class="prices">'+(o.origin==='dawnRecovery'||o.origin==='coldcase'?'<i class="offer-source">'+(o.origin==='dawnRecovery'?'새벽 회수':'포션 계약')+'</i>':'')+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')
       /* EVENT §02 본사 1+1 행사 (User 2026-09-28, v2.9.10 quick patch): the promoted offer wears a red 1+1 sticker on its
          매입 tag, as a store shelf does - it was a `· 1+1` fragment inside the muted metadata line and went unseen */
       +(o.promo?'<em class="promo-sticker" aria-label="1+1 행사">1+1</em>':'')+'</span>'
@@ -1725,15 +1727,20 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
    +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
 }
-function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
+function finalRiskSummary(d){const groups=(d.families||[]).map(id=>d.hazards.filter(h=>(D.familyTiers[id]?.[1]||[]).includes(h)));
+ const other=d.hazards.filter(h=>!groups.some(g=>g.includes(h)));if(other.length)groups.push(other);
+ return '<span class="final-risk-summary">'+groups.filter(g=>g.length).map(g=>'<span class="final-risk-family">'+g.map(h=>'<span class="tl" data-hazard="'+h+'">'+E(D.hazards[h])+' <strong>'+Presentation.hazardNeed(h,d)+'</strong></span>').join('')+'</span>').join('')+'</span>';
+}
+function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice();
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  /* User 2026-10-02: on a day an Event closed a Gate the one Gate left open also shows its count, beside the closed one */
- const counts=s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null;
+ const isFinal=s.phase==='final',counts=s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null;
+ const today=isFinal?finalRiskSummary(s.dungeons[0]):todayLine(counts);
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
     seal carried no function or state - it filled the head's right margin and nothing else. The
     document is identified by 발주서 and its DAY / branch line. */
- +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
+ +'<div class="form-head"><h1>발주서</h1>'+(isFinal?btn('원정대 후보 보기','final-roster','look candidate-look'):'')+'<span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
    /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the rail floats while the order is scrolled; once the
       `오늘` block has gone under it, the same line rides in the rail's own box under a rule, so the Gates and their
       visitors stay in view while the player orders. Hidden while the block itself is on screen. */
@@ -1743,8 +1750,8 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<p class="board-rail death-limit-row'+railShown+(railFolded()?' folded':'')+'">'
      +'<button type="button" class="rail-fold" data-action="rail-fold" aria-expanded="'+!railFolded()+'" aria-label="'+(railFolded()?'요약 열기':'요약 접기')+'">'
      +'<span class="rail-chip">요약</span></button>'
-     +'<span class="rail-line">'+deathLimitItem(true)+'</span>'
-     +'<span class="rail-line rail-today" aria-hidden="true"><i>오늘</i><b>'+todayLine(counts)+'</b></span>'
+     +'<span class="rail-line">'+(isFinal?'<i>위험</i><b>'+today+'</b>':deathLimitItem(true))+'</span>'
+     +(isFinal?'':'<span class="rail-line rail-today" aria-hidden="true"><i>오늘</i><b>'+today+'</b></span>')
      +'<span class="rail-line rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
@@ -1754,19 +1761,19 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
    +'<div class="ref-row"><button class="look" data-action="gates">위험 보기</button>'+relicRef()+'</div>'
    // today only: who is coming and where (no next-day block, User 2026-09-24)
-   +'<div class="brief"><div class="when"><span class="k">오늘</span>'
-     +'<p>'+todayLine(counts,'b')+'</p></div></div>'
+   +'<div class="brief"><div class="when"><span class="k">'+(isFinal?'위험':'오늘')+'</span>'
+     +'<p>'+(isFinal?today:todayLine(counts,'b'))+'</p></div></div>'
    /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
       so they sit with the other planning signals on ORDER rather than arriving on D30. It is
       the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */
-   +(s.final?'<div class="brief"><div class="when"><span class="k">마왕성</span>'
+   +(s.final&&!isFinal?'<div class="brief"><div class="when"><span class="k">마왕성</span>'
      +'<p><b>'+E(s.final.familyNames.join(' / '))+'</b></p>'
      +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards,s.final).map(h=>
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
    +'<ol class="lines">'+s.offers.map((o,i)=>orderOffer(s,o,i)).join('')+'</ol>'
  +'<button class="rubber" data-action="reroll" '+(s.event?.effects.noReroll?'aria-disabled="true" data-reason="noReroll"':price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>'+REROLL_ICON+'발주 후보 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
- +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
+
  +'</div>';}
 /* v2.9.10 (User 2026-09-27): every Item names its category (음식 / 음료 / 포션 / 야외장비 / 보험), the words the Events and
    the Store Supports already speak in (`음식·음료`, `보험`, `야외장비`) - without it a first Run cannot tell which Items they
@@ -1943,7 +1950,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  /* a short Wallet is a system status on the closed transfer itself - exact need / owned - the
     same place SALE states a disabled price's cause; never a refusal line */
  const finalBlock=isFinal?(noop?Copy.finalPrep.noEffect:full?'가방 가득':poor?Copy.finalPrep.wallet.replace('{need}',finalPrice).replace('{have}',n.money):''):'';
- const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>보급</small>','supply','stamp',
+ const actions=isFinal?btn('<em class="price-role"><span>보급</span><span class="price-rate">50%</span></em><strong>'+finalPrice+'<span class="price-unit">G</span></strong><small>50%</small>','supply','final-supply-key',
     'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
  :priceKeys(n,it,st);
  const forwho='<p class="forwho"><span>'+E(n.name)+(isFinal?'에게 보급':'에게 판매')+'</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>';
@@ -1951,16 +1958,16 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  /* FINAL: why a transfer is closed is the Item's status, said once beside it - never folded
     into the action's face, which stays 50% / price / 보급 in every state */
  const status=finalBlock?'<p class="final-status">'+(noop?'<b>'+E(Copy.finalPrep.noEffect)+'</b> '+E(Copy.finalPrep.noEffectWhy):E(finalBlock))+'</p>':'';
- if(noop)return '<div class="tillpanel">'+forwho+status+'<div class="tills">'+actions+'</div></div>';
- return '<div class="tillpanel">'+forwho
- +(isFinal&&s.bossId==='GLUTTONY'?'<p class="final-boss-note">'+E(Copy.boss.d15.trait.GLUTTONY[0])+' · '+E(Copy.boss.d15.trait.GLUTTONY[1][0])+'</p>':'')
+ if(noop)return '<div class="tillpanel'+(isFinal?' counter-tray final-till':'')+'">'+forwho+status+'<div class="tills">'+actions+'</div></div>';
+ return '<div class="tillpanel'+(isFinal?' counter-tray final-till':'')+'">'+forwho
+ +(isFinal&&s.bossId==='GLUTTONY'?'<p class="final-boss-note">'+E(Copy.boss.d15.trait.GLUTTONY[0])+' · '+E(traitLines('GLUTTONY')[0])+'</p>':'')
  /* SA-Q30: the rows are still grouped by what actually produced them internally - a Stat that
     rose because this Item's Supply relieved a Supply Deficit, or crossed a Fatigue band, is
     still never presented as if the Item itself granted that Stat - but the two group names
     that used to sit over them (이 상품이 직접 / 보급이 상태에 미치는 영향) were the analytical
     label stack v2.8 removes: one heading now covers the whole list. Since User 2026-09-25 the list
     holds the Item's own effects only - no derived row and no departure line are left under it. */
- +'<h4>판매 후 변화</h4>'
+ +'<h4>'+(isFinal?'보급 후 변화':'판매 후 변화')+'</h4>'
  +(changes.length?'':'<ul class="effects"><li><span>현재 준비 변화 없음</span><b></b></li></ul>')
  +(changes.length?'<ul class="effects">'
    +changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join('')
@@ -1973,7 +1980,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    if(!rest.length)return '';
    return '<p class="delta-src">특수 효과</p><ul class="effects">'
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
- +'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>'
+ +(isFinal?'':'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>')
  +status+'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(e.description)+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
 /* RELIC §GRADE: the 등급 word under the name, in the Item rarity name and colour */
@@ -2146,8 +2153,9 @@ function replayLine(){const s=game.run,st=s.settlement;
    above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
 function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',finalView=muster||action==='final-view',blocked=muster&&(!n.alive||n.recovery);
  /* the FINAL muster card opens the adventurer's notebook; picking happens there (User 2026-09-25) */
+ const condition=finalView?[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':'',(n.fatigue||0)>10?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:''].filter(Boolean).join(' · '):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
  const call=!muster?'기록 보기':s.team.includes(n.id)?'선택됨':'기록 보기';
- return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
+ return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${condition?E(condition)+' · ':''}방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
 /* FINAL-Q77: the one party-wide 토벌 전망, in the place and treatment the ordinary 전투 전망 reads
@@ -2156,6 +2164,9 @@ function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',fi
 function finalForecastView(){const f=game.finalForecast(),c=Copy.finalPrep;if(!f)return '';
  return '<div class="readout final-forecast"><div class="top"><span class="fore">'+E(c.forecast)+'<b>'+E(f)+'</b>'
   +tip(c.forecast,...c.forecastWhy)+'</span></div></div>';}
+function finalTrait(){const s=game.run;if(!s.bossReveal?.traitSeen)return '';const c=Copy.boss.d15.trait[s.bossId];
+ return '<details class="final-trait"><summary><span>마왕 권능</span><b>'+E(c[0])+'</b></summary><div>'+traitLines(s.bossId).map(l=>'<p>'+E(l)+'</p>').join('')+(s.bossId==='SLOTH'?sealCount():s.bossId==='GREED'?greedSales(true):'')+'</div></details>';
+}
 function finalThreat(d){
  /* BATCH 5-1: each Family owns its Hazards. The persisted Final pool is the union of the two
     Families' tier-II Hazards (shop.js), so each column takes the pool filtered by its own
@@ -2166,53 +2177,38 @@ function finalThreat(d){
  +(d.families||[]).map(id=>{const b=D.dungeonBy[id],own=(D.familyTiers[id]||[])[1]||[];
    return '<div class="fam-col"><span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>'
     +hazardList(d.hazards.filter(h=>own.includes(h)),null,d)+'</div>';}).join('')
- +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+'</section>';
+ +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+finalTrait()+'</section>';
 }
+function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
+ return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
+ +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
+ +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
+ +'<span class="final-environments"><span class="env-caption">환경 대응</span>'+finalEnvironment(p,d)+'</span></div>';
+}
+function finalMemberPin(){const s=game.run,t=game.finalPreRoll(),index=s.team.indexOf(supplyNPC),n=s.npcs.find(n=>n.id===supplyNPC);if(!n||index<0)return '';
+ return '<div class="final-pin-host"><button type="button" class="final-pin final-member board-rail'+(finalPinFolded?' folded':'')+'" data-action="final-pin" aria-expanded="'+!finalPinFolded+'" aria-label="'+(finalPinFolded?'요약 열기':'요약 접기')+'">'+finalMemberBody(n,t.preparations[index],t.d)+'</button></div>';
+}
+function watchFinalPin(){finalPinWatch?.disconnect();finalPinWatch=null;const pin=$('.final-pin'),host=$('.final-pin-host'),src=$('.final-member[data-action="supply-target"][data-id="'+supplyNPC+'"]'),sc=$('.p-final .stage-scroll');
+ if(!pin||!src||!sc)return;const sync=()=>{const show=src.getBoundingClientRect().bottom<=sc.getBoundingClientRect().top+2;pin.classList.toggle('show',show);host.style.height=show?Math.ceil(pin.getBoundingClientRect().height+4)+'px':'0px';};
+ sync();if(typeof IntersectionObserver==='function'){finalPinWatch=new IntersectionObserver(sync,{root:sc,threshold:0});finalPinWatch.observe(src);}
+}
+function finalIsOrdering(s){return !!s&&!s.finalCommitted&&(finalOrdered===false||(finalOrdered===null&&!s.team.length));}
 function finalMuster(s,need,committed){
- /* B5-2 / FINAL-Q75: 출전 NPC 선택 -> FINAL 준비. Until the party is confirmed the screen is the
-    muster only; once confirmed (saved) the roster is gone and only the confirmed members are
-    prepared, one at a time, against the shelf. */
- const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명';
- const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
- const preparation=committed?game.finalPreRoll():null;
- return (!committed&&!finalOrdered&&!s.team.length
-  /* step 1: the last order, open - the same form as ORDER, confirmed on its own 발주 확정 */
-  ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order open">'+orderForm()+'</div>'
-  :!committed
-  ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+E(pickCount)+'</span></div>'
-   /* v2.8: the party is provisional - capacity, not a quota, and where the forecast will be */
-   +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'</p></div>'
-   +'<div class="npc-grid final-roster">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
-  :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'
-   +finalForecastView()
-   +'<div class="final-team">'+s.team.map((id,index)=>{const n=s.npcs.find(x=>x.id===id),slots=Adventurer.slots(n);
-    return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'
-    +'<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span>'
-    +'<span class="wallet">'+walletChip(n)+'</span></span>'
-    +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
-    +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
-    +'<span class="final-environments"><span class="env-caption">환경 대응</span>'+finalEnvironment(preparation.preparations[index],preparation.d)+'</span></div></button>';}).join('')+'</div>'
-   /* the adventurer being supplied reads the same Stat grid SALE shows (User 2026-09-25) */
-   +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))
-    /* User 2026-09-30: Stats alone do not decide who carries what - the same notebook (Traits, records) opens here, read only */
-    +btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')
-   +shelf(true));
+ const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명',roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level),preparation=committed?game.finalPreRoll():null;
+ return (finalIsOrdering(s)
+ ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order-layout"><div class="order-desk final-order open">'+orderForm()+'</div>'+stockSide()+'</div>'
+ :!committed
+ ?'<div class="party-head"><h2>원정대 꾸리기</h2><span class="count">'+E(pickCount)+'</span></div>'
+ +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'<br>'+E(Copy.finalPrep.returnNote)+'</p></div>'
+ +'<div class="npc-grid final-roster">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
+ :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'+finalForecastView()
+ +'<div class="final-team">'+s.team.map((id,index)=>{const n=s.npcs.find(x=>x.id===id);return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'+finalMemberBody(n,preparation.preparations[index],preparation.d)+'</button>';}).join('')+'</div>'
+ +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))+btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')+'<div class="final-supply p-sale">'+shelf(true)+'</div>');
 }
-function finalDock(s,need,committed){
- /* UI_UX §PER-PHASE (FINAL) — DISABLED COMMIT CAUSE (USER AMENDMENT 2026-09-22): the fixed dock
-    states why the sortie cannot start, on the control itself, rather than leaving a dead
-    `마왕성으로 출발` whose reason is a screen-length away in the muster head. The muster's own
-    count stays where it is; this is the disabled Action's immediate cause feedback. */
- /* any 1..need may be committed; with nobody picked the action is closed and the count it
-    waits on is the head's 선택 0명 (stating it on the dock too printed the same line twice) */
- const ready=s.team.length>0&&s.team.length<=need;
- return relicWindowLink()+(need
-  ?committed?btn('마왕성으로 출발','boss','stamp')
-   /* User 2026-09-30: the last order is chosen for the people who can go, so the candidates can be read from here - view
-      only (their notebooks, no pick); the pick and 원정대 확정 stay on the next step */
-   :!finalOrdered&&!s.team.length?btn('원정대 후보 보기','final-roster','stamp')+btn('원정대 선택','final-ordered','stamp',Object.values(s.cart||{}).some(q=>q>0)?'disabled':'')
-   :btn('원정대 확정','final-commit','stamp',ready?'':'disabled')
-  :btn('출전 불가 · 런 종료','boss','danger'));
+function finalDock(s,need,committed){const ready=s.team.length>0&&s.team.length<=need,held=Object.values(s.cart||{}).some(q=>q>0);
+ if(!need)return relicWindowLink()+btn('출전 불가 · 런 종료','boss','danger');
+ if(finalIsOrdering(s))return stockSheetKey()+btn('발주 확정','confirm-order','stamp',held?'':'disabled')+btn('원정대 꾸리기','final-ordered','stamp leave',held?'disabled':'');
+ return relicWindowLink()+(committed?btn('최종 원정 보내기','boss','stamp'):btn(Copy.finalPrep.returnOrder,'final-order-back','stamp final-order-back')+btn('원정대 확정','final-commit','stamp',ready?'':'disabled'));
 }
 function finalScreen(){
  const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
@@ -2223,7 +2219,7 @@ function finalScreen(){
     from the Run exactly as the D5 / D15 reveals do - Scene.bossArt reads bossId, day and
     sealBreakCount, so SLOTH shows the form its broken seals earned and the others their
     battle form - and the castle stays as the place, under the name of who is in it. */
- const b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
+ const ordering=finalIsOrdering(s),b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const body='<div class="gate-zero">'
  +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
       :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
@@ -2233,7 +2229,7 @@ function finalScreen(){
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
     stands in the Boss's own domain. The stage names which Boss so the stylesheet can hang that
     Boss's authored room behind it - the only place any of those rooms is used. */
- return stage('final','최종 원정','',body,finalDock(s,need,committed),' data-boss="'+E(s.bossId)+'"');
+ return stage('final','최종 원정',committed?finalMemberPin():'',body,finalDock(s,need,committed),' data-boss="'+E(s.bossId)+'"',ordering?'p-order final-order-stage':'');
 }
 /* Whoever went to the castle is the ending. run.js clears s.results when the Final resolves,
    so after D30 the end screen had the statement and then nothing - the people the player
@@ -2627,7 +2623,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
  }
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
-else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
+else if(modal==='gates'){title='오늘 열린 게이트';body=s.phase==='final'?finalThreat(s.final):'<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
 else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal.slice(8));title='오늘 피로 변화';body=r?fatigueModal(r):'';narrow=true;}
    /* UI_UX §MENU / SETTINGS — EXACT COMPOSITION (User 2026-09-24, v2.9.0): 점포지원 routes to the selection
       only while a window is purchasable; 이번 점포의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
@@ -2646,7 +2642,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
    +s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level).map(n=>npcCard(n,'final-view')).join('')+'</div>';}
  else if(modal.startsWith('npc:')){const id=modal.slice(4),s=game.run,n=s?.npcs.find(x=>x.id===id);title='우리 점포의 모험가';body=npcDetail(id);
   /* FINAL muster (User 2026-09-25): the notebook is where a member is taken on or let go */
-  if(s?.phase==='final'&&!s.finalCommitted&&n&&(finalOrdered||s.team.length)){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
+  if(s?.phase==='final'&&!s.finalCommitted&&n&&!finalIsOrdering(s)){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
    footer=btn(inTeam?'원정대에서 빼기':'원정대 선택','final-team','stamp','data-id="'+id+'" '+(out||full?'disabled':''));}
   /* read only on D30 before the muster (back to the candidates) and after the party is confirmed (back to the prep) */
   else if(s?.phase==='final'&&!s.finalCommitted)footer=btn('원정대 후보 보기','final-roster');
@@ -2845,6 +2841,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
+ case'final-order-back':if(s.phase!=='final'||s.finalCommitted)break;finalOrdered=false;sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
  case'final-npc':sound('ui');setModal('npc:'+id);break;
  case'final-roster':sound('ui');setModal('finalRoster');break;
@@ -2856,7 +2853,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;
  case'forecast-pin':pinFolded=!pinFolded;syncForecastPin();break;
  case'tray-open':trayFolded=false;syncTray();trayBase=$('.p-sale .stage-scroll')?.scrollTop||0;trayArm=performance.now()+300;sound('ui');break;
- case'supply-target':supplyNPC=id;sound('button');render();break;
+ case'final-pin':finalPinFolded=!finalPinFolded;{const pin=$('.final-pin');pin?.classList.toggle('folded',finalPinFolded);pin?.setAttribute('aria-expanded',String(!finalPinFolded));pin?.setAttribute('aria-label',finalPinFolded?'요약 열기':'요약 접기');watchFinalPin();}sound('ui');break;
+ case'supply-target':supplyNPC=id;finalPinFolded=false;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this
     ending - boss() answers !finalRequired() with its own reason. It used to be wired to

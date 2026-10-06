@@ -857,7 +857,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     (`속박 전문` sitting above `속박 대응 +16`). The sweep narrows to roles accordingly. */
  /* B5-2 closeout (User 2026-09-23): the Final transfer's action face is `50% / {price}G / 보급`
     - the verb of the action, not the 보급 role chip. That one face is set aside, nothing else. */
- const finalFace="<strong>'+finalPrice+'G</strong><small>보급</small>','supply'";
+ const finalFace="<em class=\"price-role\"><span>보급</span><span class=\"price-rate\">50%</span></em><strong>'+finalPrice+'<span class=\"price-unit\">G</span></strong><small>50%</small>','supply'";
  assert.equal(app.split(finalFace).length-1,1,'the Final transfer face is the one exempt place');
  const swept=app.replace(finalFace,'');
  for(const label of Object.values(DATA.roles))
@@ -1859,33 +1859,45 @@ test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verba
 
 test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
  const f=fn('finalMuster')+fn('finalDock')+fn('finalScreen');
- assert.ok(/!committed&&!finalOrdered&&!s\.team\.length\s*\n?\s*\/\*[^*]*\*\/\s*\?'<div class="party-head"><h2>마지막 발주<\/h2><\/div><div class="final-order open">'\+orderForm\(\)/.test(f),'D30 opens on the last order');
- assert.ok(/btn\('원정대 선택','final-ordered','stamp',Object\.values\(s\.cart\|\|\{\}\)\.some\(q=>q>0\)\?'disabled':''\)/.test(f),'moving on waits for a pending cart');
+ const dockParts=[constLine('btn'),fn('finalIsOrdering'),fn('finalDock')],dockCtx={stockSheetKey:()=>'<button data-action="stock-sheet">창고</button>',relicWindowLink:()=>'',finalOrdered:false,s:{team:[],cart:{0:1}}};
+ const pending=render(dockParts,'finalDock(s,3,false)',dockCtx);
+ assert.deepEqual([...pending.matchAll(/data-action="([^"]+)"/g)].map(x=>x[1]),['stock-sheet','confirm-order','final-ordered'],'last order has warehouse, confirm and next actions');
+ assert.match(pending,/<button[^>]*data-action="final-ordered"[^>]*disabled[^>]*>원정대 꾸리기<\/button>/,'moving on waits for a pending cart');
+ for(const cart of [{},{0:0}]){const ready=render(dockParts,'finalDock(s,3,false)',{...dockCtx,s:{team:[],cart}});assert.match(ready,/<button[^>]*data-action="confirm-order"[^>]*disabled/);assert.doesNotMatch(ready,/<button[^>]*data-action="final-ordered"[^>]*disabled/,'an empty or zero-valued cart permits next');}
+ const mustParts=[fn('finalIsOrdering'),fn('finalMuster')],base={E:String,Copy,game:{finalPreRoll:()=>{throw Error('uncommitted party must not produce a preparation');}},finalOrdered:false,supplyNPC:null,orderForm:()=>'<form data-order-form></form>',stockSide:()=>'<aside data-warehouse></aside>',npcCard:()=>'<button data-candidate></button>'};
+ const opening=render(mustParts,'finalMuster(s,3,false)',{...base,s:{team:[],npcs:[]}});assert.match(opening,/<form data-order-form>/,'D30 opens on last order');assert.match(opening,/<aside data-warehouse>/,'D30 shares the warehouse');assert.doesNotMatch(opening,/final-roster/,'selection does not begin before next');
+ const choosing=render(mustParts,'finalMuster(s,3,false)',{...base,finalOrdered:true,s:{team:[],npcs:[{alive:true,introduced:true,level:1}]}});assert.match(choosing,/final-roster/);assert.match(choosing,/data-candidate/);assert.doesNotMatch(choosing,/data-order-form/,'selection follows last order');
+ for(const [mode,team,committed,want] of [[null,[],false,true],[true,[],false,false],[false,['n1','n2'],false,true],[null,['n1'],false,false],[true,['n1'],true,false],[false,['n1'],true,false]]){const state={team,finalCommitted:committed},saved=JSON.stringify(state);assert.equal(render([fn('finalIsOrdering')],'finalIsOrdering(s)',{finalOrdered:mode,s:state}),want);assert.equal(JSON.stringify(state),saved,'presentation step never changes the run');}
+ const returned=render(mustParts,'finalMuster(s,3,false)',{...base,s:{team:['n1','n2'],npcs:[]}});assert.match(returned,/<form data-order-form>/,'explicit back opens Order with provisional members');assert.doesNotMatch(returned,/final-roster/);
+ const rosterDock=render(dockParts,'finalDock(s,3,false)',{...dockCtx,Copy,finalOrdered:true,s:{team:['n1'],cart:{}}});assert.match(rosterDock,/<button[^>]*data-action="final-order-back"[^>]*>발주로 돌아가기<\/button>/,'roster exposes the approved return action');
+ const committedDock=render(dockParts,'finalDock(s,3,true)',{...dockCtx,Copy,finalOrdered:true,s:{team:['n1'],cart:{},finalCommitted:true}});assert.doesNotMatch(committedDock,/final-order-back/,'commitment removes the return action');
  assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
  assert.ok(/case'final-npc':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'the notebook is the ordinary adventurer notebook');
  assert.ok(/btn\(inTeam\?'원정대에서 빼기':'원정대 선택','final-team','stamp'/.test(app),'the pick / release is the notebook footer');
  assert.ok(/case'final-team':game\.selectFinal\(id\)/.test(app),'and goes through the one selection rule');
  assert.ok(/'<div class="final-stats">'\+statGrid\(/.test(f)&&!/details class="final-order"/.test(f),'FINAL 준비 shows the Stat grid and no second order form');
- assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
+ assert.ok(/if\(phase!=='final'\)finalOrdered=null;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
  /* User 2026-09-30: the candidates can be read while ordering (view only), and a confirmed member's notebook from the prep */
- assert.ok(/btn\('원정대 후보 보기','final-roster','stamp'\)\+btn\('원정대 선택','final-ordered'/.test(f),'원정대 후보 보기 sits beside 원정대 선택, the same bar');
+ const form=render([constLine('btn'),fn('finalRiskSummary'),fn('orderForm')],'orderForm()',{game:{run:{phase:'final',day:30,branch:'fixture',money:100,cart:{},inventory:[],offers:[],dungeons:[{day:30,family:'final',scale:4.6,families:['spider'],hazards:['poison','web']}],final:{familyNames:['독거미 동굴']}},cartTotal:()=>0,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,Presentation,E:String,fmt:String,railShown:'',railFolded:()=>false,relicRef:()=>'',REROLL_ICON:''});
+ assert.match(form,/<div class="form-head"><h1>발주서<\/h1><button[^>]*data-action="final-roster"[^>]*>원정대 후보 보기<\/button><span class="docno">/,'candidate viewer is in the heading beside the title');
+ assert.doesNotMatch(form,/전체 0명|오늘[^<]*0명/,'Final order does not expose an empty ordinary queue');
  const m=app.slice(app.indexOf("else if(modal==='finalRoster')"),app.indexOf("else if(modal.startsWith('npc:'))"));
  assert.ok(/npcCard\(n,'final-view'\)/.test(m)&&/n\.alive&&n\.introduced/.test(m)&&!/final-npc|final-team|selectFinal/.test(m),'the candidates are the muster\'s own list, with no pick on it');
  assert.ok(/case'final-view':case'final-detail':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'each opens the ordinary notebook');
- assert.ok(/s\?\.phase==='final'&&!s\.finalCommitted&&n&&\(finalOrdered\|\|s\.team\.length\)\)/.test(app),'the notebook picks only on the muster step, never while ordering');
+ assert.ok(/s\?\.phase==='final'&&!s\.finalCommitted&&n&&!finalIsOrdering\(s\)/.test(app),'the notebook picks only on the muster step, never while ordering');
  assert.ok(/btn\('자세히 보기','final-detail','bare more','data-id="'\+supplyNPC\+'"'\)/.test(f),'FINAL 준비: 자세히 보기 opens the supplied member\'s notebook');
 });
 
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=(fn('orderOffer')+fn('orderForm'));
- assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+\(railFolded\(\)\?' folded':''\)\+'">'[\s\S]{0,400}?\+'<span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
-  'Death first, then 오늘, then 발주 후 last - each a label and a value; 발주 후 is the ledger\'s own `after`, short in the ledger\'s warning');
+ const ordinary=render([constLine('btn'),fn('orderForm')],'orderForm()',{game:{run:{phase:'order',day:1,branch:'fixture',money:100,inventory:[],offers:[],dungeons:[],cart:{}},cartTotal:()=>20,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,gateCounts:()=>new Map(),todayLine:()=>'<span>전체 3명</span>',railShown:'',railFolded:()=>false,deathLimitItem:()=>'<i>사망</i><b>0 / 5</b>',relicRef:()=>'',fmt:String,E:String,REROLL_ICON:''});
+ assert.match(ordinary,/<span class="rail-line"><i>사망<\/i><b>0 \/ 5<\/b><\/span><span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b><span>전체 3명<\/span><\/b><\/span><span class="rail-line rail-gold" aria-hidden="true"><i>발주 후<\/i><b>80G<\/b><\/span>/,'Death first, then Today, then exact post-cart Gold from 100 minus 20');
  // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
  assert.ok(/const railFolded=\(\)=>game\.account\.settings\.orderRailFolded===true;/.test(app)&&/'<span class="rail-chip">요약<\/span><\/button>'/.test(of),'a 요약 chip, folded state on the account');
  assert.ok(/case'rail-fold':\{const st=game\.account\.settings,f=!railFolded\(\);st\.orderRailFolded=f;game\.save\(\);/.test(app),'one tap folds or opens it and saves the choice');
  assert.ok(/\.death-limit-row\.folded \.rail-line\{display:none\}/.test(css)&&/\n\.death-limit-row \.rail-fold\{right:26px\}\n\.death-limit-row\.folded\{margin-right:42px\}/.test(css)&&/ \.death-limit-row \.rail-fold\{right:0\}\n \.death-limit-row\.folded\{margin-right:16px\}/.test(css),'every line folds; on a phone the key and chip clear the menu pin');
- assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
+ assert.equal((ordinary.match(/전체 3명/g)||[]).length,2,'the same expected visitor count is written in both ordinary Today surfaces');
  const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/const gone=!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w)&&/rail\.classList\.toggle\(e\.target===brief\?'show-today':'show-gold',gone\)/.test(w),'each shown only once its own source has gone above, under the rail');
  assert.ok(/orderWatch\.observe\(brief\);if\(out\)orderWatch\.observe\(out\)/.test(w)&&/\$\('\.p-order #order-register \.out'\)/.test(w),'발주 후 watches the ledger line, 오늘 its own block');
  assert.ok(/edge=\(parseFloat\(getComputedStyle\(sc\)\.paddingTop\)\|\|0\)\+h/.test(w)&&/if\(rail\.offsetHeight!==h\)watchOrderToday\(\)/.test(w),'measured against the stuck rail\'s real edge, set again when the rail grows or shrinks');
@@ -1893,7 +1905,11 @@ test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only
  assert.ok(/\.death-limit-row \.rail-today,\.death-limit-row \.rail-gold\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today,\.board-rail\.show-gold \.rail-gold\{display:grid\}/.test(css)&&/\.rail-gold\.short b\{color:/.test(css),'hidden by default, set apart by a rule, short reads as short');
  // one type ladder (User 2026-09-29): every label in one column and style, every value in one face and size
  assert.ok(/\.death-limit-row \.rail-line\{display:grid;grid-template-columns:44px 1fr/.test(css)&&/\.death-limit-row \.rail-line i\{[^}]*font:600 11px/.test(css)&&/\.death-limit-row \.rail-line b\{[^}]*font:500 13px/.test(css),'one label column, one value size');
- assert.ok(/if\(phase==='order'\)\{watchOrderToday\(\);watchStockSheet\(\);\}/.test(app),'watched on ORDER only');
+ const calls=[];const watchCtx={watchForecastPin:()=>calls.push('salePin'),watchTray:()=>calls.push('tray'),pinWatch:null,watchOrderToday:()=>calls.push('orderRail'),watchStockSheet:()=>calls.push('warehouse'),orderWatch:null,sheetWatch:null,railShown:'',finalPinWatch:null,finalPinFolded:false,watchFinalPin:()=>calls.push('finalPin'),finalOrdered:false,game:{run:{finalCommitted:false,team:[]}}};
+ render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('order')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'ordinary Order keeps both existing watchers');
+ calls.length=0;render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('final')",watchCtx);assert.deepEqual(calls,['orderRail','warehouse'],'Final last order shares the same watchers');
+ calls.length=0;render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,finalOrdered:true});assert.deepEqual(calls,[],'roster never keeps the Order watchers');
+ calls.length=0;render([fn('finalIsOrdering'),fn('syncWatchers')],"syncWatchers('final')",{...watchCtx,game:{run:{finalCommitted:true,team:['n1']}}});assert.deepEqual(calls,['finalPin'],'committed preparation watches only the member pin');
  /* User 2026-10-02: the room under the 발주서 is the open sheet's own height, not the 45% it may reach */
  assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(var\(--sheet-h,45dvh\) \+ 30px\)\}/.test(css)
   &&/host\.style\.setProperty\('--sheet-h'/.test(fn('watchStockSheet')),'the sheet reports its own height as the room under the form');
@@ -2039,7 +2055,7 @@ test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
 test('UI-Q-v29-39: ORDER price tags - 매입 labelled on top, 판매 under it, no 매입 in the metadata line',()=>{
- assert.ok(app.includes("'<span class=\"prices\">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')"),'the two labelled tags, buy price first');
+ assert.ok(fn('orderOffer').includes("Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')"),'the two labelled tags, buy price first');
  // v2.9.10 quick patch (User 2026-09-28, EVENT §02): the 1+1 promo is a red sticker on the tags, not a metadata fragment
  assert.ok(app.includes("+(o.promo?'<em class=\"promo-sticker\" aria-label=\"1+1 행사\">1+1</em>':'')+'</span>'"),'the promoted offer wears the 1+1 sticker');
  assert.ok(!/o\.promo\?' · 1\+1'/.test(app),'the metadata line no longer carries 1+1');
@@ -2430,7 +2446,9 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  const tillEmitted=fn('till').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
  assert.ok(!/이 상품이 직접/.test(tillEmitted)&&!/보급이 상태에 미치는 영향/.test(tillEmitted),
   'the old per-group analytical headings are gone');
- assert.ok(tillEmitted.includes('<h4>판매 후 변화</h4>'),'one heading covers the whole list');
+ for(const phase of ['sell','final']){const n={id:'n1',name:'fixture',money:100,pack:[]},ctx={game:{run:{phase,day:1,bossId:'WRATH',inventory:[{id:'st',item:'lowpotion',expires:3}],npcs:[n],facilities:[],dungeons:[{}]},current:()=>n,claimedGateFor:()=>({}),finalPrice:()=>70,finalNoEffect:()=>false},selected:'st',supplyNPC:'n1',D:DATA,E:String,Copy,Adventurer:{slots:()=>2},Presentation:{preview:()=>({direct:[]}),rows:()=>[]},finalItemTruth:()=>({}),walletChip:()=>'<b>100G</b>',lastSaleDay:()=>'',priceKeys:()=>'<button>판매</button>'};
+ const emitted=render([constLine('btn'),fn('till')],'till()',ctx);assert.equal((emitted.match(/<h4>/g)||[]).length,1,'one heading covers the whole list in '+phase);assert.match(emitted,new RegExp('<h4>'+(phase==='final'?'보급':'판매')+' 후 변화</h4>'),'the title names the actual action');}
+
  assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&!/moved\.derived|moved\.departure/.test(tillEmitted),
   'the till lists the Item\'s own rows only (User 2026-09-25)');
  assert.ok(!/moved\.derived|moved\.departure/.test(fn('tray')),'and so does the counter tray');
@@ -2597,27 +2615,14 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
 test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is stated once',()=>{
  const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
  assert.ok(block.length,'there is a phone-width density block');
- /* SA-Q10's original 120 / 96 phone caps were reviewed on a handset and superseded by the USER
-    amendment of 2026-09-22 (UI_UX §BOSS INFORMATION PRESENTATION): the beat is a takeover with
-    the screen dimmed behind it, so the art grows to 240 / 200 on a phone and 300 / 260 on the
-    desk. What SA-Q10 exists to protect is unchanged and is asserted below - the caps are real
-    ceilings, and art may not push the information or the acknowledgement off the first
-    viewport, which the runtime Boss QA measures. */
- assert.ok(/\.boss-art img\{max-height:240px\}/.test(block),'D5 / D15 Boss art is capped at the amended 240px on phone');
- assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(block),'the D25 reveal is capped at 200px');
- // the width-only constraint that caused it is no longer the only one
+ /* UI_UX §BOSS INFORMATION PRESENTATION: common art caps; runtime density is checked by qa-boss-report-density. */
+ assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(block),'phone art scales with viewport height under the common cap');
+ assert.ok(!/\.boss-reveal\.(?:final|d\d+) \.boss-art img\{/.test(css),'no investigation Day has its own image-size exception');
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
- // the caps are real ceilings, not overridden later at the same width. The count used to be
- // the check, which also forbade a cap at a DIFFERENT width - and UI-Q-v28-28 needs one: past
- // 720px the art was capped on width only, so it grew to its own aspect (408px in D5, 461px in
- // D25 at 1280x880) and overflowed the modal body. The phone block is what these baselines own,
- // so the ceiling is asserted there, and the desktop pair is asserted on its own below.
- assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,2,
-  'exactly the two baseline height caps at phone width, and no third');
+ assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,1,'one common height cap at phone width');
  const wide=css.slice(css.indexOf('@media (min-width:720px){'));
- assert.ok(/\.boss-art img\{max-height:300px\}/.test(wide),'the desk caps D5 / D15 art height too, higher than the phone');
- assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:260px\}/.test(wide),'and the D25 reveal lower, as on phone');
+ assert.ok(/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(wide),'all desk reports share a supporting image cap');
  // the reports themselves are untouched: art is still a figure beside the information
  assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
  assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
@@ -2922,14 +2927,11 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  // the reports reuse the existing shell
  assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
  assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and D5/D10/D15/D20/D25 are consumed by the existing one');
- /* UI_UX §D5 / D10 / D15 / D20 / D25 and UI-Q-v28-10, amended 2026-09-23 (BATCH 4B): the 64px
-    D10 / D20 identity thumbnail is retired. The two concise beats reuse the same full Boss-art
-    figure as D5 / D15 under the same caps (240 phone / 300 desk) - lower importance comes from
-    shorter content, never from a smaller Boss. The superseded 64px expectation is not kept. */
+ /* UI_UX §D5 / D10 / D15 / D20 / D25: shorter beats keep the common full illustration. */
  const compact=fn('bossReveal').split("stage==='d10'||stage==='d20'")[1].split("stage==='d0'")[0];
  assert.ok(/\+plate/.test(compact)&&!/boss-id/.test(compact),'D10 / D20 carry the shared full Boss-art figure, not a thumbnail');
  assert.ok(!/\.boss-id\b/.test(css)&&!/max-width:64px;max-height:64px/.test(css),'the 64px thumbnail rule is gone');
- assert.ok(/\.boss-art img\{max-height:240px\}/.test(css)&&/\.boss-art img\{max-height:300px\}/.test(css),
+ assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(css),
   'the shared phone / desk caps (240 / 300) are the ones D10 / D20 now use');
  assert.ok(!/\.boss-reveal\.d(10|20)[^{]*\.boss-art img\{/.test(css),'no D10 / D20-only art size - one art family');
 });
