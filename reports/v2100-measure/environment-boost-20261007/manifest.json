@@ -1,0 +1,30 @@
+{
+  "base": "703463c2",
+  "conditions": {
+    "env25": {
+      "head": "479e941486f014bb79b5b63f00e7bab971cca6dd",
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\env25.json",
+      "bytes": 44109492,
+      "sha256": "fb62f6fdbca7a4c76a5c51afee530981522971b9fd1f03c3736d7dd470826521",
+      "exit": {
+        "code": 0,
+        "signal": null,
+        "seconds": 426.385
+      },
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\env25.json"
+    },
+    "env20": {
+      "head": "d3c1a5f32916192513f49b26af58ba15c88be678",
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\env20.json",
+      "bytes": 44139786,
+      "sha256": "4c9117172e07008a679c0b7c3748d07e2eb20fc202cb26d2d417a6b965471435",
+      "exit": {
+        "code": 0,
+        "signal": null,
+        "seconds": 429.103
+      },
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\environment-boost-20261007\\env20.json"
+    }
+  },
+  "interrupted": "초기 중단 실행은 제외. 같은 후보에서 재시작."
+}
