@@ -318,7 +318,7 @@ node tools/measure-v2100.cjs --traj 200 --fresh 1000
 - 재는 것: 구간별(D1~7 / 8~14 / 15~21 / 22~29) 원정 성공률, D30 도달 · 클리어, 사망 / 런, 좀비, 장식.
   둘째 줄(`└`)에 종료 이유(사망 한도 · 파산 · 마왕 실패), 끝난 날 중앙값, D10까지 사망, 부상 출발과 그 사망률,
   상위 4명(레벨) 대 나머지의 성공률 · 사망, 현금 / 일, 자본. 방문 지갑 · 점포지원 궤적은 `--out` JSON에 남는다.
-- 규모: reader(기준) · expert · balanced 봇의 프레시 계정 1000판, reader · expert의 궤적 200 × 10런(장식 none / economy / survival)
+- 규모: reader(기준) · expert 봇의 프레시 계정 1000판, reader · expert의 궤적 200 × 10런(장식 none / economy / survival). 균형 봇은 기준 밸런스 평가에서 제외한다(User 2026-10-06).
 - 시간: 한 조건 5~8분, 두 조건을 동시에 돌리면 13~17분
 - 비교: 바꾸기 전과 비교할 때는 이전 커밋을 `git worktree`로 따로 꺼내 같은 명령을 함께 돌린다(또는 `--before <root>`).
   아직 넣지 않은 후보는 worktree 사본에만 적용해서 재고, Production에는 컨펌 뒤에 넣는다.

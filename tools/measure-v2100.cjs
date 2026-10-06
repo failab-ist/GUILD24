@@ -83,7 +83,7 @@ else if(require.main===module){
  for(const [src,root] of srcs){
   for(const policy of POL)for(const deco of DECOS||(src==='after'?['none','economy','survival']:['none','survival']))
    for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'traj',policy,deco,T:Math.ceil(TT/PARTS),R,part:p});
-  for(const policy of ['reader','expert','balanced'])for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
+  for(const policy of POL)for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
  }
  const acc={},t0=Date.now();let live=0,done=0,failed=false;const total=jobs.length;
  const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:2},arms:acc};
