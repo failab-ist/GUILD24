@@ -111,7 +111,7 @@ Implementation uses an explicit D30 no-effect exclusion set, not a positive fina
 Current explicit D30 no-effect exclusions:
 단골 스탬프 기계 (stamp) · 회원 관리대장 (member) · 길드 보증 진열대 (guarantee) · 대형 냉장고 (fridge) ·
 길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
-프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) · 새벽 회수 계약 (dawnRecovery) ·
+프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) ·
 왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
 응급 처치대 (firstAidDesk; no SALE arrival on D30) · 소문 수집 게시판 (rumorBoard; no Event on D30) ·
 단골 추천 엽서함 (postcard; no visitors on D30) · 길드 구조대 계약 (rescueContract; no ordinary expedition on D30)
@@ -225,7 +225,7 @@ the internal kind.
 ```text
 영웅 (7)  : 24시간 신선체계 · 물류 본부계약 · 평생 단골제 · 왕도 프리미엄 인증 · 원정 작전실 · 지역 거점점 계약 · 응급 처치대
 희귀 (10) : 즉석식품 코너 · 본사 추가발주권 · 귀환 적립제 · 새벽 회수 계약 · 단체 주문 창구 · 프리미엄 멤버십 ·
-            원정 도시락 코너 · 길드 납품 인증 · 고급 식자재 유통 계약 · 길드 구조대 계약
+            원정 도시락 코너 · 길드 납품 인증 · 전문 포션 유통 계약 · 길드 구조대 계약
 일반 (17) : 묶음발주 계약 · 회전 진열대 · 단골 스탬프 기계 · 회원 관리대장 · 희귀상품 입고 계약 · 길드 보증 진열대 ·
             원정 위험 게시판 · 야전 정비대 · 대형 냉장고 · 길드 전광판 · 첫 방문 쿠폰 · 야전 들것 · 후방 창고 증설 ·
             발주 교환권 · 운영 효율 매뉴얼 · 소문 수집 게시판 · 단골 추천 엽서함
@@ -452,12 +452,11 @@ no Supply (피로 회복) bonus
 The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 
-18. 고급 식자재 유통 계약 (id coldcase) · tags=[Fresh,Premium] · eligible=Uncommon+ Food/Drink
-- the Day's first ORDER sheet carries one extra Uncommon+ Food/Drink slot (never on a Reroll; the 새벽 회수 계약 rule)
-- an Uncommon+ Food/Drink sale pays the store 15% of the charged price on top (HQ commission)
-- no offer weight, no purchase intent, no shelf life, no Stat effect
-
-Eligibility: category in [Food, Drink] and rarity >= Uncommon. Do not use a retired fresh boolean/property.
+18. 전문 포션 유통 계약 (id coldcase) · tags=[Expedition,Rotation] · eligible=Potion
+- one independent Potion-only ORDER slot is added on acquisition and every offer generation, including Rerolls
+- all unlocked Potion rarities follow ordinary Day-based rarity progression; no extra rarity floor
+- no sale commission, offer weight, purchase intent, shelf-life or Stat effect
+- keep id coldcase for saved ownership compatibility
 
 19. 길드 납품 인증 · tags=[Premium,Expedition] · `DIRECTOR DOCUMENT BASELINE`
 effect=Rare+ expedition-response items gain premium-economy viability
@@ -469,7 +468,7 @@ effect=Rare+ expedition-response items gain premium-economy viability
 - 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
   being wasted (it is not counted as waste); it is taken back that Night, with the discard (ITEM §SHELF LIFE),
   so the refund is on that Day's receipt
-- each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
+- one independent Food/Drink-only ORDER slot is added on acquisition and every offer generation, including Rerolls
 - it discounts no ORDER
 
 ### KEYSTONE
@@ -552,7 +551,7 @@ not compound with them.
 - 후방 창고 증설: inventory capacity +5
 
 28. 본사 추가발주권
-- 본사 추가발주권: from the next ORDER-offer generation, offer candidate count +2
+- 본사 추가발주권: on acquisition and every ORDER-offer generation, offer candidate count +2
 
 29. 발주 교환권
 effect=매일 첫 canonical Full-offer Reroll 비용 0G
@@ -691,7 +690,7 @@ The following 21 Store Support base prices are the approved baseline.
 | memberBundle | 단골 묶음혜택 | 190G |
 | premiumMember | 프리미엄 멤버십 | 200G |
 | expeditionMeal | 원정 도시락 코너 | 200G |
-| coldcase | 고급 식자재 유통 계약 | 180G |
+| coldcase | 전문 포션 유통 계약 | 180G |
 | dawnRecovery | 새벽 회수 계약 | 190G |
 | fresh24 | 24시간 신선체계 | 360G |
 | warehouse | 후방 창고 증설 | 130G |
@@ -881,7 +880,7 @@ D30 candidate generation must be: ordinary eligible pool minus explicit D30 no-e
 It must NOT be implemented as a positive finalUseful/futureRelevant allowlist.
 
 Current explicit exclusions: the §D30 CANDIDATE ELIGIBILITY list (stamp, member, guarantee, fridge, board,
-firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, dawnRecovery, royalCert,
+firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, royalCert,
 hub, efficiency, firstAidDesk).
 
 PASS:
@@ -1000,7 +999,7 @@ PASS: No excluded facility is offered, owned, or applied as a hidden modifier.
 
 Expected:
 - rareContract -> 희귀상품 입고 계약
-- coldcase -> 고급 식자재 유통 계약
+- coldcase -> 전문 포션 유통 계약
 - the wall Decoration is 명예 모험가 액자; no Store Support is named 쇼케이스
 
 No active Store Support uses 쇼케이스 in these two names.
@@ -1025,14 +1024,14 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
   price, store receives the full charged price
 - 프리미엄 멤버십 -> 다시 온 손님 arrival NPC Wallet +25G; Rare+ purchase intent +15%p; a Rare+ purchase at 100% / 50% 단골도 +10
 - 원정 도시락 코너 -> flat +2 on every Hazard of the actual Gate per Food/Drink Item (one Hazard at the 마왕성); Food/Drink ORDER price ×1.15
-- 고급 식자재 유통 계약 -> one extra Uncommon+ Food/Drink slot on the Day's first ORDER sheet; Uncommon+ Food/Drink sale +15% HQ commission
+- 전문 포션 유통 계약 -> +1 independent Potion-only ORDER slot from acquisition, including Rerolls; no sale commission
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
-  the Day's first offer generation
+  acquisition and every offer generation, including Rerolls
 - 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15; no shelf life
 - 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read
 - 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so
 - 후방 창고 증설 -> inventory capacity +5
-- 본사 추가발주권 -> next ORDER-offer generation candidate count +2
+- 본사 추가발주권 -> acquisition and every ORDER-offer generation candidate count +2
 
 FAIL if Source omits one of these exact functions or uses a different numeric value.
 
@@ -1227,26 +1226,22 @@ EXPECT: Generic Fresh core boost applies only to native Stat/recovery. It does n
 Insurance, RiskReward penalty or unrelated attached effects.
 PASS: Fresh does not become a blanket whole-item multiplier.
 
-#### REL-Q33 — COLD DISTRIBUTION ELIGIBILITY
-SETUP: Own 고급 식자재 유통 계약 and generate Order offers repeatedly.
-EXPECT: the first sheet carries one extra Uncommon+ Food/Drink slot, and an Uncommon+ Food/Drink sale pays 15% on top.
-PASS: Effect has a meaningful multi-SKU pool and is not dependent on one or two Rare items.
+#### REL-Q33 — POTION DISTRIBUTION ELIGIBILITY
+SETUP: Own 전문 포션 유통 계약 and generate Order offers repeatedly, including Rerolls.
+EXPECT: one independent Potion-only slot, across all unlocked rarities, with no sale commission.
+PASS: the slot follows ordinary Day-based rarity progression and never replaces the Food/Drink slot.
 
-#### REL-Q76 — COLD DISTRIBUTION / DAWN RECOVERY CATEGORY
+#### REL-Q76 — DISTRIBUTION CATEGORY
+PASS: 새벽 회수 계약 uses Food/Drink categories; 전문 포션 유통 계약 uses Potion. Neither uses a legacy fresh flag.
 
-PASS:
-- eligibility uses Food/Drink categories
-- no stale legacy `fresh` category dependency
-- their offer/shelf/recovery identities remain intact
+#### REL-Q-v28-9 — ADDITIONAL ORDER SLOTS ACQUISITION
+Acquiring extraOrder, dawnRecovery or coldcase appends exactly its added slots immediately, retaining every existing
+offer, remaining quantity, cart index and inventory expiry. Dawn and Potion slots carry their own origins.
+Acquisition never advances offer pity; newly present Rare/Counter Items may satisfy and reset their missing streak.
+Every first generation and Reroll uses the same slot count/category rules. With all three supports, 10 total slots;
+with the +2 offer Event, 12. The cap on direct-Counter slots grows with the added slots, and ordinary pity relief
+does not consume category-specific or Event-origin slots. D30 filters no-effect Items on every added slot too.
 
-#### REL-Q-v28-9 — COLD DISTRIBUTION ACQUISITION
-
-On acquisition, existing non-expired U+ Food/Drink stock extends exactly once +1 day. Future eligible stock receives +1 day.
-
-FAIL:
-- eligibility depends on retired item.fresh property
-- Common Food/Drink is extended by coldcase
-- eligible existing stock is not extended
 
 #### REL-Q32 — FRESH BUILD ITEM SUPPORT
 SETUP: Simulate Fresh-heavy runs across early/mid/late Item availability.

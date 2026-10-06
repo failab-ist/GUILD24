@@ -85,7 +85,7 @@ w.purchaseDay=s.phase==='foundation'?0:s.day;
  if(id==='fresh24')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.fresh24.orderPriceMult);
  /* 원정 도시락 코너 (User 2026-10-02): the same once-only repricing, a flat +3G */
  if(id==='expeditionMeal')for(const o of s.offers||[])if(food(D.itemBy[o.item]))o.price=Math.round(o.price*D.relicParams.expeditionMeal.orderPriceMult);
- if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
+ if(s.phase==='foundation')this.morning();else{this.appendSupportOffers(id,true);s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait. Deferring
    opens DAY 1 exactly as a pick does, and the D0 window stays open, still free, until the D5 window replaces it. */
 P.deferFoundationRelic=function(){if(this.run.phase!=='foundation')throw Error('지금은 점포지원 선택을 넘길 수 없습니다.');this.morning();this.save();};

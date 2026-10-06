@@ -2039,7 +2039,7 @@ test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
 test('UI-Q-v29-39: ORDER price tags - 매입 labelled on top, 판매 under it, no 매입 in the metadata line',()=>{
- assert.ok(app.includes("'<span class=\"prices\">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')"),'the two labelled tags, buy price first');
+ assert.ok(fn('orderOffer').includes("Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')"),'the two labelled tags, buy price first');
  // v2.9.10 quick patch (User 2026-09-28, EVENT §02): the 1+1 promo is a red sticker on the tags, not a metadata fragment
  assert.ok(app.includes("+(o.promo?'<em class=\"promo-sticker\" aria-label=\"1+1 행사\">1+1</em>':'')+'</span>'"),'the promoted offer wears the 1+1 sticker');
  assert.ok(!/o\.promo\?' · 1\+1'/.test(app),'the metadata line no longer carries 1+1');

@@ -128,6 +128,9 @@ and back (account-level, kept across Days and reloads); on a phone key and chip 
 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
+Contract-origin added rows show a quiet bordered source chip above the purchase-price tag: 새벽 회수 / 포션 계약,
+13px / 500 Wanted Sans with readable parchment contrast. Ordinary added rows need no source label.
+
 The warehouse sits apart from the 발주서, like a game's storage, readable against the offer rows: a steel rack of 칸 (orange
 beam), each held unit its own cell (icon and days left, ≤ 1 day in the warning color), grouped by Item, in the SALE shelf's order
 (§SALE — SHELF ORDER: today's Hazard answers first, User 2026-10-04). The desk rack shows every

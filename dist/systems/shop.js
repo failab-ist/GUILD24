@@ -359,11 +359,21 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
      cleared every Morning so a stale v8 save cannot carry one back in. */
   s.special=null;
  }
+ offerCounterCap(){const s=this.run,ev=s.event?.effects||{},num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));
+  return D.balance.offerCounterMax+Math.max(0,num-D.balance.orderOffers)+(ev.blackmarket?1:0)+(this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0)+(this.has('coldcase')?D.relicParams.coldcase.extraOffers:0);}
+ recordOffers(offers){const s=this.run;for(const o of offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}}
+ appendSupportOffers(id,record=false){const s=this.run;if(!['extraOrder','dawnRecovery','coldcase'].includes(id)||!this.has(id))return;
+  this.counterCap=this.offerCounterCap();const only=id==='dawnRecovery'?G.Relics.food:id==='coldcase'?it=>it.category==='potion':null,added=[];
+  for(let i=0;i<D.relicParams[id].extraOffers;i++){const o=this.rollOffer(0,1,only);if(id!=='extraOrder')o.origin=id;s.offers.push(o);added.push(o);}
+  if(record){this.recordOffers(added);if(added.some(o=>D.itemBy[o.item].rarity>=2))s.pity.rare=0;
+   const hazards=G.Relics.known(this);s.pity.hazards??={};for(const h of hazards)if(added.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
+   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]||0));}
+ }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: the Counter cap grows one for one with every slot a Store Support or an Event adds */
- this.counterCap=D.balance.offerCounterMax+Math.max(0,num-D.balance.orderOffers)+(ev.blackmarket?1:0)+(advancePity&&this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0)+(advancePity&&this.has('coldcase')?D.relicParams.coldcase.extraOffers:0);for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
+ this.counterCap=this.offerCounterCap();for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  /* EVENT §02. 본사 1+1 행사: HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
-    again for a 1+1 on the SKU the player wanted is not the Event's play. Same rule as 새벽 회수 계약's extra slot below. */
+    again for a 1+1 on the SKU the player wanted is not the Event's play. Store Support slots persist separately. */
  if(ev.double&&advancePity){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
@@ -373,11 +383,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     no source label, because this is special-offer presentation and not a generic rarity
     attribution. */
  if(ev.blackmarket)s.offers.push({...this.rollOffer(2,1.35),origin:'blackmarket'});
- /* 새벽 회수 계약: the Day's first generation (never a Reroll) carries one extra Food/Drink slot,
-    after the ordinary and Event slots so no guarantee below can consume it. */
- if(advancePity&&this.has('dawnRecovery'))for(let i=0;i<D.relicParams.dawnRecovery.extraOffers;i++)s.offers.push(this.rollOffer(0,1,G.Relics.food));
- /* RELIC 고급 식자재 유통 계약: the same first-sheet extra slot, Uncommon+ Food/Drink only */
- if(advancePity&&this.has('coldcase'))for(let i=0;i<D.relicParams.coldcase.extraOffers;i++)s.offers.push(this.rollOffer(0,1,it=>G.Relics.food(it)&&it.rarity>=1));
+ /* RELIC §ADDITIONAL ORDER SLOTS: independent category slots survive every Reroll. */
+ this.appendSupportOffers('dawnRecovery');this.appendSupportOffers('coldcase');
  const ordinary=num;
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
  /* ECONOMY_ORDER §Known-Hazard Counter pity (User 2026-10-02): every sheet drawn counts - the Day's first and each Reroll -
@@ -396,7 +403,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  }
  if(hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
- for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
+ this.recordOffers(s.offers);
  }
  /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE: applied AFTER the existing
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
@@ -553,7 +560,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('premiumMember')&&it.rarity>=2&&!n.newToday&&mode!=='overcharge')loyalty+=D.relicParams.premiumMember.rareLoyalty;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
  if(s.event?.effects.halfPrice&&mode==='half'&&!s.halfPriceUsed){s.money+=D.balance.halfPriceSupport;s.daily.subsidy+=D.balance.halfPriceSupport;s.halfPriceUsed=true;}
- let commission=0;if(this.has('coldcase')&&G.Relics.food(it)&&it.rarity>=1)commission+=Math.round(intent.price*D.relicParams.coldcase.commissionRate);if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
+ let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
  /* 희귀상품 입고 계약 (v2.9.11, User 2026-09-29): a Rare+ sale is charged at the ordinary price and HQ pays the store 10%
     of the charged price on top - the customer is never asked for it (it was a +10% the customer paid). */
  if(this.has('rareContract')&&it.rarity>=2)commission+=Math.round(intent.price*D.relicParams.rareContract.hqBonus);
