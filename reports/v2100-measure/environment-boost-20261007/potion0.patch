@@ -1,0 +1,73 @@
+diff --git a/dist/data/relics.js b/dist/data/relics.js
+index 74a76cae..36ccb1d4 100644
+--- a/dist/data/relics.js
++++ b/dist/data/relics.js
+@@ -31 +31 @@ const rows=[
+-['coldcase','고급 식자재 유통 계약','hybrid',['fresh','premium'],180,p=>'매일 첫 발주 후보에 고급 이상 음식·음료가 '+p.coldcase.extraOffers+'칸 더 나온다. 고급 이상 음식·음료를 팔면 가게가 판매가의 '+pct(p.coldcase.commissionRate)+'를 더 받는다.'],
++['coldcase','전문 포션 유통 계약','utility',['expedition','rotation'],180,p=>'포션만 나오는 발주 칸이 '+p.coldcase.extraOffers+'칸 늘어난다.'],
+@@ -33 +33 @@ const rows=[
+-['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,p=>'유통기한이 지난 음식·음료는 버리는 대신 매입가의 '+pct(p.dawnRecovery.refundRate)+'를 돌려받는다. 매일 첫 발주 후보에 음식이나 음료가 '+p.dawnRecovery.extraOffers+'칸 더 나온다.'],
++['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,p=>'유통기한이 지난 음식·음료는 버리는 대신 매입가의 '+pct(p.dawnRecovery.refundRate)+'를 돌려받는다. 음식이나 음료만 나오는 발주 칸이 '+p.dawnRecovery.extraOffers+'칸 늘어난다.'],
+@@ -41 +41 @@ const rows=[
+-['extraOrder','본사 추가발주권','utility',[],190,p=>'다음 발주부터 발주 후보가 '+p.extraOrder.extraOffers+'개 늘어난다.'],
++['extraOrder','본사 추가발주권','utility',[],190,p=>'발주 칸이 '+p.extraOrder.extraOffers+'칸 늘어난다.'],
+@@ -86 +86 @@ D.relicParams={
+- coldcase:{extraOffers:1,commissionRate:.15},
++ coldcase:{extraOffers:0},
+@@ -114 +114 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
+-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
++D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
+diff --git a/dist/systems/relics.js b/dist/systems/relics.js
+index 9bf28b51..93ddb841 100644
+--- a/dist/systems/relics.js
++++ b/dist/systems/relics.js
+@@ -88 +88 @@ w.purchaseDay=s.phase==='foundation'?0:s.day;
+- if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
++ if(s.phase==='foundation')this.morning();else{this.appendSupportOffers(id,true);s.notice=D.relicBy[id].name+' 확보.';/* COPY_AUDIT §11-33 (User 2026-09-24, v2.9.0): the card already says 다음 날부터 where it applies */if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 1715f896..8391ea3a 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -361,0 +362,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
++ offerCounterCap(){const s=this.run,ev=s.event?.effects||{},num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));
++  return D.balance.offerCounterMax+Math.max(0,num-D.balance.orderOffers)+(ev.blackmarket?1:0)+(this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0)+(this.has('coldcase')?D.relicParams.coldcase.extraOffers:0);}
++ recordOffers(offers){const s=this.run;for(const o of offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}}
++ appendSupportOffers(id,record=false){const s=this.run;if(!['extraOrder','dawnRecovery','coldcase'].includes(id)||!this.has(id))return;
++  this.counterCap=this.offerCounterCap();const only=id==='dawnRecovery'?G.Relics.food:id==='coldcase'?it=>it.category==='potion':null,added=[];
++  for(let i=0;i<D.relicParams[id].extraOffers;i++){const o=this.rollOffer(0,1,only);if(id!=='extraOrder')o.origin=id;s.offers.push(o);added.push(o);}
++  if(record){this.recordOffers(added);if(added.some(o=>D.itemBy[o.item].rarity>=2))s.pity.rare=0;
++   const hazards=G.Relics.known(this);s.pity.hazards??={};for(const h of hazards)if(added.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
++   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]||0));}
++ }
+@@ -364 +374 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+- this.counterCap=D.balance.offerCounterMax+Math.max(0,num-D.balance.orderOffers)+(ev.blackmarket?1:0)+(advancePity&&this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0)+(advancePity&&this.has('coldcase')?D.relicParams.coldcase.extraOffers:0);for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
++ this.counterCap=this.offerCounterCap();for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
+@@ -366 +376 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+-    again for a 1+1 on the SKU the player wanted is not the Event's play. Same rule as 새벽 회수 계약's extra slot below. */
++    again for a 1+1 on the SKU the player wanted is not the Event's play. Store Support slots persist separately. */
+@@ -376,5 +386,2 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+- /* 새벽 회수 계약: the Day's first generation (never a Reroll) carries one extra Food/Drink slot,
+-    after the ordinary and Event slots so no guarantee below can consume it. */
+- if(advancePity&&this.has('dawnRecovery'))for(let i=0;i<D.relicParams.dawnRecovery.extraOffers;i++)s.offers.push(this.rollOffer(0,1,G.Relics.food));
+- /* RELIC 고급 식자재 유통 계약: the same first-sheet extra slot, Uncommon+ Food/Drink only */
+- if(advancePity&&this.has('coldcase'))for(let i=0;i<D.relicParams.coldcase.extraOffers;i++)s.offers.push(this.rollOffer(0,1,it=>G.Relics.food(it)&&it.rarity>=1));
++ /* RELIC §ADDITIONAL ORDER SLOTS: independent category slots survive every Reroll. */
++ this.appendSupportOffers('dawnRecovery');this.appendSupportOffers('coldcase');
+@@ -399 +406 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+- for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
++ this.recordOffers(s.offers);
+@@ -556 +563 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+- let commission=0;if(this.has('coldcase')&&G.Relics.food(it)&&it.rarity>=1)commission+=Math.round(intent.price*D.relicParams.coldcase.commissionRate);if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
++ let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
+diff --git a/tools/measure-v2100.cjs b/tools/measure-v2100.cjs
+index 4d88eb98..ca3afbb0 100644
+--- a/tools/measure-v2100.cjs
++++ b/tools/measure-v2100.cjs
+@@ -90,0 +91 @@ else if(require.main===module){
++ const WORKERS=+flag('--workers',cpus);if(!Number.isInteger(WORKERS)||WORKERS<1)throw Error('--workers는 양의 정수여야 합니다.');
+@@ -98 +99 @@ else if(require.main===module){
+- const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:4,firstRunLessons:true,finalGapWeight:2},arms:acc};
++ const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:4,firstRunLessons:true,finalGapWeight:2,workers:WORKERS},arms:acc};
+@@ -104 +105 @@ else if(require.main===module){
+- for(let i=0;i<cpus;i++)next();
++ for(let i=0;i<Math.min(WORKERS,total);i++)next();

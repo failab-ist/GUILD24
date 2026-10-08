@@ -1,0 +1,1307 @@
+{
+  "build": {
+    "version": "2.11.1",
+    "commit": "a988d4a"
+  },
+  "startBuild": {
+    "version": "2.11.1",
+    "commit": "a988d4a"
+  },
+  "changes": [
+    {
+      "id": "ramen",
+      "name": "컵라면",
+      "supplyBefore": 3,
+      "supplyAfter": 5,
+      "buyBefore": 45,
+      "buyAfter": 55,
+      "sellBefore": 90,
+      "sellAfter": 110
+    },
+    {
+      "id": "ice",
+      "name": "얼음컵",
+      "supplyBefore": 1,
+      "supplyAfter": 2,
+      "buyBefore": 30,
+      "buyAfter": 35,
+      "sellBefore": 60,
+      "sellAfter": 70
+    },
+    {
+      "id": "soda",
+      "name": "중화 탄산수",
+      "supplyBefore": 1,
+      "supplyAfter": 2,
+      "buyBefore": 35,
+      "buyAfter": 40,
+      "sellBefore": 70,
+      "sellAfter": 80
+    },
+    {
+      "id": "candy",
+      "name": "집중 사탕",
+      "supplyBefore": 2,
+      "supplyAfter": 5,
+      "buyBefore": 35,
+      "buyAfter": 50,
+      "sellBefore": 70,
+      "sellAfter": 100
+    },
+    {
+      "id": "dragonramen",
+      "name": "불룡볶음면",
+      "supplyBefore": 3,
+      "supplyAfter": 7,
+      "buyBefore": 95,
+      "buyAfter": 115,
+      "sellBefore": 190,
+      "sellAfter": 230
+    },
+    {
+      "id": "wine",
+      "name": "용사의 곡주",
+      "supplyBefore": 1,
+      "supplyAfter": 2,
+      "buyBefore": 95,
+      "buyAfter": 100,
+      "sellBefore": 190,
+      "sellAfter": 200
+    },
+    {
+      "id": "ion",
+      "name": "쿨링 이온음료",
+      "supplyBefore": 1,
+      "supplyAfter": 2,
+      "buyBefore": 95,
+      "buyAfter": 100,
+      "sellBefore": 190,
+      "sellAfter": 200
+    }
+  ],
+  "uses": {
+    "ramen": {
+      "name": "컵라면",
+      "sales": 1,
+      "expeditionCopies": 1,
+      "first9": 0,
+      "nativeAddedSupply": 2
+    },
+    "ice": {
+      "name": "얼음컵",
+      "sales": 13,
+      "expeditionCopies": 13,
+      "first9": 4,
+      "nativeAddedSupply": 13
+    },
+    "soda": {
+      "name": "중화 탄산수",
+      "sales": 12,
+      "expeditionCopies": 12,
+      "first9": 11,
+      "nativeAddedSupply": 12
+    },
+    "candy": {
+      "name": "집중 사탕",
+      "sales": 4,
+      "expeditionCopies": 4,
+      "first9": 3,
+      "nativeAddedSupply": 12
+    },
+    "dragonramen": {
+      "name": "불룡볶음면",
+      "sales": 1,
+      "expeditionCopies": 1,
+      "first9": 0,
+      "nativeAddedSupply": 4
+    },
+    "wine": {
+      "name": "용사의 곡주",
+      "sales": 1,
+      "expeditionCopies": 1,
+      "first9": 0,
+      "nativeAddedSupply": 1
+    },
+    "ion": {
+      "name": "쿨링 이온음료",
+      "sales": 2,
+      "expeditionCopies": 2,
+      "first9": 1,
+      "nativeAddedSupply": 2
+    }
+  },
+  "bands": [
+    {
+      "days": "1-9",
+      "expeditions": 39,
+      "affectedByItemBuff": 19,
+      "nativeAddedSupply": 25,
+      "removedMealSupply": 0,
+      "netSupplyChange": 25,
+      "departureBandImproved": 0,
+      "departureBandWorsened": 0
+    },
+    {
+      "days": "10-29",
+      "expeditions": 84,
+      "affectedByItemBuff": 15,
+      "nativeAddedSupply": 21,
+      "removedMealSupply": 114,
+      "netSupplyChange": -93,
+      "departureBandImproved": 0,
+      "departureBandWorsened": 5
+    }
+  ],
+  "mismatches": [],
+  "scope": "저장된 출발 직전 피로를 각각 고정한 산술 비교. 누적 피로·승패·사망·성장·클리어 변화 예측 아님.",
+  "details": [
+    {
+      "npc": "단쥬",
+      "day": 1,
+      "items": [
+        "soda",
+        "rice"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 9,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 3,
+      "items": [
+        "mask",
+        "soda"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 3,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 1,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 9,
+      "items": [
+        "ice",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 3,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 14,
+      "currentDeparture": 11,
+      "oldDepartureAtSameRecordedFatigue": 12
+    },
+    {
+      "npc": "단쥬",
+      "day": 10,
+      "items": [
+        "ice"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 3,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 15,
+      "currentDeparture": 12,
+      "oldDepartureAtSameRecordedFatigue": 12
+    },
+    {
+      "npc": "단쥬",
+      "day": 11,
+      "items": [
+        "lunchbox",
+        "ice"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 3,
+      "currentSupply": 10,
+      "oldSupply": 12,
+      "recordedBeforeFatigue": 16,
+      "currentDeparture": 6,
+      "oldDepartureAtSameRecordedFatigue": 4
+    },
+    {
+      "npc": "단쥬",
+      "day": 13,
+      "items": [
+        "lunchbox",
+        "rope"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 7,
+      "oldSupply": 9,
+      "recordedBeforeFatigue": 10,
+      "currentDeparture": 3,
+      "oldDepartureAtSameRecordedFatigue": 1
+    },
+    {
+      "npc": "단쥬",
+      "day": 14,
+      "items": [
+        "herbtea",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 3,
+      "currentSupply": 10,
+      "oldSupply": 13,
+      "recordedBeforeFatigue": 7,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 15,
+      "items": [
+        "wine",
+        "battery"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 3,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 1,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 19,
+      "items": [
+        "herbtea",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 2,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 23,
+      "items": [
+        "cloak",
+        "yanggaeng"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 5,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 26,
+      "items": [
+        "sageelixir",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 3,
+      "currentSupply": 10,
+      "oldSupply": 13,
+      "recordedBeforeFatigue": 7,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 27,
+      "items": [
+        "battlelunch"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 10,
+      "oldSupply": 12,
+      "recordedBeforeFatigue": 1,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 28,
+      "items": [
+        "cryptlantern",
+        "guildlunch"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 8,
+      "oldSupply": 10,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "단쥬",
+      "day": 29,
+      "items": [
+        "holylight",
+        "herbtea"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 3,
+      "oldSupply": 4,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "복샤나",
+      "day": 4,
+      "items": [
+        "energy",
+        "soda"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 4,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 6,
+      "currentDeparture": 2,
+      "oldDepartureAtSameRecordedFatigue": 3
+    },
+    {
+      "npc": "복샤나",
+      "day": 7,
+      "items": [
+        "soda",
+        "energy"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 4,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 7,
+      "currentDeparture": 3,
+      "oldDepartureAtSameRecordedFatigue": 4
+    },
+    {
+      "npc": "복샤나",
+      "day": 10,
+      "items": [
+        "ice"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 3,
+      "currentDeparture": 1,
+      "oldDepartureAtSameRecordedFatigue": 1
+    },
+    {
+      "npc": "복샤나",
+      "day": 19,
+      "items": [
+        "ramen",
+        "energy"
+      ],
+      "nativeDelta": 2,
+      "mealRemoved": 3,
+      "currentSupply": 7,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 26,
+      "currentDeparture": 19,
+      "oldDepartureAtSameRecordedFatigue": 18
+    },
+    {
+      "npc": "복샤나",
+      "day": 22,
+      "items": [
+        "energy",
+        "kit"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 29,
+      "currentDeparture": 27,
+      "oldDepartureAtSameRecordedFatigue": 26
+    },
+    {
+      "npc": "부엔기",
+      "day": 1,
+      "items": [
+        "soda",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 3,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "부엔기",
+      "day": 8,
+      "items": [
+        "ion",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 3,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 19,
+      "currentDeparture": 16,
+      "oldDepartureAtSameRecordedFatigue": 17
+    },
+    {
+      "npc": "부엔기",
+      "day": 9,
+      "items": [
+        "candy",
+        "choco"
+      ],
+      "nativeDelta": 3,
+      "mealRemoved": 0,
+      "currentSupply": 12,
+      "oldSupply": 9,
+      "recordedBeforeFatigue": 25,
+      "currentDeparture": 13,
+      "oldDepartureAtSameRecordedFatigue": 16
+    },
+    {
+      "npc": "부엔기",
+      "day": 10,
+      "items": [
+        "boots",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 7,
+      "oldSupply": 9,
+      "recordedBeforeFatigue": 17,
+      "currentDeparture": 10,
+      "oldDepartureAtSameRecordedFatigue": 8
+    },
+    {
+      "npc": "부엔기",
+      "day": 11,
+      "items": [
+        "ice",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 3,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 19,
+      "currentDeparture": 16,
+      "oldDepartureAtSameRecordedFatigue": 16
+    },
+    {
+      "npc": "부엔기",
+      "day": 18,
+      "items": [
+        "battlelunch",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 4,
+      "currentSupply": 17,
+      "oldSupply": 21,
+      "recordedBeforeFatigue": 28,
+      "currentDeparture": 11,
+      "oldDepartureAtSameRecordedFatigue": 7
+    },
+    {
+      "npc": "부엔기",
+      "day": 20,
+      "items": [
+        "ice",
+        "herbtea"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 15,
+      "currentDeparture": 9,
+      "oldDepartureAtSameRecordedFatigue": 8
+    },
+    {
+      "npc": "부엔기",
+      "day": 25,
+      "items": [
+        "sageelixir",
+        "midpotion"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 3,
+      "oldSupply": 4,
+      "recordedBeforeFatigue": 13,
+      "currentDeparture": 10,
+      "oldDepartureAtSameRecordedFatigue": 9
+    },
+    {
+      "npc": "부엔기",
+      "day": 29,
+      "items": [
+        "magmagear",
+        "yanggaeng"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 23,
+      "currentDeparture": 17,
+      "oldDepartureAtSameRecordedFatigue": 15
+    },
+    {
+      "npc": "영수안",
+      "day": 4,
+      "items": [
+        "soda",
+        "energy"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 4,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "영수안",
+      "day": 11,
+      "items": [
+        "ice",
+        "kit"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 2,
+      "oldDepartureAtSameRecordedFatigue": 2
+    },
+    {
+      "npc": "영수안",
+      "day": 18,
+      "items": [
+        "guildlunch"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 7,
+      "oldSupply": 9,
+      "recordedBeforeFatigue": 18,
+      "currentDeparture": 11,
+      "oldDepartureAtSameRecordedFatigue": 9
+    },
+    {
+      "npc": "영수안",
+      "day": 20,
+      "items": [
+        "ice",
+        "battery"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 18,
+      "currentDeparture": 16,
+      "oldDepartureAtSameRecordedFatigue": 16
+    },
+    {
+      "npc": "영수안",
+      "day": 21,
+      "items": [
+        "lunchbox",
+        "webgloves"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 23,
+      "currentDeparture": 17,
+      "oldDepartureAtSameRecordedFatigue": 15
+    },
+    {
+      "npc": "영수안",
+      "day": 22,
+      "items": [
+        "ice",
+        "lunchbox"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 3,
+      "currentSupply": 8,
+      "oldSupply": 10,
+      "recordedBeforeFatigue": 26,
+      "currentDeparture": 18,
+      "oldDepartureAtSameRecordedFatigue": 16
+    },
+    {
+      "npc": "도토릭",
+      "day": 7,
+      "items": [
+        "soda",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 2,
+      "oldSupply": 1,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 1,
+      "items": [
+        "soda",
+        "water"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 4,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 4,
+      "items": [
+        "soda",
+        "choco"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 7,
+      "oldSupply": 6,
+      "recordedBeforeFatigue": 1,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 8,
+      "items": [
+        "mask",
+        "soda"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 2,
+      "oldSupply": 1,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 9,
+      "items": [
+        "ice",
+        "energy"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 4,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 2,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 10,
+      "items": [
+        "lowpotion",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 2,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 12,
+      "items": [
+        "ion",
+        "yanggaeng"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 3,
+      "currentSupply": 7,
+      "oldSupply": 9,
+      "recordedBeforeFatigue": 8,
+      "currentDeparture": 1,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 18,
+      "items": [
+        "yanggaeng",
+        "yanggaeng"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 4,
+      "currentSupply": 10,
+      "oldSupply": 14,
+      "recordedBeforeFatigue": 13,
+      "currentDeparture": 3,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "인젤미",
+      "day": 19,
+      "items": [
+        "antidote",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 7,
+      "currentDeparture": 5,
+      "oldDepartureAtSameRecordedFatigue": 4
+    },
+    {
+      "npc": "인젤미",
+      "day": 21,
+      "items": [
+        "lunchbox",
+        "cryptlantern"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 14,
+      "currentDeparture": 8,
+      "oldDepartureAtSameRecordedFatigue": 6
+    },
+    {
+      "npc": "인젤미",
+      "day": 24,
+      "items": [
+        "coating",
+        "choco"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 5,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 12,
+      "currentDeparture": 7,
+      "oldDepartureAtSameRecordedFatigue": 5
+    },
+    {
+      "npc": "인젤미",
+      "day": 28,
+      "items": [
+        "slimesuit",
+        "yanggaeng"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 5,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 20,
+      "currentDeparture": 15,
+      "oldDepartureAtSameRecordedFatigue": 13
+    },
+    {
+      "npc": "서리안",
+      "day": 9,
+      "items": [
+        "ice",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 3,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 7,
+      "currentDeparture": 4,
+      "oldDepartureAtSameRecordedFatigue": 5
+    },
+    {
+      "npc": "서리안",
+      "day": 11,
+      "items": [
+        "antidote",
+        "yanggaeng"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "서리안",
+      "day": 14,
+      "items": [
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 7,
+      "oldSupply": 9,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "서리안",
+      "day": 16,
+      "items": [
+        "herbtea",
+        "herbtea"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 2,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "된자르",
+      "day": 5,
+      "items": [
+        "candy",
+        "choco"
+      ],
+      "nativeDelta": 3,
+      "mealRemoved": 0,
+      "currentSupply": 10,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "된자르",
+      "day": 10,
+      "items": [
+        "ice",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 2,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "된자르",
+      "day": 14,
+      "items": [
+        "herbtea",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 4,
+      "oldSupply": 6,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "된자르",
+      "day": 17,
+      "items": [
+        "candy",
+        "herbtea"
+      ],
+      "nativeDelta": 3,
+      "mealRemoved": 3,
+      "currentSupply": 7,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 8,
+      "currentDeparture": 1,
+      "oldDepartureAtSameRecordedFatigue": 1
+    },
+    {
+      "npc": "된자르",
+      "day": 27,
+      "items": [
+        "lunchbox",
+        "hyperenergy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 3,
+      "currentSupply": 8,
+      "oldSupply": 11,
+      "recordedBeforeFatigue": 25,
+      "currentDeparture": 17,
+      "oldDepartureAtSameRecordedFatigue": 14
+    },
+    {
+      "npc": "마감로",
+      "day": 5,
+      "items": [
+        "candy",
+        "lunchbox"
+      ],
+      "nativeDelta": 3,
+      "mealRemoved": 0,
+      "currentSupply": 11,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 9,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 1
+    },
+    {
+      "npc": "한도람",
+      "day": 3,
+      "items": [
+        "soda",
+        "choco"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 8,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "개나리아",
+      "day": 12,
+      "items": [
+        "webgloves",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "개나리아",
+      "day": 14,
+      "items": [
+        "lunchbox",
+        "herbtea"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 3,
+      "currentSupply": 8,
+      "oldSupply": 11,
+      "recordedBeforeFatigue": 2,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "개나리아",
+      "day": 17,
+      "items": [
+        "hood",
+        "herbtea"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 3,
+      "currentDeparture": 1,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "개나리아",
+      "day": 18,
+      "items": [
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 5,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "개나리아",
+      "day": 23,
+      "items": [
+        "cryptlantern",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 3,
+      "currentDeparture": 1,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "개나리아",
+      "day": 28,
+      "items": [
+        "herbtea",
+        "yanggaeng"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 3,
+      "currentSupply": 7,
+      "oldSupply": 10,
+      "recordedBeforeFatigue": 5,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "라이라크",
+      "day": 9,
+      "items": [
+        "ice",
+        "lowpotion"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 0,
+      "currentSupply": 2,
+      "oldSupply": 1,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "라이라크",
+      "day": 14,
+      "items": [
+        "lunchbox",
+        "soda"
+      ],
+      "nativeDelta": 1,
+      "mealRemoved": 3,
+      "currentSupply": 8,
+      "oldSupply": 10,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "진렐도",
+      "day": 13,
+      "items": [
+        "webgloves",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "진렐도",
+      "day": 14,
+      "items": [
+        "dragonramen"
+      ],
+      "nativeDelta": 4,
+      "mealRemoved": 2,
+      "currentSupply": 7,
+      "oldSupply": 5,
+      "recordedBeforeFatigue": 7,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 2
+    },
+    {
+      "npc": "진렐도",
+      "day": 19,
+      "items": [
+        "herbtea",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 4,
+      "oldSupply": 6,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "자가르",
+      "day": 16,
+      "items": [
+        "mask",
+        "water"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "자가르",
+      "day": 21,
+      "items": [
+        "holylight",
+        "energy"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 2,
+      "oldDepartureAtSameRecordedFatigue": 1
+    },
+    {
+      "npc": "자가르",
+      "day": 23,
+      "items": [
+        "hood",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 16,
+      "currentDeparture": 10,
+      "oldDepartureAtSameRecordedFatigue": 8
+    },
+    {
+      "npc": "아리둥",
+      "day": 18,
+      "items": [
+        "lunchbox",
+        "lowpotion"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "아리둥",
+      "day": 21,
+      "items": [
+        "spiderkit",
+        "herbtea"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 1,
+      "currentSupply": 2,
+      "oldSupply": 3,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "아리둥",
+      "day": 29,
+      "items": [
+        "rice",
+        "antidote"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 5,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 2,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "매실라",
+      "day": 24,
+      "items": [
+        "hood",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 4,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "고구메",
+      "day": 25,
+      "items": [
+        "snowvisor",
+        "choco"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 5,
+      "oldSupply": 7,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    },
+    {
+      "npc": "민들로",
+      "day": 27,
+      "items": [
+        "webgloves",
+        "lunchbox"
+      ],
+      "nativeDelta": 0,
+      "mealRemoved": 2,
+      "currentSupply": 6,
+      "oldSupply": 8,
+      "recordedBeforeFatigue": 0,
+      "currentDeparture": 0,
+      "oldDepartureAtSameRecordedFatigue": 0
+    }
+  ]
+}

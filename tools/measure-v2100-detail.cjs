@@ -14,6 +14,17 @@ for(const k of pick){if(!r.arms[k])continue;const rs=r.arms[k].rows,n=rs.length;
  const W=r.arms[k].wallets;for(const band of [0,1,2,3]){const h=(t)=>W['0|'+band+'|'+t]||[];const st=t=>{const a=h(t),N=a.reduce((x,y)=>x+y,0);let c=0,med=null;for(let i=0;i<a.length;i++){c+=a[i];if(med===null&&c>=N/2)med=i*10;}const below=a.slice(0,7).reduce((x,y)=>x+y,0);return 'n'+N+' 중앙 '+med+'G <70G '+p(below,N)+'%';};
   console.log(' 지갑 band'+band,'연패',st('losing'),'| 그외',st('other'));}
 }
+// 직업: 구간/노출이 다른 표본을 섞어 단일 직업 승률 순위로 해석하지 않는다.
+for(const [key,a] of Object.entries(r.arms))for(const idx of key.includes('/traj/')?[0,4,9]:[0]){
+ const rs=a.rows.filter(x=>x.idx===idx&&x.jobs);if(!rs.length)continue;
+ console.log('\n직업 '+key+' run'+(idx+1)+' n='+rs.length);
+ const ids=[...new Set(rs.flatMap(x=>Object.keys(x.jobs)))];
+ for(const id of ids){const js=rs.map(x=>x.jobs[id]).filter(Boolean),sum=k=>js.reduce((v,j)=>v+j[k],0),n=sum('npcs'),exp=sum('exp'),picks=sum('finalPicks');
+  console.log(' '+js[0].name+' NPC '+n+' 원정 '+exp+' 성공 '+p(sum('wins'),exp)+'% 전투패배 '+p(sum('combatLoss'),exp)+'% 환경사고 '+p(sum('env'),exp)+'% 사망 '+sum('deaths')
+   +' | 첫Lv '+(sum('firstLevel')/n).toFixed(2)+' 종료Lv '+(sum('level')/n).toFixed(2)+' 성장Lv '+(sum('levelGain')/n).toFixed(2)
+   +' | 잠재력 '+(sum('potential')/n).toFixed(3)+' 마스터리 '+(sum('mastery')/n).toFixed(2)
+   +' | 최종 '+picks+'명 참여 '+sum('finalRuns')+'판 클리어 '+p(sum('finalWins'),sum('finalRuns'))+'% 평균기여 '+(picks?sum('finalPower')/picks:0).toFixed(2)+' 위험부족 '+(picks?sum('finalGap')/picks:0).toFixed(2));}
+}
 // relics: after fresh reader + expert pooled
 for(const k of ['after/fresh/reader/none','before/fresh/reader/none']){if(!r.arms[k])continue;const rs=r.arms[k].rows,n=rs.length,base={reach:rs.reduce((v,x)=>v+x.reach,0)/n,win:rs.reduce((v,x)=>v+x.win,0)/n};
  const by={};for(const x of rs)for(const [id,d] of x.relics){const b=by[id]??={n:0,day:0,reach:0,win:0,s:0,t:0};b.n++;b.day+=d;b.reach+=x.reach;b.win+=x.win;b.s+=x.all[0];b.t+=x.all[1];}

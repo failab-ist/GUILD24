@@ -28,7 +28,7 @@ const rows=[
 ['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,p=>'다시 온 손님의 손님 소지금 +'+p.premiumMember.arrivalGold+'G, 희귀 이상 상품 구매 의사 +'+pp(p.premiumMember.rareIntentBonus)+'. 그 손님이 희귀 이상 상품을 정가나 할인으로 사면 단골도가 '+p.premiumMember.rareLoyalty+' 더 오른다.'],
 ['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,p=>'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +'+p.returnPoints.loyaltyBonus+', 손님 소지금 +'+p.returnPoints.goldBonus+'G.'],
 ['expeditionMeal','원정 도시락 코너','hybrid',['fresh','expedition'],200,p=>'모든 음식·음료가 기존 위험 대응이 없어도 모든 위험 대응을 '+p.expeditionMeal.hazardDefense+' 올린다. 마왕성에서는 가장 약한 위험 하나만 올린다. 대신 음식·음료 매입가가 '+pct(p.expeditionMeal.orderPriceMult-1)+' 오른다.'],
-['coldcase','전문 포션 유통 계약','utility',['expedition','rotation'],180,p=>'포션만 나오는 발주 칸이 '+p.coldcase.extraOffers+'칸 늘어난다.'],
+['coldcase','전문 포션 유통 계약','utility',['expedition','rotation'],180,p=>'포션만 나오는 발주 칸이 '+p.coldcase.extraOffers+'칸 늘어난다. 포션을 팔면 본사가 판매금액의 '+pct(p.coldcase.commissionRate)+'를 가게에 추가 지급한다.'],
 ['supplyCert','길드 납품 인증','hybrid',['premium','expedition'],220,p=>'희귀 이상 상품 중 오늘 위험에 맞는 것이나 보험을 팔면, 가게가 정가의 '+pct(p.supplyCert.commissionRate)+'를 더 받고 그 손님의 손님 소지금도 +'+p.supplyCert.goldBonus+'G.'],
 ['dawnRecovery','새벽 회수 계약','hybrid',['fresh','rotation'],190,p=>'유통기한이 지난 음식·음료는 버리는 대신 매입가의 '+pct(p.dawnRecovery.refundRate)+'를 돌려받는다. 음식이나 음료만 나오는 발주 칸이 '+p.dawnRecovery.extraOffers+'칸 늘어난다.'],
 ['logisticsHQ','물류 본부계약','keystone',['rotation'],300,p=>'전날 판 상품 1개마다 오늘 발주 매입가가 '+pct(p.logisticsHQ.perSale)+' 싸진다 (최대 '+pct(p.logisticsHQ.maxDiscount)+').'],
@@ -83,7 +83,7 @@ D.relicParams={
  premiumMember:{rareIntentBonus:.15,arrivalGold:25,rareLoyalty:10},
  returnPoints:{loyaltyBonus:4,goldBonus:20}, /* User 2026-10-04: Loyalty 5 -> 4 with the returning-customer condition gone */
  expeditionMeal:{hazardDefense:2,orderPriceMult:1.15},
- coldcase:{extraOffers:1},
+ coldcase:{extraOffers:1,commissionRate:.10},
  supplyCert:{commissionRate:.40,goldBonus:30},
  dawnRecovery:{refundRate:.5,extraOffers:1},
  logisticsHQ:{perSale:.03,maxDiscount:.30}, /* v2.9.11 remake (User 2026-09-29): was same-SKU 3+ -25% after 6 sales */

@@ -1,0 +1,13 @@
+diff --git a/dist/systems/adventurer.js b/dist/systems/adventurer.js
+index 6c62f1a1..4b2dac5a 100644
+--- a/dist/systems/adventurer.js
++++ b/dist/systems/adventurer.js
+@@ -69,7 +69,7 @@ function create(r,index,day,account,opts={}){
+  let potential=1+rarity*.10+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
+  return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],introduced:false};
+ }
+-function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-=18+n.level*7;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
++function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*8){n.xp-=18+n.level*8;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
+  /* NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Job Growth x Potential through the four
+     Core Stats and nothing else. The 5-Level milestone Trait roll and the Rank promotion that
+     used to ride along are removed outright, not hidden - growth identity is Job + Level + the

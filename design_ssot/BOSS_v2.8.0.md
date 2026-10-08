@@ -268,12 +268,12 @@ but may not auto-tune them. Any numeric change requires a separate approved owne
 identity=baseline raw-power Boss
 specialTrait=NONE
 
-WRATH effective Boss Power=240.
+WRATH nominal base Boss Power=240; effective Boss Power=228 (shared multiplier 0.95).
 It is the unmodified baseline every other Boss is measured against. WRATH adds no special modifier layer; its
 differentiation is the baseline Boss Power / direct Final check. PRIDE / ENVY / GLUTTONY / LUST (participant-side
-rules) face this same 240; GREED and SLOTH set their own Boss Power below.
+rules) face this same 228; GREED and SLOTH set their own Boss Power below.
 
-Every Boss's effective Boss Power takes `+24` when the Final Family Pair holds FIRE, on top of its own rule ->
+Every Boss's effective Boss Power takes `+12` before the shared multiplier when the Final Family Pair holds FIRE, on top of its own rule ->
 `FINAL_EXPEDITION_v2.8.0.md` §FAMILY-PAIR BALANCE AUDIT (FIRE PAIR).
 
 Purpose:
@@ -354,6 +354,12 @@ Rules:
 
 ---
 
+## SHARED FINAL POWER MULTIPLIER
+
+Every Boss uses `(nominal Boss Power + applicable Greed shortfall + FirePairPower) × 0.95`.
+SLOTH replaces nominal Boss Power by its seal-stage value before this multiplier.
+Participant-side Trait rules are unchanged. FirePairPower is 12 when FIRE is present, else 0.
+
 ## GREED — SALES TARGET
 
 identity=tests whether the Player actually ran a functioning store, not only an NPC-leveling pipeline
@@ -380,7 +386,7 @@ min(shortfallCap, shortfallRatio × shortfallCap)
 
 effectiveBossPower
 =
-baseBossPower + GreedBonus
+(baseBossPower + GreedBonus + FirePairPower) × 0.95
 ```
 
 Therefore:
@@ -403,8 +409,8 @@ shortfallCap = 15 Boss Power
 ```
 
 Thus with WRATH base 240:
-- target met -> effective Boss Power 240
-- maximum shortfall penalty -> effective Boss Power 255
+- target met -> effective Boss Power 228 (without FIRE)
+- maximum shortfall penalty -> effective Boss Power 242.25 (without FIRE)
 
 Displayed strengthening must still derive from the actual applied Greed bonus.
 
@@ -779,7 +785,7 @@ PASS:
 PASS:
 - existing revenue metric/target path is reused
 - applied shortfall strengthening caps at +15 Boss Power
-- target met returns to 240 baseline
+- target met returns to effective 228 baseline (nominal base 240)
 - maximum shortfall cannot exceed 255 through GREED alone
 - every committed Final transfer contributes its exact fixed 50% / 매입가 amount to Gross Sales exactly once
 - committed Gross Sales snapshot occurs at Final Lock after Final preparation completes

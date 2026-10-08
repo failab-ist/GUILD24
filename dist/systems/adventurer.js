@@ -62,26 +62,32 @@ function create(r,index,day,account,opts={}){
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
  /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 on DAY 1~4, then 1~3 + the Day term */
- const spawnLevel=Math.max(1,r.int(1,day<=4?2:3)+(day<=4?0:Math.floor((day-1)*.4))+(opts.royal?3:0));
+ const spawnLevel=Math.max(1,r.int(1,day<=4?2:3)+(newcomerMinLevel(day)-1)+(opts.royal?3:0));
  const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  /* NPC_TRAIT §NPC RARITY: growth potential 1 + 0.10 x Rarity + a 0~0.10 roll */
  let potential=1+rarity*.10+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
  return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],introduced:false};
 }
-function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-=18+n.level*7;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
- /* NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Job Growth x Potential through the four
-    Core Stats and nothing else. The 5-Level milestone Trait roll and the Rank promotion that
-    used to ride along are removed outright, not hidden - growth identity is Job + Level + the
-    four Stats the player can actually see. `r` is still taken so every caller reads the same
-    signature, and is deliberately no longer drawn from here. */
+const growthCost=level=>18+level*8;
+const newcomerMinLevel=day=>day<=4?1:1+Math.floor((day-1)*.4);
+const CATCHUP_MULT=1.5;
+/* NPC_TRAIT §LAGGING ADVENTURER EXPERIENCE: preserve base EXP, cap only the extra bonus. */
+function catchupXP(n,xp,day){
+ const floor=newcomerMinLevel(day);
+ if(!n.alive||n.level>=floor||xp<=0)return xp;
+ let needed=-n.xp;for(let level=n.level;level<floor;level++)needed+=growthCost(level);
+ return xp+Math.min(Math.max(0,needed-xp),Math.round(xp*(CATCHUP_MULT-1)));
+}
+function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=growthCost(n.level)){n.xp-=growthCost(n.level);n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
+ /* NPC_TRAIT §LEVEL-UP REWARD: Job Growth × Potential only; no RNG draw. */
  const notes=[];if(n.level>old)notes.push('Lv.'+old+' → Lv.'+n.level);return notes;}
 /* Trusted Regular / 단골. NPC_TRAIT owns this state, so the judgement lives here and
    nothing else re-states the threshold - a Boss that reads it (LUST) consumes the result
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,
+G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,growthCost,newcomerMinLevel,catchupXP,CATCHUP_MULT,keys,isTrustedRegular,TRUSTED_REGULAR,
  /* SALE_v2.7 §NORMAL CONSUMER BAG and FINAL_EXPEDITION_v2.7: exactly two slots, for every NPC
     regardless of Level, Job, Rarity or Trait, and the Final uses the same two-slot handling.
     The Lv10+ third slot is gone - not disabled, not ghosted, not hidden. */

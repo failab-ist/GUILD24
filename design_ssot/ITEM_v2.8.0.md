@@ -306,8 +306,8 @@ the Job weak against that Hazard, a hybrid the broad answer for one who is not.
 Prices by rung: 초반 대응 35~55G (집중 사탕 50G, 컵라면 55G), 초반 하이브리드 75G, 중반 대응 95~115G (음식·음료 대응은 불룡볶음면 115G, 용사의 곡주·쿨링 이온음료 100G), 후반 하이브리드 135G (마그마 냉각장비 145G, its 투력 +10 included).
 
 A Food / Drink Counter pays for its 피로 회복 (Supply) in two ways: its Counter value reads 2 under the Field Gear rung at 초반 대응 and 3 under it at 중반
-대응 (one that also raises the pressed Stat reads that much lower again: 불룡볶음면 냉기 23 with 강인함 +6, worth 냉기 +2; one with no drawback reads 2 lower again: 쿨링 이온음료 23, while 용사의 곡주 keeps 25 against its 강인함 −3), and its price sits about 5G per Supply point above the Gear rung.
-Its Supply itself is the plain Food / Drink value of its rarity (Food C 5 · R 7, Drink 2), so a Counter Food / Drink recovers as much Fatigue as any other.
+대응 (one that also raises the pressed Stat reads that much lower again: 불룡볶음면 냉기 23 with 강인함 +6, worth 냉기 +2; one with no drawback reads 2 lower again: 쿨링 이온음료 23, while 용사의 곡주 keeps 25 against its 강인함 −3), and its price follows the prices by rung above.
+Counter Food Supply: 컵라면 3 · 집중 사탕 2 · 불룡볶음면 3. Counter Drinks 얼음컵 · 중화 탄산수 · 용사의 곡주 · 쿨링 이온음료 carry Supply 1. Other Food / Drink Supply and all catalog prices stay as listed.
 
 | Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
 |---|---|---|---|---|
@@ -603,20 +603,20 @@ approved ITEM amendment; QA does not auto-tune it.
 
 | # | Item | Category / Rarity | Buy / Sell | Effect | Hazard Role |
 |---:|---|---|---:|---|---|
-| 3 | 컵라면 | Food C | 55 / 110 | 냉기 +10, Supply 5 | Cold 초반 대응 |
+| 3 | 컵라면 | Food C | 55 / 110 | 냉기 +10, Supply 3 | Cold 초반 대응 |
 | 5 | 초코바 | Food C | 30 / 60 | 기동 +6, Supply 5 | — |
 | 44 | 녹차 양갱 | Food C | 30 / 60 | 정신 +6, Supply 5 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +12, Supply 2 | Stat route |
 | 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +12, Supply 2 | Stat route |
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +10 | — |
-| 9 | 얼음컵 | Drink C | 35 / 70 | 화염 +10, Supply 2 | Fire 초반 대응 |
-| 41 | 중화 탄산수 | Drink C | 40 / 80 | 부식 +10, Supply 2 | Corrosion 초반 대응 |
+| 9 | 얼음컵 | Drink C | 35 / 70 | 화염 +10, Supply 1 | Fire 초반 대응 |
+| 41 | 중화 탄산수 | Drink C | 40 / 80 | 부식 +10, Supply 1 | Corrosion 초반 대응 |
 | 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +28 | Dark 중반 대응 |
 | 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +28 | Bind 중반 대응 |
-| 12 | 집중 사탕 | Food C | 50 / 100 | 공포 +10, Supply 5 | Fear 초반 대응 |
-| 13 | 불룡볶음면 | Food R | 115 / 230 | 강인함 +6, 냉기 +23, Supply 7 | Cold 중반 대응 |
+| 12 | 집중 사탕 | Food C | 50 / 100 | 공포 +10, Supply 2 | Fear 초반 대응 |
+| 13 | 불룡볶음면 | Food R | 115 / 230 | 강인함 +6, 냉기 +23, Supply 3 | Cold 중반 대응 |
 | 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +17, Supply 2 | Stat route |
-| 15 | 용사의 곡주 | Drink R | 100 / 200 | 공포 +25, 강인함 -3, Supply 2 | Fear 중반 대응 / RiskReward |
+| 15 | 용사의 곡주 | Drink R | 100 / 200 | 공포 +25, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +12 | Poison 초반 대응 |
 | 18 | 방한 두건 | Field Gear U | 75 / 150 | 냉기 +8, 화이트아웃 +12 | Snow 초반 하이브리드 |
@@ -630,7 +630,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +28 | Poison 중반 대응 |
 | 25 | 귀환석 | Insurance R | 200 / 400 | 부상·중상·사망 -> one more retreat roll at own retreat chance +20%p | Failure Insurance |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +18 | — |
-| 28 | 쿨링 이온음료 | Drink R | 100 / 200 | 화염 +23, Supply 2 | Fire 중반 대응 |
+| 28 | 쿨링 이온음료 | Drink R | 100 / 200 | 화염 +23, Supply 1 | Fire 중반 대응 |
 | 29 | 세계수 생환부적 | Insurance E | 300 / 600 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
 | 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +18, 속박 +18 | Spider 후반 하이브리드 |
@@ -1160,7 +1160,7 @@ EXPECT:
 불룡볶음면 (Rare, cold +23) > 방한 두건 (Uncommon hybrid, cold +8 / whiteout +12) for Cold specialization (`tests/delta.cjs`).
 
 PASS:
-불룡볶음면 keeps its Food identity (Supply 7, survival +6); 방한 두건 stays the Snow 초반 하이브리드.
+불룡볶음면 keeps its Food identity (Supply 3, survival +6); 방한 두건 stays the Snow 초반 하이브리드.
 
 #### ITEM-Q79 — ANTIDOTE ROLE BOUNDARY
 

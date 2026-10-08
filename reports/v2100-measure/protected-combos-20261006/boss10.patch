@@ -1,0 +1,27 @@
+diff --git a/dist/systems/adventurer.js b/dist/systems/adventurer.js
+index 6c62f1a1..4b2dac5a 100644
+--- a/dist/systems/adventurer.js
++++ b/dist/systems/adventurer.js
+@@ -72 +72 @@ function create(r,index,day,account,opts={}){
+-function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-=18+n.level*7;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
++function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*8){n.xp-=18+n.level*8;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
+diff --git a/dist/systems/dungeon.js b/dist/systems/dungeon.js
+index 42088a1a..ed12b7f0 100644
+--- a/dist/systems/dungeon.js
++++ b/dist/systems/dungeon.js
+@@ -318 +318 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
+-const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
++const GATE={knee:9,early:1.45,step:0.80,late:1.05,mid:1.10,midFrom:10,midTo:20};
+diff --git a/dist/systems/run.js b/dist/systems/run.js
+index 999db94f..60a0e4a9 100644
+--- a/dist/systems/run.js
++++ b/dist/systems/run.js
+@@ -206 +206 @@ P.effectiveBossPower=function(partyPower,lock){
+-  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire;
++  return (base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire)*.90;
+@@ -210 +210 @@ P.effectiveBossPower=function(partyPower,lock){
+-  if(v!=null)return v+fire;
++  if(v!=null)return (v+fire)*.90;
+@@ -212 +212 @@ P.effectiveBossPower=function(partyPower,lock){
+- return base+fire;
++ return (base+fire)*.90;

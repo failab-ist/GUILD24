@@ -1,0 +1,65 @@
+{
+  "sourceBase": "3b09af23",
+  "harness": "4b5024a7",
+  "freezeBase": "5b9b5c95",
+  "firstRunLessons": true,
+  "plannedRuns": 84000,
+  "conditions": {
+    "baseline": {
+      "head": "5b9b5c95",
+      "worktree": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/baseline",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/baseline.json",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/baseline.json",
+      "sha256": "ba107f946d4f89b4b7845cf09cd48871fc8c6bc3c95033f9af2137abfa2401bd",
+      "seconds": 394,
+      "runs": 14000
+    },
+    "combo": {
+      "head": "82da59ea",
+      "worktree": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/combo",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/combo.json",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/combo.json",
+      "sha256": "babe7469153ccfd1728c24f0fe2296ce3034fe8ca34bc0730e415ac11f4c0869",
+      "seconds": 397,
+      "runs": 14000
+    },
+    "boss5": {
+      "head": "9b2ddb83",
+      "worktree": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/boss5",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/boss5.json",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/boss5.json",
+      "sha256": "9abfaee004d01dd3846a47aa881aa8e80b451a61636be945b7f1ae6ca3df55de",
+      "seconds": 372,
+      "runs": 14000
+    },
+    "boss10": {
+      "head": "de280775",
+      "worktree": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/boss10",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/boss10.json",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/boss10.json",
+      "sha256": "82302d854e81dee1e3c189b9c2f02165b584ce30529938fcf0e112c08ed51d2b",
+      "seconds": 373,
+      "runs": 14000
+    },
+    "mage31": {
+      "head": "46edbac6",
+      "worktree": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/mage31",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/mage31.json",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/mage31.json",
+      "sha256": "2ec12f2b81c8fdc381f2c4c5b91ff3a07fa26c2a37e4a37884f807da925f130f",
+      "seconds": 342,
+      "runs": 14000
+    },
+    "full5": {
+      "head": "ca1a5ea7",
+      "worktree": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/full5",
+      "rawFile": "C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/full5.json",
+      "command": "node tools/measure-v2100.cjs --traj 200 --fresh 1000 --out C:/Users/necro/.codex/visualizations/2026/10/05/01a10ad8-ef15-7142-89f2-2ec9e10eabe2/protected-combos-20261006/full5.json",
+      "sha256": "2eeac918d4964bc9495709b5e1fd0a560c369030fcbc91801a67a93fcdab00a8",
+      "seconds": 355,
+      "runs": 14000
+    }
+  },
+  "completedRuns": 84000,
+  "validation": "schema / firstRun / d2 / jobs / items / finalPower / boss-only fresh reach PASS"
+}

@@ -1,0 +1,65 @@
+{
+  "commit": "177d1ab297157c96a80da9049674a9f5feeb23a5",
+  "previousReportCommit": "ebe7da7052bd4b001d69499fce8d2286742849b0",
+  "arm": "xp2",
+  "visit": false,
+  "xp": true,
+  "missedEligibleDays": 2,
+  "files": [
+    {
+      "file": "dist/systems/shop.js",
+      "sha256": "930fd0cba124175fe8de8545aab6842fe6a94ef1f6ccd909276e367cc216938d"
+    },
+    {
+      "file": "dist/systems/dungeon.js",
+      "sha256": "3f50fd42ea3d925d879773e189cc466c3c98f81102ff5d90fb3603eb508fa9ca"
+    },
+    {
+      "file": "tools/measure-v2100.cjs",
+      "sha256": "ddcd2ed9d2d361de5fc70a41934a8d5881ddebcb81d5c5af1bfffeab4d359c12"
+    }
+  ],
+  "verification": {
+    "status": "PASS",
+    "unchangedFileComparisons": 13,
+    "fixtures": {
+      "rows": [
+        {
+          "label": "one-missed",
+          "active": null,
+          "missedAfter": 0
+        },
+        {
+          "label": "two-missed",
+          "active": {
+            "day": 8,
+            "target": 3
+          },
+          "missedAfter": 0
+        },
+        {
+          "label": "new",
+          "active": null,
+          "missedAfter": 0
+        },
+        {
+          "label": "at-floor",
+          "active": null,
+          "missedAfter": 0
+        },
+        {
+          "label": "recovering",
+          "active": null,
+          "missedAfter": 1
+        }
+      ],
+      "cap": {
+        "level": 9,
+        "xp": 0,
+        "base": 127,
+        "bonus": 74,
+        "active": false
+      }
+    }
+  }
+}

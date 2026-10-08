@@ -121,28 +121,9 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
  n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
  n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});
  s.inventory.splice(i,1);this.save();};
-/* FINAL_EXPEDITION: one participant's contribution. Internal only - Final Power is never
-   surfaced as another Player Stat. */
-/* Stage 10, approved. 투력 was running away with the Final: at .58 it was worth nearly four
-   times 정신, so a Job's Final value was close to its 투력 alone and Hazard preparation barely
-   registered. The four weights are flattened and the environment penalty is deliberately NOT
-   reduced - a Job that answers Hazards well has to keep carrying that value into the Final,
-   which is where 사제 earns back what its raw Stats do not.
-   This is the FINAL formula. The expedition's own combat check in dungeon.js keeps the
-   coefficients it had: this adoption changes the Final, and moving D1-29 difficulty by the
-   same edit would confound the two. See reports/STAGE10.md. */
-/* FINAL_EXPEDITION_v2.7 §FINAL HAZARD AGGREGATION. The ordinary expedition divides the summed
-   gap by sqrt(count), which punishes a Family pair merely for carrying more Hazard entries -
-   a two-Family Final can hold three or four. The Final uses the MEAN gap instead, so what is
-   measured is how badly each Hazard is answered rather than how many there are, and a specialist
-   Counter that closes a large matching gap is worth what it actually closes. */
+/* FINAL_EXPEDITION §FINAL HAZARD AGGREGATION / §INDIVIDUAL FINAL POWER. */
 const finalMeanHazardGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
-/* The same four coefficients Forecast and Resolve read, so they are read from the one helper
-   rather than written out a third time - a copy of them is what let the balance harness drift
-   a whole Stage behind the game. */
-/* FINAL-Q72 (User 2026-09-30, v2.9.13): the mean-gap penalty 1.70 -> 2.50 - a D30 party could clear with no Item at all
-   about one Run in six; a prepared party keeps its edge, an unprepared one no longer walks through. */
-const individualPower=(e,meanGap)=>G.Dungeon.preparedPower(e)-meanGap*2.50;
+const individualPower=(e,meanGap)=>G.Dungeon.preparedPower(e)-meanGap*D.balance.finalGapPenalty;
 
 const STATS=['combat','survival','mobility','spirit'];
 
@@ -187,29 +168,22 @@ P.envyTarget=function(team,preparations){
  return best;
 };
 
-/* Step 7: the Boss-side modifier. GREED strengthens the Boss by whatever the Run failed to
-   earn, capped; SLOTH weakens it by however many seals were broken; WRATH is the baseline
-   that adds nothing. The sales figure is the one the shop already keeps - GREED reads it,
-   it does not count again. Every value is PASS3 and unset, so today this is the baseline
-   for all seven. */
+/* BOSS §BASELINE POWER / §GREED / §SLOTH: Boss-side modifiers. */
 P.effectiveBossPower=function(partyPower,lock){
  const t=D.bossTuning,s=this.run,base=D.balance.bossPower;
- /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair that holds FIRE has one Hazard fewer (3, not 4) and
-    measured easier (reader 3,000: 74.3% vs 65.5%), so its Boss stands that much stronger - on every Boss, on top of its own rule */
+ /* BOSS §BASELINE POWER / FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT. */
  const fire=s.final?.families?.includes('golem')?t.firePairPower:0;
- /* Stage 10, approved. Measured as a SHARE of the target rather than per Gold of shortfall, so
-    the penalty means the same thing whatever the target is set to: a Run that sold nothing takes
-    the full cap, a Run at target takes none, and it is linear between. */
+ /* BOSS §BASELINE POWER / FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT. */
  if(s.bossId==='GREED'&&t.greedRevenueTarget>0&&t.greedShortfallCap!=null){
   const revenue=lock?lock.revenue:s.stats.revenue;
   const shortfallRatio=Math.max(0,(t.greedRevenueTarget-revenue)/t.greedRevenueTarget);
-  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire;
+  return (base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire)*t.finalPowerFactor;
  }
  if(s.bossId==='SLOTH'&&Array.isArray(t.slothBossPower)){
   const v=t.slothBossPower[lock?lock.sealBreakCount:s.sealBreakCount];
-  if(v!=null)return v+fire;
+  if(v!=null)return (v+fire)*t.finalPowerFactor;
  }
- return base+fire;
+ return (base+fire)*t.finalPowerFactor;
 };
 
 /* The shared Final order (BOSS / FINAL_EXPEDITION), steps 1-7: everything before the Roll.

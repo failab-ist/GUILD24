@@ -1,0 +1,68 @@
+diff --git a/dist/data/catalog.js b/dist/data/catalog.js
+index 21b6ff63..ace25374 100644
+--- a/dist/data/catalog.js
++++ b/dist/data/catalog.js
+@@ -84 +84 @@ jobs:[
+-{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.3,1.6,1.8,2.7]},
++{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.1,1.6,1.8,2.7]},
+@@ -274 +274 @@ G.DATA.bossTuning={
+- firePairPower:24,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss
++ firePairPower:12,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss
+diff --git a/dist/systems/adventurer.js b/dist/systems/adventurer.js
+index 6c62f1a1..7b12d08c 100644
+--- a/dist/systems/adventurer.js
++++ b/dist/systems/adventurer.js
+@@ -72 +72,8 @@ function create(r,index,day,account,opts={}){
+-function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-=18+n.level*7;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
++// 측정 후보: 신규 기본 최저 레벨 미만의 생환 경험치만 보완한다.
++function catchupXP(n,xp,day){
++ const floor=day<=4?1:1+Math.floor((day-1)*.4);
++ if(!n.alive||n.level>=floor||xp<=0)return xp;
++ let needed=-n.xp;for(let lv=n.level;lv<floor;lv++)needed+=18+lv*8;
++ return xp+Math.min(Math.max(0,needed-xp),Math.round(xp*.5));
++}
++function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*8){n.xp-=18+n.level*8;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
+@@ -84 +91 @@ const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
+-G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,
++G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,catchupXP,keys,isTrustedRegular,TRUSTED_REGULAR,
+diff --git a/dist/systems/dungeon.js b/dist/systems/dungeon.js
+index 42088a1a..edadda3f 100644
+--- a/dist/systems/dungeon.js
++++ b/dist/systems/dungeon.js
+@@ -318 +318 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
+-const GATE={knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20};
++const GATE={knee:9,early:1.45,step:0.80,late:1.05,mid:1.10,midFrom:10,midTo:20};
+@@ -722,0 +723 @@ function resolve(n,d,r,facilities=[],run,assist=0){
++ const xpBase=xp;xp=G.Adventurer.catchupXP(n,xp,d.day);const xpBoost=xp-xpBase;
+@@ -737 +738 @@ function resolve(n,d,r,facilities=[],run,assist=0){
+- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
++ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,xpBase,xpBoost,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,combatHero,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (no Death roll is drawn there) - `null`
+diff --git a/dist/systems/run.js b/dist/systems/run.js
+index 999db94f..0b3a4ad0 100644
+--- a/dist/systems/run.js
++++ b/dist/systems/run.js
+@@ -206 +206 @@ P.effectiveBossPower=function(partyPower,lock){
+-  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire;
++  return (base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap)+fire)*.95;
+@@ -210 +210 @@ P.effectiveBossPower=function(partyPower,lock){
+-  if(v!=null)return v+fire;
++  if(v!=null)return (v+fire)*.95;
+@@ -212 +212 @@ P.effectiveBossPower=function(partyPower,lock){
+- return base+fire;
++ return (base+fire)*.95;
+diff --git a/tools/measure-v2100.cjs b/tools/measure-v2100.cjs
+index 7645fa76..22caec3c 100644
+--- a/tools/measure-v2100.cjs
++++ b/tools/measure-v2100.cjs
+@@ -43 +43 @@ function jobMetrics(s,initial,jobBy,preparedPower){
+-  members.push({job:n.job,level:n.level,rarity:n.rarity,potential:n.potential,regular:m.regular,gap,power,items});}
++  members.push({job:n.job,level:n.level,rarity:n.rarity,potential:n.potential,regular:m.regular,gap,power,items,baseStats:{...n.stats},equipment:n.equipment.power,fatigue:n.fatigue,preparedStats:{...m.stats}});}
+@@ -46 +46,2 @@ function jobMetrics(s,initial,jobBy,preparedPower){
+-  supplied:members.every(m=>m.items.length>0),fullPack:members.every(m=>m.items.length===2),members}:null;
++  supplied:members.every(m=>m.items.length>0),fullPack:members.every(m=>m.items.length===2),members,
++  top3:s.npcs.filter(n=>n.alive).sort((a,b)=>b.level-a.level).slice(0,3).map(n=>({job:n.job,level:n.level,stats:{...n.stats},equipment:n.equipment.power,fatigue:n.fatigue})),hazards:[...hazards]}:null;
+@@ -67,0 +69 @@ function worker({root,kind,policy,deco,T,R,part}){
++   boost:{n:recs.filter(x=>x.xpBoost>0).length,xp:recs.reduce((v,x)=>v+(x.xpBoost||0),0)},
+@@ -96 +98 @@ else if(require.main===module){
+- const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:3,firstRunLessons:true},arms:acc};
++ const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:4,firstRunLessons:true,finalGapWeight:2.5},arms:acc};

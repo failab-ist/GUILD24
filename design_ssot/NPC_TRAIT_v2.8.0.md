@@ -90,7 +90,7 @@ Stat order:
 |---|---|---|
 | 전사 | 17 / 18 / 9 / 10 | 2.8 / 2.6 / 1.5 / 1.6 |
 | 궁수 | 14 / 11 / 19 / 10 | 2.6 / 2.0 / 3.0 / 1.6 |
-| 마법사 | 18 / 9 / 10 / 17 | 3.3 / 1.6 / 1.8 / 2.7 |
+| 마법사 | 18 / 9 / 10 / 17 | 3.1 / 1.6 / 1.8 / 2.7 |
 | 사제 | 10 / 16 / 9 / 20 | 2.2 / 2.7 / 1.6 / 3.0 |
 | 도적 | 15 / 11 / 21 / 9 | 2.8 / 2.0 / 3.4 / 1.5 |
 | 광전사 | 21 / 14 / 12 / 7 | 3.6 / 2.4 / 1.9 / 1.3 |
@@ -163,6 +163,18 @@ No Level milestone rewards:
 Equipment growth from expedition loot/results is not a Level-up reward and stays owned by its existing system.
 
 Existing `rank/ranks` data is not Design Truth. If Source has an unexpected active dependency, classify/report it rather than preserving milestone gameplay silently.
+
+## EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE
+
+Each next Level costs `18 + current Level × 8` EXP. Existing EXP is preserved across saves.
+
+For an alive adventurer below the ordinary new-arrival minimum Level on that Day, ordinary expedition earned EXP
+is boosted to ×1.5 (integer Math.round). The ordinary minimum is 1 on D1~4, then `1 + floor((Day - 1) × 0.4)`.
+Mastery, royal and Decoration spawn additions are not part of this reference minimum. There is no revisit-interval condition.
+Preserve the full base reward first; cap only the extra bonus at the EXP still needed to reach that minimum.
+If the base reward alone reaches/passes the minimum, add no bonus and do not cut the base reward. At/above the minimum,
+no bonus applies. Death gives no extra EXP. The modifier changes EXP only, not Job Growth, Potential or stored Stats directly.
+The special Deep reward remains its own additional reward; the boost applies to ordinary expedition earned EXP.
 
 ## PLAYER-FACING GROWTH TRUTH
 

@@ -1,0 +1,33 @@
+{
+  "artifactRoot": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\05\\01a10ad8-ef15-7142-89f2-2ec9e10eabe2\\revisit-experiment",
+  "files": [
+    {
+      "file": "xp2.json",
+      "bytes": 115090912,
+      "sha256": "c81171f06921dbd833bdb79b806c877052da60fae6f3525f7e03936f97cc10ec"
+    },
+    {
+      "file": "profile-xp2-reader.json",
+      "bytes": 9499111,
+      "sha256": "d53da3012a069bb7231f8369c61f1aecbc4493fd4312dbc5bfcf36ea9f630675"
+    },
+    {
+      "file": "profile-xp2-expert.json",
+      "bytes": 9431940,
+      "sha256": "3460c6ecac912d352abea5b9796cdb3e0bc3bf6fbf985a1bfe48464978a3dc61"
+    }
+  ],
+  "saves": [
+    {
+      "file": "C:/Users/necro/Downloads/guild24-save-day-30_1005.json",
+      "bytes": 430556,
+      "sha256": "747ffbee2b85ba51ec507db6b62a3b4362ca7db7eb6d5e22cf285d7f57f451f0"
+    },
+    {
+      "file": "C:/Users/necro/Downloads/guild24-save-day-30v2.json",
+      "bytes": 430556,
+      "sha256": "747ffbee2b85ba51ec507db6b62a3b4362ca7db7eb6d5e22cf285d7f57f451f0"
+    }
+  ],
+  "previousRawManifest": "../revisit-xp-20261005/raw-output-manifest.json"
+}

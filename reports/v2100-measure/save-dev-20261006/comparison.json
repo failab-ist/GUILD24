@@ -1,0 +1,341 @@
+{
+  "old": {
+    "file": "C:/Users/necro/Downloads/guild24-save-day-30_1005.json",
+    "sha256": "747ffbee2b85ba51ec507db6b62a3b4362ca7db7eb6d5e22cf285d7f57f451f0",
+    "firstRun": false,
+    "runs": 8,
+    "wins": 0,
+    "ownedDecorations": [
+      "aidCabinet",
+      "memorialBook",
+      "thriftSafe",
+      "infirmaryPlaque"
+    ],
+    "loadout": {
+      "wall": "infirmaryPlaque",
+      "counter": "memorialBook",
+      "display": "aidCabinet"
+    },
+    "settlement": {
+      "day": 30,
+      "sales": 29775,
+      "rate": 0.03,
+      "gain": 893,
+      "capitalAfter": 1107,
+      "reach": true
+    },
+    "accountClearCells": [],
+    "boss": "ENVY",
+    "win": false,
+    "firstRunLessons": {},
+    "facilities": [
+      "rareContract",
+      "fridge",
+      "guarantee",
+      "lifetime",
+      "hazardBoard",
+      "groupOrder",
+      "fresh24"
+    ],
+    "ordinary": {
+      "n": 126,
+      "success": 44,
+      "great": 5,
+      "deaths": 10,
+      "deathLimit": 12,
+      "d10Deaths": 1,
+      "bands": [
+        {
+          "days": [
+            1,
+            7
+          ],
+          "n": 26,
+          "success": 13
+        },
+        {
+          "days": [
+            8,
+            14
+          ],
+          "n": 34,
+          "success": 10
+        },
+        {
+          "days": [
+            15,
+            21
+          ],
+          "n": 33,
+          "success": 14
+        },
+        {
+          "days": [
+            22,
+            29
+          ],
+          "n": 33,
+          "success": 7
+        }
+      ]
+    },
+    "final": {
+      "power": 153.55672283544723,
+      "bossPower": 264,
+      "roll": 1.0787838013842703,
+      "assault": 165.65450518853456,
+      "minAssault": 141.27218500861147,
+      "maxAssault": 165.84126066228302,
+      "chance": 0,
+      "bossOnly90Percent": {
+        "bossPower": 237.6,
+        "chance": 0
+      },
+      "members": [
+        {
+          "name": "파도르",
+          "job": "mage",
+          "level": 20,
+          "rarity": 0,
+          "potential": 1.0768960315268488,
+          "loyalty": 57,
+          "equipment": {
+            "name": "은빛 마법사 장비",
+            "power": 7,
+            "tier": 2
+          },
+          "items": [
+            {
+              "id": "ice",
+              "name": "얼음컵"
+            },
+            {
+              "id": "lunchbox",
+              "name": "간단 도시락"
+            }
+          ],
+          "meanHazardGap": 4.4276181767730804
+        },
+        {
+          "name": "메도르",
+          "job": "mage",
+          "level": 14,
+          "rarity": 0,
+          "potential": 1.0407109073363245,
+          "loyalty": 13,
+          "equipment": {
+            "name": "은빛 마법사 장비",
+            "power": 8,
+            "tier": 2
+          },
+          "items": [
+            {
+              "id": "candy",
+              "name": "집중 사탕"
+            },
+            {
+              "id": "candy",
+              "name": "집중 사탕"
+            }
+          ],
+          "meanHazardGap": 9.200179000426495
+        },
+        {
+          "name": "호두안",
+          "job": "archer",
+          "level": 13,
+          "rarity": 1,
+          "potential": 1.1793764167930931,
+          "loyalty": 14,
+          "equipment": {
+            "name": "길드 지급 활",
+            "power": 0,
+            "tier": 0
+          },
+          "items": [
+            {
+              "id": "cloak",
+              "name": "방수망토"
+            }
+          ],
+          "meanHazardGap": 14.430636936862854
+        }
+      ]
+    },
+    "xpCandidateFields": 0
+  },
+  "dev": {
+    "file": "C:/Users/necro/Downloads/guild24-save-day-30_dev.json",
+    "sha256": "5b994be2753c5f0d4d99c43998ff0acdd9bc358441c16ea79263100cf989822c",
+    "firstRun": true,
+    "runs": 1,
+    "wins": 1,
+    "ownedDecorations": [],
+    "loadout": {},
+    "settlement": {
+      "day": 30,
+      "sales": 27760,
+      "rate": 0.03,
+      "gain": 833,
+      "capitalAfter": 833,
+      "reach": true
+    },
+    "accountClearCells": [
+      {
+        "job": "warrior",
+        "boss": "LUST"
+      },
+      {
+        "job": "archer",
+        "boss": "LUST"
+      }
+    ],
+    "boss": "LUST",
+    "win": true,
+    "firstRunLessons": {
+      "injured": "npc-3",
+      "kitDay": 2,
+      "payday": "npc-5",
+      "day3": true
+    },
+    "facilities": [
+      "firstVisitCoupon",
+      "dawnRecovery",
+      "expeditionMeal",
+      "logisticsHQ",
+      "fieldRepair",
+      "groupOrder",
+      "coldcase"
+    ],
+    "ordinary": {
+      "n": 123,
+      "success": 62,
+      "great": 10,
+      "deaths": 7,
+      "deathLimit": 11,
+      "d10Deaths": 2,
+      "bands": [
+        {
+          "days": [
+            1,
+            7
+          ],
+          "n": 31,
+          "success": 17
+        },
+        {
+          "days": [
+            8,
+            14
+          ],
+          "n": 30,
+          "success": 17
+        },
+        {
+          "days": [
+            15,
+            21
+          ],
+          "n": 32,
+          "success": 16
+        },
+        {
+          "days": [
+            22,
+            29
+          ],
+          "n": 30,
+          "success": 12
+        }
+      ]
+    },
+    "final": {
+      "power": 241.57314503696088,
+      "bossPower": 240,
+      "roll": 1.047748129852116,
+      "assault": 253.10781093496976,
+      "minAssault": 222.247293434004,
+      "maxAssault": 260.89899663991775,
+      "chance": 0.5407005359784561,
+      "bossOnly90Percent": {
+        "bossPower": 216,
+        "chance": 1
+      },
+      "members": [
+        {
+          "name": "단쥬",
+          "job": "warrior",
+          "level": 20,
+          "rarity": 2,
+          "potential": 1.2200900994008406,
+          "loyalty": 86,
+          "equipment": {
+            "name": "은빛 전사 장비",
+            "power": 9,
+            "tier": 2
+          },
+          "items": [
+            {
+              "id": "toppotion",
+              "name": "최상급 포션"
+            },
+            {
+              "id": "hood",
+              "name": "방한 두건"
+            }
+          ],
+          "meanHazardGap": 4.079779222018163
+        },
+        {
+          "name": "인젤미",
+          "job": "archer",
+          "level": 18,
+          "rarity": 1,
+          "potential": 1.1862224502954632,
+          "loyalty": 76,
+          "equipment": {
+            "name": "은빛 궁수 장비",
+            "power": 6,
+            "tier": 2
+          },
+          "items": [
+            {
+              "id": "snowvisor",
+              "name": "백설 방한고글"
+            },
+            {
+              "id": "highpotion",
+              "name": "상급 포션"
+            }
+          ],
+          "meanHazardGap": 4.765743121619646
+        },
+        {
+          "name": "개나리아",
+          "job": "archer",
+          "level": 13,
+          "rarity": 2,
+          "potential": 1.2786827403120695,
+          "loyalty": 26,
+          "equipment": {
+            "name": "고대의 궁수 장비",
+            "power": 11,
+            "tier": 4
+          },
+          "items": [
+            {
+              "id": "snowvisor",
+              "name": "백설 방한고글"
+            },
+            {
+              "id": "kingwater",
+              "name": "왕도 천연암반수"
+            }
+          ],
+          "meanHazardGap": 3.2377241989597696
+        }
+      ]
+    },
+    "xpCandidateFields": 0
+  }
+}

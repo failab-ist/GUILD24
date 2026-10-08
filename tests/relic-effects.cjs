@@ -311,7 +311,7 @@ test('SA-Q16: buying 전문 포션 유통 계약 extends no stock; 대형 냉장
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 40% of list (supplyCert), 40% of the charged 150% price (royalCert), no commission (전문 포션 유통 계약)',()=>{
+test('REL-Q-v28-5 / 7 / 33: HQ commission is 40% of list (supplyCert), 40% of charged 150% (royalCert), 10% of charged Potion sales (coldcase)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -333,7 +333,7 @@ test('REL-Q-v28-5 / 7: HQ commission is 40% of list (supplyCert), 40% of the cha
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.40),'supplyCert pays 40% of list (User 2026-10-04)');
  const fineFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity>=1),plainFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity===0);
  assert.equal(sale(['coldcase'],'full',fineFood),0,'Potion contract pays no Food/Drink commission');
- assert.equal(sale(['coldcase'],'full',DATA.itemBy.lowpotion),0,'Potion contract pays no Potion commission');
+ assert.equal(sale(['coldcase'],'full',DATA.itemBy.lowpotion),Math.round(DATA.itemBy.lowpotion.sell*.10),'Potion contract pays 10% of charged Potion sales');
  assert.equal(sale(['coldcase'],'full',plainFood),0,'and nothing on a Common one');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
  // neither inherited rate survives on the Gold path

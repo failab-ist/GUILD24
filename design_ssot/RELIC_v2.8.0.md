@@ -455,7 +455,9 @@ No native Core-Stat bonus and no matching-Counter multiplier.
 18. 전문 포션 유통 계약 (id coldcase) · tags=[Expedition,Rotation] · eligible=Potion
 - one independent Potion-only ORDER slot is added on acquisition and every offer generation, including Rerolls
 - all unlocked Potion rarities follow ordinary Day-based rarity progression; no extra rarity floor
-- no sale commission, offer weight, purchase intent, shelf-life or Stat effect
+- each ordinary Potion SALE pays the store 10% of the charged price on top, rounded with Math.round (HQ commission)
+- NPC payment and Gross Sales are unchanged; the commission stacks with other HQ payments; Final supply uses its existing separate transfer path
+- no offer weight, purchase intent, shelf-life or Stat effect
 - keep id coldcase for saved ownership compatibility
 
 19. 길드 납품 인증 · tags=[Premium,Expedition] · `DIRECTOR DOCUMENT BASELINE`
@@ -1024,7 +1026,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
   price, store receives the full charged price
 - 프리미엄 멤버십 -> 다시 온 손님 arrival NPC Wallet +25G; Rare+ purchase intent +15%p; a Rare+ purchase at 100% / 50% 단골도 +10
 - 원정 도시락 코너 -> flat +2 on every Hazard of the actual Gate per Food/Drink Item (one Hazard at the 마왕성); Food/Drink ORDER price ×1.15
-- 전문 포션 유통 계약 -> +1 independent Potion-only ORDER slot from acquisition, including Rerolls; no sale commission
+- 전문 포션 유통 계약 -> +1 independent Potion-only ORDER slot from acquisition, including Rerolls; ordinary Potion SALE +10% HQ commission on the charged price
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   acquisition and every offer generation, including Rerolls
 - 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15; no shelf life
@@ -1228,7 +1230,8 @@ PASS: Fresh does not become a blanket whole-item multiplier.
 
 #### REL-Q33 — POTION DISTRIBUTION ELIGIBILITY
 SETUP: Own 전문 포션 유통 계약 and generate Order offers repeatedly, including Rerolls.
-EXPECT: one independent Potion-only slot, across all unlocked rarities, with no sale commission.
+EXPECT: one independent Potion-only slot across all unlocked rarities; ordinary Potion SALE pays 10% of the charged price to the store from HQ, rounded separately from other commissions.
+Verify 50% / 100% / 150% sales, refusal, non-Potion sales, rounding and stacking. Customer payment and Gross Sales do not include the HQ bonus. Final supply keeps its separate transfer path.
 PASS: the slot follows ordinary Day-based rarity progression and never replaces the Food/Drink slot.
 
 #### REL-Q76 — DISTRIBUTION CATEGORY

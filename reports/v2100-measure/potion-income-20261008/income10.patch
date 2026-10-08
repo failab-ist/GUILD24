@@ -1,0 +1,14 @@
+diff --git a/dist/data/relics.js b/dist/data/relics.js
+index 1658b910..3069e1dc 100644
+--- a/dist/data/relics.js
++++ b/dist/data/relics.js
+@@ -86 +86 @@ D.relicParams={
+- coldcase:{extraOffers:1},
++ coldcase:{extraOffers:1,commissionRate:.10},
+diff --git a/dist/systems/shop.js b/dist/systems/shop.js
+index 8391ea3a..5c7bf64d 100644
+--- a/dist/systems/shop.js
++++ b/dist/systems/shop.js
+@@ -563 +563 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
+- let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
++ let commission=0;if(this.has('coldcase')&&it.category==='potion')commission+=Math.round(intent.price*D.relicParams.coldcase.commissionRate);if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}

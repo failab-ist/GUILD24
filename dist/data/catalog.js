@@ -15,7 +15,7 @@ items:[
    from its Buy price. */
 item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:6,supply:5}),
 item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:12,supply:2}),
-item('ramen','컵라면',0,55,110,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:5}),
+item('ramen','컵라면',0,55,110,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:3}),
 item('lunchbox','간단 도시락',1,90,180,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:9,supply:6,loot:0.1}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:6,supply:5}),
 /* ITEM §ACTIVE CATALOG: the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
@@ -24,15 +24,15 @@ item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 �
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:12,supply:2}),
 item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:10,potion:1}),
-item('ice','얼음컵',0,35,70,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:2}),
+item('ice','얼음컵',0,35,70,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
 /* ITEM §COUNTER LADDER: the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
-item('soda','중화 탄산수',0,40,80,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:10,supply:2}),
+item('soda','중화 탄산수',0,40,80,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:10,supply:1}),
 item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:28}),
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:28}),
-item('candy','집중 사탕',0,50,100,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:5}),
-item('dragonramen','불룡볶음면',2,115,230,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:23,supply:7}),
+item('candy','집중 사탕',0,50,100,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:2}),
+item('dragonramen','불룡볶음면',2,115,230,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:23,supply:3}),
 item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:17,supply:2}),
-item('wine','용사의 곡주',2,100,200,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:25,survival:-3,supply:2}),
+item('wine','용사의 곡주',2,100,200,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:25,survival:-3,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
@@ -53,7 +53,7 @@ item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨�
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:18,potion:1}),
 item('guildlunch','길드 특제 도시락',2,165,330,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:12,supply:7,loot:0.25}),
-item('ion','쿨링 이온음료',2,100,200,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:23,supply:2}),
+item('ion','쿨링 이온음료',2,100,200,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:23,supply:1}),
 item('worldcharm','세계수 생환부적',3,300,600,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
@@ -81,7 +81,7 @@ item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초�
 jobs:[
 {id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,2.6,1.5,1.6]},
 {id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,19,10],growth:[2.6,2,3,1.6]},
-{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.3,1.6,1.8,2.7]},
+{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.1,1.6,1.8,2.7]},
 {id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,20],growth:[2.2,2.7,1.6,3]},
 {id:'rogue',name:'도적',color:'#79b6b5',stats:[15,11,21,9],growth:[2.8,2,3.4,1.5],metaUnlock:3},
 {id:'berserker',name:'광전사',color:'#db6464',stats:[21,14,12,7],growth:[3.6,2.4,1.9,1.3],metaUnlock:6}
@@ -271,7 +271,8 @@ G.DATA.bossTuning={
     has produced that contribution. No Rarity threshold remains. */
  gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
- firePairPower:24,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss
+ firePairPower:12,              // BOSS §BASELINE POWER: applied before the shared multiplier.
+ finalPowerFactor:.95,
  slothBossPower:[267,252,228,199] // SLOTH: effective Boss Power by break count [0,1,2,3]
 };
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
@@ -290,7 +291,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.35,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.175,rerollBase:50,golemCombat:.90,
+G.DATA.balance={finalHazardThreat:28,finalGapPenalty:2,finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.35,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.175,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],
