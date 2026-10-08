@@ -3119,7 +3119,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
 
 /* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */
 test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
- const h=fn('help');
+ const source=fn('help'),ctx={game:{rescueLimit:Game.prototype.rescueLimit},Copy,Adventurer,E:x=>x};
+ const h=render([source],'help()',ctx);
  for(const line of [
   'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
   '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.',
@@ -3130,10 +3131,15 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   '영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
   '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
+ assert.ok(h.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'),'the guide directs the player to the actual Item effects');
+ assert.ok(h.includes('바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.'),'the guide includes the overcharge refusal exception');
+ const rescueLimit=DATA.balance.rescueLimit;
+ try{DATA.balance.rescueLimit=7;assert.ok(render([source],'help()',ctx).includes('한 점포에서 최대 7회.'),'the guide follows the actual rescue limit');}
+ finally{DATA.balance.rescueLimit=rescueLimit;}
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
  assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
  /* COPY_AUDIT §8 (User 2026-10-04): the 판매 · 단골 Loyalty lines are read from the tables (Copy.loyalty, held in tests/copy.cjs) */
- assert.ok(h.includes('${E(Copy.loyalty.sale())}')&&h.includes('${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터'),'the guide reads Copy.loyalty');
+ assert.ok(h.includes(Copy.loyalty.sale())&&h.includes(Copy.loyalty.rule()+' 단골도 '+Adventurer.TRUSTED_REGULAR+'부터'),'the guide renders Copy.loyalty and the live threshold');
  assert.ok(app.includes("['regular','.nameplate.regular',Copy.loyalty.coach(),,6]"),'the 단골 mark reads Copy.loyalty, DAY 6 at the earliest');
  assert.ok(!h.includes('같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다'),'the weaker rule is gone');
  // and it matches what the engine actually enforces
@@ -3146,9 +3152,9 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  assert.ok(!h.includes('압박')&&!h.includes('환경 대응'),'the Hazard reading stays with its own popover');
  assert.ok(!/필요 보급/.test(h),'and the Supply arithmetic stays with its coach mark');
  // the section set is exactly §8-1..§8-8
- assert.equal((h.match(/<h3>/g)||[]).length,9,'nine sections: 처음 3일 (§8-0) then one per §8-1..§8-8');
- /* v2.9.0 §8-0: the guide opens on 처음 3일 (five lines) and keeps the eight sections under a collapsed 자세히 */
- assert.ok(h.indexOf('<h3>처음 3일</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'처음 3일 first, then 자세히 holding the eight');
+ assert.equal((h.match(/<h3>/g)||[]).length,9,'nine sections: 하루의 흐름 (§8-0) then one per §8-1..§8-8');
+ /* v2.9.0 §8-0: the guide opens on 하루의 흐름 (five lines) and keeps the eight sections under a collapsed 자세히 */
+ assert.ok(h.indexOf('<h3>하루의 흐름</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'하루의 흐름 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
  for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
@@ -3845,6 +3851,13 @@ test('ending: the music before holds until the result lands, then the ending cue
 });
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
+ const ctx={game:{account:{settings:{},tutorial:{skipped:false}}},coachOff:()=>ctx.game.account.tutorial.skipped,
+  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'}};
+ assert.ok(render([set],'settings()',ctx).includes('필요한 때 말풍선과 한 줄 안내가 나온다.'),'ON copy does not impose a Day limit');
+ ctx.game.account.tutorial.skipped=true;
+ const off=render([set],'settings()',ctx);
+ assert.ok(off.includes('안내 다시 보기')&&off.includes('안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.'),'OFF label and copy follow tutorial.skipped');
+ assert.ok(!off.includes('DAY 1~3'),'settings does not confuse contextual coaches with the task-line window');
  assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
  assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
  assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');

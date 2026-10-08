@@ -749,7 +749,7 @@ Contextual explanations use anchored popovers, never a modal/accordion pushing g
 ### GLOBAL HELP
 
 The 점주 가이드 uses the compact Copy text (current rules only, no internal arithmetic, no parallel long manual): first block
-`처음 3일` of exactly five lines (아침 / 발주 / 판매 / 밤 / 마감), one category-grammar line (COPY_AUDIT §8-0, vocabulary only,
+`하루의 흐름` of exactly five lines (아침 / 발주 / 판매 / 밤 / 마감), one Item-effect reading line (COPY_AUDIT §8-0, vocabulary only,
 never a recommendation), then the eight sections under a collapsed `자세히` disclosure inside the help modal. Five lines ->
 COPY_AUDIT_APPROVED_v2.8.0.md §8.
 
@@ -3080,7 +3080,7 @@ action separated; no new control framework.
 #### UI-Q-v28-19 — SETTINGS / DEBUG BOUNDARY
 Ordinary Player surface: \`소리 켜기 / 소리 끄기\`; \`전체 데이터 초기화\`; no reproducibility Seed control;
 no \`로컬 실행 지원 · 외부 연결 없음\` footer. No new Debug menu is required for PASS.
-Settings carries one `안내` switch (`안내 끄기` / `안내 다시 보기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. No new Save field.
+Settings carries one `안내` switch (`안내 끄기` / `안내 다시 보기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. The button and description update immediately before a Run, during a Run and on next-store preparation after the ending. No new Save field.
 
 #### UI-Q-v28-19B — DEBUG / SEED REPRODUCTION PATH
 
@@ -3229,7 +3229,7 @@ narrowed to the individual).
 FAIL: per-Gate counts on a one-Gate day with no closed Gate, no count on the open Gate beside a closed one, a count that exposes a
 true Gate, or any individual identity.
 
-#### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 처음 3일
+#### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 하루의 흐름
 
 SETUP: fresh Run: the D0 Boss briefing after the first Store Support choice; then 점주 가이드 from the menu at 360 and 1280
 (→ UI_UX §D0 — FIRST MORNING BRIEFING, §GLOBAL HELP; copy COPY_AUDIT §14-1 / §8-0).
@@ -3238,9 +3238,9 @@ PASS:
   `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
 - the labels read on the record's LED face (16px; 17px on a desk), the lines in the record's body weight (15px ink; 16px on a
   desk), never the secondary tone
-- 점주 가이드 opens on `처음 3일` with exactly the five §8-0 lines in order; the eight sections (§8-1 … §8-8) sit under a `자세히`
+- 점주 가이드 opens on `하루의 흐름` with exactly the five §8-0 lines in order; the eight sections (§8-1 … §8-8) sit under a `자세히`
   disclosure, collapsed by default, open on tap; no gameplay screen gains a disclosure
-FAIL: the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `처음 3일` is missing; `자세히` is open by default.
+FAIL: the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `하루의 흐름` is missing; `자세히` is open by default.
 
 #### UI-Q-v29-15 — STORE SUPPORT CARD COPY, TWO CLAUSES
 
@@ -3353,8 +3353,8 @@ PASS:
 - no effect text on any ORDER offer row or SALE shelf row is emphasized; rows read the same for both customers
 - effects in the fixed per-category order (Food 피로 회복 first, Drink Stat / Counter then 피로 회복, Potion 투력, Field Gear its
   Counters, Insurance its one line), the same on the tray's 특수 효과 line and in the codex
-- the first ORDER OFFER coach and the 점주 가이드 line under 처음 3일 read the exact category-grammar sentence (COPY_AUDIT §3-7
-  OFFER / §8-0)
+- the 점주 가이드 line under 하루의 흐름 reads the exact Item-effect reading sentence (COPY_AUDIT §8-0); ORDER has no OFFER
+  coach (§TUTORIAL — COACH DIET)
 - each successful sale shows one receipt stub over the counter band for about 2.5 s, `단골도 {±N} · 소지금 {A} → {B}` with that
   customer's real values; a second sale to the same customer replaces it; nothing reserves height, input never blocked
 - a refusal shows only its actual Loyalty loss at the stub location, if any; no Wallet row, no new motion; the reply line comes from the engine's reason pool (가격 / 필요도 / 일반 선택) and stays 5 s

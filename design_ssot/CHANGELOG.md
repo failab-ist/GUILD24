@@ -34,6 +34,12 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Guide and settings copy alignment (User 2026-10-09)
+
+- 승인된 설정 안내를 기간 없는 문구로 변경. 점주 가이드 첫 블록을 `하루의 흐름`으로 바꾸고 상품별 효과 확인 안내 및 바가지 거절 예외를 반영. COPY_AUDIT §2-3 / §8, UI_UX §GLOBAL HELP.
+- 가이드 회생 횟수는 기존 `game.rescueLimit()`을 참조. DAY 1~3 한 줄 안내와 게임 판정·밸런스·저장 형식은 유지.
+- 영업 전 및 종료 후 새 점포 준비 화면에서도 안내 설정 변경 직후 버튼·설명을 갱신. UI_UX §SETTINGS / DEBUG BOUNDARY.
+
 ## After v2.11.1 — Approved balance adoption (User 2026-10-08)
 
 - EXP curve18+Level×8; lagging alive adventurers receive×1.5 ordinary earned EXP below the Day's ordinary new-arrival minimum, capping only the extra bonus at that minimum. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
