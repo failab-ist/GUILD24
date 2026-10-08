@@ -68,9 +68,10 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
    - 장식(User 2026-10-04 점검): 4칸은 7~8판째(목표 9판쯤 안). 경제 장식은 10판째 현금/일이 약 3배(240~259G)지만 클리어는 생존 장식과 같은 22~30%라 지금은 그대로 둔다(`reports/v2100-measure/v2103-full.log`).
    - 화염 조합 +18: v2.9.13에서 다시 쟀다(reader 3,000, 화염 섞임 38.7 ±7.8% · 그 외 45.1 ±6.2%, 오차 안). 그대로 둔다(`archive/v3.0-prep/v3-prep-measure-v2911.md` §6).
-3. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
-   - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
-   - 출시 준비 외 작업은 §8, 1위 루브릭은 §9.
+3. v3.0 준비의 남은 순서(User 2026-10-08)
+   - 게임 안쪽은 **최종 실플레이 밸런스 확인 + 이미 진행 중인 프롤로그 마감**까지만 닫는다. 플레이 피드백 없이 새 기능을 추가하지 않는다.
+   - 그 다음 즉시 Android 앱 전환으로 이동한다. exact release behavior는 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 실행 순서/시간은 `reports/v3.0-prep.md` §6-7~6-8.
+   - 앱화 → 내부 실기기 QA → Closed Test를 가능한 빨리 시작하고, 14일 동안 미세 수정 · 사업/스토어/SNS 작업을 병행한다.
 4. 다른 세션: 1위 인터뷰(`reports/interview-1st-place.md`).
 5. 남겨 둘 입력: `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는다. SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
 6. 리팩터링(`ccr-4a2ee33b-4r88nj`, "동작은 그대로", User 2026-09-30 ~ 10-01): 머지됨(PR #38, `70e9d39`). `dist/ui/app.js`의 큰 함수를 같은 파일 안 헬퍼로 나눴다: `playPhase` → `phaseMorning` ~ `phaseSell`, `playCue` → `cueSelect` · `cueOrder` · `cueSale` · `cueRefuse`, `render` → `phaseScreen` · `openOwedModal` · `syncWatchers`, `closingScreen` → `closingReceipt` · `closingDock`, `finalScreen` → `finalThreat` · `finalMuster` · `finalDock`, `orderForm` → `orderOffer`, `clashScene` → `clashMarkup`. `tests/ui-guard.cjs`의 소스 가드도 같은 함수를 읽도록 옮겼다(assertion 그대로). 이 구간을 고칠 때는 새 함수 이름으로 찾는다. 하지 않은 것: `saleScreen`, `clashScene` 시간축, `statGrid` · `readout` · `beat` · `till` · `bossReveal`, `systems/*`.
