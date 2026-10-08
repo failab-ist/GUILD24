@@ -378,6 +378,12 @@ Rules:
 - Legendary remains exceptional and does not scale with late-Run danger beyond the exact 1% rows above
 - existing unlock/meta eligibility still applies before Rarity selection where another current owner explicitly requires it
 
+## STORE SUPPORT — ADDITIONAL ORDER SLOTS
+
+Additional slots from owned Store Supports apply on acquisition: append the new rows without regenerating
+the sheet or changing the existing cart. Full Rerolls retain counts and category constraints. Exact support
+categories/counts and acquisition/pity acceptance -> RELIC §18 / §20 / §28 / REL-Q-v28-9.
+
 ## ORDER OFFER VARIETY
 
 (User 2026-10-02.) One ORDER sheet holds an Item on at most `offerSameItemMax` = 2 slots: a slot already supplies 2~4 units

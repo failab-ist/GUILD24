@@ -1702,7 +1702,7 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
     +'<span class="col">'
      /* UI_UX §ORDER — ITEM INFORMATION HIERARCHY (User 2026-09-26, v2.9.6, COPY_AUDIT §4-26): the tag is what 발주 spends, labelled;
          the sale price is the smaller muted tag under it; floated so the name, rarity and effects wrap beside it */
-     +'<span class="prices">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')
+     +'<span class="prices">'+(o.origin==='dawnRecovery'||o.origin==='coldcase'?'<i class="offer-source">'+(o.origin==='dawnRecovery'?'새벽 회수':'포션 계약')+'</i>':'')+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')
       /* EVENT §02 본사 1+1 행사 (User 2026-09-28, v2.9.10 quick patch): the promoted offer wears a red 1+1 sticker on its
          매입 tag, as a store shelf does - it was a `· 1+1` fragment inside the muted metadata line and went unseen */
       +(o.promo?'<em class="promo-sticker" aria-label="1+1 행사">1+1</em>':'')+'</span>'

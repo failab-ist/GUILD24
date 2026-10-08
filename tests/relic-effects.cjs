@@ -26,11 +26,11 @@ test('후방 창고 증설 adds 5 warehouse slots (User 2026-09-26, v2.9.2 fourt
 test('offer weights and quantities match relevant product roles',()=>{
  const g=fresh(),s=g.run,potion=DATA.itemBy.lowpotion,premium=DATA.itemBy.guildlunch;
  for(const [id,it]of [['rareContract',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
- // RELIC 고급 식자재 유통 계약 (User 2026-10-04): no order weighting - one extra Uncommon+ Food/Drink slot on the Day's first sheet
- s.facilities=['coldcase'];assert.equal(Relics.offerWeight(g,premium),1,'고급 식자재 does not weight the draw');
+ // RELIC §18: an independent Potion slot on every sheet.
+ s.facilities=['coldcase'];assert.equal(Relics.offerWeight(g,premium),1,'Potion contract does not weight the draw');
  s.facilities=[];g.generateOffers(true);const plainCount=s.offers.length;s.facilities=['coldcase'];g.generateOffers(true);
- assert.equal(s.offers.length,plainCount+1,'one extra slot on the first sheet');const extra=DATA.itemBy[s.offers.at(-1).item];
- assert.ok(['food','drink'].includes(extra.category)&&extra.rarity>=1,'and it is an Uncommon+ Food/Drink');
+ assert.equal(s.offers.length,plainCount+1,'one independent added slot');const extra=DATA.itemBy[s.offers.at(-1).item];
+ assert.equal(extra.category,'potion','all Potion rarities are eligible');
  s.dungeons=[g.makeDungeon('spider',1)];s.facilities=[];const base=Relics.offerWeight(g,DATA.itemBy.antidote);s.facilities=['hazardBoard'];assert.ok(Relics.offerWeight(g,DATA.itemBy.antidote)>base);
  s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['extraOrder'];g.generateOffers();assert.equal(s.offers.length,n+2);
 });
@@ -98,9 +98,9 @@ test('overhead matches day effects',()=>{
    can show that something DID appear, never that everything else still CAN. */
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
-                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery',
+                 'memberBundle','premiumMember','returnPoints','supplyCert',
                  'royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (19)');
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (18)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
@@ -281,12 +281,12 @@ test('REMAKE 새벽 회수 계약: 50% recovery of expiring Food/Drink, and +1 F
  const h=fresh('dawn-offers'),t=h.run;t.facilities=[];t.event=null;h.generateOffers();const n=t.offers.length;
  for(let i=0;i<30;i++){t.facilities=['dawnRecovery'];h.generateOffers();assert.equal(t.offers.length,n+1,'one extra slot');
   assert.ok(Relics.food(DATA.itemBy[t.offers.at(-1).item]),'and it is Food/Drink');}
- t.phase='order';t.money=99999;h.reroll();assert.equal(t.offers.length,n,'a Reroll is not the first generation');
+ t.phase='order';t.money=99999;h.reroll();assert.equal(t.offers.length,n+1,'Reroll retains the added slot');assert.equal(t.offers.at(-1).origin,'dawnRecovery');assert.ok(Relics.food(DATA.itemBy[t.offers.at(-1).item]));
 });
 
 /* SA-Q16 / REL-Q-v28-9. The acquisition-time predicate named a retired `fresh` property, so it
    disagreed with the future-stock shelf path that has always keyed on Food/Drink. */
-test('SA-Q16: buying 고급 식자재 유통 계약 extends no stock; 대형 냉장고 extends owned Food/Drink once, on category',()=>{
+test('SA-Q16: buying 전문 포션 유통 계약 extends no stock; 대형 냉장고 extends owned Food/Drink once, on category',()=>{
  const g=fresh('coldcase-acquire'),s=g.run;
  const uncommonFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity>=1&&i.days);
  const commonFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity===0&&i.days);
@@ -298,7 +298,7 @@ test('SA-Q16: buying 고급 식자재 유통 계약 extends no stock; 대형 냉
  s.phase='order';s.money=9999;
  s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['coldcase'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
  g.buyRelic('coldcase');
- assert.deepEqual(s.inventory.map(st=>st.expires),before,'고급 식자재 유통 계약 leaves every date alone');
+ assert.deepEqual(s.inventory.map(st=>st.expires),before,'전문 포션 유통 계약 leaves every date alone');
  s.relicWindow={milestoneDay:10,slothSealOpportunity:false,candidateIds:['fridge'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
  g.buyRelic('fridge');
  for(let i=0;i<s.inventory.length;i++){
@@ -311,7 +311,7 @@ test('SA-Q16: buying 고급 식자재 유통 계약 extends no stock; 대형 냉
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 40% of list (supplyCert), 40% of the charged 150% price (royalCert), 15% of the price (고급 식자재)',()=>{
+test('REL-Q-v28-5 / 7 / 33: HQ commission is 40% of list (supplyCert), 40% of charged 150% (royalCert), 10% of charged Potion sales (coldcase)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -332,7 +332,8 @@ test('REL-Q-v28-5 / 7: HQ commission is 40% of list (supplyCert), 40% of the cha
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.40),'supplyCert pays 40% of list (User 2026-10-04)');
  const fineFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity>=1),plainFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity===0);
- assert.equal(sale(['coldcase'],'full',fineFood),Math.round(fineFood.sell*.15),'고급 식자재 pays 15% of an Uncommon+ Food/Drink price');
+ assert.equal(sale(['coldcase'],'full',fineFood),0,'Potion contract pays no Food/Drink commission');
+ assert.equal(sale(['coldcase'],'full',DATA.itemBy.lowpotion),Math.round(DATA.itemBy.lowpotion.sell*.10),'Potion contract pays 10% of charged Potion sales');
  assert.equal(sale(['coldcase'],'full',plainFood),0,'and nothing on a Common one');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
  // neither inherited rate survives on the Gold path
@@ -445,7 +446,7 @@ test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x
  s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['fresh24'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
  g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.15),50]);
 });
-test('REWORK 고급 식자재 유통 계약 (User 2026-10-04): no purchase intent, no stat effect',()=>{
+test('REWORK 전문 포션 유통 계약 (User 2026-10-04): no purchase intent, no stat effect',()=>{
  const g=fresh('coldcase-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
  const delta=id=>{g.run.facilities=[];const a=g.interest(n,DATA.itemBy[id],'overcharge').chance;g.run.facilities=['coldcase'];return g.interest(n,DATA.itemBy[id],'overcharge').chance-a;};
