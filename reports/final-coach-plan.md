@@ -2,7 +2,7 @@
 
 먼저 AGENTS.md를 읽고 따른다.
 
-브랜치 `codex/minor-ui-feedback`, 구현 기준 `a23a47be`. User가 마이너 UI와 마왕성 최종 화면을 컨펌했고, main 머지와 패치 버전 2.11.1을 승인했다(2026-10-05).
+브랜치 `codex/minor-ui-v2111`, 구현 기준 `a23a47be`. User가 마이너 UI와 마왕성 최종 화면을 컨펌했고, main 머지와 패치 버전 2.11.1을 승인했다(2026-10-05).
 
 승인된 단계별 코치와 개인별 환경 대응 UI는 구현했다. COPY_AUDIT_APPROVED_v2.8.0.md §14-9 / UI_UX_v2.8.0.md §FIRST-EVER FINAL EXPEDITION COACH가 현재 문구와 트리거를 소유한다. 개인별 수치는 finalPreRoll().preparations의 Hazard 결과를 읽으며, FINAL_EXPEDITION_v2.8.0.md §FINAL CALCULATION ORDER가 판정 경계다.
 
@@ -18,4 +18,4 @@
 
 기존 RUNTIME UX BUG: 모바일에서 원정대 카드가 메뉴 버튼 아래로 스크롤될 때 소지금 끝이 일부 가려진다. 기준 main에서도 재현되며 이번 변경의 회귀는 아니다. 이번 패치 범위에서는 고치지 않았다.
 
-구현 커밋: `bf816ab5`. 패치 버전은 `2.11.1`이며 배포 marker와 Canonical header, CHANGELOG 및 WORK_STATE를 맞췄다. 릴리스 기록은 CHANGELOG §RELEASE RECORD를 참조한다. 새 밸런스 측정은 실행하지 않는다.
+구현 커밋: `c6c61dc7`. 패치 버전은 `2.11.1`이며 배포 marker와 Canonical header, CHANGELOG 및 WORK_STATE를 맞췄다. 릴리스 기록은 CHANGELOG §RELEASE RECORD를 참조한다. 새 밸런스 측정은 실행하지 않는다.

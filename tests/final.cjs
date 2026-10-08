@@ -460,7 +460,7 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
  assert.equal(after.run.offers.length,before.run.offers.length,'and no special Final shop');
  // the screen actually tells the player, from D25 rather than on D30
  const app=read('dist/ui/app.js');
- assert.ok(/s\.final\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
+ assert.ok(/s\.final&&!isFinal\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
  assert.ok(/s\.final\.familyNames/.test(app),'by name');
  assert.ok(/Presentation\.hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'with the Pool it carries');
  /* FINAL_EXPEDITION_v2.7 §D25: the disclosure comes BEFORE the ordinary D25 decisions that
@@ -564,7 +564,7 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  const start=app.indexOf('const finalPrice=isFinal');
  /* v2.9.0 counter tray: the ordinary price keys live in priceKeys(); the FINAL branch of till() ends where it hands over to them */
  const till=app.slice(start,app.indexOf(':priceKeys(n,it,st);',start));
- assert.ok(/<em>50%<\/em>/.test(till),'the Final offers the 50% amount only');
+ assert.ok(/<span class="price-rate">50%<\/span><\/em><strong>'\+finalPrice\+'<span class="price-unit">G<\/span><\/strong><small>50%<\/small>/.test(till),'the Final offers the 50% amount only');
  assert.ok(!/overcharge|150%/.test(till),'no 바가지 in the Final');
  const src=read('dist/systems/run.js');
  const fn=src.slice(src.indexOf('P.supplyFinal='),src.indexOf('P.supplyFinal=')+900);

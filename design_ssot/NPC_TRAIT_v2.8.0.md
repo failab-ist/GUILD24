@@ -27,7 +27,7 @@ targetTrustedRegulars/run≈2–4
 livingNpcCap=22
 
 destinationDefault=randomAmongOpenGates
-destinationCoverage=EVERY_OPEN_GATE_WHEN_VISITORS_AT_LEAST_GATES (→ §DESTINATION)
+destinationCoverage=EVERY_OPEN_GATE_EXPECTED_DESTINATION (→ §DESTINATION)
 autoBestFitRouting=NO
 
 noncanonicalTraitResolutionKeys=[long,thirst,wet,armor,undead]
@@ -530,8 +530,14 @@ Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.8.0.md`.
 
 Default: random among currently open eligible Gates.
 
-Coverage: after the ordinary random draw, a Gate left empty takes one visitor, picked at random, from a Gate that
-holds two or more; a visitor a 거짓말쟁이 roll already diverted is never moved; Days without an empty Gate draw nothing more.
+Coverage: every retained open Gate must have at least one expected destination visitor. When visitors are fewer
+than generated Gates, remove random ordinary Gates until all remaining Gates can be covered. An Event-created
+temporary Gate takes priority and is retained. Removed Gates are absent from the Day, rather than hidden in the UI.
+After the ordinary random destination draw, an empty Gate takes one random visitor from a Gate holding two or more.
+Apply 거짓말쟁이 and 게이트 순례 주간 actual-destination overrides after expected coverage; actual counts may be zero.
+Generate Order offers and designate the Deep Gate against the retained Gate set. When no visitor is available,
+no ordinary Gate remains and no Deep Gate is designated. The Player may finish Order and then goes directly to
+Closing with the no-trading reason; ordinary rest, expiry and operating-cost settlement still apply.
 
 The system must not auto-route based on Job, stats, traits or best counter fit.
 The Player solves preparation around the assigned destination while accepting limited, explicitly signaled information uncertainty.
