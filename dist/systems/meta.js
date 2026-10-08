@@ -115,7 +115,9 @@ function opened(a){
   jobs:D.jobs.filter(j=>j.metaUnlock&&n>=j.metaUnlock).map(j=>j.id)};
 }
 
-const itemUnlocked=(a,it,day=1)=>{if(it.id==='guildlunch')return !!a.unlocks?.guildlunch&&day>=10;if(it.id==='worldcharm')return !!a.unlocks?.worldcharm&&day>=14;return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
+/* META §D10 / D14 PRODUCT UNLOCK — EXACT: account unlock and each Run's offer gate share these Days. */
+const ITEM_UNLOCK_DAY={guildlunch:10,worldcharm:14};
+const itemUnlocked=(a,it,day=1)=>{if(ITEM_UNLOCK_DAY[it.id])return !!a.unlocks?.[it.id]&&day>=ITEM_UNLOCK_DAY[it.id];return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
 
 /* What one expedition leaves on the account. Dungeon knowledge accrues only when a supplied
@@ -181,6 +183,6 @@ const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
- opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
+ opened,itemUnlocked,ITEM_UNLOCK_DAY,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

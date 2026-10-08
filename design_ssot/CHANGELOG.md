@@ -34,6 +34,12 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Order and product copy alignment (User 2026-10-09)
+
+- 임박 특가 날 발주서가 기본 유통기한을 표시하던 불일치 수정. 기존 입고 규칙을 `Game.stockLife()`로 공유하여 오늘까지인 재고는 1일, 냉장고 적용 재고는 실제 연장 기한을 표시.
+- 교환 코치는 일률적인 두 배 설명 대신 버튼의 이번 비용을 읽도록 변경. 무료 교환권 및 유료 교환 판정은 유지.
+- 날짜 해금 상품 도감은 계정 해금 후에도 각 점포의 발주 출현 날짜를 명시. 계정 해금·후보 판정·도감·자동 자료집이 `Meta.ITEM_UNLOCK_DAY`를 공유. 현행 DAY 10/14와 저장 형식 유지.
+
 ## After v2.11.1 — Guide and settings copy alignment (User 2026-10-09)
 
 - 승인된 설정 안내를 기간 없는 문구로 변경. 점주 가이드 첫 블록을 `하루의 흐름`으로 바꾸고 상품별 효과 확인 안내 및 바가지 거절 예외를 반영. COPY_AUDIT §2-3 / §8, UI_UX §GLOBAL HELP.

@@ -78,7 +78,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     Relic question and the two never answer for each other. */
  wears(id){return Object.values(this.run.loadout||{}).includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
- stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.event?.effects.sameDayStock&&['order','final'].includes(this.run.phase)?this.run.day+1:this.run.day+it.days+G.Relics.shelf(this,it),/* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */cost:cost??it.buy});}
+ // ITEM §SHELF LIFE — EXACT / EVENT §54: the offer and arrival share the same expiry rule.
+ stockLife(it){return this.run.event?.effects.sameDayStock&&['order','final'].includes(this.run.phase)?1:it.days+G.Relics.shelf(this,it);}
+ stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.day+this.stockLife(it),cost:cost??it.buy});}
  /* The Gate a customer actually walks into. A Deep nominee keeps the base Gate's Family, Tier
     and Hazard set - only the required Combat Power rises, by one global factor - and this is the
     single object the forecast and the night result both read, so what the player was shown is

@@ -427,7 +427,7 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
     SALE entry, and the codex locks the two DAY-unlocked Items on their account flag */
  assert.ok(fn('npcDetail').includes('Dungeon.injuryPenaltyFor(game.run.facilities)')&&!/'\+20%':'-15%'/.test(app),'the notebook reads the one injury figure');
  assert.ok(fn('npcDetail').includes('n.outlook&&n.outlook.day===game.run.day'),'a past visit\'s Death risk is not shown as current');
- assert.ok(/const DAY_UNLOCK=\{guildlunch:10,worldcharm:14\};/.test(app)&&/DAY_UNLOCK\[e\.id\]\?!game\.account\.unlocks\?\.\[e\.id\]/.test(app),'the codex locks 길드 특제 도시락 / 세계수 생환부적 until reached');
+ assert.ok(/const DAY_UNLOCK=Meta\.ITEM_UNLOCK_DAY;/.test(app)&&/DAY_UNLOCK\[e\.id\]\?!game\.account\.unlocks\?\.\[e\.id\]/.test(app),'the codex locks 길드 특제 도시락 / 세계수 생환부적 until reached');
  assert.ok(fn('changedRows').includes('Presentation.nightChanges(r, n, game.run.facilities)'),'WHAT CHANGED comes from the same report (and the store supports that set its injury figure)');
  // compactness is about copy: a routine beat drops the quote, never the adventurer
  assert.ok(/portrait\(n,150,'returner'\)/.test(b),'every outcome renders the same NPC art size');
@@ -1272,7 +1272,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     open it again - a presentation preference on the account, not run state. */
  // User 2026-09-29 (UI_UX §ORDER — WAREHOUSE PANEL): the warehouse left the form for its own panel - a desk column and a
  // phone handle + sheet - still from the one grouping, still against total slots, still folded until the player opens it
- assert.ok(!(fn('orderOffer')+fn('orderForm')).includes('stock'),'the form no longer carries the warehouse');
+ assert.ok(!/stockSlots\(|stockSide\(|stockHead\(/.test(fn('orderOffer')+fn('orderForm')),'the form does not render warehouse surfaces');
  const whList=fn('stockSlots'),whHead=fn('stockHead');
  assert.ok(whList.includes('groupStock()'),'reusing the existing grouping, not a second one');
  assert.ok(whHead.includes('game.capacity()')&&whHead.includes('s.inventory.length'),'used against total slots');
@@ -1828,7 +1828,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
  for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* COPY_AUDIT §3-14: the first eligible DAY is 4, even with another ORDER mark. */
- assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,4]"),'the DAY 4 reroll mark, verbatim');
+ assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 이번 교환 비용은 버튼에 표시된다.',,4]"),'the DAY 4 reroll mark, verbatim');
  assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'발주 후보 교환 · '"),'the 발주 후보 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
@@ -3074,6 +3074,44 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
  assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
+});
+
+test('ORDER shelf life: the displayed days and actual arrival share Event and refrigerator rules',()=>{
+ const g=new Game();g.autosave=false;g.start('order-life-copy');
+ const s=g.run;s.phase='order';s.day=4;s.money=5000;s.cart={};s.inventory=[];
+ const ctx={D:DATA,game:g,Presentation,Relics,E:x=>x,itemKind:it=>DATA.categories[it.category],
+  Scene:{crate:x=>x,priceTag:x=>x},Art:{itemIcon:()=>''},btn:()=>''};
+ for(const [id,phase,fridge,near,days]of [['rope','order',false,false,5],['rice','order',false,false,2],
+  ['rice','order',true,false,4],['rope','order',false,true,1],['rice','order',true,true,1],['rice','final',true,true,1]]){
+  s.phase=phase;s.facilities=fridge?['fridge']:[];s.event=near?DATA.events.find(e=>e.id==='nearexpiry'):null;
+  s.offers=[{item:id,price:DATA.itemBy[id].buy,quantity:3}];s.inventory=[];
+  assert.ok(render([fn('orderOffer')],'orderOffer(game.run,game.run.offers[0],0)',ctx).includes('유통기한 '+days+'일'),id+' displayed life');
+  g.stock(id,1);assert.equal(s.inventory[0].expires,s.day+days,id+' actual expiry');
+ }
+ s.phase='sell';s.inventory=[];g.stock('rice',1);
+ assert.equal(s.inventory[0].expires,s.day+4,'today-only Order Event does not shorten other stock arrivals');
+});
+
+test('META Day unlock: account award, offer eligibility and codex use one date',()=>{
+ assert.deepEqual(Meta.ITEM_UNLOCK_DAY,{guildlunch:10,worldcharm:14},'current Canonical Days');
+ const g=new Game();g.autosave=false;g.start('day-unlock-copy');g.morning=()=>{};
+ const ctx={game:g,Meta,DAY_UNLOCK:Meta.ITEM_UNLOCK_DAY};
+ for(const [id,day]of [['guildlunch',10],['worldcharm',14]]){
+  const it=DATA.itemBy[id];g.account.unlocks[id]=false;
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'DAY '+day+' 도달 시 해금');
+  assert.equal(Meta.itemUnlocked(g.account,it,day),false,'Day alone does not bypass account unlock');
+  g.run.day=day-1;g.nextDay();assert.equal(g.account.unlocks[id],true,'account unlock on its Day');
+  assert.equal(Meta.itemUnlocked(g.account,it,day-1),false,'each Run blocks earlier offers');
+  assert.equal(Meta.itemUnlocked(g.account,it,day),true,'eligible on the Day');
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'해금 완료 · 각 점포 DAY '+day+'부터 발주 후보');
+ }
+ const old=Meta.ITEM_UNLOCK_DAY.guildlunch;
+ try{Meta.ITEM_UNLOCK_DAY.guildlunch=12;g.account.unlocks.guildlunch=false;g.run.day=11;g.nextDay();
+  assert.equal(g.account.unlocks.guildlunch,true,'award follows changed date');
+  assert.equal(Meta.itemUnlocked(g.account,DATA.itemBy.guildlunch,11),false);
+  assert.equal(Meta.itemUnlocked(g.account,DATA.itemBy.guildlunch,12),true);
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:DATA.itemBy.guildlunch}),'해금 완료 · 각 점포 DAY 12부터 발주 후보');
+ }finally{Meta.ITEM_UNLOCK_DAY.guildlunch=old;}
 });
 
 /* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */

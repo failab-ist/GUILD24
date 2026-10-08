@@ -215,7 +215,7 @@ No role chips. Card order:
 2. exact effects in ITEM §PRESENTATION ORDER — EXACT order (Hazard Counter → 피로 회복 → Core Stat → the rest); a penalty keeps
    its place and cost colour
 3. economy / stock — tag `매입 {N}G` (today's buy price) over a smaller muted `판매 {N}G`; metadata
-   `수익 +{N}G · 재고 · 공급 · 유통기한`; the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the `매입` tag corner (not in the metadata)
+   `수익 +{N}G · 재고 · 공급 · 유통기한`; shelf life uses the arrival rule, including EVENT §54 today-only stock and any applicable refrigerator extension; the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the `매입` tag corner (not in the metadata)
 4. quantity — a `+ / 1 / 3 / 최대` blocked by Gold or space stays dim but answers a tap with the reason toast; a full supply in
    the cart answers `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9); a supply already fully ordered reads sold out — paper a shade
    worked, a quiet `품절` stamp in place of the controls, everything else readable, nothing greyed
@@ -1372,6 +1372,7 @@ Store Capital / Decoration management and run-end settlement stay as META_v2.8.0
 ## META UI
 
 Meta gameplay -> META_v2.8.0.md. Keep distinct: Job × Boss clear matrix · Job Mastery 0..7 per Job · Total Job Mastery ·
+The product codex distinguishes permanent account unlock from each Run's DAY-based offer eligibility (META §D10 / D14 PRODUCT UNLOCK — EXACT, COPY_AUDIT §8-9).
 Distinct Boss Clear 0..7 · approved 1/3/6 unlock milestones; no legacy Global Meta XP as progression. Monster Knowledge has no
 player surface and no codex `몬스터 지식` tab (all Hazards are public from MORNING); the record stays, unshown (META §MONSTER
 KNOWLEDGE).
@@ -3325,7 +3326,8 @@ PASS (→ UI_UX §SALE — COUNTER TRAY / §SALE):
   next Day sorts afresh
 - every row, the tray and the 재고 정리 list carry the shelf life (`폐기까지 N일`, then `내일까지` / `오늘까지`); a last-day row in the
   warehouse `.soon` color
-- no `유통기한 없음` / `기한 없음` state on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
+- no `유통기한 없음` / `기한 없음` state on the tray, the ORDER row or the warehouse list (every Item expires; base 2~5 days,
+  with applicable refrigerator extension and EVENT §54 today-only arrival)
 - one name line + one effect line per row; no overflow at 360
 FAIL: an order that changes with the customer's Gate, or a recommendation word.
 

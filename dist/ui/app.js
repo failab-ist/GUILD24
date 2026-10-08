@@ -1366,7 +1366,7 @@ const coachSteps={
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
   ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
   /* COPY_AUDIT §3-14: DAY 4, independently of other ORDER marks. */
-  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,4]],
+  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 이번 교환 비용은 버튼에 표시된다.',,4]],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1691,7 +1691,7 @@ function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
 function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
     /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
     const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
-    const sl = it.days + Relics.shelf(game, it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
+    const sl = game.stockLife(it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
     /* data-offer is the row's handle across a redraw: the qty controls inside it flip
        between enabled and disabled as the quantity hits 0 or the cap, so the pressed
        button is not a stable anchor but its row is. */
@@ -2292,9 +2292,9 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
    this reads the same truth the gate itself reads. */
 /* 길드 특제 도시락 / 세계수 생환부적 open on the account flag the run sets on reaching DAY 10 / 14 (Meta.itemUnlocked), not on metaUnlock. */
-const DAY_UNLOCK={guildlunch:10,worldcharm:14};
+const DAY_UNLOCK=Meta.ITEM_UNLOCK_DAY;
 function unlockProgress(entry){const a=game.account;
- if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
+ if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료 · 각 점포 DAY '+DAY_UNLOCK[entry.id]+'부터 발주 후보':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
  if(entry.metaUnlock)return Meta.distinctBossClear(a)>=entry.metaUnlock?'해금 완료'
   :'서로 다른 마왕 토벌 '+Meta.distinctBossClear(a)+'/'+entry.metaUnlock;
   return '기본 제공';}
