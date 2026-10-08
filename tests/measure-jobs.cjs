@@ -12,7 +12,7 @@ const s={npcs:[a,b,c,dead,{id:'unused',records:[]}],win:true,dungeons:[{hazards:
  finalLock:{families:['golem','spider'],members:[
   {npcId:'a',hazard:0,regular:true,stats:{combat:10,survival:0,mobility:0,spirit:0}},
   {npcId:'c',hazard:0,regular:false,stats:{combat:10,survival:0,mobility:0,spirit:0}},
-  {npcId:'b',hazard:2*Math.sqrt(2),regular:false,stats:{combat:0,survival:10,mobility:0,spirit:0}}]},bossDebug:{power:7.7,bossPower:264},
+  {npcId:'b',hazard:2*Math.sqrt(2),regular:false,stats:{combat:0,survival:10,mobility:0,spirit:0}}]},bossDebug:{power:8.7,bossPower:239.4},
  finalReport:{members:[{npcId:'a',items:['rice','hood']},{npcId:'b',items:['water']},{npcId:'c',items:['midpotion','candy']}]}};
 const unchanged=JSON.stringify(s),r=jobMetrics(s,initial,DATA.jobBy,Dungeon.preparedPower);
 assert.equal(JSON.stringify(s),unchanged,'집계는 입력을 변경하지 않음');
@@ -21,7 +21,7 @@ assert.equal(r.jobs.warrior.levelGain,3);assert.deepEqual(r.jobs.warrior.bands[0
 assert.equal(r.jobs.mage.combatLoss,2);assert.equal(r.jobs.mage.deaths,1);assert.equal(r.jobs.mage.mastery,1);
 assert.equal(r.jobs.warrior.rarities[0].exp,2);assert.equal(r.jobs.warrior.finalPicks,2);
 assert.equal(r.jobs.warrior.finalRuns,1,'같은 직업 두 명도 참여 판은 한 번');assert.equal(r.jobs.warrior.finalWins,1);
-assert.equal(r.final.fire,true);assert.ok(Math.abs(r.jobs.mage.finalPower+2.3)<1e-9);
+assert.equal(r.final.fire,true);assert.ok(Math.abs(r.jobs.mage.finalPower+1.3)<1e-9);
 assert.equal(r.final.supplied,true);assert.equal(r.final.fullPack,false,'각 1개 이상 지급과 모든 가방 충전은 분리');
 assert.deepEqual(r.final.members[0].items,['rice','hood'],'비워진 NPC 가방 대신 최종 판정 보고서의 지급 내역');
 for(const m of s.finalReport.members)m.items=[];

@@ -174,7 +174,7 @@ test('DUN-Q70/Q71: prepared Power weights and the Hazard Threat curve',()=>{
  for(const [day,tier,want] of [[1,1,12.35],[7,1,14.45],[12,1,17.45],[18,2,27.05],[24,2,30.65],[29,3,39.65],[30,2,34.25]])
   assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day,tier}).threat-want)<1e-9,
    'D'+day+' T'+tier+' threat is '+want);
- assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day:30,tier:2,family:'final'}).threat-28.5)<1e-9,'the Final keeps the curve without the late term: 28.50');
+ assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day:30,tier:2,family:'final'}).threat-28)<1e-9,'Final requirement is exactly28; ordinary curve unchanged');
  // the gate's own scale no longer moves a Hazard's threat
  assert.equal(Dungeon.hazardState('poison',{},{day:30,tier:2,scale:4.6}).threat,
               Dungeon.hazardState('poison',{},{day:30,tier:2}).threat);

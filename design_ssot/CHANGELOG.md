@@ -34,6 +34,14 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Approved balance adoption (User 2026-10-08)
+
+- EXP curve18+Level×8; lagging alive adventurers receive×1.5 ordinary earned EXP below the Day's ordinary new-arrival minimum, capping only the extra bonus at that minimum. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
+- D21+ Gate day slope1.05, Mage combat growth3.1. Ordinary hazard curve and other Jobs unchanged.
+- Boss final requirement×0.95 after Boss identity and nominal FIRE+12. Final mean-gap penalty2; each Final Hazard requires exactly28. BOSS / FINAL_EXPEDITION / DUNGEON_HAZARD.
+- Shorten comments only at touched functions; replace the touched Final contribution source-text check with equivalent behavior verification. Shared runtime/simulation/measurement penalty parameter prevents formula drift.
+- The measured candidates used Final threat28.5; exact28 is the final User decision, not a newly measured outcome. No new trajectory was run for this adoption.
+
 ## After v2.11.1 — Potion distribution and source catalog (User 2026-10-08)
 
 - Adopt the approved additional ORDER slot work from `b22afde7`: extraOrder / dawnRecovery / coldcase append their slots on acquisition, preserving the sheet/cart; independent category slots persist through full Rerolls. The Potion contract keeps id coldcase, price180G and one Potion-only slot.

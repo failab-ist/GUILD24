@@ -56,7 +56,7 @@ D25 does not grant guaranteed Counter Items, free stock, or a special Final shop
 Final Hazard Pool에는 각 Family의 authoritative **Hazard key**만 들어간다.
 Family의 non-Hazard second axis는 별도 Final modifier로 중복 추가하지 않는다.
 예: FIRE의 higher Dungeon Combat Power는 Final Hazard Pool에 들어가지 않으며, 마왕 자체의 강함 축은 effective Boss Power가 소유한다.
-대신 FIRE가 든 Pair는 effective Boss Power에 `+24`를 받는다 -> §FAMILY-PAIR BALANCE AUDIT.
+대신 FIRE가 든 Pair는 nominal Boss Power에 `+12`를 더한 뒤 공통 계수0.95를 적용한다 -> §FAMILY-PAIR BALANCE AUDIT.
 
 Family의 T2 정의 자체는 이 문서에서 재정의하지 않는다 → DUNGEON_HAZARD.
 
@@ -378,7 +378,7 @@ This ordering does not redefine the individual Boss mechanics.
 
 각 선택 Family는 해당 Family의 기존 T2 Hazard를 사용한다.
 
-Each Final Hazard uses the current Hazard Threat / defense / gap truth as ordinary expeditions with:
+Each selected Family uses its T2 Hazard set. Final Hazard Threat is fixed at 28; defense and gap use the ordinary formulas with:
 
 ```text
 Day = 30
@@ -387,10 +387,10 @@ Tier = T2
 
 Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
 No separate Final-only Hazard defense table.
-No standalone `scale=4.6` path is used in Final resolution.
+No standalone `scale=4.6` path is used in Final resolution. Ordinary Gate Hazard Threat is unchanged.
 
 Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier
-(`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×2.50 term stays hidden.
+(`대응 28 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×2.00 term stays hidden.
 
 역할 분리:
 
@@ -410,7 +410,7 @@ FinalMeanHazardGap
 = sum(each Final Hazard gap) / Final Hazard Count
 
 Final Hazard Penalty
-= FinalMeanHazardGap × 2.50
+= FinalMeanHazardGap × 2.00
 ```
 
 Final uses this mean-gap penalty path.
@@ -427,7 +427,7 @@ Reasoning boundary:
 Individual Final Power
 = 투력 × 0.50
 + (강인함 + 기동 + 정신) × 0.27
-- FinalMeanHazardGap × 2.50
+- FinalMeanHazardGap × 2.00
 ```
 
 `투력`은 Player-facing `combat` Stat 용어다.
@@ -523,11 +523,11 @@ FIRE PAIR: a pair that holds FIRE has 3 Hazards instead of 4 and clears more oft
 amount that levels the two:
 
 ```text
-FIRE-containing pair -> effective Boss Power + 24   (every Boss, on top of its own rule: WRATH 264, GREED 264~279, SLOTH seal table + 24)
+FIRE-containing pair -> nominal Boss Power + 12 before ×0.95 (WRATH 239.4; GREED239.4~253.65; SLOTH(stage +12)×0.95)
 any other pair       -> + 0
 ```
 
-The +24 touches no Hazard Pool, mean-gap penalty or forecast rule; the 토벌 전망 reads the same effective Boss Power.
+The nominal +12 touches no Hazard Pool, mean-gap penalty or forecast rule; the 토벌 전망 reads the same effective Boss Power.
 Measurement record -> CHANGELOG.
 
 ## BALANCE QA
@@ -609,7 +609,7 @@ PASS:
 
 ### FINAL-Q71 — HAZARD THREAT SOURCE
 PASS:
-- each Final Hazard uses current D30/T2 threat and defense/gap truth from `DUNGEON_HAZARD_v2.8.0.md`
+- each Final Hazard uses fixed Final threat 28 and ordinary defense/gap truth from `DUNGEON_HAZARD_v2.8.0.md`
 - no standalone `scale=4.6` Final path exists
 
 ### FINAL-Q72 — MEAN GAP PENALTY
@@ -617,7 +617,7 @@ For each participant:
 PASS exact:
 ```text
 FinalMeanHazardGap = sum(gaps) / hazardCount
-FinalHazardPenalty = FinalMeanHazardGap × 2.50
+FinalHazardPenalty = FinalMeanHazardGap × 2.00
 ```
 
 No `환경피해 ×0.35` path contributes in parallel.
@@ -625,7 +625,7 @@ No `환경피해 ×0.35` path contributes in parallel.
 ### FINAL-Q73 — INDIVIDUAL FINAL POWER
 PASS exact:
 ```text
-투력*.50 + (강인함 + 기동 + 정신)*.27 - FinalMeanHazardGap*2.50
+투력*.50 + (강인함 + 기동 + 정신)*.27 - FinalMeanHazardGap*2.00
 ```
 using the Boss modifier ordering owned by current BOSS.
 

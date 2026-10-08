@@ -190,7 +190,7 @@ test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rol
      no longer always the WRATH baseline: SLOTH reads its seal table and GREED adds a shortfall
      up to its cap. Everything else still faces the baseline exactly. */
   /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair holding FIRE adds firePairPower on top */
-  const t=DATA.bossTuning,fire=k.run.final.families.includes('golem')?t.firePairPower:0,bp=k.run.bossDebug.bossPower-fire;
+  const t=DATA.bossTuning,fire=k.run.final.families.includes('golem')?t.firePairPower:0,bp=k.run.bossDebug.bossPower/.95-fire;
   if(k.run.bossId==='SLOTH')assert.equal(bp,t.slothBossPower[k.run.sealBreakCount],'SLOTH reads its seal table');
   else if(k.run.bossId==='GREED')assert.ok(bp>=DATA.balance.bossPower&&bp<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
   else assert.equal(bp,DATA.balance.bossPower,k.run.bossId+' faces the baseline');
@@ -224,7 +224,7 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
      entries. The v2.6 aggregate-gap path is superseded. */
   const meanGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
   const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+(p.effects.survival
-   +p.effects.mobility+p.effects.spirit)*.27-meanGap(p)*2.50,0); // FINAL-Q72 2.50 (User 2026-09-30, v2.9.13; was 1.70)
+   +p.effects.mobility+p.effects.spirit)*.27-meanGap(p)*2.00,0); // FINAL_EXPEDITION §INDIVIDUAL FINAL POWER
   g.commitFinalParty();g.boss();
   /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
      participants untouched - it is the one Run where the party sum can be checked against the
@@ -234,7 +234,7 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
      band, assault = power x roll, and one CLEAR/FAIL read straight off the comparison. */
   if(s.bossId==='WRATH')
    assert.ok(Math.abs(s.bossDebug.power-expected)<1e-9,'party power is the plain sum of the prepared contributions');
-  const t=DATA.bossTuning,fire=s.final.families.includes('golem')?t.firePairPower:0,bp=s.bossDebug.bossPower-fire;
+  const t=DATA.bossTuning,fire=s.final.families.includes('golem')?t.firePairPower:0,bp=s.bossDebug.bossPower/.95-fire;
   if(s.bossId==='SLOTH')assert.equal(bp,t.slothBossPower[s.sealBreakCount],'SLOTH reads its seal table');
   else if(s.bossId==='GREED')assert.ok(bp>=DATA.balance.bossPower&&bp<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
   else assert.equal(bp,DATA.balance.bossPower,s.bossId+' faces the baseline');
@@ -297,7 +297,7 @@ test('BOSS-Q05/Q14: each Boss attaches on its approved side, and WRATH on neithe
  for(const b of DATA.bosses){
   const g=finalWith('base-'+b.id,b.id),plain=finalWith('base-'+b.id,'WRATH');
   // a FIRE-containing pair adds firePairPower to every Boss (FAMILY-PAIR BALANCE AUDIT, User 2026-09-30) - read off here
-  const bp=g.run.bossDebug.bossPower-(g.run.final.families.includes('golem')?t.firePairPower:0),power=g.run.bossDebug.power,ref=plain.run.bossDebug.power;
+  const bp=g.run.bossDebug.bossPower/.95-(g.run.final.families.includes('golem')?t.firePairPower:0),power=g.run.bossDebug.power,ref=plain.run.bossDebug.power;
   if(b.id==='SLOTH')assert.equal(bp,t.slothBossPower[0],'SLOTH at nought breaks reads its own table');
   else if(b.id==='GREED')assert.ok(bp>=base&&bp<=base+t.greedShortfallCap,'GREED adds a shortfall within its cap');
   else assert.equal(bp,base,b.id+' leaves the Boss side alone');
@@ -307,7 +307,7 @@ test('BOSS-Q05/Q14: each Boss attaches on its approved side, and WRATH on neithe
  }
  // WRATH is the reference both ways
  const w=finalWith('base-WRATH','WRATH');
- assert.equal(w.run.bossDebug.bossPower,base,'WRATH is the baseline itself');
+ assert.equal(w.run.bossDebug.bossPower,base*.95,'WRATH applies the shared multiplier');
 });
 
 test('BOSS-Q06: PRIDE moves only 투력, and only on the Final snapshot',()=>{
@@ -393,12 +393,12 @@ test('BOSS-Q08: GREED reads the committed sales the shop already keeps, capped',
     the penalty means the same thing whatever the target is set to. A Run that sold nothing
     takes the whole cap, a Run at target takes none, and it is linear in between. */
  const target=1000,tuned={greedRevenueTarget:target,greedShortfallCap:20};
- const at=rev=>withTuning(tuned,()=>g.effectiveBossPower(0,{revenue:rev}));
+ const at=rev=>withTuning(tuned,()=>g.effectiveBossPower(0,{revenue:rev})/.95);
  assert.equal(at(0),base+20,'a Run that sold nothing takes the whole cap');
  assert.equal(at(target/2),base+10,'the shortfall strengthens the Boss in proportion');
  assert.equal(at(target),base,'meeting the target adds nothing');
  assert.equal(at(target+9999),base,'and exceeding it is not a bonus');
- assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue:0})),base+5,'and no further than the cap');
+ assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue:0})/.95),base+5,'and no further than the cap');
 });
 
 test('RUN-Q15 on a controlled D30 setup: regulars and newcomers are read off the Run own history',()=>{
@@ -480,10 +480,10 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
   'and it is resolved ahead of the Relic window it exists to inform');
 });
 
-test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.50 (v2.9.13; was 1.70), not the aggregate path',()=>{
+test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.00, not the aggregate path',()=>{
  const src=read('dist/systems/run.js');
  assert.ok(!/hazard\*\.35/.test(src),'the retired aggregate-gap penalty is gone');
- assert.ok(/meanGap\*2\.50/.test(src),'the Final penalty is the mean gap x 2.50');
+ assert.equal(DATA.balance.finalGapPenalty,2,'the approved mean-gap penalty is 2');
  assert.ok(/p\.hazards\.reduce\(\(v,h\)=>v\+h\.gap,0\)\/p\.hazards\.length/.test(src),
   'and the mean divides by the Hazard COUNT, never by sqrt(count)');
  assert.ok(!/scale.*4\.6/.test(src),'no standalone scale=4.6 path is used in Final resolution');
@@ -492,8 +492,7 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.50 (v2
     balance harness drifted a whole Stage behind the game; it reads the one helper now, so the
     check is that the Final contribution IS preparedPower minus the mean-gap penalty, measured,
     rather than four literals matching by eye. */
- assert.ok(/individualPower=\(e,meanGap\)=>G\.Dungeon\.preparedPower\(e\)-meanGap\*2\.50/.test(src),
-  'the Final contribution reads the Prepared Power helper');
+ // Shared-helper contribution is checked by the actual Final below.
  const e={combat:100,survival:50,mobility:30,spirit:20};
  assert.equal(Dungeon.preparedPower(e),100*.50+(50+30+20)*.27,
   'and that helper carries the approved coefficients (투력 .50, every other Stat .27)');
@@ -515,6 +514,9 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 2.50 (v2
   const kit=Dungeon.prepare({...JSON.parse(JSON.stringify(n)),pack:[counter.id]},d,s.facilities);
   assert.ok(mean(kit)<mean(bare),'a matching Counter lowers the mean gap it answers');
  }
+ for(const member of g.finalEligible().slice(0,3))g.selectFinal(member.id);g.commitFinalParty();
+ const prepared=g.finalPreRoll(),manual=prepared.snapshots.reduce((sum,e,i)=>sum+e.combat*.50+(e.survival+e.mobility+e.spirit)*.27-mean(prepared.preparations[i])*2,0);
+ assert.ok(Math.abs(prepared.power-manual)<1e-9,'Final contribution is approved prepared Power minus the mean-gap penalty');
  // Final Power stays internal
  const app=read('dist/ui/app.js');
  assert.ok(!/Final Power|파이널 파워|최종 전투력/.test(app),'Final Power is never surfaced as a Player Stat');
@@ -710,14 +712,14 @@ test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exac
 
 /* FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT (User 2026-09-30): a pair holding FIRE (3 Hazards, not 4) measured easier, so
    its Boss stands firePairPower stronger - every Boss, on top of its own rule, and nothing else about the Final moves */
-test('FINAL: a FIRE-containing pair adds 24 to effective Boss Power, any other pair adds nothing',()=>{
- assert.equal(DATA.bossTuning.firePairPower,24);
+test('FINAL: a FIRE pair adds nominal12 before the shared0.95 multiplier',()=>{
+ assert.equal(DATA.bossTuning.firePairPower,12);
  let fire=0,other=0;
  for(let i=0;i<60&&(fire<3||other<3);i++){const g=atFinal('firepair-'+i),s=g.run,withFire=s.final.families.includes('golem');
   for(const id of ['WRATH','SLOTH','GREED']){s.bossId=id;
    const base=id==='SLOTH'?DATA.bossTuning.slothBossPower[0]:DATA.balance.bossPower;
    const got=g.effectiveBossPower(0,{revenue:DATA.bossTuning.greedRevenueTarget,sealBreakCount:0});
-   assert.equal(got,base+(withFire?24:0),id+(withFire?' with':' without')+' FIRE');}
+   assert.equal(got,(base+(withFire?12:0))*.95,id+(withFire?' with':' without')+' FIRE');}
   if(withFire){fire++;assert.equal(s.final.hazards.length,3,'a FIRE pair holds 3 Hazards');}else{other++;assert.equal(s.final.hazards.length,4);}}
  assert.ok(fire>=3&&other>=3,'both kinds of pair were drawn');
 });

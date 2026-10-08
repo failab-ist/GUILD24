@@ -299,12 +299,12 @@ Rules:
 ## GATE POWER — LATE-DAY SLOPE
 
 Gate required Power keeps its current generation inputs. The Day term runs DAY 1~9 at 1.45 per Day, DAY 10 at 0.80,
-DAY 11~20 at 1.10 and DAY 21+ at 1.10, DAY 21+ keeping the offset accumulated by D20. The late slope keeps the Gates
+DAY 11~20 at 1.10 and DAY 21+ at 1.05, DAY 21+ keeping the offset accumulated by D20. The late slope keeps the Gates
 level with a grown roster (a D30 party grows about 1.9 prepared Power a Day in D21~29); DAY 10 keeps its own 0.80 step:
 
 ```text
 Day term
-= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10
+= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.05
 ```
 
 Full required Power (Source-exact):
@@ -332,8 +332,8 @@ D10 = 13.85
 D12 = 16.05
 D18 = 22.65
 D20 = 24.85
-D24 = 29.25
-D29 = 34.75
+D24 = 29.05
+D29 = 34.30
 ```
 
 ## HAZARD THREAT
@@ -343,7 +343,8 @@ For each canonical Hazard:
 ```text
 Hazard Threat
 = 12 + Day × 0.35 + LateTerm + (Tier - 1) × 6
-LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates; 0 for the Final (마왕성 keeps Day 30 / T2 = 28.50)
+LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates
+Final (마왕성): Hazard Threat = 28, fixed for every selected T2 Hazard; no ordinary late term.
 ```
 
 Every Hazard reads the same Threat whatever Stat it presses: every Core Stat converts to Defense at ÷3, and an average
@@ -362,7 +363,7 @@ D12 T1 = 17.45
 D18 T2 = 27.05
 D24 T2 = 30.65
 D29 T3 = 39.65
-D30 T2 = 34.25 (ordinary formula; the Final reads 28.50)
+D30 T2 = 34.25 (ordinary formula; the Final reads 28)
 ```
 
 ## TIER CONTRACT
@@ -1473,7 +1474,7 @@ PASS:
 Owner rule: §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.10`
+- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.05`
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
 - SuccessEase multiplies the whole ordinary Gate Power once: 0.90 on DAY 1~21, 0.95 from DAY 22
@@ -1498,7 +1499,7 @@ Exact anchors (every Hazard):
 - D18 T2 = 27.05
 - D24 T2 = 30.65
 - D29 T3 = 39.65
-- D30 T2 = 34.25 (ordinary formula); the Final (Day 30 / T2) = 28.50
+- D30 T2 = 34.25 (ordinary formula); the Final (Day 30 / T2) = 28
 
 PASS: runtime threat matches.
 

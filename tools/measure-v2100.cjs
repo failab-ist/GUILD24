@@ -23,7 +23,7 @@ const endKind=r=>r.win?'클리어':r.reach?'마왕실패':/소문/.test(r.end)?'
 function useFirstRunLessons(P){const start=P.start;P.start=function(){this.lessons=true;return start.apply(this,arguments);};}
 
 // 직업 비교는 노출/희귀도/시작 레벨을 함께 읽는다. 서로 다른 직업의 성과를 인과 효과로 해석하지 않는다.
-function jobMetrics(s,initial,jobBy,preparedPower){
+function jobMetrics(s,initial,jobBy,preparedPower,gapPenalty=2){
  const jobs={},get=id=>jobs[id]??={name:jobBy[id].name,npcs:0,alive:0,exp:0,wins:0,combatLoss:0,env:0,deaths:0,
   firstLevel:0,level:0,levelGain:0,potential:0,mastery:0,firstDay:0,bands:BANDS.map(()=>[0,0,0,0,0]),rarities:{},
   finalRuns:0,finalWins:0,finalPicks:0,finalLevel:0,finalGap:0,finalPower:0};
@@ -37,7 +37,7 @@ function jobMetrics(s,initial,jobBy,preparedPower){
    const band=BANDS.findIndex(([a,z])=>r.day>=a&&r.day<=z);const t=b.bands[band];t[0]+=win;t[1]++;t[2]+=loss;t[3]+=env;t[4]+=dead;}}
  const members=[],hazards=s.dungeons[0]?.hazards||[];
  for(const m of s.finalLock?.members||[]){const n=s.npcs.find(n=>n.id===m.npcId);if(!n||!hazards.length)throw Error('최종 직업 상태 누락');
-  const gap=m.hazard/Math.sqrt(hazards.length),power=preparedPower(m.stats)-2.5*gap,b=get(n.job);
+  const gap=m.hazard/Math.sqrt(hazards.length),power=preparedPower(m.stats)-gapPenalty*gap,b=get(n.job);
   b.finalPicks++;b.finalLevel+=n.level;b.finalGap+=gap;b.finalPower+=power;
   const items=[...(s.finalReport?.members.find(x=>x.npcId===n.id)?.items||[])];
   members.push({job:n.job,level:n.level,rarity:n.rarity,potential:n.potential,regular:m.regular,gap,power,items});}
@@ -64,7 +64,7 @@ function worker({root,kind,policy,deco,T,R,part}){
   const recs=s.npcs.flatMap(n=>n.records||[]).filter(x=>!x.deep&&x.day<30),ok=x=>x.outcome==='성공'||x.outcome==='대성공';
   const band=([a,b])=>{const l=recs.filter(x=>x.day>=a&&x.day<=b);return [l.filter(ok).length,l.length];};
   const late=recs.filter(x=>x.day>=20);
-  rows.push({seed:s.seed,idx:k++%R,firstRun:!!s.firstRun,bands:BANDS.map(band),all:band([1,29]),...jobMetrics(s,initial,G.DATA.jobBy,G.Dungeon.preparedPower),
+  rows.push({seed:s.seed,idx:k++%R,firstRun:!!s.firstRun,bands:BANDS.map(band),all:band([1,29]),...jobMetrics(s,initial,G.DATA.jobBy,G.Dungeon.preparedPower,G.DATA.balance.finalGapPenalty??2.5),
    out:['대성공','성공','퇴각','부상','중상','사망'].map(o=>recs.filter(x=>x.outcome===o).length),env:recs.filter(x=>x.environmentHurt).length,
    day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
    zombie:s.day>=25&&late.length?late.filter(ok).length/late.length<.35:false,

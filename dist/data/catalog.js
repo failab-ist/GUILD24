@@ -81,7 +81,7 @@ item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초�
 jobs:[
 {id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,2.6,1.5,1.6]},
 {id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,19,10],growth:[2.6,2,3,1.6]},
-{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.3,1.6,1.8,2.7]},
+{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.1,1.6,1.8,2.7]},
 {id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,20],growth:[2.2,2.7,1.6,3]},
 {id:'rogue',name:'도적',color:'#79b6b5',stats:[15,11,21,9],growth:[2.8,2,3.4,1.5],metaUnlock:3},
 {id:'berserker',name:'광전사',color:'#db6464',stats:[21,14,12,7],growth:[3.6,2.4,1.9,1.3],metaUnlock:6}
@@ -271,7 +271,8 @@ G.DATA.bossTuning={
     has produced that contribution. No Rarity threshold remains. */
  gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
- firePairPower:24,              // FINAL_EXPEDITION §FAMILY-PAIR BALANCE AUDIT: a Final pair holding FIRE adds this to every Boss
+ firePairPower:12,              // BOSS §BASELINE POWER: applied before the shared multiplier.
+ finalPowerFactor:.95,
  slothBossPower:[267,252,228,199] // SLOTH: effective Boss Power by break count [0,1,2,3]
 };
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
@@ -290,7 +291,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.35,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.175,rerollBase:50,golemCombat:.90,
+G.DATA.balance={finalHazardThreat:28,finalGapPenalty:2,finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.35,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.175,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

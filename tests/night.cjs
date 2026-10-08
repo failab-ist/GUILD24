@@ -535,10 +535,10 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* v2.9.2 third pass (User 2026-09-26): DAY 11~20 at 1.10, DAY 21+ back to the late 0.80 */
  /* v2.9.11 (User 2026-09-28): early 1.50 -> 1.40, then 1.45 after the combined re-measure */
  /* v2.9.13 (User 2026-09-30): DAY 21+ 0.80 -> 1.10; the DAY 9~10 step keeps 0.80 as its own `step`, DAY 1~20 unchanged */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.45,step:0.80,late:1.10,mid:1.10,midFrom:10,midTo:20},'the shipped slope is the canonical one');
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.45,step:0.80,late:1.05,mid:1.10,midFrom:10,midTo:20},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-day*1.45)<1e-9,'D'+day+' is the single early slope');
- for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.95],[24,29.25],[29,34.75],[30,35.85]])
+ for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.90],[24,29.05],[29,34.30],[30,35.35]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
  /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 on DAY 1~21, x .95 from DAY 22 */
