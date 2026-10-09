@@ -127,6 +127,8 @@ Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Can
 No new future-customer information (future Job, Level, Destination, Preparation Need, importance score); the currently
 authorized queue count stays. Not knowing who comes next is part of inventory allocation judgment.
 
+One approved aggregate reference exception (User 2026-10-09): while in SALE, the existing queue/progress area may reveal on demand the **same current-Day, per-open-Gate expected visitor totals** already disclosed in ORDER's `오늘` line. Counts cover the Day's full planned visitor queue and are **not remaining-visitor counts per Gate**. Reuse the original ORDER count source (`claimedGateFor` / planned queue), including its uncertainty; do not infer or reveal the next customer's individual expected/actual destination, identity, Job, traits, or order. No outcome / Item recommendation follows from this reference. Presentation / coach / QA -> UI_UX §SALE — QUEUE GATE COUNT REFERENCE.
+
 ## DESTINATION
 
 Player-facing label: `예상 목적지`
