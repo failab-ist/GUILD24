@@ -909,13 +909,15 @@ Insurance reversals (`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep t
 Every such customer gets it on their own card; there is no nightly cap (User 2026-10-09).
 
     entry 240   the worse verdict prints in its own tag (`사망` lays the black tape, 350 ms); the portrait greys
-    1000        the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone by 1260)
-    ~1150       the real Outcome stamps in its usual design (hold 860, fall 1.6 × → 1, dip 4 px); portrait colour returns
-    1300-1500   the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)
+    + pause     the card holds still until the worse cue has faded, then a short silence: 사망 +500, 중상 +100
+    1000+pause  the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone 260 later)
+    ~1150+pause the real Outcome stamps in its usual design (hold 860+pause, fall 1.6 × → 1, dip 4 px); portrait colour returns
+    1300-1500+pause  the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)
 
 - the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
 - reduced motion: the end state at once, the Item icon already beside its line
-- sound: `brink` (a dull thud) with the worse print, `shove` (a whoosh) on the shove, and on the landing a relief in
+- sound: the worse verdict's own Outcome cue (`death` / `severe`) with its print, ending before the shove (User 2026-10-09),
+  `shove` (a whoosh) on the shove, and on the landing a relief in
   place of the Outcome cue (never both, User 2026-10-09), sized by how far the result turned on 사망 > 중상 > 부상 > 퇴각 >
   성공 > 대성공: `saved1` one step, `saved2` two, `saved3` three or more. Reduced motion: the relief at once
 - 다음 / 전체 건너뛰기 behave as for any stamp
