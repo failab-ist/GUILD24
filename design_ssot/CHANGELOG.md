@@ -34,6 +34,12 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Coach review (User 2026-10-10)
+
+- DAY 1 ORDER gains the `상품 종류` mark before `발주 확정`: what 음식·음료 / 포션 / 야외장비 / 보험 are for, on the first offer's kind label. COPY_AUDIT §3-2; UI_UX §TUTORIAL.
+- The Bag mark is the DAY 1 first sale's (was DAY 4). The Stats mark drops 포션 and reads 투력 → fighting, one of 강인함·기동·정신 per Hazard. COPY_AUDIT §3-6 / §3-7.
+- NIGHT Wallet gain mark: only on a 성공 / 대성공 record, and the line says every living return gains, a won one by far the most (it showed on a 퇴각 record with `이긴 손님`). NIGHT Counter mark: only where the result proof credits the Counter Item, so the record names it (it showed under a Potion's line). NIGHT_CLOSING §DISCOVERY LINE; COPY_AUDIT §26-2.
+
 ## After v2.11.1 — Combat variance ±12% and preparation lines (User 2026-10-09)
 
 - Ordinary combat variance ±17.5% -> ±12% (`combatNoise` 0.12) so a sold Item moves the result more than the roll; the average stays at the same threshold. The Final roll (0.92~1.08) is unchanged. DUNGEON_HAZARD §COMBAT VARIANCE / SIM-Q01. Not measured yet (AGENTS §9-A).
