@@ -1,11 +1,11 @@
 # WORK_STATE
 
 DATE: 2026-10-09
-STATE: V2_11_1_PLUS_APPROVED_WORK (승인된 밸런스·후속 UI·소스/문구 일치 점검 반영). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+STATE: V2_12_0 (밸런스 · 소스/문구 점검 · 코치 · 소리 · 밤 결과 연출, User 컨펌 2026-10-09). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 버전 v2.11.1과 승인된 후속 작업을 유지한다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
+- repository: `failab-ist/GUILD24`. 현행 버전은 v2.12.0이다(v2.11.1 이후 PR #112~#142 묶음, 내용은 `design_ssot/CHANGELOG.md` §v2.12.0). 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
 - 승인된 밸런스는 이미 채택됐다: PR #116의 성장·처진 인원 경험치·Final 조정·포션 유통, PR #123의 직업 및 절반 강도 일반 게이트/화염. 현행 숫자는 각각 NPC_TRAIT / DUNGEON_HAZARD / BOSS / FINAL_EXPEDITION / RELIC owner를 따른다. 과거 후보를 현재 미적용 상태라고 다시 적지 않는다.
 - 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 이후 추가 밸런스 측정은 없다.
 - 최신 main의 SALE 남은 손님 팝오버·코치 분산·도움말 끄기 연동·판매 상품이 살린 NIGHT 연출·보험 원인 표시는 유지한다. 이번 통합 기준 main은 `e3de85dc`다.
@@ -16,6 +16,7 @@ STATE: V2_11_1_PLUS_APPROVED_WORK (승인된 밸런스·후속 UI·소스/문구
 
 | 버전 | 내용 |
 |---|---|
+| v2.12.0 (User 2026-10-09 컨펌) | 경험치 곡선 · 직업 · 절반 강도 게이트 · 전투 흔들림 ±12% · 처진 손님 생환 경험치 · 포션 유통, 소스/문구 일치 점검(사건 55종), 코치 재정리(하루 하나), 밤 결과 「준비가 살렸다」와 경우별 대사, 소리 교체(CC0), 에셋 미리 불러오기 |
 | v2.11.1 (User 2026-10-05 컨펌) | 밤 피로 변화 오버레이 · 실제 원인 기록 · 장식 반영, 바가지 거절 영수증 · 건강 표기 생략, 발주 위험 보기 압축 · 리롤 PNG · DAY 4 안내, 첫 마왕성 단계별 코치 · 개인별 환경 대응 · 소지금 표기. 판정·밸런스 변경 없음 |
 | v2.9.14 (PR #50) | 플레이 피드백: 환경 대응을 SALE에 숫자로(선택 상품 미리보기), 미방문 지갑, 대응템 보장이 리롤까지 셈, 야전 정비대 모든 대응 강화, 원정 전문 인증 → 원정 작전실, 무료 점포지원은 `선택` |
 | v2.10.0 (PR #52) | 성공 메타: 숨은 평판 제거, 게이트 성공 상향, 대응 따라 사고 증가, 지갑이 결과를 따라감, 준비 부족 실패 비용, 마왕전 보정, 장식 재조정(추모 방명록 +1 · 알뜰 금고 등), 장식 구매 키 축소 |

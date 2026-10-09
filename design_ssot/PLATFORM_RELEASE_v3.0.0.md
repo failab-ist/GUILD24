@@ -4,12 +4,12 @@ DOC=PLATFORM_RELEASE
 OWNER=external_release,android_wrapper,package_identity,native_save,cloud_save,app_lifecycle,android_back,haptics
 RELEASE_TARGET=v3.0.0
 DOC_AUTHORITY=AUTHORITATIVE_RELEASE_SPEC
-GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.11.1
+GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.12.0
 
 ## ROLE
 
 This owner holds the Android v3.0.0 release-integration behaviour approved by the User.
-It does not reopen or redesign the closed v2.11.1 gameplay rules.
+It does not reopen or redesign the closed v2.12.0 gameplay rules.
 
 Implementation details that do not change Player-facing behaviour remain WORK choices.
 
