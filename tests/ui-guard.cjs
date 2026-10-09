@@ -1764,8 +1764,11 @@ test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fas
  // synthesised now, the two files no longer ship (reports/ASSETS.md)
  for(const t of ['quantity','quantset','ui'])assert.ok(!Sound.samples[t],t+' is synthesised');
  for(const f of ['tick','soft'])assert.ok(!fs.existsSync(path.join(root,'dist/ui/assets/audio',f+'.mp3')),f+'.mp3 no longer ships');
- for(const t of ['great','retreat','injury','severe','death','rescue','bossmajor','bosscompact'])
+ for(const t of ['great','retreat','injury','death','rescue','bossmajor','bosscompact'])
   assert.ok(!Sound.samples[t],t+' stays synthesised, so its family stays in tune');
+ // User 2026-10-09: picked by ear from the candidates, so these carry a recorded body (the synthesised shape is the fallback)
+ for(const t of ['crate','newstore','return','severe'])
+  assert.ok(Sound.samples[t],t+' plays a recorded body');
  // and no sampled cue can go silent when its file is missing
  assert.ok(/if\(!body\|\|sh\.accent\)notes\.forEach/.test(code),'the synthesised shape is still the fallback');
  // MORNING / ORDER / SALE / NIGHT / FINAL each have a bed, told apart by arrangement
@@ -1956,7 +1959,7 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/'<li class="wh-slot'\+mark\+'" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
  /* User 2026-10-01: an order that passes a row of the phone sheet grows it to the new height over the first beat, never a one-frame jump */
  assert.ok(/if\(to>h\.sheetH\+1\)\{sheet\.style\.overflow='hidden';A\(sheet,\{height:\{from:h\.sheetH,to,duration:STAMP_FALL\*2/.test(o),'the sheet grows into its new row');
- const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&Sound.samples.crate,'crate plays a recorded body');
  assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
 });
 
