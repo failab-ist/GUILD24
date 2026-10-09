@@ -670,7 +670,7 @@ answer:
     귀환 후 피로 N
     귀환 후 피로 N · {band}
 
-Band from 20 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6. The Fatigue row opens an overlay
+Band from 10 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6. The Fatigue row opens an overlay
 of actual daily causes (Function/Effect: 15px / 600), with the five bands in smaller type below (14px / 600, readable contrast). The overlay starts with a compact starting-to-settled row (15px / 600 figures; secondary labels 13px / 400), then lists the actual deltas; rule text keeps at least 4.5:1 contrast on a solid dark plane. NIGHT_CLOSING §FATIGUE RESULT owns the recorded path
 and settled value; the inline next-decision line does not repeat the numeric Fatigue.
 
@@ -1133,9 +1133,9 @@ Each stage teaches its decision once per account, using the existing `tutorial['
 - Roster: Fatigue / Injury / Wallet inspection on a visible candidate card, then the three-member cap and irreversible commitment on `원정대 확정`.
 - Committed preparation: every Hazard applies to each participant, anchored to that participant's environment meters. Reuse the existing party-wide `subjugation` Coach ID and forecast target to teach reading the overall forecast with each participant's environment meters and choosing supplies from their own needs. The detailed forecast explanation remains in its anchored `?` Help.
 
-Support, last order, roster and preparation are separate skip groups. `안내 건너뛰기` completes only the current stage;
-future stages remain eligible. No new Run / Account flag or migration is required. Completion survives save/load and new
-Runs; settings `안내 끄기` suppresses all marks and `안내 다시 보기` clears the existing `coach-*` records.
+Support, last order, roster and preparation are separate coach groups. Each mark's `도움말 끄기` is the settings switch itself
+(the existing `tutorial.skipped`): it suppresses every mark, not only the current stage. No new Run / Account flag or migration
+is required. Completion survives save/load and new Runs; settings `도움말 다시 보기` clears the existing `coach-*` records.
 Ordinary modals and Boss reveal holds still suppress coaches. Exact approved copy -> COPY_AUDIT §14-9.
 
 ### PARTY SELECTION
@@ -3080,7 +3080,7 @@ action separated; no new control framework.
 #### UI-Q-v28-19 — SETTINGS / DEBUG BOUNDARY
 Ordinary Player surface: \`소리 켜기 / 소리 끄기\`; \`전체 데이터 초기화\`; no reproducibility Seed control;
 no \`로컬 실행 지원 · 외부 연결 없음\` footer. No new Debug menu is required for PASS.
-Settings carries one `안내` switch (`안내 끄기` / `안내 다시 보기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. No new Save field.
+Settings carries one `안내` switch (`도움말 끄기` / `도움말 다시 보기`, the same switch as each mark's `도움말 끄기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. No new Save field.
 
 #### UI-Q-v28-19B — DEBUG / SEED REPRODUCTION PATH
 
