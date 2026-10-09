@@ -69,10 +69,10 @@ P.canBreakSeal=function(){const s=this.run,w=s.relicWindow;
   && (w.milestoneDay===0||s.day<w.expiryDay);};
 
 P.breakSeal=function(){const s=this.run,w=s.relicWindow;
- if(!this.canBreakSeal())throw Error('지금 봉인을 풀 수 없습니다.');
+ if(!this.canBreakSeal())throw Error('지금 봉인을 강화할 수 없습니다.');
  w.consumedBySealBreak=true;w.sealBreakCommitted=true;w.purchaseDay=s.day;
  s.sealBreakCount=(s.sealBreakCount||0)+1;
- s.notice='봉인 하나가 풀렸다. 이번 점포지원은 받지 않는다.';
+ s.notice='봉인 하나를 더 단단히 걸었다. 이번 점포지원은 받지 않는다.';
  this.save();};
 
 P.canBuyRelic=function(){const s=this.run,w=s.relicWindow;return ['foundation','morning','order','final'].includes(s.phase)&&w&&!w.purchased&&!w.consumedBySealBreak&&(s.phase==='foundation'||s.day<w.expiryDay)&&s.facilities.filter(id=>D.relicBy[id]).length<7;};

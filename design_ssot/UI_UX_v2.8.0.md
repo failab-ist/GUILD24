@@ -1037,8 +1037,8 @@ bury it in stacked cards or repeat it every Phase. Catalog -> EVENT_v2.8.0.md.
 
 Gameplay -> BOSS_v2.8.0.md; Final Family -> FINAL_EXPEDITION_v2.8.0.md; wording -> COPY_AUDIT_APPROVED_v2.8.0.md.
 - D5: `Boss Identity` focused reveal -> D5 Relic reveal
-- D15: `Boss Trait` focused reveal -> D15 Relic window decision (`Relic 획득` vs `봉인 해제` when Sloth opportunity)
-- D30: D30 Relic window decision (`Relic 획득` vs `봉인 해제` for Sloth) -> Final preparation / lock
+- D15: `Boss Trait` focused reveal -> D15 Relic window decision (`Relic 획득` vs `봉인 강화` when Sloth opportunity)
+- D30: D30 Relic window decision (`Relic 획득` vs `봉인 강화` for Sloth) -> Final preparation / lock
 
 ### FINAL TIMELINE PRESENTATION
 
@@ -1132,7 +1132,7 @@ Before Final Lock, every Boss-changed visible value shows `original → applied`
   Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are not shown as reduced
 - LUST: each affected non-regular participant's 투력 / 강인함 / 기동 / 정신
 - GREED: 목표 매출 · 현재 매출 · 달성률 · 현재 탐욕 강화 %
-- SLOTH: 봉인 해제 상태 · 현재 위협 단계
+- SLOTH: 봉인 강화 상태 · 현재 위협 단계
 
 The committed member Stat grid and read-only detail use finalPreRoll snapshots; changed final modifiers show prepared → applied with proven source deltas. 단골 감사 현수막 is a separate source. Uncommitted candidates and SALE keep their preparation readings.
 No Final success %. Identity `탐식의 마왕 글러트니`; Trait prose -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
@@ -1142,13 +1142,13 @@ No Final success %. Identity `탐식의 마왕 글러트니`; Trait prose -> `CO
 Normal six Bosses: `Final prep / confrontation / result -> D30 BATTLE`. SLOTH: SB0 -> BASE reuse; SB1 -> D30 SB1; SB2 -> D30
 SB2; SB3 -> D30 SB3. The Final Boss is never name-only when its art exists.
 - Boss/Family information never follows the Relic choice
-- the Sloth choice reads `Relic 획득` vs `봉인 해제` as exclusive: the seal choice is its own dark violet plate apart from the
+- the Sloth choice reads `Relic 획득` vs `봉인 강화` as exclusive: the seal choice is its own dark violet plate apart from the
   candidates, with no violet edge bar on it or the seal count
-- a small `접기 ▼` key at the plate's top right — or a tap on the plate outside its `봉인 해제` key — folds it to a chip
-  `봉인 해제 {N} / 3 ▲` (so a phone shows the last candidate); the chip unfolds it; windows open unfolded; candidate taps never fold
-- `봉인 해제` spends and closes the window like 구매; a spent window (bought or seal broken) shows `닫기`, never `나중에 결정`
+- a small `접기 ▼` key at the plate's top right — or a tap on the plate outside its `봉인 강화` key — folds it to a chip
+  `봉인 강화 {N} / 3 ▲` (so a phone shows the last candidate); the chip unfolds it; windows open unfolded; candidate taps never fold
+- `봉인 강화` spends and closes the window like 구매; a spent window (bought or seal broken) shows `닫기`, never `나중에 결정`
 - once a SLOTH Run's seals are revealed (D15 Trait), the owned list (`점포지원 N / 7` chip's sheet) opens with
-  `슬로스 봉인 해제 {N} / 3`; the chip itself is unchanged
+  `슬로스 봉인 강화 {N} / 3`; the chip itself is unchanged
 - no new permanent Phase; Seen state stable across Save/Reload; art never pushes decision information far below the fold
 
 ### FINAL — BOSS REVEAL ENTRY (v2.9.2 H6)

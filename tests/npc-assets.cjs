@@ -111,9 +111,9 @@ test('BOSS: the shipped derivation reads the Day first, so a broken seal never l
   assert.ok(art('SLOTH',day,breaks).includes(BASE),
    'DAY '+day+' with '+breaks+' break(s) still shows the base form');
  assert.ok(art('SLOTH',5,0).includes(BASE),'and so does DAY 5 with none');
- assert.ok(art('SLOTH',30,0).includes(BASE),'zero breaks reuses the base form on DAY 30 too');
- for(const n of [1,2,3])
-  assert.ok(art('SLOTH',30,n).includes('B007_SLOTH_D30_SB'+n),'DAY 30 with '+n+' break(s) shows SB'+n);
+ assert.ok(art('SLOTH',30,3).includes(BASE),'three seals held (봉인 강화 3) reuse the sleeping base form on DAY 30');
+ for(const n of [0,1,2])
+  assert.ok(art('SLOTH',30,n).includes('B007_SLOTH_D30_SB'+(3-n)),'DAY 30 with '+n+' seal(s) held shows SB'+(3-n));
  // every form the runtime can reach is a file that ships, and D30_SB0 is neither
  for(const [id,day,breaks] of [['SLOTH',5,0],['SLOTH',15,1],['SLOTH',30,0],['SLOTH',30,1],['SLOTH',30,2],['SLOTH',30,3]])
   assert.ok(shipped(art(id,day,breaks)),id+' D'+day+'/'+breaks+' resolves to a shipped file');

@@ -2347,6 +2347,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-member>.who{display:flex;align-items:center;gap:10px;margin-bottom:9px}
 .final-member>.who b{display:block;font:600 15px/1.3 var(--ui);color:#f2e7cd}
 .final-member>.who small{display:block;font:400 12px/1.3 var(--ui);color:#a2947c}
+.final-member>.who>span:nth-child(2){min-width:0}
+.final-member>.who .who-traits{font-size:11px;line-height:1;margin-top:1px;color:#8c7f69;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .final-member>.who .wallet{margin-left:auto;font:400 12px/1.3 var(--ui);color:#cdbf9f;text-align:right}
 .final-member>.who .wallet b{display:inline;font-size:14px;color:var(--wallet)}
 .final-member .bag-label{display:block;font:400 11px/1 var(--ui);color:#a2947c;margin-bottom:6px}
@@ -3492,7 +3494,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .seal-chip{display:block;margin:12px 16px 0 auto;min-height:40px;padding:8px 14px;font:500 14px/1 var(--f-plate);-webkit-font-smoothing:none;
  color:#dcc8f0;background:#2c2240;box-shadow:inset 0 0 0 1px #5a4786;border:0;cursor:pointer}
 .seal-chip::after{content:' ▲';font-size:11px} /* the fold mark lives in CSS, as the counter tray's does */
-/* 봉인 해제 is the other turning point on the gate chain, so it takes the same construction in
+/* 봉인 강화 is the other turning point on the gate chain, so it takes the same construction in
    the sigil's own flat violet - the block's `inset 4px 0 0 #7a5fa8` rule above is where that
    colour already lives. Flat fill, hard bevel, thrown on press. */
 .seal-choice .stamp{min-height:56px;font:500 18px/1 var(--f-sign);letter-spacing:.12em;

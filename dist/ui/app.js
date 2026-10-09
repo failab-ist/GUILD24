@@ -2108,7 +2108,7 @@ function loadoutModal(){const lo=game.run?.loadout||{};
    many seals are broken - they took Store Support windows but hold no slot, so neither the 점포지원 N / 7 chip nor the list
    showed them. The chip itself stays as it is. */
 function sealCount(){const s=game.run;if(s?.bossId!=='SLOTH'||!s.bossReveal?.traitSeen)return '';
- return '<p class="seal-count">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>';}
+ return '<p class="seal-count">슬로스 봉인 강화 <b>'+(s.sealBreakCount||0)+' / 3</b></p>';}
 function relicsModal(){
    const owned=game.ownedRelics();
    if(!owned.length) return '<div class="owned-relics">'+sealCount()+'<p class="muted" style="padding:16px;text-align:center">보유한 점포지원이 없다.</p></div>';
@@ -2164,19 +2164,19 @@ function relicReroll(){if(!game.canRerollRelics())return '';const price=game.rel
    acquisition can be spent on, so it sits beside the candidates and says as much.
    Shown only on a Run that is actually facing SLOTH, and only on an opportunity Day. */
 /* v2.9.10 quick patch (User 2026-09-28): on a phone the seal panel sits under the list and hides the last candidate, so a
-   tap on the panel itself - anywhere but its 봉인 해제 key - folds it to a chip, and the chip unfolds it. A window opens
+   tap on the panel itself - anywhere but its 봉인 강화 key - folds it to a chip, and the chip unfolds it. A window opens
    unfolded; the candidates never fold it. */
 let sealFolded=false;
 /* the small 접기 key at the plate's top right says the plate folds; the rest of the plate folds it too (User 2026-09-28) */
 const SEAL_FOLD_KEY='<button class="seal-fold" data-action="seal-fold" aria-label="봉인 칸 접기">접기</button>';
 function sealChoice(){const s=game.run,w=s.relicWindow;
  if(!w||!w.slothSealOpportunity)return '';
- const broken=s.sealBreakCount||0;
- if(sealFolded)return '<button class="seal-chip" data-action="seal-fold" aria-expanded="false">봉인 해제 '+broken+' / 3</button>';
- if(w.consumedBySealBreak)return '<div class="seal-choice done" data-action="seal-fold" aria-expanded="true">'+SEAL_FOLD_KEY+'<b>봉인 해제 '+broken+' / 3</b><p>이번 점포지원은 받지 않는다.</p></div>';
- return '<div class="seal-choice" data-action="seal-fold" aria-expanded="true">'+SEAL_FOLD_KEY+'<b>봉인 해제 '+broken+' / 3</b>'
-  +'<p>점포지원을 받는 대신 봉인 하나를 풀 수 있다. 둘 중 하나만 고를 수 있다.</p>'
-  +btn('봉인 해제','break-seal','stamp',game.canBreakSeal()?'':'disabled')+'</div>';}
+ const held=s.sealBreakCount||0;
+ if(sealFolded)return '<button class="seal-chip" data-action="seal-fold" aria-expanded="false">봉인 강화 '+held+' / 3</button>';
+ if(w.consumedBySealBreak)return '<div class="seal-choice done" data-action="seal-fold" aria-expanded="true">'+SEAL_FOLD_KEY+'<b>봉인 강화 '+held+' / 3</b><p>이번 점포지원은 받지 않는다.</p></div>';
+ return '<div class="seal-choice" data-action="seal-fold" aria-expanded="true">'+SEAL_FOLD_KEY+'<b>봉인 강화 '+held+' / 3</b>'
+  +'<p>점포지원을 받는 대신 봉인 하나를 강화할 수 있다. 둘 중 하나만 고를 수 있다.</p>'
+  +btn('봉인 강화','break-seal','stamp',game.canBreakSeal()?'':'disabled')+'</div>';}
 /* The end of a store is a statement from head office, so it is printed on the same tape the
    player reads every night rather than announced on a landing banner. The English eyebrow,
    the hero headline and the loose row of numbers under it are gone: what closed the store is
@@ -2283,7 +2283,7 @@ function finalThreat(d){
  +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+finalTrait()+'</section>';
 }
 function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
- return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
+ return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small><small class="who-traits">'+E(Presentation.traits(n).map(t=>D.traitBy[t].name).join(' · '))+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
  +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
  +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
  +'<span class="final-environments"><span class="env-caption">환경 대응 (권능 적용 전)</span>'+finalEnvironment(p,d)+'</span></div>';
@@ -2320,7 +2320,7 @@ function finalScreen(){
     standing screen has to say which one. It used to open on a generic 마왕성 plate with a
     28px procedural mark, so every Run's last day looked identical. Identity and art resolve
     from the Run exactly as the D5 / D15 reveals do - Scene.bossArt reads bossId, day and
-    sealBreakCount, so SLOTH shows the form its broken seals earned and the others their
+    sealBreakCount, so SLOTH shows the form its held seals leave (3 held = asleep) and the others their
     battle form - and the castle stays as the place, under the name of who is in it. */
  const ordering=finalIsOrdering(s),b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const body='<div class="gate-zero">'
