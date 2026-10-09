@@ -1764,8 +1764,11 @@ test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fas
  // synthesised now, the two files no longer ship (reports/ASSETS.md)
  for(const t of ['quantity','quantset','ui'])assert.ok(!Sound.samples[t],t+' is synthesised');
  for(const f of ['tick','soft'])assert.ok(!fs.existsSync(path.join(root,'dist/ui/assets/audio',f+'.mp3')),f+'.mp3 no longer ships');
- for(const t of ['great','retreat','injury','severe','death','rescue','bossmajor','bosscompact'])
+ for(const t of ['great','retreat','injury','death','rescue','bossmajor','bosscompact'])
   assert.ok(!Sound.samples[t],t+' stays synthesised, so its family stays in tune');
+ // User 2026-10-09: picked by ear from the candidates, so these carry a recorded body (the synthesised shape is the fallback)
+ for(const t of ['crate','newstore','return','severe'])
+  assert.ok(Sound.samples[t],t+' plays a recorded body');
  // and no sampled cue can go silent when its file is missing
  assert.ok(/if\(!body\|\|sh\.accent\)notes\.forEach/.test(code),'the synthesised shape is still the fallback');
  // MORNING / ORDER / SALE / NIGHT / FINAL each have a bed, told apart by arrangement
@@ -1956,7 +1959,7 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/'<li class="wh-slot'\+mark\+'" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
  /* User 2026-10-01: an order that passes a row of the phone sheet grows it to the new height over the first beat, never a one-frame jump */
  assert.ok(/if\(to>h\.sheetH\+1\)\{sheet\.style\.overflow='hidden';A\(sheet,\{height:\{from:h\.sheetH,to,duration:STAMP_FALL\*2/.test(o),'the sheet grows into its new row');
- const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&Sound.samples.crate,'crate plays a recorded body');
  assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
 });
 
@@ -2486,7 +2489,8 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/'fatigue'/.test(fn('tray'))&&!/' prepared'/.test(fn('kitLine')),'and no anchor class is left for them');
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): they are taught after they act - a NIGHT coach mark per taught rule,
     anchored to the class the returning record carries, in Copy.learned order, after the NIGHT result mark */
- assert.ok(steps.includes("night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text]),")&&steps.includes("['earn','.changed .tok.gain','이긴 손님은 소지금이 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]"),'the NIGHT marks are the taught rules plus the Wallet gain row (the result mark is retired, COACH DIET)');
+ assert.ok(steps.includes("night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text]),")&&steps.includes("['earn','.changed.won .tok.gain','살아 돌아온 손님은 소지금이 늘어난다. 원정에 성공하면 훨씬 크게 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]")
+  &&/'<div class="changed'\+\(r\.outcome==='성공'\|\|r\.outcome==='대성공'\?' won':''\)/.test(fn('beat')),'the NIGHT marks are the taught rules plus the Wallet gain row (the result mark is retired, COACH DIET)');
  /* User 2026-10-04: one NIGHT mark a night, the most serious rule first */
  assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','prepared','earn','great','counter','fatigue'];"),'NIGHT priority: death, severe, injured, prepared, earn, great, counter, fatigue');
  assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
@@ -2500,7 +2504,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
+   ['stats','투력이 높을수록 적과 싸워 이기기 쉽다. 위험마다 강인함·기동·정신 중 쓰이는 능력치가 하나씩 정해져 있다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
    ['flow','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
@@ -2528,7 +2532,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     line itself); the price keys carry one mark when they first show (COPY_AUDIT §3-14), the first refused 바가지 another (§26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','greatchance','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','greatchance','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination and the price keys, the Bag after its first sale; Stats, the flow and the two outlook boxes start on later DAYs; the rest are contextual');
+ /* User 2026-10-10: the Bag is a core idea - its mark is the DAY 1 first sale's, no DAY gate */
+ assert.ok(sell.includes("['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],"),'the Bag mark has no DAY gate');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']`)
   &&sell.includes(`['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.']`),'the price-key mark and the refused-바가지 lesson, verbatim');
  assert.ok(sell.includes(`['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5]`),'the 대성공 기회 mark waits for DAY 5, clear of the other SALE marks (User 2026-10-09)');
@@ -3664,9 +3670,11 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const scr of ['morningScreen','orderScreen','saleScreen','nightScreen','closingScreen'])assert.ok(fn(scr).includes('taskLine('),scr+' places the line');
  assert.ok(/\.task-line\{[^}]*font-size:clamp\(12px,3\.3vw,13px\)[^}]*white-space:nowrap/.test(css),'one line, never two at 360 (size follows width, no breakpoint)');
  assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
- // first-ORDER coach (UI_UX §TUTORIAL — COACH DIET, User 2026-09-30): 발주 확정 alone; the gold mark stays retired
- const order=/ order:\[(.*)\],\n/.exec(app)[1];
- assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['confirm','[data-action="confirm-order"]']],'one step, on the confirm key');
+ // first-ORDER coach (UI_UX §TUTORIAL — COACH DIET): the Item kinds (User 2026-10-10), then 발주 확정; the gold mark stays retired
+ const order=app.slice(app.indexOf(' order:[['),app.indexOf(' sell:[['));
+ assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]).slice(0,2),[['kinds','.p-order li.line .kind'],['confirm','[data-action="confirm-order"]']],'the kinds mark on the first offer\'s kind label, then the confirm key');
+ assert.ok(order.includes("['kinds','.p-order li.line .kind','상품 종류마다 쓰임이 다르다. 음식·음료는 피로를 덜어 준다. 포션은 투력을 올린다. 야외장비는 위험에 대응한다. 보험은 원정이 잘못됐을 때 피해를 줄인다.'],"),'the approved kinds line, DAY 1 (COPY_AUDIT §3-2)');
+ assert.ok(['food','drink','potion','gear','insurance'].every(k=>DATA.categories[k]&&order.includes(DATA.categories[k])),'it names the kinds by their on-screen labels');
  assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 for every Stat (Stat n당 대응 1)

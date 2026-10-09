@@ -664,7 +664,13 @@ test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted
  const M=Meta,acc={knowledge:{},discoveries:[]},K=Copy.learned.map(([k])=>k),T=k=>Copy.learned.find(x=>x[0]===k)[1];
  const rep=o=>({day:4,dungeon:'spider',items:[],events:[],outcome:'성공',storeBonus:0,...o});
  const notebook=()=>acc.discoveries.filter(x=>/^learn-/.test(x.id)).map(x=>x.id);
- const r1=rep({outcome:'부상',fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:[]}]});M.observe(acc,r1);
+ /* User 2026-10-10: the Counter rule is told only where the result proof credits the Counter Item - a pressure it merely lowered
+    leaves the record silent about it (often under a Potion's line), so no mark there */
+ {const quiet=rep({outcome:'성공',events:[{id:'hazard',hazards:['poison'],items:['mask']}],heroProof:{outcome:{items:['lowpotion'],worse:'퇴각'}}});
+  M.observe({knowledge:{},discoveries:[]},quiet);assert.ok(!quiet.acted.includes('counter'),'a Counter the record does not name carries no Counter rule');
+  const bare=rep({outcome:'성공',events:[{id:'hazard',hazards:['poison'],items:['mask']}]});
+  M.observe({knowledge:{},discoveries:[]},bare);assert.ok(!bare.acted.includes('counter'),'nor one with no result proof at all');}
+ const r1=rep({outcome:'부상',fatigueBeforeExpedition:12,events:[{id:'hazard',hazards:['poison'],items:['mask']}],heroProof:{outcome:{items:['mask'],worse:'중상'}}});M.observe(acc,r1);
  assert.deepEqual(r1.acted,['injured','fatigue','counter'],'injured, fatigue, counter - in coach order');
  assert.deepEqual(notebook(),['learn-injured','learn-fatigue','learn-counter'],'each kept in the notebook with its line');
  assert.equal(acc.discoveries.find(x=>x.id==='learn-injured').text,T('injured'));

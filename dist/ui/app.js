@@ -1290,7 +1290,7 @@ function beat(r){
      LAYOUT — COMBAT FACT retires it from the player-facing record at every hierarchy. */
   +(!gone&&why?'<p class="why">'+E(why)+'</p>':'')
  +'</div>'
- +(gone?'':'<div class="changed">'+changedRows(r)+'</div>')
+ +(gone?'':'<div class="changed'+(r.outcome==='성공'||r.outcome==='대성공'?' won':'')+'">'+changedRows(r)+'</div>')
  +'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
@@ -1409,7 +1409,9 @@ const coachSteps={
   ['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 발주 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
- order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
+ /* User 2026-10-10: DAY 1 ORDER names what each Item kind is for, on the first offer row's kind label (`음식 · 일반`), before 발주 확정 */
+ order:[['kinds','.p-order li.line .kind','상품 종류마다 쓰임이 다르다. 음식·음료는 피로를 덜어 준다. 포션은 투력을 올린다. 야외장비는 위험에 대응한다. 보험은 원정이 잘못됐을 때 피해를 줄인다.'],
+  ['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
   ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
   /* COPY_AUDIT §3-14: DAY 4, independently of other ORDER marks. */
@@ -1426,7 +1428,7 @@ const coachSteps={
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  /* COPY_AUDIT §3-7 STATS: the first time a customer's Stats are on screen - what they are, that they differ per customer,
     투력 for combat, the other three for the Hazards and each one's side role. No number, no verdict. */
- ['stats','.dossier .detail-stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.',,3],
+ ['stats','.dossier .detail-stats','투력이 높을수록 적과 싸워 이기기 쉽다. 위험마다 강인함·기동·정신 중 쓰이는 능력치가 하나씩 정해져 있다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.',,3],
  /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
  ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.',,2],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
@@ -1441,7 +1443,7 @@ const coachSteps={
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','보수를 받은 손님이다. 바가지(150%)를 해 볼 만하다. 다만 거절되면 그 상품은 오늘 못 팔고, 팔려도 단골도가 깎인다.'],
  ['returning','.who.returning','다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.',,4],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',,4],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
  /* COPY_AUDIT §3 단골 (User 2026-10-04): the first 단골 badge on the counter, DAY 6 at the earliest - two days clear of the
     DAY 4 returning / Bag marks - names the line and how Loyalty moves, numbers read from the tables (Copy.loyalty) */
  ['regular','.nameplate.regular',Copy.loyalty.coach(),,6],
@@ -1455,7 +1457,9 @@ const coachSteps={
  /* User 2026-10-04: one NIGHT mark a night, the most serious rule first (death ends the Run, a Severe Injury costs days, ...); the
     rest wait for the next night they act. `earn` is the Wallet gain row - the first win that raised a customer's Wallet. */
  night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text]),
-  ['earn','.changed .tok.gain','이긴 손님은 소지금이 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]
+  /* User 2026-10-10: every living return adds Wallet, a won expedition (성공 / 대성공) by far the most - so the mark waits for
+     the first won record's gain row (`.changed.won`) */
+  ['earn','.changed.won .tok.gain','살아 돌아온 손님은 소지금이 늘어난다. 원정에 성공하면 훨씬 크게 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]
   .sort((a,b)=>NIGHT_MARKS.indexOf(a[0].replace('learn-',''))-NIGHT_MARKS.indexOf(b[0].replace('learn-',''))),
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,

@@ -69,9 +69,9 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    fit counted bass a phone cannot play, so the low cues were raised until they tore; they now carry `over` / `cut` in
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
- /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:5.195,injury:8.199,severe:5.019,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
- /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,
- /* action */ depart:1.26,return:3.694,gold:4.203,spend:4.191,crate:5.353,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
+ /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
+ /* action */ depart:1.26,return:0.713,gold:4.203,spend:4.191,crate:2.941,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
  /* utility */ button:0.711,ui:5.564,
  /* repeat */ quantity:6.357,quantset:7.962,};
 const bgm={
@@ -120,7 +120,7 @@ const sfx={button:[440],ui:[1760,2217],fixture:[233,208],
  /* UI-Q-v28-23 / NIGHT OUTCOME AUDIO: one family, materially different members. Every name is
     chosen from an Outcome the result object already resolved to. `rescue` is the proven-state
     accent and never plays on its own; it lands behind the Outcome cue. */
- great:[523,659,784,1047],retreat:[440,392,330,262],injury:[262,220],severe:[196,165],
+ great:[523,659,784,1047],injury:[440,392,330,262],retreat:[262,220],severe:[196,165],
  death:[147,131],rescue:[659,988],
  /* 의무실 현판: a soft rising pair - relief, not a fanfare */
  heal:[587,880],
@@ -168,7 +168,9 @@ const sample={order:'stamp',sale:'register',overcharge:'register',
  /* v2.9.0 TRANSACTION BEAT A4: 손님 보내기 carries a recorded utility object (door / step family) */
  depart:'door',
  /* UI_UX §PROLOGUE: a page turning - Kenney RPG Audio bookFlip2 (CC0), reports/ASSETS.md */
- page:'page'};
+ page:'page',
+ /* User 2026-10-09: the recorded body alone carries these; the synthesised notes and noise stay only as the fallback */
+ crate:'crate',newstore:'newstore',return:'return',severe:'severe'};
 const buffers=new Map(),lastAt=new Map();
 /* Fetched once, on the first unmuted sync, so a muted player downloads nothing. A failure is
    swallowed on purpose: the synthesised shape is already this cue's fallback. */
@@ -279,14 +281,14 @@ const shape={
  /* UI_UX §PROLOGUE scene 3: the music cuts and a falling wah-wah answers the joke */
  page:{sampleGain:1},
  gag:{cut:250,gain:.7,dur:.24,type:'square',over:[.3],step:.17,sampleGain:.8},
- return:{gain:.95,dur:.22,type:'sine',step:.1,hit:1},
+ return:{solo:1,gain:.95,dur:.22,type:'sine',step:.1,hit:1},
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
     v2.9.2 H1: `hit` - the first note is the stamp's landing, so it starts at once and one step
     louder; every note, interval and step is unchanged. 사망 keeps its slow restrained attack. */
  great:{hit:1,gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
- retreat:{hit:1,gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
- injury:{cut:250,hit:1,gain:1,dur:.24,type:'triangle',over:[.4,.2],step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
- severe:{cut:250,hit:1,gain:1.1,dur:.4,type:'sawtooth',over:[.3,.2],step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.3,hz:280,q:.7,filter:'lowpass'},duck:.5},
+ injury:{hit:1,gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
+ retreat:{cut:250,hit:1,gain:1,dur:.24,type:'triangle',over:[.4,.2],step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
+ severe:{solo:1,cut:250,hit:1,gain:1.1,dur:.4,type:'sawtooth',over:[.3,.2],step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.3,hz:280,q:.7,filter:'lowpass'},duck:.5},
  /* restrained low drop: no boom, no fanfare, and the only cue allowed to be this long */
  death:{cut:200,gain:1.1,dur:1.4,type:'sine',over:[.7,.5,.3],step:.5,attack:.06,layer:{ratio:.5,at:0,dur:2,gain:.45},noise:{at:0,dur:1,gain:.2,hz:180,q:.6,filter:'lowpass'},duck:.75},
  rescue:{gain:.9,dur:.3,type:'sine',step:.09,layer:{ratio:2,at:.12,dur:.7,gain:.28},duck:.3},
@@ -306,13 +308,13 @@ const shape={
  sealfail:{cut:250,hit:1,gain:1,dur:.5,type:'sawtooth',over:[.3,.2],step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
  endwin:{gain:1.15,dur:.9,type:'triangle',step:.12,attack:.01,layer:{ratio:2,at:.04,dur:1.6,gain:.34},noise:{at:.48,dur:.8,gain:.18,hz:6000,q:1,filter:'highpass'},duck:.85},
  endfail:{cut:180,gain:1.1,dur:1.1,type:'sine',over:[.4,.25],step:.26,attack:.04,glide:.985,layer:{ratio:.5,at:0,dur:2.2,gain:.5},noise:{at:0,dur:1.2,gain:.22,hz:180,q:.6,filter:'lowpass'},duck:.85},
- crate:{cut:180,hit:1,gain:.8,dur:.07,type:'square',over:[.4,.3],step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.7,hz:2600,q:.6,filter:'highpass'},duck:.3},
+ crate:{solo:1,cut:400,hit:1,gain:.8,dur:.07,type:'square',over:[.4,.3],step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.7,hz:2600,q:.6,filter:'highpass'},duck:.3},
  /* v2.9.2 H4: one quiet dry tick for the whole receipt body - lighter and shorter than `crate`,
     never repeated per row */
  receipt:{noise:[{at:0,dur:.13,gain:.8,hz:2300,q:1.4,filter:'bandpass'},{at:.1,dur:.02,gain:.6,hz:3600,q:2,filter:'bandpass'}],duck:.15},
  begin:{gain:.95,dur:.24,type:'triangle',step:.09,layer:{ratio:2,at:.2,dur:.8,gain:.22},
   noise:{at:0,dur:.05,gain:.4,hz:900,q:.8,filter:'bandpass'},duck:.5},
- newstore:{gain:.8,dur:.18,type:'triangle',step:.11,glide:1.03,noise:{at:0,dur:.04,gain:.45,hz:3000,q:.7,filter:'highpass'},duck:.35},
+ newstore:{solo:1,gain:.8,dur:.18,type:'triangle',step:.11,glide:1.03,noise:{at:0,dur:.04,gain:.45,hz:3000,q:.7,filter:'highpass'},duck:.35},
  rumble:{cut:250,gain:1,dur:.7,type:'sine',attack:.01,noise:[{at:0,dur:.6,gain:.55,hz:150,q:.5,filter:'lowpass'},{at:0,dur:.55,gain:.8,hz:480,q:.8,filter:'bandpass'}],duck:.5},
  clash:{cut:180,hit:1,gain:.9,dur:.09,type:'square',over:[.5,.3],step:.04,attack:.002,glide:.9,noise:{at:0,dur:.08,gain:.75,hz:1800,q:.7,filter:'bandpass'},duck:.4},
  counter:{cut:180,hit:1,gain:1,dur:.16,type:'sawtooth',over:[.5,.4,.3],step:.06,attack:.003,glide:.9,noise:{at:0,dur:.14,gain:.6,hz:420,q:.6,filter:'lowpass'},duck:.45},
@@ -343,7 +345,7 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
      cannot play is heard through them at the same pitch (User 2026-09-29, SFX LEVELS) */
   if(sh.over)sh.over.forEach((g,k)=>g&&tone(hz*(k+2),at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1)*g,'sine',out,hit?{...sh,attack:.002}:sh));
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',out);});
- for(const nz of [].concat(sh.noise||[]))noiseVoice(t0+(nz.at??0),nz.dur??.09,SFX_VOICE*(nz.gain??1),nz,out);
+ if(!(body&&sh.solo))for(const nz of [].concat(sh.noise||[]))noiseVoice(t0+(nz.at??0),nz.dur??.09,SFX_VOICE*(nz.gain??1),nz,out);
  /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is
     the register's impact (x1.3, like `hit`); 바가지's run starts `tickLate` later on a lower first tick (`tickLow`) - the
     whole run moves, so the 70 ms spacing that states the count is kept. */
