@@ -1798,9 +1798,11 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
    mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
    and the next Day sorts afresh. */
 const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
-/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04) */
+/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04); on the SALE shelf the
+   current customer's own Gate leads them (User 2026-10-09) */
 const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];
-function shelfOrder(stocks,byHazard=true){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,hz=byHazard?todayHazards():[];
+function shelfOrder(stocks,byHazard=true,npc=null){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,gate=npc&&game.claimedGateFor(npc),
+ hz=byHazard?[...new Set([...(gate?gate.hazards:[]),...todayHazards()])]:[];
  if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
  for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
  const rank=st=>{const it=D.itemBy[st.item],c=Object.keys(it.effects).map(k=>hz.indexOf(k)).filter(i=>i>=0);
@@ -1816,7 +1818,7 @@ function shelf(isFinal=false){
    +(isFinal?'':relicRef())+'</div><div class="goods">'
  /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
     held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
- +shelfOrder(stocks,!isFinal).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
+ +shelfOrder(stocks,!isFinal,isFinal?null:n).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
