@@ -2493,7 +2493,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   &&/'<div class="changed'\+\(r\.outcome==='성공'\|\|r\.outcome==='대성공'\?' won':''\)/.test(fn('beat')),'the NIGHT marks are the taught rules plus the Wallet gain row (the result mark is retired, COACH DIET)');
  /* User 2026-10-04: one NIGHT mark a night, the most serious rule first; User 2026-10-10: then what the sold Item did, then what
     changes the next decision, then the rewards */
- assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','counter','prepared','fatigue','great','earn'];"),'NIGHT priority: death, severe, injured, counter, prepared, fatigue, great, earn');
+ assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','accident','counter','prepared','fatigue','great','earn'];"),'NIGHT priority: death, severe, injured, accident (User 2026-10-09), counter, prepared, fatigue, great, earn');
  assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */

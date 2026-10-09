@@ -106,6 +106,11 @@ function nightTone(r){return r.outcome==='사망'?'gone':
    2026-09-22 (NIGHT_CLOSING §OUTCOME LABEL): the label is exactly `생환`; the approved summary
    `사망 위기를 넘기고 살아 돌아왔다.` carries the rest. */
 function nightVerdict(r){return r.rescued&&r.outcome!=='death'?'생환':r.outcome;}
+/* 부상 after a won fight: when an environment accident did it, this sentence names it (nightWhy then stays silent) */
+const accidentHurt=r=>r.outcome==='부상'&&r.combatWon&&!!r.environmentHurt;
+const accidentName=r=>r.cause&&r.cause!=='accident'?D.hazards[r.cause]||'원정 환경':null;
+function woundedAfterWin(r){if(!r.environmentHurt)return '전투를 이겼지만 돌아오는 길은 험했다.';
+ const h=accidentName(r);return h?'전투는 이겼지만 '+h+' 때문에 다쳤다.':'전투는 이겼지만 예상치 못한 사고로 다쳤다.';}
 function nightHappened(r){
  /* DUNGEON_HAZARD_v2.7 rolls Death on any failure path, not only behind a lost fight, so the
     line may no longer name the fight as the cause on a won one - NIGHT_CLOSING forbids an
@@ -121,7 +126,7 @@ function nightHappened(r){
     guard can turn a won-fight injury into a retreat — so the line has to say which. */
  if(r.outcome==='퇴각')return r.combatWon?'전투는 이겼지만 원정을 끝내지 못하고 빠져나왔다.'
                                         :'원정은 끝내지 못했지만 무사히 빠져나왔다.';
- if(r.outcome==='부상')return r.combatWon?'전투를 이겼지만 돌아오는 길은 험했다.'
+ if(r.outcome==='부상')return r.combatWon?woundedAfterWin(r)
                                         :'원정을 끝내지 못하고 다친 채 돌아왔다.';
  return r.outcome==='대성공'?'예상보다 큰 성과를 내고 돌아왔다.':'원정을 마치고 돌아왔다.';}
 /* Importance decides presentation weight. Compactness is about how much COPY a routine
@@ -154,7 +159,7 @@ function nightRank(r){
    still drives the resolution and the Outcome summary's own wording. What is left here is what
    the Outcome does NOT already say: an attributed incident, and an event that speaks for itself. */
 function nightWhy(r){const bits=[];
- if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'
+ if(r.environmentHurt&&!accidentHurt(r))bits.push(r.cause&&r.cause!=='accident'
   ?(D.hazards[r.cause]||'원정 환경')+' 때문에 원정 내내 고전했다.'
   :'원정 중 예상치 못한 사고가 있었다.');
  if(r.events){
@@ -179,7 +184,7 @@ function nightWhy(r){const bits=[];
 function heroLine(r){
  const hp=r.heroProof?.outcome;
  /* the fight alone (User 2026-10-04): no worse Outcome proven, but without an Item the same roll loses the fight */
- if(!hp){const ch=r.combatHero?.items;return ch?.length?ch.map(id=>D.itemBy[id].name).join('·')+' 덕분에 전투에서 이겼다.':null;}
+ if(!hp){const ch=r.outcome==='성공'||r.outcome==='대성공'?r.combatHero?.items:null;return ch?.length?ch.map(id=>D.itemBy[id].name).join('·')+' 덕분에 전투에서 이겼다.':null;}
  const said=hp.worse==='사망'?'살아 돌아왔다':hp.worse==='중상'?'중상을 피했다':
   hp.worse==='부상'?'부상을 피했다':hp.worse==='퇴각'?'원정을 성공했다':'대성공했다';
  /* User 2026-10-02: the Bag is two slots, so a whole-Bag proof (items:null - no single removal worsens it, removing both does)

@@ -40,7 +40,7 @@ test('daily Fatigue causes survive saves and reconcile without double-counting r
 // real rule, so it stays true as variants are added; the literal pattern is kept as a second
 // net for the pinned fixtures, which are written by hand rather than drawn from a pool.
 const LIVING_PATTERN=/쉬고 올게요|다녀왔습니다|다시 올게요|살아 돌아왔어요|못 돌아왔어요|익숙해진|잠깐 쉬어야|늘 먹던|귀환을 도왔어요/;
-const LIVING={test:q=>LIVING_PATTERN.test(q)||Copy.livingPool().includes(q)};
+const LIVING={test:q=>LIVING_PATTERN.test(q)||Copy.inPool(Copy.livingPool(),q)};
 const DEATH_WORDS=/돌아오지 못했|마지막 영수증/;
 // placeholders, and the engine wording NIGHT_CLOSING forbids in player-facing copy
 const PLACEHOLDER=/undefined|NaN|\[object Object\]|\bnull\b/;

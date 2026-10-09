@@ -135,7 +135,7 @@ function observe(a,report,n){
   /* User 2026-10-10: the Counter rule is told on a record that names its Item - the result proof credits it (`X 덕분에`, or the
      `X → 위험 피해 방지` line); a merely lowered pressure leaves the record silent about it, often under a Potion's line */
   const hp=report.heroProof?.outcome,proven=id=>(report.events||[]).some(e=>e.id===id&&hp&&(!hp.items||hp.items.some(x=>(e.items||[]).includes(x))));
-  const acted=dead?{death:true}:{injured:report.outcome==='부상',severe:report.outcome==='중상',fatigue:(report.fatigueBeforeExpedition||0)>=G.Dungeon.fatiguePenaltyFrom(),counter:proven('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
+  const acted=dead?{death:true}:{injured:report.outcome==='부상',severe:report.outcome==='중상',accident:!!report.environmentHurt,fatigue:(report.fatigueBeforeExpedition||0)>=G.Dungeon.fatiguePenaltyFrom(),counter:proven('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
   report.acted=G.Copy.learned.map(([k])=>k).filter(k=>acted[k]);
   for(const [k,text] of G.Copy.learned){const id='learn-'+k;
    if(acted[k]&&!a.discoveries.some(x=>x.id===id))a.discoveries.push({id,text,day:report.day});}}

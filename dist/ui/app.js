@@ -1396,7 +1396,7 @@ function closingScreen(){
  +'<div class="dock">'+closingDock(s)+'</div></div>';
 }
 /* User 2026-10-10: survival first, then what the sold Item did, then what changes the next decision, then the rewards */
-const NIGHT_MARKS=['death','severe','injured','counter','prepared','fatigue','great','earn'];
+const NIGHT_MARKS=['death','severe','injured','accident','counter','prepared','fatigue','great','earn'];
 const coachSteps={
  /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
     first time a Deep Expedition actually occurs and never before the feature exists. Completion

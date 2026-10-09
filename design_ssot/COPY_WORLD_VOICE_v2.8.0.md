@@ -636,6 +636,7 @@ Target minimum pool sizes:
 - avoided death / life-saving: 8
 - rescued return: 8
 - success + growth: 10
+- saved by the sale / 만반의 준비 (User 2026-10-09): 6 per case, the last one 가끔 (COPY_AUDIT §19-10 ~ §19-16)
 
 #### DEATH NARRATION
 - traded: 6
@@ -931,6 +932,9 @@ Do not use generic 위험 감소 as Hero feedback.
 Living reaction selection priority:
 
     avoided death / rescue
+    -> saved by the sale or 만반의 준비 (User 2026-10-09): the worse Outcome the proof names and the real one pick
+       the case - 사망 → 성공·대성공 / 퇴각 / 부상·중상, 중상 → 성공·대성공, 만반의 준비, 부상 → 성공·대성공·퇴각,
+       퇴각 → 성공·대성공 (COPY_AUDIT §19-10 ~ §19-16)
     -> 중상
     -> 부상
     -> 퇴각

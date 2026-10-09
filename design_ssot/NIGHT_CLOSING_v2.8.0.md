@@ -149,7 +149,8 @@ two slots, so this is what a whole-Bag proof means; User 2026-10-02): both are n
     {Item} 2개 덕분에 부상을 피했다.        (the same Item twice)
 
 The fight alone (User 2026-10-04; DUNGEON_HAZARD_v2.8.0.md §COMBAT PROOF): when no worse Outcome is proven but removing an Item would have
-lost the combat check, and only then:
+lost the combat check, and only then - on a `성공` / `대성공` record only (User 2026-10-09: on 퇴각 / 부상 / 중상 / 사망 the
+fight line reads as if it explained the Outcome):
     {Item} 덕분에 전투에서 이겼다.
 
 Do not use vague Hero claims such as `부식 위험 감소` / `환경을 철저한 준비로 극복했다`.
@@ -163,10 +164,10 @@ VERDICT STAMP.
 
 A rule is named once per account, on the NIGHT record of the first expedition it acted on - taught after it happened,
 not before. It is shown like the tutorial: a `점주 안내` coach mark over that record, one per rule, after the NIGHT result
-mark, persisted and skipped with the other coach marks; the record itself gains no line. One mark a night (User 2026-10-04): the first that applies in the order death, Severe, Injury, Hazard counter, 만반의 준비, Fatigue, 대성공, Wallet gain (a 성공 / 대성공 record only)
+mark, persisted and skipped with the other coach marks; the record itself gains no line. One mark a night (User 2026-10-04): the first that applies in the order death, Severe, Injury, accident (User 2026-10-09), Hazard counter, 만반의 준비, Fatigue, 대성공, Wallet gain (a 성공 / 대성공 record only)
 (User 2026-10-10: survival, then what the sold Item did, then what changes the next decision, then the rewards); a rule that waits is told the next night it acts (the 발견 수첩 entry is kept either way). `손님 소지금 획득`: the first Wallet gain row from DAY 2 on, a mark on that row (COPY_AUDIT §26-2). The mark lights what its rule is
 about (User 2026-10-02): the Fatigue rule the record's `귀환 후 피로` row, every other rule the record's Outcome block. Each rule is also kept in the
-발견 수첩 the first time. Triggers (proof, not presence): came back with an Injury (the first 부상 record, never a healthy return); came back with a
+발견 수첩 the first time. Triggers (proof, not presence): came back with an Injury (the first 부상 record, never a healthy return); an accident on the way (`environmentHurt`, User 2026-10-09); came back with a
 Severe Injury (the first 중상 record - its own rule, User 2026-10-02: it rests unseen, then returns healthy); departed at Fatigue 10 or more;
 a Hazard Item lowered a Hazard (the `hazard` resolution event) and the result proof credits that Item, so the record names it
 (User 2026-10-10: a pressure merely lowered leaves the record silent about the Item, often under a Potion's line); 만반의 준비 turned away a Death; a 대성공 that paid
@@ -189,6 +190,10 @@ Player-facing explanation must be honest.
 If a Hazard was successfully blocked, do not name it as the cause of an unrelated injury. If injury came from combat,
 another Hazard or a generic expedition accident, say that. If the exact cause cannot be cleanly attributed, use a
 truthful broad narrative, e.g. `원정 중 예상치 못한 사고로 부상을 입었습니다.` Do not manufacture false precision.
+
+A won fight that came back `부상` through an accident says it in the Outcome sentence and adds no separate accident line
+(User 2026-10-09): `전투는 이겼지만 {위험} 때문에 다쳤다.` when the accident is attributed to a Hazard, else
+`전투는 이겼지만 예상치 못한 사고로 다쳤다.` Without an accident it stays `전투를 이겼지만 돌아오는 길은 험했다.`
 
 ### RUNTIME CAUSALITY
 
