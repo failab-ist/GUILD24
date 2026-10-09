@@ -63,7 +63,15 @@ AUDIO=[('press','stamp'),        # ORDER confirmation: a low knock under the pap
        ('close','settle'),       # CLOSING: the drawer/ledger settling the day
        ('blocked','gate'),       # FINAL commit: the heaviest mechanical close in the set
        ('select','key'),         # ordinary pick
-       ('send','door')]          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
+       ('send','door'),          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
+       # User 2026-10-09: the sounds below were picked by ear from reports/sfx-candidates. A third item names another uisfx theme.
+       ('drop','crate'),         # ORDER: the second and third crate landing
+       ('achievement','great'),  # NIGHT 대성공
+       ('checkpoint','newstore'),  # ending -> next store
+       ('success','return'),     # NIGHT 성공
+       ('back','retreat'),       # NIGHT 퇴각: the shortest of the failure stamps
+       ('error','injury'),       # NIGHT 부상: longer than 퇴각, shorter than 중상
+       ('error','severe','cinematic')]  # NIGHT 중상: the longest sample before 사망
 
 # v3.0 BGM (User 2026-09-29): the Gemini (Lyria) tracks the User generated for this project, kept untouched under
 # assets-src/bgm/. dist is the web build, so it gets 128 kb/s re-encodes under the ROLE name (User 2026-09-29: 33 MB -> 22 MB
@@ -150,10 +158,11 @@ def audio():
         print('  audio: node_modules/uisfx is absent, skipped'); return
     os.makedirs(AUD,exist_ok=True)
     total=0
-    for src_name,role in AUDIO:
-        src=os.path.join(SFX,'sounds','mechanical',src_name+'.mp3')
+    for src_name,role,*theme in AUDIO:
+        theme=theme[0] if theme else 'mechanical'
+        src=os.path.join(SFX,'sounds',theme,src_name+'.mp3')
         if not os.path.exists(src):
-            sys.exit('uisfx is missing sounds/mechanical/%s.mp3'%src_name)
+            sys.exit('uisfx is missing sounds/%s/%s.mp3'%(theme,src_name))
         dst=os.path.join(AUD,role+'.mp3')
         shutil.copyfile(src,dst); total+=os.path.getsize(dst)
     # the CC0 dedication travels with the files it releases, exactly as the OFL does
