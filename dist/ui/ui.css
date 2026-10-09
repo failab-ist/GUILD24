@@ -2342,7 +2342,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-environments .env-row{display:inline-flex;justify-content:flex-start;gap:4px}
 .final-environments .env-row i{font:400 13px/1.4 var(--ui);color:#d7c9ac}
 .final-environments .env-num{padding:0;background:none;box-shadow:none;font:600 14px/1.4 var(--ui);-webkit-font-smoothing:auto}
-.final-environments .env-num small,.final-environments .env-num em{font:400 14px/1.4 var(--ui);color:#d7c9ac}
+.final-environments .env-num small,.final-environments .env-num em{font:600 14px/1.4 var(--ui);color:#d7c9ac}
 .final-environments .env-num small{margin-left:1px}
 .final-environments .env-num.ok{color:#9fd6a8}
 .p-final .tillpanel .forwho{display:flex;align-items:baseline;gap:10px}
