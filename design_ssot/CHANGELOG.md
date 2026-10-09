@@ -34,55 +34,45 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
-## After v2.11.1 — Event readability and per-slot supply limit (User 2026-10-10)
+## After v2.11.1 — 소스와 사용자 노출 텍스트 일치 점검 (User 2026-10-09~10)
 
-- 사건55종 효과 설명을 승인 문구로 정리한다. 판단 숫자는 실제 효과/공통 규칙값을 읽고, 알려진 사건의 이전 저장 설명은 실제 저장 effects로 생성한다. 이름/상황·숨은 확률·기존 저장 형식은 유지.
-- 본사 발주 제한은 발주 후보 한 칸의 공급 최대2개로 변경한다. 같은 상품이 두 칸이면 각 칸에서2개씩 주문할 수 있고 교환/이전 저장 발주서에도 적용한다. 구매 완료 재고는 유지한다. 설명의 추가 입고 괄호는 삭제.
-- 냉장고 고장은 최소 오늘까지를 명시하고, 첫 사건 코치는 사건별 적용 기간을 안내한다. 위령제 지속기간과 의무관의 결과/부상 상태 구분을 owner에 명확히 적는다. 승인된 발주 제한 외 효과값 변경 없음.
+| 배치 | 핵심 변경 |
+|---|---|
+| 1 설정·점주 가이드 | 안내 기간 단정 제거, 하루의 흐름·상품 효과·거절 예외 설명, 회생 횟수 값 참조, 새 점포 준비에서도 설정 즉시 갱신 |
+| 2 상품·발주·창고 | 실제 입고 유통기한 표시, 버튼의 이번 교환 비용 안내, 해금/발주 출현 날짜 공통 참조 |
+| 3 판매·모험가 | 판매 상태 피로를 확정 상품 사용 후 기준으로 표시, 상세는 상품 사용 전 기준 명시, 단골도 설명·옛 수첩 규칙 현행화 |
+| 4 게이트·사건·일반 원정 | 위험 개수의 사건 예외, 화염 II부터 코치, 판매 전 전망 기준, 코치 강조 영역·스크롤·포커스 수정 |
+| 5 밤·마감·폐점 | 실제 종료/정산·회생 단위·특성 예외 설명, 심층 추가 성장 후 밤 보고와 NPC 기록 동기화 |
+| 6 지원·장식·다음 점포 | 승인된 운영비 가산은 구입 당일부터, 지원/장식 설명·은퇴 상태·숙련·자본을 실제 기준과 일치 |
+| 7 마왕·최종 원정·결말 | 공개 전 이번 목표 표시 억제, 확정 대원의 실제 적용 능력치와 원인 표시, 환경 기준·피로 경계·종료 용어 정리 |
+| 8 사건55종 | 전체 효과 설명 이해도·용어 검수, 필요한 숫자는 실제 값 참조, 옛 저장 설명 갱신. 승인된 본사 발주 제한은 칸당 공급 최대2개로 변경 |
 
-## After v2.11.1 — Final and Boss text truth (User 2026-10-09)
+구체적인 변경 전→후·owner 근거·검증 기록은 `reports/TEXT-SOURCE-AUDIT.md`를 따른다. 별도 저장 필드·숨은 확률 공개·새 문구 시스템은 추가하지 않았다. 최신 main의 후속 UI/코치·직업/게이트 채택을 보존해 통합한다.
 
-- 과거에 만난 마왕이어도 이번 목표의 정체를 확인하기 전에는 도감의 이번 영업 표시·우선 정렬·현재 매출로 목표를 공개하지 않는다. 과거 기록은 유지.
-- 최종 원정 후보의 피로 상태는 실제 페널티 시작값 이상부터 표시한다. 확정 대원 능력치는 기존 Final snapshot의 실제 적용값과 변화 원인을 읽고 준비값→적용값으로 표시한다. 환경 대응은 기존 권능 전 계산을 유지하고 기준을 명시한다.
-- 글러트니 설명에서 Final에 배치할 수 없는 보험의 유효성으로 오해할 문구를 빼고 무출전 버튼을 점포 종료 용어로 맞춘다. D25 필요 대응의 이전 숫자 복제는 현행 owner 참조로 정리. 판정·밸런스·RNG·저장 형식 변경 없음.
+## After v2.11.1 — Insurance first print names what it turned away (User 2026-10-09)
 
-## After v2.11.1 — Support and Meta explanation alignment (User 2026-10-09)
+- A 귀환석 rescue's event records the Outcome it turned away (`from`); NIGHT's first print shows it, so a 부상 turned into 퇴각 prints `부상`, not `중상`. NIGHT_CLOSING §INSURANCE CAUSALITY; UI_UX §NIGHT LAYOUT — VERDICT STAMP.
 
-- 즉석식품 코너·왕도 프리미엄 인증·지역 거점점 계약의 운영비 가산은 구입 당일부터 적용한다. 기본 운영비 비율을 합산하고 기존 반올림·운영비 무료 사건 우선순위를 유지한다. 운영 효율 매뉴얼은 다음 날, 방문객은 아침 생성 시점 유지. 지역 거점점 계약 문구는 매일 아침으로 정리했다.
-- 구급품 진열장은 기존 설명에 (마왕성 제외)만 추가한다. 지원 교환 쿠폰함의 유료 구매 기회 조건, 은퇴 점포지원의 도감 상태, 직업 숙련의 새 모험가 레벨 효과, 방문 소지금 보너스의 상한 적용을 명시한다. 공통 description/effect getter 재사용.
-- 추모 방명록은 승인된 META의 +1 효과를 유지하며 CORE_RUN의 옛 +2 요약을 owner 참조로 정리한다.
+## After v2.11.1 — SALE queue Gate-count reference approval (User 2026-10-09)
 
-## After v2.11.1 — Night and closure copy alignment (User 2026-10-09)
+- Adopted in Source: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
+- Revised (User 2026-10-09, same day): the popover counts customers **left** per Gate counting the one at the counter, under `이번 손님부터`, with no total; slate balloon. DAY 1 SALE coach: destination and price only; `flow` moves to DAY 2 (before 전투 전망), Stats to DAY 3 (before 환경 대응). UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §TUTORIAL — READ THE SYSTEM; SALE §QUEUE INFORMATION BOUNDARY; COPY_AUDIT §3-16.
+- NIGHT saved beat (User 2026-10-09): when the engine proves the sold Item saved the adventurer from 사망 / 중상 (not Insurance), the worse verdict prints, the Item shoves it off, the real Outcome stamps, and the Item icon stays beside `{Item} 덕분에 살아 돌아왔다.`. Shown for every 사망 kept away and every 중상 turned into 성공 / 대성공, no nightly cap; the worse print sounds its own `death` / `severe` cue and the card pauses until it fades (사망 +500 ms, 중상 +100 ms); new cues `shove` / `saved1`-`saved3` (the relief, sized by the turn, replaces the Outcome cue on that landing), levels fitted by tools/qa-sfx-mix.cjs. UI_UX §NIGHT — SAVED BY THE SALE; NIGHT_CLOSING §INSURANCE CAUSALITY.
 
-- 마감 폐점 확인은 실제 점포 자본 정산을 설명하고 메뉴의 무정산 지점 포기와 구분한다. 사망 한도 마감은 같은 한도 함수로 점포 종료 버튼을 표시한다. 종료·정산 처리 유지.
-- 부상 코치에 특성 예외를 괄호로 명시하고 일반 원정의 대성공만 가게 보너스를 남긴다고 설명한다. 회생 횟수는 재고 개수가 아닌 마감 횟수로 명시하고 적자 해결 조건을 설명한다.
-- 퇴각 부상 회복과 마감 현금흐름의 기존 owner 참조를 관련 요약에 반영했다. 심층 추가 성장 이후 밤 보고·저장 기록의 레벨·능력치 변화와 추가 보상 정보를 실제 최종 상태로 동기화한다. 보상 계산·RNG·저장 스키마는 유지.
+## After v2.11.1 — Job profiles and half-strength ordinary Gates (User 2026-10-09)
 
-## After v2.11.1 — Gate and forecast coach alignment (User 2026-10-09)
+- Adopt the revised Warrior/Archer/Rogue/Berserker profiles; Mage/Priest unchanged. Exact stats, Power contribution and Environment contribution with per-Level growth -> NPC_TRAIT.
+- Ordinary Gate base offsets D1 +0.125, D10 +0.5, D20 +1, D25 +1.5; linear interpolation, hold through D29. Ordinary golem FireTerm6/13.5/21. This halves the measured Gate/Fire package's changes together. DUNGEON_HAZARD §GATE POWER.
+- Keep EXP18+Level×8, lagging EXP×1.5, Final requirements/Fire12/threat28/gap penalty2 unchanged. Further growth/boost adjustment is deferred.
+- The reader28000-run measurement used the full candidate, not this final half-strength decision. No new balance simulation for adoption; the final reach/clear rate is unmeasured.
 
-- 일반 II·화염 게이트 코치는 기본 위험 개수와 사건으로 위험이 추가될 수 있음을 구분한다. 화염 코치는 I에서 억제하고 첫 II·III에서 한 번 표시한다. 기존 완료 기록·설정 초기화·판정 유지.
-- 전투 전망 코치는 상품 판매로 바뀌지 않는다는 설명으로 범위를 좁힌다. User 지시에 따라 심층원정 문장은 넣지 않는다. 심층 후원 시 재전망 처리 자체는 유지.
-- 코치 강조 영역은 스크롤로 보이는 실제 타깃에 맞추고 게시판 고정 제목을 제외한다. 스크롤 때 위치를 갱신하며 안내 버튼의 키보드 포커스를 복원한다. 배경 입력 차단·화면 섹션 크기·CSS는 유지.
+## After v2.11.1 — SALE Deep line names its Gate (User 2026-10-09)
 
-## After v2.11.1 — Sale fatigue and Loyalty copy alignment (User 2026-10-09)
+- The SALE Deep nomination's closed line shows `심층원정` and today's Deep Gate name (no repeated words); the open state keeps the terms and the sponsorship key. No copy added. UI_UX §DEEP SALE UI.
 
-- SALE 상단 `피로 N`은 확정된 가방의 상품을 반영한 출발 피로를 표시해 능력치와 기준을 맞춘다. 저장된 피로·상품 선택 미리보기·원정 회복 및 결과 정산은 유지. 원래 피로가 있던 손님이 완전히 회복되는 경우 `피로 0` 표시.
-- 모험가 상세는 `현재 피로 (상품 사용 전)`으로 저장 값의 기준만 명시. User가 거절한 별도 능력치 설명 문장은 추가하지 않는다.
-- 피로 안내는 실제 페널티 시작 단계의 `{N} 이상`을 읽으며 발생 조건도 같은 함수를 공유. 단골도 가이드는 기본 변화량·구매 후 출발·생환·바가지 거절 및 실제 보정·한도를 설명. 단골 코치는 역할 중심으로 축약.
-- 이전 저장의 일반 학습 규칙 문구도 `learn-*` ID로 현행 설명을 읽는다. 원정 고유 사건·결과의 저장 원문은 유지.
-- 구매 후 출발 단골도 +1은 `paidVisitLoyalty`로 공유해 안내와 실제 처리가 함께 따른다. 현행 판정·밸런스·저장 형식은 유지.
+## After v2.11.1 — SALE shelf leads with the customer's Gate (User 2026-10-09)
 
-## After v2.11.1 — Order and product copy alignment (User 2026-10-09)
-
-- 임박 특가 날 발주서가 기본 유통기한을 표시하던 불일치 수정. 기존 입고 규칙을 `Game.stockLife()`로 공유하여 오늘까지인 재고는 1일, 냉장고 적용 재고는 실제 연장 기한을 표시.
-- 교환 코치는 일률적인 두 배 설명 대신 버튼의 이번 비용을 읽도록 변경. 무료 교환권 및 유료 교환 판정은 유지.
-- 날짜 해금 상품 도감은 계정 해금 후에도 각 점포의 발주 출현 날짜를 명시. 계정 해금·후보 판정·도감·자동 자료집이 `Meta.ITEM_UNLOCK_DAY`를 공유. 현행 DAY 10/14와 저장 형식 유지.
-
-## After v2.11.1 — Guide and settings copy alignment (User 2026-10-09)
-
-- 승인된 설정 안내를 기간 없는 문구로 변경. 점주 가이드 첫 블록을 `하루의 흐름`으로 바꾸고 상품별 효과 확인 안내 및 바가지 거절 예외를 반영. COPY_AUDIT §2-3 / §8, UI_UX §GLOBAL HELP.
-- 가이드 회생 횟수는 기존 `game.rescueLimit()`을 참조. DAY 1~3 한 줄 안내와 게임 판정·밸런스·저장 형식은 유지.
-- 영업 전 및 종료 후 새 점포 준비 화면에서도 안내 설정 변경 직후 버튼·설명을 갱신. UI_UX §SETTINGS / DEBUG BOUNDARY.
+- The SALE shelf's Hazard-answer lead now starts with the current customer's own Gate's Hazards, then the other open Gates'; the rest of the order and the warehouse are unchanged. SALE §ITEM SELECTION / UI_UX §SALE — SHELF ORDER.
 
 ## After v2.11.1 — Approved balance adoption (User 2026-10-08)
 

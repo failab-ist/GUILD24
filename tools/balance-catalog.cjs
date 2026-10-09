@@ -6,7 +6,7 @@ const G=globalThis.GUILD24||globalThis,D=G.DATA;
 const number=n=>String(Math.round(n*100)/100),signed=n=>(n>=0?'+':'')+number(n),pct=n=>number(n*100)+'%';
 const cell=x=>String(x??'—').replace(/\r?\n/g,' ').replace(/\|/g,'\\|');
 function render(){
- const files=['build.js','data/catalog.js','data/relics.js','data/decorations.js','systems/adventurer.js','systems/dungeon.js','systems/meta.js','systems/run.js'];
+ const files=['build.js','data/catalog.js','data/relics.js','data/decorations.js','systems/adventurer.js','systems/dungeon.js','systems/meta.js','systems/shop.js','systems/run.js'];
  const code=Object.fromEntries(files.map(f=>[f,fs.readFileSync(path.join(root,'dist',f),'utf8').replace(/\r\n/g,'\n')]));
  const version=code['build.js'].match(/version:'([^']+)'/)[1],signature=crypto.createHash('sha256').update(files.map(f=>code[f]).join('\n')).digest('hex').slice(0,12);
  const active=D.relics.filter(r=>!D.relicRetired.includes(r.id)),L=[];

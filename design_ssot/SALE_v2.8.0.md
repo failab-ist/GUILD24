@@ -129,6 +129,8 @@ Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Can
 No new future-customer information (future Job, Level, Destination, Preparation Need, importance score); the currently
 authorized queue count stays. Not knowing who comes next is part of inventory allocation judgment.
 
+One approved aggregate reference exception (User 2026-10-09): while in SALE, the existing queue/progress area may reveal on demand, per open Gate, **how many of today's customers are still to be served, counting the one at the counter** (the player need not remember ORDER's line). Counts use ORDER's source (`claimedGateFor` over the Day's queue), so a Trait's or Event's uncertainty stays: the claimed Gate, never the actual one. Near the end of the queue the remaining counts can imply the next customer's claimed Gate (User-accepted); nothing reveals their identity, Job, Traits, needs or actual destination. No outcome / Item recommendation follows from this reference. Presentation / coach / QA -> UI_UX §SALE — QUEUE GATE COUNT REFERENCE.
+
 ## DESTINATION
 
 Player-facing label: `예상 목적지`
@@ -244,7 +246,7 @@ The compared Item's detail lives on the counter tray, so comparing two Items nev
 Shelf order: rows are ordered by kind, then days left before discard (nearest first), then higher Rarity, ties in the
 existing order, held for the Day; every row carries its shelf life (`폐기까지 N일 / 내일까지 / 오늘까지`) and a row on its
 last day is emphasized (exact -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
-recommendation order; it does not change with the customer.
+recommendation order; only the Hazard-answer lead follows the current customer's own Gate (User 2026-10-09).
 
 ### MATCHING-EFFECT EMPHASIS — RETIRED
 

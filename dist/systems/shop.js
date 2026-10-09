@@ -1,15 +1,7 @@
 (function(G){
 /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer - +200G to spend this visit only, +20%p on 150% */
 const LESSON={paydayBudget:200};
-/* Stage 10, approved (§O). Stage 9 measured FIRE as the hardest Family for all six Jobs and by
-   a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
-   Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
-   makes a fire Gate a fire Gate is unchanged. Provisional: re-measured, and if FIRE is still
-   consistently worst by 10%p a further candidate is reported rather than applied. v2.5 final
-   (H1): .92 -> .90, which narrowed the gap to the next Family by about a third. fire is still
-   the hardest Family and ships that way, on the playtest follow-up. The factor
-   itself lives in D.balance.golemCombat so the balance harness can compare a candidate against
-   it without a production edit - the same reason guarantee.minPrice carries a name. */
+/* DUNGEON_HAZARD §GATE POWER: FIRE family combat uses the shared approved golemCombat factor. */
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 // NIGHT_CLOSING §GROWTH PRESENTATION: sync already-paid Deep growth, without resolving or granting rewards.
 function syncDeepReport(n,report,beforeStats){
@@ -155,7 +147,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1)*G.Dungeon.gateEase(s.day),reward:base.reward*(1+(tier-1)*.12)};
+ // DUNGEON_HAZARD §GATE POWER: ordinary base anchors; Final uses makeFinal.
+ const gateOffset=s.day<=10?.125+(s.day-1)/24:s.day<=20?.5+(s.day-10)/20:s.day<=25?1+(s.day-20)/10:1.5;
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+gateOffset+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1)*G.Dungeon.gateEase(s.day),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -169,6 +163,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.healVisitors||fx.injuredBudget)return ready.some(n=>n.injury===1);
   if(fx.regularVisit)return ready.some(n=>n.introduced&&G.Adventurer.isTrustedRegular(n));
   if(fx.summons)return ready.length>=2;
+  /* User 2026-10-09: an Event that sets every Gate to tier I (게이트 안정화 작업) waits for the first Day a tier II Gate can open */
+  if(fx.tierOne)return s.day>=G.Dungeon.FIRST_TIER2_DAY;
   if(fx.closeGate)return s.dungeons.filter(d=>!d.temporary).length>=2;
   if(fx.shelfCut)return s.inventory.some(x=>x.expires!==null&&['food','drink'].includes(D.itemBy[x.item].category));
   return true;}
@@ -381,7 +377,20 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  this.counterCap=this.offerCounterCap();for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  /* EVENT §02. 본사 1+1 행사: HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
     again for a 1+1 on the SKU the player wanted is not the Event's play. Store Support slots persist separately. */
- if(ev.double&&advancePity){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
+ /* EVENT §02 (User 2026-10-09): only the first Run's DAY 2 tutorial steers the 1+1 SKU - a Common Item that counters a Hazard of an open
+    Gate, supply capped at 2 (4 with the 1+1) - so the player first buys a Counter there. A sheet with none has its first Common
+    slot swapped for the Counter that covers the most open Gates' Hazards; that draw uses a stream of its own, so the Run's stream
+    is unchanged. Every other Day keeps the ordinary pick. */
+ if(ev.double&&advancePity){let x;
+  if(s.firstRun&&s.day===2){const H=[...new Set(s.dungeons.flatMap(d=>d.hazards))],isC=o=>G.Relics.directCounter(D.itemBy[o.item],H);
+   x=s.offers.find(o=>D.itemBy[o.item].rarity===0&&isC(o));
+   if(!x&&H.length){const cover=it=>s.dungeons.filter(d=>G.Relics.directCounter(it,d.hazards)).length,
+     pool=D.items.filter(it=>it.rarity===0&&!it.metaUnlock&&G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,H)),top=Math.max(0,...pool.map(cover)),best=pool.filter(it=>cover(it)===top);
+    if(best.length){const main=this.rng;this.rng=new G.RNG(s.seed+':oneplus'+s.day);let o;try{o=this.offerFor(this.rng.pick(best));}finally{this.rng=main;}
+     const i=Math.max(0,s.offers.findIndex(q=>D.itemBy[q.item].rarity===0));s.offers[i]=o;x=o;}}
+   if(x)x.quantity=Math.min(x.quantity,2);}
+  x??=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];
+  if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
     which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired.
@@ -416,8 +425,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
- /* ECONOMY_ORDER §ORDER OFFER QUANTITY (User 2026-09-27, v2.9.7): Common / Uncommon 2~4, Rare 1~3 (it was 1), Epic /
-    Legendary 1 - the Rare mid-Run Counters could not be stocked for more than one customer. */
+ /* ECONOMY_ORDER §ORDER OFFER QUANTITY / EVENT §41: normal supply and support bonuses are capped per offer when the Event applies. */
  offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)*(this.has('expeditionMeal')&&G.Relics.food(it)?D.relicParams.expeditionMeal.orderPriceMult:1)),
   quantity:Math.min(ev.orderCap??Infinity,(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0))};}
  rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary: D30 has no SALE, and an Item with no Final effect

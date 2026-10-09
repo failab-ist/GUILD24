@@ -454,9 +454,9 @@ One counter tray, a fixed band directly above the dock outside the scrolled colu
 LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen keeps its per-row panel
 (FINAL_EXPEDITION_v2.8.0.md §3).
 - tapping a shelf row puts its Item on the tray; the row is only highlighted; rows never change height
-- §SALE — SHELF ORDER (User 2026-10-04): an Item that answers a Hazard of today's open Gates leads, in the Gates' Hazard order (any kind —
+- §SALE — SHELF ORDER (User 2026-10-04, 10-09): an Item that answers a Hazard of today's open Gates leads, the current customer's own Gate's Hazards first and then the other open Gates' in Gate order (any kind —
   a Food or Drink with a Hazard line counts); the rest follow by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
-  Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
+  Rarity, ties as before; only that Hazard lead follows the customer (the warehouse keeps today's Gate order); sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
 - shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
@@ -592,11 +592,21 @@ only.
 
 ### QUEUE
 
-No future-customer Job/Level/Destination/need hints; the queue count suffices.
+No future-customer Job/Level/Destination/need hints; the queue count suffices. The one approved on-demand aggregate exception is owned by §SALE — QUEUE GATE COUNT REFERENCE.
+
+### SALE — QUEUE GATE COUNT REFERENCE (User approved 2026-10-09)
+
+- Anchor: the **existing SALE bottom-Dock `손님` queue/progress surface**, on desktop and mobile. The phone still shows its current `손님` + pips treatment; `{n}/{N}` stays a screen-reader label as before. No visible numeral, `ⓘ`, arrow, underline, separate button or permanent explanation is added. No larger Dock, no reserved height, no shift of `손님 보내기` / `영업 종료`.
+- The balloon is a slate panel, not the shelf's brown, so it never reads as one more Item card (User 2026-10-09).
+- Desktop: hover over the existing queue area opens an anchored lightweight popover; focus can open it for keyboard access. Phone: tapping **the same visible queue area** opens/toggles it, without adding a visual cue. Use the existing shared popover treatment (§SHARED ANCHORED POPOVER); outside tap / Escape closes it. Opening this information never activates the adjacent phase action.
+- Content: an `이번 손님부터` label, then each open Gate in ORDER's chip form (`{Hazard}{Tier} {n}명`, closed Gates as `오늘 폐쇄`) where n counts today's customers from the one at the counter to the last, by the Gate each claims (ORDER's count source, User 2026-10-09: no memorising). No total - the pips say it. Each sale / departure moves the counts; nothing reveals a customer's identity, actual destination, Job, traits or needs.
+- Purpose: allow recalling already-known Order-stage demand while assigning today's stock; no recommended Item, correct SKU, best price, outcome prediction or strategic prompt.
+- First-use education: one account-scoped contextual **coach spotlight on the existing `손님` queue surface**, using COPY_AUDIT §3-16. The permanent UI has no `tap for details` text. Preserve existing SALE first-day coach priorities; do not introduce an extra compulsory DAY 1 mark or decide a new DAY gate without the User's approval. Once completed/dismissed, persist with ordinary tutorial marks; Full Data Reset clears it.
+- Acceptance -> UI_UX §QA UI-Q-SALE-QUEUE-GATE-COUNT. No extra gameplay RNG, Save outcome or new Gate inference.
 
 ### DEEP SALE UI
 
-While nomination is legal, show `심층원정에 추천`; afterwards sponsorship payment, new destination and updated forecast are clear
+While nomination is legal, the closed line names today's Deep Gate (`심층원정` + Gate name, User 2026-10-09) and opens to the terms and `심층원정에 추천`; afterwards sponsorship payment, new destination and updated forecast are clear
 and ordinary Sale continues.
 
 ### EVENT TEMPORARY BUDGET
@@ -670,7 +680,7 @@ answer:
     귀환 후 피로 N
     귀환 후 피로 N · {band}
 
-Band from 20 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6. The Fatigue row opens an overlay
+Band from 10 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6. The Fatigue row opens an overlay
 of actual daily causes (Function/Effect: 15px / 600), with the five bands in smaller type below (14px / 600, readable contrast). The overlay starts with a compact starting-to-settled row (15px / 600 figures; secondary labels 13px / 400), then lists the actual deltas; rule text keeps at least 4.5:1 contrast on a solid dark plane. NIGHT_CLOSING §FATIGUE RESULT owns the recorded path
 and settled value; the inline next-decision line does not repeat the numeric Fatigue.
 
@@ -876,7 +886,7 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 - the dip (40 ms down, 150 ms back, inside the card) is the only companion motion — no ring, flash, shake or particle; ink,
   tilt and tape stay as end-state tone and never change the label size
 - 생환 (`rescued` / `avoidedDeath`): first a faint print of the turned-away Outcome in its own tag (`사망` when `avoidedDeath`,
-  else `중상`), then `생환` overstamps it and the print is gone within 120 ms; the Insurance proof lines (Hero Item, incident)
+  else the event's `from`: `중상` or, for 귀환석, `부상`), then `생환` overstamps it and the print is gone within 120 ms; the Insurance proof lines (Hero Item, incident)
   cut in on that frame as the cause response. 만반의 준비 turning a Death into 부상 / 중상 prints `사망` first the same way and its
   own Outcome overstamps it (cue on the overstamp, no `rescue`); 강골 and 구급키트 only lower an injury and never reverse
 - one after-motion: with a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no reversal it settles once (160 ms) and
@@ -888,6 +898,29 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 - one landing = at most one visual (stamp), one sound (cue's first note or `rescue`), one cause / number response
 - 다음 and 전체 건너뛰기 stay live: 다음 mid-stamp shows the next result's own stamp, 전체 건너뛰기 leaves at once, and a cue still
   waiting for its frame is dropped
+
+### NIGHT — SAVED BY THE SALE (User 2026-10-09)
+
+The moment a night shows "내 준비가 살렸다": a result the engine proves the sold Item saved (`heroProof.outcome.worse`,
+the same draws without that Item) or a 만반의 준비 Death turned away, shown when
+- the worse result is `사망` and the adventurer came back alive (any Outcome), or
+- the worse result is `중상` and the Outcome is `성공` / `대성공`.
+Insurance reversals (`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep the 생환 overstamp above and never take this beat.
+Every such customer gets it on their own card; there is no nightly cap (User 2026-10-09).
+
+    entry 240   the worse verdict prints in its own tag (`사망` lays the black tape, 350 ms); the portrait greys
+    + pause     the card holds still until the worse cue has faded, then a short silence: 사망 +500, 중상 +100
+    1000+pause  the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone 260 later)
+    ~1150+pause the real Outcome stamps in its usual design (hold 860+pause, fall 1.6 × → 1, dip 4 px); portrait colour returns
+    1300-1500+pause  the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)
+
+- the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
+- reduced motion: the end state at once, the Item icon already beside its line
+- sound: the worse verdict's own Outcome cue (`death` / `severe`) with its print, ending before the shove (User 2026-10-09),
+  `shove` (a whoosh) on the shove, and on the landing a relief in
+  place of the Outcome cue (never both, User 2026-10-09), sized by how far the result turned on 사망 > 중상 > 부상 > 퇴각 >
+  성공 > 대성공: `saved1` one step, `saved2` two, `saved3` three or more. Reduced motion: the relief at once
+- 다음 / 전체 건너뛰기 behave as for any stamp
 
 ## CLOSING
 
@@ -1052,8 +1085,8 @@ D5/D15/D25 are major beats; D10/D20 are shorter (fewer lines, lighter hierarchy,
 Boss art as D5/D15 — never a thumbnail. D25 is information-first (the Family/Hazard disclosure is the payload).
 
 All D5/D10/D15/D20/D25 investigation reports share one art-size rule across every Boss:
-- mobile: max-height follows the available viewport height (100dvh minus 560px reserved for report text and controls), bounded between 100px and 240px
-- desktop: max-height follows the available viewport height (100dvh minus 510px reserved for report text and controls), bounded between 200px and 300px
+- mobile: max-height follows the available viewport height (100dvh minus 465px reserved for report text and controls), bounded between 120px and 280px
+- desktop: max-height follows the available viewport height (100dvh minus 480px reserved for report text and controls), bounded between 200px and 360px
 - keep the illustration aspect ratio; do not shrink only the overflowing Boss or investigation Day
 
 At 360x800 art alone never pushes core information or the acknowledgement below the first viewport. The sheet is a takeover
@@ -1134,9 +1167,9 @@ Each stage teaches its decision once per account, using the existing `tutorial['
 - Roster: Fatigue / Injury / Wallet inspection on a visible candidate card, then the three-member cap and irreversible commitment on `원정대 확정`.
 - Committed preparation: every Hazard applies to each participant, anchored to that participant's environment meters. Reuse the existing party-wide `subjugation` Coach ID and forecast target to teach reading the overall forecast with each participant's environment meters and choosing supplies from their own needs. The detailed forecast explanation remains in its anchored `?` Help.
 
-Support, last order, roster and preparation are separate skip groups. `안내 건너뛰기` completes only the current stage;
-future stages remain eligible. No new Run / Account flag or migration is required. Completion survives save/load and new
-Runs; settings `안내 끄기` suppresses all marks and `안내 다시 보기` clears the existing `coach-*` records.
+Support, last order, roster and preparation are separate coach groups. Each mark's `도움말 끄기` is the settings switch itself
+(the existing `tutorial.skipped`): it suppresses every mark, not only the current stage. No new Run / Account flag or migration
+is required. Completion survives save/load and new Runs; settings `도움말 다시 보기` clears the existing `coach-*` records.
 Ordinary modals and Boss reveal holds still suppress coaches. Exact approved copy -> COPY_AUDIT §14-9.
 
 ### PARTY SELECTION
@@ -1516,11 +1549,10 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): DAY 1 has four marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS),
-`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer) and
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has two marks (User 2026-10-09), destination and
 the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망) and DAY 3 (환경 대응), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
-visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: 전투 전망; DAY 3: the payday customer, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
+does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망, after `flow` - how an expedition is decided, win the fight and no Hazard incident, rule only) and DAY 3 (환경 대응, after the Stats mark - 투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: `flow`, 전투 전망; DAY 3: the payday customer, Stats, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -2175,6 +2207,12 @@ PASS:
 - on a two-Hazard Gate (T2 on) `환경 대응` names each Hazard with its own frozen state, in the readout and in the forecast pin; a
   one-Hazard Gate reads one label; the readout `.top` and the pin stay two lines tall with the label on one line, and no row
   overflows or collides at 360 / 390 / 412 / 1024 / 1280
+
+#### UI-Q-SALE-QUEUE-GATE-COUNT — ON-DEMAND ORDER GATE COUNTS (User approved 2026-10-09)
+
+- In SALE on desktop, hover/focus the existing bottom `손님` queue area: a floating popover shows, per open Gate, the customers left counting the one at the counter (ORDER's claimed-Gate source; the first customer's figures sum to ORDER's total). Mobile: tapping the same existing queue/pips area opens/closes it; outside tap / Escape dismisses; no new UI cue, height, permanent text, scroll jump or dock/button overlap at 360/390/430 or short-phone widths.
+- Sending a customer lowers their claimed Gate's count by one. No future-NPC Job, wallet, needs or actual reroute is disclosed beyond what the remaining claimed-Gate counts imply. Popover and coach never make a recommendation.
+- Account first-use coach spotlights the actual queue target, can be completed/skipped, stays complete across new Runs, and returns after Full Data Reset; existing first-day SALE mandatory coach sequence is not silently extended. No changes to next-customer progression, purchase, balance, Save/RNG or keyboard navigation.
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
 At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress: the label `손님` beside the pips, the count `{n} / {N}` as the pips' screen-reader label only (User 2026-10-03); no
@@ -3084,7 +3122,7 @@ action separated; no new control framework.
 #### UI-Q-v28-19 — SETTINGS / DEBUG BOUNDARY
 Ordinary Player surface: \`소리 켜기 / 소리 끄기\`; \`전체 데이터 초기화\`; no reproducibility Seed control;
 no \`로컬 실행 지원 · 외부 연결 없음\` footer. No new Debug menu is required for PASS.
-Settings carries one `안내` switch (`안내 끄기` / `안내 다시 보기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. The button and description update immediately before a Run, during a Run and on next-store preparation after the ending. No new Save field.
+Settings carries one `안내` switch (`도움말 끄기` / `도움말 다시 보기`, the same switch as each mark's `도움말 끄기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. The button and description update immediately before a Run, during a Run and on next-store preparation after the ending. No new Save field.
 
 #### UI-Q-v28-19B — DEBUG / SEED REPRODUCTION PATH
 

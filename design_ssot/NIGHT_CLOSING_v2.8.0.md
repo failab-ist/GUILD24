@@ -208,10 +208,16 @@ Do not add system-authored failure diagnosis such as `전투 부족`, `독 대�
 Insurance wording must match actual causal effect.
 
 Display order: on a result carrying `rescued` / `avoidedDeath` the verdict first prints the Outcome the Insurance turned
-away (`사망` when `avoidedDeath`, otherwise `중상`) and the resolved label `생환` overstamps it; the proof lines that name
+away (`사망` when `avoidedDeath`, otherwise the Outcome its event names - 귀환석 `from` 중상 / 부상, 생환부적 `from`
+중상; User 2026-10-09) and the resolved label `생환` overstamps it; the proof lines that name
 the Insurance appear on that overstamp. Only a turned-away Death reverses: those two result flags, and a Death 만반의 준비
 turned into 부상 / 중상 (its `prepared` event); 강골 / 구급키트 never do. The wording, the proof and the resolved Outcome
 are unchanged by this order. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
+
+A sale the engine proves saved the adventurer (the Hero Item proof, `heroProof.outcome.worse` 사망 / 중상) may show the
+proven worse verdict first and be pushed off by that Item: a Death kept away, or a Severe Injury turned into 성공 /
+대성공 (User 2026-10-09). The wording and the
+resolved Outcome are unchanged. Timing -> UI_UX_v2.8.0.md §NIGHT — SAVED BY THE SALE.
 
 ### RETURN STONE
 When it actually changes the escape/retreat outcome (a 부상 / 중상 / 사망 turned into 퇴각): show it as meaningful escape
@@ -302,15 +308,15 @@ Main NIGHT surface shows one settled value:
 
     귀환 후 피로 11
 
-From Fatigue 20 up the main line also names the band (`정상` / `지침` are not named):
+From Fatigue 10 up the main line also names the band (`정상` is not named):
 
     귀환 후 피로 22 · 과로
 
-Under the settled value, one next-decision line `{band} — 다음 원정 {effect}` whenever a
+Under the settled value, one next-decision line `다음 원정 {effect}` (the band name is on the main line, not repeated) whenever a
 Fatigue band penalty applies (10 and up; nothing at 정상):
 
-    지침 — 다음 원정 기동·정신 -15%
-    과로 — 다음 원정 기동·정신 -40%
+    다음 원정 기동·정신 -15%
+    다음 원정 기동·정신 -40%
 
 Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
 

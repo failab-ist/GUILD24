@@ -226,15 +226,19 @@ function prepare(n,d,facilities=[]){
     취약 Hazard - the largest gap before the bonus, the Final's own Hazard order on a tie. */
  if(mealFinal){const gaps=d.hazards.map(h=>hazardState(h,e,d).gap),i=gaps.indexOf(Math.max(...gaps)),h=d.hazards[i];
   e[h]=(e[h]||0)+D.relicParams.expeditionMeal.hazardDefense*mealFinal;}
- if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
+ {const foods=n.pack.map(id=>D.itemBy[id]).filter(it=>it.category==='food');
+  if(n.traits.includes('eater')&&foods.length){
+   if(foods.some(it=>STAT_KEYS.some(k=>it.effects[k]>0)))why.push('대식가: 음식의 능력치 +'+Math.round((mult.foodMult-1)*100)+'%');
+   why.push('대식가: 음식의 피로 회복 '+D.traitBy.eater.effects.foodSupplyDelta);}}
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
  if(lifetime)for(const k of STAT_KEYS)sources[k].push({name:D.relicBy.lifetime.name,v:lifetime*100,isPct:true});
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  const ops=e.opsBonus=opsBonus(hazards,d,facilities);
  if(ops>0){e.combat*=1+ops;sources.combat.push({name:D.relicBy.opsRoom.name,v:ops*100,isPct:true});}
- if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
- if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
+ const hasStat=(cat,it)=>it.category===cat&&STAT_KEYS.some(k=>it.effects[k]>0);
+ if(n.traits.includes('eater')&&n.pack.some(id=>hasStat('food',D.itemBy[id])))events.push({id:'eater-food',text:'대식가로 음식의 능력치가 '+Math.round((mult.foodMult-1)*100)+'% 올랐다.'});
+ if(n.traits.includes('potionbody')&&n.pack.some(id=>hasStat('potion',D.itemBy[id])))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 '+Math.round((mult.potionMult-1)*100)+'% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
  e.beforeFatigue=sup.currentFatigue;e.preparedSupply=sup.preparedSupply;
  e.preRecovery=sup.preRecovery;e.fatigueBeforeExpedition=sup.fatigueBeforeExpedition;e.remainingSupplyBuffer=sup.remainingSupplyBuffer;
@@ -260,6 +264,8 @@ function tierWeights0(day){
    preparation, not raw Power alone. T1 and every other Day are the anchors above. */
 const LATE_T3={from:21,to:29,shift:.10};
 function tierWeights(day){const w=tierWeights0(day);if(day<LATE_T3.from||day>LATE_T3.to)return w;const m=Math.min(LATE_T3.shift,w[1]);return [w[0],w[1]-m,w[2]+m];}
+/* EVENT §EVENT TIMING (User 2026-10-09): Events begin on the first Day a tier II Gate can be drawn, read off the table above, never typed. */
+const FIRST_TIER2_DAY=(()=>{for(let d=1;d<=29;d++)if(tierWeights(d)[1]>0)return d;return 30;})();
 /* DUNGEON_HAZARD §Hazard Defense: one non-투력 Stat per Hazard and no Gate's Hazards on the same Stat, 3 / 3 / 3 - 강인함 for
    독·냉기·부식, 기동 for 속박·진창·어둠, 정신 for 공포·화이트아웃·화염, every Stat at ×1/3. One owner: the readiness calculation
    below and the player-facing Gate sentence (`{능력치} {n}당 대응 1 제공`) read it. */
@@ -614,7 +620,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
    outcome=injuryRoll<clamp(.11-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
   }
  }
- if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
+ if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){const was=outcome;avoidedDeath=was==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
  /* ITEM §세계수 생환부적: 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
  if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
  /* ITEM §INSURANCE HIERARCHY: only 강골's injuryGuard reaches this branch; 구급키트 is not on it */
@@ -691,5 +697,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

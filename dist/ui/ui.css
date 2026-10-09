@@ -1022,6 +1022,21 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .dock .on-hand{display:flex;align-items:baseline;gap:0;
  font:400 12px/1 var(--ui);color:#a2947c;white-space:nowrap}
 .p-sale .dock .on-hand b{margin-left:5px;font:600 18px/1 var(--ui);color:var(--gold);font-variant-numeric:tabular-nums}
+/* UI_UX §SALE — QUEUE GATE COUNT REFERENCE: the queue line is the summary as it stands - no ?, underline or cue. Its hit area
+   overhangs into the Dock's top padding, not down onto 보유 골드. The balloon rises from the line, out of flow, in slate so it never reads as one more (brown) shelf card. */
+.p-sale .dock .q-tip{position:relative}
+.p-sale .dock .q-tip>summary{display:block;position:relative;min-height:0;padding:0;list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.p-sale .dock .q-tip>summary:before{content:'';position:absolute;inset:-12px -8px -4px}
+.p-sale .dock .q-tip>summary::-webkit-details-marker{display:none}
+.p-sale .dock .q-tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.p-sale .dock .q-pop{position:absolute;left:0;bottom:calc(100% + 14px);z-index:30;margin:0;
+ width:max-content;max-width:calc(100vw - 2 * var(--gutter));display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:10px;align-items:baseline;
+ padding:9px 11px;font:400 13px/1.6 var(--ui);color:#e6ecf1;background:#27323b;box-shadow:inset 0 0 0 1px #8fa3b366,0 6px 0 #00000059}
+/* a pointer crossing the gap to the balloon stays inside the tip, so a hover does not close on the way up */
+.p-sale .dock .q-pop::after{content:'';position:absolute;left:-8px;right:0;top:100%;height:16px}
+.p-sale .dock .q-pop span{font:inherit;color:inherit}
+.p-sale .dock .q-pop .k{font:600 12px/1.6 var(--ui);color:#a9bccb}
+.p-sale .dock .q-pop b{font-weight:600}
 /* UI_UX §PHASE VISUAL LANGUAGE (SALE reads register / commerce gold-amber) + §GAME-LIKE
    INTERACTION LANGUAGE + §GLOBAL PRESENTATION §1 / §3 / §7 / §15. Sending the customer off is the
    register key at the end of the transaction - but it is not the decision SALE is asking for.
@@ -1326,7 +1341,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .tray-delta i{font-style:normal;color:#8d8067}
 .tray-delta b.effect-bad{color:var(--tone-cost)}
 /* v2.9.0 NIGHT next-decision line under the settled Fatigue token */
-.next-decision{margin:4px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
+.next-decision{flex-basis:100%;margin:0;font:600 13px/1.4 var(--ui);color:#e0b98a}
 .counter-tray .tills{margin-top:8px;padding:0;position:static;background:none}
 .counter-tray .tills button{min-height:64px;padding:8px 2px}
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): folded, the tray keeps only its header line - the Item and the
@@ -1573,6 +1588,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .beat .verdict.ghost{position:absolute;margin:0;pointer-events:none;opacity:0}
 .p-night .beat .verdict.ghost.t-gone{padding-left:0;padding-right:0;background:none;clip-path:none;box-shadow:none;--rt-ink:#cfd3dd}
 .p-night .beat .verdict.ghost.t-gone:before{display:none}
+/* UI_UX §NIGHT — SAVED BY THE SALE: the worse verdict lays its own death tape, the sold Item flies over it, then sits by its line */
+.p-night .beat .verdict.saved-ghost{isolation:isolate}
+.p-night .beat .verdict.saved-ghost.t-gone:after{content:'';position:absolute;z-index:-1;left:-10px;right:-16px;top:14%;bottom:2%;
+ background:linear-gradient(180deg,#9aa0ab 0 2px,#3b3f47 2px 4px,#08090b 4px calc(100% - 3px),#2c2f36 calc(100% - 3px) calc(100% - 1px),#000 calc(100% - 1px));
+ transform-origin:left center;transform:rotate(-1.5deg) scaleX(var(--tape,0));pointer-events:none}
+.saved-fly{position:fixed;left:0;top:0;z-index:40;width:48px;height:48px;pointer-events:none;opacity:0}
+.saved-fly svg{display:block;width:48px;height:48px}
+.beat .cause li.hero .hero-items{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
+.beat .cause li.hero .hero-items svg{display:block;width:28px;height:28px}
 /* the lamp on the figure is the other half of the tag's state: the one warm light in the shop
    falls fully on a Great Success, cools on a withdrawal, and thins out as the damage grows. A
    death keeps its existing cold treatment below. Tone only - one size for every Outcome. */
@@ -1633,7 +1657,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .changed .grew{gap:4px}
 .changed .after{margin-top:10px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff12}
 .changed .reward{margin-top:7px}
-.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17}
+.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17;row-gap:7px}
 .p-night .changed .reward{margin-top:6px}
 .p-night .changed .grew{gap:4px 14px}
 /* no growth: the aftermath opens the strip, so it carries no rule and no lead-in space */
@@ -1663,9 +1687,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .changed .tip>summary i{box-shadow:inset 0 -1px 0 #9aa6b259}
 .changed .tip.up>summary b{color:#9fd6a8}
 .changed .tip.down>summary b{color:#e8927f}
-.changed .fatigue-row{display:inline-flex;align-items:baseline;gap:6px;background:transparent;box-shadow:none;padding:12px 0;margin:-12px 0;color:inherit;text-align:left}
+.changed .fatigue-row{position:relative;display:inline-flex;align-items:baseline;gap:6px;background:transparent;box-shadow:none;padding:0;margin:0;min-height:0;color:inherit;text-align:left}
+/* the 44px tap target overhangs the line instead of taking layout height */
+.changed .fatigue-row:after{content:'';position:absolute;left:0;right:0;top:-12px;bottom:-12px}
 .changed .fatigue-row i{box-shadow:inset 0 -1px 0 #9aa6b259}
-.changed .fatigue-row b{font-size:18px}
 .changed .fatigue-row.up b{color:#9fd6a8}
 .changed .fatigue-row.down b{color:#e8927f}
 .modal:has(.fatigue-ledger) .modal-body{background:#211a13}
@@ -1683,7 +1708,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .fatigue-bands h3{margin:0 0 8px;font:400 13px/1.4 var(--ui)}
 .fatigue-bands p{display:grid;grid-template-columns:80px 1fr;gap:10px;margin:6px 0;font:600 14px/1.5 var(--ui);color:#d7c9ac}
 .fatigue-bands b{font-weight:600}
-@media(min-width:1024px){.p-night .changed .fatigue-row i{font-size:16px}.p-night .changed .fatigue-row b{font-size:23px}}
 .tok{display:inline-flex;align-items:baseline;gap:6px}
 /* the equipment cell's two facts: identity, then its Stat effect, told apart by a middle dot
    rather than by a second cell (UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM) */
@@ -1783,7 +1807,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .row.open span{color:#2c2418;font-weight:600;letter-spacing:.08em}
 .print .row.open b{font-size:18px;line-height:1}
 .print .row b i{font-style:normal;font-size:12px;margin-left:3px;color:#7a715d}
-.p-closing .purse{flex-wrap:wrap;row-gap:9px}
+.p-closing .purse{flex-wrap:wrap;row-gap:7px}
 .p-closing .purse>b{font-size:22px;color:#f3ecd8}
 .p-closing .purse .pl{flex:1 0 100%;display:flex;align-items:baseline;margin:0}
 .p-closing .purse .pl span{letter-spacing:.08em}
@@ -2341,8 +2365,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-environments .env-meter-list{display:grid;grid-template-columns:repeat(2,max-content);gap:5px 14px;margin:0}
 .final-environments .env-row{display:inline-flex;justify-content:flex-start;gap:4px}
 .final-environments .env-row i{font:400 13px/1.4 var(--ui);color:#d7c9ac}
-.final-environments .env-num{padding:0;background:none;box-shadow:none;font-size:14px;line-height:1.4}
-.final-environments .env-num small{font-size:14px;color:#d7c9ac}
+.final-environments .env-num{padding:0;background:none;box-shadow:none;font:600 14px/1.4 var(--ui);-webkit-font-smoothing:auto}
+.final-environments .env-num small,.final-environments .env-num em{font:600 14px/1.4 var(--ui);color:#d7c9ac}
+.final-environments .env-num small{margin-left:1px}
 .final-environments .env-num.ok{color:#9fd6a8}
 .p-final .tillpanel .forwho{display:flex;align-items:baseline;gap:10px}
 .p-final .final-forecast{margin:0 0 12px}
@@ -2373,7 +2398,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .great-signal{margin:8px 0 0;font:600 13px/1.5 var(--ui);color:#e6c766}
 /* v2.9.5 SALE strain line (COPY_AUDIT §4-25): thin and small under 전투 전망, in the readout's own label tone */
 .readout .strain{margin:-2px 0 0;font:500 12px/1.3 var(--ui);color:#b3a282}
-.deep-offer>summary{color:#c9b0e6}
+/* SALE §DEEP SALE UI (User 2026-10-09): the closed line already names today's Deep Gate; its terms and the sponsorship key are inside */
+.deep-offer{box-shadow:inset 0 0 0 1px #c9b0e640}
+.deep-offer>summary{gap:10px;list-style:none;color:#e8dcc0}
+.deep-offer>summary::-webkit-details-marker{display:none}
+.deep-offer>summary::after{content:'';margin-left:auto;width:7px;height:7px;border:solid #c9b0e6;border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg)}
+.deep-offer[open]>summary::after{transform:translateY(2px) rotate(-135deg)}
+.deep-offer .dp-tag{font:600 12px/1 var(--ui);letter-spacing:.1em;color:#c9b0e6;white-space:nowrap}
+.deep-offer .dp-gate{font:500 15px/1.3 var(--ui)}
+.sale-desk .deep-offer .dp-tag{font-size:14px}
+.sale-desk .deep-offer .dp-gate{font-size:18px}
+.sale-desk .deep-offer .smalltext{font-size:15px}
+.sale-desk .deep-offer button{font-size:16px}
 .deep-offer button{background:#3b2b4d}
 .deep-taken{margin:0 0 14px;padding:12px 14px;background:#00000038;box-shadow:inset 0 0 0 2px #ffffff0f}
 .deep-taken b{display:block;font:400 14px/1.4 var(--ui);color:#c9b0e6}
@@ -3130,6 +3166,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-night .changed .tip>summary i,.p-night .changed .tok i{font-size:16px}
  .p-night .changed .tip>summary b,.p-night .changed .tok b,.p-night .changed .tok>em{font-size:18px}
  .p-night .changed .after .tip>summary b{font-size:23px}
+ .p-night .changed .next-decision{font-size:16px}
  .p-night .dock{padding-left:max(var(--gutter),calc((100% - 880px) / 2));
   padding-right:max(var(--gutter),calc((100% - 880px) / 2));padding-top:14px}
  .p-night .dock .bare{font-size:16px;min-height:52px}
@@ -3304,7 +3341,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .fam-card .hazards{margin:0}
 /* UI_UX §BOSS INFORMATION PRESENTATION: every investigation shares one viewport-bounded art cap. */
 @media (max-width:719px){
- .boss-art img{max-height:clamp(100px,calc(100dvh - 560px),240px)}
+ .boss-art img{max-height:clamp(120px,calc(100dvh - 465px),280px)}
  /* SA-Q12 — MOBILE QUEUE DUPLICATION. The waiting fan and its 대기 N say on the sale surface
     what the Dock already says underneath it, and on a phone the two cost a band of height each
     to state one number twice. The decorative line is suppressed at phone width only; the Dock
@@ -3314,7 +3351,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media (min-width:720px){
  .boss-art img{max-width:420px}
  /* UI_UX §BOSS INFORMATION PRESENTATION: the same cap across investigation days. */
- .boss-art img{max-height:clamp(200px,calc(100dvh - 510px),300px)}
+ .boss-art img{max-height:clamp(200px,calc(100dvh - 480px),360px)}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}
 }
 /* =====================================================================
@@ -3799,14 +3836,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.settings-wood,.modal.wood-frame{border:16px solid transparent;background:#24160d;background-clip:padding-box;
  border-image:url('assets/presentation/settings/wood-panel.webp') 150 fill / 16px / 0 stretch;
  color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
-.settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:inset 0 -1px 0 #a46b33}
 .settings-wood .modal-header h2,.wood-frame .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .settings-wood .modal-header .bare,.wood-frame .modal-header .bare{padding:8px 12px;min-height:44px;color:#dfcba9;
  background:#2d190d;box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07}
 .settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:#392213;color:#fff0d1}
 .settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #76502c}
 /* the sheets a menu opens share the menu's carved wood: header on the wood itself, tab chips as wooden keys with the same brass edge */
-.modal.wood-frame .modal-header{background:none;margin:0;padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.modal.wood-frame .modal-header{background:none;margin:0;padding:4px 8px 12px;box-shadow:inset 0 -1px 0 #a46b33}
 .modal.wood-frame .modal-header h2{font-size:23px}
 .modal.wood-frame .modal-body{color:#dfcba9}
 .modal.wood-frame .tabs .small{background:linear-gradient(180deg,#5a3a20 0,#42291a 55%,#2f1c10 100%);color:#e6d3ae;
@@ -3831,13 +3868,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .modal-body p+p{margin-top:8px}
 .settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
- background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}
+ background:none;box-shadow:inset 0 1px 0 #9b6433}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
  border-image:url('assets/presentation/settings/blue-key.webp') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
  background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
- box-shadow:0 3px 0 #110a06;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
+ box-shadow:none;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
 .settings-wood button:not(.bare):hover,.wood-frame .modal-footer button:not(.bare):hover{background:none;filter:brightness(1.12)}
-.settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
+.settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:none;filter:brightness(.94)}
+/* 「취소」는 일반 창의 갈색 칸 규칙이 더 세서 나무 틀 안에서 배경이 남았다. 같은 파란 키로 맞춘다. */
+.settings-wood .modal-footer button:not(.stamp)[data-action="dismiss"],.wood-frame .modal-footer button:not(.stamp)[data-action="dismiss"]{background:none;color:#f2eee4;box-shadow:none}
+.settings-wood .modal-footer button:not(.stamp)[data-action="dismiss"]:hover,.wood-frame .modal-footer button:not(.stamp)[data-action="dismiss"]:hover,.settings-wood .modal-footer button:not(.stamp)[data-action="dismiss"]:active,.wood-frame .modal-footer button:not(.stamp)[data-action="dismiss"]:active{background:none;box-shadow:none}
 .settings-wood button.danger,.wood-frame .modal-footer button.danger{border-image-source:url('assets/presentation/settings/red-key.webp');
  color:#ffe9df;text-shadow:0 1px 0 #350e0c}
 .settings-wood button:disabled,.settings-wood button[aria-disabled="true"],.wood-frame .modal-footer button:disabled{opacity:1;filter:saturate(.25) brightness(.75);
@@ -3847,9 +3887,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-content::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
  background:url('assets/presentation/settings/supply-backdrop.webp') right bottom / 100% auto no-repeat;opacity:.22}
 .settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
-.settings-group+.settings-group{padding-top:22px;box-shadow:0 -2px 0 #130b06,inset 0 1px 0 #97612e}
+.settings-group+.settings-group{padding-top:22px;box-shadow:inset 0 1px 0 #97612e}
 .settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
- width:6px;height:6px;background:#ad7d42;box-shadow:0 1px 0 #120b06;transform:rotate(45deg);pointer-events:none}
+ width:6px;height:6px;background:#ad7d42;transform:rotate(45deg);pointer-events:none}
 .settings-wood .settings-group h3{margin:0;font:500 21px/1.3 var(--f-plate);color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .settings-group p{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
 .settings-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -3863,21 +3903,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-panel .mix-row{grid-template-columns:38px minmax(0,1fr) 52px;gap:10px}
 .settings-panel .mix-row label{color:#ead8b6;font-size:14px}
 .settings-panel .mix-row b{min-height:36px;display:flex;align-items:center;justify-content:center;
- background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
+ background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526}
 /* Native inputs keep keyboard behaviour and a 44px touch area around the thin rail. */
 .settings-panel .mix-row input[type=range]{appearance:none;-webkit-appearance:none;height:44px;
  color:#ffc554;accent-color:#ffc554}
 .settings-panel input[type=range]::-webkit-slider-runnable-track{height:8px;
  background:linear-gradient(to right,#ffc554 var(--mix-level,100%),#493018 var(--mix-level,100%));
- border:1px solid #8d591f;border-radius:0;box-shadow:inset 0 1px 0 #ffe29b,0 2px 0 #100905}
+ border:1px solid #8d591f;border-radius:0;box-shadow:inset 0 1px 0 #ffe29b}
 .settings-panel input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
  margin-top:-6px;border:3px solid #d48a2a;border-radius:0;background:#ffe5a0;
- box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+ box-shadow:inset 0 0 0 2px #7d4b19;transform:rotate(45deg)}
 .settings-panel input[type=range]::-moz-range-track{height:6px;background:#493018;
- border:1px solid #8d591f;border-radius:0;box-shadow:0 2px 0 #100905}
+ border:1px solid #8d591f;border-radius:0}
 .settings-panel input[type=range]::-moz-range-progress{height:6px;background:#ffc554;box-shadow:inset 0 1px 0 #ffe29b}
 .settings-panel input[type=range]::-moz-range-thumb{width:12px;height:12px;border:3px solid #d48a2a;
- border-radius:0;background:#ffe5a0;box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+ border-radius:0;background:#ffe5a0;box-shadow:inset 0 0 0 2px #7d4b19;transform:rotate(45deg)}
 @media(min-width:600px){
  .settings-wood .modal-body{padding-left:18px;padding-right:18px}
  .settings-wood button:not(.bare){font-size:15px}
@@ -3992,6 +4032,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .dock .queue .on-hand{font-size:18px}
  .sale-desk .dock .pips{gap:5px}
  .sale-desk .dock .pips i{width:19px;height:22px}
+ .sale-desk .dock .q-pop{font-size:17px;padding:12px 16px}
+ .sale-desk .dock .q-pop .k{font-size:16px}
 }
 /* SALE section rules (User 2026-10-03): the rule under the tray above 손님 보내기 is the same 4px board edge as the one between the two halves */
 .p-sale:not(.sale-desk) .counter-tray{box-shadow:inset 0 4px 0 #000000b3,inset 0 -1px 0 #4a331d,inset 0 -2px 0 #7c5730,inset 0 -3px 0 #b98d52,inset 0 -4px 0 #d3ac71}

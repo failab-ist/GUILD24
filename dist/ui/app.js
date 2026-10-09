@@ -33,13 +33,13 @@ const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,
 const PRO_HOLD=[5500,7000,5000,4500,7500];
 const proSpeaker=m=>'<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>'+(m?'<path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>')+'</svg>';
 const proSoundBtn=()=>{const m=game.account.settings.muted||(!prologue.woke&&Sound.locked());return '<button type="button" class="pro-sound" data-action="prologue-sound" aria-label="'+(m?'소리 켜기':'소리 끄기')+'">'+proSpeaker(m)+'</button>';};
-function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(prologue&&prologue.i===at)prologueStep(false);},PRO_HOLD[at]);}
+function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(!prologue||prologue.i!==at)return;if(document.hidden){proTimer();return;}prologueStep(false);},PRO_HOLD[at]);}
 const proWide=()=>matchMedia('(min-width:1024px)').matches;
 const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
 /* The browser keeps sound locked until the first tap: the speaker shows it as off, and that first tap starts the music from its beginning */
 function prologueWake(){if(!prologue||prologue.woke)return;prologue.woke=true;if(!game.account.settings.muted&&Sound.locked()){Sound.restart();sound('ui');}}
-/* scene 3: the gag lands when the caption has finished fading in, and the music cuts with it */
-function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},1600);}
+/* scene 3: the gag lands as the caption starts to fade in (its 0.6s delay), and the music cuts with it. A hidden tab holds the scene: no auto-advance, no page sound */
+function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},600);}
 function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
 function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);clearTimeout(prologue.g);
  if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);if(prologue.i===2)proGag();proTimer();return;}
@@ -115,7 +115,23 @@ const stampLand=st=>st.entry+st.hold+STAMP_FALL;
    hold as 생환, the Outcome cue on the overstamp and no `rescue` accent (that stays with the flags). 강골 and 구급키트 only
    lower an injury, so they never reverse. */
 const preparedBrink=r=>!!r&&!r.rescued&&!r.avoidedDeath&&(r.events||[]).some(e=>e.id==='prepared');
+/* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09, "죽었나? 했는데 살았네"): every customer whose proof says the sold Item
+   (or 만반의 준비) kept a Death away - whatever they came back with - or turned a Severe Injury into 성공 / 대성공. The worse
+   verdict the same draws gave without it lays down, the Item shoves it off, the real tag lands. Insurance (rescued /
+   avoidedDeath) keeps its own reversal. `savedTier`: how far the result turned (1 / 2 / 3+ steps) picks the relief cue. */
+const SAVED_RANK={'사망':5,'중상':4,'부상':3,'퇴각':2,'성공':1,'대성공':0};
+const savedWorse=r=>{if(!r||r.rescued||r.avoidedDeath)return null;const w=preparedBrink(r)?'사망':r.heroProof?.outcome?.worse;
+ return w==='사망'&&r.outcome!=='사망'||w==='중상'&&(r.outcome==='성공'||r.outcome==='대성공')?w:null;};
+const savedTier=r=>Math.min(3,SAVED_RANK[savedWorse(r)]-SAVED_RANK[r.outcome]);
+const savedBeat=r=>!!savedWorse(r);
+const savedItems=r=>r.heroProof?.outcome?.items||r.items||[];
+const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
+/* User 2026-10-09 ("하.. 하다가 어 살았네"): the worse verdict sounds its own cue and the card holds still until that cue has
+   faded (사망's runs ~1.4 s, 중상's ~0.45 s), then a short silence, then the shove - so the two sounds never overlap */
+const SAVED_WAIT={'사망':500,'중상':100};
+const savedAt=w=>{const d=SAVED_WAIT[w]||0;return Object.fromEntries(Object.entries(SAVED).map(([k,v])=>[k,v+d]));};
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
+ if(savedBeat(r))return {...st,entry:240,hold:savedAt(savedWorse(r)).hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
  return preparedBrink(r)?{...st,hold:NIGHT_STAMP.saved.hold,print:true,brink:true}:st;};
 /* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
@@ -257,9 +273,13 @@ function finishClash(){if(!clash)return;const c=clash;clash=null;c.timers.forEac
 let nightCueAt=[];
 function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!result)return;
  const st=motionOK()&&nightStampOf(result);
- if(!st){sound(nightCue(result));if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
- nightCueAt=[setTimeout(()=>sound(nightCue(result)),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
- if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));}
+ /* UI_UX §NIGHT — SAVED BY THE SALE: the relief takes the Outcome cue's place on that landing, never on top of it */
+ const cue=savedBeat(result)?'saved'+savedTier(result):nightCue(result);
+ if(!st){sound(cue);if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
+ nightCueAt=[setTimeout(()=>sound(cue),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
+ if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));
+ /* the worse verdict's own cue on its print, a whoosh on the shove */
+ if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play(st.saved==='사망'?'death':'severe'),st.entry),setTimeout(()=>Sound.play('shove'),savedAt(st.saved).shove));}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -396,6 +416,31 @@ function phaseClosing(A){
     the money only when there is not (REWARD figures count up). A reversal prints what the
     Insurance turned away and overstamps it; a death gets a tape, not a stamp. Everything reads
     the tone and the result already resolved; nothing here is state. */
+function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
+ const g=document.createElement('p');g.setAttribute('aria-hidden','true');
+ g.className='verdict ghost saved-ghost t-'+(st.saved==='사망'?'gone':'severe');g.textContent=st.saved;
+ g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
+ const out=T.gone-T.shove,wait=T.shove-st.entry-100;
+ A(g,{opacity:[{from:0,to:1,duration:100,delay:st.entry},{to:1,duration:wait},{to:0,duration:out,ease:'in(2)'}],
+  translateX:[{from:0,to:0,duration:T.shove},{to:-70,duration:out,ease:'in(2)'}],
+  translateY:[{from:0,to:0,duration:T.shove},{to:46,duration:out,ease:'in(2)'}],
+  rotate:[{from:0,to:0,duration:T.shove-60},{to:-3,duration:60},{to:-18,duration:out}],
+  onComplete:()=>g.remove()});
+ if(st.saved==='사망')A(g,{'--tape':{from:0,to:1,duration:350,delay:st.entry+60,ease:'inOut(2)'}});
+ /* the figure greys while the worse verdict is on the card, and its colour comes back with the landing */
+ const fig=$('.beat .returner');
+ if(fig)A(fig,{filter:[{from:'grayscale(0) brightness(1)',to:'grayscale(0) brightness(1)',duration:st.entry+60},{to:'grayscale(1) brightness(0.5)',duration:350},
+  {to:'grayscale(1) brightness(0.5)',duration:stampLand(st)-st.entry-410},{to:'grayscale(0) brightness(1)',duration:260}],onComplete:()=>{fig.style.filter='';}});
+ const ids=savedItems(r);if(!ids.length)return;
+ const slot=$('.beat .cause li.hero .hero-items'),t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
+ const fly=document.createElement('div');fly.className='saved-fly';fly.setAttribute('aria-hidden','true');fly.innerHTML=Art.itemIcon(ids[0],48);document.body.appendChild(fly);
+ const h=slot?.getBoundingClientRect(),hx=h?h.left:gx-30,hy=h?h.top+h.height/2-24:gy;
+ A(fly,{opacity:[{from:0,to:0,duration:T.shove-150},{to:1,duration:60},{to:1,duration:T.settle-T.shove+90},{to:0,duration:120}],
+  translateX:[{from:gx+40,to:gx+40,duration:T.shove-150},{to:gx+20,duration:150,ease:'outQuad'},{to:gx-30,duration:80},{to:gx-30,duration:T.home-T.shove-80},{to:hx-12,duration:T.settle-T.home,ease:'inOut(2)'}],
+  translateY:[{from:innerHeight-60,to:innerHeight-60,duration:T.shove-150},{to:gy,duration:150,ease:'outQuad'},{to:gy+6,duration:80},{to:gy+6,duration:T.home-T.shove-80},{to:hy,duration:T.settle-T.home,ease:'inOut(2)'}],
+  scale:[{from:.6,to:.6,duration:T.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:T.home-T.shove-80},{to:.6,duration:T.settle-T.home}],
+  onComplete:()=>fly.remove()});
+ if(slot)A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
 function phaseNight(A){
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
@@ -414,9 +459,11 @@ function phaseNight(A){
    if(tone==='hurt')A(tag,{'--ink':{from:.35,to:1,duration:220,delay:land,ease:'outQuad'}});
    /* the reversal: the Outcome the Insurance turned away starts to print in its own tag, then the
       resolved label lands over it and the faint print goes */
-   if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
-    const fromDeath=r.avoidedDeath||st.brink;
-    g.className='verdict ghost t-'+(fromDeath?'gone':'severe');g.textContent=fromDeath?'사망':'중상';
+   if(st.saved)savedPlay(A,r,st,tag);
+   else if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
+    /* NIGHT_CLOSING §INSURANCE CAUSALITY: the Outcome the Insurance actually turned away (귀환석 also turns a 부상) */
+    const from=r.avoidedDeath||st.brink?'사망':(r.events||[]).find(e=>e.id==='escape'||e.id==='revive')?.from||'중상';
+    g.className='verdict ghost t-'+({'사망':'gone','중상':'severe','부상':'hurt'}[from]||'severe');g.textContent=from;
     g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
     A(g,{opacity:[{from:0,to:.4,duration:st.hold,delay:st.entry},{to:.4,duration:STAMP_FALL},{to:0,duration:120}],
      scale:{from:1.15,to:1,duration:st.hold,delay:st.entry,ease:'outQuad'},onComplete:()=>g.remove()});}
@@ -798,8 +845,7 @@ function deepOfferUI(n){
  if(t.nomineeId)return '';
  const cost=game.deepCost(n);
  if(game.canNominateDeep(n))
-  return '<details class="special-event deep-offer"><summary>'+E(c.term)+' · '+E(c.action)+'</summary>'
-   +'<p>'+E(s.dungeons[t.gateIndex].name)+' · '+E(c.sponsor)+' '+fmt(cost)+'G</p>'
+  return '<details class="special-event deep-offer"><summary><span class="dp-tag">'+E(c.term)+'</span><b class="dp-gate">'+E(s.dungeons[t.gateIndex].name)+'</b></summary>'
    +'<p class="smalltext">'+E(c.terms)+'</p>'
    +btn(E(c.action)+' · '+E(c.sponsor)+' '+fmt(cost)+'G','deep-nominate','danger','data-id="'+n.id+'"')
    +'</details>';
@@ -871,10 +917,7 @@ function deepSlip(){
      +'<span class="body">'+E(c.sponsor)+' '+fmt(t.paid)+'G 지급</span>'
    : '<span class="body">'+E(c.brief)+'</span>')
  +'</div>';}
-/* EVENT §3-1. Three things have to arrive at once: that something happened today, what
-   happened, and what is switched on because of it. The catalog already keeps those last two
-   apart - `reveal` is the situation and `description` is the effect - so the notice says both
-   and sets them apart instead of showing the effect line alone with no cause. */
+/* EVENT §3-1: show the current effect and saved situation separately. */
 function eventSlip(e){
  return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
  +'<span class="stamp-line">오늘의 사건</span><b>'+E(e.name)+'</b>'
@@ -1019,7 +1062,7 @@ function saleScreen(){
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
     than becoming a readout of its own. */
- +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
+ +'<div class="dock"><div class="queue">'+queueRef(s)
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
@@ -1046,7 +1089,7 @@ function saleDesk(n,st,waiting,preloadHtml){const s=game.run;
   +'<div class="shelf-col">'+shelf()+'</div>'
  +'</main>'
  +'<div class="counter-mat" aria-hidden="true"></div>'+tray()
- +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
+ +'<div class="dock"><div class="queue">'+queueRef(s)
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';}
 /* crossing the desk breakpoint mid-SALE draws the other layout */
@@ -1262,7 +1305,9 @@ function causeLines(r){
   &&l.items.every(name=>proven.some(id=>D.itemBy[id]?.name===name))));
  const lines=(hero?[hero]:[]).concat(supply.slice(0,1).map(l=>l.text));
  /* the proven claim is marked so the verdict stamp can hand it the landing's after-motion (H1) */
- return lines.length?'<ul class="cause">'+lines.map((t,i)=>'<li'+(hero&&!i?' class="hero"':'')+'>'+E(t)+'</li>').join('')+'</ul>':'';}
+ return lines.length?'<ul class="cause">'+lines.map((t,i)=>'<li'+(hero&&!i?' class="hero"':'')+'>'+E(t)
+  /* UI_UX §NIGHT — SAVED BY THE SALE: the Item that did it stays beside its line */
+  +(hero&&!i&&savedBeat(r)?'<span class="hero-items" aria-hidden="true">'+savedItems(r).map(id=>Art.itemIcon(id,28)).join('')+'</span>':'')+'</li>').join('')+'</ul>':'';}
 // WHAT CHANGED — Presentation decides what actually moved; this only stamps it.
 function changedRows(r){
  /* NIGHT_CLOSING 2026-09-12: a normal 대성공 also pays the Store, and a 심층원정 pays it
@@ -1278,7 +1323,7 @@ function changedRows(r){
  /* NIGHT_CLOSING §FATIGUE RESULT: the settled value opens the recorded daily causes. */
  const stamp=c=>c.note
   /* v2.9.0 NIGHT next-decision line (COPY_AUDIT §6-6): one sentence under the settled Fatigue, not a chip */
-  ?'<p class="next-decision">'+E(c.value+' — '+c.label+' '+c.extra)+'</p>'
+  ?'<p class="next-decision">'+E(c.label+' '+c.extra)+'</p>'
   :c.detail
   ?'<button class="fatigue-row tok '+c.kind+'" data-action="fatigue" data-id="'+E(r.npcId)+'" aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></button>'
   /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
@@ -1376,16 +1421,19 @@ const coachSteps={
     returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
+ /* User 2026-10-09: DAY 1 SALE keeps the destination and price marks; `flow` joins 전투 전망 on DAY 2, the Stats join 환경 대응 on DAY 3 */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  /* COPY_AUDIT §3-7 STATS: the first time a customer's Stats are on screen - what they are, that they differ per customer,
     투력 for combat, the other three for the Hazards and each one's side role. No number, no verdict. */
- ['stats','.dossier .detail-stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
+ ['stats','.dossier .detail-stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.',,3],
  /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
- ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.'],
+ ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.',,2],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
  ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3],
+ /* User 2026-10-09: 대성공 기회 is taught after 전투 전망 (DAY 2) says 우세, on its own Day clear of the DAY 2~4 / 6 marks, the first time the tag is on the box */
+ ['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5],
  /* COPY_AUDIT §3-14: the first time the price keys show - a refused 바가지 closes the Item, so it is known before the choice */
  ['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.'],
  /* contextual marks */
@@ -1471,7 +1519,7 @@ function paintCoach(step,target){
     is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
  const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
- root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:max-content;min-width:'+Math.min(260,bw)+'px;max-width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:max-content;min-width:'+Math.min(260,bw)+'px;max-width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('도움말 끄기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
  /* `bh` above is only the estimate that keeps the first paint from flashing. A real bubble is
     120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
     and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
@@ -1504,7 +1552,7 @@ function showCoach(){
  const s=game.run,relicD30=modal==='relics'&&s?.phase==='final'&&s.day===30&&s.relicWindow?.milestoneDay===30;
  if(tutorial.skipped||(modal&&!relicD0&&!relicD30)||bossHold)return;
  const finalGroup=s?.finalCommitted?'final':finalIsOrdering(s)?'finalOrder':'finalRoster';
- const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);activeGroup=steps;
+ const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
@@ -1527,16 +1575,19 @@ function showCoach(){
  activeCoach=step;
  settleCoach(step,target);
 }
-function finishCoach(skip=false){
- if(!activeCoach&&!skip)return;const t=game.account.tutorial??={};
- /* USER 2026-09-24: 건너뛰기 skips THIS screen's lesson only - every mark of the group on screen
-    is marked done - and the next screen still teaches its own. `skipped` stays the whole-tutorial
-    switch (reset / harness), no longer set by this button. */
- if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else{t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];}game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+function finishCoach(){
+ if(!activeCoach)return;const t=game.account.tutorial??={};
+ t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 document.addEventListener('scroll',()=>{if(!activeCoach)return;
  const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);
  if(target)settleCoach(activeCoach,target);},true);
+/* UI_UX §COACH (User 2026-10-09): `도움말 끄기` on a mark is the settings `안내 끄기` switch - the same `tutorial.skipped`, so every mark stops, not only this screen's. */
+function coachSwitch(off){
+ const t=game.account.tutorial??={};
+ if(off){t.skipped=true;$('#coach-root').innerHTML='';activeCoach=null;}
+ else{t.skipped=false;for(const k of Object.keys(t))if(k.startsWith('coach-'))delete t[k];}
+ game.save();}
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}
@@ -1678,16 +1729,23 @@ function orderScreen(){
 /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, User 2026-09-24): with two or more open Gates the ORDER 오늘 line carries the
    visitor count per Gate, by the destination each customer claims (a liar's or a rerouted customer's true Gate stays
    hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
-function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
+function gateCounts(from=0){const s=game.run,c=new Map();for(const id of s.queue.slice(from)){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
 /* User 2026-10-04: the Gates read as their Hazards - `부식I 3명` (name and Tier set tight, then the visitors) - so what is bought
    against is what is counted. `전체 N명` leads, stronger, in a column of its own; the Hazards run beside it and, when the line
    runs out, wrap under the first Hazard rather than under the total. Each reading is one unbreakable chip; a Tier II-III Gate's
    two Hazards sit side by side, both carrying the Gate's one count; a closed Gate comes last. */
-function todayLine(counts,tag='em'){const s=game.run,hz=d=>d.hazards.map(h=>E(D.hazards[h])+['','I','II','III'][d.tier||1]),
- chips=s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
-  .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>'));
- return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+chips.join('')+'</span></span>';}
+function todayChips(counts){const s=game.run,hz=d=>d.hazards.map(h=>E(D.hazards[h])+['','I','II','III'][d.tier||1]);
+ return s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
+  .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>')).join('');}
+function todayLine(counts,tag='em'){const s=game.run;
+ return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+todayChips(counts)+'</span></span>';}
+/* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): the Dock's own `손님` + pips is the summary of a shared tip - no
+   mark, word or height is added. Hover / focus (desk) or a tap (phone) shows, Gate by Gate, the customers left today counting the
+   one at the counter - by the Gate each claims, through ORDER's gateCounts() and its chips; the pips already say the total. */
+function queueRef(s){return '<details class="tip q-tip" name="sale-tip"><summary aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">'
+ +'<span class="q-line" aria-hidden="true">손님'+pips(s.queue.length,s.cursor)+'</span></summary>'
+ +'<p class="q-pop" role="tooltip"><span class="k">이번 손님부터</span><span class="tl-chips">'+todayChips(gateCounts(s.cursor))+'</span></p></details>';}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
@@ -1813,9 +1871,11 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
    mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
    and the next Day sorts afresh. */
 const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
-/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04) */
+/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04); on the SALE shelf the
+   current customer's own Gate leads them (User 2026-10-09) */
 const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];
-function shelfOrder(stocks,byHazard=true){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,hz=byHazard?todayHazards():[];
+function shelfOrder(stocks,byHazard=true,npc=null){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,gate=npc&&game.claimedGateFor(npc),
+ hz=byHazard?[...new Set([...(gate?gate.hazards:[]),...todayHazards()])]:[];
  if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
  for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
  const rank=st=>{const it=D.itemBy[st.item],c=Object.keys(it.effects).map(k=>hz.indexOf(k)).filter(i=>i>=0);
@@ -1831,7 +1891,7 @@ function shelf(isFinal=false){
    +(isFinal?'':relicRef())+'</div><div class="goods">'
  /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
     held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
- +shelfOrder(stocks,!isFinal).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
+ +shelfOrder(stocks,!isFinal,isFinal?null:n).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
@@ -2294,7 +2354,6 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
   /* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, one owner; COPY_AUDIT §4-14 for the recovery line */
   const band=Dungeon.fatigueBand(n.fatigue);
   cond.push('현재 피로 (상품 사용 전): '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
-  cond.push('피로 회복: 음식·음료');
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook&&n.outlook.day===game.run.day)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
@@ -2302,7 +2361,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  /* DUNGEON_HAZARD §STRAIN (v2.9.1 balance): an information row, no verdict - consecutive
     expeditions this adventurer began injured, counted back from the most recent record and
     reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
- cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');
+ {const streak=Dungeon.injuredStreak(n.records);if(streak>0)cond.push('연속 부상 출발 '+streak+'회');}
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
  return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'상품 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
@@ -2478,7 +2537,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
 const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
- <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
+ <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
@@ -2695,7 +2754,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  try{
  if(activeCoach&&activeCoach[3]===a)finishCoach();
  switch(a){
- case'coach-skip':finishCoach(true);break;
+ case'coach-skip':coachSwitch(true);sound('ui');render();break;
  /* presentation only - the line stays in run.say, so nothing here is saved or re-rendered */
  case'say-hide':hideSpeech();break;
  case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
@@ -2849,9 +2908,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
- case'coach-toggle':{const t=game.account.tutorial??={};if(t.skipped){t.skipped=false;for(const k of Object.keys(t))if(k.startsWith('coach-'))delete t[k];}else{t.skipped=true;$('#coach-root').innerHTML='';activeCoach=null;}game.save();sound('ui');render();
+ case'coach-toggle':coachSwitch(!coachOff());sound('ui');render();
   // UI_UX §SETTINGS / DEBUG BOUNDARY: preparation returns before the settings panel refresh.
-  if(!s||(s.phase==='end'&&prepOpen))renderModal();break;}
+  if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
   // Preparation rendering returns before modal refresh; keep its mute label current too.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
@@ -2881,7 +2940,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     when one is actually credited - this fired every Final, unlock or not, and twice with one */
  /* §BOSS / FINAL AUDIO: the Final commit is the run's heaviest short action cue - a gate
     closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
- case'boss-go':sound('final');game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
+ case'boss-go':sound('final');endRevealed=false;endFrom='final';/* the clash plays before any render() can arm the hold, so arm it here */game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
  case'retire':setModal('retireConfirm');break;
  case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}
@@ -2907,7 +2966,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
 const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'점포지원 후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
- /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
+ /* EVENT §41 / §42: blocked controls explain their active restriction. */
  cap:()=>'오늘은 발주 후보 한 칸에서 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 후보 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}

@@ -1,27 +1,16 @@
 # WORK_STATE
 
-DATE: 2026-10-08
-STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User 화면·main 머지·패치 버전 컨펌 2026-10-05). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+DATE: 2026-10-09
+STATE: V2_11_1_PLUS_APPROVED_WORK (승인된 밸런스·후속 UI·소스/문구 일치 점검 반영). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 승인 버전은 v2.11.1(마이너 UI 피드백 · 첫 마왕성 단계별 코치, `codex/minor-ui-v2111`의 main 머지 PR). 직전은 v2.11.0(PR #111, 이후 UI PR #112 · #113 포함). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
-- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
-- Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
-- 로컬 후속 작업(User 2026-10-06): 대응 음식·음료 7종 피로 회복만 PR #107 이전으로 복원(`3b09af23`), 가격·직접 대응은 유지. 직업 계측 도구 `eac6111b`로 기준+성장 비용 ×8+후반 전투 1.00/1.05, 60,000런 측정 완료. 후보는 Production 미적용이고 직업·마왕·환경 변경도 미적용. main 머지/배포는 아직 하지 않았다. 결과 `reports/v2100-measure/fresh-candidates-20261006/REPORT.md`.
-- 로컬 롤백 밸런스 기준 로그: `reports/v2100-measure/fresh-candidates-20261006/baseline.log`(도구 `eac6111b`, 확정 회복 롤백 기준). 이전 배포 버전 기준은 `reports/v2100-measure/v2103-bots-baseline.log`. 플레이타임 `v2102-playtime-full.log`(측정 방법은 `AGENTS.md` §9-B).
-- 후속 결정/읽기(User 2026-10-06): 균형 봇은 기준 평가와 기본 측정에서 제외(`1aa258e0`). 기존 데이터의 프레시 도달/도달 시 클리어·직업 후반 사망/종료 생존은 `reports/v2100-measure/fresh-candidates-20261006/FOLLOWUP.md`. D30 생존 난이도와 도달 후 마왕전 난이도를 분리하는 방향이며 마왕/성장 새 수치는 아직 미적용. 추가 시뮬 없음.
-- 보호 ON 새 측정(User 2026-10-06): 기준+A~D+마왕5% 전체 조합 E, 84,000런 완료. 결과 `reports/v2100-measure/protected-combos-20261006/REPORT.md`(도구 `4b5024a7`, 후보 기준 `5b9b5c95`). E의 템 지급 도달 후 클리어 25.5/30.6%, C 마왕10%도 33.3/39.3%로 목표50~60% 미달. 성장/전투/마왕/법사 후보는 Production 미적용. 퇴각 경험치 전역 상향은 거절, 처진 인원만 부스트는 수치 미확정·본 6조건 미포함. 마왕 환경/화염 개별 조정·도적/광전사 수치도 미적용. 광전사 실제 출전 표본0이다.
-
-- 추가 측정(User 2026-10-07): 마왕5%·화염12·처진 인원XP×1.5를 공통으로 환경 차감2.5/2.0, 28000런 완료. 템 지급 프레시 도달 후 클리어28.1/33.9%와33.0/40.1%, 세이브 수준 레벨 참고 집단은2.0에서45.5/57.1%다. 전체 목표50~60% 미달은 BALANCE FINDING. 결과 `reports/v2100-measure/environment-boost-20261007/REPORT.md`. Production 후보 미적용.
-- 포션 계약 추가 비교(User 2026-10-07): 다른 세션b22afde7의 전문 포션 유통 계약을env20 배경에서 추가 칸0/1, 28000런 정상 완료. 프레시 전체 클리어reader6.3→5.9%, expert6.7→7.2%로 차이는오차범위 안. 실제 획득8~10%라 큰 효과는확인하지 못했다. 결과 `reports/v2100-measure/environment-boost-20261007/POTION.md`. 이전 중단의 정확 원인은ROOT CAUSE UNRESOLVED이고 독립 숨김 실행+`--workers 4`로 재실행했다. 측정 도구동시 작업 옵션은b86d604c, 게임 수치는변경 없음.
-
-- 추가 승인 측정(User 2026-10-08): 전문 포션 유통 계약의 포션 판매 본사 수입10% 후보, 14000런 추가 완료. 기존0% 동일시드14000런과 비교해 프레시 현금/일 +0.86/+0.82G(짝지은95%범위 모두0보다 높음), 전체 클리어5.9→6.0%/7.2→7.2%로 전투 변화는 오차범위 안이다. 결과 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 후보 `19728a00`, Production 미적용. 다른 희귀와 동일한 D1 단독보유 순위 비교는 아니다.
-
-- 소스 반영(User 2026-10-08): 전문 포션 유통 계약180G·포션전용1칸·일반포션판매 본사지급10% 적용. 다른세션b22afde7의 확정발주칸 즉시추가/후보교환유지 묶음을 재사용했다. 상품44종·활성점포지원34종·장식12종과 공통수치를 한 문서 `reports/BALANCE-CATALOG.md`로 소스에서 자동 생성하며 audit에 연결했다. 실험후보/시뮬지표는 자료집에 넣지 않았다. 전체npm test·audit·판매회귀·관련화면27검사 PASS. 성장/후반/마왕/직업/환경 후보는 이번에 적용하지 않았다. 로컬 반영이며 PR/머지/배포는 하지 않았다.
-
-- 최신 채택(User2026-10-08): 성장18+레벨×8·후반1.05·법사투력성장3.1·마왕최종요구×0.95·화염가산12·최종환경차감2·처진생환자XP×1.5(일반신규최저까지 추가분상한) 적용. 마왕성 위험필요대응은정확28, 일반원정위험은유지. 포션1칸·180G·본사지급10%와회복롤백을보존했다. 최신main PR#115의 UI·코치·게이트수정은그대로유지했다.
-- 현행자료집: `reports/BALANCE-CATALOG.md`, source audit로자동갱신. 과거시뮬은필요대응28.5였으므로정확28판의새도달/클리어율이라고인용하지않는다. 신규궤적측정없음. 주석정리는수정함수에한정하고승인XP변경외resolve 실행문보존을확인했다. 전체npm test·관련마왕성발주왕복22검사·마왕성화면/보급173검사PASS. PR #116으로main머지승인, 표준 npm test→audit→git diff 검증PASS.
+- repository: `failab-ist/GUILD24`. 현행 버전 v2.11.1과 승인된 후속 작업을 유지한다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
+- 승인된 밸런스는 이미 채택됐다: PR #116의 성장·처진 인원 경험치·Final 조정·포션 유통, PR #123의 직업 및 절반 강도 일반 게이트/화염. 현행 숫자는 각각 NPC_TRAIT / DUNGEON_HAZARD / BOSS / FINAL_EXPEDITION / RELIC owner를 따른다. 과거 후보를 현재 미적용 상태라고 다시 적지 않는다.
+- 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 이후 추가 밸런스 측정은 없다.
+- 최신 main의 SALE 남은 손님 팝오버·코치 분산·도움말 끄기 연동·판매 상품이 살린 NIGHT 연출·보험 원인 표시는 유지한다. 이번 통합 기준 main은 `e3de85dc`다.
+- 소스/사용자 노출 텍스트 점검은 배치1~8 완료. 설정·가이드, 상품·발주, 판매·모험가, 게이트·사건, 밤·폐점, 지원·장식·메타, 마왕·최종 원정, 사건55종을 처리했다. 배치8 커밋 `738c74a`. 전체 변경과 근거·검증은 `reports/TEXT-SOURCE-AUDIT.md`, 굵직한 배치 요약은 CHANGELOG의 소스/문구 점검 항목을 따른다.
+- User 2026-10-10이 화면·커밋·문서 정리·머지를 승인했다. 통합 후 표준 npm test→audit→clean 검사와 관련 화면 검사를 완료한 결과로 머지한다. 실물 폰 검증과 별도 출시 버전 변경은 이번 작업 범위에 없다.
 
 ## 최근 버전 (User 2026-10-02 ~ 10-04)
 
@@ -61,7 +50,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
   - 전체 `npm test` PASS · revision 39 · `ssot:check` 21/21
   - `qa:runtime` 14/14(`qa-bgm` 29/29 새로 추가) · `qa:visual` clean(126장)
 - 남은 것(User)
-  - 실기기 청취: UI-Q114 · UI-Q-v29-47. 음량 −24 LUFS와 이음새를 확인해야 한다.
+  - 실기기 청취: UI-Q114 · UI-Q-v29-47. 현행 믹스의 음량과 이음새를 확인해야 한다.
 - 웹 BGM(User 2026-09-29)
   - 128 kb/s 사본으로 22 MB이고, 다음 페이즈 곡을 미리 받는다.
   - 웹 사본에는 C2PA가 빠지므로, 크레딧과 스토어 설명에 AI 음악 고지가 필수다(출시 작업의 크레딧 항목).
@@ -72,7 +61,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 검증 범위 · PR · 머지 규칙은 `AGENTS.md` §6-A, 밸런스 측정은 §9-B, 보고 · 핸드오프 언어는 §11-A.
 
 다음 작업:
-0. 소스·사용자 노출 텍스트 일치 점검: 배치1~7 커밋 완료(최근93251c8f). 배치8 사건55종 승인 문구 적용·값 참조·옛 저장 설명 표시 및 최신 User의 칸당 공급최대2개 규칙 구현 완료. 같은 상품 두 칸이면2+2개, 추가 입고 괄호 삭제, 냉장고 최소 오늘까지 문구 확인 적용. 기존 폰트 누락2글자 갱신. 전체 npm test→audit PASS, 폰390/데스크1280 AFTER462검사 PASS. reports/TEXT-SOURCE-AUDIT.md 배치8에55행 변경 전→후·근거·검증·미확인 과거 저장 원인 기록. 현재 미커밋 변경은 이번 배치8뿐. User 2026-10-10 AFTER 화면 확인 및 커밋·문서 정리·머지 승인. 배치8 커밋 후 최신 main 통합→현재 기준 문서/수정 함수 주석 정리→최종 검사→머지→clean 확인→전체 완료 보고·STOP. Read AGENTS.md first and follow it.
+0. 소스/문구 점검 배치1~8과 문서 정리를 완료하고 최신 main 통합 후 최종 검사·PR 머지·clean 확인으로 마무리한다. 관련 실행 포인터는 reports/TEXT-SOURCE-AUDIT.md §최종 정리. 새로운 기능·밸런스 측정은 별도 User 요청을 기다린다. Read AGENTS.md first and follow it.
 1. v2.10.3을 User 플레이로 확인한다: 바가지 거절 대가(그 상품은 그 방문에 못 팖 · 단골도 거절 −2 / 판매 −4), 첫 판매 가격 키 코치, 왕도 인증 40%. 세이브에 런 시작 빌드가 찍히므로 `node tools/save-check.cjs <세이브>`로 v2.10.3 판인지 바로 가린다.
    - 열린 관찰: Day 항 ×0.4라 D25 이후 신규가 Lv10 안팎으로 나와 기존 핵심 NPC와 비슷해진다. ×0.33은 D30 도달 16~19%로 너무 빡빡해서 버렸다. 플레이 뒤 상한이 필요한지 판단한다.
    - v2.11.0을 플레이로 확인한다(User 2026-10-05): 휴식 바우처 꽂이(피로 −6)는 측정으로는 약하지만(D30 +0.8%p) 뽑으면 플레이 성향이 달라질 수 있어 플레이로 본다. 지원 교환 쿠폰함은 봇이 후보 교환을 쓰지 않아 측정 불가. 측정 근거 `reports/relic-balance/v2105-after/`.

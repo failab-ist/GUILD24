@@ -40,6 +40,13 @@ test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic 
  for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
 });
 
+test('EVENT 55 게이트 안정화 작업 (User 2026-10-09): out of the Pool before the first Day a tier II Gate can open; other Events unchanged',()=>{
+ const g=fresh('safe-elig'),safe=DATA.events.find(e=>e.id==='safegates'),other=DATA.events.find(e=>!e.effects.tierOne&&g.eventEligible(e));
+ const first=globalThis.Dungeon.FIRST_TIER2_DAY;
+ g.run.day=first-1;assert.equal(g.eventEligible(safe),false,'before: out');assert.equal(g.eventEligible(other),true,'others stay');
+ g.run.day=first;assert.equal(g.eventEligible(safe),true,'from that Day: in');
+});
+
 test('EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): a Run never meets the same Event twice, and the log survives a save',()=>{
  let events=0,repeats=0;
  for(let i=0;i<60;i++){const g=fresh('norepeat-'+i),s=g.run;s.money=99999;
@@ -274,6 +281,14 @@ test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
  // User 2026-09-29: a Reroll ends the promotion - the new sheet carries no 1+1, and a second Reroll does not bring it back
  s.money=5000;g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'a Reroll ends the 1+1');
  g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'and it does not come back');
+});
+
+test('EVENT 02 (User 2026-10-09): only the first Run DAY 2 steers the 1+1 SKU to a Common Counter, supply capped at 2',()=>{
+ for(let n=0;n<40;n++){const g=fresh('promo-counter'+n),s=g.run;s.event=DATA.events.find(e=>e.id==='oneplus');s.firstRun=true;s.day=2;g.generateOffers();
+  const H=[...new Set(s.dungeons.flatMap(d=>d.hazards))],p=s.offers.filter(o=>o.promo);
+  assert.equal(p.length,1,'exactly one designated SKU');
+  const it=DATA.itemBy[p[0].item];assert.equal(it.rarity,0,'Common');assert.ok(Relics.directCounter(it,H),'counters an open Gate Hazard: '+it.id);
+  assert.ok(p[0].quantity<=2,'tutorial supply is at most 2');}
 });
 
 test('EVENT 10: 암시장 keeps its one special slot through a Reroll (User 2026-09-29)',()=>{

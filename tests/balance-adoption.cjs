@@ -19,4 +19,18 @@ assert.equal(DATA.balance.finalGapPenalty,2);assert.equal(DATA.bossTuning.firePa
 for(const [boss,fire,seals,revenue,want]of [['WRATH',false,0,0,228],['WRATH',true,0,0,239.4],['GREED',false,0,0,242.25],['GREED',false,0,18800,228],['SLOTH',false,0,0,253.65],['SLOTH',true,0,0,265.05],['SLOTH',false,3,0,189.05]]){
  const run={bossId:boss,final:{families:fire?['golem','spider']:['spider','snow']},stats:{revenue},sealBreakCount:seals};
  assert.ok(Math.abs(Game.prototype.effectiveBossPower.call({run},0)-want)<1e-9,boss+' effective requirement');}
-console.log('PASS 성장·최저레벨·부스트 상한·기본XP·RNG·마왕성28·일반위험·후반·법사·마왕 계수');
+// 승인된 변경 폭의 절반: 앵커/보간/유지와 화염 계열을 함께 확인한다.
+for(const [day,offset]of [[1,.125],[4,.25],[10,.5],[11,.55],[15,.75],[20,1],[21,1.1],[22,1.2],[25,1.5],[26,1.5],[29,1.5]]){
+ for(const [family,base]of [['spider',2],['slime',2],['golem',3],['crypt',3],['snow',4]])for(const tier of [1,2,3]){
+  let calls=0;const dungeon=Game.prototype.makeDungeon.call({run:{day},burden(){calls++;}},family,tier);
+  const isFire=family==='golem',scale=(isFire?.9:1)*(day<=21?.9:.95),term=21+Dungeon.gateDayTerm(day)+(tier-1)*5+(base-2)*1.3;
+  const old=(term+(isFire?[6,14,22][tier-1]:0))*scale;
+  const full=(term+offset*2+(isFire?[6,13,20][tier-1]:0))*scale;
+  const half=(term+offset+(isFire?[6,13.5,21][tier-1]:0))*scale;
+  assert.ok(Math.abs(dungeon.power-half)<1e-9,'승인된 절반 게이트 '+day+'/'+family+'/'+tier);
+  assert.ok(Math.abs((dungeon.power-old)*2-(full-old))<1e-9,'기존→실험안 변화의 정확한 절반');
+  assert.equal(calls,1,'기존 burden 호출 보존');assert.deepEqual(dungeon.hazards,DATA.familyTiers[family][tier-1]);
+ }
+}
+const final=Game.prototype.makeFinal.call({run:{seed:'half-gate-final',day:30}});assert.equal(final.family,'final');assert.equal(final.power,DATA.balance.bossPower/3);assert.equal(final.scale,4.6);
+console.log('PASS 절반 게이트·화염·성장 유지·최저레벨·부스트 상한·기본XP·RNG·마왕성28·일반위험·후반·법사·마왕 계수');

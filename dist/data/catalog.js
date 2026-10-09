@@ -80,12 +80,12 @@ item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초�
    and 광전사 a clear step above 도적 - without either becoming mandatory.
    Stat order: 투력 / 강인함 / 기동 / 정신. */
 jobs:[
-{id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,2.6,1.5,1.6]},
-{id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,19,10],growth:[2.6,2,3,1.6]},
+{id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,3,1.5,1.6]},
+{id:'archer',name:'궁수',color:'#77ac79',stats:[13,12,21,10],growth:[2.3,2.1,3.4,1.6]},
 {id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.1,1.6,1.8,2.7]},
 {id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,20],growth:[2.2,2.7,1.6,3]},
-{id:'rogue',name:'도적',color:'#79b6b5',stats:[15,11,21,9],growth:[2.8,2,3.4,1.5],metaUnlock:3},
-{id:'berserker',name:'광전사',color:'#db6464',stats:[21,14,12,7],growth:[3.6,2.4,1.9,1.3],metaUnlock:6}
+{id:'rogue',name:'도적',color:'#79b6b5',stats:[17,10,19,9],growth:[3,1.8,3,1.5],metaUnlock:3},
+{id:'berserker',name:'광전사',color:'#db6464',stats:[21,15,13,7],growth:[3.6,2.5,2,1.3],metaUnlock:6}
 ],
 traits:[
 // NPC_TRAIT ACTIVE TRAIT CATALOG (FROZEN, 30). `direction` is internal only.
@@ -221,24 +221,7 @@ events:[
    archive/inactive/v2_7_franchise/contracts.js. Nothing active read it any more. A stale v8
    save may still carry a `run.contract` string; it is dormant payload and changes nothing. */
 };
-/* Boss Trait tuning. Every one of these is PASS3 and none is approved yet, so they are
-   null on purpose: a Trait with no value applies nothing, and the Final stays exactly the
-   WRATH baseline. Stage 9 measures candidates against the final RNG baseline and Stage 10
-   fills these in once they are approved. Writing a plausible-looking number here would
-   make an unapproved guess look like a decision. */
-/* DUNGEON_HAZARD / ECONOMY_ORDER / NPC_TRAIT, 2026-09-12 amendment.
-   EVERY VALUE HERE IS A STAGE 9 MEASUREMENT BASELINE, NOT A SETTLED ONE. The Director set
-   them so the integrated measurement has something real to measure; Stage 9 reports the actual
-   distributions and proposes candidates, and Stage 10 applies exactly one approved set.
-   signalMargin is not a gate on the roll - it is only where the player is told the attempt is
-   worth chasing, so it has to be read off the same margin the roll uses. The cap keeps Great
-   Success below certainty at every level of preparation. */
-/* Stage 10, approved. The curve is gentler than the Stage 9 baseline (slope 1.2 / cap .45)
-   and the Store reward stops scaling with the Gate's own value: a Great Success now pays a
-   flat amount for the Day band it happened in, so the reward is legible before it is earned.
-   Deep Expeditions still pay 0. ECONOMY_ORDER / SA-Q41 sets the v2.8 baseline at 50/100/200:
-   the well-grown-NPC Great Success loop is kept, the second-order Store snowball is reduced.
-   signalMargin .26, chanceSlope .80 and chanceCap .30 are explicitly unchanged. */
+/* DUNGEON_HAZARD / ECONOMY_ORDER §GREAT SUCCESS: signal and roll share the margin; ordinary Gate store rewards follow the Day band, Deep pays none. */
 G.DATA.greatSuccess={signalMargin:.26,chanceSlope:.8,chanceCap:.30,
  storeGoldByBand:[{maxDay:10,gold:50},{maxDay:20,gold:100},{maxDay:30,gold:200}]};
 G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
@@ -251,23 +234,11 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
  sponsorBase:200,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
  successExp:40,greatExp:80,successWallet:60,greatWallet:120};
 
-/* v2.5 final (F1). The Stage 10 factors ease once more, as the five-arm ablation measured them:
-   PRIDE .85->.90, ENVY .88->.92, GLUTTONY .70->.80, LUST .90->.95, GREED shortfall cap 20->15,
-   SLOTH 225/195/180/165 -> 220/190/175/160. WRATH's 200 and the revenue target do not move, so
-   the baseline Boss is unchanged and only the gimmicks soften. SLOTH is still the hardest Boss
-   by a wide margin and ships that way - that is on the playtest follow-up, not in this change.
-   Stage 10, approved. Until now every field was null and the production Traits were inert,
-   which is why the Stage 9 per-Boss spread was Family and Gate variance rather than gimmick.
-   greedRevenueTarget is the one value that could not be approved in advance: it is 90% of the
-   median cumulative gross sales an engaged Run makes under the NEW economy, so it was measured
-   after the rest of this adoption landed and filled in from that measurement. */
+/* BOSS §BASELINE POWER / participant-side rules: current approved tuning. */
 G.DATA.bossTuning={
- prideCombatFactor:0.92,        // PRIDE: every participant's Final 투력 x this (v2.7, supersedes 0.90)
+ prideCombatFactor:0.92, // PRIDE: every participant’s Final combat factor
  envyStatFactor:0.92,           // ENVY: the single ace's four Stats x this
  greedRevenueTarget:18800,      // GREED: cumulative gross sales the Run is measured against
-                                //   = 90% of the median engaged Run's gross sales measured on
-                                //   the Stage 10 economy (median 20,909 across the engaged
-                                //   strategies, 200 seeds each), rounded to 100G.
  greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power
  /* GLUTTONY v2.7: the Rare+ threshold is superseded. EVERY positive Core-Stat contribution
     that came from an Item is halved, whatever its Rarity, after the Item-side amplification
@@ -311,11 +282,7 @@ G.DATA.balance={finalHazardThreat:28,finalGapPenalty:2,finalRoll:{lo:.92,hi:1.08
    economy's difficulty is meant to sit in what was ordered, what was kept in stock, and how
    each sale was priced - not in a die roll against a fair offer. */
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-4,refusalLoyalty:-2},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
-  /* Only 정가 weighs the judged price against the purse. PROVISIONAL, reported for approval:
-     intentPivot is the measured median 정가 burden and intentWeight is what a deviation from it
-     is worth, so the term redistributes around ordinary weight instead of taxing every offer.
-     할인 and 바가지 carry no weight and are decided exactly as they were before this existed -
-     their acceptance is not this patch's to move. */
+  /* ECONOMY_ORDER §PURCHASE INTENT: only 정가 receives the positive affordability bonus. */
   intentPivot:.36,intentWeight:.5,
   /* v2.9.2 balance (User 2026-09-25): the FINAL 정가 purchase chance, the 0.97 관련 준비 case included, is scaled
      by 0.90 - a ~10% relative cut, not percentage points. 할인 and 바가지 carry no scale; the shared need is untouched. */

@@ -19,7 +19,7 @@ async function switchCheck(page,state,width){
  await page.locator('[data-action="coach-toggle"]').click();
  await page.waitForTimeout(50);
  const off=await page.locator('#modal-root').innerText();
- check(prefix+' OFF 버튼 즉시 갱신',off.includes('안내 다시 보기'));
+ check(prefix+' OFF 버튼 즉시 갱신',off.includes('도움말 다시 보기'));
  if(!before)check(prefix+' OFF 설명',off.includes('안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.'));
  assert.equal(await page.evaluate(()=>Guild24.game.account.tutorial.skipped),true);
  if(state==='prep')await capture(page,'settings-off-'+width);
@@ -35,7 +35,7 @@ async function switchCheck(page,state,width){
  await open(page,'settings');await page.locator('[data-action="coach-toggle"]').click();
  await page.waitForTimeout(50);
  const on=await page.locator('#modal-root').innerText();
- check(prefix+' ON 버튼 즉시 갱신',on.includes('안내 끄기'));
+ check(prefix+' ON 버튼 즉시 갱신',on.includes('도움말 끄기'));
  if(!before)check(prefix+' ON 설명',on.includes('필요한 때 말풍선과 한 줄 안내가 나온다.'));
  const tutorial=await page.evaluate(()=>Guild24.game.account.tutorial);
  check(prefix+' ON 코치 기록만 초기화',tutorial.skipped===false&&tutorial.keepMarker===true&&!Object.keys(tutorial).some(k=>k.startsWith('coach-')));
@@ -62,7 +62,7 @@ async function switchCheck(page,state,width){
    await capture(page,'guide-'+width);
    await page.locator('details.more > summary').click();
    const guide=await page.locator('#modal-root').innerText();
-   check(width+' 회생 현재 한도',guide.includes('한 점포에서 최대 3회.'));
+   check(width+' 회생 현재 한도',guide.includes(before?'한 점포에서 최대 3회.':'한 점포에서 최대 3번의 마감에 이용할 수 있다.'));
    if(!before){
     check(width+' 상품 효과 안내',guide.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'));
     check(width+' 바가지 거절 예외',guide.includes('바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.'));

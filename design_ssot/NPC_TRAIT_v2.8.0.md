@@ -59,8 +59,8 @@ natural=[투력,강인함]
 pressure=[기동,정신]
 
 ### 궁수
-natural=[기동,투력]
-pressure=[강인함 일부,정신 일부]
+natural=[기동]
+pressure=[투력 준비,강인함 일부,정신 일부]
 
 ### 마법사
 natural=[투력,정신]
@@ -71,9 +71,8 @@ natural=[강인함,정신]
 pressure=[투력/기동 depending growth]
 
 ### 도적
-natural=[기동]
-secondary=[투력]
-pressure=[raw combat/강인함]
+natural=[투력,기동]
+pressure=[강인함,정신]
 
 ### 광전사
 natural=[투력]
@@ -88,18 +87,38 @@ Stat order:
 
 | Job | Lv1 Stats | per-Level Growth |
 |---|---|---|
-| 전사 | 17 / 18 / 9 / 10 | 2.8 / 2.6 / 1.5 / 1.6 |
-| 궁수 | 14 / 11 / 19 / 10 | 2.6 / 2.0 / 3.0 / 1.6 |
+| 전사 | 17 / 18 / 9 / 10 | 2.8 / 3.0 / 1.5 / 1.6 |
+| 궁수 | 13 / 12 / 21 / 10 | 2.3 / 2.1 / 3.4 / 1.6 |
 | 마법사 | 18 / 9 / 10 / 17 | 3.1 / 1.6 / 1.8 / 2.7 |
 | 사제 | 10 / 16 / 9 / 20 | 2.2 / 2.7 / 1.6 / 3.0 |
-| 도적 | 15 / 11 / 21 / 9 | 2.8 / 2.0 / 3.4 / 1.5 |
-| 광전사 | 21 / 14 / 12 / 7 | 3.6 / 2.4 / 1.9 / 1.3 |
+| 도적 | 17 / 10 / 19 / 9 | 3.0 / 1.8 / 3.0 / 1.5 |
+| 광전사 | 21 / 15 / 13 / 7 | 3.6 / 2.5 / 2.0 / 1.3 |
 
     Core Stat gain per Level
     = Job Growth × that NPC's internal Potential
 
 Potential is an internal growth input, never exposed as a relationship reward (→ §PLAYER-FACING GROWTH TRUTH).
 Job Mastery does not alter this table; current Job Mastery effect -> META_v2.8.0.md.
+
+### Job contribution — internal comparison
+
+At Potential 1, no Equipment, Items, Traits or Condition modifiers:
+Power contribution = 투력 × 0.50 + (강인함 + 기동 + 정신) × 0.27.
+Environment contribution = 강인함 + 기동 + 정신 (exclude 투력).
+Per-Level contribution applies the same formulas to per-Level Growth.
+These are comparison metrics, not a player-facing aggregate Stat or a shared Hazard defense.
+Each Hazard still uses its own 강인함 / 기동 / 정신 counter at Stat / 3 (DUNGEON_HAZARD).
+
+| Job | Lv1 Power contribution | Power contribution / Level | Lv1 Environment contribution | Environment contribution / Level |
+|---|---:|---:|---:|---:|
+| 전사 | 18.490 | 3.047 | 37 | 6.1 |
+| 궁수 | 18.110 | 3.067 | 43 | 7.1 |
+| 마법사 | 18.720 | 3.197 | 36 | 6.1 |
+| 사제 | 17.150 | 3.071 | 45 | 7.3 |
+| 도적 | 18.760 | 3.201 | 38 | 6.3 |
+| 광전사 | 19.950 | 3.366 | 35 | 5.8 |
+
+At Level L, contribution = Lv1 contribution + (L − 1) × per-Level contribution.
 
 ## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
 

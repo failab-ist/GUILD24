@@ -1,0 +1,135 @@
+{
+  "status": "complete",
+  "started": "2026-10-09T04:39:59.706Z",
+  "pid": 25592,
+  "policy": "reader",
+  "traj": 200,
+  "fresh": 1000,
+  "runs": 10,
+  "decos": [
+    "none",
+    "economy",
+    "survival"
+  ],
+  "runsPerCondition": 7000,
+  "totalRuns": 28000,
+  "firstRunLessons": true,
+  "source": {
+    "A": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\job-balance-tool\\GUILD24",
+      "head": "0b70d210d32a661b4c290c5e03301b38fbf03c09",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "3fd320320a313a2f24567e5d4605449a246bdec6cd395cf8873db556b6b44c3c",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "ca7513c3cd6ffb2c4a99afdef7feed91ce9f55f11dacadab27ac2985c21a5e13",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    },
+    "B": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\gate-fire-study\\GUILD24",
+      "head": "df8b6f67dc0dcc1631a16b0bdf5a38e98efee79e",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "3fd320320a313a2f24567e5d4605449a246bdec6cd395cf8873db556b6b44c3c",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "4dd3c4fe4015713660b40fcea24dc239a3b4613c091eed85eb56d935b6180909",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    },
+    "C": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\growth-boost-study\\GUILD24",
+      "head": "76143c34c01d605c38d88ef896888872bb716832",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "d0136c819a7d2c374b13ef94e2fa960311a68f2a61125137fcca336e09487707",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "ca7513c3cd6ffb2c4a99afdef7feed91ce9f55f11dacadab27ac2985c21a5e13",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    },
+    "D": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\gate-growth-study\\GUILD24",
+      "head": "2e8921c90ce4ce2b8f522d665686f428cc1e5091",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "d0136c819a7d2c374b13ef94e2fa960311a68f2a61125137fcca336e09487707",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "4dd3c4fe4015713660b40fcea24dc239a3b4613c091eed85eb56d935b6180909",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    }
+  },
+  "runnerHash": "d5df0357f4200074463574a1d5707b0ae25cefea3208b23a58885a8012ed4cb4",
+  "completed": [
+    {
+      "id": "A",
+      "seconds": 161.504,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\A.json",
+      "bytes": 19161176,
+      "sha256": "c6aa62e463f70de511a1eb44733adda218fb1a07749e29917cabd4226d3f433c",
+      "logSha256": "da0392ec970093dde0bf472df1e254b5edf1d3e32eb7096117685d479a9cac91"
+    },
+    {
+      "id": "B",
+      "seconds": 137.226,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\B.json",
+      "bytes": 18334078,
+      "sha256": "5fbc2c4af3f0b9bae246993c40084314299ca0373f4198903bb9529f3f5a9e4d",
+      "logSha256": "a2864aa86ad5d4ce1a0c8029c6bce765b6439d05166c74adb2c01546f5cdbe9f"
+    },
+    {
+      "id": "C",
+      "seconds": 185.162,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\C.json",
+      "bytes": 19197295,
+      "sha256": "0b8d60eb3d25bad57208c2dd12282486905ad876fceac0c53a5db0888cb70a8e",
+      "logSha256": "ef72db62f6c8e566639350b1bc95f3a53f782b8ed97a9e2d8efc1b4c0aa58d5a"
+    },
+    {
+      "id": "D",
+      "seconds": 152.993,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\D.json",
+      "bytes": 18360623,
+      "sha256": "fba4e9bff7a7cc17311d28dcc529c96ef3c01eb1ad39d7f84134b724c83271b8",
+      "logSha256": "8e8cb595167ffaef0e54ed3060b404210f13db6120baa009bf95b4a13019a2db"
+    }
+  ],
+  "finished": "2026-10-09T04:50:38.929Z"
+}
