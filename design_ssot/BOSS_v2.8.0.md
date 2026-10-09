@@ -69,7 +69,7 @@ Boss design question:
 | GREED | 탐욕 | 탐욕의 마왕 그리드 | D5/D15 BASE | D30 BATTLE |
 | GLUTTONY | 탐식 | 탐식의 마왕 글러트니 | D5/D15 BASE | D30 BATTLE |
 | LUST | 색욕 | 색욕의 마왕 러스트 | D5/D15 BASE | D30 BATTLE |
-| SLOTH | 나태 | 나태의 마왕 슬로스 | D5/D15 BASE | D30 state by Seal Break count |
+| SLOTH | 나태 | 나태의 마왕 슬로스 | D5/D15 BASE | D30 state by Seal Break count (3 = asleep) |
 
 Boss fixed identity names above are authoritative Boss IDs/names. The normal NPC Name Pool is not owned by BOSS.
 Portrait filenames / sprite-atlas coordinates belong to production catalog data, not this gameplay rule document.
@@ -643,12 +643,14 @@ Seal Break count is not a permanent Meta resource.
 
 ```text
 D5 / D15              → BASE
-D30 + 0 Seal Break    → BASE reuse
-D30 + 1 Seal Break    → D30 SB1
-D30 + 2 Seal Break    → D30 SB2
-D30 + 3 Seal Break    → D30 SB3
+D30 + 3 Seal Break    → BASE reuse (asleep)
+D30 + 2 Seal Break    → D30 SB1
+D30 + 1 Seal Break    → D30 SB2
+D30 + 0 Seal Break    → D30 SB3 (freed)
 ```
 
+The player-facing name of a Seal Break is `봉인 강화`: a held seal keeps Sloth asleep and weaker.
+The more seals are committed, the deeper the sleep, so the art file index is `3 - sealBreakCount`.
 There is no separate D30 / SB0 visual requirement.
 Gameplay truth is `bossId + sealBreakCount`, not an asset filename.
 

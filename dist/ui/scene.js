@@ -116,14 +116,15 @@ function returnTag(state){
    The Boss is a game object in its own right, so it resolves the same way a portrait
    does: from the Run state, never from a stored filename. Day comes first. Six Bosses
    wear their battle form only on the last day; SLOTH wears its base form until then no
-   matter how many seals are already broken, and on D30 shows the form its break count
-   earned. Zero breaks reuses the base form - there is no D30 SB0 art and none is needed
+   matter how many seals are already strengthened, and on D30 shows a form that wakes as seals are
+   left unstrengthened (3 held = base form, 0 held = SB3). There is no D30 SB0 art and none is needed
    (BOSS: `Gameplay truth is bossId + sealBreakCount, not an asset filename`). */
 function bossArt(bossId,day,sealBreakCount){
  const a=G.NPCAssets,prefix=a&&a.boss&&a.boss[bossId];
  if(!prefix)return null;
+ const awake=3-(sealBreakCount||0);   // 봉인 강화 count: the more seals held, the deeper the sleep
  const form=bossId!=='SLOTH' ? (day>=30?'D30':'D05-D15')
-   : (day<30||!sealBreakCount ? a.slothZero : 'D30_SB'+sealBreakCount);
+   : (day<30||awake<1 ? a.slothZero : 'D30_SB'+awake);
  return a.base+'boss/'+prefix+'_'+bossId+'_'+form+a.ext;
 }
 

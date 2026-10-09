@@ -500,7 +500,7 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(!app.includes('관찰')&&!app.includes('보급 생환')&&!app.includes('몬스터 지식'),'no Monster Knowledge tab or progress line');
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  // v2.9.10 quick patch (User 2026-09-28): a seal break closes the window like 구매; a spent window shows 닫기, not 나중에 결정
- assert.ok(app.includes("case'break-seal':game.breakSeal();setModal(null);render();"),'봉인 해제 closes the Store Support window');
+ assert.ok(app.includes("case'break-seal':game.breakSeal();setModal(null);render();"),'봉인 강화 closes the Store Support window');
  assert.ok(app.includes("(w.purchased||w.consumedBySealBreak?closeX():'')"),'a spent window offers the X close only');
  // v2.9.13 quick patch 3 (User 2026-10-01): the DAY 0 free pick may wait - on DAY 0 its 나중에 결정 opens DAY 1, later it closes
  assert.ok(app.includes("btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')"),'the DAY 0 takeover offers 나중에 결정');
@@ -508,7 +508,7 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(!app.includes('first-support-note'),'User 2026-10-03: no footer guide text; the coach owns the first-window explanation');
  // and the owned list carries the SLOTH seal count once the seals are revealed; the chip does not
  assert.ok(/function sealCount\(\)\{const s=game\.run;if\(s\?\.bossId!=='SLOTH'\|\|!s\.bossReveal\?\.traitSeen\)return '';/.test(app)
-  &&app.includes("'<p class=\"seal-count\">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>'"),'SLOTH seal count in the owned list');
+  &&app.includes("'<p class=\"seal-count\">슬로스 봉인 강화 <b>'+(s.sealBreakCount||0)+' / 3</b></p>'"),'SLOTH seal count in the owned list');
  assert.ok(!/relicRef[\s\S]{0,300}봉인/.test(app),'the chip stays 점포지원 N / 7');
  assert.ok(!/\.seal-(choice|count)\{[^}]*box-shadow:inset 4px 0/.test(css),'no violet edge bar on the seal surfaces (User 2026-09-28)');
  // the seal plate folds to a chip on a tap on itself (not its key, not the candidates) and opens unfolded
