@@ -11,6 +11,11 @@ const LESSON={paydayBudget:200};
    itself lives in D.balance.golemCombat so the balance harness can compare a candidate against
    it without a production edit - the same reason guarantee.minPrice carries a name. */
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+// NIGHT_CLOSING §GROWTH PRESENTATION: sync already-paid Deep growth, without resolving or granting rewards.
+function syncDeepReport(n,report,beforeStats){
+ const fields={level:n.level,deep:report.deep,statChanges:G.Adventurer.keys.filter(key=>n.stats[key]!==beforeStats[key]).map(key=>({key,before:beforeStats[key],after:n.stats[key]}))};
+ Object.assign(report,fields);Object.assign(n.records.at(-1),fields);
+}
 class Game{
  constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;}
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
@@ -622,14 +627,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   let badLuckChain=0;
  for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);
   const carried=n.pack.length>0&&!d.deep,assist=carried&&badLuckChain>=3?.10+.05*(badLuckChain-3):0;
+  const beforeStats=d.deep?{...n.stats}:null;
   const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);
   if(carried)badLuckChain=['성공','대성공'].includes(rep.outcome)?0:badLuckChain+1;
-  if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
-     Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
-     ordinary reward already carries that. EXP goes through the ordinary growth curve (no
-     automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a
-     later visit carries it under the existing Wallet rules. A failed outcome earns no special
-     Deep bonus and keeps its ordinary handling. Amounts are PASS3; while unapproved they are 0. */
+  if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: additional EXP/Wallet after the ordinary result. */
   if(d.deep&&n.alive&&['성공','대성공'].includes(rep.outcome)){
    const t=D.deepTuning,great=rep.outcome==='대성공';
    const bonusXp=(great?t.greatExp:t.successExp)||0,bonusWallet=(great?t.greatWallet:t.successWallet)||0;
@@ -637,6 +638,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
+  if(d.deep)syncDeepReport(n,rep,beforeStats);
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,D.balance.returnLoyalty);if(n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();

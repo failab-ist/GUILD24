@@ -3346,7 +3346,9 @@ PASS:
   equipped and no new Run has started until `첫 점포지원 고르기`; every other Run end (bankruptcy, death limit, 폐점, FINAL end)
   reaches 다음 점포 열기 -> the same 새 점포 준비
 - the codex tab reads `점포 장식`
-FAIL: abandon starting a new Run by itself, or a Decoration purchase refused with no Run.
+- the CLOSING 폐점 confirmation says Store Capital is settled (COPY §7-4); the menu abandon confirmation remains no-settlement (§1-3)
+- after the current death limit is reached, CLOSING shows 사망 한도에 도달했다. and 점포 종료; it offers no next-Day or rescue route
+FAIL: abandon starting a new Run by itself, or a Decoration purchase refused with no Run; a closure promising no settlement; next-Day/rescue controls after the death limit.
 
 #### UI-Q-v29-22 — FIXED EFFECT ORDER / NO FIT EMPHASIS / TRANSACTION RESULT STUB
 

@@ -1325,3 +1325,21 @@ test('RESULT-PROOF, combat: a 투력 Item that turned a lost fight into a win is
  assert.equal(easy.combatHero??null,null,'a win the potion did not decide is not credited');
  assert.equal(Presentation.heroLine(easy),null);
 });
+
+// This unit checks only serialization of already-paid growth. It never calls Game.night or resolves an expedition.
+test('NIGHT Deep growth: final report and saved record use already-paid level and stat changes',()=>{
+ const source=read('dist/systems/shop.js'),body=source.match(/function syncDeepReport[\s\S]*?(?=\r?\nclass Game\{)/)[0];
+ const sync=require('node:vm').runInNewContext(body+';syncDeepReport',{G:{Adventurer:{keys:['combat','survival','mobility','spirit']}}});
+ const before={combat:10,survival:11,mobility:12,spirit:13};
+ const record={level:2,changes:['Lv.1 → Lv.2','Lv.2 → Lv.3'],xp:58,loot:20};
+ const n={level:3,stats:{combat:16,survival:13,mobility:12,spirit:17},money:80,records:[record]};
+ const report={...record,deep:{great:false,bonusXp:40,bonusWallet:60},statChanges:[{key:'combat',before:10,after:13}]};
+ const live=JSON.stringify({level:n.level,stats:n.stats,money:n.money});sync(n,report,before);
+ const expected=[{key:'combat',before:10,after:16},{key:'survival',before:11,after:13},{key:'spirit',before:13,after:17}];
+ assert.equal(report.level,3);assert.equal(record.level,3);
+ assert.deepEqual(JSON.parse(JSON.stringify(report.statChanges)),expected);assert.deepEqual(JSON.parse(JSON.stringify(record.statChanges)),expected);
+ assert.deepEqual(record.deep,{great:false,bonusXp:40,bonusWallet:60});
+ assert.equal(report.xp,58);assert.equal(report.loot,20);assert.deepEqual(report.changes,['Lv.1 → Lv.2','Lv.2 → Lv.3']);
+ assert.equal(JSON.stringify({level:n.level,stats:n.stats,money:n.money}),live,'sync cannot pay or grow the adventurer again');
+ const saved=JSON.parse(JSON.stringify(record));assert.equal(saved.level,3);assert.deepEqual(saved.statChanges,expected);
+});

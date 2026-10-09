@@ -696,14 +696,14 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
  assert.ok(app.includes('이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
- assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
+ assert.ok(app.includes("btn('지점 포기','abandon-go','danger')"),'COPY §1-3 abandon confirms 지점 포기');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
- assert.ok(!/btn\('폐점','retire-go'/.test(app),'and 폐점 is no longer the confirm');
+ assert.ok(app.includes("btn('폐점','retire-go','danger')"),'COPY §7-4 closure confirms 폐점 with settlement');
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
  assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
-  'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
+  'abandoning a store is distinguished from erasing the account (§1-3 body for abandon only)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
  // since the Meta replacement, so any remaining promise of one is a lie, not just off-tone.
@@ -3183,14 +3183,14 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
   '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
-  '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다.',
+  '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다.',
   '영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
   '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  assert.ok(h.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'),'the guide directs the player to the actual Item effects');
  assert.ok(h.includes('바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.'),'the guide includes the overcharge refusal exception');
  const rescueLimit=DATA.balance.rescueLimit;
- try{DATA.balance.rescueLimit=7;assert.ok(render([source],'help()',ctx).includes('한 점포에서 최대 7회.'),'the guide follows the actual rescue limit');}
+ try{DATA.balance.rescueLimit=7;assert.ok(render([source],'help()',ctx).includes('한 점포에서 최대 7번의 마감에 이용할 수 있다.'),'the guide follows the actual rescue limit');}
  finally{DATA.balance.rescueLimit=rescueLimit;}
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
  assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
@@ -3933,5 +3933,14 @@ test('UI_UX §TUTORIAL: spotlight clips nested scrollports and the sticky board 
  assert.deepEqual(bounds(),{left:30,top:150,right:170,bottom:145,width:140,height:0});
  el.parentElement=null;el.getBoundingClientRect=()=>rect(-5,-5,220,200);
  assert.deepEqual(bounds(),{left:0,top:0,right:200,bottom:180,width:200,height:180});
+});
+test('CORE_RUN death-limit closing: controls follow the current limit before the money branch',()=>{
+ const s={money:-10,rescueUsed:0,stats:{deaths:4}},ctx={s,game:{canRescue:()=>true,rescueLimit:()=>3},Meta:{deathLimit:()=>5},btn:(label,action)=>'<button data-action="'+action+'">'+label+'</button>'};
+ const dock=()=>render([fn('closingDock')],'closingDock(s)',ctx);
+ assert.ok(dock().includes('재고 정리')&&dock().includes('다음 날'));
+ s.stats.deaths=5;assert.ok(dock().includes('사망 한도에 도달했다.')&&dock().includes('점포 종료'));
+ assert.ok(!dock().includes('재고 정리')&&!dock().includes('다음 날')&&!dock().includes('폐점'));
+ ctx.Meta.deathLimit=()=>6;assert.ok(dock().includes('다음 날'),'display follows the existing limit function');
+ s.money=100;s.stats.deaths=6;assert.ok(dock().includes('점포 종료'),'positive cash does not override the death limit');
 });
 console.log(count+' ui guard groups passed');

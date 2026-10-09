@@ -503,7 +503,7 @@ injury=1 + next actual Outcome 대성공
 -> injury=0
 
 injury=1 + next actual Outcome 퇴각
--> injury=1 유지
+-> injury=1 유지 unless DUNGEON_HAZARD §RETREAT HEALING actually heals it
 
 injury=1 + next actual Outcome 부상
 -> injury=1 유지

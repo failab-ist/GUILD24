@@ -148,7 +148,7 @@ Canonical -> NIGHT_CLOSING_v2.8.0.md
 ### CLOSING
 question=`오늘 장사는 어땠을까?`
 
-Purpose: Revenue · COGS · Margin · Overhead · Waste · Relic spend · Final Gold.
+Purpose: opening Gold · actual cash inflows/outflows · end Gold · cash change · inventory/expiry information. The receipt contract is owned by NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT — EXACT.
 
 Canonical -> NIGHT_CLOSING_v2.8.0.md
 

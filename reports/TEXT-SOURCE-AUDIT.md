@@ -2,7 +2,7 @@
 
 DATE: 2026-10-09
 BASE: `codex/balance-adoption` / `1a981fd87940fde8e86eb04fdee1babf2d104849`
-STATUS: 배치 1~3 완료. 배치 4 구현·관련 검증 PASS, User AFTER 화면 확인·커밋 승인 완료. 전체 점검 미완료.
+STATUS: 배치 1~4 커밋 완료. 배치 5 구현·관련 검증·AFTER 캡처 보고 완료, 최신 User 후속 지시에 따라 커밋 후 배치 6 진행. 전체 점검 미완료.
 
 배치 1 COMMIT: `9057d7f9`. 배치 2 BASE: `9057d7f9`; User가 AFTER 화면 확인·커밋을 승인했다.
 배치 2 COMMIT / 배치 3 BASE: `1f3da969`. 배치 3 COMMIT / 배치 4 BASE: `7c0b551e`.
@@ -15,7 +15,7 @@ STATUS: 배치 1~3 완료. 배치 4 구현·관련 검증 PASS, User AFTER 화�
 | 2 | 상품·발주·창고 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 3 | 판매·모험가 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 4 | 게이트·사건·일반 원정 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
-| 5 | 밤·마감·폐점 | 미점검 |
+| 5 | 밤·마감·폐점 | 수정·관련 검증 PASS / AFTER 캡처 보고 완료 |
 | 6 | 점포지원·장식·다음 점포 | 미점검 |
 | 7 | 마왕 조사·최종 원정·결말 | 미점검 |
 
@@ -126,7 +126,32 @@ BASE: `7c0b551e`. User가 문구 초안을 수정·승인했고 코칭 강조 �
 - BEFORE/AFTER와 검사 결과는 기존 캡처 폴더의 `batch4-before-*` / `batch4-after-*`, 짧은 화면은 `short/`에 있다. User 화면 확인 완료(2026-10-09).
 - 전체 `npm test` / `qa:runtime` / `qa:visual`은 실행하지 않았다. 밸런스·판정·저장 형식·공개 API 변경 및 시뮬레이션 없음.
 
+## 배치 5 발견·처리
+
+BASE: `cc24933f`. User가 폐점의 실제 정산 경로를 확인한 뒤 초안에 맞춘 수정 및 다음 배치 진행을 승인했다. 부상 코치는 악바리 이름 대신 괄호로 특성 예외를 쓰도록 승인했다. 구현·관련 검증과 폰/데스크 AFTER 캡처 보고 완료. 최신 진행 지시에 따라 배치 5 논리 단위를 커밋한다.
+
+| ID | 노출 위치·변경 전 → 후 | 실제 처리·Canonical 근거 | 분류·검증 |
+|---|---|---|---|
+| T22 | 마감 폐점 확인 `현재 지점 포기` / `보상은 없다` → `이 점포를 폐점할까요?` / `점포 자본을 정산한다` / `폐점` | retire-go는 Game.end()/settleStoreCapital(), 메뉴 abandon-go만 무정산. CORE_RUN §CURRENT RUN ABANDON / §RUN-END STORE CAPITAL SETTLEMENT / COPY §7-4 | IMPLEMENTATION BUG 해결. 실제 폐점 클릭: DAY 9 총매출10000의 1%=100 자본 정산·저장/재로드 중복 없음. 메뉴 포기는 정산 없음 |
+| T23 | 심층 추가 성장 후에도 밤 Lv·능력치 변화가 추가 보상 이전 값 → 지급 완료 후 실제 최종 값으로 동기화 | Game.night()의 기존 보상 지급 뒤 private syncDeepReport()가 level/statChanges/deep을 보고·기존 NPC 기록에 연결. NPC_TRAIT §DEEP EXPEDITION NPC REWARD / NIGHT_CLOSING §GROWTH PRESENTATION | IMPLEMENTATION BUG 해결. 이미 지급된 고정 입력만으로 보고/기록의 최종 Lv3·능력치 변화·일반/추가 보상 구분 검사. 성장·소지금 재지급 없음·JSON 저장값 보존. 기존 실제 심층 보상/저장 통합 검사 PASS. 별도 g.night probe 미실행 |
+| T24 | 부상 코치가 투력·강인함 감소로 단정 → `싸운다(특성에 따라 달라질 수 있다)` | conditionModifiers()는 악바리의 투력 증가를 적용. NPC_TRAIT §INJURY / grit / COPY §26-2 | MISSING ADOPTION 해결. User 요청의 괄호 문구·특성 이름 생략. 폰/데스크 코칭 문구·잘림·완료 클릭 확인 |
+| T25 | 사망 한도 마감에도 `다음 날`·재고 정리 → `사망 한도에 도달했다.` / `점포 종료` | closeDay()의 사망 우선 검사를 closingDock()도 같은 Meta.deathLimit(s)에서 읽음. CORE_RUN §DEATH LIMIT — SEGMENTED / COPY §7-5 | RUNTIME UX BUG 해결. 한도 전/도달·한도 함수 변경·양수/음수 잔고 단위 검사. 실제 종료 클릭은 기존 소문 원인·정산 처리로 종료 |
+| T26 | 가이드 `최대 N회`·재고 없으면 폐점 → `최대 N번의 마감`·적자 해결 불가 시 폐점 | canRescue()/liquidate()/closeDay()의 기존 조건과 game.rescueLimit(). 재고 정리 창도 마감 단위를 명시 | 승인된 명확화 완료. 입력 한도7 표시 반영 유지. 매입가80 재고 두 개를 정리해 각각40G 회수, 잔고 회복 뒤에도 같은 마감 회생1회 확인 |
+| T27 | 대성공 규칙이 가게 보너스를 단정 → `일반 원정의 대성공`으로 범위 명시 | 일반만 점포 보상, 심층은 점포 보상0. 코치 발생은 이미 storeBonus>0. ECONOMY_ORDER §GREAT SUCCESS STORE GOLD / NIGHT_CLOSING §NORMAL GREAT SUCCESS GOLD / COPY §26-2 | MISSING ADOPTION 해결. 트리거·보상 유지, 공통 Copy.learned 및 기존 저장 학습 표시 재사용 |
+| T28 | Natural recovery 문단이 퇴각 부상 유지로만 단정, CORE_RUN 마감 Purpose가 COGS/Margin 열거 → 현행 owner 참조로 정리 | DUNGEON_HAZARD §RETREAT HEALING, CHANGELOG v2.9.13 quick patch 2 / NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT | MISSING ADOPTION 해결. 조건부 퇴각 회복 예외와 마감 현금흐름의 기존 승인 규칙만 반영 |
+
+### 배치 5 검증·한계
+
+- node tests/ui-guard.cjs: PASS 121개 그룹. node tests/copy.cjs: PASS 30개 그룹. node tests/night.cjs: PASS, 최종 상태의 기록 동기화 검사 추가. node tests/integration.cjs: PASS 55개 그룹. node tests/regression.cjs: PASS 56개 그룹. node tests/canonical.cjs: PASS.
+- tools/qa-night-closing-text.cjs --before: 기존 HEAD app.js/copy.js 제공, 390×880 / 1280×880에서 변경 전 10개 노출 사례 기록·42+4개 기존 흐름 검사. 변경 전 문구는 PASS로 간주하지 않음.
+- 수정 후 같은 하네스: PASS 102개 검사. 실제 폐점/사망 한도 종료/무정산 포기/재고 정리/코치 완료 클릭, 재로드 유지, 문구·버튼·말풍선 잘림·가로 넘침·런타임 오류 확인. 심층 표시 사례는 원정 없이 이미 지급된 값의 동기화 함수만 호출.
+- npm run audit: PASS. 생성 보고서 내용 변화 없음. 공개 API·저장 스키마 버전·밸런스·판정·RNG 변경 없음. NPC 기록에 결과의 기존 deep 정보를 함께 보관한다.
+- 밤 피로·피로 단계·상세 원장은 기존 실제 기록을 읽으며 회복을 중복 차감하지 않는다. 마감 수치·운영비·폐기·후원은 기존 daily 기록/계산 함수와 연결, DAY29 내일 운영비 생략 유지.
+- 자동 승인 검토는 별도 단일 g.night 스크래치 재현의 실행 및 준비 파일 작성을 AGENTS §9-A 사전 명시적 승인 부족으로 거절했다. 그 파일·실행은 없음. 대신 원정을 실행하지 않는 기록 동기화 단위 검사와 기존 정해진 검증 절차로 수정 영역을 검증했다. 거절된 재현을 다른 경로로 실행하지 않았다.
+- 캡처/결과: 기존 폴더의 batch5-before-* / batch5-after-* / batch5-before-results.json / batch5-after-results.json. 부상·대성공 코칭은 표시 검사용 기록 픽스처, 심층은 이미 지급된 상태 픽스처이며 밸런스 측정 결과가 아니다.
+- 전체 npm test·qa:runtime·qa:visual은 실행하지 않았다. 전체 작업 마지막 표준 검증은 남아 있다.
+
 ## 다음 경계
 
-User가 배치 4 화면 확인·커밋 및 다음 배치 진행을 승인했다. 배치 4를 커밋·clean 확인한 뒤 배치 5 밤·마감·폐점을 점검한다. 배치 6~7 미점검.
+배치 4 COMMIT: cc24933f. 최신 User의 수정·후속 진행 승인에 따라 배치 5 커밋·clean 확인 후 배치 6을 점검한다. 배치 7 미점검.
 후속 보고에는 무엇을 어떻게 바꿨는지 변경 전→후와 이유를 함께 적는다(User 2026-10-09).
