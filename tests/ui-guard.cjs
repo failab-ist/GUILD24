@@ -638,7 +638,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  assert.equal(glut.sin,'탐식','the Sin is 탐식');
  assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
  assert.deepEqual(c.d15.trait.GLUTTONY,
-['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.']],
   'the D15 Function is the exact Canonical copy; the figure is filled from the tuning table');
  // no retired wording survives anywhere a player can read
  const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
@@ -2035,7 +2035,7 @@ test('UI-Q-v29-38: SALE strain - in the 전투 전망 box, injured with a chain 
  for(const cls of ['st-tag','ro-strain']){const i=r.indexOf('class="'+cls+'"');assert.ok(i>combat&&i<env&&i<top,cls+' sits inside the 전투 전망 box');}
  assert.ok(!r.includes('class="strain"'),'no loose line under the pair any more');
  assert.ok(/\.readout\.ro2 \.ro-strain\{position:absolute/.test(css)&&/\.readout\.ro2 \.st-tag\{display:none\}/.test(css),'phone chip (line for a screen reader), desk line');
- assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
+ assert.ok(app.includes("if(streak>0)cond.push('연속 부상 출발 '+streak+'회');"),'the NPC detail row reads the same function and wording');
  assert.equal((r.match(/<span class="fore ro-(?:combat|env)/g)||[]).length,2,'the .top still holds the two boxes (전투 전망 and the 환경 대응 meter)');
  assert.ok(!/strainText='[^;]*%/.test(r)&&(r.match(/E\(strainText\)/g)||[]).length===2,'no % in the words: the chip and the line print strainText only');
  assert.ok(/\.readout\.ro2 \.ro-strain\{position:static;[^}]*font:500 12px/.test(css),'small on a desk');
@@ -3122,8 +3122,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)'"),
   'the First Aid primary function is the approved sentence (COPY_AUDIT §4-22, User 2026-09-25)');
  // v2.9.0 F3 (User 2026-09-25): the NPC detail rows and the route-change line
- assert.ok(fn('npcDetail').includes("cond.push('피로 회복: 음식·음료')"),'§4-14 no rest recovery: Food/Drink only');
- assert.ok(fn('npcDetail').includes("'연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회'"),'the strained-departure information row reads the records through the STRAIN helper (v2.9.1 balance)');
+ assert.ok(!fn('npcDetail').includes('피로 회복:'),'User 2026-10-09: the NPC detail does not restate the Food/Drink recovery rule');
+ assert.ok(fn('npcDetail').includes("Dungeon.injuredStreak(n.records)")&&fn('npcDetail').includes("'연속 부상 출발 '+streak+'회'"),'the strained-departure information row reads the records through the STRAIN helper (v2.9.1 balance)');
  assert.ok(read('dist/systems/shop.js').includes('rep.routeChange=G.Copy.routeChangeLine('),'the route-change line is composed once, in data/copy.js so the engine needs no UI layer (the simulation worker loads no presentation.js)');
  assert.ok(!/허세/.test(read('dist/systems/shop.js')),'the retired Trait name never appears in the engine');
  assert.equal(Presentation.routeChangeLine({name:'하람',pilgrim:false},'슬라임 초원','거미 동굴'),'거짓말쟁이 하람은 말했던 슬라임 초원 대신 거미 동굴로 향했다.','§14-10 exact, particles by the final consonant');
@@ -3478,11 +3478,10 @@ test('DAY 0 Store Support tutorial: one mark over the takeover, DAY 0 only, no a
  assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0&&!relicD30\)\|\|bossHold\)return;/.test(show),'other modals and a held Boss reveal still suppress marks, and a skipped tutorial stays skipped');
  assert.ok(/relicD0\?coachSteps\.relic:/.test(show),'the takeover reads its own lesson');
  assert.ok(/\.coach-layer\.over-takeover\{z-index:80\}/.test(css)&&/\.relic-takeover\{[^}]*z-index:70/.test(css),'the mark sits above the takeover it teaches');
- /* USER 2026-09-24: 건너뛰기 skips this screen's lesson only, never the whole tutorial */
- const fin=fn('finishCoach');
- assert.ok(/if\(skip\)for\(const x of activeGroup\|\|\[\]\)t\['coach-'\+x\[0\]\]=true;/.test(fin),'skip marks every mark of the group on screen done');
- assert.ok(!/skipped=true/.test(fin),'and no longer switches the whole tutorial off');
- assert.ok(/activeGroup=steps;/.test(show),'the group is the one being shown');
+ /* User 2026-10-09: the mark's 도움말 끄기 is the settings switch - the same tutorial.skipped, every mark off */
+ assert.ok(!/skipped=true/.test(fn('finishCoach').split('function coachSwitch')[0]),'finishing one mark never switches the tutorial off');
+ assert.ok(/case'coach-skip':coachSwitch\(true\);/.test(app)&&/case'coach-toggle':coachSwitch\(!coachOff\(\)\);/.test(app),'the mark button and the settings switch share coachSwitch');
+ assert.ok(/btn\('도움말 끄기','coach-skip','coach-skip'\)/.test(app),'the mark button reads 도움말 끄기');
  assert.ok(/\.coach-bubble p\{[^}]*word-break:keep-all/.test(css),'bubble copy breaks between words');
  const copy=read('design_ssot/COPY_WORLD_VOICE_v2.8.0.md');
  for(const line of steps.match(/'[^']*다\.'/g).map(x=>x.slice(1,-1)))assert.ok(copy.includes(line),'the copy is the approved line: '+line);
@@ -3872,8 +3871,9 @@ test('ending: the music before holds until the result lands, then the ending cue
 });
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
- assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
+ assert.ok(set.includes("btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')"),'the switch reads 도움말 끄기 / 도움말 다시 보기');
  assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
- assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');
+ const sw=fn('coachSwitch');
+ assert.ok(/t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\]/.test(sw),'turning it on clears every coach-* mark');
 });
 console.log(count+' ui guard groups passed');

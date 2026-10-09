@@ -288,7 +288,7 @@ Copy.boss={
    /* COPY_WORLD_VOICE_v2.7 §GLUTTONY: verbatim. v2.7 has no Rarity threshold for this Boss,
       so the inherited sentence claimed a Rarity boundary the mechanic does not have - every
       positive Core-Stat contribution from an Item is halved, whatever the Item cost. */
-   GLUTTONY:['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+   GLUTTONY:['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.']],
    LUST:['매혹의 속삭임',['최종 원정에서 단골이 아닌 출전자의 능력치가 모두 {lust}% 감소한다.','단골은 영향을 받지 않는다.']],
    SLOTH:['나태의 봉인',['슬로스에게는 봉인이 세 개 있다.','점포지원을 받는 날 대신 봉인 하나를 풀 수 있다. 풀 수 있는 날은 DAY 15·20·25 중 두 번과 DAY 30이다.','봉인을 풀면 그날 점포지원은 받지 못하고, 많이 풀수록 슬로스가 약해진다.']]}},
  /* The scouting report is the D25 disclosure now, so its button acknowledges the report

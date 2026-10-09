@@ -232,9 +232,9 @@ function nightChanges(r, npc, facilities=[]){const out=[];
   }
   if(r.finalFatigue!==undefined){
    /* NIGHT_CLOSING §FATIGUE RESULT / COPY_AUDIT §6-6: one settled value, daily causes on demand;
-      band from 20 up, next-decision penalty from 10 up, thresholds owned by Dungeon. */
+      band from 10 up, next-decision penalty from 10 up, thresholds owned by Dungeon. */
      const settled=r.settledFatigue??r.finalFatigue,band=G.Dungeon.fatigueBand(settled);
-     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=20?' · '+band.name:''),
+     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=10?' · '+band.name:''),
       detail:true});
      if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:band.name,extra:band.text});
   }

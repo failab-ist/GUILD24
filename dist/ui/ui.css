@@ -1341,7 +1341,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .tray-delta i{font-style:normal;color:#8d8067}
 .tray-delta b.effect-bad{color:var(--tone-cost)}
 /* v2.9.0 NIGHT next-decision line under the settled Fatigue token */
-.next-decision{margin:4px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
+.next-decision{flex-basis:100%;margin:-3px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
 .counter-tray .tills{margin-top:8px;padding:0;position:static;background:none}
 .counter-tray .tills button{min-height:64px;padding:8px 2px}
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): folded, the tray keeps only its header line - the Item and the
@@ -1657,7 +1657,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .changed .grew{gap:4px}
 .changed .after{margin-top:10px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff12}
 .changed .reward{margin-top:7px}
-.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17}
+.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17;row-gap:10px}
 .p-night .changed .reward{margin-top:6px}
 .p-night .changed .grew{gap:4px 14px}
 /* no growth: the aftermath opens the strip, so it carries no rule and no lead-in space */
@@ -1687,9 +1687,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .changed .tip>summary i{box-shadow:inset 0 -1px 0 #9aa6b259}
 .changed .tip.up>summary b{color:#9fd6a8}
 .changed .tip.down>summary b{color:#e8927f}
-.changed .fatigue-row{display:inline-flex;align-items:baseline;gap:6px;background:transparent;box-shadow:none;padding:12px 0;margin:-12px 0;color:inherit;text-align:left}
+.changed .fatigue-row{position:relative;display:inline-flex;align-items:baseline;gap:6px;background:transparent;box-shadow:none;padding:0;margin:0;min-height:0;color:inherit;text-align:left}
+/* the 44px tap target overhangs the line instead of taking layout height */
+.changed .fatigue-row:after{content:'';position:absolute;left:0;right:0;top:-12px;bottom:-12px}
 .changed .fatigue-row i{box-shadow:inset 0 -1px 0 #9aa6b259}
-.changed .fatigue-row b{font-size:18px}
 .changed .fatigue-row.up b{color:#9fd6a8}
 .changed .fatigue-row.down b{color:#e8927f}
 .modal:has(.fatigue-ledger) .modal-body{background:#211a13}
@@ -1707,7 +1708,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .fatigue-bands h3{margin:0 0 8px;font:400 13px/1.4 var(--ui)}
 .fatigue-bands p{display:grid;grid-template-columns:80px 1fr;gap:10px;margin:6px 0;font:600 14px/1.5 var(--ui);color:#d7c9ac}
 .fatigue-bands b{font-weight:600}
-@media(min-width:1024px){.p-night .changed .fatigue-row i{font-size:16px}.p-night .changed .fatigue-row b{font-size:23px}}
 .tok{display:inline-flex;align-items:baseline;gap:6px}
 /* the equipment cell's two facts: identity, then its Stat effect, told apart by a middle dot
    rather than by a second cell (UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM) */
@@ -1807,7 +1807,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .row.open span{color:#2c2418;font-weight:600;letter-spacing:.08em}
 .print .row.open b{font-size:18px;line-height:1}
 .print .row b i{font-style:normal;font-size:12px;margin-left:3px;color:#7a715d}
-.p-closing .purse{flex-wrap:wrap;row-gap:9px}
+.p-closing .purse{flex-wrap:wrap;row-gap:10px}
 .p-closing .purse>b{font-size:22px;color:#f3ecd8}
 .p-closing .purse .pl{flex:1 0 100%;display:flex;align-items:baseline;margin:0}
 .p-closing .purse .pl span{letter-spacing:.08em}
@@ -2365,8 +2365,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-environments .env-meter-list{display:grid;grid-template-columns:repeat(2,max-content);gap:5px 14px;margin:0}
 .final-environments .env-row{display:inline-flex;justify-content:flex-start;gap:4px}
 .final-environments .env-row i{font:400 13px/1.4 var(--ui);color:#d7c9ac}
-.final-environments .env-num{padding:0;background:none;box-shadow:none;font-size:14px;line-height:1.4}
-.final-environments .env-num small{font-size:14px;color:#d7c9ac}
+.final-environments .env-num{padding:0;background:none;box-shadow:none;font:600 14px/1.4 var(--ui);-webkit-font-smoothing:auto}
+.final-environments .env-num small,.final-environments .env-num em{font:600 14px/1.4 var(--ui);color:#d7c9ac}
+.final-environments .env-num small{margin-left:1px}
 .final-environments .env-num.ok{color:#9fd6a8}
 .p-final .tillpanel .forwho{display:flex;align-items:baseline;gap:10px}
 .p-final .final-forecast{margin:0 0 12px}
@@ -3165,6 +3166,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-night .changed .tip>summary i,.p-night .changed .tok i{font-size:16px}
  .p-night .changed .tip>summary b,.p-night .changed .tok b,.p-night .changed .tok>em{font-size:18px}
  .p-night .changed .after .tip>summary b{font-size:23px}
+ .p-night .changed .next-decision{font-size:16px}
  .p-night .dock{padding-left:max(var(--gutter),calc((100% - 880px) / 2));
   padding-right:max(var(--gutter),calc((100% - 880px) / 2));padding-top:14px}
  .p-night .dock .bare{font-size:16px;min-height:52px}

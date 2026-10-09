@@ -1321,7 +1321,7 @@ function changedRows(r){
  /* NIGHT_CLOSING §FATIGUE RESULT: the settled value opens the recorded daily causes. */
  const stamp=c=>c.note
   /* v2.9.0 NIGHT next-decision line (COPY_AUDIT §6-6): one sentence under the settled Fatigue, not a chip */
-  ?'<p class="next-decision">'+E(c.value+' — '+c.label+' '+c.extra)+'</p>'
+  ?'<p class="next-decision">'+E(c.label+' '+c.extra)+'</p>'
   :c.detail
   ?'<button class="fatigue-row tok '+c.kind+'" data-action="fatigue" data-id="'+E(r.npcId)+'" aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></button>'
   /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
@@ -1478,7 +1478,7 @@ const coachSteps={
 };
 let activeCoach=null;
 let nightMarked=null;
-let coachSettle=0,coachPainted=null,activeGroup=null;
+let coachSettle=0,coachPainted=null;
 /* The target's own position, rounded - the one thing the whole overlay is measured from, so it
    is also what tells us whether a repaint is needed. */
 const coachKey=el=>{const r=el.getBoundingClientRect();
@@ -1510,7 +1510,7 @@ function paintCoach(step,target){
     is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
  const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
- root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:max-content;min-width:'+Math.min(260,bw)+'px;max-width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:max-content;min-width:'+Math.min(260,bw)+'px;max-width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('도움말 끄기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
  /* `bh` above is only the estimate that keeps the first paint from flashing. A real bubble is
     120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
     and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
@@ -1547,7 +1547,7 @@ function showCoach(){
  const s=game.run,relicD30=modal==='relics'&&s?.phase==='final'&&s.day===30&&s.relicWindow?.milestoneDay===30;
  if(tutorial.skipped||(modal&&!relicD0&&!relicD30)||bossHold)return;
  const finalGroup=s?.finalCommitted?'final':finalIsOrdering(s)?'finalOrder':'finalRoster';
- const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);activeGroup=steps;
+ const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
@@ -1570,13 +1570,16 @@ function showCoach(){
  activeCoach=step;
  settleCoach(step,target);
 }
-function finishCoach(skip=false){
- if(!activeCoach&&!skip)return;const t=game.account.tutorial??={};
- /* USER 2026-09-24: 건너뛰기 skips THIS screen's lesson only - every mark of the group on screen
-    is marked done - and the next screen still teaches its own. `skipped` stays the whole-tutorial
-    switch (reset / harness), no longer set by this button. */
- if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else{t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];}game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+function finishCoach(){
+ if(!activeCoach)return;const t=game.account.tutorial??={};
+ t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
+/* UI_UX §COACH (User 2026-10-09): `도움말 끄기` on a mark is the settings `안내 끄기` switch - the same `tutorial.skipped`, so every mark stops, not only this screen's. */
+function coachSwitch(off){
+ const t=game.account.tutorial??={};
+ if(off){t.skipped=true;$('#coach-root').innerHTML='';activeCoach=null;}
+ else{t.skipped=false;for(const k of Object.keys(t))if(k.startsWith('coach-'))delete t[k];}
+ game.save();}
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}
@@ -2333,7 +2336,6 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
   /* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, one owner; COPY_AUDIT §4-14 for the recovery line */
   const band=Dungeon.fatigueBand(n.fatigue);
   cond.push('현재 피로: '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
-  cond.push('피로 회복: 음식·음료');
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook&&n.outlook.day===game.run.day)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
@@ -2341,7 +2343,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  /* DUNGEON_HAZARD §STRAIN (v2.9.1 balance): an information row, no verdict - consecutive
     expeditions this adventurer began injured, counted back from the most recent record and
     reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
- cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');
+ {const streak=Dungeon.injuredStreak(n.records);if(streak>0)cond.push('연속 부상 출발 '+streak+'회');}
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
  return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'상품 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
@@ -2515,7 +2517,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
 const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
- <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 DAY 1~3 한 줄 안내가 나오지 않는다.':'처음 한 번씩 나오는 말풍선 안내다.'}</p></section>
+ <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 DAY 1~3 한 줄 안내가 나오지 않는다.':'처음 한 번씩 나오는 말풍선 안내다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
@@ -2736,7 +2738,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  try{
  if(activeCoach&&activeCoach[3]===a)finishCoach();
  switch(a){
- case'coach-skip':finishCoach(true);break;
+ case'coach-skip':coachSwitch(true);sound('ui');render();break;
  /* presentation only - the line stays in run.say, so nothing here is saved or re-rendered */
  case'say-hide':hideSpeech();break;
  case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
@@ -2890,7 +2892,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
- case'coach-toggle':{const t=game.account.tutorial??={};if(t.skipped){t.skipped=false;for(const k of Object.keys(t))if(k.startsWith('coach-'))delete t[k];}else{t.skipped=true;$('#coach-root').innerHTML='';activeCoach=null;}game.save();sound('ui');render();break;}
+ case'coach-toggle':coachSwitch(!coachOff());sound('ui');render();break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
   // Preparation rendering returns before modal refresh; keep its mute label current too.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
