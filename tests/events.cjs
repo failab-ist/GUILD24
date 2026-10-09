@@ -40,6 +40,13 @@ test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic 
  for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
 });
 
+test('EVENT 55 게이트 안정화 작업 (User 2026-10-09): out of the Pool before the first Day a tier II Gate can open; other Events unchanged',()=>{
+ const g=fresh('safe-elig'),safe=DATA.events.find(e=>e.id==='safegates'),other=DATA.events.find(e=>!e.effects.tierOne&&g.eventEligible(e));
+ const first=globalThis.Dungeon.FIRST_TIER2_DAY;
+ g.run.day=first-1;assert.equal(g.eventEligible(safe),false,'before: out');assert.equal(g.eventEligible(other),true,'others stay');
+ g.run.day=first;assert.equal(g.eventEligible(safe),true,'from that Day: in');
+});
+
 test('EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): a Run never meets the same Event twice, and the log survives a save',()=>{
  let events=0,repeats=0;
  for(let i=0;i<60;i++){const g=fresh('norepeat-'+i),s=g.run;s.money=99999;

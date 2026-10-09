@@ -454,9 +454,9 @@ One counter tray, a fixed band directly above the dock outside the scrolled colu
 LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen keeps its per-row panel
 (FINAL_EXPEDITION_v2.8.0.md §3).
 - tapping a shelf row puts its Item on the tray; the row is only highlighted; rows never change height
-- §SALE — SHELF ORDER (User 2026-10-04): an Item that answers a Hazard of today's open Gates leads, in the Gates' Hazard order (any kind —
+- §SALE — SHELF ORDER (User 2026-10-04, 10-09): an Item that answers a Hazard of today's open Gates leads, the current customer's own Gate's Hazards first and then the other open Gates' in Gate order (any kind —
   a Food or Drink with a Hazard line counts); the rest follow by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
-  Rarity, ties as before; the same for every customer; sorted on the discard day shown when the Day's shelf first appeared,
+  Rarity, ties as before; only that Hazard lead follows the customer (the warehouse keeps today's Gate order); sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
 - shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
@@ -596,7 +596,7 @@ No future-customer Job/Level/Destination/need hints; the queue count suffices.
 
 ### DEEP SALE UI
 
-While nomination is legal, show `심층원정에 추천`; afterwards sponsorship payment, new destination and updated forecast are clear
+While nomination is legal, the closed line names today's Deep Gate (`심층원정` + Gate name, User 2026-10-09) and opens to the terms and `심층원정에 추천`; afterwards sponsorship payment, new destination and updated forecast are clear
 and ordinary Sale continues.
 
 ### EVENT TEMPORARY BUDGET
@@ -1052,8 +1052,8 @@ D5/D15/D25 are major beats; D10/D20 are shorter (fewer lines, lighter hierarchy,
 Boss art as D5/D15 — never a thumbnail. D25 is information-first (the Family/Hazard disclosure is the payload).
 
 All D5/D10/D15/D20/D25 investigation reports share one art-size rule across every Boss:
-- mobile: max-height follows the available viewport height (100dvh minus 560px reserved for report text and controls), bounded between 100px and 240px
-- desktop: max-height follows the available viewport height (100dvh minus 510px reserved for report text and controls), bounded between 200px and 300px
+- mobile: max-height follows the available viewport height (100dvh minus 500px reserved for report text and controls), bounded between 120px and 280px
+- desktop: max-height follows the available viewport height (100dvh minus 480px reserved for report text and controls), bounded between 200px and 360px
 - keep the illustration aspect ratio; do not shrink only the overflowing Boss or investigation Day
 
 At 360x800 art alone never pushes core information or the acknowledgement below the first viewport. The sheet is a takeover
