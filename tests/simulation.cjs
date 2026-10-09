@@ -391,4 +391,11 @@ test('relicPriority: the ranked Support is chosen whenever a window offers it an
  assert.ok((ranked.relicPurchases[id]?.count||0)>(base.relicPurchases[id]?.count||0),id+' is bought more once it is ranked first');
 });
 
+/* `investor` (User 2026-10-09): the standard measurement's second bot plays every Run to an end, the same way twice */
+test('investor: plays every Run to an end and is deterministic',()=>{
+ const a=Debug.simulate(SEEDS,'investor'),b=Debug.simulate(SEEDS,'investor');
+ assert.equal(Object.values(a.endedBy).reduce((x,y)=>x+y,0),SEEDS,'every Run ends');
+ assert.deepEqual([a.wins,a.deaths,a.revenue,a.reached30],[b.wins,b.deaths,b.revenue,b.reached30],'same seeds, same result');
+});
+
 console.log(count+' simulation groups passed');

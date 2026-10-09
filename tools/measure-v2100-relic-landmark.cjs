@@ -2,7 +2,7 @@
 //   node tools/measure-v2100-relic-landmark.cjs <v2100.json>
 // landmark read: owners of X (bought on day d) vs runs alive past day d without X. JSON only.
 const r=require(require('node:path').resolve(process.argv[2])),p=x=>(100*x).toFixed(1);
-const rows=[...r.arms['after/fresh/reader/none'].rows,...r.arms['after/fresh/expert/none'].rows];
+const rows=[...r.arms['after/fresh/reader/none'].rows,...(r.arms['after/fresh/investor/none']||r.arms['after/fresh/expert/none']).rows];
 const ok=x=>x.all[0]/Math.max(1,x.all[1]);
 const ids=[...new Set(rows.flatMap(x=>x.relics.map(([id])=>id)))];
 const out=[];
@@ -18,5 +18,5 @@ for(const id of ids){
   dReach+=cnt*(m(o,x=>x.reach)-m(c,x=>x.reach));dWin+=cnt*(m(o,x=>x.win)-m(c,x=>x.win));w+=cnt;}
  out.push({id,n:own.length,day:own.reduce((v,o)=>v+o.d,0)/own.length,reach:dReach/w,win:dWin/w});}
 out.sort((a,b)=>b.win-a.win);
-console.log('relic landmark (fresh reader+expert, n='+rows.length+'): owners vs runs alive at the same purchase day without it');
+console.log('relic landmark (fresh reader+investor (or expert), n='+rows.length+'): owners vs runs alive at the same purchase day without it');
 for(const o of out)console.log(o.id.padEnd(16),'보유 '+String(o.n).padStart(4),'구매일 '+o.day.toFixed(1).padStart(4),'D30 '+(o.reach>=0?'+':'')+p(o.reach).padStart(5)+'%p','클리어 '+(o.win>=0?'+':'')+p(o.win).padStart(5)+'%p');
