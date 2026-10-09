@@ -797,7 +797,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
 
  // both tutorials are ordinary coach marks, so they inherit the account-scoped persistence
  assert.ok(/\['deep','\.slip\.deep'/.test(app),'the first Deep Expedition teaches itself on the notice');
- assert.ok(!/\['great',/.test(app)&&Copy.learned.some(([k])=>k==='great'),'Great Success is named on the NIGHT record once it pays, not coached before (NIGHT_CLOSING §DISCOVERY LINE, User 2026-09-30)');
+ assert.ok(!/\['great',/.test(app)&&Copy.learned.some(([k])=>k==='great'),'Great Success is named on the NIGHT record once it pays (NIGHT_CLOSING §DISCOVERY LINE, User 2026-09-30); the SALE mark teaches only the 대성공 기회 tag, from DAY 5 (User 2026-10-09)');
  assert.ok(!/deepTutorial|tutorialDeep/.test(app),'no separate tutorial state was introduced');
 });
 
@@ -2507,9 +2507,10 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     line itself); the price keys carry one mark when they first show (COPY_AUDIT §3-14), the first refused 바가지 another (§26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','greatchance','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']`)
   &&sell.includes(`['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.']`),'the price-key mark and the refused-바가지 lesson, verbatim');
+ assert.ok(sell.includes(`['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5]`),'the 대성공 기회 mark waits for DAY 5, clear of the other SALE marks (User 2026-10-09)');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
  assert.ok(/el\.className='receipt-stub'\+\(st\.mode==='half'\?' half':''\)/.test(fn('showStub'))&&/if\(activeCoach\)\{stubTimer=setTimeout\(drop,400\);return;\}/.test(fn('showStub')),'the 50% line carries its class and stays while a mark is open');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');

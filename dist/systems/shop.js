@@ -162,6 +162,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.healVisitors||fx.injuredBudget)return ready.some(n=>n.injury===1);
   if(fx.regularVisit)return ready.some(n=>n.introduced&&G.Adventurer.isTrustedRegular(n));
   if(fx.summons)return ready.length>=2;
+  /* User 2026-10-09: an Event that sets every Gate to tier I (게이트 안정화 작업) waits for the first Day a tier II Gate can open */
+  if(fx.tierOne)return s.day>=G.Dungeon.FIRST_TIER2_DAY;
   if(fx.closeGate)return s.dungeons.filter(d=>!d.temporary).length>=2;
   if(fx.shelfCut)return s.inventory.some(x=>x.expires!==null&&['food','drink'].includes(D.itemBy[x.item].category));
   return true;}
