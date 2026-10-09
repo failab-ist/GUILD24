@@ -69,7 +69,7 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    fit counted bass a phone cannot play, so the low cues were raised until they tore; they now carry `over` / `cut` in
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
- /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:1.186,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
+ /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
  /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
  /* action */ depart:1.26,return:0.713,gold:4.203,spend:4.191,crate:2.941,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
  /* utility */ button:0.711,ui:5.564,
@@ -170,7 +170,7 @@ const sample={order:'stamp',sale:'register',overcharge:'register',
  /* UI_UX §PROLOGUE: a page turning - Kenney RPG Audio bookFlip2 (CC0), reports/ASSETS.md */
  page:'page',
  /* User 2026-10-09: the recorded body alone carries these; the synthesised notes and noise stay only as the fallback */
- crate:'crate',great:'great',newstore:'newstore',return:'return',severe:'severe'};
+ crate:'crate',newstore:'newstore',return:'return',severe:'severe'};
 const buffers=new Map(),lastAt=new Map();
 /* Fetched once, on the first unmuted sync, so a muted player downloads nothing. A failure is
    swallowed on purpose: the synthesised shape is already this cue's fallback. */
@@ -285,7 +285,7 @@ const shape={
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
     v2.9.2 H1: `hit` - the first note is the stamp's landing, so it starts at once and one step
     louder; every note, interval and step is unchanged. 사망 keeps its slow restrained attack. */
- great:{solo:1,hit:1,gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
+ great:{hit:1,gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
  injury:{hit:1,gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
  retreat:{cut:250,hit:1,gain:1,dur:.24,type:'triangle',over:[.4,.2],step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
  severe:{solo:1,cut:250,hit:1,gain:1.1,dur:.4,type:'sawtooth',over:[.3,.2],step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.3,hz:280,q:.7,filter:'lowpass'},duck:.5},

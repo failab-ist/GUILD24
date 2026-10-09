@@ -1764,10 +1764,10 @@ test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fas
  // synthesised now, the two files no longer ship (reports/ASSETS.md)
  for(const t of ['quantity','quantset','ui'])assert.ok(!Sound.samples[t],t+' is synthesised');
  for(const f of ['tick','soft'])assert.ok(!fs.existsSync(path.join(root,'dist/ui/assets/audio',f+'.mp3')),f+'.mp3 no longer ships');
- for(const t of ['retreat','injury','death','rescue','bossmajor','bosscompact'])
+ for(const t of ['great','retreat','injury','death','rescue','bossmajor','bosscompact'])
   assert.ok(!Sound.samples[t],t+' stays synthesised, so its family stays in tune');
  // User 2026-10-09: picked by ear from the candidates, so these carry a recorded body (the synthesised shape is the fallback)
- for(const t of ['crate','great','newstore','return','severe'])
+ for(const t of ['crate','newstore','return','severe'])
   assert.ok(Sound.samples[t],t+' plays a recorded body');
  // and no sampled cue can go silent when its file is missing
  assert.ok(/if\(!body\|\|sh\.accent\)notes\.forEach/.test(code),'the synthesised shape is still the fallback');

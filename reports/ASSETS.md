@@ -156,12 +156,11 @@ Regenerate the vendored copies with `npm run assets`.
 | `key.mp3` | `mechanical/select` | ordinary pick |
 | `door.mp3` | `mechanical/send` | SALE 손님 보내기 — the customer leaves (v2.9.0 TRANSACTION BEAT A4) |
 | `crate.mp3` | `mechanical/drop` | ORDER 2nd / 3rd crate landing (User 2026-10-09) |
-| `great.mp3` | `mechanical/achievement` | NIGHT 대성공 (User 2026-10-09) |
 | `newstore.mp3` | `mechanical/checkpoint` | ending -> next store (User 2026-10-09) |
 | `return.mp3` | `mechanical/success` | NIGHT 성공 (User 2026-10-09) |
 | `severe.mp3` | `cinematic/error` | NIGHT 중상 (User 2026-10-09) |
 
-User 2026-10-09: the last five rows were chosen by ear from a side-by-side page of the current synthesised cue against uisfx candidates; each shape in `dist/ui/audio.js` keeps `solo` (the file alone plays) and its synthesised notes as the fallback. `퇴각` and `부상` stay synthesised, with the two shapes swapped so 부상 is the longer one (User 2026-10-09). `사망`, `rescue`, `saved*`, `shove`, `heal` and the Boss / ending cues stay synthesised. `severe.mp3` is from the `cinematic` theme (same CC0 dedication).
+User 2026-10-09: the last four rows were chosen by ear from a side-by-side page of the current synthesised cue against uisfx candidates; each shape in `dist/ui/audio.js` keeps `solo` (the file alone plays) and its synthesised notes as the fallback. `대성공` stays synthesised (the candidate sounded too much like 살았다 3단계, User 2026-10-09). `퇴각` and `부상` stay synthesised, with the two shapes swapped so 부상 is the longer one (User 2026-10-09). `사망`, `rescue`, `saved*`, `shove`, `heal` and the Boss / ending cues stay synthesised. `severe.mp3` is from the `cinematic` theme (same CC0 dedication).
 
 - `page.mp3` — page turn of the prologue's scene changes (User 2026-10-04). Kenney "RPG Audio" `bookFlip2.ogg`, CC0 1.0
   (https://kenney.nl/assets/rpg-audio), re-encoded mono mp3 64 kb/s (~7 KB). Added by hand, not by `npm run assets`.

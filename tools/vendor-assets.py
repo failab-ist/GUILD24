@@ -66,7 +66,6 @@ AUDIO=[('press','stamp'),        # ORDER confirmation: a low knock under the pap
        ('send','door'),          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
        # User 2026-10-09: the sounds below were picked by ear from reports/sfx-candidates. A third item names another uisfx theme.
        ('drop','crate'),         # ORDER: the second and third crate landing
-       ('achievement','great'),  # NIGHT 대성공
        ('checkpoint','newstore'),  # ending -> next store
        ('success','return'),     # NIGHT 성공
        ('error','severe','cinematic')]  # NIGHT 중상: the longest sample before 사망
