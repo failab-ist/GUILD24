@@ -2275,7 +2275,6 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
   assert.deepEqual([['사망','중상'],['사망','부상'],['사망','퇴각'],['사망','대성공'],['중상','성공'],['중상','대성공']].map(([w,o])=>savedTier(hp(w,o))),[1,2,3,3,3,3]);}
  assert.ok(/const savedBeat=r=>!!savedWorse\(r\);/.test(app),'no nightly cap');
  assert.ok(/if\(st\.print\)\{const say=\$\('\.beat \.say'\);if\(say\)A\(say,\{opacity:\[\{from:0,to:0,duration:land\}/.test(app),'the character\'s line waits for the stamp on a reversal');
- assert.ok(/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS\+\(ns\?\.print\?stampLand\(ns\):0\);/.test(app),'and stays its full time after the landing');
  const nsk=fn('nightSound');
  assert.ok(/const cue=savedBeat\(result\)\?'saved'\+savedTier\(result\):nightCue\(result\);/.test(nsk)&&/if\(!st\)\{sound\(cue\);/.test(nsk)&&/nightCueAt=\[setTimeout\(\(\)=>sound\(cue\),/.test(nsk),'the relief replaces the Outcome cue on its landing - one sound, never stacked');
  assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(st\.saved==='사망'\?'death':'severe'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),savedAt\(st\.saved\)\.shove\)\);/.test(nsk),'the worse verdict sounds its own cue on the print, whoosh on the shove, both dropped by 다음');
@@ -3616,7 +3615,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(fs.existsSync(path.join(root,'dist/ui/assets/audio/door.mp3')),'and the file ships');
  assert.ok(/\('send','door'\)/.test(read('tools/vendor-assets.py'))&&read('reports/ASSETS.md').includes('`door.mp3`'),'vendored and recorded like the others');
  // A2 reply timing: buy / refuse lines stay 5 s, the greeting 3 s
- assert.ok(/const SAY_MS=3000;/.test(app)&&/const SAY_REPLY_MS=5000;/.test(app)&&/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS;/.test(app),'the reply stays 5 s, the greeting 3 s');
+ assert.ok(/const SAY_MS=3000;/.test(app)&&/const SAY_REPLY_MS=5000;/.test(app)&&/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS\+\(ns\?\.print\?stampLand\(ns\):0\);/.test(app),'the reply stays 5 s, the greeting 3 s (a NIGHT reversal counts from its landing)');
  // reduced motion: the same handlers run, the beats stand down, the end state is the same
  assert.ok(/if\(!motionOK\(\)\|\|!who\)\{go\(\);return;\}/.test(exit),'under reduced motion the departure is immediate');
 });
