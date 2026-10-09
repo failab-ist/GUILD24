@@ -34,6 +34,10 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — SALE queue Gate-count reference approval (User 2026-10-09)
+
+- Approved **design only**, pending Source implementation: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
+
 ## After v2.11.1 — Approved balance adoption (User 2026-10-08)
 
 - EXP curve18+Level×8; lagging alive adventurers receive×1.5 ordinary earned EXP below the Day's ordinary new-arrival minimum, capping only the extra bonus at that minimum. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
