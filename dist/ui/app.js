@@ -798,8 +798,7 @@ function deepOfferUI(n){
  if(t.nomineeId)return '';
  const cost=game.deepCost(n);
  if(game.canNominateDeep(n))
-  return '<details class="special-event deep-offer"><summary>'+E(c.term)+' · '+E(c.action)+'</summary>'
-   +'<p>'+E(s.dungeons[t.gateIndex].name)+' · '+E(c.sponsor)+' '+fmt(cost)+'G</p>'
+  return '<details class="special-event deep-offer"><summary><span class="dp-tag">'+E(c.term)+'</span><b class="dp-gate">'+E(s.dungeons[t.gateIndex].name)+'</b></summary>'
    +'<p class="smalltext">'+E(c.terms)+'</p>'
    +btn(E(c.action)+' · '+E(c.sponsor)+' '+fmt(cost)+'G','deep-nominate','danger','data-id="'+n.id+'"')
    +'</details>';
