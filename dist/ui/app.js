@@ -128,7 +128,7 @@ const savedItems=r=>r.heroProof?.outcome?.items||r.items||[];
 const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
 /* User 2026-10-09 ("하.. 하다가 어 살았네"): the worse verdict sounds its own cue and the card holds still until that cue has
    faded (사망's runs ~1.4 s, 중상's ~0.45 s), then a short silence, then the shove - so the two sounds never overlap */
-const SAVED_WAIT={'사망':500,'중상':100};
+const SAVED_WAIT={'사망':250,'중상':100};
 const savedAt=w=>{const d=SAVED_WAIT[w]||0;return Object.fromEntries(Object.entries(SAVED).map(([k,v])=>[k,v+d]));};
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
  if(savedBeat(r))return {...st,entry:240,hold:savedAt(savedWorse(r)).hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
