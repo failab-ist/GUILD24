@@ -3,19 +3,28 @@ const assert=require('node:assert/strict'),path=require('node:path'),fs=require(
 const T=require('../tools/measure-jobs.cjs'),G=T.load(path.resolve(__dirname,'..')),D=G.DATA;
 const o=T.options([]),source=T.current(G),candidate=T.profile(G,require('../tools/job-balance-candidate.json'));
 const before=JSON.stringify(D),refs=D.jobs.map(j=>[j.stats,j.growth]);
+for(const [id,want] of Object.entries({
+ warrior:{stats:[17,18,9,10],growth:[2.8,3,1.5,1.6]},
+ archer:{stats:[13,12,21,10],growth:[2.3,2.1,3.4,1.6]},
+ mage:{stats:[18,9,10,17],growth:[3.1,1.6,1.8,2.7]},
+ priest:{stats:[10,16,9,20],growth:[2.2,2.7,1.6,3]},
+ rogue:{stats:[17,10,19,9],growth:[3,1.8,3,1.5]},
+ berserker:{stats:[21,15,13,7],growth:[3.6,2.5,2,1.3]}
+}))assert.deepEqual(source.jobs[id],want,'승인 직업 Source '+id);
 assert.deepEqual(candidate.jobs.warrior.growth,[2.8,3,1.5,1.6]);
-assert.deepEqual(candidate.jobs.archer,{stats:[12,11,21,10],growth:[2.2,2,3.4,1.6]});
-assert.deepEqual(candidate.jobs.rogue,{stats:[17,11,19,9],growth:[3,2,3,1.5]});
+assert.deepEqual(candidate.jobs.archer,{stats:[13,12,21,10],growth:[2.3,2.1,3.4,1.6]});
+assert.deepEqual(candidate.jobs.rogue,{stats:[17,10,19,9],growth:[3,1.8,3,1.5]});
+assert.deepEqual(candidate.jobs.berserker,{stats:[21,15,13,7],growth:[3.6,2.5,2,1.3]});
 assert.deepEqual(candidate.jobs.mage,source.jobs.mage,'미변경 직업은 현재 Source를 상속한다');
 for(const jobs of [{unknown:{stats:[1,1,1,1],growth:[1,1,1,1]}},{constructor:{stats:[1,1,1,1],growth:[1,1,1,1]}},{archer:{stats:[1,1,1,NaN],growth:[1,1,1,1]}},{archer:{stats:[1,1,1,1],growth:[1,1,1,1],bonus:1}}])assert.throws(()=>T.profile(G,{name:'bad',jobs}));
 assert.throws(()=>T.profile(G,{name:'bad',jobs:{},bossPower:1}));
 assert.throws(()=>T.withProfile(G,candidate,()=>{throw Error('정상 복구 확인');}),/복구/);
 assert.equal(JSON.stringify(D),before);D.jobs.forEach((j,i)=>{assert.equal(j.stats,refs[i][0]);assert.equal(j.growth,refs[i][1]);});
 const stats=T.statRows(G,candidate,o),find=(id,level)=>stats.find(r=>r.job===id&&r.level===level),close=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,a+' != '+b);
-assert.equal(stats.length,30);close(find('warrior',20).power,76.383);close(find('archer',1).power,17.34);close(find('archer',20).power,74.15);
-close(find('rogue',1).power,19.03);close(find('rogue',20).power,80.875);close(find('archer',20).powerGrowth,2.99);
+assert.equal(stats.length,30);close(find('warrior',20).power,76.383);close(find('archer',1).power,18.11);close(find('archer',20).power,76.383);
+close(find('rogue',1).power,18.76);close(find('rogue',20).power,79.579);close(find('archer',20).powerGrowth,3.067);
 assert.equal(Object.keys(find('archer',20).defense).length,9);close(find('archer',20).defense.bind.value,85.6/3);
-close(find('archer',20).defense.poison.value,49/3);close(find('archer',20).defense.fire.value,40.4/3);
+close(find('archer',20).defense.poison.value,51.9/3);close(find('archer',20).defense.fire.value,40.4/3);
 for(const r of stats)close(r.power,find(r.job,1).power+(r.level-1)*r.powerGrowth);
 const n=T.actor(G,'archer',20,o),d=T.gate(G,4,'slime',1);
 assert.equal(d.day,4);assert.equal(d.tier,1);assert.equal(d.family,'slime');close(d.power,(21+4*1.45)*.9);
@@ -35,7 +44,7 @@ const fakeRng={next:()=>.5,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.s
 const arm=T.runArm(G,candidate,{...o,runs:1},'reader','archer',(count,policy,account,pricing,build,opts)=>{
  assert.equal(count,1);assert.equal(policy,'reader');assert.equal(pricing,'adaptive');assert.equal(build,'hybrid');assert.ok(opts.relicAware);
  assert.equal(G.Meta.jobUnlocked(null,D.jobBy.berserker),true);assert.equal(G.Meta.jobMastery(null,'archer'),0);
- const npc=G.Adventurer.create(fakeRng,1,1,G.Meta.fresh());assert.equal(npc.job,'archer');assert.deepEqual(npc.stats,{combat:12,survival:11,mobility:21,spirit:10});
+ const npc=G.Adventurer.create(fakeRng,1,1,G.Meta.fresh());assert.equal(npc.job,'archer');assert.deepEqual(npc.stats,{combat:13,survival:12,mobility:21,spirit:10});
  assert.deepEqual(npc.traits,[]);assert.equal(npc.potential,1);assert.equal(npc.rarity,0);
  const s={seed:'fixture',phase:'end',day:1,npcs:[npc],stats:{deaths:0},dungeons:[],win:false};
  G.Game.prototype.end.call({run:s});G.Game.prototype.end.call({run:s});

@@ -5,6 +5,8 @@ STATE: V2_11_1 (마이너 UI 피드백 · 첫 마왕성 단계별 코치, User �
 
 ## Current
 
+- 직업 채택(User 2026-10-09): 전사 강인함 성장3.0, 궁수13/12/21/10·성장2.3/2.1/3.4/1.6, 도적17/10/19/9·성장3.0/1.8/3.0/1.5, 광전사21/15/13/7·성장3.6/2.5/2.0/1.3을 로컬 작업 브랜치에 반영. 법사·사제는 유지. 전력/환경 기여와 레벨당 기여는 NPC_TRAIT §Job contribution에 기록. npm test 전체·audit PASS. 일반 게이트/화염 및 성장/부스트 새 안은 실험 승인만 받았고 채택 전이다. reader 전용 4조건·총28,000런 비교가 다음 작업이며 main 머지/배포는 하지 않았다.
+
 - repository: `failab-ist/GUILD24`. 현행 승인 버전은 v2.11.1(마이너 UI 피드백 · 첫 마왕성 단계별 코치, `codex/minor-ui-v2111`의 main 머지 PR). 직전은 v2.11.0(PR #111, 이후 UI PR #112 · #113 포함). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.12 ~ v2.10.3, 그 전은 `archive/changelog/`). 닫힌 버전의 보고서·측정 도구는 `archive/`(목록 `archive/README.md`).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
