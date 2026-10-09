@@ -34,6 +34,12 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Gate and forecast coach alignment (User 2026-10-09)
+
+- 일반 II·화염 게이트 코치는 기본 위험 개수와 사건으로 위험이 추가될 수 있음을 구분한다. 화염 코치는 I에서 억제하고 첫 II·III에서 한 번 표시한다. 기존 완료 기록·설정 초기화·판정 유지.
+- 전투 전망 코치는 상품 판매로 바뀌지 않는다는 설명으로 범위를 좁힌다. User 지시에 따라 심층원정 문장은 넣지 않는다. 심층 후원 시 재전망 처리 자체는 유지.
+- 코치 강조 영역은 스크롤로 보이는 실제 타깃에 맞추고 게시판 고정 제목을 제외한다. 스크롤 때 위치를 갱신하며 안내 버튼의 키보드 포커스를 복원한다. 배경 입력 차단·화면 섹션 크기·CSS는 유지.
+
 ## After v2.11.1 — Sale fatigue and Loyalty copy alignment (User 2026-10-09)
 
 - SALE 상단 `피로 N`은 확정된 가방의 상품을 반영한 출발 피로를 표시해 능력치와 기준을 맞춘다. 저장된 피로·상품 선택 미리보기·원정 회복 및 결과 정산은 유지. 원래 피로가 있던 손님이 완전히 회복되는 경우 `피로 0` 표시.

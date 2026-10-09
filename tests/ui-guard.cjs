@@ -1847,8 +1847,8 @@ test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */
 test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verbatim, the rule only',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
- assert.ok(morning.includes(`['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']`),'COPY_AUDIT §3-10 FIRE mark');
+ assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 기본 위험이 두 가지다. 단, 사건으로 위험이 추가될 수 있다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
+ assert.ok(morning.includes(`['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']`),'COPY_AUDIT §3-10 FIRE mark');
  const gp=fn('gatePlate');
  assert.ok(/data-tier="'\+\(d\.tier\|\|1\)\+'" data-family="'\+E\(d\.family\|\|''\)\+'"/.test(gp),'the plate carries its tier and Family - not its Hazard count, which an Event can raise on a tier I Gate (User 2026-10-02)');
  assert.ok(!/data-tier|data-family/.test(fn('closedPlate')),'a closed Gate carries neither anchor');
@@ -2499,7 +2499,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
- assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2]`)
+ assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2]`)
   &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3]`)
   &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
@@ -3917,5 +3917,21 @@ test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코�
  assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
  assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
  assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');
+});
+test('UI_UX §TUTORIAL: spotlight clips nested scrollports and the sticky board rail',()=>{
+ const rect=(left,top,right,bottom)=>({left,top,right,bottom});
+ const parent=(bounds,x,y,next=null,rail=null)=>({parentElement:next,getBoundingClientRect:()=>bounds,
+  css:{overflowX:x,overflowY:y},classList:{contains:k=>k==='board'&&!!rail},querySelector:()=>rail});
+ const outer=parent(rect(20,20,180,170),'hidden','visible');
+ const rail={getBoundingClientRect:()=>rect(10,35,190,65),contains:()=>false};
+ const inner=parent(rect(10,35,190,145),'visible','auto',outer,rail);
+ const wrapper=parent(rect(0,0,0,0),'auto','auto',inner);wrapper.css.display='contents';
+ const el={parentElement:wrapper,getBoundingClientRect:()=>rect(-10,0,210,200)};
+ const bounds=()=>({...render([fn('coachBounds')],'\ncoachBounds(el)',{el,innerWidth:200,innerHeight:180,getComputedStyle:e=>e.css})});
+ assert.deepEqual(bounds(),{left:20,top:65,right:180,bottom:145,width:160,height:80});
+ el.getBoundingClientRect=()=>rect(30,150,170,190);
+ assert.deepEqual(bounds(),{left:30,top:150,right:170,bottom:145,width:140,height:0});
+ el.parentElement=null;el.getBoundingClientRect=()=>rect(-5,-5,220,200);
+ assert.deepEqual(bounds(),{left:0,top:0,right:200,bottom:180,width:200,height:180});
 });
 console.log(count+' ui guard groups passed');

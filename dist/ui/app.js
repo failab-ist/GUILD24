@@ -1357,9 +1357,9 @@ const coachSteps={
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   /* UI_UX §FIRST EVENT TUTORIAL (User 2026-10-01): the first Event slip on the board, once per account (the first Run's DAY 2) */
   ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.'],
-  /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one Hazard) */
-  ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다.'],
-  ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
+  /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one base Hazard) */
+  ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 기본 위험이 두 가지다. 단, 사건으로 위험이 추가될 수 있다.'],
+  ['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 발주 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
@@ -1382,7 +1382,7 @@ const coachSteps={
  /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
  ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.'],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2],
+ ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
  ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3],
  /* COPY_AUDIT §3-14: the first time the price keys show - a refused 바가지 closes the Item, so it is known before the choice */
@@ -1433,16 +1433,22 @@ const coachSteps={
 let activeCoach=null;
 let nightMarked=null;
 let coachSettle=0,coachPainted=null,activeGroup=null;
-/* The target's own position, rounded - the one thing the whole overlay is measured from, so it
-   is also what tells us whether a repaint is needed. */
-const coachKey=el=>{const r=el.getBoundingClientRect();
+/* PRESENTATION §Tutorial / coach target truth: clip the target to its visible scrollports. */
+function coachBounds(el){const r=el.getBoundingClientRect();
+ let left=Math.max(0,r.left),top=Math.max(0,r.top),right=Math.min(innerWidth,r.right),bottom=Math.min(innerHeight,r.bottom);
+ for(let p=el.parentElement;p;p=p.parentElement){const css=getComputedStyle(p),x=/auto|scroll|hidden|clip/.test(css.overflowX),y=/auto|scroll|hidden|clip/.test(css.overflowY);
+  if(css.display==='contents'||(!x&&!y))continue;const b=p.getBoundingClientRect();
+  if(x){left=Math.max(left,b.left);right=Math.min(right,b.right);}if(y){top=Math.max(top,b.top);bottom=Math.min(bottom,b.bottom);
+   const rail=p.classList.contains('board')&&p.querySelector(':scope > .board-rail');if(rail&&!rail.contains(el))top=Math.max(top,rail.getBoundingClientRect().bottom);}}
+ return {left,top,right,bottom,width:Math.max(0,right-left),height:Math.max(0,bottom-top)};}
+const coachKey=el=>{const r=coachBounds(el);
  return [Math.round(r.top),Math.round(r.left),Math.round(r.width),Math.round(r.height)].join(':');};
-/* UI-Q-v28-27: the cutout has to hold the exact content the copy describes. Split out of
-   showCoach so the same geometry can be re-struck once the target has stopped moving - see
-   settleCoach. Picking the step, and the one scroll, stay in showCoach: this only paints. */
+/* UI_UX §TUTORIAL: repaint the visible target without changing the active lesson. */
 function paintCoach(step,target){
  const root=$('#coach-root');if(!root)return null;
- const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8);
+ const hold=holdFocus(root),b=coachBounds(target);
+ if(!b.width||!b.height){root.innerHTML='';return coachKey(target);}
+ const left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.max(0,Math.min(innerWidth-4,b.right+4)-left);
  /* UI-Q-v28-27: the bubble may not cover the next required control, and on every phase that
     control is the dock. The usable floor is therefore the dock's top edge, not the viewport's -
     the 진열대 lesson used to be placed just below its product row and ran 29px over 손님 보내기. */
@@ -1459,7 +1465,7 @@ function paintCoach(step,target){
  const RESERVE=172;
  const room=top>=RESERVE?floor-top:floor-top-RESERVE;
  const height=target.closest('.p-sale')?Math.min(floor,b.bottom+4)-top
-  :Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
+  :Math.min(b.bottom+4-top,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
  /* User 2026-10-01: the bubble takes the width its words need, up to the screen (560 px on a desk), so a line that fits
     is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
  const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
@@ -1473,22 +1479,18 @@ function paintCoach(step,target){
  if(bub){const real=bub.getBoundingClientRect().height,rw=bub.getBoundingClientRect().width;
   bub.style.left=Math.max(12,Math.min(innerWidth-rw-12,left))+'px';
   bub.style.top=(bottom+real+12<floor?bottom+12:Math.max(12,top-real-12))+'px';}
+ restoreFocus(root,hold);
  return coachKey(target);
 }
-/* The coach is drawn one frame after render() and render() starts the phase-entry animation on
-   the same tick, so it used to measure a target that was still moving: ORDER animates `.form`
-   translateY 16 -> 0 over 280ms, and the ledger lesson struck its cutout 15px low and stayed
-   there, masking the 운영비(예상) row it was pointing at. Wait for the target to hold the same
-   rect for two frames, then re-strike once if it has moved. Bounded, and it fixes any cause -
-   entry animation, late font, image load - without the coach knowing any duration. */
+/* UI_UX §TUTORIAL: track geometry while moving, then sleep until scroll or resize. */
 function settleCoach(step,target){
- let last=null,still=0,frames=0;
+ cancelAnimationFrame(coachSettle);let last=null,still=0,frames=0;
  const tick=()=>{
-  if(activeCoach!==step)return;
+  if(activeCoach!==step||!target.isConnected)return;
   const key=coachKey(target);
+  if(key!==coachPainted)coachPainted=paintCoach(step,target);
   if(key===last)still++;else{last=key;still=0;}
-  if(still>=2){if(key!==coachPainted)coachPainted=paintCoach(step,target);return;}
-  if(++frames<48)coachSettle=requestAnimationFrame(tick);
+  if(still<2&&++frames<48)coachSettle=requestAnimationFrame(tick);
  };
  coachSettle=requestAnimationFrame(tick);
 }
@@ -1516,7 +1518,7 @@ function showCoach(){
     flex item the scrolled column slides under, so a mark whose target had been scrolled beneath
     it measured as "visible" at y=195 and lit the band instead of the line it teaches
     (UI-Q-v28-27: automatic scroll must not leave the target behind a header). */
- const view=target.getBoundingClientRect(),scrollArea=[target.closest('.stage-scroll'),target.closest('.dossier-col'),target.closest('.shelf-col')]
+ const view=target.getBoundingClientRect(),scrollArea=[target.closest('.board'),target.closest('.stage-scroll'),target.closest('.dossier-col'),target.closest('.shelf-col')]
   .find(el=>el&&el.getBoundingClientRect().height>0),area=scrollArea?.getBoundingClientRect();
  const top=Math.max(80,area?area.top:0),bottom=Math.min(innerHeight-100,area?area.bottom:innerHeight);
  if(view.top<top||view.bottom>bottom){target.scrollIntoView({block:'center',behavior:'instant'});}
@@ -1531,6 +1533,9 @@ function finishCoach(skip=false){
     switch (reset / harness), no longer set by this button. */
  if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else{t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];}game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
+document.addEventListener('scroll',()=>{if(!activeCoach)return;
+ const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);
+ if(target)settleCoach(activeCoach,target);},true);
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}

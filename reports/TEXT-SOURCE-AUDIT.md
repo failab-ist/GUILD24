@@ -2,10 +2,10 @@
 
 DATE: 2026-10-09
 BASE: `codex/balance-adoption` / `1a981fd87940fde8e86eb04fdee1babf2d104849`
-STATUS: 배치 1~3 완료. 관련 검증 PASS, User AFTER 화면 확인·커밋 승인 완료(2026-10-09). 전체 점검 미완료.
+STATUS: 배치 1~3 완료. 배치 4 구현·관련 검증 PASS, User AFTER 화면 확인·커밋 승인 완료. 전체 점검 미완료.
 
 배치 1 COMMIT: `9057d7f9`. 배치 2 BASE: `9057d7f9`; User가 AFTER 화면 확인·커밋을 승인했다.
-배치 2 COMMIT / 배치 3 BASE: `1f3da969`.
+배치 2 COMMIT / 배치 3 BASE: `1f3da969`. 배치 3 COMMIT / 배치 4 BASE: `7c0b551e`.
 
 ## 배치 상태
 
@@ -14,7 +14,7 @@ STATUS: 배치 1~3 완료. 관련 검증 PASS, User AFTER 화면 확인·커밋 
 | 1 | 설정·점주 가이드·안내 ON/OFF·한 줄 안내 경계 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 2 | 상품·발주·창고 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 3 | 판매·모험가 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
-| 4 | 게이트·사건·일반 원정 | 미점검 |
+| 4 | 게이트·사건·일반 원정 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 5 | 밤·마감·폐점 | 미점검 |
 | 6 | 점포지원·장식·다음 점포 | 미점검 |
 | 7 | 마왕 조사·최종 원정·결말 | 미점검 |
@@ -97,7 +97,36 @@ User 결정(2026-10-09): 피로 경계·단골도 설명 수정 승인. 상세�
 - 캡처: 기존 폴더의 `batch3-before-*` / `batch3-after-*`. 예시 단계의 `batch3-detail-draft-*`에는 거절된 추가 설명 문장이 있어 최종 화면으로 쓰지 않는다.
 - 전체 `npm test` / `qa:runtime` / `qa:visual`은 실행하지 않았다. 전체 작업 마지막 검증은 남아 있다.
 
+## 배치 4 발견·처리
+
+BASE: `7c0b551e`. User가 문구 초안을 수정·승인했고 코칭 강조 영역 어긋남 수정도 승인했다. 구현·관련 검증 완료, User가 AFTER 화면 확인·커밋 및 배치 5 착수를 승인했다(2026-10-09).
+
+| ID | 노출 위치·변경 전 → 후 | 실제 처리·Canonical 근거 | 분류·검증 |
+|---|---|---|---|
+| T17 | 일반 II 코치 `위험이 두 가지` → `기본 위험이 두 가지… 사건으로 위험이 추가될 수 있다.` | `Dungeon` 기본 crypt II 공포/어둠에 `Game.morningEvent()` 한파가 냉기를 추가. DUNGEON_HAZARD §Family T2 / EVENT §한파 / COPY §3-10 | MISSING ADOPTION — 사건 예외 누락. 기본 2개·한파 3개와 실제 게시판 비교 |
+| T18 | 화염 코치 `위험이 하나뿐… 요구 전력이 더 높다.` → `II 이후에도 기본 위험이 하나… 사건으로 위험이 추가될 수 있다.`. I부터 발생 → 첫 II·III부터 발생 | 화염 기본 1개에 독안개가 독 추가. DUNGEON_HAZARD §FIRE second axis / EVENT §독안개 / UI_UX §GATE TIER / FIRE GATE TUTORIAL / COPY §3-10 | MISSING ADOPTION + 승인된 코칭 시점 변경. I에 사건이 있어도 억제, II·III 최초 안내 및 완료 저장/재로드 확인 |
+| T19 | 전망 코치 `손님이 들어올 때 정해져 바뀌지 않는다.` → `상품 판매로는 바뀌지 않는다.` | `Game.nominateDeep()`은 후원 확정 시 전망 재계산. SALE 입장 전망은 판매로 변화 없음. SALE §입장 스냅샷 / DUNGEON_HAZARD §DEEP / COPY §3-4 | MISSING ADOPTION — 불변 범위가 너무 넓음. 접전→후원 후 불리→실제 포션 판매 후 불리. User 지시대로 코치에 심층 설명은 넣지 않음 |
+| T20 | 코칭 강조 영역이 스크롤 뒤 타깃과 어긋남 → 보이는 타깃 경계로 갱신 | `paintCoach()`은 전체 DOM 경계만 읽고 `settleCoach()`은 첫 안정 이후 추적 중단. PRESENTATION §Tutorial / coach target truth / UI_UX §TUTORIAL / UI-Q-v28-27 | RUNTIME UX BUG. 공통 코치에서 스크롤 잘림·게시판 고정 제목을 제외하고 스크롤 이벤트로 재배치. 안내 버튼 키보드 포커스 유지. CSS·섹션 크기 변경 없음 |
+
+| T21 | 기존 SALE 코칭 QA가 현행 코칭 목록을 읽다 중단 → 의존 상수와 재방문 조건을 명시한 픽스처로 실행 | 코칭 목록의 NIGHT_MARKS 참조 및 재방문 코치의 introduced/newToday/records 조건을 기존 도구가 준비하지 않음. UI_UX §TUTORIAL / Presentation.returning() | TEST GAP. 검사 내용·기대값은 유지하고 필요한 상수와 고정 DAY 4 성공 기록만 제공 |
+
+- 게이트 위험 행·필요 대응·능력치 환산·원정 판정과 환경 대응 미리보기는 기존 계산 함수를 읽는다. 표시 대응은 내림, 필요 대응은 올림하므로 실제 부족 상태가 충족으로 표시되지 않는다. 대응 충족 안내는 해당 위험의 차감을 막는 설명이며 일반 사고 확률까지 0이라고 약속하지 않는다.
+- 사건 55종의 효과 문구와 발동·대상·당일 적용은 현행 데이터 및 관련 사건 검사로 대조했다. 심층 후원 조건·비용·보상 표시는 기존 함수·데이터를 재사용하며 이번 배치에서 별도 수치 복제나 숨은 확률 공개를 추가하지 않았다.
+- 강조 영역 검사는 브라우저의 IntersectionObserver가 제공하는 실제 교차 영역과 비교한다. 기존 코치 레이어는 배경 입력을 차단하므로 휠로 배경을 움직이는 검사는 잘못된 전제였다. 배경 차단은 유지하고, 브라우저의 자동·네이티브 스크롤 위치 변경에 강조 영역이 따라오는지 검사한다. 정렬 오차 기준은 1px 유지.
+
+### 배치 4 검증
+
+- `node tests/ui-guard.cjs`: PASS, 120개 그룹. 중첩 스크롤 영역·고정 제목·완전 잘림·화면 경계·display:contents 감싸기 요소 제외의 독립 기대값 검사 추가.
+- `node tests/copy.cjs`: PASS, 30개 그룹. `tests/events.cjs` / `tests/delta.cjs` / `tests/canonical.cjs`: PASS.
+- `node tools/qa-gate-copy.cjs <out-dir>`: PASS, 106개 검사(390×880 / 1280×880). `QA_HEIGHT=640`: PASS, 114개 검사(390×640 / 1280×640). 기본/사건 위험, FIRE I 억제·II/III 발생, 실제 다음 클릭·저장·재로드, 후원/판매 전망, 강조 영역 정렬·스크롤·키보드 포커스·말풍선 비가림·가로 넘침·런타임 오류 확인.
+- 공통 코칭 변경 검증 중 데스크의 display:contents 요소에 스크롤 overflow가 남아 강조 영역이 숨겨지는 회귀를 발견·수정했다. 실제 박스가 없는 요소는 경계 계산에서 제외하며, 단위 검사에 동일 조건을 추가했다.
+- 공통 코칭 변경의 SALE 회귀 `tools/qa-sale-copy.cjs`: PASS, 48개 검사(390×880 / 1280×880).
+- `QA_SIZES=[[390,880],[1280,880]] node tools/qa-sale-details.cjs <out-dir>`: PASS, 203개 검사. 기존 9개 SALE 코칭·재방문 코치 크기 변경·완료 저장·재로드·버튼/말풍선/타깃 비가림·실제 가격 클릭 확인. 의존 상수·재방문 픽스처 누락을 고쳤고 검사 기대값은 유지. 캡처·결과는 `batch4-sale-coach/`.
+- `npm run audit`: PASS. 생성 보고서 내용 변화 없음.
+- BEFORE/AFTER와 검사 결과는 기존 캡처 폴더의 `batch4-before-*` / `batch4-after-*`, 짧은 화면은 `short/`에 있다. User 화면 확인 완료(2026-10-09).
+- 전체 `npm test` / `qa:runtime` / `qa:visual`은 실행하지 않았다. 밸런스·판정·저장 형식·공개 API 변경 및 시뮬레이션 없음.
+
 ## 다음 경계
 
-User 승인에 따라 배치 3만 커밋·clean 확인하고 STOP. 배치 4~7은 미점검.
+User가 배치 4 화면 확인·커밋 및 다음 배치 진행을 승인했다. 배치 4를 커밋·clean 확인한 뒤 배치 5 밤·마감·폐점을 점검한다. 배치 6~7 미점검.
 후속 보고에는 무엇을 어떻게 바꿨는지 변경 전→후와 이유를 함께 적는다(User 2026-10-09).
