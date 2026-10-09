@@ -1891,7 +1891,7 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=(fn('orderOffer')+fn('orderForm'));
- const ordinary=render([constLine('btn'),fn('orderForm')],'orderForm()',{game:{run:{phase:'order',day:1,branch:'fixture',money:100,inventory:[],offers:[],dungeons:[],cart:{}},cartTotal:()=>20,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,gateCounts:()=>new Map(),todayCounts:()=>null,todayLine:()=>'<span>전체 3명</span>',railShown:'',railFolded:()=>false,deathLimitItem:()=>'<i>사망</i><b>0 / 5</b>',relicRef:()=>'',fmt:String,E:String,REROLL_ICON:''});
+ const ordinary=render([constLine('btn'),fn('orderForm')],'orderForm()',{game:{run:{phase:'order',day:1,branch:'fixture',money:100,inventory:[],offers:[],dungeons:[],cart:{}},cartTotal:()=>20,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,gateCounts:()=>new Map(),todayLine:()=>'<span>전체 3명</span>',railShown:'',railFolded:()=>false,deathLimitItem:()=>'<i>사망</i><b>0 / 5</b>',relicRef:()=>'',fmt:String,E:String,REROLL_ICON:''});
  assert.match(ordinary,/<span class="rail-line"><i>사망<\/i><b>0 \/ 5<\/b><\/span><span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b><span>전체 3명<\/span><\/b><\/span><span class="rail-line rail-gold" aria-hidden="true"><i>발주 후<\/i><b>80G<\/b><\/span>/,'Death first, then Today, then exact post-cart Gold from 100 minus 20');
  // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
  assert.ok(/const railFolded=\(\)=>game\.account\.settings\.orderRailFolded===true;/.test(app)&&/'<span class="rail-chip">요약<\/span><\/button>'/.test(of),'a 요약 chip, folded state on the account');
@@ -3386,10 +3386,10 @@ test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count befor
   'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
- assert.ok(/counts:s\.dungeons\.length>=2\|\|\(s\.closedGates\|\|\[\]\)\.length\?gateCounts\(\):null/.test(fn('todayCounts'))&&/counts=isFinal\?null:todayCounts\(\)/.test(fn('orderForm')),'per-Gate counts with two or more Gates, or beside a closed Gate (User 2026-10-02)');
- /* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): SALE re-reads ORDER's line through the same owner, held for the Day */
- assert.ok(/todayLine\(todayCounts\(\),'b'\)/.test(fn('queueRef'))&&/s\.phase!=='sell'/.test(fn('todayCounts')),'SALE shows ORDER\'s 오늘 line, held while SALE runs');
- assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)|\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(fn('queueRef')+fn('todayCounts')),'and it names no customer');
+ assert.ok(/counts=s\.dungeons\.length>=2\|\|\(s\.closedGates\|\|\[\]\)\.length\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts with two or more Gates, or beside a closed Gate (User 2026-10-02)');
+ /* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): SALE counts what is left from the counter on, through the same owner */
+ assert.ok(/todayChips\(gateCounts\(s\.cursor\)\)/.test(fn('queueRef'))&&/s\.queue\.slice\(from\)/.test(fn('gateCounts')),'SALE shows the customers left per Gate, counting the one at the counter');
+ assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)|\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(fn('queueRef')),'and it names no customer');
  const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
@@ -3644,7 +3644,8 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
  // User 2026-10-04: 전체 N명 then the Hazards beside it - `부식I 3명` (name and Tier tight, a space, the visitors), wrapping under the first Hazard
-assert.ok(fn('todayLine').includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&fn('todayLine').includes("' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes("전체 '+s.queue.length+'명")&&fn('todayLine').includes('class="tl-chips"'),'전체 {N}명, then the Hazards beside it: {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one');
+const tlc=fn('todayChips')+fn('todayLine');
+assert.ok(tlc.includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&tlc.includes("' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes("전체 '+s.queue.length+'명")&&fn('todayLine').includes('class="tl-chips"'),'전체 {N}명, then the Hazards beside it: {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
@@ -3708,7 +3709,7 @@ test('EVENT 게이트 임시 폐쇄: the closed Gate stays on the MORNING board,
  const cp=fn('closedPlates');
  assert.ok(/game\.run\.closedGates\|\|\[\]/.test(cp)&&/class="slip gate closed"/.test(cp)&&/<span class="closed-stamp">오늘 폐쇄<\/span>/.test(cp)&&!/hazard/.test(cp),'a faded plate, the stamp, no Hazard rows');
  assert.ok(/gatePlate\(d\)\)\.join\(''\)\+closedPlates\(\)/.test(fn('morningScreen'))&&/gatePlate\(d,true\)\)\.join\(''\)\+closedPlates\(\)/.test(app),'on the board and in the window, after the open Gates');
- assert.ok(fn('todayLine').includes('오늘 폐쇄')&&fn('todayLine').includes('s.closedGates'),'and on the 오늘 line');
+ assert.ok(fn('todayChips').includes('오늘 폐쇄')&&fn('todayChips').includes('s.closedGates')&&fn('todayLine').includes('todayChips(counts)'),'and on the 오늘 line');
  assert.ok(/s\.closedGates\.push\(\.\.\.s\.dungeons\.splice\(this\.rng\.pick\(open\),1\)\)/.test(read('dist/systems/shop.js')),'the record is the same pick, so no roll moves');
 });
 // UI_UX §DESK STAGE WIDTH (User 2026-09-30): one cap token, height-bound; FINAL's room and NIGHT's band keep 1120

@@ -597,8 +597,9 @@ No future-customer Job/Level/Destination/need hints; the queue count suffices. T
 ### SALE — QUEUE GATE COUNT REFERENCE (User approved 2026-10-09)
 
 - Anchor: the **existing SALE bottom-Dock `손님` queue/progress surface**, on desktop and mobile. The phone still shows its current `손님` + pips treatment; `{n}/{N}` stays a screen-reader label as before. No visible numeral, `ⓘ`, arrow, underline, separate button or permanent explanation is added. No larger Dock, no reserved height, no shift of `손님 보내기` / `영업 종료`.
+- The balloon is a slate panel, not the shelf's brown, so it never reads as one more Item card (User 2026-10-09).
 - Desktop: hover over the existing queue area opens an anchored lightweight popover; focus can open it for keyboard access. Phone: tapping **the same visible queue area** opens/toggles it, without adding a visual cue. Use the existing shared popover treatment (§SHARED ANCHORED POPOVER); outside tap / Escape closes it. Opening this information never activates the adjacent phase action.
-- Content: the **Day's planned total expected visitors by open Gate**, exactly the aggregate forecast already disclosed on ORDER (`오늘` Gate counts, using the same claimed/expected Gate data and Day queue). Show each Gate once with its count. This is **not** a countdown of visitors still waiting at each Gate, and never reveals the next customer's identity, individually assigned/actual destination, Job, traits or needs. The count does not change merely because SALE progressed; any uncertainty of expected vs actual destination remains.
+- Content: a `남은 손님` label, then each open Gate in ORDER's chip form (`{Hazard}{Tier} {n}명`, closed Gates as `오늘 폐쇄`) where n counts today's customers from the one at the counter to the last, by the Gate each claims (ORDER's count source, User 2026-10-09: no memorising). No total - the pips say it. Each sale / departure moves the counts; nothing reveals a customer's identity, actual destination, Job, traits or needs.
 - Purpose: allow recalling already-known Order-stage demand while assigning today's stock; no recommended Item, correct SKU, best price, outcome prediction or strategic prompt.
 - First-use education: one account-scoped contextual **coach spotlight on the existing `손님` queue surface**, using COPY_AUDIT §3-16. The permanent UI has no `tap for details` text. Preserve existing SALE first-day coach priorities; do not introduce an extra compulsory DAY 1 mark or decide a new DAY gate without the User's approval. Once completed/dismissed, persist with ordinary tutorial marks; Full Data Reset clears it.
 - Acceptance -> UI_UX §QA UI-Q-SALE-QUEUE-GATE-COUNT. No extra gameplay RNG, Save outcome or new Gate inference.
@@ -1521,11 +1522,10 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): DAY 1 has four marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS),
-`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer) and
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has two marks (User 2026-10-09), destination and
 the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망) and DAY 3 (환경 대응), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
-visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: 전투 전망; DAY 3: the payday customer, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
+does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망, after `flow` - how an expedition is decided, win the fight and no Hazard incident, rule only) and DAY 3 (환경 대응, after the Stats mark - 투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: `flow`, 전투 전망; DAY 3: the payday customer, Stats, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -2183,8 +2183,8 @@ PASS:
 
 #### UI-Q-SALE-QUEUE-GATE-COUNT — ON-DEMAND ORDER GATE COUNTS (User approved 2026-10-09)
 
-- In SALE on desktop, hover/focus the existing bottom `손님` queue area: a floating popover shows exactly the ORDER `오늘` count for each open Gate of the current Day (unchanged across customer sales). Mobile: tapping the same existing queue/pips area opens/closes it; outside tap / Escape dismisses; no new UI cue, height, permanent text, scroll jump or dock/button overlap at 360/390/430 or short-phone widths.
-- Changing current customer / consumed stock does not turn the original Day totals into 'remaining visitors by Gate'. No new individual future-NPC Gate, Job, wallet, needs, order or exact actual reroute information is disclosed. Popover and coach never make a recommendation.
+- In SALE on desktop, hover/focus the existing bottom `손님` queue area: a floating popover shows, per open Gate, the customers left counting the one at the counter (ORDER's claimed-Gate source; the first customer's figures sum to ORDER's total). Mobile: tapping the same existing queue/pips area opens/closes it; outside tap / Escape dismisses; no new UI cue, height, permanent text, scroll jump or dock/button overlap at 360/390/430 or short-phone widths.
+- Sending a customer lowers their claimed Gate's count by one. No future-NPC Job, wallet, needs or actual reroute is disclosed beyond what the remaining claimed-Gate counts imply. Popover and coach never make a recommendation.
 - Account first-use coach spotlights the actual queue target, can be completed/skipped, stays complete across new Runs, and returns after Full Data Reset; existing first-day SALE mandatory coach sequence is not silently extended. No changes to next-customer progression, purchase, balance, Save/RNG or keyboard navigation.
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE

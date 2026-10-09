@@ -1375,12 +1375,13 @@ const coachSteps={
     returning customer, a filled Bag slot, a refused 바가지 key, a 50% sale's change line) teaches itself the first time
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
+ /* User 2026-10-09: DAY 1 SALE keeps the destination and price marks; `flow` joins 전투 전망 on DAY 2, the Stats join 환경 대응 on DAY 3 */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  /* COPY_AUDIT §3-7 STATS: the first time a customer's Stats are on screen - what they are, that they differ per customer,
     투력 for combat, the other three for the Hazards and each one's side role. No number, no verdict. */
- ['stats','.dossier .detail-stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
+ ['stats','.dossier .detail-stats','투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.',,3],
  /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
- ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.'],
+ ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.',,2],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
@@ -1662,27 +1663,23 @@ function orderScreen(){
 /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, User 2026-09-24): with two or more open Gates the ORDER 오늘 line carries the
    visitor count per Gate, by the destination each customer claims (a liar's or a rerouted customer's true Gate stays
    hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
-function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
+function gateCounts(from=0){const s=game.run,c=new Map();for(const id of s.queue.slice(from)){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
 /* User 2026-10-04: the Gates read as their Hazards - `부식I 3명` (name and Tier set tight, then the visitors) - so what is bought
    against is what is counted. `전체 N명` leads, stronger, in a column of its own; the Hazards run beside it and, when the line
    runs out, wrap under the first Hazard rather than under the total. Each reading is one unbreakable chip; a Tier II-III Gate's
    two Hazards sit side by side, both carrying the Gate's one count; a closed Gate comes last. */
-function todayLine(counts,tag='em'){const s=game.run,hz=d=>d.hazards.map(h=>E(D.hazards[h])+['','I','II','III'][d.tier||1]),
- chips=s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
-  .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>'));
- return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+chips.join('')+'</span></span>';}
-/* ORDER's per-Gate counts (with two or more Gates, or one closed). UI_UX §SALE — QUEUE GATE COUNT REFERENCE: in SALE they are the
-   Day's planned totals, so they are held from SALE's first read - a Deep nomination re-claiming a destination does not move them. */
-let todayHeld=null;
-function todayCounts(){const s=game.run;
- if(s.phase!=='sell'||todayHeld?.run!==s||todayHeld.day!==s.day)todayHeld={run:s,day:s.day,counts:s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null};
- return todayHeld.counts;}
+function todayChips(counts){const s=game.run,hz=d=>d.hazards.map(h=>E(D.hazards[h])+['','I','II','III'][d.tier||1]);
+ return s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
+  .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>')).join('');}
+function todayLine(counts,tag='em'){const s=game.run;
+ return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+todayChips(counts)+'</span></span>';}
 /* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): the Dock's own `손님` + pips is the summary of a shared tip - no
-   mark, word or height is added. Hover / focus (desk) or a tap (phone) shows ORDER's 오늘 line; the count stays the label. */
+   mark, word or height is added. Hover / focus (desk) or a tap (phone) shows, Gate by Gate, the customers left today counting the
+   one at the counter - by the Gate each claims, through ORDER's gateCounts() and its chips; the pips already say the total. */
 function queueRef(s){return '<details class="tip q-tip" name="sale-tip"><summary aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">'
  +'<span class="q-line" aria-hidden="true">손님'+pips(s.queue.length,s.cursor)+'</span></summary>'
- +'<p class="q-pop" role="tooltip"><span class="k">오늘</span>'+todayLine(todayCounts(),'b')+'</p></details>';}
+ +'<p class="q-pop" role="tooltip"><span class="k">남은 손님</span><span class="tl-chips">'+todayChips(gateCounts(s.cursor))+'</span></p></details>';}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
@@ -1745,7 +1742,7 @@ function finalRiskSummary(d){const groups=(d.families||[]).map(id=>d.hazards.fil
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice();
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  /* User 2026-10-02: on a day an Event closed a Gate the one Gate left open also shows its count, beside the closed one */
- const isFinal=s.phase==='final',counts=isFinal?null:todayCounts();
+ const isFinal=s.phase==='final',counts=s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null;
  const today=isFinal?finalRiskSummary(s.dungeons[0]):todayLine(counts);
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24

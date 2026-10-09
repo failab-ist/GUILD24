@@ -37,6 +37,7 @@ and this table is their commit record.
 ## After v2.11.1 — SALE queue Gate-count reference approval (User 2026-10-09)
 
 - Approved **design only**, pending Source implementation: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
+- Revised (User 2026-10-09, same day): the popover counts customers **left** per Gate counting the one at the counter, under `남은 손님`, with no total; slate balloon. DAY 1 SALE coach: destination and price only; `flow` moves to DAY 2 (before 전투 전망), Stats to DAY 3 (before 환경 대응). UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §TUTORIAL — READ THE SYSTEM; SALE §QUEUE INFORMATION BOUNDARY; COPY_AUDIT §3-16.
 
 ## After v2.11.1 — Approved balance adoption (User 2026-10-08)
 
