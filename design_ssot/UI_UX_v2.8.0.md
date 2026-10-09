@@ -915,9 +915,9 @@ Every such customer gets it on their own card; there is no nightly cap (User 202
 
 - the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
 - reduced motion: the end state at once, the Item icon already beside its line
-- sound: `brink` (a dull thud) with the worse print, `shove` (a whoosh) on the shove, the Outcome cue on the landing and
-  a relief 120 ms behind it, sized by how far the result turned on 사망 > 중상 > 부상 > 퇴각 > 성공 > 대성공: `saved1` one
-  step, `saved2` two, `saved3` three or more. Reduced motion: the Outcome cue at once, the relief 0.42 s after
+- sound: `brink` (a dull thud) with the worse print, `shove` (a whoosh) on the shove, and on the landing a relief in
+  place of the Outcome cue (never both, User 2026-10-09), sized by how far the result turned on 사망 > 중상 > 부상 > 퇴각 >
+  성공 > 대성공: `saved1` one step, `saved2` two, `saved3` three or more. Reduced motion: the relief at once
 - 다음 / 전체 건너뛰기 behave as for any stamp
 
 ## CLOSING

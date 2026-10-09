@@ -69,8 +69,8 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    fit counted bass a phone cannot play, so the low cues were raised until they tore; they now carry `over` / `cut` in
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
- /* result */ great:5.074,retreat:5.195,injury:8.199,severe:5.019,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
- /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,brink:5.472,saved1:6.266,saved2:5.637,saved3:3.376,
+ /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:5.195,injury:8.199,severe:5.019,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,brink:5.472,
  /* action */ depart:1.26,return:3.694,gold:4.203,spend:4.191,crate:5.353,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
  /* utility */ button:0.711,ui:5.564,
  /* repeat */ quantity:6.357,quantset:7.962,};
@@ -156,7 +156,7 @@ const sfx={button:[440],ui:[1760,2217],fixture:[233,208],
  /* UI_UX §PROLOGUE: a page turning; the recorded body carries it, no pitched fallback */
  page:[],
  /* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09): the worse verdict lands with a dull thud, the sold Item shoves it off
-    with a whoosh, and behind the real Outcome cue a relief rises - fuller the further the result turned
+    with a whoosh, and in place of the Outcome cue a relief lands - fuller the further the result turned
     (1 step / 2 steps / 3 or more). Its own keys, apart from `rescue` (Insurance) and `great`. */
  brink:[165],shove:[],saved1:[392,494],saved2:[440,554,659],saved3:[262,330,392,523]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
@@ -292,9 +292,9 @@ const shape={
  rescue:{gain:.9,dur:.3,type:'sine',step:.09,layer:{ratio:2,at:.12,dur:.7,gain:.28},duck:.3},
  brink:{cut:250,gain:1,dur:.45,type:'sine',over:[.6,.4],attack:.01,glide:.9,noise:{at:0,dur:.22,gain:.4,hz:420,q:.6,filter:'lowpass'},duck:.4},
  shove:{noise:[{at:0,dur:.22,gain:1.8,hz:500,to:2600,q:.9,filter:'bandpass'},{at:.16,dur:.05,gain:1,hz:1500,q:.8,filter:'bandpass'}],duck:.25},
- saved1:{gain:.85,dur:.26,type:'sine',step:.1,attack:.01,duck:.3},
- saved2:{gain:.9,dur:.24,type:'triangle',step:.08,layer:{ratio:2,at:.16,dur:.6,gain:.2},duck:.35},
- saved3:{gain:.9,dur:.55,type:'triangle',step:.04,attack:.12,layer:{ratio:3,at:.32,dur:.9,gain:.35},duck:.5},
+ saved1:{hit:1,gain:.85,dur:.26,type:'sine',step:.1,attack:.01,duck:.3},
+ saved2:{hit:1,gain:.9,dur:.24,type:'triangle',step:.08,layer:{ratio:2,at:.16,dur:.6,gain:.2},duck:.35},
+ saved3:{hit:1,gain:.9,dur:.55,type:'triangle',step:.04,attack:.12,layer:{ratio:3,at:.32,dur:.9,gain:.35},duck:.5},
  heal:{gain:.7,dur:.22,type:'sine',step:.1,attack:.02,layer:{ratio:2,at:.1,dur:.45,gain:.18},duck:.2},
  /* Boss motif, two strengths: the major one adds the low layer and the rumble, the compact one
     is the same interval read short. D10 / D20 must stay smaller than D5 / D15 / D25. */

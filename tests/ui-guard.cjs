@@ -2271,7 +2271,8 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
   assert.deepEqual([['사망','중상'],['사망','부상'],['사망','퇴각'],['사망','대성공'],['중상','성공'],['중상','대성공']].map(([w,o])=>savedTier(hp(w,o))),[1,2,3,3,3,3]);}
  assert.ok(/const savedBeat=r=>!!savedWorse\(r\);/.test(app),'no nightly cap');
  const nsk=fn('nightSound');
- assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\('brink'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),SAVED\.shove\),\s*setTimeout\(\(\)=>Sound\.play\('saved'\+savedTier\(result\)\),stampLand\(st\)\+120\)\);/.test(nsk),'thud, whoosh, then the relief behind the real cue, all dropped by 다음');
+ assert.ok(/const cue=savedBeat\(result\)\?'saved'\+savedTier\(result\):nightCue\(result\);/.test(nsk)&&/if\(!st\)\{sound\(cue\);/.test(nsk)&&/nightCueAt=\[setTimeout\(\(\)=>sound\(cue\),/.test(nsk),'the relief replaces the Outcome cue on its landing - one sound, never stacked');
+ assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\('brink'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),SAVED\.shove\)\);/.test(nsk),'thud on the print, whoosh on the shove, both dropped by 다음');
  assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
  assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');

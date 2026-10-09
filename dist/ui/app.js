@@ -269,12 +269,13 @@ function finishClash(){if(!clash)return;const c=clash;clash=null;c.timers.forEac
 let nightCueAt=[];
 function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!result)return;
  const st=motionOK()&&nightStampOf(result);
- if(!st){sound(nightCue(result));if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);if(savedBeat(result))Sound.play('saved'+savedTier(result),.42);return;}
- nightCueAt=[setTimeout(()=>sound(nightCue(result)),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
+ /* UI_UX §NIGHT — SAVED BY THE SALE: the relief takes the Outcome cue's place on that landing, never on top of it */
+ const cue=savedBeat(result)?'saved'+savedTier(result):nightCue(result);
+ if(!st){sound(cue);if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
+ nightCueAt=[setTimeout(()=>sound(cue),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
  if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));
- /* UI_UX §NIGHT — SAVED BY THE SALE: a thud under the worse print, a whoosh on the shove, the relief behind the real cue */
- if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play('brink'),st.entry),setTimeout(()=>Sound.play('shove'),SAVED.shove),
-  setTimeout(()=>Sound.play('saved'+savedTier(result)),stampLand(st)+120));}
+ /* a thud under the worse print, a whoosh on the shove */
+ if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play('brink'),st.entry),setTimeout(()=>Sound.play('shove'),SAVED.shove));}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
