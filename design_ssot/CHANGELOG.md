@@ -34,6 +34,10 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — SALE Deep line names its Gate (User 2026-10-09)
+
+- The SALE Deep nomination's closed line shows `심층원정` and today's Deep Gate name (no repeated words); the open state keeps the terms and the sponsorship key. No copy added. UI_UX §DEEP SALE UI.
+
 ## After v2.11.1 — SALE shelf leads with the customer's Gate (User 2026-10-09)
 
 - The SALE shelf's Hazard-answer lead now starts with the current customer's own Gate's Hazards, then the other open Gates'; the rest of the order and the warehouse are unchanged. SALE §ITEM SELECTION / UI_UX §SALE — SHELF ORDER.

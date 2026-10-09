@@ -3169,7 +3169,8 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
  assert.equal(Copy.deep.confirmed,'심층원정 확정');
  const offer=fn('deepOfferUI');
- assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the Gate and the sponsorship');
+ assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the sponsorship');
+ assert.ok(/s\.dungeons\[t\.gateIndex\]\.name/.test(offer.slice(0,offer.indexOf('c.terms'))),'and the closed line names today\'s Deep Gate');
  assert.ok(offer.includes('c.terms'),'and the reward terms in one line');
  for(const gone of ['c.note','c.gain','c.sink','c.gate'])
   assert.ok(!offer.includes(gone),'the nomination does not restate the tutorial: '+gone);

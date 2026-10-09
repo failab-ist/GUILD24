@@ -596,7 +596,7 @@ No future-customer Job/Level/Destination/need hints; the queue count suffices.
 
 ### DEEP SALE UI
 
-While nomination is legal, show `심층원정에 추천`; afterwards sponsorship payment, new destination and updated forecast are clear
+While nomination is legal, the closed line names today's Deep Gate (`심층원정` + Gate name, User 2026-10-09) and opens to the terms and `심층원정에 추천`; afterwards sponsorship payment, new destination and updated forecast are clear
 and ordinary Sale continues.
 
 ### EVENT TEMPORARY BUDGET
