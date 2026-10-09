@@ -132,7 +132,7 @@ function observe(a,report,n){
     it, and its own seen-state keeps it to once per account), and the notebook keeps each rule the first time. A Death
     record carries only the Death-limit rule (the one exception to its closed payload, User 2026-09-30). */
  {const ev=id=>(report.events||[]).some(e=>e.id===id),dead=report.outcome==='사망';
-  const acted=dead?{death:true}:{injured:report.outcome==='부상',severe:report.outcome==='중상',fatigue:(report.fatigueBeforeExpedition||0)>=10,counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
+  const acted=dead?{death:true}:{injured:report.outcome==='부상',severe:report.outcome==='중상',fatigue:(report.fatigueBeforeExpedition||0)>=G.Dungeon.fatiguePenaltyFrom(),counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
   report.acted=G.Copy.learned.map(([k])=>k).filter(k=>acted[k]);
   for(const [k,text] of G.Copy.learned){const id='learn-'+k;
    if(acted[k]&&!a.discoveries.some(x=>x.id===id))a.discoveries.push({id,text,day:report.day});}}

@@ -252,7 +252,9 @@ const itemName=id=>D.itemBy[id]?.name||null;
    event that authors its own `text` keeps it, and one that does not - a Hazard mitigation
    carries the Hazards it covered instead - is described from what it actually holds. An
    event with nothing to say is left out rather than printed as a blank. */
-function eventLine(ev,r){if(!ev)return null;return ev.text||supplyEffect(ev,r||{})||null;}
+function eventLine(ev,r){if(!ev)return null;
+ const lesson=G.Copy.learned.find(([id])=>ev.id==='learn-'+id);
+ return lesson?lesson[1]:ev.text||supplyEffect(ev,r||{})||null;}
 function supplyEffect(ev,r){
  /* SA-Q08: a Hazard mitigation is only worth a claim about the Outcome when
     DUNGEON_HAZARD's RESULT-PROOF counterfactual actually proved one - the old `ev.prevented`

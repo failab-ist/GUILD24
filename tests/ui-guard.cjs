@@ -2673,11 +2673,11 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  const kit=fn('kitLine');
  /* SA-Q04: the Injury state is n.status in words (건강 / 부상 / 중상); a second numeric 부상 N
     beside it was the duplication the finding names. */
- const state=n=>render([fn('kitLine')],'\nkitLine(n)',{n,Adventurer:{slots:()=>2},game:{run:{}},walletChip:()=>'',E:s=>s});
+ const state=n=>render([fn('kitLine')],'\nkitLine(n)',{n,Adventurer:{slots:()=>2},game:{run:{facilities:[]},claimedGateFor:()=>({})},Dungeon:{prepare:()=>({effects:{fatigueBeforeExpedition:n.fatigue}})},Presentation:{traits:()=>[]},walletChip:()=>'',E:s=>s});
  assert.ok(!state({status:'건강',injury:0,fatigue:10,loyalty:0,pack:[]}).includes('건강'),'the compact state omits healthy even with Fatigue');
  assert.ok(state({status:'부상',injury:1,fatigue:10,loyalty:0,pack:[]}).includes('부상'),'the compact state retains an active Injury');
  assert.ok(!/부상 '\+n\.injury/.test(kit),'and it is not also stated as a number');
- assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
+ assert.ok(state({status:'건강',injury:0,fatigue:10,loyalty:0,pack:[]}).includes('피로 10'),'Fatigue remains one readable number');
  assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
  assert.ok(!/<meter|<progress|loyalty-bar|progress-bar/.test(kit),'there is no Loyalty progress bar');
  /* SA-Q46 — PLAYTEST SALE TOP DENSITY. Normal SALE shows the Loyalty value/state without a
@@ -3074,6 +3074,24 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
  assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
+});
+
+test('SALE fatigue: the status uses committed-Bag preparation without changing stored Fatigue',()=>{
+ const g=new Game();g.autosave=false;g.start('sale-fatigue-state');g.deferFoundationRelic();
+ const s=g.run;s.phase='sell';s.day=6;s.facilities=[];s.queue=[s.npcs[0].id];s.cursor=0;
+ const n=g.current();Object.assign(n,{traits:[],stats:{combat:20,survival:20,mobility:20,spirit:20},injury:0,
+  fatigue:10,recovery:0,pack:[],destination:0,claimedDestination:0});n.equipment.power=0;
+ const ctx={n,game:g,Adventurer,Dungeon,Presentation,Art:{itemIcon:()=>''},walletChip:()=>'',E:x=>x};
+ const read=()=>render([fn('kitLine')],'\nkitLine(n)',ctx);
+ assert.ok(read().includes('피로 10'),'before a sale the preparation has no recovery');
+ assert.equal(Dungeon.prepare(n,g.claimedGateFor(n),[]).effects.mobility,17,'penalty is active before food');
+ n.pack=['rice'];assert.ok(read().includes('피로 5'),'committed food changes the displayed fatigue');
+ assert.equal(Dungeon.prepare(n,g.claimedGateFor(n),[]).effects.mobility,20,'the stat and fatigue bases agree');
+ assert.equal(n.fatigue,10,'UI preparation does not consume recovery or mutate the save');
+ n.fatigue=3;assert.ok(read().includes('피로 0'),'full recovery remains visible for a fatigued arrival');
+ n.fatigue=0;assert.ok(!read().includes('피로 '),'zero-fatigue arrivals retain the compact omission');
+ assert.ok(fn('npcDetail').includes('현재 피로 (상품 사용 전): '),'detail identifies its stored-state basis');
+ assert.ok(!fn('npcDetail').includes('위 능력치는 가방 속 상품'),'the rejected explanatory sentence is absent');
 });
 
 test('ORDER shelf life: the displayed days and actual arrival share Event and refrigerator rules',()=>{

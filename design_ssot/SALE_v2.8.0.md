@@ -104,15 +104,17 @@ Fatigue in this strip:
 
     피로 2
 
-If a committed purchase reduces departure Fatigue:
+This single `피로 N` is `Dungeon.prepare()`'s `fatigueBeforeExpedition`, from the committed Bag, matching the effective Stat grid. Selecting an uncommitted Item does not move it. A fatigued arrival fully relieved by committed Items keeps `피로 0` visible; a zero-Fatigue arrival retains the existing omission.
 
-    피로 12 -> 출발 8
+A committed purchase reducing preparation Fatigue from 12 to 8 changes the single number to:
+
+    피로 8
 
 Do not show:
 
     성공 N · 퇴각 N · 부상 N
 
-Detailed deterministic arithmetic belongs in the shared anchored explanation popover.
+Stored Fatigue is unchanged by a sale; resolution settles recovery and outcome Fatigue. NPC detail labels that stored reading `현재 피로 (상품 사용 전)`. Detailed deterministic arithmetic follows DUNGEON_HAZARD; NIGHT shows the result.
 
 ## PRE-REVEAL BOUNDARY
 
@@ -342,7 +344,7 @@ Once an Item is actually purchased and committed into the NPC's Bag, it is no lo
 - the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 % stay frozen (§FROZEN OUTLOOK)
 - exact Item/direct-effect changes may be shown
 - exact proven derived changes from Fatigue/other owned systems may be shown with their source
-- current Fatigue stays the status strip's `피로 N`; no `피로 {A} → 출발 {B}` line is added
+- the status strip's single `피로 N` reads departure Fatigue from the committed Bag, matching prepared Stats; no `피로 {A} → 출발 {B}` line is added
 
 A refusal does not grant the Item effect.
 
@@ -413,7 +415,7 @@ The four Stat cells carry no Hazard tag (User 2026-10-03); the 환경 대응 met
 
 ## NPC DETAIL — CONDITION TRUTH
 
-NPC detail exposes when relevant: actual injury effect, current fatigue, current fatigue tier and active penalty,
+NPC detail exposes when relevant: actual injury effect, stored fatigue before Item use and its pre-recovery band/penalty,
 Severe Injury remaining rest days, fatigue recovery method.
 
 `injury=2` itself has no Stat penalty.

@@ -335,7 +335,7 @@ This finishing pass preserves the fixed character, shelf-row space, ribbon geome
 ### SALE STAT SOURCE UX
 
 - Stat 하단에 실제 적용된 **Source 이름만** 작게 표시 (유리: 초록, 불리: 빨강). 미적용 표시 안함.
-- NPC Detail 창: 실제 부상 효과, 현재 피로/적용 penalty, 남은 휴식일, 회복 방법 표시.
+- NPC Detail 창: 실제 부상 효과, 현재 피로 (상품 사용 전)/그 기준의 penalty, 남은 휴식일, 회복 방법 표시.
 
 ### SALE — FOUR CORE STATS REMAIN PRIMARY INFORMATION
 
@@ -664,7 +664,7 @@ ceiling 40) strong danger treatment.
 
 ### FATIGUE SURFACE
 
-SALE: Fatigue is the status strip's `피로 N` (harmful emphasis when penalized); no standing Fatigue line; the tray lists a
+SALE: the status strip's single `피로 N` uses the committed Bag's departure Fatigue, matching prepared Stats (harmful emphasis when penalized); no standing Fatigue line; the tray lists a
 Food/Drink's own `피로 회복 N` row only, no `피로 {A} → 출발 {B}` line; no Outcome-by-Outcome table — the expedition's Fatigue is NIGHT's
 answer:
     귀환 후 피로 N
@@ -2462,7 +2462,7 @@ PASS: the tray's `피로 회복 N` matches the Item's Supply and NIGHT's `출발
 single Outcome is predicted as guaranteed.
 
 #### UI-Q-v28-8 — FATIGUE
-SALE: no hypothetical Outcome fatigue matrix; current Fatigue readable in the status strip; a chosen Food/Drink lists its own
+SALE: no hypothetical Outcome fatigue matrix; committed-Bag departure Fatigue readable as the status strip's single `피로 N`; a chosen Food/Drink lists its own
 `피로 회복 N` row on the counter tray and no `피로 {A} → 출발 {B}` line; no always-on Fatigue line, no `보급 X / 필요 Y` cell.
 NIGHT: main label 귀환 후 피로, with ` · {band}` from Fatigue 20 up; detailed path on demand; the recovery rows identify `음식·음료` before departure and after the Outcome,
 never `남은 보급으로`; 보급 회복 / 보급 완화 / 밤 피로 absent as primary labels. The daily overlay separates pre-departure recovery, outcome buffer, actual Event/Trait/Decoration causes and clamps, with smaller five-band reference below.

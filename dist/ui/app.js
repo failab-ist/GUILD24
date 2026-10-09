@@ -1152,7 +1152,7 @@ function spendable(n){return n.money+(n.eventBudget||0);}
    tutorial/coach and stays available in the compact Help under its own owner. */
 function kitLine(n){const slots=Adventurer.slots(n),parts=n.injury?[n.status]:[];
  /* SALE §CURRENT CUSTOMER COMPACT STATE: only an active Injury is named. */
- if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
+ if(n.fatigue)parts.push('피로 '+Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),game.run.facilities).effects.fatigueBeforeExpedition);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  parts.push('단골도 '+n.loyalty);
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
     already picked a product - it reads here, before pricing, in the same block as the bag. */
@@ -2277,7 +2277,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  if(n.fatigue||n.fatigue===0){
   /* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, one owner; COPY_AUDIT §4-14 for the recovery line */
   const band=Dungeon.fatigueBand(n.fatigue);
-  cond.push('현재 피로: '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
+  cond.push('현재 피로 (상품 사용 전): '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
   cond.push('피로 회복: 음식·음료');
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */

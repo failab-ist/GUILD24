@@ -718,9 +718,36 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  assert.ok(swap(DATA.relicParams.returnPoints,'loyaltyBonus',6,()=>DATA.relicBy.returnPoints.description).includes('단골도 +6'),'귀환 적립제 reads its Loyalty value');
  assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
  assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4·+1·-5.'),'the guide reads the 150% Loyalty');
- assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-4.');
- assert.equal(Copy.loyalty.rule(),'단골도는 손님이 상품을 살 때(정가 +1, 50% 할인 +4, 150% 바가지 -4)와 원정에서 살아 돌아왔을 때(+1) 바뀐다.');
- assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도는 팔 때 정가 +1, 50% 할인 +4, 150% 바가지 -4, 원정에서 살아 돌아오면 +1.');
+ assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4·+1·-4.');
+ assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -4로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
+ assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.');
+});
+
+test('Fatigue lesson and discovery follow the same penalty threshold',()=>{
+ const lesson=()=>Copy.learned.find(([id])=>id==='fatigue')[1];
+ assert.equal(Dungeon.fatiguePenaltyFrom(),10,'Canonical penalty starts at 10');
+ assert.equal(lesson(),'피로가 10 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.');
+ assert.equal(Presentation.eventLine({id:'learn-fatigue',text:'피로가 10을 넘으면 기동·정신이 떨어진다.'}),lesson(),'old saved lessons display the current rule');
+ assert.equal(Presentation.eventLine({id:'old-event',text:'저장된 원정 결과'}),'저장된 원정 결과','historical outcome text is preserved');
+ const from=Dungeon.fatiguePenaltyFrom;
+ try{Dungeon.fatiguePenaltyFrom=()=>12;
+  assert.equal(lesson(),'피로가 12 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.');
+  for(const [value,expected]of [[11,false],[12,true]]){
+   const report={day:1,outcome:'퇴각',events:[],items:[],dungeon:'spider',fatigueBeforeExpedition:value};
+   Meta.observe(Meta.fresh(),report,{});assert.equal(report.acted.includes('fatigue'),expected,'discovery boundary follows the threshold');
+  }
+ }finally{Dungeon.fatiguePenaltyFrom=from;}
+});
+
+test('Paid visit Loyalty copy follows the same value departure awards',()=>{
+ assert.equal(DATA.balance.paidVisitLoyalty,1,'Canonical paid-visit increment');
+ const old=DATA.balance.paidVisitLoyalty;
+ try{DATA.balance.paidVisitLoyalty=3;
+  assert.ok(Copy.loyalty.rule().includes('상품을 사고 떠날 때 +3'));
+  const g=new Game();g.autosave=false;g.start('paid-visit-copy');
+  const s=g.run,n=s.npcs[0];s.phase='sell';s.queue=[n.id];s.cursor=0;n.loyalty=10;n.history=[{day:s.day,paid:70}];
+  g.night=()=>{};g.depart();assert.equal(n.loyalty,13,'departure reads the shared value');
+ }finally{DATA.balance.paidVisitLoyalty=old;}
 });
 
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not

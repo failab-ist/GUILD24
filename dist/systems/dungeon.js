@@ -134,6 +134,7 @@ const FATIGUE_BANDS=[
  {min:0,name:'정상',mobility:0,combat:0,text:''}];
 function fatigueBand(f){const b=FATIGUE_BANDS.find(x=>(f||0)>=x.min)||FATIGUE_BANDS[FATIGUE_BANDS.length-1];return {...b,exhausted:b.min>=FATIGUE_MAX};}
 function fatigueBands(){return FATIGUE_BANDS.map((b,i)=>({...b,max:i?FATIGUE_BANDS[i-1].min-1:FATIGUE_MAX})).reverse();}
+function fatiguePenaltyFrom(){return fatigueBands().find(b=>b.mobility||b.combat).min;}
 /* NIGHT_CLOSING §FATIGUE RESULT: record causes at resolution, without changing the calculation. */
 function fatigueLedger(n,run,outcome,e,baseline,raw,buffer,final){
  const arrival=n.fatigueArrival?.day===run?.day?n.fatigueArrival:null;
@@ -690,5 +691,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

@@ -2,9 +2,10 @@
 
 DATE: 2026-10-09
 BASE: `codex/balance-adoption` / `1a981fd87940fde8e86eb04fdee1babf2d104849`
-STATUS: 배치 1·2 완료. 관련 검증 PASS, User AFTER 화면 확인·커밋 승인 완료(2026-10-09). 전체 점검 미완료.
+STATUS: 배치 1~3 완료. 관련 검증 PASS, User AFTER 화면 확인·커밋 승인 완료(2026-10-09). 전체 점검 미완료.
 
 배치 1 COMMIT: `9057d7f9`. 배치 2 BASE: `9057d7f9`; User가 AFTER 화면 확인·커밋을 승인했다.
+배치 2 COMMIT / 배치 3 BASE: `1f3da969`.
 
 ## 배치 상태
 
@@ -12,7 +13,7 @@ STATUS: 배치 1·2 완료. 관련 검증 PASS, User AFTER 화면 확인·커밋
 |---|---|---|
 | 1 | 설정·점주 가이드·안내 ON/OFF·한 줄 안내 경계 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 2 | 상품·발주·창고 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
-| 3 | 판매·모험가 | 미점검 |
+| 3 | 판매·모험가 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 4 | 게이트·사건·일반 원정 | 미점검 |
 | 5 | 밤·마감·폐점 | 미점검 |
 | 6 | 점포지원·장식·다음 점포 | 미점검 |
@@ -72,7 +73,31 @@ User가 2026-10-09 초안을 승인하여 아래 세 항목을 적용했다. 변
 - BEFORE/AFTER 캡처·결과는 기존 캡처 폴더의 `batch2-before-*` / `batch2-after-*`에 있다. BEFORE에서는 390/1280 모두 5일 표시와 실제 1일, 교환권 0/50/100G와 두 배 코치, DAY 4 미출현과 계정 해금 완료 표시를 확인했다.
 - 전체 `npm test` / `qa:runtime` / `qa:visual`은 실행하지 않았다. 전체 작업 마지막 검증은 남아 있다.
 
+## 배치 3 발견·처리
+
+User 결정(2026-10-09): 피로 경계·단골도 설명 수정 승인. 상세는 `현재 피로 (상품 사용 전)`만 쓰며 별도 능력치 설명 문장은 거절했다. SALE 상단의 단일 피로 숫자는 현재 확정 가방을 반영한 원정 판정 기준으로 바꾸는 안을 승인했다. 저장 값·원정 처리 순서는 유지한다. 변경 전후·AFTER 화면을 보고했으며 User가 커밋을 승인했다. CSS·섹션 크기·배치는 변경하지 않았다.
+
+| ID | 변경 전 → 후 | 실제 처리·Canonical 근거 | 분류·검증 |
+|---|---|---|---|
+| T11 | 피로 안내 `10을 넘으면` → 실제 단계의 `{N} 이상이면` | 실제 피로 페널티는 10부터. DUNGEON_HAZARD §FATIGUE STAT PENALTY / COPY §26-2. 안내·발견 조건은 `Dungeon.fatiguePenaltyFrom()` 공유 | MISSING ADOPTION — 경계 문구 불일치. 9/10 기준 및 격리된 안내 기준 변경 검사 |
+| T12 | 상세 `현재 피로` → `현재 피로 (상품 사용 전)` | 저장 피로 10은 유지되지만 위 능력치는 이미 가방의 회복을 반영. SALE §NPC DETAIL / COPY §4-14 | DESIGN ISSUE — 기준 혼동을 줄이는 승인된 명확화. 추가 설명 문장은 넣지 않음 |
+| T13 | 삼각김밥 판매 후 SALE 피로 `10` 유지 → `5` 표시 | 단일 상태 숫자는 `Dungeon.prepare().effects.fatigueBeforeExpedition`을 읽어 능력치 기준과 일치. SALE §CURRENT CUSTOMER COMPACT STATE / POST-COMMIT CURRENT STATE | 승인된 표시 기준 변경. 선택만으로 이동하지 않음, 판매 후 10→5·기동/정신 17→20, 완전 회복 시 0 표시 |
+| T14 | 판매 단골도 기본 수치를 실제 변화량처럼 단정 → `기본 단골도`로 명시 | 기본 가격별 +4/+1/-4에 특성·점포지원·한도 적용. 스탬프 사례에서는 정가 +2 영수증이 이미 정확. NPC_TRAIT §ORDINARY PAID-PURCHASE LOYALTY DELTAS / COPY §8 | MISSING ADOPTION — 기본·보정 기준 누락. 실제 영수증 +2와 가이드의 보정 설명 확인 |
+| T15 | 구매 후 떠날 때 +1·바가지 거절 -2 설명 누락 → 가이드에 추가. 단골 코치는 역할 설명으로 축약 | NPC_TRAIT §Non-purchase Loyalty / 바가지 거절 규칙. `paidVisitLoyalty`를 출발 처리·문구가 공유, 현행 +1 유지 | MISSING ADOPTION. 출발 +1 및 격리된 공유 값 변경 검사 |
+| T16 | 이전 저장 수첩의 `learn-fatigue` 문구는 옛 문구 유지 → 현행 규칙 문구 표시 | 일반 학습 규칙은 `learn-*` ID로 `Copy.learned`를 읽음. 원정 고유 사건·결과의 저장 문구는 유지. COPY §26-2 | MISSING ADOPTION — 저장된 일반 규칙 문구가 최신 값과 어긋날 수 있음. 이전 문구 갱신·고유 결과 원문 유지 검사 |
+
+### 배치 3 검증
+
+- `node tests/ui-guard.cjs`: PASS, 119개 그룹. 준비 피로와 능력치의 일치, 저장 값 불변, 완전 회복 시 0, 정상 입장 시 기존 피로 생략 포함.
+- `node tests/copy.cjs`: PASS, 30개 그룹. 경계·단골도 숫자 공유·이전 저장 학습 문구 검증 포함.
+- `node tests/traits.cjs` / `node tests/delta.cjs` / `node tests/regression.cjs` / `node tests/night.cjs` / `node tests/integration.cjs` / `node tests/canonical.cjs`: PASS.
+- `node tools/qa-sale-copy.cjs <out-dir>`: PASS, 48개 검사, 390×880 / 1280×880. 실제 판매·선택·가방 2칸·완전 회복·영수증·구매 후 출발·가이드·단골 코치·상세·기존 저장 문구·가로 넘침·런타임 오류 확인.
+- 저장 피로 10을 판매 시 소비하지 않으며 원정 처리의 회복/증가 순서를 바꾸지 않았다. 준비 능력치와 같은 기존 함수를 조회한다. 전투 전망·환경 대응·실패 시 사망 위험의 입장 스냅샷도 유지(대성공 신호는 기존 판정대로 갱신 가능).
+- `npm run audit`: PASS. 생성 보고서의 변경은 BALANCE-CATALOG 소스 서명뿐. 가격·기한·밸런스 수치 변경 없음.
+- 캡처: 기존 폴더의 `batch3-before-*` / `batch3-after-*`. 예시 단계의 `batch3-detail-draft-*`에는 거절된 추가 설명 문장이 있어 최종 화면으로 쓰지 않는다.
+- 전체 `npm test` / `qa:runtime` / `qa:visual`은 실행하지 않았다. 전체 작업 마지막 검증은 남아 있다.
+
 ## 다음 경계
 
-User 승인에 따라 배치 2만 커밋·clean 확인하고 STOP. 배치 3~7은 미점검.
+User 승인에 따라 배치 3만 커밋·clean 확인하고 STOP. 배치 4~7은 미점검.
 후속 보고에는 무엇을 어떻게 바꿨는지 변경 전→후와 이유를 함께 적는다(User 2026-10-09).
