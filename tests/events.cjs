@@ -266,6 +266,13 @@ test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
  g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'and it does not come back');
 });
 
+test('EVENT 02 (User 2026-10-09): the 1+1 SKU is a Common Counter for a Hazard of an open Gate',()=>{
+ for(let n=0;n<40;n++){const g=fresh('promo-counter'+n),s=g.run;s.event=DATA.events.find(e=>e.id==='oneplus');g.generateOffers();
+  const H=[...new Set(s.dungeons.flatMap(d=>d.hazards))],p=s.offers.filter(o=>o.promo);
+  assert.equal(p.length,1,'exactly one designated SKU');
+  const it=DATA.itemBy[p[0].item];assert.equal(it.rarity,0,'Common');assert.ok(Relics.directCounter(it,H),'counters an open Gate Hazard: '+it.id);}
+});
+
 test('EVENT 10: 암시장 keeps its one special slot through a Reroll (User 2026-09-29)',()=>{
  const g=fresh('bm');force(g,'blackmarket');
  let guard=0;while(guard++<60){g.run.money=5000;g.run.stats.deaths=0;advance(g);if(g.run.event?.id==='blackmarket'||g.run.phase==='end')break;}

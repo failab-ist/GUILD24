@@ -378,7 +378,17 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  this.counterCap=this.offerCounterCap();for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  /* EVENT §02. 본사 1+1 행사: HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
     again for a 1+1 on the SKU the player wanted is not the Event's play. Store Support slots persist separately. */
- if(ev.double&&advancePity){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
+ /* EVENT §02 (User 2026-10-09): the 1+1 SKU is a Common Item that counters a Hazard of an open Gate today, so the Event
+    that opens the first Run is also where the player first buys a Counter. A sheet with none has its first Common slot
+    swapped for the Counter that covers the most open Gates' Hazards; that draw uses a stream of its own, so the Run's stream is unchanged. */
+ if(ev.double&&advancePity){const H=[...new Set(s.dungeons.flatMap(d=>d.hazards))],isC=o=>G.Relics.directCounter(D.itemBy[o.item],H);
+  let x=s.offers.find(o=>D.itemBy[o.item].rarity===0&&isC(o));
+  if(!x&&H.length){const cover=it=>s.dungeons.filter(d=>G.Relics.directCounter(it,d.hazards)).length,
+    pool=D.items.filter(it=>it.rarity===0&&!it.metaUnlock&&G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,H)),top=Math.max(0,...pool.map(cover)),best=pool.filter(it=>cover(it)===top);
+   if(best.length){const main=this.rng;this.rng=new G.RNG(s.seed+':oneplus'+s.day);let o;try{o=this.offerFor(this.rng.pick(best));}finally{this.rng=main;}
+    const i=Math.max(0,s.offers.findIndex(q=>D.itemBy[q.item].rarity===0));s.offers[i]=o;x=o;}}
+  if(!x)x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];
+  if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
     which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired.
