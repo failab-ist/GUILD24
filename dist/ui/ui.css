@@ -3315,7 +3315,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .fam-card .hazards{margin:0}
 /* UI_UX §BOSS INFORMATION PRESENTATION: every investigation shares one viewport-bounded art cap. */
 @media (max-width:719px){
- .boss-art img{max-height:clamp(120px,calc(100dvh - 500px),280px)}
+ .boss-art img{max-height:clamp(120px,calc(100dvh - 465px),280px)}
  /* SA-Q12 — MOBILE QUEUE DUPLICATION. The waiting fan and its 대기 N say on the sale surface
     what the Dock already says underneath it, and on a phone the two cost a band of height each
     to state one number twice. The decorative line is suppressed at phone width only; the Dock
