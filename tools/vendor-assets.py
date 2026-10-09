@@ -69,8 +69,6 @@ AUDIO=[('press','stamp'),        # ORDER confirmation: a low knock under the pap
        ('achievement','great'),  # NIGHT 대성공
        ('checkpoint','newstore'),  # ending -> next store
        ('success','return'),     # NIGHT 성공
-       ('back','retreat'),       # NIGHT 퇴각: the shortest of the failure stamps
-       ('error','injury'),       # NIGHT 부상: longer than 퇴각, shorter than 중상
        ('error','severe','cinematic')]  # NIGHT 중상: the longest sample before 사망
 
 # v3.0 BGM (User 2026-09-29): the Gemini (Lyria) tracks the User generated for this project, kept untouched under
