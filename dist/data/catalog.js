@@ -79,12 +79,12 @@ item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초�
    and 광전사 a clear step above 도적 - without either becoming mandatory.
    Stat order: 투력 / 강인함 / 기동 / 정신. */
 jobs:[
-{id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,2.6,1.5,1.6]},
-{id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,19,10],growth:[2.6,2,3,1.6]},
+{id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,3,1.5,1.6]},
+{id:'archer',name:'궁수',color:'#77ac79',stats:[13,12,21,10],growth:[2.3,2.1,3.4,1.6]},
 {id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.1,1.6,1.8,2.7]},
 {id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,20],growth:[2.2,2.7,1.6,3]},
-{id:'rogue',name:'도적',color:'#79b6b5',stats:[15,11,21,9],growth:[2.8,2,3.4,1.5],metaUnlock:3},
-{id:'berserker',name:'광전사',color:'#db6464',stats:[21,14,12,7],growth:[3.6,2.4,1.9,1.3],metaUnlock:6}
+{id:'rogue',name:'도적',color:'#79b6b5',stats:[17,10,19,9],growth:[3,1.8,3,1.5],metaUnlock:3},
+{id:'berserker',name:'광전사',color:'#db6464',stats:[21,15,13,7],growth:[3.6,2.5,2,1.3],metaUnlock:6}
 ],
 traits:[
 // NPC_TRAIT ACTIVE TRAIT CATALOG (FROZEN, 30). `direction` is internal only.

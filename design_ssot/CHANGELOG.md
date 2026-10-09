@@ -34,6 +34,13 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Job profiles and half-strength ordinary Gates (User 2026-10-09)
+
+- Adopt the revised Warrior/Archer/Rogue/Berserker profiles; Mage/Priest unchanged. Exact stats, Power contribution and Environment contribution with per-Level growth -> NPC_TRAIT.
+- Ordinary Gate base offsets D1 +0.125, D10 +0.5, D20 +1, D25 +1.5; linear interpolation, hold through D29. Ordinary golem FireTerm6/13.5/21. This halves the measured Gate/Fire package's changes together. DUNGEON_HAZARD §GATE POWER.
+- Keep EXP18+Level×8, lagging EXP×1.5, Final requirements/Fire12/threat28/gap penalty2 unchanged. Further growth/boost adjustment is deferred.
+- The reader28000-run measurement used the full candidate, not this final half-strength decision. No new balance simulation for adoption; the final reach/clear rate is unmeasured.
+
 ## After v2.11.1 — SALE Deep line names its Gate (User 2026-10-09)
 
 - The SALE Deep nomination's closed line shows `심층원정` and today's Deep Gate name (no repeated words); the open state keeps the terms and the sponsorship key. No copy added. UI_UX §DEEP SALE UI.
