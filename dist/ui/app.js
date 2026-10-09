@@ -431,16 +431,16 @@ function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
  const fig=$('.beat .returner');
  if(fig)A(fig,{filter:[{from:'grayscale(0) brightness(1)',to:'grayscale(0) brightness(1)',duration:st.entry+60},{to:'grayscale(1) brightness(0.5)',duration:350},
   {to:'grayscale(1) brightness(0.5)',duration:stampLand(st)-st.entry-410},{to:'grayscale(0) brightness(1)',duration:260}],onComplete:()=>{fig.style.filter='';}});
- const ids=savedItems(r);if(!ids.length)return;
- const slot=$('.beat .cause li.hero .hero-items'),t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
+ const ids=savedItems(r),slot=$('.beat .cause li.hero .hero-items');if(!ids.length||!slot)return;
+ const t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
  const fly=document.createElement('div');fly.className='saved-fly';fly.setAttribute('aria-hidden','true');fly.innerHTML=Art.itemIcon(ids[0],48);document.body.appendChild(fly);
- const h=slot?.getBoundingClientRect(),hx=h?h.left:gx-30,hy=h?h.top+h.height/2-24:gy;
+ const h=slot.getBoundingClientRect(),hx=h.left,hy=h.top+h.height/2-24;
  A(fly,{opacity:[{from:0,to:0,duration:T.shove-150},{to:1,duration:60},{to:1,duration:T.settle-T.shove+90},{to:0,duration:120}],
   translateX:[{from:gx+40,to:gx+40,duration:T.shove-150},{to:gx+20,duration:150,ease:'outQuad'},{to:gx-30,duration:80},{to:gx-30,duration:T.home-T.shove-80},{to:hx-12,duration:T.settle-T.home,ease:'inOut(2)'}],
   translateY:[{from:innerHeight-60,to:innerHeight-60,duration:T.shove-150},{to:gy,duration:150,ease:'outQuad'},{to:gy+6,duration:80},{to:gy+6,duration:T.home-T.shove-80},{to:hy,duration:T.settle-T.home,ease:'inOut(2)'}],
   scale:[{from:.6,to:.6,duration:T.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:T.home-T.shove-80},{to:.6,duration:T.settle-T.home}],
   onComplete:()=>fly.remove()});
- if(slot)A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
+ A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
 function phaseNight(A){
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
@@ -470,6 +470,8 @@ function phaseNight(A){
   }
   /* after-motion has one owner: the reversal's proof lines cut in on the overstamp; else the Hero
      Item line settles; else the REWARD figures count up. A death has none. */
+  /* the character's line answers the real Outcome, so a reversal (the worse verdict printed first) keeps it back until the stamp lands */
+  if(st.print){const say=$('.beat .say');if(say)A(say,{opacity:[{from:0,to:0,duration:land},{to:1,duration:160,ease:'outQuad'}]});}
   const told=[...document.querySelectorAll('.beat .told .cause,.beat .told .why')],hero=$('.beat .cause li.hero');
   if(st.print)told.forEach(el=>A(el,{opacity:{from:0,to:1,duration:1,delay:land}}));
   /* the claim's accent bar belongs to its list: when the claim is the list's only line, the list settles */
