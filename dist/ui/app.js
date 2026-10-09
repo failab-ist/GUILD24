@@ -1560,10 +1560,19 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
   +'</div>'
   +hazardList(Presentation.known(d,game),null,d)
  +'</div></div>';}
+// UI_UX §FINAL MODIFIER PREVIEW: read the same snapshots as resolution, without changing preparation.
+function statDisplay(n){const s=game.run,i=s.phase==='final'&&s.finalCommitted?s.team.indexOf(n.id):-1;
+ if(i<0)return Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),s.facilities);
+ const t=game.finalPreRoll(),prep=t.preparations[i],boss=game.finalSnapshot(t.team[i],prep,t.d,t.context),values=t.snapshots[i];
+ const sources=Object.fromEntries(Adventurer.keys.map(k=>[k,[...(prep.sources?.[k]||[])]]));
+ for(const k of Adventurer.keys){
+  if(boss[k]!==prep.effects[k])sources[k].push({name:Copy.boss.d15.trait[s.bossId][0],v:boss[k]-prep.effects[k]});
+  if(values[k]!==boss[k])sources[k].push({name:D.decorationBy.cheerBanner.name,v:values[k]-boss[k]});
+ }
+ return {...prep,effects:values,sources,beforeEffects:prep.effects};
+}
 function statGrid(n){
-   const tList = Presentation.traits(n);
-   const gate = game.claimedGateFor(n);
-   const prep = Dungeon.prepare({...n,traits:tList},gate,game.run.facilities);
+   const prep = statDisplay(n);
    const values = prep.effects;
    /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
       presses, a small tag with the pressing Hazard name(s) - the one place the grid links to
@@ -1584,13 +1593,14 @@ function statGrid(n){
       A Stat that did not move, or moved with no provable source, stays a plain non-interactive
       cell: colour but no affordance, and never an empty popup. */
    return '<div class="detail-stats">'+Adventurer.keys.map(k=>{
-    const delta = values[k]-n.stats[k], moved = delta!==0;
+    const before = prep.beforeEffects?.[k], applied = before!==undefined&&before!==values[k];
+    const delta = values[k]-(applied?before:n.stats[k]), moved = delta!==0;
     const sense = !moved ? '' : delta>0 ? 'up' : 'down';
     /* the prepared snapshot returns its provenance as prep.sources - `prep.effects.sources`
        never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
-    const face = '<label>'+label+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    const face = '<label>'+label+'</label><strong>'+(applied?Presentation.stat(before,true)+' → ':'')+Presentation.stat(values[k],moved)+'</strong>';
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
@@ -2159,7 +2169,7 @@ function replayLine(){const s=game.run,st=s.settlement;
    above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
 function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',finalView=muster||action==='final-view',blocked=muster&&(!n.alive||n.recovery);
  /* the FINAL muster card opens the adventurer's notebook; picking happens there (User 2026-09-25) */
- const condition=finalView?[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':'',(n.fatigue||0)>10?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:''].filter(Boolean).join(' · '):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
+ const condition=finalView?[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':'',(n.fatigue||0)>=Dungeon.fatiguePenaltyFrom()?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:''].filter(Boolean).join(' · '):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
  const call=!muster?'기록 보기':s.team.includes(n.id)?'선택됨':'기록 보기';
  return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${condition?E(condition)+' · ':''}방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
@@ -2189,7 +2199,7 @@ function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
  return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
  +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
  +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
- +'<span class="final-environments"><span class="env-caption">환경 대응</span>'+finalEnvironment(p,d)+'</span></div>';
+ +'<span class="final-environments"><span class="env-caption">환경 대응 (권능 적용 전)</span>'+finalEnvironment(p,d)+'</span></div>';
 }
 function finalMemberPin(){const s=game.run,t=game.finalPreRoll(),index=s.team.indexOf(supplyNPC),n=s.npcs.find(n=>n.id===supplyNPC);if(!n||index<0)return '';
  return '<div class="final-pin-host"><button type="button" class="final-pin final-member board-rail'+(finalPinFolded?' folded':'')+'" data-action="final-pin" aria-expanded="'+!finalPinFolded+'" aria-label="'+(finalPinFolded?'요약 열기':'요약 접기')+'">'+finalMemberBody(n,t.preparations[index],t.d)+'</button></div>';
@@ -2212,7 +2222,7 @@ function finalMuster(s,need,committed){
  +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))+btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')+'<div class="final-supply p-sale">'+shelf(true)+'</div>');
 }
 function finalDock(s,need,committed){const ready=s.team.length>0&&s.team.length<=need,held=Object.values(s.cart||{}).some(q=>q>0);
- if(!need)return relicWindowLink()+btn('출전 불가 · 런 종료','boss','danger');
+ if(!need)return relicWindowLink()+btn('출전 불가 · 점포 종료','boss','danger');
  if(finalIsOrdering(s))return stockSheetKey()+btn('발주 확정','confirm-order','stamp',held?'':'disabled')+btn('원정대 꾸리기','final-ordered','stamp leave',held?'disabled':'');
  return relicWindowLink()+(committed?btn('최종 원정 보내기','boss','stamp'):btn(Copy.finalPrep.returnOrder,'final-order-back','stamp final-order-back')+btn('원정대 확정','final-commit','stamp',ready?'':'disabled'));
 }
@@ -2404,7 +2414,7 @@ const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).fi
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 /* UI_UX §CODEX BOSS TAB: the Bosses the Player has met, this Run's Boss first once its identity is shown. Only the Trait is kept -
    the Final Hazards change every Run - and a Boss never met is not listed at all. */
-function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=s?.bossId;
+function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=r.identitySeen?s?.bossId:null;
  const known=id=>{const k=Meta.bossKnown(a,id);return id===cur?{identity:k.identity||!!r.identitySeen,trait:k.trait||!!r.traitSeen}:k;};
  const ids=D.bosses.map(b=>b.id).filter(id=>known(id).identity);
  if(!ids.length)return '<p class="boss-none">'+E(c.codex.none)+'</p>';

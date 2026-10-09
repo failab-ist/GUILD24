@@ -1072,7 +1072,7 @@ Information truth first; Boss presence is co-equal except at D25, where art neve
 ### 도감 > 마왕
 
 A codex tab after 점포지원 and before 점포 장식. It lists only the Bosses the Player has met (identity shown at D5, or any past clear); a Boss never
-met is absent, an empty tab says COPY_AUDIT §14-11. Order: the Boss order of the roster, except this Run's Boss first once its identity is shown.
+met is absent, an empty tab says COPY_AUDIT §14-11. Order: the Boss order of the roster, except this Run's Boss first once its identity is shown. The current identitySeen marker also gates 이번 영업 and GREED's live current-sales row; past knowledge alone cannot identify this Run's target early.
 Each card: small art, Boss name (this Run's card carries an `이번 영업` mark), then the Trait name and sentences. No Flavor and no Final Hazards
 (they change every Run). A Trait not yet shown reads `DAY 15에 마왕 권능이 밝혀진다.` for this Run's Boss and `마왕 권능은 아직 확인하지 못했다.` for a Boss
 met in an earlier store. GREED's card adds 목표 매출, plus 현재 매출 on this Run's card. The record lives on the Account (`bossLog`); a save without it reads empty
@@ -1081,7 +1081,7 @@ and a cleared Boss counts as known.
 ### D25 — 최종 정찰 보고
 
 `최종 정찰 보고` with a one-time 안내 line under the intro (COPY_AUDIT §14-7) (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
-Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 29).
+Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N from the current FINAL_EXPEDITION / DUNGEON_HAZARD Final threat owner (Day 30 / T2).
 `two Families` does NOT mean two Hazard keys. Never the Hazard formula, Final success % or Final Power.
 Hazard names and required Counter values use the Function/Effect information face (14px on phone, 15px on desk, weight 600); conversion explanations use the Secondary factual face (13px, weight 400). Family headings keep the plate face (16px on phone, 17px on desk); do not let their typography inherit into nested Hazard values. Keep at least 4.5:1 contrast for required information.
 
@@ -1100,6 +1100,7 @@ Before Final Lock, every Boss-changed visible value shows `original → applied`
 - GREED: 목표 매출 · 현재 매출 · 달성률 · 현재 탐욕 강화 %
 - SLOTH: 봉인 해제 상태 · 현재 위협 단계
 
+The committed member Stat grid and read-only detail use finalPreRoll snapshots; changed final modifiers show prepared → applied with proven source deltas. 단골 감사 현수막 is a separate source. Uncommitted candidates and SALE keep their preparation readings.
 No Final success %. Identity `탐식의 마왕 글러트니`; Trait prose -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
 ### FINAL BOSS ART
@@ -1196,7 +1197,7 @@ commit transfer
   with Wallet, Bag and environment readings. It reserves space above the scrolling shelf and clears the menu pin;
   focused unsold Items never change it, a paid transfer updates it, and changing target updates the named participant.
 - the shelf/header and fixed-price transfer key reuse current SALE material assets; departure reads 최종 원정 보내기.
-- meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
+- the meter caption reads 환경 대응 (권능 적용 전); meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
 
 ### FINAL ITEM / WALLET FEEDBACK
 

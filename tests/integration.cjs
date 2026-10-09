@@ -654,7 +654,7 @@ test('FINAL: reaching D30 with nobody to send is a Final failure, not an unpaid 
  /* The UI used to send this to retire, which closes the store for overheads it had in fact
     paid. boss() has always owned this ending. */
  const app=source('dist/ui/app.js');
- assert.ok(/출전 불가 · 런 종료','boss'/.test(app),'the button goes to the Final, not to retire');
+ assert.ok(/출전 불가 · 점포 종료','boss'/.test(app),'the button goes to the Final, not to retire');
  assert.ok(/case'boss':if\(!game\.finalRequired\(\)\)\{game\.boss\(\)/.test(app),
   'and with nobody to send there is no party to confirm first');
 

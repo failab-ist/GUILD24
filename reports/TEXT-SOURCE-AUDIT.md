@@ -2,7 +2,7 @@
 
 DATE: 2026-10-09
 BASE: `codex/balance-adoption` / `1a981fd87940fde8e86eb04fdee1babf2d104849`
-STATUS: 배치 1~5 커밋 완료. 배치 6 구현·관련 검증·AFTER 보고 완료, User 후속 지시에 따라 커밋 후 배치 7 진행. 전체 점검 미완료.
+STATUS: 배치1~6 커밋 완료. 배치7 수정·관련 검증·AFTER 보고 완료, 커밋 후 추가 요청 배치8 사건55종 가독성·용어 전수 검수 진행. 전체 점검 미완료.
 
 배치 1 COMMIT: `9057d7f9`. 배치 2 BASE: `9057d7f9`; User가 AFTER 화면 확인·커밋을 승인했다.
 배치 2 COMMIT / 배치 3 BASE: `1f3da969`. 배치 3 COMMIT / 배치 4 BASE: `7c0b551e`.
@@ -16,8 +16,9 @@ STATUS: 배치 1~5 커밋 완료. 배치 6 구현·관련 검증·AFTER 보고 �
 | 3 | 판매·모험가 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 4 | 게이트·사건·일반 원정 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 5 | 밤·마감·폐점 | 35893f69 커밋 / 관련 검증 PASS / AFTER 캡처 보고 |
-| 6 | 점포지원·장식·다음 점포 | 수정·관련 검증 PASS / AFTER 캡처 보고 완료 |
-| 7 | 마왕 조사·최종 원정·결말 | 미점검 |
+| 6 | 점포지원·장식·다음 점포 | a2faca1f 커밋 / 관련 검증 PASS / AFTER 캡처 보고 |
+| 7 | 마왕 조사·최종 원정·결말 | 수정·관련 검증 PASS / AFTER 캡처 보고 완료 |
+| 8 | 사건55종의 사용자 이해도·전체 용어 전수 검수(최신 추가 요청) | 배치7 뒤 진행 예정 |
 
 규칙별 코치·도감·상세창·오류 및 비활성 사유는 각 시스템 배치에서 의미·수치·예외까지 점검한다.
 이 기록은 발견·검증 원장이며 Design SSOT가 아니다. 현재 문구는 COPY owner, 현재 규칙은 SPEC_INDEX가 가리키는 owner를 따른다.
@@ -175,7 +176,27 @@ BASE: `35893f69`. User가 운영비 가산의 구입 당일 적용과 다음 날
 - 캡처/결과: 기존 폴더의 batch6-before-* / batch6-after-* / batch6-before-results.json / batch6-after-results.json. 구급품 진열장은 User 요청대로 `(마왕성 제외)`만 붙였다. CSS·섹션 배치·저장 스키마·API 인자 형식 변경 없음.
 - 점포지원34종+이전 저장호환1종, 장식12종의 주요 효과·대상·기간·중첩·해금·교환 조건을 기존 owner/Source/관련 검사로 대조했다. 기존 description/effect getter와 Meta 함수를 유지하며 중요한 조건을 범용화로 생략하지 않았다.
 
+## 배치 7 발견·처리
+
+BASE: `a2faca1f`. User가 T36~T41 적용을 승인했다. 구현·관련 검증·폰/데스크 AFTER 캡처 보고 완료. 최신 User 추가 요청에 따라 커밋 후 사건55종의 가독성·전체 용어 전수 검수를 별도 배치8로 진행한다.
+
+| ID | 변경 전 → 후 | 근거·분류 | 검증 |
+|---|---|---|---|
+| T36 | 과거에 만난 이번 목표는 D4에도 이번 영업·우선 정렬·현재 매출 표시 → 이번 identitySeen 뒤에만 표시 | UI_UX §도감 > 마왕 / BOSS §D0 INFORMATION BOUNDARY. RUNTIME UX BUG 해결 | D4 비공개·과거7마왕 기록 유지, D5 실제 보고 확인 뒤 목표/현재 매출 공개 |
+| T37 | 후보 피로 >10 표시 → >=Dungeon.fatiguePenaltyFrom() 표시 | 실제 첫 페널티값10 참조. IMPLEMENTATION BUG 해결 | 대상 NPC를 지정해 피로10·지침 표시 확인 |
+| T38 | 확정 대원은 권능 전 능력치 → 기존 finalPreRoll().snapshots의 실제 적용값과 준비→적용 표시 | UI_UX §FINAL MODIFIER PREVIEW / FINAL 계산 순서. IMPLEMENTATION BUG 해결 | 7마왕·4능력치 UI/실제 snapshot 대조. PRIDE100→92, ENVY대상100→92, GLUTTONY110→105, LUST100→95. 실제 포션 보급 후110→101.2·회계70G·재로드 유지. Boss/단골 감사 현수막 원인을 별도 delta로 표시. Source 배열 불변·미확정/SALE 기준 유지 단위 검사 |
+| T39 | 글러트니 설명이 보험 유효성을 암시 → `환경 대응·피로 회복은 그대로다.` | 보험은 Final에서 효과 없음·배치 불가. 승인된 문구 명확화 완료 | 공통 Copy 재사용·현재 승인 문구 검사 PASS. 권능/보험 판정 유지 |
+| T40 | `출전 불가 · 런 종료` → `출전 불가 · 점포 종료` | GLOSSARY 점포 용어. MISSING ADOPTION 해결 | 무출전 실제 화면 및 기존 무출전 종료 통합 검사. boss action 유지 |
+| T41 | D25 UI owner가 요구대응29 복제 → 현행 Final threat owner 참조 | 현재 승인 FINAL/DUNGEON/Source28. MISSING ADOPTION 해결 | 실제 위험 행28 유지. 숫자·판정 변경 없음 |
+
+### 배치 7 검증·한계
+
+- node tests/ui-guard.cjs: PASS 123개 그룹. 확정/미확정/SALE 표시 기준·권능/장식 source 분리·배열 불변·100→92 동작 검사 추가. node tests/copy.cjs: PASS30개 그룹. node tests/final.cjs: PASS30개 그룹. node tests/integration.cjs: PASS55개 그룹. node tests/vocabulary.cjs: PASS11개 그룹. npm run audit: PASS, 생성 보고서 내용 변화 없음.
+- tools/qa-final-text-audit.cjs: BEFORE 16개 기존 검사·20개 증거(기존 HEAD UI/Copy 제공). AFTER PASS116개 검사·20개 증거, 390×880(터치)/1280×880(마우스). 실제 원정대 선택·확정·대원 전환·자료 확인·포션 보급·저장/재로드, 폰 tap/데스크 hover 원인 열람, 7마왕의 네 능력치·환경 기준·공개 경계·가로 넘침·런타임 오류·조회 RNG 불변 확인. 원정/마왕전 resolve는 실행하지 않음.
+- 캡처/결과: 기존 폴더의 batch7-before-* / batch7-after-* / batch7-before-results.json / batch7-after-results.json. 코드·게임 판정·밸런스·RNG·저장 형식·CSS 변경 없음(표시 함수·문구만 수정).
+- 사건55종의 읽기 쉬운 표현과 전체 용어 검수는 최신 추가 요청의 배치8로 남는다. 앞선 배치4는 값·조건 대조 중심이며, 문구 이해도 전수 개선 완료라고 보고하지 않는다. 마지막 전체 npm test→audit·생성 보고서 반영·clean 확인은 배치8 이후 수행한다.
+
 ## 다음 경계
 
-배치 4 COMMIT: cc24933f. 배치 5 COMMIT: 35893f69. 최신 User의 배치 6 수정·배치 7 후속 진행 승인에 따라 배치 6 커밋·clean 확인 후 배치 7 점검.
+배치7 커밋·clean 확인 후 최신 추가 요청의 배치8 사건55종 가독성·용어 전수 검수. 전체 마지막 npm test→audit·생성 보고서 반영 및 clean 확인 뒤 전체 완료 보고.
 후속 보고에는 무엇을 어떻게 바꿨는지 변경 전→후와 이유를 함께 적는다(User 2026-10-09).

@@ -638,7 +638,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  assert.equal(glut.sin,'탐식','the Sin is 탐식');
  assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
  assert.deepEqual(c.d15.trait.GLUTTONY,
-['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복은 그대로다.']],
   'the D15 Function is the exact Canonical copy; the figure is filled from the tuning table');
  // no retired wording survives anywhere a player can read
  const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
@@ -2704,7 +2704,7 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
 test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic movement',()=>{
  const grid=fn('statGrid');
  // classification is by MEANING: for a Core Stat, more is better
- assert.ok(/const delta = values\[k\]-n\.stats\[k\], moved = delta!==0;/.test(grid),'the change is measured');
+ assert.ok(/const delta = values\[k\]-\(applied\?before:n\.stats\[k\]\), moved = delta!==0;/.test(grid),'the change is measured against the shown baseline');
  assert.ok(/sense = !moved \? '' : delta>0 \? 'up' : 'down'/.test(grid),'a rise is beneficial, a fall harmful');
  assert.ok(/const cls = 'detail-stat'\+\(sense\?' '\+sense:''\);/.test(grid),'and the cell carries that meaning');
  assert.ok(!/ moved'/.test(grid),'the generic `moved` class is gone from the row');
@@ -3949,5 +3949,20 @@ test('RELIC retired codex: candidate status reads the existing retired list',()=
  assert.equal(status(),'현재 후보로 나오지 않음');ctx.entry={id:'bulk'};assert.equal(status(),'기본 제공');
  ctx.D.relicRetired.push('bulk');assert.equal(status(),'현재 후보로 나오지 않음','status follows the list rather than a hardcoded support id');
  assert.ok(DATA.relicBy.memberBundle.description,'old-owned effect description is preserved');
+});
+test('FINAL committed Stat grid: applied snapshot, before/after, separate Boss and Decoration sources',()=>{
+ const keys=Adventurer.keys,n={id:'n1',traits:[],stats:{combat:90,survival:100,mobility:100,spirit:100}};
+ const prep={effects:{combat:100,survival:100,mobility:100,spirit:100},sources:{combat:[{name:'장비',v:10}],survival:[],mobility:[],spirit:[]}};
+ const boss={...prep.effects,combat:92},t={team:[n],preparations:[prep],snapshots:[boss],d:{},context:null};let ordinary=0;
+ const game={run:{phase:'final',finalCommitted:true,team:[n.id],facilities:[],bossId:'PRIDE'},finalPreRoll:()=>t,finalSnapshot:()=>boss,claimedGateFor:()=>({})};
+ const ctx={game,n,D:DATA,Copy,Presentation,Adventurer,Dungeon:{prepare:()=>{ordinary++;return prep;}},E:x=>x};
+ const html=()=>render([fn('statDisplay'),fn('statGrid')],'\nstatGrid(n)',{...ctx});
+ assert.ok(html().includes('100 → 92')&&html().includes('오만의 갑주 -8'));
+ assert.ok(html().includes('detail-stat down'),'Boss loss is harmful even if the final value exceeds the stored90');
+ assert.deepEqual(prep.sources.combat,[{name:'장비',v:10}],'display cannot mutate shared preparation sources');
+ t.snapshots=[{...boss,combat:108.56}];const banner=html();
+ assert.ok(banner.includes('100 → 108.6')&&banner.includes('오만의 갑주 -8')&&banner.includes('단골 감사 현수막 +16.6'));
+ game.run.finalCommitted=false;assert.ok(!html().includes('→'));assert.equal(ordinary,1,'uncommitted candidate reads ordinary preparation');
+ game.run.phase='sell';game.run.finalCommitted=true;assert.ok(!html().includes('→'));assert.equal(ordinary,2,'SALE has no Final modifier');
 });
 console.log(count+' ui guard groups passed');
