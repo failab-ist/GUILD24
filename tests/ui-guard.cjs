@@ -2617,7 +2617,7 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
  assert.ok(block.length,'there is a phone-width density block');
  /* UI_UX §BOSS INFORMATION PRESENTATION: common art caps; runtime density is checked by qa-boss-report-density. */
- assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 500px\),280px\)\}/.test(block),'phone art scales with viewport height under the common cap');
+ assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 465px\),280px\)\}/.test(block),'phone art scales with viewport height under the common cap');
  assert.ok(!/\.boss-reveal\.(?:final|d\d+) \.boss-art img\{/.test(css),'no investigation Day has its own image-size exception');
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
@@ -2932,7 +2932,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  const compact=fn('bossReveal').split("stage==='d10'||stage==='d20'")[1].split("stage==='d0'")[0];
  assert.ok(/\+plate/.test(compact)&&!/boss-id/.test(compact),'D10 / D20 carry the shared full Boss-art figure, not a thumbnail');
  assert.ok(!/\.boss-id\b/.test(css)&&!/max-width:64px;max-height:64px/.test(css),'the 64px thumbnail rule is gone');
- assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 500px\),280px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 480px\),360px\)\}/.test(css),
+ assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 465px\),280px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 480px\),360px\)\}/.test(css),
   'the shared phone / desk caps (240 / 300) are the ones D10 / D20 now use');
  assert.ok(!/\.boss-reveal\.d(10|20)[^{]*\.boss-art img\{/.test(css),'no D10 / D20-only art size - one art family');
 });
@@ -3064,7 +3064,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
  assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("left<=1?'오늘까지':left===2?'내일까지':'폐기까지 '+left+'일'"),'§4-10 the shelf-life state stays, as the last sale day (v2.9.10), and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
  // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
- assert.ok(fn('shelf').includes('+shelfOrder(stocks,!isFinal).map(st=>{'),'the shelf reads its order from shelfOrder (today\'s Hazard order off in the Final)');
+ assert.ok(fn('shelf').includes('+shelfOrder(stocks,!isFinal,isFinal?null:n).map(st=>{'),'the shelf reads its order from shelfOrder (today\'s Hazard order off in the Final)');
  assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');
  assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at))at[st.item]=st.expires;'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
  assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];')&&fn('shelfOrder').includes('-it.rarity'),'today\'s Hazard, then kind, then nearest discard, then higher Rarity; ties stay stable');
@@ -3169,7 +3169,8 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
  assert.equal(Copy.deep.confirmed,'심층원정 확정');
  const offer=fn('deepOfferUI');
- assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the Gate and the sponsorship');
+ assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the sponsorship');
+ assert.ok(/s\.dungeons\[t\.gateIndex\]\.name/.test(offer.slice(0,offer.indexOf('c.terms'))),'and the closed line names today\'s Deep Gate');
  assert.ok(offer.includes('c.terms'),'and the reward terms in one line');
  for(const gone of ['c.note','c.gain','c.sink','c.gate'])
   assert.ok(!offer.includes(gone),'the nomination does not restate the tutorial: '+gone);

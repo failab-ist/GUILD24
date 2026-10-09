@@ -1,0 +1,9 @@
+{
+  "name": "adopted-20261009-revised",
+  "jobs": {
+    "warrior": { "stats": [17, 18, 9, 10], "growth": [2.8, 3, 1.5, 1.6] },
+    "archer": { "stats": [13, 12, 21, 10], "growth": [2.3, 2.1, 3.4, 1.6] },
+    "rogue": { "stats": [17, 10, 19, 9], "growth": [3, 1.8, 3, 1.5] },
+    "berserker": { "stats": [21, 15, 13, 7], "growth": [3.6, 2.5, 2, 1.3] }
+  }
+}
