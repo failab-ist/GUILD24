@@ -571,7 +571,7 @@ Let:
       × (1 + 0.03 × (avgLevel - 1))
       × (1 + 0.06 × avgRarity)
 
-Current Store Support/Event flat or percentage modifiers apply only through their own owner rules.
+Current Store Support/Event flat or percentage modifiers apply only through their own owner rules. Percentage surcharges read currently acquired supports and apply from acquisition Day (RELIC §OPERATING COST TIMING); efficiency's flat reduction keeps its next-Day timing.
 
 Final daily operating cost:
 

@@ -917,14 +917,11 @@ function deepSlip(){
      +'<span class="body">'+E(c.sponsor)+' '+fmt(t.paid)+'G 지급</span>'
    : '<span class="body">'+E(c.brief)+'</span>')
  +'</div>';}
-/* EVENT §3-1. Three things have to arrive at once: that something happened today, what
-   happened, and what is switched on because of it. The catalog already keeps those last two
-   apart - `reveal` is the situation and `description` is the effect - so the notice says both
-   and sets them apart instead of showing the effect line alone with no cause. */
+/* EVENT §3-1: show the current effect and saved situation separately. */
 function eventSlip(e){
  return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
  +'<span class="stamp-line">오늘의 사건</span><b>'+E(e.name)+'</b>'
- +'<span class="effect"><i>효과</i><span>'+E(e.description)+'</span></span>'
+ +'<span class="effect"><i>효과</i><span>'+E(Presentation.eventDescription(e))+'</span></span>'
  +'<span class="flavor"><span>'+E(e.reveal)+'</span></span></button>';}
 /* Owned store support used to sit on the counter as a row of brass plates, which is where
    the float is. It crowded the till off its own surface, so the counter now carries the
@@ -1198,7 +1195,7 @@ function spendable(n){return n.money+(n.eventBudget||0);}
    tutorial/coach and stays available in the compact Help under its own owner. */
 function kitLine(n){const slots=Adventurer.slots(n),parts=n.injury?[n.status]:[];
  /* SALE §CURRENT CUSTOMER COMPACT STATE: only an active Injury is named. */
- if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
+ if(n.fatigue)parts.push('피로 '+Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),game.run.facilities).effects.fatigueBeforeExpedition);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  parts.push('단골도 '+n.loyalty);
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
     already picked a product - it reads here, before pricing, in the same block as the bag. */
@@ -1381,6 +1378,7 @@ function closingReceipt(s){
  +'<div class="tear bottom" aria-hidden="true"></div></div>';
 }
 function closingDock(s){
+ if(s.stats.deaths>=Meta.deathLimit(s))return '<p class="danger-text">사망 한도에 도달했다.</p>'+btn('점포 종료','close','stamp');
  const rescue=game.canRescue(),spent=(s.rescueUsed||0),cap=game.rescueLimit();
  return (s.money<0
   ?'<p class="danger-text">운영비가 부족하다.'+(rescue?' 회생 '+spent+' / '+cap+'':' 회생을 모두 썼다.')+'</p>'
@@ -1404,17 +1402,17 @@ const coachSteps={
  morning:[['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   /* UI_UX §FIRST EVENT TUTORIAL (User 2026-10-01): the first Event slip on the board, once per account (the first Run's DAY 2) */
-  ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.'],
-  /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one Hazard) */
-  ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다.'],
-  ['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']],
+  ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건마다 영향과 적용 기간이 다르다. 사건의 효과를 확인한다.'],
+  /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one base Hazard) */
+  ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 기본 위험이 두 가지다. 단, 사건으로 위험이 추가될 수 있다.'],
+  ['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 발주 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
  order:[['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
   ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
   /* COPY_AUDIT §3-14: DAY 4, independently of other ORDER marks. */
-  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,4]],
+  ['reroll','.p-order [data-action="reroll"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 이번 교환 비용은 버튼에 표시된다.',,4]],
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the first SALE teaches two marks - the destination (COPY_WORLD_VOICE
     §Tutorial: the rule that a destination can change is taught here, never through one Trait's name) and the Stats.
     The Hazard and price marks are retired: the Hazard rows say what answers them and price is taught after the fact.
@@ -1431,7 +1429,7 @@ const coachSteps={
  /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
  ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.',,2],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
- ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2],
+ ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
  ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3],
  /* User 2026-10-09: 대성공 기회 is taught after 전투 전망 (DAY 2) says 우세, on its own Day clear of the DAY 2~4 / 6 marks, the first time the tag is on the box */
@@ -1483,17 +1481,23 @@ const coachSteps={
 };
 let activeCoach=null;
 let nightMarked=null;
-let coachSettle=0,coachPainted=null;
-/* The target's own position, rounded - the one thing the whole overlay is measured from, so it
-   is also what tells us whether a repaint is needed. */
-const coachKey=el=>{const r=el.getBoundingClientRect();
+let coachSettle=0,coachPainted=null,activeGroup=null;
+/* PRESENTATION §Tutorial / coach target truth: clip the target to its visible scrollports. */
+function coachBounds(el){const r=el.getBoundingClientRect();
+ let left=Math.max(0,r.left),top=Math.max(0,r.top),right=Math.min(innerWidth,r.right),bottom=Math.min(innerHeight,r.bottom);
+ for(let p=el.parentElement;p;p=p.parentElement){const css=getComputedStyle(p),x=/auto|scroll|hidden|clip/.test(css.overflowX),y=/auto|scroll|hidden|clip/.test(css.overflowY);
+  if(css.display==='contents'||(!x&&!y))continue;const b=p.getBoundingClientRect();
+  if(x){left=Math.max(left,b.left);right=Math.min(right,b.right);}if(y){top=Math.max(top,b.top);bottom=Math.min(bottom,b.bottom);
+   const rail=p.classList.contains('board')&&p.querySelector(':scope > .board-rail');if(rail&&!rail.contains(el))top=Math.max(top,rail.getBoundingClientRect().bottom);}}
+ return {left,top,right,bottom,width:Math.max(0,right-left),height:Math.max(0,bottom-top)};}
+const coachKey=el=>{const r=coachBounds(el);
  return [Math.round(r.top),Math.round(r.left),Math.round(r.width),Math.round(r.height)].join(':');};
-/* UI-Q-v28-27: the cutout has to hold the exact content the copy describes. Split out of
-   showCoach so the same geometry can be re-struck once the target has stopped moving - see
-   settleCoach. Picking the step, and the one scroll, stay in showCoach: this only paints. */
+/* UI_UX §TUTORIAL: repaint the visible target without changing the active lesson. */
 function paintCoach(step,target){
  const root=$('#coach-root');if(!root)return null;
- const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8);
+ const hold=holdFocus(root),b=coachBounds(target);
+ if(!b.width||!b.height){root.innerHTML='';return coachKey(target);}
+ const left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.max(0,Math.min(innerWidth-4,b.right+4)-left);
  /* UI-Q-v28-27: the bubble may not cover the next required control, and on every phase that
     control is the dock. The usable floor is therefore the dock's top edge, not the viewport's -
     the 진열대 lesson used to be placed just below its product row and ran 29px over 손님 보내기. */
@@ -1510,7 +1514,7 @@ function paintCoach(step,target){
  const RESERVE=172;
  const room=top>=RESERVE?floor-top:floor-top-RESERVE;
  const height=target.closest('.p-sale')?Math.min(floor,b.bottom+4)-top
-  :Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
+  :Math.min(b.bottom+4-top,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
  /* User 2026-10-01: the bubble takes the width its words need, up to the screen (560 px on a desk), so a line that fits
     is one line and the bubble grows only by the lines it needs; bw is the cap, the real width is measured below */
  const bw=Math.min(560,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
@@ -1524,22 +1528,18 @@ function paintCoach(step,target){
  if(bub){const real=bub.getBoundingClientRect().height,rw=bub.getBoundingClientRect().width;
   bub.style.left=Math.max(12,Math.min(innerWidth-rw-12,left))+'px';
   bub.style.top=(bottom+real+12<floor?bottom+12:Math.max(12,top-real-12))+'px';}
+ restoreFocus(root,hold);
  return coachKey(target);
 }
-/* The coach is drawn one frame after render() and render() starts the phase-entry animation on
-   the same tick, so it used to measure a target that was still moving: ORDER animates `.form`
-   translateY 16 -> 0 over 280ms, and the ledger lesson struck its cutout 15px low and stayed
-   there, masking the 운영비(예상) row it was pointing at. Wait for the target to hold the same
-   rect for two frames, then re-strike once if it has moved. Bounded, and it fixes any cause -
-   entry animation, late font, image load - without the coach knowing any duration. */
+/* UI_UX §TUTORIAL: track geometry while moving, then sleep until scroll or resize. */
 function settleCoach(step,target){
- let last=null,still=0,frames=0;
+ cancelAnimationFrame(coachSettle);let last=null,still=0,frames=0;
  const tick=()=>{
-  if(activeCoach!==step)return;
+  if(activeCoach!==step||!target.isConnected)return;
   const key=coachKey(target);
+  if(key!==coachPainted)coachPainted=paintCoach(step,target);
   if(key===last)still++;else{last=key;still=0;}
-  if(still>=2){if(key!==coachPainted)coachPainted=paintCoach(step,target);return;}
-  if(++frames<48)coachSettle=requestAnimationFrame(tick);
+  if(still<2&&++frames<48)coachSettle=requestAnimationFrame(tick);
  };
  coachSettle=requestAnimationFrame(tick);
 }
@@ -1567,7 +1567,7 @@ function showCoach(){
     flex item the scrolled column slides under, so a mark whose target had been scrolled beneath
     it measured as "visible" at y=195 and lit the band instead of the line it teaches
     (UI-Q-v28-27: automatic scroll must not leave the target behind a header). */
- const view=target.getBoundingClientRect(),scrollArea=[target.closest('.stage-scroll'),target.closest('.dossier-col'),target.closest('.shelf-col')]
+ const view=target.getBoundingClientRect(),scrollArea=[target.closest('.board'),target.closest('.stage-scroll'),target.closest('.dossier-col'),target.closest('.shelf-col')]
   .find(el=>el&&el.getBoundingClientRect().height>0),area=scrollArea?.getBoundingClientRect();
  const top=Math.max(80,area?area.top:0),bottom=Math.min(innerHeight-100,area?area.bottom:innerHeight);
  if(view.top<top||view.bottom>bottom){target.scrollIntoView({block:'center',behavior:'instant'});}
@@ -1579,6 +1579,9 @@ function finishCoach(){
  if(!activeCoach)return;const t=game.account.tutorial??={};
  t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
+document.addEventListener('scroll',()=>{if(!activeCoach)return;
+ const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);
+ if(target)settleCoach(activeCoach,target);},true);
 /* UI_UX §COACH (User 2026-10-09): `도움말 끄기` on a mark is the settings `안내 끄기` switch - the same `tutorial.skipped`, so every mark stops, not only this screen's. */
 function coachSwitch(off){
  const t=game.account.tutorial??={};
@@ -1608,10 +1611,19 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
   +'</div>'
   +hazardList(Presentation.known(d,game),null,d)
  +'</div></div>';}
+// UI_UX §FINAL MODIFIER PREVIEW: read the same snapshots as resolution, without changing preparation.
+function statDisplay(n){const s=game.run,i=s.phase==='final'&&s.finalCommitted?s.team.indexOf(n.id):-1;
+ if(i<0)return Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),s.facilities);
+ const t=game.finalPreRoll(),prep=t.preparations[i],boss=game.finalSnapshot(t.team[i],prep,t.d,t.context),values=t.snapshots[i];
+ const sources=Object.fromEntries(Adventurer.keys.map(k=>[k,[...(prep.sources?.[k]||[])]]));
+ for(const k of Adventurer.keys){
+  if(boss[k]!==prep.effects[k])sources[k].push({name:Copy.boss.d15.trait[s.bossId][0],v:boss[k]-prep.effects[k]});
+  if(values[k]!==boss[k])sources[k].push({name:D.decorationBy.cheerBanner.name,v:values[k]-boss[k]});
+ }
+ return {...prep,effects:values,sources,beforeEffects:prep.effects};
+}
 function statGrid(n){
-   const tList = Presentation.traits(n);
-   const gate = game.claimedGateFor(n);
-   const prep = Dungeon.prepare({...n,traits:tList},gate,game.run.facilities);
+   const prep = statDisplay(n);
    const values = prep.effects;
    /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
       presses, a small tag with the pressing Hazard name(s) - the one place the grid links to
@@ -1632,13 +1644,14 @@ function statGrid(n){
       A Stat that did not move, or moved with no provable source, stays a plain non-interactive
       cell: colour but no affordance, and never an empty popup. */
    return '<div class="detail-stats">'+Adventurer.keys.map(k=>{
-    const delta = values[k]-n.stats[k], moved = delta!==0;
+    const before = prep.beforeEffects?.[k], applied = before!==undefined&&before!==values[k];
+    const delta = values[k]-(applied?before:n.stats[k]), moved = delta!==0;
     const sense = !moved ? '' : delta>0 ? 'up' : 'down';
     /* the prepared snapshot returns its provenance as prep.sources - `prep.effects.sources`
        never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
-    const face = '<label>'+label+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    const face = '<label>'+label+'</label><strong>'+(applied?Presentation.stat(before,true)+' → ':'')+Presentation.stat(values[k],moved)+'</strong>';
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
@@ -1752,7 +1765,7 @@ function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
 function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
     /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
     const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
-    const sl = it.days + Relics.shelf(game, it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
+    const sl = game.stockLife(it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
     /* data-offer is the row's handle across a redraw: the qty controls inside it flip
        between enabled and disabled as the quantity hits 0 or the cap, so the pressed
        button is not a stable anchor but its row is. */
@@ -2045,7 +2058,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +(isFinal?'':'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>')
  +status+'<div class="tills">'+actions+'</div></div>';}
-function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(e.description)+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
+function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(Presentation.eventDescription(e))+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
 /* RELIC §GRADE: the 등급 word under the name, in the Item rarity name and colour */
 const relicRarity=r=>'<span class="relic-rarity r'+r.rarity+'">'+E(D.rarities[r.rarity])+'</span>';
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</details>';}
@@ -2216,7 +2229,7 @@ function replayLine(){const s=game.run,st=s.settlement;
    above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
 function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',finalView=muster||action==='final-view',blocked=muster&&(!n.alive||n.recovery);
  /* the FINAL muster card opens the adventurer's notebook; picking happens there (User 2026-09-25) */
- const condition=finalView?[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':'',(n.fatigue||0)>10?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:''].filter(Boolean).join(' · '):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
+ const condition=finalView?[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':'',(n.fatigue||0)>=Dungeon.fatiguePenaltyFrom()?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:''].filter(Boolean).join(' · '):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
  const call=!muster?'기록 보기':s.team.includes(n.id)?'선택됨':'기록 보기';
  return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${condition?E(condition)+' · ':''}방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
@@ -2246,7 +2259,7 @@ function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
  return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
  +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
  +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
- +'<span class="final-environments"><span class="env-caption">환경 대응</span>'+finalEnvironment(p,d)+'</span></div>';
+ +'<span class="final-environments"><span class="env-caption">환경 대응 (권능 적용 전)</span>'+finalEnvironment(p,d)+'</span></div>';
 }
 function finalMemberPin(){const s=game.run,t=game.finalPreRoll(),index=s.team.indexOf(supplyNPC),n=s.npcs.find(n=>n.id===supplyNPC);if(!n||index<0)return '';
  return '<div class="final-pin-host"><button type="button" class="final-pin final-member board-rail'+(finalPinFolded?' folded':'')+'" data-action="final-pin" aria-expanded="'+!finalPinFolded+'" aria-label="'+(finalPinFolded?'요약 열기':'요약 접기')+'">'+finalMemberBody(n,t.preparations[index],t.d)+'</button></div>';
@@ -2269,7 +2282,7 @@ function finalMuster(s,need,committed){
  +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))+btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')+'<div class="final-supply p-sale">'+shelf(true)+'</div>');
 }
 function finalDock(s,need,committed){const ready=s.team.length>0&&s.team.length<=need,held=Object.values(s.cart||{}).some(q=>q>0);
- if(!need)return relicWindowLink()+btn('출전 불가 · 런 종료','boss','danger');
+ if(!need)return relicWindowLink()+btn('출전 불가 · 점포 종료','boss','danger');
  if(finalIsOrdering(s))return stockSheetKey()+btn('발주 확정','confirm-order','stamp',held?'':'disabled')+btn('원정대 꾸리기','final-ordered','stamp leave',held?'disabled':'');
  return relicWindowLink()+(committed?btn('최종 원정 보내기','boss','stamp'):btn(Copy.finalPrep.returnOrder,'final-order-back','stamp final-order-back')+btn('원정대 확정','final-commit','stamp',ready?'':'disabled'));
 }
@@ -2340,7 +2353,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  if(n.fatigue||n.fatigue===0){
   /* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, one owner; COPY_AUDIT §4-14 for the recovery line */
   const band=Dungeon.fatigueBand(n.fatigue);
-  cond.push('현재 피로: '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
+  cond.push('현재 피로 (상품 사용 전): '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook&&n.outlook.day===game.run.day)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
@@ -2354,9 +2367,10 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
    this reads the same truth the gate itself reads. */
 /* 길드 특제 도시락 / 세계수 생환부적 open on the account flag the run sets on reaching DAY 10 / 14 (Meta.itemUnlocked), not on metaUnlock. */
-const DAY_UNLOCK={guildlunch:10,worldcharm:14};
+const DAY_UNLOCK=Meta.ITEM_UNLOCK_DAY;
 function unlockProgress(entry){const a=game.account;
- if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
+ if(D.relicRetired.includes(entry.id))return '현재 후보로 나오지 않음';
+ if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료 · 각 점포 DAY '+DAY_UNLOCK[entry.id]+'부터 발주 후보':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
  if(entry.metaUnlock)return Meta.distinctBossClear(a)>=entry.metaUnlock?'해금 완료'
   :'서로 다른 마왕 토벌 '+Meta.distinctBossClear(a)+'/'+entry.metaUnlock;
   return '기본 제공';}
@@ -2430,6 +2444,7 @@ function progressPanel(){const a=game.account;
  /* the grade, the total and the distinct count are already stated in the codex header
     directly above this, so the panel does not say them a second time. */
  return '<div class="progress-panel">'
+ +'<p class="smalltext">서로 다른 마왕을 토벌할 때, 출전한 직업의 숙련이 쌓인다. 숙련이 높을수록 새로 오는 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.</p>'
  +'<table class="matrix"><thead><tr><th scope="col">직업</th>'
  +D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')
  +'<th scope="col">숙련</th></tr></thead><tbody>'
@@ -2458,7 +2473,7 @@ const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).fi
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 /* UI_UX §CODEX BOSS TAB: the Bosses the Player has met, this Run's Boss first once its identity is shown. Only the Trait is kept -
    the Final Hazards change every Run - and a Boss never met is not listed at all. */
-function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=s?.bossId;
+function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=r.identitySeen?s?.bossId:null;
  const known=id=>{const k=Meta.bossKnown(a,id);return id===cur?{identity:k.identity||!!r.identitySeen,trait:k.trait||!!r.traitSeen}:k;};
  const ids=D.bosses.map(b=>b.id).filter(id=>known(id).identity);
  if(!ids.length)return '<p class="boss-none">'+E(c.codex.none)+'</p>';
@@ -2470,7 +2485,7 @@ function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal
    :'<p class="lock">'+E(now?c.codex.pending:c.codex.unknown)+'</p>';
   return '<article class="boss-card'+(now?' now':'')+'">'+(art?'<img src="'+art+'" alt="">':'')
    +'<div class="bc-text"><h3>'+E(D.bossBy[id].name)+(now?'<span class="now-tag">'+E(c.codex.now)+'</span>':'')+'</h3>'+trait+'</div></article>';}).join('');}
-function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에 시작할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 시작한 마감에서는 잔고가 0 이상이 된 뒤에도 계속 정리할 수 있습니다. 한 점포에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
+function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에 시작할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 시작한 마감에서는 잔고가 0 이상이 된 뒤에도 계속 정리할 수 있습니다. 한 점포에서 ${game.rescueLimit()}번의 마감까지 이용할 수 있고, 지금까지 ${s.rescueUsed||0}번의 마감에 이용했습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The store the Run is about to open, as the
@@ -2522,16 +2537,12 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
 const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
- <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 DAY 1~3 한 줄 안내가 나오지 않는다.':'처음 한 번씩 나오는 말풍선 안내다.'}</p></section>
+ <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
-/* COPY_AUDIT_APPROVED_v2.8.0 §8 is the exact owner of the global guide. The long-form manual
-   it replaces described retired rules, understated the refusal ceiling, and repeated what the
-   anchored popovers and coach marks already say in context. Approved text, verbatim. */
-/* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
-   under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
+/* COPY_AUDIT §8 / UI_UX §GLOBAL HELP: five flow lines, then eight sections under collapsed 자세히. */
+function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -2716,7 +2727,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
  else if(modal==='settings'){title='설정';body=settings();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다.<br>현재 보급 상태를 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
  else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss','stamp')+btn(c.under,'final-commit-go','stamp');narrow=true;}
- else if(modal==='retireConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','retire-go','danger');narrow=true;}
+ else if(modal==='retireConfirm'){title='이 점포를 폐점할까요?';body='<p>이번 점포의 영업을 끝내고 점포 자본을 정산한다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·보유 점포 자본·보유 장식은 유지된다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점','retire-go','danger');narrow=true;}
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체한다. 기존 진행을 남기려면 먼저 내보내야 한다.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
@@ -2897,7 +2908,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
- case'coach-toggle':coachSwitch(!coachOff());sound('ui');render();break;
+ case'coach-toggle':coachSwitch(!coachOff());sound('ui');render();
+  // UI_UX §SETTINGS / DEBUG BOUNDARY: preparation returns before the settings panel refresh.
+  if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
   // Preparation rendering returns before modal refresh; keep its mute label current too.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
@@ -2953,8 +2966,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
 const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'점포지원 후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
- /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
- cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 후보 교환을 할 수 없습니다.'};
+ /* EVENT §41 / §42: blocked controls explain their active restriction. */
+ cap:()=>'오늘은 발주 후보 한 칸에서 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 후보 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
  /* H2: a price key has its own press (KEY_PRESS, playCue) - the 정가 key's `stamp` class must not add a second one */

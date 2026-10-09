@@ -34,13 +34,28 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — 소스와 사용자 노출 텍스트 일치 점검 (User 2026-10-09~10)
+
+| 배치 | 핵심 변경 |
+|---|---|
+| 1 설정·점주 가이드 | 안내 기간 단정 제거, 하루의 흐름·상품 효과·거절 예외 설명, 회생 횟수 값 참조, 새 점포 준비에서도 설정 즉시 갱신 |
+| 2 상품·발주·창고 | 실제 입고 유통기한 표시, 버튼의 이번 교환 비용 안내, 해금/발주 출현 날짜 공통 참조 |
+| 3 판매·모험가 | 판매 상태 피로를 확정 상품 사용 후 기준으로 표시, 상세는 상품 사용 전 기준 명시, 단골도 설명·옛 수첩 규칙 현행화 |
+| 4 게이트·사건·일반 원정 | 위험 개수의 사건 예외, 화염 II부터 코치, 판매 전 전망 기준, 코치 강조 영역·스크롤·포커스 수정 |
+| 5 밤·마감·폐점 | 실제 종료/정산·회생 단위·특성 예외 설명, 심층 추가 성장 후 밤 보고와 NPC 기록 동기화 |
+| 6 지원·장식·다음 점포 | 승인된 운영비 가산은 구입 당일부터, 지원/장식 설명·은퇴 상태·숙련·자본을 실제 기준과 일치 |
+| 7 마왕·최종 원정·결말 | 공개 전 이번 목표 표시 억제, 확정 대원의 실제 적용 능력치와 원인 표시, 환경 기준·피로 경계·종료 용어 정리 |
+| 8 사건55종 | 전체 효과 설명 이해도·용어 검수, 필요한 숫자는 실제 값 참조, 옛 저장 설명 갱신. 승인된 본사 발주 제한은 칸당 공급 최대2개로 변경 |
+
+구체적인 변경 전→후·owner 근거·검증 기록은 `reports/TEXT-SOURCE-AUDIT.md`를 따른다. 별도 저장 필드·숨은 확률 공개·새 문구 시스템은 추가하지 않았다. 최신 main의 후속 UI/코치·직업/게이트 채택을 보존해 통합한다.
+
 ## After v2.11.1 — Insurance first print names what it turned away (User 2026-10-09)
 
 - A 귀환석 rescue's event records the Outcome it turned away (`from`); NIGHT's first print shows it, so a 부상 turned into 퇴각 prints `부상`, not `중상`. NIGHT_CLOSING §INSURANCE CAUSALITY; UI_UX §NIGHT LAYOUT — VERDICT STAMP.
 
 ## After v2.11.1 — SALE queue Gate-count reference approval (User 2026-10-09)
 
-- Approved **design only**, pending Source implementation: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
+- Adopted in Source: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
 - Revised (User 2026-10-09, same day): the popover counts customers **left** per Gate counting the one at the counter, under `이번 손님부터`, with no total; slate balloon. DAY 1 SALE coach: destination and price only; `flow` moves to DAY 2 (before 전투 전망), Stats to DAY 3 (before 환경 대응). UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §TUTORIAL — READ THE SYSTEM; SALE §QUEUE INFORMATION BOUNDARY; COPY_AUDIT §3-16.
 - NIGHT saved beat (User 2026-10-09): when the engine proves the sold Item saved the adventurer from 사망 / 중상 (not Insurance), the worse verdict prints, the Item shoves it off, the real Outcome stamps, and the Item icon stays beside `{Item} 덕분에 살아 돌아왔다.`. Shown for every 사망 kept away and every 중상 turned into 성공 / 대성공, no nightly cap; the worse print sounds its own `death` / `severe` cue and the card pauses until it fades (사망 +500 ms, 중상 +100 ms); new cues `shove` / `saved1`-`saved3` (the relief, sized by the turn, replaces the Outcome cue on that landing), levels fitted by tools/qa-sfx-mix.cjs. UI_UX §NIGHT — SAVED BY THE SALE; NIGHT_CLOSING §INSURANCE CAUSALITY.
 

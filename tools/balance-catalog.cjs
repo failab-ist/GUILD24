@@ -6,7 +6,7 @@ const G=globalThis.GUILD24||globalThis,D=G.DATA;
 const number=n=>String(Math.round(n*100)/100),signed=n=>(n>=0?'+':'')+number(n),pct=n=>number(n*100)+'%';
 const cell=x=>String(x??'—').replace(/\r?\n/g,' ').replace(/\|/g,'\\|');
 function render(){
- const files=['build.js','data/catalog.js','data/relics.js','data/decorations.js','systems/adventurer.js','systems/dungeon.js','systems/shop.js','systems/run.js'];
+ const files=['build.js','data/catalog.js','data/relics.js','data/decorations.js','systems/adventurer.js','systems/dungeon.js','systems/meta.js','systems/shop.js','systems/run.js'];
  const code=Object.fromEntries(files.map(f=>[f,fs.readFileSync(path.join(root,'dist',f),'utf8').replace(/\r\n/g,'\n')]));
  const version=code['build.js'].match(/version:'([^']+)'/)[1],signature=crypto.createHash('sha256').update(files.map(f=>code[f]).join('\n')).digest('hex').slice(0,12);
  const active=D.relics.filter(r=>!D.relicRetired.includes(r.id)),L=[];
@@ -43,7 +43,7 @@ function render(){
   line('### '+label+'\n');
   table(['상품','등급','매입 G','정가 G','기한','고유 효과','스탯 → 위험 대응','등장 조건'],items.map(it=>{
    const conversion=['survival','mobility','spirit'].filter(k=>it.effects[k]).map(k=>{const hazards=Object.keys(D.hazards).filter(h=>G.Dungeon.hazardRule(h).stat===k);return hazards.map(h=>D.hazards[h]).join('·')+' 각 '+signed(it.effects[k]*G.Dungeon.hazardRule(hazards[0]).coef);}).join(' · ');
-   return [it.name,D.rarities[it.rarity],it.buy,it.sell,it.days+'일',G.Presentation.rows(it.effects,undefined,it.category).map(r=>r.label+' '+r.text).join(' · '),conversion||'—',it.metaUnlock?'마왕 '+it.metaUnlock+'종 격파 후':it.id==='guildlunch'?'DAY10부터':it.id==='worldcharm'?'DAY14부터':'DAY1부터 후보'];
+   return [it.name,D.rarities[it.rarity],it.buy,it.sell,it.days+'일',G.Presentation.rows(it.effects,undefined,it.category).map(r=>r.label+' '+r.text).join(' · '),conversion||'—',it.metaUnlock?'마왕 '+it.metaUnlock+'종 격파 후':G.Meta.ITEM_UNLOCK_DAY[it.id]?'DAY'+G.Meta.ITEM_UNLOCK_DAY[it.id]+'부터':'DAY1부터 후보'];
   }));
  }
  line('## 3. 점포지원\n');

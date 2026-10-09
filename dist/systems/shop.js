@@ -1,18 +1,18 @@
 (function(G){
 /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the DAY 3 payday customer - +200G to spend this visit only, +20%p on 150% */
 const LESSON={paydayBudget:200};
-/* Stage 10, approved (§O). Stage 9 measured FIRE as the hardest Family for all six Jobs and by
-   a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
-   Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
-   makes a fire Gate a fire Gate is unchanged. Provisional: re-measured, and if FIRE is still
-   consistently worst by 10%p a further candidate is reported rather than applied. v2.5 final
-   (H1): .92 -> .90, which narrowed the gap to the next Family by about a third. fire is still
-   the hardest Family and ships that way, on the playtest follow-up. The factor
-   itself lives in D.balance.golemCombat so the balance harness can compare a candidate against
-   it without a production edit - the same reason guarantee.minPrice carries a name. */
+/* DUNGEON_HAZARD §GATE POWER: FIRE family combat uses the shared approved golemCombat factor. */
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+// NIGHT_CLOSING §GROWTH PRESENTATION: sync already-paid Deep growth, without resolving or granting rewards.
+function syncDeepReport(n,report,beforeStats){
+ const fields={level:n.level,deep:report.deep,statChanges:G.Adventurer.keys.filter(key=>n.stats[key]!==beforeStats[key]).map(key=>({key,before:beforeStats[key],after:n.stats[key]}))};
+ Object.assign(report,fields);Object.assign(n.records.at(-1),fields);
+}
 class Game{
- constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;}
+ constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;
+  // EVENT §41: an older active sheet also respects the remaining supply cap; paid stock stays intact.
+  if(run?.event?.effects.orderCap&&['morning','order','final'].includes(run.phase))for(const o of run.offers||[])o.quantity=Math.min(o.quantity,run.event.effects.orderCap);
+ }
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
  /* CORE_RUN §PRE-RUN FLOW. Start Contract selection is retired; the Run always runs on the
     neutral baseline and the Account's Decoration loadout is frozen into the Run here. Changing
@@ -58,17 +58,14 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* ECONOMY_ORDER §BASE OPERATING COST: a Day base, +12G per Day after DAY 15, scaled by the Core Roster */
   const dayBase=170+1*(day-1)+12*Math.max(0,day-15);
   return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
- expectedOperatingCost({day=this.run.day,facilities=this.run.dayFacilities,event=this.run.event}={}){const s=this.run,ev=event?.effects||{};
-  /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
-     carry a `contract` value, and it must change nothing at all. */
-  const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0)+(ev.overheadAdd||0);
-  /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
-     never on the flat extras, and never compounded with another percentage modifier. */
-  /* 왕도 프리미엄 인증 (v2.9.11, User 2026-09-29) and 즉석식품 코너 (User 2026-10-02) take the same share of overheadBase, from
-     the next Day, added to hub's */
-  const base=this.overheadBase(day),hub=(facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0)
-   +(facilities?.includes('royalCert')?base*D.relicParams.royalCert.overheadRate:0)
-   +(facilities?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0);
+ expectedOperatingCost(options={}){const s=this.run;
+  const {day=s.day,facilities=s.dayFacilities,event=s.event}=options,ev=event?.effects||{};
+  // RELIC §OPERATING COST TIMING: surcharges apply on acquisition; efficiency keeps the morning snapshot.
+  const current=options.facilities===undefined?s.facilities:facilities;
+  const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=D.eventRules.auditMinimum?Math.min(D.eventRules.auditMaximum,s.stats.waste*D.eventRules.auditPerItem):0)+(ev.overheadAdd||0);
+  const base=this.overheadBase(day),hub=(current?.includes('hub')?base*D.relicParams.hub.overheadRate:0)
+   +(current?.includes('royalCert')?base*D.relicParams.royalCert.overheadRate:0)
+   +(current?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0);
   return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
     next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */
@@ -78,7 +75,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     Relic question and the two never answer for each other. */
  wears(id){return Object.values(this.run.loadout||{}).includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
- stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.event?.effects.sameDayStock&&['order','final'].includes(this.run.phase)?this.run.day+1:this.run.day+it.days+G.Relics.shelf(this,it),/* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */cost:cost??it.buy});}
+ // ITEM §SHELF LIFE — EXACT / EVENT §54: the offer and arrival share the same expiry rule.
+ stockLife(it){return this.run.event?.effects.sameDayStock&&['order','final'].includes(this.run.phase)?1:it.days+G.Relics.shelf(this,it);}
+ stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.day+this.stockLife(it),cost:cost??it.buy});}
  /* The Gate a customer actually walks into. A Deep nominee keeps the base Gate's Family, Tier
     and Hazard set - only the required Combat Power rises, by one global factor - and this is the
     single object the forecast and the night result both read, so what the player was shown is
@@ -157,7 +156,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.poison)return s.dungeons.some(d=>!d.hazards.includes('poison'));
   if(fx.pilgrimage)return s.dungeons.length>=2&&s.expectedVisitors>=3;
   if(fx.unknown)return s.npcs.some(n=>n.alive&&!n.recovery);
-  if(fx.audit)return s.stats.waste>=6;
+  if(fx.audit)return s.stats.waste>=D.eventRules.auditMinimum;
   if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22;
   /* EVENT 24~55 (v2.9.11): an Event whose subject is absent today is out of the pool (NO FALSE ATTRIBUTION) */
   const ready=s.npcs.filter(n=>n.alive&&!n.recovery);
@@ -275,9 +274,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
   /* EVENT §20 본사 폐기 유예: stock whose last sale day is today - the shelf's `오늘까지`, discarded tonight - gets
      one more day. Only that stock; nothing bought later today is touched. */
-  if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=1;
+  if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=ev.wasteDelay;
   /* EVENT 46 냉장고 고장: Food/Drink shelf life -1 Day; what becomes due today leaves tonight as usual */
-  if(ev.shelfCut)for(const st of s.inventory)if(st.expires!==null&&['food','drink'].includes(D.itemBy[st.item].category))st.expires=Math.max(s.day,st.expires-1);
+  if(ev.shelfCut)for(const st of s.inventory)if(st.expires!==null&&['food','drink'].includes(D.itemBy[st.item].category))st.expires=Math.max(s.day,st.expires-ev.shelfCut);
   if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
@@ -357,7 +356,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
      Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may
      already have secretly diverted. Filtering on n.destination let a 거짓말쟁이's own reroute
      land the reroll back on exactly what was shown, silently erasing the Event for them. */
-  if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
+  if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(D.eventRules.pilgrimageMin,D.eventRules.pilgrimageMax),selected.length));
    for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
   /* SA-Q43: the non-Canonical random 길드 지원 opportunity is not generated. The field is still
      cleared every Morning so a stale v8 save cannot carry one back in. */
@@ -399,7 +398,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     on the one Event-origin row, and on nothing else - an ordinary offer has no origin and gets
     no source label, because this is special-offer presentation and not a generic rarity
     attribution. */
- if(ev.blackmarket)s.offers.push({...this.rollOffer(2,1.35),origin:'blackmarket'});
+ if(ev.blackmarket)s.offers.push({...this.rollOffer(2,D.eventRules.blackmarketPrice),origin:'blackmarket'});
  /* RELIC §ADDITIONAL ORDER SLOTS: independent category slots survive every Reroll. */
  this.appendSupportOffers('dawnRecovery');this.appendSupportOffers('coldcase');
  const ordinary=num;
@@ -426,10 +425,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
- /* ECONOMY_ORDER §ORDER OFFER QUANTITY (User 2026-09-27, v2.9.7): Common / Uncommon 2~4, Rare 1~3 (it was 1), Epic /
-    Legendary 1 - the Rare mid-Run Counters could not be stocked for more than one customer. */
+ /* ECONOMY_ORDER §ORDER OFFER QUANTITY / EVENT §41: normal supply and support bonuses are capped per offer when the Event applies. */
  offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)*(this.has('expeditionMeal')&&G.Relics.food(it)?D.relicParams.expeditionMeal.orderPriceMult:1)),
-  quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
+  quantity:Math.min(ev.orderCap??Infinity,(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0))};}
  rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary: D30 has no SALE, and an Item with no Final effect
    cannot go in a Final Bag, so the D30 sheet never offers one - the same explicit no-effect exclusion D30 Store Supports use */
  let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it))&&!(s.day>=30&&this.finalNoEffect(it.id)));
@@ -444,7 +442,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);
   const rates=band.weights.map((w,v)=>v===2?w+(s.pity.rare>=5?3:0):w);const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('rareContract')&&v>=2?D.relicParams.rareContract.rareWeightMult:1));pool=pool.filter(it=>it.rarity===rarity);
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
- order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?2:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
+ order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?D.eventRules.promoUnits:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
  open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';if(s.queue.length)this.arrive();else{this.night();this.finishNight();}this.save();}
  /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY. The expedition outlook the decision surface
     shows is a SALE-ENTRY snapshot, taken before this visit's first transaction and frozen for
@@ -597,24 +595,23 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
  /* unusedCartFood / unusedStockFood: Food+Drink counts kept for a later balance check. No rule reads them today. */
- validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,unusedCartFood=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))unusedCartFood+=q;}
- const cap=s.event?.effects.orderCap;if(cap){const per={};for(const [i,q]of Object.entries(cart)){const it=s.offers[i]?.item;if(it)per[it]=(per[it]||0)+q;}if(Object.values(per).some(v=>v>cap))throw Error('오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.');}
+ validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,unusedCartFood=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?D.eventRules.promoUnits:1);if(['food','drink'].includes(D.itemBy[o.item].category))unusedCartFood+=q;}
+ const cap=s.event?.effects.orderCap;if(cap&&Object.values(cart).some(q=>q>cap))throw Error('오늘은 발주 후보 한 칸에서 '+cap+'개까지만 발주할 수 있습니다.');
  if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const unusedStockFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
  /* UI_UX §ORDER quantity interaction (User 2026-09-24, v2.9.0): the largest quantity this offer takes right now AND what stops
     the next one - `supply` (the offer's own count), `money` (with the Gold still missing for one more) or `space` (warehouse).
     The reason is what the blocked dial control says when tapped (COPY_AUDIT §3-9); maxQuantity keeps its old contract. */
- quantityLimit(i){const s=this.run,o=s.offers[i];let q=0,reason='supply',lack=0;
+ quantityLimit(i){const s=this.run,o=s.offers[i];let q=0,reason=s.event?.effects.orderCap&&o.quantity>=s.event.effects.orderCap?'cap':'supply',lack=0;
   for(let n=1;n<=o.quantity;n++){const cart={...(s.cart||{}),[i]:n};try{this.validateCart(cart);q=n;}catch(e){reason=e.message==='발주 자금이 부족합니다.'?'money':/까지만 발주/.test(e.message)?'cap':'space';if(reason==='money')lack=this.cartTotal(cart)-s.money;break;}}
   return {max:q,reason,lack};}
  maxQuantity(i){return this.quantityLimit(i).max;}
- confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?2:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
+ confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?D.eventRules.promoUnits:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
  /* RELIC 평생 단골제 (User 2026-10-02): once a 단골 while it is owned, Loyalty never drops below the 단골 line again */
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,was&&this.has('lifetime')?G.Adventurer.TRUSTED_REGULAR:0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
- /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase
-    today still adds +1 on departure; a visit without one adds nothing. Survival is +1. */
- depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
+ /* NPC_TRAIT §Non-purchase Loyalty: only a visit with a paid purchase earns departure Loyalty. */
+ depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,D.balance.paidVisitLoyalty);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
  /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11; was the next morning): stock whose last sale day is today - the shelf's
     `오늘까지` - and that did not sell is discarded tonight, when SALE closes, so it lands on today's receipt as `오늘 폐기`.
     A save from an earlier build may still hold stock past its day; it goes with tonight's. */
@@ -638,14 +635,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   let badLuckChain=0;
  for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);
   const carried=n.pack.length>0&&!d.deep,assist=carried&&badLuckChain>=3?.10+.05*(badLuckChain-3):0;
+  const beforeStats=d.deep?{...n.stats}:null;
   const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);
   if(carried)badLuckChain=['성공','대성공'].includes(rep.outcome)?0:badLuckChain+1;
-  if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
-     Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
-     ordinary reward already carries that. EXP goes through the ordinary growth curve (no
-     automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a
-     later visit carries it under the existing Wallet rules. A failed outcome earns no special
-     Deep bonus and keeps its ordinary handling. Amounts are PASS3; while unapproved they are 0. */
+  if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: additional EXP/Wallet after the ordinary result. */
   if(d.deep&&n.alive&&['성공','대성공'].includes(rep.outcome)){
    const t=D.deepTuning,great=rep.outcome==='대성공';
    const bonusXp=(great?t.greatExp:t.successExp)||0,bonusWallet=(great?t.greatWallet:t.successWallet)||0;
@@ -653,6 +646,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
+  if(d.deep)syncDeepReport(n,rep,beforeStats);
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,D.balance.returnLoyalty);if(n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();

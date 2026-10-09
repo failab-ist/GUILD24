@@ -427,7 +427,7 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
     SALE entry, and the codex locks the two DAY-unlocked Items on their account flag */
  assert.ok(fn('npcDetail').includes('Dungeon.injuryPenaltyFor(game.run.facilities)')&&!/'\+20%':'-15%'/.test(app),'the notebook reads the one injury figure');
  assert.ok(fn('npcDetail').includes('n.outlook&&n.outlook.day===game.run.day'),'a past visit\'s Death risk is not shown as current');
- assert.ok(/const DAY_UNLOCK=\{guildlunch:10,worldcharm:14\};/.test(app)&&/DAY_UNLOCK\[e\.id\]\?!game\.account\.unlocks\?\.\[e\.id\]/.test(app),'the codex locks 길드 특제 도시락 / 세계수 생환부적 until reached');
+ assert.ok(/const DAY_UNLOCK=Meta\.ITEM_UNLOCK_DAY;/.test(app)&&/DAY_UNLOCK\[e\.id\]\?!game\.account\.unlocks\?\.\[e\.id\]/.test(app),'the codex locks 길드 특제 도시락 / 세계수 생환부적 until reached');
  assert.ok(fn('changedRows').includes('Presentation.nightChanges(r, n, game.run.facilities)'),'WHAT CHANGED comes from the same report (and the store supports that set its injury figure)');
  // compactness is about copy: a routine beat drops the quote, never the adventurer
  assert.ok(/portrait\(n,150,'returner'\)/.test(b),'every outcome renders the same NPC art size');
@@ -696,14 +696,14 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
  assert.ok(app.includes('이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·점포 자본·보유 장식은 유지된다.'),
   'and the confirmation says what it costs and what it does not');
- assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
+ assert.ok(app.includes("btn('지점 포기','abandon-go','danger')"),'COPY §1-3 abandon confirms 지점 포기');
  assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
- assert.ok(!/btn\('폐점','retire-go'/.test(app),'and 폐점 is no longer the confirm');
+ assert.ok(app.includes("btn('폐점','retire-go','danger')"),'COPY §7-4 closure confirms 폐점 with settlement');
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
  assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 점포에서 얻을 보상은 없다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다."),
-  'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
+  'abandoning a store is distinguished from erasing the account (§1-3 body for abandon only)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
  // since the Meta replacement, so any remaining promise of one is a lie, not just off-tone.
@@ -1272,7 +1272,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     open it again - a presentation preference on the account, not run state. */
  // User 2026-09-29 (UI_UX §ORDER — WAREHOUSE PANEL): the warehouse left the form for its own panel - a desk column and a
  // phone handle + sheet - still from the one grouping, still against total slots, still folded until the player opens it
- assert.ok(!(fn('orderOffer')+fn('orderForm')).includes('stock'),'the form no longer carries the warehouse');
+ assert.ok(!/stockSlots\(|stockSide\(|stockHead\(/.test(fn('orderOffer')+fn('orderForm')),'the form does not render warehouse surfaces');
  const whList=fn('stockSlots'),whHead=fn('stockHead');
  assert.ok(whList.includes('groupStock()'),'reusing the existing grouping, not a second one');
  assert.ok(whHead.includes('game.capacity()')&&whHead.includes('s.inventory.length'),'used against total slots');
@@ -1308,7 +1308,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* D-5 / EVENT §3-1. The board notice used to print the effect line alone. The catalog keeps
     the situation and the effect apart already, so the notice says both and rules them off. */
- assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(e.description)'),
+ assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(Presentation.eventDescription(e))'),
   'the notice says what happened as well as what it switched on');
  assert.ok(/\.slip\.event \.effect\{[^}]*border-bottom:1px dashed/.test(css),'and the two are set apart');
  assert.ok(fn('eventSlip').indexOf('class="effect"')<fn('eventSlip').indexOf('class="flavor"')
@@ -1828,7 +1828,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  const ids=new Set([...steps.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]));
  for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* COPY_AUDIT §3-14: the first eligible DAY is 4, even with another ORDER mark. */
- assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 누를 때마다 값이 두 배로 오른다.',,4]"),'the DAY 4 reroll mark, verbatim');
+ assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 이번 교환 비용은 버튼에 표시된다.',,4]"),'the DAY 4 reroll mark, verbatim');
  assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'발주 후보 교환 · '"),'the 발주 후보 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
@@ -1840,15 +1840,15 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
 /* UI_UX §FIRST EVENT TUTORIAL (UI-Q-v29-56, User 2026-10-01): one contextual MORNING mark on the board's Event slip */
 test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- assert.ok(morning.includes(`['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.']`),'COPY_AUDIT §3-11 Event mark');
+ assert.ok(morning.includes(`['event','.slip.event','아침마다 사건이 생길 수 있다. 사건마다 영향과 적용 기간이 다르다. 사건의 효과를 확인한다.']`),'COPY_AUDIT §3-11 Event mark');
  assert.ok(/class="slip event" data-action="event-again"/.test(app),'the MORNING board carries the Event slip the mark anchors to');
 });
 
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */
 test('UI-Q-v29-52: the two-Hazard Gate and FIRE Gate marks - on the plate, verbatim, the rule only',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 위험이 두 가지다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
- assert.ok(morning.includes(`['gatefire','.slip.gate[data-family="golem"]','화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.']`),'COPY_AUDIT §3-10 FIRE mark');
+ assert.ok(morning.includes(`['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 기본 위험이 두 가지다. 단, 사건으로 위험이 추가될 수 있다.']`),'COPY_AUDIT §3-10 tier II mark, never on FIRE II');
+ assert.ok(morning.includes(`['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']`),'COPY_AUDIT §3-10 FIRE mark');
  const gp=fn('gatePlate');
  assert.ok(/data-tier="'\+\(d\.tier\|\|1\)\+'" data-family="'\+E\(d\.family\|\|''\)\+'"/.test(gp),'the plate carries its tier and Family - not its Hazard count, which an Event can raise on a tier I Gate (User 2026-10-02)');
  assert.ok(!/data-tier|data-family/.test(fn('closedPlate')),'a closed Gate carries neither anchor');
@@ -2520,7 +2520,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
- assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2]`)
+ assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2]`)
   &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3]`)
   &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
@@ -2696,11 +2696,11 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  const kit=fn('kitLine');
  /* SA-Q04: the Injury state is n.status in words (건강 / 부상 / 중상); a second numeric 부상 N
     beside it was the duplication the finding names. */
- const state=n=>render([fn('kitLine')],'\nkitLine(n)',{n,Adventurer:{slots:()=>2},game:{run:{}},walletChip:()=>'',E:s=>s});
+ const state=n=>render([fn('kitLine')],'\nkitLine(n)',{n,Adventurer:{slots:()=>2},game:{run:{facilities:[]},claimedGateFor:()=>({})},Dungeon:{prepare:()=>({effects:{fatigueBeforeExpedition:n.fatigue}})},Presentation:{traits:()=>[]},walletChip:()=>'',E:s=>s});
  assert.ok(!state({status:'건강',injury:0,fatigue:10,loyalty:0,pack:[]}).includes('건강'),'the compact state omits healthy even with Fatigue');
  assert.ok(state({status:'부상',injury:1,fatigue:10,loyalty:0,pack:[]}).includes('부상'),'the compact state retains an active Injury');
  assert.ok(!/부상 '\+n\.injury/.test(kit),'and it is not also stated as a number');
- assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
+ assert.ok(state({status:'건강',injury:0,fatigue:10,loyalty:0,pack:[]}).includes('피로 10'),'Fatigue remains one readable number');
  assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
  assert.ok(!/<meter|<progress|loyalty-bar|progress-bar/.test(kit),'there is no Loyalty progress bar');
  /* SA-Q46 — PLAYTEST SALE TOP DENSITY. Normal SALE shows the Loyalty value/state without a
@@ -2727,7 +2727,7 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
 test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic movement',()=>{
  const grid=fn('statGrid');
  // classification is by MEANING: for a Core Stat, more is better
- assert.ok(/const delta = values\[k\]-n\.stats\[k\], moved = delta!==0;/.test(grid),'the change is measured');
+ assert.ok(/const delta = values\[k\]-\(applied\?before:n\.stats\[k\]\), moved = delta!==0;/.test(grid),'the change is measured against the shown baseline');
  assert.ok(/sense = !moved \? '' : delta>0 \? 'up' : 'down'/.test(grid),'a rise is beneficial, a fall harmful');
  assert.ok(/const cls = 'detail-stat'\+\(sense\?' '\+sense:''\);/.test(grid),'and the cell carries that meaning');
  assert.ok(!/ moved'/.test(grid),'the generic `moved` class is gone from the row');
@@ -3099,6 +3099,62 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
 });
 
+test('SALE fatigue: the status uses committed-Bag preparation without changing stored Fatigue',()=>{
+ const g=new Game();g.autosave=false;g.start('sale-fatigue-state');g.deferFoundationRelic();
+ const s=g.run;s.phase='sell';s.day=6;s.facilities=[];s.queue=[s.npcs[0].id];s.cursor=0;
+ const n=g.current();Object.assign(n,{traits:[],stats:{combat:20,survival:20,mobility:20,spirit:20},injury:0,
+  fatigue:10,recovery:0,pack:[],destination:0,claimedDestination:0});n.equipment.power=0;
+ const ctx={n,game:g,Adventurer,Dungeon,Presentation,Art:{itemIcon:()=>''},walletChip:()=>'',E:x=>x};
+ const read=()=>render([fn('kitLine')],'\nkitLine(n)',ctx);
+ assert.ok(read().includes('피로 10'),'before a sale the preparation has no recovery');
+ assert.equal(Dungeon.prepare(n,g.claimedGateFor(n),[]).effects.mobility,17,'penalty is active before food');
+ n.pack=['rice'];assert.ok(read().includes('피로 5'),'committed food changes the displayed fatigue');
+ assert.equal(Dungeon.prepare(n,g.claimedGateFor(n),[]).effects.mobility,20,'the stat and fatigue bases agree');
+ assert.equal(n.fatigue,10,'UI preparation does not consume recovery or mutate the save');
+ n.fatigue=3;assert.ok(read().includes('피로 0'),'full recovery remains visible for a fatigued arrival');
+ n.fatigue=0;assert.ok(!read().includes('피로 '),'zero-fatigue arrivals retain the compact omission');
+ assert.ok(fn('npcDetail').includes('현재 피로 (상품 사용 전): '),'detail identifies its stored-state basis');
+ assert.ok(!fn('npcDetail').includes('위 능력치는 가방 속 상품'),'the rejected explanatory sentence is absent');
+});
+
+test('ORDER shelf life: the displayed days and actual arrival share Event and refrigerator rules',()=>{
+ const g=new Game();g.autosave=false;g.start('order-life-copy');
+ const s=g.run;s.phase='order';s.day=4;s.money=5000;s.cart={};s.inventory=[];
+ const ctx={D:DATA,game:g,Presentation,Relics,E:x=>x,itemKind:it=>DATA.categories[it.category],
+  Scene:{crate:x=>x,priceTag:x=>x},Art:{itemIcon:()=>''},btn:()=>''};
+ for(const [id,phase,fridge,near,days]of [['rope','order',false,false,5],['rice','order',false,false,2],
+  ['rice','order',true,false,4],['rope','order',false,true,1],['rice','order',true,true,1],['rice','final',true,true,1]]){
+  s.phase=phase;s.facilities=fridge?['fridge']:[];s.event=near?DATA.events.find(e=>e.id==='nearexpiry'):null;
+  s.offers=[{item:id,price:DATA.itemBy[id].buy,quantity:3}];s.inventory=[];
+  assert.ok(render([fn('orderOffer')],'orderOffer(game.run,game.run.offers[0],0)',ctx).includes('유통기한 '+days+'일'),id+' displayed life');
+  g.stock(id,1);assert.equal(s.inventory[0].expires,s.day+days,id+' actual expiry');
+ }
+ s.phase='sell';s.inventory=[];g.stock('rice',1);
+ assert.equal(s.inventory[0].expires,s.day+4,'today-only Order Event does not shorten other stock arrivals');
+});
+
+test('META Day unlock: account award, offer eligibility and codex use one date',()=>{
+ assert.deepEqual(Meta.ITEM_UNLOCK_DAY,{guildlunch:10,worldcharm:14},'current Canonical Days');
+ const g=new Game();g.autosave=false;g.start('day-unlock-copy');g.morning=()=>{};
+ const ctx={game:g,Meta,D:DATA,DAY_UNLOCK:Meta.ITEM_UNLOCK_DAY};
+ for(const [id,day]of [['guildlunch',10],['worldcharm',14]]){
+  const it=DATA.itemBy[id];g.account.unlocks[id]=false;
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'DAY '+day+' 도달 시 해금');
+  assert.equal(Meta.itemUnlocked(g.account,it,day),false,'Day alone does not bypass account unlock');
+  g.run.day=day-1;g.nextDay();assert.equal(g.account.unlocks[id],true,'account unlock on its Day');
+  assert.equal(Meta.itemUnlocked(g.account,it,day-1),false,'each Run blocks earlier offers');
+  assert.equal(Meta.itemUnlocked(g.account,it,day),true,'eligible on the Day');
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'해금 완료 · 각 점포 DAY '+day+'부터 발주 후보');
+ }
+ const old=Meta.ITEM_UNLOCK_DAY.guildlunch;
+ try{Meta.ITEM_UNLOCK_DAY.guildlunch=12;g.account.unlocks.guildlunch=false;g.run.day=11;g.nextDay();
+  assert.equal(g.account.unlocks.guildlunch,true,'award follows changed date');
+  assert.equal(Meta.itemUnlocked(g.account,DATA.itemBy.guildlunch,11),false);
+  assert.equal(Meta.itemUnlocked(g.account,DATA.itemBy.guildlunch,12),true);
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:DATA.itemBy.guildlunch}),'해금 완료 · 각 점포 DAY 12부터 발주 후보');
+ }finally{Meta.ITEM_UNLOCK_DAY.guildlunch=old;}
+});
+
 /* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */
 test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()=>{
  // SA-Q02: no hidden-Potential disclosure and no promise that Loyalty reveals Traits
@@ -3142,21 +3198,27 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
 
 /* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */
 test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
- const h=fn('help');
+ const source=fn('help'),ctx={game:{rescueLimit:Game.prototype.rescueLimit},Copy,Adventurer,E:x=>x};
+ const h=render([source],'help()',ctx);
  for(const line of [
   'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
   '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
   '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
-  '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3회. 회생을 다 썼거나 정리할 재고가 없으면 폐점한다.',
+  '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다.',
   '영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
   '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
+ assert.ok(h.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'),'the guide directs the player to the actual Item effects');
+ assert.ok(h.includes('바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.'),'the guide includes the overcharge refusal exception');
+ const rescueLimit=DATA.balance.rescueLimit;
+ try{DATA.balance.rescueLimit=7;assert.ok(render([source],'help()',ctx).includes('한 점포에서 최대 7번의 마감에 이용할 수 있다.'),'the guide follows the actual rescue limit');}
+ finally{DATA.balance.rescueLimit=rescueLimit;}
  // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
  assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
  /* COPY_AUDIT §8 (User 2026-10-04): the 판매 · 단골 Loyalty lines are read from the tables (Copy.loyalty, held in tests/copy.cjs) */
- assert.ok(h.includes('${E(Copy.loyalty.sale())}')&&h.includes('${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터'),'the guide reads Copy.loyalty');
+ assert.ok(h.includes(Copy.loyalty.sale())&&h.includes(Copy.loyalty.rule()+' 단골도 '+Adventurer.TRUSTED_REGULAR+'부터'),'the guide renders Copy.loyalty and the live threshold');
  assert.ok(app.includes("['regular','.nameplate.regular',Copy.loyalty.coach(),,6]"),'the 단골 mark reads Copy.loyalty, DAY 6 at the earliest');
  assert.ok(!h.includes('같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다'),'the weaker rule is gone');
  // and it matches what the engine actually enforces
@@ -3169,9 +3231,9 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  assert.ok(!h.includes('압박')&&!h.includes('환경 대응'),'the Hazard reading stays with its own popover');
  assert.ok(!/필요 보급/.test(h),'and the Supply arithmetic stays with its coach mark');
  // the section set is exactly §8-1..§8-8
- assert.equal((h.match(/<h3>/g)||[]).length,9,'nine sections: 처음 3일 (§8-0) then one per §8-1..§8-8');
- /* v2.9.0 §8-0: the guide opens on 처음 3일 (five lines) and keeps the eight sections under a collapsed 자세히 */
- assert.ok(h.indexOf('<h3>처음 3일</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'처음 3일 first, then 자세히 holding the eight');
+ assert.equal((h.match(/<h3>/g)||[]).length,9,'nine sections: 하루의 흐름 (§8-0) then one per §8-1..§8-8');
+ /* v2.9.0 §8-0: the guide opens on 하루의 흐름 (five lines) and keeps the eight sections under a collapsed 자세히 */
+ assert.ok(h.indexOf('<h3>하루의 흐름</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'하루의 흐름 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
  for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
@@ -3872,9 +3934,63 @@ test('ending: the music before holds until the result lands, then the ending cue
 });
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
+ const ctx={game:{account:{settings:{},tutorial:{skipped:false}}},coachOff:()=>ctx.game.account.tutorial.skipped,
+  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'}};
+ assert.ok(render([set],'settings()',ctx).includes('필요한 때 말풍선과 한 줄 안내가 나온다.'),'ON copy does not impose a Day limit');
+ ctx.game.account.tutorial.skipped=true;
+ const off=render([set],'settings()',ctx);
+ assert.ok(off.includes('도움말 다시 보기')&&off.includes('안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.'),'OFF label and copy follow tutorial.skipped');
+ assert.ok(!off.includes('DAY 1~3'),'settings does not confuse contextual coaches with the task-line window');
  assert.ok(set.includes("btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')"),'the switch reads 도움말 끄기 / 도움말 다시 보기');
  assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
  const sw=fn('coachSwitch');
  assert.ok(/t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\]/.test(sw),'turning it on clears every coach-* mark');
+});
+test('UI_UX §TUTORIAL: spotlight clips nested scrollports and the sticky board rail',()=>{
+ const rect=(left,top,right,bottom)=>({left,top,right,bottom});
+ const parent=(bounds,x,y,next=null,rail=null)=>({parentElement:next,getBoundingClientRect:()=>bounds,
+  css:{overflowX:x,overflowY:y},classList:{contains:k=>k==='board'&&!!rail},querySelector:()=>rail});
+ const outer=parent(rect(20,20,180,170),'hidden','visible');
+ const rail={getBoundingClientRect:()=>rect(10,35,190,65),contains:()=>false};
+ const inner=parent(rect(10,35,190,145),'visible','auto',outer,rail);
+ const wrapper=parent(rect(0,0,0,0),'auto','auto',inner);wrapper.css.display='contents';
+ const el={parentElement:wrapper,getBoundingClientRect:()=>rect(-10,0,210,200)};
+ const bounds=()=>({...render([fn('coachBounds')],'\ncoachBounds(el)',{el,innerWidth:200,innerHeight:180,getComputedStyle:e=>e.css})});
+ assert.deepEqual(bounds(),{left:20,top:65,right:180,bottom:145,width:160,height:80});
+ el.getBoundingClientRect=()=>rect(30,150,170,190);
+ assert.deepEqual(bounds(),{left:30,top:150,right:170,bottom:145,width:140,height:0});
+ el.parentElement=null;el.getBoundingClientRect=()=>rect(-5,-5,220,200);
+ assert.deepEqual(bounds(),{left:0,top:0,right:200,bottom:180,width:200,height:180});
+});
+test('CORE_RUN death-limit closing: controls follow the current limit before the money branch',()=>{
+ const s={money:-10,rescueUsed:0,stats:{deaths:4}},ctx={s,game:{canRescue:()=>true,rescueLimit:()=>3},Meta:{deathLimit:()=>5},btn:(label,action)=>'<button data-action="'+action+'">'+label+'</button>'};
+ const dock=()=>render([fn('closingDock')],'closingDock(s)',ctx);
+ assert.ok(dock().includes('재고 정리')&&dock().includes('다음 날'));
+ s.stats.deaths=5;assert.ok(dock().includes('사망 한도에 도달했다.')&&dock().includes('점포 종료'));
+ assert.ok(!dock().includes('재고 정리')&&!dock().includes('다음 날')&&!dock().includes('폐점'));
+ ctx.Meta.deathLimit=()=>6;assert.ok(dock().includes('다음 날'),'display follows the existing limit function');
+ s.money=100;s.stats.deaths=6;assert.ok(dock().includes('점포 종료'),'positive cash does not override the death limit');
+});
+test('RELIC retired codex: candidate status reads the existing retired list',()=>{
+ const ctx={game:{account:Meta.fresh()},D:{relicRetired:['memberBundle']},DAY_UNLOCK:{},Meta,entry:{id:'memberBundle'}};
+ const status=()=>render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx});
+ assert.equal(status(),'현재 후보로 나오지 않음');ctx.entry={id:'bulk'};assert.equal(status(),'기본 제공');
+ ctx.D.relicRetired.push('bulk');assert.equal(status(),'현재 후보로 나오지 않음','status follows the list rather than a hardcoded support id');
+ assert.ok(DATA.relicBy.memberBundle.description,'old-owned effect description is preserved');
+});
+test('FINAL committed Stat grid: applied snapshot, before/after, separate Boss and Decoration sources',()=>{
+ const keys=Adventurer.keys,n={id:'n1',traits:[],stats:{combat:90,survival:100,mobility:100,spirit:100}};
+ const prep={effects:{combat:100,survival:100,mobility:100,spirit:100},sources:{combat:[{name:'장비',v:10}],survival:[],mobility:[],spirit:[]}};
+ const boss={...prep.effects,combat:92},t={team:[n],preparations:[prep],snapshots:[boss],d:{},context:null};let ordinary=0;
+ const game={run:{phase:'final',finalCommitted:true,team:[n.id],facilities:[],bossId:'PRIDE'},finalPreRoll:()=>t,finalSnapshot:()=>boss,claimedGateFor:()=>({})};
+ const ctx={game,n,D:DATA,Copy,Presentation,Adventurer,Dungeon:{prepare:()=>{ordinary++;return prep;}},E:x=>x};
+ const html=()=>render([fn('statDisplay'),fn('statGrid')],'\nstatGrid(n)',{...ctx});
+ assert.ok(html().includes('100 → 92')&&html().includes('오만의 갑주 -8'));
+ assert.ok(html().includes('detail-stat down'),'Boss loss is harmful even if the final value exceeds the stored90');
+ assert.deepEqual(prep.sources.combat,[{name:'장비',v:10}],'display cannot mutate shared preparation sources');
+ t.snapshots=[{...boss,combat:108.56}];const banner=html();
+ assert.ok(banner.includes('100 → 108.6')&&banner.includes('오만의 갑주 -8')&&banner.includes('단골 감사 현수막 +16.6'));
+ game.run.finalCommitted=false;assert.ok(!html().includes('→'));assert.equal(ordinary,1,'uncommitted candidate reads ordinary preparation');
+ game.run.phase='sell';game.run.finalCommitted=true;assert.ok(!html().includes('→'));assert.equal(ordinary,2,'SALE has no Final modifier');
 });
 console.log(count+' ui guard groups passed');

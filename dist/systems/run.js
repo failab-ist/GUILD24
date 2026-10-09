@@ -29,8 +29,8 @@ P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
   this.run.day++;
-  if(this.run.day===10&&!this.account.unlocks?.guildlunch){this.account.unlocks??={};this.account.unlocks.guildlunch=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.guildlunch.name);}
-  if(this.run.day===14&&!this.account.unlocks?.worldcharm){this.account.unlocks??={};this.account.unlocks.worldcharm=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.worldcharm.name);}
+  if(this.run.day===G.Meta.ITEM_UNLOCK_DAY.guildlunch&&!this.account.unlocks?.guildlunch){this.account.unlocks??={};this.account.unlocks.guildlunch=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.guildlunch.name);}
+  if(this.run.day===G.Meta.ITEM_UNLOCK_DAY.worldcharm&&!this.account.unlocks?.worldcharm){this.account.unlocks??={};this.account.unlocks.worldcharm=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.worldcharm.name);}
   this.morning();
 };
 /* 발주 교환권: the free Rerolls come first, then the ordinary curve from its FIRST step

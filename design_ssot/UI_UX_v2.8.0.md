@@ -215,7 +215,7 @@ No role chips. Card order:
 2. exact effects in ITEM §PRESENTATION ORDER — EXACT order (Hazard Counter → 피로 회복 → Core Stat → the rest); a penalty keeps
    its place and cost colour
 3. economy / stock — tag `매입 {N}G` (today's buy price) over a smaller muted `판매 {N}G`; metadata
-   `수익 +{N}G · 재고 · 공급 · 유통기한`; the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the `매입` tag corner (not in the metadata)
+   `수익 +{N}G · 재고 · 공급 · 유통기한`; shelf life uses the arrival rule, including EVENT §54 today-only stock and any applicable refrigerator extension; the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the `매입` tag corner (not in the metadata)
 4. quantity — a `+ / 1 / 3 / 최대` blocked by Gold or space stays dim but answers a tap with the reason toast; a full supply in
    the cart answers `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9); a supply already fully ordered reads sold out — paper a shade
    worked, a quiet `품절` stamp in place of the controls, everything else readable, nothing greyed
@@ -335,7 +335,7 @@ This finishing pass preserves the fixed character, shelf-row space, ribbon geome
 ### SALE STAT SOURCE UX
 
 - Stat 하단에 실제 적용된 **Source 이름만** 작게 표시 (유리: 초록, 불리: 빨강). 미적용 표시 안함.
-- NPC Detail 창: 실제 부상 효과, 현재 피로/적용 penalty, 남은 휴식일, 회복 방법 표시.
+- NPC Detail 창: 실제 부상 효과, 현재 피로 (상품 사용 전)/그 기준의 penalty, 남은 휴식일, 회복 방법 표시.
 
 ### SALE — FOUR CORE STATS REMAIN PRIMARY INFORMATION
 
@@ -674,7 +674,7 @@ ceiling 40) strong danger treatment.
 
 ### FATIGUE SURFACE
 
-SALE: Fatigue is the status strip's `피로 N` (harmful emphasis when penalized); no standing Fatigue line; the tray lists a
+SALE: the status strip's single `피로 N` uses the committed Bag's departure Fatigue, matching prepared Stats (harmful emphasis when penalized); no standing Fatigue line; the tray lists a
 Food/Drink's own `피로 회복 N` row only, no `피로 {A} → 출발 {B}` line; no Outcome-by-Outcome table — the expedition's Fatigue is NIGHT's
 answer:
     귀환 후 피로 N
@@ -759,7 +759,7 @@ Contextual explanations use anchored popovers, never a modal/accordion pushing g
 ### GLOBAL HELP
 
 The 점주 가이드 uses the compact Copy text (current rules only, no internal arithmetic, no parallel long manual): first block
-`처음 3일` of exactly five lines (아침 / 발주 / 판매 / 밤 / 마감), one category-grammar line (COPY_AUDIT §8-0, vocabulary only,
+`하루의 흐름` of exactly five lines (아침 / 발주 / 판매 / 밤 / 마감), one Item-effect reading line (COPY_AUDIT §8-0, vocabulary only,
 never a recommendation), then the eight sections under a collapsed `자세히` disclosure inside the help modal. Five lines ->
 COPY_AUDIT_APPROVED_v2.8.0.md §8.
 
@@ -1105,7 +1105,7 @@ Information truth first; Boss presence is co-equal except at D25, where art neve
 ### 도감 > 마왕
 
 A codex tab after 점포지원 and before 점포 장식. It lists only the Bosses the Player has met (identity shown at D5, or any past clear); a Boss never
-met is absent, an empty tab says COPY_AUDIT §14-11. Order: the Boss order of the roster, except this Run's Boss first once its identity is shown.
+met is absent, an empty tab says COPY_AUDIT §14-11. Order: the Boss order of the roster, except this Run's Boss first once its identity is shown. The current identitySeen marker also gates 이번 영업 and GREED's live current-sales row; past knowledge alone cannot identify this Run's target early.
 Each card: small art, Boss name (this Run's card carries an `이번 영업` mark), then the Trait name and sentences. No Flavor and no Final Hazards
 (they change every Run). A Trait not yet shown reads `DAY 15에 마왕 권능이 밝혀진다.` for this Run's Boss and `마왕 권능은 아직 확인하지 못했다.` for a Boss
 met in an earlier store. GREED's card adds 목표 매출, plus 현재 매출 on this Run's card. The record lives on the Account (`bossLog`); a save without it reads empty
@@ -1114,7 +1114,7 @@ and a cleared Boss counts as known.
 ### D25 — 최종 정찰 보고
 
 `최종 정찰 보고` with a one-time 안내 line under the intro (COPY_AUDIT §14-7) (any reused report framing belongs here): exactly two Final Families, each with its actual T2 Hazard set, each
-Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N for 마왕성 (Day 30 / T2 -> 29).
+Hazard as the MORNING-plate row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` with N from the current FINAL_EXPEDITION / DUNGEON_HAZARD Final threat owner (Day 30 / T2).
 `two Families` does NOT mean two Hazard keys. Never the Hazard formula, Final success % or Final Power.
 Hazard names and required Counter values use the Function/Effect information face (14px on phone, 15px on desk, weight 600); conversion explanations use the Secondary factual face (13px, weight 400). Family headings keep the plate face (16px on phone, 17px on desk); do not let their typography inherit into nested Hazard values. Keep at least 4.5:1 contrast for required information.
 
@@ -1133,6 +1133,7 @@ Before Final Lock, every Boss-changed visible value shows `original → applied`
 - GREED: 목표 매출 · 현재 매출 · 달성률 · 현재 탐욕 강화 %
 - SLOTH: 봉인 해제 상태 · 현재 위협 단계
 
+The committed member Stat grid and read-only detail use finalPreRoll snapshots; changed final modifiers show prepared → applied with proven source deltas. 단골 감사 현수막 is a separate source. Uncommitted candidates and SALE keep their preparation readings.
 No Final success %. Identity `탐식의 마왕 글러트니`; Trait prose -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
 ### FINAL BOSS ART
@@ -1229,7 +1230,7 @@ commit transfer
   with Wallet, Bag and environment readings. It reserves space above the scrolling shelf and clears the menu pin;
   focused unsold Items never change it, a paid transfer updates it, and changing target updates the named participant.
 - the shelf/header and fixed-price transfer key reuse current SALE material assets; departure reads 최종 원정 보내기.
-- meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
+- the meter caption reads 환경 대응 (권능 적용 전); meters use that participant's actual `finalPreRoll().preparations` Hazard result, before participant-side Boss snapshot modifiers; focused unsold goods do not change the committed reading, and a paid transfer refreshes every member's meter
 
 ### FINAL ITEM / WALLET FEEDBACK
 
@@ -1404,7 +1405,9 @@ Store Capital / Decoration management and run-end settlement stay as META_v2.8.0
 
 ## META UI
 
+The progress table explains Job Mastery's same-Job spawn-Level meaning (COPY §10-5). Retired Store Supports keep their description but read 현재 후보로 나오지 않음 (COPY §10-6).
 Meta gameplay -> META_v2.8.0.md. Keep distinct: Job × Boss clear matrix · Job Mastery 0..7 per Job · Total Job Mastery ·
+The product codex distinguishes permanent account unlock from each Run's DAY-based offer eligibility (META §D10 / D14 PRODUCT UNLOCK — EXACT, COPY_AUDIT §8-9).
 Distinct Boss Clear 0..7 · approved 1/3/6 unlock milestones; no legacy Global Meta XP as progression. Monster Knowledge has no
 player surface and no codex `몬스터 지식` tab (all Hazards are public from MORNING); the record stays, unshown (META §MONSTER
 KNOWLEDGE).
@@ -1523,6 +1526,7 @@ Coach Mark / Spotlight / FTUE Overlay: the screen stays visible, dimmed, a spotl
 - responsive bubble: as wide as its words need, up to the screen (560 px on a desk), so it takes only the lines its copy
   needs; target may scroll into view; one concept per step; contextual first use preferred
 - `건너뛰기` skips the current screen's marks only
+- spotlight follows the visible target inside nested scrollports, excludes a sticky board rail, and stays aligned after scrolling or resizing; repaint preserves the focused coach control
 - completion persists; reload never restarts a finished tutorial
 - no large green instruction cards in the flow
 
@@ -1621,10 +1625,10 @@ that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDI
 (acceptance -> UI_UX §QA UI-Q-v29-52.) Two contextual MORNING marks, like Deep: first time such a Gate is on the board, once per
 account, persisted and reset with the rest, anchored on that Gate's plate, rule only, never the answering Item (§READ THE
 SYSTEM):
-- the first tier II Gate that is not FIRE (`DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two Hazards, each pressing its
+- the first tier II Gate that is not FIRE (`DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two base Hazards (Events may add another), each pressing its
   own Stat. Keyed on the tier, not the Hazard count (User 2026-10-02): a tier I Gate an Event (한파 · 독안개) gave a second
   Hazard, and a tier III Gate, never draw it
-- a FIRE Gate: one Hazard, higher required Combat Power (`DUNGEON_HAZARD` §FIRE second axis)
+- the first FIRE tier II or III Gate: the base Hazard stays one from II onward, while Events may add another. A FIRE tier I Gate never shows this mark. Existing completion/reset state is preserved.
 - copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-10
 
 ## COPY HIERARCHY
@@ -2499,7 +2503,7 @@ PASS: the tray's `피로 회복 N` matches the Item's Supply and NIGHT's `출발
 single Outcome is predicted as guaranteed.
 
 #### UI-Q-v28-8 — FATIGUE
-SALE: no hypothetical Outcome fatigue matrix; current Fatigue readable in the status strip; a chosen Food/Drink lists its own
+SALE: no hypothetical Outcome fatigue matrix; committed-Bag departure Fatigue readable as the status strip's single `피로 N`; a chosen Food/Drink lists its own
 `피로 회복 N` row on the counter tray and no `피로 {A} → 출발 {B}` line; no always-on Fatigue line, no `보급 X / 필요 Y` cell.
 NIGHT: main label 귀환 후 피로, with ` · {band}` from Fatigue 20 up; detailed path on demand; the recovery rows identify `음식·음료` before departure and after the Outcome,
 never `남은 보급으로`; 보급 회복 / 보급 완화 / 밤 피로 absent as primary labels. The daily overlay separates pre-departure recovery, outcome buffer, actual Event/Trait/Decoration causes and clamps, with smaller five-band reference below.
@@ -2781,12 +2785,12 @@ FAIL: a pick or release possible while ordering, a second muster on the order st
 Verify UI_UX §GATE TIER / FIRE GATE TUTORIAL on MORNING at 390 and 1280, tutorial on.
 
 PASS:
-- the first board with a tier II Gate that is not FIRE shows `II 게이트부터는 위험이 두 가지다.`
-  on that plate; the first board with a FIRE Gate shows `화염 게이트는 위험이 하나뿐이지만, 요구 전력이 더 높다.` on that plate
-- each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks; neither names
+- the first board with a tier II Gate that is not FIRE shows `II 게이트부터는 기본 위험이 두 가지다. 단, 사건으로 위험이 추가될 수 있다.`
+  on that plate; the first board with a FIRE tier II or III Gate shows `화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.` on that plate
+- FIRE tier I never shows the FIRE mark; each once per account; a board without such a Gate shows neither; 건너뛰기 and reset behave as the other marks; neither names
   an Item
 
-FAIL: the II mark on a FIRE II Gate (it holds one Hazard), on a tier I Gate an Event gave a second Hazard, or on a tier III Gate
+FAIL: the FIRE mark on a tier I Gate; the II mark on a FIRE II Gate (it holds one base Hazard), on a tier I Gate an Event gave a second Hazard, or on a tier III Gate
 before any tier II Gate; either mark on a closed Gate.
 
 #### UI-Q-v29-53 — COACH DIET (User 2026-09-30)
@@ -3118,7 +3122,7 @@ action separated; no new control framework.
 #### UI-Q-v28-19 — SETTINGS / DEBUG BOUNDARY
 Ordinary Player surface: \`소리 켜기 / 소리 끄기\`; \`전체 데이터 초기화\`; no reproducibility Seed control;
 no \`로컬 실행 지원 · 외부 연결 없음\` footer. No new Debug menu is required for PASS.
-Settings carries one `안내` switch (`도움말 끄기` / `도움말 다시 보기`, the same switch as each mark's `도움말 끄기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. No new Save field.
+Settings carries one `안내` switch (`도움말 끄기` / `도움말 다시 보기`, the same switch as each mark's `도움말 끄기`) on the existing `tutorial.skipped`; turning it back on clears every `coach-*` mark so the coaches show again. The button and description update immediately before a Run, during a Run and on next-store preparation after the ending. No new Save field.
 
 #### UI-Q-v28-19B — DEBUG / SEED REPRODUCTION PATH
 
@@ -3206,6 +3210,7 @@ PASS:
 - copy and spotlight stay readable together after any automatic scroll; coach UI does not cover the target or the next required
   control
 - a relationship lesson highlights the smallest useful shared region or uses sequential steps
+- on MORNING, the spotlight follows the visible Gate plate after board scrolling, excludes the sticky board rail, and preserves coach-button keyboard focus on repaint; the bubble does not overlap the target
 - contextual missing targets skip cleanly and do not block later lessons
 - the lesson explains how to read the system, not which gameplay answer to choose
 - the same step stays semantically correct at phone and desktop layouts
@@ -3267,7 +3272,7 @@ narrowed to the individual).
 FAIL: per-Gate counts on a one-Gate day with no closed Gate, no count on the open Gate beside a closed one, a count that exposes a
 true Gate, or any individual identity.
 
-#### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 처음 3일
+#### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 하루의 흐름
 
 SETUP: fresh Run: the D0 Boss briefing after the first Store Support choice; then 점주 가이드 from the menu at 360 and 1280
 (→ UI_UX §D0 — FIRST MORNING BRIEFING, §GLOBAL HELP; copy COPY_AUDIT §14-1 / §8-0).
@@ -3276,9 +3281,9 @@ PASS:
   `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
 - the labels read on the record's LED face (16px; 17px on a desk), the lines in the record's body weight (15px ink; 16px on a
   desk), never the secondary tone
-- 점주 가이드 opens on `처음 3일` with exactly the five §8-0 lines in order; the eight sections (§8-1 … §8-8) sit under a `자세히`
+- 점주 가이드 opens on `하루의 흐름` with exactly the five §8-0 lines in order; the eight sections (§8-1 … §8-8) sit under a `자세히`
   disclosure, collapsed by default, open on tap; no gameplay screen gains a disclosure
-FAIL: the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `처음 3일` is missing; `자세히` is open by default.
+FAIL: the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `하루의 흐름` is missing; `자세히` is open by default.
 
 #### UI-Q-v29-15 — STORE SUPPORT CARD COPY, TWO CLAUSES
 
@@ -3363,7 +3368,8 @@ PASS (→ UI_UX §SALE — COUNTER TRAY / §SALE):
   next Day sorts afresh
 - every row, the tray and the 재고 정리 list carry the shelf life (`폐기까지 N일`, then `내일까지` / `오늘까지`); a last-day row in the
   warehouse `.soon` color
-- no `유통기한 없음` / `기한 없음` state on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
+- no `유통기한 없음` / `기한 없음` state on the tray, the ORDER row or the warehouse list (every Item expires; base 2~5 days,
+  with applicable refrigerator extension and EVENT §54 today-only arrival)
 - one name line + one effect line per row; no overflow at 360
 FAIL: an order that changes with the customer's Gate, or a recommendation word.
 
@@ -3380,7 +3386,9 @@ PASS:
   equipped and no new Run has started until `첫 점포지원 고르기`; every other Run end (bankruptcy, death limit, 폐점, FINAL end)
   reaches 다음 점포 열기 -> the same 새 점포 준비
 - the codex tab reads `점포 장식`
-FAIL: abandon starting a new Run by itself, or a Decoration purchase refused with no Run.
+- the CLOSING 폐점 confirmation says Store Capital is settled (COPY §7-4); the menu abandon confirmation remains no-settlement (§1-3)
+- after the current death limit is reached, CLOSING shows 사망 한도에 도달했다. and 점포 종료; it offers no next-Day or rescue route
+FAIL: abandon starting a new Run by itself, or a Decoration purchase refused with no Run; a closure promising no settlement; next-Day/rescue controls after the death limit.
 
 #### UI-Q-v29-22 — FIXED EFFECT ORDER / NO FIT EMPHASIS / TRANSACTION RESULT STUB
 
@@ -3391,8 +3399,8 @@ PASS:
 - no effect text on any ORDER offer row or SALE shelf row is emphasized; rows read the same for both customers
 - effects in the fixed per-category order (Food 피로 회복 first, Drink Stat / Counter then 피로 회복, Potion 투력, Field Gear its
   Counters, Insurance its one line), the same on the tray's 특수 효과 line and in the codex
-- the first ORDER OFFER coach and the 점주 가이드 line under 처음 3일 read the exact category-grammar sentence (COPY_AUDIT §3-7
-  OFFER / §8-0)
+- the 점주 가이드 line under 하루의 흐름 reads the exact Item-effect reading sentence (COPY_AUDIT §8-0); ORDER has no OFFER
+  coach (§TUTORIAL — COACH DIET)
 - each successful sale shows one receipt stub over the counter band for about 2.5 s, `단골도 {±N} · 소지금 {A} → {B}` with that
   customer's real values; a second sale to the same customer replaces it; nothing reserves height, input never blocked
 - a refusal shows only its actual Loyalty loss at the stub location, if any; no Wallet row, no new motion; the reply line comes from the engine's reason pool (가격 / 필요도 / 일반 선택) and stays 5 s

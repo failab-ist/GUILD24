@@ -280,13 +280,13 @@ actual Outcome 성공 / 대성공
 -> persistent ordinary Injury clears naturally
 
 actual Outcome 퇴각
--> persistent ordinary Injury remains
+-> persistent ordinary Injury remains unless DUNGEON_HAZARD §RETREAT HEALING actually heals it
 
 actual Outcome 부상
 -> persistent ordinary Injury remains
 ```
 
-Do not display Retreat as natural Injury recovery.
+Do not display Retreat as automatic Injury recovery; a proven §RETREAT HEALING result may show recovery.
 Do not clear ordinary Injury merely because the result was not a fresh `부상` token.
 
 If an already-injured NPC resolves to Severe Injury or Death, report the actual final outcome/state only.

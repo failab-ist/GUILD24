@@ -252,7 +252,9 @@ const itemName=id=>D.itemBy[id]?.name||null;
    event that authors its own `text` keeps it, and one that does not - a Hazard mitigation
    carries the Hazards it covered instead - is described from what it actually holds. An
    event with nothing to say is left out rather than printed as a blank. */
-function eventLine(ev,r){if(!ev)return null;return ev.text||supplyEffect(ev,r||{})||null;}
+function eventLine(ev,r){if(!ev)return null;
+ const lesson=G.Copy.learned.find(([id])=>ev.id==='learn-'+id);
+ return lesson?lesson[1]:ev.text||supplyEffect(ev,r||{})||null;}
 function supplyEffect(ev,r){
  /* SA-Q08: a Hazard mitigation is only worth a claim about the Outcome when
     DUNGEON_HAZARD's RESULT-PROOF counterfactual actually proved one - the old `ev.prevented`
@@ -296,6 +298,8 @@ function amount(key,value,moved=true){
 /* josa() / routeChangeLine() live in data/copy.js (G.Copy) so the engine's NIGHT line needs no UI layer;
    re-exported here for the screens. */
 const josa=G.Copy.josa,routeChangeLine=G.Copy.routeChangeLine;
-G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
+// A saved Event keeps its actual effects; only the known description is refreshed.
+function eventDescription(e){if(!e)return '';const current=D.events.find(x=>x.id===e.id);return current?current.describe(e.effects??current.effects):e.description??'';}
+G.Presentation={eventDescription,josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,fatigueRows,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);
