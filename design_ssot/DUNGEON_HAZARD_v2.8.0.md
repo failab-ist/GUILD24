@@ -551,8 +551,8 @@ Player gets ingredients, not formula.
 
 ## COMBAT VARIANCE
 
-baseNoise=±17.5%
-baseNoiseCoefficient=0.175
+baseNoise=±12%
+baseNoiseCoefficient=0.12
 
 Goal:
 - border cases can swing
@@ -661,7 +661,7 @@ The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirem
 After preparation:
 
     combatNoise
-    = uniform multiplier within ±17.5%
+    = uniform multiplier within ±12%
       plus any explicit Trait variance modifier
 
     combatSuccess
@@ -1990,7 +1990,7 @@ PASS:
 #### SIM-Q01 — COMBAT VARIANCE
 
 SETUP:
-Run full-run simulations/playtests with canonical baseNoise ±17.5%.
+Run full-run simulations/playtests with canonical baseNoise ±12%.
 
 EXPECT:
 Borderline outcomes can swing.
@@ -1998,7 +1998,7 @@ Strong invested NPC remains trustworthy.
 The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
 
 PASS:
-±17.5% is used as the baseline and any later retune is supported by outcome evidence.
+±12% (User 2026-10-09, retuned from ±17.5% so a sold Item moves the result more than the roll) is used as the baseline; outcome evidence for the retune is pending measurement, and any later retune is supported by outcome evidence.
 
 #### SIM-Q02 — ROLE USAGE
 

@@ -188,7 +188,9 @@ Existing `rank/ranks` data is not Design Truth. If Source has an unexpected acti
 Each next Level costs `18 + current Level × 8` EXP. Existing EXP is preserved across saves.
 
 For an alive adventurer below the ordinary new-arrival minimum Level on that Day, ordinary expedition earned EXP
-is boosted to ×1.5 (integer Math.round). The ordinary minimum is 1 on D1~4, then `1 + floor((Day - 1) × 0.4)`.
+is boosted to ×1.5 (integer Math.round). On a 퇴각 / 부상 / 중상 return the extra bonus is instead the larger of that
+×1.5 bonus and 25% of the EXP still needed to reach the minimum (integer Math.round); 성공 / 대성공 keep ×1.5.
+The ordinary minimum is 1 on D1~4, then `1 + floor((Day - 1) × 0.4)`.
 Mastery, royal and Decoration spawn additions are not part of this reference minimum. There is no revisit-interval condition.
 Preserve the full base reward first; cap only the extra bonus at the EXP still needed to reach that minimum.
 If the base reward alone reaches/passes the minimum, add no bonus and do not cut the base reward. At/above the minimum,

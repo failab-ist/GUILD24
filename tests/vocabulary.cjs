@@ -111,8 +111,8 @@ test('ITEM-Q11: Return Stone escape bonus is the approved +20%p (User 2026-09-28
  assert.equal(DATA.itemBy.worldcharm.effects.revive,1);
 });
 
-test('SIM-Q01: combat variance uses the approved v2.4 starting value',()=>{
- assert.equal(DATA.balance.combatNoise,.175);
+test('SIM-Q01: combat variance uses the approved value (User 2026-10-09: ±12%)',()=>{
+ assert.equal(DATA.balance.combatNoise,.12);
 });
 
 test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes',()=>{
