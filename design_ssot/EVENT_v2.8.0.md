@@ -32,18 +32,17 @@ Canonical Event 55종은 모두 **자동 적용형 Day Event**다. Event 선택�
 
 ### Normal Event가 발생하지 않는 날
 
-Normal Daily Event는 D0 · D5 · D10 · D15 · D20 · D25 · D30, 그리고 실제 `심층원정` 발생일
-(D7 / D14 / D21 / D28 중 해당 Run에 배정된 날)에 발생하지 않는다. 계정 첫 Run의 D1도 발생하지 않는다(점포지원 소문 수집
-게시판을 가졌으면 발생한다).
+Normal Daily Event는 2티어 게이트가 처음 나올 수 있는 날(현재 D6)보다 앞선 날(점포지원 소문 수집 게시판을 가졌으면 제외), D0 · D5 · D10 · D15 · D20 · D25 · D30, 그리고 실제 `심층원정` 발생일
+(D7 / D14 / D21 / D28 중 해당 Run에 배정된 날)에 발생하지 않는다. 점포지원 소문 수집 게시판을 가졌으면 이 날짜 제한 없이 발생한다.
 
 - D5 / D10 / D15 / D20 / D25는 Relic Window Day이므로 Event를 겹치지 않는다.
 - D30은 Final Day다. Boss reveal은 Normal Event가 아니며 `BOSS_v2.8.0.md`가 소유한다.
-- 계정 첫 Run: D1은 Event가 없고, D2는 `본사 1+1 행사`가 고정으로 나온다(`CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS). 그래서 첫 Event는 언제나 1+1 행사다. 다른 Run의 D1 · D2는 보통 Event Day다.
+- 계정 첫 Run: D1은 Event가 없고(D6 전이라 모든 Run이 같다), D2는 `본사 1+1 행사`가 고정으로 나온다(`CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS). 그래서 첫 Event는 언제나 1+1 행사다.
 
 ### Eligible Day
 
-D1–D29 중 Relic Window Day가 아니며, 해당 Run의 실제 심층원정 발생일도 아닌 날(계정 첫 Run은 D1 제외).
-24일에서 심층원정 발생일 2–3일을 제외한 **21–22일**(계정 첫 Run은 하루 적다).
+D1–D29 중 2티어 게이트가 처음 나올 수 있는 날(`tierWeights`에서 읽으며 현재 D6) 이후이고, Relic Window Day가 아니며, 해당 Run의 실제 심층원정 발생일도 아닌 날.
+D6–D29의 24일에서 Relic Window Day 4일과 심층원정 발생일 2–3일을 제외한 **17–18일**.
 
 ### 발생 확률
 
@@ -55,7 +54,7 @@ dailyEventChance = 40%
 목표 평균:
 
 ```text
-21–22 × 0.40 ≈ 8.4–8.8 Events / Run
+17–18 × 0.40 ≈ 6.8–7.2 Events / Run (+ 계정 첫 Run의 D2 `본사 1+1 행사`)
 ```
 
 실제 분포는 전체 런 밸런스 측정에서 측정한다. 측정 결과를 이유로 `dailyEventChance`를 자동으로 바꾸지 않는다

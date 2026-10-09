@@ -5,9 +5,12 @@ for(const f of ['data/catalog','data/relics','data/decorations','data/copy','sys
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 
 function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
-function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
+/* Events open at the first tier II Gate Day (User 2026-10-09); these Runs sell nothing, so the death limit must not end them before it */
+function advance(g){const s=g.run;if(s.phase==='end')return;s.stats.deaths=0;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 // from DAY 3, past the first-Run DAY 1~2 lessons, so a forced Event never lands on 본사 1+1 행사's Day
+/* advance to the evening before the next Day an Event can fire (the first is DAY 6 or later) */
+const toEve=g=>{for(let k=0;k<40&&g.run.phase!=='end'&&!(g.run.day+1>=3&&g.eventEligibleDay(g.run.day+1));k++){g.run.money=Math.max(g.run.money,5000);advance(g);}};
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.run.day>=3&&g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
 const CATALOG=['물류대란','본사 1+1 행사','게이트 순례 주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','고위험 게이트 발견','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
  "길드 의료단 순회","길드 의무관 당직","길드 위로금","길드 특별 수당","본사 물류 지원","보험 공동 구매","본사 원정용품 지원","길드 연회","원정 교대 근무","길드 휴양일","단골의 날","길드 현상금","마왕의 징조","입고 지연","가뭄","길드 세금 징수","장맛비","본사 발주 제한","포스기 먹통","가격 단속","퇴각로 붕괴","길드 소집령","냉장고 고장","야시장","원정 징발령","본사 재고 떨이","정예 토벌령","폭염","게이트 임시 폐쇄","길드 훈련 주간","유통기한 임박 특가","게이트 안정화 작업"];
@@ -26,16 +29,16 @@ test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic 
  const g=fresh(),deep=g.run.deep.days;
  assert.ok(deep.length>=2&&deep.length<=3,'the Run holds two or three Deep Days');
  for(let day=0;day<=30;day++){
-  const want=day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!deep.includes(day)&&!(g.run.firstRun&&day===1);
+  const want=day>=1&&day<=29&&day>=globalThis.Dungeon.FIRST_TIER2_DAY&&![5,10,15,20,25].includes(day)&&!deep.includes(day)&&!(g.run.firstRun&&day===1);
   assert.equal(g.eventEligibleDay(day),want,'day '+day);
  }
- // DAY 1~29 hold 24 non-window Days; a Run carries 21 or 22 eligible Days (one fewer on the account's first Run).
+ // DAY 6~29 (from the first Day a tier II Gate can open) hold 20 non-window Days; a Run carries 17 or 18 eligible Days.
  const eligible=[...Array(31).keys()].filter(d=>g.eventEligibleDay(d)).length;
- assert.equal(eligible,24-deep.length-(g.run.firstRun?1:0),'each Deep Day removes exactly one eligible Day');
- assert.ok(eligible>=20&&eligible<=22,'20-22 eligible Days per Run: '+eligible);
- // the account's first Run keeps DAY 1 quiet; a later Run may meet an Event on DAY 1
- g.run.firstRun=true;assert.equal(g.eventEligibleDay(1),false,'first Run: no Event on DAY 1');
- g.run.firstRun=false;assert.equal(g.eventEligibleDay(1),true,'later Run: DAY 1 is an ordinary Event Day');
+ assert.equal(eligible,20-deep.length,'each Deep Day removes exactly one eligible Day');
+ assert.ok(eligible>=17&&eligible<=18,'17-18 eligible Days per Run: '+eligible);
+ // no Event before the first Day a tier II Gate can open (User 2026-10-09), first Run or not; 소문 수집 게시판 keeps its every-morning promise
+ for(const first of [true,false]){g.run.firstRun=first;assert.equal(g.eventEligibleDay(1),false,'no Event on DAY 1');}
+ g.run.firstRun=false;g.run.facilities=['rumorBoard'];assert.equal(g.eventEligibleDay(1),true,'소문 수집 게시판: an Event every morning, DAY 1 too');g.run.facilities=[];
  // suppression does not depend on anyone being nominated, and costs the run stream no draw
  for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
 });
@@ -271,7 +274,7 @@ test('EVENT 20/22: 본사 폐기 유예 gives only tonight\'s waste one more day
  /* v2.9.10 quick patch (User 2026-09-28): the Event was a refund of the overnight waste's cost; it is now a one-day delay
     for the stock whose last sale day is today, and only that stock */
  const g=fresh('subsidy'),s=g.run;force(g,'wastecover');
- while(s.day<2)advance(g);
+ toEve(g);
  g.stock('rice',3);g.stock('ramen',2);
  const rice=s.inventory.filter(st=>st.item==='rice'),ramen=s.inventory.filter(st=>st.item==='ramen');
  for(const st of rice)st.expires=s.day+2;   // its last sale day is tomorrow, the Event's Day
