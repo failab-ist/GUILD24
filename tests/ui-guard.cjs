@@ -2204,7 +2204,7 @@ test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a 
  assert.ok(/\.end-tape \.seal\{[^}]*rotate:-7deg/.test(css)&&/\.end-tape \.seal\.lost\{[^}]*rotate:9deg;[^}]*opacity:\.5;[^}]*clip-path/.test(css),'clear square-on and crisp; failure crooked, faint, partly printed');
  assert.ok(/\.end-tape \.print:has\(\.seal\) \.closed\{padding-right:84px\}/.test(css)&&/\.end-tape \.seal\{[^}]*transform-origin:100% 0\}/.test(css),'the headline keeps clear of the seal, and the fall stays on the tape');
  /* v2.9.9 H7: the FINAL clash plays first when it can; its end (or a skip) renders the ending and sounds the seal once */
- assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);if\(!clashScene\(\)\)\{render\(\);sealSound\(\);\}break;/.test(app)
+ assert.ok(/case'boss-go':sound\('final'\);endRevealed=false;endFrom='final';\/\*[^*]*\*\/game\.boss\(\);setModal\(null\);if\(!clashScene\(\)\)\{render\(\);sealSound\(\);\}break;/.test(app)
   &&/c\.el\.remove\(\);render\(\);sealSound\(\);\}/.test(fn('finishClash')),'the landing cue follows the departure once');
  const ss=bare(fn('sealSound'));assert.ok(/clearTimeout\(sealCueAt\)/.test(ss)&&/Sound\.play\(kind\)/.test(ss)&&/FINAL_SEAL\.hold\+STAMP_FALL/.test(ss),'on the landing frame, never twice');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
@@ -2617,13 +2617,13 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
  assert.ok(block.length,'there is a phone-width density block');
  /* UI_UX §BOSS INFORMATION PRESENTATION: common art caps; runtime density is checked by qa-boss-report-density. */
- assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(block),'phone art scales with viewport height under the common cap');
+ assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 500px\),280px\)\}/.test(block),'phone art scales with viewport height under the common cap');
  assert.ok(!/\.boss-reveal\.(?:final|d\d+) \.boss-art img\{/.test(css),'no investigation Day has its own image-size exception');
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
  assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,1,'one common height cap at phone width');
  const wide=css.slice(css.indexOf('@media (min-width:720px){'));
- assert.ok(/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(wide),'all desk reports share a supporting image cap');
+ assert.ok(/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 480px\),360px\)\}/.test(wide),'all desk reports share a supporting image cap');
  // the reports themselves are untouched: art is still a figure beside the information
  assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
  assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
@@ -2932,7 +2932,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  const compact=fn('bossReveal').split("stage==='d10'||stage==='d20'")[1].split("stage==='d0'")[0];
  assert.ok(/\+plate/.test(compact)&&!/boss-id/.test(compact),'D10 / D20 carry the shared full Boss-art figure, not a thumbnail');
  assert.ok(!/\.boss-id\b/.test(css)&&!/max-width:64px;max-height:64px/.test(css),'the 64px thumbnail rule is gone');
- assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(css),
+ assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 500px\),280px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 480px\),360px\)\}/.test(css),
   'the shared phone / desk caps (240 / 300) are the ones D10 / D20 now use');
  assert.ok(!/\.boss-reveal\.d(10|20)[^{]*\.boss-art img\{/.test(css),'no D10 / D20-only art size - one art family');
 });

@@ -3304,7 +3304,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .fam-card .hazards{margin:0}
 /* UI_UX §BOSS INFORMATION PRESENTATION: every investigation shares one viewport-bounded art cap. */
 @media (max-width:719px){
- .boss-art img{max-height:clamp(100px,calc(100dvh - 560px),240px)}
+ .boss-art img{max-height:clamp(120px,calc(100dvh - 500px),280px)}
  /* SA-Q12 — MOBILE QUEUE DUPLICATION. The waiting fan and its 대기 N say on the sale surface
     what the Dock already says underneath it, and on a phone the two cost a band of height each
     to state one number twice. The decorative line is suppressed at phone width only; the Dock
@@ -3314,7 +3314,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media (min-width:720px){
  .boss-art img{max-width:420px}
  /* UI_UX §BOSS INFORMATION PRESENTATION: the same cap across investigation days. */
- .boss-art img{max-height:clamp(200px,calc(100dvh - 510px),300px)}
+ .boss-art img{max-height:clamp(200px,calc(100dvh - 480px),360px)}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}
 }
 /* =====================================================================
@@ -3799,14 +3799,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.settings-wood,.modal.wood-frame{border:16px solid transparent;background:#24160d;background-clip:padding-box;
  border-image:url('assets/presentation/settings/wood-panel.webp') 150 fill / 16px / 0 stretch;
  color:#f0dfbf;box-shadow:0 -4px 0 #100a06;isolation:isolate}
-.settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.settings-wood .modal-header,.wood-frame .modal-header{padding:4px 8px 12px;box-shadow:inset 0 -1px 0 #a46b33}
 .settings-wood .modal-header h2,.wood-frame .modal-header h2{font-size:23px;color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .settings-wood .modal-header .bare,.wood-frame .modal-header .bare{padding:8px 12px;min-height:44px;color:#dfcba9;
  background:#2d190d;box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07}
 .settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:#392213;color:#fff0d1}
 .settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #76502c}
 /* the sheets a menu opens share the menu's carved wood: header on the wood itself, tab chips as wooden keys with the same brass edge */
-.modal.wood-frame .modal-header{background:none;margin:0;padding:4px 8px 12px;box-shadow:0 2px 0 #0f0905,inset 0 -1px 0 #a46b33}
+.modal.wood-frame .modal-header{background:none;margin:0;padding:4px 8px 12px;box-shadow:inset 0 -1px 0 #a46b33}
 .modal.wood-frame .modal-header h2{font-size:23px}
 .modal.wood-frame .modal-body{color:#dfcba9}
 .modal.wood-frame .tabs .small{background:linear-gradient(180deg,#5a3a20 0,#42291a 55%,#2f1c10 100%);color:#e6d3ae;
@@ -3831,13 +3831,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .modal-body p+p{margin-top:8px}
 .settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
- background:none;box-shadow:0 -2px 0 #100905,inset 0 1px 0 #9b6433}
+ background:none;box-shadow:inset 0 1px 0 #9b6433}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
  border-image:url('assets/presentation/settings/blue-key.webp') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
  background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
- box-shadow:0 3px 0 #110a06;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
+ box-shadow:none;clip-path:none;filter:none;text-shadow:0 1px 0 #111b28}
 .settings-wood button:not(.bare):hover,.wood-frame .modal-footer button:not(.bare):hover{background:none;filter:brightness(1.12)}
-.settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:0 1px 0 #110a06;filter:brightness(.94)}
+.settings-wood button:not(.bare):active,.wood-frame .modal-footer button:not(.bare):active{transform:translateY(2px);box-shadow:none;filter:brightness(.94)}
+/* 「취소」는 일반 창의 갈색 칸 규칙이 더 세서 나무 틀 안에서 배경이 남았다. 같은 파란 키로 맞춘다. */
+.settings-wood .modal-footer button:not(.stamp)[data-action="dismiss"],.wood-frame .modal-footer button:not(.stamp)[data-action="dismiss"]{background:none;color:#f2eee4;box-shadow:none}
+.settings-wood .modal-footer button:not(.stamp)[data-action="dismiss"]:hover,.wood-frame .modal-footer button:not(.stamp)[data-action="dismiss"]:hover,.settings-wood .modal-footer button:not(.stamp)[data-action="dismiss"]:active,.wood-frame .modal-footer button:not(.stamp)[data-action="dismiss"]:active{background:none;box-shadow:none}
 .settings-wood button.danger,.wood-frame .modal-footer button.danger{border-image-source:url('assets/presentation/settings/red-key.webp');
  color:#ffe9df;text-shadow:0 1px 0 #350e0c}
 .settings-wood button:disabled,.settings-wood button[aria-disabled="true"],.wood-frame .modal-footer button:disabled{opacity:1;filter:saturate(.25) brightness(.75);
@@ -3847,9 +3850,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-content::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
  background:url('assets/presentation/settings/supply-backdrop.webp') right bottom / 100% auto no-repeat;opacity:.22}
 .settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
-.settings-group+.settings-group{padding-top:22px;box-shadow:0 -2px 0 #130b06,inset 0 1px 0 #97612e}
+.settings-group+.settings-group{padding-top:22px;box-shadow:inset 0 1px 0 #97612e}
 .settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
- width:6px;height:6px;background:#ad7d42;box-shadow:0 1px 0 #120b06;transform:rotate(45deg);pointer-events:none}
+ width:6px;height:6px;background:#ad7d42;transform:rotate(45deg);pointer-events:none}
 .settings-wood .settings-group h3{margin:0;font:500 21px/1.3 var(--f-plate);color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .settings-group p{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
 .settings-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -3863,21 +3866,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .settings-panel .mix-row{grid-template-columns:38px minmax(0,1fr) 52px;gap:10px}
 .settings-panel .mix-row label{color:#ead8b6;font-size:14px}
 .settings-panel .mix-row b{min-height:36px;display:flex;align-items:center;justify-content:center;
- background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526,inset 0 -3px 0 #0d0804}
+ background:#1c1008;color:#ffc554;font:600 16px/1 var(--ui);font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 1px #855526}
 /* Native inputs keep keyboard behaviour and a 44px touch area around the thin rail. */
 .settings-panel .mix-row input[type=range]{appearance:none;-webkit-appearance:none;height:44px;
  color:#ffc554;accent-color:#ffc554}
 .settings-panel input[type=range]::-webkit-slider-runnable-track{height:8px;
  background:linear-gradient(to right,#ffc554 var(--mix-level,100%),#493018 var(--mix-level,100%));
- border:1px solid #8d591f;border-radius:0;box-shadow:inset 0 1px 0 #ffe29b,0 2px 0 #100905}
+ border:1px solid #8d591f;border-radius:0;box-shadow:inset 0 1px 0 #ffe29b}
 .settings-panel input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
  margin-top:-6px;border:3px solid #d48a2a;border-radius:0;background:#ffe5a0;
- box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+ box-shadow:inset 0 0 0 2px #7d4b19;transform:rotate(45deg)}
 .settings-panel input[type=range]::-moz-range-track{height:6px;background:#493018;
- border:1px solid #8d591f;border-radius:0;box-shadow:0 2px 0 #100905}
+ border:1px solid #8d591f;border-radius:0}
 .settings-panel input[type=range]::-moz-range-progress{height:6px;background:#ffc554;box-shadow:inset 0 1px 0 #ffe29b}
 .settings-panel input[type=range]::-moz-range-thumb{width:12px;height:12px;border:3px solid #d48a2a;
- border-radius:0;background:#ffe5a0;box-shadow:inset 0 0 0 2px #7d4b19,2px 2px 0 #120b05;transform:rotate(45deg)}
+ border-radius:0;background:#ffe5a0;box-shadow:inset 0 0 0 2px #7d4b19;transform:rotate(45deg)}
 @media(min-width:600px){
  .settings-wood .modal-body{padding-left:18px;padding-right:18px}
  .settings-wood button:not(.bare){font-size:15px}
