@@ -2113,6 +2113,9 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
  assert.ok(m.indexOf('bossRevealDue()')<m.indexOf("modal='event'")&&m.indexOf('bossRevealDue()')<m.indexOf("modal='relics';\n",m.indexOf('bossRevealDue()'))&&/openOwedModal\(s,phase,changed\);[\s\S]*renderModal\(\)/.test(r),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
+ /* User 2026-10-09: a coach mark covers the customer's line - the line waits while a mark is up, then gets its full time */
+ assert.ok(/queueMicrotask\(\(\)=>holdSpeech\(!!activeCoach\)\);/.test(fn('showCoach'))&&/if\(sayHeld\)return;/.test(fn('armSpeech'))
+  &&/else if\(sayHeld\)\{sayHeld=false;armSpeech\(\);\}/.test(fn('holdSpeech'))&&/\.coach-on \.say\{visibility:hidden\}/.test(read('dist/ui/ui.css')),'the line waits for the coach mark');
  assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(m),'the hold ends with the MORNING it belongs to - the screen is never left inert');
 });
 

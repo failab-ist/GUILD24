@@ -1161,6 +1161,7 @@ function placeSpeech(){
   return w.right>r.left&&w.left<r.right&&w.bottom>r.top&&w.top<r.bottom;}))say.classList.remove('up');
 }
 function armSpeech(ms=SAY_MS){
+ if(sayHeld)return;
  if(!$('.say:not(.status)')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
  if(sayArmed===sayKey)return;
  if(sayTimer)clearTimeout(sayTimer);
@@ -1563,7 +1564,14 @@ function settleCoach(step,target){
  };
  coachSettle=requestAnimationFrame(tick);
 }
+/* User 2026-10-09: a coach mark covers the customer's line, so the line waits while a mark is up and gets its full time once
+   the mark is closed */
+let sayHeld=false;
+function holdSpeech(on){document.documentElement.classList.toggle('coach-on',on);
+ if(on){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;sayHeld=true;}
+ else if(sayHeld){sayHeld=false;armSpeech();}}
 function showCoach(){
+ queueMicrotask(()=>holdSpeech(!!activeCoach));
  const root=$('#coach-root');if(!root)return;root.innerHTML='';activeCoach=null;
  cancelAnimationFrame(coachSettle);
  const tutorial=game.account.tutorial||{};
