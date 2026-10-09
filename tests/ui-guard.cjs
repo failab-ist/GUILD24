@@ -1891,7 +1891,7 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=(fn('orderOffer')+fn('orderForm'));
- const ordinary=render([constLine('btn'),fn('orderForm')],'orderForm()',{game:{run:{phase:'order',day:1,branch:'fixture',money:100,inventory:[],offers:[],dungeons:[],cart:{}},cartTotal:()=>20,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,gateCounts:()=>new Map(),todayLine:()=>'<span>전체 3명</span>',railShown:'',railFolded:()=>false,deathLimitItem:()=>'<i>사망</i><b>0 / 5</b>',relicRef:()=>'',fmt:String,E:String,REROLL_ICON:''});
+ const ordinary=render([constLine('btn'),fn('orderForm')],'orderForm()',{game:{run:{phase:'order',day:1,branch:'fixture',money:100,inventory:[],offers:[],dungeons:[],cart:{}},cartTotal:()=>20,rerollPrice:()=>50,expectedOperatingCost:()=>100,capacity:()=>18},D:DATA,gateCounts:()=>new Map(),todayCounts:()=>null,todayLine:()=>'<span>전체 3명</span>',railShown:'',railFolded:()=>false,deathLimitItem:()=>'<i>사망</i><b>0 / 5</b>',relicRef:()=>'',fmt:String,E:String,REROLL_ICON:''});
  assert.match(ordinary,/<span class="rail-line"><i>사망<\/i><b>0 \/ 5<\/b><\/span><span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b><span>전체 3명<\/span><\/b><\/span><span class="rail-line rail-gold" aria-hidden="true"><i>발주 후<\/i><b>80G<\/b><\/span>/,'Death first, then Today, then exact post-cart Gold from 100 minus 20');
  // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
  assert.ok(/const railFolded=\(\)=>game\.account\.settings\.orderRailFolded===true;/.test(app)&&/'<span class="rail-chip">요약<\/span><\/button>'/.test(of),'a 요약 chip, folded state on the account');
@@ -2631,7 +2631,8 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  assert.ok(/\.line-up\{display:none\}/.test(block),'the waiting fan / 대기 N is suppressed at phone width');
  assert.ok(!/\.line-up\{display:none\}/.test(css.replace(block,'')),'and only at phone width');
  // ...while the Dock keeps the real queue progress and count
- const dock=app.slice(app.indexOf("'<div class=\"dock\"><div class=\"queue\">"));
+ const dock=fn('queueRef');
+ assert.equal((app.match(/'<div class="dock"><div class="queue">'\+queueRef\(s\)/g)||[]).length,2,'phone and desk Docks draw the one queue line');
  assert.ok(/손님 '\+\(s\.cursor\+1\)\+' \/ '\+s\.queue\.length/.test(dock),'the Dock still states the queue count');
  assert.ok(/pips\(s\.queue\.length,s\.cursor\)/.test(dock),'and its progress');
  assert.ok(!/\.p-sale \.dock \.queue\{[^}]*display:none/.test(css),'nothing hides the Dock queue on any width');
@@ -3385,7 +3386,10 @@ test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count befor
   'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
- assert.ok(/counts=s\.dungeons\.length>=2\|\|\(s\.closedGates\|\|\[\]\)\.length\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts with two or more Gates, or beside a closed Gate (User 2026-10-02)');
+ assert.ok(/counts:s\.dungeons\.length>=2\|\|\(s\.closedGates\|\|\[\]\)\.length\?gateCounts\(\):null/.test(fn('todayCounts'))&&/counts=isFinal\?null:todayCounts\(\)/.test(fn('orderForm')),'per-Gate counts with two or more Gates, or beside a closed Gate (User 2026-10-02)');
+ /* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): SALE re-reads ORDER's line through the same owner, held for the Day */
+ assert.ok(/todayLine\(todayCounts\(\),'b'\)/.test(fn('queueRef'))&&/s\.phase!=='sell'/.test(fn('todayCounts')),'SALE shows ORDER\'s 오늘 line, held while SALE runs');
+ assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)|\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(fn('queueRef')+fn('todayCounts')),'and it names no customer');
  const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),

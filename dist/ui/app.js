@@ -1019,7 +1019,7 @@ function saleScreen(){
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
     than becoming a readout of its own. */
- +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
+ +'<div class="dock"><div class="queue">'+queueRef(s)
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
@@ -1046,7 +1046,7 @@ function saleDesk(n,st,waiting,preloadHtml){const s=game.run;
   +'<div class="shelf-col">'+shelf()+'</div>'
  +'</main>'
  +'<div class="counter-mat" aria-hidden="true"></div>'+tray()
- +'<div class="dock"><div class="queue"><span class="q-line" role="img" aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">손님'+pips(s.queue.length,s.cursor)+'</span>'
+ +'<div class="dock"><div class="queue">'+queueRef(s)
  +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';}
 /* crossing the desk breakpoint mid-SALE draws the other layout */
@@ -1672,6 +1672,17 @@ function todayLine(counts,tag='em'){const s=game.run,hz=d=>d.hazards.map(h=>E(D.
  chips=s.dungeons.flatMap(d=>hz(d).map(t=>'<span class="tl">'+t+(counts?' '+(counts.get(d.id)||0)+'명':'')+'</span>'))
   .concat((s.closedGates||[]).map(d=>'<span class="tl shut">'+hz(d).join(' · ')+' 오늘 폐쇄</span>'));
  return '<span class="tl-line"><'+tag+' class="tl-total">전체 '+s.queue.length+'명</'+tag+'><span class="tl-chips">'+chips.join('')+'</span></span>';}
+/* ORDER's per-Gate counts (with two or more Gates, or one closed). UI_UX §SALE — QUEUE GATE COUNT REFERENCE: in SALE they are the
+   Day's planned totals, so they are held from SALE's first read - a Deep nomination re-claiming a destination does not move them. */
+let todayHeld=null;
+function todayCounts(){const s=game.run;
+ if(s.phase!=='sell'||todayHeld?.run!==s||todayHeld.day!==s.day)todayHeld={run:s,day:s.day,counts:s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null};
+ return todayHeld.counts;}
+/* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): the Dock's own `손님` + pips is the summary of a shared tip - no
+   mark, word or height is added. Hover / focus (desk) or a tap (phone) shows ORDER's 오늘 line; the count stays the label. */
+function queueRef(s){return '<details class="tip q-tip" name="sale-tip"><summary aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">'
+ +'<span class="q-line" aria-hidden="true">손님'+pips(s.queue.length,s.cursor)+'</span></summary>'
+ +'<p class="q-pop" role="tooltip"><span class="k">오늘</span>'+todayLine(todayCounts(),'b')+'</p></details>';}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
@@ -1734,7 +1745,7 @@ function finalRiskSummary(d){const groups=(d.families||[]).map(id=>d.hazards.fil
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice();
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  /* User 2026-10-02: on a day an Event closed a Gate the one Gate left open also shows its count, beside the closed one */
- const isFinal=s.phase==='final',counts=s.dungeons.length>=2||(s.closedGates||[]).length?gateCounts():null;
+ const isFinal=s.phase==='final',counts=isFinal?null:todayCounts();
  const today=isFinal?finalRiskSummary(s.dungeons[0]):todayLine(counts);
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
