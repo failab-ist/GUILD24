@@ -457,8 +457,9 @@ function phaseNight(A){
       resolved label lands over it and the faint print goes */
    if(st.saved)savedPlay(A,r,st,tag);
    else if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
-    const fromDeath=r.avoidedDeath||st.brink;
-    g.className='verdict ghost t-'+(fromDeath?'gone':'severe');g.textContent=fromDeath?'사망':'중상';
+    /* NIGHT_CLOSING §INSURANCE CAUSALITY: the Outcome the Insurance actually turned away (귀환석 also turns a 부상) */
+    const from=r.avoidedDeath||st.brink?'사망':(r.events||[]).find(e=>e.id==='escape'||e.id==='revive')?.from||'중상';
+    g.className='verdict ghost t-'+({'사망':'gone','중상':'severe','부상':'hurt'}[from]||'severe');g.textContent=from;
     g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
     A(g,{opacity:[{from:0,to:.4,duration:st.hold,delay:st.entry},{to:.4,duration:STAMP_FALL},{to:0,duration:120}],
      scale:{from:1.15,to:1,duration:st.hold,delay:st.entry,ease:'outQuad'},onComplete:()=>g.remove()});}

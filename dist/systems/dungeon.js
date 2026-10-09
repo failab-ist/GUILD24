@@ -615,7 +615,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
    outcome=injuryRoll<clamp(.11-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
   }
  }
- if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
+ if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){const was=outcome;avoidedDeath=was==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
  /* ITEM §세계수 생환부적: 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
  if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
  /* ITEM §INSURANCE HIERARCHY: only 강골's injuryGuard reaches this branch; 구급키트 is not on it */

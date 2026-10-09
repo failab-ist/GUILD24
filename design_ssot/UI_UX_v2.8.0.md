@@ -886,7 +886,7 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 - the dip (40 ms down, 150 ms back, inside the card) is the only companion motion — no ring, flash, shake or particle; ink,
   tilt and tape stay as end-state tone and never change the label size
 - 생환 (`rescued` / `avoidedDeath`): first a faint print of the turned-away Outcome in its own tag (`사망` when `avoidedDeath`,
-  else `중상`), then `생환` overstamps it and the print is gone within 120 ms; the Insurance proof lines (Hero Item, incident)
+  else the event's `from`: `중상` or, for 귀환석, `부상`), then `생환` overstamps it and the print is gone within 120 ms; the Insurance proof lines (Hero Item, incident)
   cut in on that frame as the cause response. 만반의 준비 turning a Death into 부상 / 중상 prints `사망` first the same way and its
   own Outcome overstamps it (cue on the overstamp, no `rescue`); 강골 and 구급키트 only lower an injury and never reverse
 - one after-motion: with a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no reversal it settles once (160 ms) and

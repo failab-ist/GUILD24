@@ -154,6 +154,15 @@ test('the sampled matrix actually covers every supported outcome and causal vari
   assert.ok(seen[k]>0,'sampled the '+k+' variant at least once');
 });
 
+/* NIGHT_CLOSING §INSURANCE CAUSALITY (User 2026-10-09): the NIGHT first print is the Outcome the Insurance actually turned
+   away, so the 귀환석 event names it - a 부상 turned into 퇴각 must not print 중상 */
+test('a 귀환석 rescue names the Outcome it turned away, and only a turned-away Death sets avoidedDeath',()=>{
+ const esc=all.map(({r})=>[r,(r.events||[]).find(e=>e.id==='escape')]).filter(([,e])=>e);
+ assert.ok(esc.length>0,'the sweep reaches a 귀환석 rescue');
+ for(const [r,e] of esc){assert.ok(['사망','중상','부상'].includes(e.from),'names what it turned away: '+e.from);
+  assert.equal(r.outcome,'퇴각');assert.equal(r.avoidedDeath,e.from==='사망');}
+});
+
 /* ITEM v2.9.10 (User 2026-09-28): 세계수 생환부적 turns a remaining 사망 or 중상 into 퇴각; a 부상 stays 부상.
    The sweep's World Tree Bags therefore never end heavy, and each conversion names what it stopped. */
 test('ITEM-Q13: a World Tree Bag never ends in 사망 or 중상, and names what it turned into 퇴각',()=>{
