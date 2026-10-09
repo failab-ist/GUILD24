@@ -343,3 +343,13 @@ test('LOYALTY 2026-09-23: 50% +4, visit without purchase 0, survival +1',()=>{
 });
 
 console.log(count+' trait groups passed');
+
+test('대식가 밤 문구: 음식의 능력치가 실제로 오를 때만 뜬다',()=>{
+ const g=fresh('eater');
+ const d=g.makeDungeon('spider',1);
+ const base=id=>({...g.run.npcs[0],traits:['eater'],pack:[id],injury:0,fatigue:0});
+ const note=Dungeon.prepare(base('rice'),d).events.find(e=>e.id==='eater-food');
+ assert.ok(note&&/30%/.test(note.text)&&!/고유/.test(note.text),'능력치가 있는 음식: '+(note&&note.text));
+ assert.equal(Dungeon.prepare(base('candy'),d).events.some(e=>e.id==='eater-food'),false,'능력치가 없는 음식(집중 사탕)에는 뜨지 않는다');
+ assert.ok(Dungeon.prepare(base('candy'),d).why.some(w=>w==='대식가: 음식의 피로 회복 -1'),'피로 회복 -1은 한 줄로 따로 적는다');
+});
