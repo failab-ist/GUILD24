@@ -140,12 +140,9 @@ test('DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST: how many, never which',()=>{
    h.run.day=day;h.morning();
    /* EVENT 52 게이트 임시 폐쇄 (v2.9.11) closes one of the forecast Gates that morning, and its reveal says so */
    const base=h.run.dungeons.filter(d=>!d.temporary).length+(h.run.event?.effects.closeGate?1:0);
-   /* NPC_TRAIT §DESTINATION: a Gate no visitor can reach is dropped, so an Event that thins the queue (원정 징발령, -1 visitor)
-      can leave fewer base Gates than the forecast count - never more, and never fewer than the visitors who came */
-   const thinned=base===h.run.queue.length&&f.counts.some(c=>c.count>base);
-   assert.ok(f.counts.some(c=>c.count===base)||thinned,
+   assert.ok(f.counts.some(c=>c.count===base),
     'D'+day+' generated '+base+' base Gates, which the forecast allowed');
-   if(f.fixed!==null&&!thinned)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');
+   if(f.fixed!==null)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');
   }
  }
  // the D19~24 draw lands near its 70%

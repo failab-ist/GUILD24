@@ -162,15 +162,16 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.healVisitors||fx.injuredBudget)return ready.some(n=>n.injury===1);
   if(fx.regularVisit)return ready.some(n=>n.introduced&&G.Adventurer.isTrustedRegular(n));
   if(fx.summons)return ready.length>=2;
+  /* User 2026-10-09: an Event that sets every Gate to tier I (게이트 안정화 작업) waits for the first Day a tier II Gate can open */
+  if(fx.tierOne)return s.day>=G.Dungeon.FIRST_TIER2_DAY;
   if(fx.closeGate)return s.dungeons.filter(d=>!d.temporary).length>=2;
   if(fx.shelfCut)return s.inventory.some(x=>x.expires!==null&&['food','drink'].includes(D.itemBy[x.item].category));
   return true;}
  /* EVENT §EVENT TIMING / FREQUENCY · §DEEP EXPEDITION DAY EXCLUSION: DAY 1~29 except the Store Support windows and this
-    Run's 심층원정 Days; no Event before the first Day a tier II Gate can open (User 2026-10-09; 소문 수집 게시판 keeps its every-morning
-    promise); the account's first Run keeps DAY 1 quiet so 본사 1+1 행사 (DAY 2) stays its first Event - unless 소문
+    Run's 심층원정 Days; the account's first Run keeps DAY 1 quiet so 본사 1+1 행사 (DAY 2) stays its first Event - unless 소문
     수집 게시판 asks for an Event every morning (its card promises one). rollEvent
     draws before it asks this, so a suppressed Day costs the run stream no draw. */
- eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&(day>=G.Dungeon.FIRST_TIER2_DAY||this.has('rumorBoard'))&&!this.deepDay(day)&&!(this.run.firstRun&&day===1&&!this.has('rumorBoard'));}
+ eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day)&&!(this.run.firstRun&&day===1&&!this.has('rumorBoard'));}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
     Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),
