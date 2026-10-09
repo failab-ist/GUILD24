@@ -732,6 +732,7 @@ function render(){
  if(phase!=='final')finalOrdered=null;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
  if(phase==='morning'&&arrived)dayFlip(s.day);
+ if(phase==='morning'&&changed)Preload.faces([...s.npcs.filter(n=>n.introduced),...s.npcs.filter(n=>!n.introduced)].map(n=>Scene.npcArt(n)).filter(Boolean));
  if(phase==='end'&&arrived)endReveal();
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
