@@ -592,7 +592,16 @@ only.
 
 ### QUEUE
 
-No future-customer Job/Level/Destination/need hints; the queue count suffices.
+No future-customer Job/Level/Destination/need hints; the queue count suffices. The one approved on-demand aggregate exception is owned by §SALE — QUEUE GATE COUNT REFERENCE.
+
+### SALE — QUEUE GATE COUNT REFERENCE (User approved 2026-10-09)
+
+- Anchor: the **existing SALE bottom-Dock `손님` queue/progress surface**, on desktop and mobile. The phone still shows its current `손님` + pips treatment; `{n}/{N}` stays a screen-reader label as before. No visible numeral, `ⓘ`, arrow, underline, separate button or permanent explanation is added. No larger Dock, no reserved height, no shift of `손님 보내기` / `영업 종료`.
+- Desktop: hover over the existing queue area opens an anchored lightweight popover; focus can open it for keyboard access. Phone: tapping **the same visible queue area** opens/toggles it, without adding a visual cue. Use the existing shared popover treatment (§SHARED ANCHORED POPOVER); outside tap / Escape closes it. Opening this information never activates the adjacent phase action.
+- Content: the **Day's planned total expected visitors by open Gate**, exactly the aggregate forecast already disclosed on ORDER (`오늘` Gate counts, using the same claimed/expected Gate data and Day queue). Show each Gate once with its count. This is **not** a countdown of visitors still waiting at each Gate, and never reveals the next customer's identity, individually assigned/actual destination, Job, traits or needs. The count does not change merely because SALE progressed; any uncertainty of expected vs actual destination remains.
+- Purpose: allow recalling already-known Order-stage demand while assigning today's stock; no recommended Item, correct SKU, best price, outcome prediction or strategic prompt.
+- First-use education: one account-scoped contextual **coach spotlight on the existing `손님` queue surface**, using COPY_AUDIT §3-16. The permanent UI has no `tap for details` text. Preserve existing SALE first-day coach priorities; do not introduce an extra compulsory DAY 1 mark or decide a new DAY gate without the User's approval. Once completed/dismissed, persist with ordinary tutorial marks; Full Data Reset clears it.
+- Acceptance -> UI_UX §QA UI-Q-SALE-QUEUE-GATE-COUNT. No extra gameplay RNG, Save outcome or new Gate inference.
 
 ### DEEP SALE UI
 
@@ -2171,6 +2180,12 @@ PASS:
 - on a two-Hazard Gate (T2 on) `환경 대응` names each Hazard with its own frozen state, in the readout and in the forecast pin; a
   one-Hazard Gate reads one label; the readout `.top` and the pin stay two lines tall with the label on one line, and no row
   overflows or collides at 360 / 390 / 412 / 1024 / 1280
+
+#### UI-Q-SALE-QUEUE-GATE-COUNT — ON-DEMAND ORDER GATE COUNTS (User approved 2026-10-09)
+
+- In SALE on desktop, hover/focus the existing bottom `손님` queue area: a floating popover shows exactly the ORDER `오늘` count for each open Gate of the current Day (unchanged across customer sales). Mobile: tapping the same existing queue/pips area opens/closes it; outside tap / Escape dismisses; no new UI cue, height, permanent text, scroll jump or dock/button overlap at 360/390/430 or short-phone widths.
+- Changing current customer / consumed stock does not turn the original Day totals into 'remaining visitors by Gate'. No new individual future-NPC Gate, Job, wallet, needs, order or exact actual reroute information is disclosed. Popover and coach never make a recommendation.
+- Account first-use coach spotlights the actual queue target, can be completed/skipped, stays complete across new Runs, and returns after Full Data Reset; existing first-day SALE mandatory coach sequence is not silently extended. No changes to next-customer progression, purchase, balance, Save/RNG or keyboard navigation.
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
 At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress: the label `손님` beside the pips, the count `{n} / {N}` as the pips' screen-reader label only (User 2026-10-03); no
