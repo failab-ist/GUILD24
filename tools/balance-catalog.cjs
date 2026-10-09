@@ -26,7 +26,7 @@ function render(){
   ['위험 대응',Object.keys(D.hazards).map(h=>{const r=G.Dungeon.hazardRule(h);return D.hazards[h]+' = '+G.Presentation.labels[r.stat]+(Number.isInteger(1/r.coef)?' '+number(1/r.coef)+'당 대응 1':' × '+number(r.coef));}).join(' · ')],
   ['마왕성 위험 요구 대응',number(G.Dungeon.hazardState('cold',{survival:0},{day:30,tier:2,family:'final'}).threat)+' · DAY30 / T2'],
   ['마왕전 환경 전력 차감','개인별 평균 위험 부족분 × '+penalty],['마왕전 전력 흔들림',pct(D.balance.finalRoll.lo)+'~'+pct(D.balance.finalRoll.hi)],
-  ['래스 유효 요구 전력',D.balance.bossPower*D.bossTuning.finalPowerFactor],['화염 계열 추가 요구 전력',D.bossTuning.firePairPower+' (마왕 계수 '+D.bossTuning.finalPowerFactor+' 적용 전)'],['마왕 공통 요구 전력 계수',D.bossTuning.finalPowerFactor],['처진 인원 경험치', '×'+G.Adventurer.CATCHUP_MULT+' · 당일 기본 신규 최저 레벨 미만 생환자, 추가분만 최저 레벨까지 제한'],
+  ['래스 유효 요구 전력',D.balance.bossPower*D.bossTuning.finalPowerFactor],['화염 계열 추가 요구 전력',D.bossTuning.firePairPower+' (마왕 계수 '+D.bossTuning.finalPowerFactor+' 적용 전)'],['마왕 공통 요구 전력 계수',D.bossTuning.finalPowerFactor],['처진 인원 경험치', '×'+G.Adventurer.CATCHUP_MULT+' · 퇴각·부상·중상 생환은 최저 레벨까지 모자란 경험치의 '+Math.round(G.Adventurer.CATCHUP_GAP_SHARE*100)+'%와 비교해 큰 쪽 · 당일 기본 신규 최저 레벨 미만 생환자, 추가분만 최저 레벨까지 제한'],
   ['일반 원정 전투 흔들림','±'+pct(D.balance.combatNoise)],['후반 원정 전투 일일 상승',G.Dungeon.GATE.late],
   ['점포지원 후보 등급',`일반 ${pct(D.relicRarityChance[0])} / 희귀 ${pct(D.relicRarityChance[2])} / 영웅 ${pct(D.relicRarityChance[3])}`],
   ['최대 피로',G.Dungeon.FATIGUE_MAX],['단골 기준','단골도 '+G.Adventurer.TRUSTED_REGULAR+' 이상']

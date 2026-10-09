@@ -34,6 +34,11 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Lagging adventurer EXP on a failed return (User 2026-10-09)
+
+- A lagging alive adventurer (below the Day's ordinary new-arrival minimum) returning 퇴각 / 부상 / 중상 takes the larger of the ×1.5 bonus and 25% of the EXP still needed to reach that minimum; still capped at the minimum. 성공 / 대성공, Death, Injury penalties, Insurance and the Death limit are unchanged. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
+- Not measured yet; the standard measurement runs only after User approval (AGENTS §9-A).
+
 ## After v2.11.1 — 소스와 사용자 노출 텍스트 일치 점검 (User 2026-10-09~10)
 
 | 배치 | 핵심 변경 |
