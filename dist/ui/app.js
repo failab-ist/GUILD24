@@ -2283,7 +2283,7 @@ function finalThreat(d){
  +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+finalTrait()+'</section>';
 }
 function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
- return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
+ return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small><small class="who-traits">'+E(Presentation.traits(n).map(t=>D.traitBy[t].name).join(' · '))+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
  +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
  +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
  +'<span class="final-environments"><span class="env-caption">환경 대응 (권능 적용 전)</span>'+finalEnvironment(p,d)+'</span></div>';
