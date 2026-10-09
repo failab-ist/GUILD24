@@ -527,7 +527,7 @@ function playRun(g,out,ctx){
       how a player chooses - Stage 9 reports offers and takes separately so both are visible. */
    if(s.deep?.today&&!s.deep.today.nomineeId)out.deepOffered+=Number(!!g.canNominateDeep(n));
    if(s.deep?.today&&!s.deep.today.nomineeId&&!g.canNominateDeep(n)&&s.money<g.deepCost(n))out.deepSkipped++;
-   if(engagement.order&&g.canNominateDeep(n)&&(investor?tierOf(n)==='core'&&s.money-g.deepCost(n)>=3*g.expectedOperatingCost():policy!=='balanced'||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&topRoster(n)))){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
+   if(engagement.order&&g.canNominateDeep(n)&&(investor?tierOf(n)!=='rest':policy!=='balanced'||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&topRoster(n)))){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
     out.deepSponsor+=cost;out.deepCosts.push(cost);
     const byR=out.deepByRarity[n.rarity]??={takes:0,gold:0,level:0};byR.takes++;byR.gold+=cost;byR.level+=n.level;
     const band=n.level<5?'1-4':n.level<10?'5-9':n.level<15?'10-14':'15+';
