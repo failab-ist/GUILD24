@@ -1,0 +1,5699 @@
+{
+  "status": "BALANCE FINDING",
+  "validation": "PASS",
+  "sourceHead": "92de7369dd46ba40cad9d9b6e75973f5d93c71c5",
+  "seconds": 665.844,
+  "raw": {
+    "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\job-balance-full-500.json",
+    "bytes": 118622893,
+    "sha256": "16c57332165d2c4188042bcdd9689a108dec41556456a28b6e03c5a8b48ff6cf"
+  },
+  "counts": {
+    "independent": 720000,
+    "growth": 18000,
+    "runs": 14000
+  },
+  "inputs": {
+    "mode": "all",
+    "root": "C:\\Users\\necro\\.codex\\worktrees\\job-balance-tool\\GUILD24",
+    "profile": "C:\\Users\\necro\\.codex\\worktrees\\job-balance-tool\\GUILD24\\tools\\job-balance-candidate.json",
+    "samples": 500,
+    "runs": 500,
+    "budget": 200,
+    "potential": 1,
+    "rarity": 0,
+    "traits": [],
+    "policies": [
+      "reader",
+      "expert"
+    ],
+    "seed": "job-balance",
+    "firstRun": false,
+    "execute": true,
+    "out": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\job-balance-full-500.json"
+  },
+  "profiles": [
+    {
+      "name": "source",
+      "jobs": {
+        "warrior": {
+          "stats": [
+            17,
+            18,
+            9,
+            10
+          ],
+          "growth": [
+            2.8,
+            2.6,
+            1.5,
+            1.6
+          ]
+        },
+        "archer": {
+          "stats": [
+            14,
+            11,
+            19,
+            10
+          ],
+          "growth": [
+            2.6,
+            2,
+            3,
+            1.6
+          ]
+        },
+        "mage": {
+          "stats": [
+            18,
+            9,
+            10,
+            17
+          ],
+          "growth": [
+            3.1,
+            1.6,
+            1.8,
+            2.7
+          ]
+        },
+        "priest": {
+          "stats": [
+            10,
+            16,
+            9,
+            20
+          ],
+          "growth": [
+            2.2,
+            2.7,
+            1.6,
+            3
+          ]
+        },
+        "rogue": {
+          "stats": [
+            15,
+            11,
+            21,
+            9
+          ],
+          "growth": [
+            2.8,
+            2,
+            3.4,
+            1.5
+          ]
+        },
+        "berserker": {
+          "stats": [
+            21,
+            14,
+            12,
+            7
+          ],
+          "growth": [
+            3.6,
+            2.4,
+            1.9,
+            1.3
+          ]
+        }
+      }
+    },
+    {
+      "name": "approved-20261009",
+      "jobs": {
+        "warrior": {
+          "stats": [
+            17,
+            18,
+            9,
+            10
+          ],
+          "growth": [
+            2.8,
+            3,
+            1.5,
+            1.6
+          ]
+        },
+        "archer": {
+          "stats": [
+            12,
+            11,
+            21,
+            10
+          ],
+          "growth": [
+            2.2,
+            2,
+            3.4,
+            1.6
+          ]
+        },
+        "mage": {
+          "stats": [
+            18,
+            9,
+            10,
+            17
+          ],
+          "growth": [
+            3.1,
+            1.6,
+            1.8,
+            2.7
+          ]
+        },
+        "priest": {
+          "stats": [
+            10,
+            16,
+            9,
+            20
+          ],
+          "growth": [
+            2.2,
+            2.7,
+            1.6,
+            3
+          ]
+        },
+        "rogue": {
+          "stats": [
+            17,
+            11,
+            19,
+            9
+          ],
+          "growth": [
+            3,
+            2,
+            3,
+            1.5
+          ]
+        },
+        "berserker": {
+          "stats": [
+            21,
+            14,
+            12,
+            7
+          ],
+          "growth": [
+            3.6,
+            2.4,
+            1.9,
+            1.3
+          ]
+        }
+      }
+    }
+  ],
+  "runSummary": [
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "mixed",
+      "n": 500,
+      "reach": 0.076,
+      "clear": 0.008,
+      "givenReach": 0.10526315789473684,
+      "reachN": 38,
+      "clearN": 4,
+      "day": 15.388,
+      "deaths": 7.416,
+      "ends": {
+        "사망 한도": 457,
+        "마왕 실패": 34,
+        "파산": 5,
+        "클리어": 4
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 1134,
+          "exp": 6117,
+          "wins": 2698,
+          "combatLoss": 2690,
+          "env": 1487,
+          "levelGain": 4396
+        },
+        "archer": {
+          "npcs": 1175,
+          "exp": 5297,
+          "wins": 1830,
+          "combatLoss": 2983,
+          "env": 1251,
+          "levelGain": 3388
+        },
+        "rogue": {
+          "npcs": 1135,
+          "exp": 5922,
+          "wins": 2607,
+          "combatLoss": 2581,
+          "env": 1394,
+          "levelGain": 4213
+        },
+        "berserker": {
+          "npcs": 1185,
+          "exp": 6473,
+          "wins": 3230,
+          "combatLoss": 2370,
+          "env": 1533,
+          "levelGain": 4767
+        },
+        "warrior": {
+          "npcs": 1086,
+          "exp": 5344,
+          "wins": 2140,
+          "combatLoss": 2735,
+          "env": 1130,
+          "levelGain": 3530
+        },
+        "priest": {
+          "npcs": 1200,
+          "exp": 5963,
+          "wins": 2062,
+          "combatLoss": 3514,
+          "env": 1153,
+          "levelGain": 3906
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "warrior",
+      "n": 500,
+      "reach": 0.026,
+      "clear": 0,
+      "givenReach": 0,
+      "reachN": 13,
+      "clearN": 0,
+      "day": 14.702,
+      "deaths": 7.46,
+      "ends": {
+        "사망 한도": 480,
+        "파산": 7,
+        "마왕 실패": 13
+      },
+      "jobs": {
+        "warrior": {
+          "npcs": 6802,
+          "exp": 33487,
+          "wins": 13477,
+          "combatLoss": 17206,
+          "env": 7063,
+          "levelGain": 22303
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "archer",
+      "n": 500,
+      "reach": 0.024,
+      "clear": 0,
+      "givenReach": 0,
+      "reachN": 12,
+      "clearN": 0,
+      "day": 12.626,
+      "deaths": 6.83,
+      "ends": {
+        "사망 한도": 481,
+        "마왕 실패": 12,
+        "파산": 7
+      },
+      "jobs": {
+        "archer": {
+          "npcs": 6450,
+          "exp": 28729,
+          "wins": 10767,
+          "combatLoss": 15331,
+          "env": 6357,
+          "levelGain": 18306
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "mage",
+      "n": 500,
+      "reach": 0.09,
+      "clear": 0.012,
+      "givenReach": 0.13333333333333333,
+      "reachN": 45,
+      "clearN": 6,
+      "day": 16.354,
+      "deaths": 7.58,
+      "ends": {
+        "사망 한도": 448,
+        "마왕 실패": 39,
+        "클리어": 6,
+        "파산": 7
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 7045,
+          "exp": 37308,
+          "wins": 15764,
+          "combatLoss": 16955,
+          "env": 9040,
+          "levelGain": 26498
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "priest",
+      "n": 500,
+      "reach": 0.038,
+      "clear": 0.004,
+      "givenReach": 0.10526315789473684,
+      "reachN": 19,
+      "clearN": 2,
+      "day": 14.098,
+      "deaths": 7.13,
+      "ends": {
+        "사망 한도": 472,
+        "마왕 실패": 17,
+        "파산": 9,
+        "클리어": 2
+      },
+      "jobs": {
+        "priest": {
+          "npcs": 6694,
+          "exp": 32366,
+          "wins": 11083,
+          "combatLoss": 19239,
+          "env": 6109,
+          "levelGain": 20640
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "rogue",
+      "n": 500,
+      "reach": 0.098,
+      "clear": 0.016,
+      "givenReach": 0.16326530612244897,
+      "reachN": 49,
+      "clearN": 8,
+      "day": 15.528,
+      "deaths": 7.384,
+      "ends": {
+        "사망 한도": 440,
+        "마왕 실패": 41,
+        "파산": 11,
+        "클리어": 8
+      },
+      "jobs": {
+        "rogue": {
+          "npcs": 6907,
+          "exp": 35435,
+          "wins": 15231,
+          "combatLoss": 15950,
+          "env": 8572,
+          "levelGain": 24866
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "reader",
+      "pool": "berserker",
+      "n": 500,
+      "reach": 0.114,
+      "clear": 0.012,
+      "givenReach": 0.10526315789473684,
+      "reachN": 57,
+      "clearN": 6,
+      "day": 17.322,
+      "deaths": 7.824,
+      "ends": {
+        "마왕 실패": 51,
+        "사망 한도": 433,
+        "파산": 10,
+        "클리어": 6
+      },
+      "jobs": {
+        "berserker": {
+          "npcs": 7190,
+          "exp": 39569,
+          "wins": 18412,
+          "combatLoss": 15766,
+          "env": 9945,
+          "levelGain": 29340
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "mixed",
+      "n": 500,
+      "reach": 0.05,
+      "clear": 0.006,
+      "givenReach": 0.12,
+      "reachN": 25,
+      "clearN": 3,
+      "day": 14.938,
+      "deaths": 7.328,
+      "ends": {
+        "사망 한도": 467,
+        "마왕 실패": 22,
+        "클리어": 3,
+        "파산": 8
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 1139,
+          "exp": 6020,
+          "wins": 2591,
+          "combatLoss": 2703,
+          "env": 1426,
+          "levelGain": 4237
+        },
+        "archer": {
+          "npcs": 1152,
+          "exp": 5194,
+          "wins": 1865,
+          "combatLoss": 2885,
+          "env": 1217,
+          "levelGain": 3317
+        },
+        "rogue": {
+          "npcs": 1142,
+          "exp": 5798,
+          "wins": 2469,
+          "combatLoss": 2638,
+          "env": 1374,
+          "levelGain": 4066
+        },
+        "berserker": {
+          "npcs": 1184,
+          "exp": 6396,
+          "wins": 3112,
+          "combatLoss": 2463,
+          "env": 1485,
+          "levelGain": 4675
+        },
+        "warrior": {
+          "npcs": 1052,
+          "exp": 5088,
+          "wins": 1996,
+          "combatLoss": 2669,
+          "env": 1118,
+          "levelGain": 3408
+        },
+        "priest": {
+          "npcs": 1170,
+          "exp": 5614,
+          "wins": 1901,
+          "combatLoss": 3371,
+          "env": 1078,
+          "levelGain": 3591
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "warrior",
+      "n": 500,
+      "reach": 0.024,
+      "clear": 0,
+      "givenReach": 0,
+      "reachN": 12,
+      "clearN": 0,
+      "day": 14.546,
+      "deaths": 7.388,
+      "ends": {
+        "사망 한도": 486,
+        "마왕 실패": 12,
+        "파산": 2
+      },
+      "jobs": {
+        "warrior": {
+          "npcs": 6780,
+          "exp": 33200,
+          "wins": 13359,
+          "combatLoss": 17098,
+          "env": 6988,
+          "levelGain": 22152
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "archer",
+      "n": 500,
+      "reach": 0.024,
+      "clear": 0,
+      "givenReach": 0,
+      "reachN": 12,
+      "clearN": 0,
+      "day": 12.76,
+      "deaths": 6.922,
+      "ends": {
+        "사망 한도": 484,
+        "마왕 실패": 12,
+        "파산": 4
+      },
+      "jobs": {
+        "archer": {
+          "npcs": 6478,
+          "exp": 28984,
+          "wins": 10976,
+          "combatLoss": 15395,
+          "env": 6406,
+          "levelGain": 18450
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "mage",
+      "n": 500,
+      "reach": 0.088,
+      "clear": 0.006,
+      "givenReach": 0.06818181818181818,
+      "reachN": 44,
+      "clearN": 3,
+      "day": 16.616,
+      "deaths": 7.728,
+      "ends": {
+        "사망 한도": 448,
+        "마왕 실패": 41,
+        "파산": 8,
+        "클리어": 3
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 7112,
+          "exp": 38140,
+          "wins": 15978,
+          "combatLoss": 17527,
+          "env": 9495,
+          "levelGain": 27064
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "priest",
+      "n": 500,
+      "reach": 0.054,
+      "clear": 0.012,
+      "givenReach": 0.2222222222222222,
+      "reachN": 27,
+      "clearN": 6,
+      "day": 14.61,
+      "deaths": 7.208,
+      "ends": {
+        "사망 한도": 459,
+        "마왕 실패": 21,
+        "파산": 14,
+        "클리어": 6
+      },
+      "jobs": {
+        "priest": {
+          "npcs": 6778,
+          "exp": 33349,
+          "wins": 11534,
+          "combatLoss": 19700,
+          "env": 6312,
+          "levelGain": 21510
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "rogue",
+      "n": 500,
+      "reach": 0.096,
+      "clear": 0.026,
+      "givenReach": 0.2708333333333333,
+      "reachN": 48,
+      "clearN": 13,
+      "day": 15.504,
+      "deaths": 7.374,
+      "ends": {
+        "사망 한도": 444,
+        "마왕 실패": 35,
+        "클리어": 13,
+        "파산": 8
+      },
+      "jobs": {
+        "rogue": {
+          "npcs": 6892,
+          "exp": 35439,
+          "wins": 15362,
+          "combatLoss": 15914,
+          "env": 8407,
+          "levelGain": 24913
+        }
+      }
+    },
+    {
+      "profile": "source",
+      "policy": "expert",
+      "pool": "berserker",
+      "n": 500,
+      "reach": 0.112,
+      "clear": 0.012,
+      "givenReach": 0.10714285714285714,
+      "reachN": 56,
+      "clearN": 6,
+      "day": 17.31,
+      "deaths": 7.852,
+      "ends": {
+        "사망 한도": 439,
+        "마왕 실패": 50,
+        "파산": 5,
+        "클리어": 6
+      },
+      "jobs": {
+        "berserker": {
+          "npcs": 7197,
+          "exp": 39360,
+          "wins": 18206,
+          "combatLoss": 15834,
+          "env": 9928,
+          "levelGain": 29152
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "mixed",
+      "n": 500,
+      "reach": 0.082,
+      "clear": 0.01,
+      "givenReach": 0.12195121951219512,
+      "reachN": 41,
+      "clearN": 5,
+      "day": 15.116,
+      "deaths": 7.292,
+      "ends": {
+        "사망 한도": 453,
+        "클리어": 5,
+        "마왕 실패": 36,
+        "파산": 6
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 1118,
+          "exp": 5875,
+          "wins": 2560,
+          "combatLoss": 2608,
+          "env": 1424,
+          "levelGain": 4172
+        },
+        "archer": {
+          "npcs": 1185,
+          "exp": 5195,
+          "wins": 1624,
+          "combatLoss": 3212,
+          "env": 1169,
+          "levelGain": 3196
+        },
+        "rogue": {
+          "npcs": 1127,
+          "exp": 5981,
+          "wins": 2751,
+          "combatLoss": 2446,
+          "env": 1457,
+          "levelGain": 4302
+        },
+        "berserker": {
+          "npcs": 1167,
+          "exp": 6269,
+          "wins": 3070,
+          "combatLoss": 2381,
+          "env": 1469,
+          "levelGain": 4589
+        },
+        "warrior": {
+          "npcs": 1091,
+          "exp": 5392,
+          "wins": 2257,
+          "combatLoss": 2632,
+          "env": 1148,
+          "levelGain": 3656
+        },
+        "priest": {
+          "npcs": 1169,
+          "exp": 5792,
+          "wins": 2022,
+          "combatLoss": 3405,
+          "env": 1110,
+          "levelGain": 3766
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "warrior",
+      "n": 500,
+      "reach": 0.05,
+      "clear": 0.002,
+      "givenReach": 0.04,
+      "reachN": 25,
+      "clearN": 1,
+      "day": 15.68,
+      "deaths": 7.634,
+      "ends": {
+        "사망 한도": 469,
+        "마왕 실패": 24,
+        "파산": 6,
+        "클리어": 1
+      },
+      "jobs": {
+        "warrior": {
+          "npcs": 6955,
+          "exp": 35846,
+          "wins": 14648,
+          "combatLoss": 18044,
+          "env": 7746,
+          "levelGain": 24481
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "archer",
+      "n": 500,
+      "reach": 0.006,
+      "clear": 0,
+      "givenReach": 0,
+      "reachN": 3,
+      "clearN": 0,
+      "day": 10.87,
+      "deaths": 6.392,
+      "ends": {
+        "사망 한도": 491,
+        "파산": 6,
+        "마왕 실패": 3
+      },
+      "jobs": {
+        "archer": {
+          "npcs": 6156,
+          "exp": 24590,
+          "wins": 8063,
+          "combatLoss": 14710,
+          "env": 5122,
+          "levelGain": 14370
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "mage",
+      "n": 500,
+      "reach": 0.09,
+      "clear": 0.012,
+      "givenReach": 0.13333333333333333,
+      "reachN": 45,
+      "clearN": 6,
+      "day": 16.354,
+      "deaths": 7.58,
+      "ends": {
+        "사망 한도": 448,
+        "마왕 실패": 39,
+        "클리어": 6,
+        "파산": 7
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 7045,
+          "exp": 37308,
+          "wins": 15764,
+          "combatLoss": 16955,
+          "env": 9040,
+          "levelGain": 26498
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "priest",
+      "n": 500,
+      "reach": 0.038,
+      "clear": 0.004,
+      "givenReach": 0.10526315789473684,
+      "reachN": 19,
+      "clearN": 2,
+      "day": 14.098,
+      "deaths": 7.13,
+      "ends": {
+        "사망 한도": 472,
+        "마왕 실패": 17,
+        "파산": 9,
+        "클리어": 2
+      },
+      "jobs": {
+        "priest": {
+          "npcs": 6694,
+          "exp": 32366,
+          "wins": 11083,
+          "combatLoss": 19239,
+          "env": 6109,
+          "levelGain": 20640
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "rogue",
+      "n": 500,
+      "reach": 0.122,
+      "clear": 0.022,
+      "givenReach": 0.18032786885245902,
+      "reachN": 61,
+      "clearN": 11,
+      "day": 17.048,
+      "deaths": 7.722,
+      "ends": {
+        "사망 한도": 427,
+        "마왕 실패": 50,
+        "파산": 12,
+        "클리어": 11
+      },
+      "jobs": {
+        "rogue": {
+          "npcs": 7156,
+          "exp": 38968,
+          "wins": 17645,
+          "combatLoss": 16240,
+          "env": 9662,
+          "levelGain": 28369
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "reader",
+      "pool": "berserker",
+      "n": 500,
+      "reach": 0.114,
+      "clear": 0.012,
+      "givenReach": 0.10526315789473684,
+      "reachN": 57,
+      "clearN": 6,
+      "day": 17.322,
+      "deaths": 7.824,
+      "ends": {
+        "마왕 실패": 51,
+        "사망 한도": 433,
+        "파산": 10,
+        "클리어": 6
+      },
+      "jobs": {
+        "berserker": {
+          "npcs": 7190,
+          "exp": 39569,
+          "wins": 18412,
+          "combatLoss": 15766,
+          "env": 9945,
+          "levelGain": 29340
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "mixed",
+      "n": 500,
+      "reach": 0.048,
+      "clear": 0.004,
+      "givenReach": 0.08333333333333333,
+      "reachN": 24,
+      "clearN": 2,
+      "day": 14.506,
+      "deaths": 7.254,
+      "ends": {
+        "사망 한도": 471,
+        "마왕 실패": 22,
+        "파산": 5,
+        "클리어": 2
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 1153,
+          "exp": 5880,
+          "wins": 2524,
+          "combatLoss": 2652,
+          "env": 1376,
+          "levelGain": 4117
+        },
+        "archer": {
+          "npcs": 1154,
+          "exp": 4938,
+          "wins": 1520,
+          "combatLoss": 3061,
+          "env": 1124,
+          "levelGain": 2978
+        },
+        "rogue": {
+          "npcs": 1100,
+          "exp": 5621,
+          "wins": 2558,
+          "combatLoss": 2373,
+          "env": 1277,
+          "levelGain": 3965
+        },
+        "berserker": {
+          "npcs": 1151,
+          "exp": 6163,
+          "wins": 2986,
+          "combatLoss": 2388,
+          "env": 1411,
+          "levelGain": 4480
+        },
+        "warrior": {
+          "npcs": 1049,
+          "exp": 5137,
+          "wins": 2138,
+          "combatLoss": 2536,
+          "env": 1072,
+          "levelGain": 3493
+        },
+        "priest": {
+          "npcs": 1172,
+          "exp": 5471,
+          "wins": 1868,
+          "combatLoss": 3282,
+          "env": 1064,
+          "levelGain": 3476
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "warrior",
+      "n": 500,
+      "reach": 0.062,
+      "clear": 0.002,
+      "givenReach": 0.03225806451612903,
+      "reachN": 31,
+      "clearN": 1,
+      "day": 15.422,
+      "deaths": 7.562,
+      "ends": {
+        "사망 한도": 468,
+        "마왕 실패": 30,
+        "클리어": 1,
+        "파산": 1
+      },
+      "jobs": {
+        "warrior": {
+          "npcs": 6910,
+          "exp": 35227,
+          "wins": 14528,
+          "combatLoss": 17633,
+          "env": 7517,
+          "levelGain": 24081
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "archer",
+      "n": 500,
+      "reach": 0.004,
+      "clear": 0,
+      "givenReach": 0,
+      "reachN": 2,
+      "clearN": 0,
+      "day": 10.576,
+      "deaths": 6.268,
+      "ends": {
+        "사망 한도": 491,
+        "파산": 7,
+        "마왕 실패": 2
+      },
+      "jobs": {
+        "archer": {
+          "npcs": 6099,
+          "exp": 23905,
+          "wins": 7890,
+          "combatLoss": 14263,
+          "env": 4989,
+          "levelGain": 13854
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "mage",
+      "n": 500,
+      "reach": 0.088,
+      "clear": 0.006,
+      "givenReach": 0.06818181818181818,
+      "reachN": 44,
+      "clearN": 3,
+      "day": 16.616,
+      "deaths": 7.728,
+      "ends": {
+        "사망 한도": 448,
+        "마왕 실패": 41,
+        "파산": 8,
+        "클리어": 3
+      },
+      "jobs": {
+        "mage": {
+          "npcs": 7112,
+          "exp": 38140,
+          "wins": 15978,
+          "combatLoss": 17527,
+          "env": 9495,
+          "levelGain": 27064
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "priest",
+      "n": 500,
+      "reach": 0.054,
+      "clear": 0.012,
+      "givenReach": 0.2222222222222222,
+      "reachN": 27,
+      "clearN": 6,
+      "day": 14.61,
+      "deaths": 7.208,
+      "ends": {
+        "사망 한도": 459,
+        "마왕 실패": 21,
+        "파산": 14,
+        "클리어": 6
+      },
+      "jobs": {
+        "priest": {
+          "npcs": 6778,
+          "exp": 33349,
+          "wins": 11534,
+          "combatLoss": 19700,
+          "env": 6312,
+          "levelGain": 21510
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "rogue",
+      "n": 500,
+      "reach": 0.144,
+      "clear": 0.02,
+      "givenReach": 0.1388888888888889,
+      "reachN": 72,
+      "clearN": 10,
+      "day": 16.776,
+      "deaths": 7.622,
+      "ends": {
+        "마왕 실패": 62,
+        "사망 한도": 420,
+        "파산": 8,
+        "클리어": 10
+      },
+      "jobs": {
+        "rogue": {
+          "npcs": 7108,
+          "exp": 38284,
+          "wins": 17140,
+          "combatLoss": 16276,
+          "env": 9473,
+          "levelGain": 27807
+        }
+      }
+    },
+    {
+      "profile": "approved-20261009",
+      "policy": "expert",
+      "pool": "berserker",
+      "n": 500,
+      "reach": 0.112,
+      "clear": 0.012,
+      "givenReach": 0.10714285714285714,
+      "reachN": 56,
+      "clearN": 6,
+      "day": 17.31,
+      "deaths": 7.852,
+      "ends": {
+        "사망 한도": 439,
+        "마왕 실패": 50,
+        "파산": 5,
+        "클리어": 6
+      },
+      "jobs": {
+        "berserker": {
+          "npcs": 7197,
+          "exp": 39360,
+          "wins": 18206,
+          "combatLoss": 15834,
+          "env": 9928,
+          "levelGain": 29152
+        }
+      }
+    }
+  ],
+  "runPairs": [
+    {
+      "policy": "reader",
+      "pool": "mixed",
+      "reach": {
+        "n": 500,
+        "delta": 0.006,
+        "lo": -0.020317230059335632,
+        "hi": 0.032317230059335636
+      },
+      "endDay": {
+        "n": 500,
+        "delta": -0.272,
+        "lo": -0.9019460406729435,
+        "hi": 0.35794604067294344
+      }
+    },
+    {
+      "policy": "reader",
+      "pool": "warrior",
+      "reach": {
+        "n": 500,
+        "delta": 0.024,
+        "lo": 0.003343595402350373,
+        "hi": 0.04465640459764963
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0.978,
+        "lo": 0.49526527890247335,
+        "hi": 1.4607347210975266
+      }
+    },
+    {
+      "policy": "reader",
+      "pool": "archer",
+      "reach": {
+        "n": 500,
+        "delta": -0.018,
+        "lo": -0.033115011423769554,
+        "hi": -0.0028849885762304434
+      },
+      "endDay": {
+        "n": 500,
+        "delta": -1.756,
+        "lo": -2.385618725009481,
+        "hi": -1.126381274990519
+      }
+    },
+    {
+      "policy": "reader",
+      "pool": "mage",
+      "reach": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "policy": "reader",
+      "pool": "priest",
+      "reach": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "policy": "reader",
+      "pool": "rogue",
+      "reach": {
+        "n": 500,
+        "delta": 0.024,
+        "lo": -0.012749404270388544,
+        "hi": 0.060749404270388545
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 1.52,
+        "lo": 0.7301418861592928,
+        "hi": 2.3098581138407073
+      }
+    },
+    {
+      "policy": "reader",
+      "pool": "berserker",
+      "reach": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "mixed",
+      "reach": {
+        "n": 500,
+        "delta": -0.002,
+        "lo": -0.023130258940338932,
+        "hi": 0.019130258940338936
+      },
+      "endDay": {
+        "n": 500,
+        "delta": -0.432,
+        "lo": -1.0225304833679425,
+        "hi": 0.15853048336794257
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "warrior",
+      "reach": {
+        "n": 500,
+        "delta": 0.038,
+        "lo": 0.015706713107283665,
+        "hi": 0.06029328689271633
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0.876,
+        "lo": 0.39031510013104087,
+        "hi": 1.3616848998689592
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "archer",
+      "reach": {
+        "n": 500,
+        "delta": -0.02,
+        "lo": -0.034576737720255976,
+        "hi": -0.005423262279744028
+      },
+      "endDay": {
+        "n": 500,
+        "delta": -2.184,
+        "lo": -2.8312821371790062,
+        "hi": -1.536717862820994
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "mage",
+      "reach": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "priest",
+      "reach": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "rogue",
+      "reach": {
+        "n": 500,
+        "delta": 0.048,
+        "lo": 0.01059940754705005,
+        "hi": 0.08540059245294995
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 1.272,
+        "lo": 0.47441915184108174,
+        "hi": 2.0695808481589184
+      }
+    },
+    {
+      "policy": "expert",
+      "pool": "berserker",
+      "reach": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      },
+      "endDay": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    }
+  ],
+  "growthSummary": [
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.174,
+      "equipment": 0.068,
+      "expeditions": 3.496
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.186,
+      "equipment": 0.068,
+      "expeditions": 3.514
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.26,
+      "level": 14.288,
+      "equipment": 10.706,
+      "expeditions": 17.394
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.294,
+      "level": 14.88,
+      "equipment": 11.174,
+      "expeditions": 18.076
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.866,
+      "level": 22.524,
+      "equipment": 18.22,
+      "expeditions": 27.482
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.908,
+      "level": 22.834,
+      "equipment": 18.374,
+      "expeditions": 27.762
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 1.948,
+      "equipment": 0.04,
+      "expeditions": 3.162
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 1.872,
+      "equipment": 0,
+      "expeditions": 3.062
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.272,
+      "level": 13.608,
+      "equipment": 10.004,
+      "expeditions": 16.512
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.286,
+      "level": 13.566,
+      "equipment": 9.824,
+      "expeditions": 16.496
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.832,
+      "level": 21.98,
+      "equipment": 17.638,
+      "expeditions": 26.802
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.78,
+      "level": 21.166,
+      "equipment": 16.786,
+      "expeditions": 25.952
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.162,
+      "equipment": 0.096,
+      "expeditions": 3.48
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.162,
+      "equipment": 0.096,
+      "expeditions": 3.48
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.302,
+      "level": 14.476,
+      "equipment": 10.898,
+      "expeditions": 17.536
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.302,
+      "level": 14.476,
+      "equipment": 10.898,
+      "expeditions": 17.536
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.876,
+      "level": 22.266,
+      "equipment": 18.074,
+      "expeditions": 27.14
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.876,
+      "level": 22.266,
+      "equipment": 18.074,
+      "expeditions": 27.14
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.104,
+      "equipment": 0,
+      "expeditions": 3.43
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.104,
+      "equipment": 0,
+      "expeditions": 3.43
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.478,
+      "level": 16.678,
+      "equipment": 12.75,
+      "expeditions": 20.248
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.478,
+      "level": 16.678,
+      "equipment": 12.75,
+      "expeditions": 20.248
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.926,
+      "level": 22.894,
+      "equipment": 18.578,
+      "expeditions": 27.804
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.926,
+      "level": 22.894,
+      "equipment": 18.578,
+      "expeditions": 27.804
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.046,
+      "equipment": 0.082,
+      "expeditions": 3.292
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.15,
+      "equipment": 0.134,
+      "expeditions": 3.406
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.286,
+      "level": 14.14,
+      "equipment": 10.372,
+      "expeditions": 17.11
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.264,
+      "level": 14.008,
+      "equipment": 10.328,
+      "expeditions": 16.934
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.914,
+      "level": 22.672,
+      "equipment": 18.326,
+      "expeditions": 27.518
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.922,
+      "level": 22.854,
+      "equipment": 18.53,
+      "expeditions": 27.736
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.326,
+      "equipment": 0.236,
+      "expeditions": 3.62
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "n": 500,
+      "survival": 0,
+      "level": 2.326,
+      "equipment": 0.236,
+      "expeditions": 3.62
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.222,
+      "level": 13.852,
+      "equipment": 10.362,
+      "expeditions": 16.762
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "n": 500,
+      "survival": 0.222,
+      "level": 13.852,
+      "equipment": 10.362,
+      "expeditions": 16.762
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.944,
+      "level": 23.208,
+      "equipment": 18.9,
+      "expeditions": 28.124
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "n": 500,
+      "survival": 0.944,
+      "level": 23.208,
+      "equipment": 18.9,
+      "expeditions": 28.124
+    }
+  ],
+  "growthPairs": [
+    {
+      "job": "warrior",
+      "supply": "none",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "warrior",
+      "supply": "same",
+      "survival": {
+        "n": 500,
+        "delta": 0.034,
+        "lo": 0.016267501478708167,
+        "hi": 0.05173249852129184
+      }
+    },
+    {
+      "job": "warrior",
+      "supply": "budget",
+      "survival": {
+        "n": 500,
+        "delta": 0.042,
+        "lo": 0.01976203495418789,
+        "hi": 0.06423796504581211
+      }
+    },
+    {
+      "job": "archer",
+      "supply": "none",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "archer",
+      "supply": "same",
+      "survival": {
+        "n": 500,
+        "delta": 0.014,
+        "lo": -0.00009448835552425261,
+        "hi": 0.028094488355524253
+      }
+    },
+    {
+      "job": "archer",
+      "supply": "budget",
+      "survival": {
+        "n": 500,
+        "delta": -0.052,
+        "lo": -0.08153337548834327,
+        "hi": -0.022466624511656715
+      }
+    },
+    {
+      "job": "mage",
+      "supply": "none",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "mage",
+      "supply": "same",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "mage",
+      "supply": "budget",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "priest",
+      "supply": "none",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "priest",
+      "supply": "same",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "priest",
+      "supply": "budget",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "rogue",
+      "supply": "none",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "rogue",
+      "supply": "same",
+      "survival": {
+        "n": 500,
+        "delta": -0.022,
+        "lo": -0.038063193442374244,
+        "hi": -0.005936806557625754
+      }
+    },
+    {
+      "job": "rogue",
+      "supply": "budget",
+      "survival": {
+        "n": 500,
+        "delta": 0.008,
+        "lo": -0.010391453622067566,
+        "hi": 0.026391453622067566
+      }
+    },
+    {
+      "job": "berserker",
+      "supply": "none",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "berserker",
+      "supply": "same",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    },
+    {
+      "job": "berserker",
+      "supply": "budget",
+      "survival": {
+        "n": 500,
+        "delta": 0,
+        "lo": 0,
+        "hi": 0
+      }
+    }
+  ],
+  "expSummary": [
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.0848,
+      "combat": 0.0988,
+      "environment": 0.2144,
+      "deaths": 0.1984,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5068,
+      "deaths": 0.2512,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1032,
+      "combat": 0.2584,
+      "environment": 0.5604,
+      "deaths": 0.158,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.102,
+      "combat": 0.2492,
+      "environment": 0.6072,
+      "deaths": 0.164,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2472,
+      "deaths": 0.4064,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5452,
+      "deaths": 0.4544,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.58,
+      "deaths": 0.4056,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3868,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7236,
+      "combat": 0.8688,
+      "environment": 0.172,
+      "deaths": 0.0352,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.21,
+      "combat": 0.3924,
+      "environment": 0.4616,
+      "deaths": 0.1152,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.314,
+      "combat": 0.6832,
+      "environment": 0.5248,
+      "deaths": 0.0792,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2184,
+      "combat": 0.5424,
+      "environment": 0.6068,
+      "deaths": 0.1068,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.4204,
+      "combat": 0.5176,
+      "environment": 0.1852,
+      "deaths": 0.1424,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0304,
+      "combat": 0.062,
+      "environment": 0.492,
+      "deaths": 0.3372,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.122,
+      "combat": 0.2824,
+      "environment": 0.552,
+      "deaths": 0.2532,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0628,
+      "combat": 0.1684,
+      "environment": 0.5932,
+      "deaths": 0.2676,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.912,
+      "combat": 1,
+      "environment": 0.088,
+      "deaths": 0.0044,
+      "meanCost": 173
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.4052,
+      "combat": 0.6016,
+      "environment": 0.328,
+      "deaths": 0.0536,
+      "meanCost": 192
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.5596,
+      "combat": 0.7584,
+      "environment": 0.242,
+      "deaths": 0.0192,
+      "meanCost": 197
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.3448,
+      "combat": 0.5964,
+      "environment": 0.404,
+      "deaths": 0.0584,
+      "meanCost": 188
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7392,
+      "combat": 0.928,
+      "environment": 0.2032,
+      "deaths": 0.0748,
+      "meanCost": 183
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.1372,
+      "combat": 0.328,
+      "environment": 0.5452,
+      "deaths": 0.3096,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2008,
+      "combat": 0.4836,
+      "environment": 0.58,
+      "deaths": 0.2308,
+      "meanCost": 195
+    },
+    {
+      "profile": "source",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1068,
+      "combat": 0.272,
+      "environment": 0.5932,
+      "deaths": 0.2772,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.0416,
+      "combat": 0.05,
+      "environment": 0.2528,
+      "deaths": 0.2464,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.4964,
+      "deaths": 0.2436,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1248,
+      "combat": 0.2836,
+      "environment": 0.5444,
+      "deaths": 0.1468,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1268,
+      "combat": 0.3068,
+      "environment": 0.6072,
+      "deaths": 0.148,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2748,
+      "deaths": 0.4584,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5484,
+      "deaths": 0.4584,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5812,
+      "deaths": 0.412,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3832,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.64,
+      "combat": 0.8068,
+      "environment": 0.2104,
+      "deaths": 0.0496,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2096,
+      "combat": 0.386,
+      "environment": 0.4596,
+      "deaths": 0.1116,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3416,
+      "combat": 0.7072,
+      "environment": 0.5128,
+      "deaths": 0.0724,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2384,
+      "combat": 0.596,
+      "environment": 0.6072,
+      "deaths": 0.0972,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.358,
+      "combat": 0.4596,
+      "environment": 0.2232,
+      "deaths": 0.1712,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0332,
+      "combat": 0.0644,
+      "environment": 0.486,
+      "deaths": 0.3288,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1432,
+      "combat": 0.3128,
+      "environment": 0.5412,
+      "deaths": 0.238,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0908,
+      "combat": 0.2288,
+      "environment": 0.5932,
+      "deaths": 0.2444,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.874,
+      "combat": 0.9936,
+      "environment": 0.1196,
+      "deaths": 0.0088,
+      "meanCost": 168
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.4164,
+      "combat": 0.5572,
+      "environment": 0.2752,
+      "deaths": 0.0412,
+      "meanCost": 199
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.5908,
+      "combat": 0.778,
+      "environment": 0.2216,
+      "deaths": 0.0164,
+      "meanCost": 197
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.3988,
+      "combat": 0.608,
+      "environment": 0.3184,
+      "deaths": 0.0484,
+      "meanCost": 183
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.632,
+      "combat": 0.8768,
+      "environment": 0.2748,
+      "deaths": 0.1144,
+      "meanCost": 195
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.1024,
+      "combat": 0.2596,
+      "environment": 0.5484,
+      "deaths": 0.3276,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1712,
+      "combat": 0.3604,
+      "environment": 0.5216,
+      "deaths": 0.228,
+      "meanCost": 185
+    },
+    {
+      "profile": "source",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0936,
+      "combat": 0.238,
+      "environment": 0.5932,
+      "deaths": 0.2828,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.0928,
+      "combat": 0.1168,
+      "environment": 0.2428,
+      "deaths": 0.1996,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0204,
+      "combat": 0.0472,
+      "environment": 0.5136,
+      "deaths": 0.2148,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1608,
+      "combat": 0.4004,
+      "environment": 0.5592,
+      "deaths": 0.118,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1592,
+      "combat": 0.3992,
+      "environment": 0.5804,
+      "deaths": 0.13,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2736,
+      "deaths": 0.4264,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.542,
+      "deaths": 0.4416,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5684,
+      "deaths": 0.384,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3512,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7072,
+      "combat": 0.8812,
+      "environment": 0.2,
+      "deaths": 0.034,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2464,
+      "combat": 0.5068,
+      "environment": 0.478,
+      "deaths": 0.0956,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3592,
+      "combat": 0.8092,
+      "environment": 0.5352,
+      "deaths": 0.0668,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2864,
+      "combat": 0.704,
+      "environment": 0.5796,
+      "deaths": 0.0808,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.434,
+      "combat": 0.5548,
+      "environment": 0.2116,
+      "deaths": 0.1404,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0724,
+      "combat": 0.1644,
+      "environment": 0.496,
+      "deaths": 0.2888,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1768,
+      "combat": 0.418,
+      "environment": 0.5492,
+      "deaths": 0.2056,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1292,
+      "combat": 0.3284,
+      "environment": 0.5796,
+      "deaths": 0.2036,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.898,
+      "combat": 0.9864,
+      "environment": 0.0892,
+      "deaths": 0.0008,
+      "meanCost": 171
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.4844,
+      "combat": 0.6732,
+      "environment": 0.2892,
+      "deaths": 0.0356,
+      "meanCost": 199
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.6352,
+      "combat": 0.794,
+      "environment": 0.1944,
+      "deaths": 0.0136,
+      "meanCost": 183
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.47,
+      "combat": 0.5244,
+      "environment": 0.1028,
+      "deaths": 0.0096,
+      "meanCost": 183
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6904,
+      "combat": 0.9032,
+      "environment": 0.236,
+      "deaths": 0.084,
+      "meanCost": 183
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.1516,
+      "combat": 0.3688,
+      "environment": 0.542,
+      "deaths": 0.294,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2276,
+      "combat": 0.5404,
+      "environment": 0.5684,
+      "deaths": 0.2116,
+      "meanCost": 195
+    },
+    {
+      "profile": "source",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.136,
+      "combat": 0.3468,
+      "environment": 0.5932,
+      "deaths": 0.2492,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.1976,
+      "deaths": 0.2044,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.4544,
+      "deaths": 0.2224,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1148,
+      "combat": 0.2552,
+      "environment": 0.4968,
+      "deaths": 0.1224,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1184,
+      "combat": 0.2872,
+      "environment": 0.5672,
+      "deaths": 0.1324,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2344,
+      "deaths": 0.4192,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.526,
+      "deaths": 0.4464,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.556,
+      "deaths": 0.3864,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5872,
+      "deaths": 0.3516,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6224,
+      "combat": 0.732,
+      "environment": 0.1536,
+      "deaths": 0.0304,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.194,
+      "combat": 0.3532,
+      "environment": 0.4176,
+      "deaths": 0.1012,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3476,
+      "combat": 0.6804,
+      "environment": 0.4624,
+      "deaths": 0.0584,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2476,
+      "combat": 0.5804,
+      "environment": 0.552,
+      "deaths": 0.0752,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.2992,
+      "combat": 0.3616,
+      "environment": 0.1704,
+      "deaths": 0.1596,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0168,
+      "combat": 0.0308,
+      "environment": 0.4516,
+      "deaths": 0.312,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1268,
+      "combat": 0.28,
+      "environment": 0.5036,
+      "deaths": 0.2152,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0796,
+      "combat": 0.2048,
+      "environment": 0.564,
+      "deaths": 0.2136,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.8976,
+      "combat": 0.9896,
+      "environment": 0.0948,
+      "deaths": 0.004,
+      "meanCost": 166
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.4112,
+      "combat": 0.58,
+      "environment": 0.2868,
+      "deaths": 0.0436,
+      "meanCost": 198
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.6012,
+      "combat": 0.804,
+      "environment": 0.2516,
+      "deaths": 0.0184,
+      "meanCost": 199
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.4152,
+      "combat": 0.5512,
+      "environment": 0.2452,
+      "deaths": 0.0256,
+      "meanCost": 184
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6256,
+      "combat": 0.818,
+      "environment": 0.2344,
+      "deaths": 0.098,
+      "meanCost": 195
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0868,
+      "combat": 0.2184,
+      "environment": 0.526,
+      "deaths": 0.3192,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1572,
+      "combat": 0.3784,
+      "environment": 0.556,
+      "deaths": 0.2284,
+      "meanCost": 195
+    },
+    {
+      "profile": "source",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0844,
+      "combat": 0.216,
+      "environment": 0.5872,
+      "deaths": 0.2608,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.0848,
+      "combat": 0.1056,
+      "environment": 0.2548,
+      "deaths": 0.2296,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0268,
+      "combat": 0.0432,
+      "environment": 0.4856,
+      "deaths": 0.2196,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2092,
+      "combat": 0.4464,
+      "environment": 0.5272,
+      "deaths": 0.1168,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1744,
+      "combat": 0.4344,
+      "environment": 0.6072,
+      "deaths": 0.1304,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2776,
+      "deaths": 0.4488,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5428,
+      "deaths": 0.448,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5812,
+      "deaths": 0.3908,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3664,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6928,
+      "combat": 0.8732,
+      "environment": 0.2128,
+      "deaths": 0.044,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2708,
+      "combat": 0.5004,
+      "environment": 0.454,
+      "deaths": 0.0996,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.4256,
+      "combat": 0.8456,
+      "environment": 0.496,
+      "deaths": 0.062,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2908,
+      "combat": 0.7448,
+      "environment": 0.6072,
+      "deaths": 0.0868,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.4124,
+      "combat": 0.5376,
+      "environment": 0.2264,
+      "deaths": 0.16,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0772,
+      "combat": 0.1592,
+      "environment": 0.4816,
+      "deaths": 0.2976,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2184,
+      "combat": 0.4596,
+      "environment": 0.5256,
+      "deaths": 0.202,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1396,
+      "combat": 0.358,
+      "environment": 0.5932,
+      "deaths": 0.2172,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.8904,
+      "combat": 0.9856,
+      "environment": 0.096,
+      "deaths": 0.0036,
+      "meanCost": 171
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.5004,
+      "combat": 0.6696,
+      "environment": 0.2672,
+      "deaths": 0.0344,
+      "meanCost": 199
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.696,
+      "combat": 0.8972,
+      "environment": 0.2128,
+      "deaths": 0.0112,
+      "meanCost": 197
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.5372,
+      "combat": 0.6256,
+      "environment": 0.154,
+      "deaths": 0.0132,
+      "meanCost": 177
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6656,
+      "combat": 0.8756,
+      "environment": 0.2404,
+      "deaths": 0.0972,
+      "meanCost": 183
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.146,
+      "combat": 0.342,
+      "environment": 0.5428,
+      "deaths": 0.3008,
+      "meanCost": 156
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.252,
+      "combat": 0.4824,
+      "environment": 0.4868,
+      "deaths": 0.1908,
+      "meanCost": 180
+    },
+    {
+      "profile": "source",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1396,
+      "combat": 0.358,
+      "environment": 0.5932,
+      "deaths": 0.236,
+      "meanCost": 128
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.1396,
+      "combat": 0.1752,
+      "environment": 0.2524,
+      "deaths": 0.202,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0544,
+      "combat": 0.1152,
+      "environment": 0.5256,
+      "deaths": 0.2164,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.21,
+      "combat": 0.5092,
+      "environment": 0.576,
+      "deaths": 0.1304,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2032,
+      "combat": 0.494,
+      "environment": 0.6072,
+      "deaths": 0.138,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.27,
+      "deaths": 0.4176,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.554,
+      "deaths": 0.4416,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5824,
+      "deaths": 0.3804,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3564,
+      "meanCost": 0
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7332,
+      "combat": 0.9172,
+      "environment": 0.2076,
+      "deaths": 0.0416,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2956,
+      "combat": 0.5752,
+      "environment": 0.4836,
+      "deaths": 0.102,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.402,
+      "combat": 0.8912,
+      "environment": 0.5464,
+      "deaths": 0.0708,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.3128,
+      "combat": 0.8028,
+      "environment": 0.6072,
+      "deaths": 0.0936,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.474,
+      "combat": 0.6096,
+      "environment": 0.218,
+      "deaths": 0.1408,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0948,
+      "combat": 0.2212,
+      "environment": 0.51,
+      "deaths": 0.3,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2204,
+      "combat": 0.5088,
+      "environment": 0.5644,
+      "deaths": 0.2132,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1536,
+      "combat": 0.398,
+      "environment": 0.5932,
+      "deaths": 0.23,
+      "meanCost": 160
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.9092,
+      "combat": 0.974,
+      "environment": 0.0696,
+      "deaths": 0.0016,
+      "meanCost": 135
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.5248,
+      "combat": 0.7492,
+      "environment": 0.3056,
+      "deaths": 0.0376,
+      "meanCost": 199
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.708,
+      "combat": 0.744,
+      "environment": 0.0484,
+      "deaths": 0.0004,
+      "meanCost": 177
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.54,
+      "combat": 0.6832,
+      "environment": 0.2116,
+      "deaths": 0.02,
+      "meanCost": 177
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7492,
+      "combat": 0.954,
+      "environment": 0.214,
+      "deaths": 0.07,
+      "meanCost": 177
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2132,
+      "combat": 0.4952,
+      "environment": 0.554,
+      "deaths": 0.2596,
+      "meanCost": 195
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2848,
+      "combat": 0.5728,
+      "environment": 0.4912,
+      "deaths": 0.186,
+      "meanCost": 197
+    },
+    {
+      "profile": "source",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1948,
+      "combat": 0.4916,
+      "environment": 0.5932,
+      "deaths": 0.2352,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.0848,
+      "combat": 0.0988,
+      "environment": 0.2144,
+      "deaths": 0.1984,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.4984,
+      "deaths": 0.2432,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1352,
+      "combat": 0.3184,
+      "environment": 0.5396,
+      "deaths": 0.1448,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1312,
+      "combat": 0.3192,
+      "environment": 0.6068,
+      "deaths": 0.1512,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2472,
+      "deaths": 0.4064,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.538,
+      "deaths": 0.448,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5792,
+      "deaths": 0.396,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3744,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7236,
+      "combat": 0.8688,
+      "environment": 0.172,
+      "deaths": 0.0352,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2284,
+      "combat": 0.4244,
+      "environment": 0.4536,
+      "deaths": 0.1104,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3544,
+      "combat": 0.7376,
+      "environment": 0.51,
+      "deaths": 0.0704,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2424,
+      "combat": 0.6048,
+      "environment": 0.6052,
+      "deaths": 0.0996,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.4204,
+      "combat": 0.5176,
+      "environment": 0.1852,
+      "deaths": 0.1424,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0424,
+      "combat": 0.0848,
+      "environment": 0.4868,
+      "deaths": 0.3288,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1464,
+      "combat": 0.3308,
+      "environment": 0.5396,
+      "deaths": 0.2376,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0892,
+      "combat": 0.2252,
+      "environment": 0.5932,
+      "deaths": 0.2496,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.912,
+      "combat": 1,
+      "environment": 0.088,
+      "deaths": 0.0044,
+      "meanCost": 173
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.436,
+      "combat": 0.5968,
+      "environment": 0.2804,
+      "deaths": 0.0436,
+      "meanCost": 199
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.6152,
+      "combat": 0.8072,
+      "environment": 0.2228,
+      "deaths": 0.0132,
+      "meanCost": 197
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.3916,
+      "combat": 0.4772,
+      "environment": 0.1748,
+      "deaths": 0.0244,
+      "meanCost": 177
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7392,
+      "combat": 0.928,
+      "environment": 0.2032,
+      "deaths": 0.0748,
+      "meanCost": 183
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.1516,
+      "combat": 0.3552,
+      "environment": 0.538,
+      "deaths": 0.3012,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2212,
+      "combat": 0.532,
+      "environment": 0.5792,
+      "deaths": 0.2188,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "warrior",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1308,
+      "combat": 0.3332,
+      "environment": 0.5932,
+      "deaths": 0.2656,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2528,
+      "deaths": 0.2696,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.4816,
+      "deaths": 0.2472,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1104,
+      "combat": 0.2356,
+      "environment": 0.5252,
+      "deaths": 0.1496,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1012,
+      "combat": 0.2476,
+      "environment": 0.6072,
+      "deaths": 0.1536,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2748,
+      "deaths": 0.4684,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.542,
+      "deaths": 0.4684,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5812,
+      "deaths": 0.4184,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3908,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.5732,
+      "combat": 0.7236,
+      "environment": 0.2104,
+      "deaths": 0.0568,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.1832,
+      "combat": 0.3364,
+      "environment": 0.452,
+      "deaths": 0.1148,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3336,
+      "combat": 0.6664,
+      "environment": 0.4916,
+      "deaths": 0.0732,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2184,
+      "combat": 0.542,
+      "environment": 0.6072,
+      "deaths": 0.0984,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.2812,
+      "combat": 0.3624,
+      "environment": 0.2232,
+      "deaths": 0.1984,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0144,
+      "combat": 0.026,
+      "environment": 0.4772,
+      "deaths": 0.3384,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1324,
+      "combat": 0.272,
+      "environment": 0.5232,
+      "deaths": 0.2428,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0668,
+      "combat": 0.1796,
+      "environment": 0.5932,
+      "deaths": 0.2528,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.8528,
+      "combat": 0.9672,
+      "environment": 0.1196,
+      "deaths": 0.0112,
+      "meanCost": 168
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.3828,
+      "combat": 0.606,
+      "environment": 0.362,
+      "deaths": 0.0644,
+      "meanCost": 191
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.5652,
+      "combat": 0.734,
+      "environment": 0.2112,
+      "deaths": 0.0176,
+      "meanCost": 197
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.3676,
+      "combat": 0.6944,
+      "environment": 0.4736,
+      "deaths": 0.0596,
+      "meanCost": 198
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.5832,
+      "combat": 0.8084,
+      "environment": 0.2748,
+      "deaths": 0.1284,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0772,
+      "combat": 0.188,
+      "environment": 0.542,
+      "deaths": 0.3416,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1476,
+      "combat": 0.3044,
+      "environment": 0.5124,
+      "deaths": 0.2564,
+      "meanCost": 146
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "archer",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0668,
+      "combat": 0.1796,
+      "environment": 0.5932,
+      "deaths": 0.2712,
+      "meanCost": 128
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.0928,
+      "combat": 0.1168,
+      "environment": 0.2428,
+      "deaths": 0.1996,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0204,
+      "combat": 0.0472,
+      "environment": 0.5136,
+      "deaths": 0.2148,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1608,
+      "combat": 0.4004,
+      "environment": 0.5592,
+      "deaths": 0.118,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1592,
+      "combat": 0.3992,
+      "environment": 0.5804,
+      "deaths": 0.13,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2736,
+      "deaths": 0.4264,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.542,
+      "deaths": 0.4416,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5684,
+      "deaths": 0.384,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3512,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7072,
+      "combat": 0.8812,
+      "environment": 0.2,
+      "deaths": 0.034,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2464,
+      "combat": 0.5068,
+      "environment": 0.478,
+      "deaths": 0.0956,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3592,
+      "combat": 0.8092,
+      "environment": 0.5352,
+      "deaths": 0.0668,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2864,
+      "combat": 0.704,
+      "environment": 0.5796,
+      "deaths": 0.0808,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.434,
+      "combat": 0.5548,
+      "environment": 0.2116,
+      "deaths": 0.1404,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0724,
+      "combat": 0.1644,
+      "environment": 0.496,
+      "deaths": 0.2888,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1768,
+      "combat": 0.418,
+      "environment": 0.5492,
+      "deaths": 0.2056,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1292,
+      "combat": 0.3284,
+      "environment": 0.5796,
+      "deaths": 0.2036,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.898,
+      "combat": 0.9864,
+      "environment": 0.0892,
+      "deaths": 0.0008,
+      "meanCost": 171
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.4844,
+      "combat": 0.6732,
+      "environment": 0.2892,
+      "deaths": 0.0356,
+      "meanCost": 199
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.6352,
+      "combat": 0.794,
+      "environment": 0.1944,
+      "deaths": 0.0136,
+      "meanCost": 183
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.47,
+      "combat": 0.5244,
+      "environment": 0.1028,
+      "deaths": 0.0096,
+      "meanCost": 183
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6904,
+      "combat": 0.9032,
+      "environment": 0.236,
+      "deaths": 0.084,
+      "meanCost": 183
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.1516,
+      "combat": 0.3688,
+      "environment": 0.542,
+      "deaths": 0.294,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2276,
+      "combat": 0.5404,
+      "environment": 0.5684,
+      "deaths": 0.2116,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "mage",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.136,
+      "combat": 0.3468,
+      "environment": 0.5932,
+      "deaths": 0.2492,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.1976,
+      "deaths": 0.2044,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.4544,
+      "deaths": 0.2224,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1148,
+      "combat": 0.2552,
+      "environment": 0.4968,
+      "deaths": 0.1224,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1184,
+      "combat": 0.2872,
+      "environment": 0.5672,
+      "deaths": 0.1324,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2344,
+      "deaths": 0.4192,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.526,
+      "deaths": 0.4464,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.556,
+      "deaths": 0.3864,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5872,
+      "deaths": 0.3516,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6224,
+      "combat": 0.732,
+      "environment": 0.1536,
+      "deaths": 0.0304,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.194,
+      "combat": 0.3532,
+      "environment": 0.4176,
+      "deaths": 0.1012,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.3476,
+      "combat": 0.6804,
+      "environment": 0.4624,
+      "deaths": 0.0584,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2476,
+      "combat": 0.5804,
+      "environment": 0.552,
+      "deaths": 0.0752,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.2992,
+      "combat": 0.3616,
+      "environment": 0.1704,
+      "deaths": 0.1596,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0168,
+      "combat": 0.0308,
+      "environment": 0.4516,
+      "deaths": 0.312,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1268,
+      "combat": 0.28,
+      "environment": 0.5036,
+      "deaths": 0.2152,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0796,
+      "combat": 0.2048,
+      "environment": 0.564,
+      "deaths": 0.2136,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.8976,
+      "combat": 0.9896,
+      "environment": 0.0948,
+      "deaths": 0.004,
+      "meanCost": 166
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.4112,
+      "combat": 0.58,
+      "environment": 0.2868,
+      "deaths": 0.0436,
+      "meanCost": 198
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.6012,
+      "combat": 0.804,
+      "environment": 0.2516,
+      "deaths": 0.0184,
+      "meanCost": 199
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.4152,
+      "combat": 0.5512,
+      "environment": 0.2452,
+      "deaths": 0.0256,
+      "meanCost": 184
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6256,
+      "combat": 0.818,
+      "environment": 0.2344,
+      "deaths": 0.098,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0868,
+      "combat": 0.2184,
+      "environment": 0.526,
+      "deaths": 0.3192,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.1572,
+      "combat": 0.3784,
+      "environment": 0.556,
+      "deaths": 0.2284,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "priest",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.0844,
+      "combat": 0.216,
+      "environment": 0.5872,
+      "deaths": 0.2608,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.1084,
+      "combat": 0.138,
+      "environment": 0.2548,
+      "deaths": 0.2132,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0368,
+      "combat": 0.068,
+      "environment": 0.4992,
+      "deaths": 0.2176,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2068,
+      "combat": 0.4716,
+      "environment": 0.5464,
+      "deaths": 0.1212,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1796,
+      "combat": 0.4452,
+      "environment": 0.6072,
+      "deaths": 0.1328,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.2776,
+      "deaths": 0.4352,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5492,
+      "deaths": 0.4468,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5812,
+      "deaths": 0.3896,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3628,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7132,
+      "combat": 0.8988,
+      "environment": 0.2128,
+      "deaths": 0.0424,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2816,
+      "combat": 0.526,
+      "environment": 0.4616,
+      "deaths": 0.0976,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.4176,
+      "combat": 0.8636,
+      "environment": 0.5156,
+      "deaths": 0.0632,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2948,
+      "combat": 0.76,
+      "environment": 0.6072,
+      "deaths": 0.09,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.4456,
+      "combat": 0.5816,
+      "environment": 0.2264,
+      "deaths": 0.1464,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0848,
+      "combat": 0.18,
+      "environment": 0.4904,
+      "deaths": 0.298,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2152,
+      "combat": 0.4744,
+      "environment": 0.5436,
+      "deaths": 0.2012,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1436,
+      "combat": 0.3712,
+      "environment": 0.5932,
+      "deaths": 0.2176,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.896,
+      "combat": 0.9916,
+      "environment": 0.096,
+      "deaths": 0.0036,
+      "meanCost": 171
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.5112,
+      "combat": 0.698,
+      "environment": 0.2804,
+      "deaths": 0.0352,
+      "meanCost": 199
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.694,
+      "combat": 0.906,
+      "environment": 0.2228,
+      "deaths": 0.0124,
+      "meanCost": 197
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.5372,
+      "combat": 0.638,
+      "environment": 0.168,
+      "deaths": 0.014,
+      "meanCost": 177
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.6988,
+      "combat": 0.9216,
+      "environment": 0.2404,
+      "deaths": 0.0896,
+      "meanCost": 183
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.158,
+      "combat": 0.3792,
+      "environment": 0.5492,
+      "deaths": 0.2972,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.258,
+      "combat": 0.5328,
+      "environment": 0.5216,
+      "deaths": 0.198,
+      "meanCost": 185
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "rogue",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.15,
+      "combat": 0.3836,
+      "environment": 0.5932,
+      "deaths": 0.2552,
+      "meanCost": 156
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.1396,
+      "combat": 0.1752,
+      "environment": 0.2524,
+      "deaths": 0.202,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0544,
+      "combat": 0.1152,
+      "environment": 0.5256,
+      "deaths": 0.2164,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.21,
+      "combat": 0.5092,
+      "environment": 0.576,
+      "deaths": 0.1304,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.2032,
+      "combat": 0.494,
+      "environment": 0.6072,
+      "deaths": 0.138,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.27,
+      "deaths": 0.4176,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.554,
+      "deaths": 0.4416,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5824,
+      "deaths": 0.3804,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "none",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0,
+      "combat": 0,
+      "environment": 0.5932,
+      "deaths": 0.3564,
+      "meanCost": 0
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7332,
+      "combat": 0.9172,
+      "environment": 0.2076,
+      "deaths": 0.0416,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2956,
+      "combat": 0.5752,
+      "environment": 0.4836,
+      "deaths": 0.102,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.402,
+      "combat": 0.8912,
+      "environment": 0.5464,
+      "deaths": 0.0708,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.3128,
+      "combat": 0.8028,
+      "environment": 0.6072,
+      "deaths": 0.0936,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.474,
+      "combat": 0.6096,
+      "environment": 0.218,
+      "deaths": 0.1408,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.0948,
+      "combat": 0.2212,
+      "environment": 0.51,
+      "deaths": 0.3,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2204,
+      "combat": 0.5088,
+      "environment": 0.5644,
+      "deaths": 0.2132,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "same",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1536,
+      "combat": 0.398,
+      "environment": 0.5932,
+      "deaths": 0.23,
+      "meanCost": 160
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 4,
+      "n": 2500,
+      "success": 0.9092,
+      "combat": 0.974,
+      "environment": 0.0696,
+      "deaths": 0.0016,
+      "meanCost": 135
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 14,
+      "n": 2500,
+      "success": 0.5248,
+      "combat": 0.7492,
+      "environment": 0.3056,
+      "deaths": 0.0376,
+      "meanCost": 199
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 21,
+      "n": 2500,
+      "success": 0.708,
+      "combat": 0.744,
+      "environment": 0.0484,
+      "deaths": 0.0004,
+      "meanCost": 177
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "healthy",
+      "day": 29,
+      "n": 2500,
+      "success": 0.54,
+      "combat": 0.6832,
+      "environment": 0.2116,
+      "deaths": 0.02,
+      "meanCost": 177
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 4,
+      "n": 2500,
+      "success": 0.7492,
+      "combat": 0.954,
+      "environment": 0.214,
+      "deaths": 0.07,
+      "meanCost": 177
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 14,
+      "n": 2500,
+      "success": 0.2132,
+      "combat": 0.4952,
+      "environment": 0.554,
+      "deaths": 0.2596,
+      "meanCost": 195
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 21,
+      "n": 2500,
+      "success": 0.2848,
+      "combat": 0.5728,
+      "environment": 0.4912,
+      "deaths": 0.186,
+      "meanCost": 197
+    },
+    {
+      "profile": "approved-20261009",
+      "job": "berserker",
+      "supply": "budget",
+      "state": "worn",
+      "day": 29,
+      "n": 2500,
+      "success": 0.1948,
+      "combat": 0.4916,
+      "environment": 0.5932,
+      "deaths": 0.2352,
+      "meanCost": 195
+    }
+  ]
+}

@@ -154,6 +154,15 @@ test('the sampled matrix actually covers every supported outcome and causal vari
   assert.ok(seen[k]>0,'sampled the '+k+' variant at least once');
 });
 
+/* NIGHT_CLOSING §INSURANCE CAUSALITY (User 2026-10-09): the NIGHT first print is the Outcome the Insurance actually turned
+   away, so the 귀환석 event names it - a 부상 turned into 퇴각 must not print 중상 */
+test('a 귀환석 rescue names the Outcome it turned away, and only a turned-away Death sets avoidedDeath',()=>{
+ const esc=all.map(({r})=>[r,(r.events||[]).find(e=>e.id==='escape')]).filter(([,e])=>e);
+ assert.ok(esc.length>0,'the sweep reaches a 귀환석 rescue');
+ for(const [r,e] of esc){assert.ok(['사망','중상','부상'].includes(e.from),'names what it turned away: '+e.from);
+  assert.equal(r.outcome,'퇴각');assert.equal(r.avoidedDeath,e.from==='사망');}
+});
+
 /* ITEM v2.9.10 (User 2026-09-28): 세계수 생환부적 turns a remaining 사망 or 중상 into 퇴각; a 부상 stays 부상.
    The sweep's World Tree Bags therefore never end heavy, and each conversion names what it stopped. */
 test('ITEM-Q13: a World Tree Bag never ends in 사망 or 중상, and names what it turned into 퇴각',()=>{
@@ -547,7 +556,8 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* makeDungeon applies SuccessEase once, on the finished Gate Power (read off real Gates, golem's Family Combat included) */
  {const g=new Game();g.autosave=false;g.start('gate-ease');
   for(const day of [3,8,22])for(const id of ['spider','golem'])for(const tier of [1,2]){g.run.day=day;const b=D.dungeonBy[id],gate=g.makeDungeon(id,tier);
-   const raw=(21+Dungeon.gateDayTerm(day)+(tier-1)*5+(id==='golem'?6+(tier-1)*8:0)+(b.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1);
+   const offset=({3:5/24,8:5/12,22:1.2})[day];
+   const raw=(21+offset+Dungeon.gateDayTerm(day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(b.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1);
    assert.ok(Math.abs(gate.power-raw*Dungeon.gateEase(day))<1e-9,id+' T'+tier+' D'+day+': Gate Power x SuccessEase '+Dungeon.gateEase(day));}}
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
@@ -1324,4 +1334,22 @@ test('RESULT-PROOF, combat: a 투력 Item that turned a lost fight into a win is
  const easy=Dungeon.resolve(base(['midpotion']),{...gate,power:b*.5},scripted([0.5,0.999,0.999]),[]);
  assert.equal(easy.combatHero??null,null,'a win the potion did not decide is not credited');
  assert.equal(Presentation.heroLine(easy),null);
+});
+
+// This unit checks only serialization of already-paid growth. It never calls Game.night or resolves an expedition.
+test('NIGHT Deep growth: final report and saved record use already-paid level and stat changes',()=>{
+ const source=read('dist/systems/shop.js'),body=source.match(/function syncDeepReport[\s\S]*?(?=\r?\nclass Game\{)/)[0];
+ const sync=require('node:vm').runInNewContext(body+';syncDeepReport',{G:{Adventurer:{keys:['combat','survival','mobility','spirit']}}});
+ const before={combat:10,survival:11,mobility:12,spirit:13};
+ const record={level:2,changes:['Lv.1 → Lv.2','Lv.2 → Lv.3'],xp:58,loot:20};
+ const n={level:3,stats:{combat:16,survival:13,mobility:12,spirit:17},money:80,records:[record]};
+ const report={...record,deep:{great:false,bonusXp:40,bonusWallet:60},statChanges:[{key:'combat',before:10,after:13}]};
+ const live=JSON.stringify({level:n.level,stats:n.stats,money:n.money});sync(n,report,before);
+ const expected=[{key:'combat',before:10,after:16},{key:'survival',before:11,after:13},{key:'spirit',before:13,after:17}];
+ assert.equal(report.level,3);assert.equal(record.level,3);
+ assert.deepEqual(JSON.parse(JSON.stringify(report.statChanges)),expected);assert.deepEqual(JSON.parse(JSON.stringify(record.statChanges)),expected);
+ assert.deepEqual(record.deep,{great:false,bonusXp:40,bonusWallet:60});
+ assert.equal(report.xp,58);assert.equal(report.loot,20);assert.deepEqual(report.changes,['Lv.1 → Lv.2','Lv.2 → Lv.3']);
+ assert.equal(JSON.stringify({level:n.level,stats:n.stats,money:n.money}),live,'sync cannot pay or grow the adventurer again');
+ const saved=JSON.parse(JSON.stringify(record));assert.equal(saved.level,3);assert.deepEqual(saved.statChanges,expected);
 });

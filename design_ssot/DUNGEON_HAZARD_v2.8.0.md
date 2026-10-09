@@ -307,14 +307,18 @@ Day term
 = min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.05
 ```
 
+Ordinary base offset: D1 +0.125, D10 +0.5, D20 +1.0, D25 +1.5.
+Linearly interpolate between anchors; hold +1.5 on D25~29. Add before FamilyCombat / SuccessEase.
+The Day-term slopes remain unchanged. The Final uses its separate Boss requirement.
+
 Full required Power (Source-exact):
 
 ```text
 Gate Power
-= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
+= (21 + Ordinary base offset + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
 × Event danger multiplier
 
-FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
+FireTerm = 6 + (Tier - 1) × 7.5 for golem (Tier I / II / III = 6 / 13.5 / 21), else 0
 FamilyCombat = golemCombat 0.90 for golem, else 1
 SuccessEase = 0.90 on DAY 1~21, 0.95 from DAY 22 (ordinary Gates; the Final's Boss Power is its own owner)
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
@@ -547,8 +551,8 @@ Player gets ingredients, not formula.
 
 ## COMBAT VARIANCE
 
-baseNoise=±17.5%
-baseNoiseCoefficient=0.175
+baseNoise=±12%
+baseNoiseCoefficient=0.12
 
 Goal:
 - border cases can swing
@@ -657,7 +661,7 @@ The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirem
 After preparation:
 
     combatNoise
-    = uniform multiplier within ±17.5%
+    = uniform multiplier within ±12%
       plus any explicit Trait variance modifier
 
     combatSuccess
@@ -1475,13 +1479,15 @@ Owner rule: §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
 - the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.05`
-- the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
-- the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.25, D29 34.75
+- the base constant21, Tier term, Family adjustment and Family Combat multiplier are unchanged
+- add the ordinary base offset at D1 +0.125 / D10 +0.5 / D20 +1 / D25 +1.5, linear interpolation and holding +1.5 through D29
+- ordinary golem FireTerm is 6 / 13.5 / 21; the separate Final firePairPower12 is unchanged
+- the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.05, D29 34.30
 - SuccessEase multiplies the whole ordinary Gate Power once: 0.90 on DAY 1~21, 0.95 from DAY 22
 
 FAIL:
 - a single slope applied across all Days
-- an early-Day Gate Power that moved
+- an early-Day Gate Power changed beyond the approved ordinary base offset
 - the slope implemented as a post-hoc multiplier on the finished Gate Power rather than on the
   Day term
 
@@ -1984,7 +1990,7 @@ PASS:
 #### SIM-Q01 — COMBAT VARIANCE
 
 SETUP:
-Run full-run simulations/playtests with canonical baseNoise ±17.5%.
+Run full-run simulations/playtests with canonical baseNoise ±12%.
 
 EXPECT:
 Borderline outcomes can swing.
@@ -1992,7 +1998,7 @@ Strong invested NPC remains trustworthy.
 The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
 
 PASS:
-±17.5% is used as the baseline and any later retune is supported by outcome evidence.
+±12% (User 2026-10-09, retuned from ±17.5% so a sold Item moves the result more than the roll) is used as the baseline; outcome evidence for the retune is pending measurement, and any later retune is supported by outcome evidence.
 
 #### SIM-Q02 — ROLE USAGE
 

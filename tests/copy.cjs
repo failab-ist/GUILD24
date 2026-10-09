@@ -110,7 +110,7 @@ const COMPOSED={
  '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
- '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
+ '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 발주 후보 한 칸에서 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
  '8-4':"app.js help(): the 단골 line wraps Copy.loyalty.rule() and the 단골 threshold (Adventurer.TRUSTED_REGULAR) (User 2026-10-04)"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set
@@ -122,7 +122,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const src=walk('dist').map(read).join('\n').replace(/\\`/g,'`');
  /* Decoration / Store Support / Loyalty copy is built from the live values (User 2026-10-04), so the shipped line is the
     rendered one: the data getters and Copy.loyalty are read here as the Player sees them. */
- const rendered=[...DATA.relics.map(r=>r.description),...DATA.decorations.map(d=>d.name+' — '+d.effect),
+ const rendered=[...DATA.events.map(e=>e.description),...DATA.relics.map(r=>r.description),...DATA.decorations.map(d=>d.name+' — '+d.effect),
   Copy.loyalty.sale(),Copy.loyalty.coach()].join('\n');
  const missing=new Set();let checked=0,sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
@@ -504,25 +504,17 @@ test('SALE: a reaction leaves the screen without leaving the Run',()=>{
 
 test('D-5 / EVENT §3-1: an Event says what it switched on, at the precision the rest of the catalog uses',()=>{
  const by=id=>DATA.events.find(e=>e.id===id);
- /* These five described their effect in the abstract while every other Event in the catalog
-    gave a figure, so the player could not tell what had actually changed. Each number below
-    is the one its own rule applies. */
- assert.ok(/요구 전력 \+12% · 원정 보상 \+30%/.test(by('overflow').description),'몬스터 범람 states both multipliers');
+ assert.ok(/요구 전력이 12% 오르고, 원정 결과의 손님 소지금 획득이 30% 늘어난다/.test(by('overflow').description),'몬스터 범람 states both multipliers');
  assert.equal(by('overflow').effects.danger,1.12);assert.equal(by('overflow').effects.reward,1.3);
- assert.ok(/구매 의사 \+20%p/.test(by('festival').description),'왕도 축제 states the intent it adds');
- assert.equal(by('festival').effects.foodDemand,.2);
- assert.ok(/구매 의사 \+20%p/.test(by('clinic').description),'치유소 휴무 too');
- assert.equal(by('clinic').effects.medicalDemand,.2);
- /* COPY_AUDIT §13-11 states the same rule as a total rather than per-item: the charge is
-    min(100G, waste x 5G) once cumulative waste reaches 6 (v2.9.11 wording, User 2026-09-29: `오늘 누적 폐기 6건 이상이면
-    운영비 +폐기 수 ×5G · 최대 100G`). */
- assert.ok(/누적 폐기 6건 이상이면 운영비 \+폐기 수 ×5G · 최대 100G/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
- assert.ok(/waste>=6\?Math\.min\(100,s\.stats\.waste\*5\)/.test(read('dist/systems/shop.js')),'which is the rule it applies');
- assert.ok(/특별 발주 1건 · 매입가 \+35%/.test(by('blackmarket').description),'암시장 상인 states the markup');
- assert.ok(/rollOffer\(2,1\.35\)/.test(read('dist/systems/shop.js')),'which is the offer it rolls');
- // and nothing in the catalog went back to describing an effect without saying what it is
- for(const e of DATA.events)
-  assert.ok(!/(위험|보상|의사|매입가) (증가|감소)$/.test(e.description),e.name+' still describes its effect in the abstract');
+ assert.ok(/구매 의사 \+20%p/.test(by('festival').description),'왕도 축제 states the intent it adds');assert.equal(by('festival').effects.foodDemand,.2);
+ assert.ok(/구매 의사 \+20%p/.test(by('clinic').description),'치유소 휴무 too');assert.equal(by('clinic').effects.medicalDemand,.2);
+ // EVENT §11 / COPY_AUDIT §13-11: cumulative item count, threshold and capped charge.
+ assert.ok(/누적 폐기가 6개 이상이면, 오늘 운영비 계산에 누적 폐기 개수 ×5G를 더한다\(최대 100G\)/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
+ const g=new Game();g.autosave=false;g.start('copy-event-cost');g.run.facilities=[];g.run.dayFacilities=[];g.run.event=by('audit');g.overheadBase=()=>170;
+ for(const [waste,cost]of [[5,170],[6,200],[40,270]]){g.run.stats.waste=waste;assert.equal(g.expectedOperatingCost(),cost,'audit threshold and maximum');assert.equal(g.eventEligible(by('audit')),waste>=6);}
+ assert.ok(/전용 발주 칸이 1개 추가된다. 그 칸의 매입가는 35% 높다/.test(by('blackmarket').description),'암시장 상인 states the markup');
+ g.run.event=by('blackmarket');assert.equal(DATA.eventRules.blackmarketPrice,1.35);assert.equal(g.offerFor(DATA.itemBy.rice,DATA.eventRules.blackmarketPrice).price,47,'35G purchase with 35% event slot markup');
+ for(const e of DATA.events)assert.ok(!/(위험|보상|의사|매입가) (증가|감소)$/.test(e.description),e.name+' still describes its effect in the abstract');
 });
 
 test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually moves',()=>{
@@ -639,10 +631,10 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
   ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 10% 오른다.'],
   ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
-  ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
+  ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G (소지금 상한 적용), 그 손님의 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다.'],
   ['memberBundle','단골 묶음혜택',190,'단골 손님이 오늘 두 번째 상품을 살 때, 손님은 반값만 내고 가게는 전액을 받는다.'],
-  ['premiumMember','프리미엄 멤버십',200,'다시 온 손님의 손님 소지금 +25G, 희귀 이상 상품 구매 의사 +15%p. 그 손님이 희귀 이상 상품을 정가나 할인으로 사면 단골도가 10 더 오른다.'],
+  ['premiumMember','프리미엄 멤버십',200,'다시 온 손님의 손님 소지금 +25G (소지금 상한 적용), 희귀 이상 상품 구매 의사 +15%p. 그 손님이 희귀 이상 상품을 정가나 할인으로 사면 단골도가 10 더 오른다.'],
   ['returnPoints','귀환 적립제',240,'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +4, 손님 소지금 +20G.'],
   ['expeditionMeal','원정 도시락 코너',200,'모든 음식·음료가 기존 위험 대응이 없어도 모든 위험 대응을 2 올린다. 마왕성에서는 가장 약한 위험 하나만 올린다. 대신 음식·음료 매입가가 15% 오른다.'],
   ['coldcase','전문 포션 유통 계약',180,'포션만 나오는 발주 칸이 1칸 늘어난다. 포션을 팔면 본사가 판매금액의 10%를 가게에 추가 지급한다.'],
@@ -653,7 +645,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['royalCert','왕도 프리미엄 인증',320,'바가지(150%)로 팔면 가게가 판매가의 40%를 더 받고, 손님의 바가지 구매 의사 +10%p. 대신 기본 운영비가 10% 오른다.'],
   ['opsRoom','원정 작전실',290,'손님의 위험 대응이 필요한 수치를 넘긴 만큼 투력이 오른다 (최대 +30%).'],
   ['fresh24','24시간 신선체계',360,'음식·음료가 올려 주는 능력치가 50% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +15%.'],
-  ['hub','지역 거점점 계약',340,'다음 날부터 매일 손님이 45% 확률로 1명, 15% 확률로 2명 더 온다. 대신 기본 운영비가 10% 오른다.'],
+  ['hub','지역 거점점 계약',340,'매일 아침 손님이 45% 확률로 1명, 15% 확률로 2명 더 온다. 대신 기본 운영비가 10% 오른다.'],
   ['warehouse','후방 창고 증설',130,'창고에 둘 수 있는 상품이 5칸 늘어난다.'],
   ['extraOrder','본사 추가발주권',190,'발주 칸이 2칸 늘어난다.'],
   ['rerollTicket','발주 교환권',120,'매일 첫 발주 후보 교환은 무료. 그다음부터 50G → 100G → 200G… 로 오른다.'],
@@ -699,17 +691,17 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  const EFFECTS={
   sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
   honorFrame:'새로 오는 모험가가 평범보다 높은 등급일 확률 60% (기존 40%)',
-  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 200G씩 늘어난다',
+  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 200G씩 늘어난다 (소지금 상한 적용)',
   guildShelf:'매일 아침 35% 확률로 그날 손님이 1명 더 온다',
   trainingSign:'처음 찾아오는 모험가는 55% 확률로 레벨 +1로 온다',
   infirmaryPlaque:'부상당한 손님이 가게에 오면 40% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
-  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%)',
+  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%) (마왕성 제외)',
   /* 운영형 (User 2026-10-04) */
   heroSign:'첫 점포지원을 영웅 등급 3장 중에서 고른다',
   cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다',
   voucher:'밤마다 살아 있는 모든 손님의 피로가 6 줄어든다',
-  rerollCoupon:'점포지원 후보 교환이 창마다 처음 한 번 무료'};
+  rerollCoupon:'유료 점포지원 구매 기회마다 첫 후보 교환이 무료'};
  assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
  for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');
  for(const d of DATA.decorations)assert.ok(!d.effect.endsWith('.'),d.id+' has no closing period');
@@ -718,9 +710,36 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  assert.ok(swap(DATA.relicParams.returnPoints,'loyaltyBonus',6,()=>DATA.relicBy.returnPoints.description).includes('단골도 +6'),'귀환 적립제 reads its Loyalty value');
  assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
  assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4·+1·-5.'),'the guide reads the 150% Loyalty');
- assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-4.');
- assert.equal(Copy.loyalty.rule(),'단골도는 손님이 상품을 살 때(정가 +1, 50% 할인 +4, 150% 바가지 -4)와 원정에서 살아 돌아왔을 때(+1) 바뀐다.');
- assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도는 팔 때 정가 +1, 50% 할인 +4, 150% 바가지 -4, 원정에서 살아 돌아오면 +1.');
+ assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4·+1·-4.');
+ assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -4로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
+ assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.');
+});
+
+test('Fatigue lesson and discovery follow the same penalty threshold',()=>{
+ const lesson=()=>Copy.learned.find(([id])=>id==='fatigue')[1];
+ assert.equal(Dungeon.fatiguePenaltyFrom(),10,'Canonical penalty starts at 10');
+ assert.equal(lesson(),'피로가 10 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.');
+ assert.equal(Presentation.eventLine({id:'learn-fatigue',text:'피로가 10을 넘으면 기동·정신이 떨어진다.'}),lesson(),'old saved lessons display the current rule');
+ assert.equal(Presentation.eventLine({id:'old-event',text:'저장된 원정 결과'}),'저장된 원정 결과','historical outcome text is preserved');
+ const from=Dungeon.fatiguePenaltyFrom;
+ try{Dungeon.fatiguePenaltyFrom=()=>12;
+  assert.equal(lesson(),'피로가 12 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.');
+  for(const [value,expected]of [[11,false],[12,true]]){
+   const report={day:1,outcome:'퇴각',events:[],items:[],dungeon:'spider',fatigueBeforeExpedition:value};
+   Meta.observe(Meta.fresh(),report,{});assert.equal(report.acted.includes('fatigue'),expected,'discovery boundary follows the threshold');
+  }
+ }finally{Dungeon.fatiguePenaltyFrom=from;}
+});
+
+test('Paid visit Loyalty copy follows the same value departure awards',()=>{
+ assert.equal(DATA.balance.paidVisitLoyalty,1,'Canonical paid-visit increment');
+ const old=DATA.balance.paidVisitLoyalty;
+ try{DATA.balance.paidVisitLoyalty=3;
+  assert.ok(Copy.loyalty.rule().includes('상품을 사고 떠날 때 +3'));
+  const g=new Game();g.autosave=false;g.start('paid-visit-copy');
+  const s=g.run,n=s.npcs[0];s.phase='sell';s.queue=[n.id];s.cursor=0;n.loyalty=10;n.history=[{day:s.day,paid:70}];
+  g.night=()=>{};g.depart();assert.equal(n.loyalty,13,'departure reads the shared value');
+ }finally{DATA.balance.paidVisitLoyalty=old;}
 });
 
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not
@@ -753,64 +772,81 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
    Function. This is a 1:1 equality table: a paraphrase, a missed row or a stale example is a
    FAIL here rather than something a pattern absorbs. Mechanics are out of scope and untouched -
    the effects objects are asserted to be exactly what they were. */
+test('Event descriptions follow actual effects and preserve saved Event data',()=>{
+ const by=id=>DATA.events.find(e=>e.id===id);
+ const cases=[['logistics',{price:1.25},'25%'],['overflow',{danger:1.2,reward:1.5},'20% 오르고'],['potionPrice',{potionPrice:1.4},'40%'],['festival',{foodDemand:.35},'+35%p'],['strike',{visitors:-2},'-2명'],['caravan',{offers:4},'4칸'],['payday',{wallet:1.3},'30%'],['clinic',{medicalDemand:.35},'+35%p'],['wastecover',{wasteDelay:2},'2일'],['bard',{visitors:4},'+4명'],['rite',{deathLimit:2},'2명'],['medicshift',{nightSaves:3},'3명'],['consolation',{injuredBudget:80},'80G'],['guildbonus',{flatBudget:90},'90G'],['hqlogistics',{price:.8},'20%'],['insurebuy',{categoryPrice:{insurance:.6}},'40%'],['gearaid',{categoryPrice:{gear:.6}},'40%'],['banquet',{feast:3},'3배'],['shiftrest',{outcomeFatigue:.7},'30%'],['spaday',{arrivalFatigue:10},'10 줄어'],['bounty',{reward:1.4},'40%'],['omen',{danger:1.2},'20%'],['latedelivery',{offers:-4},'4칸'],['drought',{categoryPrice:{drink:1.5}},'50%'],['guildtax',{overheadAdd:80},'80G'],['monsoon',{foodDemand:-.3},'-30%p'],['ordercap',{orderCap:3},'3개'],['collapse',{escapeCut:.2},'20%p'],['fridgebreak',{shelfCut:2},'2일'],['nightmarket',{visitors:4,overheadAdd:80},'80G'],['draft',{reward:1.5,visitors:-2},'-2명'],['clearance',{price:.5,offers:-4},'4칸'],['eliteorder',{danger:1.2,xpMult:1.8},'80%'],['heatwave',{drinkDemand:.4,categoryPrice:{drink:1.5}},'+40%p'],['trainingweek',{xpMult:1.8,reward:.5},'50% 줄어'],['nearexpiry',{price:.5},'50%'],['safegates',{reward:.5},'50%']];
+ for(const [id,effects,part]of cases){const original=by(id),saved={...JSON.parse(JSON.stringify(original)),description:'예전 저장 설명',effects};
+  assert.ok(Presentation.eventDescription(saved).includes(part),id+' uses saved effects');
+  const before=original.effects;try{original.effects=effects;assert.ok(original.description.includes(part),id+' getter follows current effects');}finally{original.effects=before;}
+  assert.equal(saved.description,'예전 저장 설명','display does not modify save');
+ }
+ const rules=DATA.eventRules,original={...rules};try{Object.assign(rules,{auditMinimum:7,auditPerItem:6,auditMaximum:120,blackmarketPrice:1.4,pilgrimageMin:2,pilgrimageMax:4,promoUnits:3});
+  assert.equal(by('audit').description,'이번 점포의 누적 폐기가 7개 이상이면, 오늘 운영비 계산에 누적 폐기 개수 ×6G를 더한다(최대 120G).');
+  assert.ok(by('blackmarket').description.includes('40%'));assert.ok(by('pilgrimage').description.includes('2~4명'));assert.ok(by('oneplus').description.includes('3개가 입고'));
+ }finally{Object.assign(rules,original);}
+ const subsidy=DATA.balance.halfPriceSupport;try{DATA.balance.halfPriceSupport=80;assert.ok(by('halfPrice').description.includes('80G'));}finally{DATA.balance.halfPriceSupport=subsidy;}
+ assert.equal(Presentation.eventDescription({id:'unknown-id',description:'기존 설명',effects:{}}),'기존 설명');assert.equal(Presentation.eventDescription(null),'');
+ for(const e of DATA.events){const saved=JSON.parse(JSON.stringify(e));assert.deepEqual(Object.keys(saved).sort(),['description','effects','id','name','reveal','weight']);assert.equal(saved.description,e.description);assert.equal(saved.describe,undefined);}
+});
+
 test('SA-Q37 / COPY_AUDIT §13: all 55 Events carry the approved Flavor and Function',()=>{
  const APPROVED=[
-  ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 발주 매입가 +15%'],
-  ['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','오늘 지정 발주 상품 1종 · 1개 발주 시 2개 입고'],
-  ['pilgrimage','게이트 순례 주간','성지 순례 깃발이 게이트 거리를 메웠다. 행렬을 따라 길을 바꾸는 모험가도 있다.','오늘 방문객 중 1~3명의 목적지가 다른 열린 게이트로 바뀔 수 있음'],
-  ['overflow','몬스터 범람','경비병들이 게이트 앞 울타리를 한 겹 더 둘렀다. 안쪽 울음소리가 오늘따라 가깝다.','오늘 게이트 요구 전력 +12% · 원정 보상 +30%'],
-  ['potionPrice','포션 가격 폭등','연금술사 조합의 새 가격표가 붙었다. 어제 붙인 종이 위에.','오늘 포션 매입가 +35%'],
-  ['coldwave','한파','아침부터 진열대 유리가 서렸다. 게이트 쪽 바닥에는 얇은 얼음이 잡혔다.','오늘 적용 가능한 게이트에 냉기 위험 추가'],
-  ['shortage','포션 공급 중단','배송 마차에서 포션 칸만 비어 있었다.','오늘 포션 발주 등장률 대폭 감소'],
-  ['rookie','신입 모험가 시즌','길드 등록대 앞에 새 장비 냄새가 난다. 이름표가 아직 빳빳한 모험가들이 줄을 섰다.','오늘 신규 모험가 1명 방문'],
-  ['royal','왕립 기사단 방문','왕립 문장이 박힌 마차가 길드 앞에 섰다. 주변 모험가들이 슬쩍 길을 비킨다.','오늘 신규 모험가 1명 방문 · 레벨·희귀도 상향'],
-  ['blackmarket','암시장 상인','개점 전, 뒷문 앞에 주인 없는 상자가 놓여 있었다. 가격표만은 또박또박 붙어 있다.','오늘 희귀 이상 특별 발주 1건 · 매입가 +35%'],
-  ['audit','본사 재고 감사','본사 감사관은 인사보다 장부를 먼저 찾았다.','오늘 누적 폐기 6건 이상이면 운영비 +폐기 수 ×5G · 최대 100G'],
-  ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 음식·음료 구매 의사 +20%p'],
-  ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 방문객 -1'],
-  ['unknown','고위험 게이트 발견','새벽 순찰대가 위험한 게이트를 발견했다. 길드가 높은 보상을 걸었다.','오늘 고위험·고보상 임시 게이트 +1'],
-  ['halfPrice','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G'],
-  ['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','오늘 적용 가능한 게이트에 독 위험 추가'],
-  ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2'],
-  ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전 주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능'],
-  ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 보험 상품 구매 의사 +20%p'],
-  ['wastecover','본사 폐기 유예','유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.','오늘 밤 폐기될 상품 유통기한 +1일'],
-  ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2'],
-  ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G'],
-  ['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1'],
+  ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 상품의 발주 매입가가 15% 오른다.'],
+  ['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','오늘 1+1 표시가 붙은 발주 상품 1종은 1개를 주문하면 2개가 입고된다.'],
+  ['pilgrimage','게이트 순례 주간','성지 순례 깃발이 게이트 거리를 메웠다. 행렬을 따라 길을 바꾸는 모험가도 있다.','오늘 손님 중 1~3명이 예상 목적지와 다른 열린 게이트로 갈 수 있다. 실제 경로는 밤에 확인한다.'],
+  ['overflow','몬스터 범람','경비병들이 게이트 앞 울타리를 한 겹 더 둘렀다. 안쪽 울음소리가 오늘따라 가깝다.','오늘 게이트 요구 전력이 12% 오르고, 원정 결과의 손님 소지금 획득이 30% 늘어난다.'],
+  ['potionPrice','포션 가격 폭등','연금술사 조합의 새 가격표가 붙었다. 어제 붙인 종이 위에.','오늘 포션의 발주 매입가가 35% 오른다.'],
+  ['coldwave','한파','아침부터 진열대 유리가 서렸다. 게이트 쪽 바닥에는 얇은 얼음이 잡혔다.','오늘 냉기·화염 위험이 없는 게이트에 냉기 위험이 추가된다.'],
+  ['shortage','포션 공급 중단','배송 마차에서 포션 칸만 비어 있었다.','오늘 포션은 발주 후보에 매우 드물게 나온다.'],
+  ['rookie','신입 모험가 시즌','길드 등록대 앞에 새 장비 냄새가 난다. 이름표가 아직 빳빳한 모험가들이 줄을 섰다.','오늘 손님 중 1명이 새 모험가로 방문한다.'],
+  ['royal','왕립 기사단 방문','왕립 문장이 박힌 마차가 길드 앞에 섰다. 주변 모험가들이 슬쩍 길을 비킨다.','오늘 손님 중 1명이 새 모험가로 방문한다. 보통의 새 모험가보다 시작 레벨이 높고, 높은 등급으로 올 가능성이 커진다.'],
+  ['blackmarket','암시장 상인','개점 전, 뒷문 앞에 주인 없는 상자가 놓여 있었다. 가격표만은 또박또박 붙어 있다.','오늘 희귀 이상 상품 전용 발주 칸이 1개 추가된다. 그 칸의 매입가는 35% 높다.'],
+  ['audit','본사 재고 감사','본사 감사관은 인사보다 장부를 먼저 찾았다.','이번 점포의 누적 폐기가 6개 이상이면, 오늘 운영비 계산에 누적 폐기 개수 ×5G를 더한다(최대 100G).'],
+  ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 손님의 음식·음료 구매 의사 +20%p'],
+  ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 손님 수 -1명.'],
+  ['unknown','고위험 게이트 발견','새벽 순찰대가 위험한 게이트를 발견했다. 길드가 높은 보상을 걸었다.','오늘 요구 전력과 손님 소지금 획득이 더 큰 임시 게이트가 1곳 열린다.'],
+  ['halfPrice','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 처음으로 상품을 50% 할인해 팔면, 본사가 보유 골드 50G를 지원한다.'],
+  ['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','오늘 독 위험이 없는 게이트에 독 위험이 추가된다.'],
+  ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보가 2칸 늘어난다.'],
+  ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전 주머니 소리가 난다.','오늘 방문한 손님은 손님 소지금의 20%만큼 상품을 더 살 수 있다(오늘만 쓰는 추가 구매 금액).'],
+  ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 손님의 보험 상품 구매 의사 +20%p'],
+  ['wastecover','본사 폐기 유예','유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.','오늘 아침 보유 재고 중 오늘까지 팔 수 있던 상품의 유통기한이 1일 늘어난다.'],
+  ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 손님 수 +2명.'],
+  ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비는 0G다.'],
+  ['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','이번 점포가 끝날 때까지 사망 한도가 1명 늘어난다.'],
   /* §13-24 … §13-55 (User 2026-09-28, v2.9.11) */
-  ["medcorps","길드 의료단 순회","길드 의료단 마차가 게이트 거리를 돈다. 줄 선 모험가들의 붕대가 하나둘 풀린다.","오늘 방문 부상 모험가 · 부상 회복"],
-  ["medicshift","길드 의무관 당직","의무관이 오늘 밤은 길드에 남는다고 했다. 붕대 상자가 접수대 옆에 놓였다.","오늘 밤 원정 결과 부상 최대 2회 · 무사로"],
-  ["consolation","길드 위로금","길드가 다친 조합원에게 위로금 봉투를 돌렸다. 봉투에는 '몸조심'이라고만 적혀 있다.","오늘 방문 부상 모험가 · 60G 추가 구매 가능"],
-  ["guildbonus","길드 특별 수당","길드가 원정 수당을 앞당겨 풀었다. 봉투가 생각보다 얇지는 않다.","오늘 방문 모험가 · 40G 추가 구매 가능"],
-  ["hqlogistics","본사 물류 지원","본사 트럭이 운임을 받지 않고 돌아갔다. 기사도 이유는 모른다.","오늘 모든 발주 매입가 -15%"],
-  ["insurebuy","보험 공동 구매","길드 보험 창구가 공동 구매를 돌렸다. 상자마다 할인 도장이 찍혀 있다.","오늘 보험 매입가 -30%"],
-  ["gearaid","본사 원정용품 지원","본사가 원정용품 창고를 정리한다며 장비 상자를 싸게 넘겼다.","오늘 야외장비 매입가 -30%"],
-  ["banquet","길드 연회","길드가 연회를 연다며 음식을 챙겨 가라고 했다. 오늘은 한 입이 두 입만큼 든든하다.","오늘 음식의 피로 회복 ×2"],
-  ["shiftrest","원정 교대 근무","길드가 원정대를 두 조로 나눠 교대로 쉬게 했다. 돌아오는 발걸음이 덜 무겁다.","오늘 원정으로 쌓이는 피로 절반"],
-  ["spaday","길드 휴양일","길드가 온천 이용권을 돌렸다. 오늘 오는 손님들은 어깨가 한결 가볍다.","오늘 방문 모험가 · 피로 -8"],
-  ["regularday","단골의 날","단골손님이 오늘 들르겠다는 쪽지를 친구 편에 보냈다.","오늘 단골 1명 추가 방문"],
-  ["bounty","길드 현상금","게시판에 현상금 종이가 새로 붙었다. 액수 앞에서 발걸음이 느려진다.","오늘 원정 보상 +20%"],
-  ["omen","마왕의 징조","새벽 하늘이 붉게 물들었다. 게이트 안쪽이 조용해서 더 불안하다.","오늘 게이트 요구 전력 +8%"],
-  ["latedelivery","입고 지연","배송 마차 바퀴가 빠졌다. 오늘 들어온 건 사과 편지 한 장.","오늘 발주 후보 -2"],
-  ["drought","가뭄","우물 앞 줄이 길다. 생수 상자 값이 아침마다 오른다.","오늘 음료 매입가 +30%"],
-  ["guildtax","길드 세금 징수","징수원이 영업 시작 전에 왔다. 영수증은 주지 않았다.","오늘 운영비 +50G"],
-  ["monsoon","장맛비","비가 그치지 않는다. 우산 든 손님은 봉지를 들 손이 없다.","오늘 음식·음료 구매 의사 -15%p"],
-  ["ordercap","본사 발주 제한","본사 공문: 오늘은 품목당 두 상자까지만. 이유는 '사정상'.","오늘 같은 상품 발주 최대 2개"],
-  ["noreroll","포스기 먹통","포스기가 멈췄다. 오늘은 발주서를 바꿔 달라고 전화할 수도 없다.","오늘 발주 후보 교환 불가"],
-  ["pricewatch","가격 단속","길드 감시관이 가격표를 하나씩 들여다보고 있다.","오늘 바가지(150%) 판매 불가"],
-  ["collapse","퇴각로 붕괴","게이트 뒤편 샛길이 무너졌다. 오늘은 돌아 나올 길이 하나뿐이다.","오늘 원정 퇴각 확률 -10%p"],
-  ["summons","길드 소집령","실력자 한 명이 길드에 급히 불려 갔다. 행선지는 비밀이라고 한다.","오늘 방문 예정이었던 최고 레벨 모험가 대신 다른 모험가 방문"],
-  ["fridgebreak","냉장고 고장","냉장고 모터가 새벽부터 덜컹거린다. 수리 기사는 내일 온다고 했다.","오늘 음식·음료 재고 유통기한 -1일"],
-  ["nightmarket","야시장","게이트 거리에 야시장이 열렸다. 사람도 많고 자릿세도 붙었다.","오늘 방문객 +3 · 운영비 +60G"],
-  ["draft","원정 징발령","길드가 모험가 몇 명을 징발해 갔다. 남은 사람 몫이 커졌다.","오늘 원정 보상 +40% · 방문객 -1"],
-  ["clearance","본사 재고 떨이","본사 창고 정리 날이다. 싸게 주지만 고를 수는 없다.","오늘 모든 발주 매입가 -25% · 발주 후보 -3"],
-  ["eliteorder","정예 토벌령","왕도가 정예 토벌령을 내렸다. 게이트가 험해진 만큼 배우는 것도 많다.","오늘 게이트 요구 전력 +15% · 원정 경험치 +50%"],
-  ["heatwave","폭염","진열대 유리가 뜨겁다. 음료 칸 앞에서만 사람들이 오래 서 있다.","오늘 음료 구매 의사 +25%p · 음료 매입가 +35%"],
-  ["gateclosed","게이트 임시 폐쇄","경비대가 게이트 하나에 밧줄을 쳤다. 그쪽으로 가려던 모험가들이 다른 줄에 선다.","오늘 열린 게이트 1곳 폐쇄"],
-  ["trainingweek","길드 훈련 주간","교관들이 게이트 앞에 진을 쳤다. 배우는 건 많은데 챙겨 오는 건 적다.","오늘 원정 경험치 +50% · 원정 보상 -30%"],
-  ["nearexpiry","유통기한 임박 특가","본사가 날짜 임박 상품을 싸게 돌렸다. 스티커 날짜가 오늘이다.","오늘 모든 발주 매입가 -40% · 오늘 들어온 재고는 오늘까지"],
-  ["safegates","게이트 안정화 작업","길드 공병대가 밤새 게이트를 다졌다. 안쪽이 조용해진 만큼 챙길 것도 적다.","오늘 모든 게이트 1단계 · 원정 보상 -40%"],
+  ["medcorps","길드 의료단 순회","길드 의료단 마차가 게이트 거리를 돈다. 줄 선 모험가들의 붕대가 하나둘 풀린다.","오늘 부상인 손님이 가게에 오면 부상이 낫는다(중상 제외)."],
+  ["medicshift","길드 의무관 당직","의무관이 오늘 밤은 길드에 남는다고 했다. 붕대 상자가 접수대 옆에 놓였다.","오늘 밤 부상으로 돌아온 모험가의 남는 부상을 최대 2명까지 없앤다(중상·사망 제외)."],
+  ["consolation","길드 위로금","길드가 다친 조합원에게 위로금 봉투를 돌렸다. 봉투에는 '몸조심'이라고만 적혀 있다.","오늘 방문 때 부상이 남아 있는 손님은 상품을 60G 더 살 수 있다(오늘만 쓰는 추가 구매 금액)."],
+  ["guildbonus","길드 특별 수당","길드가 원정 수당을 앞당겨 풀었다. 봉투가 생각보다 얇지는 않다.","오늘 방문한 손님은 상품을 40G 더 살 수 있다(오늘만 쓰는 추가 구매 금액)."],
+  ["hqlogistics","본사 물류 지원","본사 트럭이 운임을 받지 않고 돌아갔다. 기사도 이유는 모른다.","오늘 모든 상품의 발주 매입가가 15% 낮아진다."],
+  ["insurebuy","보험 공동 구매","길드 보험 창구가 공동 구매를 돌렸다. 상자마다 할인 도장이 찍혀 있다.","오늘 보험 상품의 발주 매입가가 30% 낮아진다."],
+  ["gearaid","본사 원정용품 지원","본사가 원정용품 창고를 정리한다며 장비 상자를 싸게 넘겼다.","오늘 야외장비 상품의 발주 매입가가 30% 낮아진다."],
+  ["banquet","길드 연회","길드가 연회를 연다며 음식을 챙겨 가라고 했다. 오늘은 한 입이 두 입만큼 든든하다.","오늘 원정에 쓰는 음식의 피로 회복이 2배가 된다(음료는 그대로)."],
+  ["shiftrest","원정 교대 근무","길드가 원정대를 두 조로 나눠 교대로 쉬게 했다. 돌아오는 발걸음이 덜 무겁다.","오늘 원정 결과의 피로 증가량이 50% 줄어든다"],
+  ["spaday","길드 휴양일","길드가 온천 이용권을 돌렸다. 오늘 오는 손님들은 어깨가 한결 가볍다.","오늘 방문하는 모든 손님의 피로가 8 줄어든다."],
+  ["regularday","단골의 날","단골손님이 오늘 들르겠다는 쪽지를 친구 편에 보냈다.","오늘 아직 방문 예정이 아닌 단골이 있으면 1명이 추가로 온다."],
+  ["bounty","길드 현상금","게시판에 현상금 종이가 새로 붙었다. 액수 앞에서 발걸음이 느려진다.","오늘 원정 결과의 손님 소지금 획득이 20% 늘어난다."],
+  ["omen","마왕의 징조","새벽 하늘이 붉게 물들었다. 게이트 안쪽이 조용해서 더 불안하다.","오늘 게이트 요구 전력이 8% 오른다."],
+  ["latedelivery","입고 지연","배송 마차 바퀴가 빠졌다. 오늘 들어온 건 사과 편지 한 장.","오늘 발주 후보가 2칸 줄어든다."],
+  ["drought","가뭄","우물 앞 줄이 길다. 생수 상자 값이 아침마다 오른다.","오늘 음료의 발주 매입가가 30% 오른다."],
+  ["guildtax","길드 세금 징수","징수원이 영업 시작 전에 왔다. 영수증은 주지 않았다.","오늘 운영비에 50G가 더해진다."],
+  ["monsoon","장맛비","비가 그치지 않는다. 우산 든 손님은 봉지를 들 손이 없다.","오늘 손님의 음식·음료 구매 의사 -15%p"],
+  ["ordercap","본사 발주 제한","본사 공문: 오늘은 품목당 두 상자까지만. 이유는 '사정상'.","오늘은 발주 후보 한 칸에서 최대 2개까지 주문할 수 있다."],
+  ["noreroll","포스기 먹통","포스기가 멈췄다. 오늘은 발주서를 바꿔 달라고 전화할 수도 없다.","오늘 발주 후보 교환을 할 수 없다(무료 교환도 포함)."],
+  ["pricewatch","가격 단속","길드 감시관이 가격표를 하나씩 들여다보고 있다.","오늘은 상품을 바가지(150%)로 팔 수 없다."],
+  ["collapse","퇴각로 붕괴","게이트 뒤편 샛길이 무너졌다. 오늘은 돌아 나올 길이 하나뿐이다.","오늘 원정의 기본 퇴각 확률이 10%p 줄어든다(귀환석의 추가 퇴각 효과는 그대로)."],
+  ["summons","길드 소집령","실력자 한 명이 길드에 급히 불려 갔다. 행선지는 비밀이라고 한다.","오늘 방문할 수 있는 모험가 중 레벨이 가장 높은 1명은 가게에 오지 않는다."],
+  ["fridgebreak","냉장고 고장","냉장고 모터가 새벽부터 덜컹거린다. 수리 기사는 내일 온다고 했다.","오늘 아침 가진 음식·음료 재고의 유통기한이 1일 줄어든다(최소 오늘까지)."],
+  ["nightmarket","야시장","게이트 거리에 야시장이 열렸다. 사람도 많고 자릿세도 붙었다.","오늘 손님 수 +3명. 운영비에 60G가 더해진다."],
+  ["draft","원정 징발령","길드가 모험가 몇 명을 징발해 갔다. 남은 사람 몫이 커졌다.","오늘 원정 결과의 손님 소지금 획득이 40% 늘어난다. 손님 수 -1명."],
+  ["clearance","본사 재고 떨이","본사 창고 정리 날이다. 싸게 주지만 고를 수는 없다.","오늘 모든 상품의 발주 매입가가 25% 낮아진다. 발주 후보는 3칸 줄어든다."],
+  ["eliteorder","정예 토벌령","왕도가 정예 토벌령을 내렸다. 게이트가 험해진 만큼 배우는 것도 많다.","오늘 게이트 요구 전력이 15% 오르고, 원정 경험치가 50% 늘어난다."],
+  ["heatwave","폭염","진열대 유리가 뜨겁다. 음료 칸 앞에서만 사람들이 오래 서 있다.","오늘 손님의 음료 구매 의사 +25%p. 음료의 발주 매입가는 35% 오른다."],
+  ["gateclosed","게이트 임시 폐쇄","경비대가 게이트 하나에 밧줄을 쳤다. 그쪽으로 가려던 모험가들이 다른 줄에 선다.","오늘 열린 게이트 중 1곳이 폐쇄된다."],
+  ["trainingweek","길드 훈련 주간","교관들이 게이트 앞에 진을 쳤다. 배우는 건 많은데 챙겨 오는 건 적다.","오늘 원정 경험치가 50% 늘고, 원정 결과의 손님 소지금 획득은 30% 줄어든다."],
+  ["nearexpiry","유통기한 임박 특가","본사가 날짜 임박 상품을 싸게 돌렸다. 스티커 날짜가 오늘이다.","오늘 모든 상품의 발주 매입가가 40% 낮아진다. 오늘 발주로 입고한 상품은 오늘까지만 팔 수 있다."],
+  ["safegates","게이트 안정화 작업","길드 공병대가 밤새 게이트를 다졌다. 안쪽이 조용해진 만큼 챙길 것도 적다.","오늘 모든 게이트가 티어 I로 열린다. 원정 결과의 손님 소지금 획득은 40% 줄어든다."],
  ];
  assert.equal(APPROVED.length,55,'§13 audits all 55 Events (23 → 55 in v2.9.11)');
  assert.deepEqual(DATA.events.map(e=>e.id),APPROVED.map(r=>r[0]),'the catalogue is exactly those 55, in order');

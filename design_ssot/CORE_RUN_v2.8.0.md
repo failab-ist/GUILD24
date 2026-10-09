@@ -148,7 +148,7 @@ Canonical -> NIGHT_CLOSING_v2.8.0.md
 ### CLOSING
 question=`오늘 장사는 어땠을까?`
 
-Purpose: Revenue · COGS · Margin · Overhead · Waste · Relic spend · Final Gold.
+Purpose: opening Gold · actual cash inflows/outflows · end Gold · cash change · inventory/expiry information. The receipt contract is owned by NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT — EXACT.
 
 Canonical -> NIGHT_CLOSING_v2.8.0.md
 
@@ -557,7 +557,7 @@ D21~D30  11
 ```
 
 - the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
-- 추모 방명록 adds +2 to every segment limit (`META_v2.8.0.md`)
+- 추모 방명록 adds the current Decoration bonus to every segment limit (`META_v2.8.0.md` §counter — 추모 방명록)
 - the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
 - the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.8.0.md`)
 - death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
@@ -639,7 +639,7 @@ Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20,
 PASS:
 - the Run ends at Closing exactly when the cumulative count reaches the current segment limit 5 / 8 / 11
 - the count never resets at a segment boundary; 5 Deaths by D10 ends the Run, 5 Deaths first reached on D11 does not
-- 추모 방명록 adds +2 to every segment; 위령제 adds +1 to every segment from its Day
+- 추모 방명록 adds the current META Decoration bonus to every segment; 위령제 adds +1 to every segment from its Day
 - MORNING and ORDER always show `사망 {n} / {limit} · D{end}까지` with the limit in force, warning color at one left
 
 #### RUN-Q02 — D0 RELIC BEFORE BUSINESS

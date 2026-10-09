@@ -49,7 +49,7 @@ function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e))
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
- out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
+ out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix+(k==='foodMult'?' (대응 제외)':''),tone,bad:tone==='cost'});}
  /* ITEM §PRESENTATION ORDER — EXACT (User 2026-09-28, v2.9.10 quick patch; was Food-leads / Drink-ends since v2.9.0):
     one order for every Item, the shelf's own kind order read as effects - Hazard Counter, then 피로 회복, then the
     Core Stats in the stat panel's order, then anything else. Within a group the catalog order stands (a stable sort). */
@@ -232,9 +232,9 @@ function nightChanges(r, npc, facilities=[]){const out=[];
   }
   if(r.finalFatigue!==undefined){
    /* NIGHT_CLOSING §FATIGUE RESULT / COPY_AUDIT §6-6: one settled value, daily causes on demand;
-      band from 20 up, next-decision penalty from 10 up, thresholds owned by Dungeon. */
+      band from 10 up, next-decision penalty from 10 up, thresholds owned by Dungeon. */
      const settled=r.settledFatigue??r.finalFatigue,band=G.Dungeon.fatigueBand(settled);
-     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=20?' · '+band.name:''),
+     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=10?' · '+band.name:''),
       detail:true});
      if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:band.name,extra:band.text});
   }
@@ -252,7 +252,9 @@ const itemName=id=>D.itemBy[id]?.name||null;
    event that authors its own `text` keeps it, and one that does not - a Hazard mitigation
    carries the Hazards it covered instead - is described from what it actually holds. An
    event with nothing to say is left out rather than printed as a blank. */
-function eventLine(ev,r){if(!ev)return null;return ev.text||supplyEffect(ev,r||{})||null;}
+function eventLine(ev,r){if(!ev)return null;
+ const lesson=G.Copy.learned.find(([id])=>ev.id==='learn-'+id);
+ return lesson?lesson[1]:ev.text||supplyEffect(ev,r||{})||null;}
 function supplyEffect(ev,r){
  /* SA-Q08: a Hazard mitigation is only worth a claim about the Outcome when
     DUNGEON_HAZARD's RESULT-PROOF counterfactual actually proved one - the old `ev.prevented`
@@ -296,6 +298,8 @@ function amount(key,value,moved=true){
 /* josa() / routeChangeLine() live in data/copy.js (G.Copy) so the engine's NIGHT line needs no UI layer;
    re-exported here for the screens. */
 const josa=G.Copy.josa,routeChangeLine=G.Copy.routeChangeLine;
-G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
+// A saved Event keeps its actual effects; only the known description is refreshed.
+function eventDescription(e){if(!e)return '';const current=D.events.find(x=>x.id===e.id);return current?current.describe(e.effects??current.effects):e.description??'';}
+G.Presentation={eventDescription,josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,fatigueRows,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

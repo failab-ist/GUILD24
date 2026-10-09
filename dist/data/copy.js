@@ -191,21 +191,19 @@ const Copy={
     guide and the 단골 mark follow the values. Order = the price keys' own order (50% · 100% · 150%). */
  loyalty:{
   sign:x=>(x>0?'+':'')+x,
-  sale(){const P=G.DATA.pricing,s=this.sign;return '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 '+s(P.half.loyalty)+'·'+s(P.full.loyalty)+'·'+s(P.overcharge.loyalty)+'.';},
-  rule(){const P=G.DATA.pricing,s=this.sign;return '단골도는 손님이 상품을 살 때(정가 '+s(P.full.loyalty)+', 50% 할인 '+s(P.half.loyalty)+', 150% 바가지 '+s(P.overcharge.loyalty)
-   +')와 원정에서 살아 돌아왔을 때('+s(G.DATA.balance.returnLoyalty)+') 바뀐다.';},
-  coach(){const P=G.DATA.pricing,s=this.sign;return '단골 손님. 단골도 '+G.Adventurer.TRUSTED_REGULAR+'부터 단골이 된다. 단골도는 팔 때 정가 '+s(P.full.loyalty)
-   +', 50% 할인 '+s(P.half.loyalty)+', 150% 바가지 '+s(P.overcharge.loyalty)+', 원정에서 살아 돌아오면 '+s(G.DATA.balance.returnLoyalty)+'.';}},
+  sale(){const P=G.DATA.pricing,s=this.sign;return '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 기본 단골도는 각각 '+s(P.half.loyalty)+'·'+s(P.full.loyalty)+'·'+s(P.overcharge.loyalty)+'.';},
+  rule(){const P=G.DATA.pricing,B=G.DATA.balance,s=this.sign;return '기본 단골도는 상품을 살 때 정가 '+s(P.full.loyalty)+', 50% 할인 '+s(P.half.loyalty)+', 150% 바가지 '+s(P.overcharge.loyalty)+'로 바뀐다. 상품을 사고 떠날 때 '+s(B.paidVisitLoyalty)+', 원정에서 살아 돌아오면 '+s(B.returnLoyalty)+', 바가지를 거절하면 '+s(P.overcharge.refusalLoyalty)+'다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.';},
+  coach(){return '단골 손님. 단골도 '+G.Adventurer.TRUSTED_REGULAR+'부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.';}},
  lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
  /* NIGHT_CLOSING §DISCOVERY LINE (User 2026-09-30): the rule, named once per account by a coach mark on the NIGHT record
     of the first expedition it acted on - taught after it happened rather than before. Order = coach order on one record. */
- learned:[['injured','부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다. 원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.'],
+ learned:[['injured','부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다(특성에 따라 달라질 수 있다). 원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.'],
   /* COPY_AUDIT §26-2 (User 2026-10-02): a Severe Injury is its own rule - the adventurer rests, unseen, then comes back healthy */
   ['severe','중상을 입었다. 며칠 쉬어야 해서 그동안은 손님으로 오지 않는다. 다 쉬면 건강하게 돌아온다.'],
-  ['fatigue','피로가 10을 넘으면 기동·정신이 떨어진다. 음식·음료가 피로를 덜어 준다.'],
+  ['fatigue',null],
   ['counter','위험에 맞는 상품은 그 위험의 압박을 줄인다.'],
   ['prepared','건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.'],
-  ['great','준비가 넉넉하면 대성공이 난다. 대성공은 가게에도 보너스 골드를 남긴다.'],
+  ['great','준비가 넉넉하면 대성공이 난다. 일반 원정의 대성공은 가게에도 보너스 골드를 남긴다.'],
   ['death','사망이 쌓여 한도에 닿으면 소문이 퍼져 영업이 끝난다.']],
  arrive(n,day,hasCallback,run){
   const ex=exclusionFor(run,n,'arrival'),emit=line=>{remember(run,n,'arrival',line);return line;};
@@ -288,7 +286,7 @@ Copy.boss={
    /* COPY_WORLD_VOICE_v2.7 §GLUTTONY: verbatim. v2.7 has no Rarity threshold for this Boss,
       so the inherited sentence claimed a Rarity boundary the mechanic does not have - every
       positive Core-Stat contribution from an Item is halved, whatever the Item cost. */
-   GLUTTONY:['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+   GLUTTONY:['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.']],
    LUST:['매혹의 속삭임',['최종 원정에서 단골이 아닌 출전자의 능력치가 모두 {lust}% 감소한다.','단골은 영향을 받지 않는다.']],
    SLOTH:['나태의 봉인',['슬로스에게는 봉인이 세 개 있다.','점포지원을 받는 날 대신 봉인 하나를 풀 수 있다. 풀 수 있는 날은 DAY 15·20·25 중 두 번과 DAY 30이다.','봉인을 풀면 그날 점포지원은 받지 못하고, 많이 풀수록 슬로스가 약해진다.']]}},
  /* The scouting report is the D25 disclosure now, so its button acknowledges the report
@@ -374,5 +372,8 @@ Copy.prologue={skip:'건너뛰기',tap:'탭하여 넘기기',click:'클릭하여
  ['…뭐, 그건 모험가들이 할 일이고.'],
  ['나는 던전 앞에 편의점을 차렸다.'],
  ['오는 모험가마다 팔고, 먹이고, 키운다.','단골이 되면 또 오고, 또 오면 더 강해진다.']]};
+/* COPY_AUDIT §26-2: the lesson follows the actual penalty-band threshold. */
+Object.defineProperty(Copy.learned.find(([id])=>id==='fatigue'),1,{enumerable:true,get:()=>
+ '피로가 '+G.Dungeon.fatiguePenaltyFrom()+' 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.'});
 G.Copy=Copy;
 })(globalThis);

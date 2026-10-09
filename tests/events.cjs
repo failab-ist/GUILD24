@@ -40,6 +40,13 @@ test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic 
  for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
 });
 
+test('EVENT 55 게이트 안정화 작업 (User 2026-10-09): out of the Pool before the first Day a tier II Gate can open; other Events unchanged',()=>{
+ const g=fresh('safe-elig'),safe=DATA.events.find(e=>e.id==='safegates'),other=DATA.events.find(e=>!e.effects.tierOne&&g.eventEligible(e));
+ const first=globalThis.Dungeon.FIRST_TIER2_DAY;
+ g.run.day=first-1;assert.equal(g.eventEligible(safe),false,'before: out');assert.equal(g.eventEligible(other),true,'others stay');
+ g.run.day=first;assert.equal(g.eventEligible(safe),true,'from that Day: in');
+});
+
 test('EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): a Run never meets the same Event twice, and the log survives a save',()=>{
  let events=0,repeats=0;
  for(let i=0;i<60;i++){const g=fresh('norepeat-'+i),s=g.run;s.money=99999;
@@ -114,12 +121,29 @@ test('EVENT 24~55: every new Event effect moves its own channel',()=>{
   assert.ok(t.dungeons.every(d=>d.tier===1),'게이트 안정화 작업: every Gate Tier 1');
   assert.deepEqual(t.dungeons.map(d=>d.family),['spider','slime'],'the Families stay');}
  {const t=apply('fridgebreak',(h,t)=>{t.inventory=[];h.stock('rice',1);h.stock('rope',1);});
-  const [rice,rope]=t.inventory;assert.equal(rice.expires,6+2-1,'냉장고 고장: Food -1 Day');assert.equal(rope.expires,6+5,'Field Gear untouched');}
+  const [rice,rope]=t.inventory;assert.equal(rice.expires,6+2-1,'냉장고 고장: Food -1 Day');assert.equal(rope.expires,6+5,'Field Gear untouched');
+  rice.expires=t.day+1;const h=fresh('ev-fridge-floor');h.run=t;h.rollEvent=()=>E('fridgebreak');h.morningEvent(t.dungeons.map(d=>d.family));assert.equal(rice.expires,t.day,'shelf cut floors at today');assert.equal(t.inventory.length,2,'morning keeps stock sellable today');h.nightDiscard();assert.ok(!t.inventory.includes(rice),'remaining stock is discarded tonight');}
  {const h=fresh('ev-near'),t=h.run;t.phase='order';t.event=E('nearexpiry');h.stock('rope',1);assert.equal(t.inventory.at(-1).expires,t.day+1,'유통기한 임박 특가: today only');t.event=null;}
- // ORDER: same-SKU cap, no reroll
+ // ORDER: per-offer cap, no reroll
  {const h=fresh('ev-order'),t=h.run;t.phase='order';t.money=99999;t.event=E('ordercap');const i=t.offers.findIndex(o=>o.quantity>=3);
   if(i>=0){assert.throws(()=>h.validateCart({[i]:3}),/2개까지만 발주/);assert.doesNotThrow(()=>h.validateCart({[i]:2}));assert.equal(h.quantityLimit(i).reason,'cap');}
   t.event=E('noreroll');assert.throws(()=>h.reroll(),/발주 후보 교환을 할 수 없습니다/);t.event=null;}
+ // User 2026-10-10 / EVENT §41: each slot supplies at most 2, even with the same product twice.
+ {const h=fresh('ev-cap-slots'),t=h.run;t.phase='order';t.money=99999;t.inventory=[];t.event=E('ordercap');
+  t.offers=[{item:'rice',price:35,quantity:4},{item:'rice',price:35,quantity:4}];
+  const saved=JSON.parse(JSON.stringify(t)),restored=new Game(h.account,saved);
+  assert.deepEqual(restored.run.offers.map(o=>o.quantity),[2,2],'old active sheet is capped on restore');assert.deepEqual(restored.run.inventory,t.inventory,'already paid stock is untouched');assert.equal(restored.rng.state,saved.rngState,'restore adds no random draw');
+  assert.throws(()=>h.validateCart({0:3}),/한 칸에서 2개까지만/);
+  assert.doesNotThrow(()=>h.validateCart({0:2,1:2}),'duplicate product slots are independent');
+  h.setQuantity(0,2);assert.equal(h.quantityLimit(1).max,2);h.setQuantity(1,2);h.confirmOrder();
+  assert.equal(t.inventory.length,4);assert.equal(t.money,99999-140);
+  t.event=null;assert.doesNotThrow(()=>h.validateCart({0:2,1:2}),'ordinary ordering is unchanged');
+  t.event=E('ordercap');t.facilities=['rotation'];t.previousSales=4;
+  const prior=h.rng;h.rng={int:(lo,hi)=>hi};
+  for(const rarity of [0,1,2,3,4]){const it=DATA.items.find(it=>it.rarity===rarity);assert.ok(it,'each rarity has a test subject');assert.ok(h.offerFor(it).quantity<=2,'rarity '+rarity+' supply cap includes support bonuses');}
+  assert.equal(h.offerFor(DATA.itemBy.rice).quantity,2);t.event=null;t.facilities=[];
+  assert.equal(h.offerFor(DATA.itemBy.rice).quantity,4,'ordinary supply remains 2 to 4');h.rng=prior;
+ }
  // SALE: 바가지 closed, drink intent up
  {const h=fresh('ev-sale'),t=h.run;t.phase='sell';const n=t.npcs[0];n.traits=[];n.money=9999;n.pack=[];n.refused=[];t.queue=[n.id];t.cursor=0;h.stock('water',1);
   t.event=E('pricewatch');assert.equal(h.sell(t.inventory.at(-1).id,'overcharge'),false,'가격 단속: no 바가지 sale');assert.equal(n.pack.length,0);
@@ -257,6 +281,14 @@ test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
  // User 2026-09-29: a Reroll ends the promotion - the new sheet carries no 1+1, and a second Reroll does not bring it back
  s.money=5000;g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'a Reroll ends the 1+1');
  g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'and it does not come back');
+});
+
+test('EVENT 02 (User 2026-10-09): only the first Run DAY 2 steers the 1+1 SKU to a Common Counter, supply capped at 2',()=>{
+ for(let n=0;n<40;n++){const g=fresh('promo-counter'+n),s=g.run;s.event=DATA.events.find(e=>e.id==='oneplus');s.firstRun=true;s.day=2;g.generateOffers();
+  const H=[...new Set(s.dungeons.flatMap(d=>d.hazards))],p=s.offers.filter(o=>o.promo);
+  assert.equal(p.length,1,'exactly one designated SKU');
+  const it=DATA.itemBy[p[0].item];assert.equal(it.rarity,0,'Common');assert.ok(Relics.directCounter(it,H),'counters an open Gate Hazard: '+it.id);
+  assert.ok(p[0].quantity<=2,'tutorial supply is at most 2');}
 });
 
 test('EVENT 10: 암시장 keeps its one special slot through a Reroll (User 2026-09-29)',()=>{

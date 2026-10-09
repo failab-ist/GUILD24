@@ -104,15 +104,17 @@ Fatigue in this strip:
 
     피로 2
 
-If a committed purchase reduces departure Fatigue:
+This single `피로 N` is `Dungeon.prepare()`'s `fatigueBeforeExpedition`, from the committed Bag, matching the effective Stat grid. Selecting an uncommitted Item does not move it. A fatigued arrival fully relieved by committed Items keeps `피로 0` visible; a zero-Fatigue arrival retains the existing omission.
 
-    피로 12 -> 출발 8
+A committed purchase reducing preparation Fatigue from 12 to 8 changes the single number to:
+
+    피로 8
 
 Do not show:
 
     성공 N · 퇴각 N · 부상 N
 
-Detailed deterministic arithmetic belongs in the shared anchored explanation popover.
+Stored Fatigue is unchanged by a sale; resolution settles recovery and outcome Fatigue. NPC detail labels that stored reading `현재 피로 (상품 사용 전)`. Detailed deterministic arithmetic follows DUNGEON_HAZARD; NIGHT shows the result.
 
 ## PRE-REVEAL BOUNDARY
 
@@ -126,6 +128,8 @@ Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Can
 
 No new future-customer information (future Job, Level, Destination, Preparation Need, importance score); the currently
 authorized queue count stays. Not knowing who comes next is part of inventory allocation judgment.
+
+One approved aggregate reference exception (User 2026-10-09): while in SALE, the existing queue/progress area may reveal on demand, per open Gate, **how many of today's customers are still to be served, counting the one at the counter** (the player need not remember ORDER's line). Counts use ORDER's source (`claimedGateFor` over the Day's queue), so a Trait's or Event's uncertainty stays: the claimed Gate, never the actual one. Near the end of the queue the remaining counts can imply the next customer's claimed Gate (User-accepted); nothing reveals their identity, Job, Traits, needs or actual destination. No outcome / Item recommendation follows from this reference. Presentation / coach / QA -> UI_UX §SALE — QUEUE GATE COUNT REFERENCE.
 
 ## DESTINATION
 
@@ -242,7 +246,7 @@ The compared Item's detail lives on the counter tray, so comparing two Items nev
 Shelf order: rows are ordered by kind, then days left before discard (nearest first), then higher Rarity, ties in the
 existing order, held for the Day; every row carries its shelf life (`폐기까지 N일 / 내일까지 / 오늘까지`) and a row on its
 last day is emphasized (exact -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
-recommendation order; it does not change with the customer.
+recommendation order; only the Hazard-answer lead follows the current customer's own Gate (User 2026-10-09).
 
 ### MATCHING-EFFECT EMPHASIS — RETIRED
 
@@ -342,7 +346,7 @@ Once an Item is actually purchased and committed into the NPC's Bag, it is no lo
 - the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 % stay frozen (§FROZEN OUTLOOK)
 - exact Item/direct-effect changes may be shown
 - exact proven derived changes from Fatigue/other owned systems may be shown with their source
-- current Fatigue stays the status strip's `피로 N`; no `피로 {A} → 출발 {B}` line is added
+- the status strip's single `피로 N` reads departure Fatigue from the committed Bag, matching prepared Stats; no `피로 {A} → 출발 {B}` line is added
 
 A refusal does not grant the Item effect.
 
@@ -413,7 +417,7 @@ The four Stat cells carry no Hazard tag (User 2026-10-03); the 환경 대응 met
 
 ## NPC DETAIL — CONDITION TRUTH
 
-NPC detail exposes when relevant: actual injury effect, current fatigue, current fatigue tier and active penalty,
+NPC detail exposes when relevant: actual injury effect, stored fatigue before Item use and its pre-recovery band/penalty,
 Severe Injury remaining rest days, fatigue recovery method.
 
 `injury=2` itself has no Stat penalty.

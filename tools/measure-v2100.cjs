@@ -3,7 +3,8 @@
 // layer on, Decorations bought from earned Capital in a named order (cheapest first). Per arm it reports ordinary success by Day band,
 // D30 reach / clear, deaths, a zombie line and the Decorations bought; a second line the end reasons (death limit, bankruptcy,
 // Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers
-// against the rest, cash per Day and the Capital gain. The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
+// against the rest, cash per Day and the Capital gain; a third line the preparation lines (with / without an Item, the share of
+// Item expeditions whose result an Item changed, the top four's share of the Items sold). The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
 //   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,expert] [--decos none,economy] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
@@ -17,6 +18,13 @@ const BANDS=[[1,7],[8,14],[15,21],[22,29]];
 function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),out={top:[0,0,0],rest:[0,0,0]};
  for(const n of npcs){const t=out[top.has(n)?'top':'rest'];for(const x of n.records||[]){if(x.deep||x.day>=30)continue;t[1]++;if(ok(x))t[0]++;if(x.outcome==='사망')t[2]++;}}
  return out;}
+// 준비 지표(User 2026-10-09): 상품을 들고 간 원정 대 맨손 원정 [원정, 성공, 사망], 상품이 결과를 바꾼 원정(RESULT-PROOF
+// heroProof.outcome 또는 combatHero)과 그중 사망을 막은 원정, 판 상품 중 마지막 레벨 상위 4명이 받은 몫.
+function prep(npcs){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),o={eq:[0,0,0],bare:[0,0,0],changed:0,saved:0,items:0,topItems:0};
+ for(const n of npcs)for(const x of n.records||[]){if(x.deep||x.day>=30)continue;const k=(x.items||[]).length,t=o[k?'eq':'bare'];
+  t[0]++;if(x.outcome==='성공'||x.outcome==='대성공')t[1]++;if(x.outcome==='사망')t[2]++;
+  if(k){o.items+=k;if(top.has(n))o.topItems+=k;if(x.heroProof?.outcome||x.combatHero)o.changed++;if(x.heroProof?.outcome?.worse==='사망')o.saved++;}}
+ return o;}
 const endKind=r=>r.win?'클리어':r.reach?'마왕실패':/소문/.test(r.end)?'사망한도':/자금/.test(r.end)?'파산':'기타';
 
 // 기준 측정은 플레이어와 같은 첫 계정 보호를 사용한다. 다음 런 여부는 Game.start가 판단한다.
@@ -71,7 +79,7 @@ function worker({root,kind,policy,deco,T,R,part}){
    d10:recs.filter(x=>x.day<=10&&x.outcome==='사망').length,injDep:recs.filter(x=>x.departedInjured).length,
    d2:recs.filter(x=>x.day<=2&&x.outcome==='사망').length,
    injDeath:recs.filter(x=>x.departedInjured&&x.outcome==='사망').length,
-   core:split(s.npcs,ok),
+   core:split(s.npcs,ok),prep:prep(s.npcs),
    cash:(s.reportHistory||[]).length?((s.reportHistory.at(-1).balance-700)/s.reportHistory.length):0,
    deco:(this.account.store?.owned||[]).length,sales:s.settlement?.sales??s.stats.revenue,gain:s.settlement?.gain??0,rate:s.settlement?.rate??0,
    relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay])});
@@ -115,7 +123,10 @@ function summary(res){
    const grp=g=>p(sum(rs,r=>r.core?.[g][0]||0),sum(rs,r=>r.core?.[g][1]||0))+' · 사망 '+avg(r=>r.core?.[g][2]||0).toFixed(2);
    L.push('  └ 종료 '+Object.entries(ends).sort((a,b)=>b[1]-a[1]).map(([e,c])=>e+' '+p(c,rs.length)).join(' ')+' | 끝난 날 중앙 '+ds[ds.length>>1]
     +' | D10까지 사망 '+avg(r=>r.d10||0).toFixed(2)+' | 부상 출발/런 '+avg(r=>r.injDep||0).toFixed(1)+' (사망 '+p(sum(rs,r=>r.injDeath||0),sum(rs,r=>r.injDep||0))+')'
-    +' | 상위 4명 성공 '+grp('top')+' · 나머지 '+grp('rest')+' | 현금/일 '+avg(r=>r.cash).toFixed(0)+' | 자본 '+avg(r=>r.gain).toFixed(0));}}
+    +' | 상위 4명 성공 '+grp('top')+' · 나머지 '+grp('rest')+' | 현금/일 '+avg(r=>r.cash).toFixed(0)+' | 자본 '+avg(r=>r.gain).toFixed(0));
+   const pr=k=>sum(rs,r=>r.prep?.[k]||0),pv=k=>[0,1,2].map(i=>sum(rs,r=>r.prep?.[k][i]||0)),eq=pv('eq'),bare=pv('bare');
+   if(eq[0]+bare[0])L.push('  └ 준비 | 상품 원정 성공 '+p(eq[1],eq[0])+' · 사망 '+p(eq[2],eq[0])+' | 맨손 원정 성공 '+p(bare[1],bare[0])+' · 사망 '+p(bare[2],bare[0])
+    +' | 상품이 결과를 바꿈 '+p(pr('changed'),eq[0])+' (사망을 막음 '+p(pr('saved'),eq[0])+') | 상위 4명이 받은 상품 '+p(pr('topItems'),pr('items')));}}
  return L.join('\n');
 }
-module.exports={RANK,DECO,BANDS,split,endKind,jobMetrics,useFirstRunLessons};
+module.exports={RANK,DECO,BANDS,split,prep,endKind,jobMetrics,useFirstRunLessons};

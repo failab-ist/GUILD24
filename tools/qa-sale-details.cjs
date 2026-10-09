@@ -7,6 +7,7 @@ const sizes=process.env.QA_SIZES?JSON.parse(process.env.QA_SIZES):[[360,640],[36
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
 const app=fs.readFileSync(process.env.QA_BASELINE_APP||path.join(root,'dist/ui/app.js'),'utf8');
 const table=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')).replace(/^const coachSteps=/,'').replace(/;\s*$/,'');
+const nightMarks=app.match(/^const NIGHT_MARKS=.*$/m)[0];
 let checks=0;const failures=[],results=[];
 const check=(ok,message)=>{checks++;if(!ok){failures.push(message);if(!capture)assert.ok(ok,message);}};
 (async()=>{
@@ -20,7 +21,7 @@ const check=(ok,message)=>{checks++;if(!ok){failures.push(message);if(!capture)a
   if(process.env.QA_BASELINE_CSS)await p.route('**/ui/ui.css',r=>r.fulfill({path:process.env.QA_BASELINE_CSS,contentType:'text/css'}));
   if(process.env.QA_BASELINE_APP)await p.route('**/ui/app.js',r=>r.fulfill({path:process.env.QA_BASELINE_APP,contentType:'text/javascript'}));
   await p.goto(`http://127.0.0.1:${port}/`,{waitUntil:'load'});
-  await p.evaluate(t=>{window.__saleCoaches=new Function('return '+t)().sell;Guild24.game.start('qa-sale-compare-d5');Guild24.game.account.tutorial.skipped=true;Guild24.render();},table);
+  await p.evaluate(({t,nightMarks})=>{window.__saleCoaches=new Function(nightMarks+'return '+t)().sell;Guild24.game.start('qa-sale-compare-d5');Guild24.game.account.tutorial.skipped=true;Guild24.render();},{t:table,nightMarks});
   if(await p.locator('.p-prep [data-action="start"]').count())await p.locator('.p-prep [data-action="start"]').click();
   await p.locator('#modal-root [data-action="buy-relic"]').first().click();
   await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();});
@@ -44,7 +45,7 @@ const check=(ok,message)=>{checks++;if(!ok){failures.push(message);if(!capture)a
    icons.push(icon);await p.screenshot({path:path.join(out,`${tag}-rarity-${i}.png`)});
   }
   check(new Set(icons.map(x=>x.itemRarity)).size===5,tag+' all five item rarity colors covered');
-  await p.evaluate(()=>{const g=Guild24.game,n=g.current(),s=g.run;n.rarity=0;n.pack=[];n.refused=[];s.inventory=['rope','coating','guildlunch','coupon','lowpotion','water'].map((id,i)=>({id:'coach-'+i,item:id,cost:Math.round(DATA.itemBy[id].sell*.5),expires:s.day+3}));g.save();Guild24.render();});
+  await p.evaluate(()=>{const g=Guild24.game,n=g.current(),s=g.run;n.rarity=0;n.pack=[];n.refused=[];n.introduced=true;n.newToday=false;n.records=[{day:4,outcome:'성공',injury:0,recovery:0,changes:[],events:[]}];s.inventory=['rope','coating','guildlunch','coupon','lowpotion','water'].map((id,i)=>({id:'coach-'+i,item:id,cost:Math.round(DATA.itemBy[id].sell*.5),expires:s.day+3}));g.save();Guild24.render();});
   await p.locator('.goods [data-action="select"]').first().dispatchEvent('click');await p.waitForTimeout(300);
   const show=async id=>{await p.evaluate(id=>{const t=Guild24.game.account.tutorial;t.skipped=false;for(const x of window.__saleCoaches)t['coach-'+x[0]]=x[0]!==id;Guild24.game.save();Guild24.render();},id);await p.waitForTimeout(motion?600:150);};
   const coach=async (id,suffix='')=>{

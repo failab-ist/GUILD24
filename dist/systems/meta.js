@@ -115,7 +115,9 @@ function opened(a){
   jobs:D.jobs.filter(j=>j.metaUnlock&&n>=j.metaUnlock).map(j=>j.id)};
 }
 
-const itemUnlocked=(a,it,day=1)=>{if(it.id==='guildlunch')return !!a.unlocks?.guildlunch&&day>=10;if(it.id==='worldcharm')return !!a.unlocks?.worldcharm&&day>=14;return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
+/* META §D10 / D14 PRODUCT UNLOCK — EXACT: account unlock and each Run's offer gate share these Days. */
+const ITEM_UNLOCK_DAY={guildlunch:10,worldcharm:14};
+const itemUnlocked=(a,it,day=1)=>{if(ITEM_UNLOCK_DAY[it.id])return !!a.unlocks?.[it.id]&&day>=ITEM_UNLOCK_DAY[it.id];return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
 
 /* What one expedition leaves on the account. Dungeon knowledge accrues only when a supplied
@@ -130,7 +132,7 @@ function observe(a,report,n){
     it, and its own seen-state keeps it to once per account), and the notebook keeps each rule the first time. A Death
     record carries only the Death-limit rule (the one exception to its closed payload, User 2026-09-30). */
  {const ev=id=>(report.events||[]).some(e=>e.id===id),dead=report.outcome==='사망';
-  const acted=dead?{death:true}:{injured:report.outcome==='부상',severe:report.outcome==='중상',fatigue:(report.fatigueBeforeExpedition||0)>=10,counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
+  const acted=dead?{death:true}:{injured:report.outcome==='부상',severe:report.outcome==='중상',fatigue:(report.fatigueBeforeExpedition||0)>=G.Dungeon.fatiguePenaltyFrom(),counter:ev('hazard'),prepared:ev('prepared'),great:report.outcome==='대성공'&&report.storeBonus>0};
   report.acted=G.Copy.learned.map(([k])=>k).filter(k=>acted[k]);
   for(const [k,text] of G.Copy.learned){const id='learn-'+k;
    if(acted[k]&&!a.discoveries.some(x=>x.id===id))a.discoveries.push({id,text,day:report.day});}}
@@ -181,6 +183,6 @@ const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
- opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
+ opened,itemUnlocked,ITEM_UNLOCK_DAY,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

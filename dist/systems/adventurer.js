@@ -71,13 +71,15 @@ function create(r,index,day,account,opts={}){
 }
 const growthCost=level=>18+level*8;
 const newcomerMinLevel=day=>day<=4?1:1+Math.floor((day-1)*.4);
-const CATCHUP_MULT=1.5;
-/* NPC_TRAIT §LAGGING ADVENTURER EXPERIENCE: preserve base EXP, cap only the extra bonus. */
-function catchupXP(n,xp,day){
+const CATCHUP_MULT=1.5,CATCHUP_GAP_SHARE=.25,CATCHUP_GAP_OUTCOMES=['퇴각','부상','중상'];
+/* NPC_TRAIT §LAGGING ADVENTURER EXPERIENCE: preserve base EXP, cap only the extra bonus; a failed return takes the larger of ×1.5 and 25% of the gap. */
+function catchupXP(n,xp,day,outcome){
  const floor=newcomerMinLevel(day);
  if(!n.alive||n.level>=floor||xp<=0)return xp;
  let needed=-n.xp;for(let level=n.level;level<floor;level++)needed+=growthCost(level);
- return xp+Math.min(Math.max(0,needed-xp),Math.round(xp*(CATCHUP_MULT-1)));
+ let bonus=Math.round(xp*(CATCHUP_MULT-1));
+ if(CATCHUP_GAP_OUTCOMES.includes(outcome))bonus=Math.max(bonus,Math.round(needed*CATCHUP_GAP_SHARE));
+ return xp+Math.min(Math.max(0,needed-xp),bonus);
 }
 function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=growthCost(n.level)){n.xp-=growthCost(n.level);n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
  /* NPC_TRAIT §LEVEL-UP REWARD: Job Growth × Potential only; no RNG draw. */
@@ -87,7 +89,7 @@ function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=growthCost(n.level)
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,growthCost,newcomerMinLevel,catchupXP,CATCHUP_MULT,keys,isTrustedRegular,TRUSTED_REGULAR,
+G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,growthCost,newcomerMinLevel,catchupXP,CATCHUP_MULT,CATCHUP_GAP_SHARE,keys,isTrustedRegular,TRUSTED_REGULAR,
  /* SALE_v2.7 §NORMAL CONSUMER BAG and FINAL_EXPEDITION_v2.7: exactly two slots, for every NPC
     regardless of Level, Job, Rarity or Trait, and the Final uses the same two-slot handling.
     The Lv10+ third slot is gone - not disabled, not ghosted, not hidden. */

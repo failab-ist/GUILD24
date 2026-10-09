@@ -19,9 +19,9 @@ const {spawn}=require('node:child_process'),path=require('node:path');
 const PORT=Number(process.env.QA_PORT||5197),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const FIT=process.argv.includes('--fit'),SIMILAR=process.argv.includes('--similar');
 const TIERS={
- result:{target:-19,margin:8,cues:['great','retreat','injury','severe','death','sealwin','sealfail','endwin','endfail','bossmajor','final','boss','collapse']},
+ result:{target:-19,margin:8,cues:['great','retreat','injury','severe','death','sealwin','sealfail','endwin','endfail','bossmajor','final','boss','collapse','saved1','saved2','saved3']},
  decision:{target:-21,margin:8,cues:['order','sale','overcharge','half','refusal','purchase','support','unlock','open','close','begin','newstore','bosscompact','rescue','gag']},
- action:{target:-25,margin:5,cues:['depart','return','gold','spend','crate','receipt','heal','fixture','rumble','clash','counter','supply']},
+ action:{target:-25,margin:5,cues:['depart','return','gold','spend','crate','receipt','heal','fixture','rumble','clash','counter','supply','shove']},
  utility:{target:-29,margin:3,cues:['button','ui','page']},
  repeat:{target:-31,margin:3,cues:['quantity','quantset']}};
 const UNDER=1.5,OVER=3,LOW=280,FULL=6,SOLO=-4.5,CEIL=-1;
@@ -31,19 +31,21 @@ const UNDER=1.5,OVER=3,LOW=280,FULL=6,SOLO=-4.5,CEIL=-1;
    measured 0.754 / 0.997 / 0.993, the intended families 0.99+. */
 const DISTINCT=[['fixture','clash'],['boss','bossmajor'],['crate','receipt'],
  /* and the new sounds against their neighbours, so a split never lands on another cue */
- ['ui','quantity'],['receipt','quantity'],['fixture','support'],['fixture','final'],['boss','counter']],ALIKE_MAX=.6;
+ ['ui','quantity'],['receipt','quantity'],['fixture','support'],['fixture','final'],['boss','counter'],
+ /* UI_UX §NIGHT — SAVED BY THE SALE: its relief is not Insurance's accent nor 대성공's, its thud not 사망's */
+ ['saved3','great'],['saved1','rescue'],['saved2','rescue'],['shove','retreat']],ALIKE_MAX=.6;
 /* the worst moments for cues landing together (User 2026-09-29: tearing), each over its phase's music: [cue, seconds] */
 const rapid=(c,from,n,gap)=>Array.from({length:n},(_,i)=>[c,from+i*gap]);
 const SCENES={
  sell:[['sale',3],['gold',3.02],['overcharge',3.5],['gold',3.52],['button',3.55],['refusal',4.1],['depart',4.15]],
  order:[...rapid('quantity',3,16,.05),['quantset',3.9],['order',4.2],['crate',4.3],['crate',4.4],['ui',4.45]],
- night:[['great',3],['rescue',3.1],['death',4],['severe',4.1],['injury',4.2],['return',4.3]],
+ night:[['great',3],['rescue',3.1],['saved3',3.12],['shove',3.0],['death',4],['severe',4.1],['injury',4.2],['return',4.3]],
  final:[['rumble',3],['clash',3.1],['counter',3.2],['clash',3.25],['counter',3.35],['supply',3.4],['collapse',3.5],['bossmajor',4],['final',4.2]],
  'end-win':[['sealwin',3],['endwin',3.1]],'end-fail':[['sealfail',3],['endfail',3.1]]};
 const FAMILY=[['sale','overcharge'],['sale','half'],['quantity','quantset'],['bossmajor','bosscompact']];
 // the music each cue is heard over (where the app plays it); utility clicks are heard everywhere: the loudest bed
 const MUSIC={order:['order','quantity','quantset','crate'],sale:['sale','overcharge','half','refusal','depart','heal','gold','spend'],
- night:['great','retreat','injury','severe','death','rescue','return'],close:['close','receipt'],morning:['open'],
+ night:['great','retreat','injury','severe','death','rescue','return','shove','saved1','saved2','saved3'],close:['close','receipt'],morning:['open'],
  title:['support','purchase','unlock','fixture','begin','newstore'],boss:['boss','bossmajor','bosscompact','final','rumble','clash','counter','collapse','supply'],
  succ:['sealwin','endwin'],fail:['sealfail','endfail']};
 const results=[];const check=(n,ok,d='')=>{results.push(ok);console.log((ok?'PASS ':'FAIL ')+n+(d?' - '+d:''));};

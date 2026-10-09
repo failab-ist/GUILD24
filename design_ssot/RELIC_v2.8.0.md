@@ -392,7 +392,7 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
+base operating cost +10% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
   (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
@@ -495,7 +495,7 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - Price = 320G
 - HQ commission = 40% of the charged (150%) sale price
 - the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16)
-- base operating cost +10% of overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded
+- base operating cost +10% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
 - the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
 
 24. 원정 작전실 (`opsRoom`) · tag=Expedition · User 2026-10-02 remake of 원정 전문 인증 (`expeditionCert`; a save's old id is
@@ -546,7 +546,7 @@ The visitor increase is subject to the ordinary active/available adventurer cap.
 
 Operating cost: `overheadBase + overheadBase × 0.10 + other flat extras`, then the existing operating-cost rounding
 rule. The 10% applies to `overheadBase` only; it is not applied again to other Event or Relic flat modifiers and does
-not compound with them.
+not compound with them. The surcharge applies from the acquisition Day; the visitor roll remains a Morning effect.
 
 ### UTILITY
 27. 후방 창고 증설
@@ -705,6 +705,13 @@ The following 21 Store Support base prices are the approved baseline.
 
 The other 11 active support prices are exact in their Store Support entries above.
 Price should follow actual ROI, not label alone.
+
+## OPERATING COST TIMING
+
+Percentage operating-cost surcharges from kitchen, royalCert and hub apply from the Day of acquisition.
+They read the currently acquired supports and add their shares of overheadBase before the existing rounding.
+efficiency's flat reduction keeps its next-Day timing; ordinary visitor generation remains a Morning effect.
+An operating-cost-free Event still overrides the charge. Final Day has no daily operating charge.
 
 ## GOLD ROLE
 
@@ -1114,7 +1121,7 @@ Expected: eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wa
 Expected:
     150% sale of any rarity -> HQ commission = 40% of the charged sale price
     the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16)
-    the next Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's
+    the acquisition Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's
     the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
 
 #### REL-Q36 — PREMIUM POOL SUPPORT

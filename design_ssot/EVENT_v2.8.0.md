@@ -45,6 +45,9 @@ Normal Daily Event는 D0 · D5 · D10 · D15 · D20 · D25 · D30, 그리고 실
 D1–D29 중 Relic Window Day가 아니며, 해당 Run의 실제 심층원정 발생일도 아닌 날(계정 첫 Run은 D1 제외).
 24일에서 심층원정 발생일 2–3일을 제외한 **21–22일**(계정 첫 Run은 하루 적다).
 
+2티어 게이트가 처음 나올 수 있는 날(`tierWeights`에서 읽으며 현재 D6) 전에는 모든 게이트를 1티어로 만드는 Event(`게이트 안정화 작업`)가
+Pool에서 빠진다. 나머지 Event의 발생 조건은 그대로다.
+
 ### 발생 확률
 
 ```text
@@ -223,6 +226,7 @@ Deterministic count/budget/special-slot changes may expose their source.
 
 예외: Event를 통해 기존 NPC 시스템 안에서 실제 NPC가 새로 합류한 경우, 그 NPC는 이후 NPC Canonical Rule에 따라
 Run에 남을 수 있다. Event 자체의 Day Modifier는 다음 날 제거된다.
+길드 합동 위령제의 사망 한도 증가는 §23에 따라 이번 점포가 끝날 때까지 유지된다.
 
 ---
 
@@ -332,7 +336,7 @@ eventCatalogStatus=FROZEN
 
 Work는 임의로 Event를 추가하거나 Effect / Trigger / Role을 재설계하지 않는다.
 
-모든 Event는 한 Run에 한 번(§EVENT SELECTION), 당일만(§EVENT DURATION) 적용된다.
+모든 Event는 한 Run에 한 번(§EVENT SELECTION) 발생하며, 적용 기간과 예외는 §EVENT DURATION을 따른다.
 WEIGHT는 따로 적지 않으면 1.0이다(§Selection Weight).
 
 Exact player-facing title/reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-N (N = Event 번호).
@@ -357,6 +361,8 @@ TYPE: Order / Opportunity
 
 EFFECT: 오늘 발주 후보 중 행사 상품 1종을 지정한다. 해당 상품을 발주하면 주문한 수량만큼 추가 입고된다.
 추가 입고분의 매입 비용은 0G다.
+
+첫 계정 Run DAY 2(튜토리얼)에서만 행사 상품을 보정한다. 행사 상품은 그날 열린 게이트의 위험을 막는 일반 등급 상품이고, 열린 게이트가 여럿이면 더 많은 게이트의 위험을 막는 상품을 고른다. 후보에 그런 상품이 없으면 첫 일반 등급 후보를 그 상품으로 바꾼다. 보정한 상품의 공급 수량은 최대 2개이고, 1+1이면 4개가 입고된다. 그 밖의 날은 보정 없이 기존대로 무작위 후보에서 지정한다.
 
 행사 상품은 그날 첫 발주 후보에서만 지정한다. 발주 후보 교환을 하면 행사가 끝나고, 새 후보에는 1+1이 없다.
 
@@ -759,7 +765,7 @@ ELIGIBILITY: 오늘 올 수 있는 모험가 중 부상자가 있을 때만.
 
 TYPE: Opportunity
 
-EFFECT: 오늘 밤 결과가 `부상`인 원정 최대 2회를 무사로 바꾼다(구급품 진열장과 같은 자리, 그보다 먼저 쓰인다). 사망·중상은 그대로. 밤 결과에 한 줄로 알린다.
+EFFECT: 오늘 밤 결과가 `부상`인 모험가의 남는 부상을 최대 2명까지 제거한다(구급품 진열장과 같은 자리, 그보다 먼저 쓰인다). 원정 결과 `부상`은 유지하며 이후 NPC 부상 상태만 제거한다. 사망·중상은 그대로. 밤 결과에 한 줄로 알린다.
 
 ### 26. 길드 위로금
 
@@ -859,7 +865,7 @@ EFFECT: 오늘 음식·음료 구매 의사 -15%p.
 
 TYPE: Pressure
 
-EFFECT: 오늘 한 번의 발주에서 같은 상품은 최대 2개까지(1+1 입고분은 따로 세지 않음). 막힌 수량 버튼은 이유를 알린다.
+EFFECT: 오늘 발주 후보 한 칸의 공급 수량은 최대 2개다. 같은 상품이 여러 칸에 나오면 각 칸에서 최대 2개씩 주문할 수 있다. 발주 후보 교환으로 새로 받은 칸에도 적용한다. 막힌 수량 버튼은 이유를 알린다.
 
 ### 42. 포스기 먹통
 
