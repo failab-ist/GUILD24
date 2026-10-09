@@ -225,15 +225,19 @@ function prepare(n,d,facilities=[]){
     취약 Hazard - the largest gap before the bonus, the Final's own Hazard order on a tie. */
  if(mealFinal){const gaps=d.hazards.map(h=>hazardState(h,e,d).gap),i=gaps.indexOf(Math.max(...gaps)),h=d.hazards[i];
   e[h]=(e[h]||0)+D.relicParams.expeditionMeal.hazardDefense*mealFinal;}
- if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
+ {const foods=n.pack.map(id=>D.itemBy[id]).filter(it=>it.category==='food');
+  if(n.traits.includes('eater')&&foods.length){
+   if(foods.some(it=>STAT_KEYS.some(k=>it.effects[k]>0)))why.push('대식가: 음식의 능력치 +'+Math.round((mult.foodMult-1)*100)+'%');
+   why.push('대식가: 음식의 피로 회복 '+D.traitBy.eater.effects.foodSupplyDelta);}}
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
  if(lifetime)for(const k of STAT_KEYS)sources[k].push({name:D.relicBy.lifetime.name,v:lifetime*100,isPct:true});
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  const ops=e.opsBonus=opsBonus(hazards,d,facilities);
  if(ops>0){e.combat*=1+ops;sources.combat.push({name:D.relicBy.opsRoom.name,v:ops*100,isPct:true});}
- if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
- if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
+ const hasStat=(cat,it)=>it.category===cat&&STAT_KEYS.some(k=>it.effects[k]>0);
+ if(n.traits.includes('eater')&&n.pack.some(id=>hasStat('food',D.itemBy[id])))events.push({id:'eater-food',text:'대식가로 음식의 능력치가 '+Math.round((mult.foodMult-1)*100)+'% 올랐다.'});
+ if(n.traits.includes('potionbody')&&n.pack.some(id=>hasStat('potion',D.itemBy[id])))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 '+Math.round((mult.potionMult-1)*100)+'% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
  e.beforeFatigue=sup.currentFatigue;e.preparedSupply=sup.preparedSupply;
  e.preRecovery=sup.preRecovery;e.fatigueBeforeExpedition=sup.fatigueBeforeExpedition;e.remainingSupplyBuffer=sup.remainingSupplyBuffer;
