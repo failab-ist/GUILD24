@@ -1582,7 +1582,7 @@ function finishCoach(){
 document.addEventListener('scroll',()=>{if(!activeCoach)return;
  const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);
  if(target)settleCoach(activeCoach,target);},true);
-/* UI_UX §COACH (User 2026-10-09): `도움말 끄기` on a mark is the settings `안내 끄기` switch - the same `tutorial.skipped`, so every mark stops, not only this screen's. */
+/* UI_UX §COACH (User 2026-10-09): `도움말 끄기` on a mark is the settings `도움말 끄기` switch - the same `tutorial.skipped`, so every mark stops, not only this screen's. */
 function coachSwitch(off){
  const t=game.account.tutorial??={};
  if(off){t.skipped=true;$('#coach-root').innerHTML='';activeCoach=null;}
