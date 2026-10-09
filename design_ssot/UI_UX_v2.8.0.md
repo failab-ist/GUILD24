@@ -1052,8 +1052,8 @@ D5/D15/D25 are major beats; D10/D20 are shorter (fewer lines, lighter hierarchy,
 Boss art as D5/D15 — never a thumbnail. D25 is information-first (the Family/Hazard disclosure is the payload).
 
 All D5/D10/D15/D20/D25 investigation reports share one art-size rule across every Boss:
-- mobile: max-height follows the available viewport height (100dvh minus 560px reserved for report text and controls), bounded between 100px and 240px
-- desktop: max-height follows the available viewport height (100dvh minus 510px reserved for report text and controls), bounded between 200px and 300px
+- mobile: max-height follows the available viewport height (100dvh minus 500px reserved for report text and controls), bounded between 120px and 280px
+- desktop: max-height follows the available viewport height (100dvh minus 480px reserved for report text and controls), bounded between 200px and 360px
 - keep the illustration aspect ratio; do not shrink only the overflowing Boss or investigation Day
 
 At 360x800 art alone never pushes core information or the acknowledgement below the first viewport. The sheet is a takeover
