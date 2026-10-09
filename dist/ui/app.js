@@ -743,7 +743,9 @@ function render(){
     neighbour inside the same group rather than back to the top. */
  if(!changed)restoreFocus($('#app'),focusHold);
  openOwedModal(s,phase,changed);
- const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
+ /* a NIGHT reversal keeps the line back until its stamp lands, so its time on screen starts there */
+ const nr=phase==='night'?s.results[s.nightCursor||0]:null,ns=nr&&nightStampOf(nr);
+ const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS+(ns?.print?stampLand(ns):0);
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();placeSpeech();armSpeech(sayMs);
  syncWatchers(phase);
 }
