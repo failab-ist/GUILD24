@@ -1432,11 +1432,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:22%;
  background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
 @media(min-width:1024px){.p-night{--nb-h:min(56vw,260px)}.p-night .nightband{background-size:cover}}
-.p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;padding:0 var(--gutter) 24px;
- background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 var(--sky),#100c07 calc(var(--sky) + 24px),#140f08 100%);
- --sky:var(--nb-h)}
-.p-night .rail{margin-top:var(--sky)}
-.p-night .task-line{position:absolute;left:8px;right:58px;top:8px;box-sizing:border-box;min-height:34px;padding:6px 10px;display:flex;align-items:center;background:#0a0d16e6;box-shadow:inset 0 0 0 2px #3b2f21,3px 3px 0 #00000073}
+/* 밤 결과: 배경 띠는 고정이고 스크롤 영역은 띠 아래에서 시작한다. 결과가 위로 밀려도 띠 위로 올라가지 않고 띠 가장자리에서 잘린다. */
+.p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;margin-top:var(--nb-h);padding:0 var(--gutter) 24px;
+ background:linear-gradient(180deg,#0a0d16 0,#100c07 24px,#140f08 100%)}
+.p-night .rail{margin-top:0}
+.p-night .task-line{z-index:2;position:absolute;left:8px;right:58px;top:8px;box-sizing:border-box;min-height:34px;padding:6px 10px;display:flex;align-items:center;background:#0a0d16e6;box-shadow:inset 0 0 0 2px #3b2f21,3px 3px 0 #00000073}
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}
@@ -1722,7 +1722,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night.cold{background:#080a10}
 .p-night.cold .nightband{filter:saturate(.35) brightness(.7)}
 .p-night.cold .stage-scroll{
- background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 30px),#0c0e14 var(--sky),#0a0c12 100%)}
+ background:linear-gradient(180deg,#080a10 0,#0c0e14 24px,#0a0c12 100%)}
 .p-night.cold .returner{filter:grayscale(1) brightness(.42) contrast(1.1) drop-shadow(0 3px 0 #00000099)}
 .p-night.cold .verdict{text-shadow:2px 2px 0 #000000b3}
 /* =====================================================================
