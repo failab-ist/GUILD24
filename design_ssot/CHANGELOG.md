@@ -34,6 +34,11 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Combat variance ±12% and preparation lines (User 2026-10-09)
+
+- Ordinary combat variance ±17.5% -> ±12% (`combatNoise` 0.12) so a sold Item moves the result more than the roll; the average stays at the same threshold. The Final roll (0.92~1.08) is unchanged. DUNGEON_HAZARD §COMBAT VARIANCE / SIM-Q01. Not measured yet (AGENTS §9-A).
+- `tools/measure-v2100.cjs` adds a `└ 준비` line and `tools/save-check.cjs` §2 three rows: with-Item vs bare expeditions (success / Death), the share of Item expeditions whose result an Item changed (RESULT-PROOF) and the Deaths it kept away, the top four's share of Items sold.
+
 ## After v2.11.1 — Lagging adventurer EXP on a failed return (User 2026-10-09)
 
 - A lagging alive adventurer (below the Day's ordinary new-arrival minimum) returning 퇴각 / 부상 / 중상 takes the larger of the ×1.5 bonus and 25% of the EXP still needed to reach that minimum; still capped at the minimum. 성공 / 대성공, Death, Injury penalties, Insurance and the Death limit are unchanged. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
