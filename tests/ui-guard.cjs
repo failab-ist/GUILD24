@@ -2236,7 +2236,8 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  const own=night.indexOf('if(st.print)told'),h=night.indexOf('else if(hero)A(hero.parentElement.children.length===1?hero.parentElement:hero,'),c=night.indexOf("else if(!st.tape)document.querySelectorAll('.beat .changed .reward .tok b')");
  assert.ok(own>0&&own<h&&h<c,'one owner per landing: cut-in, Hero line, or the REWARD figures');
  assert.ok(/duration:1,delay:land/.test(night),'the reversal proof lines cut in on the overstamp frame');
- assert.ok(/const fromDeath=r\.avoidedDeath\|\|st\.brink;/.test(night)&&/'verdict ghost t-'\+\(fromDeath\?'gone':'severe'\)/.test(night)&&/fromDeath\?'사망':'중상'/.test(night),
+ assert.ok(/const from=r\.avoidedDeath\|\|st\.brink\?'사망':\(r\.events\|\|\[\]\)\.find\(e=>e\.id==='escape'\|\|e\.id==='revive'\)\?\.from\|\|'중상';/.test(night)
+  &&/'verdict ghost t-'\+\(\{'사망':'gone','중상':'severe','부상':'hurt'\}\[from\]\|\|'severe'\);g\.textContent=from;/.test(night),
   'the first print is the Outcome the result says was turned away');
  assert.ok(/onComplete:\(\)=>g\.remove\(\)/.test(night)&&!/ghost/.test(bare(fn('beat'))),'the first print is never rendered and never stays');
  assert.ok(/'<li'\+\(hero&&!i\?' class="hero"':''\)/.test(fn('causeLines')),'the proven Hero claim is the line that settles');

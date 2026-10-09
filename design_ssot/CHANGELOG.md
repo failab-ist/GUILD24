@@ -34,6 +34,10 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Insurance first print names what it turned away (User 2026-10-09)
+
+- A 귀환석 rescue's event records the Outcome it turned away (`from`); NIGHT's first print shows it, so a 부상 turned into 퇴각 prints `부상`, not `중상`. NIGHT_CLOSING §INSURANCE CAUSALITY; UI_UX §NIGHT LAYOUT — VERDICT STAMP.
+
 ## After v2.11.1 — SALE queue Gate-count reference approval (User 2026-10-09)
 
 - Approved **design only**, pending Source implementation: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
