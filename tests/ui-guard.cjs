@@ -1308,7 +1308,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* D-5 / EVENT §3-1. The board notice used to print the effect line alone. The catalog keeps
     the situation and the effect apart already, so the notice says both and rules them off. */
- assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(e.description)'),
+ assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(Presentation.eventDescription(e))'),
   'the notice says what happened as well as what it switched on');
  assert.ok(/\.slip\.event \.effect\{[^}]*border-bottom:1px dashed/.test(css),'and the two are set apart');
  assert.ok(fn('eventSlip').indexOf('class="effect"')<fn('eventSlip').indexOf('class="flavor"')
@@ -1840,7 +1840,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
 /* UI_UX §FIRST EVENT TUTORIAL (UI-Q-v29-56, User 2026-10-01): one contextual MORNING mark on the board's Event slip */
 test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
- assert.ok(morning.includes(`['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.']`),'COPY_AUDIT §3-11 Event mark');
+ assert.ok(morning.includes(`['event','.slip.event','아침마다 사건이 생길 수 있다. 사건마다 영향과 적용 기간이 다르다. 사건의 효과를 확인한다.']`),'COPY_AUDIT §3-11 Event mark');
  assert.ok(/class="slip event" data-action="event-again"/.test(app),'the MORNING board carries the Event slip the mark anchors to');
 });
 

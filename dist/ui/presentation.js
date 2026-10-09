@@ -298,6 +298,8 @@ function amount(key,value,moved=true){
 /* josa() / routeChangeLine() live in data/copy.js (G.Copy) so the engine's NIGHT line needs no UI layer;
    re-exported here for the screens. */
 const josa=G.Copy.josa,routeChangeLine=G.Copy.routeChangeLine;
-G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
+// A saved Event keeps its actual effects; only the known description is refreshed.
+function eventDescription(e){if(!e)return '';const current=D.events.find(x=>x.id===e.id);return current?current.describe(e.effects??current.effects):e.description??'';}
+G.Presentation={eventDescription,josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,fatigueRows,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

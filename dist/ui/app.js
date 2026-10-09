@@ -878,7 +878,7 @@ function deepSlip(){
 function eventSlip(e){
  return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
  +'<span class="stamp-line">오늘의 사건</span><b>'+E(e.name)+'</b>'
- +'<span class="effect"><i>효과</i><span>'+E(e.description)+'</span></span>'
+ +'<span class="effect"><i>효과</i><span>'+E(Presentation.eventDescription(e))+'</span></span>'
  +'<span class="flavor"><span>'+E(e.reveal)+'</span></span></button>';}
 /* Owned store support used to sit on the counter as a row of brass plates, which is where
    the float is. It crowded the till off its own surface, so the counter now carries the
@@ -1357,7 +1357,7 @@ const coachSteps={
  morning:[['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.'],
   /* User 2026-09-30: contextual, the first time the board holds such a Gate - the rule only, never which Item answers it */
   /* UI_UX §FIRST EVENT TUTORIAL (User 2026-10-01): the first Event slip on the board, once per account (the first Run's DAY 2) */
-  ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건은 오늘 하루 가게 사정을 바꾼다.'],
+  ['event','.slip.event','아침마다 사건이 생길 수 있다. 사건마다 영향과 적용 기간이 다르다. 사건의 효과를 확인한다.'],
   /* User 2026-10-02: the first tier II Gate only - not a tier I Gate an Event gave a second Hazard, not a III, not FIRE II (one base Hazard) */
   ['gatepair','.slip.gate[data-tier="2"]:not([data-family="golem"])','II 게이트부터는 기본 위험이 두 가지다. 단, 사건으로 위험이 추가될 수 있다.'],
   ['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']],
@@ -1998,7 +1998,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +(isFinal?'':'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>')
  +status+'<div class="tills">'+actions+'</div></div>';}
-function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(e.description)+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
+function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(Presentation.eventDescription(e))+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
 /* RELIC §GRADE: the 등급 word under the name, in the Item rarity name and colour */
 const relicRarity=r=>'<span class="relic-rarity r'+r.rarity+'">'+E(D.rarities[r.rarity])+'</span>';
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</details>';}
@@ -2908,7 +2908,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
    is the subject, so two rows of the same Item cannot be confused. */
 const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',relicMoney:lack=>'점포지원 후보 교환 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.',
  /* EVENT 42 본사 발주 제한 / 43 포스기 먹통 (v2.9.11) */
- cap:()=>'오늘은 같은 상품을 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 후보 교환을 할 수 없습니다.'};
+ cap:()=>'오늘은 발주 후보 한 칸에서 '+(game.run.event?.effects.orderCap||2)+'개까지만 발주할 수 있습니다.',noReroll:()=>'오늘은 발주 후보 교환을 할 수 없습니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
  /* H2: a price key has its own press (KEY_PRESS, playCue) - the 정가 key's `stamp` class must not add a second one */
