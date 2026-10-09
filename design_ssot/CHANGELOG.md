@@ -34,6 +34,12 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Support and Meta explanation alignment (User 2026-10-09)
+
+- 즉석식품 코너·왕도 프리미엄 인증·지역 거점점 계약의 운영비 가산은 구입 당일부터 적용한다. 기본 운영비 비율을 합산하고 기존 반올림·운영비 무료 사건 우선순위를 유지한다. 운영 효율 매뉴얼은 다음 날, 방문객은 아침 생성 시점 유지. 지역 거점점 계약 문구는 매일 아침으로 정리했다.
+- 구급품 진열장은 기존 설명에 (마왕성 제외)만 추가한다. 지원 교환 쿠폰함의 유료 구매 기회 조건, 은퇴 점포지원의 도감 상태, 직업 숙련의 새 모험가 레벨 효과, 방문 소지금 보너스의 상한 적용을 명시한다. 공통 description/effect getter 재사용.
+- 추모 방명록은 승인된 META의 +1 효과를 유지하며 CORE_RUN의 옛 +2 요약을 owner 참조로 정리한다.
+
 ## After v2.11.1 — Night and closure copy alignment (User 2026-10-09)
 
 - 마감 폐점 확인은 실제 점포 자본 정산을 설명하고 메뉴의 무정산 지점 포기와 구분한다. 사망 한도 마감은 같은 한도 함수로 점포 종료 버튼을 표시한다. 종료·정산 처리 유지.

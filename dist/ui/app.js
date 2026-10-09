@@ -2300,6 +2300,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
 /* 길드 특제 도시락 / 세계수 생환부적 open on the account flag the run sets on reaching DAY 10 / 14 (Meta.itemUnlocked), not on metaUnlock. */
 const DAY_UNLOCK=Meta.ITEM_UNLOCK_DAY;
 function unlockProgress(entry){const a=game.account;
+ if(D.relicRetired.includes(entry.id))return '현재 후보로 나오지 않음';
  if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료 · 각 점포 DAY '+DAY_UNLOCK[entry.id]+'부터 발주 후보':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
  if(entry.metaUnlock)return Meta.distinctBossClear(a)>=entry.metaUnlock?'해금 완료'
   :'서로 다른 마왕 토벌 '+Meta.distinctBossClear(a)+'/'+entry.metaUnlock;
@@ -2374,6 +2375,7 @@ function progressPanel(){const a=game.account;
  /* the grade, the total and the distinct count are already stated in the codex header
     directly above this, so the panel does not say them a second time. */
  return '<div class="progress-panel">'
+ +'<p class="smalltext">서로 다른 마왕을 토벌할 때, 출전한 직업의 숙련이 쌓인다. 숙련이 높을수록 새로 오는 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.</p>'
  +'<table class="matrix"><thead><tr><th scope="col">직업</th>'
  +D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')
  +'<th scope="col">숙련</th></tr></thead><tbody>'

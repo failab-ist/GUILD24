@@ -2,7 +2,7 @@
 
 DATE: 2026-10-09
 BASE: `codex/balance-adoption` / `1a981fd87940fde8e86eb04fdee1babf2d104849`
-STATUS: 배치 1~4 커밋 완료. 배치 5 구현·관련 검증·AFTER 캡처 보고 완료, 최신 User 후속 지시에 따라 커밋 후 배치 6 진행. 전체 점검 미완료.
+STATUS: 배치 1~5 커밋 완료. 배치 6 구현·관련 검증·AFTER 보고 완료, User 후속 지시에 따라 커밋 후 배치 7 진행. 전체 점검 미완료.
 
 배치 1 COMMIT: `9057d7f9`. 배치 2 BASE: `9057d7f9`; User가 AFTER 화면 확인·커밋을 승인했다.
 배치 2 COMMIT / 배치 3 BASE: `1f3da969`. 배치 3 COMMIT / 배치 4 BASE: `7c0b551e`.
@@ -15,8 +15,8 @@ STATUS: 배치 1~4 커밋 완료. 배치 5 구현·관련 검증·AFTER 캡처 �
 | 2 | 상품·발주·창고 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 3 | 판매·모험가 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
 | 4 | 게이트·사건·일반 원정 | 완료 / 관련 검증 PASS / User 화면 확인 완료 |
-| 5 | 밤·마감·폐점 | 수정·관련 검증 PASS / AFTER 캡처 보고 완료 |
-| 6 | 점포지원·장식·다음 점포 | 미점검 |
+| 5 | 밤·마감·폐점 | 35893f69 커밋 / 관련 검증 PASS / AFTER 캡처 보고 |
+| 6 | 점포지원·장식·다음 점포 | 수정·관련 검증 PASS / AFTER 캡처 보고 완료 |
 | 7 | 마왕 조사·최종 원정·결말 | 미점검 |
 
 규칙별 코치·도감·상세창·오류 및 비활성 사유는 각 시스템 배치에서 의미·수치·예외까지 점검한다.
@@ -151,7 +151,31 @@ BASE: `cc24933f`. User가 폐점의 실제 정산 경로를 확인한 뒤 초안
 - 캡처/결과: 기존 폴더의 batch5-before-* / batch5-after-* / batch5-before-results.json / batch5-after-results.json. 부상·대성공 코칭은 표시 검사용 기록 픽스처, 심층은 이미 지급된 상태 픽스처이며 밸런스 측정 결과가 아니다.
 - 전체 npm test·qa:runtime·qa:visual은 실행하지 않았다. 전체 작업 마지막 표준 검증은 남아 있다.
 
+## 배치 6 발견·처리
+
+BASE: `35893f69`. User가 운영비 가산의 구입 당일 적용과 다음 날 문구 삭제, 구급품 진열장의 `(마왕성 제외)` 괄호만 추가, 나머지 초안 적용 및 배치 7 후속 진행을 승인했다. 구현·관련 검증·폰/데스크 AFTER 캡처 보고 완료.
+
+| ID | 변경 전 → 후 | 실제 처리·Canonical 근거 | 분류·검증 |
+|---|---|---|---|
+| T29 | 운영비 가산이 아침 보유 시설을 기준으로 다음 날부터 적용 → 즉석식품 코너·왕도 프리미엄 인증·지역 거점점 계약은 구입 당일부터 적용. 지역 계약 `다음 날부터 매일` → `매일 아침` | 최신 User 승인. expectedOperatingCost()의 비율 가산은 현재 소유 시설, 운영 효율 매뉴얼의 차감은 기존 아침 시설을 읽음. RELIC §OPERATING COST TIMING / ECONOMY_ORDER §BASE OPERATING COST | 승인된 Design 변경 적용. 실제 구입 직후 예상 운영비와 그날 마감 차감190G 확인. 3종 합산·비복리·10G 반올림·무료 사건 우선·차감 시점·명시적 facilities 인자·Save/Load 회귀 PASS |
+| T30 | 구급품 진열장 대상 예외 없음 → 기존 설명 끝에 `(마왕성 제외)`만 추가 | META §display — 구급품 진열장: ordinary expedition only, not Final. 일반 resolve는 보정, Final snapshot은 미적용 | MISSING ADOPTION 해결. 부상·피로·가방 조건·data getter 수치 유지. 폰/데스크 장식 화면 표시 확인 |
+| T31 | 지원 교환 쿠폰이 모든 기회에 적용되는 듯한 안내 → `유료 점포지원 구매 기회마다 첫 후보 교환이 무료` | 기존 canRerollRelics()의 D0 제외, RELIC §CANDIDATE REROLL / META §지원 교환 쿠폰함 | MISSING ADOPTION 해결. 실제 교환 판정·비용 유지, 공통 effect getter 재사용 |
+| T32 | 후보에서 은퇴한 단골 묶음혜택도 도감 `기본 제공` → `현재 후보로 나오지 않음` | D.relicRetired를 직접 참조. RELIC §RETIRED SUPPORTS | MISSING ADOPTION 해결. 목록 변경 반영 단위 검사, 기존 저장 효과/설명 유지 검사, 도감 클릭 확인 |
+| T33 | 숙련 수치만 표시 → 출전 직업별 서로 다른 마왕 토벌로 숙련 증가·그 직업 새 모험가의 등장 레벨 효과 안내 | META §JOB MASTERY / COPY §10-5. 기존 Meta 수치/행렬 유지 | MISSING ADOPTION 해결. 도감 진행도 한 문단, 확률표·숨은 공식 추가 없음. 현재 숙련1/7 표시 유지 확인 |
+| T34 | 방문 보너스가 실제 순증가처럼 보임 → 알뜰 금고·첫 방문 쿠폰·프리미엄 멤버십에 `(소지금 상한 적용)` | 기존 Game.arrive()의 방문 보너스 합산 후 상한. META/RELIC 각 owner | MISSING ADOPTION 해결. 기존 보너스 getter·상한 판정 유지. 야간 보상에 일괄 적용하지 않음 |
+| T35 | CORE_RUN의 추모 방명록 옛 +2 요약 → 현행 META 장식 owner 참조 | CHANGELOG의 User2026-10-03 승인 +2→+1. git blame: CORE는2c86615cf(09-25), META는d5ff723df(10-03) | MISSING ADOPTION 해결. 본문과 해당 QA의 오래된 요약만 정리, 현재 +1 Source·효과 설명 유지 |
+
+### 배치 6 검증·한계
+
+- node tests/relic-effects.cjs: PASS, 구입 당일 운영비·차감의 기존 시점·무료 사건·명시적 입력·저장 회귀 추가. node tests/relic-order.cjs: PASS 29개 그룹. node tests/copy.cjs: PASS 30개 그룹. node tests/ui-guard.cjs: PASS 122개 그룹. node tests/canonical.cjs / node tests/integration.cjs(55개 그룹) / node tests/events.cjs(29개 그룹): PASS.
+- tools/qa-support-meta-text.cjs --before: 390×880 / 1280×880, 기존 HEAD UI/계산/설명 제공. 56개 기존 흐름 검사·18개 변경 전 노출 사례 기록. 기존 문구를 PASS로 간주하지 않음.
+- 수정 후 같은 하네스: PASS 82개 검사. 세 지원 실제 구입·즉시 예상 운영비·당일 마감 차감, 장식·숙련·은퇴 지원 도감·방문 지원 설명, 가로 넘침·런타임 오류 확인.
+- npm run audit: PASS. 생성 BALANCE-CATALOG의 소스 서명과 승인한 효과 문구 갱신. 기본 가격·비율·상한·성장·확률 수치는 유지. 이번 User 승인으로 운영비 가산 시점만 변경했다.
+- 전체 npm test·qa:runtime·qa:visual은 이번 배치에서 실행하지 않았다. 원정 재현·밸런스 측정·시뮬레이션 없음. 마지막 전체 표준 검증은 배치 7 이후 남음.
+- 캡처/결과: 기존 폴더의 batch6-before-* / batch6-after-* / batch6-before-results.json / batch6-after-results.json. 구급품 진열장은 User 요청대로 `(마왕성 제외)`만 붙였다. CSS·섹션 배치·저장 스키마·API 인자 형식 변경 없음.
+- 점포지원34종+이전 저장호환1종, 장식12종의 주요 효과·대상·기간·중첩·해금·교환 조건을 기존 owner/Source/관련 검사로 대조했다. 기존 description/effect getter와 Meta 함수를 유지하며 중요한 조건을 범용화로 생략하지 않았다.
+
 ## 다음 경계
 
-배치 4 COMMIT: cc24933f. 최신 User의 수정·후속 진행 승인에 따라 배치 5 커밋·clean 확인 후 배치 6을 점검한다. 배치 7 미점검.
+배치 4 COMMIT: cc24933f. 배치 5 COMMIT: 35893f69. 최신 User의 배치 6 수정·배치 7 후속 진행 승인에 따라 배치 6 커밋·clean 확인 후 배치 7 점검.
 후속 보고에는 무엇을 어떻게 바꿨는지 변경 전→후와 이유를 함께 적는다(User 2026-10-09).

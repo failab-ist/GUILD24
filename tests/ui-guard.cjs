@@ -3113,7 +3113,7 @@ test('ORDER shelf life: the displayed days and actual arrival share Event and re
 test('META Day unlock: account award, offer eligibility and codex use one date',()=>{
  assert.deepEqual(Meta.ITEM_UNLOCK_DAY,{guildlunch:10,worldcharm:14},'current Canonical Days');
  const g=new Game();g.autosave=false;g.start('day-unlock-copy');g.morning=()=>{};
- const ctx={game:g,Meta,DAY_UNLOCK:Meta.ITEM_UNLOCK_DAY};
+ const ctx={game:g,Meta,D:DATA,DAY_UNLOCK:Meta.ITEM_UNLOCK_DAY};
  for(const [id,day]of [['guildlunch',10],['worldcharm',14]]){
   const it=DATA.itemBy[id];g.account.unlocks[id]=false;
   assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'DAY '+day+' 도달 시 해금');
@@ -3942,5 +3942,12 @@ test('CORE_RUN death-limit closing: controls follow the current limit before the
  assert.ok(!dock().includes('재고 정리')&&!dock().includes('다음 날')&&!dock().includes('폐점'));
  ctx.Meta.deathLimit=()=>6;assert.ok(dock().includes('다음 날'),'display follows the existing limit function');
  s.money=100;s.stats.deaths=6;assert.ok(dock().includes('점포 종료'),'positive cash does not override the death limit');
+});
+test('RELIC retired codex: candidate status reads the existing retired list',()=>{
+ const ctx={game:{account:Meta.fresh()},D:{relicRetired:['memberBundle']},DAY_UNLOCK:{},Meta,entry:{id:'memberBundle'}};
+ const status=()=>render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx});
+ assert.equal(status(),'현재 후보로 나오지 않음');ctx.entry={id:'bulk'};assert.equal(status(),'기본 제공');
+ ctx.D.relicRetired.push('bulk');assert.equal(status(),'현재 후보로 나오지 않음','status follows the list rather than a hardcoded support id');
+ assert.ok(DATA.relicBy.memberBundle.description,'old-owned effect description is preserved');
 });
 console.log(count+' ui guard groups passed');

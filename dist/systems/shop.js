@@ -63,17 +63,14 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* ECONOMY_ORDER §BASE OPERATING COST: a Day base, +12G per Day after DAY 15, scaled by the Core Roster */
   const dayBase=170+1*(day-1)+12*Math.max(0,day-15);
   return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
- expectedOperatingCost({day=this.run.day,facilities=this.run.dayFacilities,event=this.run.event}={}){const s=this.run,ev=event?.effects||{};
-  /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
-     carry a `contract` value, and it must change nothing at all. */
+ expectedOperatingCost(options={}){const s=this.run;
+  const {day=s.day,facilities=s.dayFacilities,event=s.event}=options,ev=event?.effects||{};
+  // RELIC §OPERATING COST TIMING: surcharges apply on acquisition; efficiency keeps the morning snapshot.
+  const current=options.facilities===undefined?s.facilities:facilities;
   const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0)+(ev.overheadAdd||0);
-  /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
-     never on the flat extras, and never compounded with another percentage modifier. */
-  /* 왕도 프리미엄 인증 (v2.9.11, User 2026-09-29) and 즉석식품 코너 (User 2026-10-02) take the same share of overheadBase, from
-     the next Day, added to hub's */
-  const base=this.overheadBase(day),hub=(facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0)
-   +(facilities?.includes('royalCert')?base*D.relicParams.royalCert.overheadRate:0)
-   +(facilities?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0);
+  const base=this.overheadBase(day),hub=(current?.includes('hub')?base*D.relicParams.hub.overheadRate:0)
+   +(current?.includes('royalCert')?base*D.relicParams.royalCert.overheadRate:0)
+   +(current?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0);
   return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
     next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */

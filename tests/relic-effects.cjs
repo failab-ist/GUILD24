@@ -344,7 +344,7 @@ test('REL-Q-v28-5 / 7 / 33: HQ commission is 40% of list (supplyCert), 40% of ch
 });
 
 /* RELIC §23 (v2.9.11, User 2026-09-29): the owner's 바가지 intent penalty -0.16 becomes -0.06, and the card takes 10% of
-   overheadBase from the next Day - the 지역 거점점 계약 rule, added to it, never compounded. */
+   overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded. */
 test('REL §23: 왕도 프리미엄 인증 - 바가지 intent +10%p and base operating cost +10%',()=>{
  const g=fresh('royal-intent'),s=g.run,n=s.npcs[0];
  n.traits=[];n.money=99999;n.loyalty=0;n.injury=0;n.pack=[];
@@ -600,4 +600,23 @@ test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime trut
  n.loyalty=60;n.history=[{day:s.day,paid:50}];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 · 오늘 유료 구매 1건');
  assert.equal(Relics.status(g,'fieldRepair'),'','an always-on support carries no line');
  assert.equal(Relics.status(g,'lifetime'),'','평생 단골제 has no daily use state to read');
+});
+
+// RELIC §OPERATING COST TIMING: real acquisition and deterministic cost calculation, no expedition simulation.
+test('운영비 가산은 구입 당일부터 합산하며 운영 효율 매뉴얼은 다음 날부터',()=>{
+ const g=fresh('support-overhead-timing'),s=g.run;Object.assign(s,{day:5,phase:'order',npcs:[],queue:[],team:[],cursor:0,facilities:[],dayFacilities:[],money:5000,offers:[],cart:{},event:null});
+ assert.equal(g.expectedOperatingCost(),170,'D5 base174 rounds to170');
+ const ids=['kitchen','royalCert','hub'],prices=[200,320,340],want=[190,210,230];
+ for(let i=0;i<ids.length;i++){
+  s.relicWindow={milestoneDay:5,candidateIds:[ids[i]],candidatePrices:[prices[i]],purchased:null,expiryDay:10,focusedRevealSeen:true};
+  g.buyRelic(ids[i]);assert.equal(g.expectedOperatingCost(),want[i],ids[i]+' adds10% of174 on acquisition Day');
+  assert.deepEqual(s.dayFacilities,[],'purchase does not rewrite the morning snapshot');
+ }
+ assert.equal(g.expectedOperatingCost({facilities:[],event:null}),170,'explicit modifier set is preserved');
+ s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),230,'same-Day efficiency remains deferred');
+ assert.equal(g.tomorrowOperatingCost(),200,'D6:175*1.30-30=197.5 rounds to200');
+ assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),280,'flat Event +50 is not multiplied');
+ assert.equal(g.expectedOperatingCost({event:{effects:{overheadFree:true,overheadAdd:50}}}),0,'operating-free Event overrides owned surcharges');
+ const saved=Save.import(Save.export(g.account,s));const restored=new Game(saved.account,saved.run);restored.autosave=false;
+ assert.equal(restored.expectedOperatingCost(),230,'owned/dayFacilities timing survives Save/Load');
 });
