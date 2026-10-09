@@ -49,7 +49,7 @@ function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e))
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
- out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
+ out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix+(k==='foodMult'||k==='potionMult'?' (대응 제외)':''),tone,bad:tone==='cost'});}
  /* ITEM §PRESENTATION ORDER — EXACT (User 2026-09-28, v2.9.10 quick patch; was Food-leads / Drink-ends since v2.9.0):
     one order for every Item, the shelf's own kind order read as effects - Hazard Counter, then 피로 회복, then the
     Core Stats in the stat panel's order, then anything else. Within a group the catalog order stands (a stable sort). */
