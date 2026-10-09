@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.11.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.11.1
+DOC_VERSION=2.12.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=AFTER_V2_11_1_WORKING (User 2026-10-09 job profiles and half-strength ordinary Gates, retaining the approved Final and EXP boundaries; User 2026-10-10 text/source alignment and approved support timing / per-slot Event supply); v2.11.1 and every earlier release remain closed - CHANGELOG §RELEASE RECORD
-SOURCE_ADOPTION_STATUS=V2_11_1_ADOPTED_PLUS_APPROVED_BALANCE (Text/source alignment batches1-8, support timing and per-slot Event supply are adopted; User 2026-10-09 revised six-job profiles and half-strength ordinary Gate/Fire adjustments are adopted; the further EXP/boost candidate is deferred; Counter recovery, approved additional ORDER slots and Potion distribution/HQ income are adopted locally; the approved growth, late Gate, Mage, Boss, lagging EXP and Final hazard requirement28/penalty2 balance is adopted)
+FREEZE_STATUS=V2_12_0_CLOSED_2026-10-09 (tag v2.12.0 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_12_0_ADOPTED (every version through v2.12.0 is adopted in Source on main: the approved balance, text/source alignment, coach, sound and night-result work; CHANGELOG §v2.12.0)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0

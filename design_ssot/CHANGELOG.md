@@ -32,32 +32,45 @@ and this table is their commit record.
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
+| v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR (this one) | (the User sets it) |
 
 
-## After v2.11.1 — Coach review 2: 상품 효과, 대성공 기회, failure Death risk causes (User 2026-10-10)
+## v2.12.0 — Release summary (User 2026-10-09)
+
+Minor version: balance, coaching, sound and night-result work since v2.11.1. Details are in the sections below; rules live in their routed owners.
+
+- Balance: EXP curve 18+Level×8 and lagging-customer EXP, six-job profiles with half-strength ordinary Gates, Boss / Final requirement 28, Potion distribution, ordinary combat variance ±12%, lagging customers returning 퇴각 / 부상 / 중상 get the larger of ×1.5 and 25% of the EXP to the Day's minimum. Death limit, Insurance and the Final roll are unchanged. Not re-measured as a whole yet (AGENTS §9-A).
+- UI / text: source and player-facing text alignment (8 batches, 55 Events), SALE remaining-customers popover, Gate-led shelf, Deep line, 도움말 끄기 wiring, Boss art and settings lines.
+- Coaches: one a Day, ordered by the core loop (see "Coach review" sections); first-time causes of Death risk; ORDER item-kind and effect marks.
+- NIGHT: the sold Item that kept a customer alive is shown (「준비가 살렸다」); per-case lines for returns from Death / Severe, an accident coach, customer lines wait for coaches, Death-turn pause 0.25 s, result backdrop strip fixed.
+- Sound (CC0 only): box stack, 대성공, next store, night result cues, closing receipt without the tick (profit / loss sounds only) and a new-day cue on the next Day; 퇴각 and 부상 cues swapped between the existing synth sounds. Sources and licences: `reports/ASSETS.md`.
+- Loading: Store Support paper and Boss art are preloaded; customer photos load from this store's customers first.
+- Not in the game: the investor bot work on `claude/balance-review-9jhs2f` (measurement only).
+
+## v2.12.0 — Coach review 2: 상품 효과, 대성공 기회, failure Death risk causes (User 2026-10-10)
 
 - The DAY 1 ORDER mark says what Items do in general (a Food or a Drink can be a Counter too), on the first offer's effect line. COPY_AUDIT §3-2.
 - The 대성공 기회 mark says what sets the tag (the customer's power, a sold Item's added; it can show with an empty Bag) and never its chance.
 - What raises 실패 시 사망 위험 is told cause by cause as contextual SALE marks, each the first time it is at the counter, one a Day: an injured customer (`DEATH.injured`), the `연속 부상 출발` chip (`STRAIN` step / cap), a 탈진 customer (`DEATH.exhausted`). COPY_AUDIT §3-7; UI_UX §TUTORIAL.
 - Coach order by the core loop (GAME_VISION): DAY 1 SALE destination now carries the `flow` lines (one turn: where, how it is decided, price, Bag); DAY 2 both outlook boxes; DAY 3 the returning customer; DAY 4 the Stats. NIGHT marks: death, Severe, Injury, Counter, 만반의 준비, Fatigue, 대성공, Wallet gain. UI_UX §TUTORIAL; NIGHT_CLOSING §DISCOVERY LINE; COPY_AUDIT §3-4 / §3-7 / §26-2.
 
-## After v2.11.1 — Coach review (User 2026-10-10)
+## v2.12.0 — Coach review (User 2026-10-10)
 
 - DAY 1 ORDER gains the `상품 종류` mark before `발주 확정`: what 음식·음료 / 포션 / 야외장비 / 보험 are for, on the first offer's kind label. COPY_AUDIT §3-2; UI_UX §TUTORIAL.
 - The Bag mark is the DAY 1 first sale's (was DAY 4). The Stats mark drops 포션 and reads 투력 → fighting, one of 강인함·기동·정신 per Hazard. COPY_AUDIT §3-6 / §3-7.
 - NIGHT Wallet gain mark: only on a 성공 / 대성공 record, and the line says every living return gains, a won one by far the most (it showed on a 퇴각 record with `이긴 손님`). NIGHT Counter mark: only where the result proof credits the Counter Item, so the record names it (it showed under a Potion's line). NIGHT_CLOSING §DISCOVERY LINE; COPY_AUDIT §26-2.
 
-## After v2.11.1 — Combat variance ±12% and preparation lines (User 2026-10-09)
+## v2.12.0 — Combat variance ±12% and preparation lines (User 2026-10-09)
 
 - Ordinary combat variance ±17.5% -> ±12% (`combatNoise` 0.12) so a sold Item moves the result more than the roll; the average stays at the same threshold. The Final roll (0.92~1.08) is unchanged. DUNGEON_HAZARD §COMBAT VARIANCE / SIM-Q01. Not measured yet (AGENTS §9-A).
 - `tools/measure-v2100.cjs` adds a `└ 준비` line and `tools/save-check.cjs` §2 three rows: with-Item vs bare expeditions (success / Death), the share of Item expeditions whose result an Item changed (RESULT-PROOF) and the Deaths it kept away, the top four's share of Items sold.
 
-## After v2.11.1 — Lagging adventurer EXP on a failed return (User 2026-10-09)
+## v2.12.0 — Lagging adventurer EXP on a failed return (User 2026-10-09)
 
 - A lagging alive adventurer (below the Day's ordinary new-arrival minimum) returning 퇴각 / 부상 / 중상 takes the larger of the ×1.5 bonus and 25% of the EXP still needed to reach that minimum; still capped at the minimum. 성공 / 대성공, Death, Injury penalties, Insurance and the Death limit are unchanged. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
 - Not measured yet; the standard measurement runs only after User approval (AGENTS §9-A).
 
-## After v2.11.1 — 소스와 사용자 노출 텍스트 일치 점검 (User 2026-10-09~10)
+## v2.12.0 — 소스와 사용자 노출 텍스트 일치 점검 (User 2026-10-09~10)
 
 | 배치 | 핵심 변경 |
 |---|---|
@@ -72,32 +85,32 @@ and this table is their commit record.
 
 구체적인 변경 전→후·owner 근거·검증 기록은 `reports/TEXT-SOURCE-AUDIT.md`를 따른다. 별도 저장 필드·숨은 확률 공개·새 문구 시스템은 추가하지 않았다. 최신 main의 후속 UI/코치·직업/게이트 채택을 보존해 통합한다.
 
-## After v2.11.1 — Insurance first print names what it turned away (User 2026-10-09)
+## v2.12.0 — Insurance first print names what it turned away (User 2026-10-09)
 
 - A 귀환석 rescue's event records the Outcome it turned away (`from`); NIGHT's first print shows it, so a 부상 turned into 퇴각 prints `부상`, not `중상`. NIGHT_CLOSING §INSURANCE CAUSALITY; UI_UX §NIGHT LAYOUT — VERDICT STAMP.
 
-## After v2.11.1 — SALE queue Gate-count reference approval (User 2026-10-09)
+## v2.12.0 — SALE queue Gate-count reference approval (User 2026-10-09)
 
 - Adopted in Source: hovering (desktop) or tapping (mobile) the existing SALE `손님` queue/progress area reveals a compact popover with the Day's **same per-Gate expected total visitors already available in ORDER**. No extra permanent text, icon, button, Dock height or future-customer disclosure. First-use contextual coach once per account explains the interaction; no extra DAY 1 compulsory coach was approved. SALE §QUEUE INFORMATION BOUNDARY; UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §QA; COPY_AUDIT §3-16. No unrelated 3/4/5 proposals adopted.
 - Revised (User 2026-10-09, same day): the popover counts customers **left** per Gate counting the one at the counter, under `이번 손님부터`, with no total; slate balloon. DAY 1 SALE coach: destination and price only; `flow` moves to DAY 2 (before 전투 전망), Stats to DAY 3 (before 환경 대응). UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §TUTORIAL — READ THE SYSTEM; SALE §QUEUE INFORMATION BOUNDARY; COPY_AUDIT §3-16.
-- NIGHT saved beat (User 2026-10-09): when the engine proves the sold Item saved the adventurer from 사망 / 중상 (not Insurance), the worse verdict prints, the Item shoves it off, the real Outcome stamps, and the Item icon stays beside `{Item} 덕분에 살아 돌아왔다.`. Shown for every 사망 kept away and every 중상 turned into 성공 / 대성공, no nightly cap; the worse print sounds its own `death` / `severe` cue and the card pauses until it fades (사망 +500 ms, 중상 +100 ms); new cues `shove` / `saved1`-`saved3` (the relief, sized by the turn, replaces the Outcome cue on that landing), levels fitted by tools/qa-sfx-mix.cjs. UI_UX §NIGHT — SAVED BY THE SALE; NIGHT_CLOSING §INSURANCE CAUSALITY.
+- NIGHT saved beat (User 2026-10-09): when the engine proves the sold Item saved the adventurer from 사망 / 중상 (not Insurance), the worse verdict prints, the Item shoves it off, the real Outcome stamps, and the Item icon stays beside `{Item} 덕분에 살아 돌아왔다.`. Shown for every 사망 kept away and every 중상 turned into 성공 / 대성공, no nightly cap; the worse print sounds its own `death` / `severe` cue and the card pauses until it fades (사망 +250 ms, 중상 +100 ms); new cues `shove` / `saved1`-`saved3` (the relief, sized by the turn, replaces the Outcome cue on that landing), levels fitted by tools/qa-sfx-mix.cjs. UI_UX §NIGHT — SAVED BY THE SALE; NIGHT_CLOSING §INSURANCE CAUSALITY.
 
-## After v2.11.1 — Job profiles and half-strength ordinary Gates (User 2026-10-09)
+## v2.12.0 — Job profiles and half-strength ordinary Gates (User 2026-10-09)
 
 - Adopt the revised Warrior/Archer/Rogue/Berserker profiles; Mage/Priest unchanged. Exact stats, Power contribution and Environment contribution with per-Level growth -> NPC_TRAIT.
 - Ordinary Gate base offsets D1 +0.125, D10 +0.5, D20 +1, D25 +1.5; linear interpolation, hold through D29. Ordinary golem FireTerm6/13.5/21. This halves the measured Gate/Fire package's changes together. DUNGEON_HAZARD §GATE POWER.
 - Keep EXP18+Level×8, lagging EXP×1.5, Final requirements/Fire12/threat28/gap penalty2 unchanged. Further growth/boost adjustment is deferred.
 - The reader28000-run measurement used the full candidate, not this final half-strength decision. No new balance simulation for adoption; the final reach/clear rate is unmeasured.
 
-## After v2.11.1 — SALE Deep line names its Gate (User 2026-10-09)
+## v2.12.0 — SALE Deep line names its Gate (User 2026-10-09)
 
 - The SALE Deep nomination's closed line shows `심층원정` and today's Deep Gate name (no repeated words); the open state keeps the terms and the sponsorship key. No copy added. UI_UX §DEEP SALE UI.
 
-## After v2.11.1 — SALE shelf leads with the customer's Gate (User 2026-10-09)
+## v2.12.0 — SALE shelf leads with the customer's Gate (User 2026-10-09)
 
 - The SALE shelf's Hazard-answer lead now starts with the current customer's own Gate's Hazards, then the other open Gates'; the rest of the order and the warehouse are unchanged. SALE §ITEM SELECTION / UI_UX §SALE — SHELF ORDER.
 
-## After v2.11.1 — Approved balance adoption (User 2026-10-08)
+## v2.12.0 — Approved balance adoption (User 2026-10-08)
 
 - EXP curve18+Level×8; lagging alive adventurers receive×1.5 ordinary earned EXP below the Day's ordinary new-arrival minimum, capping only the extra bonus at that minimum. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.
 - D21+ Gate day slope1.05, Mage combat growth3.1. Ordinary hazard curve and other Jobs unchanged.
@@ -105,13 +118,13 @@ and this table is their commit record.
 - Shorten comments only at touched functions; replace the touched Final contribution source-text check with equivalent behavior verification. Shared runtime/simulation/measurement penalty parameter prevents formula drift.
 - The measured candidates used Final threat28.5; exact28 is the final User decision, not a newly measured outcome. No new trajectory was run for this adoption.
 
-## After v2.11.1 — Potion distribution and source catalog (User 2026-10-08)
+## v2.12.0 — Potion distribution and source catalog (User 2026-10-08)
 
 - Adopt the approved additional ORDER slot work from `b22afde7`: extraOrder / dawnRecovery / coldcase append their slots on acquisition, preserving the sheet/cart; independent category slots persist through full Rerolls. The Potion contract keeps id coldcase, price180G and one Potion-only slot.
 - Potion ordinary SALE pays the store 10% of the charged price from HQ, rounded separately and added to other commissions. NPC payment and Gross Sales are unchanged; Final supply remains separate. RELIC §18 / REL-Q33, COPY_AUDIT §11-18.
 - `reports/BALANCE-CATALOG.md` is a source-derived reference for Items, Store Supports, Decorations and common balance parameters, regenerated by audit. It contains current Source only; routed owners remain Design Truth.
 
-## After v2.11.1 — Counter Food / Drink recovery rollback (User 2026-10-06)
+## v2.12.0 — Counter Food / Drink recovery rollback (User 2026-10-06)
 
 - Counter Food / Drink Supply returns to the values before PR #107: 컵라면 5→3, 집중 사탕 5→2, 불룡볶음면 7→3, 얼음컵 / 중화 탄산수 / 용사의 곡주 / 쿨링 이온음료 2→1. Prices, direct Counters and Core Stats stay unchanged. ITEM §COUNTER LADDER / §ACTIVE CATALOG; tests vocabulary, night.
 - Growth cost and late Gate slope are simulation-only candidates; no change to live growth, Boss, Job or environment parameters is adopted here.
