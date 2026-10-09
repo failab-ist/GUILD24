@@ -1237,9 +1237,9 @@ function nightScreen(){
  /* USER CONFIRMED 2026-09-22: the last result hands over to the day's close, so it names it. */
  +btn(last?'마감으로':'다음','night-next','stamp');
  return '<div class="stage p-night'+(r&&r.outcome==='사망'?' cold':'')+'">'+menuFab()
- +'<div class="nightband" aria-hidden="true"></div>'
+ +'<div class="nightband" aria-hidden="true"></div>'+taskLine('night')
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
-  +taskLine('night')+rail
+  +rail
   +'<div class="beat-room">'
    +(s.pilgrimage?'<p class="event-note">게이트 순례 주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
    +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
