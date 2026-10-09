@@ -1022,6 +1022,21 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .dock .on-hand{display:flex;align-items:baseline;gap:0;
  font:400 12px/1 var(--ui);color:#a2947c;white-space:nowrap}
 .p-sale .dock .on-hand b{margin-left:5px;font:600 18px/1 var(--ui);color:var(--gold);font-variant-numeric:tabular-nums}
+/* UI_UX §SALE — QUEUE GATE COUNT REFERENCE: the queue line is the summary as it stands - no ?, underline or cue. Its hit area
+   overhangs into the Dock's top padding, not down onto 보유 골드. The balloon rises from the line, out of flow, in slate so it never reads as one more (brown) shelf card. */
+.p-sale .dock .q-tip{position:relative}
+.p-sale .dock .q-tip>summary{display:block;position:relative;min-height:0;padding:0;list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.p-sale .dock .q-tip>summary:before{content:'';position:absolute;inset:-12px -8px -4px}
+.p-sale .dock .q-tip>summary::-webkit-details-marker{display:none}
+.p-sale .dock .q-tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.p-sale .dock .q-pop{position:absolute;left:0;bottom:calc(100% + 14px);z-index:30;margin:0;
+ width:max-content;max-width:calc(100vw - 2 * var(--gutter));display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:10px;align-items:baseline;
+ padding:9px 11px;font:400 13px/1.6 var(--ui);color:#e6ecf1;background:#27323b;box-shadow:inset 0 0 0 1px #8fa3b366,0 6px 0 #00000059}
+/* a pointer crossing the gap to the balloon stays inside the tip, so a hover does not close on the way up */
+.p-sale .dock .q-pop::after{content:'';position:absolute;left:-8px;right:0;top:100%;height:16px}
+.p-sale .dock .q-pop span{font:inherit;color:inherit}
+.p-sale .dock .q-pop .k{font:600 12px/1.6 var(--ui);color:#a9bccb}
+.p-sale .dock .q-pop b{font-weight:600}
 /* UI_UX §PHASE VISUAL LANGUAGE (SALE reads register / commerce gold-amber) + §GAME-LIKE
    INTERACTION LANGUAGE + §GLOBAL PRESENTATION §1 / §3 / §7 / §15. Sending the customer off is the
    register key at the end of the transaction - but it is not the decision SALE is asking for.
@@ -1573,6 +1588,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .beat .verdict.ghost{position:absolute;margin:0;pointer-events:none;opacity:0}
 .p-night .beat .verdict.ghost.t-gone{padding-left:0;padding-right:0;background:none;clip-path:none;box-shadow:none;--rt-ink:#cfd3dd}
 .p-night .beat .verdict.ghost.t-gone:before{display:none}
+/* UI_UX §NIGHT — SAVED BY THE SALE: the worse verdict lays its own death tape, the sold Item flies over it, then sits by its line */
+.p-night .beat .verdict.saved-ghost{isolation:isolate}
+.p-night .beat .verdict.saved-ghost.t-gone:after{content:'';position:absolute;z-index:-1;left:-10px;right:-16px;top:14%;bottom:2%;
+ background:linear-gradient(180deg,#9aa0ab 0 2px,#3b3f47 2px 4px,#08090b 4px calc(100% - 3px),#2c2f36 calc(100% - 3px) calc(100% - 1px),#000 calc(100% - 1px));
+ transform-origin:left center;transform:rotate(-1.5deg) scaleX(var(--tape,0));pointer-events:none}
+.saved-fly{position:fixed;left:0;top:0;z-index:40;width:48px;height:48px;pointer-events:none;opacity:0}
+.saved-fly svg{display:block;width:48px;height:48px}
+.beat .cause li.hero .hero-items{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
+.beat .cause li.hero .hero-items svg{display:block;width:28px;height:28px}
 /* the lamp on the figure is the other half of the tag's state: the one warm light in the shop
    falls fully on a Great Success, cools on a withdrawal, and thins out as the damage grows. A
    death keeps its existing cold treatment below. Tone only - one size for every Outcome. */
@@ -4008,6 +4032,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .dock .queue .on-hand{font-size:18px}
  .sale-desk .dock .pips{gap:5px}
  .sale-desk .dock .pips i{width:19px;height:22px}
+ .sale-desk .dock .q-pop{font-size:17px;padding:12px 16px}
+ .sale-desk .dock .q-pop .k{font-size:16px}
 }
 /* SALE section rules (User 2026-10-03): the rule under the tray above 손님 보내기 is the same 4px board edge as the one between the two halves */
 .p-sale:not(.sale-desk) .counter-tray{box-shadow:inset 0 4px 0 #000000b3,inset 0 -1px 0 #4a331d,inset 0 -2px 0 #7c5730,inset 0 -3px 0 #b98d52,inset 0 -4px 0 #d3ac71}

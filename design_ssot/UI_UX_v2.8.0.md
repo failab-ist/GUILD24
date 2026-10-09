@@ -592,7 +592,17 @@ only.
 
 ### QUEUE
 
-No future-customer Job/Level/Destination/need hints; the queue count suffices.
+No future-customer Job/Level/Destination/need hints; the queue count suffices. The one approved on-demand aggregate exception is owned by §SALE — QUEUE GATE COUNT REFERENCE.
+
+### SALE — QUEUE GATE COUNT REFERENCE (User approved 2026-10-09)
+
+- Anchor: the **existing SALE bottom-Dock `손님` queue/progress surface**, on desktop and mobile. The phone still shows its current `손님` + pips treatment; `{n}/{N}` stays a screen-reader label as before. No visible numeral, `ⓘ`, arrow, underline, separate button or permanent explanation is added. No larger Dock, no reserved height, no shift of `손님 보내기` / `영업 종료`.
+- The balloon is a slate panel, not the shelf's brown, so it never reads as one more Item card (User 2026-10-09).
+- Desktop: hover over the existing queue area opens an anchored lightweight popover; focus can open it for keyboard access. Phone: tapping **the same visible queue area** opens/toggles it, without adding a visual cue. Use the existing shared popover treatment (§SHARED ANCHORED POPOVER); outside tap / Escape closes it. Opening this information never activates the adjacent phase action.
+- Content: an `이번 손님부터` label, then each open Gate in ORDER's chip form (`{Hazard}{Tier} {n}명`, closed Gates as `오늘 폐쇄`) where n counts today's customers from the one at the counter to the last, by the Gate each claims (ORDER's count source, User 2026-10-09: no memorising). No total - the pips say it. Each sale / departure moves the counts; nothing reveals a customer's identity, actual destination, Job, traits or needs.
+- Purpose: allow recalling already-known Order-stage demand while assigning today's stock; no recommended Item, correct SKU, best price, outcome prediction or strategic prompt.
+- First-use education: one account-scoped contextual **coach spotlight on the existing `손님` queue surface**, using COPY_AUDIT §3-16. The permanent UI has no `tap for details` text. Preserve existing SALE first-day coach priorities; do not introduce an extra compulsory DAY 1 mark or decide a new DAY gate without the User's approval. Once completed/dismissed, persist with ordinary tutorial marks; Full Data Reset clears it.
+- Acceptance -> UI_UX §QA UI-Q-SALE-QUEUE-GATE-COUNT. No extra gameplay RNG, Save outcome or new Gate inference.
 
 ### DEEP SALE UI
 
@@ -888,6 +898,27 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 - one landing = at most one visual (stamp), one sound (cue's first note or `rescue`), one cause / number response
 - 다음 and 전체 건너뛰기 stay live: 다음 mid-stamp shows the next result's own stamp, 전체 건너뛰기 leaves at once, and a cue still
   waiting for its frame is dropped
+
+### NIGHT — SAVED BY THE SALE (User 2026-10-09)
+
+The moment a night shows "내 준비가 살렸다": a result the engine proves the sold Item saved (`heroProof.outcome.worse`,
+the same draws without that Item) or a 만반의 준비 Death turned away, shown when
+- the worse result is `사망` and the adventurer came back alive (any Outcome), or
+- the worse result is `중상` and the Outcome is `성공` / `대성공`.
+Insurance reversals (`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep the 생환 overstamp above and never take this beat.
+Every such customer gets it on their own card; there is no nightly cap (User 2026-10-09).
+
+    entry 240   the worse verdict prints in its own tag (`사망` lays the black tape, 350 ms); the portrait greys
+    1000        the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone by 1260)
+    ~1150       the real Outcome stamps in its usual design (hold 860, fall 1.6 × → 1, dip 4 px); portrait colour returns
+    1300-1500   the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)
+
+- the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
+- reduced motion: the end state at once, the Item icon already beside its line
+- sound: `brink` (a dull thud) with the worse print, `shove` (a whoosh) on the shove, and on the landing a relief in
+  place of the Outcome cue (never both, User 2026-10-09), sized by how far the result turned on 사망 > 중상 > 부상 > 퇴각 >
+  성공 > 대성공: `saved1` one step, `saved2` two, `saved3` three or more. Reduced motion: the relief at once
+- 다음 / 전체 건너뛰기 behave as for any stamp
 
 ## CLOSING
 
@@ -1512,11 +1543,10 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): DAY 1 has four marks, destination, Stats (투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS),
-`flow` (User 2026-10-04: how an expedition is decided - win the fight and no Hazard incident - on the readout, rule only, never an answer) and
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has two marks (User 2026-10-09), destination and
 the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망) and DAY 3 (환경 대응), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
-visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: 전투 전망; DAY 3: the payday customer, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
+does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망, after `flow` - how an expedition is decided, win the fight and no Hazard incident, rule only) and DAY 3 (환경 대응, after the Stats mark - 투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: `flow`, 전투 전망; DAY 3: the payday customer, Stats, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -2171,6 +2201,12 @@ PASS:
 - on a two-Hazard Gate (T2 on) `환경 대응` names each Hazard with its own frozen state, in the readout and in the forecast pin; a
   one-Hazard Gate reads one label; the readout `.top` and the pin stay two lines tall with the label on one line, and no row
   overflows or collides at 360 / 390 / 412 / 1024 / 1280
+
+#### UI-Q-SALE-QUEUE-GATE-COUNT — ON-DEMAND ORDER GATE COUNTS (User approved 2026-10-09)
+
+- In SALE on desktop, hover/focus the existing bottom `손님` queue area: a floating popover shows, per open Gate, the customers left counting the one at the counter (ORDER's claimed-Gate source; the first customer's figures sum to ORDER's total). Mobile: tapping the same existing queue/pips area opens/closes it; outside tap / Escape dismisses; no new UI cue, height, permanent text, scroll jump or dock/button overlap at 360/390/430 or short-phone widths.
+- Sending a customer lowers their claimed Gate's count by one. No future-NPC Job, wallet, needs or actual reroute is disclosed beyond what the remaining claimed-Gate counts imply. Popover and coach never make a recommendation.
+- Account first-use coach spotlights the actual queue target, can be completed/skipped, stays complete across new Runs, and returns after Full Data Reset; existing first-day SALE mandatory coach sequence is not silently extended. No changes to next-customer progression, purchase, balance, Save/RNG or keyboard navigation.
 
 #### UI-Q-v28-3 — MOBILE SALE QUEUE
 At mobile width: no decorative waiting-line/fan/next-customer card; the bottom Dock keeps one queue progress: the label `손님` beside the pips, the count `{n} / {N}` as the pips' screen-reader label only (User 2026-10-03); no

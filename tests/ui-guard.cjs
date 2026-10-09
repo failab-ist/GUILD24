@@ -2255,6 +2255,26 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(/if\(st\.print&&!st\.brink\)nightCueAt\.push\(/.test(ns),'and carries no rescue accent');
  assert.ok(!/injury-guard|aftercare/.test(fn('nightSound')+app.slice(app.indexOf('const preparedBrink='),app.indexOf('const nightStampOf='))),'강골 / 구급키트 never reverse');
  assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
+ // UI_UX §NIGHT — SAVED BY THE SALE: a proven save, never Insurance - a Death kept away whatever came back, a Severe Injury
+ // only when it turned into 성공 / 대성공; every such customer, no nightly cap; the relief cue grows with the turn
+ {const src=app.slice(app.indexOf('const SAVED_RANK='),app.indexOf('const savedBeat='));
+  const {savedWorse,savedTier}=new Function('const preparedBrink='+app.match(/const preparedBrink=([^\n]*)/)[1]+'\n'+src+'return {savedWorse,savedTier};')();
+  const hp=(w,o)=>({outcome:o,heroProof:{outcome:{worse:w,items:['x']}}});
+  for(const o of ['중상','부상','퇴각','성공','대성공'])assert.equal(savedWorse(hp('사망',o)),'사망','사망 → '+o);
+  assert.equal(savedWorse(hp('사망','사망')),null);
+  for(const o of ['성공','대성공'])assert.equal(savedWorse(hp('중상',o)),'중상','중상 → '+o);
+  for(const o of ['부상','퇴각'])assert.equal(savedWorse(hp('중상',o)),null,'중상 → '+o+' is not shown');
+  assert.equal(savedWorse(hp('부상','성공')),null,'a lighter what-if is not a save');
+  assert.equal(savedWorse({...hp('사망','퇴각'),rescued:true}),null,'Insurance keeps its own 생환 reversal');
+  assert.equal(savedWorse({...hp('사망','퇴각'),avoidedDeath:true}),null);
+  assert.equal(savedWorse({outcome:'부상',events:[{id:'prepared'}]}),'사망','만반의 준비 turns a Death away');
+  assert.deepEqual([['사망','중상'],['사망','부상'],['사망','퇴각'],['사망','대성공'],['중상','성공'],['중상','대성공']].map(([w,o])=>savedTier(hp(w,o))),[1,2,3,3,3,3]);}
+ assert.ok(/const savedBeat=r=>!!savedWorse\(r\);/.test(app),'no nightly cap');
+ const nsk=fn('nightSound');
+ assert.ok(/const cue=savedBeat\(result\)\?'saved'\+savedTier\(result\):nightCue\(result\);/.test(nsk)&&/if\(!st\)\{sound\(cue\);/.test(nsk)&&/nightCueAt=\[setTimeout\(\(\)=>sound\(cue\),/.test(nsk),'the relief replaces the Outcome cue on its landing - one sound, never stacked');
+ assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\('brink'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),SAVED\.shove\)\);/.test(nsk),'thud on the print, whoosh on the shove, both dropped by 다음');
+ assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
+ assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
  for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
@@ -2632,7 +2652,8 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  assert.ok(/\.line-up\{display:none\}/.test(block),'the waiting fan / 대기 N is suppressed at phone width');
  assert.ok(!/\.line-up\{display:none\}/.test(css.replace(block,'')),'and only at phone width');
  // ...while the Dock keeps the real queue progress and count
- const dock=app.slice(app.indexOf("'<div class=\"dock\"><div class=\"queue\">"));
+ const dock=fn('queueRef');
+ assert.equal((app.match(/'<div class="dock"><div class="queue">'\+queueRef\(s\)/g)||[]).length,2,'phone and desk Docks draw the one queue line');
  assert.ok(/손님 '\+\(s\.cursor\+1\)\+' \/ '\+s\.queue\.length/.test(dock),'the Dock still states the queue count');
  assert.ok(/pips\(s\.queue\.length,s\.cursor\)/.test(dock),'and its progress');
  assert.ok(!/\.p-sale \.dock \.queue\{[^}]*display:none/.test(css),'nothing hides the Dock queue on any width');
@@ -3388,6 +3409,9 @@ test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count befor
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
  assert.ok(/counts=s\.dungeons\.length>=2\|\|\(s\.closedGates\|\|\[\]\)\.length\?gateCounts\(\):null/.test((fn('orderOffer')+fn('orderForm'))),'per-Gate counts with two or more Gates, or beside a closed Gate (User 2026-10-02)');
+ /* UI_UX §SALE — QUEUE GATE COUNT REFERENCE (User 2026-10-09): SALE counts what is left from the counter on, through the same owner */
+ assert.ok(/todayChips\(gateCounts\(s\.cursor\)\)/.test(fn('queueRef'))&&/s\.queue\.slice\(from\)/.test(fn('gateCounts')),'SALE shows the customers left per Gate, counting the one at the counter');
+ assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)|\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(fn('queueRef')),'and it names no customer');
  const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
@@ -3641,7 +3665,8 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
  // User 2026-10-04: 전체 N명 then the Hazards beside it - `부식I 3명` (name and Tier tight, a space, the visitors), wrapping under the first Hazard
-assert.ok(fn('todayLine').includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&fn('todayLine').includes("' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes("전체 '+s.queue.length+'명")&&fn('todayLine').includes('class="tl-chips"'),'전체 {N}명, then the Hazards beside it: {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one');
+const tlc=fn('todayChips')+fn('todayLine');
+assert.ok(tlc.includes("E(D.hazards[h])+['','I','II','III'][d.tier||1]")&&tlc.includes("' '+(counts.get(d.id)||0)+'명'")&&fn('todayLine').includes("전체 '+s.queue.length+'명")&&fn('todayLine').includes('class="tl-chips"'),'전체 {N}명, then the Hazards beside it: {Hazard}{Tier} {a}명 with two or more Gates, the Hazards alone with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
@@ -3705,7 +3730,7 @@ test('EVENT 게이트 임시 폐쇄: the closed Gate stays on the MORNING board,
  const cp=fn('closedPlates');
  assert.ok(/game\.run\.closedGates\|\|\[\]/.test(cp)&&/class="slip gate closed"/.test(cp)&&/<span class="closed-stamp">오늘 폐쇄<\/span>/.test(cp)&&!/hazard/.test(cp),'a faded plate, the stamp, no Hazard rows');
  assert.ok(/gatePlate\(d\)\)\.join\(''\)\+closedPlates\(\)/.test(fn('morningScreen'))&&/gatePlate\(d,true\)\)\.join\(''\)\+closedPlates\(\)/.test(app),'on the board and in the window, after the open Gates');
- assert.ok(fn('todayLine').includes('오늘 폐쇄')&&fn('todayLine').includes('s.closedGates'),'and on the 오늘 line');
+ assert.ok(fn('todayChips').includes('오늘 폐쇄')&&fn('todayChips').includes('s.closedGates')&&fn('todayLine').includes('todayChips(counts)'),'and on the 오늘 line');
  assert.ok(/s\.closedGates\.push\(\.\.\.s\.dungeons\.splice\(this\.rng\.pick\(open\),1\)\)/.test(read('dist/systems/shop.js')),'the record is the same pick, so no roll moves');
 });
 // UI_UX §DESK STAGE WIDTH (User 2026-09-30): one cap token, height-bound; FINAL's room and NIGHT's band keep 1120
