@@ -10,7 +10,7 @@ const root=path.resolve(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])
  require(path.join(root,'dist',f+'.js'));
 const G=globalThis.GUILD24||globalThis,D=G.DATA;
-const {BANDS,split}=require('./measure-v2100.cjs');
+const {BANDS,split,prep}=require('./measure-v2100.cjs');
 
 function readSave(file){
  const text=fs.readFileSync(file,'utf8');let raw=text;
@@ -82,6 +82,10 @@ function report(save){
  row(['사망 / 지금 사망 한도',(s.stats?.deaths||0)+' / '+G.Meta.deathLimit(s)+'명 (DAY 10까지 '+ord.filter(r=>r.day<=10&&r.outcome==='사망').length+'명)']);
  row(['부상 출발',inj.length+'회 · 그중 사망 '+inj.filter(r=>r.outcome==='사망').length+'회']);
  row(['상위 4명(레벨) 성공',g(grp.top)]);row(['나머지 성공',g(grp.rest)]);
+ const pp=prep(npcs),pe=x=>x[0]?pct(x[1]/x[0])+' · 사망 '+pct(x[2]/x[0])+' ('+x[0]+'회)':'-';
+ row(['상품 들고 간 원정 / 맨손 원정','성공 '+pe(pp.eq)+' / 성공 '+pe(pp.bare)]);
+ row(['상품이 결과를 바꾼 원정',pp.eq[0]?pct(pp.changed/pp.eq[0])+' ('+pp.changed+'회, 그중 사망을 막음 '+pp.saved+'회)':'-']);
+ row(['상위 4명이 받은 상품',pp.items?pct(pp.topItems/pp.items)+' ('+pp.topItems+' / '+pp.items+'개)':'-']);
  row(['DAY 20부터 성공률',late.length?rate(late)+(s.day>=25&&late.filter(ok).length/late.length<.35?' — 좀비 기준(35%) 아래':''):'아직 없음']);
  row(['현금 / 일',hist.length?Math.round((hist.at(-1).balance-700)/hist.length)+'G':'-']);
  L.push('');
