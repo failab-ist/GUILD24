@@ -797,7 +797,7 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
 
  // both tutorials are ordinary coach marks, so they inherit the account-scoped persistence
  assert.ok(/\['deep','\.slip\.deep'/.test(app),'the first Deep Expedition teaches itself on the notice');
- assert.ok(!/\['great',/.test(app)&&Copy.learned.some(([k])=>k==='great'),'Great Success is named on the NIGHT record once it pays, not coached before (NIGHT_CLOSING §DISCOVERY LINE, User 2026-09-30)');
+ assert.ok(!/\['great',/.test(app)&&Copy.learned.some(([k])=>k==='great'),'Great Success is named on the NIGHT record once it pays (NIGHT_CLOSING §DISCOVERY LINE, User 2026-09-30); the SALE mark teaches only the 대성공 기회 tag, from DAY 5 (User 2026-10-09)');
  assert.ok(!/deepTutorial|tutorialDeep/.test(app),'no separate tutorial state was introduced');
 });
 
@@ -2204,7 +2204,7 @@ test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a 
  assert.ok(/\.end-tape \.seal\{[^}]*rotate:-7deg/.test(css)&&/\.end-tape \.seal\.lost\{[^}]*rotate:9deg;[^}]*opacity:\.5;[^}]*clip-path/.test(css),'clear square-on and crisp; failure crooked, faint, partly printed');
  assert.ok(/\.end-tape \.print:has\(\.seal\) \.closed\{padding-right:84px\}/.test(css)&&/\.end-tape \.seal\{[^}]*transform-origin:100% 0\}/.test(css),'the headline keeps clear of the seal, and the fall stays on the tape');
  /* v2.9.9 H7: the FINAL clash plays first when it can; its end (or a skip) renders the ending and sounds the seal once */
- assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);if\(!clashScene\(\)\)\{render\(\);sealSound\(\);\}break;/.test(app)
+ assert.ok(/case'boss-go':sound\('final'\);endRevealed=false;endFrom='final';\/\*[^*]*\*\/game\.boss\(\);setModal\(null\);if\(!clashScene\(\)\)\{render\(\);sealSound\(\);\}break;/.test(app)
   &&/c\.el\.remove\(\);render\(\);sealSound\(\);\}/.test(fn('finishClash')),'the landing cue follows the departure once');
  const ss=bare(fn('sealSound'));assert.ok(/clearTimeout\(sealCueAt\)/.test(ss)&&/Sound\.play\(kind\)/.test(ss)&&/FINAL_SEAL\.hold\+STAMP_FALL/.test(ss),'on the landing frame, never twice');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
@@ -2527,9 +2527,10 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     line itself); the price keys carry one mark when they first show (COPY_AUDIT §3-14), the first refused 바가지 another (§26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','greatchance','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination, Stats, the flow and the price keys; the two outlook boxes and the Bag start on later DAYs; the rest are contextual');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']`)
   &&sell.includes(`['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.']`),'the price-key mark and the refused-바가지 lesson, verbatim');
+ assert.ok(sell.includes(`['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5]`),'the 대성공 기회 mark waits for DAY 5, clear of the other SALE marks (User 2026-10-09)');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
  assert.ok(/el\.className='receipt-stub'\+\(st\.mode==='half'\?' half':''\)/.test(fn('showStub'))&&/if\(activeCoach\)\{stubTimer=setTimeout\(drop,400\);return;\}/.test(fn('showStub')),'the 50% line carries its class and stays while a mark is open');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
@@ -2636,13 +2637,13 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
  assert.ok(block.length,'there is a phone-width density block');
  /* UI_UX §BOSS INFORMATION PRESENTATION: common art caps; runtime density is checked by qa-boss-report-density. */
- assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(block),'phone art scales with viewport height under the common cap');
+ assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 465px\),280px\)\}/.test(block),'phone art scales with viewport height under the common cap');
  assert.ok(!/\.boss-reveal\.(?:final|d\d+) \.boss-art img\{/.test(css),'no investigation Day has its own image-size exception');
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
  assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,1,'one common height cap at phone width');
  const wide=css.slice(css.indexOf('@media (min-width:720px){'));
- assert.ok(/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(wide),'all desk reports share a supporting image cap');
+ assert.ok(/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 480px\),360px\)\}/.test(wide),'all desk reports share a supporting image cap');
  // the reports themselves are untouched: art is still a figure beside the information
  assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
  assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
@@ -2952,7 +2953,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  const compact=fn('bossReveal').split("stage==='d10'||stage==='d20'")[1].split("stage==='d0'")[0];
  assert.ok(/\+plate/.test(compact)&&!/boss-id/.test(compact),'D10 / D20 carry the shared full Boss-art figure, not a thumbnail');
  assert.ok(!/\.boss-id\b/.test(css)&&!/max-width:64px;max-height:64px/.test(css),'the 64px thumbnail rule is gone');
- assert.ok(/\.boss-art img\{max-height:clamp\(100px,calc\(100dvh - 560px\),240px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 510px\),300px\)\}/.test(css),
+ assert.ok(/\.boss-art img\{max-height:clamp\(120px,calc\(100dvh - 465px\),280px\)\}/.test(css)&&/\.boss-art img\{max-height:clamp\(200px,calc\(100dvh - 480px\),360px\)\}/.test(css),
   'the shared phone / desk caps (240 / 300) are the ones D10 / D20 now use');
  assert.ok(!/\.boss-reveal\.d(10|20)[^{]*\.boss-art img\{/.test(css),'no D10 / D20-only art size - one art family');
 });
@@ -3084,7 +3085,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
  assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("left<=1?'오늘까지':left===2?'내일까지':'폐기까지 '+left+'일'"),'§4-10 the shelf-life state stays, as the last sale day (v2.9.10), and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
  // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
- assert.ok(fn('shelf').includes('+shelfOrder(stocks,!isFinal).map(st=>{'),'the shelf reads its order from shelfOrder (today\'s Hazard order off in the Final)');
+ assert.ok(fn('shelf').includes('+shelfOrder(stocks,!isFinal,isFinal?null:n).map(st=>{'),'the shelf reads its order from shelfOrder (today\'s Hazard order off in the Final)');
  assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');
  assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at))at[st.item]=st.expires;'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
  assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];')&&fn('shelfOrder').includes('-it.rarity'),'today\'s Hazard, then kind, then nearest discard, then higher Rarity; ties stay stable');
@@ -3189,7 +3190,8 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
  assert.equal(Copy.deep.confirmed,'심층원정 확정');
  const offer=fn('deepOfferUI');
- assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the Gate and the sponsorship');
+ assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the sponsorship');
+ assert.ok(/s\.dungeons\[t\.gateIndex\]\.name/.test(offer.slice(0,offer.indexOf('c.terms'))),'and the closed line names today\'s Deep Gate');
  assert.ok(offer.includes('c.terms'),'and the reward terms in one line');
  for(const gone of ['c.note','c.gain','c.sink','c.gate'])
   assert.ok(!offer.includes(gone),'the nomination does not restate the tutorial: '+gone);

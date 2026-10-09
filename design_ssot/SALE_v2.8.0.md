@@ -244,7 +244,7 @@ The compared Item's detail lives on the counter tray, so comparing two Items nev
 Shelf order: rows are ordered by kind, then days left before discard (nearest first), then higher Rarity, ties in the
 existing order, held for the Day; every row carries its shelf life (`폐기까지 N일 / 내일까지 / 오늘까지`) and a row on its
 last day is emphasized (exact -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
-recommendation order; it does not change with the customer.
+recommendation order; only the Hazard-answer lead follows the current customer's own Gate (User 2026-10-09).
 
 ### MATCHING-EFFECT EMPHASIS — RETIRED
 

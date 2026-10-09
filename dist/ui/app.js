@@ -33,13 +33,13 @@ const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,
 const PRO_HOLD=[5500,7000,5000,4500,7500];
 const proSpeaker=m=>'<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>'+(m?'<path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>')+'</svg>';
 const proSoundBtn=()=>{const m=game.account.settings.muted||(!prologue.woke&&Sound.locked());return '<button type="button" class="pro-sound" data-action="prologue-sound" aria-label="'+(m?'소리 켜기':'소리 끄기')+'">'+proSpeaker(m)+'</button>';};
-function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(prologue&&prologue.i===at)prologueStep(false);},PRO_HOLD[at]);}
+function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(!prologue||prologue.i!==at)return;if(document.hidden){proTimer();return;}prologueStep(false);},PRO_HOLD[at]);}
 const proWide=()=>matchMedia('(min-width:1024px)').matches;
 const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
 /* The browser keeps sound locked until the first tap: the speaker shows it as off, and that first tap starts the music from its beginning */
 function prologueWake(){if(!prologue||prologue.woke)return;prologue.woke=true;if(!game.account.settings.muted&&Sound.locked()){Sound.restart();sound('ui');}}
-/* scene 3: the gag lands when the caption has finished fading in, and the music cuts with it */
-function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},1600);}
+/* scene 3: the gag lands as the caption starts to fade in (its 0.6s delay), and the music cuts with it. A hidden tab holds the scene: no auto-advance, no page sound */
+function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},600);}
 function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
 function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);clearTimeout(prologue.g);
  if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);if(prologue.i===2)proGag();proTimer();return;}
@@ -840,8 +840,7 @@ function deepOfferUI(n){
  if(t.nomineeId)return '';
  const cost=game.deepCost(n);
  if(game.canNominateDeep(n))
-  return '<details class="special-event deep-offer"><summary>'+E(c.term)+' · '+E(c.action)+'</summary>'
-   +'<p>'+E(s.dungeons[t.gateIndex].name)+' · '+E(c.sponsor)+' '+fmt(cost)+'G</p>'
+  return '<details class="special-event deep-offer"><summary><span class="dp-tag">'+E(c.term)+'</span><b class="dp-gate">'+E(s.dungeons[t.gateIndex].name)+'</b></summary>'
    +'<p class="smalltext">'+E(c.terms)+'</p>'
    +btn(E(c.action)+' · '+E(c.sponsor)+' '+fmt(cost)+'G','deep-nominate','danger','data-id="'+n.id+'"')
    +'</details>';
@@ -1430,6 +1429,8 @@ const coachSteps={
  ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 손님이 들어올 때 정해져 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
  ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3],
+ /* User 2026-10-09: 대성공 기회 is taught after 전투 전망 (DAY 2) says 우세, on its own Day clear of the DAY 2~4 / 6 marks, the first time the tag is on the box */
+ ['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5],
  /* COPY_AUDIT §3-14: the first time the price keys show - a refused 바가지 closes the Item, so it is known before the choice */
  ['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.'],
  /* contextual marks */
@@ -1849,9 +1850,11 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
    mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
    and the next Day sorts afresh. */
 const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
-/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04) */
+/* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04); on the SALE shelf the
+   current customer's own Gate leads them (User 2026-10-09) */
 const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];
-function shelfOrder(stocks,byHazard=true){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,hz=byHazard?todayHazards():[];
+function shelfOrder(stocks,byHazard=true,npc=null){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,gate=npc&&game.claimedGateFor(npc),
+ hz=byHazard?[...new Set([...(gate?gate.hazards:[]),...todayHazards()])]:[];
  if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
  for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
  const rank=st=>{const it=D.itemBy[st.item],c=Object.keys(it.effects).map(k=>hz.indexOf(k)).filter(i=>i>=0);
@@ -1867,7 +1870,7 @@ function shelf(isFinal=false){
    +(isFinal?'':relicRef())+'</div><div class="goods">'
  /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
     held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
- +shelfOrder(stocks,!isFinal).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
+ +shelfOrder(stocks,!isFinal,isFinal?null:n).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
@@ -2917,7 +2920,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     when one is actually credited - this fired every Final, unlock or not, and twice with one */
  /* §BOSS / FINAL AUDIO: the Final commit is the run's heaviest short action cue - a gate
     closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
- case'boss-go':sound('final');game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
+ case'boss-go':sound('final');endRevealed=false;endFrom='final';/* the clash plays before any render() can arm the hold, so arm it here */game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
  case'retire':setModal('retireConfirm');break;
  case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}

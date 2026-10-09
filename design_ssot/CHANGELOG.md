@@ -40,6 +40,21 @@ and this table is their commit record.
 - Revised (User 2026-10-09, same day): the popover counts customers **left** per Gate counting the one at the counter, under `이번 손님부터`, with no total; slate balloon. DAY 1 SALE coach: destination and price only; `flow` moves to DAY 2 (before 전투 전망), Stats to DAY 3 (before 환경 대응). UI_UX §SALE — QUEUE GATE COUNT REFERENCE / §TUTORIAL — READ THE SYSTEM; SALE §QUEUE INFORMATION BOUNDARY; COPY_AUDIT §3-16.
 - NIGHT saved beat (User 2026-10-09): when the engine proves the sold Item saved the adventurer from 사망 / 중상 (not Insurance), the worse verdict prints, the Item shoves it off, the real Outcome stamps, and the Item icon stays beside `{Item} 덕분에 살아 돌아왔다.`. Shown for every 사망 kept away and every 중상 turned into 성공 / 대성공, no nightly cap; new cues `brink` / `shove` / `saved1`-`saved3` (the relief, sized by the turn, replaces the Outcome cue on that landing), levels fitted by tools/qa-sfx-mix.cjs. UI_UX §NIGHT — SAVED BY THE SALE; NIGHT_CLOSING §INSURANCE CAUSALITY.
 
+## After v2.11.1 — Job profiles and half-strength ordinary Gates (User 2026-10-09)
+
+- Adopt the revised Warrior/Archer/Rogue/Berserker profiles; Mage/Priest unchanged. Exact stats, Power contribution and Environment contribution with per-Level growth -> NPC_TRAIT.
+- Ordinary Gate base offsets D1 +0.125, D10 +0.5, D20 +1, D25 +1.5; linear interpolation, hold through D29. Ordinary golem FireTerm6/13.5/21. This halves the measured Gate/Fire package's changes together. DUNGEON_HAZARD §GATE POWER.
+- Keep EXP18+Level×8, lagging EXP×1.5, Final requirements/Fire12/threat28/gap penalty2 unchanged. Further growth/boost adjustment is deferred.
+- The reader28000-run measurement used the full candidate, not this final half-strength decision. No new balance simulation for adoption; the final reach/clear rate is unmeasured.
+
+## After v2.11.1 — SALE Deep line names its Gate (User 2026-10-09)
+
+- The SALE Deep nomination's closed line shows `심층원정` and today's Deep Gate name (no repeated words); the open state keeps the terms and the sponsorship key. No copy added. UI_UX §DEEP SALE UI.
+
+## After v2.11.1 — SALE shelf leads with the customer's Gate (User 2026-10-09)
+
+- The SALE shelf's Hazard-answer lead now starts with the current customer's own Gate's Hazards, then the other open Gates'; the rest of the order and the warehouse are unchanged. SALE §ITEM SELECTION / UI_UX §SALE — SHELF ORDER.
+
 ## After v2.11.1 — Approved balance adoption (User 2026-10-08)
 
 - EXP curve18+Level×8; lagging alive adventurers receive×1.5 ordinary earned EXP below the Day's ordinary new-arrival minimum, capping only the extra bonus at that minimum. NPC_TRAIT §EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE.

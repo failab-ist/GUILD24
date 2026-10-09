@@ -1,0 +1,7540 @@
+{
+  "validity": "PASS",
+  "raw": [
+    {
+      "id": "A",
+      "seconds": 161.504,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\A.json",
+      "bytes": 19161176,
+      "sha256": "c6aa62e463f70de511a1eb44733adda218fb1a07749e29917cabd4226d3f433c",
+      "logSha256": "da0392ec970093dde0bf472df1e254b5edf1d3e32eb7096117685d479a9cac91"
+    },
+    {
+      "id": "B",
+      "seconds": 137.226,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\B.json",
+      "bytes": 18334078,
+      "sha256": "5fbc2c4af3f0b9bae246993c40084314299ca0373f4198903bb9529f3f5a9e4d",
+      "logSha256": "a2864aa86ad5d4ce1a0c8029c6bce765b6439d05166c74adb2c01546f5cdbe9f"
+    },
+    {
+      "id": "C",
+      "seconds": 185.162,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\C.json",
+      "bytes": 19197295,
+      "sha256": "0b8d60eb3d25bad57208c2dd12282486905ad876fceac0c53a5db0888cb70a8e",
+      "logSha256": "ef72db62f6c8e566639350b1bc95f3a53f782b8ed97a9e2d8efc1b4c0aa58d5a"
+    },
+    {
+      "id": "D",
+      "seconds": 152.993,
+      "file": "C:\\Users\\necro\\.codex\\visualizations\\2026\\10\\08\\01a11c48-2be9-7c61-aea2-e3468c80fd22\\reader-gate-growth-20261009\\D.json",
+      "bytes": 18360623,
+      "sha256": "fba4e9bff7a7cc17311d28dcc529c96ef3c01eb1ad39d7f84134b724c83271b8",
+      "logSha256": "8e8cb595167ffaef0e54ed3060b404210f13db6120baa009bf95b4a13019a2db"
+    }
+  ],
+  "source": {
+    "A": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\job-balance-tool\\GUILD24",
+      "head": "0b70d210d32a661b4c290c5e03301b38fbf03c09",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "3fd320320a313a2f24567e5d4605449a246bdec6cd395cf8873db556b6b44c3c",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "ca7513c3cd6ffb2c4a99afdef7feed91ce9f55f11dacadab27ac2985c21a5e13",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    },
+    "B": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\gate-fire-study\\GUILD24",
+      "head": "df8b6f67dc0dcc1631a16b0bdf5a38e98efee79e",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "3fd320320a313a2f24567e5d4605449a246bdec6cd395cf8873db556b6b44c3c",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "4dd3c4fe4015713660b40fcea24dc239a3b4613c091eed85eb56d935b6180909",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    },
+    "C": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\growth-boost-study\\GUILD24",
+      "head": "76143c34c01d605c38d88ef896888872bb716832",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "d0136c819a7d2c374b13ef94e2fa960311a68f2a61125137fcca336e09487707",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "ca7513c3cd6ffb2c4a99afdef7feed91ce9f55f11dacadab27ac2985c21a5e13",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    },
+    "D": {
+      "root": "C:\\Users\\necro\\.codex\\worktrees\\gate-growth-study\\GUILD24",
+      "head": "2e8921c90ce4ce2b8f522d665686f428cc1e5091",
+      "files": {
+        "dist/data/catalog.js": "f9e5f78dd5921e3a4d5cd26bf5685e44e202873f1a1e112532bc9c998bd70166",
+        "dist/data/relics.js": "c7de1dff0c5e4ef4fbd779e5cd6aabe4927556f0d717a4e20b9953b9982352c0",
+        "dist/data/decorations.js": "9a2b618c765519ecc59b9dcbb5d21aea3610d45ea2b2790c9a195233f563bf6b",
+        "dist/data/copy.js": "74c64e7a7c87181fad4c1e2727b812724be7e1a59c064ae85306bec1aefa7099",
+        "dist/systems/rng.js": "067fc4964695b874cb07d610529ffb89f1213e26fe088e8803cd8179164cb91a",
+        "dist/systems/adventurer.js": "d0136c819a7d2c374b13ef94e2fa960311a68f2a61125137fcca336e09487707",
+        "dist/systems/dungeon.js": "f4cc7dfdf1e12727f88857c373a1f0a5106035ba5d1bb7a54a2c0aeb687a0657",
+        "dist/systems/meta.js": "220f1af1e6bd2cb3f887f15da203abe1db773b8551be241a1af7ba7df5172509",
+        "dist/systems/save.js": "eee3e0b195834019e6b9d8efda567c608d3e95f2ecabdf86084113dac96e882c",
+        "dist/systems/shop.js": "4dd3c4fe4015713660b40fcea24dc239a3b4613c091eed85eb56d935b6180909",
+        "dist/systems/relics.js": "1d7b6dfeeddd4edc85a93e4498c4d0217d01c7daeca33f10ea2adfbf11003018",
+        "dist/systems/run.js": "67a5cf4fdec402c94f50d41b64238db13ac25e4d037abf6509e2b1d60d6e13e4",
+        "dist/systems/simulation.js": "8e2930db731de414f53fff3848796a15d98cc991c120b176c21612849cc2a422",
+        "tools/measure-v2100.cjs": "4c27c518f0090c62e98bb2bb8c727cdbdb78ac997cac023821c4caf1f82b4adf"
+      }
+    }
+  },
+  "summaries": [
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "n": 200,
+      "reachN": 40,
+      "winN": 12,
+      "reach": 0.2,
+      "win": 0.06,
+      "clearOnReach": 0.3,
+      "day": 19.675,
+      "medianDay": 19,
+      "deaths": 8.035,
+      "d10": 3.385,
+      "injDep": 21.325,
+      "injDeath": 0.2175849941383353,
+      "zombie": 0.145,
+      "env": 0.22767807379333407,
+      "bands": [
+        {
+          "wins": 2929,
+          "n": 6324,
+          "rate": 0.4631562302340291
+        },
+        {
+          "wins": 2191,
+          "n": 5171,
+          "rate": 0.4237091471668923
+        },
+        {
+          "wins": 1753,
+          "n": 3728,
+          "rate": 0.47022532188841204
+        },
+        {
+          "wins": 1004,
+          "n": 2719,
+          "rate": 0.3692534019860243
+        }
+      ],
+      "ends": {
+        "사망한도": 156,
+        "마왕실패": 28,
+        "클리어": 12,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.6694695989650712,
+        "exp": 7730,
+        "deaths": 0.615
+      },
+      "rest": {
+        "success": 0.2645906776341559,
+        "exp": 10212,
+        "deaths": 7.42
+      },
+      "cash": 104.41425576647343,
+      "capital": 468.115,
+      "ownedDecorations": 0,
+      "finalLevel": 17.133333333333333,
+      "supplied": {
+        "n": 40,
+        "clear": 0.3
+      },
+      "fullPack": {
+        "n": 36,
+        "clear": 0.3333333333333333
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "n": 200,
+      "reachN": 38,
+      "winN": 14,
+      "reach": 0.19,
+      "win": 0.07,
+      "clearOnReach": 0.3684210526315789,
+      "day": 18.415,
+      "medianDay": 19,
+      "deaths": 7.77,
+      "d10": 3.705,
+      "injDep": 19.51,
+      "injDeath": 0.2255253716043055,
+      "zombie": 0.15,
+      "env": 0.22272483780727337,
+      "bands": [
+        {
+          "wins": 3042,
+          "n": 6339,
+          "rate": 0.4798864174159962
+        },
+        {
+          "wins": 2001,
+          "n": 4680,
+          "rate": 0.42756410256410254
+        },
+        {
+          "wins": 1636,
+          "n": 3393,
+          "rate": 0.4821691718243442
+        },
+        {
+          "wins": 847,
+          "n": 2389,
+          "rate": 0.35454164922561743
+        }
+      ],
+      "ends": {
+        "사망한도": 160,
+        "클리어": 14,
+        "마왕실패": 24,
+        "파산": 2
+      },
+      "top": {
+        "success": 0.6803870791876789,
+        "exp": 7337,
+        "deaths": 0.535
+      },
+      "rest": {
+        "success": 0.2677514792899408,
+        "exp": 9464,
+        "deaths": 7.235
+      },
+      "cash": 86.9136754546826,
+      "capital": 424.45,
+      "ownedDecorations": 0,
+      "finalLevel": 17.236842105263158,
+      "supplied": {
+        "n": 38,
+        "clear": 0.3684210526315789
+      },
+      "fullPack": {
+        "n": 36,
+        "clear": 0.3611111111111111
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "n": 200,
+      "reachN": 54,
+      "winN": 19,
+      "reach": 0.27,
+      "win": 0.095,
+      "clearOnReach": 0.35185185185185186,
+      "day": 19.185,
+      "medianDay": 19,
+      "deaths": 7.815,
+      "d10": 3.565,
+      "injDep": 19.96,
+      "injDeath": 0.22545090180360722,
+      "zombie": 0.105,
+      "env": 0.22747541733363824,
+      "bands": [
+        {
+          "wins": 2890,
+          "n": 6313,
+          "rate": 0.45778552193885635
+        },
+        {
+          "wins": 2123,
+          "n": 4730,
+          "rate": 0.44883720930232557
+        },
+        {
+          "wins": 1638,
+          "n": 3509,
+          "rate": 0.46679965802222856
+        },
+        {
+          "wins": 1192,
+          "n": 2940,
+          "rate": 0.4054421768707483
+        }
+      ],
+      "ends": {
+        "사망한도": 145,
+        "클리어": 19,
+        "마왕실패": 35,
+        "파산": 1
+      },
+      "top": {
+        "success": 0.6959424083769633,
+        "exp": 7640,
+        "deaths": 0.52
+      },
+      "rest": {
+        "success": 0.256394640682095,
+        "exp": 9852,
+        "deaths": 7.295
+      },
+      "cash": 84.01568245865371,
+      "capital": 454.69,
+      "ownedDecorations": 0,
+      "finalLevel": 17.734567901234566,
+      "supplied": {
+        "n": 54,
+        "clear": 0.35185185185185186
+      },
+      "fullPack": {
+        "n": 52,
+        "clear": 0.34615384615384615
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "n": 200,
+      "reachN": 37,
+      "winN": 9,
+      "reach": 0.185,
+      "win": 0.045,
+      "clearOnReach": 0.24324324324324326,
+      "day": 17.71,
+      "medianDay": 17,
+      "deaths": 7.725,
+      "d10": 3.67,
+      "injDep": 18.64,
+      "injDeath": 0.23336909871244635,
+      "zombie": 0.09,
+      "env": 0.22188430983118174,
+      "bands": [
+        {
+          "wins": 2938,
+          "n": 6340,
+          "rate": 0.46340694006309147
+        },
+        {
+          "wins": 1964,
+          "n": 4608,
+          "rate": 0.4262152777777778
+        },
+        {
+          "wins": 1359,
+          "n": 3009,
+          "rate": 0.45164506480558325
+        },
+        {
+          "wins": 808,
+          "n": 2155,
+          "rate": 0.37494199535962874
+        }
+      ],
+      "ends": {
+        "사망한도": 158,
+        "파산": 5,
+        "마왕실패": 28,
+        "클리어": 9
+      },
+      "top": {
+        "success": 0.6764788732394367,
+        "exp": 7100,
+        "deaths": 0.545
+      },
+      "rest": {
+        "success": 0.25144252108300047,
+        "exp": 9012,
+        "deaths": 7.18
+      },
+      "cash": 77.23469487250459,
+      "capital": 387.28,
+      "ownedDecorations": 0,
+      "finalLevel": 17.495495495495497,
+      "supplied": {
+        "n": 37,
+        "clear": 0.24324324324324326
+      },
+      "fullPack": {
+        "n": 33,
+        "clear": 0.2727272727272727
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "n": 200,
+      "reachN": 40,
+      "winN": 12,
+      "reach": 0.2,
+      "win": 0.06,
+      "clearOnReach": 0.3,
+      "day": 19.675,
+      "medianDay": 19,
+      "deaths": 8.035,
+      "d10": 3.385,
+      "injDep": 21.325,
+      "injDeath": 0.2175849941383353,
+      "zombie": 0.145,
+      "env": 0.22767807379333407,
+      "bands": [
+        {
+          "wins": 2929,
+          "n": 6324,
+          "rate": 0.4631562302340291
+        },
+        {
+          "wins": 2191,
+          "n": 5171,
+          "rate": 0.4237091471668923
+        },
+        {
+          "wins": 1753,
+          "n": 3728,
+          "rate": 0.47022532188841204
+        },
+        {
+          "wins": 1004,
+          "n": 2719,
+          "rate": 0.3692534019860243
+        }
+      ],
+      "ends": {
+        "사망한도": 156,
+        "클리어": 12,
+        "마왕실패": 28,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.6694695989650712,
+        "exp": 7730,
+        "deaths": 0.615
+      },
+      "rest": {
+        "success": 0.2645906776341559,
+        "exp": 10212,
+        "deaths": 7.42
+      },
+      "cash": 104.4142557664735,
+      "capital": 468.115,
+      "ownedDecorations": 0,
+      "finalLevel": 17.133333333333333,
+      "supplied": {
+        "n": 40,
+        "clear": 0.3
+      },
+      "fullPack": {
+        "n": 36,
+        "clear": 0.3333333333333333
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "n": 200,
+      "reachN": 42,
+      "winN": 17,
+      "reach": 0.21,
+      "win": 0.085,
+      "clearOnReach": 0.40476190476190477,
+      "day": 18.65,
+      "medianDay": 18,
+      "deaths": 7.76,
+      "d10": 3.66,
+      "injDep": 20.245,
+      "injDeath": 0.2170906396641146,
+      "zombie": 0.12,
+      "env": 0.22385676816056563,
+      "bands": [
+        {
+          "wins": 3127,
+          "n": 6512,
+          "rate": 0.4801904176904177
+        },
+        {
+          "wins": 2099,
+          "n": 4946,
+          "rate": 0.4243833400727861
+        },
+        {
+          "wins": 1699,
+          "n": 3478,
+          "rate": 0.48849913743530765
+        },
+        {
+          "wins": 1061,
+          "n": 2602,
+          "rate": 0.4077632590315142
+        }
+      ],
+      "ends": {
+        "클리어": 17,
+        "사망한도": 156,
+        "마왕실패": 25,
+        "파산": 2
+      },
+      "top": {
+        "success": 0.6899145735050364,
+        "exp": 7843,
+        "deaths": 0.56
+      },
+      "rest": {
+        "success": 0.2656008251676122,
+        "exp": 9695,
+        "deaths": 7.2
+      },
+      "cash": 92.48466113100895,
+      "capital": 443.48,
+      "ownedDecorations": 0.45,
+      "finalLevel": 18.11904761904762,
+      "supplied": {
+        "n": 42,
+        "clear": 0.40476190476190477
+      },
+      "fullPack": {
+        "n": 40,
+        "clear": 0.4
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "n": 200,
+      "reachN": 63,
+      "winN": 37,
+      "reach": 0.315,
+      "win": 0.185,
+      "clearOnReach": 0.5873015873015873,
+      "day": 20.325,
+      "medianDay": 20,
+      "deaths": 8.03,
+      "d10": 3.48,
+      "injDep": 22.935,
+      "injDeath": 0.18857641159799432,
+      "zombie": 0.095,
+      "env": 0.22330243046855425,
+      "bands": [
+        {
+          "wins": 3287,
+          "n": 6777,
+          "rate": 0.48502287147705475
+        },
+        {
+          "wins": 2583,
+          "n": 5232,
+          "rate": 0.49369266055045874
+        },
+        {
+          "wins": 2102,
+          "n": 4271,
+          "rate": 0.4921564036525404
+        },
+        {
+          "wins": 1556,
+          "n": 3675,
+          "rate": 0.4234013605442177
+        }
+      ],
+      "ends": {
+        "사망한도": 136,
+        "마왕실패": 26,
+        "클리어": 37,
+        "파산": 1
+      },
+      "top": {
+        "success": 0.6942957987020381,
+        "exp": 8783,
+        "deaths": 0.475
+      },
+      "rest": {
+        "success": 0.30701754385964913,
+        "exp": 11172,
+        "deaths": 7.555
+      },
+      "cash": 189.14253976604127,
+      "capital": 600.64,
+      "ownedDecorations": 2.06,
+      "finalLevel": 18.343915343915345,
+      "supplied": {
+        "n": 63,
+        "clear": 0.5873015873015873
+      },
+      "fullPack": {
+        "n": 63,
+        "clear": 0.5873015873015873
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "n": 200,
+      "reachN": 74,
+      "winN": 38,
+      "reach": 0.37,
+      "win": 0.19,
+      "clearOnReach": 0.5135135135135135,
+      "day": 21.69,
+      "medianDay": 27,
+      "deaths": 8.19,
+      "d10": 3.225,
+      "injDep": 24.18,
+      "injDeath": 0.19416873449131514,
+      "zombie": 0.1,
+      "env": 0.23313117807172531,
+      "bands": [
+        {
+          "wins": 3405,
+          "n": 6692,
+          "rate": 0.5088164973102212
+        },
+        {
+          "wins": 2700,
+          "n": 5529,
+          "rate": 0.48833423765599565
+        },
+        {
+          "wins": 2254,
+          "n": 4607,
+          "rate": 0.489255480790102
+        },
+        {
+          "wins": 1738,
+          "n": 4113,
+          "rate": 0.42256260637004617
+        }
+      ],
+      "ends": {
+        "사망한도": 126,
+        "클리어": 38,
+        "마왕실패": 36
+      },
+      "top": {
+        "success": 0.696299540179549,
+        "exp": 9134,
+        "deaths": 0.485
+      },
+      "rest": {
+        "success": 0.3165071567714068,
+        "exp": 11807,
+        "deaths": 7.705
+      },
+      "cash": 254.73615407937476,
+      "capital": 695.12,
+      "ownedDecorations": 3.77,
+      "finalLevel": 18.02252252252252,
+      "supplied": {
+        "n": 74,
+        "clear": 0.5135135135135135
+      },
+      "fullPack": {
+        "n": 73,
+        "clear": 0.5205479452054794
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "n": 200,
+      "reachN": 40,
+      "winN": 12,
+      "reach": 0.2,
+      "win": 0.06,
+      "clearOnReach": 0.3,
+      "day": 19.675,
+      "medianDay": 19,
+      "deaths": 8.035,
+      "d10": 3.385,
+      "injDep": 21.325,
+      "injDeath": 0.2175849941383353,
+      "zombie": 0.145,
+      "env": 0.22767807379333407,
+      "bands": [
+        {
+          "wins": 2929,
+          "n": 6324,
+          "rate": 0.4631562302340291
+        },
+        {
+          "wins": 2191,
+          "n": 5171,
+          "rate": 0.4237091471668923
+        },
+        {
+          "wins": 1753,
+          "n": 3728,
+          "rate": 0.47022532188841204
+        },
+        {
+          "wins": 1004,
+          "n": 2719,
+          "rate": 0.3692534019860243
+        }
+      ],
+      "ends": {
+        "사망한도": 156,
+        "마왕실패": 28,
+        "파산": 4,
+        "클리어": 12
+      },
+      "top": {
+        "success": 0.6694695989650712,
+        "exp": 7730,
+        "deaths": 0.615
+      },
+      "rest": {
+        "success": 0.2645906776341559,
+        "exp": 10212,
+        "deaths": 7.42
+      },
+      "cash": 104.41425576647343,
+      "capital": 468.115,
+      "ownedDecorations": 0,
+      "finalLevel": 17.133333333333333,
+      "supplied": {
+        "n": 40,
+        "clear": 0.3
+      },
+      "fullPack": {
+        "n": 36,
+        "clear": 0.3333333333333333
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "n": 200,
+      "reachN": 51,
+      "winN": 21,
+      "reach": 0.255,
+      "win": 0.105,
+      "clearOnReach": 0.4117647058823529,
+      "day": 19.775,
+      "medianDay": 19,
+      "deaths": 7.965,
+      "d10": 3.405,
+      "injDep": 21.38,
+      "injDeath": 0.22380729653882134,
+      "zombie": 0.17,
+      "env": 0.2274234552890461,
+      "bands": [
+        {
+          "wins": 3122,
+          "n": 6381,
+          "rate": 0.4892650054850337
+        },
+        {
+          "wins": 2145,
+          "n": 4964,
+          "rate": 0.4321112006446414
+        },
+        {
+          "wins": 1805,
+          "n": 3711,
+          "rate": 0.48639180813796823
+        },
+        {
+          "wins": 1163,
+          "n": 3038,
+          "rate": 0.3828176431863068
+        }
+      ],
+      "ends": {
+        "클리어": 21,
+        "사망한도": 147,
+        "마왕실패": 30,
+        "파산": 2
+      },
+      "top": {
+        "success": 0.6871637202152191,
+        "exp": 7806,
+        "deaths": 0.52
+      },
+      "rest": {
+        "success": 0.2790629860031104,
+        "exp": 10288,
+        "deaths": 7.445
+      },
+      "cash": 89.83471960638663,
+      "capital": 476.495,
+      "ownedDecorations": 0.45,
+      "finalLevel": 17.529411764705884,
+      "supplied": {
+        "n": 51,
+        "clear": 0.4117647058823529
+      },
+      "fullPack": {
+        "n": 49,
+        "clear": 0.40816326530612246
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "n": 200,
+      "reachN": 115,
+      "winN": 40,
+      "reach": 0.575,
+      "win": 0.2,
+      "clearOnReach": 0.34782608695652173,
+      "day": 24.95,
+      "medianDay": 30,
+      "deaths": 8.675,
+      "d10": 3.175,
+      "injDep": 22.655,
+      "injDeath": 0.2180534098433017,
+      "zombie": 0.195,
+      "env": 0.2476211551228148,
+      "bands": [
+        {
+          "wins": 3179,
+          "n": 6356,
+          "rate": 0.500157331655129
+        },
+        {
+          "wins": 2676,
+          "n": 5810,
+          "rate": 0.4605851979345955
+        },
+        {
+          "wins": 2552,
+          "n": 5221,
+          "rate": 0.48879524995211643
+        },
+        {
+          "wins": 1996,
+          "n": 5208,
+          "rate": 0.38325652841781876
+        }
+      ],
+      "ends": {
+        "클리어": 40,
+        "마왕실패": 75,
+        "사망한도": 78,
+        "파산": 7
+      },
+      "top": {
+        "success": 0.6862009530568792,
+        "exp": 9863,
+        "deaths": 0.5
+      },
+      "rest": {
+        "success": 0.28550109959158027,
+        "exp": 12732,
+        "deaths": 8.175
+      },
+      "cash": 98.26571961646336,
+      "capital": 680.705,
+      "ownedDecorations": 2.195,
+      "finalLevel": 17.452173913043477,
+      "supplied": {
+        "n": 114,
+        "clear": 0.3508771929824561
+      },
+      "fullPack": {
+        "n": 109,
+        "clear": 0.3669724770642202
+      }
+    },
+    {
+      "id": "A",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "n": 200,
+      "reachN": 174,
+      "winN": 56,
+      "reach": 0.87,
+      "win": 0.28,
+      "clearOnReach": 0.3218390804597701,
+      "day": 28.805,
+      "medianDay": 30,
+      "deaths": 7.755,
+      "d10": 2.075,
+      "injDep": 18.03,
+      "injDeath": 0.19550748752079866,
+      "zombie": 0.23,
+      "env": 0.2539137811367317,
+      "bands": [
+        {
+          "wins": 3803,
+          "n": 6318,
+          "rate": 0.6019309908198797
+        },
+        {
+          "wins": 3289,
+          "n": 6400,
+          "rate": 0.51390625
+        },
+        {
+          "wins": 3153,
+          "n": 6241,
+          "rate": 0.5052074987982695
+        },
+        {
+          "wins": 2810,
+          "n": 6975,
+          "rate": 0.4028673835125448
+        }
+      ],
+      "ends": {
+        "마왕실패": 118,
+        "클리어": 56,
+        "사망한도": 21,
+        "파산": 5
+      },
+      "top": {
+        "success": 0.7080524344569289,
+        "exp": 10680,
+        "deaths": 0.37
+      },
+      "rest": {
+        "success": 0.36010226825750624,
+        "exp": 15254,
+        "deaths": 7.385
+      },
+      "cash": 125.83689380753088,
+      "capital": 849.985,
+      "ownedDecorations": 3.915,
+      "finalLevel": 17.440613026819925,
+      "supplied": {
+        "n": 174,
+        "clear": 0.3218390804597701
+      },
+      "fullPack": {
+        "n": 169,
+        "clear": 0.33136094674556216
+      }
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "n": 1000,
+      "reachN": 230,
+      "winN": 73,
+      "reach": 0.23,
+      "win": 0.073,
+      "clearOnReach": 0.3173913043478261,
+      "day": 19.676,
+      "medianDay": 19,
+      "deaths": 8.107,
+      "d10": 3.401,
+      "injDep": 21.373,
+      "injDeath": 0.219435736677116,
+      "zombie": 0.146,
+      "env": 0.23120292374203325,
+      "bands": [
+        {
+          "wins": 14721,
+          "n": 31808,
+          "rate": 0.4628080985915493
+        },
+        {
+          "wins": 10583,
+          "n": 24955,
+          "rate": 0.4240833500300541
+        },
+        {
+          "wins": 8452,
+          "n": 18540,
+          "rate": 0.4558791801510248
+        },
+        {
+          "wins": 5405,
+          "n": 14445,
+          "rate": 0.374177916233991
+        }
+      ],
+      "ends": {
+        "클리어": 73,
+        "사망한도": 766,
+        "마왕실패": 157,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.667526304930885,
+        "exp": 38776,
+        "deaths": 0.601
+      },
+      "rest": {
+        "success": 0.26047633995134584,
+        "exp": 50972,
+        "deaths": 7.506
+      },
+      "cash": 104.56602945968831,
+      "capital": 475.027,
+      "ownedDecorations": 0,
+      "finalLevel": 17.37536231884058,
+      "supplied": {
+        "n": 229,
+        "clear": 0.31877729257641924
+      },
+      "fullPack": {
+        "n": 213,
+        "clear": 0.3427230046948357
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "n": 200,
+      "reachN": 22,
+      "winN": 6,
+      "reach": 0.11,
+      "win": 0.03,
+      "clearOnReach": 0.2727272727272727,
+      "day": 17.325,
+      "medianDay": 17,
+      "deaths": 7.79,
+      "d10": 3.745,
+      "injDep": 19.885,
+      "injDeath": 0.22428966557706814,
+      "zombie": 0.11,
+      "env": 0.21589905362776024,
+      "bands": [
+        {
+          "wins": 2701,
+          "n": 6347,
+          "rate": 0.4255553804947219
+        },
+        {
+          "wins": 1843,
+          "n": 4871,
+          "rate": 0.37836173270375695
+        },
+        {
+          "wins": 1210,
+          "n": 2938,
+          "rate": 0.4118447923757658
+        },
+        {
+          "wins": 607,
+          "n": 1694,
+          "rate": 0.35832349468713104
+        }
+      ],
+      "ends": {
+        "사망한도": 175,
+        "마왕실패": 16,
+        "클리어": 6,
+        "파산": 3
+      },
+      "top": {
+        "success": 0.6530131133048475,
+        "exp": 6787,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.21284342932803707,
+        "exp": 9063,
+        "deaths": 7.17
+      },
+      "cash": 87.04765304342138,
+      "capital": 370.99,
+      "ownedDecorations": 0,
+      "finalLevel": 17.484848484848484,
+      "supplied": {
+        "n": 22,
+        "clear": 0.2727272727272727
+      },
+      "fullPack": {
+        "n": 21,
+        "clear": 0.2857142857142857
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "n": 200,
+      "reachN": 18,
+      "winN": 8,
+      "reach": 0.09,
+      "win": 0.04,
+      "clearOnReach": 0.4444444444444444,
+      "day": 15.715,
+      "medianDay": 15,
+      "deaths": 7.395,
+      "d10": 3.885,
+      "injDep": 16.93,
+      "injDeath": 0.24778499704666274,
+      "zombie": 0.105,
+      "env": 0.211424957841484,
+      "bands": [
+        {
+          "wins": 2814,
+          "n": 6235,
+          "rate": 0.4513231756214916
+        },
+        {
+          "wins": 1583,
+          "n": 4019,
+          "rate": 0.39387907439661607
+        },
+        {
+          "wins": 1024,
+          "n": 2470,
+          "rate": 0.4145748987854251
+        },
+        {
+          "wins": 522,
+          "n": 1508,
+          "rate": 0.34615384615384615
+        }
+      ],
+      "ends": {
+        "사망한도": 176,
+        "파산": 6,
+        "마왕실패": 10,
+        "클리어": 8
+      },
+      "top": {
+        "success": 0.6635240572171651,
+        "exp": 6152,
+        "deaths": 0.58
+      },
+      "rest": {
+        "success": 0.23032178217821783,
+        "exp": 8080,
+        "deaths": 6.815
+      },
+      "cash": 70.71856480360262,
+      "capital": 320.565,
+      "ownedDecorations": 0,
+      "finalLevel": 17.27777777777778,
+      "supplied": {
+        "n": 18,
+        "clear": 0.4444444444444444
+      },
+      "fullPack": {
+        "n": 17,
+        "clear": 0.47058823529411764
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "n": 200,
+      "reachN": 22,
+      "winN": 6,
+      "reach": 0.11,
+      "win": 0.03,
+      "clearOnReach": 0.2727272727272727,
+      "day": 16.205,
+      "medianDay": 15,
+      "deaths": 7.485,
+      "d10": 3.83,
+      "injDep": 17.23,
+      "injDeath": 0.23940800928612885,
+      "zombie": 0.12,
+      "env": 0.21750356730311884,
+      "bands": [
+        {
+          "wins": 2722,
+          "n": 6290,
+          "rate": 0.4327503974562798
+        },
+        {
+          "wins": 1710,
+          "n": 4243,
+          "rate": 0.4030167334433184
+        },
+        {
+          "wins": 1086,
+          "n": 2508,
+          "rate": 0.43301435406698563
+        },
+        {
+          "wins": 597,
+          "n": 1676,
+          "rate": 0.3562052505966587
+        }
+      ],
+      "ends": {
+        "사망한도": 169,
+        "마왕실패": 16,
+        "파산": 9,
+        "클리어": 6
+      },
+      "top": {
+        "success": 0.6626097673702049,
+        "exp": 6491,
+        "deaths": 0.575
+      },
+      "rest": {
+        "success": 0.22052030148310237,
+        "exp": 8226,
+        "deaths": 6.91
+      },
+      "cash": 60.17665346346586,
+      "capital": 329.375,
+      "ownedDecorations": 0,
+      "finalLevel": 17.21212121212121,
+      "supplied": {
+        "n": 22,
+        "clear": 0.2727272727272727
+      },
+      "fullPack": {
+        "n": 20,
+        "clear": 0.3
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "n": 200,
+      "reachN": 24,
+      "winN": 6,
+      "reach": 0.12,
+      "win": 0.03,
+      "clearOnReach": 0.25,
+      "day": 15.865,
+      "medianDay": 15,
+      "deaths": 7.405,
+      "d10": 4,
+      "injDep": 17.275,
+      "injDeath": 0.238205499276411,
+      "zombie": 0.1,
+      "env": 0.21432033792673638,
+      "bands": [
+        {
+          "wins": 2687,
+          "n": 6331,
+          "rate": 0.4244195229821513
+        },
+        {
+          "wins": 1612,
+          "n": 4128,
+          "rate": 0.3905038759689923
+        },
+        {
+          "wins": 1000,
+          "n": 2426,
+          "rate": 0.41220115416323166
+        },
+        {
+          "wins": 546,
+          "n": 1556,
+          "rate": 0.3508997429305913
+        }
+      ],
+      "ends": {
+        "사망한도": 170,
+        "파산": 6,
+        "마왕실패": 18,
+        "클리어": 6
+      },
+      "top": {
+        "success": 0.6516781756865264,
+        "exp": 6227,
+        "deaths": 0.63
+      },
+      "rest": {
+        "success": 0.2175553932310689,
+        "exp": 8214,
+        "deaths": 6.775
+      },
+      "cash": 61.22679397404119,
+      "capital": 314.935,
+      "ownedDecorations": 0,
+      "finalLevel": 17.36111111111111,
+      "supplied": {
+        "n": 23,
+        "clear": 0.2608695652173913
+      },
+      "fullPack": {
+        "n": 22,
+        "clear": 0.2727272727272727
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "n": 200,
+      "reachN": 22,
+      "winN": 6,
+      "reach": 0.11,
+      "win": 0.03,
+      "clearOnReach": 0.2727272727272727,
+      "day": 17.325,
+      "medianDay": 17,
+      "deaths": 7.79,
+      "d10": 3.745,
+      "injDep": 19.885,
+      "injDeath": 0.22428966557706814,
+      "zombie": 0.11,
+      "env": 0.21589905362776024,
+      "bands": [
+        {
+          "wins": 2701,
+          "n": 6347,
+          "rate": 0.4255553804947219
+        },
+        {
+          "wins": 1843,
+          "n": 4871,
+          "rate": 0.37836173270375695
+        },
+        {
+          "wins": 1210,
+          "n": 2938,
+          "rate": 0.4118447923757658
+        },
+        {
+          "wins": 607,
+          "n": 1694,
+          "rate": 0.35832349468713104
+        }
+      ],
+      "ends": {
+        "사망한도": 175,
+        "마왕실패": 16,
+        "클리어": 6,
+        "파산": 3
+      },
+      "top": {
+        "success": 0.6530131133048475,
+        "exp": 6787,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.21284342932803707,
+        "exp": 9063,
+        "deaths": 7.17
+      },
+      "cash": 87.04765304342139,
+      "capital": 370.99,
+      "ownedDecorations": 0,
+      "finalLevel": 17.484848484848484,
+      "supplied": {
+        "n": 22,
+        "clear": 0.2727272727272727
+      },
+      "fullPack": {
+        "n": 21,
+        "clear": 0.2857142857142857
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "n": 200,
+      "reachN": 16,
+      "winN": 7,
+      "reach": 0.08,
+      "win": 0.035,
+      "clearOnReach": 0.4375,
+      "day": 15.765,
+      "medianDay": 15,
+      "deaths": 7.41,
+      "d10": 3.955,
+      "injDep": 16.955,
+      "injDeath": 0.24594514892362135,
+      "zombie": 0.1,
+      "env": 0.21144891810462887,
+      "bands": [
+        {
+          "wins": 2927,
+          "n": 6365,
+          "rate": 0.4598586017282011
+        },
+        {
+          "wins": 1720,
+          "n": 4172,
+          "rate": 0.41227229146692235
+        },
+        {
+          "wins": 1067,
+          "n": 2535,
+          "rate": 0.4209072978303747
+        },
+        {
+          "wins": 546,
+          "n": 1532,
+          "rate": 0.3563968668407311
+        }
+      ],
+      "ends": {
+        "사망한도": 178,
+        "클리어": 7,
+        "마왕실패": 9,
+        "파산": 6
+      },
+      "top": {
+        "success": 0.6761801912989818,
+        "exp": 6482,
+        "deaths": 0.575
+      },
+      "rest": {
+        "success": 0.23110071410982516,
+        "exp": 8122,
+        "deaths": 6.835
+      },
+      "cash": 81.44038133655872,
+      "capital": 331.23,
+      "ownedDecorations": 0.31,
+      "finalLevel": 17.8125,
+      "supplied": {
+        "n": 16,
+        "clear": 0.4375
+      },
+      "fullPack": {
+        "n": 15,
+        "clear": 0.4666666666666667
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "n": 200,
+      "reachN": 30,
+      "winN": 11,
+      "reach": 0.15,
+      "win": 0.055,
+      "clearOnReach": 0.36666666666666664,
+      "day": 16.545,
+      "medianDay": 15,
+      "deaths": 7.49,
+      "d10": 3.875,
+      "injDep": 18.52,
+      "injDeath": 0.22354211663066956,
+      "zombie": 0.14,
+      "env": 0.2192778649921507,
+      "bands": [
+        {
+          "wins": 3018,
+          "n": 6669,
+          "rate": 0.4525416104363473
+        },
+        {
+          "wins": 1826,
+          "n": 4179,
+          "rate": 0.43694663795166305
+        },
+        {
+          "wins": 1300,
+          "n": 2890,
+          "rate": 0.44982698961937717
+        },
+        {
+          "wins": 775,
+          "n": 2187,
+          "rate": 0.35436671239140377
+        }
+      ],
+      "ends": {
+        "사망한도": 170,
+        "마왕실패": 19,
+        "클리어": 11
+      },
+      "top": {
+        "success": 0.6593051062034041,
+        "exp": 7109,
+        "deaths": 0.665
+      },
+      "rest": {
+        "success": 0.2531760435571688,
+        "exp": 8816,
+        "deaths": 6.825
+      },
+      "cash": 152.00235300515672,
+      "capital": 412.435,
+      "ownedDecorations": 1.57,
+      "finalLevel": 17.711111111111112,
+      "supplied": {
+        "n": 30,
+        "clear": 0.36666666666666664
+      },
+      "fullPack": {
+        "n": 30,
+        "clear": 0.36666666666666664
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "n": 200,
+      "reachN": 54,
+      "winN": 25,
+      "reach": 0.27,
+      "win": 0.125,
+      "clearOnReach": 0.46296296296296297,
+      "day": 19.535,
+      "medianDay": 20,
+      "deaths": 7.945,
+      "d10": 3.46,
+      "injDep": 22.08,
+      "injDeath": 0.208106884057971,
+      "zombie": 0.13,
+      "env": 0.21934604904632152,
+      "bands": [
+        {
+          "wins": 3311,
+          "n": 6786,
+          "rate": 0.48791629826112587
+        },
+        {
+          "wins": 2291,
+          "n": 5046,
+          "rate": 0.4540229885057471
+        },
+        {
+          "wins": 1965,
+          "n": 3995,
+          "rate": 0.4918648310387985
+        },
+        {
+          "wins": 1271,
+          "n": 3257,
+          "rate": 0.39023641387780167
+        }
+      ],
+      "ends": {
+        "사망한도": 146,
+        "마왕실패": 29,
+        "클리어": 25
+      },
+      "top": {
+        "success": 0.6907692307692308,
+        "exp": 8450,
+        "deaths": 0.575
+      },
+      "rest": {
+        "success": 0.2822080120368629,
+        "exp": 10634,
+        "deaths": 7.37
+      },
+      "cash": 244.7597854087758,
+      "capital": 594.93,
+      "ownedDecorations": 3.425,
+      "finalLevel": 17.962962962962962,
+      "supplied": {
+        "n": 54,
+        "clear": 0.46296296296296297
+      },
+      "fullPack": {
+        "n": 53,
+        "clear": 0.4716981132075472
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "n": 200,
+      "reachN": 22,
+      "winN": 6,
+      "reach": 0.11,
+      "win": 0.03,
+      "clearOnReach": 0.2727272727272727,
+      "day": 17.325,
+      "medianDay": 17,
+      "deaths": 7.79,
+      "d10": 3.745,
+      "injDep": 19.885,
+      "injDeath": 0.22428966557706814,
+      "zombie": 0.11,
+      "env": 0.21589905362776024,
+      "bands": [
+        {
+          "wins": 2701,
+          "n": 6347,
+          "rate": 0.4255553804947219
+        },
+        {
+          "wins": 1843,
+          "n": 4871,
+          "rate": 0.37836173270375695
+        },
+        {
+          "wins": 1210,
+          "n": 2938,
+          "rate": 0.4118447923757658
+        },
+        {
+          "wins": 607,
+          "n": 1694,
+          "rate": 0.35832349468713104
+        }
+      ],
+      "ends": {
+        "사망한도": 175,
+        "마왕실패": 16,
+        "파산": 3,
+        "클리어": 6
+      },
+      "top": {
+        "success": 0.6530131133048475,
+        "exp": 6787,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.21284342932803707,
+        "exp": 9063,
+        "deaths": 7.17
+      },
+      "cash": 87.04765304342136,
+      "capital": 370.99,
+      "ownedDecorations": 0,
+      "finalLevel": 17.484848484848484,
+      "supplied": {
+        "n": 22,
+        "clear": 0.2727272727272727
+      },
+      "fullPack": {
+        "n": 21,
+        "clear": 0.2857142857142857
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "n": 200,
+      "reachN": 26,
+      "winN": 11,
+      "reach": 0.13,
+      "win": 0.055,
+      "clearOnReach": 0.4230769230769231,
+      "day": 16.89,
+      "medianDay": 16,
+      "deaths": 7.58,
+      "d10": 3.74,
+      "injDep": 18.34,
+      "injDeath": 0.24863685932388221,
+      "zombie": 0.14,
+      "env": 0.21692045156208978,
+      "bands": [
+        {
+          "wins": 2893,
+          "n": 6240,
+          "rate": 0.4636217948717949
+        },
+        {
+          "wins": 1721,
+          "n": 4281,
+          "rate": 0.40200887643074046
+        },
+        {
+          "wins": 1161,
+          "n": 2841,
+          "rate": 0.40865892291446676
+        },
+        {
+          "wins": 639,
+          "n": 1874,
+          "rate": 0.3409818569903949
+        }
+      ],
+      "ends": {
+        "사망한도": 168,
+        "마왕실패": 15,
+        "파산": 6,
+        "클리어": 11
+      },
+      "top": {
+        "success": 0.6685478950579622,
+        "exp": 6556,
+        "deaths": 0.535
+      },
+      "rest": {
+        "success": 0.23398617511520736,
+        "exp": 8680,
+        "deaths": 7.045
+      },
+      "cash": 70.99426081929994,
+      "capital": 361.98,
+      "ownedDecorations": 0.31,
+      "finalLevel": 17.32051282051282,
+      "supplied": {
+        "n": 26,
+        "clear": 0.4230769230769231
+      },
+      "fullPack": {
+        "n": 25,
+        "clear": 0.44
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "n": 200,
+      "reachN": 71,
+      "winN": 22,
+      "reach": 0.355,
+      "win": 0.11,
+      "clearOnReach": 0.30985915492957744,
+      "day": 21.6,
+      "medianDay": 26,
+      "deaths": 8.565,
+      "d10": 3.375,
+      "injDep": 21.37,
+      "injDeath": 0.22905942910622368,
+      "zombie": 0.24,
+      "env": 0.23786903667381756,
+      "bands": [
+        {
+          "wins": 2949,
+          "n": 6357,
+          "rate": 0.463898065125059
+        },
+        {
+          "wins": 2157,
+          "n": 5373,
+          "rate": 0.40145170295924065
+        },
+        {
+          "wins": 1871,
+          "n": 4278,
+          "rate": 0.4373539036933146
+        },
+        {
+          "wins": 1304,
+          "n": 3570,
+          "rate": 0.365266106442577
+        }
+      ],
+      "ends": {
+        "마왕실패": 49,
+        "파산": 17,
+        "사망한도": 112,
+        "클리어": 22
+      },
+      "top": {
+        "success": 0.66463133640553,
+        "exp": 8680,
+        "deaths": 0.6
+      },
+      "rest": {
+        "success": 0.2305010093595155,
+        "exp": 10898,
+        "deaths": 7.965
+      },
+      "cash": 73.82825404874616,
+      "capital": 525.265,
+      "ownedDecorations": 1.825,
+      "finalLevel": 17.460093896713616,
+      "supplied": {
+        "n": 69,
+        "clear": 0.3188405797101449
+      },
+      "fullPack": {
+        "n": 65,
+        "clear": 0.3384615384615385
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "n": 200,
+      "reachN": 148,
+      "winN": 48,
+      "reach": 0.74,
+      "win": 0.24,
+      "clearOnReach": 0.32432432432432434,
+      "day": 27.135,
+      "medianDay": 30,
+      "deaths": 8.685,
+      "d10": 2.63,
+      "injDep": 18.69,
+      "injDeath": 0.21776350989834137,
+      "zombie": 0.315,
+      "env": 0.2506751780014731,
+      "bands": [
+        {
+          "wins": 3495,
+          "n": 6311,
+          "rate": 0.553794961178894
+        },
+        {
+          "wins": 2922,
+          "n": 6181,
+          "rate": 0.4727390389904546
+        },
+        {
+          "wins": 2780,
+          "n": 5768,
+          "rate": 0.48196948682385576
+        },
+        {
+          "wins": 2287,
+          "n": 6178,
+          "rate": 0.3701845257364843
+        }
+      ],
+      "ends": {
+        "클리어": 48,
+        "마왕실패": 100,
+        "파산": 9,
+        "사망한도": 43
+      },
+      "top": {
+        "success": 0.6902448503692188,
+        "exp": 10292,
+        "deaths": 0.405
+      },
+      "rest": {
+        "success": 0.3096281634384278,
+        "exp": 14146,
+        "deaths": 8.28
+      },
+      "cash": 102.411967846622,
+      "capital": 765.14,
+      "ownedDecorations": 3.71,
+      "finalLevel": 17.51801801801802,
+      "supplied": {
+        "n": 148,
+        "clear": 0.32432432432432434
+      },
+      "fullPack": {
+        "n": 142,
+        "clear": 0.323943661971831
+      }
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "n": 1000,
+      "reachN": 115,
+      "winN": 52,
+      "reach": 0.115,
+      "win": 0.052,
+      "clearOnReach": 0.45217391304347826,
+      "day": 17.257,
+      "medianDay": 17,
+      "deaths": 7.813,
+      "d10": 3.648,
+      "injDep": 19.207,
+      "injDeath": 0.23444577497787264,
+      "zombie": 0.13,
+      "env": 0.2198893766016289,
+      "bands": [
+        {
+          "wins": 13748,
+          "n": 31653,
+          "rate": 0.4343348181846902
+        },
+        {
+          "wins": 8898,
+          "n": 23480,
+          "rate": 0.37896081771720613
+        },
+        {
+          "wins": 6103,
+          "n": 15031,
+          "rate": 0.40602754307763955
+        },
+        {
+          "wins": 2902,
+          "n": 8662,
+          "rate": 0.33502655275917803
+        }
+      ],
+      "ends": {
+        "사망한도": 872,
+        "마왕실패": 63,
+        "클리어": 52,
+        "파산": 13
+      },
+      "top": {
+        "success": 0.6413095096758874,
+        "exp": 33692,
+        "deaths": 0.604
+      },
+      "rest": {
+        "success": 0.22253733327425002,
+        "exp": 45134,
+        "deaths": 7.209
+      },
+      "cash": 92.12043446441888,
+      "capital": 372.764,
+      "ownedDecorations": 0,
+      "finalLevel": 17.58550724637681,
+      "supplied": {
+        "n": 112,
+        "clear": 0.4642857142857143
+      },
+      "fullPack": {
+        "n": 106,
+        "clear": 0.49056603773584906
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "n": 200,
+      "reachN": 44,
+      "winN": 15,
+      "reach": 0.22,
+      "win": 0.075,
+      "clearOnReach": 0.3409090909090909,
+      "day": 19.465,
+      "medianDay": 19,
+      "deaths": 7.92,
+      "d10": 3.405,
+      "injDep": 21.36,
+      "injDeath": 0.20997191011235955,
+      "zombie": 0.12,
+      "env": 0.22854572039140705,
+      "bands": [
+        {
+          "wins": 2928,
+          "n": 6324,
+          "rate": 0.4629981024667932
+        },
+        {
+          "wins": 2185,
+          "n": 5168,
+          "rate": 0.4227941176470588
+        },
+        {
+          "wins": 1680,
+          "n": 3686,
+          "rate": 0.45577862181226264
+        },
+        {
+          "wins": 986,
+          "n": 2604,
+          "rate": 0.37864823348694315
+        }
+      ],
+      "ends": {
+        "사망한도": 152,
+        "마왕실패": 29,
+        "클리어": 15,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.6707904675087902,
+        "exp": 7679,
+        "deaths": 0.575
+      },
+      "rest": {
+        "success": 0.2601207562110264,
+        "exp": 10103,
+        "deaths": 7.345
+      },
+      "cash": 105.24450997794888,
+      "capital": 462.225,
+      "ownedDecorations": 0,
+      "finalLevel": 17.151515151515152,
+      "supplied": {
+        "n": 44,
+        "clear": 0.3409090909090909
+      },
+      "fullPack": {
+        "n": 42,
+        "clear": 0.35714285714285715
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "n": 200,
+      "reachN": 37,
+      "winN": 12,
+      "reach": 0.185,
+      "win": 0.06,
+      "clearOnReach": 0.32432432432432434,
+      "day": 18.21,
+      "medianDay": 18,
+      "deaths": 7.73,
+      "d10": 3.695,
+      "injDep": 19.05,
+      "injDeath": 0.2304461942257218,
+      "zombie": 0.115,
+      "env": 0.22066349569510507,
+      "bands": [
+        {
+          "wins": 3038,
+          "n": 6337,
+          "rate": 0.4794066593025091
+        },
+        {
+          "wins": 2033,
+          "n": 4698,
+          "rate": 0.4327373350361856
+        },
+        {
+          "wins": 1560,
+          "n": 3315,
+          "rate": 0.47058823529411764
+        },
+        {
+          "wins": 864,
+          "n": 2259,
+          "rate": 0.38247011952191234
+        }
+      ],
+      "ends": {
+        "사망한도": 160,
+        "클리어": 12,
+        "마왕실패": 25,
+        "파산": 3
+      },
+      "top": {
+        "success": 0.6830765034774308,
+        "exp": 7333,
+        "deaths": 0.535
+      },
+      "rest": {
+        "success": 0.2680034497628288,
+        "exp": 9276,
+        "deaths": 7.195
+      },
+      "cash": 88.61490676422517,
+      "capital": 414.165,
+      "ownedDecorations": 0,
+      "finalLevel": 16.945945945945947,
+      "supplied": {
+        "n": 37,
+        "clear": 0.32432432432432434
+      },
+      "fullPack": {
+        "n": 36,
+        "clear": 0.3333333333333333
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "n": 200,
+      "reachN": 56,
+      "winN": 25,
+      "reach": 0.28,
+      "win": 0.125,
+      "clearOnReach": 0.44642857142857145,
+      "day": 19.395,
+      "medianDay": 19,
+      "deaths": 7.86,
+      "d10": 3.525,
+      "injDep": 20.5,
+      "injDeath": 0.2251219512195122,
+      "zombie": 0.11,
+      "env": 0.2256476977033601,
+      "bands": [
+        {
+          "wins": 2919,
+          "n": 6325,
+          "rate": 0.461501976284585
+        },
+        {
+          "wins": 2117,
+          "n": 4713,
+          "rate": 0.44918311054530025
+        },
+        {
+          "wins": 1734,
+          "n": 3648,
+          "rate": 0.4753289473684211
+        },
+        {
+          "wins": 1203,
+          "n": 2992,
+          "rate": 0.402072192513369
+        }
+      ],
+      "ends": {
+        "마왕실패": 31,
+        "클리어": 25,
+        "사망한도": 140,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.6922977513569398,
+        "exp": 7738,
+        "deaths": 0.54
+      },
+      "rest": {
+        "success": 0.2631790744466801,
+        "exp": 9940,
+        "deaths": 7.32
+      },
+      "cash": 83.76101205649701,
+      "capital": 464.185,
+      "ownedDecorations": 0,
+      "finalLevel": 17.660714285714285,
+      "supplied": {
+        "n": 56,
+        "clear": 0.44642857142857145
+      },
+      "fullPack": {
+        "n": 53,
+        "clear": 0.4339622641509434
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "n": 200,
+      "reachN": 40,
+      "winN": 10,
+      "reach": 0.2,
+      "win": 0.05,
+      "clearOnReach": 0.25,
+      "day": 17.83,
+      "medianDay": 17,
+      "deaths": 7.735,
+      "d10": 3.66,
+      "injDep": 19.085,
+      "injDeath": 0.23107152213780455,
+      "zombie": 0.115,
+      "env": 0.22805402087170043,
+      "bands": [
+        {
+          "wins": 2929,
+          "n": 6346,
+          "rate": 0.46155058304443747
+        },
+        {
+          "wins": 1972,
+          "n": 4606,
+          "rate": 0.42813721233174123
+        },
+        {
+          "wins": 1335,
+          "n": 3004,
+          "rate": 0.4444074567243675
+        },
+        {
+          "wins": 865,
+          "n": 2334,
+          "rate": 0.37060839760068554
+        }
+      ],
+      "ends": {
+        "사망한도": 155,
+        "마왕실패": 30,
+        "클리어": 10,
+        "파산": 5
+      },
+      "top": {
+        "success": 0.6744614512471655,
+        "exp": 7056,
+        "deaths": 0.57
+      },
+      "rest": {
+        "success": 0.2536278969027507,
+        "exp": 9234,
+        "deaths": 7.165
+      },
+      "cash": 75.37327505850821,
+      "capital": 394.44,
+      "ownedDecorations": 0,
+      "finalLevel": 17.375,
+      "supplied": {
+        "n": 40,
+        "clear": 0.25
+      },
+      "fullPack": {
+        "n": 39,
+        "clear": 0.2564102564102564
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "n": 200,
+      "reachN": 44,
+      "winN": 15,
+      "reach": 0.22,
+      "win": 0.075,
+      "clearOnReach": 0.3409090909090909,
+      "day": 19.465,
+      "medianDay": 19,
+      "deaths": 7.92,
+      "d10": 3.405,
+      "injDep": 21.36,
+      "injDeath": 0.20997191011235955,
+      "zombie": 0.12,
+      "env": 0.22854572039140705,
+      "bands": [
+        {
+          "wins": 2928,
+          "n": 6324,
+          "rate": 0.4629981024667932
+        },
+        {
+          "wins": 2185,
+          "n": 5168,
+          "rate": 0.4227941176470588
+        },
+        {
+          "wins": 1680,
+          "n": 3686,
+          "rate": 0.45577862181226264
+        },
+        {
+          "wins": 986,
+          "n": 2604,
+          "rate": 0.37864823348694315
+        }
+      ],
+      "ends": {
+        "사망한도": 152,
+        "마왕실패": 29,
+        "파산": 4,
+        "클리어": 15
+      },
+      "top": {
+        "success": 0.6707904675087902,
+        "exp": 7679,
+        "deaths": 0.575
+      },
+      "rest": {
+        "success": 0.2601207562110264,
+        "exp": 10103,
+        "deaths": 7.345
+      },
+      "cash": 105.24450997794885,
+      "capital": 462.225,
+      "ownedDecorations": 0,
+      "finalLevel": 17.151515151515152,
+      "supplied": {
+        "n": 44,
+        "clear": 0.3409090909090909
+      },
+      "fullPack": {
+        "n": 42,
+        "clear": 0.35714285714285715
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "n": 200,
+      "reachN": 39,
+      "winN": 16,
+      "reach": 0.195,
+      "win": 0.08,
+      "clearOnReach": 0.41025641025641024,
+      "day": 18.2,
+      "medianDay": 18,
+      "deaths": 7.72,
+      "d10": 3.665,
+      "injDep": 19.69,
+      "injDeath": 0.22092432706957846,
+      "zombie": 0.11,
+      "env": 0.22482710116047358,
+      "bands": [
+        {
+          "wins": 3142,
+          "n": 6516,
+          "rate": 0.4821976672805402
+        },
+        {
+          "wins": 2116,
+          "n": 4892,
+          "rate": 0.43254292722812754
+        },
+        {
+          "wins": 1571,
+          "n": 3369,
+          "rate": 0.46631047788661323
+        },
+        {
+          "wins": 908,
+          "n": 2285,
+          "rate": 0.3973741794310722
+        }
+      ],
+      "ends": {
+        "사망한도": 159,
+        "마왕실패": 23,
+        "클리어": 16,
+        "파산": 2
+      },
+      "top": {
+        "success": 0.6905930741674406,
+        "exp": 7537,
+        "deaths": 0.51
+      },
+      "rest": {
+        "success": 0.2658267716535433,
+        "exp": 9525,
+        "deaths": 7.21
+      },
+      "cash": 94.58725730547212,
+      "capital": 422.685,
+      "ownedDecorations": 0.435,
+      "finalLevel": 17.427350427350426,
+      "supplied": {
+        "n": 38,
+        "clear": 0.42105263157894735
+      },
+      "fullPack": {
+        "n": 37,
+        "clear": 0.43243243243243246
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "n": 200,
+      "reachN": 57,
+      "winN": 28,
+      "reach": 0.285,
+      "win": 0.14,
+      "clearOnReach": 0.49122807017543857,
+      "day": 20.035,
+      "medianDay": 20,
+      "deaths": 8.055,
+      "d10": 3.465,
+      "injDep": 22.845,
+      "injDeath": 0.1952287152549792,
+      "zombie": 0.095,
+      "env": 0.22298360489315264,
+      "bands": [
+        {
+          "wins": 3279,
+          "n": 6796,
+          "rate": 0.48248969982342554
+        },
+        {
+          "wins": 2603,
+          "n": 5246,
+          "rate": 0.4961875714830347
+        },
+        {
+          "wins": 2101,
+          "n": 4233,
+          "rate": 0.49633829435388616
+        },
+        {
+          "wins": 1394,
+          "n": 3426,
+          "rate": 0.4068884997081144
+        }
+      ],
+      "ends": {
+        "클리어": 28,
+        "사망한도": 143,
+        "마왕실패": 29
+      },
+      "top": {
+        "success": 0.6797784559737764,
+        "exp": 8847,
+        "deaths": 0.595
+      },
+      "rest": {
+        "success": 0.30983969043670534,
+        "exp": 10854,
+        "deaths": 7.46
+      },
+      "cash": 195.05289585715968,
+      "capital": 595.85,
+      "ownedDecorations": 2.075,
+      "finalLevel": 17.76608187134503,
+      "supplied": {
+        "n": 57,
+        "clear": 0.49122807017543857
+      },
+      "fullPack": {
+        "n": 55,
+        "clear": 0.509090909090909
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "n": 200,
+      "reachN": 74,
+      "winN": 35,
+      "reach": 0.37,
+      "win": 0.175,
+      "clearOnReach": 0.47297297297297297,
+      "day": 21.72,
+      "medianDay": 26,
+      "deaths": 8.14,
+      "d10": 3.21,
+      "injDep": 23.985,
+      "injDeath": 0.2005420054200542,
+      "zombie": 0.07,
+      "env": 0.22872970029828132,
+      "bands": [
+        {
+          "wins": 3408,
+          "n": 6684,
+          "rate": 0.5098743267504489
+        },
+        {
+          "wins": 2752,
+          "n": 5585,
+          "rate": 0.4927484333034915
+        },
+        {
+          "wins": 2326,
+          "n": 4599,
+          "rate": 0.5057621222004783
+        },
+        {
+          "wins": 1870,
+          "n": 4253,
+          "rate": 0.43968963084881263
+        }
+      ],
+      "ends": {
+        "클리어": 35,
+        "사망한도": 126,
+        "마왕실패": 39
+      },
+      "top": {
+        "success": 0.7030426835824105,
+        "exp": 9301,
+        "deaths": 0.415
+      },
+      "rest": {
+        "success": 0.32292724196277495,
+        "exp": 11820,
+        "deaths": 7.725
+      },
+      "cash": 265.147062235133,
+      "capital": 706.88,
+      "ownedDecorations": 3.75,
+      "finalLevel": 17.71171171171171,
+      "supplied": {
+        "n": 74,
+        "clear": 0.47297297297297297
+      },
+      "fullPack": {
+        "n": 74,
+        "clear": 0.47297297297297297
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "n": 200,
+      "reachN": 44,
+      "winN": 15,
+      "reach": 0.22,
+      "win": 0.075,
+      "clearOnReach": 0.3409090909090909,
+      "day": 19.465,
+      "medianDay": 19,
+      "deaths": 7.92,
+      "d10": 3.405,
+      "injDep": 21.36,
+      "injDeath": 0.20997191011235955,
+      "zombie": 0.12,
+      "env": 0.22854572039140705,
+      "bands": [
+        {
+          "wins": 2928,
+          "n": 6324,
+          "rate": 0.4629981024667932
+        },
+        {
+          "wins": 2185,
+          "n": 5168,
+          "rate": 0.4227941176470588
+        },
+        {
+          "wins": 1680,
+          "n": 3686,
+          "rate": 0.45577862181226264
+        },
+        {
+          "wins": 986,
+          "n": 2604,
+          "rate": 0.37864823348694315
+        }
+      ],
+      "ends": {
+        "사망한도": 152,
+        "마왕실패": 29,
+        "파산": 4,
+        "클리어": 15
+      },
+      "top": {
+        "success": 0.6707904675087902,
+        "exp": 7679,
+        "deaths": 0.575
+      },
+      "rest": {
+        "success": 0.2601207562110264,
+        "exp": 10103,
+        "deaths": 7.345
+      },
+      "cash": 105.24450997794888,
+      "capital": 462.225,
+      "ownedDecorations": 0,
+      "finalLevel": 17.151515151515152,
+      "supplied": {
+        "n": 44,
+        "clear": 0.3409090909090909
+      },
+      "fullPack": {
+        "n": 42,
+        "clear": 0.35714285714285715
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "n": 200,
+      "reachN": 55,
+      "winN": 19,
+      "reach": 0.275,
+      "win": 0.095,
+      "clearOnReach": 0.34545454545454546,
+      "day": 19.735,
+      "medianDay": 19,
+      "deaths": 7.955,
+      "d10": 3.45,
+      "injDep": 20.825,
+      "injDeath": 0.22713085234093638,
+      "zombie": 0.125,
+      "env": 0.22555222555222557,
+      "bands": [
+        {
+          "wins": 3120,
+          "n": 6378,
+          "rate": 0.4891815616180621
+        },
+        {
+          "wins": 2218,
+          "n": 4978,
+          "rate": 0.4455604660506227
+        },
+        {
+          "wins": 1785,
+          "n": 3761,
+          "rate": 0.4746078170699282
+        },
+        {
+          "wins": 1174,
+          "n": 2901,
+          "rate": 0.4046880386073768
+        }
+      ],
+      "ends": {
+        "클리어": 19,
+        "사망한도": 143,
+        "마왕실패": 36,
+        "파산": 2
+      },
+      "top": {
+        "success": 0.6920147264186873,
+        "exp": 7877,
+        "deaths": 0.48
+      },
+      "rest": {
+        "success": 0.28064293462183215,
+        "exp": 10141,
+        "deaths": 7.475
+      },
+      "cash": 94.31303666683216,
+      "capital": 478.175,
+      "ownedDecorations": 0.435,
+      "finalLevel": 17.24848484848485,
+      "supplied": {
+        "n": 55,
+        "clear": 0.34545454545454546
+      },
+      "fullPack": {
+        "n": 53,
+        "clear": 0.3584905660377358
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "n": 200,
+      "reachN": 108,
+      "winN": 27,
+      "reach": 0.54,
+      "win": 0.135,
+      "clearOnReach": 0.25,
+      "day": 24.78,
+      "medianDay": 30,
+      "deaths": 8.885,
+      "d10": 3.14,
+      "injDep": 22.545,
+      "injDeath": 0.22488356620093147,
+      "zombie": 0.175,
+      "env": 0.24687736142596792,
+      "bands": [
+        {
+          "wins": 3159,
+          "n": 6361,
+          "rate": 0.4966200282974375
+        },
+        {
+          "wins": 2668,
+          "n": 5810,
+          "rate": 0.4592082616179002
+        },
+        {
+          "wins": 2502,
+          "n": 5221,
+          "rate": 0.47921854050948093
+        },
+        {
+          "wins": 1973,
+          "n": 5105,
+          "rate": 0.38648383937316355
+        }
+      ],
+      "ends": {
+        "사망한도": 85,
+        "마왕실패": 81,
+        "클리어": 27,
+        "파산": 7
+      },
+      "top": {
+        "success": 0.6788039056143206,
+        "exp": 9832,
+        "deaths": 0.52
+      },
+      "rest": {
+        "success": 0.28645874457165416,
+        "exp": 12665,
+        "deaths": 8.365
+      },
+      "cash": 101.29297005096096,
+      "capital": 676.355,
+      "ownedDecorations": 2.235,
+      "finalLevel": 17.194444444444443,
+      "supplied": {
+        "n": 107,
+        "clear": 0.2523364485981308
+      },
+      "fullPack": {
+        "n": 100,
+        "clear": 0.27
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "n": 200,
+      "reachN": 171,
+      "winN": 47,
+      "reach": 0.855,
+      "win": 0.235,
+      "clearOnReach": 0.27485380116959063,
+      "day": 28.745,
+      "medianDay": 30,
+      "deaths": 8.015,
+      "d10": 2.095,
+      "injDep": 18.455,
+      "injDeath": 0.20482254131671634,
+      "zombie": 0.23,
+      "env": 0.25524044389642414,
+      "bands": [
+        {
+          "wins": 3816,
+          "n": 6347,
+          "rate": 0.6012289270521506
+        },
+        {
+          "wins": 3316,
+          "n": 6438,
+          "rate": 0.5150667909288599
+        },
+        {
+          "wins": 3090,
+          "n": 6217,
+          "rate": 0.4970242882419173
+        },
+        {
+          "wins": 2744,
+          "n": 6950,
+          "rate": 0.39482014388489206
+        }
+      ],
+      "ends": {
+        "클리어": 47,
+        "사망한도": 23,
+        "마왕실패": 124,
+        "파산": 6
+      },
+      "top": {
+        "success": 0.7023264505278893,
+        "exp": 10703,
+        "deaths": 0.355
+      },
+      "rest": {
+        "success": 0.35733490720703,
+        "exp": 15249,
+        "deaths": 7.66
+      },
+      "cash": 124.8915969968665,
+      "capital": 853.015,
+      "ownedDecorations": 3.92,
+      "finalLevel": 17.132553606237817,
+      "supplied": {
+        "n": 170,
+        "clear": 0.27647058823529413
+      },
+      "fullPack": {
+        "n": 160,
+        "clear": 0.2875
+      }
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "n": 1000,
+      "reachN": 232,
+      "winN": 66,
+      "reach": 0.232,
+      "win": 0.066,
+      "clearOnReach": 0.28448275862068967,
+      "day": 19.692,
+      "medianDay": 19,
+      "deaths": 8.097,
+      "d10": 3.407,
+      "injDep": 21.293,
+      "injDeath": 0.21913304841966844,
+      "zombie": 0.157,
+      "env": 0.23012002583116217,
+      "bands": [
+        {
+          "wins": 14720,
+          "n": 31808,
+          "rate": 0.46277665995975853
+        },
+        {
+          "wins": 10624,
+          "n": 24952,
+          "rate": 0.4257774927861494
+        },
+        {
+          "wins": 8432,
+          "n": 18600,
+          "rate": 0.4533333333333333
+        },
+        {
+          "wins": 5433,
+          "n": 14454,
+          "rate": 0.3758821087588211
+        }
+      ],
+      "ends": {
+        "클리어": 66,
+        "사망한도": 763,
+        "마왕실패": 166,
+        "파산": 5
+      },
+      "top": {
+        "success": 0.6669172152817376,
+        "exp": 38582,
+        "deaths": 0.577
+      },
+      "rest": {
+        "success": 0.26307776389756404,
+        "exp": 51232,
+        "deaths": 7.52
+      },
+      "cash": 105.19675012142187,
+      "capital": 475.945,
+      "ownedDecorations": 0,
+      "finalLevel": 17.096264367816094,
+      "supplied": {
+        "n": 231,
+        "clear": 0.2857142857142857
+      },
+      "fullPack": {
+        "n": 219,
+        "clear": 0.3013698630136986
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "n": 200,
+      "reachN": 21,
+      "winN": 4,
+      "reach": 0.105,
+      "win": 0.02,
+      "clearOnReach": 0.19047619047619047,
+      "day": 17.69,
+      "medianDay": 17,
+      "deaths": 7.97,
+      "d10": 3.73,
+      "injDep": 20.305,
+      "injDeath": 0.22432898300911105,
+      "zombie": 0.13,
+      "env": 0.21333993317658706,
+      "bands": [
+        {
+          "wins": 2700,
+          "n": 6347,
+          "rate": 0.4253978257444462
+        },
+        {
+          "wins": 1846,
+          "n": 4869,
+          "rate": 0.379133292257137
+        },
+        {
+          "wins": 1297,
+          "n": 3079,
+          "rate": 0.42124066255277687
+        },
+        {
+          "wins": 652,
+          "n": 1867,
+          "rate": 0.3492233529726835
+        }
+      ],
+      "ends": {
+        "사망한도": 175,
+        "마왕실패": 17,
+        "파산": 4,
+        "클리어": 4
+      },
+      "top": {
+        "success": 0.6497175141242938,
+        "exp": 6903,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.21708607841019548,
+        "exp": 9259,
+        "deaths": 7.35
+      },
+      "cash": 87.8448542828346,
+      "capital": 387.785,
+      "ownedDecorations": 0,
+      "finalLevel": 16.142857142857142,
+      "supplied": {
+        "n": 21,
+        "clear": 0.19047619047619047
+      },
+      "fullPack": {
+        "n": 18,
+        "clear": 0.2222222222222222
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "n": 200,
+      "reachN": 23,
+      "winN": 10,
+      "reach": 0.115,
+      "win": 0.05,
+      "clearOnReach": 0.43478260869565216,
+      "day": 15.95,
+      "medianDay": 15,
+      "deaths": 7.41,
+      "d10": 3.885,
+      "injDep": 17.275,
+      "injDeath": 0.24283646888567295,
+      "zombie": 0.125,
+      "env": 0.21826002497571806,
+      "bands": [
+        {
+          "wins": 2816,
+          "n": 6235,
+          "rate": 0.4516439454691259
+        },
+        {
+          "wins": 1561,
+          "n": 3994,
+          "rate": 0.3908362543815724
+        },
+        {
+          "wins": 1046,
+          "n": 2541,
+          "rate": 0.4116489571035026
+        },
+        {
+          "wins": 559,
+          "n": 1644,
+          "rate": 0.3400243309002433
+        }
+      ],
+      "ends": {
+        "사망한도": 171,
+        "클리어": 10,
+        "마왕실패": 13,
+        "파산": 6
+      },
+      "top": {
+        "success": 0.6486915146708961,
+        "exp": 6305,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.23332100135651745,
+        "exp": 8109,
+        "deaths": 6.79
+      },
+      "cash": 69.96953593857843,
+      "capital": 329.39,
+      "ownedDecorations": 0,
+      "finalLevel": 17.3768115942029,
+      "supplied": {
+        "n": 23,
+        "clear": 0.43478260869565216
+      },
+      "fullPack": {
+        "n": 23,
+        "clear": 0.43478260869565216
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "n": 200,
+      "reachN": 26,
+      "winN": 11,
+      "reach": 0.13,
+      "win": 0.055,
+      "clearOnReach": 0.4230769230769231,
+      "day": 16.375,
+      "medianDay": 14,
+      "deaths": 7.455,
+      "d10": 3.855,
+      "injDep": 17.555,
+      "injDeath": 0.23725434349188265,
+      "zombie": 0.12,
+      "env": 0.21771539856289035,
+      "bands": [
+        {
+          "wins": 2743,
+          "n": 6284,
+          "rate": 0.43650541056651815
+        },
+        {
+          "wins": 1671,
+          "n": 4230,
+          "rate": 0.3950354609929078
+        },
+        {
+          "wins": 1119,
+          "n": 2534,
+          "rate": 0.44159431728492504
+        },
+        {
+          "wins": 637,
+          "n": 1843,
+          "rate": 0.34563212154096584
+        }
+      ],
+      "ends": {
+        "클리어": 11,
+        "사망한도": 166,
+        "마왕실패": 15,
+        "파산": 8
+      },
+      "top": {
+        "success": 0.6604286145487474,
+        "exp": 6626,
+        "deaths": 0.645
+      },
+      "rest": {
+        "success": 0.21705989110707805,
+        "exp": 8265,
+        "deaths": 6.81
+      },
+      "cash": 62.20776922056569,
+      "capital": 340.985,
+      "ownedDecorations": 0,
+      "finalLevel": 17.384615384615383,
+      "supplied": {
+        "n": 26,
+        "clear": 0.4230769230769231
+      },
+      "fullPack": {
+        "n": 23,
+        "clear": 0.4782608695652174
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "n": 200,
+      "reachN": 19,
+      "winN": 6,
+      "reach": 0.095,
+      "win": 0.03,
+      "clearOnReach": 0.3157894736842105,
+      "day": 15.945,
+      "medianDay": 15,
+      "deaths": 7.58,
+      "d10": 4.055,
+      "injDep": 17.675,
+      "injDeath": 0.24497878359264497,
+      "zombie": 0.115,
+      "env": 0.21336637070686212,
+      "bands": [
+        {
+          "wins": 2691,
+          "n": 6336,
+          "rate": 0.4247159090909091
+        },
+        {
+          "wins": 1631,
+          "n": 4175,
+          "rate": 0.3906586826347305
+        },
+        {
+          "wins": 1011,
+          "n": 2473,
+          "rate": 0.4088152042054185
+        },
+        {
+          "wins": 526,
+          "n": 1545,
+          "rate": 0.34045307443365697
+        }
+      ],
+      "ends": {
+        "사망한도": 174,
+        "마왕실패": 13,
+        "파산": 7,
+        "클리어": 6
+      },
+      "top": {
+        "success": 0.6490139949109415,
+        "exp": 6288,
+        "deaths": 0.63
+      },
+      "rest": {
+        "success": 0.21575051571411236,
+        "exp": 8241,
+        "deaths": 6.95
+      },
+      "cash": 62.58384270828817,
+      "capital": 316.265,
+      "ownedDecorations": 0,
+      "finalLevel": 17.45614035087719,
+      "supplied": {
+        "n": 18,
+        "clear": 0.3333333333333333
+      },
+      "fullPack": {
+        "n": 17,
+        "clear": 0.35294117647058826
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "n": 200,
+      "reachN": 21,
+      "winN": 4,
+      "reach": 0.105,
+      "win": 0.02,
+      "clearOnReach": 0.19047619047619047,
+      "day": 17.69,
+      "medianDay": 17,
+      "deaths": 7.97,
+      "d10": 3.73,
+      "injDep": 20.305,
+      "injDeath": 0.22432898300911105,
+      "zombie": 0.13,
+      "env": 0.21333993317658706,
+      "bands": [
+        {
+          "wins": 2700,
+          "n": 6347,
+          "rate": 0.4253978257444462
+        },
+        {
+          "wins": 1846,
+          "n": 4869,
+          "rate": 0.379133292257137
+        },
+        {
+          "wins": 1297,
+          "n": 3079,
+          "rate": 0.42124066255277687
+        },
+        {
+          "wins": 652,
+          "n": 1867,
+          "rate": 0.3492233529726835
+        }
+      ],
+      "ends": {
+        "사망한도": 175,
+        "클리어": 4,
+        "마왕실패": 17,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.6497175141242938,
+        "exp": 6903,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.21708607841019548,
+        "exp": 9259,
+        "deaths": 7.35
+      },
+      "cash": 87.84485428283452,
+      "capital": 387.785,
+      "ownedDecorations": 0,
+      "finalLevel": 16.142857142857142,
+      "supplied": {
+        "n": 21,
+        "clear": 0.19047619047619047
+      },
+      "fullPack": {
+        "n": 18,
+        "clear": 0.2222222222222222
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "n": 200,
+      "reachN": 17,
+      "winN": 5,
+      "reach": 0.085,
+      "win": 0.025,
+      "clearOnReach": 0.29411764705882354,
+      "day": 15.735,
+      "medianDay": 15,
+      "deaths": 7.425,
+      "d10": 3.96,
+      "injDep": 16.72,
+      "injDeath": 0.25239234449760767,
+      "zombie": 0.085,
+      "env": 0.21418313615537168,
+      "bands": [
+        {
+          "wins": 2963,
+          "n": 6385,
+          "rate": 0.46405638214565387
+        },
+        {
+          "wins": 1727,
+          "n": 4184,
+          "rate": 0.41276290630975143
+        },
+        {
+          "wins": 1042,
+          "n": 2455,
+          "rate": 0.4244399185336049
+        },
+        {
+          "wins": 584,
+          "n": 1599,
+          "rate": 0.36522826766729205
+        }
+      ],
+      "ends": {
+        "사망한도": 178,
+        "클리어": 5,
+        "파산": 5,
+        "마왕실패": 12
+      },
+      "top": {
+        "success": 0.6725813917605308,
+        "exp": 6481,
+        "deaths": 0.6
+      },
+      "rest": {
+        "success": 0.24035863424220094,
+        "exp": 8142,
+        "deaths": 6.825
+      },
+      "cash": 81.72563133686293,
+      "capital": 333.885,
+      "ownedDecorations": 0.345,
+      "finalLevel": 17.50980392156863,
+      "supplied": {
+        "n": 17,
+        "clear": 0.29411764705882354
+      },
+      "fullPack": {
+        "n": 17,
+        "clear": 0.29411764705882354
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "n": 200,
+      "reachN": 27,
+      "winN": 14,
+      "reach": 0.135,
+      "win": 0.07,
+      "clearOnReach": 0.5185185185185185,
+      "day": 16.715,
+      "medianDay": 15,
+      "deaths": 7.575,
+      "d10": 3.985,
+      "injDep": 18.69,
+      "injDeath": 0.22552166934189405,
+      "zombie": 0.14,
+      "env": 0.22076150316259457,
+      "bands": [
+        {
+          "wins": 2983,
+          "n": 6653,
+          "rate": 0.44836915677138134
+        },
+        {
+          "wins": 1782,
+          "n": 4137,
+          "rate": 0.43074691805656273
+        },
+        {
+          "wins": 1342,
+          "n": 3017,
+          "rate": 0.4448127278753729
+        },
+        {
+          "wins": 876,
+          "n": 2319,
+          "rate": 0.3777490297542044
+        }
+      ],
+      "ends": {
+        "사망한도": 173,
+        "클리어": 14,
+        "마왕실패": 13
+      },
+      "top": {
+        "success": 0.6570548712206047,
+        "exp": 7144,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.2548430193720775,
+        "exp": 8982,
+        "deaths": 6.955
+      },
+      "cash": 154.48184522383966,
+      "capital": 430.365,
+      "ownedDecorations": 1.625,
+      "finalLevel": 17.962962962962962,
+      "supplied": {
+        "n": 27,
+        "clear": 0.5185185185185185
+      },
+      "fullPack": {
+        "n": 26,
+        "clear": 0.5384615384615384
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "n": 200,
+      "reachN": 45,
+      "winN": 23,
+      "reach": 0.225,
+      "win": 0.115,
+      "clearOnReach": 0.5111111111111111,
+      "day": 18.585,
+      "medianDay": 18,
+      "deaths": 7.72,
+      "d10": 3.535,
+      "injDep": 20.57,
+      "injDeath": 0.21584832280019445,
+      "zombie": 0.115,
+      "env": 0.21523379412898608,
+      "bands": [
+        {
+          "wins": 3281,
+          "n": 6718,
+          "rate": 0.48838940160762134
+        },
+        {
+          "wins": 2271,
+          "n": 4976,
+          "rate": 0.45639067524115756
+        },
+        {
+          "wins": 1796,
+          "n": 3687,
+          "rate": 0.4871168972064009
+        },
+        {
+          "wins": 1090,
+          "n": 2776,
+          "rate": 0.3926512968299712
+        }
+      ],
+      "ends": {
+        "사망한도": 155,
+        "클리어": 23,
+        "마왕실패": 22
+      },
+      "top": {
+        "success": 0.6962593516209477,
+        "exp": 8020,
+        "deaths": 0.55
+      },
+      "rest": {
+        "success": 0.28154286277991514,
+        "exp": 10137,
+        "deaths": 7.17
+      },
+      "cash": 240.63382153857518,
+      "capital": 543.345,
+      "ownedDecorations": 3.47,
+      "finalLevel": 17.85185185185185,
+      "supplied": {
+        "n": 45,
+        "clear": 0.5111111111111111
+      },
+      "fullPack": {
+        "n": 43,
+        "clear": 0.4883720930232558
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "n": 200,
+      "reachN": 21,
+      "winN": 4,
+      "reach": 0.105,
+      "win": 0.02,
+      "clearOnReach": 0.19047619047619047,
+      "day": 17.69,
+      "medianDay": 17,
+      "deaths": 7.97,
+      "d10": 3.73,
+      "injDep": 20.305,
+      "injDeath": 0.22432898300911105,
+      "zombie": 0.13,
+      "env": 0.21333993317658706,
+      "bands": [
+        {
+          "wins": 2700,
+          "n": 6347,
+          "rate": 0.4253978257444462
+        },
+        {
+          "wins": 1846,
+          "n": 4869,
+          "rate": 0.379133292257137
+        },
+        {
+          "wins": 1297,
+          "n": 3079,
+          "rate": 0.42124066255277687
+        },
+        {
+          "wins": 652,
+          "n": 1867,
+          "rate": 0.3492233529726835
+        }
+      ],
+      "ends": {
+        "마왕실패": 17,
+        "사망한도": 175,
+        "파산": 4,
+        "클리어": 4
+      },
+      "top": {
+        "success": 0.6497175141242938,
+        "exp": 6903,
+        "deaths": 0.62
+      },
+      "rest": {
+        "success": 0.21708607841019548,
+        "exp": 9259,
+        "deaths": 7.35
+      },
+      "cash": 87.84485428283455,
+      "capital": 387.785,
+      "ownedDecorations": 0,
+      "finalLevel": 16.142857142857142,
+      "supplied": {
+        "n": 21,
+        "clear": 0.19047619047619047
+      },
+      "fullPack": {
+        "n": 18,
+        "clear": 0.2222222222222222
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "n": 200,
+      "reachN": 29,
+      "winN": 9,
+      "reach": 0.145,
+      "win": 0.045,
+      "clearOnReach": 0.3103448275862069,
+      "day": 16.915,
+      "medianDay": 16,
+      "deaths": 7.6,
+      "d10": 3.75,
+      "injDep": 18.3,
+      "injDeath": 0.24562841530054644,
+      "zombie": 0.125,
+      "env": 0.22042870213044047,
+      "bands": [
+        {
+          "wins": 2885,
+          "n": 6242,
+          "rate": 0.462191605254726
+        },
+        {
+          "wins": 1723,
+          "n": 4300,
+          "rate": 0.40069767441860465
+        },
+        {
+          "wins": 1212,
+          "n": 2855,
+          "rate": 0.4245183887915937
+        },
+        {
+          "wins": 648,
+          "n": 1905,
+          "rate": 0.3401574803149606
+        }
+      ],
+      "ends": {
+        "마왕실패": 20,
+        "사망한도": 167,
+        "클리어": 9,
+        "파산": 4
+      },
+      "top": {
+        "success": 0.6655057540884313,
+        "exp": 6604,
+        "deaths": 0.59
+      },
+      "rest": {
+        "success": 0.23833065072430443,
+        "exp": 8698,
+        "deaths": 7.01
+      },
+      "cash": 74.43114645434952,
+      "capital": 364.18,
+      "ownedDecorations": 0.345,
+      "finalLevel": 17.149425287356323,
+      "supplied": {
+        "n": 29,
+        "clear": 0.3103448275862069
+      },
+      "fullPack": {
+        "n": 29,
+        "clear": 0.3103448275862069
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "n": 200,
+      "reachN": 69,
+      "winN": 28,
+      "reach": 0.345,
+      "win": 0.14,
+      "clearOnReach": 0.4057971014492754,
+      "day": 21.995,
+      "medianDay": 25,
+      "deaths": 8.63,
+      "d10": 3.285,
+      "injDep": 21.55,
+      "injDeath": 0.2271461716937355,
+      "zombie": 0.23,
+      "env": 0.23397980605818255,
+      "bands": [
+        {
+          "wins": 2953,
+          "n": 6371,
+          "rate": 0.4635065138910689
+        },
+        {
+          "wins": 2216,
+          "n": 5477,
+          "rate": 0.4046010589738908
+        },
+        {
+          "wins": 1937,
+          "n": 4478,
+          "rate": 0.4325591782045556
+        },
+        {
+          "wins": 1328,
+          "n": 3680,
+          "rate": 0.36086956521739133
+        }
+      ],
+      "ends": {
+        "사망한도": 115,
+        "마왕실패": 41,
+        "클리어": 28,
+        "파산": 16
+      },
+      "top": {
+        "success": 0.67578125,
+        "exp": 8704,
+        "deaths": 0.56
+      },
+      "rest": {
+        "success": 0.2258007432312865,
+        "exp": 11302,
+        "deaths": 8.07
+      },
+      "cash": 78.77318050750524,
+      "capital": 545.3,
+      "ownedDecorations": 1.9,
+      "finalLevel": 17.294685990338163,
+      "supplied": {
+        "n": 66,
+        "clear": 0.42424242424242425
+      },
+      "fullPack": {
+        "n": 58,
+        "clear": 0.4482758620689655
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "n": 200,
+      "reachN": 154,
+      "winN": 36,
+      "reach": 0.77,
+      "win": 0.18,
+      "clearOnReach": 0.23376623376623376,
+      "day": 27.67,
+      "medianDay": 30,
+      "deaths": 8.535,
+      "d10": 2.41,
+      "injDep": 18.84,
+      "injDeath": 0.21735668789808918,
+      "zombie": 0.39,
+      "env": 0.2570956962840694,
+      "bands": [
+        {
+          "wins": 3572,
+          "n": 6307,
+          "rate": 0.5663548438243222
+        },
+        {
+          "wins": 2979,
+          "n": 6230,
+          "rate": 0.4781701444622793
+        },
+        {
+          "wins": 2730,
+          "n": 5960,
+          "rate": 0.45805369127516776
+        },
+        {
+          "wins": 2231,
+          "n": 6342,
+          "rate": 0.35178177231157365
+        }
+      ],
+      "ends": {
+        "마왕실패": 118,
+        "파산": 9,
+        "사망한도": 37,
+        "클리어": 36
+      },
+      "top": {
+        "success": 0.6896517313641353,
+        "exp": 10021,
+        "deaths": 0.44
+      },
+      "rest": {
+        "success": 0.3105007423403968,
+        "exp": 14818,
+        "deaths": 8.095
+      },
+      "cash": 99.3898000247635,
+      "capital": 785.625,
+      "ownedDecorations": 3.765,
+      "finalLevel": 16.98701298701299,
+      "supplied": {
+        "n": 152,
+        "clear": 0.23684210526315788
+      },
+      "fullPack": {
+        "n": 144,
+        "clear": 0.25
+      }
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "n": 1000,
+      "reachN": 117,
+      "winN": 50,
+      "reach": 0.117,
+      "win": 0.05,
+      "clearOnReach": 0.42735042735042733,
+      "day": 17.259,
+      "medianDay": 17,
+      "deaths": 7.809,
+      "d10": 3.644,
+      "injDep": 19.15,
+      "injDeath": 0.2368668407310705,
+      "zombie": 0.138,
+      "env": 0.21906273812547625,
+      "bands": [
+        {
+          "wins": 13752,
+          "n": 31653,
+          "rate": 0.43446118851293714
+        },
+        {
+          "wins": 8881,
+          "n": 23457,
+          "rate": 0.3786076650893124
+        },
+        {
+          "wins": 6081,
+          "n": 15015,
+          "rate": 0.404995004995005
+        },
+        {
+          "wins": 2845,
+          "n": 8615,
+          "rate": 0.3302379570516541
+        }
+      ],
+      "ends": {
+        "사망한도": 868,
+        "마왕실패": 67,
+        "클리어": 50,
+        "파산": 15
+      },
+      "top": {
+        "success": 0.6402116402116402,
+        "exp": 33453,
+        "deaths": 0.611
+      },
+      "rest": {
+        "success": 0.22394947777507895,
+        "exp": 45287,
+        "deaths": 7.198
+      },
+      "cash": 91.52611739285783,
+      "capital": 370.936,
+      "ownedDecorations": 0,
+      "finalLevel": 17.28205128205128,
+      "supplied": {
+        "n": 116,
+        "clear": 0.43103448275862066
+      },
+      "fullPack": {
+        "n": 109,
+        "clear": 0.44954128440366975
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": -0.09,
+        "lo": -0.15544977897471604,
+        "hi": -0.024550221025283953
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.03,
+        "lo": -0.0714732801309966,
+        "hi": 0.011473280130996598
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.35,
+        "lo": -3.7070568138364353,
+        "hi": -0.9929431861635647
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.36,
+        "lo": 0.12542461498213117,
+        "hi": 0.5945753850178688
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.245,
+        "lo": -0.6432287918436665,
+        "hi": 0.1532287918436665
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.1,
+        "lo": -0.1636706349013713,
+        "hi": -0.036329365098628705
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.03,
+        "lo": -0.07373874930716214,
+        "hi": 0.013738749307162137
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.7,
+        "lo": -4.052514902991487,
+        "hi": -1.347485097008513
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.18,
+        "lo": -0.03468925960782193,
+        "hi": 0.3946892596078219
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.375,
+        "lo": -0.7445503107302225,
+        "hi": -0.005449689269777458
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.16,
+        "lo": -0.22726797232340595,
+        "hi": -0.09273202767659407
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.11124346972776064,
+        "hi": -0.018756530272239363
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.98,
+        "lo": -4.311292792475225,
+        "hi": -1.6487072075247748
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.265,
+        "lo": 0.05590576239167894,
+        "hi": 0.4740942376083211
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.33,
+        "lo": -0.7123041605263782,
+        "hi": 0.05230416052637826
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.13028365783179968,
+        "hi": 0.0002836578317996774
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.05299336360987223,
+        "hi": 0.022993363609872232
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.845,
+        "lo": -3.2109432391070687,
+        "hi": -0.47905676089293125
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.33,
+        "lo": 0.10939031762001247,
+        "hi": 0.5506096823799875
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.32,
+        "lo": -0.6872768468213797,
+        "hi": 0.04727684682137967
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": -0.09,
+        "lo": -0.15544977897471604,
+        "hi": -0.024550221025283953
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.03,
+        "lo": -0.07147328013099659,
+        "hi": 0.011473280130996591
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.35,
+        "lo": -3.7070568138364353,
+        "hi": -0.9929431861635651
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.36,
+        "lo": 0.12542461498213123,
+        "hi": 0.5945753850178688
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.245,
+        "lo": -0.6432287918436665,
+        "hi": 0.1532287918436665
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.13,
+        "lo": -0.19850495928935497,
+        "hi": -0.061495040710645044
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.05,
+        "lo": -0.09762647800368177,
+        "hi": -0.0023735219963182466
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.885,
+        "lo": -4.433685944591373,
+        "hi": -1.3363140554086268
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.295,
+        "lo": 0.042679107157524265,
+        "hi": 0.5473208928424758
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.35,
+        "lo": -0.7526285243785095,
+        "hi": 0.05262852437850951
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.165,
+        "lo": -0.24208079817461803,
+        "hi": -0.08791920182538197
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.13,
+        "lo": -0.19105492049444428,
+        "hi": -0.06894507950555571
+      },
+      "day": {
+        "n": 200,
+        "delta": -3.78,
+        "lo": -5.361433461059552,
+        "hi": -2.1985665389404474
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.395,
+        "lo": 0.1650552135313336,
+        "hi": 0.6249447864686665
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.54,
+        "lo": -0.9777933557188345,
+        "hi": -0.10220664428116555
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.1,
+        "lo": -0.18219843620515458,
+        "hi": -0.017801563794845418
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.13729925387272515,
+        "hi": 0.007299253872725148
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.155,
+        "lo": -3.5652378315403177,
+        "hi": -0.7447621684596819
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.235,
+        "lo": -0.014698347056228994,
+        "hi": 0.48469834705622894
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.245,
+        "lo": -0.621551770650331,
+        "hi": 0.13155177065033097
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": -0.09,
+        "lo": -0.15544977897471607,
+        "hi": -0.02455022102528394
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.03,
+        "lo": -0.0714732801309966,
+        "hi": 0.011473280130996612
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.35,
+        "lo": -3.7070568138364353,
+        "hi": -0.9929431861635647
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.36,
+        "lo": 0.1254246149821312,
+        "hi": 0.5945753850178688
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.245,
+        "lo": -0.6432287918436665,
+        "hi": 0.1532287918436665
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.125,
+        "lo": -0.1929780854430493,
+        "hi": -0.05702191455695069
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.05,
+        "lo": -0.09961175902108121,
+        "hi": -0.0003882409789187913
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.885,
+        "lo": -4.260806202827524,
+        "hi": -1.509193797172475
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.335,
+        "lo": 0.09503948775436827,
+        "hi": 0.5749605122456318
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.385,
+        "lo": -0.775687236525484,
+        "hi": 0.005687236525483974
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.22,
+        "lo": -0.3069462538311824,
+        "hi": -0.1330537461688176
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.09,
+        "lo": -0.16244929053132579,
+        "hi": -0.017550709468674208
+      },
+      "day": {
+        "n": 200,
+        "delta": -3.35,
+        "lo": -4.703495819968929,
+        "hi": -1.9965041800310706
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.2,
+        "lo": -0.03497007186739093,
+        "hi": 0.43497007186739095
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.11,
+        "lo": -0.5549987219223923,
+        "hi": 0.3349987219223923
+      }
+    },
+    {
+      "id": "B",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.13,
+        "lo": -0.203926384679347,
+        "hi": -0.056073615320653
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.12317896912394757,
+        "hi": 0.043178969123947565
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.67,
+        "lo": -2.6273922752159695,
+        "hi": -0.7126077247840301
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.555,
+        "lo": 0.2992971735052839,
+        "hi": 0.8107028264947163
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.93,
+        "lo": 0.512828330529211,
+        "hi": 1.3471716694707891
+      }
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "reach": {
+        "n": 1000,
+        "delta": -0.115,
+        "lo": -0.14586754355703174,
+        "hi": -0.08413245644296827
+      },
+      "win": {
+        "n": 1000,
+        "delta": -0.021,
+        "lo": -0.0410518310966935,
+        "hi": -0.0009481689033065017
+      },
+      "day": {
+        "n": 1000,
+        "delta": -2.419,
+        "lo": -3.0269781580806203,
+        "hi": -1.8110218419193798
+      },
+      "d10": {
+        "n": 1000,
+        "delta": 0.247,
+        "lo": 0.14495377685941882,
+        "hi": 0.3490462231405812
+      },
+      "deaths": {
+        "n": 1000,
+        "delta": -0.294,
+        "lo": -0.4698504923452246,
+        "hi": -0.11814950765477542
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.033739711414507684,
+        "hi": 0.07373971141450768
+      },
+      "win": {
+        "n": 200,
+        "delta": 0.015,
+        "lo": -0.027773661646546835,
+        "hi": 0.057773661646546834
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.21,
+        "lo": -0.6340742885522007,
+        "hi": 0.21407428855220076
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.013919751587219805,
+        "hi": 0.0539197515872198
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.115,
+        "lo": -0.31498656789065443,
+        "hi": 0.08498656789065441
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.005,
+        "lo": -0.052111967560665454,
+        "hi": 0.04211196756066546
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.01,
+        "lo": -0.0377533863206151,
+        "hi": 0.0177533863206151
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.205,
+        "lo": -0.6195692731149464,
+        "hi": 0.20956927311494636
+      },
+      "d10": {
+        "n": 200,
+        "delta": -0.01,
+        "lo": -0.05606047150405514,
+        "hi": 0.036060471504055135
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.23933998431507314,
+        "hi": 0.15933998431507312
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": 0.01,
+        "lo": -0.04893117696169364,
+        "hi": 0.06893117696169364
+      },
+      "win": {
+        "n": 200,
+        "delta": 0.03,
+        "lo": -0.011473280130996584,
+        "hi": 0.07147328013099657
+      },
+      "day": {
+        "n": 200,
+        "delta": 0.21,
+        "lo": -0.49854180160602823,
+        "hi": 0.9185418016060282
+      },
+      "d10": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.13509068509564845,
+        "hi": 0.055090685095648455
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.045,
+        "lo": -0.18595002352637724,
+        "hi": 0.2759500235263772
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": 0.015,
+        "lo": -0.03407873071958189,
+        "hi": 0.0640787307195819
+      },
+      "win": {
+        "n": 200,
+        "delta": 0.005,
+        "lo": -0.030416258367929324,
+        "hi": 0.04041625836792932
+      },
+      "day": {
+        "n": 200,
+        "delta": 0.12,
+        "lo": -0.6137017076298067,
+        "hi": 0.8537017076298067
+      },
+      "d10": {
+        "n": 200,
+        "delta": -0.01,
+        "lo": -0.11671334447690809,
+        "hi": 0.0967133444769081
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.01,
+        "lo": -0.2290386087694035,
+        "hi": 0.2490386087694035
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.0337397114145077,
+        "hi": 0.0737397114145077
+      },
+      "win": {
+        "n": 200,
+        "delta": 0.015,
+        "lo": -0.027773661646546828,
+        "hi": 0.05777366164654683
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.21,
+        "lo": -0.6340742885522012,
+        "hi": 0.2140742885522012
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.013919751587219805,
+        "hi": 0.0539197515872198
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.115,
+        "lo": -0.31498656789065455,
+        "hi": 0.08498656789065452
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.06966129789382239,
+        "hi": 0.03966129789382238
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.005,
+        "lo": -0.04041625836792934,
+        "hi": 0.030416258367929345
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.45,
+        "lo": -1.0326819814077712,
+        "hi": 0.13268198140777127
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.005,
+        "lo": -0.07420534853266485,
+        "hi": 0.08420534853266486
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.26180091394567256,
+        "hi": 0.18180091394567258
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.03,
+        "lo": -0.09503553570566342,
+        "hi": 0.03503553570566342
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.045,
+        "lo": -0.09753631240012009,
+        "hi": 0.007536312400120086
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.29,
+        "lo": -1.157082468532366,
+        "hi": 0.5770824685323659
+      },
+      "d10": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.11371393215757367,
+        "hi": 0.08371393215757367
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.025,
+        "lo": -0.23509668669969805,
+        "hi": 0.28509668669969807
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": 0,
+        "lo": -0.07352051639956218,
+        "hi": 0.07352051639956218
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.07787355261229047,
+        "hi": 0.04787355261229047
+      },
+      "day": {
+        "n": 200,
+        "delta": 0.03,
+        "lo": -0.9691093484955762,
+        "hi": 1.0291093484955762
+      },
+      "d10": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.1449504281210502,
+        "hi": 0.11495042812105018
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.05,
+        "lo": -0.3235932865261153,
+        "hi": 0.22359328652611532
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.033739711414507725,
+        "hi": 0.07373971141450772
+      },
+      "win": {
+        "n": 200,
+        "delta": 0.015,
+        "lo": -0.027773661646546807,
+        "hi": 0.057773661646546806
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.21,
+        "lo": -0.6340742885522012,
+        "hi": 0.21407428855220115
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.01391975158721975,
+        "hi": 0.05391975158721975
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.115,
+        "lo": -0.31498656789065455,
+        "hi": 0.08498656789065455
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.03373971141450774,
+        "hi": 0.07373971141450775
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.01,
+        "lo": -0.046733991488174316,
+        "hi": 0.026733991488174312
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.6141866935021878,
+        "hi": 0.5341866935021877
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.045,
+        "lo": -0.017596609152468773,
+        "hi": 0.10759660915246877
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.01,
+        "lo": -0.24123926393657633,
+        "hi": 0.2212392639365763
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.035,
+        "lo": -0.10901446415750503,
+        "hi": 0.03901446415750502
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.12878801418580804,
+        "hi": -0.0012119858141919487
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.17,
+        "lo": -0.9233752051926022,
+        "hi": 0.5833752051926021
+      },
+      "d10": {
+        "n": 200,
+        "delta": -0.035,
+        "lo": -0.19784984050579793,
+        "hi": 0.12784984050579792
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.21,
+        "lo": -0.09805697965403701,
+        "hi": 0.518056979654037
+      }
+    },
+    {
+      "id": "C",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.06786598397179927,
+        "hi": 0.03786598397179927
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.045,
+        "lo": -0.11488248427209936,
+        "hi": 0.024882484272099367
+      },
+      "day": {
+        "n": 200,
+        "delta": -0.06,
+        "lo": -0.6339849342305233,
+        "hi": 0.5139849342305234
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.02,
+        "lo": -0.1080668669565253,
+        "hi": 0.1480668669565253
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.26,
+        "lo": -0.09592695766966003,
+        "hi": 0.61592695766966
+      }
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "reach": {
+        "n": 1000,
+        "delta": 0.002,
+        "lo": -0.022648833615378144,
+        "hi": 0.026648833615378148
+      },
+      "win": {
+        "n": 1000,
+        "delta": -0.007,
+        "lo": -0.02442417181283988,
+        "hi": 0.010424171812839882
+      },
+      "day": {
+        "n": 1000,
+        "delta": 0.016,
+        "lo": -0.18983520953394645,
+        "hi": 0.22183520953394642
+      },
+      "d10": {
+        "n": 1000,
+        "delta": 0.006,
+        "lo": -0.006703159948322875,
+        "hi": 0.018703159948322876
+      },
+      "deaths": {
+        "n": 1000,
+        "delta": -0.01,
+        "lo": -0.08508021362834833,
+        "hi": 0.06508021362834834
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": -0.095,
+        "lo": -0.1624935902409859,
+        "hi": -0.02750640975901411
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.07890340053085743,
+        "hi": -0.0010965994691425687
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.985,
+        "lo": -3.361879188490586,
+        "hi": -0.6081208115094145
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.345,
+        "lo": 0.10978461105620657,
+        "hi": 0.5802153889437933
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.48184009466774297,
+        "hi": 0.35184009466774296
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.075,
+        "lo": -0.14154303024638915,
+        "hi": -0.008456969753610863
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.02,
+        "lo": -0.0659975616570266,
+        "hi": 0.025997561657026592
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.465,
+        "lo": -3.828664553794804,
+        "hi": -1.1013354462051956
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.18,
+        "lo": -0.034239195678158085,
+        "hi": 0.39423919567815807
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.36,
+        "lo": -0.7294464733671402,
+        "hi": 0.009446473367140273
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.14,
+        "lo": -0.20952591216454158,
+        "hi": -0.07047408783545843
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.0916889343055962,
+        "hi": 0.0116889343055962
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.81,
+        "lo": -4.155172179373631,
+        "hi": -1.464827820626369
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.29,
+        "lo": 0.08981443985026724,
+        "hi": 0.4901855601497327
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.36,
+        "lo": -0.7507767849788314,
+        "hi": 0.030776784978831462
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "none",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.09,
+        "lo": -0.15690828643725557,
+        "hi": -0.023091713562744434
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.015,
+        "lo": -0.052993363609872224,
+        "hi": 0.022993363609872225
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.765,
+        "lo": -3.2330437871552142,
+        "hi": -0.2969562128447858
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.385,
+        "lo": 0.16855662896655466,
+        "hi": 0.6014433710334454
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.145,
+        "lo": -0.5523114100091207,
+        "hi": 0.2623114100091207
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": -0.095,
+        "lo": -0.1624935902409859,
+        "hi": -0.02750640975901411
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.07890340053085743,
+        "hi": -0.0010965994691425757
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.985,
+        "lo": -3.3618791884905854,
+        "hi": -0.6081208115094148
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.345,
+        "lo": 0.10978461105620654,
+        "hi": 0.5802153889437934
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.4818400946677431,
+        "hi": 0.3518400946677431
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.125,
+        "lo": -0.19007633708377575,
+        "hi": -0.059923662916224266
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.06,
+        "lo": -0.1031387990085433,
+        "hi": -0.0168612009914567
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.915,
+        "lo": -4.4183730591489505,
+        "hi": -1.4116269408510493
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.3,
+        "lo": 0.04493875008925752,
+        "hi": 0.5550612499107425
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.335,
+        "lo": -0.7465267103929396,
+        "hi": 0.07652671039293962
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.18,
+        "lo": -0.26072921920947134,
+        "hi": -0.09927078079052865
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.115,
+        "lo": -0.17893915292199217,
+        "hi": -0.05106084707800784
+      },
+      "day": {
+        "n": 200,
+        "delta": -3.61,
+        "lo": -5.21455714806517,
+        "hi": -2.0054428519348293
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.505,
+        "lo": 0.26636249436545517,
+        "hi": 0.7436375056345448
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.455,
+        "lo": -0.8822957901282278,
+        "hi": -0.0277042098717723
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "economy",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.145,
+        "lo": -0.22529463207275136,
+        "hi": -0.06470536792724864
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.075,
+        "lo": -0.14297808544304938,
+        "hi": -0.007021914556950615
+      },
+      "day": {
+        "n": 200,
+        "delta": -3.105,
+        "lo": -4.55541048142349,
+        "hi": -1.6545895185765107
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.31,
+        "lo": 0.062081324729784476,
+        "hi": 0.5579186752702155
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.47,
+        "lo": -0.8748185061414225,
+        "hi": -0.06518149385857741
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 0,
+      "reach": {
+        "n": 200,
+        "delta": -0.095,
+        "lo": -0.16249359024098586,
+        "hi": -0.02750640975901414
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.04,
+        "lo": -0.07890340053085743,
+        "hi": -0.0010965994691425687
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.985,
+        "lo": -3.361879188490585,
+        "hi": -0.6081208115094154
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.345,
+        "lo": 0.10978461105620649,
+        "hi": 0.5802153889437934
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.065,
+        "lo": -0.48184009466774297,
+        "hi": 0.35184009466774296
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 1,
+      "reach": {
+        "n": 200,
+        "delta": -0.11,
+        "lo": -0.18191440473257203,
+        "hi": -0.03808559526742797
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.06,
+        "lo": -0.10939728391613705,
+        "hi": -0.010602716083862943
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.86,
+        "lo": -4.265022492425336,
+        "hi": -1.4549775075746634
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.345,
+        "lo": 0.10855674068738605,
+        "hi": 0.5814432593126139
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.365,
+        "lo": -0.7587633580090369,
+        "hi": 0.028763358009036954
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 4,
+      "reach": {
+        "n": 200,
+        "delta": -0.23,
+        "lo": -0.32080177095211415,
+        "hi": -0.13919822904788587
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.06,
+        "lo": -0.1330463554891772,
+        "hi": 0.013046355489177222
+      },
+      "day": {
+        "n": 200,
+        "delta": -2.955,
+        "lo": -4.350112683909089,
+        "hi": -1.559887316090912
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.11,
+        "lo": -0.1357287453299002,
+        "hi": 0.3557287453299002
+      },
+      "deaths": {
+        "n": 200,
+        "delta": -0.045,
+        "lo": -0.5058765341156918,
+        "hi": 0.41587653411569175
+      }
+    },
+    {
+      "id": "D",
+      "kind": "traj",
+      "deco": "survival",
+      "idx": 9,
+      "reach": {
+        "n": 200,
+        "delta": -0.1,
+        "lo": -0.17735891681021812,
+        "hi": -0.02264108318978189
+      },
+      "win": {
+        "n": 200,
+        "delta": -0.1,
+        "lo": -0.1856488096412602,
+        "hi": -0.014351190358739802
+      },
+      "day": {
+        "n": 200,
+        "delta": -1.135,
+        "lo": -2.0404285274340865,
+        "hi": -0.22957147256591337
+      },
+      "d10": {
+        "n": 200,
+        "delta": 0.335,
+        "lo": 0.09705920630011192,
+        "hi": 0.5729407936998882
+      },
+      "deaths": {
+        "n": 200,
+        "delta": 0.78,
+        "lo": 0.3210411467846781,
+        "hi": 1.238958853215322
+      }
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "idx": 0,
+      "reach": {
+        "n": 1000,
+        "delta": -0.113,
+        "lo": -0.14523598250663622,
+        "hi": -0.08076401749336377
+      },
+      "win": {
+        "n": 1000,
+        "delta": -0.023,
+        "lo": -0.04379666066210379,
+        "hi": -0.002203339337896213
+      },
+      "day": {
+        "n": 1000,
+        "delta": -2.417,
+        "lo": -3.028578022901163,
+        "hi": -1.8054219770988365
+      },
+      "d10": {
+        "n": 1000,
+        "delta": 0.243,
+        "lo": 0.14110537660957828,
+        "hi": 0.3448946233904217
+      },
+      "deaths": {
+        "n": 1000,
+        "delta": -0.298,
+        "lo": -0.47419601240774056,
+        "hi": -0.12180398759225941
+      }
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "A",
+      "deco": "none",
+      "n": 200,
+      "clearBy10": 0.505,
+      "medianFirstClearAll": 10,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.06
+        ],
+        [
+          2,
+          0.13
+        ],
+        [
+          3,
+          0.185
+        ],
+        [
+          5,
+          0.315
+        ],
+        [
+          10,
+          0.505
+        ]
+      ]
+    },
+    {
+      "id": "A",
+      "deco": "economy",
+      "n": 200,
+      "clearBy10": 0.8,
+      "medianFirstClearAll": 6,
+      "medianAmongClearers": 6,
+      "clearByRun": [
+        [
+          1,
+          0.06
+        ],
+        [
+          2,
+          0.135
+        ],
+        [
+          3,
+          0.215
+        ],
+        [
+          5,
+          0.4
+        ],
+        [
+          10,
+          0.8
+        ]
+      ]
+    },
+    {
+      "id": "A",
+      "deco": "survival",
+      "n": 200,
+      "clearBy10": 0.85,
+      "medianFirstClearAll": 5,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.06
+        ],
+        [
+          2,
+          0.16
+        ],
+        [
+          3,
+          0.25
+        ],
+        [
+          5,
+          0.505
+        ],
+        [
+          10,
+          0.85
+        ]
+      ]
+    },
+    {
+      "id": "B",
+      "deco": "none",
+      "n": 200,
+      "clearBy10": 0.305,
+      "medianFirstClearAll": null,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.03
+        ],
+        [
+          2,
+          0.07
+        ],
+        [
+          3,
+          0.105
+        ],
+        [
+          5,
+          0.17
+        ],
+        [
+          10,
+          0.305
+        ]
+      ]
+    },
+    {
+      "id": "B",
+      "deco": "economy",
+      "n": 200,
+      "clearBy10": 0.525,
+      "medianFirstClearAll": 10,
+      "medianAmongClearers": 6,
+      "clearByRun": [
+        [
+          1,
+          0.03
+        ],
+        [
+          2,
+          0.065
+        ],
+        [
+          3,
+          0.11
+        ],
+        [
+          5,
+          0.195
+        ],
+        [
+          10,
+          0.525
+        ]
+      ]
+    },
+    {
+      "id": "B",
+      "deco": "survival",
+      "n": 200,
+      "clearBy10": 0.69,
+      "medianFirstClearAll": 8,
+      "medianAmongClearers": 6,
+      "clearByRun": [
+        [
+          1,
+          0.03
+        ],
+        [
+          2,
+          0.085
+        ],
+        [
+          3,
+          0.12
+        ],
+        [
+          5,
+          0.29
+        ],
+        [
+          10,
+          0.69
+        ]
+      ]
+    },
+    {
+      "id": "C",
+      "deco": "none",
+      "n": 200,
+      "clearBy10": 0.545,
+      "medianFirstClearAll": 9,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.075
+        ],
+        [
+          2,
+          0.125
+        ],
+        [
+          3,
+          0.19
+        ],
+        [
+          5,
+          0.355
+        ],
+        [
+          10,
+          0.545
+        ]
+      ]
+    },
+    {
+      "id": "C",
+      "deco": "economy",
+      "n": 200,
+      "clearBy10": 0.74,
+      "medianFirstClearAll": 7,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.075
+        ],
+        [
+          2,
+          0.14
+        ],
+        [
+          3,
+          0.235
+        ],
+        [
+          5,
+          0.415
+        ],
+        [
+          10,
+          0.74
+        ]
+      ]
+    },
+    {
+      "id": "C",
+      "deco": "survival",
+      "n": 200,
+      "clearBy10": 0.83,
+      "medianFirstClearAll": 6,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.075
+        ],
+        [
+          2,
+          0.165
+        ],
+        [
+          3,
+          0.235
+        ],
+        [
+          5,
+          0.455
+        ],
+        [
+          10,
+          0.83
+        ]
+      ]
+    },
+    {
+      "id": "D",
+      "deco": "none",
+      "n": 200,
+      "clearBy10": 0.31,
+      "medianFirstClearAll": null,
+      "medianAmongClearers": 5,
+      "clearByRun": [
+        [
+          1,
+          0.02
+        ],
+        [
+          2,
+          0.07
+        ],
+        [
+          3,
+          0.09
+        ],
+        [
+          5,
+          0.2
+        ],
+        [
+          10,
+          0.31
+        ]
+      ]
+    },
+    {
+      "id": "D",
+      "deco": "economy",
+      "n": 200,
+      "clearBy10": 0.525,
+      "medianFirstClearAll": 10,
+      "medianAmongClearers": 7,
+      "clearByRun": [
+        [
+          1,
+          0.02
+        ],
+        [
+          2,
+          0.045
+        ],
+        [
+          3,
+          0.08
+        ],
+        [
+          5,
+          0.2
+        ],
+        [
+          10,
+          0.525
+        ]
+      ]
+    },
+    {
+      "id": "D",
+      "deco": "survival",
+      "n": 200,
+      "clearBy10": 0.715,
+      "medianFirstClearAll": 8,
+      "medianAmongClearers": 6,
+      "clearByRun": [
+        [
+          1,
+          0.02
+        ],
+        [
+          2,
+          0.065
+        ],
+        [
+          3,
+          0.125
+        ],
+        [
+          5,
+          0.34
+        ],
+        [
+          10,
+          0.715
+        ]
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 699,
+      "exp": 3900,
+      "wins": 0.48435897435897435,
+      "combatLoss": 0.4135897435897436,
+      "environment": 0.20384615384615384,
+      "death": 0.09282051282051282,
+      "alive": 0.4821173104434907,
+      "firstLevel": 3.1187410586552216,
+      "endLevel": 7.227467811158799,
+      "levelGain": 4.108726752503577,
+      "potential": 1.109291997236881,
+      "picks": 24,
+      "finalLevel": 17.833333333333332,
+      "finalPower": 70.73335087350632
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 766,
+      "exp": 3941,
+      "wins": 0.4105556965237249,
+      "combatLoss": 0.47196143110885563,
+      "environment": 0.2463841664552144,
+      "death": 0.11139304744988582,
+      "alive": 0.42689295039164493,
+      "firstLevel": 3.117493472584856,
+      "endLevel": 6.740208877284595,
+      "levelGain": 3.622715404699739,
+      "potential": 1.107533995296007,
+      "picks": 25,
+      "finalLevel": 18.12,
+      "finalPower": 73.03578646833654
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 716,
+      "exp": 4222,
+      "wins": 0.4872098531501658,
+      "combatLoss": 0.3777830412126954,
+      "environment": 0.23117006158218853,
+      "death": 0.08503079109426812,
+      "alive": 0.49860335195530725,
+      "firstLevel": 3.1215083798882683,
+      "endLevel": 7.64245810055866,
+      "levelGain": 4.520949720670391,
+      "potential": 1.1071834013110553,
+      "picks": 43,
+      "finalLevel": 17.27906976744186,
+      "finalPower": 73.41251847278328
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 721,
+      "exp": 4039,
+      "wins": 0.37236939836593214,
+      "combatLoss": 0.5488982421391434,
+      "environment": 0.2052488239663283,
+      "death": 0.09507303788066353,
+      "alive": 0.46740638002773927,
+      "firstLevel": 3.1497919556171983,
+      "endLevel": 7.076282940360611,
+      "levelGain": 3.926490984743412,
+      "potential": 1.0994032061092394,
+      "picks": 19,
+      "finalLevel": 16.736842105263158,
+      "finalPower": 66.78951095859745
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 2,
+      "exp": 10,
+      "wins": 0.1,
+      "combatLoss": 0.8,
+      "environment": 0.4,
+      "death": 0.1,
+      "alive": 0.5,
+      "firstLevel": 3,
+      "endLevel": 8,
+      "levelGain": 5,
+      "potential": 1.141952757583931,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 748,
+      "exp": 4917,
+      "wins": 0.5064063453325198,
+      "combatLoss": 0.36546674801708356,
+      "environment": 0.22676428716697172,
+      "death": 0.07667276794793573,
+      "alive": 0.4959893048128342,
+      "firstLevel": 3.657754010695187,
+      "endLevel": 8.8475935828877,
+      "levelGain": 5.189839572192513,
+      "potential": 1.149413890930212,
+      "picks": 52,
+      "finalLevel": 18.057692307692307,
+      "finalPower": 76.18349363395791
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 803,
+      "exp": 5190,
+      "wins": 0.4709055876685935,
+      "combatLoss": 0.4001926782273603,
+      "environment": 0.23121387283236994,
+      "death": 0.08246628131021194,
+      "alive": 0.4669987546699875,
+      "firstLevel": 3.489414694894147,
+      "endLevel": 8.452054794520548,
+      "levelGain": 4.962640099626401,
+      "potential": 1.149417701666997,
+      "picks": 58,
+      "finalLevel": 17.551724137931036,
+      "finalPower": 79.71877354644658
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "mage",
+      "name": "법사",
+      "npc": 802,
+      "exp": 5483,
+      "wins": 0.5172350902790444,
+      "combatLoss": 0.3104140069305125,
+      "environment": 0.25424037935436805,
+      "death": 0.07258799927047237,
+      "alive": 0.5037406483790524,
+      "firstLevel": 3.718204488778055,
+      "endLevel": 9.235660847880299,
+      "levelGain": 5.517456359102244,
+      "potential": 1.146956546686908,
+      "picks": 66,
+      "finalLevel": 18.53030303030303,
+      "finalPower": 82.27110046860768
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "priest",
+      "name": "사제",
+      "npc": 749,
+      "exp": 4955,
+      "wins": 0.43107971745711404,
+      "combatLoss": 0.4659939455095863,
+      "environment": 0.2127144298688194,
+      "death": 0.08213925327951564,
+      "alive": 0.45660881174899864,
+      "firstLevel": 3.6728971962616823,
+      "endLevel": 8.664886515353805,
+      "levelGain": 4.991989319092123,
+      "potential": 1.1431863290913344,
+      "picks": 41,
+      "finalLevel": 17.853658536585368,
+      "finalPower": 83.55746314399916
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 53,
+      "exp": 396,
+      "wins": 0.4823232323232323,
+      "combatLoss": 0.351010101010101,
+      "environment": 0.3005050505050505,
+      "death": 0.0707070707070707,
+      "alive": 0.4716981132075472,
+      "firstLevel": 3.792452830188679,
+      "endLevel": 9.924528301886792,
+      "levelGain": 6.132075471698113,
+      "potential": 1.1504923182258489,
+      "picks": 5,
+      "finalLevel": 17.8,
+      "finalPower": 85.49738331179307
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 916,
+      "exp": 6842,
+      "wins": 0.5191464484068986,
+      "combatLoss": 0.3354282373574978,
+      "environment": 0.24758842443729903,
+      "death": 0.06109324758842444,
+      "alive": 0.5436681222707423,
+      "firstLevel": 4.782751091703057,
+      "endLevel": 10.884279475982533,
+      "levelGain": 6.101528384279476,
+      "potential": 1.1083708653435682,
+      "picks": 125,
+      "finalLevel": 17.696,
+      "finalPower": 70.8196414613322
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 804,
+      "exp": 5859,
+      "wins": 0.5065710872162486,
+      "combatLoss": 0.3454514422256358,
+      "environment": 0.2534562211981567,
+      "death": 0.06059054446151221,
+      "alive": 0.5584577114427861,
+      "firstLevel": 4.718905472636816,
+      "endLevel": 10.620646766169154,
+      "levelGain": 5.901741293532338,
+      "potential": 1.1011168719152056,
+      "picks": 128,
+      "finalLevel": 17.3828125,
+      "finalPower": 76.03542462501602
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "mage",
+      "name": "법사",
+      "npc": 865,
+      "exp": 6368,
+      "wins": 0.520571608040201,
+      "combatLoss": 0.2988379396984925,
+      "environment": 0.28046482412060303,
+      "death": 0.055433417085427136,
+      "alive": 0.5919075144508671,
+      "firstLevel": 4.8497109826589595,
+      "endLevel": 11.063583815028903,
+      "levelGain": 6.213872832369942,
+      "potential": 1.1068541150662579,
+      "picks": 155,
+      "finalLevel": 17.251612903225805,
+      "finalPower": 70.52248408276832
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "priest",
+      "name": "사제",
+      "npc": 862,
+      "exp": 6034,
+      "wins": 0.4565793834935366,
+      "combatLoss": 0.427411335764004,
+      "environment": 0.2311899237653298,
+      "death": 0.06347364932051706,
+      "alive": 0.5556844547563805,
+      "firstLevel": 4.937354988399072,
+      "endLevel": 10.422273781902552,
+      "levelGain": 5.48491879350348,
+      "potential": 1.1107803850867972,
+      "picks": 96,
+      "finalLevel": 17.427083333333332,
+      "finalPower": 77.10692233881728
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 116,
+      "exp": 831,
+      "wins": 0.5595667870036101,
+      "combatLoss": 0.2779783393501805,
+      "environment": 0.27075812274368233,
+      "death": 0.05054151624548736,
+      "alive": 0.6379310344827587,
+      "firstLevel": 4.9655172413793105,
+      "endLevel": 10.982758620689655,
+      "levelGain": 6.017241379310345,
+      "potential": 1.0989388747014315,
+      "picks": 18,
+      "finalLevel": 17.77777777777778,
+      "finalPower": 81.25386174108226
+    },
+    {
+      "id": "A",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 3878,
+      "exp": 23399,
+      "wins": 0.4518569169622633,
+      "combatLoss": 0.4343348006325057,
+      "environment": 0.22723193298858926,
+      "death": 0.08825163468524296,
+      "alive": 0.4675090252707581,
+      "firstLevel": 3.400206291903043,
+      "endLevel": 7.9548736462093865,
+      "levelGain": 4.554667354306344,
+      "potential": 1.106598418702875,
+      "picks": 165,
+      "finalLevel": 17.242424242424242,
+      "finalPower": 67.9996036575059
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 3865,
+      "exp": 22556,
+      "wins": 0.43247916297215816,
+      "combatLoss": 0.4536265295265118,
+      "environment": 0.236389430750133,
+      "death": 0.09580599397056215,
+      "alive": 0.44087968952134543,
+      "firstLevel": 3.3586028460543336,
+      "endLevel": 7.654851228978008,
+      "levelGain": 4.296248382923674,
+      "potential": 1.1063841244252828,
+      "picks": 160,
+      "finalLevel": 17.5,
+      "finalPower": 76.04025317389048
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 3747,
+      "exp": 22816,
+      "wins": 0.4627016129032258,
+      "combatLoss": 0.3918741234221599,
+      "environment": 0.2544267180925666,
+      "death": 0.08362552594670407,
+      "alive": 0.49079263410728585,
+      "firstLevel": 3.411529223378703,
+      "endLevel": 8.14438217240459,
+      "levelGain": 4.7328529490258875,
+      "potential": 1.1065660178846335,
+      "picks": 196,
+      "finalLevel": 17.198979591836736,
+      "finalPower": 70.44195578728102
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 3646,
+      "exp": 20977,
+      "wins": 0.39452733946703533,
+      "combatLoss": 0.5225723411355294,
+      "environment": 0.20479572865519377,
+      "death": 0.09405539400295562,
+      "alive": 0.45885902358749314,
+      "firstLevel": 3.310477235326385,
+      "endLevel": 7.461327482172243,
+      "levelGain": 4.150850246845859,
+      "potential": 1.1074616409449756,
+      "picks": 169,
+      "finalLevel": 17.59171597633136,
+      "finalPower": 77.60880398914246
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "A",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 648,
+      "exp": 3407,
+      "wins": 0.4531846199002055,
+      "combatLoss": 0.4567067801584972,
+      "environment": 0.20457880833577927,
+      "death": 0.0956853536835926,
+      "alive": 0.49691358024691357,
+      "firstLevel": 2.746913580246914,
+      "endLevel": 6.4753086419753085,
+      "levelGain": 3.728395061728395,
+      "potential": 1.107447180671066,
+      "picks": 17,
+      "finalLevel": 17.705882352941178,
+      "finalPower": 66.64257158560848
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 725,
+      "exp": 3638,
+      "wins": 0.37822979659153383,
+      "combatLoss": 0.5266630016492578,
+      "environment": 0.22842221000549753,
+      "death": 0.11269928532160528,
+      "alive": 0.43448275862068964,
+      "firstLevel": 2.830344827586207,
+      "endLevel": 6.224827586206897,
+      "levelGain": 3.39448275862069,
+      "potential": 1.1092227127954108,
+      "picks": 20,
+      "finalLevel": 17.8,
+      "finalPower": 77.44825544584927
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 704,
+      "exp": 3969,
+      "wins": 0.4441924918115394,
+      "combatLoss": 0.4348702443940539,
+      "environment": 0.22877299067775259,
+      "death": 0.08893927941546989,
+      "alive": 0.49857954545454547,
+      "firstLevel": 2.975852272727273,
+      "endLevel": 7.090909090909091,
+      "levelGain": 4.115056818181818,
+      "potential": 1.107881344062182,
+      "picks": 25,
+      "finalLevel": 17.04,
+      "finalPower": 67.50499986312256
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 705,
+      "exp": 3427,
+      "wins": 0.33907207470090456,
+      "combatLoss": 0.5943974321564051,
+      "environment": 0.19229646921505691,
+      "death": 0.1143857601400642,
+      "alive": 0.44397163120567373,
+      "firstLevel": 2.954609929078014,
+      "endLevel": 6.120567375886525,
+      "levelGain": 3.1659574468085108,
+      "potential": 1.1016943089636242,
+      "picks": 10,
+      "finalLevel": 16.7,
+      "finalPower": 71.67259095166133
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 720,
+      "exp": 4560,
+      "wins": 0.4668859649122807,
+      "combatLoss": 0.41578947368421054,
+      "environment": 0.22171052631578947,
+      "death": 0.08355263157894736,
+      "alive": 0.4708333333333333,
+      "firstLevel": 3.4569444444444444,
+      "endLevel": 8.193055555555556,
+      "levelGain": 4.736111111111111,
+      "potential": 1.1462530111231735,
+      "picks": 38,
+      "finalLevel": 17.94736842105263,
+      "finalPower": 75.09418665997458
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 783,
+      "exp": 4912,
+      "wins": 0.4586726384364821,
+      "combatLoss": 0.4313925081433225,
+      "environment": 0.2251628664495114,
+      "death": 0.08672638436482084,
+      "alive": 0.4559386973180077,
+      "firstLevel": 3.2247765006385696,
+      "endLevel": 7.856960408684547,
+      "levelGain": 4.632183908045977,
+      "potential": 1.1500705678641285,
+      "picks": 37,
+      "finalLevel": 18.37837837837838,
+      "finalPower": 84.88613714180296
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "mage",
+      "name": "법사",
+      "npc": 748,
+      "exp": 4848,
+      "wins": 0.47957920792079206,
+      "combatLoss": 0.3712871287128713,
+      "environment": 0.23906765676567657,
+      "death": 0.07838283828382839,
+      "alive": 0.4919786096256685,
+      "firstLevel": 3.3850267379679146,
+      "endLevel": 8.363636363636363,
+      "levelGain": 4.978609625668449,
+      "potential": 1.1444517591743755,
+      "picks": 50,
+      "finalLevel": 17.78,
+      "finalPower": 81.38794802163451
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "priest",
+      "name": "사제",
+      "npc": 724,
+      "exp": 4614,
+      "wins": 0.4466840052015605,
+      "combatLoss": 0.4640225400953619,
+      "environment": 0.19007368877329867,
+      "death": 0.08365843086259211,
+      "alive": 0.46685082872928174,
+      "firstLevel": 3.4337016574585637,
+      "endLevel": 8.095303867403315,
+      "levelGain": 4.661602209944752,
+      "potential": 1.1344937550970369,
+      "picks": 37,
+      "finalLevel": 17.81081081081081,
+      "finalPower": 79.92147012934952
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 27,
+      "exp": 150,
+      "wins": 0.4666666666666667,
+      "combatLoss": 0.38,
+      "environment": 0.22,
+      "death": 0.10666666666666667,
+      "alive": 0.4074074074074074,
+      "firstLevel": 2.6296296296296298,
+      "endLevel": 6.703703703703703,
+      "levelGain": 4.074074074074074,
+      "potential": 1.1520418203375475,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 873,
+      "exp": 6297,
+      "wins": 0.5030967127203431,
+      "combatLoss": 0.3665237414641893,
+      "environment": 0.24281403843099889,
+      "death": 0.06939812609178975,
+      "alive": 0.49942726231386025,
+      "firstLevel": 4.625429553264605,
+      "endLevel": 10.313860252004583,
+      "levelGain": 5.688430698739977,
+      "potential": 1.108057103596573,
+      "picks": 119,
+      "finalLevel": 17.605042016806724,
+      "finalPower": 70.79218935295138
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 867,
+      "exp": 5746,
+      "wins": 0.44744169857292027,
+      "combatLoss": 0.41890010442046643,
+      "environment": 0.2641837800208841,
+      "death": 0.0777932474765054,
+      "alive": 0.4844290657439446,
+      "firstLevel": 4.67358708189158,
+      "endLevel": 9.73356401384083,
+      "levelGain": 5.05997693194925,
+      "potential": 1.1042449397503293,
+      "picks": 100,
+      "finalLevel": 17.26,
+      "finalPower": 69.43901288509383
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "mage",
+      "name": "법사",
+      "npc": 838,
+      "exp": 6473,
+      "wins": 0.5079561254441526,
+      "combatLoss": 0.33786497759925843,
+      "environment": 0.2657191410474278,
+      "death": 0.059477830990267266,
+      "alive": 0.5405727923627685,
+      "firstLevel": 4.483293556085919,
+      "endLevel": 10.750596658711217,
+      "levelGain": 6.2673031026252985,
+      "potential": 1.1057263968998359,
+      "picks": 143,
+      "finalLevel": 17.67132867132867,
+      "finalPower": 75.22453631206619
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "priest",
+      "name": "사제",
+      "npc": 825,
+      "exp": 5485,
+      "wins": 0.406563354603464,
+      "combatLoss": 0.5019143117593436,
+      "environment": 0.22643573381950774,
+      "death": 0.07985414767547858,
+      "alive": 0.4690909090909091,
+      "firstLevel": 4.570909090909091,
+      "endLevel": 9.465454545454545,
+      "levelGain": 4.8945454545454545,
+      "potential": 1.1000721770051698,
+      "picks": 76,
+      "finalLevel": 17.394736842105264,
+      "finalPower": 77.61759656965855
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 55,
+      "exp": 437,
+      "wins": 0.5194508009153318,
+      "combatLoss": 0.30892448512585813,
+      "environment": 0.26773455377574373,
+      "death": 0.06864988558352403,
+      "alive": 0.45454545454545453,
+      "firstLevel": 3.8181818181818183,
+      "endLevel": 10.418181818181818,
+      "levelGain": 6.6,
+      "potential": 1.10628123941027,
+      "picks": 6,
+      "finalLevel": 18,
+      "finalPower": 76.79597550813926
+    },
+    {
+      "id": "B",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 3674,
+      "exp": 20625,
+      "wins": 0.4268121212121212,
+      "combatLoss": 0.48145454545454547,
+      "environment": 0.21124848484848485,
+      "death": 0.09648484848484848,
+      "alive": 0.4583560152422428,
+      "firstLevel": 3.035928143712575,
+      "endLevel": 7.059608056614045,
+      "levelGain": 4.0236799129014695,
+      "potential": 1.1066871978730306,
+      "picks": 89,
+      "finalLevel": 17.95505617977528,
+      "finalPower": 76.23448120565314
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 3654,
+      "exp": 19742,
+      "wins": 0.3994022895350015,
+      "combatLoss": 0.5016209097355891,
+      "environment": 0.22490122581298755,
+      "death": 0.10277580792219633,
+      "alive": 0.44471811713191023,
+      "firstLevel": 3.0188834154351394,
+      "endLevel": 6.781882868089765,
+      "levelGain": 3.762999452654625,
+      "potential": 1.1063415098553564,
+      "picks": 87,
+      "finalLevel": 17.666666666666668,
+      "finalPower": 76.35349462353992
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 3533,
+      "exp": 19864,
+      "wins": 0.4295207410390656,
+      "combatLoss": 0.4477446637132501,
+      "environment": 0.24320378574305276,
+      "death": 0.09197543294401933,
+      "alive": 0.48287574299462216,
+      "firstLevel": 3.0880271723747525,
+      "endLevel": 7.223039909425418,
+      "levelGain": 4.1350127370506655,
+      "potential": 1.1042910816969655,
+      "picks": 96,
+      "finalLevel": 16.875,
+      "finalPower": 71.20089927349258
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 3526,
+      "exp": 18595,
+      "wins": 0.3458456574347943,
+      "combatLoss": 0.5877924173164829,
+      "environment": 0.199247109438021,
+      "death": 0.10578112395805324,
+      "alive": 0.44214407260351674,
+      "firstLevel": 3.0306296086216675,
+      "endLevel": 6.568349404424277,
+      "levelGain": 3.537719795802609,
+      "potential": 1.106458041387982,
+      "picks": 73,
+      "finalLevel": 17.972602739726028,
+      "finalPower": 83.40092867411967
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "B",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 703,
+      "exp": 4011,
+      "wins": 0.47594116180503615,
+      "combatLoss": 0.4156070805285465,
+      "environment": 0.21465968586387435,
+      "death": 0.08651209174769384,
+      "alive": 0.5064011379800853,
+      "firstLevel": 3.2190611664295874,
+      "endLevel": 7.486486486486487,
+      "levelGain": 4.267425320056899,
+      "potential": 1.1071583470672104,
+      "picks": 30,
+      "finalLevel": 17.2,
+      "finalPower": 66.59715439553591
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 746,
+      "exp": 3937,
+      "wins": 0.41249682499365,
+      "combatLoss": 0.4681229362458725,
+      "environment": 0.24638049276098553,
+      "death": 0.10464820929641859,
+      "alive": 0.4477211796246649,
+      "firstLevel": 3.0603217158176945,
+      "endLevel": 6.801608579088472,
+      "levelGain": 3.7412868632707776,
+      "potential": 1.1079492702358593,
+      "picks": 25,
+      "finalLevel": 17.48,
+      "finalPower": 75.64001626965397
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 737,
+      "exp": 4301,
+      "wins": 0.4796558939781446,
+      "combatLoss": 0.3868867705184841,
+      "environment": 0.23529411764705882,
+      "death": 0.08742152987677285,
+      "alive": 0.4898236092265943,
+      "firstLevel": 3.248303934871099,
+      "endLevel": 7.679782903663501,
+      "levelGain": 4.431478968792401,
+      "potential": 1.1053964805203897,
+      "picks": 33,
+      "finalLevel": 18.03030303030303,
+      "finalPower": 81.00111466678979
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 718,
+      "exp": 3993,
+      "wins": 0.371900826446281,
+      "combatLoss": 0.5457049837215127,
+      "environment": 0.21437515652391687,
+      "death": 0.10217881292261458,
+      "alive": 0.43175487465181056,
+      "firstLevel": 3.1086350974930363,
+      "endLevel": 6.9665738161559885,
+      "levelGain": 3.8579387186629526,
+      "potential": 1.097766959516515,
+      "picks": 32,
+      "finalLevel": 16.78125,
+      "finalPower": 70.8045008246061
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 6,
+      "exp": 48,
+      "wins": 0.4166666666666667,
+      "combatLoss": 0.3541666666666667,
+      "environment": 0.3333333333333333,
+      "death": 0.08333333333333333,
+      "alive": 0.3333333333333333,
+      "firstLevel": 3.1666666666666665,
+      "endLevel": 9,
+      "levelGain": 5.833333333333333,
+      "potential": 1.1289762714256844,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 727,
+      "exp": 4716,
+      "wins": 0.5258693808312129,
+      "combatLoss": 0.3488125530110263,
+      "environment": 0.21946564885496184,
+      "death": 0.08163698049194232,
+      "alive": 0.47042640990371387,
+      "firstLevel": 3.606602475928473,
+      "endLevel": 8.617606602475929,
+      "levelGain": 5.011004126547455,
+      "potential": 1.1464599246250786,
+      "picks": 41,
+      "finalLevel": 18.195121951219512,
+      "finalPower": 77.65758772469404
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 813,
+      "exp": 5391,
+      "wins": 0.4750510109441662,
+      "combatLoss": 0.394917455017622,
+      "environment": 0.23409386013726582,
+      "death": 0.08235948803561491,
+      "alive": 0.45387453874538747,
+      "firstLevel": 3.4858548585485853,
+      "endLevel": 8.509225092250922,
+      "levelGain": 5.023370233702337,
+      "potential": 1.1478421728603823,
+      "picks": 55,
+      "finalLevel": 17.454545454545453,
+      "finalPower": 80.86607729039665
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "mage",
+      "name": "법사",
+      "npc": 807,
+      "exp": 5634,
+      "wins": 0.530528931487398,
+      "combatLoss": 0.3028044018459354,
+      "environment": 0.25026624068157616,
+      "death": 0.06549520766773163,
+      "alive": 0.5427509293680297,
+      "firstLevel": 3.795539033457249,
+      "endLevel": 9.458488228004956,
+      "levelGain": 5.662949194547708,
+      "potential": 1.1492455156240733,
+      "picks": 81,
+      "finalLevel": 17.59259259259259,
+      "finalPower": 75.28042523296146
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "priest",
+      "name": "사제",
+      "npc": 763,
+      "exp": 5159,
+      "wins": 0.43322349292498546,
+      "combatLoss": 0.4710215157976352,
+      "environment": 0.2025586353944563,
+      "death": 0.07908509401046715,
+      "alive": 0.46526867627785057,
+      "firstLevel": 3.6290956749672345,
+      "endLevel": 8.74442988204456,
+      "levelGain": 5.115334207077327,
+      "potential": 1.141132110670553,
+      "picks": 42,
+      "finalLevel": 17.80952380952381,
+      "finalPower": 83.45071444902173
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 36,
+      "exp": 221,
+      "wins": 0.4117647058823529,
+      "combatLoss": 0.38009049773755654,
+      "environment": 0.3574660633484163,
+      "death": 0.09954751131221719,
+      "alive": 0.3888888888888889,
+      "firstLevel": 3.638888888888889,
+      "endLevel": 8.36111111111111,
+      "levelGain": 4.722222222222222,
+      "potential": 1.13927143736833,
+      "picks": 3,
+      "finalLevel": 17.666666666666668,
+      "finalPower": 70.50138537839796
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 928,
+      "exp": 7002,
+      "wins": 0.5215652670665524,
+      "combatLoss": 0.3286203941730934,
+      "environment": 0.2490716938017709,
+      "death": 0.061839474435875466,
+      "alive": 0.5334051724137931,
+      "firstLevel": 4.800646551724138,
+      "endLevel": 10.87823275862069,
+      "levelGain": 6.077586206896552,
+      "potential": 1.1096850093301078,
+      "picks": 137,
+      "finalLevel": 17.05839416058394,
+      "finalPower": 70.48449747665617
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 834,
+      "exp": 5967,
+      "wins": 0.4794704206468912,
+      "combatLoss": 0.37271660801072565,
+      "environment": 0.261102731690967,
+      "death": 0.06653259594436065,
+      "alive": 0.5239808153477218,
+      "firstLevel": 4.724220623501199,
+      "endLevel": 10.390887290167866,
+      "levelGain": 5.666666666666667,
+      "potential": 1.1023342309569621,
+      "picks": 112,
+      "finalLevel": 16.928571428571427,
+      "finalPower": 72.53943922127492
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "mage",
+      "name": "법사",
+      "npc": 871,
+      "exp": 6406,
+      "wins": 0.5202934748673119,
+      "combatLoss": 0.3000312207305651,
+      "environment": 0.2758351545426163,
+      "death": 0.05588510771152045,
+      "alive": 0.5889781859931114,
+      "firstLevel": 4.856486796785304,
+      "endLevel": 10.99540757749713,
+      "levelGain": 6.138920780711826,
+      "potential": 1.1057050506020845,
+      "picks": 141,
+      "finalLevel": 17.30496453900709,
+      "finalPower": 72.37673821968147
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "priest",
+      "name": "사제",
+      "npc": 848,
+      "exp": 6034,
+      "wins": 0.4690089492873716,
+      "combatLoss": 0.41083858137222407,
+      "environment": 0.23400729201193238,
+      "death": 0.062479284057010274,
+      "alive": 0.5554245283018868,
+      "firstLevel": 4.8950471698113205,
+      "endLevel": 10.516509433962264,
+      "levelGain": 5.621462264150943,
+      "potential": 1.1063325357388094,
+      "picks": 117,
+      "finalLevel": 17.17948717948718,
+      "finalPower": 73.17621536458604
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 79,
+      "exp": 543,
+      "wins": 0.5340699815837937,
+      "combatLoss": 0.3278084714548803,
+      "environment": 0.26335174953959484,
+      "death": 0.06998158379373849,
+      "alive": 0.5189873417721519,
+      "firstLevel": 4.151898734177215,
+      "endLevel": 9.810126582278482,
+      "levelGain": 5.658227848101266,
+      "potential": 1.1053051886360952,
+      "picks": 6,
+      "finalLevel": 17.666666666666668,
+      "finalPower": 83.77575242136449
+    },
+    {
+      "id": "C",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 3907,
+      "exp": 23326,
+      "wins": 0.4500986024179028,
+      "combatLoss": 0.43822344165309096,
+      "environment": 0.22695704364228758,
+      "death": 0.08977107090799966,
+      "alive": 0.4640389045303302,
+      "firstLevel": 3.442539032505759,
+      "endLevel": 7.921423086767341,
+      "levelGain": 4.478884054261582,
+      "potential": 1.1067497500049264,
+      "picks": 165,
+      "finalLevel": 17.084848484848486,
+      "finalPower": 67.29085199721877
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 3860,
+      "exp": 22630,
+      "wins": 0.43194874060981,
+      "combatLoss": 0.45413168360583295,
+      "environment": 0.23742819266460452,
+      "death": 0.09460892620415377,
+      "alive": 0.44533678756476686,
+      "firstLevel": 3.344559585492228,
+      "endLevel": 7.667098445595855,
+      "levelGain": 4.322538860103627,
+      "potential": 1.1073504362644395,
+      "picks": 173,
+      "finalLevel": 17.196531791907514,
+      "finalPower": 74.50756894963527
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 3733,
+      "exp": 23007,
+      "wins": 0.4688573042986917,
+      "combatLoss": 0.3880992741339592,
+      "environment": 0.24931542573999219,
+      "death": 0.08284435171904203,
+      "alive": 0.48941869809804445,
+      "firstLevel": 3.385212965443343,
+      "endLevel": 8.1666220198232,
+      "levelGain": 4.781409054379855,
+      "potential": 1.1067279969235968,
+      "picks": 200,
+      "finalLevel": 16.95,
+      "finalPower": 71.29630522093129
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 3648,
+      "exp": 20851,
+      "wins": 0.3907726248141576,
+      "combatLoss": 0.5260658961200901,
+      "environment": 0.20454654453023835,
+      "death": 0.09380845043403194,
+      "alive": 0.46381578947368424,
+      "firstLevel": 3.3240131578947367,
+      "endLevel": 7.441611842105263,
+      "levelGain": 4.1175986842105265,
+      "potential": 1.1081652197941092,
+      "picks": 158,
+      "finalLevel": 17.18354430379747,
+      "finalPower": 74.35551449720076
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "C",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 670,
+      "exp": 3477,
+      "wins": 0.43284440609721025,
+      "combatLoss": 0.47627264883520276,
+      "environment": 0.21627840092033362,
+      "death": 0.10353753235547886,
+      "alive": 0.4626865671641791,
+      "firstLevel": 3.008955223880597,
+      "endLevel": 6.625373134328358,
+      "levelGain": 3.6164179104477614,
+      "potential": 1.1081870901713904,
+      "picks": 16,
+      "finalLevel": 16.5625,
+      "finalPower": 61.12322021026568
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 726,
+      "exp": 3600,
+      "wins": 0.37222222222222223,
+      "combatLoss": 0.5316666666666666,
+      "environment": 0.22416666666666665,
+      "death": 0.11694444444444445,
+      "alive": 0.4201101928374656,
+      "firstLevel": 2.8333333333333335,
+      "endLevel": 6.158402203856749,
+      "levelGain": 3.325068870523416,
+      "potential": 1.1075501238858612,
+      "picks": 15,
+      "finalLevel": 17.8,
+      "finalPower": 76.62125267426978
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 703,
+      "exp": 3984,
+      "wins": 0.45481927710843373,
+      "combatLoss": 0.42494979919678716,
+      "environment": 0.22188755020080322,
+      "death": 0.08985943775100401,
+      "alive": 0.4907539118065434,
+      "firstLevel": 2.9601706970128023,
+      "endLevel": 7.102418207681366,
+      "levelGain": 4.142247510668564,
+      "potential": 1.1077942120798254,
+      "picks": 20,
+      "finalLevel": 18.25,
+      "finalPower": 79.56934763073684
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 696,
+      "exp": 3454,
+      "wins": 0.3471337579617834,
+      "combatLoss": 0.5903300521134917,
+      "environment": 0.18934568616097278,
+      "death": 0.10856977417486971,
+      "alive": 0.46120689655172414,
+      "firstLevel": 2.882183908045977,
+      "endLevel": 6.129310344827586,
+      "levelGain": 3.2471264367816093,
+      "potential": 1.099349177287137,
+      "picks": 6,
+      "finalLevel": 16.333333333333332,
+      "finalPower": 72.93486175783559
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 3,
+      "exp": 14,
+      "wins": 0.21428571428571427,
+      "combatLoss": 0.7857142857142857,
+      "environment": 0.21428571428571427,
+      "death": 0.14285714285714285,
+      "alive": 0.3333333333333333,
+      "firstLevel": 3,
+      "endLevel": 6,
+      "levelGain": 3,
+      "potential": 1.0451907539895424,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 706,
+      "exp": 4468,
+      "wins": 0.4794091316025067,
+      "combatLoss": 0.4093554162936437,
+      "environment": 0.21598030438675023,
+      "death": 0.085496866606983,
+      "alive": 0.45892351274787535,
+      "firstLevel": 3.314447592067989,
+      "endLevel": 8.024079320113314,
+      "levelGain": 4.709631728045326,
+      "potential": 1.1473020527525684,
+      "picks": 40,
+      "finalLevel": 17.9,
+      "finalPower": 74.04728130073642
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 761,
+      "exp": 4526,
+      "wins": 0.45779938135218734,
+      "combatLoss": 0.43415819708351744,
+      "environment": 0.2176314626601856,
+      "death": 0.09169244365885992,
+      "alive": 0.45466491458607095,
+      "firstLevel": 3.084099868593955,
+      "endLevel": 7.391590013140604,
+      "levelGain": 4.307490144546649,
+      "potential": 1.1483370318591808,
+      "picks": 31,
+      "finalLevel": 18,
+      "finalPower": 82.37810195549936
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "mage",
+      "name": "법사",
+      "npc": 748,
+      "exp": 4586,
+      "wins": 0.4683820322721326,
+      "combatLoss": 0.38443087658089836,
+      "environment": 0.2402965547317924,
+      "death": 0.08373310074138683,
+      "alive": 0.48663101604278075,
+      "firstLevel": 3.3957219251336896,
+      "endLevel": 8.057486631016042,
+      "levelGain": 4.661764705882353,
+      "potential": 1.1442619038820774,
+      "picks": 32,
+      "finalLevel": 17.71875,
+      "finalPower": 78.49144366328807
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "priest",
+      "name": "사제",
+      "npc": 730,
+      "exp": 4551,
+      "wins": 0.4535266974291364,
+      "combatLoss": 0.4638540980004395,
+      "environment": 0.1863326741375522,
+      "death": 0.07888376181059108,
+      "alive": 0.5082191780821917,
+      "firstLevel": 3.26986301369863,
+      "endLevel": 7.83972602739726,
+      "levelGain": 4.5698630136986305,
+      "potential": 1.1348909231482944,
+      "picks": 32,
+      "finalLevel": 17.78125,
+      "finalPower": 82.92091381241642
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 8,
+      "exp": 26,
+      "wins": 0.46153846153846156,
+      "combatLoss": 0.3076923076923077,
+      "environment": 0.3076923076923077,
+      "death": 0.15384615384615385,
+      "alive": 0.5,
+      "firstLevel": 2.375,
+      "endLevel": 4,
+      "levelGain": 1.625,
+      "potential": 1.1623340701684355,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "economy",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 909,
+      "exp": 6535,
+      "wins": 0.4863045141545524,
+      "combatLoss": 0.3819433817903596,
+      "environment": 0.25172149961744456,
+      "death": 0.06641162968630451,
+      "alive": 0.5225522552255225,
+      "firstLevel": 4.717271727172717,
+      "endLevel": 10.354235423542354,
+      "levelGain": 5.636963696369637,
+      "potential": 1.1099527995437652,
+      "picks": 134,
+      "finalLevel": 16.96268656716418,
+      "finalPower": 68.57009850229386
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 839,
+      "exp": 5818,
+      "wins": 0.4537641801306291,
+      "combatLoss": 0.4133722928841526,
+      "environment": 0.26314884840151254,
+      "death": 0.07597112409762805,
+      "alive": 0.4731823599523242,
+      "firstLevel": 4.572109654350418,
+      "endLevel": 9.862932061978546,
+      "levelGain": 5.290822407628129,
+      "potential": 1.1068395418516235,
+      "picks": 106,
+      "finalLevel": 17.00943396226415,
+      "finalPower": 70.32086484061576
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "mage",
+      "name": "법사",
+      "npc": 899,
+      "exp": 6598,
+      "wins": 0.4936344346771749,
+      "combatLoss": 0.3423764777205214,
+      "environment": 0.27796301909669596,
+      "death": 0.061079114883297966,
+      "alive": 0.5517241379310345,
+      "firstLevel": 4.728587319243604,
+      "endLevel": 10.671857619577308,
+      "levelGain": 5.943270300333704,
+      "potential": 1.1034396820643395,
+      "picks": 124,
+      "finalLevel": 17.153225806451612,
+      "finalPower": 70.99815296012049
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "priest",
+      "name": "사제",
+      "npc": 812,
+      "exp": 5591,
+      "wins": 0.40976569486675013,
+      "combatLoss": 0.49490252191021283,
+      "environment": 0.23054909676265425,
+      "death": 0.0729744231801109,
+      "alive": 0.4975369458128079,
+      "firstLevel": 4.550492610837439,
+      "endLevel": 9.67487684729064,
+      "levelGain": 5.124384236453202,
+      "potential": 1.1055011518573987,
+      "picks": 90,
+      "finalLevel": 16.81111111111111,
+      "finalPower": 71.63632051634815
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 39,
+      "exp": 297,
+      "wins": 0.49158249158249157,
+      "combatLoss": 0.3265993265993266,
+      "environment": 0.29292929292929293,
+      "death": 0.06734006734006734,
+      "alive": 0.48717948717948717,
+      "firstLevel": 4.641025641025641,
+      "endLevel": 10.58974358974359,
+      "levelGain": 5.948717948717949,
+      "potential": 1.094690935822944,
+      "picks": 8,
+      "finalLevel": 16.5,
+      "finalPower": 65.0031950178385
+    },
+    {
+      "id": "D",
+      "kind": "traj10",
+      "deco": "survival",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "warrior",
+      "name": "전사",
+      "npc": 3689,
+      "exp": 20556,
+      "wins": 0.4253259388986184,
+      "combatLoss": 0.4844814166180191,
+      "environment": 0.21186028410196536,
+      "death": 0.09778166958552248,
+      "alive": 0.45513689346706426,
+      "firstLevel": 3.0566549200325293,
+      "endLevel": 7.031444835998916,
+      "levelGain": 3.9747899159663866,
+      "potential": 1.1062414444140418,
+      "picks": 90,
+      "finalLevel": 17.733333333333334,
+      "finalPower": 74.78416376580034
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "archer",
+      "name": "궁수",
+      "npc": 3654,
+      "exp": 19794,
+      "wins": 0.3988582398706679,
+      "combatLoss": 0.5034353844599374,
+      "environment": 0.22436091744973224,
+      "death": 0.10235424876225119,
+      "alive": 0.4455391351943076,
+      "firstLevel": 3.0246305418719213,
+      "endLevel": 6.793103448275862,
+      "levelGain": 3.768472906403941,
+      "potential": 1.105668683436088,
+      "picks": 87,
+      "finalLevel": 17.298850574712645,
+      "finalPower": 75.33774929402581
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "mage",
+      "name": "법사",
+      "npc": 3528,
+      "exp": 19915,
+      "wins": 0.42872206879236757,
+      "combatLoss": 0.4478031634446397,
+      "environment": 0.24308310318855134,
+      "death": 0.09103690685413006,
+      "alive": 0.4861111111111111,
+      "firstLevel": 3.0759637188208617,
+      "endLevel": 7.22874149659864,
+      "levelGain": 4.152777777777778,
+      "potential": 1.1040790758551104,
+      "picks": 97,
+      "finalLevel": 16.95876288659794,
+      "finalPower": 69.86736487000464
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "priest",
+      "name": "사제",
+      "npc": 3521,
+      "exp": 18475,
+      "wins": 0.3454939106901218,
+      "combatLoss": 0.5897699594046009,
+      "environment": 0.19550744248985116,
+      "death": 0.1060893098782138,
+      "alive": 0.4433399602385686,
+      "firstLevel": 3.0292530531099118,
+      "endLevel": 6.557796080658903,
+      "levelGain": 3.528543027548992,
+      "potential": 1.1067200629985006,
+      "picks": 77,
+      "finalLevel": 17.142857142857142,
+      "finalPower": 80.77042597253225
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "rogue",
+      "name": "도적",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    },
+    {
+      "id": "D",
+      "kind": "fresh",
+      "deco": "none",
+      "job": "berserker",
+      "name": "광전사",
+      "npc": 0,
+      "exp": 0,
+      "wins": null,
+      "combatLoss": null,
+      "environment": null,
+      "death": null,
+      "alive": null,
+      "firstLevel": null,
+      "endLevel": null,
+      "levelGain": null,
+      "potential": null,
+      "picks": 0,
+      "finalLevel": null,
+      "finalPower": null
+    }
+  ]
+}
