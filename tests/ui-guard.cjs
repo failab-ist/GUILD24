@@ -2274,6 +2274,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
   assert.equal(savedWorse({outcome:'부상',events:[{id:'prepared'}]}),'사망','만반의 준비 turns a Death away');
   assert.deepEqual([['사망','중상'],['사망','부상'],['사망','퇴각'],['사망','대성공'],['중상','성공'],['중상','대성공']].map(([w,o])=>savedTier(hp(w,o))),[1,2,3,3,3,3]);}
  assert.ok(/const savedBeat=r=>!!savedWorse\(r\);/.test(app),'no nightly cap');
+ assert.ok(/if\(st\.print\)\{const say=\$\('\.beat \.say'\);if\(say\)A\(say,\{opacity:\[\{from:0,to:0,duration:land\}/.test(app),'the character\'s line waits for the stamp on a reversal');
  const nsk=fn('nightSound');
  assert.ok(/const cue=savedBeat\(result\)\?'saved'\+savedTier\(result\):nightCue\(result\);/.test(nsk)&&/if\(!st\)\{sound\(cue\);/.test(nsk)&&/nightCueAt=\[setTimeout\(\(\)=>sound\(cue\),/.test(nsk),'the relief replaces the Outcome cue on its landing - one sound, never stacked');
  assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(st\.saved==='사망'\?'death':'severe'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),savedAt\(st\.saved\)\.shove\)\);/.test(nsk),'the worse verdict sounds its own cue on the print, whoosh on the shove, both dropped by 다음');

@@ -470,6 +470,8 @@ function phaseNight(A){
   }
   /* after-motion has one owner: the reversal's proof lines cut in on the overstamp; else the Hero
      Item line settles; else the REWARD figures count up. A death has none. */
+  /* the character's line answers the real Outcome, so a reversal (the worse verdict printed first) keeps it back until the stamp lands */
+  if(st.print){const say=$('.beat .say');if(say)A(say,{opacity:[{from:0,to:0,duration:land},{to:1,duration:160,ease:'outQuad'}]});}
   const told=[...document.querySelectorAll('.beat .told .cause,.beat .told .why')],hero=$('.beat .cause li.hero');
   if(st.print)told.forEach(el=>A(el,{opacity:{from:0,to:1,duration:1,delay:land}}));
   /* the claim's accent bar belongs to its list: when the claim is the list's only line, the list settles */
