@@ -1326,7 +1326,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .tray-delta i{font-style:normal;color:#8d8067}
 .tray-delta b.effect-bad{color:var(--tone-cost)}
 /* v2.9.0 NIGHT next-decision line under the settled Fatigue token */
-.next-decision{margin:4px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
+.next-decision{flex-basis:100%;margin:-5px 0 0;font:600 13px/1.4 var(--ui);color:#e0b98a}
 .counter-tray .tills{margin-top:8px;padding:0;position:static;background:none}
 .counter-tray .tills button{min-height:64px;padding:8px 2px}
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): folded, the tray keeps only its header line - the Item and the
@@ -1633,7 +1633,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .changed .grew{gap:4px}
 .changed .after{margin-top:10px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff12}
 .changed .reward{margin-top:7px}
-.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17}
+.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17;row-gap:9px}
 .p-night .changed .reward{margin-top:6px}
 .p-night .changed .grew{gap:4px 14px}
 /* no growth: the aftermath opens the strip, so it carries no rule and no lead-in space */
@@ -2341,8 +2341,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-environments .env-meter-list{display:grid;grid-template-columns:repeat(2,max-content);gap:5px 14px;margin:0}
 .final-environments .env-row{display:inline-flex;justify-content:flex-start;gap:4px}
 .final-environments .env-row i{font:400 13px/1.4 var(--ui);color:#d7c9ac}
-.final-environments .env-num{padding:0;background:none;box-shadow:none;font-size:14px;line-height:1.4}
-.final-environments .env-num small{font-size:14px;color:#d7c9ac}
+.final-environments .env-num{padding:0;background:none;box-shadow:none;font:600 14px/1.4 var(--ui);-webkit-font-smoothing:auto}
+.final-environments .env-num small,.final-environments .env-num em{font:400 14px/1.4 var(--ui);color:#d7c9ac}
+.final-environments .env-num small{margin-left:1px}
 .final-environments .env-num.ok{color:#9fd6a8}
 .p-final .tillpanel .forwho{display:flex;align-items:baseline;gap:10px}
 .p-final .final-forecast{margin:0 0 12px}

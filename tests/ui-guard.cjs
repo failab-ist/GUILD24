@@ -3453,11 +3453,10 @@ test('DAY 0 Store Support tutorial: one mark over the takeover, DAY 0 only, no a
  assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0&&!relicD30\)\|\|bossHold\)return;/.test(show),'other modals and a held Boss reveal still suppress marks, and a skipped tutorial stays skipped');
  assert.ok(/relicD0\?coachSteps\.relic:/.test(show),'the takeover reads its own lesson');
  assert.ok(/\.coach-layer\.over-takeover\{z-index:80\}/.test(css)&&/\.relic-takeover\{[^}]*z-index:70/.test(css),'the mark sits above the takeover it teaches');
- /* USER 2026-09-24: 건너뛰기 skips this screen's lesson only, never the whole tutorial */
- const fin=fn('finishCoach');
- assert.ok(/if\(skip\)for\(const x of activeGroup\|\|\[\]\)t\['coach-'\+x\[0\]\]=true;/.test(fin),'skip marks every mark of the group on screen done');
- assert.ok(!/skipped=true/.test(fin),'and no longer switches the whole tutorial off');
- assert.ok(/activeGroup=steps;/.test(show),'the group is the one being shown');
+ /* User 2026-10-09: the mark's 도움말 끄기 is the settings switch - the same tutorial.skipped, every mark off */
+ assert.ok(!/skipped=true/.test(fn('finishCoach').split('function coachSwitch')[0]),'finishing one mark never switches the tutorial off');
+ assert.ok(/case'coach-skip':coachSwitch\(true\);/.test(app)&&/case'coach-toggle':coachSwitch\(!coachOff\(\)\);/.test(app),'the mark button and the settings switch share coachSwitch');
+ assert.ok(/btn\('도움말 끄기','coach-skip','coach-skip'\)/.test(app),'the mark button reads 도움말 끄기');
  assert.ok(/\.coach-bubble p\{[^}]*word-break:keep-all/.test(css),'bubble copy breaks between words');
  const copy=read('design_ssot/COPY_WORLD_VOICE_v2.8.0.md');
  for(const line of steps.match(/'[^']*다\.'/g).map(x=>x.slice(1,-1)))assert.ok(copy.includes(line),'the copy is the approved line: '+line);
@@ -3846,8 +3845,9 @@ test('ending: the music before holds until the result lands, then the ending cue
 });
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
- assert.ok(set.includes("btn(coachOff()?'안내 다시 보기':'안내 끄기','coach-toggle')"),'the switch reads 안내 끄기 / 안내 다시 보기');
+ assert.ok(set.includes("btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')"),'the switch reads 도움말 끄기 / 도움말 다시 보기');
  assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
- assert.ok(/case'coach-toggle':\{const t=game\.account\.tutorial\?\?=\{\};if\(t\.skipped\)\{t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\];\}/.test(app),'turning it on clears every coach-* mark');
+ const sw=fn('coachSwitch');
+ assert.ok(/t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\]/.test(sw),'turning it on clears every coach-* mark');
 });
 console.log(count+' ui guard groups passed');
