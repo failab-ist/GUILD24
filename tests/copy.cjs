@@ -719,6 +719,9 @@ test('Fatigue lesson and discovery follow the same penalty threshold',()=>{
  const lesson=()=>Copy.learned.find(([id])=>id==='fatigue')[1];
  assert.equal(Dungeon.fatiguePenaltyFrom(),10,'Canonical penalty starts at 10');
  assert.equal(lesson(),'피로가 10 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.');
+ /* User 2026-10-10: the 실패 시 사망 위험 causes are SALE marks of their own, numbers read from DEATH / STRAIN / FATIGUE_MAX */
+ assert.equal(Copy.risk.hurt(),'다친 손님이다. 다친 채 원정을 떠나면 실패 시 사망 위험이 '+Math.round(Dungeon.DEATH.injured*100)+'%p 오른다.');
+ assert.equal(Copy.risk.exhausted(),'탈진한 손님이다. 피로 '+Dungeon.FATIGUE_MAX+'으로 떠나면 실패 시 사망 위험이 '+Math.round(Dungeon.DEATH.exhausted*100)+'%p 오른다. 음식·음료가 피로를 덜어 준다.');
  assert.equal(Presentation.eventLine({id:'learn-fatigue',text:'피로가 10을 넘으면 기동·정신이 떨어진다.'}),lesson(),'old saved lessons display the current rule');
  assert.equal(Presentation.eventLine({id:'old-event',text:'저장된 원정 결과'}),'저장된 원정 결과','historical outcome text is preserved');
  const from=Dungeon.fatiguePenaltyFrom;

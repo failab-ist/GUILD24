@@ -1549,10 +1549,14 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): DAY 1 has three marks, destination,
-the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14) and the Bag after the first sale (User 2026-10-10: a core idea, not a DAY 4 one). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망, after `flow` - how an expedition is decided, win the fight and no Hazard incident, rule only) and DAY 3 (환경 대응, after the Stats mark - 투력 drives combat, each Hazard uses one of the other three; COPY_AUDIT §3-7 STATS) and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
-visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: `flow`, 전투 전망; DAY 3: the payday customer, Stats, 환경 대응; DAY 4: 발주 후보 교환, the returning customer). The kit mark belongs to the day the kit actually arrives.
+First SALE (§TUTORIAL — COACH DIET). The order follows the core loop (User 2026-10-10: GAME_VISION 관찰 → 추론 → 선택 → 결과 →
+기억; what a first turn cannot run without comes first). DAY 1 is one full turn, three marks: destination - where this customer goes
+and how an expedition is decided, win the fight and pass the environment (the retired `flow` mark's lines, rule only) - then the price
+keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14) and the Bag
+after the first sale. DAY 2 reads both outlook boxes (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and does not
+move with a sale; COPY_AUDIT §3-4). DAY 3 the returning customer (memory; tap opens the notebook; it also says what 단골도 does -
+visits and buying) beside the payday customer. DAY 4 the Stats mark (why - 투력 drives combat, each Hazard uses one of the other
+three; COPY_AUDIT §3-7 STATS) beside 발주 후보 교환. A step carries the first DAY it may show, so no DAY is buried. The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1564,7 +1568,9 @@ screen says it; otherwise none, or taught after the fact.
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
   대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
-  sale) and returning customer; FINAL staged support / last order / roster / preparation marks (§FIRST-EVER FINAL EXPEDITION COACH),
+  sale) and returning customer; SALE `대성공 기회` (the first tag, DAY 5 at the earliest; what sets it, never its chance) and the 실패 시 사망 위험
+  causes, each the first time it is at the counter - an injured customer, the `연속 부상 출발` chip, a 탈진 customer - one a Day
+  (User 2026-10-10); FINAL staged support / last order / roster / preparation marks (§FIRST-EVER FINAL EXPEDITION COACH),
   including the existing `토벌 전망`; CLOSING `영업 시작 골드와 보유 골드를 비교한다.` (first clause only; the receipt gains no row)
 - no mark (the screen says it): MORNING 방문객, 게이트; DAY 0 card, key; ORDER gates, stock, offer, quantity; SALE
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
