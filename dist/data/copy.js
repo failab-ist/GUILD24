@@ -375,5 +375,12 @@ Copy.prologue={skip:'건너뛰기',tap:'탭하여 넘기기',click:'클릭하여
 /* COPY_AUDIT §26-2: the lesson follows the actual penalty-band threshold. */
 Object.defineProperty(Copy.learned.find(([id])=>id==='fatigue'),1,{enumerable:true,get:()=>
  '피로가 '+G.Dungeon.fatiguePenaltyFrom()+' 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.'});
+/* User 2026-10-10: what raises 실패 시 사망 위험 is told cause by cause, each the first time it is at the counter (SALE marks
+   `hurt` / `strain` / `exhausted`, one a day) - an injured departure, each counted injured departure in a row, a 탈진 departure */
+const pp=v=>Math.round(v*100)+'%p';
+Copy.risk={
+ hurt:()=>'다친 손님이다. 다친 채 원정을 떠나면 실패 시 사망 위험이 '+pp(G.Dungeon.DEATH.injured)+' 오른다.',
+ exhausted:()=>'탈진한 손님이다. 피로 '+G.Dungeon.FATIGUE_MAX+'으로 떠나면 실패 시 사망 위험이 '+pp(G.Dungeon.DEATH.exhausted)+' 오른다. 음식·음료가 피로를 덜어 준다.',
+ strain:()=>'다친 채 연달아 떠날수록 실패 시 사망 위험이 더 오른다. 연속 부상 출발 1회마다 '+pp(G.Dungeon.STRAIN.step)+'씩, 최대 '+pp(G.Dungeon.STRAIN.cap)+'까지. 건강하게 떠나면 다시 0회부터 센다.'};
 G.Copy=Copy;
 })(globalThis);

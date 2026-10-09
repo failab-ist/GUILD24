@@ -34,6 +34,13 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 
 
+## After v2.11.1 — Coach review 2: 상품 효과, 대성공 기회, failure Death risk causes (User 2026-10-10)
+
+- The DAY 1 ORDER mark says what Items do in general (a Food or a Drink can be a Counter too), on the first offer's effect line. COPY_AUDIT §3-2.
+- The 대성공 기회 mark says what sets the tag (the customer's power, a sold Item's added; it can show with an empty Bag) and never its chance.
+- What raises 실패 시 사망 위험 is told cause by cause as contextual SALE marks, each the first time it is at the counter, one a Day: an injured customer (`DEATH.injured`), the `연속 부상 출발` chip (`STRAIN` step / cap), a 탈진 customer (`DEATH.exhausted`). COPY_AUDIT §3-7; UI_UX §TUTORIAL.
+- Coach order by the core loop (GAME_VISION): DAY 1 SALE destination now carries the `flow` lines (one turn: where, how it is decided, price, Bag); DAY 2 both outlook boxes; DAY 3 the returning customer; DAY 4 the Stats. NIGHT marks: death, Severe, Injury, Counter, 만반의 준비, Fatigue, 대성공, Wallet gain. UI_UX §TUTORIAL; NIGHT_CLOSING §DISCOVERY LINE; COPY_AUDIT §3-4 / §3-7 / §26-2.
+
 ## After v2.11.1 — Coach review (User 2026-10-10)
 
 - DAY 1 ORDER gains the `상품 종류` mark before `발주 확정`: what 음식·음료 / 포션 / 야외장비 / 보험 are for, on the first offer's kind label. COPY_AUDIT §3-2; UI_UX §TUTORIAL.

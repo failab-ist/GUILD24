@@ -1212,7 +1212,9 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=n.injury?[n.status]:[]
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판으로 부상 회복</p>'
   :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대로 부상 회복</p>'
   :n.healedBy==='medcorps'?'<p class="heal-note" role="status">길드 의료단으로 부상 회복</p>':'';
- return '<div class="kit"><div class="vitals"><span class="vit"><i>상태</i><span>'+parts.map(x=>'<b>'+x+'</b>').join(' · ')+'</span></span>'
+ /* User 2026-10-10: the injury and a 탈진 Fatigue carry the class the 실패 시 사망 위험 marks anchor to */
+ const mark=x=>n.injury&&x===n.status?' class="hurt"':/^피로 \d+$/.test(x)&&+x.slice(3)>=Dungeon.FATIGUE_MAX?' class="spent"':'';
+ return '<div class="kit"><div class="vitals"><span class="vit"><i>상태</i><span>'+parts.map(x=>'<b'+mark(x)+'>'+x+'</b>').join(' · ')+'</span></span>'
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the first Run's DAY 3 payday customer carries the `payday` mark's anchor */
  +'<span class="npc-wallet'+(game.run.firstRun&&n.lessonPayday===game.run.day?' payday':'')+'">'+walletChip(n,true)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
@@ -1393,7 +1395,8 @@ function closingScreen(){
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+taskLine('closing')+closingReceipt(s)+'</main>'
  +'<div class="dock">'+closingDock(s)+'</div></div>';
 }
-const NIGHT_MARKS=['death','severe','injured','prepared','earn','great','counter','fatigue'];
+/* User 2026-10-10: survival first, then what the sold Item did, then what changes the next decision, then the rewards */
+const NIGHT_MARKS=['death','severe','injured','counter','prepared','fatigue','great','earn'];
 const coachSteps={
  /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
@@ -1409,8 +1412,8 @@ const coachSteps={
   ['gatefire','.slip.gate[data-family="golem"][data-tier="2"],.slip.gate[data-family="golem"][data-tier="3"]','화염 게이트는 II 이후에도 기본 위험이 하나다. 단, 사건으로 위험이 추가될 수 있다.']],
  /* COACH DIET (User 2026-09-30): the first ORDER keeps 발주 확정 alone - the 오늘 line and 위험 보기, the 창고 head, each offer's
     effect line, the 최대 key and the priced 발주 후보 교환 key say the retired gates / stock / offer / quantity / reroll marks */
- /* User 2026-10-10: DAY 1 ORDER names what each Item kind is for, on the first offer row's kind label (`음식 · 일반`), before 발주 확정 */
- order:[['kinds','.p-order li.line .kind','상품 종류마다 쓰임이 다르다. 음식·음료는 피로를 덜어 준다. 포션은 투력을 올린다. 야외장비는 위험에 대응한다. 보험은 원정이 잘못됐을 때 피해를 줄인다.'],
+ /* User 2026-10-10: DAY 1 ORDER says what Items do, in general (a Food or a Drink can be a Counter too), on the first offer's effect line, before 발주 확정 */
+ order:[['kinds','.p-order li.line .fx','상품은 능력치를 올리거나, 위험에 대응하거나, 피로를 덜거나, 실패에 대비한다. 효과는 상품마다 이 줄에 적혀 있다.'],
   ['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'],
   /* COPY_AUDIT §3-12 (User 2026-10-02): the first Run's DAY 3 HQ kit is told where it lands - its cell, or the folded sheet's handle */
   ['kit','.stock-side .wh-slot.lesson-kit,.p-order .dock .stock-handle.lesson-kit','본사가 구급키트 1개를 보냈다. 원정에서 다쳐도 한 단계 가볍게 끝난다.'],
@@ -1425,24 +1428,31 @@ const coachSteps={
     that situation exists and never before. Exact copy: COPY_AUDIT §3 / §26-3.
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
  /* User 2026-10-09: DAY 1 SALE keeps the destination and price marks; `flow` joins 전투 전망 on DAY 2, the Stats join 환경 대응 on DAY 3 */
- sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
+ /* User 2026-10-10 (coach order by the core loop): DAY 1 is one full turn - where the customer goes and how an expedition is
+    decided (the retired `flow` mark's lines join the destination), the price keys, the Bag; DAY 2 reads both outlook boxes;
+    DAY 3 the returning customer (memory); DAY 4 the Stats (why) */
+ sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다. 게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.'],
  /* COPY_AUDIT §3-7 STATS: the first time a customer's Stats are on screen - what they are, that they differ per customer,
     투력 for combat, the other three for the Hazards and each one's side role. No number, no verdict. */
- ['stats','.dossier .detail-stats','투력이 높을수록 적과 싸워 이기기 쉽다. 위험마다 강인함·기동·정신 중 쓰이는 능력치가 하나씩 정해져 있다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.',,3],
- /* User 2026-10-04: how an expedition is decided, before the two outlook boxes that read it - the rule only, never an Item */
- ['flow','.readout','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.',,2],
+ ['stats','.dossier .detail-stats','투력이 높을수록 적과 싸워 이기기 쉽다. 위험마다 강인함·기동·정신 중 쓰이는 능력치가 하나씩 정해져 있다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.',,4],
  /* COPY_AUDIT §3-4 (User 2026-10-01, back): `.top` is the frozen SALE-entry snapshot itself; what moves with the Bag sits below it */
  ['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2],
  /* User 2026-10-02: the outlook mark is two - one per box */
- ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3],
+ ['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2],
  /* User 2026-10-09: 대성공 기회 is taught after 전투 전망 (DAY 2) says 우세, on its own Day clear of the DAY 2~4 / 6 marks, the first time the tag is on the box */
- ['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5],
+ /* User 2026-10-10: what sets the tag, without its chance - it can show with an empty Bag, a sold Item's power only adds to it */
+ ['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 힘이 게이트의 요구 전력보다 넉넉히 앞설 때 붙는다. 판 상품이 있으면 그 힘도 더해진다. 이때 원정에 성공하면 대성공이 나기 쉽다.',,5],
+ /* User 2026-10-10: each cause of a higher 실패 시 사망 위험, contextual - the first injured customer at the counter (its 상태 부상), the
+    first 연속 부상 출발 chip, the first 탈진 customer (피로 at the cap); one of the three a Day (riskMarked), so they never pile up */
+ ['hurt','.vitals b.hurt',Copy.risk.hurt()],
+ ['strain','.readout .ro-combat:has(.st-tag)',Copy.risk.strain()],
+ ['exhausted','.vitals b.spent',Copy.risk.exhausted()],
  /* COPY_AUDIT §3-14: the first time the price keys show - a refused 바가지 closes the Item, so it is known before the choice */
  ['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.'],
  /* contextual marks */
  /* COPY_AUDIT §3-13 (User 2026-10-02): the first Run's DAY 3 payday customer - an invitation to try 150%, with its two costs */
  ['payday','.npc-wallet.payday','보수를 받은 손님이다. 바가지(150%)를 해 볼 만하다. 다만 거절되면 그 상품은 오늘 못 팔고, 팔려도 단골도가 깎인다.'],
- ['returning','.who.returning','다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.',,4],
+ ['returning','.who.returning','다시 온 손님. 단골도가 높을수록 자주 찾아오고, 상품도 더 잘 산다. 지난 원정과 기록은 손님을 눌러 본다.',,3],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
  /* COPY_AUDIT §3 단골 (User 2026-10-04): the first 단골 badge on the counter, DAY 6 at the earliest - two days clear of the
     DAY 4 returning / Bag marks - names the line and how Loyalty moves, numbers read from the tables (Copy.loyalty) */
@@ -1485,7 +1495,8 @@ const coachSteps={
  relic:[['relic-what','.relic-open','점포지원은 영업 내내 적용된다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
 };
 let activeCoach=null;
-let nightMarked=null;
+let nightMarked=null,riskMarked=null;
+const RISK_MARKS=['hurt','strain','exhausted'];
 let coachSettle=0,coachPainted=null,activeGroup=null;
 /* PRESENTATION §Tutorial / coach target truth: clip the target to its visible scrollports. */
 function coachBounds(el){const r=el.getBoundingClientRect();
@@ -1563,9 +1574,9 @@ function showCoach(){
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
     appeared there. */
  const visible=sel=>[...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);
- const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&nightMarked?.[0]===game.run&&nightMarked[1]===day;
+ const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&nightMarked?.[0]===game.run&&nightMarked[1]===day,riskDone=riskMarked?.[0]===game.run&&riskMarked[1]===day;
  /* x[4] = the first DAY a mark may show; a NIGHT mark waits once one has been told this night */
- const step=steps.find(x=>!tutorial['coach-'+x[0]]&&!(x[4]>day)&&!nightDone&&visible(x[1]));if(!step)return;
+ const step=steps.find(x=>!tutorial['coach-'+x[0]]&&!(x[4]>day)&&!nightDone&&!(riskDone&&RISK_MARKS.includes(x[0]))&&visible(x[1]));if(!step)return;
  const target=visible(step[1]);
  /* A target inside the phase's scroll area is judged against THAT area, not the window: the
     band above it (the SALE customer front, ~240px on a phone and ~400px on a desk) is a fixed
@@ -1582,7 +1593,7 @@ function showCoach(){
 }
 function finishCoach(){
  if(!activeCoach)return;const t=game.account.tutorial??={};
- t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+ t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];if(RISK_MARKS.includes(activeCoach[0]))riskMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 document.addEventListener('scroll',()=>{if(!activeCoach)return;
  const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);

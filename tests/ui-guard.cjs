@@ -2491,8 +2491,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     anchored to the class the returning record carries, in Copy.learned order, after the NIGHT result mark */
  assert.ok(steps.includes("night:[...Copy.learned.map(([k,text])=>['learn-'+k,k==='fatigue'?'.beat .told.learn-fatigue ~ .changed .fatigue-row':'.beat .told.learn-'+k,text]),")&&steps.includes("['earn','.changed.won .tok.gain','살아 돌아온 손님은 소지금이 늘어난다. 원정에 성공하면 훨씬 크게 늘어난다. 그 돈은 이 가게에서 쓴다.',,2]]")
   &&/'<div class="changed'\+\(r\.outcome==='성공'\|\|r\.outcome==='대성공'\?' won':''\)/.test(fn('beat')),'the NIGHT marks are the taught rules plus the Wallet gain row (the result mark is retired, COACH DIET)');
- /* User 2026-10-04: one NIGHT mark a night, the most serious rule first */
- assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','prepared','earn','great','counter','fatigue'];"),'NIGHT priority: death, severe, injured, prepared, earn, great, counter, fatigue');
+ /* User 2026-10-04: one NIGHT mark a night, the most serious rule first; User 2026-10-10: then what the sold Item did, then what
+    changes the next decision, then the rewards */
+ assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','counter','prepared','fatigue','great','earn'];"),'NIGHT priority: death, severe, injured, counter, prepared, fatigue, great, earn');
  assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */
@@ -2505,13 +2506,14 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
    ['stats','투력이 높을수록 적과 싸워 이기기 쉽다. 위험마다 강인함·기동·정신 중 쓰이는 능력치가 하나씩 정해져 있다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.'],
-   ['flow','게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.']])
+   /* User 2026-10-10: the retired `flow` mark's lines join the DAY 1 destination mark */
+   ['destination','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다. 게이트 안에는 적이 있고, 환경도 위험하다. 둘 다 넘어야 원정에 성공한다. 하나라도 못 넘기면 다치거나 죽을 수 있다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
  /* COPY_AUDIT §3-12 (User 2026-10-02): the DAY 3 HQ 구급키트 line is pinned exact too - it tells a gift that already
     arrived (what it is, once, what it does), not a pick, so it is the one mark that names an Item */
- const EXACT=['stats','flow','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
+ const EXACT=['stats','destination','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
  assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
@@ -2525,19 +2527,26 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* User 2026-10-01: the outlook mark is back and the readout title is `전투 전망` (the longer title stacked the cells on a phone) */
  assert.ok(steps.includes(`['forecast','.readout .ro-combat','전투 전망은 손님이 게이트와의 싸움에서 이길지 보여 준다. 상품 판매로는 바뀌지 않는다.',,2]`)
-  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,3]`)
+  &&steps.includes(`['envmeter','.readout .ro-env','환경 대응 = 손님 능력치 + 상품. 필요한 수치를 채우면 위험을 막는다.',,2]`)
   &&/<span class="fore ro-combat"><span class="ro-head">전투 전망'/.test(fn('readout'))&&/'<b>'\+o\.combat\+'<\/b>'\)\+'<\/span>'/.test(fn('readout')),'two outlook marks, one per box (User 2026-10-02), verbatim; the combat box reads 전투 전망');
  /* COACH DIET (User 2026-09-30): two marks on the first SALE, the rest contextual. The destination mark stays because
     COPY_WORLD_VOICE §Tutorial names it the authoritative wording of the destination rule (tests/copy.cjs §18 holds the
     line itself); the price keys carry one mark when they first show (COPY_AUDIT §3-14), the first refused 바가지 another (§26-3). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z-]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids,['destination','stats','flow','forecast','envmeter','greatchance','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination and the price keys, the Bag after its first sale; Stats, the flow and the two outlook boxes start on later DAYs; the rest are contextual');
+ assert.deepEqual(ids,['destination','stats','forecast','envmeter','greatchance','hurt','strain','exhausted','price','payday','returning','bag','regular','price-refused'],'the first SALE reads destination and the price keys, the Bag after its first sale; Stats, the flow and the two outlook boxes start on later DAYs; the rest are contextual');
  /* User 2026-10-10: the Bag is a core idea - its mark is the DAY 1 first sale's, no DAY gate */
  assert.ok(sell.includes("['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],"),'the Bag mark has no DAY gate');
  assert.ok(sell.includes(`['price-refused','.counter-tray [data-mode="overcharge"].refused','거절된 상품은 오늘 이 손님에게 못 판다. 바가지는 팔려도 거절돼도 단골도가 깎인다.']`)
   &&sell.includes(`['price','.counter-tray .tills','세 가격 중 하나로 판다. 할인은 단골도를 올리고, 바가지는 거절되면 그 상품을 오늘 못 판다.']`),'the price-key mark and the refused-바가지 lesson, verbatim');
- assert.ok(sell.includes(`['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 능력과 상품 준비가 게이트보다 넉넉할 때 뜬다. 이때는 대성공이 날 확률이 생긴다.',,5]`),'the 대성공 기회 mark waits for DAY 5, clear of the other SALE marks (User 2026-10-09)');
+ assert.ok(sell.includes(`['greatchance','.readout .ro-combat:has(.gs-tag)','‘대성공 기회’는 손님의 힘이 게이트의 요구 전력보다 넉넉히 앞설 때 붙는다. 판 상품이 있으면 그 힘도 더해진다. 이때 원정에 성공하면 대성공이 나기 쉽다.',,5]`)
+  &&!/확률|%/.test(sell.match(/\['greatchance'[^\n]*/)[0]),'the 대성공 기회 mark waits for DAY 5, clear of the other SALE marks (User 2026-10-09)');
+ /* User 2026-10-10: the 연속 부상 출발 chip teaches what it does to 실패 시 사망 위험 the first time it is on the box, numbers off STRAIN */
+ assert.ok(sell.includes(`['hurt','.vitals b.hurt',Copy.risk.hurt()],`)&&sell.includes(`['exhausted','.vitals b.spent',Copy.risk.exhausted()],`)
+  &&/n\.injury&&x===n\.status\?' class="hurt"'/.test(fn('kitLine'))&&/>=Dungeon\.FATIGUE_MAX\?' class="spent"'/.test(fn('kitLine')),'the injured and 탈진 marks anchor to the 상태 parts that carry them');
+ assert.ok(app.includes("const RISK_MARKS=['hurt','strain','exhausted'];")&&/!\(riskDone&&RISK_MARKS\.includes\(x\[0\]\)\)/.test(app)&&/if\(RISK_MARKS\.includes\(activeCoach\[0\]\)\)riskMarked=\[game\.run,game\.run\.day\]/.test(app),'one 실패 시 사망 위험 mark a Day');
+ assert.ok(sell.includes(`['strain','.readout .ro-combat:has(.st-tag)',Copy.risk.strain()],`)
+  &&Copy.risk.strain()==='다친 채 연달아 떠날수록 실패 시 사망 위험이 더 오른다. 연속 부상 출발 1회마다 '+Math.round(Dungeon.STRAIN.step*100)+'%p씩, 최대 '+Math.round(Dungeon.STRAIN.cap*100)+'%p까지. 건강하게 떠나면 다시 0회부터 센다.','the strain mark, contextual, its numbers read from STRAIN');
  assert.ok(/blocked==='오늘 거절됨'\?'refused':''/.test(fn('priceKeys')),'a refused key carries its anchor class');
  assert.ok(/el\.className='receipt-stub'\+\(st\.mode==='half'\?' half':''\)/.test(fn('showStub'))&&/if\(activeCoach\)\{stubTimer=setTimeout\(drop,400\);return;\}/.test(fn('showStub')),'the 50% line carries its class and stays while a mark is open');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
@@ -3672,9 +3681,9 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
  // first-ORDER coach (UI_UX §TUTORIAL — COACH DIET): the Item kinds (User 2026-10-10), then 발주 확정; the gold mark stays retired
  const order=app.slice(app.indexOf(' order:[['),app.indexOf(' sell:[['));
- assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]).slice(0,2),[['kinds','.p-order li.line .kind'],['confirm','[data-action="confirm-order"]']],'the kinds mark on the first offer\'s kind label, then the confirm key');
- assert.ok(order.includes("['kinds','.p-order li.line .kind','상품 종류마다 쓰임이 다르다. 음식·음료는 피로를 덜어 준다. 포션은 투력을 올린다. 야외장비는 위험에 대응한다. 보험은 원정이 잘못됐을 때 피해를 줄인다.'],"),'the approved kinds line, DAY 1 (COPY_AUDIT §3-2)');
- assert.ok(['food','drink','potion','gear','insurance'].every(k=>DATA.categories[k]&&order.includes(DATA.categories[k])),'it names the kinds by their on-screen labels');
+ assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]).slice(0,2),[['kinds','.p-order li.line .fx'],['confirm','[data-action="confirm-order"]']],'the Item-effect mark on the first offer\'s effect line, then the confirm key');
+ /* User 2026-10-10: general, not bound to a kind - a Food or a Drink can be a Counter too */
+ assert.ok(order.includes("['kinds','.p-order li.line .fx','상품은 능력치를 올리거나, 위험에 대응하거나, 피로를 덜거나, 실패에 대비한다. 효과는 상품마다 이 줄에 적혀 있다.'],"),'the approved Item-effect line, DAY 1 (COPY_AUDIT §3-2)');
  assert.ok(order.includes("'카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.'"),'the approved 발주 확정 line (COPY_AUDIT §3-2)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 for every Stat (Stat n당 대응 1)
