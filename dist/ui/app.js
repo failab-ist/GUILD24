@@ -148,10 +148,9 @@ let orderCueAt=[];
    reusing the NIGHT stamp's own fall, a fixed 100 ms hold (중요, this screen repeats every Day). */
 const CLOSING_STAMP={hold:100,dip:4};
 let closingCueAt=null;
-/* one printer tick for the whole receipt, then the profit/loss row's own cue on its landing frame;
+/* the profit/loss row's own cue on its landing frame, and nothing before it (User 2026-10-09: the printer tick is gone);
    the direction is read off the rendered row so this never re-derives the day's figures itself */
 function closingSound(){clearTimeout(closingCueAt);const s=game.run;if(!s||s.phase!=='closing')return;
- sound('receipt');
  const row=$('.p-closing .tape .purse');if(!row)return;
  const kind=row.classList.contains('loss')?'spend':'gold';
  if(!motionOK()){sound(kind);return;}

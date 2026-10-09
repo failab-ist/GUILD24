@@ -940,7 +940,8 @@ lit by its colour and shadow alone and, on phones, indents to the receipt's text
 
 (contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX §QA UI-Q-v29-33.)
 
-The receipt body prints as one pass within 200 ms behind one printer tick (never per row — it repeats for 30 Days). Only the
+The receipt body prints as one pass within 200 ms, with no printer tick (User 2026-10-09: the money cue on the stamp is the
+only sound; never a tick per row — it repeats for 30 Days). Only the
 closing `보유 골드` figure (its box also holds `영업 손익`) stamps (중요, the NIGHT fall reused): 100 ms hold, 90 ms fall, the
 tape gives and settles. It stays cream; `영업 손익` beneath is green up, red down, gold at exactly 0 (each set in CSS so reduced
 motion matches). No `어제보다 +N` line (deferred, v3.0+ router).
@@ -2741,7 +2742,7 @@ or a settled end state that differs between motion and reduced motion.
 SETUP: CLOSING at 390 and 1280, motion on and reduced motion, one Day ending in profit and one in loss; `마감으로` -> receipt
 printing -> `다음 날`; the END settlement (`점포 자본 정산`) on an account whose prior Store Capital sits below at least one
 Decoration price and a Run that carries it past one or more; frames through the stamp landing and the settlement count.
-PASS (→ UI_UX §CLOSING — RECEIPT STAMP): all receipt rows are on screen together within 200 ms behind one printer tick, nothing row by
+PASS (→ UI_UX §CLOSING — RECEIPT STAMP): all receipt rows are on screen together within 200 ms, no printer tick (User 2026-10-09), nothing row by
 row; only the `보유 골드` figure (the purse box) stamps - 100 ms hold, the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles; `영업 손익` green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and
 figures at once; no `어제보다 +N` line; the END `현재 점포 자본` row counts from the prior total to the resolved one in 320 ms with one `ui` click per Decoration price it passes and none
 when it crosses no price.

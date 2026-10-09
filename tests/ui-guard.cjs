@@ -2157,7 +2157,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/translateY:\[\{from:0,to:0,duration:land\},\{to:CLOSING_STAMP\.dip,duration:40,ease:'in\(2\)'\}/.test(closing),'the tape gives 4 px on the landing frame and settles');
  assert.ok(/\.p-closing \.purse\.gain \.pl b\{color:#6fcf93\}/.test(css)&&/\.p-closing \.purse\.loss \.pl b\{color:#e0645a\}/.test(css),'v2.9.7: 보유 골드 stamps in one colour; 영업 손익 alone is green / red - the end state a reduced-motion capture also shows');
  const cs=bare(fn('closingSound'));
- assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&/sound\('receipt'\)/.test(cs),'one printer tick, and a stale timer is cleared first');
+ assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&!/sound\('receipt'\)/.test(cs),'no printer tick - the money cue alone (User 2026-10-09) - and a stale timer is cleared first');
  assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
  assert.ok(/closingCueAt=setTimeout\(\(\)=>sound\(kind\),CLOSING_STAMP\.hold\+STAMP_FALL\)/.test(cs),'the stamp cue lands on the same frame as the visual stamp');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
