@@ -214,7 +214,8 @@ turned into 부상 / 중상 (its `prepared` event); 강골 / 구급키트 never 
 are unchanged by this order. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
 
 A sale the engine proves saved the adventurer (the Hero Item proof, `heroProof.outcome.worse` 사망 / 중상) may show the
-proven worse verdict first and be pushed off by that Item, at most once a night (User 2026-10-09). The wording and the
+proven worse verdict first and be pushed off by that Item: a Death kept away, or a Severe Injury turned into 성공 /
+대성공 (User 2026-10-09). The wording and the
 resolved Outcome are unchanged. Timing -> UI_UX_v2.8.0.md §NIGHT — SAVED BY THE SALE.
 
 ### RETURN STONE

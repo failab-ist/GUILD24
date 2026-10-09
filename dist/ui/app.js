@@ -115,14 +115,15 @@ const stampLand=st=>st.entry+st.hold+STAMP_FALL;
    hold as 생환, the Outcome cue on the overstamp and no `rescue` accent (that stays with the flags). 강골 and 구급키트 only
    lower an injury, so they never reverse. */
 const preparedBrink=r=>!!r&&!r.rescued&&!r.avoidedDeath&&(r.events||[]).some(e=>e.id==='prepared');
-/* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09, "죽었나? 했는데 살았네"): the Night's one customer whose proof says the
-   sold Item (or 만반의 준비) kept a Death / Severe Injury away. The worse verdict the same draws gave without it lays down,
-   the Item comes up and shoves it off, the real tag lands. Insurance (rescued / avoidedDeath) keeps its own reversal; with
-   two such customers the one kept from a Death is shown, else the first. */
-const savedWorse=r=>!r||r.rescued||r.avoidedDeath?null:preparedBrink(r)?'사망'
- :['사망','중상'].includes(r.heroProof?.outcome?.worse)?r.heroProof.outcome.worse:null;
-const savedPick=rs=>{let at=-1;rs.forEach((r,i)=>{const w=savedWorse(r);if(w&&(at<0||w==='사망'&&savedWorse(rs[at])!=='사망'))at=i;});return at;};
-const savedBeat=r=>{const rs=game.run?.results||[];return !!savedWorse(r)&&rs.indexOf(r)===savedPick(rs);};
+/* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09, "죽었나? 했는데 살았네"): every customer whose proof says the sold Item
+   (or 만반의 준비) kept a Death away - whatever they came back with - or turned a Severe Injury into 성공 / 대성공. The worse
+   verdict the same draws gave without it lays down, the Item shoves it off, the real tag lands. Insurance (rescued /
+   avoidedDeath) keeps its own reversal. `savedTier`: how far the result turned (1 / 2 / 3+ steps) picks the relief cue. */
+const SAVED_RANK={'사망':5,'중상':4,'부상':3,'퇴각':2,'성공':1,'대성공':0};
+const savedWorse=r=>{if(!r||r.rescued||r.avoidedDeath)return null;const w=preparedBrink(r)?'사망':r.heroProof?.outcome?.worse;
+ return w==='사망'&&r.outcome!=='사망'||w==='중상'&&(r.outcome==='성공'||r.outcome==='대성공')?w:null;};
+const savedTier=r=>Math.min(3,SAVED_RANK[savedWorse(r)]-SAVED_RANK[r.outcome]);
+const savedBeat=r=>!!savedWorse(r);
 const savedItems=r=>r.heroProof?.outcome?.items||r.items||[];
 const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
@@ -268,9 +269,12 @@ function finishClash(){if(!clash)return;const c=clash;clash=null;c.timers.forEac
 let nightCueAt=[];
 function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!result)return;
  const st=motionOK()&&nightStampOf(result);
- if(!st){sound(nightCue(result));if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
+ if(!st){sound(nightCue(result));if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);if(savedBeat(result))Sound.play('saved'+savedTier(result),.42);return;}
  nightCueAt=[setTimeout(()=>sound(nightCue(result)),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
- if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));}
+ if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));
+ /* UI_UX §NIGHT — SAVED BY THE SALE: a thud under the worse print, a whoosh on the shove, the relief behind the real cue */
+ if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play('brink'),st.entry),setTimeout(()=>Sound.play('shove'),SAVED.shove),
+  setTimeout(()=>Sound.play('saved'+savedTier(result)),stampLand(st)+120));}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by

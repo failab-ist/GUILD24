@@ -2255,17 +2255,23 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(/if\(st\.print&&!st\.brink\)nightCueAt\.push\(/.test(ns),'and carries no rescue accent');
  assert.ok(!/injury-guard|aftercare/.test(fn('nightSound')+app.slice(app.indexOf('const preparedBrink='),app.indexOf('const nightStampOf='))),'강골 / 구급키트 never reverse');
  assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
- // UI_UX §NIGHT — SAVED BY THE SALE: a proven save, never Insurance, at most one a night (a Death first)
- {const src=app.slice(app.indexOf('const preparedBrink='),app.indexOf('const savedBeat='));
-  const {savedWorse,savedPick}=new Function(src.replace(/^const preparedBrink=[^\n]*\n/,'const preparedBrink='+app.match(/const preparedBrink=([^\n]*)/)[1]+'\n')+'return {savedWorse,savedPick};')();
-  const hp=w=>({heroProof:{outcome:{worse:w,items:['x']}}});
-  assert.equal(savedWorse(hp('사망')),'사망');assert.equal(savedWorse(hp('중상')),'중상');
-  assert.equal(savedWorse(hp('부상')),null,'a lighter what-if is not a save');
-  assert.equal(savedWorse({...hp('사망'),rescued:true}),null,'Insurance keeps its own 생환 reversal');
-  assert.equal(savedWorse({...hp('사망'),avoidedDeath:true}),null);
-  assert.equal(savedWorse({events:[{id:'prepared'}]}),'사망','만반의 준비 turns a Death away');
-  assert.equal(savedPick([{},hp('중상'),hp('사망'),hp('사망')]),2,'one a night: the first kept from a Death');
-  assert.equal(savedPick([{},hp('중상'),hp('중상')]),1);assert.equal(savedPick([{}]),-1);}
+ // UI_UX §NIGHT — SAVED BY THE SALE: a proven save, never Insurance - a Death kept away whatever came back, a Severe Injury
+ // only when it turned into 성공 / 대성공; every such customer, no nightly cap; the relief cue grows with the turn
+ {const src=app.slice(app.indexOf('const SAVED_RANK='),app.indexOf('const savedBeat='));
+  const {savedWorse,savedTier}=new Function('const preparedBrink='+app.match(/const preparedBrink=([^\n]*)/)[1]+'\n'+src+'return {savedWorse,savedTier};')();
+  const hp=(w,o)=>({outcome:o,heroProof:{outcome:{worse:w,items:['x']}}});
+  for(const o of ['중상','부상','퇴각','성공','대성공'])assert.equal(savedWorse(hp('사망',o)),'사망','사망 → '+o);
+  assert.equal(savedWorse(hp('사망','사망')),null);
+  for(const o of ['성공','대성공'])assert.equal(savedWorse(hp('중상',o)),'중상','중상 → '+o);
+  for(const o of ['부상','퇴각'])assert.equal(savedWorse(hp('중상',o)),null,'중상 → '+o+' is not shown');
+  assert.equal(savedWorse(hp('부상','성공')),null,'a lighter what-if is not a save');
+  assert.equal(savedWorse({...hp('사망','퇴각'),rescued:true}),null,'Insurance keeps its own 생환 reversal');
+  assert.equal(savedWorse({...hp('사망','퇴각'),avoidedDeath:true}),null);
+  assert.equal(savedWorse({outcome:'부상',events:[{id:'prepared'}]}),'사망','만반의 준비 turns a Death away');
+  assert.deepEqual([['사망','중상'],['사망','부상'],['사망','퇴각'],['사망','대성공'],['중상','성공'],['중상','대성공']].map(([w,o])=>savedTier(hp(w,o))),[1,2,3,3,3,3]);}
+ assert.ok(/const savedBeat=r=>!!savedWorse\(r\);/.test(app),'no nightly cap');
+ const nsk=fn('nightSound');
+ assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\('brink'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),SAVED\.shove\),\s*setTimeout\(\(\)=>Sound\.play\('saved'\+savedTier\(result\)\),stampLand\(st\)\+120\)\);/.test(nsk),'thud, whoosh, then the relief behind the real cue, all dropped by 다음');
  assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
  assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');

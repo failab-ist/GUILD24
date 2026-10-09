@@ -901,10 +901,12 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 
 ### NIGHT — SAVED BY THE SALE (User 2026-10-09)
 
-The one moment a night shows "내 준비가 살렸다": a result the engine proves the sold Item saved (`heroProof.outcome.worse`
-is `사망` or `중상` — the same draws without that Item end worse), or a 만반의 준비 Death turned away. Insurance reversals
-(`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep the 생환 overstamp above and never take this beat. At most one per night:
-the first `사망` save, else the first `중상` save.
+The moment a night shows "내 준비가 살렸다": a result the engine proves the sold Item saved (`heroProof.outcome.worse`,
+the same draws without that Item) or a 만반의 준비 Death turned away, shown when
+- the worse result is `사망` and the adventurer came back alive (any Outcome), or
+- the worse result is `중상` and the Outcome is `성공` / `대성공`.
+Insurance reversals (`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep the 생환 overstamp above and never take this beat.
+Every such customer gets it on their own card; there is no nightly cap (User 2026-10-09).
 
     entry 240   the worse verdict prints in its own tag (`사망` lays the black tape, 350 ms); the portrait greys
     1000        the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone by 1260)
@@ -913,6 +915,9 @@ the first `사망` save, else the first `중상` save.
 
 - the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
 - reduced motion: the end state at once, the Item icon already beside its line
+- sound: `brink` (a dull thud) with the worse print, `shove` (a whoosh) on the shove, the Outcome cue on the landing and
+  a relief 120 ms behind it, sized by how far the result turned on 사망 > 중상 > 부상 > 퇴각 > 성공 > 대성공: `saved1` one
+  step, `saved2` two, `saved3` three or more. Reduced motion: the Outcome cue at once, the relief 0.42 s after
 - 다음 / 전체 건너뛰기 behave as for any stamp
 
 ## CLOSING
