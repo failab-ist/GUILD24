@@ -638,7 +638,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  assert.equal(glut.sin,'탐식','the Sin is 탐식');
  assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
  assert.deepEqual(c.d15.trait.GLUTTONY,
-['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.','환경 대응·피로 회복·보험 효과는 그대로다.']],
+['탐식의 허기',['최종 원정에서 상품이 올려 주는 능력치가 {gluttony}% 감소한다.']],
   'the D15 Function is the exact Canonical copy; the figure is filled from the tuning table');
  // no retired wording survives anywhere a player can read
  const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
@@ -2035,7 +2035,7 @@ test('UI-Q-v29-38: SALE strain - in the 전투 전망 box, injured with a chain 
  for(const cls of ['st-tag','ro-strain']){const i=r.indexOf('class="'+cls+'"');assert.ok(i>combat&&i<env&&i<top,cls+' sits inside the 전투 전망 box');}
  assert.ok(!r.includes('class="strain"'),'no loose line under the pair any more');
  assert.ok(/\.readout\.ro2 \.ro-strain\{position:absolute/.test(css)&&/\.readout\.ro2 \.st-tag\{display:none\}/.test(css),'phone chip (line for a screen reader), desk line');
- assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
+ assert.ok(app.includes("if(streak>0)cond.push('연속 부상 출발 '+streak+'회');"),'the NPC detail row reads the same function and wording');
  assert.equal((r.match(/<span class="fore ro-(?:combat|env)/g)||[]).length,2,'the .top still holds the two boxes (전투 전망 and the 환경 대응 meter)');
  assert.ok(!/strainText='[^;]*%/.test(r)&&(r.match(/E\(strainText\)/g)||[]).length===2,'no % in the words: the chip and the line print strainText only');
  assert.ok(/\.readout\.ro2 \.ro-strain\{position:static;[^}]*font:500 12px/.test(css),'small on a desk');
@@ -3101,8 +3101,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)'"),
   'the First Aid primary function is the approved sentence (COPY_AUDIT §4-22, User 2026-09-25)');
  // v2.9.0 F3 (User 2026-09-25): the NPC detail rows and the route-change line
- assert.ok(fn('npcDetail').includes("cond.push('피로 회복: 음식·음료')"),'§4-14 no rest recovery: Food/Drink only');
- assert.ok(fn('npcDetail').includes("'연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회'"),'the strained-departure information row reads the records through the STRAIN helper (v2.9.1 balance)');
+ assert.ok(!fn('npcDetail').includes('피로 회복:'),'User 2026-10-09: the NPC detail does not restate the Food/Drink recovery rule');
+ assert.ok(fn('npcDetail').includes("Dungeon.injuredStreak(n.records)")&&fn('npcDetail').includes("'연속 부상 출발 '+streak+'회'"),'the strained-departure information row reads the records through the STRAIN helper (v2.9.1 balance)');
  assert.ok(read('dist/systems/shop.js').includes('rep.routeChange=G.Copy.routeChangeLine('),'the route-change line is composed once, in data/copy.js so the engine needs no UI layer (the simulation worker loads no presentation.js)');
  assert.ok(!/허세/.test(read('dist/systems/shop.js')),'the retired Trait name never appears in the engine');
  assert.equal(Presentation.routeChangeLine({name:'하람',pilgrim:false},'슬라임 초원','거미 동굴'),'거짓말쟁이 하람은 말했던 슬라임 초원 대신 거미 동굴로 향했다.','§14-10 exact, particles by the final consonant');

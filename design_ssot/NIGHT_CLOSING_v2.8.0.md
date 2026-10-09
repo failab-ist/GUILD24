@@ -302,15 +302,15 @@ Main NIGHT surface shows one settled value:
 
     귀환 후 피로 11
 
-From Fatigue 20 up the main line also names the band (`정상` / `지침` are not named):
+From Fatigue 10 up the main line also names the band (`정상` is not named):
 
     귀환 후 피로 22 · 과로
 
-Under the settled value, one next-decision line `{band} — 다음 원정 {effect}` whenever a
+Under the settled value, one next-decision line `다음 원정 {effect}` (the band name is on the main line, not repeated) whenever a
 Fatigue band penalty applies (10 and up; nothing at 정상):
 
-    지침 — 다음 원정 기동·정신 -15%
-    과로 — 다음 원정 기동·정신 -40%
+    다음 원정 기동·정신 -15%
+    다음 원정 기동·정신 -40%
 
 Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
 
