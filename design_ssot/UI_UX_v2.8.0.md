@@ -599,7 +599,7 @@ No future-customer Job/Level/Destination/need hints; the queue count suffices. T
 - Anchor: the **existing SALE bottom-Dock `손님` queue/progress surface**, on desktop and mobile. The phone still shows its current `손님` + pips treatment; `{n}/{N}` stays a screen-reader label as before. No visible numeral, `ⓘ`, arrow, underline, separate button or permanent explanation is added. No larger Dock, no reserved height, no shift of `손님 보내기` / `영업 종료`.
 - The balloon is a slate panel, not the shelf's brown, so it never reads as one more Item card (User 2026-10-09).
 - Desktop: hover over the existing queue area opens an anchored lightweight popover; focus can open it for keyboard access. Phone: tapping **the same visible queue area** opens/toggles it, without adding a visual cue. Use the existing shared popover treatment (§SHARED ANCHORED POPOVER); outside tap / Escape closes it. Opening this information never activates the adjacent phase action.
-- Content: a `남은 손님` label, then each open Gate in ORDER's chip form (`{Hazard}{Tier} {n}명`, closed Gates as `오늘 폐쇄`) where n counts today's customers from the one at the counter to the last, by the Gate each claims (ORDER's count source, User 2026-10-09: no memorising). No total - the pips say it. Each sale / departure moves the counts; nothing reveals a customer's identity, actual destination, Job, traits or needs.
+- Content: an `이번 손님부터` label, then each open Gate in ORDER's chip form (`{Hazard}{Tier} {n}명`, closed Gates as `오늘 폐쇄`) where n counts today's customers from the one at the counter to the last, by the Gate each claims (ORDER's count source, User 2026-10-09: no memorising). No total - the pips say it. Each sale / departure moves the counts; nothing reveals a customer's identity, actual destination, Job, traits or needs.
 - Purpose: allow recalling already-known Order-stage demand while assigning today's stock; no recommended Item, correct SKU, best price, outcome prediction or strategic prompt.
 - First-use education: one account-scoped contextual **coach spotlight on the existing `손님` queue surface**, using COPY_AUDIT §3-16. The permanent UI has no `tap for details` text. Preserve existing SALE first-day coach priorities; do not introduce an extra compulsory DAY 1 mark or decide a new DAY gate without the User's approval. Once completed/dismissed, persist with ordinary tutorial marks; Full Data Reset clears it.
 - Acceptance -> UI_UX §QA UI-Q-SALE-QUEUE-GATE-COUNT. No extra gameplay RNG, Save outcome or new Gate inference.
@@ -898,6 +898,22 @@ arrival; reduced motion shows the end state at once. The stamp falls 1.6 × → 
 - one landing = at most one visual (stamp), one sound (cue's first note or `rescue`), one cause / number response
 - 다음 and 전체 건너뛰기 stay live: 다음 mid-stamp shows the next result's own stamp, 전체 건너뛰기 leaves at once, and a cue still
   waiting for its frame is dropped
+
+### NIGHT — SAVED BY THE SALE (User 2026-10-09)
+
+The one moment a night shows "내 준비가 살렸다": a result the engine proves the sold Item saved (`heroProof.outcome.worse`
+is `사망` or `중상` — the same draws without that Item end worse), or a 만반의 준비 Death turned away. Insurance reversals
+(`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep the 생환 overstamp above and never take this beat. At most one per night:
+the first `사망` save, else the first `중상` save.
+
+    entry 240   the worse verdict prints in its own tag (`사망` lays the black tape, 350 ms); the portrait greys
+    1000        the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone by 1260)
+    ~1150       the real Outcome stamps in its usual design (hold 860, fall 1.6 × → 1, dip 4 px); portrait colour returns
+    1300-1500   the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)
+
+- the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
+- reduced motion: the end state at once, the Item icon already beside its line
+- 다음 / 전체 건너뛰기 behave as for any stamp
 
 ## CLOSING
 

@@ -1588,6 +1588,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .beat .verdict.ghost{position:absolute;margin:0;pointer-events:none;opacity:0}
 .p-night .beat .verdict.ghost.t-gone{padding-left:0;padding-right:0;background:none;clip-path:none;box-shadow:none;--rt-ink:#cfd3dd}
 .p-night .beat .verdict.ghost.t-gone:before{display:none}
+/* UI_UX §NIGHT — SAVED BY THE SALE: the worse verdict lays its own death tape, the sold Item flies over it, then sits by its line */
+.p-night .beat .verdict.saved-ghost{isolation:isolate}
+.p-night .beat .verdict.saved-ghost.t-gone:after{content:'';position:absolute;z-index:-1;left:-10px;right:-16px;top:14%;bottom:2%;
+ background:linear-gradient(180deg,#9aa0ab 0 2px,#3b3f47 2px 4px,#08090b 4px calc(100% - 3px),#2c2f36 calc(100% - 3px) calc(100% - 1px),#000 calc(100% - 1px));
+ transform-origin:left center;transform:rotate(-1.5deg) scaleX(var(--tape,0));pointer-events:none}
+.saved-fly{position:fixed;left:0;top:0;z-index:40;width:48px;height:48px;pointer-events:none;opacity:0}
+.saved-fly svg{display:block;width:48px;height:48px}
+.beat .cause li.hero .hero-items{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
+.beat .cause li.hero .hero-items svg{display:block;width:28px;height:28px}
 /* the lamp on the figure is the other half of the tag's state: the one warm light in the shop
    falls fully on a Great Success, cools on a withdrawal, and thins out as the damage grows. A
    death keeps its existing cold treatment below. Tone only - one size for every Outcome. */

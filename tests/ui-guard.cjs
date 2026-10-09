@@ -2255,6 +2255,19 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(/if\(st\.print&&!st\.brink\)nightCueAt\.push\(/.test(ns),'and carries no rescue accent');
  assert.ok(!/injury-guard|aftercare/.test(fn('nightSound')+app.slice(app.indexOf('const preparedBrink='),app.indexOf('const nightStampOf='))),'강골 / 구급키트 never reverse');
  assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
+ // UI_UX §NIGHT — SAVED BY THE SALE: a proven save, never Insurance, at most one a night (a Death first)
+ {const src=app.slice(app.indexOf('const preparedBrink='),app.indexOf('const savedBeat='));
+  const {savedWorse,savedPick}=new Function(src.replace(/^const preparedBrink=[^\n]*\n/,'const preparedBrink='+app.match(/const preparedBrink=([^\n]*)/)[1]+'\n')+'return {savedWorse,savedPick};')();
+  const hp=w=>({heroProof:{outcome:{worse:w,items:['x']}}});
+  assert.equal(savedWorse(hp('사망')),'사망');assert.equal(savedWorse(hp('중상')),'중상');
+  assert.equal(savedWorse(hp('부상')),null,'a lighter what-if is not a save');
+  assert.equal(savedWorse({...hp('사망'),rescued:true}),null,'Insurance keeps its own 생환 reversal');
+  assert.equal(savedWorse({...hp('사망'),avoidedDeath:true}),null);
+  assert.equal(savedWorse({events:[{id:'prepared'}]}),'사망','만반의 준비 turns a Death away');
+  assert.equal(savedPick([{},hp('중상'),hp('사망'),hp('사망')]),2,'one a night: the first kept from a Death');
+  assert.equal(savedPick([{},hp('중상'),hp('중상')]),1);assert.equal(savedPick([{}]),-1);}
+ assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
+ assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
  for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');

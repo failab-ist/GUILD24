@@ -213,6 +213,10 @@ the Insurance appear on that overstamp. Only a turned-away Death reverses: those
 turned into 부상 / 중상 (its `prepared` event); 강골 / 구급키트 never do. The wording, the proof and the resolved Outcome
 are unchanged by this order. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
 
+A sale the engine proves saved the adventurer (the Hero Item proof, `heroProof.outcome.worse` 사망 / 중상) may show the
+proven worse verdict first and be pushed off by that Item, at most once a night (User 2026-10-09). The wording and the
+resolved Outcome are unchanged. Timing -> UI_UX_v2.8.0.md §NIGHT — SAVED BY THE SALE.
+
 ### RETURN STONE
 When it actually changes the escape/retreat outcome (a 부상 / 중상 / 사망 turned into 퇴각): show it as meaningful escape
 support (event `귀환석이 실패한 원정에서 퇴각을 도왔다.`).

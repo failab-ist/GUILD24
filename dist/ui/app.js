@@ -115,7 +115,18 @@ const stampLand=st=>st.entry+st.hold+STAMP_FALL;
    hold as 생환, the Outcome cue on the overstamp and no `rescue` accent (that stays with the flags). 강골 and 구급키트 only
    lower an injury, so they never reverse. */
 const preparedBrink=r=>!!r&&!r.rescued&&!r.avoidedDeath&&(r.events||[]).some(e=>e.id==='prepared');
+/* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09, "죽었나? 했는데 살았네"): the Night's one customer whose proof says the
+   sold Item (or 만반의 준비) kept a Death / Severe Injury away. The worse verdict the same draws gave without it lays down,
+   the Item comes up and shoves it off, the real tag lands. Insurance (rescued / avoidedDeath) keeps its own reversal; with
+   two such customers the one kept from a Death is shown, else the first. */
+const savedWorse=r=>!r||r.rescued||r.avoidedDeath?null:preparedBrink(r)?'사망'
+ :['사망','중상'].includes(r.heroProof?.outcome?.worse)?r.heroProof.outcome.worse:null;
+const savedPick=rs=>{let at=-1;rs.forEach((r,i)=>{const w=savedWorse(r);if(w&&(at<0||w==='사망'&&savedWorse(rs[at])!=='사망'))at=i;});return at;};
+const savedBeat=r=>{const rs=game.run?.results||[];return !!savedWorse(r)&&rs.indexOf(r)===savedPick(rs);};
+const savedItems=r=>r.heroProof?.outcome?.items||r.items||[];
+const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
+ if(savedBeat(r))return {...st,entry:240,hold:SAVED.hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
  return preparedBrink(r)?{...st,hold:NIGHT_STAMP.saved.hold,print:true,brink:true}:st;};
 /* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
@@ -396,6 +407,31 @@ function phaseClosing(A){
     the money only when there is not (REWARD figures count up). A reversal prints what the
     Insurance turned away and overstamps it; a death gets a tape, not a stamp. Everything reads
     the tone and the result already resolved; nothing here is state. */
+function savedPlay(A,r,st,tag){
+ const g=document.createElement('p');g.setAttribute('aria-hidden','true');
+ g.className='verdict ghost saved-ghost t-'+(st.saved==='사망'?'gone':'severe');g.textContent=st.saved;
+ g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
+ const out=SAVED.gone-SAVED.shove,wait=SAVED.shove-st.entry-100;
+ A(g,{opacity:[{from:0,to:1,duration:100,delay:st.entry},{to:1,duration:wait},{to:0,duration:out,ease:'in(2)'}],
+  translateX:[{from:0,to:0,duration:SAVED.shove},{to:-70,duration:out,ease:'in(2)'}],
+  translateY:[{from:0,to:0,duration:SAVED.shove},{to:46,duration:out,ease:'in(2)'}],
+  rotate:[{from:0,to:0,duration:SAVED.shove-60},{to:-3,duration:60},{to:-18,duration:out}],
+  onComplete:()=>g.remove()});
+ if(st.saved==='사망')A(g,{'--tape':{from:0,to:1,duration:350,delay:st.entry+60,ease:'inOut(2)'}});
+ /* the figure greys while the worse verdict is on the card, and its colour comes back with the landing */
+ const fig=$('.beat .returner');
+ if(fig)A(fig,{filter:[{from:'grayscale(0) brightness(1)',to:'grayscale(0) brightness(1)',duration:st.entry+60},{to:'grayscale(1) brightness(0.5)',duration:350},
+  {to:'grayscale(1) brightness(0.5)',duration:stampLand(st)-st.entry-410},{to:'grayscale(0) brightness(1)',duration:260}],onComplete:()=>{fig.style.filter='';}});
+ const ids=savedItems(r);if(!ids.length)return;
+ const slot=$('.beat .cause li.hero .hero-items'),t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
+ const fly=document.createElement('div');fly.className='saved-fly';fly.setAttribute('aria-hidden','true');fly.innerHTML=Art.itemIcon(ids[0],48);document.body.appendChild(fly);
+ const h=slot?.getBoundingClientRect(),hx=h?h.left:gx-30,hy=h?h.top+h.height/2-24:gy;
+ A(fly,{opacity:[{from:0,to:0,duration:SAVED.shove-150},{to:1,duration:60},{to:1,duration:SAVED.settle-SAVED.shove+90},{to:0,duration:120}],
+  translateX:[{from:gx+40,to:gx+40,duration:SAVED.shove-150},{to:gx+20,duration:150,ease:'outQuad'},{to:gx-30,duration:80},{to:gx-30,duration:SAVED.home-SAVED.shove-80},{to:hx-12,duration:SAVED.settle-SAVED.home,ease:'inOut(2)'}],
+  translateY:[{from:innerHeight-60,to:innerHeight-60,duration:SAVED.shove-150},{to:gy,duration:150,ease:'outQuad'},{to:gy+6,duration:80},{to:gy+6,duration:SAVED.home-SAVED.shove-80},{to:hy,duration:SAVED.settle-SAVED.home,ease:'inOut(2)'}],
+  scale:[{from:.6,to:.6,duration:SAVED.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:SAVED.home-SAVED.shove-80},{to:.6,duration:SAVED.settle-SAVED.home}],
+  onComplete:()=>fly.remove()});
+ if(slot)A(slot,{opacity:{from:0,to:1,duration:120,delay:SAVED.settle}});}
 function phaseNight(A){
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
@@ -414,7 +450,8 @@ function phaseNight(A){
    if(tone==='hurt')A(tag,{'--ink':{from:.35,to:1,duration:220,delay:land,ease:'outQuad'}});
    /* the reversal: the Outcome the Insurance turned away starts to print in its own tag, then the
       resolved label lands over it and the faint print goes */
-   if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
+   if(st.saved)savedPlay(A,r,st,tag);
+   else if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
     const fromDeath=r.avoidedDeath||st.brink;
     g.className='verdict ghost t-'+(fromDeath?'gone':'severe');g.textContent=fromDeath?'사망':'중상';
     g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
@@ -1262,7 +1299,9 @@ function causeLines(r){
   &&l.items.every(name=>proven.some(id=>D.itemBy[id]?.name===name))));
  const lines=(hero?[hero]:[]).concat(supply.slice(0,1).map(l=>l.text));
  /* the proven claim is marked so the verdict stamp can hand it the landing's after-motion (H1) */
- return lines.length?'<ul class="cause">'+lines.map((t,i)=>'<li'+(hero&&!i?' class="hero"':'')+'>'+E(t)+'</li>').join('')+'</ul>':'';}
+ return lines.length?'<ul class="cause">'+lines.map((t,i)=>'<li'+(hero&&!i?' class="hero"':'')+'>'+E(t)
+  /* UI_UX §NIGHT — SAVED BY THE SALE: the Item that did it stays beside its line */
+  +(hero&&!i&&savedBeat(r)?'<span class="hero-items" aria-hidden="true">'+savedItems(r).map(id=>Art.itemIcon(id,28)).join('')+'</span>':'')+'</li>').join('')+'</ul>':'';}
 // WHAT CHANGED — Presentation decides what actually moved; this only stamps it.
 function changedRows(r){
  /* NIGHT_CLOSING 2026-09-12: a normal 대성공 also pays the Store, and a 심층원정 pays it
@@ -1679,7 +1718,7 @@ function todayLine(counts,tag='em'){const s=game.run;
    one at the counter - by the Gate each claims, through ORDER's gateCounts() and its chips; the pips already say the total. */
 function queueRef(s){return '<details class="tip q-tip" name="sale-tip"><summary aria-label="손님 '+(s.cursor+1)+' / '+s.queue.length+'">'
  +'<span class="q-line" aria-hidden="true">손님'+pips(s.queue.length,s.cursor)+'</span></summary>'
- +'<p class="q-pop" role="tooltip"><span class="k">남은 손님</span><span class="tl-chips">'+todayChips(gateCounts(s.cursor))+'</span></p></details>';}
+ +'<p class="q-pop" role="tooltip"><span class="k">이번 손님부터</span><span class="tl-chips">'+todayChips(gateCounts(s.cursor))+'</span></p></details>';}
 /* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
    ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
    joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
