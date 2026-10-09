@@ -20,7 +20,7 @@ const PORT=Number(process.env.QA_PORT||5197),EXECUTABLE=process.env.QA_CHROMIUM|
 const FIT=process.argv.includes('--fit'),SIMILAR=process.argv.includes('--similar');
 const TIERS={
  result:{target:-19,margin:8,cues:['great','retreat','injury','severe','death','sealwin','sealfail','endwin','endfail','bossmajor','final','boss','collapse','saved1','saved2','saved3']},
- decision:{target:-21,margin:8,cues:['order','sale','overcharge','half','refusal','purchase','support','unlock','open','close','begin','newstore','bosscompact','rescue','gag','brink']},
+ decision:{target:-21,margin:8,cues:['order','sale','overcharge','half','refusal','purchase','support','unlock','open','close','begin','newstore','bosscompact','rescue','gag']},
  action:{target:-25,margin:5,cues:['depart','return','gold','spend','crate','receipt','heal','fixture','rumble','clash','counter','supply','shove']},
  utility:{target:-29,margin:3,cues:['button','ui','page']},
  repeat:{target:-31,margin:3,cues:['quantity','quantset']}};
@@ -33,7 +33,7 @@ const DISTINCT=[['fixture','clash'],['boss','bossmajor'],['crate','receipt'],
  /* and the new sounds against their neighbours, so a split never lands on another cue */
  ['ui','quantity'],['receipt','quantity'],['fixture','support'],['fixture','final'],['boss','counter'],
  /* UI_UX §NIGHT — SAVED BY THE SALE: its relief is not Insurance's accent nor 대성공's, its thud not 사망's */
- ['saved3','great'],['saved1','rescue'],['saved2','rescue'],['brink','death'],['shove','retreat']],ALIKE_MAX=.6;
+ ['saved3','great'],['saved1','rescue'],['saved2','rescue'],['shove','retreat']],ALIKE_MAX=.6;
 /* the worst moments for cues landing together (User 2026-09-29: tearing), each over its phase's music: [cue, seconds] */
 const rapid=(c,from,n,gap)=>Array.from({length:n},(_,i)=>[c,from+i*gap]);
 const SCENES={
@@ -45,7 +45,7 @@ const SCENES={
 const FAMILY=[['sale','overcharge'],['sale','half'],['quantity','quantset'],['bossmajor','bosscompact']];
 // the music each cue is heard over (where the app plays it); utility clicks are heard everywhere: the loudest bed
 const MUSIC={order:['order','quantity','quantset','crate'],sale:['sale','overcharge','half','refusal','depart','heal','gold','spend'],
- night:['great','retreat','injury','severe','death','rescue','return','brink','shove','saved1','saved2','saved3'],close:['close','receipt'],morning:['open'],
+ night:['great','retreat','injury','severe','death','rescue','return','shove','saved1','saved2','saved3'],close:['close','receipt'],morning:['open'],
  title:['support','purchase','unlock','fixture','begin','newstore'],boss:['boss','bossmajor','bosscompact','final','rumble','clash','counter','collapse','supply'],
  succ:['sealwin','endwin'],fail:['sealfail','endfail']};
 const results=[];const check=(n,ok,d='')=>{results.push(ok);console.log((ok?'PASS ':'FAIL ')+n+(d?' - '+d:''));};

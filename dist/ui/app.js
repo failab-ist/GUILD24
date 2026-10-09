@@ -126,8 +126,12 @@ const savedTier=r=>Math.min(3,SAVED_RANK[savedWorse(r)]-SAVED_RANK[r.outcome]);
 const savedBeat=r=>!!savedWorse(r);
 const savedItems=r=>r.heroProof?.outcome?.items||r.items||[];
 const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
+/* User 2026-10-09 ("하.. 하다가 어 살았네"): the worse verdict sounds its own cue and the card holds still until that cue has
+   faded (사망's runs ~1.4 s, 중상's ~0.45 s), then a short silence, then the shove - so the two sounds never overlap */
+const SAVED_WAIT={'사망':500,'중상':100};
+const savedAt=w=>{const d=SAVED_WAIT[w]||0;return Object.fromEntries(Object.entries(SAVED).map(([k,v])=>[k,v+d]));};
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
- if(savedBeat(r))return {...st,entry:240,hold:SAVED.hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
+ if(savedBeat(r))return {...st,entry:240,hold:savedAt(savedWorse(r)).hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
  return preparedBrink(r)?{...st,hold:NIGHT_STAMP.saved.hold,print:true,brink:true}:st;};
 /* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
@@ -274,8 +278,8 @@ function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!r
  if(!st){sound(cue);if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
  nightCueAt=[setTimeout(()=>sound(cue),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
  if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));
- /* a thud under the worse print, a whoosh on the shove */
- if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play('brink'),st.entry),setTimeout(()=>Sound.play('shove'),SAVED.shove));}
+ /* the worse verdict's own cue on its print, a whoosh on the shove */
+ if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play(st.saved==='사망'?'death':'severe'),st.entry),setTimeout(()=>Sound.play('shove'),savedAt(st.saved).shove));}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -412,15 +416,15 @@ function phaseClosing(A){
     the money only when there is not (REWARD figures count up). A reversal prints what the
     Insurance turned away and overstamps it; a death gets a tape, not a stamp. Everything reads
     the tone and the result already resolved; nothing here is state. */
-function savedPlay(A,r,st,tag){
+function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
  const g=document.createElement('p');g.setAttribute('aria-hidden','true');
  g.className='verdict ghost saved-ghost t-'+(st.saved==='사망'?'gone':'severe');g.textContent=st.saved;
  g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
- const out=SAVED.gone-SAVED.shove,wait=SAVED.shove-st.entry-100;
+ const out=T.gone-T.shove,wait=T.shove-st.entry-100;
  A(g,{opacity:[{from:0,to:1,duration:100,delay:st.entry},{to:1,duration:wait},{to:0,duration:out,ease:'in(2)'}],
-  translateX:[{from:0,to:0,duration:SAVED.shove},{to:-70,duration:out,ease:'in(2)'}],
-  translateY:[{from:0,to:0,duration:SAVED.shove},{to:46,duration:out,ease:'in(2)'}],
-  rotate:[{from:0,to:0,duration:SAVED.shove-60},{to:-3,duration:60},{to:-18,duration:out}],
+  translateX:[{from:0,to:0,duration:T.shove},{to:-70,duration:out,ease:'in(2)'}],
+  translateY:[{from:0,to:0,duration:T.shove},{to:46,duration:out,ease:'in(2)'}],
+  rotate:[{from:0,to:0,duration:T.shove-60},{to:-3,duration:60},{to:-18,duration:out}],
   onComplete:()=>g.remove()});
  if(st.saved==='사망')A(g,{'--tape':{from:0,to:1,duration:350,delay:st.entry+60,ease:'inOut(2)'}});
  /* the figure greys while the worse verdict is on the card, and its colour comes back with the landing */
@@ -431,12 +435,12 @@ function savedPlay(A,r,st,tag){
  const slot=$('.beat .cause li.hero .hero-items'),t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
  const fly=document.createElement('div');fly.className='saved-fly';fly.setAttribute('aria-hidden','true');fly.innerHTML=Art.itemIcon(ids[0],48);document.body.appendChild(fly);
  const h=slot?.getBoundingClientRect(),hx=h?h.left:gx-30,hy=h?h.top+h.height/2-24:gy;
- A(fly,{opacity:[{from:0,to:0,duration:SAVED.shove-150},{to:1,duration:60},{to:1,duration:SAVED.settle-SAVED.shove+90},{to:0,duration:120}],
-  translateX:[{from:gx+40,to:gx+40,duration:SAVED.shove-150},{to:gx+20,duration:150,ease:'outQuad'},{to:gx-30,duration:80},{to:gx-30,duration:SAVED.home-SAVED.shove-80},{to:hx-12,duration:SAVED.settle-SAVED.home,ease:'inOut(2)'}],
-  translateY:[{from:innerHeight-60,to:innerHeight-60,duration:SAVED.shove-150},{to:gy,duration:150,ease:'outQuad'},{to:gy+6,duration:80},{to:gy+6,duration:SAVED.home-SAVED.shove-80},{to:hy,duration:SAVED.settle-SAVED.home,ease:'inOut(2)'}],
-  scale:[{from:.6,to:.6,duration:SAVED.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:SAVED.home-SAVED.shove-80},{to:.6,duration:SAVED.settle-SAVED.home}],
+ A(fly,{opacity:[{from:0,to:0,duration:T.shove-150},{to:1,duration:60},{to:1,duration:T.settle-T.shove+90},{to:0,duration:120}],
+  translateX:[{from:gx+40,to:gx+40,duration:T.shove-150},{to:gx+20,duration:150,ease:'outQuad'},{to:gx-30,duration:80},{to:gx-30,duration:T.home-T.shove-80},{to:hx-12,duration:T.settle-T.home,ease:'inOut(2)'}],
+  translateY:[{from:innerHeight-60,to:innerHeight-60,duration:T.shove-150},{to:gy,duration:150,ease:'outQuad'},{to:gy+6,duration:80},{to:gy+6,duration:T.home-T.shove-80},{to:hy,duration:T.settle-T.home,ease:'inOut(2)'}],
+  scale:[{from:.6,to:.6,duration:T.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:T.home-T.shove-80},{to:.6,duration:T.settle-T.home}],
   onComplete:()=>fly.remove()});
- if(slot)A(slot,{opacity:{from:0,to:1,duration:120,delay:SAVED.settle}});}
+ if(slot)A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
 function phaseNight(A){
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
