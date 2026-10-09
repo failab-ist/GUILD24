@@ -60,7 +60,6 @@ AUDIO=[('press','stamp'),        # ORDER confirmation: a low knock under the pap
        ('add-to-cart','cart'),   # ordinary Decoration purchase
        ('unlock','unlock'),      # 본사 해금
        ('open','shutter'),       # MORNING opening
-       ('close','settle'),       # CLOSING: the drawer/ledger settling the day
        ('blocked','gate'),       # FINAL commit: the heaviest mechanical close in the set
        ('select','key'),         # ordinary pick
        ('send','door'),          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
@@ -68,7 +67,8 @@ AUDIO=[('press','stamp'),        # ORDER confirmation: a low knock under the pap
        ('drop','crate'),         # ORDER: the second and third crate landing
        ('checkpoint','newstore'),  # ending -> next store
        ('success','return'),     # NIGHT 성공
-       ('error','severe','cinematic')]  # NIGHT 중상: the longest sample before 사망
+       ('error','severe','cinematic'),  # NIGHT 중상: the longest sample before 사망
+       ('start','settle','organic')]  # CLOSING 다음 날: a new day starting, not a closure (User 2026-10-09)
 
 # v3.0 BGM (User 2026-09-29): the Gemini (Lyria) tracks the User generated for this project, kept untouched under
 # assets-src/bgm/. dist is the web build, so it gets 128 kb/s re-encodes under the ROLE name (User 2026-09-29: 33 MB -> 22 MB

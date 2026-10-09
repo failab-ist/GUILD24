@@ -269,10 +269,10 @@ const shape={
  purchase:{gain:.8,dur:.18,type:'triangle',step:.09,sampleGain:.85,accent:true,duck:.35},
  unlock:{gain:.85,dur:.2,type:'sine',step:.09,sampleGain:.9,accent:true,
   layer:{ratio:2,at:.16,dur:.7,gain:.24},duck:.4},
- /* MORNING: a latch and a shutter. CLOSING: the drawer and the page settling, which is a
-    closure and not a reward - the accent falls, and nothing rings on after it. */
+ /* MORNING: a latch and a shutter. CLOSING 다음 날: the recorded start of a new day alone (User 2026-10-09: the falling
+    drawer read as negative); the notes stay only as the fallback. */
  open:{cut:300,gain:.7,dur:.22,type:'sine',over:[.4],step:.08,sampleGain:.95,accent:true,duck:.35},
- close:{gain:.7,dur:.2,type:'triangle',step:.085,sampleGain:.95,accent:true,
+ close:{solo:1,gain:.7,dur:.2,type:'triangle',step:.085,sampleGain:.95,accent:true,
   noise:{at:.06,dur:.16,gain:.3,hz:3200,q:.8,filter:'highpass'},duck:.35},
  gold:{gain:.9,dur:.16,type:'triangle',step:.07},
  spend:{gain:.9,dur:.16,type:'triangle',step:.07},
