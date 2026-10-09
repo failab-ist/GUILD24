@@ -33,13 +33,13 @@ const PRO_ART='ui/assets/presentation/prologue/',PRO_CUE=['rumble','final',null,
 const PRO_HOLD=[5500,7000,5000,4500,7500];
 const proSpeaker=m=>'<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>'+(m?'<path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>')+'</svg>';
 const proSoundBtn=()=>{const m=game.account.settings.muted||(!prologue.woke&&Sound.locked());return '<button type="button" class="pro-sound" data-action="prologue-sound" aria-label="'+(m?'소리 켜기':'소리 끄기')+'">'+proSpeaker(m)+'</button>';};
-function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(prologue&&prologue.i===at)prologueStep(false);},PRO_HOLD[at]);}
+function proTimer(){clearTimeout(prologue.t);const at=prologue.i;prologue.t=setTimeout(()=>{if(!prologue||prologue.i!==at)return;if(document.hidden){proTimer();return;}prologueStep(false);},PRO_HOLD[at]);}
 const proWide=()=>matchMedia('(min-width:1024px)').matches;
 const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
 /* The browser keeps sound locked until the first tap: the speaker shows it as off, and that first tap starts the music from its beginning */
 function prologueWake(){if(!prologue||prologue.woke)return;prologue.woke=true;if(!game.account.settings.muted&&Sound.locked()){Sound.restart();sound('ui');}}
-/* scene 3: the gag lands when the caption has finished fading in, and the music cuts with it */
-function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},1600);}
+/* scene 3: the gag lands as the caption starts to fade in (its 0.6s delay), and the music cuts with it. A hidden tab holds the scene: no auto-advance, no page sound */
+function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},600);}
 function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
 function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);clearTimeout(prologue.g);
  if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);if(prologue.i===2)proGag();proTimer();return;}
@@ -2865,7 +2865,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     when one is actually credited - this fired every Final, unlock or not, and twice with one */
  /* §BOSS / FINAL AUDIO: the Final commit is the run's heaviest short action cue - a gate
     closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
- case'boss-go':sound('final');game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
+ case'boss-go':sound('final');endRevealed=false;endFrom='final';/* the clash plays before any render() can arm the hold, so arm it here */game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
  case'retire':setModal('retireConfirm');break;
  case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}
