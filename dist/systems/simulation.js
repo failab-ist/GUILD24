@@ -254,8 +254,46 @@ function playRun(g,out,ctx){
  const INJURY_SUPPORT=['firstAidDesk','fieldStretcher','rescueContract'];
  const bleeding=()=>{const alive=s.npcs.filter(x=>x.alive&&x.introduced),hurt=alive.filter(x=>x.injury>0).length;
   return hurt>=3||hurt>=alive.length*.25||s.stats.deaths>=G.Meta.deathLimit(s)*.5;};
+ /* investor, the Final (User 2026-10-09: "25일부터는 돈 남으면 리롤치면서 영웅급 대응 + 영웅급 포션이나 음식 음료 모은다"). From
+    DAY 25 the Final's Families are on screen (s.final), so a player with Gold to spare buys - and rerolls for - the Items
+    the likely Final party would carry, and holds them off the shelf. The party is read the way the Final reads it: each
+    member's Final contribution with the held Items shared out greedily, top 3 by what they reach. */
+ const finalHold={};
+ const finalUseful=(it,fd)=>!g.finalNoEffect(it.id)&&(Object.keys(it.effects).some(k=>fd.hazards.includes(k))||['combat','survival','mobility','spirit'].some(k=>(it.effects[k]||0)>0));
+ /* `at` is memoised per call of finalStash (same customer, same Bag -> same contribution); the party is picked once per call */
+ let atMemo=new Map();
+ const finalAt=(n,p,fd)=>{const k=n.id+'|'+[...p].sort().join(',');let v=atMemo.get(k);if(v===undefined){v=contribution(G.Dungeon.prepare({...copy(n),pack:p},fd,s.facilities));atMemo.set(k,v);}return v;};
+ const finalTeam=(pool,fd)=>{
+  const solo=n=>{const left=pool.filter(id=>n.money>=g.finalPrice(id)),pack=[];
+   while(pack.length<G.Adventurer.slots(n)&&left.length){const k=left.reduce((b,id,j)=>finalAt(n,[...pack,id],fd)>finalAt(n,[...pack,left[b]],fd)?j:b,0);pack.push(left.splice(k,1)[0]);}
+   return finalAt(n,pack,fd);};
+  return s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).map(n=>({n,v:solo(n)})).sort((a,b)=>b.v-a.v).slice(0,3).map(x=>x.n);};
+ const finalParty=(team,pool,fd)=>{
+  const packs=team.map(()=>[]),cur=team.map(n=>finalAt(n,[],fd)),left=[...pool],used=[];
+  for(;;){let best=null;
+   team.forEach((n,i)=>{if(packs[i].length>=G.Adventurer.slots(n))return;const seen=new Set();
+    left.forEach((id,j)=>{if(seen.has(id)||n.money<g.finalPrice(id))return;seen.add(id);const gain=finalAt(n,[...packs[i],id],fd)-cur[i];if(gain>0&&(!best||gain>best.gain))best={i,j,id,gain};});});
+   if(!best)break;packs[best.i].push(best.id);cur[best.i]+=best.gain;used.push(left.splice(best.j,1)[0]);}
+  return {power:cur.reduce((a,b)=>a+b,0),used};};
+ function finalStash(){
+  const fd=s.final;if(!fd)return;const finalPhase=s.phase==='final';
+  const lasts=it=>finalPhase||s.day+g.stockLife(it)>=31;
+  const shelf=()=>s.inventory.map(x=>D.itemBy[x.item]).filter(it=>lasts(it)&&finalUseful(it,fd)).map(it=>it.id);
+  const reserve=spend.cashFloor+(finalPhase?0:g.expectedOperatingCost()*(30-s.day));
+  atMemo=new Map();const team=finalTeam(shelf(),fd);let rerolls=0;
+  for(;;){
+   const base=finalParty(team,shelf(),fd).power,seen=new Set();
+   const pick=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>!seen.has(x.it.id)&&seen.add(x.it.id)&&x.o.quantity>0&&lasts(x.it)&&finalUseful(x.it,fd)&&s.money-x.o.price>=reserve&&g.canStock(x.it))
+    .map(x=>({...x,gain:finalParty(team,[...shelf(),x.it.id],fd).power-base})).filter(x=>x.gain>=1).sort((a,b)=>b.gain/b.o.price-a.gain/a.o.price)[0];
+   if(pick){try{g.order(pick.i);act();(out.items[pick.o.item]??={ordered:0,sold:0}).ordered++;continue;}catch(e){}}
+   /* nothing on this sheet raises the party: look again while the till holds the reserve plus a Hero-grade buy */
+   if(rerolls>=3||s.event?.effects.noReroll||s.money-g.rerollPrice()<reserve+250)break;
+   try{const cost=g.rerollPrice();g.reroll();act();rerolls++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}catch(e){break;}}
+  for(const k of Object.keys(finalHold))delete finalHold[k];
+  for(const id of finalParty(team,shelf(),fd).used)finalHold[id]=(finalHold[id]||0)+1;}
  function investorSell(n,d){
   if(!d)return;
+  const held=it=>(finalHold[it.id]||0)>0&&s.inventory.filter(x=>x.item===it.id).length<=finalHold[it.id];
   const V=weight(n),gw=s.money<2*g.expectedOperatingCost()?1/8:1/15,purse=n.money+(n.eventBudget||0);
   const later=s.queue.slice(s.cursor+1).map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.id!==n.id&&weight(m)>V+.1);
   const reserve=it=>{if(!later.length)return 0;
@@ -265,7 +303,7 @@ function playRun(g,out,ctx){
   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<12){
    const base=utility(forecast(n,n.pack,d),V),overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),seen=new Set(),singles=[];
    for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);
-    const it=D.itemBy[st.item],cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
+    const it=D.itemBy[st.item];if(held(it))continue;const cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
     const gain=utility(forecast(n,[...n.pack,it.id],d),V)-base,waste=st.expires!=null&&st.expires<=s.day?cost*gw:0,hold=reserve(it);
     const modes=[...(V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3?['overcharge']:[]),'full','half'];
     for(const mode of modes){if(n.refused.includes(it.id+':'+mode))continue;const intent=g.interest(n,it,mode);if(intent.debit>purse)continue;
@@ -487,6 +525,8 @@ function playRun(g,out,ctx){
      try{g.reroll();}catch(e){break;}
      act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
     out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
+   /* investor: the Final's Items first, while the cart is still empty (order() takes from the offer) */
+   if(investor&&s.final)finalStash();
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
@@ -624,10 +664,16 @@ function playRun(g,out,ctx){
    const wasDay=s.day;g.closeDay();act();
    if(wasDay===29)out.prepStartGold.push(s.money);
   }
-  else if(s.phase==='final'){buySupport();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
+  else if(s.phase==='final'){buySupport();if(investor)finalStash();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
    measureFinal();
    const fd=s.dungeons[0],bareFinal=n=>contribution(G.Dungeon.prepare({...copy(n),pack:[]},fd,s.facilities));
-   const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort(expert||investor?(a,b)=>bareFinal(b)-bareFinal(a):(a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
+   /* investor: who is strongest once handed what the store holds - a bare read charges every unanswered Final Hazard
+      against the customer and so seats a lower Level that happens to cover them over a stronger one the shelf can cover */
+   const kitFinal=n=>{const pack=[],left=s.inventory.filter(x=>!g.finalNoEffect(x.item)&&n.money>=g.finalPrice(x.item)).map(x=>x.item);
+    const at=p=>contribution(G.Dungeon.prepare({...copy(n),pack:p},fd,s.facilities));
+    while(pack.length<G.Adventurer.slots(n)&&left.length){const i=left.reduce((b,id,k)=>at([...pack,id])>at([...pack,left[b]])?k:b,0);pack.push(left.splice(i,1)[0]);}
+    return at(pack);};
+   const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort(investor?(a,b)=>kitFinal(b)-kitFinal(a):expert?(a,b)=>bareFinal(b)-bareFinal(a):(a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
    /* FINAL-Q75: the party is selected and confirmed first, then prepared one at a time. */
    for(const n of team){g.selectFinal(n.id);act();}
    if(team.length){g.commitFinalParty();act();}
