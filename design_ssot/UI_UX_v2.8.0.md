@@ -1074,7 +1074,7 @@ where to read it again, COPY_AUDIT §14-2) 4. short Flavor under it, readable si
 
 ### D15 — 길드 정보 보고
 
-`길드 정보 보고`: 1. a one-time 안내 line under the intro (what a 마왕 권능 is, COPY_AUDIT §14-4; spent once per Account, tied to 안내 끄기 / 다시 보기)
+`길드 정보 보고`: 1. a one-time 안내 line under the intro (what a 마왕 권능 is, COPY_AUDIT §14-4; spent once per Account, tied to 도움말 끄기 / 도움말 다시 보기)
 2. the same BASE illustration 3. identity 4. exact Trait name 5. exact material effect, figures read from the tuning table 6. relevant current DATA
 (GREED: 목표 매출 · 현재 매출 line, then the line saying 도감 > 마왕 shows it again).
 The rule, not strategy advice. Never exact Final success %, hidden Final Power, internal Factor / Modifier terms.
