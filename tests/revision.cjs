@@ -688,7 +688,10 @@ test('NIGHT_CLOSING §DISCOVERY LINE: a record names the taught rules that acted
  assert.ok(!notebook().includes('learn-prepared'),'and no other rule is kept from it');
  const r5=rep({outcome:'대성공',storeBonus:50,events:[{id:'prepared',text:'x'}],fatigueBeforeExpedition:9});M.observe(acc,r5);
  assert.deepEqual(r5.acted,['prepared','great'],'prepared and great; Fatigue 9 is below the line');
- assert.deepEqual(notebook().sort(),K.map(k=>'learn-'+k).sort(),'all six are in the notebook');
+ /* User 2026-10-09: an accident on the way (environmentHurt) carries the accident rule, after the injury it caused */
+ const r6=rep({outcome:'부상',environmentHurt:true});M.observe(acc,r6);assert.deepEqual(r6.acted,['injured','accident'],'injured, then accident');
+ {const calm=rep({outcome:'부상'});M.observe({knowledge:{},discoveries:[]},calm);assert.ok(!calm.acted.includes('accident'),'no accident, no accident rule');}
+ assert.deepEqual(notebook().sort(),K.map(k=>'learn-'+k).sort(),'every rule are in the notebook');
 });
 
 /* User 2026-10-02: 카리냐 -> 카리냥, in place (same F/021 portrait); a Run saved before the rename carries the new name */

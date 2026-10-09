@@ -137,7 +137,7 @@ const sale={
 /* COPY_WORLD_VOICE §DIALOGUE EXPOSURE — OCCASIONAL (User 2026-10-04): a long line keeps its length and comes up
    on 1 pick in OCCASIONAL_EVERY of its pool (COPY_AUDIT §16-§18 `가끔`); the other picks use the pool's other lines. */
 const OCCASIONAL_EVERY=5;
-const OCCASIONAL=new Set(['“가격은 아픈데, 지금은 필요하네요.”','“이 값이면 던전 보스가 더 양심적이겠어요.”','“그 값이면 차라리 맨손으로 들어가죠.”','“좋은 물건인데, 오늘은 제 차례가 아니네요.”','“가방 정리하고 왔어요. 자리 좀 있어요.”','“습관이 무섭네요. 발이 먼저 여기로 와요.”','“이쯤 되면 길드보다 여기를 더 자주 오네요.”','“이쯤 되면 제 이름으로 선반 하나 내주셔야죠.”','“던전 앞 편의점이라더니, 진짜 바로 앞이네요.”','“가게 이름이 너무 정직해서 들어와 봤어요.”','“오늘은 진짜 무리 안 하려고요. 진짜로요.”','“동료들이 그거 어디서 샀냐고 묻더라고요.”','“저한텐 잘 산 물건이 좋은 물건입니다.”','“중요한 건 꺾이지 않는 마음이라던데… 저는 일단 안 꺾이게 다녀올게요.”','“가까운 데만 갑니다. 길드엔 다르게 말했지만요.”','“어디 가냐고요? 돌아와서 맞힌 쪽으로 말할게요.”','“몬스터보다 배고픔이 더 끈질기더라고요.”','“계산할 때는… 어디 보고 있으면 되죠?”','“물건도 보고 소식도 듣고, 일석이조네요.”','“없는 걸 보면 갖고 싶고, 갖고 나면 또 없는 게 보입니다.”','“표정은 신경 쓰지 마세요. 원래 이렇습니다.”','“장바구니라는 게 원래 차라고 있는 거잖아요.”','“아버지가 던전 하나쯤은 다녀와 봐야 한대서요.”','“바가지 씌우시면 표정에 다 드러날 거예요. 제 표정에요.”','“제 꿈은 불 없는 던전에서 은퇴하는 거예요.”','“여름에도 손이 시린 사람 마음, 아세요?”','“피 대신 포션이 흐른다는 소리 들어 봤어요.”','“어제 던전에서 넘어졌는데 몬스터가 더 놀라더라고요.”','“신중한 동료가 저랑은 다시 안 간대요. 이유는 모르겠어요.”']);
+const OCCASIONAL=new Set(['“저승 문 앞까지 갔다가 영수증만 받아 왔어요.”','“원정은 못 끝냈지만, 제 인생은 안 끝났어요.”','“붕대 감는 것도 살아 있어야 할 수 있더라고요.”','“의원 갈 돈 굳었네요. 그 돈으로 또 사러 올게요.”','“가방 무겁다고 투덜댄 거 취소할게요.”','“멀쩡히 왔으니 내일도 손님으로 올게요.”','“돌아올 핑계를 찾다가 그냥 끝내 버렸어요.”','“가격은 아픈데, 지금은 필요하네요.”','“이 값이면 던전 보스가 더 양심적이겠어요.”','“그 값이면 차라리 맨손으로 들어가죠.”','“좋은 물건인데, 오늘은 제 차례가 아니네요.”','“가방 정리하고 왔어요. 자리 좀 있어요.”','“습관이 무섭네요. 발이 먼저 여기로 와요.”','“이쯤 되면 길드보다 여기를 더 자주 오네요.”','“이쯤 되면 제 이름으로 선반 하나 내주셔야죠.”','“던전 앞 편의점이라더니, 진짜 바로 앞이네요.”','“가게 이름이 너무 정직해서 들어와 봤어요.”','“오늘은 진짜 무리 안 하려고요. 진짜로요.”','“동료들이 그거 어디서 샀냐고 묻더라고요.”','“저한텐 잘 산 물건이 좋은 물건입니다.”','“중요한 건 꺾이지 않는 마음이라던데… 저는 일단 안 꺾이게 다녀올게요.”','“가까운 데만 갑니다. 길드엔 다르게 말했지만요.”','“어디 가냐고요? 돌아와서 맞힌 쪽으로 말할게요.”','“몬스터보다 배고픔이 더 끈질기더라고요.”','“계산할 때는… 어디 보고 있으면 되죠?”','“물건도 보고 소식도 듣고, 일석이조네요.”','“없는 걸 보면 갖고 싶고, 갖고 나면 또 없는 게 보입니다.”','“표정은 신경 쓰지 마세요. 원래 이렇습니다.”','“장바구니라는 게 원래 차라고 있는 거잖아요.”','“아버지가 던전 하나쯤은 다녀와 봐야 한대서요.”','“바가지 씌우시면 표정에 다 드러날 거예요. 제 표정에요.”','“제 꿈은 불 없는 던전에서 은퇴하는 거예요.”','“여름에도 손이 시린 사람 마음, 아세요?”','“피 대신 포션이 흐른다는 소리 들어 봤어요.”','“어제 던전에서 넘어졌는데 몬스터가 더 놀라더라고요.”','“신중한 동료가 저랑은 다시 안 간대요. 이유는 모르겠어요.”']);
 
 /* §11.2 반복되는 중요한 NPC Result.
    사망은 DATA로 명확히 전달되고, 여기 Flavor는 별도다. 사망 Pool에는 살아 있는 사람의
@@ -153,6 +153,15 @@ const night={
   '늘 돌아오던 길에서 이번에는 목숨을 잃었다.','수첩의 다음 줄은 비었다. 더 적을 방문이 없다.'],
  deathStranger:['처음 들른 날이 마지막 방문이 됐다. 원정에서 돌아오지 못했다.','이름을 적은 날, 사망 기록까지 함께 남았다.','한 번 들렀고, 그날 게이트에서 목숨을 잃었다.','이름 한 줄만 남기고 다시 오지 않았다.',
   '얼굴을 익힐 새도 없이 사망 소식이 먼저 왔다.','첫 원정이 마지막 원정이 됐다.'],
+ /* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09): the customer whose result the sold Item (or 만반의 준비) turned
+    speaks to that turn, one pool per case; {상품} is the Item the proof names. The last line of each is OCCASIONAL. */
+ savedDeathWin:['“{상품} 아니었으면 거기서 끝이었어요.”','“죽다 살아났는데, 일까지 끝냈어요.”','“아직도 손이 떨려요. 그래도 해냈어요.”','“쓰러졌다 일어나니까 길이 보이더라고요.”','“살아 돌아온 것도 모자라 해내기까지 했네요.”','“저승 문 앞까지 갔다가 영수증만 받아 왔어요.”'],
+ savedDeathRetreat:['“{상품} 덕분에 겨우 빠져나왔어요.”','“살아 나온 것만으로 충분해요.”','“도망치는 것도 살아 있어야 하더라고요.”','“거기서 버틴 건 {상품} 덕이에요.”','“오늘은 살아서 돌아온 게 성과예요.”','“원정은 못 끝냈지만, 제 인생은 안 끝났어요.”'],
+ savedDeathHurt:['“{상품} 없었으면 이 정도로 안 끝났어요.”','“다쳤지만, 살아서 왔어요.”','“이 상처는 싸게 막은 거예요.”','“{상품} 덕에 숨은 붙어 왔어요.”','“아파도 좋아요. 살아 있으니까요.”','“붕대 감는 것도 살아 있어야 할 수 있더라고요.”'],
+ savedSevereWin:['“{상품} 덕분에 끝까지 갔어요.”','“크게 다칠 뻔했는데 버텼어요.”','“그 한 방 맞았으면 며칠은 누워 있었을 거예요.”','“아슬아슬했는데 멀쩡히 해냈어요.”','“{상품} 아니었으면 지금쯤 침대 신세였어요.”','“의원 갈 돈 굳었네요. 그 돈으로 또 사러 올게요.”'],
+ savedPrepared:['“꽉 채워 간 보람이 있었어요.”','“하나라도 빠졌으면 못 돌아왔어요.”','“다쳤어도, 준비한 만큼 버텼어요.”','“빈틈없이 챙겨서 숨은 붙어 왔어요.”','“준비 안 했으면 거기 남았을 거예요.”','“가방 무겁다고 투덜댄 거 취소할게요.”'],
+ savedHurt:['“{상품} 덕분에 멀쩡히 왔어요.”','“다칠 뻔했는데 잘 피했어요.”','“긁힌 데 하나 없어요. {상품} 덕이에요.”','“아찔했는데, 몸은 멀쩡해요.”','“오늘은 붕대 쓸 일이 없네요.”','“멀쩡히 왔으니 내일도 손님으로 올게요.”'],
+ savedRetreat:['“{상품} 덕분에 끝까지 밀어붙였어요.”','“돌아설 뻔했는데 해냈어요.”','“{상품} 덕에 한 발 더 갔어요.”','“조금만 더, 했던 게 맞았어요.”','“발길 돌릴 뻔했는데 끝을 봤어요.”','“돌아올 핑계를 찾다가 그냥 끝내 버렸어요.”'],
  avoided:['“사장님이 챙겨 준 거 없었으면 못 돌아왔어요.”','“오늘은 진짜 그 보급이 살렸습니다.”','“마지막 순간에 챙겨 간 게 버텨 줬어요.”','“그 물건 아니었으면 거기서 끝났을 겁니다.”',
   '“이번엔 사장님 덕을 제대로 봤습니다.”','“오늘은 물건 하나가 사람 하나 살렸네요.”','“그거 안 샀으면 지금 여기 없었겠죠.”','“오늘은 그 물건 값이 하나도 안 아깝네요.”','“마지막 순간에 사장님 얼굴이 떠올랐어요.”','“그걸 챙긴 제 자신을 칭찬하고 싶네요.”','“그 물건, 제 생명보험이었네요.”'],
  rescued:['“사장님이 챙겨 준 게 마지막에 저를 돌려보냈어요.”','“정말 끝인 줄 알았는데, 그 물건이 귀환시켰습니다.”','“가방에 넣어 간 게 마지막에 제대로 작동했어요.”','“그거 없었으면 돌아오는 길 자체가 없었습니다.”',
@@ -200,6 +209,8 @@ const Copy={
  learned:[['injured','부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다(특성에 따라 달라질 수 있다). 원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.'],
   /* COPY_AUDIT §26-2 (User 2026-10-02): a Severe Injury is its own rule - the adventurer rests, unseen, then comes back healthy */
   ['severe','중상을 입었다. 며칠 쉬어야 해서 그동안은 손님으로 오지 않는다. 다 쉬면 건강하게 돌아온다.'],
+  /* User 2026-10-09: an accident is not the Hazard itself - one the Hazard left uncovered, or plain bad luck */
+  ['accident','원정 중 사고가 났다. 사고는 두 가지다. 막지 못한 위험 때문에 나는 사고와, 위험을 다 막아도 가끔 나는 운 나쁜 사고. 강인함이 높을수록 둘 다 줄어든다.'],
   ['fatigue',null],
   ['counter','위험에 맞는 상품은 그 위험의 압박을 줄인다.'],
   ['prepared','건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.'],
@@ -232,6 +243,13 @@ const Copy={
    return emit(pick(n.history.some(h=>h.day===report.day)?night.deathTraded:n.records.length>1?night.deathKnown:night.deathStranger,k,ex));
   if(report.avoidedDeath)return emit(pick(night.avoided,k,ex));
   if(report.rescued)return emit(pick(night.rescued,k,ex));
+  {const w=report.heroProof?.outcome?.worse,o=report.outcome,won=o==='성공'||o==='대성공';
+   const saved=(report.events||[]).some(e=>e.id==='prepared')?'savedPrepared'
+    :w==='사망'?(won?'savedDeathWin':o==='퇴각'?'savedDeathRetreat':'savedDeathHurt')
+    :w==='중상'&&won?'savedSevereWin':w==='부상'&&(won||o==='퇴각')?'savedHurt':w==='퇴각'&&won?'savedRetreat':null;
+   if(saved){const id=(report.heroProof?.outcome?.items||report.items||[])[0],name=G.DATA.itemBy[id]?.name;
+    const line=pick(name?night[saved]:night[saved].filter(l=>!l.includes('{상품}')),k,ex);
+    return emit(name?line.replace(/\{상품\}/g,name):line);}}
   /* COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE: 대성공 is its own named Pool now, distinct from
      an ordinary 성공's growth/plain lines - Source used to fall through to `grew`/`plain` for
      every non-injury success alike, with no line that actually said a 대성공 happened. */
@@ -243,8 +261,11 @@ const Copy={
   return emit(pick(night.plain,k,ex));
  },
  /* 사망 Pool과 생존 Pool은 절대 겹치지 않는다. 테스트가 이 경계를 고정한다. */
+ /* a line drawn from a pool: the pool's own text, or a {상품} template with the Item name in it */
+ inPool(pool,line){return pool.some(t=>t===line||t.includes('{상품}')&&new RegExp('^'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\\\{상품\\\}/g,'.+')+'$').test(line));},
  deathPool(){return [...night.deathTraded,...night.deathKnown,...night.deathStranger];},
- livingPool(){return [...night.avoided,...night.rescued,...night.severe,...night.hurt,
+ livingPool(){return [...night.savedDeathWin,...night.savedDeathRetreat,...night.savedDeathHurt,...night.savedSevereWin,
+  ...night.savedPrepared,...night.savedHurt,...night.savedRetreat,...night.avoided,...night.rescued,...night.severe,...night.hurt,
   ...night.retreat,...night.grew,...night.great,...night.plain];}
 };
 

@@ -909,7 +909,7 @@ Insurance reversals (`rescued` / `avoidedDeath`: 귀환석, 생환부적) keep t
 Every such customer gets it on their own card; there is no nightly cap (User 2026-10-09).
 
     entry 240   the worse verdict prints in its own tag (`사망` lays the black tape, 350 ms); the portrait greys
-    + pause     the card holds still until the worse cue has faded, then a short silence: 사망 +500, 중상 +100
+    + pause     the card holds still until the worse cue has faded, then a short silence: 사망 +250 (User 2026-10-09: shorter, so it is not read as a death and skipped), 중상 +100
     1000+pause  the sold Item flies up from below and shoves the print off (slides down-left, tilts, gone 260 later)
     ~1150+pause the real Outcome stamps in its usual design (hold 860+pause, fall 1.6 × → 1, dip 4 px); portrait colour returns
     1300-1500+pause  the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)

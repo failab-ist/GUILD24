@@ -49,7 +49,7 @@ const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3'
  'visit.trait.coldhand':'17-15','visit.trait.potionbody':'17-16','visit.trait.clumsy':'17-17','visit.trait.reckless':'17-18',
  'sale.full':'18-1','sale.half':'18-2','sale.overcharge':'18-3','sale.refuse.price':'18-4','sale.refuse.overcharge':'18-4a','sale.refuse.need':'18-5','sale.refuse.choice':'18-6',
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
- 'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
+ 'night.rescued':'19-7','night.grew':'19-8','night.savedDeathWin':'19-10','night.savedDeathRetreat':'19-11','night.savedDeathHurt':'19-12','night.savedSevereWin':'19-13','night.savedPrepared':'19-14','night.savedHurt':'19-15','night.savedRetreat':'19-16','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
  for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
@@ -433,7 +433,7 @@ test('the variant layer changes sentences only — it touches no rule and no num
  for(const npc of g.run.npcs)for(const r of npc.records){
   if(!r.quote)continue;
   const pool=r.outcome==='사망'?Copy.deathPool():Copy.livingPool();
-  assert.ok(pool.includes(r.quote),'a '+r.outcome+' line comes from the matching pool: '+r.quote);
+  assert.ok(Copy.inPool(pool,r.quote),'a '+r.outcome+' line comes from the matching pool: '+r.quote);
  }
 });
 

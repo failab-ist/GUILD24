@@ -2113,6 +2113,9 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
  assert.ok(m.indexOf('bossRevealDue()')<m.indexOf("modal='event'")&&m.indexOf('bossRevealDue()')<m.indexOf("modal='relics';\n",m.indexOf('bossRevealDue()'))&&/openOwedModal\(s,phase,changed\);[\s\S]*renderModal\(\)/.test(r),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
+ /* User 2026-10-09: a coach mark covers the customer's line - the line waits while a mark is up, then gets its full time */
+ assert.ok(/queueMicrotask\(\(\)=>holdSpeech\(!!activeCoach\)\);/.test(fn('showCoach'))&&/if\(sayHeld\)return;/.test(fn('armSpeech'))
+  &&/else if\(sayHeld\)\{sayHeld=false;armSpeech\(\);\}/.test(fn('holdSpeech'))&&/\.coach-on \.say\{visibility:hidden\}/.test(read('dist/ui/ui.css')),'the line waits for the coach mark');
  assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(m),'the hold ends with the MORNING it belongs to - the screen is never left inert');
 });
 
@@ -2274,11 +2277,14 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
   assert.equal(savedWorse({outcome:'부상',events:[{id:'prepared'}]}),'사망','만반의 준비 turns a Death away');
   assert.deepEqual([['사망','중상'],['사망','부상'],['사망','퇴각'],['사망','대성공'],['중상','성공'],['중상','대성공']].map(([w,o])=>savedTier(hp(w,o))),[1,2,3,3,3,3]);}
  assert.ok(/const savedBeat=r=>!!savedWorse\(r\);/.test(app),'no nightly cap');
+ assert.ok(/const SAVED_WAIT=\{'사망':250,'중상':100\};/.test(app),'the silence before the shove: 사망 250 ms, 중상 100 ms (UI_UX §NIGHT — SAVED BY THE SALE)');
+ assert.ok(/if\(st\.print\)\{const say=\$\('\.beat \.say'\);if\(say\)A\(say,\{opacity:\[\{from:0,to:0,duration:land\}/.test(app),'the character\'s line waits for the stamp on a reversal');
  const nsk=fn('nightSound');
  assert.ok(/const cue=savedBeat\(result\)\?'saved'\+savedTier\(result\):nightCue\(result\);/.test(nsk)&&/if\(!st\)\{sound\(cue\);/.test(nsk)&&/nightCueAt=\[setTimeout\(\(\)=>sound\(cue\),/.test(nsk),'the relief replaces the Outcome cue on its landing - one sound, never stacked');
  assert.ok(/if\(st\.saved\)nightCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(st\.saved==='사망'\?'death':'severe'\),st\.entry\),setTimeout\(\(\)=>Sound\.play\('shove'\),savedAt\(st\.saved\)\.shove\)\);/.test(nsk),'the worse verdict sounds its own cue on the print, whoosh on the shove, both dropped by 다음');
  assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
  assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
+ assert.ok(/const ids=savedItems\(r\),slot=\$\('\.beat \.cause li\.hero \.hero-items'\);if\(!ids\.length\|\|!slot\)return;/.test(app),'no hero line, no flying Item (만반의 준비 has none)');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
  for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
@@ -2493,7 +2499,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   &&/'<div class="changed'\+\(r\.outcome==='성공'\|\|r\.outcome==='대성공'\?' won':''\)/.test(fn('beat')),'the NIGHT marks are the taught rules plus the Wallet gain row (the result mark is retired, COACH DIET)');
  /* User 2026-10-04: one NIGHT mark a night, the most serious rule first; User 2026-10-10: then what the sold Item did, then what
     changes the next decision, then the rewards */
- assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','counter','prepared','fatigue','great','earn'];"),'NIGHT priority: death, severe, injured, counter, prepared, fatigue, great, earn');
+ assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','accident','counter','prepared','fatigue','great','earn'];"),'NIGHT priority: death, severe, injured, accident (User 2026-10-09), counter, prepared, fatigue, great, earn');
  assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */
@@ -3613,7 +3619,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(fs.existsSync(path.join(root,'dist/ui/assets/audio/door.mp3')),'and the file ships');
  assert.ok(/\('send','door'\)/.test(read('tools/vendor-assets.py'))&&read('reports/ASSETS.md').includes('`door.mp3`'),'vendored and recorded like the others');
  // A2 reply timing: buy / refuse lines stay 5 s, the greeting 3 s
- assert.ok(/const SAY_MS=3000;/.test(app)&&/const SAY_REPLY_MS=5000;/.test(app)&&/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS;/.test(app),'the reply stays 5 s, the greeting 3 s');
+ assert.ok(/const SAY_MS=3000;/.test(app)&&/const SAY_REPLY_MS=5000;/.test(app)&&/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS\+\(ns\?\.print\?stampLand\(ns\):0\);/.test(app),'the reply stays 5 s, the greeting 3 s (a NIGHT reversal counts from its landing)');
  // reduced motion: the same handlers run, the beats stand down, the end state is the same
  assert.ok(/if\(!motionOK\(\)\|\|!who\)\{go\(\);return;\}/.test(exit),'under reduced motion the departure is immediate');
 });

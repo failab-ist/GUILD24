@@ -4254,3 +4254,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-final .dock:has(.final-order-back){flex-wrap:nowrap;gap:8px}
 .p-final .dock:has(.final-order-back) [data-action=final-commit]{flex:1.15 1 0;min-width:0;min-height:48px;padding:6px 8px;font:600 16px/1.3 var(--ui);letter-spacing:0}
 @media(min-width:1024px){.p-final .dock .stamp.final-order-back{flex:0 1 240px}.p-final .dock:has(.final-order-back) [data-action=final-commit]{flex:1 1 auto;font-size:20px}}
+
+/* User 2026-10-09: the customer's line waits while a coach mark is up (holdSpeech) */
+.coach-on .say{visibility:hidden}

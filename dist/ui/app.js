@@ -128,7 +128,7 @@ const savedItems=r=>r.heroProof?.outcome?.items||r.items||[];
 const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
 /* User 2026-10-09 ("하.. 하다가 어 살았네"): the worse verdict sounds its own cue and the card holds still until that cue has
    faded (사망's runs ~1.4 s, 중상's ~0.45 s), then a short silence, then the shove - so the two sounds never overlap */
-const SAVED_WAIT={'사망':500,'중상':100};
+const SAVED_WAIT={'사망':250,'중상':100};
 const savedAt=w=>{const d=SAVED_WAIT[w]||0;return Object.fromEntries(Object.entries(SAVED).map(([k,v])=>[k,v+d]));};
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
  if(savedBeat(r))return {...st,entry:240,hold:savedAt(savedWorse(r)).hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
@@ -431,16 +431,16 @@ function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
  const fig=$('.beat .returner');
  if(fig)A(fig,{filter:[{from:'grayscale(0) brightness(1)',to:'grayscale(0) brightness(1)',duration:st.entry+60},{to:'grayscale(1) brightness(0.5)',duration:350},
   {to:'grayscale(1) brightness(0.5)',duration:stampLand(st)-st.entry-410},{to:'grayscale(0) brightness(1)',duration:260}],onComplete:()=>{fig.style.filter='';}});
- const ids=savedItems(r);if(!ids.length)return;
- const slot=$('.beat .cause li.hero .hero-items'),t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
+ const ids=savedItems(r),slot=$('.beat .cause li.hero .hero-items');if(!ids.length||!slot)return;
+ const t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
  const fly=document.createElement('div');fly.className='saved-fly';fly.setAttribute('aria-hidden','true');fly.innerHTML=Art.itemIcon(ids[0],48);document.body.appendChild(fly);
- const h=slot?.getBoundingClientRect(),hx=h?h.left:gx-30,hy=h?h.top+h.height/2-24:gy;
+ const h=slot.getBoundingClientRect(),hx=h.left,hy=h.top+h.height/2-24;
  A(fly,{opacity:[{from:0,to:0,duration:T.shove-150},{to:1,duration:60},{to:1,duration:T.settle-T.shove+90},{to:0,duration:120}],
   translateX:[{from:gx+40,to:gx+40,duration:T.shove-150},{to:gx+20,duration:150,ease:'outQuad'},{to:gx-30,duration:80},{to:gx-30,duration:T.home-T.shove-80},{to:hx-12,duration:T.settle-T.home,ease:'inOut(2)'}],
   translateY:[{from:innerHeight-60,to:innerHeight-60,duration:T.shove-150},{to:gy,duration:150,ease:'outQuad'},{to:gy+6,duration:80},{to:gy+6,duration:T.home-T.shove-80},{to:hy,duration:T.settle-T.home,ease:'inOut(2)'}],
   scale:[{from:.6,to:.6,duration:T.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:T.home-T.shove-80},{to:.6,duration:T.settle-T.home}],
   onComplete:()=>fly.remove()});
- if(slot)A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
+ A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
 function phaseNight(A){
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
@@ -470,6 +470,8 @@ function phaseNight(A){
   }
   /* after-motion has one owner: the reversal's proof lines cut in on the overstamp; else the Hero
      Item line settles; else the REWARD figures count up. A death has none. */
+  /* the character's line answers the real Outcome, so a reversal (the worse verdict printed first) keeps it back until the stamp lands */
+  if(st.print){const say=$('.beat .say');if(say)A(say,{opacity:[{from:0,to:0,duration:land},{to:1,duration:160,ease:'outQuad'}]});}
   const told=[...document.querySelectorAll('.beat .told .cause,.beat .told .why')],hero=$('.beat .cause li.hero');
   if(st.print)told.forEach(el=>A(el,{opacity:{from:0,to:1,duration:1,delay:land}}));
   /* the claim's accent bar belongs to its list: when the claim is the list's only line, the list settles */
@@ -741,7 +743,9 @@ function render(){
     neighbour inside the same group rather than back to the top. */
  if(!changed)restoreFocus($('#app'),focusHold);
  openOwedModal(s,phase,changed);
- const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
+ /* a NIGHT reversal keeps the line back until its stamp lands, so its time on screen starts there */
+ const nr=phase==='night'?s.results[s.nightCursor||0]:null,ns=nr&&nightStampOf(nr);
+ const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS+(ns?.print?stampLand(ns):0);
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();placeSpeech();armSpeech(sayMs);
  syncWatchers(phase);
 }
@@ -1157,6 +1161,7 @@ function placeSpeech(){
   return w.right>r.left&&w.left<r.right&&w.bottom>r.top&&w.top<r.bottom;}))say.classList.remove('up');
 }
 function armSpeech(ms=SAY_MS){
+ if(sayHeld)return;
  if(!$('.say:not(.status)')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
  if(sayArmed===sayKey)return;
  if(sayTimer)clearTimeout(sayTimer);
@@ -1396,7 +1401,7 @@ function closingScreen(){
  +'<div class="dock">'+closingDock(s)+'</div></div>';
 }
 /* User 2026-10-10: survival first, then what the sold Item did, then what changes the next decision, then the rewards */
-const NIGHT_MARKS=['death','severe','injured','counter','prepared','fatigue','great','earn'];
+const NIGHT_MARKS=['death','severe','injured','accident','counter','prepared','fatigue','great','earn'];
 const coachSteps={
  /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
@@ -1559,7 +1564,14 @@ function settleCoach(step,target){
  };
  coachSettle=requestAnimationFrame(tick);
 }
+/* User 2026-10-09: a coach mark covers the customer's line, so the line waits while a mark is up and gets its full time once
+   the mark is closed */
+let sayHeld=false;
+function holdSpeech(on){document.documentElement.classList.toggle('coach-on',on);
+ if(on){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;sayHeld=true;}
+ else if(sayHeld){sayHeld=false;armSpeech();}}
 function showCoach(){
+ queueMicrotask(()=>holdSpeech(!!activeCoach));
  const root=$('#coach-root');if(!root)return;root.innerHTML='';activeCoach=null;
  cancelAnimationFrame(coachSettle);
  const tutorial=game.account.tutorial||{};
