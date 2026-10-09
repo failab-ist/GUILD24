@@ -1539,8 +1539,8 @@ COPY_AUDIT_APPROVED_v2.8.0.md §3.
 
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 
-(§TUTORIAL — COACH DIET.) The first ORDER has one mark, `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity`
-or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
+(§TUTORIAL — COACH DIET.) The first ORDER has two marks, `kinds` (what each Item kind is for, on the first offer's kind label; User 2026-10-10)
+then `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity` or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
 register say them. The `reroll` mark is the DAY 4 ORDER's, even when another ORDER coach appears that day: the key keeps the name `발주 후보 교환` and gains a transparent local raster refresh icon with an open arc and a distinct attached triangular arrowhead. The mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
@@ -1549,10 +1549,10 @@ Hazards: each pressures a Core Stat; natural Stat and Item Counter both count; r
 fact on the tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer: Food/Drink reduce Fatigue;
 Fatigue 10+ lowers 기동/정신.
 
-First SALE (§TUTORIAL — COACH DIET): DAY 1 has two marks (User 2026-10-09), destination and
-the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
-does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망, after `flow` - how an expedition is decided, win the fight and no Hazard incident, rule only) and DAY 3 (환경 대응, after the Stats mark - 투력 drives combat, the other three answer Hazards; COPY_AUDIT §3-7 STATS), the Bag mark (after the first sale) on DAY 4 and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
-visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: `flow`, 전투 전망; DAY 3: the payday customer, Stats, 환경 대응; DAY 4: 발주 후보 교환, the Bag, the returning customer). The kit mark belongs to the day the kit actually arrives.
+First SALE (§TUTORIAL — COACH DIET): DAY 1 has three marks, destination,
+the price keys the first time they show (a refused 바가지 closes the Item, so it must be known before the choice; COPY_AUDIT §3-14) and the Bag after the first sale (User 2026-10-10: a core idea, not a DAY 4 one). The two outlook marks (전투 전망, 환경 대응; the readout `.top` is the SALE-entry snapshot and
+does not move with a sale; COPY_AUDIT §3-4) start on DAY 2 (전투 전망, after `flow` - how an expedition is decided, win the fight and no Hazard incident, rule only) and DAY 3 (환경 대응, after the Stats mark - 투력 drives combat, each Hazard uses one of the other three; COPY_AUDIT §3-7 STATS) and the returning-customer mark (tap opens the notebook; it also says what 단골도 does -
+visits and buying) on DAY 4: a step carries the first DAY it may show, so no DAY is buried (DAY 2: `flow`, 전투 전망; DAY 3: the payday customer, Stats, 환경 대응; DAY 4: 발주 후보 교환, the returning customer). The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
 ### TUTORIAL — COACH DIET (v2.9.12)
@@ -1560,7 +1560,7 @@ No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이�
 (acceptance -> UI_UX §QA UI-Q-v29-53.) One rule, one place: a mark only where the rule must be known before the decision and no
 screen says it; otherwise none, or taught after the fact.
 - before: DAY 0 `점포지원`; MORNING Deep (§FIRST-EVER DEEP EXPEDITION TUTORIAL), the first Event (§FIRST EVENT TUTORIAL) and II / FIRE
-  Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
+  Gate marks (§GATE TIER / FIRE GATE TUTORIAL); ORDER `상품 종류` (DAY 1, User 2026-10-10), `발주 확정` and, on the Day the first Run's HQ 구급키트 comes, that kit (its cell on
   desk, the `창고` handle on a phone; COPY_AUDIT §3-12 - the one mark that names an Item, a gift already given); SALE the
   first Run's DAY 3 payday customer (its wallet, COPY_AUDIT §3-13); destination, Stats and the two outlook boxes (전투 전망, 환경
   대응 - one mark each, User 2026-10-02); SALE price keys (the first time they show, COPY_AUDIT §3-14); SALE Bag (after the first
@@ -1570,7 +1570,7 @@ screen says it; otherwise none, or taught after the fact.
   Hazard; NIGHT `한 명씩 …` (`전체 건너뛰기` says it)
 - one label carries the rest: DAY 1 창고 head `창고 · 본사 기본 상품 N종` (opening stock only; the desk head - the phone key is
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
-- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`손님 소지금 획득`); a NIGHT tells one mark, the most serious rule first
+- after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`손님 소지금 획득`, on a 성공 / 대성공 record only; User 2026-10-10); a NIGHT tells one mark, the most serious rule first
 
 ### SALE PRICE LESSONS (v2.9.12)
 
@@ -2798,7 +2798,7 @@ before any tier II Gate; either mark on a closed Gate.
 Verify UI_UX §TUTORIAL — COACH DIET / §SALE PRICE LESSONS on a fresh account, tutorial on, at 390 and 1280.
 PASS:
 - the marks shown are exactly the owner's list: DAY 0 one mark (`점포지원`); no MORNING 방문객 / 게이트 mark (Deep and the II / FIRE
-  Gate marks still show in their situation); first ORDER `발주 확정` only; first SALE destination, Stats and outlook, the price keys
+  Gate marks still show in their situation); first ORDER `상품 종류` then `발주 확정`; first SALE destination, Stats and outlook, the price keys
   (§3-14) when they first show, then Bag after the first sale and the returning-customer mark on the first returning customer; no NIGHT `한 명씩` mark; CLOSING the one-clause
   receipt mark
 - DAY 1 창고 head reads `창고 · 본사 기본 상품 N종` while only the opening stock is held; SALE's readout title reads

@@ -146,8 +146,12 @@
 
 ## 3-2. 발주 확정
 
-**현재**
+**현재** (첫 발주는 아래 상품 종류 안내 다음에 나온다)
 > 카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.
+
+### 상품 종류 (KINDS, anchor = 첫 발주 화면 첫 상품의 종류 줄 `{종류} · {희귀도}`, DAY 1, 발주 확정 앞)
+(User 2026-10-10: DAY 1에 무엇을 사야 할지 모르는 사람에게 종류마다 쓰임을 알린다. 종류 이름은 화면의 종류 줄과 같다. 특수는 나중에 열리는 상품이라 뺀다)
+> 상품 종류마다 쓰임이 다르다. 음식·음료는 피로를 덜어 준다. 포션은 투력을 올린다. 야외장비는 위험에 대응한다. 보험은 원정이 잘못됐을 때 피해를 줄인다.
 
 ---
 
@@ -173,7 +177,7 @@
 
 ## 3-6. 가방 (상품 사용)
 
-**현재** (contextual mark on the filled Bag slot, after the first sale)
+**현재** (contextual mark on the filled Bag slot, after the first sale - DAY 1, User 2026-10-10)
 > 판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.
 
 ---
@@ -182,11 +186,12 @@
 
 Exact copy for these tutorial steps (rule owner: UI_UX §TUTORIAL — COACH DIET). The first SALE teaches two marks — 목적지
 (COPY_WORLD_VOICE §TUTORIAL COACH COPY) and STATS; 가방 (§3-6) appears after the first sale and RETURNING on the first
-returning customer; pricing is taught after the fact (§26-3). The first ORDER has 발주 확정 (§3-2) alone.
+returning customer; pricing is taught after the fact (§26-3). The first ORDER has 상품 종류 then 발주 확정 (§3-2).
 No GATES · STOCK · OFFER · QUANTITY · `gold` · HAZARD · SUPPLY · 대성공 · 만반의 준비 mark (§26-2 teaches after the fact). 전망 (§3-4) is a DAY 2 (전투 전망) / DAY 3 (환경 대응) SALE mark; 발주 후보 교환 is the DAY 4 ORDER mark (§3-14).
 
 ### STATS (anchor = the SALE 능력치 grid — the first time a customer's Stats are on screen)
-> 투력은 전투를, 강인함·기동·정신은 위험을 막는다. 포션은 투력을 올린다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.
+(User 2026-10-10: 포션은 §3-2 상품 종류 안내가 말한다)
+> 투력이 높을수록 적과 싸워 이기기 쉽다. 위험마다 강인함·기동·정신 중 쓰이는 능력치가 하나씩 정해져 있다. 강인함은 사고, 기동은 부상, 정신은 사망을 조금 줄인다.
 
 ### 원정 흐름 (FLOW, anchor = the SALE 전망 readout, 첫 판매 화면 · 정답 없음)
 (User 2026-10-04: 전투 전망 · 환경 대응 안내 앞에서 원정이 어떻게 갈리는지만 알린다. 적과 환경을 한 곳의 두 위협으로 읽게 한다. 상품 이름이나 해법은 쓰지 않는다)
@@ -3286,10 +3291,10 @@ No Rare Reference customer and no line for one (COPY_WORLD_VOICE §RARE REFERENC
 **노출 위치**
 > 계정에서 그 규칙이 처음 작용한 원정의 NIGHT 기록 위에 `점주 안내` 코치 말풍선으로 (튜토리얼과 같은 방식, 기록에 줄은
 > 붙지 않음). 계정당 한 번이며 발견 수첩에도 남는다 (rule owner: NIGHT_CLOSING §DISCOVERY LINE). 한 밤에는 하나만 띄운다(User 2026-10-04) —
-> 아래 순서로 가장 먼저 걸리는 하나: 사망(사망 기록에는 이것만) · 중상으로 돌아옴 · 부상으로 돌아옴 · 만반의 준비로 생존 · 손님 소지금 획득 · 대성공(가게 보너스 골드) ·
-> 대응 상품이 위험을 줄임 · 실제 피로 페널티 시작 단계 이상으로 출발. 밀린 규칙은 다음에 작용한 밤에 뜬다. 발견 수첩 기록은 영향이 없다.
+> 아래 순서로 가장 먼저 걸리는 하나: 사망(사망 기록에는 이것만) · 중상으로 돌아옴 · 부상으로 돌아옴 · 만반의 준비로 생존 · 성공한 원정의 손님 소지금 획득 · 대성공(가게 보너스 골드) ·
+> 대응 상품이 결과를 바꿈(기록에 그 상품 이름이 적힘) · 실제 피로 페널티 시작 단계 이상으로 출발. 밀린 규칙은 다음에 작용한 밤에 뜬다. 발견 수첩 기록은 영향이 없다.
 
-**현재** (마지막 줄 소지금 안내는 User 2026-10-04: 기록의 `손님 소지금 획득` 행에 한 번)
+**현재** (마지막 줄 소지금 안내는 기록의 `손님 소지금 획득` 행에 한 번, 결과가 성공·대성공인 기록에서만 - User 2026-10-10. 대응 상품 안내는 결과 증명이 그 상품을 기록에 적은 원정에서만 - User 2026-10-10)
 > 부상을 입었다. 다친 채 다시 떠나면 투력·강인함이 깎인 채로 싸운다(특성에 따라 달라질 수 있다). 원정에 성공하면 반드시 낫고, 퇴각하면 확률로 낫는다.
 > 중상을 입었다. 며칠 쉬어야 해서 그동안은 손님으로 오지 않는다. 다 쉬면 건강하게 돌아온다.
 > 피로가 {N} 이상이면 능력치가 떨어진다. 음식·음료가 피로를 덜어 준다.
@@ -3297,7 +3302,7 @@ No Rare Reference customer and no line for one (COPY_WORLD_VOICE §RARE REFERENC
 > 건강한 손님의 가방을 가득 채우면, 실패해도 살아 돌아올 가능성이 커진다.
 > 준비가 넉넉하면 대성공이 난다. 일반 원정의 대성공은 가게에도 보너스 골드를 남긴다.
 > 사망이 쌓여 한도에 닿으면 소문이 퍼져 영업이 끝난다.
-> 이긴 손님은 소지금이 늘어난다. 그 돈은 이 가게에서 쓴다.
+> 살아 돌아온 손님은 소지금이 늘어난다. 원정에 성공하면 훨씬 크게 늘어난다. 그 돈은 이 가게에서 쓴다.
 
 {N}은 `Dungeon.fatiguePenaltyFrom()`에서 읽으며 안내 발생 조건도 같은 기준을 따른다. 발견 수첩의 규칙 설명은 저장된 `learn-*` ID로 현행 `Copy.learned`를 읽는다. 원정 고유 사건·결과 문구는 저장 원문을 유지한다.
 
