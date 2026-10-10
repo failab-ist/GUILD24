@@ -202,7 +202,6 @@ html.in-app .stage .dock{padding-bottom:max(24px,var(--sa-bottom))}
 html.in-app #toast{bottom:calc(104px + var(--sa-bottom))}
 /* windows and notices end 24px above the edge too; the wood-frame windows are left as they are until seen on the phone */
 html.in-app .modal:not(.wood-frame):not(.settings-wood) .modal-footer{padding-bottom:max(24px,var(--sa-bottom))}
-html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 /* the prologue's corner buttons stand in the same top corners as the menu button; the hint 24px off the bottom */
 html.in-app .pro-skip,html.in-app .pro-sound{top:6px}
 html.in-app .pro-hint{bottom:24px}
@@ -4282,3 +4281,5 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 
 /* User 2026-10-09: the customer's line waits while a coach mark is up (holdSpeech) */
 .coach-on .say{visibility:hidden}
+/* app only: the Store Support arrival row ends 24px above the edge, like the windows' footers */
+html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
