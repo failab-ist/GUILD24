@@ -1,13 +1,13 @@
 # WORK_STATE
 
 DATE: 2026-10-10
-STATE: V2_12_4 (사망 한도 6/8/10 · 2티어 앞당기기 · 후반 게이트 한 기울기, User 컨펌 2026-10-10). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+STATE: V2_13_0 (전투 요구는 날짜 · 티어 차이는 위험, 위험 사망 곡선, 2티어 D5부터, User 컨펌 2026-10-10). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 버전은 v2.12.6이다(v2.12.4에서 점포지원 후보의 태그 보정만 뺀 것, 내용은 `design_ssot/CHANGELOG.md` §v2.12.6 · §v2.12.5 · §v2.12.4 · §v2.12.3 · §v2.12.2 · §v2.12.1). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
+- repository: `failab-ist/GUILD24`. 현행 버전은 v2.13.0이다(v2.12.6에 게이트 개편: 전투 요구는 날짜, 티어 차이는 위험, 내용은 `design_ssot/CHANGELOG.md` §v2.13.0 · §v2.12.6 · §v2.12.5 · §v2.12.4 · §v2.12.3 · §v2.12.2 · §v2.12.1). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
 - 승인된 밸런스는 이미 채택됐다: PR #116의 성장·처진 인원 경험치·Final 조정·포션 유통, PR #123의 직업 및 절반 강도 일반 게이트/화염. 현행 숫자는 각각 NPC_TRAIT / DUNGEON_HAZARD / BOSS / FINAL_EXPEDITION / RELIC owner를 따른다. 과거 후보를 현재 미적용 상태라고 다시 적지 않는다.
-- 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 지금 기준 측정 로그는 `reports/v2100-measure/newcomer-band-20261010/3-band-half-both.log`(새 손님 레벨 폭 + 영웅 4/9/15 · 장비 30/22/18/12%, 프레시 3000판 reader · investor)다. 같은 폴더의 1 · 2번은 채택하지 않은 후보, 0번은 v2.12.1이다. investor 봇은 그 뒤 DAY 6부터 핵심을 고르고 핵심 몫을 더 주도록 고쳤다(User 2026-10-10). 고친 봇의 기준은 4번 로그(investor만, D30 도달 12.7% · 클리어 5.5%)다. 환경+1 · +2 후보는 `snowball-20261010/`에 있고 채택하지 않았다. v2.12.3(게이트 1티어 공통)부터 기준은 `reports/v2100-measure/gate-tier1-20261010/main-vs-tier1-common.log`의 `after` 줄(프레시 1000판 · 궤적 200×10런 장식 4루트, reader · investor)이다. v2.12.4부터 기준은 `reports/v2100-measure/mid-difficulty-20261010/`의 `AB` 줄(프레시 2000판 reader · investor, 궤적 400×10런 장식 4루트 investor)이다.
+- 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 지금 기준 측정 로그는 `reports/v2100-measure/newcomer-band-20261010/3-band-half-both.log`(새 손님 레벨 폭 + 영웅 4/9/15 · 장비 30/22/18/12%, 프레시 3000판 reader · investor)다. 같은 폴더의 1 · 2번은 채택하지 않은 후보, 0번은 v2.12.1이다. investor 봇은 그 뒤 DAY 6부터 핵심을 고르고 핵심 몫을 더 주도록 고쳤다(User 2026-10-10). 고친 봇의 기준은 4번 로그(investor만, D30 도달 12.7% · 클리어 5.5%)다. 환경+1 · +2 후보는 `snowball-20261010/`에 있고 채택하지 않았다. v2.12.3(게이트 1티어 공통)부터 기준은 `reports/v2100-measure/gate-tier1-20261010/main-vs-tier1-common.log`의 `after` 줄(프레시 1000판 · 궤적 200×10런 장식 4루트, reader · investor)이다. v2.13.0부터 기준은 `reports/v2100-measure/tier-hazard-20261010/`의 `라` 줄(프레시 2000판 reader · investor, 궤적은 아직 안 잼)이다. v2.12.4 기준(`mid-difficulty-20261010/` `AB` 줄)은 비교용이다.
 - 최신 main의 SALE 남은 손님 팝오버·코치 분산·도움말 끄기 연동·판매 상품이 살린 NIGHT 연출·보험 원인 표시는 유지한다. 이번 통합 기준 main은 `e3de85dc`다.
 - 소스/사용자 노출 텍스트 점검은 배치1~8 완료. 설정·가이드, 상품·발주, 판매·모험가, 게이트·사건, 밤·폐점, 지원·장식·메타, 마왕·최종 원정, 사건55종을 처리했다. 배치8 커밋 `738c74a`. 전체 변경과 근거·검증은 `reports/TEXT-SOURCE-AUDIT.md`, 굵직한 배치 요약은 CHANGELOG의 소스/문구 점검 항목을 따른다.
 - User 2026-10-10 화면·문서 정리·머지 승인. 배치8 738c74a 및 최신 main 통합/문서 정리 30140540. 전체 npm test→audit→clean, 관련 화면 검사 PASS. PR #132가 이번 점검의 통합·원격 검증·머지 결과를 기록한다. 실물 폰 검증과 별도 출시 버전 변경은 이번 작업 범위에 없다.
@@ -18,6 +18,7 @@ STATE: V2_12_4 (사망 한도 6/8/10 · 2티어 앞당기기 · 후반 게이트
 |---|---|
 | v2.12.3 (User 2026-10-10 컨펌) | 게이트 1티어 전투 요구를 다섯 계열 공통값(기존 평균)으로, 2·3티어와 골렘 전투 몫은 그대로. 측정 `reports/v2100-measure/gate-tier1-20261010/` |
 | v2.12.4 (User 2026-10-10 컨펌) | 사망 한도 6/8/10, 2티어 비율 앞당기기(D8 40%·D12 50%), 게이트 완화 0.90 하나 + 후반 하루 몫 1.54. 측정 `reports/v2100-measure/mid-difficulty-20261010/` |
+| v2.13.0 (User 2026-10-10 컨펌) | 게이트 전투 요구 = 1티어 날짜선 × 1 / 1.05 / 1.20(골렘 2·3티어는 그대로), 위험 사망 몫 0.60 × 모자람², 2티어 D5부터 · 중반 1티어 줄임(D12 40% · D18 20%). 측정 `reports/v2100-measure/tier-hazard-20261010/` |
 | v2.12.5 (User 2026-10-10 컨펌) | 점포지원 후보 순수 뽑기: 태그 다양화 · 태그 +18% · 직전 후보 제외 · D30 제외 삭제(범위가 넓어 v2.12.6에서 일부 되돌림) |
 | v2.12.6 (User 2026-10-10 컨펌) | 점포지원 후보에서 태그 다양화 · 태그 +18%만 삭제, 직전 후보 · 교환 · D30 제외는 유지. 밸런스 측정은 안 함 |
 | v2.12.2 (User 2026-10-10 컨펌) | 새 손님 레벨 DAY 5부터 최저+0~1(기존 +0~2), 영웅 상품 가중치 D13~19 4 · D20~24 9 · D25~29 15, 장비 강화 장비 등급별 30/22/18/12%. 측정 `reports/v2100-measure/newcomer-band-20261010/` |
