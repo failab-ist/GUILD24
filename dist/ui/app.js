@@ -2540,12 +2540,12 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
  +'<div class="store" style="--daysign-x:1">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    /* the store's name is a plate right under the title (User 2026-09-27): the counter front carries the Store Capital */
-   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1>'
+   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="170" alt="마왕 잡는 편의점"></h1>'
    +'<span class="branchplate">'+E(plannedBranch())+'</span></div></span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
    +'<p class="board-rail">새 점포 준비</p>'
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
-    +'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</b>'
+    +'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다.</b>'
     +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>'
     +'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'

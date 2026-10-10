@@ -27,12 +27,13 @@ IMPLEMENTATION TRUTH = current Source.
 ## GAME CORE
 
 ### BRAND
+title=`마왕 잡는 편의점: 길드24` (로고는 「마왕 잡는 편의점」)
 brand=GUILD24 / 길드24
 slogan=`던전 가기 전, 길드24.`
 parent=길드리테일
 
 ### ONE-LINE
-《던전 앞 편의점》 = RPG 세계를 편의점 카운터 뒤에서 플레이하는 턴제 경영 로그라이트.
+《마왕 잡는 편의점: 길드24》 = RPG 세계를 편의점 카운터 뒤에서 플레이하는 턴제 경영 로그라이트.
 
 ### CORE FANTASY
 플레이어는 용사가 아니라 던전 앞 `GUILD24` 점주다.

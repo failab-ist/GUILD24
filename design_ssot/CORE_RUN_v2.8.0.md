@@ -29,7 +29,7 @@ externalAPIRequired=NO
 
 ## RUN FANTASY
 
-30일 동안 던전 앞 GUILD24를 운영한다.
+30일 동안 길드24 편의점을 운영한다.
 
 하루의 발주 → 판매 → 원정 결과 → 점포 결산이 누적되어 Store Build · Inventory Strategy · NPC 성장 ·
 Wallet/Loyalty/Revisit · Final Expedition 전력을 만든다.
