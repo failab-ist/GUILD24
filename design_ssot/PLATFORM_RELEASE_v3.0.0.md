@@ -86,13 +86,13 @@ Settings owns one `진동 ON/OFF` control.
 
 Use one short baseline haptic at these meaningful result points only:
 
-- SALE purchase succeeds
 - NIGHT outcome = 대성공
+- NIGHT saved beat: the sold Item proves it saved the adventurer from 사망 / 중상 (UI_UX §NIGHT — SAVED BY THE SALE); an Insurance save does not vibrate
 - NPC outcome = 사망
 - FINAL result = clear
 - FINAL result = failure
 
-Do not add routine haptics to ordinary buttons, quantity changes, scrolling, ORDER taps, navigation, or repeated low-value interactions.
+Do not add routine haptics to ordinary buttons, quantity changes, scrolling, ORDER taps, SALE purchases, navigation, or repeated low-value interactions.
 
 Start with one short common intensity. Only tune intensity/duration if real-device QA shows it is clearly too weak or intrusive; do not create a multi-level haptic taxonomy without a new User decision.
 
