@@ -7,6 +7,8 @@ const plug=name=>{try{return G.Capacitor?.Plugins?.[name]||null;}catch(e){return
 const inApp=()=>{try{return !!G.Capacitor?.isNativePlatform?.();}catch(e){return false;}};
 const prefs=()=>inApp()?plug('Preferences'):null;
 const HYDRATE_MS=1500,CLOUD_MS=30000;
+const CLOUD_OK='guild24.cloudok';
+const okMark=()=>{try{localStorage.setItem(CLOUD_OK,'1');}catch(e){}};
 let pending=null,timer=null,cloudRev=null;
 
 try{if(inApp())document.documentElement.classList.add('in-app');}catch(e){}
@@ -35,7 +37,7 @@ G.Native={
     every call has a time limit and any failure is dropped. The game never uploads a copy older than the one already in the cloud. */
  cloudPull(ms){
   const c=inApp()?plug('PlayGamesSaves'):null;if(!c)return Promise.resolve(null);
-  const work=(async()=>{try{const r=await c.load();
+  const work=(async()=>{try{const r=await c.load();okMark();
    if(r&&r.found&&typeof r.data==='string'){cloudRev=Number(r.rev)||0;return r.data;}
    if(r&&r.found===false)cloudRev=0;
   }catch(e){}return null;})();
@@ -50,13 +52,15 @@ G.Native={
   try{
    if(cloudRev===null){const r=await c.load();cloudRev=r&&r.found?Number(r.rev)||0:0;}
    if(job.rev<cloudRev)return;
-   await c.save({data:job.data,rev:job.rev,at:job.at});cloudRev=job.rev;
+   await c.save({data:job.data,rev:job.rev,at:job.at});okMark();cloudRev=job.rev;
   }catch(e){}
  },
  cloudClear(){
   pending=null;clearTimeout(timer);timer=null;
   try{const c=inApp()?plug('PlayGamesSaves'):null;if(c){cloudRev=0;c.clear().catch(()=>{});}}catch(e){}
  },
+ /* True only after the plugin has answered a real load or save once, so a build whose Play Games sign-in is not set up never claims a backup. */
+ cloudWorks(){try{return !!(inApp()&&plug('PlayGamesSaves'))&&localStorage.getItem(CLOUD_OK)==='1';}catch(e){return false;}},
  canVibrate(){return !!(inApp()&&plug('Haptics'))||(typeof navigator!=='undefined'&&!!navigator.vibrate);},
  /* One short buzz. Shell Haptics first, then the browser's own, else nothing. */
  vibrate(ms=40){

@@ -2568,13 +2568,19 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
 /* PLATFORM_RELEASE §HAPTICS: one short buzz at a result point, unless the player turned vibration off (default ON) */
 const hapticOn=()=>game.account.settings.haptic!==false;
 const haptic=()=>{if(hapticOn())Native.vibrate();};
+/* PLATFORM_RELEASE §credits: what the build owes its sources (licences are shipped beside the files) and the AI-content notice. */
+function credits(){return `<div class="settings-content">
+ <section class="settings-group" aria-labelledby="credits-ai"><h3 id="credits-ai">AI 사용 고지</h3><p>그림에는 이미지 생성 AI를 썼다.</p><p>배경음악은 음악 생성 AI(Google Lyria)로 만들었다.</p></section>
+ <section class="settings-group" aria-labelledby="credits-font"><h3 id="credits-font">글꼴</h3><p>Wanted Sans, 물마루 (SIL OFL 1.1)</p></section>
+ <section class="settings-group" aria-labelledby="credits-code"><h3 id="credits-code">소리와 코드</h3><p>효과음: Kenney, uisfx (CC0 1.0)</p><p>애니메이션: anime.js, Julian Garnier (MIT)</p></section></div>`;}
 const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
  ${Native.canVibrate()?`<section class="settings-group" aria-labelledby="settings-haptic"><div class="settings-heading"><h3 id="settings-haptic">진동</h3>${btn(hapticOn()?'진동 끄기':'진동 켜기','haptic')}</div><p>${hapticOn()?'중요한 결과가 나올 때 짧게 진동한다.':'진동이 꺼져 있다.'}</p></section>`:''}
  <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
- <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3>${Native.inApp()?'<p>자동저장은 이 기기의 앱에 보관된다.</p>':`<p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div>`}</section>
+ <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3>${Native.inApp()?`<p>자동저장은 이 기기의 앱에 보관된다.${Native.cloudWorks()?' Play 게임즈에도 자동으로 백업된다.':''}</p>`:`<p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div>`}</section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
+ <p class="settings-links">${btn('크레딧','credits','bare')}</p>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
 /* COPY_AUDIT §8 / UI_UX §GLOBAL HELP: five flow lines, then eight sections under collapsed 자세히. */
 function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
@@ -2760,13 +2766,14 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
  else if(modal==='settings'){title='설정';body=settings();narrow=true;}
+ else if(modal==='credits'){title='크레딧';body=credits();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다.<br>현재 보급 상태를 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
  else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss','stamp')+btn(c.under,'final-commit-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='이 점포를 폐점할까요?';body='<p>이번 점포의 영업을 끝내고 점포 자본을 정산한다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·보유 점포 자본·보유 장식은 유지된다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점','retire-go','danger');narrow=true;}
- else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
+ else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body=Native.inApp()?`<p>현재 영업과 본사 기록을 포함한 이 기기의 GUILD24 저장 데이터를 모두 지운다.${Native.cloudWorks()?' Play 게임즈의 백업도 함께 지운다.':''} 되돌릴 수 없다.</p>`:'<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.</p>';footer=(Native.inApp()?'':btn('저장 내보내기','export'))+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체한다. 기존 진행을 남기려면 먼저 내보내야 한다.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- const utility=modal==='menu'?'menu-panel':['roster','codex','help','loadout','abandonConfirm'].includes(modal)?'wood-frame':['settings','resetConfirm','importConfirm'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':''):'';
+ const utility=modal==='menu'?'menu-panel':['roster','codex','help','loadout','abandonConfirm'].includes(modal)?'wood-frame':['settings','resetConfirm','importConfirm','credits'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':''):'';
  root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''} ${utility}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&!ownCancel.has(modal)&&!d0Owed()?btn(CLOSE_X,'dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  sentenceBreaks(root);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
@@ -2939,6 +2946,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'codex-tab':codexTab=id;decoPending=null;sound('ui');renderModal();break;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
+ case'credits':sound('ui');setModal('credits');break;
  /* §AUDIO HIERARCHY: Settings is Utility. Unmuting used to answer with the default cue, which
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
