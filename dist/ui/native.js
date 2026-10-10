@@ -8,6 +8,8 @@ const inApp=()=>{try{return !!G.Capacitor?.isNativePlatform?.();}catch(e){return
 const prefs=()=>inApp()?plug('Preferences'):null;
 const HYDRATE_MS=1500,CLOUD_MS=30000;
 const CLOUD_OK='guild24.cloudok';
+/* a browser can only set how long the motor runs, and 40 ms read as weak on a phone (User 2026-10-10): one firmer pulse, not a pattern */
+const WEB_MS=70;
 const webVibrate=()=>{try{return typeof navigator!=='undefined'&&!!navigator.vibrate&&!!matchMedia('(pointer:coarse)').matches;}catch(e){return false;}};
 const okMark=()=>{try{localStorage.setItem(CLOUD_OK,'1');}catch(e){}};
 let pending=null,timer=null,cloudRev=null;
@@ -68,7 +70,7 @@ G.Native={
  vibrate(ms=40){
   try{const h=inApp()?plug('Haptics'):null;
    if(h){h.vibrate({duration:ms}).catch(()=>{});return;}
-   if(webVibrate()&&!(navigator.userActivation&&!navigator.userActivation.hasBeenActive))navigator.vibrate(ms);}catch(e){}
+   if(webVibrate()&&!(navigator.userActivation&&!navigator.userActivation.hasBeenActive))navigator.vibrate(Math.max(ms,WEB_MS));}catch(e){}
  },
  /* Android Back. `handle()` closes the topmost surface and returns true; otherwise the app saves and exits. */
  onBack(handle){
