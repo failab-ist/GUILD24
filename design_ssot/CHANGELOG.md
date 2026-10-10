@@ -35,6 +35,10 @@ and this table is their commit record.
 | v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR (this one) | (the User sets it) |
 
 
+## After v2.12.0 — Epic Rarity and Equipment gain trimmed (User 2026-10-10)
+
+Snowball trim after a fresh first Run cleared SLOTH easily on DAY 30. ECONOMY_ORDER §ORDER RARITY PROGRESSION: Epic weight is cut across D15~29 (D15~19 4→3, D20~24 10→7, D25~29 16→14), with the difference spread over Common, Uncommon and Rare so Rare still rises by day; D30 keeps its Final Bag row. DUNGEON_HAZARD §Equipment gain: no Equipment gain on DAY 1~2, then 30/20/15/10% by the Equipment tier already earned (tier 0/1/2/3+), so the adventurer who keeps winning gains Equipment more slowly.
+
 ## After v2.12.0 — EXP curve 18+Level×9 (User 2026-10-10)
 
 NPC_TRAIT §EXPERIENCE CURVE: each next Level costs `18 + current Level × 9` EXP (was × 8). A no-Decoration account was clearing too early (first clear around the 6th Run against the ~10th-Run aim); measured on the investor bot this moves it to about the 10th Run. Log: `reports/v2100-measure/late-difficulty-20261009/2-growth-x9.log`.
