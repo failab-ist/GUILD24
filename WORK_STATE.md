@@ -1,13 +1,13 @@
 # WORK_STATE
 
 DATE: 2026-10-10
-STATE: V2_12_1 (게임 이름 · 경험치 곡선 · 영웅 상품/장비 강화 조정 · 앱 준비, User 컨펌 2026-10-10). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+STATE: V2_12_2 (새 손님 레벨 폭 · 영웅 상품/장비 강화 수치, User 컨펌 2026-10-10). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 버전은 v2.12.1이다(v2.12.0 이후 PR #144~#155 묶음, 내용은 `design_ssot/CHANGELOG.md` §v2.12.1). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
+- repository: `failab-ist/GUILD24`. 현행 버전은 v2.12.2다(v2.12.1에 PR #157 밸런스를 더한 것, 내용은 `design_ssot/CHANGELOG.md` §v2.12.2 · §v2.12.1). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
 - 승인된 밸런스는 이미 채택됐다: PR #116의 성장·처진 인원 경험치·Final 조정·포션 유통, PR #123의 직업 및 절반 강도 일반 게이트/화염. 현행 숫자는 각각 NPC_TRAIT / DUNGEON_HAZARD / BOSS / FINAL_EXPEDITION / RELIC owner를 따른다. 과거 후보를 현재 미적용 상태라고 다시 적지 않는다.
-- 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 지금 기준 측정 로그는 `reports/v2100-measure/snowball-20261010/hero-equip.log`(영웅 상품·장비 강화 조정, 프레시 1000판 reader · investor)다. 비교한 환경+1 · +2 후보는 같은 폴더에 있고 채택하지 않았다.
+- 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 지금 기준 측정 로그는 `reports/v2100-measure/newcomer-band-20261010/3-band-half-both.log`(새 손님 레벨 폭 + 영웅 4/9/15 · 장비 30/22/18/12%, 프레시 3000판 reader · investor)다. 같은 폴더의 1 · 2번은 채택하지 않은 후보, 0번은 v2.12.1이다. 환경+1 · +2 후보는 `snowball-20261010/`에 있고 채택하지 않았다.
 - 최신 main의 SALE 남은 손님 팝오버·코치 분산·도움말 끄기 연동·판매 상품이 살린 NIGHT 연출·보험 원인 표시는 유지한다. 이번 통합 기준 main은 `e3de85dc`다.
 - 소스/사용자 노출 텍스트 점검은 배치1~8 완료. 설정·가이드, 상품·발주, 판매·모험가, 게이트·사건, 밤·폐점, 지원·장식·메타, 마왕·최종 원정, 사건55종을 처리했다. 배치8 커밋 `738c74a`. 전체 변경과 근거·검증은 `reports/TEXT-SOURCE-AUDIT.md`, 굵직한 배치 요약은 CHANGELOG의 소스/문구 점검 항목을 따른다.
 - User 2026-10-10 화면·문서 정리·머지 승인. 배치8 738c74a 및 최신 main 통합/문서 정리 30140540. 전체 npm test→audit→clean, 관련 화면 검사 PASS. PR #132가 이번 점검의 통합·원격 검증·머지 결과를 기록한다. 실물 폰 검증과 별도 출시 버전 변경은 이번 작업 범위에 없다.
@@ -16,6 +16,7 @@ STATE: V2_12_1 (게임 이름 · 경험치 곡선 · 영웅 상품/장비 강화
 
 | 버전 | 내용 |
 |---|---|
+| v2.12.2 (User 2026-10-10 컨펌) | 새 손님 레벨 DAY 5부터 최저+0~1(기존 +0~2), 영웅 상품 가중치 D13~19 4 · D20~24 9 · D25~29 15, 장비 강화 장비 등급별 30/22/18/12%. 측정 `reports/v2100-measure/newcomer-band-20261010/` |
 | v2.12.1 (User 2026-10-10 컨펌) | 게임 이름 「마왕 잡는 편의점: 길드24」와 새 로고, 레벨업 경험치 18+레벨×9, 영웅 상품 확률(D13~29)과 장비 강화 확률(DAY 3부터, 장비 등급별 30/20/15/10%) 낮춤, 슬로스 「봉인 강화」, 앱 준비(Capacitor 포장 · 앱 저장 · 뒤로가기 · 진동 · 클라우드 저장 · 크레딧 · 방침 링크), 웹 진동. 측정 로그 `reports/v2100-measure/snowball-20261010/` |
 | v2.12.0 (User 2026-10-09 컨펌) | 경험치 곡선 · 직업 · 절반 강도 게이트 · 전투 흔들림 ±12% · 처진 손님 생환 경험치 · 포션 유통, 소스/문구 일치 점검(사건 55종), 코치 재정리(하루 하나), 밤 결과 「준비가 살렸다」와 경우별 대사, 소리 교체(CC0), 에셋 미리 불러오기 |
 | v2.11.1 (User 2026-10-05 컨펌) | 밤 피로 변화 오버레이 · 실제 원인 기록 · 장식 반영, 바가지 거절 영수증 · 건강 표기 생략, 발주 위험 보기 압축 · 리롤 PNG · DAY 4 안내, 첫 마왕성 단계별 코치 · 개인별 환경 대응 · 소지금 표기. 판정·밸런스 변경 없음 |

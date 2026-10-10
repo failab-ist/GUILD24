@@ -33,10 +33,11 @@ and this table is their commit record.
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 | v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR #143 | `v2.12.0` |
-| v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR (this one) | (the User sets it) |
+| v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR #156 | (the User sets it) |
+| v2.12.2 | 2026-10-10 | PR #157 on `main` (newcomer Level band, Epic / Equipment values); version bump PR (this one) | (the User sets it) |
 
 
-## After v2.12.1 — Newcomer Level band, Epic Rarity and Equipment gain (User 2026-10-10)
+## v2.12.2 — Newcomer Level band, Epic Rarity and Equipment gain (User 2026-10-10)
 
 - META §Exact spawn-Level model: from DAY 5 a newcomer draws 1~2 + the Day term (was 1~3), so a newcomer arrives at most one Level above the Day's minimum. The min+2 newcomer showed a bare 우세 on the Days the minimum steps up (up to about 15% of newcomer-Gate pairs on DAY 21) and two of a fresh Run's top four were such arrivals.
 - Half of the v2.12.1 trim is given back to offset part of the difficulty the Level band adds: ECONOMY_ORDER §ORDER RARITY PROGRESSION Epic D13~19 3→4, D20~24 7→9, D25~29 14→15; DUNGEON_HAZARD §Equipment gain 30 / 22 / 18 / 12% by Equipment tier 0 / 1 / 2 / 3+ (was 30 / 20 / 15 / 10%). The User chose this over the easier 30 / 25 / 20 / 15% option because the User plays above the bots.
