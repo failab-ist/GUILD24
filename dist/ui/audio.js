@@ -360,7 +360,13 @@ let swapEnd=0,music=null,pending='',decoded={key:'',buf:null},ahead={key:'',byte
 function bgmDecode(bytes){const Off=window.OfflineAudioContext||window.webkitOfflineAudioContext;let dc=ctx;
  try{if(Off)dc=new Off(2,1,BGM_RATE);}catch(e){dc=ctx;}
  return new Promise((ok,no)=>{const p=dc.decodeAudioData(bytes,ok,no);if(p&&p.catch)p.catch(no);});}
-const bgmFetch=key=>fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status));
+const kept={};
+/* In the app every file is read once at start-up (`bgmAll`) and kept as bytes - never decoded ahead, one track is decoded at a time.
+   decodeAudioData takes the buffer it is given, so a kept file is handed out as a copy. */
+const bgmFetch=(key,keep)=>{if(kept[key])return kept[key].then(b=>b.slice(0));
+ const get=fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status));
+ if(keep){kept[key]=get;get.catch(()=>{delete kept[key];});}return get;};
+const bgmAll=each=>BGM_HQ?Object.keys(bgm).map(k=>bgmFetch(k,true).then(()=>{},()=>{}).then(each)):[];
 function bgmLoad(key){if(decoded.key===key)return Promise.resolve(decoded.buf);
  const bytes=ahead.key===key&&ahead.bytes?ahead.bytes:bgmFetch(key);ahead={key:'',bytes:null};
  return bytes.then(bgmDecode).then(buf=>{decoded={key,buf};return buf;});}
@@ -426,5 +432,5 @@ function unlock(){if(!enabled||!ctx)return;
  if(ctx.state!=='running')ctx.resume().catch(()=>{});
  try{const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();s.buffer=b;s.connect(master||sfxBus);s.start(0);}catch(e){}}
 if(typeof document!=='undefined')for(const ev of ['touchend','click'])document.addEventListener(ev,unlock,{capture:true,passive:true});
-G.Sound={play,sync,wake,locked,restart,prime:bgmPrime,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+G.Sound={play,sync,wake,locked,restart,prime:bgmPrime,loadAll:bgmAll,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);
