@@ -75,7 +75,7 @@ const BGM_HQ=(()=>{try{return !!(window.Native&&window.Native.inApp());}catch(e)
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
  /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
- /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:0.752,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
  /* action */ depart:1.26,return:0.713,gold:4.203,spend:4.191,crate:2.941,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
  /* utility */ button:0.711,ui:5.564,
  /* repeat */ quantity:6.357,quantset:7.962,};

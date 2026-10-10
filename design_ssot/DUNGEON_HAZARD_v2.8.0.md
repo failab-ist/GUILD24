@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.12.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.6
+DOC_VERSION=2.13.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -63,7 +63,7 @@ T1=fire
 T2=fire + increasedCombatPower
 T3=strong(fire) + highCombatPower
 
-Tier II / III Gate required Combat Power carries a Family factor `golemCombat=0.90` (화염 골렘 광산, Family id `golem`). Tier I is the common Tier I requirement of §GATE POWER for every Family.
+Tier II / III Gate required Combat Power keeps its own fire combat term with a Family factor `golemCombat=0.90` (화염 골렘 광산, Family id `golem`): from Tier II the stronger combat takes the place of a second Hazard. Tier I is the common Tier I requirement of §GATE POWER for every Family.
 Fire has no special occurrence weighting: Families are drawn uniformly.
 
 armorHazard=NO
@@ -315,18 +315,23 @@ The Day-term slopes remain unchanged. The Final uses its separate Boss requireme
 Full required Power (Source-exact):
 
 ```text
-Tier I Gate Power (every Family)
-= (21 + Ordinary base offset + Day term + Tier1Term) × SuccessEase × Event danger multiplier
+Gate Power (every Family's Tier I, and Tier II / III of every Family but golem)
+= (21 + Ordinary base offset + Day term + Tier1Term) × TierCombat × SuccessEase × Event danger multiplier
 Tier1Term = 1.5 (`DATA.balance.gateTier1Term`)
+TierCombat = Tier I 1 · Tier II 1.05 · Tier III 1.20 (`DATA.balance.gateTierCombat`)
 
-Tier II / III Gate Power
+golem Tier II / III Gate Power
 = (21 + Ordinary base offset + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
 × Event danger multiplier
 
-FireTerm = 6 + (Tier - 1) × 7.5 for golem (Tier II / III = 13.5 / 21), else 0
-FamilyCombat = golemCombat 0.90 for golem, else 1
+FireTerm = 6 + (Tier - 1) × 7.5 (Tier II / III = 13.5 / 21)
+FamilyCombat = golemCombat 0.90
 SuccessEase = 0.90 on every ordinary Day (ordinary Gates; the Final's Boss Power is its own owner)
-familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
+familyBase (golem Tier II / III only): golem 3
+
+Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard and
++6 / +12 Hazard Threat), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
+Gates are where a grown adventurer breaks through on strength.
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
@@ -594,13 +599,14 @@ Use the following exact anchor rows for ordinary Days:
 | Day anchor | T1 | T2 | T3 |
 |---|---:|---:|---:|
 | D1 | 100% | 0% | 0% |
-| D5 | 100% | 0% | 0% |
-| D7 | 85% | 15% | 0% |
-| D8 | 60% | 40% | 0% |
-| D12 | 50% | 50% | 0% |
-| D13 | 45% | 52% | 3% |
-| D18 | 30% | 60% | 10% |
-| D19 | 26% | 60% | 14% |
+| D4 | 100% | 0% | 0% |
+| D5 | 85% | 15% | 0% |
+| D7 | 70% | 30% | 0% |
+| D8 | 55% | 45% | 0% |
+| D12 | 40% | 60% | 0% |
+| D13 | 36% | 61% | 3% |
+| D18 | 20% | 70% | 10% |
+| D19 | 16% | 70% | 14% |
 | D24 | 10% | 60% | 30% |
 | D25 | 5% | 50% | 45% |
 | D29 | 0% | 45% | 55% |
@@ -859,8 +865,11 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit × 0.25
+= EnvironmentDeficit² × 0.60
 ```
+
+The curve makes a bare Gate deadly and a slight shortfall mild: it meets the old straight 0.25 line at a 42% deficit,
+below it a partly covered Hazard (one counter + food) dies less, above it an uncovered Hazard dies more.
 
 If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
 
@@ -1847,7 +1856,7 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit * 0.25
+= EnvironmentDeficit^2 * 0.60
 
 healthyFailureDeathChance
 = clamp(

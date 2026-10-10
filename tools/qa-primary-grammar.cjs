@@ -105,7 +105,17 @@ const READ=`((sel,label)=>{const e=document.querySelector(sel);if(!e)return null
    check(tag+' reached MORNING, ORDER, SALE, NIGHT and CLOSING',seen.size===5,[...seen].join(','));
    for(let i=0;i<120;i++){if(await p.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;await p.evaluate(`(${STEP})()`);}
    const atFinal=await p.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();Guild24.render();return g.run.phase==='final';})()`);
-   check(tag+' reached FINAL',atFinal);if(atFinal)await measure('final');
+   check(tag+' reached FINAL',atFinal);
+   /* D30 opens on the last order (its dock is ORDER's, FINAL_EXPEDITION §D30 PLAYER FLOW); the FINAL boundary Action is the preparation's
+      최종 원정 보내기 - move through the muster and commit a party first */
+   /* D30's Boss plate and Store Support offer can stand over the dock: clear them before each tap */
+   const clearModal=async()=>{for(let i=0;i<10;i++){const b=await p.$('#modal-root [data-action="boss-seen"], #modal-root [data-action="dismiss"]');if(!b)return;await b.click({force:true});await p.waitForTimeout(300);}};
+   const tap=async sel=>{for(let i=0;i<6;i++){await clearModal();try{await p.click(sel,{timeout:1500});return true;}catch{await p.waitForTimeout(400);}}return false;};
+   if(atFinal){await tap('.p-final .dock [data-action="final-ordered"]');
+    await p.evaluate(`(()=>{const g=Guild24.game;g.finalEligible().slice(0,g.finalRequired()).forEach(n=>g.selectFinal(n.id));Guild24.render();})()`);
+    await tap('.p-final .dock [data-action="final-commit"]');await clearModal();
+    check(tag+' FINAL party committed',await p.evaluate('Guild24.game.run.finalCommitted'));
+    await measure('final');}
    await p.evaluate(()=>{Guild24.game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');});await measure('end');
    await ctx.close();}
  }finally{await browser.close();server.kill();}

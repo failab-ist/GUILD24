@@ -34,9 +34,10 @@ for(const [day,offset]of [[1,.125],[4,.25],[10,.5],[11,.55],[15,.75],[20,1],[21,
   const old=(term+(isFire?[6,14,22][tier-1]:0))*scale;
   const full=(term+offset*2+(isFire?[6,13,20][tier-1]:0))*scale;
   const half=(term+offset+(isFire?[6,13.5,21][tier-1]:0))*scale;
-  /* DUNGEON_HAZARD §GATE POWER: Tier I is one common requirement for every Family (User 2026-10-10) */
+  /* DUNGEON_HAZARD §GATE POWER: one Day line (Tier I) x Tier combat 1 / 1.05 / 1.20 for every Family; golem Tier II / III keep their own term */
   const t1=(21+Dungeon.gateDayTerm(day)+offset+DATA.balance.gateTier1Term)*.9;
   if(tier===1)assert.ok(Math.abs(dungeon.power-t1)<1e-9,'1티어 공통 게이트 '+day+'/'+family);
+  else if(!isFire)assert.ok(Math.abs(dungeon.power-t1*[1,1.05,1.20][tier-1])<1e-9,'티어 배수 게이트 '+day+'/'+family+'/'+tier);
   else{assert.ok(Math.abs(dungeon.power-half)<1e-9,'승인된 절반 게이트 '+day+'/'+family+'/'+tier);
   assert.ok(Math.abs((dungeon.power-old)*2-(full-old))<1e-9,'기존→실험안 변화의 정확한 절반');}
   assert.equal(calls,1,'기존 burden 호출 보존');assert.deepEqual(dungeon.hazards,DATA.familyTiers[family][tier-1]);
