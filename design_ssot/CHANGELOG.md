@@ -46,6 +46,11 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
+## After v2.12.4 — Store Support draw is pure (User 2026-10-10)
+
+- RELIC §GRADE / §CANDIDATE RULES / §D30 CANDIDATE ELIGIBILITY: a window card rolls its grade (일반 60 / 희귀 28 / 영웅 12%, D0 일반), then a support of that grade is drawn uniformly. Removed: the tag-diversity step, the +18% per shared tag build bias, the cool-down of the previous window's three and of the redraw's three, and the D30 no-effect exclusion (`D.relicD30NoEffect`). Kept: no owned or retired support, no repeat inside a window.
+- Not measured: the offer mix and Run balance move with it; no balance run was made for this change.
+
 ## After v2.12.3 — Difficulty reference set by human play (User 2026-10-10)
 
 - `GAME_VISION.md` §Difficulty Curve: absolute difficulty is set from human play; the bot only measures change against the previous build. New reference: a rules-aware skilled player clears about 25% of fresh Runs (first clear by the 3rd~5th Run), a new buyer first clears around the 8th~15th Run with Decorations; investor bot fresh clear 2~3% with D10 reach held near 77%, Decoration-trajectory median first clear around the 10th Run. Bot change maps to people at an equal shift in odds. Directions: no Run that only luck can clear, prefer difficulty that sold items can answer, Boss difficulty held. The v2.10 balanced / skilled bot table is retired.

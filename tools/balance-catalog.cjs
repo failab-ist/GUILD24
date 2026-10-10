@@ -47,8 +47,8 @@ function render(){
   }));
  }
  line('## 3. 점포지원\n');
- line('가격은 런 내 Gold(G)의 기본 구매 가격이다. 첫 선택·메타 할인 등은 별도이며, 소유 가능한 활성 목록만 표시한다. DAY0 등급 규칙과 장식의 첫 선택 변경은 각각 공통 수치/장식 효과를 따른다. D30 가능 여부는 현재 명시적 제외 목록이다.\n');
- for(const rarity of [3,2,0]){line('### '+D.rarities[rarity]+'\n');table(['점포지원','기본 가격 G','현재 효과','D30 선택'],active.filter(r=>r.rarity===rarity).map(r=>[r.name,r.price,r.description,D.relicD30NoEffect.includes(r.id)?'제외':'가능']));}
+ line('가격은 런 내 Gold(G)의 기본 구매 가격이다. 첫 선택·메타 할인 등은 별도이며, 소유 가능한 활성 목록만 표시한다. DAY0 등급 규칙과 장식의 첫 선택 변경은 각각 공통 수치/장식 효과를 따른다.\n');
+ for(const rarity of [3,2,0]){line('### '+D.rarities[rarity]+'\n');table(['점포지원','기본 가격 G','현재 효과'],active.filter(r=>r.rarity===rarity).map(r=>[r.name,r.price,r.description]));}
  if(D.relicRetired.length)line('은퇴한 점포지원(새 후보 제외, 기존 저장 호환): '+D.relicRetired.map(id=>D.relicBy[id]?.name||id).join(' · ')+'.\n');
  line('## 4. 장식\n');
  line('가격은 Gold가 아닌 **점포 자본**이다. 계정에서 영구 보유하며 자리마다 한 개만 장착한다. 보유만으로 중첩되지 않고 해당 런에 장착한 장식이 적용된다.\n');

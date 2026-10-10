@@ -97,28 +97,11 @@ D30 Boss/Final ordering:
 
 No D30 Family reroll/reveal generation occurs.
 
-### D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE
+### D30 CANDIDATE ELIGIBILITY (User 2026-10-10)
 
-Every otherwise-eligible Store Support is included in D30 by default. A Store Support is excluded from D30 only when,
-after acquisition on D30 and before Final Lock, there is no legal action/state through which it can change:
-- D30 ORDER / Reroll / inventory preparation
-- Final participant preparation
-- Final participant power / Hazard readiness
-- Final result-relevant state
-
-Implementation uses an explicit D30 no-effect exclusion set, not a positive final-useful inclusion list.
-
-Current explicit D30 no-effect exclusions:
-단골 스탬프 기계 (stamp) · 회원 관리대장 (member) · 길드 보증 진열대 (guarantee) · 대형 냉장고 (fridge) ·
-길드 전광판 (board) · 첫 방문 쿠폰 (firstVisitCoupon) · 단체 주문 창구 (groupOrder) · 단골 묶음혜택 (memberBundle) ·
-프리미엄 멤버십 (premiumMember) · 귀환 적립제 (returnPoints) · 길드 납품 인증 (supplyCert) ·
-왕도 프리미엄 인증 (royalCert) · 지역 거점점 계약 (hub) · 운영 효율 매뉴얼 (efficiency) ·
-응급 처치대 (firstAidDesk; no SALE arrival on D30) · 소문 수집 게시판 (rumorBoard; no Event on D30) ·
-단골 추천 엽서함 (postcard; no visitors on D30) · 길드 구조대 계약 (rescueContract; no ordinary expedition on D30)
-
-All other current supports are D30-eligible under ordinary acquisition eligibility. Future Store Supports are
-D30-eligible by default; one is removed from D30 only by adding it to the exclusion set after its actual
-D30-to-Final usefulness is reviewed.
+D30 draws exactly like every other window: the ordinary pool of supports the Run does not own, with no D30 exclusion
+of any kind. A support that cannot change anything after a D30 acquisition may be offered; whether it pays is the
+player's reading of the offer.
 
 ### SLOTH SEAL-BREAK WINDOW
 
@@ -203,16 +186,15 @@ Who reads which:
 
 withinWindowDuplicate=NO
 owned nonstackable relic: futureEligible=NO
-unbought relic: futureEligible=YES · immediateNextWindowRepeat=NO
-offer diversity: prefer >=2 distinct Primary Build directions when practical
-buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약하게 높일 수 있으나 필수 Piece를 보장하지 않는다.
+unbought relic: futureEligible=YES (an unbought candidate may come back in the next window or in a redraw)
+pure draw (User 2026-10-10): no tag diversity, no build bias, no cool-down and no D30 exclusion bend the draw
 
 ### CANDIDATE REROLL (User 2026-10-02)
 
 - an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
 - price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
-- the redraw keeps every pool rule above (ownership, the grade roll, the D30 exclusions, diversity, build bias) and leaves
-  the three on the table out when at least three others remain; the new three are priced as any window's
+- the redraw keeps every pool rule above (ownership, the grade roll) and may return a support that was on the table; the new
+  three are priced as any window's
 - the spend is Store Support investment (the closing receipt's `점포지원 투자`); a reload never redraws for free
 - the key sits in the window's footer beside `나중에 결정`, the same rank and look (User 2026-10-02); copy -> COPY_AUDIT §11-31c
 
@@ -234,9 +216,10 @@ the internal kind.
 
 Draw, per card of a window:
 1. roll the card's grade: D5+ 일반 60% · 희귀 28% · 영웅 12%; D0 always 일반
-2. draw one support of that grade from the eligible pool (ownership, the D30 exclusions, the cool-down of the last three);
+2. draw one support of that grade uniformly from the pool the Run may still own (no owned support, none already on the
+   window);
    when that grade has nothing left, draw from the whole eligible pool
-3. offer diversity and build bias apply inside the grade
+3. nothing else bends the draw: no tag diversity, no build bias, no cool-down, no D30 exclusion (User 2026-10-10)
 
 No grade is guaranteed in a window or a Run; 영웅 can come from D5. Presentation: the grade word under the support name, in the
 Item rarity colours (일반 / 희귀 / 영웅 = the Item 일반 / 희귀 / 영웅 colours), and a grade colour line (UI_UX §STORE SUPPORT WINDOW).
@@ -518,7 +501,6 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn
   after it; only for an injured arrival and only while owned)
 - the SALE state strip says so once (COPY_AUDIT §9-4b)
-- D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
 - measurement evidence: archive/v2.9.11/v2.9.11-drafts.md §C-2
 
 25. 24시간 신선체계 · tag=Fresh · `DIRECTOR DOCUMENT BASELINE`
@@ -765,7 +747,7 @@ SLOTH: 점포지원, not 유물
 ## SAVE CONTRACT
 
 Persist at minimum: owned relic IDs · active relic window · candidates · prices · purchased/deferred state ·
-immediate-repeat cooldown state · Sloth opportunity / consumedBySealBreak state when applicable.
+Sloth opportunity / consumedBySealBreak state when applicable.
 
 Save/Load must not become an offer reroll method.
 
@@ -883,20 +865,13 @@ PASS:
 - D30 candidate relevance reads the persisted Final state
 - SLOTH D30 Seal option still shares the same mutually exclusive window
 
-#### REL-Q-v28-18 — D30 DEFAULT INCLUDE
+#### REL-Q-v28-18 — D30 PURE DRAW (User 2026-10-10)
 
-D30 candidate generation must be: ordinary eligible pool minus explicit D30 no-effect exclusions.
-It must NOT be implemented as a positive finalUseful/futureRelevant allowlist.
-
-Current explicit exclusions: the §D30 CANDIDATE ELIGIBILITY list (stamp, member, guarantee, fridge, board,
-firstVisitCoupon, groupOrder, memberBundle, premiumMember, returnPoints, supplyCert, royalCert,
-hub, efficiency, firstAidDesk).
+D30 candidate generation is the ordinary pure draw: no explicit exclusion, no allowlist.
 
 PASS:
-- every other current support can enter D30 under ordinary eligibility
+- every current support the Run does not own can be offered on D30
 - a newly added future Store Support enters D30 by default
-- a future support is excluded only after being explicitly added to the no-effect set
-- a support that requires a legal D30 Reroll/ORDER action to realize value is still eligible
 
 ### SLOTH WINDOW
 
@@ -962,7 +937,7 @@ SETUP: Inspect D0 and later windows.
 EXPECT:
 - D0 offers 일반 only
 - D5+ each card rolls 일반 60% · 희귀 28% · 영웅 12% and draws within that grade (whole pool when the grade is empty)
-- soft build bias and diversity still apply inside the grade
+- nothing else bends the draw (no tag diversity, build bias, cool-down or D30 exclusion)
 PASS: no 희귀 / 영웅 on D0, the per-card grade shares hold, and no hidden guaranteed 영웅 path.
 
 ### POOL / BLUEPRINTS
