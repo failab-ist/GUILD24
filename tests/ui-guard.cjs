@@ -3958,7 +3958,7 @@ test('ending: the music before holds until the result lands, then the ending cue
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
  const ctx={game:{account:{settings:{},tutorial:{skipped:false}}},coachOff:()=>ctx.game.account.tutorial.skipped,
-  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,SUPPORT_MAIL:'x@y.z'};
+  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,SUPPORT_MAIL:'x@y.z',PRIVACY_URL:'https://x.y/p'};
  assert.ok(render([set],'settings()',ctx).includes('필요한 때 말풍선과 한 줄 안내가 나온다.'),'ON copy does not impose a Day limit');
  ctx.game.account.tutorial.skipped=true;
  const off=render([set],'settings()',ctx);
