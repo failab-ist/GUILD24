@@ -77,6 +77,10 @@ When the app returns:
 - resume audio according to the existing mute/BGM/SFX settings
 - do not duplicate BGM or replay one-shot SFX merely because of resume
 
+## DEFAULT SOUND
+
+A fresh Android install starts with sound on, including the prologue speaker and BGM, because the app WebView plays without a first tap. Only a start with no saved Save does this: a saved mute choice wins, and the web build keeps sound off by default.
+
 ## HAPTICS
 
 Settings owns one `진동 ON/OFF` control.
@@ -117,3 +121,4 @@ Before Closed Test:
 8. backgrounding saves and silences audio; foreground return resumes without duplicate playback
 9. haptic toggle persists; the five approved result points fire once; routine controls do not vibrate
 10. Safe Area / portrait layout is readable on the real Android test device
+11. a fresh install plays prologue music and effects with no first tap; a saved mute choice stays muted

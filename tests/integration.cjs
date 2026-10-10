@@ -1532,4 +1532,29 @@ test('BOSS §TRAIT NUMBERS: the Trait figures come from the tuning table the Fin
  for(const k of lines.match(/\{\w+\}/g)||[])assert.ok(k.slice(1,-1) in n,k+' has a source in traitNumbers()');
 });
 
+test('PLATFORM_RELEASE §Saved Games: the cloud copy restores a missing Save, wins only when newer and valid, and a write carries a rising rev',()=>{
+ const store=new Map();
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ try{
+  const g=fresh('cloud-rev');Save.rev=0;
+  assert.equal(Save.hasLocal(),false,'a fresh install has no local Save');
+  assert.ok(Save.write(g.account,g.run)&&Save.write(g.account,g.run),'two writes');
+  const local=JSON.parse(store.get('guild24.save.v9'));
+  assert.equal(local.rev,2,'rev rises by one per write');assert.ok(Number.isFinite(local.at),'and a timestamp rides with it');
+  assert.ok(Save.valid(local),'the metadata does not make a Save invalid');
+  const cloud=(rev,at)=>JSON.stringify({...local,rev,at});
+  assert.equal(Save.cloudMerge(cloud(1,local.at+999)),'local','an older cloud copy never replaces the local Save');
+  assert.equal(Save.cloudMerge(cloud(2,local.at)),'local','the same rev and no later time keeps the local Save');
+  assert.equal(Save.cloudMerge(JSON.stringify({...local,rev:9,account:null})),'local','an invalid cloud copy is ignored');
+  assert.equal(Save.cloudMerge(cloud(2,local.at+5)),'cloud','the same rev with a later time is the newer Save');
+  assert.equal(Save.cloudMerge(cloud(7,0)),'cloud','a higher rev is the newer Save');
+  assert.equal(JSON.parse(store.get('guild24.save.v9')).rev,7,'the cloud copy is now the local Save');
+  assert.equal(Save.read()&&Save.rev,7,'and the next write continues from its rev');
+  store.clear();
+  assert.equal(Save.cloudMerge(cloud(3,1)),'cloud','with no local Save the cloud copy is restored');
+  assert.ok(Save.read(),'and it loads');
+  assert.equal(Save.reset(),true);assert.equal(Save.rev,0,'a reset starts the count again');
+ }finally{delete global.localStorage;Save.rev=0;}
+});
+
 console.log(count+' integration groups passed');
