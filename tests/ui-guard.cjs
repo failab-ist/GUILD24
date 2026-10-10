@@ -3332,7 +3332,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  const writes=app.match(/pendingSeed(\?\?)?=/g)||[];
  assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed=','pendingSeed='],
   'the plan has exactly four sites: declared, memoised once, cleared at Start, cleared on full reset');
- assert.ok(/case'reset-go':\{[^}]*game=new Game\(Meta\.fresh\(\),null\);[^}]*pendingSeed=null;/.test(app),'a full reset drops a pending plan with the rest of the Run state');
+ assert.ok(/case'reset-go':\{[^}]*game=new Game\((?:Meta\.fresh|freshAccount)\(\),null\);[^}]*pendingSeed=null;/.test(app),'a full reset drops a pending plan with the rest of the Run state');
  assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
  const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
  assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');
