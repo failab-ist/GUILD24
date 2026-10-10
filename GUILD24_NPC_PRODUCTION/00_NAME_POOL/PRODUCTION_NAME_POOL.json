@@ -1,6 +1,6 @@
 {
   "package": {
-    "project": "GUILD24 / 던전 앞 편의점",
+    "project": "GUILD24 / 마왕 잡는 편의점",
     "name": "NPC_NAME_POOL_PRODUCTION_SORTED",
     "source_package": "NPC_NAME_POOL v1.1.0",
     "purpose": "Normal portrait production binding convenience only; names/genders unchanged",
