@@ -3881,7 +3881,9 @@ test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a
  assert.ok(/low\.type='highpass';low\.frequency\.value=120;/.test(audio),'the effects bus drops what a phone cannot play');
  assert.ok(/if\(sh\.cut\)\{to=ctx\.createBiquadFilter\(\);to\.type='highpass';to\.frequency\.value=sh\.cut;/.test(audio)&&/if\(sh\.over\)sh\.over\.forEach/.test(audio),'a bass-heavy cue has its own low cut and its overtones');
  for(const [k,t] of Object.entries(Sound.music))assert.equal(t.trim||0,k==='night'?-3:0,k+(k==='night'?': NIGHT 3 dB under':': no extra trim'));
- assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\)\/20\)/.test(audio),'the trim is applied');
+ assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\+BGM_HQ_TRIM\)\/20\)/.test(audio),'the trim is applied');
+ // the app plays the 192 kb/s originals at 44.1 kHz, 0.4 dB under so the level matches the web copies; the web is unchanged
+ assert.ok(/BGM_RATE=BGM_HQ\?44100:32000,BGM_HQ_TRIM=BGM_HQ\?-\.4:0;/.test(audio)&&/window\.Native&&window\.Native\.inApp\(\)/.test(audio),'the app decodes at 44.1 kHz with a 0.4 dB trim; the web keeps 32 kHz');
  assert.deepEqual(Sound.fades,{out:1,in:1.5},'1 s out, 1.5 s in');
  assert.ok(/at=Math\.max\(now,swapEnd\)/.test(audio)&&/swapEnd=now\+fade;/.test(audio),'the next track waits for the old fade');
  assert.ok(/linearRampToValueAtTime\(full\*\(i\/8\)\*\*2,at\+BGM_IN\*i\/8\)/.test(audio),'the rise is a squared curve, never a hard start');

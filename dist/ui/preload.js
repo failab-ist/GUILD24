@@ -48,9 +48,11 @@ function pump(){if(busy)return;while(line.length&&seen.has(line[0]))line.shift()
 function faces(srcs){for(const s of srcs.slice().reverse())if(!seen.has(s))line.unshift(s);pump();}
 /* onProgress(done,total). On a slow link the game starts after CAP and the rest keeps loading behind it. */
 function run(onProgress){
- const list=required(matchMedia(WIDE).matches),total=list.length;let n=0;
+ const list=required(matchMedia(WIDE).matches);let n=0,total=list.length;
  const fonts=document.fonts?.ready||Promise.resolve();
- const all=Promise.all(list.map(s=>one(s).then(()=>onProgress(++n,total))));
+ /* the app also reads every music file up front (audio.js bgmAll), so a phase change never waits on one */
+ const step=()=>onProgress(++n,total),mus=G.Sound?.loadAll?G.Sound.loadAll(step):[];total+=mus.length;
+ const all=Promise.all(list.map(s=>one(s).then(step)).concat(mus));
  return Promise.race([Promise.all([all,fonts]),new Promise(r=>setTimeout(r,CAP))]).then(()=>{onProgress(total,total);warm();});}
 /* After the first screen, when idle: four at a time so input is never held up. */
 function warm(){const q=later();let i=0;
