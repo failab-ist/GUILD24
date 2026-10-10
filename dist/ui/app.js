@@ -1,5 +1,5 @@
 (function(){
-'use strict';
+'use strict';Native.hydrate(Save.keys).then(function(){
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
 /* UI_UX §BUILD MARKER (v2.9.3): the build a report was played on - the opening screen's corner and the console */
 const BUILD=window.GUILD24_BUILD||{version:'dev',commit:'dev'};console.info('GUILD24 v'+BUILD.version+' · '+BUILD.commit);
@@ -66,7 +66,7 @@ let endRevealed=true,endFrom='final',endAt=null;
 function endReveal(){const s=game.run;clearTimeout(endAt);
  const land=!motionOK()?0:s?.finalReport?FINAL_SEAL.hold+STAMP_FALL:ENDING_HOLD;
  endAt=setTimeout(()=>{if(game.run?.phase!=='end'||endRevealed)return;endRevealed=true;const st=game.account.settings;
-  Sound.play(game.run.win?'endwin':'endfail',game.run.finalReport?.15:0);Sound.sync(st.muted,audioPhase(),st);},land);}
+  Sound.play(game.run.win?'endwin':'endfail',game.run.finalReport?.15:0);if(game.run.finalReport)haptic();Sound.sync(st.muted,audioPhase(),st);},land);}
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -269,13 +269,17 @@ function finishClash(){if(!clash)return;const c=clash;clash=null;c.timers.forEac
    With motion the Outcome cue waits for the stamp's landing frame (a death's for its tape, a
    reversal's for its first print, `rescue` then on the overstamp); a waiting cue is dropped when
    the next result or the next screen comes first, so it is never heard over it. */
+/* PLATFORM_RELEASE §HAPTICS: a night result buzzes once, on the landing of its cue - 대성공, 사망, or the sale saving the adventurer (an Insurance save does not) */
+const nightHaptic=r=>savedBeat(r)||r.outcome==='대성공'||r.outcome==='사망';
 let nightCueAt=[];
 function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!result)return;
  const st=motionOK()&&nightStampOf(result);
  /* UI_UX §NIGHT — SAVED BY THE SALE: the relief takes the Outcome cue's place on that landing, never on top of it */
  const cue=savedBeat(result)?'saved'+savedTier(result):nightCue(result);
- if(!st){sound(cue);if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
- nightCueAt=[setTimeout(()=>sound(cue),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
+ if(!st){sound(cue);if(nightHaptic(result))haptic();if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
+ const landAt=st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st);
+ nightCueAt=[setTimeout(()=>sound(cue),landAt)];
+ if(nightHaptic(result))nightCueAt.push(setTimeout(haptic,landAt));
  if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));
  /* the worse verdict's own cue on its print, a whoosh on the shove */
  if(st.saved)nightCueAt.push(setTimeout(()=>Sound.play(st.saved==='사망'?'death':'severe'),st.entry),setTimeout(()=>Sound.play('shove'),savedAt(st.saved).shove));}
@@ -2561,9 +2565,13 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +row('bgm','BGM',Number.isFinite(st.bgm)?st.bgm:d.bgm)
   +row('sfx','SFX',Number.isFinite(st.sfx)?st.sfx:d.sfx)
   +`</div>`;}
+/* PLATFORM_RELEASE §HAPTICS: one short buzz at a result point, unless the player turned vibration off (default ON) */
+const hapticOn=()=>game.account.settings.haptic!==false;
+const haptic=()=>{if(hapticOn())Native.vibrate();};
 const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
+ ${Native.canVibrate()?`<section class="settings-group" aria-labelledby="settings-haptic"><div class="settings-heading"><h3 id="settings-haptic">진동</h3>${btn(hapticOn()?'진동 끄기':'진동 켜기','haptic')}</div><p>${hapticOn()?'중요한 결과가 나올 때 짧게 진동한다.':'진동이 꺼져 있다.'}</p></section>`:''}
  <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
@@ -2935,6 +2943,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
+ case'haptic':game.account.settings.haptic=!hapticOn();game.save();sound('ui');haptic();render();
+  if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
  case'coach-toggle':coachSwitch(!coachOff());sound('ui');render();
   // UI_UX §SETTINGS / DEBUG BOUNDARY: preparation returns before the settings panel refresh.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
@@ -3054,6 +3064,13 @@ document.addEventListener('focusout',ev=>{
  t.open=false;});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
+/* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level the app saves and exits. */
+Native.onBack(()=>{
+ if(document.querySelector('.tip[open],.wh-tip[open]')){closeTips(null);whClose();return true;}
+ if(activeCoach){finishCoach();return true;}
+ if(modal){if(game.run?.phase!=='foundation'&&!d0Owed())setModal(null);return true;}
+ if(game.run?.phase==='order'&&sheetOpen()){setStockSheet(false);return true;}
+ game.save();return false;});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
@@ -3075,4 +3092,5 @@ window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simul
  loaded.then(()=>{ready=true;},()=>{ready=true;});
  if(!game.run)startPrologue(()=>{if(ready)render();else{$('#app').innerHTML=boot;loaded.then(render,render);}});
  else loaded.then(render,render);})();
+});
 })();

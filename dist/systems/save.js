@@ -31,6 +31,7 @@ function accountOk(a,D){
     A save that carries a level carries a real one - a string or a 7 is malformed, not old. */
  for(const k of ['bgm','sfx'])
   if(a.settings[k]!==undefined&&!(Number.isFinite(a.settings[k])&&a.settings[k]>=0&&a.settings[k]<=1))return false;
+ if(a.settings.haptic!==undefined&&typeof a.settings.haptic!=='boolean')return false;
  if(!Array.isArray(a.discovered)||!a.discovered.every(k=>D.itemBy[k]))return false;
  if(a.tutorial!==undefined&&(typeof a.tutorial!=='object'||!a.tutorial))return false;
  /* META §BEST DAY: absent on a save that predates it (reads 0), a Day when present; the best 총매출 likewise, a whole Gold amount */
@@ -249,14 +250,15 @@ const build=()=>{const b=G.GUILD24_BUILD;return b?{version:b.version,commit:b.co
 
 G.Save={
  error:null,
+ keys:[KEY,BACKUP],
  migrate(s){if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
    const json=JSON.stringify({version:VERSION,build:build(),account,run});
    const previous=localStorage.getItem(KEY);
-   if(previous)localStorage.setItem(BACKUP,previous);
-   localStorage.setItem(KEY,json);
+   if(previous){localStorage.setItem(BACKUP,previous);G.Native?.put(BACKUP,previous);}
+   localStorage.setItem(KEY,json);G.Native?.put(KEY,json);
    this.error=null;
    return true;
   }catch(e){
@@ -311,7 +313,7 @@ G.Save={
  reset(){
   if(typeof localStorage==='undefined')return false;
   try{
-   for(const key of [KEY,BACKUP,...LEGACY.map(v=>'guild24.save.'+v)])localStorage.removeItem(key);
+   for(const key of [KEY,BACKUP,...LEGACY.map(v=>'guild24.save.'+v)]){localStorage.removeItem(key);G.Native?.drop(key);}
    this.error=null;
    return true;
   }catch(e){
