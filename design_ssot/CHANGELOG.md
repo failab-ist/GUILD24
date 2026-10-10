@@ -32,14 +32,25 @@ and this table is their commit record.
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
-| v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR (this one) | (the User sets it) |
+| v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR #143 | `v2.12.0` |
+| v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR (this one) | (the User sets it) |
 
 
-## After v2.12.0 — Epic Rarity and Equipment gain trimmed (User 2026-10-10)
+## v2.12.1 — Release summary (User 2026-10-10)
 
-Snowball trim after a fresh first Run cleared SLOTH easily on DAY 30. ECONOMY_ORDER §ORDER RARITY PROGRESSION: Epic weight is cut across D15~29 (D15~19 4→3, D20~24 10→7, D25~29 16→14), with the difference spread over Common, Uncommon and Rare so Rare still rises by day; D30 keeps its Final Bag row. DUNGEON_HAZARD §Equipment gain: no Equipment gain on DAY 1~2, then 30/20/15/10% by the Equipment tier already earned (tier 0/1/2/3+), so the adventurer who keeps winning gains Equipment more slowly.
+Patch version: work on `main` since v2.12.0 (PR #144~#155). Rules live in their routed owners; the app-wrapper rules live in PLATFORM_RELEASE.
 
-## After v2.12.0 — EXP curve 18+Level×9 (User 2026-10-10)
+- Balance: EXP curve 18+Level×9 (#145); Epic Rarity weight and Equipment gain trimmed against snowball (#155). Environment Hazard and Counter values are unchanged.
+- Game title: 「마왕 잡는 편의점: 길드24」 with the new drawn title logo (#150); old title wording cleaned from the docs (#152 #153). GUILD24 stays the in-game store brand.
+- Sloth's seal choice reads `봉인 강화` (a held seal keeps Sloth asleep and weaker); the D30 art index follows the seals held (#144). BOSS / UI_UX.
+- App readiness (Capacitor wrapper, #148): notch-safe full screen, app Save, Android back, haptics at key NIGHT and Final moments (#147 #149), cloud save, credits, bug-report and privacy-policy links, sound on at a fresh app install (#151), browser vibration on touch devices for the web build (#154). PLATFORM_RELEASE.
+- Measurement only, not in the game: the investor bot in `dist/systems/simulation.js` (#146).
+
+## v2.12.1 — Epic Rarity and Equipment gain trimmed (User 2026-10-10)
+
+Snowball trim after a fresh first Run cleared SLOTH easily on DAY 30. ECONOMY_ORDER §ORDER RARITY PROGRESSION: Epic weight is cut across D13~29 (D13~19 4→3, D20~24 10→7, D25~29 16→14), with the difference spread over Common, Uncommon and Rare so Rare still rises by day; D30 keeps its Final Bag row. DUNGEON_HAZARD §Equipment gain: no Equipment gain on DAY 1~2, then 30/20/15/10% by the Equipment tier already earned (tier 0/1/2/3+), so the adventurer who keeps winning gains Equipment more slowly.
+
+## v2.12.1 — EXP curve 18+Level×9 (User 2026-10-10)
 
 NPC_TRAIT §EXPERIENCE CURVE: each next Level costs `18 + current Level × 9` EXP (was × 8). A no-Decoration account was clearing too early (first clear around the 6th Run against the ~10th-Run aim); measured on the investor bot this moves it to about the 10th Run. Log: `reports/v2100-measure/late-difficulty-20261009/2-growth-x9.log`.
 

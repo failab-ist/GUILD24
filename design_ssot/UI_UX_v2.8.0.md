@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.12.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
