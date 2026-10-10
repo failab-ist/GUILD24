@@ -200,6 +200,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 html.in-app .stage .menu-pin{top:6px}
 html.in-app .stage .dock{padding-bottom:max(24px,var(--sa-bottom))}
 html.in-app #toast{bottom:calc(104px + var(--sa-bottom))}
+/* windows and notices end 24px above the edge too; the wood-frame windows are left as they are until seen on the phone */
+html.in-app .modal:not(.wood-frame):not(.settings-wood) .modal-footer{padding-bottom:max(24px,var(--sa-bottom))}
+html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
+/* the prologue's corner buttons stand in the same top corners as the menu button; the hint 24px off the bottom */
+html.in-app .pro-skip,html.in-app .pro-sound{top:6px}
+html.in-app .pro-hint{bottom:24px}
+/* the ending receipt starts clear of the menu button */
+html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
 .menu-pin{position:absolute;top:calc(var(--sa-top) + 6px);right:calc(var(--sa-right) + 6px);z-index:30;
  width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#2d190d;color:#dfcba9;
