@@ -5,14 +5,14 @@
 // Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers
 // against the rest, cash per Day and the Capital gain; a third line the preparation lines (with / without an Item, the share of
 // Item expeditions whose result an Item changed, the top four's share of the Items sold). The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
-//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,investor] [--decos none,economy] [--out file.json]
+//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,investor] [--decos none,economy,survival,operation] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const RANK=['fresh24','hub','expeditionMeal','kitchen','dawnRecovery','opsRoom','extraOrder','returnPoints','lifetime','member','rotation',
  'firstAidDesk','bulk','board','coldcase','hazardBoard','premiumMember','fieldStretcher','groupOrder','guarantee','royalCert','supplyCert',
  'firstVisitCoupon','fridge','rerollTicket','stamp','warehouse','logisticsHQ','memberBundle','fieldRepair','efficiency','rareContract'];
-const DECO={none:[],economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign']};
+const DECO={none:[],economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],operation:['rerollCoupon','voucher','heroSign','cheerBanner']};
 const BANDS=[[1,7],[8,14],[15,21],[22,29]];
 // The four highest-Level adventurers at the Run's end against everyone else: [wins, expeditions, deaths] each
 function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),out={top:[0,0,0],rest:[0,0,0]};
@@ -97,7 +97,7 @@ else if(require.main===module){
  const WORKERS=+flag('--workers',cpus);if(!Number.isInteger(WORKERS)||WORKERS<1)throw Error('--workers는 양의 정수여야 합니다.');
  const srcs=[['after',here],...(before?[['before',path.resolve(before)]]:[])];
  for(const [src,root] of srcs){
-  for(const policy of POL)for(const deco of DECOS||(src==='after'?['none','economy','survival']:['none','survival']))
+  for(const policy of POL)for(const deco of DECOS||(src==='after'?['none','economy','survival','operation']:['none','survival']))
    for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'traj',policy,deco,T:Math.ceil(TT/PARTS),R,part:p});
   for(const policy of POL)for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
  }
