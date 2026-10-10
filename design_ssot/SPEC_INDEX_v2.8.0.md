@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.12.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_12_0_CLOSED_2026-10-09 (tag v2.12.0 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
-SOURCE_ADOPTION_STATUS=V2_12_0_ADOPTED (every version through v2.12.0 is adopted in Source on main: the approved balance, text/source alignment, coach, sound and night-result work; CHANGELOG §v2.12.0)
+FREEZE_STATUS=V2_12_1_CLOSED_2026-10-10 (tag v2.12.1 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_12_1_ADOPTED (every version through v2.12.1 is adopted in Source on main: the game title, EXP curve, Epic Rarity and Equipment gain trim, 봉인 강화 wording, and the app-wrapper work held by PLATFORM_RELEASE; CHANGELOG §v2.12.1)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
