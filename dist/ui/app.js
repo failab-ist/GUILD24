@@ -2573,7 +2573,7 @@ function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
  ${Native.canVibrate()?`<section class="settings-group" aria-labelledby="settings-haptic"><div class="settings-heading"><h3 id="settings-haptic">진동</h3>${btn(hapticOn()?'진동 끄기':'진동 켜기','haptic')}</div><p>${hapticOn()?'중요한 결과가 나올 때 짧게 진동한다.':'진동이 꺼져 있다.'}</p></section>`:''}
  <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
- <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
+ <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3><p>자동저장은 ${Native.inApp()?'이 기기의 앱에':'현재 브라우저에'} 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div></section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다. 소리는 처음에 꺼져 있다.</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
 /* COPY_AUDIT §8 / UI_UX §GLOBAL HELP: five flow lines, then eight sections under collapsed 자세히. */
