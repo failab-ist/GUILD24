@@ -1462,10 +1462,11 @@ line, §BUILD MARKER, excepted); no Debug menu needed.
 
 ### OPENING TITLE LOGO (v2.9.9)
 
-(acceptance -> UI_UX §QA UI-Q-v29-41; asset -> reports/ASSETS.md §Title logo.) `던전 앞 편의점` is the drawn logo, not type,
-hanging from the store scene's ceiling: one image with the name as alt text in the `h1`, no added shadow or frame; no larger
-than needed — phone at most 210 px wide or 58% of the width, clear of the build marker and menu; desk 320 px; cut to the
-letters (shipped as a 960 px derivative with the 점 받침 reading as ㅁ). The branch name stays visible, unemphasised: MORNING's
+(acceptance -> UI_UX §QA UI-Q-v29-41; asset -> reports/ASSETS.md §Title logo.) `마왕 잡는 편의점` is the drawn logo, not type,
+set on two lines (`마왕 잡는` over `편의점`), hanging from the store scene's ceiling: one image with the name as alt text in the
+`h1`, no added shadow or frame; sized by height so the branch plate under it clears the board and an equipped 간판's tag — 62 px on a phone,
+76 px on the desk, 96 px on a stage 800 high or more, 56 px on a short phone — clear of the build marker and menu; cut to the letters (shipped
+as a 640 px derivative with the 점 받침 reading as ㅁ). The branch name stays visible, unemphasised: MORNING's
 plate under the logo.
 
 ### PRIMARY ACTION GRAMMAR (v2.9.9)
@@ -2694,7 +2695,7 @@ the ended Run changed before `첫 점포지원 고르기`.
 
 PASS: at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880 the logo title matches → UI_UX §OPENING TITLE LOGO - whole,
 centred, crisp, clear of the build marker and the menu button, the branch plate fully visible under it (UI-Q-v29-42); the `h1`
-reads `던전 앞 편의점` to a screen reader; the 점 받침 reads as ㅁ at the phone size.
+reads `마왕 잡는 편의점` to a screen reader; the 점 받침 reads as ㅁ at the phone size.
 FAIL: the title rendered as text, a cropped or stretched logo, the logo covered, or a missing file.
 
 #### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
