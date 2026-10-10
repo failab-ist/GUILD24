@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.12.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.2
+DOC_VERSION=2.12.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.3
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_12_2_CLOSED_2026-10-10 (tag v2.12.2 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
-SOURCE_ADOPTION_STATUS=V2_12_2_ADOPTED (every version through v2.12.2 is adopted in Source on main: v2.12.1 plus the newcomer Level band and the Epic Rarity / Equipment gain values of v2.12.2; CHANGELOG §v2.12.2)
+FREEZE_STATUS=V2_12_3_CLOSED_2026-10-10 (tag v2.12.3 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_12_3_ADOPTED (every version through v2.12.3 is adopted in Source on main: v2.12.2 plus the common Tier I Gate requirement of v2.12.3; CHANGELOG §v2.12.3)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
