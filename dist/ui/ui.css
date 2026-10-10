@@ -196,6 +196,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .in-app .p-sale .front{padding-top:calc(var(--sa-top) + 4px)}
 .in-app .relic-takeover{padding-top:var(--sa-top)}
 .in-app .p-prep .build-mark{top:6px}
+/* the menu button and the build mark sit in the top corners, beside the camera cut-out; the bottom buttons stand 24px off the edge, clear of the gesture bar */
+html.in-app .stage .menu-pin{top:6px}
+html.in-app .stage .dock{padding-bottom:max(24px,var(--sa-bottom))}
+html.in-app #toast{bottom:calc(104px + var(--sa-bottom))}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
 .menu-pin{position:absolute;top:calc(var(--sa-top) + 6px);right:calc(var(--sa-right) + 6px);z-index:30;
  width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#2d190d;color:#dfcba9;
