@@ -4,4 +4,6 @@
     <string name="title_activity_main">GUILD24</string>
     <string name="package_name">com.solbri.guild24</string>
     <string name="custom_url_scheme">com.solbri.guild24</string>
+    <!-- Play Games app ID: replace with the numeric ID from Play Console > Play Games Services > Configuration. 0 = not set yet. -->
+    <string name="game_services_project_id" translatable="false">0</string>
 </resources>

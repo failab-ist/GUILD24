@@ -6,11 +6,18 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.getcapacitor.BridgeActivity;
+import com.google.android.gms.games.PlayGamesSdk;
 
 public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    registerPlugin(PlayGamesSavesPlugin.class);
     super.onCreate(savedInstanceState);
+    // Play Games v2 signs in on its own after this; a failure only means the cloud copy is unavailable.
+    try {
+      PlayGamesSdk.initialize(this);
+    } catch (Exception ignored) {
+    }
     // 전체 화면: 상태바·내비게이션바를 숨기고, 가장자리 스와이프 때만 잠깐 보인다. 노치 영역까지 그린다.
     getWindow().getAttributes().layoutInDisplayCutoutMode =
         WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
