@@ -256,15 +256,15 @@ are never requested at runtime, and no pixel of them is reused in the UI.
   runtime visual improvement under the Presentation Asset / Visual Delta gates.
 
 ### Title logo — user-provided, project-generated (v2.12.x)
-- shipped file: `dist/ui/assets/presentation/start/title-logo.png` — 640x382, PNG RGBA, 231 KB
+- shipped file: `dist/ui/assets/presentation/start/title-logo.png` — 960x174, PNG RGBA, 169 KB
 - source: provided by the User on 2026-10-10 (the title changed to `마왕 잡는 편의점: 길드24`), generated with GPT image
-  generation for this project (2172x724, PNG RGBA, two lines, no subtitle, md5 `00a4d9cd35681dfc5712cfb754394486`). Not a third-party work: no external
-  licence is claimed and none applies. The User's other cuts (one line, and with a GUILD24 subtitle) are kept outside the
-  build, the 점 받침 corrected the same way.
-- modification (User, 2026-10-10): the 점 받침 read as ㅡ / ㅇ at the phone size. Its walls were thinned (rows and
-  columns taken from the wall interiors) and the counter's middle row and column repeated, so the counter grew from 82x26 to
-  125x63 px of the original. No other glyph was touched. The corrected image was trimmed to its drawn letters (alpha
-  above 60, 4 px margin) and resized to 640 px wide (Lanczos) for display.
+  generation for this project (2172x724, PNG RGBA, one line, no subtitle, md5 `ae29f477c6ebf7a89e909281159b2ef7`). Not a
+  third-party work: no external licence is claimed and none applies. The User's other cuts (two lines, and with a GUILD24
+  subtitle) are kept outside the build with the same correction.
+- modification (User, 2026-10-10): the 점 받침 read as ㅇ - its outer corners were stepped. The four corners were squared by
+  painting the straight edge profiles (face, highlight, outline, the drop below) into them; the counter was not touched and
+  no other glyph was. The corrected image was trimmed to its drawn letters (alpha above 60, 4 px margin) and resized to
+  960 px wide (Lanczos) for display.
 - role: the opening screen's title (UI_UX §OPENING TITLE LOGO), in place of the set-type title.
 
 ## Batch 1 presentation graphics

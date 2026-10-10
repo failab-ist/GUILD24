@@ -974,7 +974,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .opening-title{margin:0 0 -2px;line-height:0}
 /* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu; the file is cut to the drawn
    letters (v2.9.9: the branch plate that sat under it is MORNING's counter plate now, UI_UX §NEW STORE PREPARATION) */
-.opening-logo{display:block;width:auto;height:62px}
+.opening-logo{display:block;width:min(210px,58vw);height:auto}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
@@ -2669,7 +2669,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-prep .build-mark{position:absolute;top:calc(var(--sa-top) + 8px);left:calc(var(--sa-left) + 10px);z-index:5;
  margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
 /* the name hangs from the ceiling where the DAY sign will */
-.p-prep .band.ceiling .opening{position:absolute;inset:0 0 auto;z-index:2;padding-top:calc(var(--sa-top) + 15px)}
+.p-prep .band.ceiling .opening{position:absolute;inset:0 0 auto;z-index:2;padding-top:calc(var(--sa-top) + 21px)}
 .p-prep .prep-note{padding-top:16px}
 .p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
 .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
@@ -2716,7 +2716,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-prep .prep-slot.sign:not(.empty) .slot-tag{grid-auto-flow:row;gap:1px;top:72%}
  .p-prep .prep-slot.sign:not(.empty) .slot-tag{font-size:min(15px,max(12px,1.72cqh))}
  .p-prep .prep-slot.sign:not(.empty) .slot-tag b{font-size:min(16px,max(13px,1.875cqh))}
- .p-prep .opening-logo{height:76px}
+ .p-prep .opening-logo{width:320px}
  /* on the wide framing the title hangs at the 간판's height, so the 간판 keeps the gap from the title as it does from the
     DAY sign on MORNING (a 1366x680 browser brought them together) */
  .p-prep .deco-layer{--sign-l:calc(50cqw - 160px)}
@@ -2737,7 +2737,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-morning.p-prep .prep-note{padding:12px 14px 10px}
  .p-prep .prep-note .welcome-title{margin-bottom:6px}
  .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.6}
- .p-prep .opening-logo{height:96px}
 }
 /* UI_UX §SHORT PHONE (User 2026-09-29, iPhone SE: a 375x548 stage with Safari's bars). The painting is cropped top and
    bottom, its ceiling comes up under the title and the board keeps only the wall between the ceiling and the counter:
@@ -2752,7 +2751,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     it on a 360 phone (User 2026-09-29, a Galaxy at 360x597); that tag runs from the piece's edge nearest the title out
     toward the screen's edge, so however wide it grows it never reaches the title, and hangs from its spot's top (as the
     empty plaque's does), so it grows down toward the board rather than up over the build mark */
- .p-prep .opening-logo{height:56px}
+ .p-prep .opening-logo{width:min(180px,50vw)}
  .p-prep .deco-layer{--sign-l:calc(50cqw - min(180px,50vw) / 2)}
  .p-prep .prep-slot.sign.empty .slot-tag{left:auto;right:0;top:0;transform:none}
  /* an equipped 간판's tag runs right under it, level with the branch plate, so the piece keeps the full title's gap */

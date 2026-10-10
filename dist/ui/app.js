@@ -2540,7 +2540,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
  +'<div class="store" style="--daysign-x:1">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    /* the store's name is a plate right under the title (User 2026-09-27): the counter front carries the Store Capital */
-   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="640" height="382" alt="마왕 잡는 편의점"></h1>'
+   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="174" alt="마왕 잡는 편의점"></h1>'
    +'<span class="branchplate">'+E(plannedBranch())+'</span></div></span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
    +'<p class="board-rail">새 점포 준비</p>'
