@@ -15,3 +15,14 @@ reports/operating-experiment.json
 
 # Measurement harness outputs (tests/balance, longitudinal, mastery, progression, acquisition, antifarm)
 tests/*-results-v5*.json
+
+# Android (Capacitor): build output, signing keys, machine-local paths
+android/**/build/
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+*.jks
+*.keystore
