@@ -87,6 +87,7 @@ Settings owns one `진동 ON/OFF` control.
 
 - default: ON
 - OFF disables all gameplay haptics
+- the web build uses the browser's own vibration on phones and tablets, with the same points and the same control; where the device has no vibration (iOS Safari, desktop) the control is not shown (User 2026-10-10)
 
 Use one short baseline haptic at these meaningful result points only:
 
