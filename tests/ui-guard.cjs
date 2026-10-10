@@ -3442,13 +3442,13 @@ test('OPENING: the preparation scene starts on the three axes, with no franchise
  // 8: the eyebrow is gone
  assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation carries no 길드리테일 가맹점 eyebrow');
  assert.ok(!app.includes('길드리테일 가맹점'),'and it is gone from the build');
- for(const line of ['30일 동안 던전 앞 편의점을 운영한다.',
+ for(const line of ['30일 동안 길드24 편의점을 운영한다.',
                     '찾아오는 모험가를 보급하고, 성장시킨다.',
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
   assert.ok(intro.includes(line),'the approved line is present: '+line);
  /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the three lines are one note pinned to the `새 점포 준비` board */
  assert.ok(/<p class="board-rail">새 점포 준비<\/p>/.test(intro),'the board is titled 새 점포 준비');
- assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
+ assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
  assert.ok(/<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다\.<\/span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\.<\/span>/.test(intro),'lines 2 and 3 follow it');
  // everything the change was scoped to keep
  assert.ok(/data-action="store-manage"/.test(intro),'the Store Management entry stays');
