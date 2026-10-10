@@ -2,20 +2,20 @@
 const assert=require('node:assert/strict');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])require('../dist/'+f+'.js');
 const actor=(level=2,xp=0,alive=true)=>({job:'warrior',level,xp,alive,potential:1,stats:{combat:17,survival:18,mobility:9,spirit:10}});
-assert.equal(Adventurer.growthCost(1),26);assert.equal(Adventurer.growthCost(20),178);
+assert.equal(Adventurer.growthCost(1),27);assert.equal(Adventurer.growthCost(20),198);
 for(const [day,want]of [[1,1],[4,1],[5,2],[10,4],[20,8],[29,12],[30,12]])assert.equal(Adventurer.newcomerMinLevel(day),want);
-assert.equal(Adventurer.catchupXP(actor(),20,10),30);assert.equal(Adventurer.catchupXP(actor(),60,10),76);
+assert.equal(Adventurer.catchupXP(actor(),20,10),30);assert.equal(Adventurer.catchupXP(actor(),60,10),81);
 assert.equal(Adventurer.catchupXP(actor(),90,10),90,'base EXP is never cut');
 assert.equal(Adventurer.catchupXP(actor(3,41),10,10),10);assert.equal(Adventurer.catchupXP(actor(4),20,10),20);
 assert.equal(Adventurer.catchupXP(actor(2,0,false),20,10),20,'no bonus after Death');
-assert.equal(Adventurer.catchupXP(actor(1),20,4),20);assert.equal(Adventurer.catchupXP(actor(1),20,5),26);
+assert.equal(Adventurer.catchupXP(actor(1),20,4),20);assert.equal(Adventurer.catchupXP(actor(1),20,5),27);
 const a=actor();Adventurer.grow(a,Adventurer.catchupXP(a,60,10),{next(){throw Error('growth RNG');}});assert.equal(a.level,4);assert.equal(a.xp,0);
 assert.equal(Adventurer.catchupXP(a,60,10),60,'bonus stops at minimum');
 // 실패 생환(퇴각·부상·중상)만: ×1.5 보너스와 최저선까지 모자란 경험치 25% 중 큰 쪽, 추가분 상한 유지.
-assert.equal(Adventurer.catchupXP(actor(2),28,10,'퇴각'),47);assert.equal(Adventurer.catchupXP(actor(2),28,10,'성공'),42);
-assert.equal(Adventurer.catchupXP(actor(6),57,25,'부상'),135);assert.equal(Adventurer.catchupXP(actor(6),57,25,'중상'),135);
+assert.equal(Adventurer.catchupXP(actor(2),28,10,'퇴각'),48);assert.equal(Adventurer.catchupXP(actor(2),28,10,'성공'),42);
+assert.equal(Adventurer.catchupXP(actor(6),57,25,'부상'),143);assert.equal(Adventurer.catchupXP(actor(6),57,25,'중상'),143);
 assert.equal(Adventurer.catchupXP(actor(6),151,25,'성공'),227);assert.equal(Adventurer.catchupXP(actor(6),151,25,'대성공'),227);
-assert.equal(Adventurer.catchupXP(actor(7),20,20,'퇴각'),39);assert.equal(Adventurer.catchupXP(actor(7),60,20,'퇴각'),74,'bonus still stops at the minimum');
+assert.equal(Adventurer.catchupXP(actor(7),20,20,'퇴각'),40);assert.equal(Adventurer.catchupXP(actor(7),60,20,'퇴각'),81,'bonus still stops at the minimum');
 assert.equal(Adventurer.catchupXP(actor(2,0,false),28,10,'퇴각'),28,'no bonus after Death');
 assert.equal(Adventurer.catchupXP(actor(4),28,10,'퇴각'),28,'no bonus at the minimum');
 for(const h of Object.keys(DATA.hazards))assert.equal(Dungeon.hazardState(h,{survival:0,mobility:0,spirit:0},{day:30,tier:2,family:'final'}).threat,28);

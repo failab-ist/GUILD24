@@ -35,6 +35,10 @@ and this table is their commit record.
 | v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR (this one) | (the User sets it) |
 
 
+## After v2.12.0 — EXP curve 18+Level×9 (User 2026-10-10)
+
+NPC_TRAIT §EXPERIENCE CURVE: each next Level costs `18 + current Level × 9` EXP (was × 8). A no-Decoration account was clearing too early (first clear around the 6th Run against the ~10th-Run aim); measured on the investor bot this moves it to about the 10th Run. Log: `reports/v2100-measure/late-difficulty-20261009/2-growth-x9.log`.
+
 ## v2.12.0 — Release summary (User 2026-10-09)
 
 Minor version: balance, coaching, sound and night-result work since v2.11.1. Details are in the sections below; rules live in their routed owners.
