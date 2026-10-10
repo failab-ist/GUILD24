@@ -4,11 +4,12 @@
     "name": "NPC_NAME_POOL_PRODUCTION_SORTED",
     "source_package": "NPC_NAME_POOL v1.1.0",
     "purpose": "Normal portrait production binding convenience only; names/genders unchanged",
-    "normal_count": 200,
+    "normal_count": 201,
     "normal_m": 100,
     "normal_f": 100,
     "easter_count": 0,
-    "boss_count": 7
+    "boss_count": 7,
+    "normal_x": 1
   },
   "binding_rule": {
     "normal_asset_path": "NORMAL/<M|F>/<001-100>.png",
@@ -1620,6 +1621,16 @@
         "original_id": "N200",
         "asset_filename": "100.png",
         "asset_path": "NORMAL/F/100.png"
+      }
+    ],
+    "X": [
+      {
+        "slot": "001",
+        "gender": "X",
+        "name": "고더기",
+        "original_id": "N201",
+        "asset_filename": "001.png",
+        "asset_path": "NORMAL/X/001.png"
       }
     ]
   },

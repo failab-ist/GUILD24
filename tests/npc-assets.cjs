@@ -10,20 +10,22 @@ const root=path.resolve(__dirname,'..','GUILD24_NPC_PRODUCTION');
 const pool=JSON.parse(fs.readFileSync(path.join(root,'00_NAME_POOL/PRODUCTION_NAME_POOL.json'),'utf8'));
 const list=d=>fs.readdirSync(path.join(root,d)).filter(f=>f.endsWith('.png')).sort();
 const SLOTS=Array.from({length:100},(_,i)=>String(i+1).padStart(3,'0'));
+const COUNT={M:100,F:100,X:1};   // X: portraits sorted into neither gender folder (고더기, 2026-10-10)
+const slotsOf=g=>SLOTS.slice(0,COUNT[g]);
 
-test('NORMAL: each gender folder is exactly the 100 numbered production slots',()=>{
- for(const g of ['M','F']){
+test('NORMAL: each folder is exactly its numbered production slots (M 100, F 100, X 1)',()=>{
+ for(const g of ['M','F','X']){
   const files=list('02_NORMAL_WORK/'+g);
-  assert.deepEqual(files,SLOTS.map(s=>s+'.png'),g+' holds 001.png..100.png and nothing else');
-  assert.equal(new Set(files).size,100,g+' has no duplicate slot');
+  assert.deepEqual(files,slotsOf(g).map(s=>s+'.png'),g+' holds its numbered slots and nothing else');
+  assert.equal(new Set(files).size,COUNT[g],g+' has no duplicate slot');
  }
 });
 
 test('NORMAL: every portrait binds to exactly one name, and every name to one portrait',()=>{
- for(const g of ['M','F']){
+ for(const g of ['M','F','X']){
   const entries=pool.normal[g],files=new Set(list('02_NORMAL_WORK/'+g));
-  assert.equal(entries.length,100,g+' name pool holds 100 names');
-  assert.deepEqual(entries.map(e=>e.slot),SLOTS,g+' slots run 001..100 with no gap');
+  assert.equal(entries.length,COUNT[g],g+' name pool holds '+COUNT[g]+' names');
+  assert.deepEqual(entries.map(e=>e.slot),slotsOf(g),g+' slots run 001.. with no gap');
   // orphan portrait: a file no name claims. orphan name: a name with no file.
   for(const e of entries){
    assert.equal(e.gender,g,'the entry knows its own folder: '+e.name);
@@ -32,11 +34,11 @@ test('NORMAL: every portrait binds to exactly one name, and every name to one po
   }
   assert.deepEqual([...files],[],g+' has no portrait without a name');
  }
- const names=[...pool.normal.M,...pool.normal.F].map(e=>e.name);
+ const names=[...pool.normal.M,...pool.normal.F,...pool.normal.X].map(e=>e.name);
  assert.equal(new Set(names).size,names.length,'no name is shared between two portraits');
  // the name is the runtime key, so it has to resolve to one gender and one slot
- const ids=[...pool.normal.M,...pool.normal.F].map(e=>e.original_id);
- assert.equal(new Set(ids).size,200,'the legacy N001-N200 ids stay unique and traceable');
+ const ids=[...pool.normal.M,...pool.normal.F,...pool.normal.X].map(e=>e.original_id);
+ assert.equal(new Set(ids).size,201,'the legacy N001-N200 ids stay unique and traceable');
 });
 
 test('EASTER (v2.9.11): the Rare Reference identities and their art are gone',()=>{
@@ -58,12 +60,12 @@ test('NORMAL: the shipped name pool is the production pool, in the order that bi
  require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/systems/rng.js');
  require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');
  require('../dist/ui/assets/npc/manifest.js');require('../dist/ui/art.js');require('../dist/ui/scene.js');
- const A=globalThis.Adventurer,expected=[...pool.normal.M,...pool.normal.F].map(e=>e.name);
- assert.equal(expected.length,200,'the production pool is 200 normal names');
+ const A=globalThis.Adventurer,expected=[...pool.normal.M,...pool.normal.F,...pool.normal.X].map(e=>e.name);
+ assert.equal(expected.length,201,'the production pool is 201 normal names');
  assert.deepEqual(A.names,expected,'the shipped pool is the production pool, in binding order');
- assert.equal(new Set(A.names).size,200,'no name appears twice, so no name addresses two portraits');
+ assert.equal(new Set(A.names).size,201,'no name appears twice, so no name addresses two portraits');
 
- for(const g of ['M','F'])for(const e of pool.normal[g]){
+ for(const g of ['M','F','X'])for(const e of pool.normal[g]){
   const at=A.portraitOf(e.name);
   assert.deepEqual(at,{gender:g,slot:Number(e.slot)},'name binds to its own slot: '+g+'/'+e.slot+' '+e.name);
   assert.equal(globalThis.Scene.npcArt({id:'npc-x',name:e.name}),
