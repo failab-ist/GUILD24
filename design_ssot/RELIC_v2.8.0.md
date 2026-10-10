@@ -917,20 +917,15 @@ SETUP: Own a nonstackable Relic and open later windows.
 EXPECT: Owned Relic is excluded.
 PASS: No duplicate ownership offer.
 
-#### REL-Q09 — IMMEDIATE REPEAT
+#### REL-Q09 — NO REPEAT PROTECTION (User 2026-10-10)
 SETUP: Skip an offered Relic.
-EXPECT: It may recur later but not immediately next window.
-PASS: Immediate-repeat protection works.
+EXPECT: It may be offered again in the next window or in a redraw; nothing keeps it off the table.
+PASS: No cool-down state exists.
 
-#### REL-Q10 — OFFER DIVERSITY
-SETUP: Sample many windows.
-EXPECT: When practical, candidate set includes >=2 different primary build directions.
-PASS: Windows are not routinely three near-identical choices.
-
-#### REL-Q11 — SOFT BUILD BIAS
+#### REL-Q10 / REL-Q11 — NO DIVERSITY, NO BUILD BIAS (User 2026-10-10)
 SETUP: Own several same-axis Relics and sample offers.
-EXPECT: Related pieces may be somewhat more likely.
-PASS: No guaranteed missing-piece completion.
+EXPECT: A candidate's chance does not depend on its tags or on the tags the Run owns; no step steers the three toward different build directions.
+PASS: The draw is the grade roll and a uniform pick inside the grade.
 
 #### REL-Q12 — GRADE DRAW
 SETUP: Inspect D0 and later windows.

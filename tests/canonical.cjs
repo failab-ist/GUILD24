@@ -52,13 +52,13 @@ try{
  Debug.simulate(4,'skilled',null,'full','hybrid');
  assert.ok(deferredPurchases>0,'deferred purchase exercised');
  assert.ok(days.length>1,'the natural drive actually walked a Run day by day');
- console.log('PASS REL-Q01–05 / 07–09 / 13 / 25: natural progression, deferred purchase, expiry, cooldown and Save stability');
+ console.log('PASS REL-Q01–05 / 07–09 / 13 / 25: natural progression, deferred purchase, expiry and Save stability');
 }finally{Game.prototype.morning=originalMorning;Game.prototype.buyRelic=originalBuy;}
 
 /* CONTROLLED D30 SETUP. The Run is walked Day by Day with nobody sent out and the till held
    solvent, so neither an expedition result nor the economy can decide whether D30 is reached.
    It proves only what it drives: that the window ladder really ends at D30 and that the last
-   window draws from the ordinary pool minus the explicit D30 no-effect set. It makes no claim
+   window draws from the ordinary pool with no D30 exclusion. It makes no claim
    about natural survivability. */
 {
  const g=new Game();g.autosave=false;g.start('controlled-d30');
