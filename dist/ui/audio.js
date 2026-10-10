@@ -62,7 +62,12 @@ const trackFor=phase=>phase==='hush'?'':phase==='final'?'boss':phase==='end-win'
    result cues read clearly above it (PRESENTATION §Mix). The effects bus is the player's slider alone.
    A phase change fades the old track out over BGM_SWAP; the next one starts only after it (two keys never overlap) and
    rises over BGM_IN on a squared curve, so it does not start on a hard downbeat. */
-const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5;
+const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_SWAP=1,BGM_IN=1.5;
+/* The app ships the 192 kb/s originals under the same names (tools/app-bgm.cjs, after `cap sync`) and decodes them at the
+   files' own 44.1 kHz; the web keeps the 128 kb/s copies at 32 kHz. The originals measure 0.4 dB louder than the copies
+   `lufs` was taken on, so the app takes that off to play at the same level. */
+const BGM_HQ=(()=>{try{return !!(window.Native&&window.Native.inApp());}catch(e){return false;}})(),
+ BGM_RATE=BGM_HQ?44100:32000,BGM_HQ_TRIM=BGM_HQ?-.4:0;
 /* UI_UX §AUDIO FEEDBACK — SFX LEVELS (User 2026-09-29): each cue's own level, fitted by tools/qa-sfx-mix.cjs so every cue
    sits within 1.5 dB of its tier's target as a phone speaker plays it (100 ms peak, nothing under 300 Hz: result -19 /
    decision -21 / action -25 / utility -29 / rapid repeat -31) and clears the music it is heard over. Round 4: the first
@@ -374,7 +379,7 @@ function bgmPass(m,at,from,fadeIn){const t=bgm[m.key],src=ctx.createBufferSource
  clearTimeout(m.timer);
  m.timer=setTimeout(()=>{if(music===m)bgmPass(m,end,t.s,t.cross?t.xf:.005);},Math.max(0,(end-ctx.currentTime-2)*1000));}
 function bgmStart(key,buf){const t=bgm[key],now=ctx.currentTime,at=Math.max(now,swapEnd),out=ctx.createGain(),
- full=Math.pow(10,(BGM_LUFS-t.lufs+(t.trim||0))/20);
+ full=Math.pow(10,(BGM_LUFS-t.lufs+(t.trim||0)+BGM_HQ_TRIM)/20);
  out.gain.setValueAtTime(0,now);out.gain.setValueAtTime(0,at);
  for(let i=1;i<=8;i++)out.gain.linearRampToValueAtTime(full*(i/8)**2,at+BGM_IN*i/8);out.connect(bgmBus);
  const m={key,buf,out,srcs:[],timer:null,passes:[]};music=m;
