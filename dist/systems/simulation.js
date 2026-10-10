@@ -202,9 +202,9 @@ function playRun(g,out,ctx){
   return ratio*10+env*8-risk*30+Math.min(12,e.supply||0)*.5;};
  /* `investor` (User 2026-10-09, measurement only; it takes `expert`'s place in the standard measurement, `expert` stays
     for old comparisons): a player who decides whom to back. `reader` and `expert` give every customer the same care, so
-    they cannot show whether backing a few pays. From DAY 8 the roster is re-ranked every morning on what the screen
+    they cannot show whether backing a few pays. From DAY 6 (User 2026-10-10, was DAY 8) the roster is re-ranked every morning on what the screen
     shows - Level against the newcomer floor, rarity, loyalty, Levels gained per visit since first seen, a 중상 and two
-    failed returns in a row - into a core of 4, 3 candidates and the rest; DAY 1~7 everyone is still being looked at.
+    failed returns in a row - into a core of 4, 3 candidates and the rest; DAY 1~5 everyone is still being looked at.
     The current core keeps a small edge so one bad night does not drop them. A customer's weight (V) scales what their
     expedition is worth; a Death costs more as the store nears its death limit, whoever dies.
     In SALE it weighs whole Bags - nothing, each shelf Item, and pairs of the best ones - by the expected 성공 / 대성공,
@@ -212,7 +212,7 @@ function playRun(g,out,ctx){
     choose a potion, a meal, two Counters or 만반의 준비 for a backed customer, sell a cheap meal at 150% to one it is not
     backing, and keep a scarce Counter, potion or Insurance back for a backed customer later in today's queue. The
     acceptance chance it weighs is interest()'s, which the screen reads out only as 필요도. Pure reads; no RNG draw. */
- const INV={from:8,core:4,candidate:3,V:{explore:.6,core:1,candidate:.6,rest:.25}};
+ const INV={from:6,core:4,candidate:3,V:{explore:.6,core:1.5,candidate:.6,rest:.15}};
  const firstSeen=new Map();let tierDay=-1,tiers=new Map();
  const invScore=(n,was)=>{
   if(!firstSeen.has(n.id))firstSeen.set(n.id,{level:n.level,visits:n.visits});
