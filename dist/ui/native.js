@@ -8,6 +8,8 @@ const inApp=()=>{try{return !!G.Capacitor?.isNativePlatform?.();}catch(e){return
 const prefs=()=>inApp()?plug('Preferences'):null;
 const HYDRATE_MS=1500;
 
+try{if(inApp())document.documentElement.classList.add('in-app');}catch(e){}
+
 G.Native={
  inApp,
  /* The save lives in localStorage while the game runs; in the app a copy is kept in the shell's own storage

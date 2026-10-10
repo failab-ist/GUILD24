@@ -189,6 +189,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* ---- stage: the only shared frame ---- */
 .stage{position:relative;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--soil);
  padding-top:var(--sa-top);padding-left:var(--sa-left);padding-right:var(--sa-right)}
+/* PLATFORM_RELEASE §SCREEN / DEVICE (User 2026-10-10): in the app the screen runs under the camera cut-out - the first band's
+   artwork reaches the top edge and only its content starts below the Safe Area. */
+.in-app .stage{padding-top:0}
+.in-app .stage>.menu-pin+*{padding-top:var(--sa-top)}
+.in-app .p-sale .front{padding-top:calc(var(--sa-top) + 4px)}
+.in-app .relic-takeover{padding-top:var(--sa-top)}
+.in-app .p-prep .build-mark{top:6px}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
 .menu-pin{position:absolute;top:calc(var(--sa-top) + 6px);right:calc(var(--sa-right) + 6px);z-index:30;
  width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#2d190d;color:#dfcba9;
