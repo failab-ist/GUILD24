@@ -5,7 +5,7 @@
 // Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers
 // against the rest, cash per Day and the Capital gain; a third line the preparation lines (with / without an Item, the share of
 // Item expeditions whose result an Item changed, the top four's share of the Items sold). The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
-//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,expert] [--decos none,economy] [--out file.json]
+//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,investor] [--decos none,economy] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
@@ -92,7 +92,7 @@ if(process.env.V2100_WORKER){process.on('message',j=>{const res=worker(j);proces
 else if(require.main===module){
  const args=process.argv.slice(2),flag=(k,d)=>{const i=args.indexOf(k);return i>=0?args[i+1]:d;};
  const here=path.resolve(__dirname,'..'),before=flag('--before',null),TT=+flag('--traj',200),FN=+flag('--fresh',1000),R=+flag('--runs',10),out=flag('--out',null);
- const POL=flag('--policies','reader,expert').split(','),DECOS=flag('--decos',null)?.split(',');
+ const POL=flag('--policies','reader,investor').split(','),DECOS=flag('--decos',null)?.split(',');
  const cpus=Math.max(1,os.cpus().length),PARTS=4,jobs=[];
  const WORKERS=+flag('--workers',cpus);if(!Number.isInteger(WORKERS)||WORKERS<1)throw Error('--workers는 양의 정수여야 합니다.');
  const srcs=[['after',here],...(before?[['before',path.resolve(before)]]:[])];

@@ -33,7 +33,8 @@ const SPEND={
  'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:true},
  'human':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
  'reader':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
- 'expert':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
+ 'expert':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
+ 'investor':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
 /* Boss clear is `power * roll >= bossPower` with roll uniform on the Final roll band (FINAL_EXPEDITION §FINAL ROLL), so
@@ -184,7 +185,7 @@ function playRun(g,out,ctx){
     Tried and dropped in calibration (no gain or worse): spending brakes loosened to `spender`'s, rerolling until every
     visitor Hazard has a Counter, Counters ordered right after the meals, 50% to the top roster in D1-10.
     Calibrated with tools/calibrate-bot-v292.cjs --account. */
- const expert=policy==='expert',reader=policy==='reader'||expert,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
+ const expert=policy==='expert',investor=policy==='investor',reader=policy==='reader'||expert||investor,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
  /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
     it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk
     that outlookFor() shows as 전투 전망 · 환경 대응 · 사망 위험 - trying each shelf Item in the Bag and taking the one that
@@ -199,6 +200,128 @@ function playRun(g,out,ctx){
   /* supply also buffers the fatigue THIS expedition will add, so the customer comes back fresh - the User's run carried
      food / drink on 86% of D1-10 expeditions (fatigue after 3.0 vs the bot's 7.8), and the screen does not show it */
   return ratio*10+env*8-risk*30+Math.min(12,e.supply||0)*.5;};
+ /* `investor` (User 2026-10-09, measurement only; it takes `expert`'s place in the standard measurement, `expert` stays
+    for old comparisons): a player who decides whom to back. `reader` and `expert` give every customer the same care, so
+    they cannot show whether backing a few pays. From DAY 8 the roster is re-ranked every morning on what the screen
+    shows - Level against the newcomer floor, rarity, loyalty, Levels gained per visit since first seen, a 중상 and two
+    failed returns in a row - into a core of 4, 3 candidates and the rest; DAY 1~7 everyone is still being looked at.
+    The current core keeps a small edge so one bad night does not drop them. A customer's weight (V) scales what their
+    expedition is worth; a Death costs more as the store nears its death limit, whoever dies.
+    In SALE it weighs whole Bags - nothing, each shelf Item, and pairs of the best ones - by the expected 성공 / 대성공,
+    Death, lasting Injury and the Fatigue they come back with, plus the Gold and loyalty of each price. So it can
+    choose a potion, a meal, two Counters or 만반의 준비 for a backed customer, sell a cheap meal at 150% to one it is not
+    backing, and keep a scarce Counter, potion or Insurance back for a backed customer later in today's queue. The
+    acceptance chance it weighs is interest()'s, which the screen reads out only as 필요도. Pure reads; no RNG draw. */
+ const INV={from:8,core:4,candidate:3,V:{explore:.6,core:1,candidate:.6,rest:.25}};
+ const firstSeen=new Map();let tierDay=-1,tiers=new Map();
+ const invScore=(n,was)=>{
+  if(!firstSeen.has(n.id))firstSeen.set(n.id,{level:n.level,visits:n.visits});
+  const fs=firstSeen.get(n.id),seen=n.visits-fs.visits,growth=seen>=2?Math.min(1.5,(n.level-fs.level)/seen):.5;
+  const last=(n.records||[]).slice(-2),slump=last.length===2&&last.every(r=>['퇴각','부상','중상'].includes(r.outcome));
+  return (n.level-G.Adventurer.newcomerMinLevel(s.day))+1.5*n.rarity+Math.min(100,n.loyalty||0)/25+3*growth
+   -(n.injury===2?2:0)-(slump?1.5:0)+(was==='core'?1:0);};
+ const tierOf=n=>{
+  if(tierDay!==s.day){tierDay=s.day;const was=tiers;tiers=new Map();
+   const roster=s.npcs.filter(x=>x.alive&&(x.introduced||s.queue.includes(x.id)));
+   if(s.day<INV.from)for(const x of roster){invScore(x);tiers.set(x.id,'explore');}
+   else roster.map(x=>({x,v:invScore(x,was.get(x.id))})).sort((a,b)=>b.v-a.v)
+    .forEach(({x},i)=>tiers.set(x.id,i<INV.core?'core':i<INV.core+INV.candidate?'candidate':'rest'));}
+  return tiers.get(n.id)||(s.day<INV.from?'explore':'rest');};
+ const weight=n=>INV.V[tierOf(n)];
+ /* The expected expedition, read off the same prepare / failureDeathRisk / envChance the resolution uses, without a roll. */
+ const forecast=(n,pack,d)=>{
+  const v={...n,pack},p=G.Dungeon.prepare(v,d,s.facilities),e=p.effects,clamp01=x=>Math.max(0,Math.min(1,x));
+  const prepared=G.Dungeon.fullyPrepared(v,e.fatigueBeforeExpedition),cab=Object.values(s.loadout||{}).includes('aidCabinet');
+  const ability=G.Dungeon.preparedPower({...e,combat:e.combat*(cab&&prepared?D.decorationParams.aidCabinet.powerMult:1)});
+  const win=clamp01(.5-((d.power||1)/Math.max(1,ability)-1)/(2*(D.balance.combatNoise+(e.variance||0))));
+  const env=G.Dungeon.envChance(p.hazard,e.survival),ok=win*(1-env)*(1-(e.injuryRisk||0)),fail=1-ok;
+  let dc=G.Dungeon.failureDeathRisk(v,d,s.facilities).chance*(prepared?(cab?D.decorationParams.aidCabinet.preparedFactor:G.Dungeon.PREPARED.factor):1);
+  if((s.firstRun&&s.day<=2)||(e.revive||0)>=1)dc=0;
+  if(s.facilities.includes('rescueContract'))dc*=1-D.relicParams.rescueContract.chance;
+  const stone=pack.some(id=>D.itemBy[id].effects.escape)?Math.max(.15,Math.min(.94,.40+e.mobility*.003+(e.escape||0)-(d.scale||1)*.024)):0;
+  const escape=Math.max(.15,Math.min(.94,.40+e.mobility*.003+(e.escape||0)-(e.itemEscape||0)-(d.scale||1)*.024));
+  const hurt=Math.max(0,fail*(1-dc)-(1-win)*(1-dc)*escape*(1-Math.min(1,env+(e.injuryRisk||0))))*(1-stone*.5);
+  const lasting=(e.aftercare||0)>0?hurt*.3:hurt*1.3;
+  const great=ok*Math.min(D.greatSuccess.chanceCap,Math.max(0,(ability/(d.power||1)-1)*D.greatSuccess.chanceSlope));
+  const after=e.fatigueBeforeExpedition+Math.max(0,Math.ceil(ok*4+fail*8+(e.fatigue||0))-(e.remainingSupplyBuffer||0));
+  return {ok,great,death:fail*dc*(1-stone),lasting,tired:after>=40?8:after>=30?5:after>=20?3:after>=10?1:0};};
+ /* a lasting Injury is also the next departure's Death risk (DUNGEON_HAZARD §Healthy / injured failure Death chance), so it is
+    charged a share of a Death whoever carries it - that is what makes a 구급키트 worth selling to a customer it is not backing */
+ const deathCost=V=>30*V+12*s.stats.deaths/Math.max(1,G.Meta.deathLimit(s))+4;
+ const utility=(f,V)=>V*(10*f.ok+4*f.great-3*f.lasting-f.tired)-f.death*deathCost(V)-f.lasting*.15*deathCost(V);
+ /* the store is bleeding: several customers carry an Injury, or the death limit is half used. A player then reaches for the
+    Supports that answer it (야전 들것 · 응급 처치대 · 길드 구조대 계약) ahead of the ranked list */
+ const INJURY_SUPPORT=['firstAidDesk','fieldStretcher','rescueContract'];
+ const bleeding=()=>{const alive=s.npcs.filter(x=>x.alive&&x.introduced),hurt=alive.filter(x=>x.injury>0).length;
+  return hurt>=3||hurt>=alive.length*.25||s.stats.deaths>=G.Meta.deathLimit(s)*.5;};
+ /* investor, the Final (User 2026-10-09: "25일부터는 돈 남으면 리롤치면서 영웅급 대응 + 영웅급 포션이나 음식 음료 모은다"). From
+    DAY 25 the Final's Families are on screen (s.final), so a player with Gold to spare buys - and rerolls for - the Items
+    the likely Final party would carry, and holds them off the shelf. The party is read the way the Final reads it: each
+    member's Final contribution with the held Items shared out greedily, top 3 by what they reach. */
+ const finalHold={};
+ const finalUseful=(it,fd)=>!g.finalNoEffect(it.id)&&(Object.keys(it.effects).some(k=>fd.hazards.includes(k))||['combat','survival','mobility','spirit'].some(k=>(it.effects[k]||0)>0));
+ /* `at` is memoised per call of finalStash (same customer, same Bag -> same contribution); the party is picked once per call */
+ let atMemo=new Map();
+ const finalAt=(n,p,fd)=>{const k=n.id+'|'+[...p].sort().join(',');let v=atMemo.get(k);if(v===undefined){v=contribution(G.Dungeon.prepare({...copy(n),pack:p},fd,s.facilities));atMemo.set(k,v);}return v;};
+ const finalTeam=(pool,fd)=>{
+  const solo=n=>{const left=pool.filter(id=>n.money>=g.finalPrice(id)),pack=[];
+   while(pack.length<G.Adventurer.slots(n)&&left.length){const k=left.reduce((b,id,j)=>finalAt(n,[...pack,id],fd)>finalAt(n,[...pack,left[b]],fd)?j:b,0);pack.push(left.splice(k,1)[0]);}
+   return finalAt(n,pack,fd);};
+  return s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).map(n=>({n,v:solo(n)})).sort((a,b)=>b.v-a.v).slice(0,3).map(x=>x.n);};
+ const finalParty=(team,pool,fd)=>{
+  const packs=team.map(()=>[]),cur=team.map(n=>finalAt(n,[],fd)),left=[...pool],used=[];
+  for(;;){let best=null;
+   team.forEach((n,i)=>{if(packs[i].length>=G.Adventurer.slots(n))return;const seen=new Set();
+    left.forEach((id,j)=>{if(seen.has(id)||n.money<g.finalPrice(id))return;seen.add(id);const gain=finalAt(n,[...packs[i],id],fd)-cur[i];if(gain>0&&(!best||gain>best.gain))best={i,j,id,gain};});});
+   if(!best)break;packs[best.i].push(best.id);cur[best.i]+=best.gain;used.push(left.splice(best.j,1)[0]);}
+  return {power:cur.reduce((a,b)=>a+b,0),used};};
+ function finalStash(){
+  const fd=s.final;if(!fd)return;const finalPhase=s.phase==='final';
+  const lasts=it=>finalPhase||s.day+g.stockLife(it)>=31;
+  const shelf=()=>s.inventory.map(x=>D.itemBy[x.item]).filter(it=>lasts(it)&&finalUseful(it,fd)).map(it=>it.id);
+  const reserve=spend.cashFloor+(finalPhase?0:g.expectedOperatingCost()*(30-s.day));
+  atMemo=new Map();const team=finalTeam(shelf(),fd);let rerolls=0;
+  for(;;){
+   const base=finalParty(team,shelf(),fd).power,seen=new Set();
+   const pick=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>!seen.has(x.it.id)&&seen.add(x.it.id)&&x.o.quantity>0&&lasts(x.it)&&finalUseful(x.it,fd)&&s.money-x.o.price>=reserve&&g.canStock(x.it))
+    .map(x=>({...x,gain:finalParty(team,[...shelf(),x.it.id],fd).power-base})).filter(x=>x.gain>=1).sort((a,b)=>b.gain/b.o.price-a.gain/a.o.price)[0];
+   if(pick){try{g.order(pick.i);act();(out.items[pick.o.item]??={ordered:0,sold:0}).ordered++;continue;}catch(e){}}
+   /* nothing on this sheet raises the party: look again while the till holds the reserve plus a Hero-grade buy */
+   if(rerolls>=3||s.event?.effects.noReroll||s.money-g.rerollPrice()<reserve+250)break;
+   try{const cost=g.rerollPrice();g.reroll();act();rerolls++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}catch(e){break;}}
+  for(const k of Object.keys(finalHold))delete finalHold[k];
+  for(const id of finalParty(team,shelf(),fd).used)finalHold[id]=(finalHold[id]||0)+1;}
+ function investorSell(n,d){
+  if(!d)return;
+  const held=it=>(finalHold[it.id]||0)>0&&s.inventory.filter(x=>x.item===it.id).length<=finalHold[it.id];
+  const V=weight(n),gw=s.money<2*g.expectedOperatingCost()?1/8:1/15,purse=n.money+(n.eventBudget||0);
+  const later=s.queue.slice(s.cursor+1).map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.id!==n.id&&weight(m)>V+.1);
+  const reserve=it=>{if(!later.length)return 0;
+   const want=later.filter(m=>['potion','insurance'].includes(it.category)||G.Relics.directCounter(it,(g.claimedGateFor(m)||s.dungeons[0]).hazards));
+   return want.length&&s.inventory.filter(x=>x.item===it.id).length<=want.length?(Math.max(...want.map(weight))-V)*6:0;};
+  let attempts=0;
+  while(n.pack.length<G.Adventurer.slots(n)&&attempts++<12){
+   const base=utility(forecast(n,n.pack,d),V),overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),seen=new Set(),singles=[];
+   for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);
+    const it=D.itemBy[st.item];if(held(it))continue;const cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
+    const gain=utility(forecast(n,[...n.pack,it.id],d),V)-base,waste=st.expires!=null&&st.expires<=s.day?cost*gw:0,hold=reserve(it);
+    const modes=[...(V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3?['overcharge']:[]),'full','half'];
+    for(const mode of modes){if(n.refused.includes(it.id+':'+mode))continue;const intent=g.interest(n,it,mode);if(intent.debit>purse)continue;
+     const raw=gain+(intent.price-cost)*gw+waste+D.pricing[mode].loyalty*V*.2-hold;
+     singles.push({st,it,mode,gain,chance:intent.chance,raw,value:intent.chance*raw});}}
+   if(!singles.length)break;
+   singles.sort((a,b)=>b.value-a.value);let best=singles[0];
+   /* two free slots: a pair can be worth more than its halves (만반의 준비, two Hazards, food + potion) */
+   if(G.Adventurer.slots(n)-n.pack.length>=2){
+    const top=[];for(const x of singles)if(!top.some(y=>y.it.id===x.it.id)&&top.length<6)top.push(x);
+    for(let i=0;i<top.length;i++)for(let j=i;j<top.length;j++){const a=top[i],b=top[j];
+     if(i===j&&s.inventory.filter(x=>x.item===a.it.id).length<2)continue;
+     const pairGain=utility(forecast(n,[...n.pack,a.it.id,b.it.id],d),V)-base,single=x=>x.raw-x.gain;
+     const raw=pairGain+single(a)+single(b),value=a.chance*b.chance*raw+a.chance*(1-b.chance)*a.raw+(1-a.chance)*b.chance*b.raw;
+     if(value>best.value)best=a.raw>=b.raw?{...a,value}:{...b,value};}}
+   if(best.value<=.05)break;
+   g.sell(best.st.id,best.mode);}
+ }
  /* RELIC-AWARE LAYER, measurement only (ctx.relicAware, default off). The policies above were
     written before most Store Supports existed, so a Support whose value comes from a choice the
     player makes (150% sales, 3-of-a-SKU orders, a Counter for the Gate) read as ~0 because the
@@ -333,7 +456,7 @@ function playRun(g,out,ctx){
  for(const report of s.results){const fb=f=>f>=40?'40':f>=30?'30-39':f>=20?'20-29':f>=10?'10-19':'0-9';out.fatigue.departure[fb(report.fatigueBeforeExpedition||0)]++;const F=out.fatigue.foodByBand[fb(report.beforeFatigue||0)]??={visits:0,foodDrink:0};F.visits++;F.foodDrink+=Number((report.items||[]).some(id=>['food','drink'].includes(D.itemBy[id]?.category)));out.fatigue.supplyUse.preRecovery+=report.preRecovery||0;out.fatigue.supplyUse.outcomeBuffer+=report.outcomeBufferUsed||0;out.fatigue.supplyUse.waste+=Math.max(0,(report.remainingSupplyBuffer||0)-(report.outcomeBufferUsed||0));}
  for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
- function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+ function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
@@ -402,6 +525,8 @@ function playRun(g,out,ctx){
      try{g.reroll();}catch(e){break;}
      act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
     out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
+   /* investor: the Final's Items first, while the cart is still empty (order() takes from the offer) */
+   if(investor&&s.final)finalStash();
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
@@ -412,6 +537,21 @@ function playRun(g,out,ctx){
     let need=Math.max(0,s.queue.length-onShelf);for(const x of meals){if(!need)break;const take=Math.min(need,x.o.quantity);
      for(let k=0;k<take&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor;k++){try{g.setQuantity(x.i,(s.cart?.[x.i]||0)+1);act();(out.items[x.o.item]??={ordered:0,sold:0}).ordered++;need--;}catch(e){break;}}}
     offers=[...meals,...rest];}
+   /* investor: before the ordinary order, each backed visitor today (core first, then candidates) is matched to one
+      Counter for a Hazard of their Gate that is not yet 충분 bare, and a core visitor whose bare fight is no better than
+      even to one potion - from the shelf if one is unclaimed, else the best such offer the till can take above cashFloor */
+   if(investor){const shelf=[...s.inventory.map(x=>x.item)],left=s.offers.map((o,i)=>o.quantity-(s.cart?.[i]||0));
+    const claim=(ok,score)=>{const k=shelf.findIndex(id=>ok(D.itemBy[id]));if(k>=0){shelf.splice(k,1);return;}
+     const pick=s.offers.map((o,i)=>({o,i})).filter(x=>left[x.i]>0&&ok(D.itemBy[x.o.item])&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(D.itemBy[x.o.item]))
+      .sort((a,b)=>score(D.itemBy[b.o.item])/b.o.price-score(D.itemBy[a.o.item])/a.o.price)[0];
+     if(pick)try{g.setQuantity(pick.i,(s.cart?.[pick.i]||0)+1);left[pick.i]--;act();(out.items[pick.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}};
+    const backed=s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&['core','candidate'].includes(tierOf(m))).sort((a,b)=>weight(b)-weight(a));
+    /* an injured visitor today gets a 구급키트 on the shelf, backed or not: the Injury is the next Death */
+    for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.injury===1))claim(it=>!!it.effects.aftercare,()=>1);
+    for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
+     const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
+     if(open.length)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
+     if(tierOf(m)==='core'&&G.Dungeon.preparedPower(bare)<=(dd.power||1))claim(it=>it.category==='potion',it=>it.effects.combat||0);}}
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
    else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
@@ -437,7 +577,7 @@ function playRun(g,out,ctx){
       how a player chooses - Stage 9 reports offers and takes separately so both are visible. */
    if(s.deep?.today&&!s.deep.today.nomineeId)out.deepOffered+=Number(!!g.canNominateDeep(n));
    if(s.deep?.today&&!s.deep.today.nomineeId&&!g.canNominateDeep(n)&&s.money<g.deepCost(n))out.deepSkipped++;
-   if(engagement.order&&g.canNominateDeep(n)&&(policy!=='balanced'||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&topRoster(n)))){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
+   if(engagement.order&&g.canNominateDeep(n)&&(investor?tierOf(n)!=='rest':policy!=='balanced'||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&topRoster(n)))){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
     out.deepSponsor+=cost;out.deepCosts.push(cost);
     const byR=out.deepByRarity[n.rarity]??={takes:0,gold:0,level:0};byR.takes++;byR.gold+=cost;byR.level+=n.level;
     const band=n.level<5?'1-4':n.level<10?'5-9':n.level<15?'10-14':'15+';
@@ -446,7 +586,8 @@ function playRun(g,out,ctx){
        adventurer, so the sink can only be judged next to the growth and the Final seat it buys. */
     (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;out.deepCollapse.samples++;deepWatches.push(s.day);}
    const d=g.claimedGateFor(n);let attempts=0;
-   if(reader)while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){
+   if(investor)investorSell(n,d);
+   else if(reader)while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){
     const base=readScore(n,n.pack,d),o=G.Dungeon.estimate(n,d,s.facilities),seen=new Set(),picks=[];
     /* 150% the way the User used it (16 of 270 sales, all from D10): one Item per visit, to a regular (12+ visits in the
        User's Run; 8+ visits or loyalty 50+ here) whose purse covers it, the other slot at 정가. A refused 150% closes that
@@ -523,10 +664,16 @@ function playRun(g,out,ctx){
    const wasDay=s.day;g.closeDay();act();
    if(wasDay===29)out.prepStartGold.push(s.money);
   }
-  else if(s.phase==='final'){buySupport();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
+  else if(s.phase==='final'){buySupport();if(investor)finalStash();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
    measureFinal();
    const fd=s.dungeons[0],bareFinal=n=>contribution(G.Dungeon.prepare({...copy(n),pack:[]},fd,s.facilities));
-   const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort(expert?(a,b)=>bareFinal(b)-bareFinal(a):(a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
+   /* investor: who is strongest once handed what the store holds - a bare read charges every unanswered Final Hazard
+      against the customer and so seats a lower Level that happens to cover them over a stronger one the shelf can cover */
+   const kitFinal=n=>{const pack=[],left=s.inventory.filter(x=>!g.finalNoEffect(x.item)&&n.money>=g.finalPrice(x.item)).map(x=>x.item);
+    const at=p=>contribution(G.Dungeon.prepare({...copy(n),pack:p},fd,s.facilities));
+    while(pack.length<G.Adventurer.slots(n)&&left.length){const i=left.reduce((b,id,k)=>at([...pack,id])>at([...pack,left[b]])?k:b,0);pack.push(left.splice(i,1)[0]);}
+    return at(pack);};
+   const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort(investor?(a,b)=>kitFinal(b)-kitFinal(a):expert?(a,b)=>bareFinal(b)-bareFinal(a):(a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
    /* FINAL-Q75: the party is selected and confirmed first, then prepared one at a time. */
    for(const n of team){g.selectFinal(n.id);act();}
    if(team.length){g.commitFinalParty();act();}
