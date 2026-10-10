@@ -38,6 +38,10 @@ and this table is their commit record.
 | v2.12.3 | 2026-10-10 | Tier I Gate requirement and version bump in one PR (this one), after measurement-only #159 #160, save-file name #162 | (the User sets it) |
 
 
+## After v2.12.3 — Difficulty reference set by human play (User 2026-10-10)
+
+- `GAME_VISION.md` §Difficulty Curve: absolute difficulty is set from human play; the bot only measures change against the previous build. New reference: a rules-aware skilled player clears about 25% of fresh Runs (first clear by the 3rd~5th Run), a new buyer first clears around the 8th~15th Run with Decorations; investor bot fresh clear 2~3% with D10 reach held near 77%, Decoration-trajectory median first clear around the 10th Run. Bot change maps to people at an equal shift in odds. Directions: no Run that only luck can clear, prefer difficulty that sold items can answer, Boss difficulty held. The v2.10 balanced / skilled bot table is retired.
+
 ## v2.12.3 — Tier I Gate requirement is one common value (User 2026-10-10)
 
 - DUNGEON_HAZARD §GATE POWER: every Family's Tier I Gate now asks the same Combat Power, (21 + base offset + Day term + 1.5) × SuccessEase, the average of the old five (DAY 1 was 독거미·슬라임 100 / 망자역 106 / 설원 112 / 골렘 119). Which three Families open first no longer decides whether the starting roster can win at all. Tier II / III, golem's Combat share and Hazard Threat are unchanged.
