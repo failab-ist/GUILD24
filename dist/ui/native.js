@@ -8,6 +8,9 @@ const inApp=()=>{try{return !!G.Capacitor?.isNativePlatform?.();}catch(e){return
 const prefs=()=>inApp()?plug('Preferences'):null;
 const HYDRATE_MS=1500,CLOUD_MS=30000;
 const CLOUD_OK='guild24.cloudok';
+/* a browser can only set how long the motor runs, and 40 ms read as weak on a phone (User 2026-10-10): one firmer pulse, not a pattern */
+const WEB_MS=70;
+const webVibrate=()=>{try{return typeof navigator!=='undefined'&&!!navigator.vibrate&&!!matchMedia('(pointer:coarse)').matches;}catch(e){return false;}};
 const okMark=()=>{try{localStorage.setItem(CLOUD_OK,'1');}catch(e){}};
 let pending=null,timer=null,cloudRev=null;
 
@@ -61,12 +64,13 @@ G.Native={
  },
  /* True only after the plugin has answered a real load or save once, so a build whose Play Games sign-in is not set up never claims a backup. */
  cloudWorks(){try{return !!(inApp()&&plug('PlayGamesSaves'))&&localStorage.getItem(CLOUD_OK)==='1';}catch(e){return false;}},
- canVibrate(){return !!(inApp()&&plug('Haptics'))||(typeof navigator!=='undefined'&&!!navigator.vibrate);},
- /* One short buzz. Shell Haptics first, then the browser's own, else nothing. */
+ /* The browser's own buzz, only on a phone or tablet: desktop Chrome and Edge define navigator.vibrate and do nothing with it, so a toggle there would be a control that does not work. */
+ canVibrate(){return !!(inApp()&&plug('Haptics'))||webVibrate();},
+ /* One short buzz. Shell Haptics first, then the browser's own, else nothing. A browser that has not been tapped yet refuses the call, so it is skipped quietly. */
  vibrate(ms=40){
   try{const h=inApp()?plug('Haptics'):null;
    if(h){h.vibrate({duration:ms}).catch(()=>{});return;}
-   if(typeof navigator!=='undefined'&&navigator.vibrate)navigator.vibrate(ms);}catch(e){}
+   if(webVibrate()&&!(navigator.userActivation&&!navigator.userActivation.hasBeenActive))navigator.vibrate(Math.max(ms,WEB_MS));}catch(e){}
  },
  /* Android Back. `handle()` closes the topmost surface and returns true; otherwise the app saves and exits. */
  onBack(handle){
