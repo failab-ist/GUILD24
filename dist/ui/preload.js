@@ -39,7 +39,7 @@ function later(){
 /* Portraits trickle in one at a time, 400 ms apart, so a first store never fights its own downloads. The
    customers already in this store come first (call faces() each morning); the rest of the pool follows. */
 function pool(){const n=G.NPCAssets,out=[];
- if(n)for(const sex of['M','F'])for(let i=1;i<=n.normal[sex];i++)out.push(n.base+'normal/'+sex+'/'+String(i).padStart(3,'0')+n.ext);
+ if(n)for(const sex of['M','F','X'])for(let i=1;i<=n.normal[sex];i++)out.push(n.base+'normal/'+sex+'/'+String(i).padStart(3,'0')+n.ext);
  return out;}
 const seen=new Set(),line=[];let busy=false;
 function pump(){if(busy)return;while(line.length&&seen.has(line[0]))line.shift();if(!line.length)return;

@@ -157,7 +157,7 @@ test('COPY-002: NPC name voice is Korean-flavoured fantasy, not a Western or syl
  const src=fs.readFileSync(__dirname+'/../dist/systems/adventurer.js','utf8');
  const names=JSON.parse(src.match(/const names=(\[[\s\S]*?\]);/)[1]);
  assert.equal(new Set(names).size,names.length,'no duplicate names');
- assert.equal(names.length,200,'the pool is the full production pool, not a sample of it');
+ assert.equal(names.length,201,'the pool is the full production pool, not a sample of it');
  // §15 lists the tone anchors as direction; all are ordinary names in the pool. 요화니우스 left the anchors with the Rare
  // Reference customers (v2.9.11, User 2026-09-28) and is not a name in the game at all.
  for(const anchor of ['지오닝','민자이','고쉬스앵'])assert.ok(names.includes(anchor),'missing tone anchor '+anchor);
