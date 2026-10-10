@@ -26,17 +26,23 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
  case 'bulk':{if(!['order','final'].includes(s.phase))return '';const cart=s.cart||{};const skus=[...new Set(Object.keys(cart).filter(i=>cart[i]>0).map(i=>s.offers[i]?.item))];const n=skus.filter(item=>Object.keys(cart).filter(i=>s.offers[i]?.item===item).reduce((a,i)=>a+cart[i],0)>=3).length;return n?'지금 발주에서 '+n+'종 적용':'지금 발주에서 적용 없음';}
  case 'memberBundle':{if(s.phase!=='sell')return '';const n=g.current();if(!n)return '';if(!G.Adventurer.isTrustedRegular(n))return n.name+' · 단골 아님';return n.name+' · 단골 · 오늘 유료 구매 '+n.history.filter(h=>h.day===s.day&&h.paid>0).length+'건';}
  default:return '';}}
-/* The candidate draw, one owner: the window and its reroll read the same pool rules (User 2026-10-10: pure draw).
-   Each card rolls its 등급 first (DAY 0: 일반 only), then draws uniformly within it; a 등급 with nothing left
-   falls back to the whole pool. The pool is only what the Run may still own: no owned or retired support, and no
-   repeat inside the window. Nothing else bends the draw - no cool-down, no tag diversity, no build bias, no D30 exclusion. */
+/* RELIC_v2.8 §D30 CANDIDATE ELIGIBILITY. D30 subtracts the explicit no-effect set from the
+   ordinary pool and does nothing else: no previousSales gate lives here any more. 회전 진열대 and
+   물류 본부계약 both read yesterday's sales at the moment they FIRE, and D30 has a yesterday, so a
+   quiet D29 is a reason the support may pay nothing - not a reason the player may not be offered
+   the choice. Whether a D30 support needs a legal Reroll or ORDER action to realise its value is
+   likewise no bar: that action is legal on D30. */
+/* The candidate draw, one owner: the window and its reroll read the same pool rules (User 2026-10-10: tag diversity and build
+   bias are gone). `avoid` is the set kept off this draw when at least three others remain - the previous window's three for
+   a new window, the three on the table for a reroll. Each card rolls its 등급 first (DAY 0: 일반 only), then draws uniformly
+   within it; a 등급 with nothing left falls back to the whole pool. */
 /* META 본사 우수 점포 훈장: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
 const heroDay0=g=>!!g.wears&&g.wears('heroSign');
 const rarityFor=(g,day)=>{if(day===0)return heroDay0(g)?3:0;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
-function drawCandidates(g,day){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0)));const chosen=[];for(let i=0;i<3&&pool.length;i++){const want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool,pick=g.rng.pick(base);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
+function drawCandidates(g,day,avoid=[]){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0))&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const chosen=[];for(let i=0;i<3&&pool.length;i++){const want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool,pick=g.rng.pick(base);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
  return {candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+g.rng.next()*.3)))};}
-P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
- s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),...drawCandidates(this,day),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
+P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
+ s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),...drawCandidates(this,day,previous),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): an open, unspent window from DAY 5 on may redraw its three for Gold - 300G,
    doubling with each reroll of the same window, back to 300G on the next window. The DAY 0 free pick has none. The redraw
    keeps every pool rule and leaves the three on the table out when it can; the spend is 점포지원 investment. */
@@ -46,7 +52,7 @@ P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.mileston
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
  s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;
- Object.assign(w,drawCandidates(this,w.milestoneDay));w.rerolls=(w.rerolls||0)+1;this.save();};
+ Object.assign(w,drawCandidates(this,w.milestoneDay,w.candidateIds));w.rerolls=(w.rerolls||0)+1;this.save();};
 /* Sloth's seals are not a second choice path: they are the other thing this window's one
    acquisition can be spent on. Two of D15/D20/D25 were drawn with the Run and D30 always
    counts, so the opportunity Days are already fixed before the player sees any of them. */

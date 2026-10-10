@@ -103,6 +103,15 @@ D.relicParams={
 /* The hub overhead rate used to be its own D.balance literal; it now reads through to the
    relic's parameter so there is one lever, under the old name as well. */
 Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.overheadRate,enumerable:true,configurable:true});
+/* RELIC_v2.8 §D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE. The inherited
+   positive final-useful allowlist is superseded, and it is gone rather than kept beside this:
+   an allowlist silently drops every support nobody remembered to add, including every future
+   one, which is the defect REL-Q-v28-18 names. D30 is now the ordinary eligible pool MINUS this
+   set, so a support belongs here only when there is NO legal action or state between a D30
+   acquisition and the Final Lock through which it could change anything - not merely when it
+   looks weak that late. A future support joins D30 by existing; it leaves only by being added
+   here after its own D30-to-Final review. */
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
 /* RELIC §RETIRED (User 2026-10-04): no longer offered; kept so a save that owns it still reads and plays it */
 D.relicRetired=['memberBundle'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
