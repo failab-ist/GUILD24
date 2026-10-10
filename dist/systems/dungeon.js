@@ -257,7 +257,7 @@ function gateCountRule(day){
 function gateCountOdds(day){const c=gateCountRule(day);if(c.length===1)return [1];
  return day>=GATE_COUNT_LATE.from?[1-GATE_COUNT_LATE.three,GATE_COUNT_LATE.three]:c.map(()=>1/c.length);}
 function tierWeights0(day){
- const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.60,.40,0]],[12,[.50,.50,0]],[13,[.45,.52,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
+ const anchors=[[1,[1,0,0]],[4,[1,0,0]],[5,[.85,.15,0]],[7,[.70,.30,0]],[8,[.55,.45,0]],[12,[.40,.60,0]],[13,[.36,.61,.03]],[18,[.20,.70,.10]],[19,[.16,.70,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
 /* v2.9.2 third pass (User 2026-09-26): DAY 21~29 move LATE_T3 of the T2 weight to T3 - the late Days lean on Hazard / Item
@@ -308,7 +308,7 @@ const GREAT={xp:1.00},WIN={xp:.90};
 const EQUIP={fromDay:3,chance:[.30,.22,.18,.12]};
 const equipChance=(tier,day)=>day<EQUIP.fromDay?0:EQUIP.chance[Math.min(tier||0,EQUIP.chance.length-1)];
 const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
-const DEATH={combat:.40,environment:.25,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
+const DEATH={combat:.40,environment:.60,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation: only CONSECUTIVE injured departures count; a
    healthy departure resets the chain. STRAIN.weary is the fatigueEscalation threshold read at the call sites below.
    trailingRun() also backs the NPC-detail "연속 부상 출발 {n}회" row. */
@@ -351,7 +351,7 @@ function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.
  const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
  const environmentDeficit=p.hazards.length
   ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
- const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit*DEATH.environment,0,DEATH.cap);
+ const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit**2*DEATH.environment,0,DEATH.cap);
  const extra=(departedInjured?DEATH.injured:0)+(departedExhausted?DEATH.exhausted:0)+(strain||0);
  /* DUNGEON_HAZARD §Spirit steadiness: 정신 trims the failure Death chance a little, at most DEATH.spiritMax */
  const steady=1-Math.min(DEATH.spiritMax,Math.max(0,p.effects.spirit||0)*DEATH.spirit);
