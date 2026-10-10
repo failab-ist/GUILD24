@@ -61,7 +61,7 @@ function still(png,dur,out){execFileSync(FF,['-hide_banner','-loglevel','error',
    c4:await card('c4','<div class="cap band" style="top:1640px;font-size:64px">그들의 생사를 가른다.</div>'),
    c5:await card('c5','<div class="cap band" style="top:1700px;font-size:60px">키워낸 단골들과 함께,</div>'),
    c6:await card('c6','<div class="cap band" style="top:1700px;font-size:64px">마왕을 쓰러뜨려라.</div>')};
-  await cp.setContent(`<!doctype html><meta charset=utf-8><style>${css}html,body{background:#1b1612}.t{position:absolute;left:0;right:0;top:760px;text-align:center;font-family:MUL;font-size:150px;color:#f3e6c8;text-shadow:0 6px 0 #3a2a18,0 0 40px rgba(0,0,0,.6);letter-spacing:4px}.s{position:absolute;left:0;right:0;top:1000px;text-align:center;font-family:WB;font-size:54px;color:#cdbb9a;letter-spacing:6px}</style><div class="t">던전 앞 편의점</div><div class="s">턴제 경영 로그라이트</div>`);await cp.waitForTimeout(500);
+  await cp.setContent(`<!doctype html><meta charset=utf-8><style>${css}html,body{background:#1b1612}.t{position:absolute;left:0;right:0;top:760px;text-align:center;font-family:MUL;font-size:150px;color:#f3e6c8;text-shadow:0 6px 0 #3a2a18,0 0 40px rgba(0,0,0,.6);letter-spacing:4px}.s{position:absolute;left:0;right:0;top:1000px;text-align:center;font-family:WB;font-size:54px;color:#cdbb9a;letter-spacing:6px}</style><div class="t">마왕 잡는 편의점</div><div class="s">턴제 경영 로그라이트</div>`);await cp.waitForTimeout(500);
   const titlePng=path.join(outDir,'title-card.png');await cp.screenshot({path:titlePng});await cctx.close();
   // --- assembly (§7 mapping) ---
   const seg=path.join(outDir,'seg');fs.mkdirSync(seg,{recursive:true});const S=[];
