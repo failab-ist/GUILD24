@@ -772,7 +772,7 @@ This is the ordinary NPC expedition-Wallet channel consumed by current Item/Trai
 Equipment gain:
 - only a living combat-success path is eligible
 - no Equipment gain on DAY 1~2
-- from DAY 3 the base chance falls with the Equipment tier already earned: tier 0 30% / tier 1 20% / tier 2 15% / tier 3+ 10%
+- from DAY 3 the base chance falls with the Equipment tier already earned: tier 0 30% / tier 1 25% / tier 2 20% / tier 3+ 15%
   (User 2026-10-10: the adventurer who keeps winning grows more slowly), plus explicit rare-loot modifier
 - on hit, Equipment tier +1
 - Equipment 투력 gain = seeded integer 2–5 inclusive
@@ -1778,7 +1778,7 @@ Reward PASS:
 - Wallet base = 35 + Day×8
 - Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
-- living combat-success equipment chance is 0 on DAY 1~2, then 30 / 20 / 15 / 10% by Equipment tier 0 / 1 / 2 / 3+, plus explicit rare-loot modifier
+- living combat-success equipment chance is 0 on DAY 1~2, then 30 / 25 / 20 / 15% by Equipment tier 0 / 1 / 2 / 3+, plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
 
 FAIL:

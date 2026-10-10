@@ -36,6 +36,12 @@ and this table is their commit record.
 | v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR (this one) | (the User sets it) |
 
 
+## After v2.12.1 — Newcomer Level band and Equipment gain (User 2026-10-10)
+
+- META §Exact spawn-Level model: from DAY 5 a newcomer draws 1~2 + the Day term (was 1~3), so a newcomer arrives at most one Level above the Day's minimum. The min+2 newcomer showed a bare 우세 on the Days the minimum steps up (up to about 15% of newcomer-Gate pairs on DAY 21) and two of a fresh Run's top four were such arrivals.
+- DUNGEON_HAZARD §Equipment gain: 30 / 25 / 20 / 15% by Equipment tier 0 / 1 / 2 / 3+ (was 30 / 20 / 15 / 10%), giving back part of the difficulty the Level band adds.
+- Measured, investor / reader fresh 3000 each: D30 reach 14.5% → 12.5% / 11.2% → 8.3%, clear 5.8% → 4.8% / 3.3% → 2.4%; the reader's lucky-Run (top four ≥80% success) clear over the rest's falls from 5.5× to 3.0×. Logs: `reports/v2100-measure/newcomer-band-20261010/`.
+
 ## v2.12.1 — Release summary (User 2026-10-10)
 
 Patch version: work on `main` since v2.12.0 (PR #144~#155). Rules live in their routed owners; the app-wrapper rules live in PLATFORM_RELEASE.
