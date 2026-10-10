@@ -4,7 +4,8 @@
 // D30 reach / clear, deaths, a zombie line and the Decorations bought; a second line the end reasons (death limit, bankruptcy,
 // Final lost), the median end Day, deaths by DAY 10, injured departures and their deaths, the four highest-Level adventurers
 // against the rest, cash per Day and the Capital gain; a third line the preparation lines (with / without an Item, the share of
-// Item expeditions whose result an Item changed, the top four's share of the Items sold). The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
+// Item expeditions whose result an Item changed, the top four's share of the Items sold); a fourth line that share by early /
+// mid / late Days, for all Item expeditions and for those with a chance (bare-handed power / Gate requirement 0.8 or more). The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
 //   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,investor] [--decos none,economy,survival,operation] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
@@ -20,10 +21,14 @@ function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level)
  return out;}
 // 준비 지표(User 2026-10-09): 상품을 들고 간 원정 대 맨손 원정 [원정, 성공, 사망], 상품이 결과를 바꾼 원정(RESULT-PROOF
 // heroProof.outcome 또는 combatHero)과 그중 사망을 막은 원정, 판 상품 중 마지막 레벨 상위 4명이 받은 몫.
-function prep(npcs){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),o={eq:[0,0,0],bare:[0,0,0],changed:0,saved:0,items:0,topItems:0};
+// 구간별(User 2026-10-10): 초 D1~7 · 중 D8~20 · 후 D21~29의 [상품 원정, 결과를 바꿈], 그리고 가망 있는 원정(맨손 힘 / 게이트 요구 0.8 이상,
+// 측정 중에만 기록하는 bareRatio)만 센 같은 값. 0.8 미만은 상품을 줘도 거의 지는 원정이라 투자 판단과 섞지 않는다.
+const THIRDS=[[1,7],[8,20],[21,29]];
+function prep(npcs){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),o={eq:[0,0,0],bare:[0,0,0],changed:0,saved:0,items:0,topItems:0,band:THIRDS.map(()=>[0,0]),viable:THIRDS.map(()=>[0,0])};
  for(const n of npcs)for(const x of n.records||[]){if(x.deep||x.day>=30)continue;const k=(x.items||[]).length,t=o[k?'eq':'bare'];
   t[0]++;if(x.outcome==='성공'||x.outcome==='대성공')t[1]++;if(x.outcome==='사망')t[2]++;
-  if(k){o.items+=k;if(top.has(n))o.topItems+=k;if(x.heroProof?.outcome||x.combatHero)o.changed++;if(x.heroProof?.outcome?.worse==='사망')o.saved++;}}
+  if(k){o.items+=k;if(top.has(n))o.topItems+=k;const ch=x.heroProof?.outcome||x.combatHero?1:0;o.changed+=ch;if(x.heroProof?.outcome?.worse==='사망')o.saved++;
+   const b=THIRDS.findIndex(([a,z])=>x.day>=a&&x.day<=z);o.band[b][0]++;o.band[b][1]+=ch;if(x.bareRatio>=.8){o.viable[b][0]++;o.viable[b][1]+=ch;}}}
  return o;}
 const endKind=r=>r.win?'클리어':r.reach?'마왕실패':/소문/.test(r.end)?'사망한도':/자금/.test(r.end)?'파산':'기타';
 
@@ -61,6 +66,10 @@ function worker({root,kind,policy,deco,T,R,part}){
   require(path.join(root,'dist',f+'.js'));
  const G=globalThis.GUILD24||globalThis,P=G.Game.prototype,end=P.end,open=P.open,seen=new WeakSet(),initial=new WeakMap(),rows=[];let k=0;const wallets={};
  useFirstRunLessons(P);
+ // 가망 있는 원정 판정용: 출발 때 맨손 힘 / 게이트 요구를 원정 기록에 붙인다(측정 중에만, 게임 규칙은 그대로).
+ {const Dg=G.Dungeon,resolve=Dg.resolve;Dg.resolve=function(n,d,r,fac){let bare=null;
+  if(d.family!=='final'&&!d.deep){const pk=n.pack;n.pack=[];bare=Dg.preparedPower(Dg.prepare(n,d,fac).effects)/d.power;n.pack=pk;}
+  const rep=resolve.apply(this,arguments),rec=n.records?.at(-1);if(bare!==null&&rec)rec.bareRatio=bare;return rep;};}
  P.open=function(){const s=this.run;
   for(const id of s.queue){const n=s.npcs.find(x=>x.id===id);if(!n)continue;
    if(!initial.has(n))initial.set(n,{level:n.level,day:s.day,mastery:G.Meta.jobMastery(this.account,n.job)});
@@ -126,7 +135,9 @@ function summary(res){
     +' | 상위 4명 성공 '+grp('top')+' · 나머지 '+grp('rest')+' | 현금/일 '+avg(r=>r.cash).toFixed(0)+' | 자본 '+avg(r=>r.gain).toFixed(0));
    const pr=k=>sum(rs,r=>r.prep?.[k]||0),pv=k=>[0,1,2].map(i=>sum(rs,r=>r.prep?.[k][i]||0)),eq=pv('eq'),bare=pv('bare');
    if(eq[0]+bare[0])L.push('  └ 준비 | 상품 원정 성공 '+p(eq[1],eq[0])+' · 사망 '+p(eq[2],eq[0])+' | 맨손 원정 성공 '+p(bare[1],bare[0])+' · 사망 '+p(bare[2],bare[0])
-    +' | 상품이 결과를 바꿈 '+p(pr('changed'),eq[0])+' (사망을 막음 '+p(pr('saved'),eq[0])+') | 상위 4명이 받은 상품 '+p(pr('topItems'),pr('items')));}}
+    +' | 상품이 결과를 바꿈 '+p(pr('changed'),eq[0])+' (사망을 막음 '+p(pr('saved'),eq[0])+') | 상위 4명이 받은 상품 '+p(pr('topItems'),pr('items')));
+   const bd=(k,i)=>p(sum(rs,r=>r.prep?.[k]?.[i][1]||0),sum(rs,r=>r.prep?.[k]?.[i][0]||0));
+   if(eq[0])L.push('  └ 상품이 결과를 바꿈 초 · 중 · 후 '+[0,1,2].map(i=>bd('band',i)).join(' · ')+' | 가망 있는 원정(맨손 0.8 이상) '+[0,1,2].map(i=>bd('viable',i)).join(' · '));}}
  return L.join('\n');
 }
 module.exports={RANK,DECO,BANDS,split,prep,endKind,jobMetrics,useFirstRunLessons};
