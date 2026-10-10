@@ -1,5 +1,5 @@
 (function(){
-'use strict';Native.hydrate(Save.keys).then(function(){
+'use strict';Native.hydrate(Save.keys).then(()=>Native.cloudPull(Save.hasLocal()?2000:6000)).then(raw=>{if(raw)Save.cloudMerge(raw);}).then(function(){
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
 /* UI_UX §BUILD MARKER (v2.9.3): the build a report was played on - the opening screen's corner and the console */
 const BUILD=window.GUILD24_BUILD||{version:'dev',commit:'dev'};console.info('GUILD24 v'+BUILD.version+' · '+BUILD.commit);
@@ -3071,7 +3071,7 @@ Native.onBack(()=>{
  if(modal){if(game.run?.phase!=='foundation'&&!d0Owed())setModal(null);return true;}
  if(game.run?.phase==='order'&&sheetOpen()){setStockSheet(false);return true;}
  game.save();return false;});
-window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
+window.addEventListener('pagehide',()=>{game.save();Native.cloudFlush();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden){game.save();Native.cloudFlush();}Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
    would replace the control under the pointer and end the drag. */
