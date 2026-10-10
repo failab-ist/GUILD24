@@ -777,7 +777,7 @@ test('RESULT-PROOF: the departure snapshot freezes Equipment before the Outcome\
  const gate=g.makeDungeon('spider',1);
  const won=r=>{const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:[],injury:0,fatigue:0,alive:true,recovery:0,
    equipment:{...g.run.npcs[0].equipment,power:0,tier:1}}));
-  return Dungeon.resolve(n,{...gate,power:1},new RNG('equip-win-'+r),[]);};
+  return Dungeon.resolve(n,{...gate,power:1,day:Dungeon.EQUIP.fromDay},new RNG('equip-win-'+r),[]);};
  let sawWin=false;
  for(let i=0;i<200&&!sawWin;i++){const r=won(i);if(r.equipmentGain>0)sawWin=true;}
  assert.ok(sawWin,'sanity: the sweep actually reached an equipment-tier win, or this proof has nothing to test');
