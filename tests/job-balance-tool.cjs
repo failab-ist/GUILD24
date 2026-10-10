@@ -27,7 +27,7 @@ assert.equal(Object.keys(find('archer',20).defense).length,9);close(find('archer
 close(find('archer',20).defense.poison.value,51.9/3);close(find('archer',20).defense.fire.value,40.4/3);
 for(const r of stats)close(r.power,find(r.job,1).power+(r.level-1)*r.powerGrowth);
 const n=T.actor(G,'archer',20,o),d=T.gate(G,4,'slime',1);
-assert.equal(d.day,4);assert.equal(d.tier,1);assert.equal(d.family,'slime');close(d.power,(21+.25+4*1.45)*.9);
+assert.equal(d.day,4);assert.equal(d.tier,1);assert.equal(d.family,'slime');close(d.power,(21+.25+4*1.45+D.balance.gateTier1Term)*.9);
 assert.deepEqual(T.choosePack(G,n,d,'none',0),[]);assert.deepEqual(T.choosePack(G,n,d,'same',0),[]);
 const affordable=T.choosePack(G,n,d,'budget',o.budget);assert.ok(affordable.length<=2);assert.ok(affordable.reduce((v,id)=>v+D.itemBy[id].buy,0)<=o.budget);
 assert.equal(JSON.stringify(n),JSON.stringify(T.actor(G,'archer',20,o)),'보급 선택은 원정 상태를 바꾸지 않는다');

@@ -37,6 +37,11 @@ and this table is their commit record.
 | v2.12.2 | 2026-10-10 | PR #157 on `main` (newcomer Level band, Epic / Equipment values); version bump PR (this one) | (the User sets it) |
 
 
+## After v2.12.2 — Tier I Gate requirement is one common value (User 2026-10-10)
+
+- DUNGEON_HAZARD §GATE POWER: every Family's Tier I Gate now asks the same Combat Power, (21 + base offset + Day term + 1.5) × SuccessEase, the average of the old five (DAY 1 was 독거미·슬라임 100 / 망자역 106 / 설원 112 / 골렘 119). Which three Families open first no longer decides whether the starting roster can win at all. Tier II / III, golem's Combat share and Hazard Threat are unchanged.
+- Measured against main, investor / reader fresh 1000 each: Runs ending by DAY 7 6.3% → 5.5% / 8.7% → 7.1%; D10, D30 reach and clear move within noise (investor D30 13.2% → 12.3%, clear 6.1% → 5.8%). Log: `reports/v2100-measure/gate-tier1-20261010/`.
+
 ## v2.12.2 — Newcomer Level band, Epic Rarity and Equipment gain (User 2026-10-10)
 
 - META §Exact spawn-Level model: from DAY 5 a newcomer draws 1~2 + the Day term (was 1~3), so a newcomer arrives at most one Level above the Day's minimum. The min+2 newcomer showed a bare 우세 on the Days the minimum steps up (up to about 15% of newcomer-Gate pairs on DAY 21) and two of a fresh Run's top four were such arrivals.

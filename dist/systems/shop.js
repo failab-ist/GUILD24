@@ -147,9 +147,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- // DUNGEON_HAZARD §GATE POWER: ordinary base anchors; Final uses makeFinal.
+ // DUNGEON_HAZARD §GATE POWER: ordinary base anchors; Final uses makeFinal. Tier I is one common requirement for every Family (gateTier1Term).
  const gateOffset=s.day<=10?.125+(s.day-1)/24:s.day<=20?.5+(s.day-10)/20:s.day<=25?1+(s.day-20)/10:1.5;
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+gateOffset+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1)*G.Dungeon.gateEase(s.day),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(tier===1?21+gateOffset+G.Dungeon.gateDayTerm(s.day)+D.balance.gateTier1Term:(21+gateOffset+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1))*G.Dungeon.gateEase(s.day),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
