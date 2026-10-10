@@ -48,7 +48,7 @@ test('UI §RESPONSIVE RULE: the sheet is authored mobile-first',()=>{
  assert.ok(min>=2,'tablet/desktop are added with min-width queries');
  assert.equal(max, 1,'only specific exceptions use max-width');
  assert.ok(/button\{[^}]*min-height:44px/.test(css),'the 44px touch contract is in the base sheet');
- assert.ok(css.includes('env(safe-area-inset-bottom)')&&css.includes('env(safe-area-inset-top)'),'safe areas are honoured');
+ assert.ok(css.includes('env(safe-area-inset-bottom,0px)')&&css.includes('env(safe-area-inset-top,0px)')&&css.includes('padding-top:var(--sa-top)'),'safe areas are honoured');
 });
 
 test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',()=>{
@@ -3852,7 +3852,7 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  // User 2026-09-29 (Galaxy 360x597): an empty 간판's tag carries `들일 수 있음` and is wider than the piece
  assert.ok(/\.p-prep \.opening-logo\{width:min\(180px,50vw\)\}/.test(pb)&&/\.p-prep \.deco-layer\{--sign-l:calc\(50cqw - min\(180px,50vw\) \/ 2\)\}/.test(pb)
   &&/\.p-prep \.prep-slot\.sign\.empty \.slot-tag\{left:auto;right:0;top:0;transform:none\}/.test(pb)
-  &&/\.p-prep \.decoplate\.sign\{top:max\(calc\(env\(safe-area-inset-top\) \+ 26px\)/.test(pb),'the title a step smaller, the empty 간판 tag grows away from it and under the build mark');
+  &&/\.p-prep \.decoplate\.sign\{top:max\(calc\(var\(--sa-top\) \+ 26px\)/.test(pb),'the title a step smaller, the empty 간판 tag grows away from it and under the build mark');
  assert.ok(/\['375x548','360x597'\]/.test(read('tools/qa-visual.cjs')),'the visual gate runs the SE stage and the Galaxy stage');
  // User 2026-09-30: under 700 high the filled counter tray takes one tighter step, its keys still 44 px or more
  const tb=css.slice(css.indexOf('@media (max-height:699px) and (orientation:portrait){'),css.indexOf('.p-prep .slot-tag i{'));

@@ -25,7 +25,11 @@
   .desktop-only { display: block; }
   .mobile-only { display: none; }
 }
+/* PLATFORM_RELEASE §SCREEN / DEVICE: the Safe Area comes from the browser's env() or, in the Android app, from the shell's
+   --safe-area-inset-* variables (the app WebView can report env() as 0); the larger of the two, 0 when neither exists. */
 :root{
+ --sa-top:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));--sa-bottom:max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px));
+ --sa-left:max(env(safe-area-inset-left,0px),var(--safe-area-inset-left,0px));--sa-right:max(env(safe-area-inset-right,0px),var(--safe-area-inset-right,0px));
  /* v2.9.7 CLOSING boxes: the stamp keys' stepped corner at 4px */
  --px-cut:polygon(0 4px,4px 4px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,100% calc(100% - 4px),
   calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px));
@@ -184,12 +188,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 
 /* ---- stage: the only shared frame ---- */
 .stage{position:relative;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--soil);
- padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+ padding-top:var(--sa-top);padding-left:var(--sa-left);padding-right:var(--sa-right)}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
-.menu-pin{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:calc(env(safe-area-inset-right) + 6px);z-index:30;
+.menu-pin{position:absolute;top:calc(var(--sa-top) + 6px);right:calc(var(--sa-right) + 6px);z-index:30;
  width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#2d190d;color:#dfcba9;
  box-shadow:inset 0 0 0 1px #76502c,inset 0 -3px 0 #130b07,3px 3px 0 #00000073}
-.dock{flex-shrink:0;padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom))}
+.dock{flex-shrink:0;padding:12px var(--gutter) max(12px,var(--sa-bottom))}
 
 /* ---- hazard pressure: burned into the notice, always inline, never hover-only ---- */
 .hazards{display:grid;gap:2px}
@@ -867,7 +871,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 #toast{position:fixed;left:50%;z-index:60;
  /* clear of the dock: the primary action stays visible and legible while a system
     message is on screen, and the message never sits on top of the button it is about */
- bottom:calc(92px + env(safe-area-inset-bottom));
+ bottom:calc(92px + var(--sa-bottom));
  transform:translateX(-50%) translateY(140%);
  max-width:min(90vw,420px);padding:10px 16px;
  font:400 14px/1.45 var(--ui);color:var(--ink);text-align:center;
@@ -1856,7 +1860,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px var(--gutter) 18px;
  font:400 14px/1.6 var(--ui);color:#c6b391}
 .modal-body h3{color:#f2e7cd}
-.modal-footer{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:10px;padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));
+.modal-footer{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:10px;padding:12px var(--gutter) max(14px,var(--sa-bottom));
  background:#1a120a;box-shadow:inset 0 3px 0 #ffffff12}
 /* the footer's primary Action is the primary Action: it keeps the size it needs and nothing
    else - the green plane and its three concentric rings are gone with the stamp they belonged
@@ -2098,7 +2102,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-plate .stamp[disabled]{background:#e3d5b9;color:#655a4b;opacity:1;transform:none;
  clip-path:none;filter:none;box-shadow:none;border:1px solid #958570}
 .relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;
- width:calc(100% - 32px);max-width:1120px;align-self:center;margin:8px 0 max(12px,env(safe-area-inset-bottom));
+ width:calc(100% - 32px);max-width:1120px;align-self:center;margin:8px 0 max(12px,var(--sa-bottom));
  padding:0;background:transparent;box-shadow:none}
 .relic-takeover .close p{flex:1 1 100%;font:600 13px/1.5 var(--ui);color:#f5e8ce;text-align:center;
  text-shadow:1px 1px 0 #21150f,-1px -1px 0 #21150f}
@@ -2451,7 +2455,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-panel .modal-header .bare{padding:8px 10px;color:#ead8b6;background:#2d190e;
  box-shadow:inset 0 0 0 1px #8b6037,0 2px 0 #100905}
 .menu-panel .modal-header .bare:hover{background:#412816;color:#fff0d1}
-.menu-panel .modal-body{padding:14px 6px max(8px,env(safe-area-inset-bottom));color:#efdfbf}
+.menu-panel .modal-body{padding:14px 6px max(8px,var(--sa-bottom));color:#efdfbf}
 .menu-panel .menu-list{gap:8px}
 .menu-panel .menu-list button{display:flex;align-items:center;gap:10px;min-height:56px;
  padding:5px 9px;border:2px solid #85603c;background:#422b19;color:#f6e8cf;
@@ -2494,7 +2498,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the Action, not a row of its own (the rack's cells say the rest; the desk column keeps the full head), and the Actions are
    48 px (Android's touch target) with a 3 px cast and lighter edges, so the 발주서 keeps the height */
 @media (max-width:1023px){
- .p-order .dock{flex-wrap:nowrap;align-items:stretch;gap:8px;padding-top:12px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+ .p-order .dock{flex-wrap:nowrap;align-items:stretch;gap:8px;padding-top:12px;padding-bottom:max(10px,var(--sa-bottom))}
  .p-order .dock .stock-handle{position:relative;flex:0 0 64px;flex-direction:column;justify-content:center;align-items:center;gap:2px;
   min-height:48px;margin-top:0;padding:3px 2px;text-align:center;box-shadow:0 3px 0 #00000073}
  .p-order .dock .stock-handle i{font-size:10px}
@@ -2644,10 +2648,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The preparation screen is the MORNING room
    (the stage carries both classes, so the painting, the bands and the Decoration seating are MORNING's own); only what
    differs before a Run is set here. */
-.p-prep .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:5;
+.p-prep .build-mark{position:absolute;top:calc(var(--sa-top) + 8px);left:calc(var(--sa-left) + 10px);z-index:5;
  margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
 /* the name hangs from the ceiling where the DAY sign will */
-.p-prep .band.ceiling .opening{position:absolute;inset:0 0 auto;z-index:2;padding-top:calc(env(safe-area-inset-top) + 21px)}
+.p-prep .band.ceiling .opening{position:absolute;inset:0 0 auto;z-index:2;padding-top:calc(var(--sa-top) + 21px)}
 .p-prep .prep-note{padding-top:16px}
 .p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
 .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
@@ -2698,7 +2702,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* on the wide framing the title hangs at the 간판's height, so the 간판 keeps the gap from the title as it does from the
     DAY sign on MORNING (a 1366x680 browser brought them together) */
  .p-prep .deco-layer{--sign-l:calc(50cqw - 160px)}
- .p-prep .band.ceiling .opening{padding-top:calc(env(safe-area-inset-top) + 14px)}
+ .p-prep .band.ceiling .opening{padding-top:calc(var(--sa-top) + 14px)}
  .p-prep .slot-tag{font-size:min(20px,max(12px,1.72cqh,1.4cqw))}
  .p-prep .slot-tag b{font-size:min(22px,max(13px,1.875cqh,1.5cqw))}
  .p-prep .prep-status{font-size:13px}
@@ -2735,7 +2739,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* an equipped 간판's tag runs right under it, level with the branch plate, so the piece keeps the full title's gap */
  .p-prep .decoplate.sign:not(.empty){--sign-l:calc(50cqw - min(210px,58vw) / 2)}
  /* and it hangs under the build mark, not over it, where the crop takes the painted ceiling off the top */
- .p-prep .decoplate.sign{top:max(calc(env(safe-area-inset-top) + 26px),calc(50cqh + (var(--y) - .5) * var(--ph)))}
+ .p-prep .decoplate.sign{top:max(calc(var(--sa-top) + 26px),calc(50cqh + (var(--y) - .5) * var(--ph)))}
 }
 @media (max-height:699px) and (orientation:portrait){
  /* SALE: a filled counter tray left 2 / 1 / 0 shelf rows above it
@@ -3386,7 +3390,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.doc .modal-header .bare:hover{background:#2c241814}
 .modal.doc .modal-body{padding:0 var(--gutter) 6px}
 /* the foot is paper too, so the seal sits ON the record instead of on a bar under it */
-.modal.doc .modal-footer{justify-content:flex-end;padding:4px var(--gutter) max(16px,env(safe-area-inset-bottom));
+.modal.doc .modal-footer{justify-content:flex-end;padding:4px var(--gutter) max(16px,var(--sa-bottom));
  background:transparent;box-shadow:none}
 /* the filing line: the record's own provenance, above the report body */
 .boss-reveal .filed{display:flex;align-items:baseline;gap:10px;margin:0;padding:9px 0 0;
@@ -3633,7 +3637,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the Boss card above in its own room, the party's cards below; the motion is app.js clashScene(). The one scene the
    per-beat contract lets use the whole stage. */
 .clash{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(64px,14vh,150px);
- padding:calc(env(safe-area-inset-top) + max(20px,6vh)) 16px calc(env(safe-area-inset-bottom) + max(20px,8vh));overflow:hidden;cursor:pointer;
+ padding:calc(var(--sa-top) + max(20px,6vh)) 16px calc(var(--sa-bottom) + max(20px,8vh));overflow:hidden;cursor:pointer;
  background:linear-gradient(180deg,#0d0a0cb8 0,#0d0a0c73 42%,#0d0a0ce6 100%),var(--room,none) center 30%/cover no-repeat,#0d0a0c;
  -webkit-tap-highlight-color:transparent;user-select:none}
 .clash .flash{position:absolute;inset:0;opacity:0;pointer-events:none;mix-blend-mode:screen}
@@ -3810,7 +3814,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .counter-tray.folded .tray-what>b:after{content:'';position:absolute;right:0;top:50%;margin-top:-3px;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:6px solid #d6bd84}
 .p-sale:not(.sale-desk) .deep-offer{margin-bottom:2px}
 .p-sale:not(.sale-desk) .deep-offer>summary{min-height:44px;padding:5px 12px}
-.p-sale:not(.sale-desk) .dock{padding-top:5px;padding-bottom:max(5px,env(safe-area-inset-bottom))}
+.p-sale:not(.sale-desk) .dock{padding-top:5px;padding-bottom:max(5px,var(--sa-bottom))}
 .p-sale:not(.sale-desk) .dock .stamp{min-height:48px;padding-top:10px;padding-bottom:10px;font-size:16px}
 /* the Great Success signal inside the 전투 전망 box (User 2026-10-02): a phone shows a quiet tag beside the word and keeps the
    sentence for a screen reader only; a desk shows the sentence under the word and no tag */
@@ -3858,18 +3862,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:none;box-shadow:none;color:#f1e6cc;filter:drop-shadow(0 2px 0 #0f0905)}
 .menu-panel .modal-header .bare:hover,.settings-wood .modal-header .bare:hover,.wood-frame .modal-header .bare:hover{background:none;color:#fff;filter:drop-shadow(0 2px 0 #0f0905) brightness(1.1)}
 .menu-panel .modal-header .bare:active,.settings-wood .modal-header .bare:active,.wood-frame .modal-header .bare:active{transform:translateY(2px);box-shadow:none}
-.relic-takeover .takeover-x{position:absolute;top:max(10px,env(safe-area-inset-top));right:10px;z-index:3;display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;
+.relic-takeover .takeover-x{position:absolute;top:max(10px,var(--sa-top));right:10px;z-index:3;display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;
  background:#140905e6;color:#f1e6cc;box-shadow:inset 0 0 0 2px #ffffff33;filter:drop-shadow(0 2px 0 #0f0905)}
 .relic-takeover .takeover-x:hover{background:#140905;color:#fff}
 .relic-takeover .takeover-x:active{transform:translateY(2px)}
 .relic-takeover .close:empty{display:none}
 .modal-header .bare .x-icon,.takeover-x .x-icon{display:block;width:16px;height:16px}
 /* one vertical rhythm for the carved sheets: 14px under the header rule, 16px above the footer rule, 12px between stacked blocks */
-.modal.wood-frame .modal-body,.modal.wood-frame:has(.tabs) .modal-body{padding:16px 12px max(14px,env(safe-area-inset-bottom))}
-.modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,env(safe-area-inset-bottom))}
+.modal.wood-frame .modal-body,.modal.wood-frame:has(.tabs) .modal-body{padding:16px 12px max(14px,var(--sa-bottom))}
+.modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,var(--sa-bottom))}
 .modal.wood-frame .modal-body p+p{margin-top:8px}
-.settings-wood .modal-body{padding:18px 12px max(18px,env(safe-area-inset-bottom));color:#dfcba9}
-.settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,env(safe-area-inset-bottom));
+.settings-wood .modal-body{padding:18px 12px max(18px,var(--sa-bottom));color:#dfcba9}
+.settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,var(--sa-bottom));
  background:none;box-shadow:inset 0 1px 0 #9b6433}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
  border-image:url('assets/presentation/settings/blue-key.webp') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
@@ -4194,7 +4198,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-final.p-order .final-order{position:relative;padding-top:26px;background:none;box-shadow:none}
 .final-order .form-head h1{display:inline-block}
 .final-order .form-head .candidate-look{float:right;margin-top:6px;min-height:32px;padding:6px 0;background:none;box-shadow:none;font:600 13px/1.4 var(--ui);color:#6b6350;text-decoration:underline dotted #6b635099;text-underline-offset:4px}
-.p-final.p-order .dock{flex-wrap:nowrap;gap:8px;padding:12px var(--gutter) max(10px,env(safe-area-inset-bottom));background:var(--tex-paper),#efe5c5;box-shadow:none}
+.p-final.p-order .dock{flex-wrap:nowrap;gap:8px;padding:12px var(--gutter) max(10px,var(--sa-bottom));background:var(--tex-paper),#efe5c5;box-shadow:none}
 .p-final.p-order .dock .stamp{flex:1 1 0;min-width:0;min-height:48px;margin:0;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;font:600 15px/1.2 var(--ui);letter-spacing:0;background:#2f3a44;color:#eef6fa;text-shadow:0 2px 0 #1f272e;filter:drop-shadow(3px 3px 0 #2a2317bf);box-shadow:inset 0 3px 0 #7fb0c4,inset 0 -4px 0 #1f272e}
 .p-final.p-order .dock .stamp[disabled]{background:#8d959c;color:#3f464c;text-shadow:none;filter:none;clip-path:var(--stamp-cut);box-shadow:inset 0 3px 0 #6e767d,inset 0 -2px 0 #a3aab0}
 .p-final.p-order .dock .stamp:not([disabled]):active{transform:translate(2px,2px);filter:drop-shadow(1px 1px 0 #2a2317bf)}
