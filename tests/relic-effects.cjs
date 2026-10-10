@@ -71,7 +71,6 @@ test('RELIC 22: 평생 단골제 - 단골 Stats +10% and the 단골 line holds; 
  const not={...n,loyalty:50};assert.deepEqual(Dungeon.prepare(not,d,['lifetime']).effects,Dungeon.prepare(not,d,[]).effects,'below 51: nothing');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  assert.ok(!/relicParams\.lifetime\.(goldBonus|revisitMult)/.test(src),'no Gold, no revisit weight');
- assert.ok(!DATA.relicD30NoEffect.includes('lifetime'),'it now reaches the Final party, so it may be offered on DAY 30');
  const h=fresh('lifetime-floor'),m=h.run.npcs[0];m.loyalty=55;h.run.facilities=['lifetime'];h.loyal(m,-10);assert.equal(m.loyalty,51,'a 단골 stops at 51');
  m.loyalty=55;h.run.facilities=[];h.loyal(m,-10);assert.equal(m.loyalty,45,'without it Loyalty falls as before');
  m.loyalty=40;h.run.facilities=['lifetime'];h.loyal(m,-10);assert.equal(m.loyalty,30,'not yet a 단골: no floor');
@@ -93,60 +92,22 @@ test('overhead matches day effects',()=>{
  }
  assert.equal(raw.hub,base.g.overheadBase()*0.10,'hub is 10% of the overhead base, the approved rate');
 });
-/* REL-Q-v28-18. The D30 pool is the ordinary eligible pool MINUS an explicit no-effect set, so
-   this asserts the whole membership directly rather than sampling windows and hoping: sampling
-   can show that something DID appear, never that everything else still CAN. */
-test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
- const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
-                 'memberBundle','premiumMember','returnPoints','supplyCert',
-                 'royalCert','hub','efficiency','firstAidDesk','rumorBoard','postcard','rescueContract'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (18)');
- /* the model itself: no positive allowlist survives anywhere in the Store Support source */
- const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
- for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
-  const src=read(f);
-  assert.ok(!/finalUseful/.test(src),'no finalUseful allowlist in '+f);
-  assert.ok(!/futureRelevant/.test(src),'no futureRelevant allowlist in '+f);
+/* RELIC §CANDIDATE DRAW (User 2026-10-10): the draw is pure. A card rolls its 등급, then a support of that 등급 is drawn
+   uniformly from what the Run may still own. No cool-down, no tag diversity, no build bias, no D30 exclusion. */
+test('RELIC candidate draw is pure: grade roll, then uniform within the grade',()=>{
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/relics.js'),'utf8');
+ const fn=src.slice(src.indexOf('function drawCandidates'),src.indexOf('P.relicWindow='));
+ assert.ok(!/tags|weighted|avoid|NoEffect/.test(fn),'drawCandidates reads no tag, weight, avoid set or D30 exclusion');
+ assert.equal(DATA.relicD30NoEffect,undefined,'the D30 exclusion set is gone');
+ /* every support, including the ones the old D30 list excluded, is offered on D30 when it is the only one left */
+ for(const r of DATA.relics.filter(r=>!DATA.relicRetired.includes(r.id))){
+  const g=fresh('d30-'+r.id),s=g.run;s.facilities=DATA.relics.map(x=>x.id).filter(x=>x!==r.id);s.day=30;s.relicWindow=null;g.relicWindow(30);
+  assert.ok(s.relicWindow.candidateIds.includes(r.id),r.id+' is offered on D30');
  }
- assert.ok(!/previousSales>=8/.test(read('systems/relics.js')),'and no inherited 8-sale gate');
- assert.ok(DATA.relics.every(r=>!('finalUseful' in r)),'the property is off the rows too');
-
- /* eligibility, one support at a time and with the RNG taken out of it: a Run that owns
-    everything else has exactly one candidate left, so its presence or absence is the answer. */
- const eligibleAtD30=(id,previousSales)=>{
-  const g=fresh('d30-'+id);const s=g.run;
-  s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!==id);
-  s.previousSales=previousSales;s.day=30;s.relicWindow=null;
-  g.relicWindow(30);
-  return s.relicWindow.candidateIds.includes(id);
- };
- for(const r of DATA.relics){
-  const want=!EXCLUDED.includes(r.id);
-  assert.equal(eligibleAtD30(r.id,9),want,r.id+(want?' is D30-eligible':' is excluded from D30'));
- }
- /* REL-Q-v28-14/15 are conditions on when the support PAYS, never on whether D30 may offer it. */
- for(const sales of [0,5,6,7,8])for(const id of ['rotation','logisticsHQ'])
-  assert.equal(eligibleAtD30(id,sales),true,id+' is not gated by '+sales+' previous sales at D30');
- /* a support that needs a legal D30 ORDER / Reroll action to pay is still eligible */
- for(const id of ['rerollTicket','extraOrder','bulk','fieldRepair','rareContract','hazardBoard','opsRoom'])
-  assert.equal(eligibleAtD30(id,0),true,id+' realises its value through a legal D30 action');
-
- /* a future Store Support is included by DEFAULT, and leaves only by being named */
- const future={id:'futureSupport',name:'미래 점포지원',kind:'utility',tags:[],price:300,description:'테스트 전용.'};
- DATA.relics.push(future);DATA.relicBy[future.id]=future;
- try{
-  assert.equal(eligibleAtD30(future.id,0),true,'a newly added support enters D30 without being listed');
-  DATA.relicD30NoEffect.push(future.id);
-  assert.equal(eligibleAtD30(future.id,0),false,'and is removed only by the explicit no-effect set');
- }finally{
-  DATA.relics.pop();delete DATA.relicBy[future.id];
-  DATA.relicD30NoEffect.splice(DATA.relicD30NoEffect.indexOf(future.id),1);
- }
-
- /* and a real D30 window only ever draws from that pool */
- for(let i=0;i<100;i++){const g=fresh('final-offer-'+i);g.run.previousSales=0;g.relicWindow(30);
-  for(const id of g.run.relicWindow.candidateIds)
-   assert.ok(!EXCLUDED.includes(id),id+' must not reach a D30 window');}
+ /* the first card's grade follows 일반 60 / 희귀 28 / 영웅 12 */
+ const N=3000,c={0:0,2:0,3:0};
+ for(let i=0;i<N;i++){const g=fresh('grade-'+i);g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);c[DATA.relicBy[g.run.relicWindow.candidateIds[0]].rarity]++;}
+ for(const [k,want] of [[0,.60],[2,.28],[3,.12]])assert.ok(Math.abs(c[k]/N-want)<.03,'grade '+k+' share '+(c[k]/N).toFixed(3));
 });
 
 /* RELIC_v2.8 §ROTATION DISPLAY — SUPPLY ENGINE. The support stopped being a discount and became
@@ -221,7 +182,6 @@ test('RELIC 31 야전 들것: an ordinary Injury costs 투력 8% instead of 15%,
  n.injury=1;const src=Dungeon.prepare(n,d,['fieldStretcher']).sources.combat.find(x=>x.name==='부상');
  assert.equal(src.v,-8,'the SALE / NPC source line reads the same -8%');
  assert.equal(DATA.relicBy.fieldStretcher.kind,'foundation');assert.deepEqual(DATA.relicBy.fieldStretcher.tags,['expedition']);
- assert.ok(!DATA.relicD30NoEffect.includes('fieldStretcher'),'the D30 Final reads preparation too, so it stays D30-eligible');
 });
 
 test('RELIC 32 응급 처치대: an injured arrival recovers at 20%, only while owned, and says so',()=>{

@@ -3,7 +3,7 @@
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
 DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.4
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.5
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE / NON-NEGOTIABLE
@@ -272,7 +272,7 @@ Items with no effect in the Demon Castle must be visibly blocked from Final Bag 
 Current no-effect Insurance: 구급키트 / 귀환석 / 세계수 생환부적 (→ §FINAL INSURANCE VALUE — EXACT).
 
 The D30 ORDER sheet never offers these, on its first sheet or after a Reroll: D30 has no SALE and they cannot go in a
-Final Bag. Same explicit no-effect exclusion D30 Store Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
+Final Bag.
 
 Player-facing copy must not use the internal term `Final`.
 Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
