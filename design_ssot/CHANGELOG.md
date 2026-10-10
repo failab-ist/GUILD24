@@ -34,8 +34,14 @@ and this table is their commit record.
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
 | v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR #143 | `v2.12.0` |
 | v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR #156 | (the User sets it) |
-| v2.12.2 | 2026-10-10 | PR #157 on `main` (newcomer Level band, Epic / Equipment values); version bump PR (this one) | (the User sets it) |
+| v2.12.2 | 2026-10-10 | PR #157 on `main` (newcomer Level band, Epic / Equipment values); version bump PR #158 | (the User sets it) |
+| v2.12.3 | 2026-10-10 | Tier I Gate requirement and version bump in one PR (this one), after measurement-only #159 #160, save-file name #162 | (the User sets it) |
 
+
+## v2.12.3 — Tier I Gate requirement is one common value (User 2026-10-10)
+
+- DUNGEON_HAZARD §GATE POWER: every Family's Tier I Gate now asks the same Combat Power, (21 + base offset + Day term + 1.5) × SuccessEase, the average of the old five (DAY 1 was 독거미·슬라임 100 / 망자역 106 / 설원 112 / 골렘 119). Which three Families open first no longer decides whether the starting roster can win at all. Tier II / III, golem's Combat share and Hazard Threat are unchanged.
+- Measured against main, investor / reader fresh 1000 each: Runs ending by DAY 7 6.3% → 5.5% / 8.7% → 7.1%; D10, D30 reach and clear move within noise (investor D30 13.2% → 12.3%, clear 6.1% → 5.8%). Log: `reports/v2100-measure/gate-tier1-20261010/`.
 
 ## v2.12.2 — Newcomer Level band, Epic Rarity and Equipment gain (User 2026-10-10)
 
