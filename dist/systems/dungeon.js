@@ -257,7 +257,7 @@ function gateCountRule(day){
 function gateCountOdds(day){const c=gateCountRule(day);if(c.length===1)return [1];
  return day>=GATE_COUNT_LATE.from?[1-GATE_COUNT_LATE.three,GATE_COUNT_LATE.three]:c.map(()=>1/c.length);}
 function tierWeights0(day){
- const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
+ const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.60,.40,0]],[12,[.50,.50,0]],[13,[.45,.52,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
 /* v2.9.2 third pass (User 2026-09-26): DAY 21~29 move LATE_T3 of the T2 weight to T3 - the late Days lean on Hazard / Item
@@ -325,9 +325,9 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    growing long before Day 30 does, so a single slope left every late Gate further out of reach than the one before it.
    `early` per Day up to the knee, `step` on DAY 9~10, `mid` on DAY 11~20 (the NPC-growth check of the Run Progression
    Arc), `late` from DAY 21. */
-const GATE={knee:9,early:1.45,step:0.80,late:1.05,mid:1.10,midFrom:10,midTo:20};
-/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power) */
-const GATE_EASE={early:.90,late:.95,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:GATE_EASE.early;
+const GATE={knee:9,early:1.45,step:0.80,late:1.54,mid:1.10,midFrom:10,midTo:20};
+/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power, one value every ordinary Day) */
+const GATE_EASE=.90,gateEase=()=>GATE_EASE;
 /* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
 const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step

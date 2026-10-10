@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
-DOC_VERSION=2.12.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.3
+DOC_VERSION=2.12.4
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -551,9 +551,9 @@ Seed UI/debug controls are not core player progression.
 A Run ends at Closing when the Run's cumulative Death count reaches the limit of the segment the current Day is in:
 
 ```text
-D1~D10   5
+D1~D10   6
 D11~D20  8
-D21~D30  11
+D21~D30  10
 ```
 
 - the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
@@ -637,7 +637,7 @@ Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20,
 추모 방명록, and with a 위령제 on an earlier Day.
 
 PASS:
-- the Run ends at Closing exactly when the cumulative count reaches the current segment limit 5 / 8 / 11
+- the Run ends at Closing exactly when the cumulative count reaches the current segment limit 6 / 8 / 10
 - the count never resets at a segment boundary; 5 Deaths by D10 ends the Run, 5 Deaths first reached on D11 does not
 - 추모 방명록 adds the current META Decoration bonus to every segment; 위령제 adds +1 to every segment from its Day
 - MORNING and ORDER always show `사망 {n} / {limit} · D{end}까지` with the limit in force, warning color at one left

@@ -35,8 +35,16 @@ and this table is their commit record.
 | v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR #143 | `v2.12.0` |
 | v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR #156 | (the User sets it) |
 | v2.12.2 | 2026-10-10 | PR #157 on `main` (newcomer Level band, Epic / Equipment values); version bump PR #158 | (the User sets it) |
-| v2.12.3 | 2026-10-10 | Tier I Gate requirement and version bump in one PR (this one), after measurement-only #159 #160, save-file name #162 | (the User sets it) |
+| v2.12.3 | 2026-10-10 | Tier I Gate requirement and version bump in one PR #164, after measurement-only #159 #160, save-file name #162 | (the User sets it) |
+| v2.12.4 | 2026-10-10 | Death limit, Tier II share, late Gate slope and version bump in one PR (this one), after GAME_VISION #165 | (the User sets it) |
 
+
+## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
+
+- CORE_RUN §DEATH LIMIT — SEGMENTED: 5 / 8 / 11 → 6 / 8 / 10. The opening ten Days forgive one more Death, the last ten one fewer (META 위령비 +1 now 7 / 9 / 11).
+- DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
+- DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
+- Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
 ## After v2.12.3 — Difficulty reference set by human play (User 2026-10-10)
 

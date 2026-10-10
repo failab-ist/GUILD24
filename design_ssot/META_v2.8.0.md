@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.12.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.3
+DOC_VERSION=2.12.4
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -436,7 +436,7 @@ counter and counted in the Day's record (UI_UX owns the presentation).
 
 ### counter — 추모 방명록 (id memorialBook)
 ```text
-every segment Death limit +1 (5 / 8 / 11 -> 6 / 9 / 12; CORE_RUN §DEATH LIMIT — SEGMENTED)
+every segment Death limit +1 (6 / 8 / 10 -> 7 / 9 / 11; CORE_RUN §DEATH LIMIT — SEGMENTED)
 ```
 
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the RESULT-PROOF
