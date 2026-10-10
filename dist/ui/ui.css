@@ -192,10 +192,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* PLATFORM_RELEASE §SCREEN / DEVICE (User 2026-10-10): in the app the screen runs under the camera cut-out - the first band's
    artwork reaches the top edge and only its content starts below the Safe Area. */
 .in-app .stage{padding-top:0}
-.in-app .stage>.menu-pin+*{padding-top:var(--sa-top)}
-.in-app .p-sale .front{padding-top:calc(var(--sa-top) + 4px)}
+.in-app .stage:not(.p-sale)>.menu-pin+*{padding-top:var(--sa-top)}
+.in-app .stage.p-sale{padding-top:var(--sa-top)}
 .in-app .relic-takeover{padding-top:var(--sa-top)}
-.in-app .p-prep .build-mark{top:6px}
+.in-app .p-prep .build-mark{top:calc(6px - var(--sa-top))}
 /* the menu button and the build mark sit in the top corners, beside the camera cut-out; the bottom buttons stand 24px off the edge, clear of the gesture bar */
 html.in-app .stage .menu-pin{top:6px}
 html.in-app .stage .dock{padding-bottom:max(24px,var(--sa-bottom))}
