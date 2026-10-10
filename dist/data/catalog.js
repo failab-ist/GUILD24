@@ -261,9 +261,9 @@ G.DATA.rarityBands=[
  {maxDay:3, weights:[76,20, 4, 0,0]},
  {maxDay:7, weights:[68,24, 8, 0,0]},
  {maxDay:12,weights:[58,27,12, 2,1]},
- {maxDay:19,weights:[53,28,15, 3,1]},
- {maxDay:24,weights:[47,27,18, 7,1]},
- {maxDay:29,weights:[40,25,20,14,1]},
+ {maxDay:19,weights:[53,27,15, 4,1]},
+ {maxDay:24,weights:[46,27,17, 9,1]},
+ {maxDay:29,weights:[40,25,19,15,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
 // EVENT: shared fixed rules; descriptions and their consumers read the same values.
 G.DATA.eventRules={auditMinimum:6,auditPerItem:5,auditMaximum:100,blackmarketPrice:1.35,pilgrimageMin:1,pilgrimageMax:3,promoUnits:2};
