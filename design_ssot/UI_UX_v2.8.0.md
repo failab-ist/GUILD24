@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.12.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.3
+DOC_VERSION=2.12.4
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -3452,7 +3452,7 @@ forecast pin or second readout on a desk, or a layout that stays the other one a
 SETUP: MORNING and ORDER at 360 / 390 / 412 and 1280 with 0 Deaths, with 4 Deaths on D10 (one left), on D11 after the segment
 step, and with 추모 방명록 worn.
 PASS (→ UI_UX §DEATH LIMIT — ALWAYS VISIBLE; copy COPY_AUDIT §4-23): both screens show `사망 {n} / {limit} · D{end}까지` in the top
-status line without scrolling, every Day; limit and end Day follow the current segment (5 · D10 / 8 · D20 / 11 · D30) and include
+status line without scrolling, every Day; limit and end Day follow the current segment (6 · D10 / 8 · D20 / 10 · D30) and include
 추모 방명록 / 위령제; warning color exactly when count = limit − 1; no popover, badge or extra text; never wraps mid-token or pushes
 the ORDER confirm off the phone screen.
 FAIL: the count only in the 도감, a stale segment limit, or a limit that ignores 추모 방명록 / 위령제.
