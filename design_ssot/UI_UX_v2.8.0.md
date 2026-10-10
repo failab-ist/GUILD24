@@ -1464,7 +1464,7 @@ line, §BUILD MARKER, excepted); no Debug menu needed.
 
 (acceptance -> UI_UX §QA UI-Q-v29-41; asset -> reports/ASSETS.md §Title logo.) `마왕 잡는 편의점` is the drawn logo, not type,
 hanging from the store scene's ceiling: one image with the name as alt text in the `h1`, no added shadow or frame; no larger
-than needed — phone at most 210 px wide or 58% of the width, clear of the build marker and menu; desk 320 px; cut to the
+than needed — phone at most 190 px wide or 53% of the width, clear of the build marker and menu; desk 320 px; cut to the
 letters (shipped as a 960 px derivative with the 점 받침 reading as ㅁ). The branch name stays visible, unemphasised: MORNING's
 plate under the logo.
 

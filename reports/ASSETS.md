@@ -256,14 +256,15 @@ are never requested at runtime, and no pixel of them is reused in the UI.
   runtime visual improvement under the Presentation Asset / Visual Delta gates.
 
 ### Title logo — user-provided, project-generated (v2.12.x)
-- shipped file: `dist/ui/assets/presentation/start/title-logo.png` — 960x174, PNG RGBA, 169 KB
+- shipped file: `dist/ui/assets/presentation/start/title-logo.png` — 960x170, PNG RGBA, 177 KB
 - source: provided by the User on 2026-10-10 (the title changed to `마왕 잡는 편의점: 길드24`), generated with GPT image
-  generation for this project (2172x724, PNG RGBA, one line, no subtitle, md5 `ae29f477c6ebf7a89e909281159b2ef7`). Not a
+  generation for this project (2172x724, PNG RGBA, one line, redrawn from the GUILD24-badge cut with the badge left out, md5
+  `40f9399bcc414afec6ca355b203a5e94`). Not a
   third-party work: no external licence is claimed and none applies. The User's other cuts (two lines, and with a GUILD24
   subtitle) are kept outside the build with the same correction.
-- modification (User, 2026-10-10): the 점 받침 read as ㅇ - its outer corners were stepped. The four corners were squared by
-  painting the straight edge profiles (face, highlight, outline, the drop below) into them; the counter was not touched and
-  no other glyph was. The corrected image was trimmed to its drawn letters (alpha above 60, 4 px margin) and resized to
+- modification (User, 2026-10-10): the 점 받침 read as ㅇ - its outer corners were stepped. The face's four corners were
+  squared by painting the straight edge profiles (face, highlight) into them; the counter was not touched and
+  no other glyph was. The corrected image was trimmed to its drawn letters (alpha above 10, 2 px margin) and resized to
   960 px wide (Lanczos) for display.
 - role: the opening screen's title (UI_UX §OPENING TITLE LOGO), in place of the set-type title.
 

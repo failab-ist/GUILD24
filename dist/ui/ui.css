@@ -974,7 +974,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .opening-title{margin:0 0 -2px;line-height:0}
 /* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu; the file is cut to the drawn
    letters (v2.9.9: the branch plate that sat under it is MORNING's counter plate now, UI_UX §NEW STORE PREPARATION) */
-.opening-logo{display:block;width:min(210px,58vw);height:auto}
+.opening-logo{display:block;width:min(190px,53vw);height:auto}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));

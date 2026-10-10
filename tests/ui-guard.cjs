@@ -3296,10 +3296,10 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  const back=fn('prepScreen');
  // 1 / 2: the title, one deliberate line
  /* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the title is the drawn logo; the name is its alt text */
- assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="174" alt="마왕 잡는 편의점"></h1>'),
+ assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="170" alt="마왕 잡는 편의점"></h1>'),
   'the backdrop carries the title as the logo, named for a screen reader');
  assert.ok(fs.existsSync(path.resolve(__dirname,'../dist/ui/assets/presentation/start/title-logo.png')),'the logo ships');
- assert.ok(/\.opening-logo\{[^}]*width:min\(210px,58vw\);height:auto\}/.test(css),'sized to the phone, never wider than the screen');
+ assert.ok(/\.opening-logo\{[^}]*width:min\(190px,53vw\);height:auto\}/.test(css),'sized to the phone, never wider than the screen');
  /* PRESENTATION_SYSTEM §TYPOGRAPHY / SPACING routes short object identity to the plate face,
     and PRESENTATION_POLISH_BATCH1 asks the Opening for a restrained sign/plate relationship.
     The branch is that identity, so it is a stamped plate now rather than fluid body copy -
@@ -3848,7 +3848,7 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  assert.ok(/\.p-morning:not\(\.p-prep\) \.band\.counter\{margin-top:calc\(-1 \* max\(0px,calc\(\(var\(--ph\) - 100cqh\) \/ 2 \+ var\(--cap-top\) \* var\(--band-c\) \* var\(--ph\) - 14px\)\)\)\}/.test(mb)&&!/transform/.test(mb),
   'MORNING: the counter band lends the board the room down to the till label, and does not move');
  assert.ok(/\.p-morning\.p-prep \.prep-note\{padding:5px 12px 3px\}/.test(pb)&&/\.p-prep \.decoplate\.sign:not\(\.empty\)\{--sign-l:calc\(50cqw - min\(210px,58vw\) \/ 2\)\}/.test(pb)
-  &&/\.opening-logo\{display:block;width:min\(210px,58vw\)/.test(css),'새 점포 준비: the tighter note, and an equipped 간판 keeps the gap from the full title');
+  &&/\.opening-logo\{display:block;width:min\(190px,53vw\)/.test(css),'새 점포 준비: the tighter note, and an equipped 간판 keeps the gap from the full title');
  // User 2026-09-29 (Galaxy 360x597): an empty 간판's tag carries `들일 수 있음` and is wider than the piece
  assert.ok(/\.p-prep \.opening-logo\{width:min\(180px,50vw\)\}/.test(pb)&&/\.p-prep \.deco-layer\{--sign-l:calc\(50cqw - min\(180px,50vw\) \/ 2\)\}/.test(pb)
   &&/\.p-prep \.prep-slot\.sign\.empty \.slot-tag\{left:auto;right:0;top:0;transform:none\}/.test(pb)
