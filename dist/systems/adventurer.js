@@ -69,7 +69,7 @@ function create(r,index,day,account,opts={}){
  let potential=1+rarity*.10+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
  return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],introduced:false};
 }
-const growthCost=level=>18+level*8;
+const growthCost=level=>18+level*9;
 const newcomerMinLevel=day=>day<=4?1:1+Math.floor((day-1)*.4);
 const CATCHUP_MULT=1.5,CATCHUP_GAP_SHARE=.25,CATCHUP_GAP_OUTCOMES=['퇴각','부상','중상'];
 /* NPC_TRAIT §LAGGING ADVENTURER EXPERIENCE: preserve base EXP, cap only the extra bonus; a failed return takes the larger of ×1.5 and 25% of the gap. */

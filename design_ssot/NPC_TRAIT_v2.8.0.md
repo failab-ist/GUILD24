@@ -185,7 +185,7 @@ Existing `rank/ranks` data is not Design Truth. If Source has an unexpected acti
 
 ## EXPERIENCE CURVE / LAGGING ADVENTURER EXPERIENCE
 
-Each next Level costs `18 + current Level × 8` EXP. Existing EXP is preserved across saves.
+Each next Level costs `18 + current Level × 9` EXP. Existing EXP is preserved across saves.
 
 For an alive adventurer below the ordinary new-arrival minimum Level on that Day, ordinary expedition earned EXP
 is boosted to ×1.5 (integer Math.round). On a 퇴각 / 부상 / 중상 return the extra bonus is instead the larger of that
