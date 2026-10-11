@@ -42,7 +42,8 @@ and this table is their commit record.
 | v2.13.0 | 2026-10-10 | Gate rework (combat by Day, Tier by Hazard) and version bump in one PR #170 | (the User sets it) |
 | v2.13.1 | 2026-10-11 | Night reversal Item fix and version bump in one PR #171 | (the User sets it) |
 | v2.13.2 | 2026-10-11 | Early-mid Gate Day-term hump, investor potion rule and version bump in one PR #172 | (the User sets it) |
-| v2.13.3 | 2026-10-11 | Save safety fixes, app Back / background sound / start failure, app-only messages and version bump in one PR (this one) | (the User sets it) |
+| v2.13.3 | 2026-10-11 | Save safety fixes, app Back / background sound / start failure, app-only messages and version bump in one PR #174 | (the User sets it) |
+| v2.13.4 | 2026-10-11 | Save kept across updates (account goes on, an unreadable Run alone is dropped), late cloud answer, and version bump in one PR (this one) | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -51,6 +52,12 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.4 — The account survives updates (User 2026-10-11)
+
+- PLATFORM_RELEASE §SAVE ACROSS UPDATES: until now a Save was read only if its account and Run matched the current Job, Boss and Item lists exactly, so an update adding one Job or Boss would have refused every Player's Save, account included. The account is now checked for shape only: a missing Job × Boss cell reads as not cleared, an id the build does not know is kept and counts for nothing. A Run the build cannot continue is dropped alone, as an abandon drops it, with one line on 새 점포 준비 (「업데이트로 진행 중이던 영업은 이어갈 수 없어 새 점포를 엽니다. 본사 기록은 그대로입니다.」); its original is set aside on the device.
+- PLATFORM_RELEASE §Google Play Games Saved Games: a cloud answer that arrives after the start stopped waiting (6 s on a fresh install) is compared at once; a newer cloud copy is loaded with 「Play 게임즈에 저장된 진행을 불러왔습니다.」. Until now it was only remembered, the new local progress was never uploaded, and the next launch let the old cloud copy overwrite it.
+- META §SAVE / ACCOUNT PERSISTENCE · CORE_RUN §SAVE/LOAD point to the rule above. v1~v8 internal Saves stay unmigrated. No balance change.
 
 ## v2.13.3 — Save safety before the app release (User 2026-10-11)
 

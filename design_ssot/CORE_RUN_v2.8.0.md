@@ -3,7 +3,7 @@
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
 DOC_VERSION=2.12.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -398,7 +398,8 @@ Save must preserve enough Run state to resume without changing already-generated
 
 Save/Load must not intentionally provide free rerolls.
 
-Save schema may invalidate incompatible local saves when schema changes.
+A Run this build cannot continue (a changed Run format or an id the catalog no longer has) is dropped alone, as an
+abandon drops it; the account goes on (PLATFORM_RELEASE §SAVE ACROSS UPDATES).
 Do not maintain compatibility branches solely for unsupported save formats.
 
 ### SAVE v9 — EXACT
@@ -426,7 +427,7 @@ Rules:
 - Do not add compatibility conversion merely to preserve internal-test progression.
 - When only legacy v1~v8 data exists, show old-version/fresh-start guidance and initialize a fresh current v9 Account/Meta + fresh current v9 Run rather than importing legacy progression.
 - Do not automatically delete original legacy bytes; they need not be destructively deleted merely to reject migration. Storage cleanup remains under the existing reset/storage policy.
-- A current v9 Save that fails validation (head and backup both) is set aside under its own key before any write, so later autosaves never overwrite it; a Save read from the backup becomes the head again. Full Data Reset erases the set-aside copy too.
+- A current v9 Save whose account fails validation (head and backup both) is set aside under its own key before any write, so later autosaves never overwrite it; a Save read from the backup becomes the head again. Full Data Reset erases the set-aside copy too.
 - Full Data Reset remains the explicit game-owned current-data deletion action.
 
 ### SAVE BOUNDARY

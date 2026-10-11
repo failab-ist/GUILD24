@@ -12,7 +12,7 @@ const CLOUD_OK='guild24.cloudok';
 const WEB_MS=70;
 const webVibrate=()=>{try{return typeof navigator!=='undefined'&&!!navigator.vibrate&&!!matchMedia('(pointer:coarse)').matches;}catch(e){return false;}};
 const okMark=()=>{try{localStorage.setItem(CLOUD_OK,'1');}catch(e){}};
-let pending=null,timer=null,cloudRev=null;
+let pending=null,timer=null,cloudRev=null,late=null,lateRaw=null;
 
 try{if(inApp())document.documentElement.classList.add('in-app');}catch(e){}
 
@@ -40,12 +40,17 @@ G.Native={
     every call has a time limit and any failure is dropped. The game never uploads a copy older than the one already in the cloud. */
  cloudPull(ms){
   const c=inApp()?plug('PlayGamesSaves'):null;if(!c)return Promise.resolve(null);
+  let gaveUp=false;
   const work=(async()=>{try{const r=await c.load();okMark();
    if(r&&r.found&&typeof r.data==='string'){cloudRev=Number(r.rev)||0;return r.data;}
    if(r&&r.found===false)cloudRev=0;
   }catch(e){}return null;})();
-  return Promise.race([work,new Promise(r=>setTimeout(()=>r(null),ms))]);
+  /* a slow network (a fresh install) can answer after the start stopped waiting: that copy is handed to cloudLate() */
+  work.then(raw=>{if(gaveUp&&raw){if(late)late(raw);else lateRaw=raw;}});
+  return Promise.race([work,new Promise(r=>setTimeout(()=>{gaveUp=true;r(null);},ms))]);
  },
+ /* The game, once it is running, takes a cloud copy that arrived late: now if it already has, else when it does. Once only. */
+ cloudLate(fn){if(lateRaw){const raw=lateRaw;lateRaw=null;fn(raw);}else late=raw=>{late=null;fn(raw);};},
  cloudPush(data,rev,at){
   if(!(inApp()&&plug('PlayGamesSaves')))return;
   pending={data,rev,at};if(!timer)timer=setTimeout(()=>G.Native.cloudFlush(),CLOUD_MS);
