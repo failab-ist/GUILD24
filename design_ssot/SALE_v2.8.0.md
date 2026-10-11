@@ -3,7 +3,7 @@
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
 DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.8
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.9
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -634,7 +634,7 @@ BOSS/GREED may read that metric; SALE does not create a Boss-only sales counter.
 - the counter tray sits fixed above the dock; the price keys are always in the same place
 
 Core environment example form (the numbered row, no label, no `?`):
-`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 3당 대응 1 제공`
+`북부 설원 폐허 I · 냉기 · 대응 15 필요 · 강인함 3당 대응 1 제공`
 
 Tap/tooltip may add detail; it may not hide the core risk needed for the sale decision.
 

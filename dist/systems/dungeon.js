@@ -271,10 +271,12 @@ const FIRST_TIER2_DAY=(()=>{for(let d=1;d<=29;d++)if(tierWeights(d)[1]>0)return 
    below and the player-facing Gate sentence (`{능력치} {n}당 대응 1 제공`) read it. */
 const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/3],mire:['mobility',1/3],fire:['spirit',1/3],fear:['spirit',1/3],dark:['mobility',1/3],whiteout:['spirit',1/3]};
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
+/* DUNGEON_HAZARD §HAZARD THREAT: TierTerm by Tier I / II / III. */
+const TIER_THREAT=[2,6,12];
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD §HAZARD THREAT: ordinary curve; Final fixed requirement. */
- const rule=rules[h]||['survival',.2],threat=d.family==='final'?D.balance.finalHazardThreat:12+(d.day||1)*.35+Math.max(0,(d.day||1)-7)*.25+((d.tier||1)-1)*6,defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
+ const rule=rules[h]||['survival',.2],threat=d.family==='final'?D.balance.finalHazardThreat:12+(d.day||1)*.35+Math.max(0,(d.day||1)-7)*.25+TIER_THREAT[(d.tier||1)-1],defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */
@@ -307,7 +309,7 @@ const GREAT={xp:1.00},WIN={xp:.90};
    the adventurer who keeps winning keeps getting stronger more slowly. Indexed by tier, the last entry holds from there on. */
 const EQUIP={fromDay:3,chance:[.30,.22,.18,.12]};
 const equipChance=(tier,day)=>day<EQUIP.fromDay?0:EQUIP.chance[Math.min(tier||0,EQUIP.chance.length-1)];
-const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.50,'부상':.35,'중상':.15,'사망':0};
+const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
 const DEATH={combat:.40,environment:.60,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation: only CONSECUTIVE injured departures count; a
    healthy departure resets the chain. STRAIN.weary is the fatigueEscalation threshold read at the call sites below.

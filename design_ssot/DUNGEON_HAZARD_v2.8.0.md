@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.13.7
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.8
+DOC_VERSION=2.13.9
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.9
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -109,15 +109,15 @@ No pressure label row anywhere: `강인함으로 버틴다` / `기동으로 피�
 
 Full Hazard sentence (Gate detail only; the Gate-level requirement number first):
 - `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for every Stat (×1/3)
-- e.g. `독 — 대응 13 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `냉기 — 대응 13 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `부식 — 대응 13 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `속박 — 대응 13 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `진창 — 대응 13 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 13 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `공포 — 대응 13 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `어둠 — 대응 13 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화이트아웃 — 대응 13 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `독 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `부식 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 15 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 15 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 15 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 15 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 15 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 15 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 
 Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need. The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+).
 
@@ -333,8 +333,8 @@ FamilyCombat = golemCombat 0.90
 SuccessEase = 0.90 on every ordinary Day (ordinary Gates; the Final's Boss Power is its own owner)
 familyBase (golem Tier II / III only): golem 3
 
-Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard and
-+6 / +12 Hazard Threat), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
+Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard, and the
+TierTerm reads +2 / +6 / +12 Hazard Threat at Tier I / II / III), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
 Gates are where a grown adventurer breaks through on strength.
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
@@ -360,10 +360,14 @@ For each canonical Hazard:
 
 ```text
 Hazard Threat
-= 12 + Day × 0.35 + LateTerm + (Tier - 1) × 6
+= 12 + Day × 0.35 + LateTerm + TierTerm
 LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates
+TierTerm = 2 / 6 / 12 for Tier I / II / III
 Final (마왕성): Hazard Threat = 28, fixed for every selected T2 Hazard; no ordinary late term.
 ```
+
+Tier I carries TierTerm 2 so two Stat Drinks do not cover a one-Hazard Gate as surely as one Common Counter does; the
+Counter keeps its worth there while a Drink keeps its Power (`ITEM_v2.8.0.md` §COUNTER LADDER).
 
 Every Hazard reads the same Threat whatever Stat it presses: every Core Stat converts to Defense at ÷3, and an average
 adventurer's own share is about the same in 강인함, 기동 and 정신, so no Stat group needs its own factor. The ÷3 conversion keeps
@@ -767,8 +771,8 @@ Ordinary expedition Wallet reward:
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
     대성공 / 성공 = 1.25
-    퇴각 = 0.50
-    부상 = 0.35
+    퇴각 = 0.40
+    부상 = 0.25
     중상 = 0.15
     사망 = 0
 
@@ -1516,13 +1520,13 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = 12 + Day*.35 + LateTerm + (Tier-1)*6, LateTerm = max(0, Day-7)*.25 (ordinary Gates; 0 for the Final); no Stat-group factor
+Threat = 12 + Day*.35 + LateTerm + TierTerm, LateTerm = max(0, Day-7)*.25, TierTerm = 2 / 6 / 12 by Tier (ordinary Gates; 0 for the Final); no Stat-group factor
 ```
 
 Exact anchors (every Hazard):
-- D1 T1 = 12.35
-- D7 T1 = 14.45
-- D12 T1 = 17.45
+- D1 T1 = 14.35
+- D7 T1 = 16.45
+- D12 T1 = 19.45
 - D18 T2 = 27.05
 - D24 T2 = 30.65
 - D29 T3 = 39.65
@@ -1795,7 +1799,7 @@ Reward PASS:
 - EXP base = 24.2 + Day×5.06
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.50 / 부상 0.35 / 중상 0.15 / 사망 0
+- Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance is 0 on DAY 1~2, then 30 / 22 / 18 / 12% by Equipment tier 0 / 1 / 2 / 3+, plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
