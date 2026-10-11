@@ -1,5 +1,5 @@
 (function(G){
-const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
+const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup',KEPT=KEY+'.unreadable';
 /* Every schema this game has ever written, current one apart. Read() uses it to tell a
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
@@ -284,13 +284,21 @@ G.Save={
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
-  /* If the newest save will not read, fall back to the previous backup. */
+  /* If the newest save will not read, fall back to the previous backup. A refused copy is set aside under KEPT first: the next
+     two writes rotate the head into the backup and then overwrite it, and the message below promises the original is kept. */
+  const head=localStorage.getItem(KEY);
+  const keep=()=>{const raw=head||localStorage.getItem(BACKUP);if(raw){localStorage.setItem(KEPT,raw);G.Native?.put(KEPT,raw);}};
   for(const key of [KEY,BACKUP])try{
    const raw=localStorage.getItem(key);
    if(!raw)continue;
    const s=JSON.parse(renameIds(raw));
-   if(this.valid(s)){this.rev=revOf(s);return this.migrate(s);}
+   if(this.valid(s)){
+    /* read from the backup: it becomes the head again, so the next write rotates a good copy into the backup slot */
+    if(key===BACKUP&&head){keep();localStorage.setItem(KEY,raw);G.Native?.put(KEY,raw);}
+    this.rev=revOf(s);return this.migrate(s);
+   }
   }catch(e){}
+  try{keep();}catch(e){}
   this.error='저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
   return null;
  },
@@ -322,8 +330,10 @@ G.Save={
  reset(){
   if(typeof localStorage==='undefined')return false;
   try{
-   for(const key of [KEY,BACKUP,...LEGACY.map(v=>'guild24.save.'+v)]){localStorage.removeItem(key);G.Native?.drop(key);}
-   this.rev=0;G.Native?.cloudClear();
+   for(const key of [KEY,BACKUP,KEPT,...LEGACY.map(v=>'guild24.save.'+v)]){localStorage.removeItem(key);G.Native?.drop(key);}
+   /* rev is not lowered: if the cloud clear fails (offline, signed out) the old cloud copy keeps its rev, and a count restarted
+      from 0 would lose to it on the next start and bring the erased progress back. The caller writes the fresh account at once. */
+   G.Native?.cloudClear();
    this.error=null;
    return true;
   }catch(e){
