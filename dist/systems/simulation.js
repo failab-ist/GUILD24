@@ -941,5 +941,14 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
 
 /* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what
    the Mastery bonus alone contributes, with the unlocks it came with held constant. Harness only. */
-G.Debug={simulate,trajectory,clearChance,contribution,masterySpawnPatch};
+/* One saved Run played on from where it stands, `count` times with a fresh roll stream each time (tools/continue-save.cjs,
+   User 2026-10-11: the same save measured before and after a rule change). Measurement only. */
+function continueRun(account,run,count=200,policy='investor',opts={}){
+ const out=blank(count,policy,'adaptive','hybrid'),rows=[];
+ for(let seed=0;seed<count;seed++){
+  const g=new G.Game(copy(account),copy(run));g.autosave=false;g.lessons=true;g.rng=new G.RNG('continue-'+seed);
+  const s=playRun(g,out,{policy,pricing:'adaptive',build:'hybrid',seed,relicAware:opts.relicAware!==false,relicPriority:opts.relicPriority});
+  rows.push({day:s.day,win:!!s.win,final:!!s.bossDebug,deaths:s.stats.deaths,limit:G.Meta.deathLimit(s),alive:s.npcs.filter(n=>n.alive).map(n=>n.id)});}
+ return rows;}
+G.Debug={simulate,trajectory,clearChance,contribution,masterySpawnPatch,continueRun};
 })(globalThis);
