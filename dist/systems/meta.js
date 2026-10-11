@@ -11,8 +11,8 @@ const D=G.DATA;
 const JOBS=()=>D.jobs.map(j=>j.id);
 const BOSSES=()=>D.bosses.map(b=>b.id);
 
-/* Exactly the current Job x Boss set, every cell false. Not sparse: a partial matrix is a
-   malformed one, and Save validation says so rather than reading it as progress. */
+/* Exactly the current Job x Boss set, every cell false. A Save from before a Job or Boss was added
+   gets the missing cells as false when it is read (PLATFORM_RELEASE §SAVE ACROSS UPDATES). */
 function freshMatrix(){
  const m={};
  for(const job of JOBS()){m[job]={};for(const boss of BOSSES())m[job][boss]=false;}
@@ -93,7 +93,8 @@ function freshFranchise(){
 }
 
 /* How many distinct Bosses this Job has beaten, 0..7. */
-const jobMastery=(a,job)=>Object.values(a.matrix?.[job]||{}).filter(Boolean).length;
+/* Only the current Bosses count: a Save may keep a cell for a Boss this build does not have (PLATFORM_RELEASE §SAVE ACROSS UPDATES). */
+const jobMastery=(a,job)=>BOSSES().filter(boss=>a.matrix?.[job]?.[boss]).length;
 
 /* 0..42. The Franchise Grade reads this and nothing else. */
 const totalJobMastery=a=>JOBS().reduce((sum,job)=>sum+jobMastery(a,job),0);
@@ -183,7 +184,7 @@ function recordBestDay(a,run){if(run.bestBefore!==undefined)return;run.bestBefor
 /* META §BEST DAY — best 총매출 (User 2026-09-30): the same kind of record, on the ending's 총매출 (the END tape's own row) */
 function recordBestSales(a,run,sales){if(run.salesBefore!==undefined)return;run.salesBefore=a.bestSales||0;a.bestSales=Math.max(run.salesBefore,sales);}
 const storeCapital=a=>store(a).capital;
-const ownedDecorations=a=>[...store(a).owned];
+const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,ITEM_UNLOCK_DAY,jobUnlocked,JOBS,BOSSES,

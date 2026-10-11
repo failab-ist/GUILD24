@@ -3103,6 +3103,13 @@ document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');
  const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
 document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  game.save();if(el.dataset.mix==='sfx')sound('button');});
+/* PLATFORM_RELEASE §Google Play Games Saved Games: a cloud copy that arrives after the start stopped waiting is compared the
+   way the start would have compared it, at once, rather than on the next launch over whatever was played meanwhile. */
+Native.cloudLate(raw=>{if(Save.cloudMerge(raw)!=='cloud')return;const s=Save.read();if(!s)return;
+ const msg='Play 게임즈에 저장된 진행을 불러왔습니다.';
+ game=new Game(s.account,s.run);selected=null;setModal(null);
+ if(prologue){const d=prologue.done;prologue.done=()=>{d();toast(msg);};return;}
+ render();toast(msg);});
 window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
 /* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
 /* UI_UX §PROLOGUE: with no Run the prologue takes the loading screen's place; if it ends before the art is in, the

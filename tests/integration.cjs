@@ -611,11 +611,8 @@ test('CORE_RUN §SAVE/LOAD: the validator reads as named checks, and each one st
  assert.ok(Save.valid(raw),'the live run still validates');
  const broken=m=>{const c=copy(raw);m(c);return Save.valid(c);};
  for(const [why,mutate] of [
-  // The matrix is the only progression truth, so a partial or mistyped one is malformed
-  // rather than partial progress, and is refused rather than read as a smaller account.
-  ['account: a missing Job row',s=>delete s.account.matrix[DATA.jobs[0].id]],
-  ['account: a missing Boss cell',s=>delete s.account.matrix[DATA.jobs[0].id][DATA.bosses[0].id]],
-  ['account: an unknown Job row',s=>s.account.matrix.sorcerer={}],
+  // A missing or unknown cell is an update, not damage (PLATFORM_RELEASE §SAVE ACROSS UPDATES);
+  // a mistyped one is still malformed.
   ['account: a non-boolean cell',s=>s.account.matrix[DATA.jobs[0].id][DATA.bosses[0].id]=1],
   ['account: no matrix at all',s=>delete s.account.matrix],
   ['run shape',s=>s.run.day=31],
@@ -1551,7 +1548,8 @@ test('META §BOSS LOG: a shown D5 / D15 beat is kept on the Account, a clear cou
  const round=Save.import(Save.export(copy(g.account),null));
  assert.deepEqual(round.account.bossLog,g.account.bossLog,'the log round-trips');
  const old=copy(g.account);delete old.bossLog;assert.ok(Save.import(Save.export(old,null)),'a save that predates the log reads empty');
- for(const bad of [[],{NOPE:{identity:true}},{[id]:{identity:'yes'}},{[id]:{seen:true}},{[id]:null}]){
+ // a row for a Boss this build does not have is kept (PLATFORM_RELEASE §SAVE ACROSS UPDATES); a mistyped row is not
+ for(const bad of [[],{[id]:{identity:'yes'}},{[id]:{seen:true}},{[id]:null}]){
   const acc=copy(g.account);acc.bossLog=bad;assert.throws(()=>Save.import(Save.export(acc,null)),'bossLog '+JSON.stringify(bad)+' is not a Boss log');}
 });
 
@@ -1589,4 +1587,79 @@ test('PLATFORM_RELEASE §Saved Games: the cloud copy restores a missing Save, wi
  }finally{delete global.localStorage;Save.rev=0;}
 });
 
+test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: an update that changes the lists keeps the account and drops only the Run',()=>{
+ const store=new Map();
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ try{
+  const g=fresh('across-updates');while(g.run.phase!=='sell')step(g);
+  const [j0,j1]=DATA.jobs.map(j=>j.id),[b0,b1]=DATA.bosses.map(b=>b.id);
+  g.account.matrix[j0][b0]=true;g.account.matrix[j1][b1]=true;g.account.bestDay=17;g.account.store.capital=1234;
+  const raw=JSON.parse(Save.export(g.account,g.run));
+  // 1. Written by an older build: a Job row and a Boss cell this build added are missing.
+  //    Written by a newer build: a Job, a Boss, an Item and a Boss log row this build does not know.
+  const older=copy(raw);delete older.account.matrix[DATA.jobs.at(-1).id];delete older.account.matrix[j0][DATA.bosses.at(-1).id];
+  const newer=copy(raw);newer.account.matrix.sorcerer={[b0]:true};newer.account.matrix[j0].HUBRIS=true;
+  newer.account.discovered.push('futureItem');newer.account.bossLog={HUBRIS:{identity:true}};
+  for(const [label,s] of [['older',older],['newer',newer]]){
+   assert.ok(Save.valid(s),label+': the Save is still valid');
+   const back=Save.import(JSON.stringify(s));
+   assert.ok(DATA.jobs.every(j=>DATA.bosses.every(b=>typeof back.account.matrix[j.id][b.id]==='boolean')),label+': every current cell is there after loading');
+   assert.equal(back.account.matrix[j0][b0],true,label+': a clear is kept');
+   assert.equal(back.account.bestDay,17,label+': the best Day is kept');
+   assert.equal(Meta.jobMastery(back.account,j0),1,label+': a cell for an unknown Boss counts for nothing');
+  }
+  const kept=Save.import(JSON.stringify(newer)).account;
+  assert.equal(kept.matrix.sorcerer[b0],true,'what a newer build wrote is kept, not erased, so updating again brings it back');
+  assert.ok(kept.discovered.includes('futureItem')&&kept.bossLog.HUBRIS.identity,'and so are its goods and Boss log');
+  // 2. A Run this build cannot continue: only the Run goes.
+  for(const [label,mutate] of [['an unknown Job in the Run',s=>s.run.npcs[0].job='sorcerer'],['a Run format this build does not read',s=>s.run.version=10]]){
+   store.clear();Save.error=null;
+   const s=copy(raw);mutate(s);const text=JSON.stringify(s);
+   store.set('guild24.save.v9',text);
+   const read=Save.read();
+   assert.ok(read,label+': the Save loads');
+   assert.equal(read.run,null,label+': the Run is dropped, the way an abandon drops it');
+   assert.equal(read.account.matrix[j1][b1],true,label+': the account record goes on');
+   assert.equal(read.account.store.capital,1234,label+': and so does the Store Capital');
+   assert.ok(/본사 기록/.test(Save.error),label+': the Player is told the record is kept');
+   assert.equal(store.get('guild24.save.v9.unreadable'),text,label+': the dropped Run is set aside, not lost');
+  }
+  // a full valid backup still wins over dropping the head's Run
+  store.clear();Save.error=null;
+  const broken=copy(raw);broken.run.npcs[0].job='sorcerer';
+  store.set('guild24.save.v9',JSON.stringify(broken));store.set('guild24.save.v9.backup',JSON.stringify(raw));
+  assert.ok(Save.read().run,'a backup that still reads in full is preferred');
+  // 3. A cloud copy whose Run this build cannot continue still carries the account across.
+  store.clear();Save.error=null;Save.rev=0;
+  const cloud=copy(raw);cloud.run.npcs[0].job='sorcerer';cloud.rev=50;
+  const local={version:9,account:Meta.fresh(),run:null,rev:3};
+  store.set('guild24.save.v9',JSON.stringify(local));
+  assert.equal(Save.cloudMerge(JSON.stringify(cloud)),'cloud','the newer cloud account is taken');
+  const after=Save.read();
+  assert.equal(after.run,null,'its Run is dropped');
+  assert.equal(after.account.matrix[j0][b0],true,'its record is what the Player continues with');
+  // 4. A broken account is still refused as a whole.
+  const bad=copy(raw);bad.account.matrix[j0][b0]='yes';
+  store.clear();Save.error=null;store.set('guild24.save.v9',JSON.stringify(bad));
+  assert.equal(Save.read(),null,'a mistyped account does not load');
+ }finally{delete global.localStorage;Save.rev=0;Save.error=null;}
+});
+
+// PLATFORM_RELEASE §Google Play Games Saved Games: a cloud answer that comes after the start stopped waiting is not thrown away.
+(async()=>{
+ let answer;const loads=[];
+ global.Capacitor={isNativePlatform:()=>true,Plugins:{PlayGamesSaves:{load:()=>new Promise(r=>{answer=r;loads.push(1);})}}};
+ try{
+  require('../dist/ui/native.js');
+  assert.equal(await Native.cloudPull(5),null,'the start stops waiting and opens with what the device has');
+  const got=[];Native.cloudLate(raw=>got.push(raw));
+  answer({found:true,data:'{"cloud":1}',rev:40});await new Promise(r=>setTimeout(r,0));
+  assert.deepEqual(got,['{"cloud":1}'],'the late copy is handed to the running game');
+  const quick=Native.cloudPull(1000);answer({found:true,data:'{"cloud":2}',rev:41});
+  assert.equal(await quick,'{"cloud":2}','an answer in time is the start\'s own');
+  await new Promise(r=>setTimeout(r,0));
+  assert.deepEqual(got,['{"cloud":1}'],'and is not handed over a second time');
+  console.log('PASS PLATFORM_RELEASE §CLOUD: a late cloud answer reaches the running game once');
+ }catch(e){console.error(e);process.exitCode=1;}finally{delete global.Capacitor;}
+})();
 console.log(count+' integration groups passed');

@@ -18,13 +18,13 @@ const inApp=()=>!!G.Native?.inApp?.();
 const PHASES=['foundation','morning','order','sell','night','closing','final','end'];
 const RELIC_WINDOWS=[0,5,10,15,20,25,30];
 
-/* Account: what is kept across Runs. Unlock keys and discovered goods must exist in the catalog. */
-/* Account: what is kept across Runs. The Job x Boss matrix is the only progression truth,
-   so it is checked as the exact current Cartesian set - every Job, every Boss, a boolean in
-   each cell. A partial or unknown-key matrix is malformed, not partial progress, and is
-   refused rather than read. Mastery, distinct clears and the Grade are derived from it, so
-   there is no cached value here that could disagree with it. */
-function accountOk(a,D){
+/* Account: what is kept across Runs (PLATFORM_RELEASE §SAVE ACROSS UPDATES). An update that adds a Job, a Boss or an Item
+   must not cost the Player this record, so the account is checked for shape only: a matrix cell, a discovered good or a
+   Boss log row that the catalog does not have (a Save written by a newer build) is kept as it is, and a missing cell reads
+   as not cleared - migrate() fills it in. Meta derives everything from the current Job and Boss lists, so a kept unknown
+   cell counts for nothing until the build that knows it reads it again. */
+const bools=o=>!!o&&typeof o==='object'&&!Array.isArray(o)&&Object.values(o).every(v=>typeof v==='boolean');
+function accountOk(a){
  if(!a||!a.knowledge||!a.settings)return false;
  if(!a.unlocks||typeof a.unlocks!=='object')return false;
  if(typeof a.unlocks.guildlunch!=='boolean'||typeof a.unlocks.worldcharm!=='boolean')return false;
@@ -34,22 +34,22 @@ function accountOk(a,D){
  for(const k of ['bgm','sfx'])
   if(a.settings[k]!==undefined&&!(Number.isFinite(a.settings[k])&&a.settings[k]>=0&&a.settings[k]<=1))return false;
  if(a.settings.haptic!==undefined&&typeof a.settings.haptic!=='boolean')return false;
- if(!Array.isArray(a.discovered)||!a.discovered.every(k=>D.itemBy[k]))return false;
+ if(!Array.isArray(a.discovered)||!a.discovered.every(k=>typeof k==='string'))return false;
  if(a.tutorial!==undefined&&(typeof a.tutorial!=='object'||!a.tutorial))return false;
  /* META §BEST DAY: absent on a save that predates it (reads 0), a Day when present; the best 총매출 likewise, a whole Gold amount */
  if(a.bestDay!==undefined&&!(Number.isInteger(a.bestDay)&&a.bestDay>=0&&a.bestDay<=30))return false;
  if(a.bestSales!==undefined&&!(Number.isInteger(a.bestSales)&&a.bestSales>=0))return false;
- /* META §BOSS LOG: absent on a save that predates it (reads empty); when present, only known Bosses with boolean flags */
- if(a.bossLog!==undefined){const ids=D.bosses.map(b=>b.id),l=a.bossLog;
+ /* META §BOSS LOG: absent on a save that predates it (reads empty); when present, rows of identity / trait booleans */
+ if(a.bossLog!==undefined){const l=a.bossLog;
   if(!l||typeof l!=='object'||Array.isArray(l))return false;
-  for(const [id,row] of Object.entries(l))
-   if(!ids.includes(id)||!row||typeof row!=='object'||Object.entries(row).some(([k,v])=>!['identity','trait'].includes(k)||typeof v!=='boolean'))return false;}
- const m=a.matrix,jobs=D.jobs.map(j=>j.id),bosses=D.bosses.map(b=>b.id);
- if(!m||typeof m!=='object')return false;
- if(Object.keys(m).length!==jobs.length)return false;
- return jobs.every(job=>{const row=m[job];
-  return !!row&&typeof row==='object'&&Object.keys(row).length===bosses.length
-   &&bosses.every(boss=>typeof row[boss]==='boolean');});
+  for(const row of Object.values(l))
+   if(!bools(row)||Object.keys(row).some(k=>!['identity','trait'].includes(k)))return false;}
+ const m=a.matrix;
+ return !!m&&typeof m==='object'&&!Array.isArray(m)&&Object.values(m).every(bools);
+}
+/* Fill the cells a newer catalog added. Never removes anything. */
+function fillMatrix(a,D){
+ for(const job of D.jobs){const row=a.matrix[job.id]??={};for(const boss of D.bosses)if(typeof row[boss.id]!=='boolean')row[boss.id]=false;}
 }
 
 /* The shape of a Run: the arrays and values that must be there, with DAY and phase in real range. */
@@ -260,7 +260,7 @@ G.Save={
  /* PLATFORM_RELEASE §Google Play Games Saved Games: every write carries a monotonic `rev` and a timestamp `at`; the larger rev (then the later at)
     is the newer Save when the local and the cloud copy are compared. Metadata only - never validated, never needed to load. */
  rev:0,
- migrate(s){if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
+ migrate(s){if(s&&s.account)fillMatrix(s.account,G.DATA);if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
@@ -286,30 +286,35 @@ G.Save={
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
-  /* If the newest save will not read, fall back to the previous backup. A refused copy is set aside under KEPT first: the next
-     two writes rotate the head into the backup and then overwrite it, and the message below promises the original is kept. */
-  const head=localStorage.getItem(KEY);
-  const keep=()=>{const raw=head||localStorage.getItem(BACKUP);if(raw){localStorage.setItem(KEPT,raw);G.Native?.put(KEPT,raw);}};
-  for(const key of [KEY,BACKUP])try{
-   const raw=localStorage.getItem(key);
-   if(!raw)continue;
-   const s=JSON.parse(renameIds(raw));
-   if(this.valid(s)){
-    /* read from the backup: it becomes the head again, so the next write rotates a good copy into the backup slot */
-    if(key===BACKUP&&head){keep();localStorage.setItem(KEY,raw);G.Native?.put(KEY,raw);}
-    this.rev=revOf(s);return this.migrate(s);
-   }
-  }catch(e){}
-  try{keep();}catch(e){}
+  const head=localStorage.getItem(KEY),backup=localStorage.getItem(BACKUP);
+  const parse=raw=>{try{return raw?JSON.parse(renameIds(raw)):null;}catch(e){return null;}};
+  const set=raw=>{try{localStorage.setItem(KEPT,raw);G.Native?.put(KEPT,raw);}catch(e){}};
+  const h=parse(head),b=parse(backup);
+  if(this.valid(h)){this.rev=revOf(h);return this.migrate(h);}
+  /* If the newest save will not read in full, the previous backup may still hold the Run. Read from the backup, it becomes the
+     head again, so the next write rotates a good copy into the backup slot; the refused head is set aside under KEPT first, since
+     the next two writes rotate it out and overwrite it. A backup with no Run gives way to a head whose account still reads. */
+  if(this.valid(b)&&(b.run!==null||!this.readable(h))){
+   if(head)try{set(head);localStorage.setItem(KEY,backup);G.Native?.put(KEY,backup);}catch(e){}
+   this.rev=revOf(b);return this.migrate(b);
+  }
+  /* PLATFORM_RELEASE §SAVE ACROSS UPDATES: a Run this build cannot continue (an update changed what a Run carries) costs only
+     that Run. The account goes on; the Run is dropped the way an abandon drops it, and its original is set aside under KEPT. */
+  const [s,raw]=this.readable(h)?[h,head]:this.readable(b)?[b,backup]:[null,null];
+  if(s){
+   set(raw);s.run=null;this.rev=revOf(s);
+   this.error='업데이트로 진행 중이던 영업은 이어갈 수 없어 새 점포를 엽니다. 본사 기록은 그대로입니다.';
+   return this.migrate(s);
+  }
+  set(head||backup);
   this.error=inApp()?'저장된 진행을 읽지 못했습니다. 원본 저장은 이 기기에 따로 보관해 두었습니다. 설정의 오류 신고로 알려 주세요.':'저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
   return null;
  },
 
  valid(s){
   try{
-   const D=G.DATA,a=s?.account,r=s?.run;
-   if(s?.version!==VERSION)return false;
-   if(!accountOk(a,D))return false;
+   const D=G.DATA,r=s?.run;
+   if(!this.readable(s))return false;
    if(r===null)return true;              // an account-only save, with no run in progress
    if(r?.version!==VERSION)return false;
    if(!runShapeOk(r,D))return false;
@@ -323,6 +328,9 @@ G.Save={
    return true;
   }catch(e){return false;}
  },
+
+ /* The account half of valid(): a Save whose account this build can continue, whatever its Run holds. */
+ readable(s){try{return s?.version===VERSION&&accountOk(s.account);}catch(e){return false;}},
 
  /* Full game data reset. Everything this game owns lives under the current key, its backup
     and the legacy keys, so those are derived from the two constants above rather than listed
@@ -347,14 +355,14 @@ G.Save={
  hasLocal(){
   try{return typeof localStorage!=='undefined'&&(localStorage.getItem(KEY)!==null||localStorage.getItem(BACKUP)!==null);}catch(e){return false;}
  },
- /* Boot, before read(): the cloud copy (raw JSON) replaces the local Save only when the local one is missing or invalid, or when the
-    cloud one is newer and valid. An invalid cloud copy is ignored; the cloud never makes the Player choose. Returns 'cloud' or 'local'. */
+ /* Boot, before read(), and again when the cloud answers late (Native.cloudLate): the cloud copy (raw JSON) replaces the local Save only when the local one is missing or invalid, or when the
+    cloud one is newer and valid (its account readable: a Run this build cannot continue is dropped by read()). An invalid cloud copy is ignored; the cloud never makes the Player choose. Returns 'cloud' or 'local'. */
  cloudMerge(raw){
   try{
    const c=JSON.parse(renameIds(raw));
-   if(!this.valid(c))return 'local';
+   if(!this.readable(c))return 'local';
    let l=null;
-   for(const key of [KEY,BACKUP])try{const t=localStorage.getItem(key);if(!t)continue;const s=JSON.parse(renameIds(t));if(this.valid(s)){l=s;break;}}catch(e){}
+   for(const key of [KEY,BACKUP])try{const t=localStorage.getItem(key);if(!t)continue;const s=JSON.parse(renameIds(t));if(this.readable(s)){l=s;break;}}catch(e){}
    if(l&&!newer(c,l))return 'local';
    const previous=localStorage.getItem(KEY);
    if(previous){localStorage.setItem(BACKUP,previous);G.Native?.put(BACKUP,previous);}
