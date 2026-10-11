@@ -324,8 +324,8 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
 /* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE. The Day term bends at the knee (D9): a party's prepared ability stops
    growing long before Day 30 does, so a single slope left every late Gate further out of reach than the one before it.
    `early` per Day up to the knee, `step` on DAY 9~10, `mid` on DAY 11~20 (the NPC-growth check of the Run Progression
-   Arc), `late` from DAY 21. */
-const GATE={knee:9,early:1.45,step:0.80,late:1.54,mid:1.10,midFrom:10,midTo:20};
+   Arc), `late` from DAY 21. DAY 1~9 steeper and DAY 11~20 flatter by the same 1.35 meet the old line at D20 (early-mid hump). */
+const GATE={knee:9,early:1.60,step:0.80,late:1.54,mid:0.965,midFrom:10,midTo:20};
 /* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power, one value every ordinary Day) */
 const GATE_EASE=.90,gateEase=()=>GATE_EASE;
 /* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
