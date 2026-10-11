@@ -329,7 +329,7 @@ const shape={
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also
    carries proven rescue evidence plays its own Outcome first and the accent behind it. */
-function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch(()=>{});
+function play(kind='button',delay=0){if(!enabled||!ctx)return;if(document.hidden)return;ctx.resume().catch(()=>{});
  const notes=sfx[kind]||sfx.button,sh=shape[kind]||{},t0=ctx.currentTime+(Number(delay)||0);
  /* MIX / RUNTIME: a rapid-repeat control must not build into harsh overlapping sound */
  if(sh.repeat){if(t0-(lastAt.get(kind)||-1)<sh.repeat)return;lastAt.set(kind,t0);}
@@ -410,7 +410,9 @@ function bedStart(key){bedStop();beat=0;const tune=tunes[bedFor[key]||key]||tune
   if(tune.drone&&beat%4===0)tone(tune.drone,ctx.currentTime,tune.ms/1000*4.2,BGM_BASS*.7*lv,'sine',bgmBus);
   beat++;},tune.ms);}
 function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
- if(!enabled||document.hidden){bedStop();bgmStop(.1,true);track='';pending='';return;}
+ if(!enabled||document.hidden){bedStop();bgmStop(.1,true);track='';pending='';
+  /* hidden: the whole context sleeps, so a cue or buzz queued on a timer (night results, the clash) is not heard behind another app; wake() resumes it */
+  if(document.hidden&&ctx&&ctx.state==='running')ctx.suspend().catch(()=>{});return;}
  if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();
  const next=trackFor(phase);if(track===next)return;

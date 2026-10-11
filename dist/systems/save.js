@@ -1,9 +1,11 @@
 (function(G){
-const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
+const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup',KEPT=KEY+'.unreadable';
 /* Every schema this game has ever written, current one apart. Read() uses it to tell a
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
 const LEGACY=['v1','v2','v3','v4','v5','v6','v7','v8'];
+/* the app has no Save export / import and no browser storage to point at, so its messages name what the Player can do there */
+const inApp=()=>!!G.Native?.inApp?.();
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4
@@ -271,7 +273,7 @@ G.Save={
    this.error=null;
    return true;
   }catch(e){
-   this.error='자동저장 불가 — 저장 내보내기로 진행을 보관하세요.';
+   this.error=inApp()?'자동저장에 실패했습니다. 기기 저장 공간을 확인해 주세요.':'자동저장 불가 — 저장 내보내기로 진행을 보관하세요.';
    return false;
   }
  },
@@ -284,14 +286,22 @@ G.Save={
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
-  /* If the newest save will not read, fall back to the previous backup. */
+  /* If the newest save will not read, fall back to the previous backup. A refused copy is set aside under KEPT first: the next
+     two writes rotate the head into the backup and then overwrite it, and the message below promises the original is kept. */
+  const head=localStorage.getItem(KEY);
+  const keep=()=>{const raw=head||localStorage.getItem(BACKUP);if(raw){localStorage.setItem(KEPT,raw);G.Native?.put(KEPT,raw);}};
   for(const key of [KEY,BACKUP])try{
    const raw=localStorage.getItem(key);
    if(!raw)continue;
    const s=JSON.parse(renameIds(raw));
-   if(this.valid(s)){this.rev=revOf(s);return this.migrate(s);}
+   if(this.valid(s)){
+    /* read from the backup: it becomes the head again, so the next write rotates a good copy into the backup slot */
+    if(key===BACKUP&&head){keep();localStorage.setItem(KEY,raw);G.Native?.put(KEY,raw);}
+    this.rev=revOf(s);return this.migrate(s);
+   }
   }catch(e){}
-  this.error='저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
+  try{keep();}catch(e){}
+  this.error=inApp()?'저장된 진행을 읽지 못했습니다. 원본 저장은 이 기기에 따로 보관해 두었습니다. 설정의 오류 신고로 알려 주세요.':'저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
   return null;
  },
 
@@ -322,12 +332,14 @@ G.Save={
  reset(){
   if(typeof localStorage==='undefined')return false;
   try{
-   for(const key of [KEY,BACKUP,...LEGACY.map(v=>'guild24.save.'+v)]){localStorage.removeItem(key);G.Native?.drop(key);}
-   this.rev=0;G.Native?.cloudClear();
+   for(const key of [KEY,BACKUP,KEPT,...LEGACY.map(v=>'guild24.save.'+v)]){localStorage.removeItem(key);G.Native?.drop(key);}
+   /* rev is not lowered: if the cloud clear fails (offline, signed out) the old cloud copy keeps its rev, and a count restarted
+      from 0 would lose to it on the next start and bring the erased progress back. The caller writes the fresh account at once. */
+   G.Native?.cloudClear();
    this.error=null;
    return true;
   }catch(e){
-   this.error='저장 삭제에 실패했습니다. 브라우저 저장소를 확인해 주세요.';
+   this.error=inApp()?'저장 삭제에 실패했습니다. 앱을 다시 켠 뒤 한 번 더 해 주세요.':'저장 삭제에 실패했습니다. 브라우저 저장소를 확인해 주세요.';
    return false;
   }
  },

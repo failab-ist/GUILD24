@@ -4287,3 +4287,5 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .settings-links a{display:inline-flex;align-items:center;min-height:44px;color:#dfcba9;font:400 13px/1.3 var(--ui);text-decoration:underline;text-underline-offset:3px}
 .settings-wood .settings-links button{width:auto;min-width:0;min-height:44px;padding:8px 0;border:0;border-image:none;background:transparent;box-shadow:none;
  color:#dfcba9;font:400 13px/1.3 var(--ui);text-decoration:underline;text-underline-offset:3px}
+/* the start threw: one plain line in the middle of the screen, clear of the status bar */
+.boot-fail{margin:0;min-height:100vh;box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;padding:calc(var(--sa-top) + 24px) 24px calc(var(--sa-bottom) + 24px);line-height:1.6}

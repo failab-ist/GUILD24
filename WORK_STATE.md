@@ -1,11 +1,11 @@
 # WORK_STATE
 
 DATE: 2026-10-11
-STATE: V2_13_2 (v2.13.0 게이트 개편 위에 초중반 게이트 혹, User 컨펌 2026-10-11). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
+STATE: V2_13_3 (v2.13.2 위에 저장 안전 수정, User 컨펌 2026-10-11). 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD.
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 버전은 v2.13.2이다(v2.13.1 위에 초중반 게이트 혹: 날짜 기울기 D1~9 1.60 · D11~20 0.965, D20부터 그대로. v2.13.1은 v2.13.0 위에 밤 반전 상품 잔상 수정. v2.13.0은 v2.12.6에 게이트 개편: 전투 요구는 날짜, 티어 차이는 위험, 내용은 `design_ssot/CHANGELOG.md` §v2.13.0 · §v2.12.6 · §v2.12.5 · §v2.12.4 · §v2.12.3 · §v2.12.2 · §v2.12.1). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
+- repository: `failab-ist/GUILD24`. 현행 버전은 v2.13.3이다(v2.13.2 위에 저장 안전 수정: 못 읽는 저장 따로 보관, 백업으로 읽으면 본 저장으로 올림, 초기화해도 rev 유지. v2.13.2는 v2.13.1 위에 초중반 게이트 혹: 날짜 기울기 D1~9 1.60 · D11~20 0.965, D20부터 그대로. v2.13.1은 v2.13.0 위에 밤 반전 상품 잔상 수정. v2.13.0은 v2.12.6에 게이트 개편: 전투 요구는 날짜, 티어 차이는 위험, 내용은 `design_ssot/CHANGELOG.md` §v2.13.0 · §v2.12.6 · §v2.12.5 · §v2.12.4 · §v2.12.3 · §v2.12.2 · §v2.12.1). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`다. 설계 진입점은 `design_ssot/SPEC_INDEX_v2.8.0.md`, 변경 내역은 `design_ssot/CHANGELOG.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
 - 승인된 밸런스는 이미 채택됐다: PR #116의 성장·처진 인원 경험치·Final 조정·포션 유통, PR #123의 직업 및 절반 강도 일반 게이트/화염. 현행 숫자는 각각 NPC_TRAIT / DUNGEON_HAZARD / BOSS / FINAL_EXPEDITION / RELIC owner를 따른다. 과거 후보를 현재 미적용 상태라고 다시 적지 않는다.
 - 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 지금 기준 측정 로그는 `reports/v2100-measure/newcomer-band-20261010/3-band-half-both.log`(새 손님 레벨 폭 + 영웅 4/9/15 · 장비 30/22/18/12%, 프레시 3000판 reader · investor)다. 같은 폴더의 1 · 2번은 채택하지 않은 후보, 0번은 v2.12.1이다. investor 봇은 그 뒤 DAY 6부터 핵심을 고르고 핵심 몫을 더 주도록 고쳤다(User 2026-10-10). 고친 봇의 기준은 4번 로그(investor만, D30 도달 12.7% · 클리어 5.5%)다. 환경+1 · +2 후보는 `snowball-20261010/`에 있고 채택하지 않았다. v2.12.3(게이트 1티어 공통)부터 기준은 `reports/v2100-measure/gate-tier1-20261010/main-vs-tier1-common.log`의 `after` 줄(프레시 1000판 · 궤적 200×10런 장식 4루트, reader · investor)이다. v2.13.0부터 기준은 `reports/v2100-measure/tier-hazard-20261010/`의 `라` 줄(프레시 2000판 reader · investor, 궤적은 아직 안 잼)이다. v2.13.2부터 기준은 `reports/v2100-measure/gate-hump-20261011/v2131-vs-hump1-potionbot.log`의 `after` 줄(프레시 2000판 investor, 포션 규칙을 더한 봇)이다. v2.12.4 기준(`mid-difficulty-20261010/` `AB` 줄)은 비교용이다.
 - 최신 main의 SALE 남은 손님 팝오버·코치 분산·도움말 끄기 연동·판매 상품이 살린 NIGHT 연출·보험 원인 표시는 유지한다. 이번 통합 기준 main은 `e3de85dc`다.
@@ -42,7 +42,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 
 ## v3.0 사운드 — 녹음 BGM 연결 (User 2026-09-29)
 
-- 곡: User가 제미나이(Lyria)로 만든 곡이다. 원본은 `assets-src/bgm/`, 배포본은 `dist/ui/assets/bgm/`(바이트 동일, 9곡 33 MB)다. 출처는 `reports/ASSETS.md`에 있다.
+- 곡: User가 제미나이(Lyria)로 만든 곡이다. 원본은 `assets-src/bgm/`, 웹 배포본은 `dist/ui/assets/bgm/`(128 kb/s로 다시 인코딩, 9곡 약 22 MB)이고, 앱은 빌드 때 `npm run app:bgm`으로 원본을 넣는다. 출처는 `reports/ASSETS.md`에 있다.
 - 루프 선택: `reports/bgm-loops.md`(원곡 전체 보존 방식, `tools/bgm-loop.py`)
   - TITLE · SALE · NIGHT · CLOSE = S1E1
   - MORNING = S1E3
@@ -85,7 +85,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
    - 그 다음 즉시 Android 앱 전환으로 이동한다. exact release behavior는 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 실행 순서/시간은 `reports/v3.0-prep.md` §6-7~6-8.
    - 앱화 → 내부 실기기 QA → Closed Test를 가능한 빨리 시작하고, 14일 동안 미세 수정 · 사업/스토어/SNS 작업을 병행한다.
 4. 다른 세션: 1위 인터뷰(`reports/interview-1st-place.md`).
-5. 남겨 둘 입력: `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는다. SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
+5. 남겨 둘 입력: `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는다.
 6. 리팩터링(`ccr-4a2ee33b-4r88nj`, "동작은 그대로", User 2026-09-30 ~ 10-01): 머지됨(PR #38, `70e9d39`). `dist/ui/app.js`의 큰 함수를 같은 파일 안 헬퍼로 나눴다: `playPhase` → `phaseMorning` ~ `phaseSell`, `playCue` → `cueSelect` · `cueOrder` · `cueSale` · `cueRefuse`, `render` → `phaseScreen` · `openOwedModal` · `syncWatchers`, `closingScreen` → `closingReceipt` · `closingDock`, `finalScreen` → `finalThreat` · `finalMuster` · `finalDock`, `orderForm` → `orderOffer`, `clashScene` → `clashMarkup`. `tests/ui-guard.cjs`의 소스 가드도 같은 함수를 읽도록 옮겼다(assertion 그대로). 이 구간을 고칠 때는 새 함수 이름으로 찾는다. 하지 않은 것: `saleScreen`, `clashScene` 시간축, `statGrid` · `readout` · `beat` · `till` · `bossReveal`, `systems/*`.
 7. 코드 읽기·정리 규칙(User 2026-10-01): `AGENTS.md` §2B로 옮겼다(User 2026-10-03).
 
@@ -93,7 +93,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 
 ### User 할 일
 
-1. 태그(User 2026-10-01): 새 버전이 main에 머지된 직후 그 머지 커밋에 붙인다(GitHub Releases, 대상 `main`). origin에는 v2.10.1까지 붙어 있고, v2.10.2 · v2.10.3은 아직이다(User가 붙인다). 퀵패치는 버전을 올리지 않으므로 태그도 새로 붙이지 않는다.
+1. 태그(User 2026-10-01): 새 버전이 main에 머지된 직후 그 머지 커밋에 붙인다(GitHub Releases, 대상 `main`). origin에는 v2.12.0까지 붙어 있고, 그 뒤 버전은 아직이다(User가 붙인다). 퀵패치는 버전을 올리지 않으므로 태그도 새로 붙이지 않는다.
 2. 실기기 BGM 청취(UI-Q114 · UI-Q-v29-47, §v3.0 사운드).
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
