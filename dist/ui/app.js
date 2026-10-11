@@ -2778,6 +2778,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다.<br>현재 보급 상태를 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
  else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss','stamp')+btn(c.under,'final-commit-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='이 점포를 폐점할까요?';body='<p>이번 점포의 영업을 끝내고 점포 자본을 정산한다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·보유 점포 자본·보유 장식은 유지된다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점','retire-go','danger');narrow=true;}
+ else if(modal==='exitConfirm'){title='게임을 종료할까요?';body='<p>진행 상황은 저장되어 있다.</p>';footer=btn('계속 하기','dismiss')+btn('종료','exit-go','danger');narrow=true;}
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body=Native.inApp()?`<p>현재 영업과 본사 기록을 포함한 이 기기의 GUILD24 저장 데이터를 모두 지운다.${Native.cloudWorks()?' Play 게임즈의 백업도 함께 지운다.':''} 되돌릴 수 없다.</p>`:'<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.</p>';footer=(Native.inApp()?'':btn('저장 내보내기','export'))+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체한다. 기존 진행을 남기려면 먼저 내보내야 한다.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
@@ -2995,6 +2996,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
  case'boss-go':sound('final');endRevealed=false;endFrom='final';/* the clash plays before any render() can arm the hold, so arm it here */game.boss();setModal(null);if(!clashScene()){render();sealSound();}break;
  case'retire':setModal('retireConfirm');break;
+ case'exit-go':game.save();Native.exit();break;
  case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;const t=new Date(),z=v=>String(v).padStart(2,'0');link.download='guild24-save-day-'+(s?.day||0)+'-'+t.getFullYear()+z(t.getMonth()+1)+z(t.getDate())+'-'+z(t.getHours())+z(t.getMinutes())+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}
  case'import':setModal('importConfirm');break;
@@ -3080,7 +3082,7 @@ document.addEventListener('focusout',ev=>{
  t.open=false;});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
-/* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level the app saves and exits. */
+/* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level Back asks before leaving (exitConfirm); the app saves and exits only on its 종료. */
 Native.onBack(()=>{
  /* a scene a tap would skip: Back skips it too, never leaving the app mid-scene; the boss hold is a moment-long lock */
  if(clash){finishClash();return true;}
@@ -3090,7 +3092,9 @@ Native.onBack(()=>{
  if(activeCoach){finishCoach();return true;}
  if(modal){if(game.run?.phase!=='foundation'&&!d0Owed())setModal(null);return true;}
  if(game.run?.phase==='order'&&sheetOpen()){setStockSheet(false);return true;}
- game.save();return false;});
+ if(game.run?.phase==='end'&&!endRevealed)return true;
+ if(game.run?.phase==='foundation'||d0Owed())return true;
+ game.save();setModal('exitConfirm');return true;});
 window.addEventListener('pagehide',()=>{game.save();Native.cloudFlush();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden){game.save();Native.cloudFlush();}Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
