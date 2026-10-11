@@ -307,7 +307,7 @@ const GREAT={xp:1.00},WIN={xp:.90};
    the adventurer who keeps winning keeps getting stronger more slowly. Indexed by tier, the last entry holds from there on. */
 const EQUIP={fromDay:3,chance:[.30,.22,.18,.12]};
 const equipChance=(tier,day)=>day<EQUIP.fromDay?0:EQUIP.chance[Math.min(tier||0,EQUIP.chance.length-1)];
-const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.60,'부상':.45,'중상':.15,'사망':0};
+const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.50,'부상':.35,'중상':.15,'사망':0};
 const DEATH={combat:.40,environment:.60,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation: only CONSECUTIVE injured departures count; a
    healthy departure resets the chain. STRAIN.weary is the fatigueEscalation threshold read at the call sites below.

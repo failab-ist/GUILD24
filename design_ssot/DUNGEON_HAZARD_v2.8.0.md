@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.13.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.6
+DOC_VERSION=2.13.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -767,8 +767,8 @@ Ordinary expedition Wallet reward:
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
     대성공 / 성공 = 1.25
-    퇴각 = 0.60
-    부상 = 0.45
+    퇴각 = 0.50
+    부상 = 0.35
     중상 = 0.15
     사망 = 0
 
@@ -1795,7 +1795,7 @@ Reward PASS:
 - EXP base = 24.2 + Day×5.06
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.60 / 부상 0.45 / 중상 0.15 / 사망 0
+- Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.50 / 부상 0.35 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance is 0 on DAY 1~2, then 30 / 22 / 18 / 12% by Equipment tier 0 / 1 / 2 / 3+, plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
