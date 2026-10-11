@@ -42,7 +42,7 @@ and this table is their commit record.
 | v2.13.0 | 2026-10-10 | Gate rework (combat by Day, Tier by Hazard) and version bump in one PR #170 | (the User sets it) |
 | v2.13.1 | 2026-10-11 | Night reversal Item fix and version bump in one PR #171 | (the User sets it) |
 | v2.13.2 | 2026-10-11 | Early-mid Gate Day-term hump, investor potion rule and version bump in one PR #172 | (the User sets it) |
-| v2.13.3 | 2026-10-11 | Save safety fixes (unreadable Save kept, backup promoted, reset keeps rev) and version bump in one PR (this one) | (the User sets it) |
+| v2.13.3 | 2026-10-11 | Save safety fixes, app Back / background sound / start failure, app-only messages and version bump in one PR (this one) | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -57,6 +57,11 @@ and this table is their commit record.
 - CORE_RUN §SAVE/LOAD: when neither the Save nor its backup reads, the refused copy is set aside under its own key (`guild24.save.v9.unreadable`) before any write. Until now the message promised the original was kept while the next two autosaves rotated it out and overwrote it.
 - CORE_RUN §SAVE/LOAD: a Save read from the backup is put back as the head, so the next write rotates a readable copy into the backup slot instead of the corrupt head.
 - PLATFORM_RELEASE §Google Play Games Saved Games: a full reset no longer restarts the Save revision at 0, and the fresh account is written at once. A reset made offline or signed out (cloud clear fails) left the old cloud copy with a higher revision, which won the next start and brought the erased progress back. No rule or balance change.
+- PLATFORM_RELEASE §ANDROID SYSTEM BACK: Back during the prologue or the FINAL clash skips the scene like a tap, and during the moment-long boss hold it does nothing; it used to close the app there.
+- Background: when the page is hidden the sound context is suspended and no cue or buzz plays, so a night result or clash timer is no longer heard behind another app.
+- A start that throws shows one line (app 「앱을 다시 켜 주세요」, web 「새로고침해 주세요」) instead of leaving the loading screen up for good.
+- App-only Save messages no longer point to Save export / import or browser storage, which the app does not have (User 2026-10-11). The web keeps its wording.
+- The debug panel shortcut (Ctrl+Shift+D) is off in the app; the web keeps it (User 2026-10-11).
 
 ## v2.13.2 — Early-mid Gate hump (User 2026-10-11)
 

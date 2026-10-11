@@ -4,6 +4,8 @@ const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup',KEPT=KEY+'.unr
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
 const LEGACY=['v1','v2','v3','v4','v5','v6','v7','v8'];
+/* the app has no Save export / import and no browser storage to point at, so its messages name what the Player can do there */
+const inApp=()=>!!G.Native?.inApp?.();
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4
@@ -271,7 +273,7 @@ G.Save={
    this.error=null;
    return true;
   }catch(e){
-   this.error='자동저장 불가 — 저장 내보내기로 진행을 보관하세요.';
+   this.error=inApp()?'자동저장에 실패했습니다. 기기 저장 공간을 확인해 주세요.':'자동저장 불가 — 저장 내보내기로 진행을 보관하세요.';
    return false;
   }
  },
@@ -299,7 +301,7 @@ G.Save={
    }
   }catch(e){}
   try{keep();}catch(e){}
-  this.error='저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
+  this.error=inApp()?'저장된 진행을 읽지 못했습니다. 원본 저장은 이 기기에 따로 보관해 두었습니다. 설정의 오류 신고로 알려 주세요.':'저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
   return null;
  },
 
@@ -337,7 +339,7 @@ G.Save={
    this.error=null;
    return true;
   }catch(e){
-   this.error='저장 삭제에 실패했습니다. 브라우저 저장소를 확인해 주세요.';
+   this.error=inApp()?'저장 삭제에 실패했습니다. 앱을 다시 켠 뒤 한 번 더 해 주세요.':'저장 삭제에 실패했습니다. 브라우저 저장소를 확인해 주세요.';
    return false;
   }
  },

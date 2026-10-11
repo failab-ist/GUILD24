@@ -2572,7 +2572,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +`</div>`;}
 /* PLATFORM_RELEASE §HAPTICS: one short buzz at a result point, unless the player turned vibration off (default ON) */
 const hapticOn=()=>game.account.settings.haptic!==false;
-const haptic=()=>{if(hapticOn())Native.vibrate();};
+const haptic=()=>{if(hapticOn()&&!document.hidden)Native.vibrate();};
 /* PLATFORM_RELEASE §credits: what the build owes its sources (licences are shipped beside the files) and the AI-content notice. */
 function credits(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="credits-ai"><h3 id="credits-ai">AI 사용 고지</h3><p>그림에는 이미지 생성 AI를 썼다.</p><p>배경음악은 음악 생성 AI(Google Lyria)로 만들었다.</p></section>
@@ -3078,10 +3078,14 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 /* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level the app saves and exits. */
 Native.onBack(()=>{
+ /* a scene a tap would skip: Back skips it too, never leaving the app mid-scene; the boss hold is a moment-long lock */
+ if(clash){finishClash();return true;}
+ if(prologue){prologueStep(true);return true;}
+ if(bossHold)return true;
  if(document.querySelector('.tip[open],.wh-tip[open]')){closeTips(null);whClose();return true;}
  if(activeCoach){finishCoach();return true;}
  if(modal){if(game.run?.phase!=='foundation'&&!d0Owed())setModal(null);return true;}
@@ -3108,5 +3112,8 @@ window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simul
  loaded.then(()=>{ready=true;},()=>{ready=true;});
  if(!game.run)startPrologue(()=>{if(ready)render();else{$('#app').innerHTML=boot;loaded.then(render,render);}});
  else loaded.then(render,render);})();
+}).catch(e=>{
+ /* a start that throws would leave the loading screen up for good: say so, in words the Player can act on */
+ try{console.error(e);const app=document.querySelector('#app');if(app)app.innerHTML='<p class="boot-fail">게임을 여는 중 문제가 생겼습니다. '+(Native.inApp()?'앱을 다시 켜 주세요.':'새로고침해 주세요.')+'</p>';}catch(_){}
 });
 })();
