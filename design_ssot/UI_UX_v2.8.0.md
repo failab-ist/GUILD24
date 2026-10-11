@@ -3,7 +3,7 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
 DOC_VERSION=2.12.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.8
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.9
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -716,7 +716,7 @@ Help the player notice risk without solving it. Every known Hazard shows its nam
 number first, on every row (MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL):
 - 냉기 · 대응 15 필요 · 강인함 3당 대응 1 제공
 - 화이트아웃 · 대응 21 필요 · 정신 3당 대응 1 제공
-- 부식 · 대응 13 필요 · 강인함 3당 대응 1 제공
+- 부식 · 대응 15 필요 · 강인함 3당 대응 1 제공
 - 진창 · 대응 21 필요 · 기동 3당 대응 1 제공
 
 (no `{위험} · {label}` row; no `?` on the SALE plate.) Gate detail adds the full sentence, e.g.

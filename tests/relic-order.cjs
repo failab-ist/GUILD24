@@ -39,7 +39,7 @@ test('REL-Q38: a milestone window is revealed once and reload cannot replay or r
  const g=fresh('reveal');
  assert.equal(g.run.relicWindow.milestoneDay,0);
  assert.equal(g.run.relicWindow.focusedRevealSeen,true,'D0 is the start flow, not an extra reveal');
- while(g.run.day<5){g.run.money=5000;g.beginOrder();g.finishOrder();while(g.run.phase==='sell')g.depart();g.finishNight();g.closeDay();}
+ while(g.run.day<5){g.run.money=5000;g.run.stats.deaths=0;g.beginOrder();g.finishOrder();while(g.run.phase==='sell')g.depart();g.finishNight();g.closeDay();}
  const w=g.run.relicWindow;
  assert.equal(w.milestoneDay,5);
  assert.equal(w.focusedRevealSeen,false,'a new milestone window starts unrevealed');

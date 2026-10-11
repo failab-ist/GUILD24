@@ -593,7 +593,7 @@ test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat acco
 
 test('NPC_TRAIT destinationDefault (User 2026-09-25): with as many visitors as Gates, every open Gate is claimed by someone',()=>{
  let days=0,covered=0,fixes=0;
- for(let k=1;k<=40;k++){const g=fresh('gate-cover-'+k);
+ for(let k=1;k<=60;k++){const g=fresh('gate-cover-'+k);
   for(let d=0;d<30&&g.run.phase!=='end';d++){const s=g.run;
    if(s.phase==='morning'&&s.dungeons.length>1&&s.queue.length>=s.dungeons.length){days++;
     const claimed=new Set(s.queue.map(id=>s.npcs.find(n=>n.id===id).claimedDestination));

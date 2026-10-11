@@ -47,7 +47,8 @@ and this table is their commit record.
 | v2.13.5 | 2026-10-11 | Larger 퇴각 / 부상 Wallet reward and version bump in one PR #178 | (the User sets it) |
 | v2.13.6 | 2026-10-11 | Android Back exit confirm and version bump in one PR #180 | (the User sets it) |
 | v2.13.7 | 2026-10-11 | 퇴각 / 부상 Wallet raise of v2.13.5 halved, version bump in one PR #181 | (the User sets it) |
-| v2.13.8 | 2026-10-11 | Night reversal portrait tone fix and version bump in one PR (this one) | (the User sets it) |
+| v2.13.8 | 2026-10-11 | Night reversal portrait tone fix and version bump in one PR #182 | (the User sets it) |
+| v2.13.9 | 2026-10-11 | Item roles rebalance (potion down, Food / Drink and Common Counter up, Tier I Hazard +2), Wallet rollback, Death limit 5 / 8 / 10 and version bump in one PR (this one) | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -56,6 +57,16 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.9 — Each Bag slot has its own job (User 2026-10-11)
+
+- ITEM §ACTIVE CATALOG: 포션 투력 중급 18 → 14, 상급 25 → 19, 최상급 35 → 25 (하급 +10 · 140G unchanged). A User Run's early unwinnable expeditions were all one potion short, so the potion had become the answer.
+- ITEM: every Stat Food +3 and Stat Drink +2 by rung (삼각김밥 · 초코바 · 녹차 양갱 6 → 9, 간단 도시락 9 → 12, 길드 특제 도시락 12 → 15, 영웅 결전 도시락 15 → 18; 생수 · 캔커피 · 진정 허브티 12 → 14, 에너지드링크 17 → 19, Epic Drinks 20 → 22); Supply unchanged.
+- ITEM §COUNTER LADDER: 초반 대응 Field Gear 12 → 14, Food / Drink 10 → 12; 초반 하이브리드 first Hazard 8 → 10. DUNGEON_HAZARD §HAZARD THREAT: TierTerm 2 / 6 / 12 (Tier I +2). Two Stat Drinks no longer cover a Tier I Hazard as surely as one Common Counter. The aim is that the best two slots change with the Customer's Power, Stat and Gate (Hazard to the Counter, Power to Food / Drink, a large shortfall to the potion, Fatigue to Food).
+- DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet reward: 퇴각 0.50 → 0.40, 부상 0.35 → 0.25 (back to before v2.13.5); the Power raise above replaces it.
+- CORE_RUN §DEATH LIMIT — SEGMENTED: 6 / 8 / 10 → 5 / 8 / 10 (META 위령비 +1 now 6 / 9 / 11). A Run that cannot recover ends sooner; one that can goes further.
+- The Boss and the early Gate hump are unchanged.
+- Measured against main, investor fresh 1000 (same seeds): success D1~7 / 8~14 / 15~21 / 22~29 47.2 / 39.2 / 45.9 / 38.1 → 51.0 / 40.7 / 48.0 / 37.9%, Deaths / Run 8.18 → 7.58, Runs ended by D10 28 → 39%, D30 reach 2.9 → 5.2%, clear 1.0 → 1.5%, cash / Day 46 → 43. Death limit 5 / 7 / 9 was tried at 200 Runs and left out (median end Day 17 → 13). Log: `reports/v2100-measure/item-roles-20261011/`.
 
 ## v2.13.8 — Night reversal portrait keeps its own tone (User 2026-10-11)
 
