@@ -77,7 +77,8 @@ G.Native={
    if(h){h.vibrate({duration:ms}).catch(()=>{});return;}
    if(webVibrate()&&!(navigator.userActivation&&!navigator.userActivation.hasBeenActive))navigator.vibrate(Math.max(ms,WEB_MS));}catch(e){}
  },
- /* Android Back. `handle()` closes the topmost surface and returns true; otherwise the app saves and exits. */
+ exit(){try{const a=inApp()?plug('App'):null;if(a)a.exitApp();}catch(e){}},
+ /* Android Back. `handle()` closes the topmost surface or asks to leave and returns true; false lets the app exit. */
  onBack(handle){
   try{const a=inApp()?plug('App'):null;if(!a)return;
    a.addListener('backButton',()=>{let used=false;try{used=handle()===true;}catch(e){}

@@ -4,7 +4,7 @@ DOC=PLATFORM_RELEASE
 OWNER=external_release,android_wrapper,package_identity,native_save,cloud_save,app_lifecycle,android_back,haptics
 RELEASE_TARGET=v3.0.0
 DOC_AUTHORITY=AUTHORITATIVE_RELEASE_SPEC
-GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.13.5
+GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.13.6
 
 ## ROLE
 
@@ -75,7 +75,7 @@ Android system Back / back gesture is navigation, not a gameplay rewind.
 Priority:
 1. if a modal / popover / settings / help surface is open, close the topmost dismissible surface
 2. otherwise never undo an already committed gameplay decision or move backward across MORNING / ORDER / SALE / NIGHT / CLOSING state
-3. at the app's top-level surface, follow normal Android app Back/exit behaviour after saving current state
+3. at the app's top-level surface, never exit silently: save current state and ask 「게임을 종료할까요?」 (계속 하기 / 종료); the app exits only on 종료. A Back during a skippable scene (prologue, FINAL clash) skips it, and during a moment-long hold (Boss reveal, ending result) is absorbed
 
 Back must never reopen a resolved customer, reroll state, reverse an expedition result, or create a Save exploit.
 
