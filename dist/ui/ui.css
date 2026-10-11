@@ -3891,6 +3891,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .modal-footer,.modal.wood-frame:has(.tabs) .modal-footer{padding:14px 12px max(12px,var(--sa-bottom))}
 .modal.wood-frame .modal-body p+p{margin-top:8px}
 .settings-wood .modal-body{padding:18px 12px max(18px,var(--sa-bottom));color:#dfcba9}
+/* 종료 확인: 머리·바닥 선 없이 짧은 한 줄이라 여백도 그만큼 줄인다 */
+.modal.exit-confirm .modal-header{padding-bottom:4px;box-shadow:none}
+.modal.exit-confirm .modal-body{padding:8px 12px 4px}
+.modal.exit-confirm .modal-footer{padding-top:12px;box-shadow:none}
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,var(--sa-bottom));
  background:none;box-shadow:inset 0 1px 0 #9b6433}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
