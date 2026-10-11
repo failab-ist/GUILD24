@@ -180,6 +180,38 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
  }finally{delete global.localStorage;}
 });
 
+test('CORE_RUN §SAVE/LOAD: an unreadable save is set aside, a backup read is promoted, and reset never lowers rev',()=>{
+ const store=new Map();
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ try{
+  const g=fresh('save-keep');g.autosave=true;
+  g.save();g.run.money+=1;g.save();
+  const good=store.get('guild24.save.v9');
+  // a corrupt head read from the backup: the good copy becomes the head, so the next write keeps a good backup
+  store.set('guild24.save.v9','{not json');
+  assert.ok(Save.read(),'the backup loads');
+  assert.equal(store.get('guild24.save.v9.unreadable'),'{not json','the refused head is set aside');
+  assert.notEqual(store.get('guild24.save.v9'),'{not json','the backup is promoted to the head');
+  g.save();
+  assert.doesNotThrow(()=>JSON.parse(store.get('guild24.save.v9.backup')),'the next write rotates a readable copy into the backup');
+  // both unreadable: the original survives the next two writes of a fresh account
+  store.set('guild24.save.v9',good.replace('"version":9','"version":99'));store.set('guild24.save.v9.backup','{bad');
+  const original=store.get('guild24.save.v9');
+  Save.error=null;
+  assert.equal(Save.read(),null,'nothing loads');
+  assert.ok(/보존/.test(Save.error),'the player is told the original is kept');
+  const blank=new Game();blank.autosave=true;blank.save();blank.save();
+  assert.equal(store.get('guild24.save.v9.unreadable'),original,'and it really is kept after two autosaves');
+  // reset: rev keeps climbing so an old cloud copy cannot win the next start
+  const before=Save.rev;
+  assert.ok(Save.reset(),'reset succeeds');
+  assert.equal(store.get('guild24.save.v9.unreadable'),undefined,'reset erases the set-aside copy too');
+  assert.ok(Save.rev>=before,'reset does not lower rev');
+  blank.save();
+  assert.ok(JSON.parse(store.get('guild24.save.v9')).rev>before,'the first write after reset outranks every earlier one');
+ }finally{delete global.localStorage;}
+});
+
 test('CORE_RUN §CURRENT RUN ABANDON (v2.9.0 F5): abandon() discards the Run at once, settles nothing, starts nothing, and Decorations are purchasable after it',()=>{
  const g=fresh('abandon-now');
  for(let i=0;i<40&&g.run.phase!=='end';i++)step(g);
@@ -1553,7 +1585,7 @@ test('PLATFORM_RELEASE §Saved Games: the cloud copy restores a missing Save, wi
   store.clear();
   assert.equal(Save.cloudMerge(cloud(3,1)),'cloud','with no local Save the cloud copy is restored');
   assert.ok(Save.read(),'and it loads');
-  assert.equal(Save.reset(),true);assert.equal(Save.rev,0,'a reset starts the count again');
+  assert.equal(Save.reset(),true);assert.equal(Save.rev,3,'a reset keeps the count monotonic, so a cloud copy it failed to clear cannot outrank what follows');
  }finally{delete global.localStorage;Save.rev=0;}
 });
 
