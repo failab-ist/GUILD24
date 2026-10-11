@@ -40,7 +40,8 @@ and this table is their commit record.
 | v2.12.5 | 2026-10-10 | Store Support pure draw and version bump in one PR #168 (partly walked back in v2.12.6) | (the User sets it) |
 | v2.12.6 | 2026-10-10 | Store Support draw: cool-down, reroll and D30 exclusions restored; version bump in one PR #169 | (the User sets it) |
 | v2.13.0 | 2026-10-10 | Gate rework (combat by Day, Tier by Hazard) and version bump in one PR #170 | (the User sets it) |
-| v2.13.1 | 2026-10-11 | Night reversal Item fix and version bump in one PR (this one) | (the User sets it) |
+| v2.13.1 | 2026-10-11 | Night reversal Item fix and version bump in one PR #171 | (the User sets it) |
+| v2.13.2 | 2026-10-11 | Early-mid Gate Day-term hump, investor potion rule and version bump in one PR (this one) | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -49,6 +50,12 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.2 — Early-mid Gate hump (User 2026-10-11)
+
+- DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE: the Day term runs DAY 1~9 at 1.60 (was 1.45) and DAY 11~20 at 0.965 (was 1.10). The two cancel by DAY 20, so the requirement rises by up to +1.35 around DAY 9~10 (about +3.7%, every Tier and Family alike) and DAY 20 onward is unchanged. Reason: the User's v2.13.0 fresh Run felt smooth early (2 deaths by DAY 10 against a limit of 6).
+- Measurement only, no rule: the investor bot also claims a potion for a backed visitor whose bare power is 0.8~1.12 of their Gate (User saves: 하급 포션 in 19% of DAY 1~14 Bags, the bot 6%).
+- Measured against v2.13.1, investor fresh 2000 (same seeds, the new bot in the after arm): success by band 45 / 41 / 46 / 38 → 42 / 37 / 44 / 37%, deaths by DAY 10 4.29 → 4.64, Items changed the result 29.7 → 31.5% (mid 24.8 → 26.5%), clear 1.4 → 0.9%. With the new bot on both arms the hump alone moves success 46 / 42 / 47 / 38 → 42 / 37 / 44 / 37% and clear 1.1 → 0.9%. Log: `reports/v2100-measure/gate-hump-20261011/`.
 
 ## v2.13.1 — Night reversal Item no longer trails to the next customer (User 2026-10-11)
 
