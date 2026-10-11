@@ -42,7 +42,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 
 ## v3.0 사운드 — 녹음 BGM 연결 (User 2026-09-29)
 
-- 곡: User가 제미나이(Lyria)로 만든 곡이다. 원본은 `assets-src/bgm/`, 배포본은 `dist/ui/assets/bgm/`(바이트 동일, 9곡 33 MB)다. 출처는 `reports/ASSETS.md`에 있다.
+- 곡: User가 제미나이(Lyria)로 만든 곡이다. 원본은 `assets-src/bgm/`, 웹 배포본은 `dist/ui/assets/bgm/`(128 kb/s로 다시 인코딩, 9곡 약 22 MB)이고, 앱은 빌드 때 `npm run app:bgm`으로 원본을 넣는다. 출처는 `reports/ASSETS.md`에 있다.
 - 루프 선택: `reports/bgm-loops.md`(원곡 전체 보존 방식, `tools/bgm-loop.py`)
   - TITLE · SALE · NIGHT · CLOSE = S1E1
   - MORNING = S1E3
@@ -85,7 +85,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
    - 그 다음 즉시 Android 앱 전환으로 이동한다. exact release behavior는 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 실행 순서/시간은 `reports/v3.0-prep.md` §6-7~6-8.
    - 앱화 → 내부 실기기 QA → Closed Test를 가능한 빨리 시작하고, 14일 동안 미세 수정 · 사업/스토어/SNS 작업을 병행한다.
 4. 다른 세션: 1위 인터뷰(`reports/interview-1st-place.md`).
-5. 남겨 둘 입력: `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는다. SNS · 트레일러 문서 브랜치(`ccr-5e99c18d`, `docs/sns-development-story-20260930`)는 `reports/`에 파일만 추가하므로 언제 머지해도 충돌이 없다.
+5. 남겨 둘 입력: `reports/expert-bot/`의 두 JSON은 expert 봇과 측정 도구가 읽는다.
 6. 리팩터링(`ccr-4a2ee33b-4r88nj`, "동작은 그대로", User 2026-09-30 ~ 10-01): 머지됨(PR #38, `70e9d39`). `dist/ui/app.js`의 큰 함수를 같은 파일 안 헬퍼로 나눴다: `playPhase` → `phaseMorning` ~ `phaseSell`, `playCue` → `cueSelect` · `cueOrder` · `cueSale` · `cueRefuse`, `render` → `phaseScreen` · `openOwedModal` · `syncWatchers`, `closingScreen` → `closingReceipt` · `closingDock`, `finalScreen` → `finalThreat` · `finalMuster` · `finalDock`, `orderForm` → `orderOffer`, `clashScene` → `clashMarkup`. `tests/ui-guard.cjs`의 소스 가드도 같은 함수를 읽도록 옮겼다(assertion 그대로). 이 구간을 고칠 때는 새 함수 이름으로 찾는다. 하지 않은 것: `saleScreen`, `clashScene` 시간축, `statGrid` · `readout` · `beat` · `till` · `bossReveal`, `systems/*`.
 7. 코드 읽기·정리 규칙(User 2026-10-01): `AGENTS.md` §2B로 옮겼다(User 2026-10-03).
 
@@ -93,7 +93,7 @@ QP3 측정(프레시 1000판, reader / expert): D30 도달 27.5 / 28.0%, 클리�
 
 ### User 할 일
 
-1. 태그(User 2026-10-01): 새 버전이 main에 머지된 직후 그 머지 커밋에 붙인다(GitHub Releases, 대상 `main`). origin에는 v2.10.1까지 붙어 있고, v2.10.2 · v2.10.3은 아직이다(User가 붙인다). 퀵패치는 버전을 올리지 않으므로 태그도 새로 붙이지 않는다.
+1. 태그(User 2026-10-01): 새 버전이 main에 머지된 직후 그 머지 커밋에 붙인다(GitHub Releases, 대상 `main`). origin에는 v2.12.0까지 붙어 있고, 그 뒤 버전은 아직이다(User가 붙인다). 퀵패치는 버전을 올리지 않으므로 태그도 새로 붙이지 않는다.
 2. 실기기 BGM 청취(UI-Q114 · UI-Q-v29-47, §v3.0 사운드).
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)

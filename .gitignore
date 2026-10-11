@@ -27,3 +27,20 @@ android/app/src/main/assets/capacitor.plugins.json
 *.jks
 *.keystore
 keystore.properties
+
+# OS / editor / Python leftovers
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+/.idea/
+__pycache__/
+*.pyc
+
+# Secrets and release outputs (signing material lives outside the repo)
+.env*
+*.p12
+*.pem
+google-services.json
+/*.apk
+/*.aab
