@@ -421,6 +421,8 @@ function phaseClosing(A){
     the money only when there is not (REWARD figures count up). A reversal prints what the
     Insurance turned away and overstamps it; a death gets a tape, not a stamp. Everything reads
     the tone and the result already resolved; nothing here is state. */
+/* the flying Item lives on <body>, outside the beat that redraws on 다음, so a skipped beat must take it down (else it trails onto the next customer) */
+const clearSavedFly=()=>document.querySelectorAll('.saved-fly').forEach(e=>e.remove());
 function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
  const g=document.createElement('p');g.setAttribute('aria-hidden','true');
  g.className='verdict ghost saved-ghost t-'+(st.saved==='사망'?'gone':'severe');g.textContent=st.saved;
@@ -447,6 +449,7 @@ function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
   onComplete:()=>fly.remove()});
  A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
 function phaseNight(A){
+  clearSavedFly();
   const beat=$('.beat'),tag=$('.beat .verdict');
   const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
   const st=r?nightStampOf(r):NIGHT_STAMP[tone]||NIGHT_STAMP.safe,at=st.entry+st.hold,land=stampLand(st);
@@ -2885,7 +2888,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}
- case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();
+ case'night-next':clearSavedFly();s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();
   nightSound(s.results[s.nightCursor]);if(s.phase==='closing')closingSound();break;
  case'event-seen':setModal(null);render();break;
  case'event-again':sound('ui');setModal('event');break;
@@ -2902,7 +2905,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
  case'reroll-relics':game.rerollRelics();sound('spend');render();break;
  case'defer-relic':game.deferFoundationRelic();setModal(null);render();sound('ui');break;
- case'closing':game.finishNight();game.save();render();nightSound(null);closingSound();break;
+ case'closing':clearSavedFly();game.finishNight();game.save();render();nightSound(null);closingSound();break;
  case'open':game.open();selected=null;render();healCue();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
     sits above the viewport the shelf below it slides up by the height of the panel that
