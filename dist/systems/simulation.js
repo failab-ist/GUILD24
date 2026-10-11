@@ -456,7 +456,15 @@ function playRun(g,out,ctx){
  for(const report of s.results){const fb=f=>f>=40?'40':f>=30?'30-39':f>=20?'20-29':f>=10?'10-19':'0-9';out.fatigue.departure[fb(report.fatigueBeforeExpedition||0)]++;const F=out.fatigue.foodByBand[fb(report.beforeFatigue||0)]??={visits:0,foodDrink:0};F.visits++;F.foodDrink+=Number((report.items||[]).some(id=>['food','drink'].includes(D.itemBy[id]?.category)));out.fatigue.supplyUse.preRecovery+=report.preRecovery||0;out.fatigue.supplyUse.outcomeBuffer+=report.outcomeBufferUsed||0;out.fatigue.supplyUse.waste+=Math.max(0,(report.remainingSupplyBuffer||0)-(report.outcomeBufferUsed||0));}
  for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
- function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+ /* reader / investor Store Support pick (User 2026-10-11): rarity (일반 1 · 희귀 2 · 영웅 4) plus 1.5 for each tag it shares with
+    a Support already owned (two at most), so a well-fitting 희귀 can go ahead of a lone 영웅; an injury Support first while
+    customers are getting hurt (investor), the User's own first free picks (전광판, 위험 게시판) first in the first window, and
+    the ranked list only to break ties. A paid window that would leave the till under 500 is passed. */
+ const SUPPORT_FLOOR=500,FIRST_PICK=['board','hazardBoard'];
+ const synergy=id=>{const r=D.relicBy[id],owned=s.facilities.flatMap(f=>D.relicBy[f]?.tags||[]),rank=priority.indexOf(id);
+  return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(s.phase==='foundation'&&FIRST_PICK.includes(id)?100-FIRST_PICK.indexOf(id):0)
+   +({0:1,2:2,3:4}[r.rarity]??1)+1.5*Math.min(2,r.tags.filter(t=>owned.includes(t)).length)+(rank>=0?(priority.length-rank)*.001:0);};
+ function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=reader?synergy:id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
@@ -517,7 +525,8 @@ function playRun(g,out,ctx){
       well as against the floor: the till has to still clear cashFloor AFTER both the next reroll
       and the order this sheet would produce. That is what stops looking from eating the buying.
       Not "reroll until the wanted item shows up" - it stops the moment the sheet is not poor. */
-   if(spend.reroll){let used=0;
+   /* reader / investor buy first and look again afterwards - see huntCounters below */
+   if(spend.reroll&&!reader){let used=0;
     const poor=()=>s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0)<8;
     while((bal?!s.offers.some(o=>o.quantity&&(D.itemBy[o.item].category==='food'||s.dungeons.some(dd=>G.Relics.directCounter(D.itemBy[o.item],dd.hazards)))):poor())&&used<(bal?2:20)){
      const cost=g.rerollPrice(),planned=plannedOrderSpend(sortedOffers(),s.money);
@@ -530,6 +539,7 @@ function playRun(g,out,ctx){
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
+   const buyRound=()=>{
    let offers=sortedOffers();
    /* reader: one meal per expected visitor goes on the sheet before anything else */
    if(reader){const meals=offers.filter(x=>['food','drink'].includes(D.itemBy[x.o.item].category)),rest=offers.filter(x=>!meals.includes(x));
@@ -568,6 +578,34 @@ function playRun(g,out,ctx){
       if(same<3&&want<=o.quantity&&s.money-g.cartTotal({...cart,[i]:want})>=spend.cashFloor)
        try{g.setQuantity(i,want);act();out.items[o.item].ordered+=3-same;}catch(e){}}}
     catch(e){if(String(e?.message||'').includes('창고')){out.capacityBlocked++;capacityHit=true;}}}}
+   };
+   buyRound();g.confirmOrder();act();
+   /* reader / investor, the User's counter hunt (2026-10-11): buy off this sheet first, then look again only when a key
+      customer today still has a Hazard of their Gate open with no Counter on the shelf or the sheet. Before each reroll one
+      Item for the Stat that Hazard presses (cold -> 강인함) is picked up as a stand-in; a Counter that shows up later is
+      taken. Up to two rerolls when the till is comfortable, one when thin, none when tight. */
+   if(reader&&spend.reroll){let used=0;const statHeld={};
+    const op=g.expectedOperatingCost(),budget=s.money>=spend.cashFloor+4*op?2:s.money>=spend.cashFloor+2*op?1:0;
+    const alive=s.npcs.filter(x=>x.alive).sort((a,b)=>b.level-a.level),cut=alive[Math.min(3,alive.length-1)]?.level??0;
+    const key=m=>investor?tierOf(m)==='core'||tierOf(m)!=='rest'&&s.money>=spend.cashFloor+2*op:m.level>=cut;
+    const open=()=>{const want={};
+     for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&key(m)&&m.money+(m.eventBudget||0)>=40)){const dd=g.claimedGateFor(m);if(!dd)continue;
+      const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
+      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')want[h]=(want[h]||0)+1;}
+     for(const x of s.inventory){const it=D.itemBy[x.item];for(const h of Object.keys(want))if(want[h]>0&&G.Relics.directCounter(it,[h])){want[h]--;break;}}
+     return Object.entries(want).filter(([,k])=>k>0);};
+    const buy=pick=>{const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&pick(x.it)&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((a,b)=>a.o.price-b.o.price)[0];
+     if(!c)return false;try{g.setQuantity(c.i,(s.cart?.[c.i]||0)+1);act();(out.items[c.o.item]??={ordered:0,sold:0}).ordered++;return true;}catch(e){return false;}};
+    for(;;){let missing=false;
+     for(const [h,k] of open())for(let q=0;q<k;q++){if(buy(it=>G.Relics.directCounter(it,[h])))continue;missing=true;
+      const st=G.Dungeon.hazardRule(h).stat;
+      if(!statHeld[st]&&!s.inventory.some(x=>(D.itemBy[x.item].effects[st]||0)>0)&&buy(it=>(it.effects[st]||0)>0))statHeld[st]=1;break;}
+     try{g.confirmOrder();act();}catch(e){}
+     if(!missing||used>=budget)break;
+     const cost=g.rerollPrice();if(s.money-cost<spend.cashFloor+op)break;
+     try{g.reroll();}catch(e){break;}act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;
+     buyRound();try{g.confirmOrder();act();}catch(e){}}
+    out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
    if(capacityHit)out.shortage.capacityDay++;
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
    /* SALE opened. An empty shelf here is a different failure from running out mid-Day. */
@@ -911,5 +949,14 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
 
 /* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what
    the Mastery bonus alone contributes, with the unlocks it came with held constant. Harness only. */
-G.Debug={simulate,trajectory,clearChance,contribution,masterySpawnPatch};
+/* One saved Run played on from where it stands, `count` times with a fresh roll stream each time (tools/continue-save.cjs,
+   User 2026-10-11: the same save measured before and after a rule change). Measurement only. */
+function continueRun(account,run,count=200,policy='investor',opts={}){
+ const out=blank(count,policy,'adaptive','hybrid'),rows=[];
+ for(let seed=0;seed<count;seed++){
+  const g=new G.Game(copy(account),copy(run));g.autosave=false;g.lessons=true;g.rng=new G.RNG('continue-'+seed);
+  const s=playRun(g,out,{policy,pricing:'adaptive',build:'hybrid',seed,relicAware:opts.relicAware!==false,relicPriority:opts.relicPriority});
+  rows.push({day:s.day,win:!!s.win,final:!!s.bossDebug,deaths:s.stats.deaths,limit:G.Meta.deathLimit(s),alive:s.npcs.filter(n=>n.alive).map(n=>n.id)});}
+ return rows;}
+G.Debug={simulate,trajectory,clearChance,contribution,masterySpawnPatch,continueRun};
 })(globalThis);
