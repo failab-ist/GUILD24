@@ -32,10 +32,82 @@ and this table is their commit record.
 | after v2.10.3 | 2026-10-04 | PR #94 (`ui/design-trim`), `main` PR #95 (`ffca808`); PR #96 (`ui/design-trim`), `main` PR #97 (`cdc01dd`); no version bump yet | - |
 | v2.11.0 | 2026-10-05 | PR #111 (점포지원 등급 · 운영형 장식; the after-v2.10.3 work on `main` above ships in it) | (the User sets it) |
 | v2.11.1 | 2026-10-05 | this patch's main merge PR (`codex/minor-ui-v2111`) | (the User sets it) |
-| v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR (this one) | (the User sets it) |
+| v2.12.0 | 2026-10-09 | PR #112~#142 on `main` (balance #116 #123 #135, UI overhaul and text/source audit #132, coaches #120 #137 #139, sounds #119 #136 #142, night results #126 #140 #141, loading #134); version bump PR #143 | `v2.12.0` |
+| v2.12.1 | 2026-10-10 | PR #144~#155 on `main` (EXP curve #145, investor bot #146, game title #150 #152 #153, app wrapper and app-ready game code #147 #148 #149 #151 #154, Epic / Equipment trim #155); version bump PR #156 | (the User sets it) |
+| v2.12.2 | 2026-10-10 | PR #157 on `main` (newcomer Level band, Epic / Equipment values); version bump PR #158 | (the User sets it) |
+| v2.12.3 | 2026-10-10 | Tier I Gate requirement and version bump in one PR #164, after measurement-only #159 #160, save-file name #162 | (the User sets it) |
+| v2.12.4 | 2026-10-10 | Death limit, Tier II share, late Gate slope and version bump in one PR #166, after GAME_VISION #165 | (the User sets it) |
+| v2.12.5 | 2026-10-10 | Store Support pure draw and version bump in one PR #168 (partly walked back in v2.12.6) | (the User sets it) |
+| v2.12.6 | 2026-10-10 | Store Support draw: cool-down, reroll and D30 exclusions restored; version bump in one PR #169 | (the User sets it) |
+| v2.13.0 | 2026-10-10 | Gate rework (combat by Day, Tier by Hazard) and version bump in one PR #170 | (the User sets it) |
+| v2.13.1 | 2026-10-11 | Night reversal Item fix and version bump in one PR #171 | (the User sets it) |
+| v2.13.2 | 2026-10-11 | Early-mid Gate Day-term hump, investor potion rule and version bump in one PR (this one) | (the User sets it) |
 
 
-## After v2.12.0 — EXP curve 18+Level×9 (User 2026-10-10)
+## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
+
+- CORE_RUN §DEATH LIMIT — SEGMENTED: 5 / 8 / 11 → 6 / 8 / 10. The opening ten Days forgive one more Death, the last ten one fewer (META 위령비 +1 now 7 / 9 / 11).
+- DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
+- DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
+- Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.2 — Early-mid Gate hump (User 2026-10-11)
+
+- DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE: the Day term runs DAY 1~9 at 1.60 (was 1.45) and DAY 11~20 at 0.965 (was 1.10). The two cancel by DAY 20, so the requirement rises by up to +1.35 around DAY 9~10 (about +3.7%, every Tier and Family alike) and DAY 20 onward is unchanged. Reason: the User's v2.13.0 fresh Run felt smooth early (2 deaths by DAY 10 against a limit of 6).
+- Measurement only, no rule: the investor bot also claims a potion for a backed visitor whose bare power is 0.8~1.12 of their Gate (User saves: 하급 포션 in 19% of DAY 1~14 Bags, the bot 6%).
+- Measured against v2.13.1, investor fresh 2000 (same seeds, the new bot in the after arm): success by band 45 / 41 / 46 / 38 → 42 / 37 / 44 / 37%, deaths by DAY 10 4.29 → 4.64, Items changed the result 29.7 → 31.5% (mid 24.8 → 26.5%), clear 1.4 → 0.9%. With the new bot on both arms the hump alone moves success 46 / 42 / 47 / 38 → 42 / 37 / 44 / 37% and clear 1.1 → 0.9%. Log: `reports/v2100-measure/gate-hump-20261011/`.
+
+## v2.13.1 — Night reversal Item no longer trails to the next customer (User 2026-10-11)
+
+- NIGHT_CLOSING / UI_UX §NIGHT — SAVED BY THE SALE: the Item flying to the customer's line lives on `<body>`, so pressing 다음 (or 전체 건너뛰기) mid-flight left it on screen over the next customer. It is now taken down with the beat. Presentation only; no rule or balance change.
+
+## v2.13.0 — Combat by Day, Tier by Hazard (User 2026-10-10)
+
+- DUNGEON_HAZARD §GATE POWER: every Family's Gate Power is one Day line (the Tier I requirement) × TierCombat 1 / 1.05 / 1.20 (`DATA.balance.gateTierCombat`). The per-Tier +5 and the Family base step are gone; golem Tier II / III keep their own fire combat term (from Tier II the stronger combat stands in for a second Hazard).
+- DUNGEON_HAZARD §Death chance: EnvironmentDeathContribution = EnvironmentDeficit² × 0.60 (was × 0.25). A bare Gate is deadlier, a slight shortfall (one counter + food) milder; the two meet at a 42% deficit.
+- DUNGEON_HAZARD §Tier generation: Tier II from D5 (D5 15% · D7 30% · D8 45% · D12 60% · D13 61% · D18 70% · D19 70%); Tier I gives that share up, Tier III unchanged. EVENT §EVENT TIMING reads D5.
+- Measured against v2.12.4 (investor fresh 2000, same seeds): items changed the result 26.7 → 29.7% (mid 22 → 25%), success D1~7 / 8~14 / 15~21 / 22~29 47 / 40 / 44 / 36 → 45 / 41 / 46 / 38%, deaths by DAY 10 3.72 → 4.29, bare expedition deaths 24 → 31%, clear 2.8 → 1.4%, clear once DAY 30 is reached 48 → 56%. The bot sends more bare expeditions than a player, so the extra early deaths fall mostly on it; the build is checked by the User's play. `reports/v2100-measure/tier-hazard-20261010/`.
+
+## v2.12.6 — Store Support draw keeps its exclusions, loses only the tag steps (User 2026-10-10)
+
+- RELIC §CANDIDATE RULES / §GRADE / §D30 CANDIDATE ELIGIBILITY: v2.12.5 removed more than asked. Restored: the previous window's three and a reroll's three stay off the draw (when at least three others remain), and the D30 no-effect exclusion (`D.relicD30NoEffect`). Still removed: the tag-diversity step and the +18% per shared tag build bias, so the pick inside a grade is uniform.
+- Not measured: v2.12.5 and v2.12.6 differ from v2.12.4 only in the tag steps.
+
+## v2.12.5 — Store Support draw is pure (User 2026-10-10)
+
+- RELIC §GRADE / §CANDIDATE RULES / §D30 CANDIDATE ELIGIBILITY: a window card rolls its grade (일반 60 / 희귀 28 / 영웅 12%, D0 일반), then a support of that grade is drawn uniformly. Removed: the tag-diversity step, the +18% per shared tag build bias, the cool-down of the previous window's three and of the redraw's three, and the D30 no-effect exclusion (`D.relicD30NoEffect`). Kept: no owned or retired support, no repeat inside a window.
+- Not measured: the offer mix and Run balance move with it; no balance run was made for this change.
+
+## After v2.12.3 — Difficulty reference set by human play (User 2026-10-10)
+
+- `GAME_VISION.md` §Difficulty Curve: absolute difficulty is set from human play; the bot only measures change against the previous build. New reference: a rules-aware skilled player clears about 25% of fresh Runs (first clear by the 3rd~5th Run), a new buyer first clears around the 8th~15th Run with Decorations; investor bot fresh clear 2~3% with D10 reach held near 77%, Decoration-trajectory median first clear around the 10th Run. Bot change maps to people at an equal shift in odds. Directions: no Run that only luck can clear, prefer difficulty that sold items can answer, Boss difficulty held. The v2.10 balanced / skilled bot table is retired.
+
+## v2.12.3 — Tier I Gate requirement is one common value (User 2026-10-10)
+
+- DUNGEON_HAZARD §GATE POWER: every Family's Tier I Gate now asks the same Combat Power, (21 + base offset + Day term + 1.5) × SuccessEase, the average of the old five (DAY 1 was 독거미·슬라임 100 / 망자역 106 / 설원 112 / 골렘 119). Which three Families open first no longer decides whether the starting roster can win at all. Tier II / III, golem's Combat share and Hazard Threat are unchanged.
+- Measured against main, investor / reader fresh 1000 each: Runs ending by DAY 7 6.3% → 5.5% / 8.7% → 7.1%; D10, D30 reach and clear move within noise (investor D30 13.2% → 12.3%, clear 6.1% → 5.8%). Log: `reports/v2100-measure/gate-tier1-20261010/`.
+
+## v2.12.2 — Newcomer Level band, Epic Rarity and Equipment gain (User 2026-10-10)
+
+- META §Exact spawn-Level model: from DAY 5 a newcomer draws 1~2 + the Day term (was 1~3), so a newcomer arrives at most one Level above the Day's minimum. The min+2 newcomer showed a bare 우세 on the Days the minimum steps up (up to about 15% of newcomer-Gate pairs on DAY 21) and two of a fresh Run's top four were such arrivals.
+- Half of the v2.12.1 trim is given back to offset part of the difficulty the Level band adds: ECONOMY_ORDER §ORDER RARITY PROGRESSION Epic D13~19 3→4, D20~24 7→9, D25~29 14→15; DUNGEON_HAZARD §Equipment gain 30 / 22 / 18 / 12% by Equipment tier 0 / 1 / 2 / 3+ (was 30 / 20 / 15 / 10%). The User chose this over the easier 30 / 25 / 20 / 15% option because the User plays above the bots.
+- Measured, investor / reader fresh 3000 each: D30 reach 14.5% → 11.1% / 11.2% → 7.9%, clear 5.8% → 4.6% / 3.3% → 2.0%; the lucky-Run (top four ≥80% success) clear over the rest's falls from 2.5× to 2.0× (investor) and 5.5× to 2.5× (reader). Logs: `reports/v2100-measure/newcomer-band-20261010/`.
+
+## v2.12.1 — Release summary (User 2026-10-10)
+
+Patch version: work on `main` since v2.12.0 (PR #144~#155). Rules live in their routed owners; the app-wrapper rules live in PLATFORM_RELEASE.
+
+- Balance: EXP curve 18+Level×9 (#145); Epic Rarity weight and Equipment gain trimmed against snowball (#155). Environment Hazard and Counter values are unchanged.
+- Game title: 「마왕 잡는 편의점: 길드24」 with the new drawn title logo (#150); old title wording cleaned from the docs (#152 #153). GUILD24 stays the in-game store brand.
+- Sloth's seal choice reads `봉인 강화` (a held seal keeps Sloth asleep and weaker); the D30 art index follows the seals held (#144). BOSS / UI_UX.
+- App readiness (Capacitor wrapper, #148): notch-safe full screen, app Save, Android back, haptics at key NIGHT and Final moments (#147 #149), cloud save, credits, bug-report and privacy-policy links, sound on at a fresh app install (#151), browser vibration on touch devices for the web build (#154). PLATFORM_RELEASE.
+- Measurement only, not in the game: the investor bot in `dist/systems/simulation.js` (#146).
+
+## v2.12.1 — Epic Rarity and Equipment gain trimmed (User 2026-10-10)
+
+Snowball trim after a fresh first Run cleared SLOTH easily on DAY 30. ECONOMY_ORDER §ORDER RARITY PROGRESSION: Epic weight is cut across D13~29 (D13~19 4→3, D20~24 10→7, D25~29 16→14), with the difference spread over Common, Uncommon and Rare so Rare still rises by day; D30 keeps its Final Bag row. DUNGEON_HAZARD §Equipment gain: no Equipment gain on DAY 1~2, then 30/20/15/10% by the Equipment tier already earned (tier 0/1/2/3+), so the adventurer who keeps winning gains Equipment more slowly.
+
+## v2.12.1 — EXP curve 18+Level×9 (User 2026-10-10)
 
 NPC_TRAIT §EXPERIENCE CURVE: each next Level costs `18 + current Level × 9` EXP (was × 8). A no-Decoration account was clearing too early (first clear around the 6th Run against the ~10th-Run aim); measured on the investor bot this moves it to about the 10th Run. Log: `reports/v2100-measure/late-difficulty-20261009/2-growth-x9.log`.
 

@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
-DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.12.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.2
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -29,7 +29,7 @@ externalAPIRequired=NO
 
 ## RUN FANTASY
 
-30일 동안 던전 앞 GUILD24를 운영한다.
+30일 동안 길드24 편의점을 운영한다.
 
 하루의 발주 → 판매 → 원정 결과 → 점포 결산이 누적되어 Store Build · Inventory Strategy · NPC 성장 ·
 Wallet/Loyalty/Revisit · Final Expedition 전력을 만든다.
@@ -551,9 +551,9 @@ Seed UI/debug controls are not core player progression.
 A Run ends at Closing when the Run's cumulative Death count reaches the limit of the segment the current Day is in:
 
 ```text
-D1~D10   5
+D1~D10   6
 D11~D20  8
-D21~D30  11
+D21~D30  10
 ```
 
 - the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
@@ -637,7 +637,7 @@ Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20,
 추모 방명록, and with a 위령제 on an earlier Day.
 
 PASS:
-- the Run ends at Closing exactly when the cumulative count reaches the current segment limit 5 / 8 / 11
+- the Run ends at Closing exactly when the cumulative count reaches the current segment limit 6 / 8 / 10
 - the count never resets at a segment boundary; 5 Deaths by D10 ends the Run, 5 Deaths first reached on D11 does not
 - 추모 방명록 adds the current META Decoration bonus to every segment; 위령제 adds +1 to every segment from its Day
 - MORNING and ORDER always show `사망 {n} / {limit} · D{end}까지` with the limit in force, warning color at one left

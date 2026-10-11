@@ -2160,7 +2160,7 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&!/sound\('receipt'\)/.test(cs),'no printer tick - the money cue alone (User 2026-10-09) - and a stale timer is cleared first');
  assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
  assert.ok(/closingCueAt=setTimeout\(\(\)=>sound\(kind\),CLOSING_STAMP\.hold\+STAMP_FALL\)/.test(cs),'the stamp cue lands on the same frame as the visual stamp');
- assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
+ assert.ok(/case'closing':(?:clearSavedFly\(\);)?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
  assert.ok(/nightSound\(s\.results\[s\.nightCursor\]\);if\(s\.phase==='closing'\)closingSound\(\);break;/.test(app),'the ordinary 마감으로 press (night-next reaching the last result) plays it too');
  const end=bare(fn('phaseEnd'));
  assert.ok(/\[\.\.\.new Set\(D\.decorations\.map\(d=>d\.price\)\)\]/.test(end),'the price lines are read from the live Decoration list, never a second copy of the numbers');
@@ -2285,7 +2285,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
  assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
  assert.ok(/const ids=savedItems\(r\),slot=\$\('\.beat \.cause li\.hero \.hero-items'\);if\(!ids\.length\|\|!slot\)return;/.test(app),'no hero line, no flying Item (만반의 준비 has none)');
- assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
+ assert.ok(/case'closing':(?:clearSavedFly\(\);)?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
  for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
  assert.ok(!/\n death:\{[^}]*hit:1/.test(audio)&&!/\n rescue:\{[^}]*hit:1/.test(audio),'사망 keeps its restrained attack; rescue is an accent');
@@ -3296,10 +3296,10 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  const back=fn('prepScreen');
  // 1 / 2: the title, one deliberate line
  /* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the title is the drawn logo; the name is its alt text */
- assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1>'),
+ assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="170" alt="마왕 잡는 편의점"></h1>'),
   'the backdrop carries the title as the logo, named for a screen reader');
  assert.ok(fs.existsSync(path.resolve(__dirname,'../dist/ui/assets/presentation/start/title-logo.png')),'the logo ships');
- assert.ok(/\.opening-logo\{[^}]*width:min\(210px,58vw\);height:auto\}/.test(css),'sized to the phone, never wider than the screen');
+ assert.ok(/\.opening-logo\{[^}]*width:min\(190px,53vw\);height:auto\}/.test(css),'sized to the phone, never wider than the screen');
  /* PRESENTATION_SYSTEM §TYPOGRAPHY / SPACING routes short object identity to the plate face,
     and PRESENTATION_POLISH_BATCH1 asks the Opening for a restrained sign/plate relationship.
     The branch is that identity, so it is a stamped plate now rather than fluid body copy -
@@ -3332,7 +3332,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  const writes=app.match(/pendingSeed(\?\?)?=/g)||[];
  assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed=','pendingSeed='],
   'the plan has exactly four sites: declared, memoised once, cleared at Start, cleared on full reset');
- assert.ok(/case'reset-go':\{[^}]*game=new Game\(Meta\.fresh\(\),null\);[^}]*pendingSeed=null;/.test(app),'a full reset drops a pending plan with the rest of the Run state');
+ assert.ok(/case'reset-go':\{[^}]*game=new Game\((?:Meta\.fresh|freshAccount)\(\),null\);[^}]*pendingSeed=null;/.test(app),'a full reset drops a pending plan with the rest of the Run state');
  assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
  const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
  assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');
@@ -3442,13 +3442,13 @@ test('OPENING: the preparation scene starts on the three axes, with no franchise
  // 8: the eyebrow is gone
  assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation carries no 길드리테일 가맹점 eyebrow');
  assert.ok(!app.includes('길드리테일 가맹점'),'and it is gone from the build');
- for(const line of ['30일 동안 던전 앞 편의점을 운영한다.',
+ for(const line of ['30일 동안 길드24 편의점을 운영한다.',
                     '찾아오는 모험가를 보급하고, 성장시킨다.',
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
   assert.ok(intro.includes(line),'the approved line is present: '+line);
  /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the three lines are one note pinned to the `새 점포 준비` board */
  assert.ok(/<p class="board-rail">새 점포 준비<\/p>/.test(intro),'the board is titled 새 점포 준비');
- assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
+ assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
  assert.ok(/<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다\.<\/span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\.<\/span>/.test(intro),'lines 2 and 3 follow it');
  // everything the change was scoped to keep
  assert.ok(/data-action="store-manage"/.test(intro),'the Store Management entry stays');
@@ -3848,7 +3848,7 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  assert.ok(/\.p-morning:not\(\.p-prep\) \.band\.counter\{margin-top:calc\(-1 \* max\(0px,calc\(\(var\(--ph\) - 100cqh\) \/ 2 \+ var\(--cap-top\) \* var\(--band-c\) \* var\(--ph\) - 14px\)\)\)\}/.test(mb)&&!/transform/.test(mb),
   'MORNING: the counter band lends the board the room down to the till label, and does not move');
  assert.ok(/\.p-morning\.p-prep \.prep-note\{padding:5px 12px 3px\}/.test(pb)&&/\.p-prep \.decoplate\.sign:not\(\.empty\)\{--sign-l:calc\(50cqw - min\(210px,58vw\) \/ 2\)\}/.test(pb)
-  &&/\.opening-logo\{display:block;width:min\(210px,58vw\)/.test(css),'새 점포 준비: the tighter note, and an equipped 간판 keeps the gap from the full title');
+  &&/\.opening-logo\{display:block;width:min\(190px,53vw\)/.test(css),'새 점포 준비: the tighter note, and an equipped 간판 keeps the gap from the full title');
  // User 2026-09-29 (Galaxy 360x597): an empty 간판's tag carries `들일 수 있음` and is wider than the piece
  assert.ok(/\.p-prep \.opening-logo\{width:min\(180px,50vw\)\}/.test(pb)&&/\.p-prep \.deco-layer\{--sign-l:calc\(50cqw - min\(180px,50vw\) \/ 2\)\}/.test(pb)
   &&/\.p-prep \.prep-slot\.sign\.empty \.slot-tag\{left:auto;right:0;top:0;transform:none\}/.test(pb)
@@ -3881,7 +3881,9 @@ test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a
  assert.ok(/low\.type='highpass';low\.frequency\.value=120;/.test(audio),'the effects bus drops what a phone cannot play');
  assert.ok(/if\(sh\.cut\)\{to=ctx\.createBiquadFilter\(\);to\.type='highpass';to\.frequency\.value=sh\.cut;/.test(audio)&&/if\(sh\.over\)sh\.over\.forEach/.test(audio),'a bass-heavy cue has its own low cut and its overtones');
  for(const [k,t] of Object.entries(Sound.music))assert.equal(t.trim||0,k==='night'?-3:0,k+(k==='night'?': NIGHT 3 dB under':': no extra trim'));
- assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\)\/20\)/.test(audio),'the trim is applied');
+ assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\+BGM_HQ_TRIM\)\/20\)/.test(audio),'the trim is applied');
+ // the app plays the 192 kb/s originals at 44.1 kHz, 0.4 dB under so the level matches the web copies; the web is unchanged
+ assert.ok(/BGM_RATE=BGM_HQ\?44100:32000,BGM_HQ_TRIM=BGM_HQ\?-\.4:0;/.test(audio)&&/window\.Native&&window\.Native\.inApp\(\)/.test(audio),'the app decodes at 44.1 kHz with a 0.4 dB trim; the web keeps 32 kHz');
  assert.deepEqual(Sound.fades,{out:1,in:1.5},'1 s out, 1.5 s in');
  assert.ok(/at=Math\.max\(now,swapEnd\)/.test(audio)&&/swapEnd=now\+fade;/.test(audio),'the next track waits for the old fade');
  assert.ok(/linearRampToValueAtTime\(full\*\(i\/8\)\*\*2,at\+BGM_IN\*i\/8\)/.test(audio),'the rise is a squared curve, never a hard start');
@@ -3958,7 +3960,7 @@ test('ending: the music before holds until the result lands, then the ending cue
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
  const ctx={game:{account:{settings:{},tutorial:{skipped:false}}},coachOff:()=>ctx.game.account.tutorial.skipped,
-  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false},hapticOn:()=>true};
+  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,SUPPORT_MAIL:'x@y.z',PRIVACY_URL:'https://x.y/p'};
  assert.ok(render([set],'settings()',ctx).includes('필요한 때 말풍선과 한 줄 안내가 나온다.'),'ON copy does not impose a Day limit');
  ctx.game.account.tutorial.skipped=true;
  const off=render([set],'settings()',ctx);

@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.12.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.2
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -1462,9 +1462,9 @@ line, §BUILD MARKER, excepted); no Debug menu needed.
 
 ### OPENING TITLE LOGO (v2.9.9)
 
-(acceptance -> UI_UX §QA UI-Q-v29-41; asset -> reports/ASSETS.md §Title logo.) `던전 앞 편의점` is the drawn logo, not type,
+(acceptance -> UI_UX §QA UI-Q-v29-41; asset -> reports/ASSETS.md §Title logo.) `마왕 잡는 편의점` is the drawn logo, not type,
 hanging from the store scene's ceiling: one image with the name as alt text in the `h1`, no added shadow or frame; no larger
-than needed — phone at most 210 px wide or 58% of the width, clear of the build marker and menu; desk 320 px; cut to the
+than needed — phone at most 190 px wide or 53% of the width, clear of the build marker and menu; desk 320 px; cut to the
 letters (shipped as a 960 px derivative with the 점 받침 reading as ㅁ). The branch name stays visible, unemphasised: MORNING's
 plate under the logo.
 
@@ -2694,7 +2694,7 @@ the ended Run changed before `첫 점포지원 고르기`.
 
 PASS: at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880 the logo title matches → UI_UX §OPENING TITLE LOGO - whole,
 centred, crisp, clear of the build marker and the menu button, the branch plate fully visible under it (UI-Q-v29-42); the `h1`
-reads `던전 앞 편의점` to a screen reader; the 점 받침 reads as ㅁ at the phone size.
+reads `마왕 잡는 편의점` to a screen reader; the 점 받침 reads as ㅁ at the phone size.
 FAIL: the title rendered as text, a cropped or stretched logo, the logo covered, or a missing file.
 
 #### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
@@ -3452,7 +3452,7 @@ forecast pin or second readout on a desk, or a layout that stays the other one a
 SETUP: MORNING and ORDER at 360 / 390 / 412 and 1280 with 0 Deaths, with 4 Deaths on D10 (one left), on D11 after the segment
 step, and with 추모 방명록 worn.
 PASS (→ UI_UX §DEATH LIMIT — ALWAYS VISIBLE; copy COPY_AUDIT §4-23): both screens show `사망 {n} / {limit} · D{end}까지` in the top
-status line without scrolling, every Day; limit and end Day follow the current segment (5 · D10 / 8 · D20 / 11 · D30) and include
+status line without scrolling, every Day; limit and end Day follow the current segment (6 · D10 / 8 · D20 / 10 · D30) and include
 추모 방명록 / 위령제; warning color exactly when count = limit − 1; no popover, badge or extra text; never wraps mid-token or pushes
 the ORDER confirm off the phone screen.
 FAIL: the count only in the 도감, a stale segment limit, or a limit that ignores 추모 방명록 / 위령제.

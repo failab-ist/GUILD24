@@ -257,7 +257,7 @@ function gateCountRule(day){
 function gateCountOdds(day){const c=gateCountRule(day);if(c.length===1)return [1];
  return day>=GATE_COUNT_LATE.from?[1-GATE_COUNT_LATE.three,GATE_COUNT_LATE.three]:c.map(()=>1/c.length);}
 function tierWeights0(day){
- const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
+ const anchors=[[1,[1,0,0]],[4,[1,0,0]],[5,[.85,.15,0]],[7,[.70,.30,0]],[8,[.55,.45,0]],[12,[.40,.60,0]],[13,[.36,.61,.03]],[18,[.20,.70,.10]],[19,[.16,.70,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
 /* v2.9.2 third pass (User 2026-09-26): DAY 21~29 move LATE_T3 of the T2 weight to T3 - the late Days lean on Hazard / Item
@@ -303,8 +303,12 @@ function greatSuccessSignal(n,d,facilities=[]){
    (a 성공/대성공 never reaches the roll). DEATH is named so a harness can measure a candidate; nothing in the game writes it.
    DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet reward: GREAT / WIN EXP multipliers and WALLET_MULT by Outcome. */
 const GREAT={xp:1.00},WIN={xp:.90};
+/* DUNGEON_HAZARD §Equipment gain (User 2026-10-10): none on DAY 1~2, then the chance falls with the Equipment tier already earned -
+   the adventurer who keeps winning keeps getting stronger more slowly. Indexed by tier, the last entry holds from there on. */
+const EQUIP={fromDay:3,chance:[.30,.22,.18,.12]};
+const equipChance=(tier,day)=>day<EQUIP.fromDay?0:EQUIP.chance[Math.min(tier||0,EQUIP.chance.length-1)];
 const WALLET_MULT={'대성공':1.25,'성공':1.25,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
-const DEATH={combat:.40,environment:.25,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
+const DEATH={combat:.40,environment:.60,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation: only CONSECUTIVE injured departures count; a
    healthy departure resets the chain. STRAIN.weary is the fatigueEscalation threshold read at the call sites below.
    trailingRun() also backs the NPC-detail "연속 부상 출발 {n}회" row. */
@@ -320,10 +324,10 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
 /* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE. The Day term bends at the knee (D9): a party's prepared ability stops
    growing long before Day 30 does, so a single slope left every late Gate further out of reach than the one before it.
    `early` per Day up to the knee, `step` on DAY 9~10, `mid` on DAY 11~20 (the NPC-growth check of the Run Progression
-   Arc), `late` from DAY 21. */
-const GATE={knee:9,early:1.45,step:0.80,late:1.05,mid:1.10,midFrom:10,midTo:20};
-/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power) */
-const GATE_EASE={early:.90,late:.95,lateFrom:22},gateEase=day=>day>=GATE_EASE.lateFrom?GATE_EASE.late:GATE_EASE.early;
+   Arc), `late` from DAY 21. DAY 1~9 steeper and DAY 11~20 flatter by the same 1.35 meet the old line at D20 (early-mid hump). */
+const GATE={knee:9,early:1.60,step:0.80,late:1.54,mid:0.965,midFrom:10,midTo:20};
+/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power, one value every ordinary Day) */
+const GATE_EASE=.90,gateEase=()=>GATE_EASE;
 /* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
 const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
@@ -347,7 +351,7 @@ function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.
  const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
  const environmentDeficit=p.hazards.length
   ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
- const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit*DEATH.environment,0,DEATH.cap);
+ const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit**2*DEATH.environment,0,DEATH.cap);
  const extra=(departedInjured?DEATH.injured:0)+(departedExhausted?DEATH.exhausted:0)+(strain||0);
  /* DUNGEON_HAZARD §Spirit steadiness: 정신 trims the failure Death chance a little, at most DEATH.spiritMax */
  const steady=1-Math.min(DEATH.spiritMax,Math.max(0,p.effects.spirit||0)*DEATH.spirit);
@@ -677,7 +681,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const xpBase=xp;xp=G.Adventurer.catchupXP(n,xp,d.day,outcome);const xpBoost=xp-xpBase;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
- if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
+ if(won&&r.next()<equipChance(n.equipment.tier,run?.day??d.day)+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money+=loot;
  if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<envChance(bare.hazard,bare.effects.survival)*(1-assist);
   /* structure only: which Hazards were actually mitigated and which carried Items did it. */
@@ -697,5 +701,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={EQUIP,equipChance,opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

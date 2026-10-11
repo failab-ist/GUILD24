@@ -32,15 +32,14 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
    quiet D29 is a reason the support may pay nothing - not a reason the player may not be offered
    the choice. Whether a D30 support needs a legal Reroll or ORDER action to realise its value is
    likewise no bar: that action is legal on D30. */
-/* The candidate draw, one owner: the window and its reroll read the same pool rules. `avoid` is the set kept off this
-   draw when at least three others remain - the previous window's three for a new window, the three on the table for a
-   reroll. Picks are drawn first, then prices, so a window draws exactly as it always has. */
+/* The candidate draw, one owner: the window and its reroll read the same pool rules (User 2026-10-10: tag diversity and build
+   bias are gone). `avoid` is the set kept off this draw when at least three others remain - the previous window's three for
+   a new window, the three on the table for a reroll. Each card rolls its 등급 first (DAY 0: 일반 only), then draws uniformly
+   within it; a 등급 with nothing left falls back to the whole pool. */
 /* META 본사 우수 점포 훈장: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
 const heroDay0=g=>!!g.wears&&g.wears('heroSign');
-/* RELIC §GRADE: each card rolls its 등급 first (DAY 0: 일반 only), then draws within it; a 등급 with nothing left
-   falls back to the whole pool. Diversity and build bias work inside the 등급, as they did inside the window. */
 const rarityFor=(g,day)=>{if(day===0)return heroDay0(g)?3:0;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
-function drawCandidates(g,day,avoid){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0))&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags),want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool;let eligible=base;if((i===1||day===0&&i===2)&&base.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=base.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=g.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
+function drawCandidates(g,day,avoid=[]){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0))&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const chosen=[];for(let i=0;i<3&&pool.length;i++){const want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool,pick=g.rng.pick(base);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
  return {candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+g.rng.next()*.3)))};}
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
  s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),...drawCandidates(this,day,previous),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day+5};this.save();};

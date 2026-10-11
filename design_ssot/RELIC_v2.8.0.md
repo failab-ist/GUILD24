@@ -3,7 +3,7 @@
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
 DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -204,14 +204,13 @@ Who reads which:
 withinWindowDuplicate=NO
 owned nonstackable relic: futureEligible=NO
 unbought relic: futureEligible=YES · immediateNextWindowRepeat=NO
-offer diversity: prefer >=2 distinct Primary Build directions when practical
-buildBias: soft only — 현재 보유 Build와 관련된 후보 Weight를 약하게 높일 수 있으나 필수 Piece를 보장하지 않는다.
+tag diversity and build bias: none (User 2026-10-10); a candidate's chance does not depend on its tags or on the tags the Run owns
 
 ### CANDIDATE REROLL (User 2026-10-02)
 
 - an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
 - price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
-- the redraw keeps every pool rule above (ownership, the grade roll, the D30 exclusions, diversity, build bias) and leaves
+- the redraw keeps every pool rule above (ownership, the grade roll, the D30 exclusions) and leaves
   the three on the table out when at least three others remain; the new three are priced as any window's
 - the spend is Store Support investment (the closing receipt's `점포지원 투자`); a reload never redraws for free
 - the key sits in the window's footer beside `나중에 결정`, the same rank and look (User 2026-10-02); copy -> COPY_AUDIT §11-31c
@@ -236,7 +235,7 @@ Draw, per card of a window:
 1. roll the card's grade: D5+ 일반 60% · 희귀 28% · 영웅 12%; D0 always 일반
 2. draw one support of that grade from the eligible pool (ownership, the D30 exclusions, the cool-down of the last three);
    when that grade has nothing left, draw from the whole eligible pool
-3. offer diversity and build bias apply inside the grade
+3. no tag diversity and no build bias: the pick inside the grade is uniform (User 2026-10-10)
 
 No grade is guaranteed in a window or a Run; 영웅 can come from D5. Presentation: the grade word under the support name, in the
 Item rarity colours (일반 / 희귀 / 영웅 = the Item 일반 / 희귀 / 영웅 colours), and a grade colour line (UI_UX §STORE SUPPORT WINDOW).
@@ -947,22 +946,17 @@ SETUP: Skip an offered Relic.
 EXPECT: It may recur later but not immediately next window.
 PASS: Immediate-repeat protection works.
 
-#### REL-Q10 — OFFER DIVERSITY
-SETUP: Sample many windows.
-EXPECT: When practical, candidate set includes >=2 different primary build directions.
-PASS: Windows are not routinely three near-identical choices.
-
-#### REL-Q11 — SOFT BUILD BIAS
+#### REL-Q10 / REL-Q11 — NO DIVERSITY, NO BUILD BIAS (User 2026-10-10)
 SETUP: Own several same-axis Relics and sample offers.
-EXPECT: Related pieces may be somewhat more likely.
-PASS: No guaranteed missing-piece completion.
+EXPECT: A candidate's chance does not depend on its tags or on the tags the Run owns.
+PASS: The draw is the grade roll and a uniform pick inside the grade.
 
 #### REL-Q12 — GRADE DRAW
 SETUP: Inspect D0 and later windows.
 EXPECT:
 - D0 offers 일반 only
 - D5+ each card rolls 일반 60% · 희귀 28% · 영웅 12% and draws within that grade (whole pool when the grade is empty)
-- soft build bias and diversity still apply inside the grade
+- no tag diversity or build bias: the pick inside the grade is uniform
 PASS: no 희귀 / 영웅 on D0, the per-card grade shares hold, and no hidden guaranteed 영웅 path.
 
 ### POOL / BLUEPRINTS

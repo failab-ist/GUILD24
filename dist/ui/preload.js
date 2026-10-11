@@ -39,7 +39,7 @@ function later(){
 /* Portraits trickle in one at a time, 400 ms apart, so a first store never fights its own downloads. The
    customers already in this store come first (call faces() each morning); the rest of the pool follows. */
 function pool(){const n=G.NPCAssets,out=[];
- if(n)for(const sex of['M','F'])for(let i=1;i<=n.normal[sex];i++)out.push(n.base+'normal/'+sex+'/'+String(i).padStart(3,'0')+n.ext);
+ if(n)for(const sex of['M','F','X'])for(let i=1;i<=n.normal[sex];i++)out.push(n.base+'normal/'+sex+'/'+String(i).padStart(3,'0')+n.ext);
  return out;}
 const seen=new Set(),line=[];let busy=false;
 function pump(){if(busy)return;while(line.length&&seen.has(line[0]))line.shift();if(!line.length)return;
@@ -48,9 +48,11 @@ function pump(){if(busy)return;while(line.length&&seen.has(line[0]))line.shift()
 function faces(srcs){for(const s of srcs.slice().reverse())if(!seen.has(s))line.unshift(s);pump();}
 /* onProgress(done,total). On a slow link the game starts after CAP and the rest keeps loading behind it. */
 function run(onProgress){
- const list=required(matchMedia(WIDE).matches),total=list.length;let n=0;
+ const list=required(matchMedia(WIDE).matches);let n=0,total=list.length;
  const fonts=document.fonts?.ready||Promise.resolve();
- const all=Promise.all(list.map(s=>one(s).then(()=>onProgress(++n,total))));
+ /* the app also reads every music file up front (audio.js bgmAll), so a phase change never waits on one */
+ const step=()=>onProgress(++n,total),mus=G.Sound?.loadAll?G.Sound.loadAll(step):[];total+=mus.length;
+ const all=Promise.all(list.map(s=>one(s).then(step)).concat(mus));
  return Promise.race([Promise.all([all,fonts]),new Promise(r=>setTimeout(r,CAP))]).then(()=>{onProgress(total,total);warm();});}
 /* After the first screen, when idle: four at a time so input is never held up. */
 function warm(){const q=later();let i=0;

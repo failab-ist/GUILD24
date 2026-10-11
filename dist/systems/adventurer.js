@@ -4,9 +4,9 @@ const D=G.DATA,keys=['combat','survival','mobility','spirit'];
 // Tone anchors: 지오닝 / 민자이 / 고쉬스앵.
 // 서양 High-Fantasy 이름은 존재하되 normal pool의 주류가 되지 않는다.
 /* The shipped pool IS the production name pool, kept in that pool's own binding order:
-   names[0..99] are NORMAL/M/001..100 and names[100..199] are NORMAL/F/001..100. A name is
+   names[0..99] are NORMAL/M/001..100, names[100..199] are NORMAL/F/001..100 and names[200] is NORMAL/X/001. A name is
    therefore its own portrait address and no second catalogue exists to drift from it.
-   The three Easter identities are random_eligible:false and are absent from this pool.
+   Every name is drawn with the same chance (name()); no identity is rarer than another.
    Derived from GUILD24_NPC_PRODUCTION/00_NAME_POOL/PRODUCTION_NAME_POOL.json and re-checked
    against that file by tests/npc-assets.cjs - never maintained by hand. */
 const names=[
@@ -29,13 +29,15 @@ const names=[
  "세냥","바그니","차잔느","수겐","오란데","마카렌","자몽드","모카벨","비닐라","새초미",
  "아리둥","몽그리","고구메","호테카","수세나","나파콧","봉수애","맨드라민","참웨라","물망쵸",
  "달고네","야콰","단쥬","주메니","비녜","노르게","바넬","실타렌","비자룬","누가렛",
- "양프네","데야","리보나","자게미","쿠레미","아프리마","레니콧","바라게","구세라","바울리"];
+ "양프네","데야","리보나","자게미","쿠레미","아프리마","레니콧","바라게","구세라","바울리",
+ "고더기"];
 function name(r,rarity){return r.pick(names);}
 /* Where a name's portrait lives. Nothing per-NPC is stored, so a save carried forward cannot
    hold a portrait id that no longer addresses anything - a name resolves to its slot from its
    position in the pool; a name no longer in the pool (the Rare Reference customers, removed in
    v2.9.11, or a renamed customer) resolves to nothing and the scene draws its placeholder. */
-const SLOTS=100,portraits=new Map(names.map((n,i)=>[n,{gender:i<SLOTS?'M':'F',slot:(i%SLOTS)+1}]));
+const SLOTS=100,genderOf=i=>i<SLOTS?'M':i<2*SLOTS?'F':'X';
+const portraits=new Map(names.map((n,i)=>[n,{gender:genderOf(i),slot:i<2*SLOTS?(i%SLOTS)+1:i-2*SLOTS+1}]));
 const portraitOf=name=>portraits.get(name)||null;
 /* META / NPC_TRAIT §JOB MASTERY (Stage 10, approved structure).
    Mastery does NOT multiply a Job's Base Stats or its Growth. What beating Bosses with a Job
@@ -61,8 +63,8 @@ function create(r,index,day,account,opts={}){
  /* META §wall — 명예 모험가 액자: the weights are the Decoration's own param, one owner. */
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
- /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 on DAY 1~4, then 1~3 + the Day term */
- const spawnLevel=Math.max(1,r.int(1,day<=4?2:3)+(newcomerMinLevel(day)-1)+(opts.royal?3:0));
+ /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 + the Day term (User 2026-10-10: no min+2 newcomer) */
+ const spawnLevel=Math.max(1,r.int(1,2)+(newcomerMinLevel(day)-1)+(opts.royal?3:0));
  const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  /* NPC_TRAIT §NPC RARITY: growth potential 1 + 0.10 x Rarity + a 0~0.10 roll */

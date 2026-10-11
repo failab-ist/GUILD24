@@ -81,7 +81,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    const blocked=async reason=>{const r=await p.evaluate(`(()=>{const b=document.querySelector('.p-final .tillpanel [data-action="supply"]'),st=document.querySelector('.p-final .tillpanel .final-status');
      return {dis:!!b&&b.disabled,face:b?b.innerText.replace(/\\s+/g,' ').trim():'',status:st?st.innerText:'',inside:!!st&&!!b&&b.contains(st)};})()`);
     check(`BR @${tag} ${reason}: status outside the button, the button keeps its action face, disabled`,
-     r.dis&&!r.inside&&r.status.includes(reason)&&/^50% \d+G 보급$/.test(r.face)&&!r.face.includes(reason),JSON.stringify({face:r.face,status:r.status}));};
+     r.dis&&!r.inside&&r.status.includes(reason)&&/^보급 50% \d+ G 50%$/.test(r.face)&&!r.face.includes(reason),JSON.stringify({face:r.face,status:r.status}));};
    const cap=await p.evaluate(`Guild24.game.finalRequired()`),ids=await p.evaluate(`Guild24.game.finalEligible().map(n=>n.id)`);
    const t0=(await p.evaluate(acct)).threat;
    check(`setup @${tag} ${ids.length} eligible, cap ${cap}`,ids.length>=3&&cap===3);
@@ -178,7 +178,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`D @${tag} focused till carries no one-NPC forecast / death risk`,!tillText.includes('전투 전망')&&!tillText.includes('실패 시 사망 위험'));
    await focus();await p.screenshot({path:path.join(OUT,`prep-7a-transfer-before-${tag}.png`)});
    await audit('normal transfer');
-   check(`N @${tag} a valid transfer: no status line, action face 50% / price / 보급, enabled`,await p.evaluate(`(()=>{const b=document.querySelector('.p-final .tillpanel [data-action="supply"]');return !b.disabled&&!document.querySelector('.p-final .tillpanel .final-status')&&/^50% \\d+G 보급$/.test(b.innerText.replace(/\\s+/g,' ').trim());})()`));
+   check(`N @${tag} a valid transfer: no status line, action face 보급 50% / price / 50%, enabled`,await p.evaluate(`(()=>{const b=document.querySelector('.p-final .tillpanel [data-action="supply"]');return !b.disabled&&!document.querySelector('.p-final .tillpanel .final-status')&&/^보급 50% \\d+ G 50%$/.test(b.innerText.replace(/\\s+/g,' ').trim());})()`));
    const b=await p.evaluate(acct);
    await p.click('.p-final [data-action="supply"]');
    a=await p.evaluate(acct);
@@ -267,15 +267,20 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    // ---- one-time coach on the forecast
    /* from the top of the screen, as after 원정대 확정: the coach itself brings its target into view */
    await p.evaluate(`document.querySelector('.stage-scroll').scrollTop=0`);
-   await p.evaluate(`(()=>{const a=Guild24.game.account;a.tutorial={...a.tutorial,skipped:false};delete a.tutorial['coach-subjugation'];Guild24.game.save();Guild24.render();})()`);
+   /* UI_UX §FIRST-EVER FINAL EXPEDITION COACH: the preparation stage is two coaches in order - the Hazards (final-environment), then the forecast (subjugation) */
+   await p.evaluate(`(()=>{const a=Guild24.game.account;a.tutorial={...a.tutorial,skipped:false};delete a.tutorial['coach-final-environment'];delete a.tutorial['coach-subjugation'];Guild24.game.save();Guild24.render();})()`);
    await p.mouse.move(1,1);await p.waitForTimeout(900);
-   const coach=await p.evaluate(`(document.querySelector('#coach-root')||{}).innerText||''`);
-   check(`K @${tag} first forecast: the coach explains it once`,coach.includes('확정된 원정대의 능력과 보급')&&coach.includes('보급이 바뀌면 전망도 함께 갱신된다.'),coach.replace(/\n/g,' ').slice(0,90));
+   const coachText=()=>p.evaluate(`(document.querySelector('#coach-root')||{}).innerText||''`);
+   const coachNext=async()=>{const b=await p.evaluate(`[...document.querySelectorAll('#coach-root [data-action]')].map(b=>b.dataset.action)`);const next=b.find(x=>x!=='coach-skip');
+    if(next)await p.click(`#coach-root [data-action="${next}"]`);await p.evaluate(`Guild24.render()`);await p.waitForTimeout(900);return b;};
+   const envCoach=await coachText(),envText=await p.evaluate(`Copy.finalPrep.coach.environment`),prepText=await p.evaluate(`Copy.finalPrep.coach.preparation`);
+   check(`K @${tag} first: the Hazard coach`,envCoach.includes(envText),envCoach.replace(/\n/g,' ').slice(0,90));
+   await coachNext();
+   const coach=await coachText();
+   check(`K @${tag} then the forecast coach explains it once`,coach.includes(prepText.slice(0,20)),coach.replace(/\n/g,' ').slice(0,90));
    await p.screenshot({path:path.join(OUT,`prep-9-coach-${tag}.png`)});
-   const btns=await p.evaluate(`[...document.querySelectorAll('#coach-root [data-action]')].map(b=>b.dataset.action)`);
-   const next=btns.find(x=>x!=='coach-skip');if(next)await p.click(`#coach-root [data-action="${next}"]`);
-   await p.evaluate(`Guild24.render()`);await p.waitForTimeout(600);
-   check(`K @${tag} seen once, not repeated`,await p.evaluate(`!!(Guild24.game.account.tutorial||{})['coach-subjugation']&&!(document.querySelector('#coach-root')||{}).innerText`),btns.join(','));
+   const btns=await coachNext();
+   check(`K @${tag} seen once, not repeated`,await p.evaluate(`(()=>{const t=Guild24.game.account.tutorial||{};return !!t['coach-final-environment']&&!!t['coach-subjugation']&&!(document.querySelector('#coach-root')||{}).innerText;})()`),btns.join(','));
    const tipTxt=await p.evaluate(`(()=>{const d=document.querySelector('.p-final .final-forecast .tip');if(!d)return '';d.open=true;return d.innerText;})()`);
    check(`K @${tag} the ? keeps the same explanation`,tipTxt.includes('확정된 원정대의 능력과 보급')&&tipTxt.includes('보급이 바뀌면 전망도 함께 갱신된다.'));
    await p.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);

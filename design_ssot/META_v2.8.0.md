@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.12.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.2
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -110,8 +110,10 @@ change an already-created NPC. It improves the chance that a newly generated NPC
 starting Level. Mastery rank is the number of distinct Bosses cleared with that Job, from 0 through 7.
 
 For each newly generated NPC:
-1. resolve the ordinary spawn Level = max(1, randomInt(1, 3) + floor((Day − 1) × 0.4)) from DAY 5; randomInt(1, 2) with
-   no Day term on DAY 1~4 (the opening roster and the first newcomers); the royal profile adds +3 (EVENT)
+1. resolve the ordinary spawn Level = max(1, randomInt(1, 2) + floor((Day − 1) × 0.4)) from DAY 5; randomInt(1, 2) with
+   no Day term on DAY 1~4 (the opening roster and the first newcomers); the royal profile adds +3 (EVENT).
+   A newcomer arrives at most one Level above the Day's minimum, so a lucky high-Level newcomer does not carry a Run
+   (User 2026-10-10)
 2. read Mastery for that NPC's Job
 3. make one mutually exclusive Mastery bonus roll
 4. add at most one of +1 / +2 / +3 Levels
@@ -434,7 +436,7 @@ counter and counted in the Day's record (UI_UX owns the presentation).
 
 ### counter — 추모 방명록 (id memorialBook)
 ```text
-every segment Death limit +1 (5 / 8 / 11 -> 6 / 9 / 12; CORE_RUN §DEATH LIMIT — SEGMENTED)
+every segment Death limit +1 (6 / 8 / 10 -> 7 / 9 / 11; CORE_RUN §DEATH LIMIT — SEGMENTED)
 ```
 
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the RESULT-PROOF

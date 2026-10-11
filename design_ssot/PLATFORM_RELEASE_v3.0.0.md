@@ -4,12 +4,12 @@ DOC=PLATFORM_RELEASE
 OWNER=external_release,android_wrapper,package_identity,native_save,cloud_save,app_lifecycle,android_back,haptics
 RELEASE_TARGET=v3.0.0
 DOC_AUTHORITY=AUTHORITATIVE_RELEASE_SPEC
-GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.12.0
+GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.13.2
 
 ## ROLE
 
 This owner holds the Android v3.0.0 release-integration behaviour approved by the User.
-It does not reopen or redesign the closed v2.12.0 gameplay rules.
+It does not reopen or redesign the closed v2.13.0 gameplay rules.
 
 Implementation details that do not change Player-facing behaviour remain WORK choices.
 
@@ -77,12 +77,17 @@ When the app returns:
 - resume audio according to the existing mute/BGM/SFX settings
 - do not duplicate BGM or replay one-shot SFX merely because of resume
 
+## DEFAULT SOUND
+
+A fresh Android install starts with sound on, including the prologue speaker and BGM, because the app WebView plays without a first tap. Only a start with no saved Save does this: a saved mute choice wins, and the web build keeps sound off by default.
+
 ## HAPTICS
 
 Settings owns one `진동 ON/OFF` control.
 
 - default: ON
 - OFF disables all gameplay haptics
+- the web build uses the browser's own vibration on phones and tablets, with the same points and the same control; where the device has no vibration (iOS Safari, desktop) the control is not shown (User 2026-10-10)
 
 Use one short baseline haptic at these meaningful result points only:
 
@@ -117,3 +122,4 @@ Before Closed Test:
 8. backgrounding saves and silences audio; foreground return resumes without duplicate playback
 9. haptic toggle persists; the five approved result points fire once; routine controls do not vibrate
 10. Safe Area / portrait layout is readable on the real Android test device
+11. a fresh install plays prologue music and effects with no first tap; a saved mute choice stays muted

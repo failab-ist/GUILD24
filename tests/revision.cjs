@@ -761,10 +761,10 @@ test('a save holding expeditionCert loads with opsRoom in its place',()=>{
  assert.ok(!JSON.stringify(st).includes('expeditionCert'));
 });
 
-/* META §Exact spawn-Level model: the ordinary spawn Level is 1~2 on DAY 1~4, 1~3 (+ the Day term) from DAY 5 */
-test('spawn Level: DAY 1~4 draw Lv1~2, DAY 5 on Lv1~3 + the Day term (no Mastery)',()=>{
+/* META §Exact spawn-Level model: the ordinary spawn Level is 1~2 on DAY 1~4, 1~2 (+ the Day term) from DAY 5 */
+test('spawn Level: DAY 1~4 draw Lv1~2, DAY 5 on Lv1~2 + the Day term (no Mastery)',()=>{
  const a=Meta.fresh(),seen=day=>{const r=new RNG('spawn-'+day),ls=new Set();for(let i=0;i<400;i++)ls.add(Adventurer.create(r,i,day,a).level);return [...ls].sort();};
- assert.deepEqual(seen(1),[1,2],'DAY 1: Lv1 and Lv2 only');assert.deepEqual(seen(4),[1,2],'DAY 4: still Lv1~2');assert.deepEqual(seen(5),[2,3,4],'DAY 5: Lv1~3 + the Day term 1');
+ assert.deepEqual(seen(1),[1,2],'DAY 1: Lv1 and Lv2 only');assert.deepEqual(seen(4),[1,2],'DAY 4: still Lv1~2');assert.deepEqual(seen(5),[2,3],'DAY 5: Lv1~2 + the Day term 1');
  for(let i=0;i<40;i++){const g=new Game(Meta.fresh());g.autosave=false;g.start('roster-'+i);
   assert.ok(g.run.npcs.every(n=>n.level<=2),'a fresh account opens with no Lv3 adventurer');}
 });

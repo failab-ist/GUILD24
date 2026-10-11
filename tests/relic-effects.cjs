@@ -620,3 +620,13 @@ test('운영비 가산은 구입 당일부터 합산하며 운영 효율 매뉴�
  const saved=Save.import(Save.export(g.account,s));const restored=new Game(saved.account,saved.run);restored.autosave=false;
  assert.equal(restored.expectedOperatingCost(),230,'owned/dayFacilities timing survives Save/Load');
 });
+
+/* RELIC §CANDIDATE RULES (User 2026-10-10): the tag steps are gone; the pick inside a grade is uniform. */
+test('RELIC candidate draw reads no tag: diversity and build bias are gone',()=>{
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/relics.js'),'utf8');
+ const fn=src.slice(src.indexOf('function drawCandidates'),src.indexOf('P.relicWindow='));
+ assert.ok(!/tags|weighted/.test(fn),'drawCandidates reads no tag and no weight');
+ const N=3000,c={0:0,2:0,3:0};
+ for(let i=0;i<N;i++){const g=fresh('grade-'+i);g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);c[DATA.relicBy[g.run.relicWindow.candidateIds[0]].rarity]++;}
+ for(const [k,want] of [[0,.60],[2,.28],[3,.12]])assert.ok(Math.abs(c[k]/N-want)<.03,'grade '+k+' share '+(c[k]/N).toFixed(3));
+});

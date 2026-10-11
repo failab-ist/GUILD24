@@ -62,7 +62,12 @@ const trackFor=phase=>phase==='hush'?'':phase==='final'?'boss':phase==='end-win'
    result cues read clearly above it (PRESENTATION §Mix). The effects bus is the player's slider alone.
    A phase change fades the old track out over BGM_SWAP; the next one starts only after it (two keys never overlap) and
    rises over BGM_IN on a squared curve, so it does not start on a hard downbeat. */
-const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5;
+const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_SWAP=1,BGM_IN=1.5;
+/* The app ships the 192 kb/s originals under the same names (tools/app-bgm.cjs, after `cap sync`) and decodes them at the
+   files' own 44.1 kHz; the web keeps the 128 kb/s copies at 32 kHz. The originals measure 0.4 dB louder than the copies
+   `lufs` was taken on, so the app takes that off to play at the same level. */
+const BGM_HQ=(()=>{try{return !!(window.Native&&window.Native.inApp());}catch(e){return false;}})(),
+ BGM_RATE=BGM_HQ?44100:32000,BGM_HQ_TRIM=BGM_HQ?-.4:0;
 /* UI_UX §AUDIO FEEDBACK — SFX LEVELS (User 2026-09-29): each cue's own level, fitted by tools/qa-sfx-mix.cjs so every cue
    sits within 1.5 dB of its tier's target as a phone speaker plays it (100 ms peak, nothing under 300 Hz: result -19 /
    decision -21 / action -25 / utility -29 / rapid repeat -31) and clears the music it is heard over. Round 4: the first
@@ -70,7 +75,7 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
  /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
- /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:0.752,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
  /* action */ depart:1.26,return:0.713,gold:4.203,spend:4.191,crate:2.941,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
  /* utility */ button:0.711,ui:5.564,
  /* repeat */ quantity:6.357,quantset:7.962,};
@@ -355,7 +360,13 @@ let swapEnd=0,music=null,pending='',decoded={key:'',buf:null},ahead={key:'',byte
 function bgmDecode(bytes){const Off=window.OfflineAudioContext||window.webkitOfflineAudioContext;let dc=ctx;
  try{if(Off)dc=new Off(2,1,BGM_RATE);}catch(e){dc=ctx;}
  return new Promise((ok,no)=>{const p=dc.decodeAudioData(bytes,ok,no);if(p&&p.catch)p.catch(no);});}
-const bgmFetch=key=>fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status));
+const kept={};
+/* In the app every file is read once at start-up (`bgmAll`) and kept as bytes - never decoded ahead, one track is decoded at a time.
+   decodeAudioData takes the buffer it is given, so a kept file is handed out as a copy. */
+const bgmFetch=(key,keep)=>{if(kept[key])return kept[key].then(b=>b.slice(0));
+ const get=fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status));
+ if(keep){kept[key]=get;get.catch(()=>{delete kept[key];});}return get;};
+const bgmAll=each=>BGM_HQ?Object.keys(bgm).map(k=>bgmFetch(k,true).then(()=>{},()=>{}).then(each)):[];
 function bgmLoad(key){if(decoded.key===key)return Promise.resolve(decoded.buf);
  const bytes=ahead.key===key&&ahead.bytes?ahead.bytes:bgmFetch(key);ahead={key:'',bytes:null};
  return bytes.then(bgmDecode).then(buf=>{decoded={key,buf};return buf;});}
@@ -374,7 +385,7 @@ function bgmPass(m,at,from,fadeIn){const t=bgm[m.key],src=ctx.createBufferSource
  clearTimeout(m.timer);
  m.timer=setTimeout(()=>{if(music===m)bgmPass(m,end,t.s,t.cross?t.xf:.005);},Math.max(0,(end-ctx.currentTime-2)*1000));}
 function bgmStart(key,buf){const t=bgm[key],now=ctx.currentTime,at=Math.max(now,swapEnd),out=ctx.createGain(),
- full=Math.pow(10,(BGM_LUFS-t.lufs+(t.trim||0))/20);
+ full=Math.pow(10,(BGM_LUFS-t.lufs+(t.trim||0)+BGM_HQ_TRIM)/20);
  out.gain.setValueAtTime(0,now);out.gain.setValueAtTime(0,at);
  for(let i=1;i<=8;i++)out.gain.linearRampToValueAtTime(full*(i/8)**2,at+BGM_IN*i/8);out.connect(bgmBus);
  const m={key,buf,out,srcs:[],timer:null,passes:[]};music=m;
@@ -421,5 +432,5 @@ function unlock(){if(!enabled||!ctx)return;
  if(ctx.state!=='running')ctx.resume().catch(()=>{});
  try{const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();s.buffer=b;s.connect(master||sfxBus);s.start(0);}catch(e){}}
 if(typeof document!=='undefined')for(const ev of ['touchend','click'])document.addEventListener(ev,unlock,{capture:true,passive:true});
-G.Sound={play,sync,wake,locked,restart,prime:bgmPrime,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+G.Sound={play,sync,wake,locked,restart,prime:bgmPrime,loadAll:bgmAll,fades:{out:BGM_SWAP,in:BGM_IN},levels:LEVEL,bgmLufs:BGM_LUFS,ducks:Object.fromEntries(Object.keys(sfx).map(k=>[k,shape[k]?.duck||0])),mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

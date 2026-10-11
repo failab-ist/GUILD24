@@ -2,8 +2,8 @@
 
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
-DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.12.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.2
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -365,8 +365,8 @@ Exact normalized weights:
 | D4–7 | 68% | 24% | 8% | 0% | 0% |
 | D8–12 | 58% | 27% | 12% | 2% | 1% |
 | D13–19 | 53% | 27% | 15% | 4% | 1% |
-| D20–24 | 46% | 26% | 17% | 10% | 1% |
-| D25–29 | 39% | 25% | 19% | 16% | 1% |
+| D20–24 | 46% | 27% | 17% | 9% | 1% |
+| D25–29 | 40% | 25% | 19% | 15% | 1% |
 | D30 | 34% | 24% | 21% | 20% | 1% |
 
 Rules:
@@ -375,6 +375,8 @@ Rules:
 - D1–7 lean on Common and offer no Epic (User 2026-10-02): a T1 Day's customer (a new Lv1 Wallet about 188~268G) cannot
   pay for an Epic (sell 270G+) and a Rare takes the whole Wallet; Epic is possible but rare from D8
 - D20+ is where Epic becomes a normal late-Run preparation consideration because the shared Epic weight rises materially
+- Epic stays scarcer than Rare through D29 (User 2026-10-10: the Epic dual-Counter gear widened the strongest customers' lead);
+  D30 keeps its row for the Final Bag
 - Legendary remains exceptional and does not scale with late-Run danger beyond the exact 1% rows above
 - existing unlock/meta eligibility still applies before Rarity selection where another current owner explicitly requires it
 
@@ -1056,8 +1058,8 @@ For ordinary ORDER Rarity selection, EXPECT exact normalized rows:
 | D4–7 | 68 | 24 | 8 | 0 | 0 |
 | D8–12 | 58 | 27 | 12 | 2 | 1 |
 | D13–19 | 53 | 27 | 15 | 4 | 1 |
-| D20–24 | 46 | 26 | 17 | 10 | 1 |
-| D25–29 | 39 | 25 | 19 | 16 | 1 |
+| D20–24 | 46 | 27 | 17 | 9 | 1 |
+| D25–29 | 40 | 25 | 19 | 15 | 1 |
 | D30 | 34 | 24 | 21 | 20 | 1 |
 
 PASS:

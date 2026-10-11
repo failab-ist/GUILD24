@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.10.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.13.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.2
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -63,7 +63,7 @@ T1=fire
 T2=fire + increasedCombatPower
 T3=strong(fire) + highCombatPower
 
-Gate required Combat Power carries a Family factor `golemCombat=0.90` (화염 골렘 광산, Family id `golem`).
+Tier II / III Gate required Combat Power keeps its own fire combat term with a Family factor `golemCombat=0.90` (화염 골렘 광산, Family id `golem`): from Tier II the stronger combat takes the place of a second Hazard. Tier I is the common Tier I requirement of §GATE POWER for every Family.
 Fire has no special occurrence weighting: Families are drawn uniformly.
 
 armorHazard=NO
@@ -298,14 +298,19 @@ Rules:
 
 ## GATE POWER — LATE-DAY SLOPE
 
-Gate required Power keeps its current generation inputs. The Day term runs DAY 1~9 at 1.45 per Day, DAY 10 at 0.80,
-DAY 11~20 at 1.10 and DAY 21+ at 1.05, DAY 21+ keeping the offset accumulated by D20. The late slope keeps the Gates
-level with a grown roster (a D30 party grows about 1.9 prepared Power a Day in D21~29); DAY 10 keeps its own 0.80 step:
+Gate required Power keeps its current generation inputs. The Day term runs DAY 1~9 at 1.60 per Day, DAY 10 at 0.80,
+DAY 11~20 at 0.965 and DAY 21+ at 1.54, DAY 21+ keeping the offset accumulated by D20. The late slope keeps the Gates
+level with a grown roster (a D30 party grows about 1.9 prepared Power a Day in D21~29) and is one even slope, with no
+step on any late Day; DAY 10 keeps its own 0.80 step:
 
 ```text
 Day term
-= min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.05
+= min(Day, 9) × 1.60 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 0.965 + max(0, Day - 20) × 1.54
 ```
+
+The early slope is steeper and the DAY 11~20 slope flatter by the same total, so the Day term peaks above the plain
+line around DAY 9~10 (+1.35, about +3.7% of the Gate) and meets it again on DAY 20; DAY 20 and every later Day are
+the same.
 
 Ordinary base offset: D1 +0.125, D10 +0.5, D20 +1.0, D25 +1.5.
 Linearly interpolate between anchors; hold +1.5 on D25~29. Add before FamilyCombat / SuccessEase.
@@ -314,14 +319,23 @@ The Day-term slopes remain unchanged. The Final uses its separate Boss requireme
 Full required Power (Source-exact):
 
 ```text
-Gate Power
+Gate Power (every Family's Tier I, and Tier II / III of every Family but golem)
+= (21 + Ordinary base offset + Day term + Tier1Term) × TierCombat × SuccessEase × Event danger multiplier
+Tier1Term = 1.5 (`DATA.balance.gateTier1Term`)
+TierCombat = Tier I 1 · Tier II 1.05 · Tier III 1.20 (`DATA.balance.gateTierCombat`)
+
+golem Tier II / III Gate Power
 = (21 + Ordinary base offset + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat × SuccessEase
 × Event danger multiplier
 
-FireTerm = 6 + (Tier - 1) × 7.5 for golem (Tier I / II / III = 6 / 13.5 / 21), else 0
-FamilyCombat = golemCombat 0.90 for golem, else 1
-SuccessEase = 0.90 on DAY 1~21, 0.95 from DAY 22 (ordinary Gates; the Final's Boss Power is its own owner)
-familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
+FireTerm = 6 + (Tier - 1) × 7.5 (Tier II / III = 13.5 / 21)
+FamilyCombat = golemCombat 0.90
+SuccessEase = 0.90 on every ordinary Day (ordinary Gates; the Final's Boss Power is its own owner)
+familyBase (golem Tier II / III only): golem 3
+
+Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard and
++6 / +12 Hazard Threat), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
+Gates are where a grown adventurer breaks through on strength.
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
@@ -589,13 +603,14 @@ Use the following exact anchor rows for ordinary Days:
 | Day anchor | T1 | T2 | T3 |
 |---|---:|---:|---:|
 | D1 | 100% | 0% | 0% |
-| D5 | 100% | 0% | 0% |
-| D7 | 85% | 15% | 0% |
-| D8 | 70% | 30% | 0% |
-| D12 | 65% | 35% | 0% |
-| D13 | 55% | 42% | 3% |
-| D18 | 30% | 60% | 10% |
-| D19 | 26% | 60% | 14% |
+| D4 | 100% | 0% | 0% |
+| D5 | 85% | 15% | 0% |
+| D7 | 70% | 30% | 0% |
+| D8 | 55% | 45% | 0% |
+| D12 | 40% | 60% | 0% |
+| D13 | 36% | 61% | 3% |
+| D18 | 20% | 70% | 10% |
+| D19 | 16% | 70% | 14% |
 | D24 | 10% | 60% | 30% |
 | D25 | 5% | 50% | 45% |
 | D29 | 0% | 45% | 55% |
@@ -771,7 +786,9 @@ This is the ordinary NPC expedition-Wallet channel consumed by current Item/Trai
 
 Equipment gain:
 - only a living combat-success path is eligible
-- base chance = 20% plus explicit rare-loot modifier
+- no Equipment gain on DAY 1~2
+- from DAY 3 the base chance falls with the Equipment tier already earned: tier 0 30% / tier 1 22% / tier 2 18% / tier 3+ 12%
+  (User 2026-10-10: the adventurer who keeps winning grows more slowly), plus explicit rare-loot modifier
 - on hit, Equipment tier +1
 - Equipment 투력 gain = seeded integer 2–5 inclusive
 
@@ -852,8 +869,11 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit × 0.25
+= EnvironmentDeficit² × 0.60
 ```
+
+The curve makes a bare Gate deadly and a slight shortfall mild: it meets the old straight 0.25 line at a 42% deficit,
+below it a partly covered Hazard (one counter + food) dies less, above it an uncovered Hazard dies more.
 
 If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
 
@@ -1478,12 +1498,13 @@ PASS:
 Owner rule: §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.45 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 1.05`
-- the base constant21, Tier term, Family adjustment and Family Combat multiplier are unchanged
+- the Day term is `min(Day, 9) × 1.60 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 0.965 + max(0, Day - 20) × 1.54`
+- the base constant21, Tier term, Family adjustment and Family Combat multiplier are unchanged on Tier II / III
+- Tier I is one common requirement for every Family: (21 + base offset + Day term + 1.5) × SuccessEase
 - add the ordinary base offset at D1 +0.125 / D10 +0.5 / D20 +1 / D25 +1.5, linear interpolation and holding +1.5 through D29
-- ordinary golem FireTerm is 6 / 13.5 / 21; the separate Final firePairPower12 is unchanged
+- ordinary golem FireTerm is 13.5 / 21 on Tier II / III; the separate Final firePairPower12 is unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.05, D29 34.30
-- SuccessEase multiplies the whole ordinary Gate Power once: 0.90 on DAY 1~21, 0.95 from DAY 22
+- SuccessEase multiplies the whole ordinary Gate Power once: 0.90 on every ordinary Day
 
 FAIL:
 - a single slope applied across all Days
@@ -1776,7 +1797,7 @@ Reward PASS:
 - Wallet base = 35 + Day×8
 - Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
-- living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
+- living combat-success equipment chance is 0 on DAY 1~2, then 30 / 22 / 18 / 12% by Equipment tier 0 / 1 / 2 / 3+, plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
 
 FAIL:
@@ -1839,7 +1860,7 @@ EnvironmentDeficit
 = average(HazardDeficit_i)
 
 EnvironmentDeathContribution
-= EnvironmentDeficit * 0.25
+= EnvironmentDeficit^2 * 0.60
 
 healthyFailureDeathChance
 = clamp(

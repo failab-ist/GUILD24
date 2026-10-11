@@ -1,6 +1,6 @@
 # GUILD24 v3.0+ — Deferred Expansion Router
 
-> Project: 《던전 앞 편의점 / GUILD24》
+> Project: 《마왕 잡는 편의점: 길드24 / GUILD24》
 > Document role: **v3.0+ DEFERRED DESIGN ROUTER / FUTURE CANDIDATE CONTEXT**
 > Status: **NOT CURRENT DESIGN SSOT**
 > Current Design Truth entry: `design_ssot/SPEC_INDEX_v2.8.0.md`

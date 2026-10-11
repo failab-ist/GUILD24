@@ -544,25 +544,26 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* v2.9.2 third pass (User 2026-09-26): DAY 11~20 at 1.10, DAY 21+ back to the late 0.80 */
  /* v2.9.11 (User 2026-09-28): early 1.50 -> 1.40, then 1.45 after the combined re-measure */
  /* v2.9.13 (User 2026-09-30): DAY 21+ 0.80 -> 1.10; the DAY 9~10 step keeps 0.80 as its own `step`, DAY 1~20 unchanged */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.45,step:0.80,late:1.05,mid:1.10,midFrom:10,midTo:20},'the shipped slope is the canonical one');
+ /* early-mid hump (User 2026-10-11): early 1.45 -> 1.60, mid 1.10 -> 0.965, the D20 term and every later Day unchanged */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.60,step:0.80,late:1.54,mid:0.965,midFrom:10,midTo:20},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
-  assert.ok(Math.abs(Dungeon.gateDayTerm(day)-day*1.45)<1e-9,'D'+day+' is the single early slope');
- for(const [day,term] of [[10,13.85],[11,14.95],[12,16.05],[20,24.85],[21,25.90],[24,29.05],[29,34.30],[30,35.35]])
+  assert.ok(Math.abs(Dungeon.gateDayTerm(day)-day*1.60)<1e-9,'D'+day+' is the single early slope');
+ for(const [day,term] of [[10,15.2],[11,16.165],[12,17.13],[20,24.85],[21,26.39],[24,31.01],[29,38.71],[30,40.25]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
- /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 on DAY 1~21, x .95 from DAY 22 */
- assert.deepEqual(Dungeon.GATE_EASE,{early:.90,late:.95,lateFrom:22});
- for(const [day,ease] of [[1,.90],[5,.90],[8,.90],[21,.90],[22,.95],[29,.95]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
+ /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 on every ordinary Day */
+ assert.equal(Dungeon.GATE_EASE,.90);
+ for(const [day,ease] of [[1,.90],[5,.90],[8,.90],[21,.90],[22,.90],[29,.90]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
  /* makeDungeon applies SuccessEase once, on the finished Gate Power (read off real Gates, golem's Family Combat included) */
  {const g=new Game();g.autosave=false;g.start('gate-ease');
   for(const day of [3,8,22])for(const id of ['spider','golem'])for(const tier of [1,2]){g.run.day=day;const b=D.dungeonBy[id],gate=g.makeDungeon(id,tier);
    const offset=({3:5/24,8:5/12,22:1.2})[day];
-   const raw=(21+offset+Dungeon.gateDayTerm(day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(b.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1);
+   const raw=tier===1||id!=='golem'?(21+offset+Dungeon.gateDayTerm(day)+D.balance.gateTier1Term)*D.balance.gateTierCombat[tier-1]:(21+offset+Dungeon.gateDayTerm(day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(b.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1);
    assert.ok(Math.abs(gate.power-raw*Dungeon.gateEase(day))<1e-9,id+' T'+tier+' D'+day+': Gate Power x SuccessEase '+Dungeon.gateEase(day));}}
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
- assert.deepEqual(Dungeon.DEATH,{combat:.40,environment:.25,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
+ assert.deepEqual(Dungeon.DEATH,{combat:.40,environment:.60,cap:.50,injured:.10,injuredCap:.60,exhausted:.10,spirit:.003,spiritMax:.15},
   'the shipped coefficients are the canonical baseline');
  // the two deficits are the only inputs, and each one alone raises the chance
  const weak=at(1,0).risk,strong=at(400,0).risk;
@@ -571,8 +572,8 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  assert.ok(weak.chance<=0.50+1e-9,'the healthy conditional cap is 50% (v2.10.0)');
  for(const over of [1,20,60,140,400]){
   const {risk}=at(over,0);
-  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.40+risk.environmentDeficit*.25))*risk.steady)<1e-12,
-   'the chance is exactly CombatDeficit x .40 + EnvironmentDeficit x .25, clamped, then 정신 steadiness');
+  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.50,risk.combatDeficit*.40+risk.environmentDeficit**2*.60))*risk.steady)<1e-12,
+   'the chance is exactly CombatDeficit x .40 + EnvironmentDeficit² x .60, clamped, then 정신 steadiness');
   /* DUNGEON_HAZARD §Spirit steadiness: 정신 x .003 off the chance, at most 15% */
   const sp=Dungeon.prepare(at(over,0).n,d).effects.spirit;
   assert.ok(Math.abs(risk.steady-(1-Math.min(.15,sp*.003)))<1e-12,'정신 '+sp.toFixed(1)+' trims the chance by '+(100*(1-risk.steady)).toFixed(1)+'%');
@@ -777,7 +778,7 @@ test('RESULT-PROOF: the departure snapshot freezes Equipment before the Outcome\
  const gate=g.makeDungeon('spider',1);
  const won=r=>{const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:[],injury:0,fatigue:0,alive:true,recovery:0,
    equipment:{...g.run.npcs[0].equipment,power:0,tier:1}}));
-  return Dungeon.resolve(n,{...gate,power:1},new RNG('equip-win-'+r),[]);};
+  return Dungeon.resolve(n,{...gate,power:1,day:Dungeon.EQUIP.fromDay},new RNG('equip-win-'+r),[]);};
  let sawWin=false;
  for(let i=0;i<200&&!sawWin;i++){const r=won(i);if(r.equipmentGain>0)sawWin=true;}
  assert.ok(sawWin,'sanity: the sweep actually reached an equipment-tier win, or this proof has nothing to test');
@@ -1175,9 +1176,9 @@ test('DUNGEON_HAZARD §Tier generation (v2.9.2 third pass, User 2026-09-26): DAY
  assert.deepEqual(Dungeon.LATE_T3,{from:21,to:29,shift:.10});
  const near=(a,b)=>a.every((x,i)=>Math.abs(x-b[i])<1e-9);
  // anchors, then the shift: D19 and D20 are the anchors' interpolation, D21~29 carry +0.10 T3 / -0.10 T2, D30 is the Final
- assert.ok(near(Dungeon.tierWeights(19),[.26,.60,.14]),'D19 anchor unchanged');
+ assert.ok(near(Dungeon.tierWeights(19),[.16,.70,.14]),'D19 anchor unchanged');
  // the boundary: D20 carries no shift, D21 is the first Day that moves 0.10 of T2 to T3
- const lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),a19=[.26,.60,.14],a24=[.10,.60,.30];
+ const lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),a19=[.16,.70,.14],a24=[.10,.60,.30];
  assert.ok(near(Dungeon.tierWeights(20),lerp(a19,a24,1/5)),'D20 is the plain interpolation');
  const d21=lerp(a19,a24,2/5);assert.ok(near(Dungeon.tierWeights(21),[d21[0],d21[1]-.10,d21[2]+.10]),'D21 is the first shifted Day');
  assert.ok(near(Dungeon.tierWeights(24),[.10,.50,.40]),'D24: 10 / 60 / 30 -> 10 / 50 / 40');
@@ -1241,7 +1242,7 @@ test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, 
  const combatDeficit=Math.max(0,Math.min(1,(required-Dungeon.preparedPower(p.effects))/required));
  const environmentDeficit=p.hazards.length?p.hazards.reduce((v,h)=>v+Math.max(0,Math.min(1,h.gap/h.threat)),0)/p.hazards.length:0;
  const steady=1-Math.min(Dungeon.DEATH.spiritMax,p.effects.spirit*Dungeon.DEATH.spirit);
- const expectedHealthy=Math.max(0,Math.min(Dungeon.DEATH.cap,combatDeficit*Dungeon.DEATH.combat+environmentDeficit*Dungeon.DEATH.environment))*steady;
+ const expectedHealthy=Math.max(0,Math.min(Dungeon.DEATH.cap,combatDeficit*Dungeon.DEATH.combat+environmentDeficit**2*Dungeon.DEATH.environment))*steady;
  assert.ok(Math.abs(Dungeon.failureDeathRisk(lv10Prepared,d).chance-expectedHealthy)<1e-9,
   'a carried Bag only ever moves the SALE snapshot through the ordinary combat/environment deficit terms, never through preparedFactor');
 });

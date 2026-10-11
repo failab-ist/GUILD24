@@ -248,17 +248,26 @@ function renamedNpcs(r){
    for review says what it was played on. Read-only metadata: never validated, never needed to load. */
 const build=()=>{const b=G.GUILD24_BUILD;return b?{version:b.version,commit:b.commit}:undefined;};
 
+const revOf=s=>Number.isInteger(s?.rev)&&s.rev>=0?s.rev:0;
+const atOf=s=>Number.isFinite(s?.at)?s.at:0;
+const newer=(a,b)=>revOf(a)!==revOf(b)?revOf(a)>revOf(b):atOf(a)>atOf(b);
+
 G.Save={
  error:null,
  keys:[KEY,BACKUP],
+ /* PLATFORM_RELEASE §Google Play Games Saved Games: every write carries a monotonic `rev` and a timestamp `at`; the larger rev (then the later at)
+    is the newer Save when the local and the cloud copy are compared. Metadata only - never validated, never needed to load. */
+ rev:0,
  migrate(s){if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
-   const json=JSON.stringify({version:VERSION,build:build(),account,run});
+   const rev=this.rev+1,at=Date.now();
+   const json=JSON.stringify({version:VERSION,build:build(),account,run,rev,at});
    const previous=localStorage.getItem(KEY);
    if(previous){localStorage.setItem(BACKUP,previous);G.Native?.put(BACKUP,previous);}
    localStorage.setItem(KEY,json);G.Native?.put(KEY,json);
+   this.rev=rev;G.Native?.cloudPush(json,rev,at);
    this.error=null;
    return true;
   }catch(e){
@@ -280,7 +289,7 @@ G.Save={
    const raw=localStorage.getItem(key);
    if(!raw)continue;
    const s=JSON.parse(renameIds(raw));
-   if(this.valid(s))return this.migrate(s);
+   if(this.valid(s)){this.rev=revOf(s);return this.migrate(s);}
   }catch(e){}
   this.error='저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
   return null;
@@ -314,6 +323,7 @@ G.Save={
   if(typeof localStorage==='undefined')return false;
   try{
    for(const key of [KEY,BACKUP,...LEGACY.map(v=>'guild24.save.'+v)]){localStorage.removeItem(key);G.Native?.drop(key);}
+   this.rev=0;G.Native?.cloudClear();
    this.error=null;
    return true;
   }catch(e){
@@ -322,6 +332,25 @@ G.Save={
   }
  },
 
+ hasLocal(){
+  try{return typeof localStorage!=='undefined'&&(localStorage.getItem(KEY)!==null||localStorage.getItem(BACKUP)!==null);}catch(e){return false;}
+ },
+ /* Boot, before read(): the cloud copy (raw JSON) replaces the local Save only when the local one is missing or invalid, or when the
+    cloud one is newer and valid. An invalid cloud copy is ignored; the cloud never makes the Player choose. Returns 'cloud' or 'local'. */
+ cloudMerge(raw){
+  try{
+   const c=JSON.parse(renameIds(raw));
+   if(!this.valid(c))return 'local';
+   let l=null;
+   for(const key of [KEY,BACKUP])try{const t=localStorage.getItem(key);if(!t)continue;const s=JSON.parse(renameIds(t));if(this.valid(s)){l=s;break;}}catch(e){}
+   if(l&&!newer(c,l))return 'local';
+   const previous=localStorage.getItem(KEY);
+   if(previous){localStorage.setItem(BACKUP,previous);G.Native?.put(BACKUP,previous);}
+   localStorage.setItem(KEY,raw);G.Native?.put(KEY,raw);
+   this.rev=revOf(c);
+   return 'cloud';
+  }catch(e){return 'local';}
+ },
  export(account,run){return JSON.stringify({version:VERSION,build:build(),account,run},null,2);},
  import(raw){
   const s=JSON.parse(renameIds(raw));

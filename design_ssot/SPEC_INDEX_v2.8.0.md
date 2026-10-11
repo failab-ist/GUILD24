@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.12.0
+DOC_VERSION=2.13.2
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.2
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_12_0_CLOSED_2026-10-09 (tag v2.12.0 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
-SOURCE_ADOPTION_STATUS=V2_12_0_ADOPTED (every version through v2.12.0 is adopted in Source on main: the approved balance, text/source alignment, coach, sound and night-result work; CHANGELOG §v2.12.0)
+FREEZE_STATUS=V2_13_2_CLOSED_2026-10-11 (tag v2.13.2 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_13_2_ADOPTED (every version through v2.13.2 is adopted in Source on main: v2.13.1 plus the early-mid Gate Day-term hump of v2.13.2; CHANGELOG §v2.13.2)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -27,12 +27,13 @@ IMPLEMENTATION TRUTH = current Source.
 ## GAME CORE
 
 ### BRAND
+title=`마왕 잡는 편의점: 길드24` (로고는 「마왕 잡는 편의점」)
 brand=GUILD24 / 길드24
 slogan=`던전 가기 전, 길드24.`
 parent=길드리테일
 
 ### ONE-LINE
-《던전 앞 편의점》 = RPG 세계를 편의점 카운터 뒤에서 플레이하는 턴제 경영 로그라이트.
+《마왕 잡는 편의점: 길드24》 = RPG 세계를 편의점 카운터 뒤에서 플레이하는 턴제 경영 로그라이트.
 
 ### CORE FANTASY
 플레이어는 용사가 아니라 던전 앞 `GUILD24` 점주다.
