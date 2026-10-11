@@ -517,7 +517,8 @@ function playRun(g,out,ctx){
       well as against the floor: the till has to still clear cashFloor AFTER both the next reroll
       and the order this sheet would produce. That is what stops looking from eating the buying.
       Not "reroll until the wanted item shows up" - it stops the moment the sheet is not poor. */
-   if(spend.reroll){let used=0;
+   /* reader / investor buy first and look again afterwards - see huntCounters below */
+   if(spend.reroll&&!reader){let used=0;
     const poor=()=>s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0)<8;
     while((bal?!s.offers.some(o=>o.quantity&&(D.itemBy[o.item].category==='food'||s.dungeons.some(dd=>G.Relics.directCounter(D.itemBy[o.item],dd.hazards)))):poor())&&used<(bal?2:20)){
      const cost=g.rerollPrice(),planned=plannedOrderSpend(sortedOffers(),s.money);
@@ -530,6 +531,7 @@ function playRun(g,out,ctx){
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
+   const buyRound=()=>{
    let offers=sortedOffers();
    /* reader: one meal per expected visitor goes on the sheet before anything else */
    if(reader){const meals=offers.filter(x=>['food','drink'].includes(D.itemBy[x.o.item].category)),rest=offers.filter(x=>!meals.includes(x));
@@ -568,6 +570,34 @@ function playRun(g,out,ctx){
       if(same<3&&want<=o.quantity&&s.money-g.cartTotal({...cart,[i]:want})>=spend.cashFloor)
        try{g.setQuantity(i,want);act();out.items[o.item].ordered+=3-same;}catch(e){}}}
     catch(e){if(String(e?.message||'').includes('창고')){out.capacityBlocked++;capacityHit=true;}}}}
+   };
+   buyRound();g.confirmOrder();act();
+   /* reader / investor, the User's counter hunt (2026-10-11): buy off this sheet first, then look again only when a key
+      customer today still has a Hazard of their Gate open with no Counter on the shelf or the sheet. Before each reroll one
+      Item for the Stat that Hazard presses (cold -> 강인함) is picked up as a stand-in; a Counter that shows up later is
+      taken. Up to two rerolls when the till is comfortable, one when thin, none when tight. */
+   if(reader&&spend.reroll){let used=0;const statHeld={};
+    const op=g.expectedOperatingCost(),budget=s.money>=spend.cashFloor+4*op?2:s.money>=spend.cashFloor+2*op?1:0;
+    const alive=s.npcs.filter(x=>x.alive).sort((a,b)=>b.level-a.level),cut=alive[Math.min(3,alive.length-1)]?.level??0;
+    const key=m=>investor?tierOf(m)==='core'||tierOf(m)!=='rest'&&s.money>=spend.cashFloor+2*op:m.level>=cut;
+    const open=()=>{const want={};
+     for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&key(m)&&m.money+(m.eventBudget||0)>=40)){const dd=g.claimedGateFor(m);if(!dd)continue;
+      const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
+      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')want[h]=(want[h]||0)+1;}
+     for(const x of s.inventory){const it=D.itemBy[x.item];for(const h of Object.keys(want))if(want[h]>0&&G.Relics.directCounter(it,[h])){want[h]--;break;}}
+     return Object.entries(want).filter(([,k])=>k>0);};
+    const buy=pick=>{const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&pick(x.it)&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((a,b)=>a.o.price-b.o.price)[0];
+     if(!c)return false;try{g.setQuantity(c.i,(s.cart?.[c.i]||0)+1);act();(out.items[c.o.item]??={ordered:0,sold:0}).ordered++;return true;}catch(e){return false;}};
+    for(;;){let missing=false;
+     for(const [h,k] of open())for(let q=0;q<k;q++){if(buy(it=>G.Relics.directCounter(it,[h])))continue;missing=true;
+      const st=G.Dungeon.hazardRule(h).stat;
+      if(!statHeld[st]&&!s.inventory.some(x=>(D.itemBy[x.item].effects[st]||0)>0)&&buy(it=>(it.effects[st]||0)>0))statHeld[st]=1;break;}
+     try{g.confirmOrder();act();}catch(e){}
+     if(!missing||used>=budget)break;
+     const cost=g.rerollPrice();if(s.money-cost<spend.cashFloor+op)break;
+     try{g.reroll();}catch(e){break;}act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;
+     buyRound();try{g.confirmOrder();act();}catch(e){}}
+    out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
    if(capacityHit)out.shortage.capacityDay++;
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
    /* SALE opened. An empty shelf here is a different failure from running out mid-Day. */
