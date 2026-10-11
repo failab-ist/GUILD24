@@ -31,6 +31,19 @@ Android v3.0.0 starts a new public Save compatibility boundary.
 - first Android install starts from a fresh Save.
 - from public v3.0.0 onward, ordinary updates must preserve supported public Player Saves unless a later User-approved migration policy says otherwise.
 
+### SAVE ACROSS UPDATES
+
+An update that adds or removes Jobs, Bosses, Items or other catalog entries keeps the Player's account (User 2026-10-11).
+
+- account (본사 기록: Job × Boss matrix, best Day / 총매출, Store Capital and Decorations, discovered goods, Boss log, settings, tutorial) is checked for shape only, not against the current catalog
+- a Job × Boss cell the Save does not have reads as not cleared and is filled in on load
+- an entry the current build does not know (a Save written by a newer build) is kept as it is and counts for nothing; it is never erased, so a later build that knows it reads it again
+- a Run in progress that the current build cannot continue (an unknown id, a changed Run format) is dropped alone, exactly as an abandon drops it (no Settlement); the account goes on and the Player starts from 새 점포 준비 with one line saying the Run could not continue and the 본사 기록 is kept
+- the dropped Run's original bytes are set aside on the device (the same set-aside copy an unreadable Save uses), never silently erased
+- a backup that still reads in full, Run included, is preferred over dropping the newest copy's Run
+- a Save whose account itself is malformed is still refused as a whole
+- the Save storage key and envelope version stay the same across ordinary updates; v1~v8 internal Saves stay unmigrated (META §PRE-RELEASE COMPATIBILITY POLICY)
+
 ### Local Save
 
 The local app Save is the primary playable Save.
@@ -51,6 +64,8 @@ Use Google Play Games Services v2 Saved Games as cloud backup/restore.
 - conflict resolution must prefer the newer valid Save and must not intentionally roll Player progress backward
 - WORK may use a monotonic Save revision plus timestamp/validity checks to implement this rule
 - cloud failure falls back to the local Save without blocking play
+- a cloud answer that arrives after the start stopped waiting (a slow network on a fresh install) is compared at once by the same rule; when it is newer the game switches to it and says so in one line, otherwise the local Save goes on and is backed up. It is never left for the next launch to overwrite what was played meanwhile
+- the comparison reads the account: a cloud copy whose Run the build cannot continue still restores its account (§SAVE ACROSS UPDATES)
 - Saved Games is not Analytics and is not a developer dashboard for browsing every Player's Save
 
 ## ANDROID SYSTEM BACK
