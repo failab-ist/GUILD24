@@ -434,10 +434,12 @@ function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
   rotate:[{from:0,to:0,duration:T.shove-60},{to:-3,duration:60},{to:-18,duration:out}],
   onComplete:()=>g.remove()});
  if(st.saved==='사망')A(g,{'--tape':{from:0,to:1,duration:350,delay:st.entry+60,ease:'inOut(2)'}});
- /* the figure greys while the worse verdict is on the card, and its colour comes back with the landing */
+ /* the figure greys while the worse verdict is on the card, and its colour comes back with the landing - to the tone its own result carries (t-severe is dimmer than t-great), so the colour does not overshoot and snap back */
  const fig=$('.beat .returner');
- if(fig)A(fig,{filter:[{from:'grayscale(0) brightness(1)',to:'grayscale(0) brightness(1)',duration:st.entry+60},{to:'grayscale(1) brightness(0.5)',duration:350},
-  {to:'grayscale(1) brightness(0.5)',duration:stampLand(st)-st.entry-410},{to:'grayscale(0) brightness(1)',duration:260}],onComplete:()=>{fig.style.filter='';}});
+ if(fig){const cs=getComputedStyle(fig).filter,num=n=>Number((cs.match(new RegExp(n+'\\(([\\d.]+)'))||[])[1]),
+   S=num('saturate'),B=num('brightness'),rest='grayscale(0) saturate('+(S>=0?S:1)+') brightness('+(B>=0?B:1)+')',grey='grayscale(1) saturate(1) brightness(0.5)';
+  A(fig,{filter:[{from:rest,to:rest,duration:st.entry+60},{to:grey,duration:350},
+  {to:grey,duration:stampLand(st)-st.entry-410},{to:rest,duration:260}],onComplete:()=>{fig.style.filter='';}});}
  const ids=savedItems(r),slot=$('.beat .cause li.hero .hero-items');if(!ids.length||!slot)return;
  const t=tag.getBoundingClientRect(),gx=t.left+t.width/2-24,gy=t.top+t.height/2-24;
  const fly=document.createElement('div');fly.className='saved-fly';fly.setAttribute('aria-hidden','true');fly.innerHTML=Art.itemIcon(ids[0],48);document.body.appendChild(fly);
