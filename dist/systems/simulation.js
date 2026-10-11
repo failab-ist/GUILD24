@@ -299,6 +299,13 @@ function playRun(g,out,ctx){
   const reserve=it=>{if(!later.length)return 0;
    const want=later.filter(m=>['potion','insurance'].includes(it.category)||G.Relics.directCounter(it,(g.claimedGateFor(m)||s.dungeons[0]).hazards));
    return want.length&&s.inventory.filter(x=>x.item===it.id).length<=want.length?(Math.max(...want.map(weight))-V)*6:0;};
+  /* a player's first rule (User saves 2026-10-11: 대응 + 음식 in 44~45% of the top four's D1~14 Bags, this bot 19~27%): a Hazard
+     of this Gate not yet 충분 bare gets its Counter first, at 정가 or else 50%, before the rest of the Bag is weighed */
+  {const bare=G.Dungeon.prepare({...n,pack:[]},d,s.facilities).effects;
+   for(const h of d.hazards){if(n.pack.length>=G.Adventurer.slots(n))break;
+    if(G.Dungeon.hazardState(h,bare,d).label==='충분'||n.pack.some(id=>G.Relics.directCounter(D.itemBy[id],[h])))continue;
+    const st=s.inventory.find(x=>!held(D.itemBy[x.item])&&G.Relics.directCounter(D.itemBy[x.item],[h])&&!reserve(D.itemBy[x.item]));if(!st)continue;
+    for(const mode of ['full','half']){if(n.refused.includes(st.item+':'+mode))continue;if(g.interest(n,D.itemBy[st.item],mode).debit>purse)continue;try{if(g.sell(st.id,mode))break;}catch(e){break;}}}}
   let attempts=0;
   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<12){
    const base=utility(forecast(n,n.pack,d),V),overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),seen=new Set(),singles=[];
