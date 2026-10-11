@@ -4,7 +4,7 @@ DOC=PLATFORM_RELEASE
 OWNER=external_release,android_wrapper,package_identity,native_save,cloud_save,app_lifecycle,android_back,haptics
 RELEASE_TARGET=v3.0.0
 DOC_AUTHORITY=AUTHORITATIVE_RELEASE_SPEC
-GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.13.4
+GAMEPLAY_DESIGN_BASE=GUILD24_DESIGN_SSOT_v2.13.5
 
 ## ROLE
 
