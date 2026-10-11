@@ -538,8 +538,8 @@ function playRun(g,out,ctx){
      for(let k=0;k<take&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor;k++){try{g.setQuantity(x.i,(s.cart?.[x.i]||0)+1);act();(out.items[x.o.item]??={ordered:0,sold:0}).ordered++;need--;}catch(e){break;}}}
     offers=[...meals,...rest];}
    /* investor: before the ordinary order, each backed visitor today (core first, then candidates) is matched to one
-      Counter for a Hazard of their Gate that is not yet 충분 bare, and a core visitor whose bare fight is no better than
-      even to one potion - from the shelf if one is unclaimed, else the best such offer the till can take above cashFloor */
+      Counter for a Hazard of their Gate that is not yet 충분 bare, and one whose bare fight is close (0.8~1.12 of the Gate)
+      to one potion - from the shelf if one is unclaimed, else the best such offer the till can take above cashFloor */
    if(investor){const shelf=[...s.inventory.map(x=>x.item)],left=s.offers.map((o,i)=>o.quantity-(s.cart?.[i]||0));
     const claim=(ok,score)=>{const k=shelf.findIndex(id=>ok(D.itemBy[id]));if(k>=0){shelf.splice(k,1);return;}
      const pick=s.offers.map((o,i)=>({o,i})).filter(x=>left[x.i]>0&&ok(D.itemBy[x.o.item])&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(D.itemBy[x.o.item]))
@@ -551,7 +551,9 @@ function playRun(g,out,ctx){
     for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
      if(open.length)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
-     if(tierOf(m)==='core'&&G.Dungeon.preparedPower(bare)<=(dd.power||1))claim(it=>it.category==='potion',it=>it.effects.combat||0);}}
+     /* a potion for a backed visitor whose fight is close - bare power 0.8~1.12 of the Gate (User saves 2026-10-11:
+        하급 포션 in 19% of D1~14 Bags, this bot 6% when only a core visitor at or under the Gate got one) */
+     {const r=G.Dungeon.preparedPower(bare)/(dd.power||1);if(r>=.8&&r<1.12)claim(it=>it.category==='potion',it=>it.effects.combat||0);}}}
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
    else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
