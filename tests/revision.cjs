@@ -330,15 +330,15 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
   assert.equal(n.eventBudget,Math.round(n.money*.50),'the arrival may spend half its purse again, this visit only');}
  assert.ok(!/sponsorSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.sponsorSign),'and no longer adds ORDER candidates');
  assert.ok(/wears\('honorFrame'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
- /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
+ /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 고급 keeps its ordinary 27 - so
     its copy can say 희귀 이상 13% -> 19% and be exactly true. Amended the same day: every grade
-    above 평범 is lifted, 평범 60% -> 50%. Re-tuned 2026-09-25, v2.9.1 balance: each grade's lift
-    x1.5, so 평범 60% -> 45%. */
+    above 일반 is lifted, 일반 60% -> 50%. Re-tuned 2026-09-25, v2.9.1 balance: each grade's lift
+    x1.5, so 일반 60% -> 45%. */
  const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
- /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 평범 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[40,32,18,8,2],'평범 60% -> 40%, so above 평범 40% -> 60% (v2.10.0; 75% in v2.9.11)');
+ /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 일반 40% -> 65%, 영웅 · 전설 the most */
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[40,32,18,8,2],'일반 60% -> 40%, so above 일반 40% -> 60% (v2.10.0; 75% in v2.9.11)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -

@@ -5,7 +5,7 @@
 //   cur          - the rules as they are
 //   benefitOff   - Rarity gives nothing (potential term 0, Trait count as a Common's)
 //   costOff      - Rarity costs nothing (operating cost and Deep sponsorship ignore it)
-//   allCommon    - every adventurer is 평범 (the rarity draw is [100,0,0,0,0])
+//   allCommon    - every adventurer is 일반 (the rarity draw is [100,0,0,0,0])
 //   premium*     - the same four under the proposed 명예 모험가 액자 weights [40,30,20,7.5,2.5], where Rarity is common
 //   node tools/rarity-value.cjs [runs=600] [--potential 0.10] [--out file]   (--potential: the growth step every arm uses)
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),vm=require('node:vm'),{fork}=require('node:child_process');

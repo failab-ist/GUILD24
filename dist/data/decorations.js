@@ -14,7 +14,7 @@ G.DATA.decorations=[
     and display economy Decorations swap Slots, names and art following the Slot. Ids are kept, so ownership carries over. */
  {id:'sponsorSign', kind:'economy', slot:'sign',    name:'원정 지원금 간판',  price:1500, effect:p=>'손님이 방문할 때마다 손님 소지금의 '+pct(p.sponsorSign.budgetShare)+'만큼 더 쓸 수 있다',
   text:'길드 원정 지원금이 되는 가게. 모험가들이 하나씩 더 집어 간다.'},
- {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:p=>'새로 오는 모험가가 평범보다 높은 등급일 확률 '+(100-p.honorFrame.weights[0])+'% (기존 40%)',
+ {id:'honorFrame', kind:'economy',slot:'wall',name:'명예 모험가 액자',price:1000, effect:p=>'새로 오는 모험가가 일반보다 높은 등급일 확률 '+(100-p.honorFrame.weights[0])+'% (기존 40%)',
   text:'이름난 모험가의 초상. 저 벽에 걸리고 싶은 사람이 문을 연다.'},
  {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:750, effect:p=>'매일 먼저 온 손님 '+p.thriftSafe.customers+'명은 손님 소지금이 '+p.thriftSafe.firstWallet+'G씩 늘어난다 (소지금 상한 적용)',
   text:'카운터 아래 작은 금고. 먼저 온 손님들의 손님 소지금에 길드 적립금을 보태 준다.'},
