@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.13.11
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.11
+DOC_VERSION=2.13.12
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.12
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_13_11_CLOSED_2026-10-12 (tag v2.13.11 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
-SOURCE_ADOPTION_STATUS=V2_13_11_ADOPTED (every version through v2.13.11 is adopted in Source on main: v2.13.10 plus the Counter guarantee fix of v2.13.11; CHANGELOG §v2.13.11)
+FREEZE_STATUS=V2_13_12_CLOSED_2026-10-12 (tag v2.13.12 on its main merge commit, set by the User); every earlier version is closed - CHANGELOG §RELEASE RECORD
+SOURCE_ADOPTION_STATUS=V2_13_12_ADOPTED (every version through v2.13.12 is adopted in Source on main: v2.13.11 plus the early money change of v2.13.12; CHANGELOG §v2.13.12)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0

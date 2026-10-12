@@ -605,20 +605,20 @@ test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime trut
 // RELIC §OPERATING COST TIMING: real acquisition and deterministic cost calculation, no expedition simulation.
 test('운영비 가산은 구입 당일부터 합산하며 운영 효율 매뉴얼은 다음 날부터',()=>{
  const g=fresh('support-overhead-timing'),s=g.run;Object.assign(s,{day:5,phase:'order',npcs:[],queue:[],team:[],cursor:0,facilities:[],dayFacilities:[],money:5000,offers:[],cart:{},event:null});
- assert.equal(g.expectedOperatingCost(),170,'D5 base174 rounds to170');
- const ids=['kitchen','royalCert','hub'],prices=[200,320,340],want=[190,210,230];
+ assert.equal(g.expectedOperatingCost(),150,'D5 base154 rounds to150');
+ const ids=['kitchen','royalCert','hub'],prices=[200,320,340],want=[170,180,200];
  for(let i=0;i<ids.length;i++){
   s.relicWindow={milestoneDay:5,candidateIds:[ids[i]],candidatePrices:[prices[i]],purchased:null,expiryDay:10,focusedRevealSeen:true};
-  g.buyRelic(ids[i]);assert.equal(g.expectedOperatingCost(),want[i],ids[i]+' adds10% of174 on acquisition Day');
+  g.buyRelic(ids[i]);assert.equal(g.expectedOperatingCost(),want[i],ids[i]+' adds10% of154 on acquisition Day');
   assert.deepEqual(s.dayFacilities,[],'purchase does not rewrite the morning snapshot');
  }
- assert.equal(g.expectedOperatingCost({facilities:[],event:null}),170,'explicit modifier set is preserved');
- s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),230,'same-Day efficiency remains deferred');
- assert.equal(g.tomorrowOperatingCost(),200,'D6:175*1.30-30=197.5 rounds to200');
- assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),280,'flat Event +50 is not multiplied');
+ assert.equal(g.expectedOperatingCost({facilities:[],event:null}),150,'explicit modifier set is preserved');
+ s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),200,'same-Day efficiency remains deferred');
+ assert.equal(g.tomorrowOperatingCost(),170,'D6:155*1.30-30=171.5 rounds to170');
+ assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),250,'flat Event +50 is not multiplied');
  assert.equal(g.expectedOperatingCost({event:{effects:{overheadFree:true,overheadAdd:50}}}),0,'operating-free Event overrides owned surcharges');
  const saved=Save.import(Save.export(g.account,s));const restored=new Game(saved.account,saved.run);restored.autosave=false;
- assert.equal(restored.expectedOperatingCost(),230,'owned/dayFacilities timing survives Save/Load');
+ assert.equal(restored.expectedOperatingCost(),200,'owned/dayFacilities timing survives Save/Load');
 });
 
 /* RELIC §CANDIDATE RULES (User 2026-10-10): the tag steps are gone; the pick inside a grade is uniform. */

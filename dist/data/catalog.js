@@ -258,8 +258,8 @@ G.DATA.bossTuning={
    Common and offer no Epic (User 2026-10-02: a T1 Day's customer cannot pay for one); Legendary
    stays exceptional and never scales past 1%. Each row is the exact normalized percentage and sums to 100. */
 G.DATA.rarityBands=[
- {maxDay:3, weights:[76,20, 4, 0,0]},
- {maxDay:7, weights:[68,24, 8, 0,0]},
+ {maxDay:3, weights:[82,16, 2, 0,0]},
+ {maxDay:7, weights:[74,21, 5, 0,0]},
  {maxDay:12,weights:[58,27,12, 2,1]},
  {maxDay:19,weights:[53,27,15, 4,1]},
  {maxDay:24,weights:[46,27,17, 9,1]},

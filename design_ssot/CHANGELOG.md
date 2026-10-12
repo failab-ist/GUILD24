@@ -50,7 +50,8 @@ and this table is their commit record.
 | v2.13.8 | 2026-10-11 | Night reversal portrait tone fix and version bump in one PR #182 | (the User sets it) |
 | v2.13.9 | 2026-10-11 | Item roles rebalance (potion down, Food / Drink and Common Counter up, Tier I Hazard +2), Wallet rollback, Death limit 5 / 8 / 10 and version bump in one PR #183 | (the User sets it) |
 | v2.13.10 | 2026-10-12 | 에너지드링크 기동 18 · 190G and version bump in one PR #184 | (the User sets it) |
-| v2.13.11 | 2026-10-12 | Known-Hazard Counter guarantee drawn by the Day band (bug fix) in one PR (this one) | (the User sets it) |
+| v2.13.11 | 2026-10-12 | Known-Hazard Counter guarantee drawn by the Day band (bug fix) in one PR #185 | (the User sets it) |
+| v2.13.12 | 2026-10-12 | Early money: Order Rarity D1~7 more Common, operating cost dayBase 170 → 150 in one PR (this one) | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -59,6 +60,12 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.12 — Early money: cheaper Days, more Common offers (User 2026-10-12)
+
+- ECONOMY_ORDER §ORDER RARITY PROGRESSION: D1–3 76 / 20 / 4 → 82 / 16 / 2, D4–7 68 / 24 / 8 → 74 / 21 / 5 (Common / Uncommon / Rare). A User Run's early sheets showed pricey Items first while a Common one already answered a Tier I Gate.
+- ECONOMY_ORDER §OPERATING COST: dayBase 170 → 150 (−20G a Day before the Level / Rarity multipliers). User Runs ended early with cash per Day near or under zero.
+- Measured, investor fresh 1000 against v2.13.11 (same seeds): ended by D10 40.5 → 32.8%, cash per Day 43 → 52G, D30 reach 5.3 → 6.7%, clear 2.3 → 2.7%. The early-hump halving was measured on top (ended by D10 31.1%, clear 2.5%) and left out. Death limit 5 / 8 / 10 held. Log: `reports/v2100-measure/early-money-20261012/`.
 
 ## v2.13.11 — The Counter guarantee keeps the Day band (User 2026-10-12)
 
