@@ -71,6 +71,7 @@ and this table is their commit record.
 - NIGHT coach marks: the one-mark-a-night limit is kept on the Run (`nightCoachDay`), not in memory. Reopening the app mid-NIGHT forgot it and told the next mark on the same record at once (e.g. 부상 then 사고).
 - ECONOMY_ORDER §Persistent Wallet: expedition rewards (the Outcome reward and the deep-Gate bonus) now clamp the Wallet to 2000G like every other increase. The DAY 30 party skips the visit-time clamp, so a Wallet raised past 2000G on DAY 29 stayed over the cap on the Final. Other Days were unaffected (the visit clamps first).
 - COPY: `(소지금 상한 적용)` removed from 첫 방문 쿠폰, 프리미엄 멤버십 and 알뜰 금고; 점주 가이드 판매 says `손님 소지금은 최대 2000G까지 쌓인다.` once instead.
+- UI_UX §NIGHT — SAVED BY THE SALE: the sentence under the card (`원정을 끝내지 못하고 다친 채 돌아왔다.`) and the growth rows were already the real result while the worse verdict was still on the card, which gave the reversal away. The sentence now reads the worse verdict's own until the Item is on its way, then it fades and the real one settles in; the rows appear with the stamp. Insurance reversals too. Presentation only; no rule or balance change.
 
 ## v2.13.11 — The Counter guarantee keeps the Day band (User 2026-10-12)
 
