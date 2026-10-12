@@ -3233,6 +3233,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  assert.ok(h.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'),'the guide directs the player to the actual Item effects');
  assert.ok(h.includes('바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.'),'the guide includes the overcharge refusal exception');
+ assert.ok(h.includes('손님 소지금은 최대 2000G까지 쌓인다.'),'the guide states the 2000G Wallet cap');
  const rescueLimit=DATA.balance.rescueLimit;
  try{DATA.balance.rescueLimit=7;assert.ok(render([source],'help()',ctx).includes('한 점포에서 최대 7번의 마감에 이용할 수 있다.'),'the guide follows the actual rescue limit');}
  finally{DATA.balance.rescueLimit=rescueLimit;}
