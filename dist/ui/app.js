@@ -132,6 +132,8 @@ const SAVED={hold:860,shove:1000,gone:1260,home:1300,settle:1500};
    faded (사망's runs ~1.4 s, 중상's ~0.45 s), then a short silence, then the shove - so the two sounds never overlap */
 const SAVED_WAIT={'사망':250,'중상':100};
 const savedAt=w=>{const d=SAVED_WAIT[w]||0;return Object.fromEntries(Object.entries(SAVED).map(([k,v])=>[k,v+d]));};
+/* the Outcome a reversal turned away (the ghost tag's word, and the line under the card before the real one lands) */
+const reversedFrom=(r,st)=>st.saved||(r.avoidedDeath||st.brink?'사망':(r.events||[]).find(e=>e.id==='escape'||e.id==='revive')?.from||'중상');
 const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
  if(savedBeat(r))return {...st,entry:240,hold:savedAt(savedWorse(r)).hold,from:1.6,dip:4,print:true,brink:true,saved:savedWorse(r)};
  return preparedBrink(r)?{...st,hold:NIGHT_STAMP.saved.hold,print:true,brink:true}:st;};
@@ -450,6 +452,15 @@ function savedPlay(A,r,st,tag){const T=savedAt(st.saved);
   scale:[{from:.6,to:.6,duration:T.shove-150},{to:1.35,duration:150},{to:1.2,duration:80},{to:1,duration:T.home-T.shove-80},{to:.6,duration:T.settle-T.home}],
   onComplete:()=>fly.remove()});
  A(slot,{opacity:{from:0,to:1,duration:120,delay:T.settle}});}
+function swapWhat(A,r,from,land){
+  const what=$('.beat .told .what');if(!what)return;
+  const old=document.createElement('span'),fin=document.createElement('span');
+  old.textContent=Presentation.nightHappened({...r,outcome:from,rescued:false,avoidedDeath:false});
+  if(old.textContent===what.textContent)return;
+  fin.append(...what.childNodes);what.classList.add('swap');what.append(old,fin);sentenceBreaks(what);
+  A(old,{opacity:[{from:1,to:1,duration:land},{to:0,duration:140,ease:'in(2)'}],
+   translateY:[{from:0,to:0,duration:land},{to:8,duration:140,ease:'in(2)'}],onComplete:()=>old.remove()});
+  A(fin,{opacity:{from:0,to:1,duration:200,delay:land,ease:'outQuad'},translateY:{from:-8,to:0,duration:200,delay:land,ease:'outQuad'}});}
 function phaseNight(A){
   clearSavedFly();
   const beat=$('.beat'),tag=$('.beat .verdict');
@@ -472,7 +483,7 @@ function phaseNight(A){
    if(st.saved)savedPlay(A,r,st,tag);
    else if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
     /* NIGHT_CLOSING §INSURANCE CAUSALITY: the Outcome the Insurance actually turned away (귀환석 also turns a 부상) */
-    const from=r.avoidedDeath||st.brink?'사망':(r.events||[]).find(e=>e.id==='escape'||e.id==='revive')?.from||'중상';
+    const from=reversedFrom(r,st);
     g.className='verdict ghost t-'+({'사망':'gone','중상':'severe','부상':'hurt'}[from]||'severe');g.textContent=from;
     g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
     A(g,{opacity:[{from:0,to:.4,duration:st.hold,delay:st.entry},{to:.4,duration:STAMP_FALL},{to:0,duration:120}],
@@ -481,7 +492,11 @@ function phaseNight(A){
   /* after-motion has one owner: the reversal's proof lines cut in on the overstamp; else the Hero
      Item line settles; else the REWARD figures count up. A death has none. */
   /* the character's line answers the real Outcome, so a reversal (the worse verdict printed first) keeps it back until the stamp lands */
-  if(st.print){const say=$('.beat .say');if(say)A(say,{opacity:[{from:0,to:0,duration:land},{to:1,duration:160,ease:'outQuad'}]});}
+  if(st.print){const say=$('.beat .say');if(say)A(say,{opacity:[{from:0,to:0,duration:land},{to:1,duration:160,ease:'outQuad'}]});
+   /* the line under the card and the growth rows tell the real result, so they wait for it too: until the stamp lands the line
+      reads the turned-away Outcome, then it drops and the real one rises in its place */
+   if(r){swapWhat(A,r,reversedFrom(r,st),land);const chg=$('.beat .changed');
+    if(chg)A(chg,{opacity:{from:0,to:1,duration:160,delay:land,ease:'outQuad'},translateY:{from:-4,to:0,duration:160,delay:land,ease:'outQuad'}});}}
   const told=[...document.querySelectorAll('.beat .told .cause,.beat .told .why')],hero=$('.beat .cause li.hero');
   if(st.print)told.forEach(el=>A(el,{opacity:{from:0,to:1,duration:1,delay:land}}));
   /* the claim's accent bar belongs to its list: when the claim is the list's only line, the list settles */
