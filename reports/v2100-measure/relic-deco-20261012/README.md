@@ -103,6 +103,6 @@ node reports/v2100-measure/relic-deco-20261012/tools/fork-read.cjs fork.json
 |---|---|---|---|
 | A: 온 손님 전원 −2 | +5.7 | +5.6 | 66% |
 | B: 먼저 온 손님 2명만 −5 | +5.3 | +5.8 | 70% |
+| B': 먼저 온 손님 2명만 −3 | +3.0 | +3.2 | 58% |
 
 측정용으로 `decorationParams.voucher`에 `first`·`firstFatigue`(먼저 온 N명 몫)를 읽게 했다. 기본값은 그대로(전원 −6).
-| B': 먼저 온 손님 2명만 −3 | +3.0 | +3.2 | 58% |
