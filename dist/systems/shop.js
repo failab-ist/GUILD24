@@ -648,7 +648,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    const bonusXp=(great?t.greatExp:t.successExp)||0,bonusWallet=(great?t.greatWallet:t.successWallet)||0;
    rep.deep={great,bonusXp,bonusWallet};
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
-   if(bonusWallet)n.money+=bonusWallet;
+   if(bonusWallet)n.money=Math.min(2000,n.money+bonusWallet);
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
   if(d.deep)syncDeepReport(n,rep,beforeStats);
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,D.balance.returnLoyalty);if(n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}

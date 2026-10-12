@@ -724,4 +724,14 @@ test('FINAL: a FIRE pair adds nominal12 before the shared0.95 multiplier',()=>{
  assert.ok(fire>=3&&other>=3,'both kinds of pair were drawn');
 });
 
+test('WALLET cap: an expedition reward never lifts a Persistent Wallet past 2000G, so a D30 party holds at most 2000G',()=>{
+ for(let i=0;i<40;i++){
+  const g=atFinal('wallet-'+i),s=g.run;
+  const n=s.npcs[0];n.money=1990;n.traits=[];n.pack=[];n.fatigue=0;n.injury=0;
+  const d2=copy(s.dungeons[0]);d2.id='wallet';d2.final=false;
+  Dungeon.resolve(n,d2,new RNG('wallet-'+i),[],{daily:{},loadout:{},records:[]});
+  assert.ok(n.money<=2000,'wallet '+n.money);
+ }
+});
+
 console.log(count+' final groups passed');
