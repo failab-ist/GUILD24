@@ -690,7 +690,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
 test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decoration / Store Support / Loyalty copy follows the values',()=>{
  const EFFECTS={
   sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
-  honorFrame:'새로 오는 모험가가 평범보다 높은 등급일 확률 60% (기존 40%)',
+  honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 60% (기존 40%)',
   thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 200G씩 늘어난다 (소지금 상한 적용)',
   guildShelf:'매일 아침 35% 확률로 그날 손님이 1명 더 온다',
   trainingSign:'처음 찾아오는 모험가는 55% 확률로 레벨 +1로 온다',

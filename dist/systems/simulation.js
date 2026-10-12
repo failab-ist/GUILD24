@@ -342,7 +342,7 @@ function playRun(g,out,ctx){
  /* `balanced` is the human-type seller (User 2026-09-25, from the User's own play; it replaces the old engaged
     heuristic, which sold half its goods at 50% and spent ~40% of the operating cost on rerolls): full price, 50% only
     for a customer just below 단골 (loyalty 41~50); on a short wallet, 50% for a crisis Item (a Counter for this Gate or
-    Insurance) unless the adventurer is Lv3 or lower and 평범, and for any Item to a top-roster adventurer (highest
+    Insurance) unless the adventurer is Lv3 or lower and 일반, and for any Item to a top-roster adventurer (highest
     living level -1 or above); only Items that do something for this customer, except one 1 day or less from discard
     and food / potion for a great-success candidate; reroll only when the sheet has no Counter for today's Gates and no
     food, at most twice; Deep sponsorship only for a top-roster adventurer with three Days of operating cost left; the

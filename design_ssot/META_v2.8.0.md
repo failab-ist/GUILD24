@@ -393,7 +393,7 @@ rare-NPC rarity weights = [40, 32, 18, 8, 2]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 평범 40% -> 60%), 영웅 and 전설 the most. This
+Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 60%), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
