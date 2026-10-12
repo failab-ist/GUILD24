@@ -458,11 +458,11 @@ function swapWhat(A,r,from,land){
   old.textContent=Presentation.nightHappened({...r,outcome:from,rescued:false,avoidedDeath:false});
   if(old.textContent===what.textContent)return;
   fin.append(...what.childNodes);what.classList.add('swap');what.append(old,fin);sentenceBreaks(what);
-  /* the turned-away line drops with the stamp, and the real one is pressed in */
-  A(old,{opacity:[{from:1,to:1,duration:land},{to:0,duration:150,ease:'in(2)'}],
-   translateY:[{from:0,to:0,duration:land},{to:10,duration:150,ease:'in(2)'}],onComplete:()=>old.remove()});
-  A(fin,{opacity:{from:0,to:1,duration:70,delay:land,ease:'linear'},translateY:{from:-10,to:0,duration:200,delay:land,ease:'outBack'},
-   scale:{from:1.05,to:1,duration:200,delay:land,ease:'outBack'}});}
+  /* the turned-away line drops while the Item is still on its way, and the real one settles in after it */
+  A(old,{opacity:[{from:1,to:1,duration:land},{to:0,duration:320,ease:'inOut(2)'}],
+   translateY:[{from:0,to:0,duration:land},{to:10,duration:320,ease:'inOut(2)'}],onComplete:()=>old.remove()});
+  A(fin,{opacity:{from:0,to:1,duration:320,delay:land+80,ease:'outQuad'},translateY:{from:-10,to:0,duration:380,delay:land+80,ease:'outBack'},
+   scale:{from:1.04,to:1,duration:380,delay:land+80,ease:'outBack'}});}
 function phaseNight(A){
   clearSavedFly();
   const beat=$('.beat'),tag=$('.beat .verdict');
@@ -497,7 +497,7 @@ function phaseNight(A){
   if(st.print){const say=$('.beat .say');if(say)A(say,{opacity:[{from:0,to:0,duration:land},{to:1,duration:160,ease:'outQuad'}]});
    /* the line under the card and the growth rows tell the real result, so they wait for it too: until the stamp lands the line
       reads the turned-away Outcome, then it drops and the real one rises in its place */
-   if(r){swapWhat(A,r,reversedFrom(r,st),land);const chg=$('.beat .changed');
+   if(r){swapWhat(A,r,reversedFrom(r,st),st.saved?savedAt(st.saved).shove-150:land);const chg=$('.beat .changed');
     if(chg)A(chg,{opacity:{from:0,to:1,duration:160,delay:land,ease:'outQuad'},translateY:{from:-4,to:0,duration:160,delay:land,ease:'outQuad'}});}}
   const told=[...document.querySelectorAll('.beat .told .cause,.beat .told .why')],hero=$('.beat .cause li.hero');
   if(st.print)told.forEach(el=>A(el,{opacity:{from:0,to:1,duration:1,delay:land}}));
