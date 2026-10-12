@@ -654,11 +654,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,D.balance.returnLoyalty);if(n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
- /* META 휴식 바우처 꽂이: every living adventurer rests its Fatigue off overnight (decorationParams.voucher), visitor or not */
+ /* META 휴식 바우처 꽂이: a living adventurer who came to the store today rests its Fatigue off overnight (decorationParams.voucher) */
  if(this.wears('voucher'))for(const n of s.npcs)if(n.alive){
+  const rep=s.results.find(r=>r.npcId===n.id);if(!rep)continue;
   const before=n.fatigue||0;n.fatigue=Math.max(0,before-D.decorationParams.voucher.fatigue);
-  const rep=s.results.find(r=>r.npcId===n.id);
-  if(rep){if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
+  {if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
    rep.settledFatigue=n.fatigue;n.records.at(-1).settledFatigue=n.fatigue;}
  }
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money,rerolls:s.rerollCount||0,gates:s.dungeons.map(d=>[d.family,d.tier||1,d.temporary?1:0])});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
