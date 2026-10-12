@@ -67,6 +67,7 @@ and this table is their commit record.
 - ECONOMY_ORDER §OPERATING COST: dayBase 170 → 150 (−20G a Day before the Level / Rarity multipliers). User Runs ended early with cash per Day near or under zero.
 - Measured, investor fresh 1000 against v2.13.11 (same seeds): ended by D10 40.5 → 32.8%, cash per Day 43 → 52G, D30 reach 5.3 → 6.7%, clear 2.3 → 2.7%. The early-hump halving was measured on top (ended by D10 31.1%, clear 2.5%) and left out. Death limit 5 / 8 / 10 held. Log: `reports/v2100-measure/early-money-20261012/`.
 - GLOSSARY: Adventurer Rarity is 일반 · 고급 · 희귀 · 영웅 · 전설, the same names and colours as Item Rarity (평범 → 일반, 유망 → 고급; both retired). Display only: the Rarity is saved as an index 0~4, so old saves load unchanged. The 명예 모험가 액자 text reads 「일반보다 높은 등급」 (PR #187, folded into this version).
+- EVENT §46 냉장고 고장: the shelf cut floors at `오늘까지` (1 day), not 0 days. Stock already on its last day was cut once more and showed `0일` in the warehouse; it was discarded tonight either way, so only the display was wrong.
 
 ## v2.13.11 — The Counter guarantee keeps the Day band (User 2026-10-12)
 
