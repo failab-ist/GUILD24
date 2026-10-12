@@ -3,7 +3,7 @@
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
 DOC_VERSION=2.12.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.10
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -450,7 +450,8 @@ however they were drawn):
 
 When any known Hazard reaches 3 consecutive missing sets:
 - replace one ordinary offer slot with one legal/unlocked Item that validly Counters a currently
-  missing known Hazard
+  missing known Hazard, its Rarity drawn by the current Day-band table among the Rarities those Counters have
+  (an early Day's guarantee is mostly a Common Counter, and no Epic before the band offers Epic)
 - preserve total offer count
 - do not reveal an unknown Hazard
 - reset covered missing state through the same resulting offer truth

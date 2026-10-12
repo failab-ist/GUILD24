@@ -729,6 +729,15 @@ test('the Counter guarantee comes on the third sheet in a row without one, Rerol
  g.reroll();assert.ok(!has());assert.equal(s.pity.counter,1,'rerolling the guaranteed sheet away starts a new count');
  g.rollOffer=roll;});
 
+/* ECONOMY_ORDER §Known-Hazard Counter pity on top of §ORDER RARITY PROGRESSION: the guarantee keeps the Day band */
+test('the Counter guarantee draws by the Day band: mostly Common early, never an Epic before DAY 8',()=>{
+ const tally={};for(let k=0;k<300;k++){const g=fresh('pity-band-'+k),s=g.run,hz=Relics.known(g);if(!hz.length)continue;
+  g.rollOffer=function(){return this.offerFor(DATA.itemBy.rice);};s.day=2;s.pity={rare:0,hazards:Object.fromEntries(hz.map(h=>[h,2]))};
+  g.generateOffers();const c=s.offers.find(o=>Relics.directCounter(DATA.itemBy[o.item],hz));assert.ok(c,'the guarantee fires');
+  const r=DATA.itemBy[c.item].rarity;tally[r]=(tally[r]||0)+1;}
+ assert.equal(tally[3]||0,0,'no Epic Counter on DAY 2');const n=Object.values(tally).reduce((a,b)=>a+b,0);
+ assert.ok((tally[0]||0)/n>.6,'Common carries most of the early guarantee');});
+
 /* User 2026-10-02: a whole-Bag proof (each Item alone was enough) names both Items, never 챙긴 보급 */
 test('a whole-Bag Hero proof names both Items, or the one Item twice',()=>{
  const r=o=>({outcome:'부상',heroProof:{outcome:{items:null,worse:'사망'}},...o});
