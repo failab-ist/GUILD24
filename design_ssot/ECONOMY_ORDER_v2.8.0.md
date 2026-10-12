@@ -450,7 +450,8 @@ however they were drawn):
 
 When any known Hazard reaches 3 consecutive missing sets:
 - replace one ordinary offer slot with one legal/unlocked Item that validly Counters a currently
-  missing known Hazard
+  missing known Hazard, its Rarity drawn by the current Day-band table among the Rarities those Counters have
+  (an early Day's guarantee is mostly a Common Counter, and no Epic before the band offers Epic)
 - preserve total offer count
 - do not reveal an unknown Hazard
 - reset covered missing state through the same resulting offer truth

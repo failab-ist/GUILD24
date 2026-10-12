@@ -415,7 +415,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   const isC=o=>G.Relics.directCounter(D.itemBy[o.item],Object.keys(D.hazards));let slot=ordinary-1;
   if(!isC(s.offers[slot])&&s.offers.filter(isC).length>=this.counterCap){const j=s.offers.findIndex((o,i)=>i<ordinary&&isC(o));if(j>=0)slot=j;}
   const others=s.offers.filter((o,i)=>i!==slot),room=matches.filter(it=>others.filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);
-  if(matches.length)s.offers[slot]=this.offerFor(this.rng.pick(room.length?room:matches));
+  /* ECONOMY_ORDER §Known-Hazard Counter pity: the guaranteed Counter keeps the current Day-band Rarity table (pity sits on
+     top of it), so an early Day's guarantee is mostly a Common Counter and never an Epic one before the band allows it */
+  if(matches.length){const pool=room.length?room:matches,band=(D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1)).weights,
+   tiers=[...new Set(pool.map(it=>it.rarity))].filter(v=>band[v]>0),rarity=tiers.length?this.rng.weighted(tiers,v=>band[v]):Math.min(...pool.map(it=>it.rarity));
+   s.offers[slot]=this.offerFor(this.rng.pick(pool.filter(it=>it.rarity===rarity)));}
  }
  if(hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
