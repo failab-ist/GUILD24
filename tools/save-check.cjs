@@ -94,8 +94,10 @@ function report(save){
  const k=key=>sum(hist,d=>d[key]);
  head(['매출','유물 추가 지급','발주','운영비','발주 후보 교환','점포지원','폐기 원가','할인액','바가지 초과분','대성공 수입','기타 수입']);
  row([k('revenue'),k('commission'),k('spent'),k('operating'),k('rerollSpent'),k('relicSpent'),k('wasteCost'),k('discount'),k('overcharge'),k('greatSuccess'),k('subsidy')+k('liquidation')].map(v=>v+'G'));
- L.push('');head(['DAY','매출','발주','운영비','교환','지원','할인','판매 수','잔액']);
- for(const d of hist)row([d.day,d.revenue||0,d.spent||0,d.operating||0,d.rerollSpent||0,d.relicSpent||0,d.discount||0,d.sales||0,d.balance]);
+ L.push('');head(['DAY','매출','발주','운영비','교환','지원','할인','판매 수','잔액','리롤','게이트']);
+ const gate=g=>(D.dungeonBy[g[0]]?.short||g[0])+' '+['','I','II','III'][g[1]]+(g[2]?' (임시)':'');
+ /* 리롤 횟수 · 그날 게이트는 v2.13.12부터 세이브에 남는다(User 2026-10-12); 그 전 세이브는 - */
+ for(const d of hist)row([d.day,d.revenue||0,d.spent||0,d.operating||0,d.rerollSpent||0,d.relicSpent||0,d.discount||0,d.sales||0,d.balance,d.rerolls??'-',d.gates?d.gates.map(gate).join(' · '):'-']);
  L.push('');
 
  L.push('## 4. 손님 흐름','');
@@ -107,11 +109,12 @@ function report(save){
 
  L.push('## 5. 원정 기록 (준비 대 게이트)','');
  L.push('준비/요구 = 출발 시 준비 전력 ÷ 게이트 요구 전력. `승리 불가`는 최고 흔들림('+(1+W).toFixed(3)+'배)으로도 못 미치는 원정이다.','');
- head(['DAY','손님','출발 Lv','신규 최저 Lv','게이트','상품','결과','준비/요구','전투 승률','판정']);
+ L.push('맨손/요구 = 같은 손님이 상품 없이 갔을 때의 준비 전력 ÷ 게이트 요구 전력(v2.13.12부터 기록, 그 전 세이브는 -).','');
+ head(['DAY','손님','출발 Lv','신규 최저 Lv','게이트','상품','결과','준비/요구','맨손/요구','전투 승률','판정']);
  let impossible=0,belowFloor=0;
  for(const r of recs){const ratio=1+(r.greatMargin??0),odds=winOdds(ratio),lv=departLevel(r),fl=newcomerMin(r.day);
   const tag=ratio*(1+W)<1?'승리 불가':ratio*(1-W)>=1?'확정 승리':'';if(tag==='승리 불가')impossible++;if(lv<fl)belowFloor++;
-  row([r.day,r.name,lv,lv<fl?fl+' ▲':fl,r.dungeonName+(r.deep?' (심층)':''),(r.items||[]).map(item).join(' + ')||'-',r.outcome,ratio.toFixed(2),pct(odds),tag]);}
+  row([r.day,r.name,lv,lv<fl?fl+' ▲':fl,r.dungeonName+(r.deep?' (심층)':''),(r.items||[]).map(item).join(' + ')||'-',r.outcome,ratio.toFixed(2),r.bareRatio!=null?r.bareRatio.toFixed(2):'-',pct(odds),tag]);}
  L.push('','승리 불가 원정 **'+impossible+'회** / '+recs.length+'회 · 신규 손님 최저 레벨보다 낮게 출발 **'+belowFloor+'회** (▲).','');
 
  L.push('## 6. 손님 상태 · 성장 · 방문','');
@@ -128,7 +131,12 @@ function report(save){
 
  L.push('## 7. 판매 가격','');
  const sold=sum(hist,d=>d.sales),disc=k('discount'),over=k('overcharge');
- L.push('판매 '+sold+'개 · 할인액 '+disc+'G · 정가 초과 수입 '+over+'G. 할인이 투자였는지 지갑 부족이었는지는 판매 순간의 지갑이 기록에 없어 이 도구로는 가리지 않는다.','');
+ const sales=npcs.flatMap(n=>(n.history||[]).filter(h=>h.mode==='half')),known=sales.filter(h=>h.wallet!=null);
+ L.push('판매 '+sold+'개 · 할인액 '+disc+'G · 정가 초과 수입 '+over+'G.');
+ /* 판매 순간의 손님 지갑은 v2.13.12부터 세이브에 남는다(User 2026-10-12) */
+ if(known.length){const short=known.filter(h=>h.wallet<(D.itemBy[h.item]?.sell??0));
+  L.push('반값 판매 '+sales.length+'개 중 지갑이 기록된 '+known.length+'개: 정가를 낼 돈이 없었던 판매 **'+short.length+'개**, 정가를 낼 수 있었는데 깎아 준 판매 **'+(known.length-short.length)+'개**.','');}
+ else L.push('할인이 투자였는지 지갑 부족이었는지는 판매 순간의 지갑이 기록에 없어(v2.13.12 전 세이브) 가리지 않는다.','');
  return L.join('\n');
 }
 

@@ -587,7 +587,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* 원정 전문 인증: the buyer of a Counter for their own Gate collects +50G on the next visit, once per purchase Day */
  s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
- n.history.push({day:s.day,item:it.id,mode,paid:intent.price,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,subsidy:intent.bundle,commission,loyalty:n.loyalty-before});
+ n.history.push({day:s.day,item:it.id,mode,paid:intent.price,wallet:n.money+intent.debit-fromEvent,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,subsidy:intent.bundle,commission,loyalty:n.loyalty-before});
  /* SA-Q11. A committed purchase is the one thing the Player did, so the Great Success signal
     - and ONLY that signal - is recomputed against the Bag they just changed. The rest of the
     SALE-ENTRY snapshot stays frozen: Combat Forecast, Hazard Readiness and the 실패 시 사망
@@ -661,7 +661,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   if(rep){if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
    rep.settledFatigue=n.fatigue;n.records.at(-1).settledFatigue=n.fatigue;}
  }
- s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
+ s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money,rerolls:s.rerollCount||0,gates:s.dungeons.map(d=>[d.family,d.tier||1,d.temporary?1:0])});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;
 })(globalThis);
