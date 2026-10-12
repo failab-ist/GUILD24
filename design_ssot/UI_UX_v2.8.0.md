@@ -915,6 +915,7 @@ Every such customer gets it on their own card; there is no nightly cap (User 202
     1300-1500+pause  the Item drops beside the `{Item} 덕분에 살아 돌아왔다.` line and stays there (28 px icon)
 
 - the stamp, label and tape keep the VERDICT STAMP design; no caption names the what-if
+- the sentence under the card (and the growth rows) tell the real Outcome, so they do not show it early (User 2026-10-12): until the stamp lands the sentence reads the worse verdict's own (`사망` → `전투에서 밀린 뒤 돌아오지 못했다.`); it fades and drops while the Item is still flying (from about 150 ms before the shove, 320 ms), then the real sentence settles in (380 ms). The growth rows and the Hero line appear when the stamp lands. An Insurance reversal (no flying Item) does the same on its stamp's landing. Reduced motion: the real sentence at once
 - reduced motion: the end state at once, the Item icon already beside its line
 - sound: the worse verdict's own Outcome cue (`death` / `severe`) with its print, ending before the shove (User 2026-10-09),
   `shove` (a whoosh) on the shove, and on the landing a relief in
