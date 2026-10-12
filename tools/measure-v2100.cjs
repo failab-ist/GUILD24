@@ -91,7 +91,9 @@ function worker({root,kind,policy,deco,T,R,part}){
    core:split(s.npcs,ok),prep:prep(s.npcs),
    cash:(s.reportHistory||[]).length?((s.reportHistory.at(-1).balance-700)/s.reportHistory.length):0,
    deco:(this.account.store?.owned||[]).length,sales:s.settlement?.sales??s.stats.revenue,gain:s.settlement?.gain??0,rate:s.settlement?.rate??0,
-   relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay])});
+   relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay]),
+   // 원정마다 [날, 티어, 출발 레벨, 준비/요구, 부상 출발 1/0, 결과, 상품 id를 + 로 이은 것] (User 2026-10-12: 사람 세이브와 같은 기준으로 비교)
+   exps:recs.map(x=>{const m=(x.changes||[]).map(c=>/^Lv\.(\d+) → Lv\.(\d+)$/.exec(c)).find(Boolean);return [x.day,((x.dungeonName||"").match(/ (I+)$/)||[0,"I"])[1].length,m?+m[1]:x.level,1+(x.greatMargin??0),x.departedInjured?1:0,x.outcome,(x.items||[]).join("+")];})});
   return r;};
  G.Debug.trajectory({trajectories:T,runs:R,policy,build:'hybrid',prefix:'v2100-'+kind+'-'+part,purchaseOrder:DECO[deco],relicAware:true,relicPriority:RANK});
  return {rows,wallets};

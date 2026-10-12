@@ -15,3 +15,4 @@ investor 봇, 프레시(첫 런 보호 ON), 같은 시드. `node tools/measure-v
 
 - `fresh200-ABCDE.log`: 200판 비교
 - `fresh1000-main-A-D-E.log`: 1000판 확인
+- `traj-v21310-vs-v21312.log`: v2.13.10(before) 대 v2.13.12(after) 장식 궤적, investor `--traj 200 --fresh 0 --decos none,economy,survival,operation` (200 × 10런 × 4루트). 10런 안 첫 클리어: 장식 없음 17.0 → 16.5%, 경제 34.0 → 37.0%, 생존 40.0 → 54.5%, 운영 33.0 → 53.5%.
