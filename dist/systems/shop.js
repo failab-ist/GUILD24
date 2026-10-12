@@ -657,7 +657,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* META 휴식 바우처 꽂이: a living adventurer who came to the store today rests its Fatigue off overnight (decorationParams.voucher) */
  if(this.wears('voucher'))for(const n of s.npcs)if(n.alive){
   const rep=s.results.find(r=>r.npcId===n.id);if(!rep)continue;
-  const before=n.fatigue||0;n.fatigue=Math.max(0,before-D.decorationParams.voucher.fatigue);
+  const V=D.decorationParams.voucher,cut=s.results.indexOf(rep)<(V.first||0)?V.firstFatigue:V.fatigue;
+  const before=n.fatigue||0;n.fatigue=Math.max(0,before-cut);
   {if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
    rep.settledFatigue=n.fatigue;n.records.at(-1).settledFatigue=n.fatigue;}
  }
