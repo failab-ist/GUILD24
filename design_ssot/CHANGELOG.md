@@ -48,7 +48,8 @@ and this table is their commit record.
 | v2.13.6 | 2026-10-11 | Android Back exit confirm and version bump in one PR #180 | (the User sets it) |
 | v2.13.7 | 2026-10-11 | 퇴각 / 부상 Wallet raise of v2.13.5 halved, version bump in one PR #181 | (the User sets it) |
 | v2.13.8 | 2026-10-11 | Night reversal portrait tone fix and version bump in one PR #182 | (the User sets it) |
-| v2.13.9 | 2026-10-11 | Item roles rebalance (potion down, Food / Drink and Common Counter up, Tier I Hazard +2), Wallet rollback, Death limit 5 / 8 / 10 and version bump in one PR (this one) | (the User sets it) |
+| v2.13.9 | 2026-10-11 | Item roles rebalance (potion down, Food / Drink and Common Counter up, Tier I Hazard +2), Wallet rollback, Death limit 5 / 8 / 10 and version bump in one PR #183 | (the User sets it) |
+| v2.13.10 | 2026-10-12 | 에너지드링크 기동 18 · 190G and version bump in one PR (this one) | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -57,6 +58,10 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.10 — 에너지드링크 no longer outdoes 하급 포션 (User 2026-10-12)
+
+- ITEM §ACTIVE CATALOG: 에너지드링크 기동 19 → 18, Buy / Sell 80 / 160 → 95 / 190. After v2.13.9 it gave the Power of 하급 포션 (140G) for 20G more and added Hazard cover and Supply, so the potion had no reason to be picked. Now it is a little below the potion in Power (4.86 vs 5.0) and costs 50G more for the cover. Not measured.
 
 ## v2.13.9 — Each Bag slot has its own job (User 2026-10-11)
 
