@@ -1510,7 +1510,7 @@ const coachSteps={
  relic:[['relic-what','.relic-open','점포지원은 영업 내내 적용된다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
 };
 let activeCoach=null;
-let nightMarked=null,riskMarked=null;
+let riskMarked=null;
 const RISK_MARKS=['hurt','strain','exhausted'];
 let coachSettle=0,coachPainted=null,activeGroup=null;
 /* PRESENTATION §Tutorial / coach target truth: clip the target to its visible scrollports. */
@@ -1596,7 +1596,7 @@ function showCoach(){
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
     appeared there. */
  const visible=sel=>[...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);
- const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&nightMarked?.[0]===game.run&&nightMarked[1]===day,riskDone=riskMarked?.[0]===game.run&&riskMarked[1]===day;
+ const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&game.run.nightCoachDay===day,riskDone=riskMarked?.[0]===game.run&&riskMarked[1]===day;
  /* x[4] = the first DAY a mark may show; a NIGHT mark waits once one has been told this night */
  const step=steps.find(x=>!tutorial['coach-'+x[0]]&&!(x[4]>day)&&!nightDone&&!(riskDone&&RISK_MARKS.includes(x[0]))&&visible(x[1]));if(!step)return;
  const target=visible(step[1]);
@@ -1615,7 +1615,7 @@ function showCoach(){
 }
 function finishCoach(){
  if(!activeCoach)return;const t=game.account.tutorial??={};
- t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];if(RISK_MARKS.includes(activeCoach[0]))riskMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+ t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')game.run.nightCoachDay=game.run.day;if(RISK_MARKS.includes(activeCoach[0]))riskMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 document.addEventListener('scroll',()=>{if(!activeCoach)return;
  const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);

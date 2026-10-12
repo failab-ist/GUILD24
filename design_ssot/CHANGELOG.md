@@ -68,6 +68,7 @@ and this table is their commit record.
 - Measured, investor fresh 1000 against v2.13.11 (same seeds): ended by D10 40.5 → 32.8%, cash per Day 43 → 52G, D30 reach 5.3 → 6.7%, clear 2.3 → 2.7%. The early-hump halving was measured on top (ended by D10 31.1%, clear 2.5%) and left out. Death limit 5 / 8 / 10 held. Log: `reports/v2100-measure/early-money-20261012/`.
 - GLOSSARY: Adventurer Rarity is 일반 · 고급 · 희귀 · 영웅 · 전설, the same names and colours as Item Rarity (평범 → 일반, 유망 → 고급; both retired). Display only: the Rarity is saved as an index 0~4, so old saves load unchanged. The 명예 모험가 액자 text reads 「일반보다 높은 등급」 (PR #187, folded into this version).
 - EVENT §46 냉장고 고장: the shelf cut floors at `오늘까지` (1 day), not 0 days. Stock already on its last day was cut once more and showed `0일` in the warehouse; it was discarded tonight either way, so only the display was wrong.
+- NIGHT coach marks: the one-mark-a-night limit is kept on the Run (`nightCoachDay`), not in memory. Reopening the app mid-NIGHT forgot it and told the next mark on the same record at once (e.g. 부상 then 사고).
 - ECONOMY_ORDER §Persistent Wallet: expedition rewards (the Outcome reward and the deep-Gate bonus) now clamp the Wallet to 2000G like every other increase. The DAY 30 party skips the visit-time clamp, so a Wallet raised past 2000G on DAY 29 stayed over the cap on the Final. Other Days were unaffected (the visit clamps first).
 - COPY: `(소지금 상한 적용)` removed from 첫 방문 쿠폰, 프리미엄 멤버십 and 알뜰 금고; 점주 가이드 판매 says `손님 소지금은 최대 2000G까지 쌓인다.` once instead.
 
