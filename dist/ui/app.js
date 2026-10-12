@@ -458,8 +458,7 @@ function swapWhat(A,r,from,land){
   old.textContent=Presentation.nightHappened({...r,outcome:from,rescued:false,avoidedDeath:false});
   if(old.textContent===what.textContent)return;
   fin.append(...what.childNodes);what.classList.add('swap');what.append(old,fin);sentenceBreaks(what);
-  /* the turned-away line is struck through just before the stamp lands, drops with it, and the real one is pressed in */
-  A({k:0},{k:1,duration:1,delay:Math.max(0,land-130),onComplete:()=>old.classList.add('struck')});
+  /* the turned-away line drops with the stamp, and the real one is pressed in */
   A(old,{opacity:[{from:1,to:1,duration:land},{to:0,duration:150,ease:'in(2)'}],
    translateY:[{from:0,to:0,duration:land},{to:10,duration:150,ease:'in(2)'}],onComplete:()=>old.remove()});
   A(fin,{opacity:{from:0,to:1,duration:70,delay:land,ease:'linear'},translateY:{from:-10,to:0,duration:200,delay:land,ease:'outBack'},
