@@ -320,7 +320,7 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
  }
  assert.ok(epic[4]>=epic[3]*2,'D20-24 is where Epic becomes a normal consideration');
  /* User 2026-10-02: D1-7 lean on Common with no Epic - a T1 Day's customer cannot pay for one; Epic starts rare at D8 */
- assert.deepEqual(rows[0].weights,[76,20,4,0,0],'D1-3');assert.deepEqual(rows[1].weights,[68,24,8,0,0],'D4-7');
+ assert.deepEqual(rows[0].weights,[82,16,2,0,0],'D1-3');assert.deepEqual(rows[1].weights,[74,21,5,0,0],'D4-7');
  assert.equal(epic[0],0,'no Epic in D1-3');assert.ok(epic[2]>0,'Epic is possible, just rare, from D8');
  // the generator really draws from the current Day's band, and a Reroll does not escape it
  const g=fresh('rarity-band');

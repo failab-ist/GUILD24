@@ -3,7 +3,7 @@
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
 DOC_VERSION=2.12.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.12
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -361,8 +361,8 @@ Exact normalized weights:
 
 | Day | Common | Uncommon | Rare | Epic | Legendary |
 |---|---:|---:|---:|---:|---:|
-| D1–3 | 76% | 20% | 4% | 0% | 0% |
-| D4–7 | 68% | 24% | 8% | 0% | 0% |
+| D1–3 | 82% | 16% | 2% | 0% | 0% |
+| D4–7 | 74% | 21% | 5% | 0% | 0% |
 | D8–12 | 58% | 27% | 12% | 2% | 1% |
 | D13–19 | 53% | 27% | 15% | 4% | 1% |
 | D20–24 | 46% | 27% | 17% | 9% | 1% |
@@ -567,7 +567,7 @@ Let:
     avgLevel  = Core Roster average Level, or 1 if empty
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
-    dayBase = 170 + 1 × (Day - 1) + 12 × max(0, Day - 15)
+    dayBase = 150 + 1 × (Day - 1) + 12 × max(0, Day - 15)
 
     overheadBase
     = dayBase
@@ -1055,8 +1055,8 @@ For ordinary ORDER Rarity selection, EXPECT exact normalized rows:
 
 | Day | Common | Uncommon | Rare | Epic | Legendary |
 |---|---:|---:|---:|---:|---:|
-| D1–3 | 76 | 20 | 4 | 0 | 0 |
-| D4–7 | 68 | 24 | 8 | 0 | 0 |
+| D1–3 | 82 | 16 | 2 | 0 | 0 |
+| D4–7 | 74 | 21 | 5 | 0 | 0 |
 | D8–12 | 58 | 27 | 12 | 2 | 1 |
 | D13–19 | 53 | 27 | 15 | 4 | 1 |
 | D20–24 | 46 | 27 | 17 | 9 | 1 |
@@ -1158,7 +1158,7 @@ Core Roster:
 
 Expected:
 
-    dayBase = 170 + 1×(Day-1) + 12×max(0, Day-15)
+    dayBase = 150 + 1×(Day-1) + 12×max(0, Day-15)
     base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 
 Then apply only current owned modifiers and round final daily operating cost to nearest 10G under

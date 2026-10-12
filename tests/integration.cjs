@@ -1355,19 +1355,19 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  s.day=11;s.dayFacilities=[];s.facilities=[];s.event=null;
  assert.deepEqual(g.coreRoster().map(n=>n.id).sort((a,b)=>a-b),[1,2,3,4,5,6],
   'the six best living: the dead L10 is out, the recovering L3R4 is in, and L3R1 beats L3R0 on Rarity');
- const want=180*(1+.03*(29/6-1))*(1+.06*(11/6));
+ const want=160*(1+.03*(29/6-1))*(1+.06*(11/6));
  assert.ok(Math.abs(g.overheadBase()-want)<1e-9,'overheadBase '+g.overheadBase()+' = '+want);
- assert.equal(g.expectedOperatingCost(),220,'charged rounded to 10G');
+ assert.equal(g.expectedOperatingCost(),200,'charged rounded to 10G');
  // fewer than six alive: all of them; an empty roster reads Level 1 / Rarity 0
  s.npcs=[mk(1,5,2),mk(2,3,0),mk(3,9,4,{alive:false})];s.day=1;
- assert.ok(Math.abs(g.overheadBase()-170*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
- assert.equal(g.expectedOperatingCost(),200,'170 x 1.09 x 1.06 = 196.418 -> 200G');
+ assert.ok(Math.abs(g.overheadBase()-150*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
+ assert.equal(g.expectedOperatingCost(),170,'150 x 1.09 x 1.06 = 173.31 -> 170G');
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
  /* v2.9.2 (User 2026-09-26): + 12 per Day after DAY 15 */
- assert.equal(g.overheadBase(),170+1*29+12*15,'empty Core Roster: the Day base alone');
- assert.equal(g.expectedOperatingCost(),380,'379 -> 380G');
- s.day=15;assert.equal(g.overheadBase(),170+14,'DAY 15 carries no late term');
- s.day=16;assert.equal(g.overheadBase(),170+15+12,'DAY 16 carries the first +12');
+ assert.equal(g.overheadBase(),150+1*29+12*15,'empty Core Roster: the Day base alone');
+ assert.equal(g.expectedOperatingCost(),360,'359 -> 360G');
+ s.day=15;assert.equal(g.overheadBase(),150+14,'DAY 15 carries no late term');
+ s.day=16;assert.equal(g.overheadBase(),150+15+12,'DAY 16 carries the first +12');
 });
 
 /* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */
