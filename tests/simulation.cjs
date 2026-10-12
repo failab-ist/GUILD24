@@ -385,9 +385,11 @@ test('RE-MEASURE follow-up: Store Gold checkpoints carry sample size, mean and s
 });
 
 /* BEST HYBRID measurement input (User 2026-10-02): a ranked Support is bought ahead of the build's tag choice */
+/* reader / investor read the rank only as a tie-break since their own Support pick (User 2026-10-11), so the rank-first
+   rule is checked on the policy that still ranks first */
 test('relicPriority: the ranked Support is chosen whenever a window offers it and the till allows',()=>{
- const base=cached('reader'),id=Object.keys(base.relicOffers).sort((a,b)=>(base.relicPurchases[a]?.count||0)-(base.relicPurchases[b]?.count||0))[0];
- const ranked=Debug.simulate(SEEDS,'reader',null,'adaptive','hybrid',{relicPriority:[id]});
+ const base=cached('balanced'),id=Object.keys(base.relicOffers).sort((a,b)=>(base.relicPurchases[a]?.count||0)-(base.relicPurchases[b]?.count||0))[0];
+ const ranked=Debug.simulate(SEEDS,'balanced',null,'adaptive','hybrid',{relicPriority:[id]});
  assert.ok((ranked.relicPurchases[id]?.count||0)>(base.relicPurchases[id]?.count||0),id+' is bought more once it is ranked first');
 });
 
