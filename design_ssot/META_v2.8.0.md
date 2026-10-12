@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.12
+DOC_VERSION=2.13.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE

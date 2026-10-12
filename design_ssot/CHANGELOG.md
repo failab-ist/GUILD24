@@ -52,6 +52,7 @@ and this table is their commit record.
 | v2.13.10 | 2026-10-12 | 에너지드링크 기동 18 · 190G and version bump in one PR #184 | (the User sets it) |
 | v2.13.11 | 2026-10-12 | Known-Hazard Counter guarantee drawn by the Day band (bug fix) in one PR #185 | (the User sets it) |
 | v2.13.12 | 2026-10-12 | Early money: Order Rarity D1~7 more Common, operating cost dayBase 170 → 150, Adventurer Rarity names follow the Item names (평범 → 일반, 유망 → 고급; display only) in PR #186 and PR #187 | (the User sets it) |
+| v2.13.13 | 2026-10-12 | Decorations: 휴식 바우처 꽂이 first two customers −3, 길드 추천 매대 60%, 명예 모험가 액자 70%, 의무실 현판 50%, 본사 우수 점포 훈장 DAY 0 reroll, and version bump in one PR #194 | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -60,6 +61,11 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.13 — Decorations re-tuned, each by its own measure (User 2026-10-12)
+
+- META §counter — 휴식 바우처 꽂이: every Night every living adventurer Fatigue −6 → the Day's first two customers to reach the counter Fatigue −3 (the same "first two" as 알뜰 금고). Copy `매일 먼저 온 손님 2명은 그날 밤 피로가 3 줄어든다`. Measured alone on a fresh account (investor 1000, same seeds): clear +7.5 → +3.2%p over no Decoration, clear given D30 80 → 58%, the top Decoration for clears at 750G before, now below 단골 감사 현수막 and 훈련소 제휴 간판. `tools/deco-single.cjs` also prints the v2.9.6 deco-impact line (Day reached, deaths, bankrupt ends, Store Capital, sales, visitors, end money, core level). Log: `reports/v2100-measure/relic-deco-20261012/`.
+- META §wall · §display — weaker Decorations lifted (User 2026-10-12): 길드 추천 매대 35 → 60% (daily sales +8 → +12% over no Decoration), 명예 모험가 액자 above 일반 60 → 70% (weights [30, 34, 23, 10, 3]; rare-or-better customers 28 → 36%), 의무실 현판 40 → 50% (D30 +5.6 → +9.5%p). 본사 우수 점포 훈장 keeps its DAY 0 영웅 window and may now redraw it at the ordinary curve (300 → 600G; 지원 교환 쿠폰함's first redraw free), RELIC §CANDIDATE REROLL. Same log folder, `buff/`.
 
 ## v2.13.12 — Early money: cheaper Days, more Common offers (User 2026-10-12)
 
@@ -72,8 +78,6 @@ and this table is their commit record.
 - ECONOMY_ORDER §Persistent Wallet: expedition rewards (the Outcome reward and the deep-Gate bonus) now clamp the Wallet to 2000G like every other increase. The DAY 30 party skips the visit-time clamp, so a Wallet raised past 2000G on DAY 29 stayed over the cap on the Final. Other Days were unaffected (the visit clamps first).
 - COPY: `(소지금 상한 적용)` removed from 첫 방문 쿠폰, 프리미엄 멤버십 and 알뜰 금고; 점주 가이드 판매 says `손님 소지금은 최대 2000G까지 쌓인다.` once instead.
 - UI_UX §NIGHT — SAVED BY THE SALE: the sentence under the card (`원정을 끝내지 못하고 다친 채 돌아왔다.`) and the growth rows were already the real result while the worse verdict was still on the card, which gave the reversal away. The sentence now reads the worse verdict's own until the Item is on its way, then it fades and the real one settles in; the rows appear with the stamp. Insurance reversals too. Presentation only; no rule or balance change.
-- META §counter — 휴식 바우처 꽂이: every Night every living adventurer Fatigue −6 → the Day's first two customers to reach the counter Fatigue −3 (the same "first two" as 알뜰 금고). Copy `매일 먼저 온 손님 2명은 그날 밤 피로가 3 줄어든다`. Measured alone on a fresh account (investor 1000, same seeds): clear +7.5 → +3.2%p over no Decoration, clear given D30 80 → 58%, the top Decoration for clears at 750G before, now below 단골 감사 현수막 and 훈련소 제휴 간판. `tools/deco-single.cjs` also prints the v2.9.6 deco-impact line (Day reached, deaths, bankrupt ends, Store Capital, sales, visitors, end money, core level). Log: `reports/v2100-measure/relic-deco-20261012/`.
-- META §wall · §display — weaker Decorations lifted (User 2026-10-12): 길드 추천 매대 35 → 60% (daily sales +8 → +12% over no Decoration), 명예 모험가 액자 above 일반 60 → 70% (weights [30, 34, 23, 10, 3]; rare-or-better customers 28 → 36%), 의무실 현판 40 → 50% (D30 +5.6 → +9.5%p). 본사 우수 점포 훈장 keeps its DAY 0 영웅 window and may now redraw it at the ordinary curve (300 → 600G; 지원 교환 쿠폰함's first redraw free), RELIC §CANDIDATE REROLL. Same log folder, `buff/`.
 - Save records (no rule change): each expedition record keeps `bareRatio` (the same adventurer's prepared power without the Bag ÷ Gate power), each sale keeps the buyer's `wallet` before paying, and each Night report keeps the Day's `rerolls` and `gates`. `tools/save-check.cjs` reads them (맨손/요구, 리롤 · 게이트 by Day, half-price sales split by whether the wallet could pay full price); older Saves show `-`. `tools/measure-v2100.cjs` keeps every expedition (`exps`) in its fresh / trajectory rows.
 
 ## v2.13.11 — The Counter guarantee keeps the Day band (User 2026-10-12)
