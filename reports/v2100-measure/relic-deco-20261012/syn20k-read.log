@@ -1,0 +1,75 @@
+runs 20000 · picks 72077 · D30 3.4% · 클리어 1.0%
+
+[하나씩] 같은 창에서 X를 집은 판 - 다른 걸 집은 판 (succ·reach·win %p, death 명, cash G/일; * = 2SE 밖)
+board            n 3062/5999   평균일 6.7    succ +0.8±0.3*    death -0.09±0.06  cash +3.69±3.05   reach -1.5±0.5*   win -0.4±0.2      
+bulk             n 3037/5978   평균일 7.2    succ +0.6±0.3*    death +0.17±0.07* cash +2.01±3.03   reach +0.8±0.6    win +0.6±0.3      
+coldcase         n 1407/2876   평균일 11.5   succ +1.1±0.5*    death +0.06±0.09  cash +3.61±5.77   reach +1.2±0.9    win +0.0±0.5      
+dawnRecovery     n 1449/2977   평균일 11.9   succ -0.1±0.5     death -0.05±0.09  cash +5.73±6.10   reach +0.3±0.9    win -0.3±0.5      
+efficiency       n 3084/5978   평균일 6.8    succ -0.5±0.3     death -0.06±0.06  cash -1.31±3.20   reach -0.5±0.5    win -0.4±0.3      
+expeditionMeal   n 1424/2951   평균일 11.7   succ +0.1±0.5     death +0.10±0.09  cash -30.82±5.63* reach +4.3±1.0*   win +1.7±0.6*     
+extraOrder       n 1483/2974   평균일 11.9   succ +0.2±0.5     death -0.06±0.09  cash -11.89±5.91* reach +1.9±0.9    win +0.2±0.5      
+fieldRepair      n 3157/5981   평균일 7.2    succ -0.1±0.3     death -0.00±0.06  cash -14.19±3.14* reach +1.1±0.6    win +0.2±0.3      
+fieldStretcher   n 3165/6082   평균일 7.0    succ +0.3±0.3     death +0.05±0.06  cash -3.95±3.19   reach -0.0±0.5    win +0.1±0.3      
+firstAidDesk     n 780/1850    평균일 11.8   succ -0.9±0.6     death -0.03±0.12  cash -17.77±7.38* reach +0.1±1.1    win -0.1±0.6      
+firstVisitCoupon n 3061/5935   평균일 6.7    succ -0.0±0.3     death +0.00±0.06  cash -2.08±3.03   reach +0.1±0.5    win -0.4±0.3      
+fresh24          n 767/1984    평균일 12.4   succ +3.7±0.6*    death -0.01±0.12  cash -28.39±7.49* reach +4.9±1.4*   win +3.1±0.9*     
+fridge           n 3083/5890   평균일 6.6    succ -0.5±0.3     death -0.08±0.06  cash -5.42±3.21   reach -0.6±0.5    win -0.3±0.3      
+groupOrder       n 1412/2954   평균일 11.1   succ +0.8±0.5     death -0.08±0.09  cash +52.71±6.35* reach -1.7±0.8*   win -0.2±0.4      
+guarantee        n 3006/5949   평균일 6.8    succ -0.8±0.3*    death -0.09±0.06  cash +3.03±3.37   reach -0.9±0.5    win -0.4±0.3      
+hazardBoard      n 3067/5930   평균일 7.1    succ -0.9±0.3*    death +0.04±0.06  cash -5.72±3.00   reach -0.2±0.6    win +0.0±0.3      
+hub              n 776/1884    평균일 11.8   succ +1.2±0.6     death -0.40±0.11* cash +46.66±7.50* reach -4.1±0.8*   win -0.2±0.5      
+kitchen          n 1464/2907   평균일 11.6   succ +2.4±0.5*    death +0.12±0.09  cash -13.37±5.75* reach +2.4±0.9*   win +0.9±0.5      
+lifetime         n 828/1858    평균일 12.3   succ +3.0±0.6*    death -0.15±0.11  cash -4.69±7.68   reach +4.7±1.4*   win +5.8±1.0*     
+logisticsHQ      n 851/1805    평균일 11.9   succ +0.5±0.6     death +0.07±0.12  cash +69.39±8.46* reach +1.9±1.2    win +0.4±0.7      
+member           n 3036/5944   평균일 6.8    succ +0.7±0.3*    death -0.10±0.06  cash +0.38±3.05   reach -0.8±0.5    win -0.4±0.3      
+opsRoom          n 811/1888    평균일 11.8   succ +3.1±0.6*    death -0.06±0.12  cash -16.25±7.87* reach +0.2±1.2    win +1.1±0.6      
+postcard         n 3111/6022   평균일 6.7    succ -0.3±0.3     death -0.14±0.06* cash -10.12±3.06* reach -1.4±0.5*   win -0.5±0.2      
+premiumMember    n 1443/2833   평균일 11.1   succ +0.1±0.5     death +0.04±0.09  cash +2.62±5.83   reach -0.0±0.8    win -0.3±0.4      
+rareContract     n 3096/6133   평균일 7.2    succ -0.5±0.3     death -0.08±0.06  cash +9.85±3.21*  reach -1.1±0.5    win -0.1±0.3      
+rerollTicket     n 3115/6129   평균일 7.0    succ -0.0±0.3     death +0.03±0.06  cash +21.03±3.05* reach -0.6±0.5    win -0.4±0.3      
+rescueContract   n 1284/2947   평균일 11.4   succ -1.1±0.5*    death -0.00±0.09  cash -10.77±5.79  reach +5.2±1.0*   win +1.1±0.5*     
+returnPoints     n 1342/2966   평균일 11.2   succ -0.6±0.5     death -0.10±0.09  cash +16.56±5.77* reach -0.4±0.8    win -1.4±0.4*     
+rotation         n 3078/5874   평균일 7.2    succ -0.9±0.3*    death +0.04±0.06  cash -7.29±3.35*  reach +1.0±0.6    win +0.3±0.3      
+royalCert        n 789/1957    평균일 11.7   succ -1.4±0.6*    death -0.32±0.11* cash -4.22±8.21   reach -2.4±0.9*   win -1.0±0.4*     
+rumorBoard       n 3162/5801   평균일 6.8    succ -1.7±0.3*    death +0.07±0.06  cash -7.40±3.18*  reach -0.2±0.5    win -0.0±0.3      
+stamp            n 3031/5943   평균일 7.0    succ -0.2±0.3     death -0.11±0.06  cash -9.87±3.21*  reach -0.5±0.5    win -0.4±0.3      
+supplyCert       n 1351/2923   평균일 11.1   succ -0.8±0.5     death +0.12±0.09  cash +41.48±6.29* reach -1.5±0.8    win -0.0±0.5      
+warehouse        n 3065/6052   평균일 7.3    succ -0.8±0.3*    death -0.02±0.06  cash -10.49±3.15* reach -0.7±0.6    win -0.6±0.3      
+
+[짝] B 집은 효과(A 있을 때) - B 집은 효과(A 없을 때), 두 방향 합침. succ z 순
+fieldStretcher+firstAidDesk    n≥37    succ +4.6±1.5*    death +0.19±0.28  cash +27.11±21.13 reach -4.0±3.5    win -1.6±1.8      
+lifetime+stamp                 n≥37    succ +4.8±1.6*    death -0.04±0.29  cash +20.81±30.60 reach +5.0±4.5    win +2.8±3.1      
+fresh24+supplyCert             n≥27    succ +6.5±2.4*    death +0.22±0.37  cash +47.95±44.71 reach +0.5±5.7    win +3.1±4.2      
+expeditionMeal+hub             n≥25    succ +7.1±2.7*    death +0.26±0.41  cash +24.57±38.04 reach +1.9±5.8    win -1.3±3.8      
+expeditionMeal+fieldStretcher  n≥76    succ +3.2±1.2*    death -0.29±0.21  cash -13.11±18.38 reach +5.3±3.1    win +4.5±2.0*     
+groupOrder+rescueContract      n≥58    succ +4.3±1.7*    death +0.11±0.27  cash +66.27±30.87*reach +1.7±3.7    win +2.9±1.9      
+hazardBoard+opsRoom            n≥35    succ +4.2±1.8*    death -0.40±0.27  cash +7.61±26.62  reach +3.9±3.8    win -0.4±1.3      
+fieldRepair+fieldStretcher     n≥233   succ +2.0±0.9*    death +0.07±0.16  cash +22.11±12.30 reach -0.3±2.0    win -1.2±1.1      
+fieldRepair+hazardBoard        n≥200   succ +2.0±0.9*    death +0.13±0.17  cash +7.60±13.02  reach -0.8±2.1    win -0.7±1.2      
+fieldStretcher+warehouse       n≥194   succ +2.0±0.9*    death +0.07±0.16  cash -13.60±15.75 reach -1.2±2.0    win +0.2±1.1      
+fieldRepair+member             n≥205   succ +1.9±0.9*    death +0.25±0.17  cash -0.29±12.48  reach +1.1±2.0    win +1.4±1.2      
+extraOrder+groupOrder          n≥45    succ +4.0±1.9*    death +0.57±0.29  cash +76.57±40.53 reach -1.9±3.8    win -2.2±1.9      
+firstAidDesk+returnPoints      n≥24    succ +4.9±2.4*    death +0.72±0.39  cash +57.00±36.54 reach -5.9±4.9    win -2.9±2.7      
+dawnRecovery+rareContract      n≥68    succ +2.8±1.4*    death -0.03±0.22  cash +38.40±19.72 reach +0.7±3.0    win -1.1±1.7      
+hazardBoard+royalCert          n≥36    succ +3.8±1.9*    death +0.92±0.31* cash +70.54±26.47*reach -2.5±2.8    win -3.0±1.3*     
+stamp+supplyCert               n≥71    succ +2.7±1.4*    death -0.19±0.23  cash -40.50±23.18 reach -7.4±2.2*   win -0.9±1.4      
+expeditionMeal+groupOrder      n≥46    succ +3.3±1.8     death +0.02±0.28  cash +16.21±32.16 reach -4.1±4.5    win -2.7±2.5      
+firstVisitCoupon+hub           n≥26    succ +3.3±1.8     death +0.15±0.30  cash +20.41±24.75 reach -2.1±2.6    win -2.2±1.1      
+lifetime+rareContract          n≥47    succ +3.1±1.7     death -0.40±0.26  cash +8.70±27.36  reach -5.3±3.7    win +0.5±3.0      
+member+royalCert               n≥41    succ +3.0±1.7     death +0.06±0.29  cash +20.18±24.93 reach +0.4±2.5    win +0.4±0.3      
+hazardBoard+rescueContract     n≥67    succ +2.2±1.3     death +0.37±0.23  cash +32.94±19.56 reach +3.0±3.1    win +1.8±1.8      
+extraOrder+rescueContract      n≥52    succ +3.0±1.8     death -0.06±0.29  cash +3.23±35.53  reach -1.0±4.5    win +1.0±2.5      
+groupOrder+rerollTicket        n≥68    succ +2.1±1.3     death +0.19±0.22  cash +20.35±23.28 reach -3.9±2.1    win -1.3±1.0      
+firstVisitCoupon+fridge        n≥197   succ +1.5±0.9     death -0.16±0.17  cash -8.65±14.32  reach -1.0±1.6    win -1.2±0.8      
+bulk+rumorBoard                n≥226   succ +1.5±0.9     death -0.05±0.17  cash -12.16±14.91 reach -1.4±1.8    win -1.6±1.0      
+... 아래쪽(서로 깎는 짝)
+efficiency+rareContract        n≥222   succ -2.0±0.9*    death +0.10±0.16  cash -10.87±16.70 reach +2.3±1.7    win -0.5±0.9      
+opsRoom+royalCert              n≥14    succ -8.9±3.9*    death -0.46±0.46  cash -56.00±82.21 reach -9.7±4.7*   win +0.9±0.4*     
+efficiency+opsRoom             n≥40    succ -4.1±1.7*    death +0.43±0.29  cash -9.39±24.82  reach -2.9±3.1    win -0.6±1.4      
+fresh24+stamp                  n≥35    succ -4.1±1.7*    death +0.15±0.30  cash -15.74±24.65 reach +0.2±4.2    win -0.2±2.8      
+fresh24+guarantee              n≥32    succ -5.0±1.8*    death -0.59±0.29* cash -45.50±28.60 reach -10.5±3.7*  win -6.2±2.4*     
+logisticsHQ+royalCert          n≥15    succ -7.3±2.5*    death -0.33±0.43  cash -18.34±73.05 reach +0.7±6.9    win -2.3±2.7      
+kitchen+rumorBoard             n≥63    succ -4.2±1.3*    death -0.15±0.21  cash -24.73±20.19 reach -1.4±2.7    win -0.7±1.5      
+dawnRecovery+firstAidDesk      n≥30    succ -7.7±2.4*    death +0.07±0.37  cash -38.42±40.40 reach -1.7±4.9    win -0.0±0.6      
+
+짝 561개 중 |z|>2: 27 (우연이면 약 26개), |z|>3: 3
