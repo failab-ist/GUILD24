@@ -32,7 +32,7 @@ item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','�
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:28}),
 item('candy','집중 사탕',0,50,100,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:12,supply:2}),
 item('dragonramen','불룡볶음면',2,115,230,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:23,supply:3}),
-item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:19,supply:2}),
+item('energy','에너지드링크',1,95,190,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:18,supply:2}),
 item('wine','용사의 곡주',2,100,200,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:25,survival:-3,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */

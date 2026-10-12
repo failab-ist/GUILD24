@@ -2,8 +2,8 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.13.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.9
+DOC_VERSION=2.13.10
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.10
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -615,7 +615,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +28 | Bind 중반 대응 |
 | 12 | 집중 사탕 | Food C | 50 / 100 | 공포 +12, Supply 2 | Fear 초반 대응 |
 | 13 | 불룡볶음면 | Food R | 115 / 230 | 강인함 +6, 냉기 +23, Supply 3 | Cold 중반 대응 |
-| 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +19, Supply 2 | Stat route |
+| 14 | 에너지드링크 | Drink U | 95 / 190 | 기동 +18, Supply 2 | Stat route |
 | 15 | 용사의 곡주 | Drink R | 100 / 200 | 공포 +25, 강인함 -3, Supply 1 | Fear 중반 대응 / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +14 | Poison 초반 대응 |
@@ -833,7 +833,7 @@ reads the shelf's own kind order (대응 장비 → 음식·음료 → 포션) a
 Insurance / Special: its one function line
 ```
 
-e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +22 · 피로 회복 1 · 강인함 -3`, `피로 회복 2 · 기동 +19`,
+e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +22 · 피로 회복 1 · 강인함 -3`, `피로 회복 2 · 기동 +18`,
 `화염 대응 +18 · 투력 +10`.
 
 The order is identity information (what kind of Item this is), not advice.
@@ -985,7 +985,7 @@ PASS:
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
-간단 도시락 90 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 165 · 초고속 에너지드링크 / 대현자 허브엘릭서 / 왕도 천연암반수 180 · 영웅 결전 도시락 205
+간단 도시락 90 · 에너지드링크 95 · 중급 포션 125 · 길드 특제 도시락 165 · 초고속 에너지드링크 / 대현자 허브엘릭서 / 왕도 천연암반수 180 · 영웅 결전 도시락 205
 방진마스크 45 · 중화 탄산수 40 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
 농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 95 · 용사의 곡주 / 쿨링 이온음료 100 · 불룡볶음면 115 95
 거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
