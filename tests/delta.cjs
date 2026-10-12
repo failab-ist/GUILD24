@@ -140,9 +140,12 @@ test('DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST: how many, never which',()=>{
    h.run.day=day;h.morning();
    /* EVENT 52 게이트 임시 폐쇄 (v2.9.11) closes one of the forecast Gates that morning, and its reveal says so */
    const base=h.run.dungeons.filter(d=>!d.temporary).length+(h.run.event?.effects.closeGate?1:0);
-   assert.ok(f.counts.some(c=>c.count===base),
+   /* NPC_TRAIT §DESTINATION Coverage: with fewer visitors than Gates (a strike Event, many resting), ordinary Gates
+      are removed until every retained Gate has a visitor - then the Day keeps exactly as many Gates as visitors */
+   const covered=h.run.dungeons.length===h.run.queue.length&&base<Math.max(...f.counts.map(c=>c.count));
+   assert.ok(covered||f.counts.some(c=>c.count===base),
     'D'+day+' generated '+base+' base Gates, which the forecast allowed');
-   if(f.fixed!==null)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');
+   if(f.fixed!==null&&!covered)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');
   }
  }
  // the D19~24 draw lands near its 70%
