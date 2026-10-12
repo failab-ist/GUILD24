@@ -1475,12 +1475,12 @@ test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the e
  assert.ok(won>0&&lost===0,'단골도 30 (x1.09) only ever turns a lost fight into a won one: '+won);
  assert.equal(diff,0,'단골도 9 is floor 0 - the same fight');
 });
-test('휴식 바우처 꽂이: at night every living adventurer is 6 Fatigue lower than the same Day without it',()=>{
+test('휴식 바우처 꽂이: at night the Day\'s first two customers are 3 Fatigue lower than the same Day without it, everyone else the same',()=>{
  const drive=a=>{const g=new Game(a);g.autosave=false;g.start('voucher');g.buyRelic(g.run.relicWindow.candidateIds[0]);
-  g.run.npcs.forEach(n=>n.fatigue=40);let k=0;while(g.run.phase!=='night'&&k++<500)step(g);return g.run.npcs;};
- const worn=drive(account(['voucher'])),bare=drive(Meta.fresh());
- assert.equal(worn.length,bare.length);
- worn.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,Math.max(0,bare[i].fatigue-6),n.name+': -6 overnight, visitor or not');});
+  g.run.npcs.forEach(n=>n.fatigue=40);let k=0;while(g.run.phase!=='night'&&k++<500)step(g);return g.run;};
+ const worn=drive(account(['voucher'])),bare=drive(Meta.fresh()),first=worn.queue.slice(0,2);
+ assert.equal(worn.npcs.length,bare.npcs.length);assert.deepEqual(worn.queue,bare.queue);assert.ok(worn.queue.length>2,'a Day with a third customer');
+ worn.npcs.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,first.includes(n.id)?Math.max(0,bare.npcs[i].fatigue-3):bare.npcs[i].fatigue,n.name+(first.includes(n.id)?': first two, -3 overnight':': not among the first two, unchanged'));});
 });
 test('지원 교환 쿠폰함: each window\'s first redraw is free, then 300G, 600G; without it 300G first',()=>{
  const g=wearing(['rerollCoupon'],'coupon'),h=past0(fresh('coupon-plain'));

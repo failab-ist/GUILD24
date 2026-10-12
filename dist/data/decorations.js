@@ -38,7 +38,7 @@ G.DATA.decorations=[
   text:'본사가 보내 준 단골 감사 현수막. 단골일수록 어깨에 힘이 들어간다.'},
  {id:'heroSign', kind:'operation', slot:'wall', name:'본사 우수 점포 훈장', price:1000, effect:()=>'첫 점포지원을 영웅 등급 3장 중에서 고른다',
   text:'본사가 우수 점포에 달아 준 훈장. 영웅급 지원이 따라온다.'},
- {id:'voucher', kind:'operation', slot:'counter', name:'휴식 바우처 꽂이', price:750, effect:p=>'밤마다 살아 있는 모든 손님의 피로가 '+p.voucher.fatigue+' 줄어든다',
+ {id:'voucher', kind:'operation', slot:'counter', name:'휴식 바우처 꽂이', price:750, effect:p=>'매일 먼저 온 손님 '+p.voucher.customers+'명은 그날 밤 피로가 '+p.voucher.fatigue+' 줄어든다',
   text:'본사가 제휴 여관 휴식 바우처를 보내 왔다. 손님들이 한 장씩 집어 간다.'},
  {id:'rerollCoupon', kind:'operation', slot:'display', name:'지원 교환 쿠폰함', price:500, effect:()=>'유료 점포지원 구매 기회마다 첫 후보 교환이 무료',
   text:'본사가 보내 준 지원 교환 쿠폰. 마음에 안 들면 한 번은 그냥 바꾼다.'}];
@@ -46,7 +46,7 @@ G.DATA.decorations=[
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance); the effect copy above reads them. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={cheerBanner:{perTen:.03},voucher:{fatigue:6},sponsorSign:{budgetShare:.50},thriftSafe:{firstWallet:200,customers:2},honorFrame:{weights:[40,32,18,8,2]},
+G.DATA.decorationParams={cheerBanner:{perTen:.03},voucher:{customers:2,fatigue:3},sponsorSign:{budgetShare:.50},thriftSafe:{firstWallet:200,customers:2},honorFrame:{weights:[40,32,18,8,2]},
  memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.40},trainingSign:{levelBonus:1,chance:.55},aidCabinet:{preparedFactor:.60,powerMult:1.05}};
 /* META §INITIAL FOUR DECORATIONS copy (User 2026-10-04): who gains first, no closing period (COPY_AUDIT §9-5); every
    number is read from decorationParams / D.balance when the card is drawn, so `effect` is a getter over the live tables. */

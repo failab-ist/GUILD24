@@ -477,8 +477,11 @@ Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-every Night: every living adventurer's Fatigue -6 (visitors or not, 중상 recovery included; floor 0)
+each Night: the Day's first two customers to reach the counter, if alive: Fatigue -3 (floor 0)
 ```
+
+The same "first two" as 알뜰 금고: the order in which that Day's customers reached the counter. Everyone else, visitor or
+not, keeps their Fatigue.
 
 ### display — 지원 교환 쿠폰함 (id rerollCoupon)
 ```text
