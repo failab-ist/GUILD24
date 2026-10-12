@@ -24,13 +24,13 @@ for(const width of [390,1280])for(const kind of ['kitchen','royalCert','hub','de
  }else if(kind==='decor'){
   await p.evaluate(()=>{const g=Guild24.game;g.run=null;g.account.store={capital:3000,owned:['aidCabinet','rerollCoupon','thriftSafe'],loadout:{display:'aidCabinet',counter:'thriftSafe'}};Guild24.render();});await open(p,'codex');await p.locator('[data-action="codex-tab"][data-id="store"]').click();
   for(const name of ['구급품 진열장','지원 교환 쿠폰함','알뜰 금고']){const row=p.locator('.slot-option').filter({hasText:name});await row.scrollIntoViewIfNeeded();const text=await row.innerText();await shot(p,(name==='구급품 진열장'?'aid':name==='지원 교환 쿠폰함'?'coupon':'wallet-decor')+'-'+width);
-   if(before)findings.push({width,kind:name,text});else check(width+' '+name+' 적용 예외',text.includes(name==='구급품 진열장'?'(마왕성 제외)':name==='지원 교환 쿠폰함'?'유료 점포지원 구매 기회마다':'(소지금 상한 적용)'));}
+   if(before)findings.push({width,kind:name,text});else check(width+' '+name+' 적용 예외',name==='알뜰 금고'?!text.includes('소지금 상한 적용'):text.includes(name==='구급품 진열장'?'(마왕성 제외)':'유료 점포지원 구매 기회마다'));}
  }else if(kind==='retired'){
   await open(p,'codex');await p.locator('[data-action="codex-tab"][data-id="facilities"]').click();const row=p.locator('.unlock').filter({hasText:'단골 묶음혜택'});await row.scrollIntoViewIfNeeded();const text=await row.innerText();await shot(p,'retired-'+width);if(before)findings.push({width,kind,text});else check(width+' 이전 지원 후보 제외 표시',text.includes('현재 후보로 나오지 않음')&&!text.includes('기본 제공'));
  }else if(kind==='mastery'){
   await p.evaluate(()=>{Guild24.game.account.matrix.warrior.WRATH=true;});await open(p,'codex');await p.locator('[data-action="codex-tab"][data-id="progress"]').click();const text=await p.locator('.progress-panel').innerText();await shot(p,'mastery-'+width);if(before)findings.push({width,kind,text});else{check(width+' 숙련 의미',text.includes(MASTERY));check(width+' 숙련 수치 유지',(await p.locator('.matrix .tally').first().innerText())==='1 / 7');}
  }else{
-  await p.evaluate(()=>{Guild24.game.run.facilities=['firstVisitCoupon','premiumMember'];Guild24.render();});await open(p,'relics');const text=await p.locator('#modal-root').innerText();await shot(p,'wallet-support-'+width);if(before)findings.push({width,kind,text});else check(width+' 방문 지원 상한 예외',(text.match(/소지금 상한 적용/g)||[]).length===2);
+  await p.evaluate(()=>{Guild24.game.run.facilities=['firstVisitCoupon','premiumMember'];Guild24.render();});await open(p,'relics');const text=await p.locator('#modal-root').innerText();await shot(p,'wallet-support-'+width);if(before)findings.push({width,kind,text});else check(width+' 방문 지원 상한 문구 없음',!text.includes('소지금 상한 적용'));
  }
  check(width+' '+kind+' 런타임 오류 없음',!errors.length);await c.close();
 }

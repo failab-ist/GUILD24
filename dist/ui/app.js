@@ -1527,7 +1527,7 @@ const coachSteps={
  relic:[['relic-what','.relic-open','점포지원은 영업 내내 적용된다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
 };
 let activeCoach=null;
-let nightMarked=null,riskMarked=null;
+let riskMarked=null;
 const RISK_MARKS=['hurt','strain','exhausted'];
 let coachSettle=0,coachPainted=null,activeGroup=null;
 /* PRESENTATION §Tutorial / coach target truth: clip the target to its visible scrollports. */
@@ -1613,7 +1613,7 @@ function showCoach(){
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
     appeared there. */
  const visible=sel=>[...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);
- const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&nightMarked?.[0]===game.run&&nightMarked[1]===day,riskDone=riskMarked?.[0]===game.run&&riskMarked[1]===day;
+ const day=game.run?.day||0,nightDone=game.run?.phase==='night'&&game.run.nightCoachDay===day,riskDone=riskMarked?.[0]===game.run&&riskMarked[1]===day;
  /* x[4] = the first DAY a mark may show; a NIGHT mark waits once one has been told this night */
  const step=steps.find(x=>!tutorial['coach-'+x[0]]&&!(x[4]>day)&&!nightDone&&!(riskDone&&RISK_MARKS.includes(x[0]))&&visible(x[1]));if(!step)return;
  const target=visible(step[1]);
@@ -1632,7 +1632,7 @@ function showCoach(){
 }
 function finishCoach(){
  if(!activeCoach)return;const t=game.account.tutorial??={};
- t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')nightMarked=[game.run,game.run.day];if(RISK_MARKS.includes(activeCoach[0]))riskMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+ t['coach-'+activeCoach[0]]=true;if(game.run?.phase==='night')game.run.nightCoachDay=game.run.day;if(RISK_MARKS.includes(activeCoach[0]))riskMarked=[game.run,game.run.day];game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 document.addEventListener('scroll',()=>{if(!activeCoach)return;
  const target=[...document.querySelectorAll(activeCoach[1])].find(el=>el.getClientRects().length);
@@ -2610,7 +2610,7 @@ function settings(){return `<div class="settings-content">
  <p class="settings-links">${btn('크레딧','credits','bare')}<a href="mailto:${SUPPORT_MAIL}">오류 신고</a><a href="${PRIVACY_URL}" target="_blank" rel="noopener">개인정보처리방침</a></p>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다.${Native.inApp()?'':' 소리는 처음에 꺼져 있다.'}</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
 /* COPY_AUDIT §8 / UI_UX §GLOBAL HELP: five flow lines, then eight sections under collapsed 자세히. */
-function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><p>손님 소지금은 최대 2000G까지 쌓인다. 그보다 많이 벌어도 2000G를 넘지 않는다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;

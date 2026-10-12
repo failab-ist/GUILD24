@@ -2500,7 +2500,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* User 2026-10-04: one NIGHT mark a night, the most serious rule first; User 2026-10-10: then what the sold Item did, then what
     changes the next decision, then the rewards */
  assert.ok(app.includes("const NIGHT_MARKS=['death','severe','injured','accident','counter','prepared','fatigue','great','earn'];"),'NIGHT priority: death, severe, injured, accident (User 2026-10-09), counter, prepared, fatigue, great, earn');
- assert.ok(/nightDone=game\.run\?\.phase==='night'&&nightMarked\?\.\[0\]===game\.run&&nightMarked\[1\]===day/.test(app)&&/nightMarked=\[game\.run,game\.run\.day\]/.test(app),'a NIGHT mark waits once one has been told this night');
+ assert.ok(/nightDone=game\.run\?\.phase==='night'&&game\.run\.nightCoachDay===day/.test(app)&&/game\.run\.nightCoachDay=game\.run\.day/.test(app),'a NIGHT mark waits once one has been told this night; the Day is kept on the Run so a reload does not tell a second');
  assert.ok(/'<div class="told'\+\(r\.acted\|\|\[\]\)\.map\(k=>' learn-'\+k\)/.test(fn('beat')),'the record carries a class per rule that acted on it');
  /* User 2026-10-02: the Fatigue mark lights the record's 귀환 후 피로 row, the one token carrying the Fatigue arithmetic */
  assert.ok(/<button class="fatigue-row tok '\+c\.kind\+'" data-action="fatigue"/.test(fn('changedRows')),'the 귀환 후 피로 token remains the Fatigue mark\'s anchor and opens an overlay');
@@ -3233,6 +3233,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  assert.ok(h.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'),'the guide directs the player to the actual Item effects');
  assert.ok(h.includes('바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.'),'the guide includes the overcharge refusal exception');
+ assert.ok(h.includes('손님 소지금은 최대 2000G까지 쌓인다.'),'the guide states the 2000G Wallet cap');
  const rescueLimit=DATA.balance.rescueLimit;
  try{DATA.balance.rescueLimit=7;assert.ok(render([source],'help()',ctx).includes('한 점포에서 최대 7번의 마감에 이용할 수 있다.'),'the guide follows the actual rescue limit');}
  finally{DATA.balance.rescueLimit=rescueLimit;}
