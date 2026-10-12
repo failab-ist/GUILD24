@@ -1323,7 +1323,7 @@ PASS: No separate punishment system is needed to make care matter.
 
 With the `명예 모험가 액자` Decoration (id honorFrame) active, the ordinary NPC rarity draw uses exactly (META §wall — 명예 모험가 액자):
 
-    [25, 30, 26, 13, 6]
+    [30, 34, 23, 10, 3]
 
 for Common / Uncommon / Rare / Epic / Legendary.
 

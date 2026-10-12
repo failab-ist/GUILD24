@@ -38,8 +38,7 @@ function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
    within it; a 등급 with nothing left falls back to the whole pool. */
 /* META 본사 우수 점포 훈장: the DAY 0 free pick is drawn from 영웅 instead of 일반 */
 const heroDay0=g=>!!g.wears&&g.wears('heroSign');
-const heroDay=(g,day)=>heroDay0(g)&&(D.decorationParams.heroSign?.days||[0]).includes(day);
-const rarityFor=(g,day)=>{if(day===0)return heroDay0(g)?3:0;if(heroDay(g,day))return 3;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
+const rarityFor=(g,day)=>{if(day===0)return heroDay0(g)?3:0;const c=D.relicRarityChance,x=g.rng.next();return x<c[3]?3:x<c[3]+c[2]?2:0;};
 function drawCandidates(g,day,avoid=[]){const s=g.run;let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&!D.relicRetired.includes(r.id)&&(day!==0||r.rarity===(heroDay0(g)?3:0))&&(day!==30||!D.relicD30NoEffect.includes(r.id)));const cool=pool.filter(r=>!avoid.includes(r.id));if(cool.length>=3)pool=cool;const chosen=[];for(let i=0;i<3&&pool.length;i++){const want=rarityFor(g,day),graded=pool.filter(r=>r.rarity===want),base=graded.length?graded:pool,pick=g.rng.pick(base);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
  return {candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+g.rng.next()*.3)))};}
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});
@@ -49,7 +48,8 @@ P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===da
    keeps every pool rule and leaves the three on the table out when it can; the spend is 점포지원 investment. */
 /* META 지원 교환 쿠폰함: the window's first redraw is free, then the ordinary curve from its first step (0 -> 300 -> 600...) */
 P.relicRerollPrice=function(){const w=this.run.relicWindow,n=w?.rerolls||0;if(this.wears('rerollCoupon')){if(!n)return 0;return D.balance.relicReroll.base*2**(n-1);}return D.balance.relicReroll.base*2**n;};
-P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.milestoneDay!==0&&this.canBuyRelic();};
+/* META 본사 우수 점포 훈장 (User 2026-10-12): its DAY 0 영웅 window may be redrawn too, at the ordinary price curve (지원 교환 쿠폰함 included) */
+P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&(w.milestoneDay!==0||this.wears('heroSign'))&&this.canBuyRelic();};
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
  s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;

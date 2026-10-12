@@ -502,7 +502,7 @@ test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0
 });
 test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
  const g=new Game();g.autosave=false;g.start('relic-reroll');
- assert.equal(g.canRerollRelics(),false,'the DAY 0 free pick has no reroll');
+ assert.equal(g.canRerollRelics(),false,'the DAY 0 free pick has no reroll (본사 우수 점포 훈장 aside)');
  assert.throws(()=>g.rerollRelics());
  g.buyRelic(g.run.relicWindow.candidateIds[0]);
  g.run.day=5;g.morning();const w=g.run.relicWindow;g.run.money=2000;

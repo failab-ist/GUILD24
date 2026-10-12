@@ -1460,6 +1460,15 @@ test('본사 우수 점포 훈장: the DAY 0 free pick is three 영웅 cards; wi
   assert.ok(w.candidatePrices.every(p=>p===0),'still free');
   const h=new Game(Meta.fresh());h.autosave=false;h.start('hero-'+i);
   assert.ok(h.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'일반 only without it');}
+ /* User 2026-10-12: its DAY 0 window may be redrawn at the ordinary curve; 지원 교환 쿠폰함 makes the first free */
+ {const g=new Game(account(['heroSign']));g.autosave=false;g.start('hero-reroll');const w=g.run.relicWindow,m=g.run.money,first=[...w.candidateIds];
+  assert.equal(g.canRerollRelics(),true);assert.equal(g.relicRerollPrice(),300);g.rerollRelics();
+  assert.equal(g.run.money,m-300,'300G');assert.equal(g.relicRerollPrice(),600,'then 600G');
+  assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].rarity===3&&!first.includes(id)),'the redraw is 영웅 again, new cards: '+w.candidateIds);
+  assert.ok(w.candidatePrices.every(p=>p===0),'and still free to take');
+  const h=new Game(Meta.fresh());h.autosave=false;h.start('hero-reroll');assert.equal(h.canRerollRelics(),false,'without it, DAY 0 has no reroll');
+  const c=new Game(account(['heroSign','rerollCoupon']));c.autosave=false;c.start('hero-coupon');assert.equal(c.relicRerollPrice(),0,'쿠폰함: the first redraw is free here too');
+  c.rerollRelics();assert.equal(c.relicRerollPrice(),300);}
 });
 test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the expedition; under 단골도 10 nothing changes',()=>{
  assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);

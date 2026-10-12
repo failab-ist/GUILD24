@@ -389,11 +389,11 @@ two shares add.
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [40, 32, 18, 8, 2]
+rare-NPC rarity weights = [30, 34, 23, 10, 3]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 60%), 영웅 and 전설 the most. This
+Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 70%), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
@@ -407,7 +407,7 @@ has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning, 35% chance of visitors +1
+each Morning, 60% chance of visitors +1
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
@@ -428,7 +428,7 @@ every adventurer created while it is worn: 55% chance of spawn Level +1
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 40% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 50% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE
@@ -473,7 +473,9 @@ counterfactual reads the same term.
 the DAY 0 free 점포지원 pick is drawn from 영웅 (3 cards) instead of 일반
 ```
 
-Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says.
+Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says. That DAY 0 window may also be redrawn
+(RELIC §CANDIDATE REROLL) at the ordinary price curve, 지원 교환 쿠폰함 included; each redraw is again three 영웅 cards, free
+to take.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
