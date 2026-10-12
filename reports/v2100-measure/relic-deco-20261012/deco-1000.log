@@ -1,0 +1,17 @@
+none             D30   5.1% (+0.0) clear   1.5% (+0.0) deathFail 95% | clear|reach 29.4% | 성공 51.4 / 41.9 / 49.1 / 37.4 | 좀비 6.0%
+sponsorSign      D30   8.9% (+3.8) clear   3.9% (+2.4) deathFail 91% | clear|reach 43.8% | 성공 54.5 / 45.0 / 49.1 / 36.5 | 좀비 13.6%
+honorFrame       D30   7.8% (+2.7) clear   3.7% (+2.2) deathFail 92% | clear|reach 47.4% | 성공 52.6 / 44.0 / 51.3 / 41.4 | 좀비 6.0%
+thriftSafe       D30  10.4% (+5.3) clear   3.1% (+1.6) deathFail 90% | clear|reach 29.8% | 성공 53.6 / 44.7 / 49.3 / 36.5 | 좀비 14.2%
+guildShelf       D30   4.7% (-0.4) clear   1.9% (+0.4) deathFail 95% | clear|reach 40.4% | 성공 53.3 / 45.5 / 51.6 / 41.0 | 좀비 4.9%
+trainingSign     D30  15.4% (+10.3) clear   5.5% (+4.0) deathFail 84% | clear|reach 35.7% | 성공 62.8 / 49.0 / 53.6 / 40.5 | 좀비 9.7%
+infirmaryPlaque  D30  10.7% (+5.6) clear   2.9% (+1.4) deathFail 89% | clear|reach 27.1% | 성공 52.7 / 41.7 / 48.3 / 37.1 | 좀비 11.5%
+memorialBook     D30  11.4% (+6.3) clear   3.6% (+2.1) deathFail 88% | clear|reach 31.6% | 성공 51.4 / 42.3 / 50.0 / 39.4 | 좀비 9.7%
+aidCabinet       D30   8.9% (+3.8) clear   3.0% (+1.5) deathFail 90% | clear|reach 33.7% | 성공 54.7 / 43.2 / 50.8 / 39.0 | 좀비 9.2%
+cheerBanner      D30   9.1% (+4.0) clear   6.2% (+4.7) deathFail 91% | clear|reach 68.1% | 성공 53.0 / 45.5 / 53.1 / 43.2 | 좀비 4.7%
+heroSign         D30   6.1% (+1.0) clear   2.8% (+1.3) deathFail 93% | clear|reach 45.9% | 성공 55.0 / 43.7 / 49.9 / 39.6 | 좀비 7.6%
+voucher          D30  11.2% (+6.1) clear   9.0% (+7.5) deathFail 89% | clear|reach 80.4% | 성공 51.7 / 43.3 / 52.3 / 46.0 | 좀비 3.1%
+rerollCoupon     D30   5.1% (+0.0) clear   1.5% (+0.0) deathFail 95% | clear|reach 29.4% | 성공 51.4 / 41.9 / 49.1 / 37.4 | 좀비 6.0%
+
+real	5m14.186s
+user	19m36.570s
+sys	0m24.225s

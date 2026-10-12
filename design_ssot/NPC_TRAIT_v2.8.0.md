@@ -2,8 +2,8 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.12.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.12
+DOC_VERSION=2.13.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -1323,7 +1323,7 @@ PASS: No separate punishment system is needed to make care matter.
 
 With the `명예 모험가 액자` Decoration (id honorFrame) active, the ordinary NPC rarity draw uses exactly (META §wall — 명예 모험가 액자):
 
-    [25, 30, 26, 13, 6]
+    [30, 34, 23, 10, 3]
 
 for Common / Uncommon / Rare / Epic / Legendary.
 

@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.11.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.12
+DOC_VERSION=2.13.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.13
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -208,7 +208,7 @@ tag diversity and build bias: none (User 2026-10-10); a candidate's chance does 
 
 ### CANDIDATE REROLL (User 2026-10-02)
 
-- an open, unspent window from D5 on (never the D0 free pick) may redraw its three candidates for Gold
+- an open, unspent window from D5 on (never the D0 free pick, except with 본사 우수 점포 훈장 — META §wall) may redraw its three candidates for Gold
 - price = 300G × 2^(rerolls already made in this window): 300 → 600 → 1200…; a new window starts again at 300G
 - the redraw keeps every pool rule above (ownership, the grade roll, the D30 exclusions) and leaves
   the three on the table out when at least three others remain; the new three are priced as any window's

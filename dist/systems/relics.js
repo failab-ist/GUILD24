@@ -48,7 +48,8 @@ P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===da
    keeps every pool rule and leaves the three on the table out when it can; the spend is 점포지원 investment. */
 /* META 지원 교환 쿠폰함: the window's first redraw is free, then the ordinary curve from its first step (0 -> 300 -> 600...) */
 P.relicRerollPrice=function(){const w=this.run.relicWindow,n=w?.rerolls||0;if(this.wears('rerollCoupon')){if(!n)return 0;return D.balance.relicReroll.base*2**(n-1);}return D.balance.relicReroll.base*2**n;};
-P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&w.milestoneDay!==0&&this.canBuyRelic();};
+/* META 본사 우수 점포 훈장 (User 2026-10-12): its DAY 0 영웅 window may be redrawn too, at the ordinary price curve (지원 교환 쿠폰함 included) */
+P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&(w.milestoneDay!==0||this.wears('heroSign'))&&this.canBuyRelic();};
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
  s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;
