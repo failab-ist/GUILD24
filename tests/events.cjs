@@ -122,7 +122,7 @@ test('EVENT 24~55: every new Event effect moves its own channel',()=>{
   assert.deepEqual(t.dungeons.map(d=>d.family),['spider','slime'],'the Families stay');}
  {const t=apply('fridgebreak',(h,t)=>{t.inventory=[];h.stock('rice',1);h.stock('rope',1);});
   const [rice,rope]=t.inventory;assert.equal(rice.expires,6+2-1,'냉장고 고장: Food -1 Day');assert.equal(rope.expires,6+5,'Field Gear untouched');
-  rice.expires=t.day+1;const h=fresh('ev-fridge-floor');h.run=t;h.rollEvent=()=>E('fridgebreak');h.morningEvent(t.dungeons.map(d=>d.family));assert.equal(rice.expires,t.day,'shelf cut floors at today');assert.equal(t.inventory.length,2,'morning keeps stock sellable today');h.nightDiscard();assert.ok(!t.inventory.includes(rice),'remaining stock is discarded tonight');}
+  rice.expires=t.day+2;const h=fresh('ev-fridge-floor');h.run=t;h.rollEvent=()=>E('fridgebreak');h.morningEvent(t.dungeons.map(d=>d.family));assert.equal(rice.expires,t.day+1,'shelf cut floors at 오늘까지 (1일), never 0일');rice.expires=t.day+1;h.morningEvent(t.dungeons.map(d=>d.family));assert.equal(rice.expires,t.day+1,'오늘까지 stock is not cut to 0일');assert.equal(t.inventory.length,2,'morning keeps stock sellable today');h.nightDiscard();assert.ok(!t.inventory.includes(rice),'remaining stock is discarded tonight');}
  {const h=fresh('ev-near'),t=h.run;t.phase='order';t.event=E('nearexpiry');h.stock('rope',1);assert.equal(t.inventory.at(-1).expires,t.day+1,'유통기한 임박 특가: today only');t.event=null;}
  // ORDER: per-offer cap, no reroll
  {const h=fresh('ev-order'),t=h.run;t.phase='order';t.money=99999;t.event=E('ordercap');const i=t.offers.findIndex(o=>o.quantity>=3);

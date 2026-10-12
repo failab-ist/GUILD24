@@ -275,8 +275,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* EVENT §20 본사 폐기 유예: stock whose last sale day is today - the shelf's `오늘까지`, discarded tonight - gets
      one more day. Only that stock; nothing bought later today is touched. */
   if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=ev.wasteDelay;
-  /* EVENT 46 냉장고 고장: Food/Drink shelf life -1 Day; what becomes due today leaves tonight as usual */
-  if(ev.shelfCut)for(const st of s.inventory)if(st.expires!==null&&['food','drink'].includes(D.itemBy[st.item].category))st.expires=Math.max(s.day,st.expires-ev.shelfCut);
+  /* EVENT 46 냉장고 고장: Food/Drink shelf life -1 Day; the floor is `오늘까지` (expires day+1), never 0 days; what is due today leaves tonight as usual */
+  if(ev.shelfCut)for(const st of s.inventory)if(st.expires!==null&&['food','drink'].includes(D.itemBy[st.item].category))st.expires=Math.max(s.day+1,st.expires-ev.shelfCut);
   if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
