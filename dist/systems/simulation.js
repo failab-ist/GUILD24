@@ -311,14 +311,18 @@ function playRun(g,out,ctx){
     const modes=[...(V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3?['overcharge']:[]),'full','half'];
     for(const mode of modes){if(n.refused.includes(it.id+':'+mode))continue;const intent=g.interest(n,it,mode);if(intent.debit>purse)continue;
      const raw=gain+(intent.price-cost)*gw+waste+D.pricing[mode].loyalty*V*.2-hold;
-     singles.push({st,it,mode,gain,chance:intent.chance,raw,value:intent.chance*raw});}}
+     singles.push({st,it,mode,gain,chance:intent.chance,raw,value:intent.chance*raw,debit:intent.debit});}}
    if(!singles.length)break;
    singles.sort((a,b)=>b.value-a.value);let best=singles[0];
    /* two free slots: a pair can be worth more than its halves (만반의 준비, two Hazards, food + potion) */
    if(G.Adventurer.slots(n)-n.pack.length>=2){
-    const top=[];for(const x of singles)if(!top.some(y=>y.it.id===x.it.id)&&top.length<6)top.push(x);
+    /* the pair is priced so the purse covers both Items together - 정가 + 정가, 정가 + 50%, or 50% + 50%, whatever still fills
+       the second slot (User 2026-10-15: "두 칸 다 채워 넣으려고 계산한다"). One Item at a time against the whole purse left the
+       second slot empty whenever the first sold at 정가. */
+    const top=[];for(const x of singles)if(!top.some(y=>y.it.id===x.it.id&&y.mode===x.mode)&&top.length<10)top.push(x);
     for(let i=0;i<top.length;i++)for(let j=i;j<top.length;j++){const a=top[i],b=top[j];
-     if(i===j&&s.inventory.filter(x=>x.item===a.it.id).length<2)continue;
+     if(a.it.id===b.it.id&&s.inventory.filter(x=>x.item===a.it.id).length<2)continue;
+     if(a.debit+b.debit>purse)continue;
      const pairGain=utility(forecast(n,[...n.pack,a.it.id,b.it.id],d),V)-base,single=x=>x.raw-x.gain;
      const raw=pairGain+single(a)+single(b),value=a.chance*b.chance*raw+a.chance*(1-b.chance)*a.raw+(1-a.chance)*b.chance*b.raw;
      if(value>best.value)best=a.raw>=b.raw?{...a,value}:{...b,value};}}
