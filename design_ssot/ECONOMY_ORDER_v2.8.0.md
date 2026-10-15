@@ -139,13 +139,13 @@ Wallet below (User 2026-10-02).
 When a selected NPC arrives for an ordinary visit:
 
 Fresh NPC:
-    Wallet = min(2000, round(180 + Level × 4 + randomInt(40, 70)))
+    Wallet = min(2000, round(180 + Level × 4 + randomInt(30, 70)))
 
 Returning NPC:
-    Wallet = min(2000, round(existing Wallet + Level × 4 + randomInt(40, 70)))
+    Wallet = min(2000, round(existing Wallet + Level × 4 + randomInt(30, 70)))
 
 Rules:
-- random range is inclusive 40..70 under the existing integer RNG convention (the floor keeps a losing regular able to buy
+- random range is inclusive 30..70 under the existing integer RNG convention (the floor keeps a losing regular able to buy
   basic preparation; the Wallet otherwise moves with expedition results)
 - persistent Wallet carries between visits
 - explicit Trait / Event / Store Support Wallet effects stay separate under their owners
@@ -862,10 +862,10 @@ FAIL:
 #### ECO-Q-v28-3B — ORDINARY NPC WALLET ON VISIT
 
 Fresh:
-    min(2000, round(180 + Level × 4 + randomInt(40, 70)))
+    min(2000, round(180 + Level × 4 + randomInt(30, 70)))
 
 Returning:
-    min(2000, round(existing Wallet + Level × 4 + randomInt(40, 70)))
+    min(2000, round(existing Wallet + Level × 4 + randomInt(30, 70)))
 
 PASS:
 - 30 and 70 endpoints are reachable under existing integer RNG convention
