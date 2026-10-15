@@ -837,4 +837,18 @@ test('a refused 바가지 closes the SKU and costs Loyalty 2; a sold one costs 4
   assert.equal(n.loyalty,26,'a sold 바가지 costs Loyalty 4');}
 });
 
+test('DUNGEON_HAZARD §Environment incident probability: only Tier II eases, through DAY 15, in two steps',()=>{
+ const at=(day,tier)=>Dungeon.envChance(10,0,day,tier);
+ assert.equal(at(1,1),.08+10*.020,'Tier I keeps 8% + gap x 2.0%');
+ assert.equal(at(12,3),.08+10*.020,'Tier III keeps 8% + gap x 2.0%');
+ assert.equal(Dungeon.envChance(10,0),.08+10*.020,'a Gate with no Day / Tier (Final) keeps the base values');
+ const ease=(base,gap)=>Math.round((base+10*gap)*1e6)/1e6;
+ assert.equal(Math.round(at(5,2)*1e6)/1e6,ease(.06,.015),'Tier II DAY 1~10: 6% + gap x 1.5%');
+ assert.equal(Math.round(at(10,2)*1e6)/1e6,ease(.06,.015));
+ assert.equal(Math.round(at(11,2)*1e6)/1e6,ease(.07,.0175),'Tier II DAY 11~15: 7% + gap x 1.75%');
+ assert.equal(Math.round(at(15,2)*1e6)/1e6,ease(.07,.0175));
+ assert.equal(at(16,2),.08+10*.020,'Tier II from DAY 16 is back to 8% + gap x 2.0%');
+ assert.ok(at(10,2)<at(11,2)&&at(11,2)<at(16,2),'the ease fades in steps');
+});
+
 console.log(checks+' revision groups passed');
