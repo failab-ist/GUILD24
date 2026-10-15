@@ -145,11 +145,11 @@ test('EVENT 24~55: every new Event effect moves its own channel',()=>{
   assert.equal(h.offerFor(DATA.itemBy.rice).quantity,4,'ordinary supply remains 2 to 4');h.rng=prior;
  }
  // SALE: 바가지 closed, drink intent up
- {const h=fresh('ev-sale'),t=h.run;t.phase='sell';const n=t.npcs[0];n.traits=[];n.money=9999;n.pack=[];n.refused=[];t.queue=[n.id];t.cursor=0;h.stock('water',1);
+ {const ffl=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;/* this reads a Trait / Event shift, not the 정가 floor */const h=fresh('ev-sale'),t=h.run;t.phase='sell';const n=t.npcs[0];n.traits=[];n.money=9999;n.pack=[];n.refused=[];t.queue=[n.id];t.cursor=0;h.stock('water',1);
   t.event=E('pricewatch');assert.equal(h.sell(t.inventory.at(-1).id,'overcharge'),false,'가격 단속: no 바가지 sale');assert.equal(n.pack.length,0);
   /* a drink that does not meet the Gate's Hazard, so its chance is not the Counter ceiling */
   const drink=['coffee','herbtea','energy'].find(id=>{t.event=null;return h.interest(n,DATA.itemBy[id],'full').chance<.87;});
-  t.event=null;const a=h.interest(n,DATA.itemBy[drink],'full').chance;t.event=E('heatwave');const b=h.interest(n,DATA.itemBy[drink],'full').chance;assert.ok(b>a,'폭염 raises drink intent: '+drink+' '+a+' -> '+b);t.event=null;}
+  t.event=null;const a=h.interest(n,DATA.itemBy[drink],'full').chance;t.event=E('heatwave');const b=h.interest(n,DATA.itemBy[drink],'full').chance;assert.ok(b>a,'폭염 raises drink intent: '+drink+' '+a+' -> '+b);t.event=null;DATA.pricing.full.finalFloor=ffl;}
  // eligibility: an Event whose subject is absent today is out of the pool
  {const h=fresh('ev-elig'),t=h.run;for(const n of t.npcs){n.injury=0;n.loyalty=0;}t.inventory=[];
   for(const id of ['medcorps','consolation','regularday','fridgebreak'])assert.equal(h.eventEligible(E(id)),false,id+' needs its subject');

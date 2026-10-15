@@ -12,11 +12,11 @@ test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.e
    the Wallet to the exact price keeps the purchase affordable while pushing burden above the
    0.36 pivot, so the bonus is zero and the frugal priceBias reads as the clean additive shift
    the test asserts. */
-test('trait source of truth; frugal changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=it.sell;n.traits=[];
+test('trait source of truth; frugal changes information only',()=>{const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=it.sell;n.traits=[];
  assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
  assert.ok(Math.round(DATA.itemBy.lowpotion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
  const a=g.interest(n,it).chance;n.traits=['frugal'];/* v2.9.2 (User 2026-09-25): 정가's final chance carries ECONOMY_ORDER's final scale, so the additive raw shift lands scaled. */
- assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias*DATA.pricing.full.finalScale)<1e-9);});
+ assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias*DATA.pricing.full.finalScale)<1e-9);DATA.pricing.full.finalFloor=ff;});
 test('coupon pending capped; explicit duplication; ordinary effects additive',()=>{const g=fresh(),n={...g.run.npcs[0],traits:[]},d=g.run.dungeons[0];const e=pack=>Dungeon.prepare({...n,pack},d).effects;assert.equal(e(['coupon','coupon','highpotion']).combat,e(['coupon','highpotion']).combat);/* ITEM_v2.7: 상급 포션 is 투력 +16, not the old 강인함 +27. The subject here is the coupon's
    duplication, so the amount is read from the catalogue instead of being restated. */
 assert.equal(e(['highpotion','coupon']).combat+DATA.itemBy.highpotion.effects.combat,e(['coupon','highpotion']).combat);assert.equal(e(['dragonramen','water']).thirst,DATA.itemBy.dragonramen.effects.thirst);assert.equal(e(['coupon','worldcharm']).revive,2);});
@@ -443,6 +443,7 @@ test('COPY §9 (v2.9.11): the Rare Reference roll is gone, its one draw is kept'
    before that wiring existed. Both halves are asserted, because the first one alone is what
    made the term leak into the other two modes. */
 test('정가 threshold reaches the decision, and 할인/바가지 are untouched by it',()=>{
+ const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;
  const g=fresh();g.open();const n=g.current();n.money=400;n.traits=[];
  const rule=DATA.pricing.full;
  assert.ok(rule.intentWeight>0&&rule.intentPivot>0,'정가 declares a weight for the judged price');
@@ -459,8 +460,8 @@ test('정가 threshold reaches the decision, and 할인/바가지 are untouched 
   for(const mode of ['half','overcharge'])
    assert.deepEqual(g.interest(n,it,mode),off(()=>g.interest(n,it,mode)),
     mode+' decides the same as before the judged price reached chance');
-  if(floored(it)){const q=g.interest(n,it,'full'),b=DATA.balance;const was=b.counterIntentBonus;b.counterIntentBonus=0;let base;try{base=g.interest(n,it,'full').chance/.90;}finally{b.counterIntentBonus=was;}
-   assert.ok(Math.abs(q.chance-(q.debit>n.money?0:Math.min(.97,base+was)*.90))<1e-9,it.id+' adds the 관련 준비 bonus to its chance (x 0.90 at 정가) when affordable');continue;}
+  if(floored(it)){const q=g.interest(n,it,'full'),b=DATA.balance;const was=b.counterIntentBonus;b.counterIntentBonus=0;let base;try{base=g.interest(n,it,'full').chance/DATA.pricing.full.finalScale;}finally{b.counterIntentBonus=was;}
+   assert.ok(Math.abs(q.chance-(q.debit>n.money?0:Math.min(.97,base+was)*DATA.pricing.full.finalScale))<1e-9,it.id+' adds the 관련 준비 bonus to its chance (x final scale at 정가) when affordable');continue;}
   movable++;if(g.interest(n,it,'full').chance!==off(()=>g.interest(n,it,'full')).chance)fullMoved++;
  }
  assert.ok(movable>0&&fullMoved>movable/2,'and 정가 actually moves - '+fullMoved+' of '+movable+' uncovered Items');
@@ -476,12 +477,14 @@ test('정가 threshold reaches the decision, and 할인/바가지 are untouched 
  assert.ok(Math.round(it.sell)/n.money<rule.intentPivot,'the control sits where the term is live');
  assert.ok(at65>at100,'.65 is worth something to the customer: '+at65.toFixed(3)+' vs '+at100.toFixed(3));
  n.money=400;
+DATA.pricing.full.finalFloor=ff;
 });
 
 /* ECONOMY_ORDER §PURCHASE INTENT. The burden term is a BONUS only: a light offer is helped, a
    heavy one is simply not helped. It may never subtract, because affordability is already
    decided by the wallet gate and an offer the customer CAN pay for should not also be taxed. */
 test('the 정가 burden term is a bonus only, and never a penalty',()=>{
+ const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;
  const g=fresh();g.open();const n=g.current();n.traits=[];n.loyalty=0;
  const rule=DATA.pricing.full,it=DATA.itemBy.highpotion;
  assert.equal(rule.intentPivot,.36);assert.equal(rule.intentWeight,.5);
@@ -497,7 +500,7 @@ test('the 정가 burden term is a bonus only, and never a penalty',()=>{
  const light=bonusAt(4000);
  assert.ok(light.burden<.36,'the light case really is under the pivot: '+light.burden.toFixed(3));
  assert.ok(light.delta>0,'a light offer gains: +'+light.delta.toFixed(4));
- assert.ok(Math.abs(light.delta-.5*(.36-light.burden)*.90)<1e-9,'and gains exactly weight x (pivot - burden), under the 0.90 final scale');
+ assert.ok(Math.abs(light.delta-.5*(.36-light.burden)*DATA.pricing.full.finalScale)<1e-9,'and gains exactly weight x (pivot - burden), under the final scale');
  // burden = pivot -> exactly 0
  const atPivot=Math.round(it.sell*rule.intentMult)/.36;
  const even=bonusAt(atPivot);
@@ -523,9 +526,11 @@ test('the 정가 burden term is a bonus only, and never a penalty',()=>{
  const src=require('node:fs').readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
  assert.ok(/const burdenIntentBonus=weight\*Math\.max\(0,\(rule\.intentPivot\|\|0\)-burden\);/.test(src),
   'the bonus is floored at zero in Source');
+DATA.pricing.full.finalFloor=ff;
 });
 
 test('the 정가 burden bonus changes nothing else about acceptance',()=>{
+ const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;
  const g=fresh();g.open();const n=g.current();n.traits=[];
  const it=DATA.itemBy.highpotion;
  // unaffordable -> 0, whatever the burden would have said
@@ -545,25 +550,42 @@ test('the 정가 burden bonus changes nothing else about acceptance',()=>{
  // the clamp still bounds the result even with the bonus at its largest
  n.money=1000000;n.loyalty=100;
  const c=g.interest(n,it,'full').chance;
- assert.ok(c<=.97*.90+1e-9&&c>=.08*.90-1e-9,'the clamp still holds, then the 0.90 final scale: '+c);
+ assert.ok(c<=.97*DATA.pricing.full.finalScale+1e-9&&c>=.08*DATA.pricing.full.finalScale-1e-9,'the clamp still holds, then the final scale: '+c);
  assert.ok(Math.round(it.sell*DATA.pricing.full.mult)===it.sell,'full price charged is still list');
  void rule;
+DATA.pricing.full.finalFloor=ff;
 });
 
 /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): the FINAL 정가 purchase chance is x 0.90 -
    a relative cut, the 0.97 관련 준비 floor included - and 50% / 150% carry no scale at all. */
-test('정가 final purchase chance is x 0.90 of the unscaled one; 50% / 150% unchanged',()=>{
+test('정가 final purchase chance is x 0.95 of the unscaled one; 50% / 150% unchanged',()=>{
+ const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;
  const g=fresh();g.open();const n=g.current();n.traits=[];
- assert.equal(DATA.pricing.full.finalScale,.90,'정가 final scale is 0.90');
+ assert.equal(DATA.pricing.full.finalScale,.95,'정가 final scale is 0.95');
  for(const mode of ['half','overcharge'])assert.equal(DATA.pricing[mode].finalScale,undefined,mode+' carries no final scale');
  const bare=(fn)=>{const k=DATA.pricing.full.finalScale;DATA.pricing.full.finalScale=1;try{return fn();}finally{DATA.pricing.full.finalScale=k;}};
  let floored=0,checked=0;
  for(const money of [60,300,4000])for(const it of DATA.items){n.money=money;
   const on=g.interest(n,it,'full').chance,off=bare(()=>g.interest(n,it,'full').chance);
-  assert.ok(Math.abs(on-off*.90)<1e-9,it.id+' at '+money+'G: '+on+' is not 0.90 x '+off);checked++;if(off===.97)floored++;
+  assert.ok(Math.abs(on-off*.95)<1e-9,it.id+' at '+money+'G: '+on+' is not 0.95 x '+off);checked++;if(off>=.97-1e-9)floored++;
   for(const mode of ['half','overcharge'])assert.deepEqual(g.interest(n,it,mode),bare(()=>g.interest(n,it,mode)),mode+' is untouched');}
  assert.ok(checked>0&&floored>0,'the 0.97 관련 준비 case is among the scaled ones ('+floored+')');
  assert.equal(DATA.balance.accessibleNeed,.72,'the shared accessible need is untouched');
+DATA.pricing.full.finalFloor=ff;
+});
+
+/* ECONOMY_ORDER §PURCHASE ACCEPTANCE (User 2026-10-15): 정가's final chance never falls below 정가 finalFloor, whatever the Traits; 50% / 150% have no floor. */
+test('정가 final purchase chance has a floor; 50% / 150% have none',()=>{
+ const g=fresh();g.open();const n=g.current();n.traits=['frugal','shy'];n.loyalty=0;n.money=400;
+ const rule=DATA.pricing.full;
+ assert.equal(rule.finalFloor,.75,'정가 final floor is 0.75');
+ for(const mode of ['half','overcharge'])assert.equal(DATA.pricing[mode].finalFloor,undefined,mode+' carries no floor');
+ const ff=rule.finalFloor;let lifted=0;
+ for(const it of DATA.items){const q=g.interest(n,it,'full');if(q.debit>n.money+(n.eventBudget||0))continue;
+  assert.ok(q.chance>=ff-1e-9,it.id+' stays at or above the floor: '+q.chance);
+  rule.finalFloor=0;const raw=g.interest(n,it,'full').chance;rule.finalFloor=ff;
+  if(raw<ff-1e-9){lifted++;assert.ok(Math.abs(q.chance-ff)<1e-9,it.id+' below the floor is set to it');}else assert.ok(Math.abs(q.chance-raw)<1e-9,it.id+' above the floor is untouched');}
+ assert.ok(lifted>0,'a frugal, shy customer really is lifted by it ('+lifted+')');
 });
 
 /* CORE_RUN §FIRST-RUN LESSONS (User 2026-09-30): the account's first Run finds one Common Counter for the first Gate's Hazard

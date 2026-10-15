@@ -291,11 +291,11 @@ For 바가지:
 Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
 기동 on 속박/진창 Gates is 관련 준비, not a Counter.
 
-정가 final scale: the FINAL 정가 purchaseChance above — the 관련 준비 case included — is multiplied by 0.90
-(a ~10% relative cut, not percentage points). 50% 할인 and 바가지 carry no scale, and the shared accessible-mode
+정가 final scale and floor: the FINAL 정가 purchaseChance above — the 관련 준비 case included — is multiplied by 0.95,
+then raised to at least 0.75. 50% 할인 and 바가지 carry no scale or floor, and the shared accessible-mode
 base need is not lowered for it:
 
-    정가 purchaseChance = (the clamped rawChance, 관련 준비 bonus included) × 0.90
+    정가 purchaseChance = max((the clamped rawChance, 관련 준비 bonus included) × 0.95, 0.75)
 
 Exact acceptance probability remains hidden from the Player.
 
@@ -847,8 +847,8 @@ PASS:
 - no separate purchase-only Counter definition; 기동 on 속박/진창 is 관련 준비, not a Counter
 - non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
 - 150% receives no Counter bonus
-- 100% only: the final chance above (관련 준비 bonus included) is × 0.90; 50% / 150% carry no scale;
-  accessible base need 0.72 is not lowered for it
+- 100% only: the final chance above (관련 준비 bonus included) is × 0.95, then at least 0.75; 50% / 150% carry
+  no scale or floor; accessible base need 0.72 is not lowered for it
 
 FAIL:
 - Bag occupancy subtracts from purchase intent
