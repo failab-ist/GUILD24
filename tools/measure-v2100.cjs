@@ -71,7 +71,8 @@ function worker({root,kind,policy,deco,T,R,part}){
  {const Dg=G.Dungeon,resolve=Dg.resolve;Dg.resolve=function(n,d,r,fac){let bare=null;
   if(d.family!=='final'&&!d.deep){const pk=n.pack;n.pack=[];bare=Dg.preparedPower(Dg.prepare(n,d,fac).effects)/d.power;n.pack=pk;}
   const rep=resolve.apply(this,arguments),rec=n.records?.at(-1);if(bare!==null&&rec)rec.bareRatio=bare;return rep;};}
- P.open=function(){const s=this.run;
+ const gap3=s=>{const l=s.npcs.filter(n=>n.alive).map(n=>n.level).sort((x,y)=>y-x).slice(0,3);return l.length<3?null:l.reduce((x,y)=>x+y,0)/3-G.Adventurer.newcomerMinLevel(s.day);},snap15=new WeakMap();
+ P.open=function(){const s=this.run;if(s.day===15&&!snap15.has(s))snap15.set(s,gap3(s));
   for(const id of s.queue){const n=s.npcs.find(x=>x.id===id);if(!n)continue;
    if(!initial.has(n))initial.set(n,{level:n.level,day:s.day,mastery:G.Meta.jobMastery(this.account,n.job)});
    if(!n.introduced)continue;const last=(n.records||[]).slice(-2);
@@ -92,6 +93,8 @@ function worker({root,kind,policy,deco,T,R,part}){
    core:split(s.npcs,ok),prep:prep(s.npcs),
    cash:(s.reportHistory||[]).length?((s.reportHistory.at(-1).balance-700)/s.reportHistory.length):0,
    // 날짜별 잔액(마감 뒤): D5·D10·D15·D20·D25. 그 날까지 못 간 런은 null (User 2026-10-15: D15 잔액을 다시 돌려 보지 않도록)
+   // 상위 3명 평균 레벨 − 그날 신규 손님 최저 레벨: D15 아침과 끝난 날 (User 2026-10-15: 잘 큰 손님이 새 손님에서 얼마나 벌어지나)
+   gap15:snap15.get(s)??null,gapEnd:gap3(s),
    bal:BAL_DAYS.map(d=>(s.reportHistory||[]).find(x=>x.day===d)?.balance??null),
    deco:(this.account.store?.owned||[]).length,sales:s.settlement?.sales??s.stats.revenue,gain:s.settlement?.gain??0,rate:s.settlement?.rate??0,
    relics:(s.relicHistory||[]).filter(w=>w.purchased).map(w=>[w.purchased,w.purchaseDay]),
@@ -142,6 +145,8 @@ function summary(res){
    const balLine=BAL_DAYS.map((d,i)=>{const v=rs.map(r=>r.bal?.[i]).filter(x=>x!=null).sort((a,b)=>a-b);
     return v.length?'D'+d+' 중앙 '+v[v.length>>1]+' ('+p(v.length,rs.length)+' 도달 · 1500G↑ '+p(v.filter(x=>x>=1500).length,v.length)+' · 2000G↑ '+p(v.filter(x=>x>=2000).length,v.length)+')':'D'+d+' -';}).join(' | ');
    if(rs.some(r=>r.bal))L.push('  └ 잔액 '+balLine);
+   const gp=k=>{const v=rs.map(r=>r[k]).filter(x=>x!=null).sort((a,b)=>a-b);return v.length?'중앙 '+v[v.length>>1].toFixed(1)+' · +6 이상 '+p(v.filter(x=>x>=6).length,v.length)+' ('+v.length+'판)':'-';};
+   if(rs.some(r=>r.gap15!=null||r.gapEnd!=null))L.push('  └ 상위 3명 레벨 − 신규 최저 | D15 '+gp('gap15')+' | 끝난 날 '+gp('gapEnd'));
    const pr=k=>sum(rs,r=>r.prep?.[k]||0),pv=k=>[0,1,2].map(i=>sum(rs,r=>r.prep?.[k][i]||0)),eq=pv('eq'),bare=pv('bare');
    if(eq[0]+bare[0])L.push('  └ 준비 | 상품 원정 성공 '+p(eq[1],eq[0])+' · 사망 '+p(eq[2],eq[0])+' | 맨손 원정 성공 '+p(bare[1],bare[0])+' · 사망 '+p(bare[2],bare[0])
     +' | 상품이 결과를 바꿈 '+p(pr('changed'),eq[0])+' (사망을 막음 '+p(pr('saved'),eq[0])+') | 상위 4명이 받은 상품 '+p(pr('topItems'),pr('items')));
