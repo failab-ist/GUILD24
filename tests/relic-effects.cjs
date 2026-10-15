@@ -579,10 +579,12 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
  assert.ok(Dungeon.prepare(withRope,s.dungeons[0],['fieldRepair']).effects.bind>Dungeon.prepare(withRope,s.dungeons[0],[]).effects.bind,'it multiplies a direct Counter');
  // SALE acceptance floor reads 관련 준비
  s.phase='sell';s.queue=[n.id];const cust=s.npcs[0];cust.money=9999;cust.destination=0;cust.claimedDestination=0;cust.traits=[];
- /* v2.9.2 (User 2026-09-25): the final 정가 chance carries x 0.90, the 관련 준비 floor included; 50% keeps the bare floor. */
- assert.ok(Math.abs(g.interest(cust,coffee,'full').chance-.97*.90)<1e-9,'a 기동 Drink for a 속박 Gate takes the 관련 준비 floor');
- assert.equal(g.interest(cust,coffee,'half').chance,.97,'and 50% keeps the bare floor');
- assert.ok(g.interest(cust,rice,'full').chance<.97*.90,'an unrelated Item does not');
+ /* ECONOMY_ORDER §PURCHASE ACCEPTANCE: 관련 준비 adds counterIntentBonus to the raw chance (0.97 cap); 정가 then carries x 0.90. */
+ const bonus=DATA.balance.counterIntentBonus,chanceOf=(item,mode)=>g.interest(cust,item,mode).chance;
+ const noBonus=(item,mode)=>{DATA.balance.counterIntentBonus=0;try{return chanceOf(item,mode);}finally{DATA.balance.counterIntentBonus=bonus;}};
+ assert.ok(Math.abs(chanceOf(coffee,'full')-Math.min(.97,noBonus(coffee,'full')/.90+bonus)*.90)<1e-9,'a 기동 Drink for a 속박 Gate takes the 관련 준비 bonus');
+ assert.ok(Math.abs(chanceOf(coffee,'half')-Math.min(.97,noBonus(coffee,'half')+bonus))<1e-9,'and 50% takes it too, unscaled');
+ assert.ok(chanceOf(rice,'full')<chanceOf(coffee,'full'),'an unrelated Item does not');
  assert.equal(DATA.balance.accessibleNeed,.72,'ECONOMY_ORDER: base need 0.72');
 });
 
