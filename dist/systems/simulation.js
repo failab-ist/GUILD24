@@ -213,6 +213,8 @@ function playRun(g,out,ctx){
     backing, and keep a scarce Counter, potion or Insurance back for a backed customer later in today's queue. The
     acceptance chance it weighs is interest()'s, which the screen reads out only as 필요도. Pure reads; no RNG draw. */
  const INV={from:1,core:4,candidate:3,V:{explore:.6,core:1.5,candidate:.6,rest:.15}};
+ /* a Deep nomination needs this forecast on the Deep Gate (1.5 x power) with the best Bag the shelf could sell */
+ const DEEP_WIN=.65,DEEP_DEATH=.06;
  const firstSeen=new Map();let tierDay=-1,tiers=new Map();
  const invScore=(n,was)=>{
   if(!firstSeen.has(n.id))firstSeen.set(n.id,{level:n.level,visits:n.visits});
@@ -250,7 +252,10 @@ function playRun(g,out,ctx){
   return {ok,great,death:fail*dc*(1-stone),lasting,tired:after>=40?8:after>=30?5:after>=20?3:after>=10?1:0};};
  /* a lasting Injury is also the next departure's Death risk (DUNGEON_HAZARD §Healthy / injured failure Death chance), so it is
     charged a share of a Death whoever carries it - that is what makes a 구급키트 worth selling to a customer it is not backing */
- const deathCost=V=>30*V+12*s.stats.deaths/Math.max(1,G.Meta.deathLimit(s))+4;
+ /* the death limit is shared, so a 나머지 customer's Death costs at least 25 whatever its weight, and every Death weighs
+    more as the limit nears (x limit / lives left, at most x4). The bot used to let rank-5+ customers go bare and die in
+    D15~20 (1.4 Deaths a Run before DAY 21, all rank 5+, against 3 spare lives) while the User lost none. */
+ const deathCost=V=>{const lim=G.Meta.deathLimit(s);return (Math.max(30*V,25)+4+12*s.stats.deaths/Math.max(1,lim))*Math.min(4,lim/Math.max(1,lim-s.stats.deaths));};
  const utility=(f,V)=>V*(10*f.ok+4*f.great-3*f.lasting-f.tired)-f.death*deathCost(V)-f.lasting*.15*deathCost(V);
  /* the store is bleeding: several customers carry an Injury, or the death limit is half used. A player then reaches for the
     Supports that answer it (야전 들것 · 응급 처치대 · 길드 구조대 계약) ahead of the ranked list */
@@ -306,11 +311,14 @@ function playRun(g,out,ctx){
   const reserve=it=>{if(!later.length)return 0;
    const want=later.filter(m=>['potion','insurance'].includes(it.category)||G.Relics.directCounter(it,(g.claimedGateFor(m)||s.dungeons[0]).hazards));
    return want.length&&s.inventory.filter(x=>x.item===it.id).length<=want.length?(Math.max(...want.map(weight))-V)*6:0;};
+  /* an injured or losing customer may take an Item held for the Final: every bare Death on D27~29 came while the shelf
+     was selling 4~9 Items that Day (User 2026-10-15: a better find goes to the Final, the one it replaces to today's Gate) */
+  const rescue=(n.injury||0)>0||forecast(n,[],d).ok<.5;
   let attempts=0;
   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<12){
    const base=utility(forecast(n,n.pack,d),V),overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),seen=new Set(),singles=[];
    for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);
-    const it=D.itemBy[st.item];if(held(it))continue;const cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
+    const it=D.itemBy[st.item];if(held(it)&&!rescue)continue;const cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
     const gain=utility(forecast(n,[...n.pack,it.id],d),V)-base,waste=st.expires!=null&&st.expires<=s.day?cost*gw:0,hold=reserve(it);
     const modes=[...(V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3?['overcharge']:[]),'full','half'];
     for(const mode of modes){if(n.refused.includes(it.id+':'+mode))continue;const intent=g.interest(n,it,mode);if(intent.debit>purse)continue;
@@ -371,7 +379,8 @@ function playRun(g,out,ctx){
     drift: whatever the loop would work through is what the plan walks. */
  const sortedOffers=()=>s.offers.map((o,i)=>({o,i})).sort((a,b)=>{
   const v=o=>(bal?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price
-   +(reader?(D.itemBy[o.item].effects.supply||0)*.6/Math.sqrt(o.price):0);
+   +(reader?(D.itemBy[o.item].effects.supply||0)*.6/Math.sqrt(o.price):0)
+   +(investor&&D.itemBy[o.item].rarity>=3&&s.money>(s.day<=15?1000:s.day<=20?1000+200*(s.day-15):Math.min(2500,2000+100*(s.day-20)))?.8:0);
   return v(b.o)-v(a.o);});
  /* What that loop would spend on the sheet as it stands, computed without touching any state.
     Same rounds, same stock target, same floor, same capacity rule - it is the ordering loop,
@@ -569,6 +578,7 @@ function playRun(g,out,ctx){
     const backed=s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&['core','candidate'].includes(tierOf(m))).sort((a,b)=>weight(b)-weight(a));
     /* an injured visitor today gets a 구급키트 on the shelf, backed or not: the Injury is the next Death */
     for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.injury===1))claim(it=>!!it.effects.aftercare,()=>1);
+    for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&(m.fatigue||0)>=15))claim(it=>(it.effects.supply||0)>=3,it=>it.effects.supply||0);
     for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
      if(open.length)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
@@ -628,7 +638,12 @@ function playRun(g,out,ctx){
       how a player chooses - Stage 9 reports offers and takes separately so both are visible. */
    if(s.deep?.today&&!s.deep.today.nomineeId)out.deepOffered+=Number(!!g.canNominateDeep(n));
    if(s.deep?.today&&!s.deep.today.nomineeId&&!g.canNominateDeep(n)&&s.money<g.deepCost(n))out.deepSkipped++;
-   if(engagement.order&&g.canNominateDeep(n)&&(investor?tierOf(n)!=='rest':policy!=='balanced'||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&topRoster(n)))){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
+   /* investor sponsors only a Deep it can really win (User 2026-10-15: bot premium - the bot reads the hidden stats, with the
+      best one or two shelf Items it could sell, and sends only when the forecast is a clear win) */
+   const deepWin=()=>{const o=g.deepOffer();if(!o)return false;const dg={...o.gate,power:o.gate.power*D.deepTuning.powerFactor,deep:true};
+    const ids=[...new Set(s.inventory.map(x=>x.item))],packs=[[]];for(let i=0;i<ids.length;i++){packs.push([ids[i]]);for(let j=i;j<ids.length;j++){if(ids[i]===ids[j]&&s.inventory.filter(x=>x.item===ids[i]).length<2)continue;packs.push([ids[i],ids[j]]);}}
+    return packs.some(pk=>{const f=forecast(n,pk,dg);return f.ok>=DEEP_WIN&&f.death<=DEEP_DEATH;});};
+   if(engagement.order&&g.canNominateDeep(n)&&(investor?tierOf(n)!=='rest'&&deepWin():policy!=='balanced'||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&topRoster(n)))){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
     out.deepSponsor+=cost;out.deepCosts.push(cost);
     const byR=out.deepByRarity[n.rarity]??={takes:0,gold:0,level:0};byR.takes++;byR.gold+=cost;byR.level+=n.level;
     const band=n.level<5?'1-4':n.level<10?'5-9':n.level<15?'10-14':'15+';
