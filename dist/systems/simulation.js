@@ -237,7 +237,7 @@ function playRun(g,out,ctx){
   const prepared=G.Dungeon.fullyPrepared(v,e.fatigueBeforeExpedition),cab=Object.values(s.loadout||{}).includes('aidCabinet');
   const ability=G.Dungeon.preparedPower({...e,combat:e.combat*(cab&&prepared?D.decorationParams.aidCabinet.powerMult:1)});
   const win=clamp01(.5-((d.power||1)/Math.max(1,ability)-1)/(2*(D.balance.combatNoise+(e.variance||0))));
-  const env=G.Dungeon.envChance(p.hazard,e.survival),ok=win*(1-env)*(1-(e.injuryRisk||0)),fail=1-ok;
+  const env=G.Dungeon.envChance(p.hazard,e.survival,d.day,d.tier),ok=win*(1-env)*(1-(e.injuryRisk||0)),fail=1-ok;
   let dc=G.Dungeon.failureDeathRisk(v,d,s.facilities).chance*(prepared?(cab?D.decorationParams.aidCabinet.preparedFactor:G.Dungeon.PREPARED.factor):1);
   if((s.firstRun&&s.day<=2)||(e.revive||0)>=1)dc=0;
   if(s.facilities.includes('rescueContract'))dc*=1-D.relicParams.rescueContract.chance;

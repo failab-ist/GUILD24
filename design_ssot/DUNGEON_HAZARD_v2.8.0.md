@@ -3,7 +3,7 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
 DOC_VERSION=2.13.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.13
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.14
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -693,12 +693,17 @@ Environment incident probability:
 
     environmentIncidentChance
     = clamp(
-        0.08
-        + hazardAggregate × 0.020
+        base
+        + hazardAggregate × gapCoefficient
         - prepared 강인함 × 0.001,
         0.02,
         0.60
       )
+
+    base / gapCoefficient
+    = 0.08 / 0.020                       every Gate except Tier II DAY 1~15
+    = 0.06 / 0.015                       Tier II Gate, DAY 1~10
+    = 0.07 / 0.0175                      Tier II Gate, DAY 11~15
 
 When combat fails:
 

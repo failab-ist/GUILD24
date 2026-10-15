@@ -331,7 +331,11 @@ const GATE={knee:9,early:1.60,step:0.80,late:1.54,mid:0.965,midFrom:10,midTo:20}
 /* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power, one value every ordinary Day) */
 const GATE_EASE=.90,gateEase=()=>GATE_EASE;
 /* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
-const ENV={base:.08,gap:.020,floor:.02,cap:.60},envChance=(hazard,survival)=>clamp(ENV.base+hazard*ENV.gap-survival*.001,ENV.floor,ENV.cap);
+const ENV={base:.08,gap:.020,floor:.02,cap:.60};
+/* DUNGEON_HAZARD §Environment incident probability: Tier II Gates ease through DAY 15 (base / gap by last DAY), every other Gate keeps ENV */
+const ENV_T2=[{until:10,base:.06,gap:.015},{until:15,base:.07,gap:.0175}];
+const envParams=(day,tier)=>tier===2&&day?ENV_T2.find(w=>day<=w.until)||ENV:ENV;
+const envChance=(hazard,survival,day,tier)=>{const e=envParams(day,tier);return clamp(e.base+hazard*e.gap-survival*.001,ENV.floor,ENV.cap);};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.step
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; the Level
@@ -398,7 +402,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sAssist=ev.assist||0;
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
  const sCombatSuccess=sAbility*(1+sAssist)*sNoise>=d.power;
- const sEnvironment=envChance(sp.hazard,se.survival)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
+ const sEnvironment=envChance(sp.hazard,se.survival,d.day,d.tier)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
  const sEscapeChance=clamp(.40+se.mobility*.003+se.escape-se.itemEscape-(d.scale||1)*.024-(ev.escapeCut||0),.15,.94);
  /* mirrors resolve()'s real order exactly: SUCCESS-vs-FAILURE first (never escape/injury
     evidence to decide THAT), then one Death roll immediately on entering failure, and only a
@@ -559,9 +563,9 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const noise=1+(noiseRoll-.5)*(D.balance.combatNoise*2+e.variance*2);
  /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden). */
  const score=ability*(1+assist)*noise;const combatSuccess=score>=d.power;
- const envRoll=r.next(),environment=envChance(p.hazard,e.survival)*(1-assist);
+ const envRoll=r.next(),environment=envChance(p.hazard,e.survival,d.day,d.tier)*(1-assist);
  const affected=envRoll<environment;
- const incidentWeights=[{key:'accident',weight:Math.max(ENV.floor,ENV.base-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*ENV.gap/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
+ const incidentWeights=[{key:'accident',weight:Math.max(ENV.floor,envParams(d.day,d.tier).base-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*envParams(d.day,d.tier).gap/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,bandRoll,rescued=false,deathChance=0,avoidedDeath=false;
  /* Today's Event, read once for the resolution: escapeCut / outcomeFatigue / xpMult / nightSaves */
@@ -685,7 +689,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<equipChance(n.equipment.tier,run?.day??d.day)+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money=Math.min(2000,n.money+loot);/* ECONOMY_ORDER §Persistent Wallet: every permanent increase clamps to 2000G, so a D30 party that skips the visit-time clamp never holds more */
- if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<envChance(bare.hazard,bare.effects.survival)*(1-assist);
+ if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<envChance(bare.hazard,bare.effects.survival,d.day,d.tier)*(1-assist);
   /* structure only: which Hazards were actually mitigated and which carried Items did it. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
  /* The real outcome is fully settled above; this only asks, from here, whether a specific sold Item is what . */

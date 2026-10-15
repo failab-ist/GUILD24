@@ -53,6 +53,7 @@ and this table is their commit record.
 | v2.13.11 | 2026-10-12 | Known-Hazard Counter guarantee drawn by the Day band (bug fix) in one PR #185 | (the User sets it) |
 | v2.13.12 | 2026-10-12 | Early money: Order Rarity D1~7 more Common, operating cost dayBase 170 → 150, Adventurer Rarity names follow the Item names (평범 → 일반, 유망 → 고급; display only) in PR #186 and PR #187 | (the User sets it) |
 | v2.13.13 | 2026-10-12 | Decorations: 휴식 바우처 꽂이 first two customers −3, 길드 추천 매대 60%, 명예 모험가 액자 70%, 의무실 현판 50%, 본사 우수 점포 훈장 DAY 0 reroll, and version bump in one PR #194 | (the User sets it) |
+| v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15 and version bump in one PR | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -61,6 +62,11 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.14 — Tier II Environment incidents ease through DAY 15 (User 2026-10-15)
+
+- DUNGEON_HAZARD §Environment incident probability: a Tier II Gate uses 6% + gap × 1.5% on DAY 1~10 and 7% + gap × 1.75% on DAY 11~15 (every other Gate stays 8% + gap × 2.0%). In the User's fresh Runs a Bag that met the Gate's required Power (prepared / required 1.0 or more) still lost 12 of 52 Expeditions, 9 of them to an incident after a won fight; the incident chance for a Tier II Gate with nothing countered reached 34% on DAY 10.
+- Measured against main, fresh 1000 + trajectory 200 × 10 (reader / investor, same seeds): investor Tier II success DAY 1~10 29.8 → 33.3%, DAY 11~20 43.6 → 45.3%; Tier I unchanged (53.4 → 53.6%), Tier II stays about 20%p below Tier I. DAY 22~29 success 37.9 → 39.4%, fresh clear 2.7 → 3.0%, Death by DAY 10 3.56 → 3.49. Easing through DAY 20 instead lifted the operation route clear 6.5 → 8.6% and was left out; easing every Tier and DAY lifted fresh clear 2.7 → 4.3% and was left out. Scratch measurement, not kept in `reports/`.
 
 ## v2.13.13 — Decorations re-tuned, each by its own measure (User 2026-10-12)
 
