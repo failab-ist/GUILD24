@@ -297,7 +297,11 @@ function playRun(g,out,ctx){
  function investorSell(n,d){
   if(!d)return;
   const held=it=>(finalHold[it.id]||0)>0&&s.inventory.filter(x=>x.item===it.id).length<=finalHold[it.id];
-  const V=weight(n),gw=s.money<2*g.expectedOperatingCost()?1/8:1/15,purse=n.money+(n.eventBudget||0);
+  /* with the till above the User's balance curve (D15 1000 · D20 2000 · D25 2500) gold weighs half as much, so a customer
+     who could pay 정가 still gets the better 50% pair (User 2026-10-15: "돈 여유 있으면 반값을 더 낸다"; the User's cleared Run
+     discounted 233G a Day from DAY 15, the bot 62G) */
+  const curve=s.day<=15?1000:s.day<=20?1000+200*(s.day-15):Math.min(2500,2000+100*(s.day-20));
+  const V=weight(n),gw=s.money<2*g.expectedOperatingCost()?1/8:s.money>curve?1/30:1/15,purse=n.money+(n.eventBudget||0);
   const later=s.queue.slice(s.cursor+1).map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.id!==n.id&&weight(m)>V+.1);
   const reserve=it=>{if(!later.length)return 0;
    const want=later.filter(m=>['potion','insurance'].includes(it.category)||G.Relics.directCounter(it,(g.claimedGateFor(m)||s.dungeons[0]).hazards));
