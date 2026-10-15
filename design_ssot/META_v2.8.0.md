@@ -312,7 +312,7 @@ Ending Gold and remaining Inventory liquidation value are **not Store Capital in
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-D1-9    = 1%
+D1-9    = 2%
 D10-19  = 2%
 D20-24  = 3%
 D25-29  = 3%
