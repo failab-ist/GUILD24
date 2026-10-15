@@ -693,8 +693,10 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .rubber:hover{background:#00000008;opacity:1}
 .rubber:disabled{opacity:.28}
 .rubber .reroll-icon{display:inline-block;vertical-align:-2px;margin-right:6px}
-/* UI_UX §ORDER Reroll UX: the 발주 후보 교환 key is as wide as its words, at the sheet's right edge, on a short margin */
-.rubber[data-action="reroll"]{width:auto;max-width:calc(100% - 32px);margin:8px 16px 4px auto;padding:9px 16px}
+/* UI_UX §ORDER Reroll UX: the 발주 후보 교환 key is as wide as its words, on a short margin: left edge on a phone, away from the 영업 시작 key; right edge on the desk, off its axis */
+.rubber[data-action="reroll"]{width:auto;max-width:calc(100% - 32px);margin:8px auto 4px 16px;padding:9px 12px}
+.rubber[data-action="reroll"] .reroll-icon{margin-right:4px}
+@media(min-width:1024px){.rubber[data-action="reroll"]{margin:8px 16px 4px auto}}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
 .p-order .dock{position:relative;display:flex;flex-wrap:wrap;gap:10px;padding-top:16px;
  background:var(--tex-paper),#e6ddc6;box-shadow:0 -5px 0 #00000059}
