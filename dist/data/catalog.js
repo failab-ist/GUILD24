@@ -16,7 +16,7 @@ items:[
    from its Buy price. */
 item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:9,supply:5}),
 item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:14,supply:2}),
-item('ramen','컵라면',0,55,110,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:12,supply:3}),
+item('ramen','컵라면',0,50,100,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:12,supply:3}),
 item('lunchbox','간단 도시락',1,90,180,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.1}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:9,supply:5}),
 /* ITEM §ACTIVE CATALOG: the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */

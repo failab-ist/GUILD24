@@ -303,7 +303,7 @@ Values (every Hazard alike - each Core Stat answers at ÷3 and no Hazard carries
 A Counter's points above the gap it meets are wasted, because judgment sums the remaining gaps: 중반 대응 is the answer for
 the Job weak against that Hazard, a hybrid the broad answer for one who is not.
 
-Prices by rung: 초반 대응 35~55G (집중 사탕 50G, 컵라면 55G), 초반 하이브리드 75G, 중반 대응 95~115G (음식·음료 대응은 불룡볶음면 115G, 용사의 곡주·쿨링 이온음료 100G), 후반 하이브리드 135G (마그마 냉각장비 145G, its 투력 +10 included).
+Prices by rung: 초반 대응 35~50G (집중 사탕 · 컵라면 50G), 초반 하이브리드 75G, 중반 대응 95~115G (음식·음료 대응은 불룡볶음면 115G, 용사의 곡주·쿨링 이온음료 100G), 후반 하이브리드 135G (마그마 냉각장비 145G, its 투력 +10 included).
 
 A Food / Drink Counter pays for its 피로 회복 (Supply) in two ways: its Counter value reads 2 under the Field Gear rung at 초반 대응 and 3 under it at 중반
 대응 (one that also raises the pressed Stat reads that much lower again: 불룡볶음면 냉기 23 with 강인함 +6, worth 냉기 +2; one with no drawback reads 2 lower again: 쿨링 이온음료 23, while 용사의 곡주 keeps 25 against its 강인함 −3), and its price follows the prices by rung above.
@@ -603,7 +603,7 @@ approved ITEM amendment; QA does not auto-tune it.
 
 | # | Item | Category / Rarity | Buy / Sell | Effect | Hazard Role |
 |---:|---|---|---:|---|---|
-| 3 | 컵라면 | Food C | 55 / 110 | 냉기 +12, Supply 3 | Cold 초반 대응 |
+| 3 | 컵라면 | Food C | 50 / 100 | 냉기 +12, Supply 3 | Cold 초반 대응 |
 | 5 | 초코바 | Food C | 30 / 60 | 기동 +9, Supply 5 | — |
 | 44 | 녹차 양갱 | Food C | 30 / 60 | 정신 +9, Supply 5 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +14, Supply 2 | Stat route |
