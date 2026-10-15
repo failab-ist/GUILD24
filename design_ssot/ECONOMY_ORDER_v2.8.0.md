@@ -274,11 +274,11 @@ For every affordable mode:
 
 For affordable 50% 할인 / 정가, if the Item is 관련 준비 for this customer's actual Gate (RELIC
 §COUNTER JUDGEMENT: a direct Counter for one of its Hazards, or a positive value of the Core Stat one of
-them presses):
+them presses), rawChance gains a flat +0.10 (balance.counterIntentBonus):
 
-    purchaseChance = 0.97
+    purchaseChance = clamp(rawChance + 0.10, 0.08, 0.97)
 
-This final Counter floor/cap applies even when a negative purchase Trait would otherwise lower rawChance.
+Traits, Loyalty and price burden still act on a 관련 준비 Item; the bonus is added, never a fixed value.
 
 For non-Counter 50% 할인 / 정가:
     purchaseChance = clamp(rawChance, 0.08, 0.97)
@@ -286,16 +286,16 @@ For non-Counter 50% 할인 / 정가:
 For 바가지:
     purchaseChance = clamp(rawChance, 0.08, 0.97)
 
-바가지 has no Counter floor.
+바가지 has no Counter bonus.
 
 Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
 기동 on 속박/진창 Gates is 관련 준비, not a Counter.
 
-정가 final scale: the FINAL 정가 purchaseChance above — the 0.97 관련 준비 case included — is multiplied by 0.90
+정가 final scale: the FINAL 정가 purchaseChance above — the 관련 준비 case included — is multiplied by 0.90
 (a ~10% relative cut, not percentage points). 50% 할인 and 바가지 carry no scale, and the shared accessible-mode
 base need is not lowered for it:
 
-    정가 purchaseChance = (the 0.97 floor or the clamped rawChance) × 0.90
+    정가 purchaseChance = (the clamped rawChance, 관련 준비 bonus included) × 0.90
 
 Exact acceptance probability remains hidden from the Player.
 
@@ -843,11 +843,11 @@ PASS:
 - only 100% keeps pivot 0.36 / weight 0.50 burden bonus, never a penalty
 - effective Wallet includes temporary Event purchase budget
 - unaffordable debit -> chance 0
-- affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> final chance 0.97
+- affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> rawChance + 0.10, clamp 0.08–0.97
 - no separate purchase-only Counter definition; 기동 on 속박/진창 is 관련 준비, not a Counter
 - non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
-- 150% receives no new Counter floor
-- 100% only: the final chance above (0.97 관련 준비 included) is × 0.90; 50% / 150% carry no scale;
+- 150% receives no Counter bonus
+- 100% only: the final chance above (관련 준비 bonus included) is × 0.90; 50% / 150% carry no scale;
   accessible base need 0.72 is not lowered for it
 
 FAIL:

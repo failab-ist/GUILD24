@@ -451,15 +451,16 @@ test('정가 threshold reaches the decision, and 할인/바가지 are untouched 
 
  /* Turning 정가's weight off is exactly the pre-wiring decision, so it is the control. */
  const off=(fn)=>{const w=rule.intentWeight;rule.intentWeight=0;try{return fn();}finally{rule.intentWeight=w;}};
- /* v2.9.0 F7 (RELIC §COUNTER JUDGEMENT): a 관련 준비 Item for this customer's Gate sits on the 0.97 floor, where
-    no judged-price bonus can move it - so the count reads the Items the floor does not cover. */
+ /* v2.9.0 F7 (RELIC §COUNTER JUDGEMENT): a 관련 준비 Item for this customer's Gate takes the flat counterIntentBonus on top of its chance,
+    so the count reads the Items that bonus does not cover. */
  const gate=g.gateFor(n),floored=it=>Relics.relatedPrep(it,gate.hazards);
  let fullMoved=0,movable=0;
  for(const it of DATA.items){
   for(const mode of ['half','overcharge'])
    assert.deepEqual(g.interest(n,it,mode),off(()=>g.interest(n,it,mode)),
     mode+' decides the same as before the judged price reached chance');
-  if(floored(it)){const q=g.interest(n,it,'full');assert.ok(Math.abs(q.chance-(q.debit>n.money?0:.97*.90))<1e-9,it.id+' takes the 관련 준비 floor (x 0.90 at 정가, v2.9.2) when affordable');continue;}
+  if(floored(it)){const q=g.interest(n,it,'full'),b=DATA.balance;const was=b.counterIntentBonus;b.counterIntentBonus=0;let base;try{base=g.interest(n,it,'full').chance/.90;}finally{b.counterIntentBonus=was;}
+   assert.ok(Math.abs(q.chance-(q.debit>n.money?0:Math.min(.97,base+was)*.90))<1e-9,it.id+' adds the 관련 준비 bonus to its chance (x 0.90 at 정가) when affordable');continue;}
   movable++;if(g.interest(n,it,'full').chance!==off(()=>g.interest(n,it,'full')).chance)fullMoved++;
  }
  assert.ok(movable>0&&fullMoved>movable/2,'and 정가 actually moves - '+fullMoved+' of '+movable+' uncovered Items');

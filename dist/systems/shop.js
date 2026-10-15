@@ -547,17 +547,15 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     debit is already refused above by the wallet<debit gate, which is where affordability is
     decided - it is not this term's job to punish an offer the customer can actually pay for. */
  const burdenIntentBonus=weight*Math.max(0,(rule.intentPivot||0)-burden);
- /* SA-Q48: for an affordable accessible-mode offer (50% 할인 / 정가) that validly Counters at
-    least one Hazard of this customer's actual Gate under the canonical Counter predicate, the
-    acceptance is floored/capped at 0.97 - even when a negative purchase Trait would otherwise
-    lower rawChance. No new Counter floor is added to 바가지. */
+ /* SA-Q48 (ECONOMY_ORDER §PURCHASE ACCEPTANCE): an affordable accessible-mode offer (50% 할인 / 정가) that validly Counters at
+    least one Hazard of this customer's actual Gate adds balance.counterIntentBonus to the raw chance; no bonus for 바가지. */
  const counters=mode!=='overcharge'&&G.Relics.relatedPrep(it,d.hazards);
  /* 왕도 프리미엄 인증 lifts the flat 바가지 intent penalty by +10%p for its owner (-0.16 -> -0.06; v2.9.11, User 2026-09-29 -
     it lifted the whole penalty before); nothing else about 150% moves. */
  const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+D.relicParams.royalCert.intentBonus:rule.intent;
  /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): only 정가 carries one, applied after the
     floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio. */
- const chance=wallet<debit?0:payday?1:(counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97))*(rule.finalScale||1);
+ const chance=wallet<debit?0:payday?1:clamp(need+n.loyalty*.002+flat+burdenIntentBonus+(counters?D.balance.counterIntentBonus:0),.08,.97)*(rule.finalScale||1);
  return {price,debit,guarantee,bundle,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

@@ -273,7 +273,7 @@ G.DATA.balance={finalHazardThreat:28,gateTier1Term:1.5,gateTierCombat:[1,1.05,1.
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:10}],
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: flat base purchase need for the
     accessible SALE modes (50% 할인 / 정가). 바가지 keeps its own Hazard-fit formula. */
- accessibleNeed:.72};/* ECONOMY_ORDER §PURCHASE ACCEPTANCE (User 2026-09-24, v2.9.0): 0.72, was 0.80 - measured, not tuned */
+ accessibleNeed:.72,counterIntentBonus:.10};/* ECONOMY_ORDER §PURCHASE ACCEPTANCE (User 2026-09-24, v2.9.0): 0.72, was 0.80 - measured, not tuned */
 /* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
    `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
    customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are
