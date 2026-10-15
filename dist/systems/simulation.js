@@ -379,7 +379,8 @@ function playRun(g,out,ctx){
     drift: whatever the loop would work through is what the plan walks. */
  const sortedOffers=()=>s.offers.map((o,i)=>({o,i})).sort((a,b)=>{
   const v=o=>(bal?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price
-   +(reader?(D.itemBy[o.item].effects.supply||0)*.6/Math.sqrt(o.price):0);
+   +(reader?(D.itemBy[o.item].effects.supply||0)*.6/Math.sqrt(o.price):0)
+   +(investor&&D.itemBy[o.item].rarity>=3&&s.money>(s.day<=15?1000:s.day<=20?1000+200*(s.day-15):Math.min(2500,2000+100*(s.day-20)))?.8:0);
   return v(b.o)-v(a.o);});
  /* What that loop would spend on the sheet as it stands, computed without touching any state.
     Same rounds, same stock target, same floor, same capacity rule - it is the ordering loop,
@@ -577,6 +578,7 @@ function playRun(g,out,ctx){
     const backed=s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&['core','candidate'].includes(tierOf(m))).sort((a,b)=>weight(b)-weight(a));
     /* an injured visitor today gets a 구급키트 on the shelf, backed or not: the Injury is the next Death */
     for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.injury===1))claim(it=>!!it.effects.aftercare,()=>1);
+    for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&(m.fatigue||0)>=15))claim(it=>(it.effects.supply||0)>=3,it=>it.effects.supply||0);
     for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
      if(open.length)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
