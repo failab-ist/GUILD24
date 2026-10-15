@@ -55,8 +55,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  overheadBase(day=this.run.day){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
-  /* ECONOMY_ORDER §BASE OPERATING COST: a Day base, +12G per Day after DAY 15, scaled by the Core Roster */
-  const dayBase=150+1*(day-1)+12*Math.max(0,day-15);
+  /* ECONOMY_ORDER §BASE OPERATING COST: a Day base, +10G per Day after DAY 15, scaled by the Core Roster */
+  const dayBase=180+1*(day-1)+10*Math.max(0,day-15);
   return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost(options={}){const s=this.run;
   const {day=s.day,facilities=s.dayFacilities,event=s.event}=options,ev=event?.effects||{};
