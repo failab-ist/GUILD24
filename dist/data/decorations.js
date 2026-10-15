@@ -55,5 +55,5 @@ G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META §STORE CAPITAL · §Day-reach conversion rate — EXACT. The band is the Day the Run actually reached, and it
    multiplies Gross Sales, not an end-state net worth. A Decoration inside the first Run is not a goal; the longer Run
    still earns more through its Gross Sales. */
-G.DATA.capitalRates=[{maxDay:9,rate:.01},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.03},{maxDay:30,rate:.03}];
+G.DATA.capitalRates=[{maxDay:9,rate:.02},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.03},{maxDay:30,rate:.03}];
 })(globalThis);

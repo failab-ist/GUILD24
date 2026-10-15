@@ -1028,7 +1028,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
  }
 
  // B. each Day band converts at its exact Canonical rate
- const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]]; // META §Day-reach conversion rate (User 2026-09-30, v2.9.13: 1/2/3/3/3%; v2.9.1 was 1/2/3/4/5%)
+ const BANDS=[[1,.02],[9,.02],[10,.02],[19,.02],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]]; // META §Day-reach conversion rate (User 2026-10-15: 2/2/3/3/3%)
  for(const [day,rate] of BANDS){
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
   const g=at(10000,day);
@@ -1038,10 +1038,10 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
   assert.equal(st.gain,Math.round(10000*rate),'D'+day+' gain');
  }
 
- // C. the same Gross Sales earns more the deeper the band reached up to D20, and the same from D20 on (User 2026-09-30,
- //    v2.9.13: the D20+ bands are one 3% - the longer Run still earns more through its larger Gross Sales)
+ // C. the same Gross Sales earns the same through D19, more from D20, and the same from D20 on (User 2026-10-15: D1-19 are one 2%;
+ //    the D20+ bands are one 3% - the longer Run still earns more through its larger Gross Sales)
  const byBand=[9,19,24,29,30].map(day=>at(10000,day).settleStoreCapital().gain);
- assert.ok(byBand[0]<byBand[1]&&byBand[1]<byBand[2],'a deeper band earns more up to D20: '+byBand.join(' < '));
+ assert.ok(byBand[0]===byBand[1]&&byBand[1]<byBand[2],'D1-19 earn the same, D20 earns more: '+byBand.join(' , '));
  assert.ok(byBand[2]===byBand[3]&&byBand[3]===byBand[4],'D20+ bands earn the same on the same sales: '+byBand.join(' = '));
 
  // J. Ending Gold and Inventory are not inputs: same sales, same Day, different end state
