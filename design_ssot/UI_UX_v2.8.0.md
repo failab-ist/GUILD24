@@ -199,8 +199,8 @@ Flow: select quantity → `발주 확정` (Inventory updates, cart clears, ORDER
 ### ORDER Reroll UX
 
 Available with an unconfirmed cart: clears only that cart, replaces the whole offer set, charges the current cost once, keeps
-confirmed Inventory; no reset-to-zero first. The `발주 후보 교환` key at the foot of the sheet is as wide as its words, right-aligned on a
-short margin, so it never takes a tap meant for 영업 시작 below it (User 2026-10-03).
+confirmed Inventory; no reset-to-zero first. The `발주 후보 교환` key at the foot of the sheet is as wide as its words (14px / 600, side padding 12px), on a
+short margin: left-aligned on a phone, right-aligned on a desk, so it never takes a tap meant for 영업 시작 below it (User 2026-10-03, 2026-10-15).
 
 ### ORDER Runtime continuity
 
