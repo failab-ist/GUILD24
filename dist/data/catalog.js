@@ -284,9 +284,9 @@ G.DATA.balance={finalHazardThreat:28,gateTier1Term:1.5,gateTierCombat:[1,1.05,1.
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-4,refusalLoyalty:-2},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
   /* ECONOMY_ORDER §PURCHASE INTENT: only 정가 receives the positive affordability bonus. */
   intentPivot:.36,intentWeight:.5,
-  /* v2.9.2 balance (User 2026-09-25): the FINAL 정가 purchase chance, the 0.97 관련 준비 case included, is scaled
-     by 0.90 - a ~10% relative cut, not percentage points. 할인 and 바가지 carry no scale; the shared need is untouched. */
-  finalScale:.90},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:4}};
+  /* ECONOMY_ORDER §PURCHASE ACCEPTANCE: the FINAL 정가 purchase chance, the 관련 준비 case included, is scaled by
+     finalScale and then raised to finalFloor. 할인 and 바가지 carry neither; the shared need is untouched. */
+  finalScale:.95,finalFloor:.75},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:4}};
 
 /* Three shapes of the ordering decision, named here so a balance candidate can be measured
    against them from the harness without a production edit: how many candidates a Day offers,

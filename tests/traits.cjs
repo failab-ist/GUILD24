@@ -102,6 +102,7 @@ test('TRAIT-Q17: 회복체질 shortens and 허약함 lengthens Severe Injury res
 });
 
 test('TRAIT-Q16 / SALE: purchase and revisit Traits use the existing systems',()=>{
+ const ffl=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;/* this reads a Trait / Event shift, not the 정가 floor */
  const g=fresh('sale'),s=g.run;
  g.beginOrder();g.open();const n=g.current();
  /* v2.9.0 F7: 삼각김밥 (강인함) is 관련 준비 for most Gates and takes the 0.97 floor, so the Common comparison
@@ -133,6 +134,7 @@ test('TRAIT-Q16 / SALE: purchase and revisit Traits use the existing systems',()
  const src=fs.readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
  assert.ok(/revisitMult/.test(src),'revisit weight is applied in visitor selection');
  assert.ok(!/traits\.includes\('eater'\)/.test(src),'no hardcoded 대식가 purchase bias survives');
+ DATA.pricing.full.finalFloor=ffl;
 });
 
 test('SALE honesty: visible Traits equal the Traits that actually resolve',()=>{
@@ -176,6 +178,7 @@ test('NPC_TRAIT: a Trait is who somebody is, so none of them wears off during a 
  // Measured rather than read: for every Trait, whatever it is worth on the first visit of the
  // first Day it must still be worth late in the Run. Source scanning cannot tell a Trait gate
  // apart from the ordinary Day curve that sits on the same line.
+ const ffl2=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;/* this reads a Trait / Event shift, not the 정가 floor */
  const g2=fresh('trait-permanence');
  const probe=(traits,{visits,day})=>{
   const base=g2.run.npcs[0];
@@ -208,6 +211,7 @@ test('NPC_TRAIT: a Trait is who somebody is, so none of them wears off during a 
   for(const expiry of ['사라집니다','없어집니다','이후에는'])
    assert.ok(!text.includes(expiry),t.name+' promises to stop applying: '+t.note);
  }
+ DATA.pricing.full.finalFloor=ffl2;
 });
 
 test('NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Stats and nothing else',()=>{

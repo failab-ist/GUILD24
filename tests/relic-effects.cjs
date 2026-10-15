@@ -580,11 +580,13 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
  // SALE acceptance floor reads 관련 준비
  s.phase='sell';s.queue=[n.id];const cust=s.npcs[0];cust.money=9999;cust.destination=0;cust.claimedDestination=0;cust.traits=[];
  /* ECONOMY_ORDER §PURCHASE ACCEPTANCE: 관련 준비 adds counterIntentBonus to the raw chance (0.97 cap); 정가 then carries x 0.90. */
+ const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;/* this reads the bonus and the scale, not the floor */
  const bonus=DATA.balance.counterIntentBonus,chanceOf=(item,mode)=>g.interest(cust,item,mode).chance;
  const noBonus=(item,mode)=>{DATA.balance.counterIntentBonus=0;try{return chanceOf(item,mode);}finally{DATA.balance.counterIntentBonus=bonus;}};
- assert.ok(Math.abs(chanceOf(coffee,'full')-Math.min(.97,noBonus(coffee,'full')/.90+bonus)*.90)<1e-9,'a 기동 Drink for a 속박 Gate takes the 관련 준비 bonus');
+ assert.ok(Math.abs(chanceOf(coffee,'full')-Math.min(.97,noBonus(coffee,'full')/DATA.pricing.full.finalScale+bonus)*DATA.pricing.full.finalScale)<1e-9,'a 기동 Drink for a 속박 Gate takes the 관련 준비 bonus');
  assert.ok(Math.abs(chanceOf(coffee,'half')-Math.min(.97,noBonus(coffee,'half')+bonus))<1e-9,'and 50% takes it too, unscaled');
  assert.ok(chanceOf(rice,'full')<chanceOf(coffee,'full'),'an unrelated Item does not');
+ DATA.pricing.full.finalFloor=ff;
  assert.equal(DATA.balance.accessibleNeed,.72,'ECONOMY_ORDER: base need 0.72');
 });
 
