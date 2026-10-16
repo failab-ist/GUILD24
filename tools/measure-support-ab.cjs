@@ -2,23 +2,26 @@
 // 게임 규칙도 simulation.js도 건드리지 않는다. 측정 중에만 Game.prototype을 감싼다.
 //   with    : 창 DAY에 대상 지원(ID)이 후보로 나오면 봇이 무엇을 고르든 그것을 산다(살 돈이 있을 때).
 //   without : 창이 뽑힌 뒤(난수는 이미 소비됨) 후보에서 대상 지원을 뺀다. 나머지는 봇이 고른다.
+//   대상이 자연히 나오는 판은 드물어서(희귀 계약은 약 7%) with 쪽 창에는 마지막 후보 자리에 대상을 넣는다. --natural이면 자연히 나온 판만 쓴다.
 // 두 조건은 창이 열리기 전까지 같은 판이다(같은 시드, 같은 봇). 그래서 대상이 후보로 나온 판끼리 짝지어 뺀다.
 // 프레시 판만 쓴다. 연속 궤적은 앞 런의 선택이 갈려 짝이 깨진다.
-//   node tools/measure-support-ab.cjs --id rareContract --day 10 [--policy investor] [--fresh 1000] [--workers N] [--out file.json] [--go]
+//   node tools/measure-support-ab.cjs --id rareContract --day 10 [--policy investor] [--fresh 1000] [--workers N] [--out file.json] [--natural] [--go]
 // --go 없이는 계획만 출력한다(AGENTS 9-A: 측정은 User 컨펌 뒤에).
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const {RANK,BANDS,useFirstRunLessons}=require('./measure-v2100.cjs');
 const BAL_DAYS=[15,20,25],PARTS=4;
 
-function worker({root,id,day,arm,policy,N,part}){
+function worker({root,id,day,arm,policy,N,part,inject}){
  for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
   require(path.join(root,'dist',f+'.js'));
  const G=globalThis.GUILD24||globalThis,P=G.Game.prototype,end=P.end,relicWindow=P.relicWindow,buyRelic=P.buyRelic,rows=[],mark=new WeakMap(),seen=new WeakSet();
  if(!G.DATA.relicBy[id])throw Error('없는 점포지원: '+id);
  useFirstRunLessons(P);
  P.relicWindow=function(d){const had=this.run.relicWindow?.milestoneDay===d,r=relicWindow.apply(this,arguments),w=this.run.relicWindow;
-  if(!had&&d===day&&w&&w.candidateIds.includes(id)){const m=mark.get(this.run)??{};m.appeared=1;mark.set(this.run,m);
-   if(arm==='without'){const i=w.candidateIds.indexOf(id);w.candidateIds.splice(i,1);w.candidatePrices.splice(i,1);}}
+  if(!had&&d===day&&w){const m=mark.get(this.run)??{};mark.set(this.run,m);m.appeared=1;const i=w.candidateIds.indexOf(id);m.natural=i>=0?1:0;m.owned=this.has(id)?1:0;
+   if(arm==='without'&&i>=0){w.candidateIds.splice(i,1);w.candidatePrices.splice(i,1);}
+   // 기본: with 쪽은 대상이 안 나온 창이어도 마지막 후보 자리에 넣어 모든 판을 짝으로 쓴다(--natural이면 넣지 않는다).
+   else if(arm==='with'&&i<0&&inject&&!m.owned){const last=w.candidateIds.length-1;w.candidateIds[last]=id;w.candidatePrices[last]=Math.round(G.DATA.relicBy[id].price*G.DATA.balance.relicPriceScale);}}
   return r;};
  P.buyRelic=function(pick){const s=this.run,w=s.relicWindow,m=mark.get(s);
   if(m&&w?.milestoneDay===day&&w.purchased==null){
@@ -28,7 +31,7 @@ function worker({root,id,day,arm,policy,N,part}){
  P.end=function(){const r=end.apply(this,arguments),s=this.run,m=mark.get(s)??{};if(seen.has(s))return r;seen.add(s);
   const recs=s.npcs.flatMap(n=>n.records||[]).filter(x=>!x.deep&&x.day<30),ok=x=>x.outcome==='성공'||x.outcome==='대성공',rh=s.reportHistory||[];
   const band=([a,b])=>{const l=recs.filter(x=>x.day>=a&&x.day<=b);return [l.filter(ok).length,l.length];};
-  rows.push({seed:s.seed,appeared:m.appeared?1:0,forced:m.forced?1:0,botPicked:m.botPicked?1:0,bought:(s.relicHistory||[]).some(w=>w.milestoneDay===day&&w.purchased===id)?1:0,
+  rows.push({seed:s.seed,appeared:m.appeared?1:0,forced:m.forced?1:0,botPicked:m.botPicked?1:0,natural:m.natural?1:0,owned:m.owned?1:0,bought:[...(s.relicHistory||[]),s.relicWindow].filter(Boolean).some(w=>w.milestoneDay===day&&w.purchased===id)?1:0,
    bands:BANDS.map(band),all:band([1,29]),day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,deaths:s.stats.deaths||0,
    bal:BAL_DAYS.map(d=>rh.find(x=>x.day===d)?.balance??null),rare:s.stats.rare||0,
    commission:rh.reduce((a,h)=>a+(h.commission||0),0),revenue:s.stats.revenue||0});
@@ -49,8 +52,8 @@ const METRICS=[
 function summary(res){
  const L=['','점포지원 짝 측정 · '+res.meta.id+' · 창 D'+res.meta.day+' · '+res.meta.policy+' · '+res.meta.sec+'s'];
  const by=a=>Object.fromEntries(res.rows.filter(r=>r.arm===a).map(r=>[r.seed,r])),W=by('with'),O=by('without');
- const seeds=Object.keys(W).filter(s=>O[s]&&W[s].appeared&&O[s].appeared),pairs=seeds.map(s=>[W[s],O[s]]);
- L.push('판 '+Object.keys(W).length+' 중 대상이 후보로 나온 판 '+pairs.length+' ('+(100*pairs.length/Math.max(1,Object.keys(W).length)).toFixed(1)+'%)');
+ const seeds=Object.keys(W).filter(s=>O[s]&&W[s].appeared&&O[s].appeared&&!W[s].owned),pairs=seeds.map(s=>[W[s],O[s]]);
+ L.push('짝 '+pairs.length+'판 (대상이 자연히 후보로 나온 판 '+pairs.filter(([a])=>a.natural).length+')');
  const forced=pairs.filter(([a])=>a.forced).length,picked=pairs.filter(([a])=>a.botPicked).length,bought=pairs.filter(([a])=>a.bought).length;
  L.push('with 쪽: 강제로 바꿔 산 판 '+forced+' · 봇이 원래 고른 판 '+picked+' · 실제로 산 판 '+bought+' (나머지는 돈이 모자라 봇이 넘긴 판)');
  L.push('with − without (짝지은 평균 ± 표준오차, 2×SE 안이면 흔들림으로 본다)');
@@ -65,7 +68,7 @@ else if(require.main===module){
  const WORKERS=+flag('--workers',Math.max(1,os.cpus().length));
  if(!id)throw Error('--id <점포지원 id>가 필요합니다. 예: --id rareContract --day 10');
  if(![5,10,15,20,25].includes(day))throw Error('--day는 창이 열리는 날(5·10·15·20·25)이어야 합니다.');
- const jobs=[];for(const arm of ['with','without'])for(let p=0;p<PARTS;p++)jobs.push({root:here,id,day,arm,policy,N:Math.ceil(N/PARTS),part:p});
+ const jobs=[];for(const arm of ['with','without'])for(let p=0;p<PARTS;p++)jobs.push({root:here,id,day,arm,policy,N:Math.ceil(N/PARTS),part:p,inject:!args.includes('--natural')});
  if(!args.includes('--go')){console.log('계획(실행 안 함): '+id+' · 창 D'+day+' · '+policy+' · 프레시 '+N+'판 × 2조건(with/without) = 작업 '+jobs.length+'개, 동시 '+WORKERS+'개. 돌리려면 User 컨펌 뒤 --go.');process.exit(0);}
  const rows=[],t0=Date.now();let live=0,done=0,failed=false;
  const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{id,day,policy,N,head:here,sec:Math.round((Date.now()-t0)/1000)},rows};if(out)fs.writeFileSync(out,JSON.stringify(res));console.log(summary(res));};
