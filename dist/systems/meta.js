@@ -27,7 +27,7 @@ function freshStore(){
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,bestDay:0,bestSales:0,bossLog:{},discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false,highpotion:false,toppotion:false,epics:[]},
+  runs:0,wins:0,bestDay:0,bestSales:0,bossLog:{},discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false,highpotion:false,toppotion:false,epics:[],rares:[]},
   store:freshStore(),
   /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
@@ -118,23 +118,31 @@ function opened(a){
 
 /* META §D10 / D14 PRODUCT UNLOCK — EXACT: account unlock and each Run's offer gate share these Days. */
 const ITEM_UNLOCK_DAY={guildlunch:10,worldcharm:14};
-/* META §REACH UNLOCK (User 2026-10-16): the first Day 15 / Day 25 a Run reaches opens that Day's potion for good, and every
-   Run that reaches it opens one more 영웅 점포지원 from that Day's pool (RELIC §GRADE), so the account grows run by run. */
+/* META §REACH UNLOCK (User 2026-10-16): the first Day 15 / Day 25 a Run reaches opens that Day's potion for good. Every Run
+   that reaches DAY 5 / 10 / 15 / 20 / 25 opens one locked 희귀 점포지원; once none is locked, DAY 15 / 25 open one 영웅 from
+   that Day's pool (RELIC §GRADE), so the account grows run by run. */
 const REACH_UNLOCK={15:'highpotion',25:'toppotion'};
 const POTION_UNLOCK=Object.fromEntries(Object.entries(REACH_UNLOCK).map(([d,id])=>[id,+d]));
 function reachUnlock(a,day){
- const item=REACH_UNLOCK[day],pool=D.relicEpicPools[day];if(!item)return {items:[],relics:[]};
- a.unlocks??={};a.unlocks.epics??=[];const out={items:[],relics:[]};
- if(!a.unlocks[item]){a.unlocks[item]=true;out.items.push(item);}
+ a.unlocks??={};a.unlocks.epics??=[];a.unlocks.rares??=[];const out={items:[],relics:[]};
+ const item=REACH_UNLOCK[day];if(item&&!a.unlocks[item]){a.unlocks[item]=true;out.items.push(item);}
+ if(!D.relicRareReachDays.includes(day))return out;
+ const rares=D.relics.filter(r=>r.rarity===2&&!D.relicRetired.includes(r.id)&&!D.relicRareStart.includes(r.id)&&!a.unlocks.rares.includes(r.id)).map(r=>r.id);
+ if(rares.length){const id=rares[((a.runs||0)*7+day)%rares.length];a.unlocks.rares.push(id);out.relics.push(id);return out;}
+ const pool=D.relicEpicPools[day];if(!pool)return out;
  const left=pool.filter(id=>!a.unlocks.epics.includes(id));
  if(left.length){const id=left[(a.runs||0)%left.length];a.unlocks.epics.push(id);out.relics.push(id);}
  return out;
 }
+const rareUnlocked=(a,id)=>D.relicRareStart.includes(id)||!!a?.unlocks?.rares?.includes(id);
 const epicUnlocked=(a,id)=>D.relicEpicStart.includes(id)||!!a?.unlocks?.epics?.includes(id);
 /* An account saved before the reach unlocks keeps what its best Day already earned: one pick per reached pool. */
 function seedReachUnlocks(a){
- if(!a||!a.unlocks||Array.isArray(a.unlocks.epics))return;
- a.unlocks.epics=[];for(const d of [15,25])if((a.bestDay||0)>=d){a.unlocks[REACH_UNLOCK[d]]=true;a.unlocks.epics.push(D.relicEpicPools[d][0]);}
+ if(!a||!a.unlocks)return;
+ if(!Array.isArray(a.unlocks.epics)){a.unlocks.epics=[];for(const d of [15,25])if((a.bestDay||0)>=d){a.unlocks[REACH_UNLOCK[d]]=true;a.unlocks.epics.push(D.relicEpicPools[d][0]);}}
+ /* 희귀 reach unlock (User 2026-10-16): an older account opens one locked 희귀 per reach Day its Best Day has passed. */
+ if(!Array.isArray(a.unlocks.rares)){a.unlocks.rares=[];const locked=D.relics.filter(r=>r.rarity===2&&!D.relicRetired.includes(r.id)&&!D.relicRareStart.includes(r.id)).map(r=>r.id);
+  for(const d of D.relicRareReachDays)if((a.bestDay||0)>=d&&locked.length)a.unlocks.rares.push(locked.shift());}
 }
 const itemUnlocked=(a,it,day=1)=>{if(POTION_UNLOCK[it.id])return !!a.unlocks?.[it.id];if(ITEM_UNLOCK_DAY[it.id])return !!a.unlocks?.[it.id]&&day>=ITEM_UNLOCK_DAY[it.id];return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
@@ -205,6 +213,6 @@ const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
- opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
+ opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

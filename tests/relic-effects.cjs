@@ -116,6 +116,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
  const eligibleAtD30=(id,previousSales)=>{
   const g=fresh('d30-'+id);const s=g.run;
   g.account.unlocks.epics=[...DATA.relicEpicPools[15],...DATA.relicEpicPools[25]]; // every 영웅 opened (RELIC §GRADE reach unlock)
+  g.account.unlocks.rares=DATA.relics.filter(r=>r.rarity===2).map(r=>r.id); // and every 희귀
   s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!==id);
   s.previousSales=previousSales;s.day=30;s.relicWindow=null;
   g.relicWindow(30);

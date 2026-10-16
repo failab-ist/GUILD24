@@ -1535,11 +1535,12 @@ test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon
  const bad=copy(g.account);bad.bestDay=31;assert.throws(()=>Save.import(Save.export(bad,null)),'bestDay 31 is not a Day');
  // D10 / D14: the Run records what it opened; a second Run reaching D10 opens nothing
  const h=new Game();h.autosave=false;h.start('day-unlock');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
- assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.guildlunch.name],'D10 records 길드 특제 도시락 on the Run');assert.ok(h.run.toast,'the Day toast still fires');
+ assert.deepEqual(h.run.dayUnlocked.slice(0,1),[DATA.itemBy.guildlunch.name],'D10 records 길드 특제 도시락 on the Run');assert.equal(h.run.dayUnlocked.length,2,'and the D10 희귀 reach unlock');
+ assert.ok(h.run.toast.startsWith('본사 해금 · '+DATA.itemBy.guildlunch.name+' · '),'one toast names both: '+h.run.toast);
  h.run.day=13;h.run.phase='closing';h.closeDay();
- assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.guildlunch.name,DATA.itemBy.worldcharm.name],'D14 adds 세계수 생환부적');
+ assert.deepEqual(h.run.dayUnlocked.filter(n=>DATA.items.some(i=>i.name===n)),[DATA.itemBy.guildlunch.name,DATA.itemBy.worldcharm.name],'D14 adds 세계수 생환부적');
  h.start('day-unlock-2');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
- assert.equal(h.run.dayUnlocked,undefined,'an account that already opened them records nothing');
+ assert.ok(!h.run.dayUnlocked.some(n=>DATA.items.some(i=>i.name===n)),'an account that already opened them records no product again (only the next 희귀)');
 });
 
 /* META §BOSS LOG / UI_UX §도감 > 마왕: what the Player was shown about a Boss survives the Run, and a save without it reads empty */
