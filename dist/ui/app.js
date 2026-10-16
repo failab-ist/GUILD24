@@ -88,10 +88,10 @@ const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!
    two lines - the fixed label, then the product - instead of one sentence the notice width
    happens to break. The message itself is the same string the Run stored; only its setting
    changes, and any other system message is still one plain line. */
-const UNLOCK_LABEL='새 상품 해금';
-function toast(msg){const t=$('#toast'),m=String(msg);
- if(m.startsWith(UNLOCK_LABEL+' · ')){t.classList.add('unlock');
-  t.innerHTML='<b class="toast-label">'+E(UNLOCK_LABEL)+'</b><span class="toast-name">'+E(m.slice(UNLOCK_LABEL.length+3))+'</span>';}
+const UNLOCK_LABELS=['새 상품 해금','새 점포지원 해금','본사 해금'];
+function toast(msg){const t=$('#toast'),m=String(msg),label=UNLOCK_LABELS.find(l=>m.startsWith(l+' · '));
+ if(label){t.classList.add('unlock');
+  t.innerHTML='<b class="toast-label">'+E(label)+'</b><span class="toast-name">'+E(m.slice(label.length+3))+'</span>';}
  else{t.classList.remove('unlock');t.textContent=m;}
  $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,audioPhase(),st);Sound.play(kind);}

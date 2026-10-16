@@ -58,7 +58,7 @@ const GRADE={epic:['fresh24','logisticsHQ','lifetime','royalCert','opsRoom','hub
 const rarityOf=id=>GRADE.epic.includes(id)?3:GRADE.rare.includes(id)?2:0;
 D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,rarity:rarityOf(id),tags,price,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})},'description',{get:()=>copy(D.relicParams),enumerable:true}));
-D.relicRarityChance={0:.60,2:.28,3:.12};
+D.relicRarityChance={0:.63,2:.29,3:.08};D.relicEpicStart=['logisticsHQ'];D.relicEpicPools={15:['firstAidDesk','hub','royalCert'],25:['lifetime','opsRoom','fresh24']};
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 /* Effect STRENGTH of every support, read by its use sites. The trigger conditions (3+ of one
    SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;

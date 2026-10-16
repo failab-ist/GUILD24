@@ -28,6 +28,8 @@ function accountOk(a){
  if(!a||!a.knowledge||!a.settings)return false;
  if(!a.unlocks||typeof a.unlocks!=='object')return false;
  if(typeof a.unlocks.guildlunch!=='boolean'||typeof a.unlocks.worldcharm!=='boolean')return false;
+ for(const k of ['highpotion','toppotion'])if(a.unlocks[k]!==undefined&&typeof a.unlocks[k]!=='boolean')return false;
+ if(a.unlocks.epics!==undefined&&!(Array.isArray(a.unlocks.epics)&&a.unlocks.epics.every(k=>typeof k==='string')))return false;
  /* Mix levels are a presentation preference, not progression truth: checked for shape when
     present, the way tutorial is, and defaulted by the audio layer when a save predates them.
     A save that carries a level carries a real one - a string or a 7 is malformed, not old. */
@@ -260,7 +262,7 @@ G.Save={
  /* PLATFORM_RELEASE §Google Play Games Saved Games: every write carries a monotonic `rev` and a timestamp `at`; the larger rev (then the later at)
     is the newer Save when the local and the cloud copy are compared. Metadata only - never validated, never needed to load. */
  rev:0,
- migrate(s){if(s&&s.account)fillMatrix(s.account,G.DATA);if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
+ migrate(s){if(s&&s.account){fillMatrix(s.account,G.DATA);G.Meta.seedReachUnlocks(s.account);}if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
