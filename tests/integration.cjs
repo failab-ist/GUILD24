@@ -514,7 +514,8 @@ test('RUN-Q19 / RUN-Q20: save → load → continue equals an uninterrupted run,
 test('RUN-Q10 / RUN-Q11 / RUN-Q12: reload is not a Gate, Order or Relic reroll',()=>{
  const g=fresh('no-reroll');g.buyRelic(g.run.relicWindow.candidateIds[0]);
  for(let day=0;day<6;day++){
-  while(g.run.phase!=='order')step(g);
+  /* Nor the death limit: on the harder ladder (v2.13.15) the scripted Run can reach it by DAY 4, so its count is cleared. */
+  while(g.run.phase!=='order'){g.run.stats.deaths=0;step(g);}
   /* The subject is reload determinism, not the till: the scripted Run may be short of the reroll price on a
      harder economy (v2.9.2 Gate slope / 정가 intent), so the reroll below is funded before the snapshot. */
   g.run.money=Math.max(g.run.money,g.rerollPrice());
@@ -1028,7 +1029,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
  }
 
  // B. each Day band converts at its exact Canonical rate
- const BANDS=[[1,.02],[9,.02],[10,.02],[19,.02],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]]; // META §Day-reach conversion rate (User 2026-10-15: 2/2/3/3/3%)
+ const BANDS=[[1,.03],[9,.03],[10,.03],[19,.03],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]]; // META §Day-reach conversion rate (User 2026-10-16: 3% on every band)
  for(const [day,rate] of BANDS){
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
   const g=at(10000,day);
@@ -1038,11 +1039,10 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
   assert.equal(st.gain,Math.round(10000*rate),'D'+day+' gain');
  }
 
- // C. the same Gross Sales earns the same through D19, more from D20, and the same from D20 on (User 2026-10-15: D1-19 are one 2%;
- //    the D20+ bands are one 3% - the longer Run still earns more through its larger Gross Sales)
+ // C. the same Gross Sales earns the same on every band (User 2026-10-16: one 3% - the longer Run still earns more through
+ //    its larger Gross Sales)
  const byBand=[9,19,24,29,30].map(day=>at(10000,day).settleStoreCapital().gain);
- assert.ok(byBand[0]===byBand[1]&&byBand[1]<byBand[2],'D1-19 earn the same, D20 earns more: '+byBand.join(' , '));
- assert.ok(byBand[2]===byBand[3]&&byBand[3]===byBand[4],'D20+ bands earn the same on the same sales: '+byBand.join(' = '));
+ assert.ok(byBand.every(v=>v===byBand[0]),'every band earns the same on the same sales: '+byBand.join(' = '));
 
  // J. Ending Gold and Inventory are not inputs: same sales, same Day, different end state
  const poor=at(8000,22,-4000),rich=at(8000,22,9000);
@@ -1438,16 +1438,16 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.45&&up/all<.65,'about 55%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first two customers bring +200G more each',()=>{
+test('알뜰 금고: the Day\'s first two customers bring +400G more each',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
  for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
  s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
- assert.equal(a.money,300,'the first customer to reach the counter: +200G');
- s.cursor=1;g.arrive();assert.equal(b.money,300,'the second too');
+ assert.equal(a.money,500,'the first customer to reach the counter: +400G');
+ s.cursor=1;g.arrive();assert.equal(b.money,500,'the second too');
  s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,400);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
 /* ---- META §OPERATION DECORATIONS (User 2026-10-04) ---------------------------------------- */
@@ -1470,8 +1470,8 @@ test('본사 우수 점포 훈장: the DAY 0 free pick is three 영웅 cards; wi
   const c=new Game(account(['heroSign','rerollCoupon']));c.autosave=false;c.start('hero-coupon');assert.equal(c.relicRerollPrice(),0,'쿠폰함: the first redraw is free here too');
   c.rerollRelics();assert.equal(c.relicRerollPrice(),300);}
 });
-test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the expedition; under 단골도 10 nothing changes',()=>{
- assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);
+test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 5%) on the expedition; under 단골도 10 nothing changes',()=>{
+ assert.equal(DATA.decorationParams.cheerBanner.perTen,.05);
  const g=past0(fresh('banner')),d=g.run.dungeons[0];
  const npc=loyalty=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=['rice','water'];n.injury=0;n.fatigue=0;n.records=[];n.loyalty=loyalty;return n;};
  const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(0),d).effects)*1.04};
@@ -1481,15 +1481,15 @@ test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the e
   if(b.combatWon&&!a.combatWon)won++;if(a.combatWon&&!b.combatWon)lost++;
   const c=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),e=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{}});
   if(c.combatWon!==e.combatWon)diff++;}
- assert.ok(won>0&&lost===0,'단골도 30 (x1.09) only ever turns a lost fight into a won one: '+won);
+ assert.ok(won>0&&lost===0,'단골도 30 (x1.15) only ever turns a lost fight into a won one: '+won);
  assert.equal(diff,0,'단골도 9 is floor 0 - the same fight');
 });
-test('휴식 바우처 꽂이: at night the Day\'s first two customers are 3 Fatigue lower than the same Day without it, everyone else the same',()=>{
+test('휴식 바우처 꽂이: at night the Day\'s first two customers are 6 Fatigue lower than the same Day without it, everyone else the same',()=>{
  const drive=a=>{const g=new Game(a);g.autosave=false;g.start('voucher');g.buyRelic(g.run.relicWindow.candidateIds[0]);
   g.run.npcs.forEach(n=>n.fatigue=40);let k=0;while(g.run.phase!=='night'&&k++<500)step(g);return g.run;};
  const worn=drive(account(['voucher'])),bare=drive(Meta.fresh()),first=worn.queue.slice(0,2);
  assert.equal(worn.npcs.length,bare.npcs.length);assert.deepEqual(worn.queue,bare.queue);assert.ok(worn.queue.length>2,'a Day with a third customer');
- worn.npcs.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,first.includes(n.id)?Math.max(0,bare.npcs[i].fatigue-3):bare.npcs[i].fatigue,n.name+(first.includes(n.id)?': first two, -3 overnight':': not among the first two, unchanged'));});
+ worn.npcs.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,first.includes(n.id)?Math.max(0,bare.npcs[i].fatigue-6):bare.npcs[i].fatigue,n.name+(first.includes(n.id)?': first two, -6 overnight':': not among the first two, unchanged'));});
 });
 test('지원 교환 쿠폰함: each window\'s first redraw is free, then 300G, 600G; without it 300G first',()=>{
  const g=wearing(['rerollCoupon'],'coupon'),h=past0(fresh('coupon-plain'));

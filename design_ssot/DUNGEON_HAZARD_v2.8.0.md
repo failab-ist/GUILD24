@@ -3,7 +3,7 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
 DOC_VERSION=2.13.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.15
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -172,7 +172,7 @@ Fatigue scale 0~40 (max / clamp 40), five bands:
 ```
 
 The band is judged on `fatigueBeforeExpedition`.
-The Fatigue-40 Death term is the same additive +10%p term as re-sending an injured NPC, and raises the cap the same way -> §ORDINARY EXPEDITION FAILURE DEATH RISK.
+The Fatigue-40 Death term is an additive +10%p term (re-sending an injured NPC adds +15%p), and raises the cap the same way -> §ORDINARY EXPEDITION FAILURE DEATH RISK.
 
 Apply this to NPC Base+Equipment-side Stats in the same preparation layer where current NPC-side Fatigue modifiers are applied.
 Sold Item Stat contribution is not multiplied by this NPC-side percentage unless another owner explicitly says so.
@@ -320,7 +320,7 @@ Full required Power (Source-exact):
 
 ```text
 Gate Power (every Family's Tier I, and Tier II / III of every Family but golem)
-= (21 + Ordinary base offset + Day term + Tier1Term) × TierCombat × SuccessEase × Event danger multiplier
+= (22 + Ordinary base offset + Day term + Tier1Term) × TierCombat × SuccessEase × Event danger multiplier
 Tier1Term = 1.5 (`DATA.balance.gateTier1Term`)
 TierCombat = Tier I 1 · Tier II 1.05 · Tier III 1.20 (`DATA.balance.gateTierCombat`)
 
@@ -920,9 +920,9 @@ If the NPC **began the expedition with ordinary Injury (`injury=1`)**:
 ```text
 failureDeathChance
 = clamp(
-    healthyFailureDeathChance + 0.10,
+    healthyFailureDeathChance + 0.15,
     0.00,
-    0.60
+    0.65
 )
 ```
 
@@ -932,10 +932,10 @@ Otherwise:
 failureDeathChance = healthyFailureDeathChance
 ```
 
-Fatigue 40 departure: if `fatigueBeforeExpedition = 40` (탈진), the same additive term applies, and the cap is raised the same way:
+Fatigue 40 departure: if `fatigueBeforeExpedition = 40` (탈진), an additive +10%p term applies, and the cap is raised the same way:
 
 ```text
-injuryEscalation  = 0.10 if injury=1, else 0
+injuryEscalation  = 0.15 if injury=1, else 0
 fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
 strainEscalation  = min(0.40, 0.12 × max(0, consecutiveInjuredDepartures − 1))
   consecutiveInjuredDepartures = this departure, if begun at injury=1, plus the unbroken run of this adventurer's
@@ -961,8 +961,8 @@ Meaning:
 - departing at Fatigue 40 (탈진) adds the same visible material risk
 - sending an adventurer out injured again and again escalates further: +12%p per consecutive injured departure after the first, up to +40%p, and the cap rises with it; one healthy departure resets it
 - healthy conditional cap is 50%
-- injured conditional cap is 60%
-- Fatigue-40 conditional cap is 60%; injured and Fatigue-40 together 70%
+- injured conditional cap is 65%
+- Fatigue-40 conditional cap is 60%; injured and Fatigue-40 together 75%
 
 These caps are conditional failure-risk caps, not unconditional whole-expedition Death probabilities.
 
@@ -1509,7 +1509,7 @@ Owner rule: §GATE POWER — LATE-DAY SLOPE.
 PASS:
 - the Day term is `min(Day, 9) × 1.60 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 0.965 + max(0, Day - 20) × 1.54`
 - the base constant21, Tier term, Family adjustment and Family Combat multiplier are unchanged on Tier II / III
-- Tier I is one common requirement for every Family: (21 + base offset + Day term + 1.5) × SuccessEase
+- Tier I is one common requirement for every Family: (22 + base offset + Day term + 1.5) × SuccessEase
 - add the ordinary base offset at D1 +0.125 / D10 +0.5 / D20 +1 / D25 +1.5, linear interpolation and holding +1.5 through D29
 - ordinary golem FireTerm is 13.5 / 21 on Tier II / III; the separate Final firePairPower12 is unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.05, D29 34.30
@@ -1730,7 +1730,7 @@ PASS:
 - Item Stat contribution is not multiplied by this NPC-side percentage
 - the band is judged on `fatigueBeforeExpedition`
 - Fatigue never exceeds 40; no stale 20 cap or -25% value survives
-- Fatigue 40 adds the +10%p failure-Death term exactly like an injured departure (cap raised the same way)
+- Fatigue 40 adds a +10%p failure-Death term (an injured departure adds +15%p; cap raised the same way)
 
 #### DUN-Q75 — SUPPLY ORDER / OUTCOME BUFFER
 
@@ -1902,14 +1902,14 @@ Controlled identical NPC/Gate state except departure Injury state.
 
 EXPECT when departure `injury=1`:
 - ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
-- failure Death chance adds +10%p to the healthy conditional formula and caps at 60%
+- failure Death chance adds +15%p to the healthy conditional formula and caps at 65%
 - Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
-- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 70%
+- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds a +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 75%
 - no extra independent Death/Severe roll is created
 - `성공 / 대성공` still performs no Death roll
 
 Pre-supply SALE check:
-- exact `실패 시 사망 위험` % includes the +10%p injured modifier
+- exact `실패 시 사망 위험` % includes the +15%p injured modifier
 - qualitative Combat Forecast / Hazard Readiness and exact `실패 시 사망 위험` are captured before any new Item commit
 - after purchase commits, those displayed outlook values remain frozen
 - actual `failureDeathChance` is recalculated internally from the final prepared state
@@ -1919,7 +1919,7 @@ Pre-supply SALE check:
 PASS:
 - injured departure is materially riskier than healthy departure when an expedition fails
 - healthy conditional cap is 50%
-- injured conditional cap is 60%
+- injured conditional cap is 65%
 - exact pre-supply `실패 시 사망 위험` is player-visible while the post-supply actual conditional probability remains hidden
 
 #### DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY

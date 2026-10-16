@@ -286,7 +286,7 @@ test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
     Sales, not an end-state net worth, which is why they are a fraction of the retired
     net-asset table this line used to carry. */
  // 1/2/3/3/3% (User 2026-09-30, v2.9.13; 1/2/3/4/5% from v2.9.1, halved in v2.9.0)
- for(const [day,rate] of [[1,.02],[9,.02],[10,.02],[19,.02],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]])
+ for(const [day,rate] of [[1,.03],[9,.03],[10,.03],[19,.03],[20,.03],[24,.03],[25,.03],[29,.03],[30,.03]])
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
  assert.equal(Meta.capitalRate(31),.03,'past D30 stays on the last band rather than falling off');
  const a=Meta.fresh();
@@ -297,7 +297,8 @@ test('META-Q07/Q08/Q09/Q10 + NPC-Q09: the 1/3/6 gates open exactly what they say
  const a=Meta.fresh();
  assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(a,j)).map(j=>j.id),['warrior','archer','mage','priest'],
   'a fresh account generates only the four starting Jobs');
- assert.equal(DATA.items.filter(i=>Meta.itemUnlocked(a,i)).length, DATA.items.length - 3, 'all but coupon, premium, tree');
+ assert.equal(DATA.items.filter(i=>Meta.itemUnlocked(a,i)).length, DATA.items.length - 5, 'all but coupon, premium, tree and the two reach potions');
+assert.equal(Meta.itemUnlocked(a,DATA.itemBy.highpotion),false);assert.equal(Meta.itemUnlocked(a,DATA.itemBy.toppotion),false);
 assert.equal(Meta.itemUnlocked(a,DATA.itemBy.coupon),false);
 assert.equal(Meta.itemUnlocked(a,DATA.itemBy.guildlunch),false);
 assert.equal(Meta.itemUnlocked(a,DATA.itemBy.worldcharm),false);
@@ -316,18 +317,18 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,200,'counter: the first two customers of the Day +200G each (User 2026-10-03, v2.10.0; was 50G Store Gold every morning)');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,400,'counter: the first two customers of the Day +400G each (User 2026-10-16)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,.60,'길드 추천 매대 is the approved Morning chance (User 2026-10-12)');
+ assert.equal(DATA.balance.wallVisitorChance,1,'길드 추천 매대 adds a visitor every Morning (User 2026-10-16)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
- assert.equal(DATA.decorationParams.sponsorSign.budgetShare,.50,'sign: 50% of the purse as a that-visit extra budget');
+ assert.equal(DATA.decorationParams.sponsorSign.budgetShare,.75,'sign: 75% of the purse as a that-visit extra budget (User 2026-10-16)');
  /* the 추가 구매 budget an arrival gets while the sign is worn, on a Day with no Event */
  {const a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.sponsorSign.price);Meta.buyDecoration(a,'sponsorSign');
   const g=new Game(a);g.autosave=false;g.start('sign-budget');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];g.run.event=null;
   const n=g.run.npcs[0];n.traits=[];n.money=400;n.injury=0;n.introduced=true;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
-  assert.equal(n.eventBudget,Math.round(n.money*.50),'the arrival may spend half its purse again, this visit only');}
+  assert.equal(n.eventBudget,Math.round(n.money*.75),'the arrival may spend three quarters of its purse again, this visit only');}
  assert.ok(!/sponsorSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.sponsorSign),'and no longer adds ORDER candidates');
  assert.ok(/wears\('honorFrame'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 고급 keeps its ordinary 27 - so
@@ -338,7 +339,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 일반 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[30,34,23,10,3],'일반 60% -> 30%, so above 일반 40% -> 70% (User 2026-10-12)');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[20,33,29,13,5],'일반 60% -> 20%, so above 일반 40% -> 80% (User 2026-10-16)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -

@@ -54,6 +54,7 @@ and this table is their commit record.
 | v2.13.12 | 2026-10-12 | Early money: Order Rarity D1~7 more Common, operating cost dayBase 170 → 150, Adventurer Rarity names follow the Item names (평범 → 일반, 유망 → 고급; display only) in PR #186 and PR #187 | (the User sets it) |
 | v2.13.13 | 2026-10-12 | Decorations: 휴식 바우처 꽂이 first two customers −3, 길드 추천 매대 60%, 명예 모험가 액자 70%, 의무실 현판 50%, 본사 우수 점포 훈장 DAY 0 reroll, and version bump in one PR #194 | (the User sets it) |
 | v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15, 정가 refuses less, operating cost 200 / +10, visit Wallet floor back to 30, failure Death CombatDeficit × 0.50 | (the User sets it) |
+| v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -62,6 +63,36 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.15 — Meta ladder: a fresh Run is hard to take far, and the account climbs Run by Run (User 2026-10-16)
+
+The User's picture: reaching the Boss should mean about a 60% clear, but a fresh Run reached DAY 30 too easily. Reaching
+DAY 30 itself should be hard at every stage, and the account should grow so a player reaches DAY 20 around the 3rd ~ 4th
+Run; an economy or operation Decoration route alone should also climb. The Boss is left as it is (tuned later on the User's saves).
+
+- RELIC §GRADE: per-card grade 일반 60 / 희귀 28 / 영웅 12% → 63 / 29 / 8%.
+- RELIC §GRADE / META §REACH UNLOCK: only unlocked 영웅 supports are drawn. A fresh account has 물류 본부계약 only; each Run
+  that reaches DAY 15 opens one more of 응급 처치대 · 지역 거점점 계약 · 왕도 프리미엄 인증, each Run that reaches DAY 25 one more of
+  평생 단골제 · 원정 작전실 · 24시간 신선체계 (one per pool per Run). 본사 우수 점포 훈장's DAY 0 영웅 pick ignores the unlock.
+- META §REACH UNLOCK / ITEM: 상급 포션 opens on the account's first DAY 15 reach, 최상급 포션 on its first DAY 25 reach; once open
+  they follow their ordinary appearance rule from that same Run. The toast reads `새 상품 해금` / `새 점포지원 해금` / `본사 해금`.
+  An older account is seeded from its Best Day (≥ 15: 상급 포션 + 응급 처치대, ≥ 25: also 최상급 포션 + 평생 단골제).
+- DUNGEON_HAZARD §ORDINARY EXPEDITION FAILURE DEATH RISK: the injured departure term +0.10 → +0.15, its cap 0.60 → 0.65
+  (injured and 탈진 together 0.75).
+- DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE (full required Power): the base 21 → 22 for every Tier I Gate and Tier II / III of every family but the golem,
+  whose Tier II / III keep 21 (measured that way).
+- META §Day-reach conversion rate: DAY 1~19 2% → 3%, so every band is 3%.
+- META Decorations: 원정 지원금 간판 50 → 75%, 명예 모험가 액자 weights [30,34,23,10,3] → [20,33,29,13,5] (above 일반 70 → 80%),
+  알뜰 금고 200 → 400G, 길드 추천 매대 60% → every Morning, 단골 감사 현수막 3 → 5% per 10 단골도, 휴식 바우처 꽂이 first two
+  customers −3 → −6. 지원 교환 쿠폰함 unchanged (first reroll free). Prices unchanged.
+- Bot only (`dist/systems/simulation.js`): with 지원 교환 쿠폰함 worn and no 희귀 / 영웅 card in a window, it uses the free reroll once.
+- Measured against main (e220d70), investor, fresh 1000 + trajectory 200 × 10, same seeds: fresh median end DAY 16 → 10,
+  D30 reach 14.8 → 5.6%, clear when reached 44.6 → 46.4%, Death by DAY 10 3.73 → 4.31. First DAY 30 within 10 Runs
+  (cumulative days at that point, median): survival 96% / 82 → 78% / 104, economy 88% / 77 → 70% / 102, operation
+  76% / 75 → 32% / 84, none 71% / 74 → 26% / 81; first DAY 20 within 10 Runs none 73%, economy 90%, survival 94%,
+  operation 72% (median 4th ~ 5th Run). Left out after measuring: halving the Tier II incident ease back (no gain, felt
+  unfair), Gate base 23 (a wall at DAY 10 every Run), 휴식 바우처 3 customers −5, two free coupon rerolls; Decoration prices
+  were not cut. Logs `reports/v2100-measure/v21315-ladder/`.
 
 ## v2.13.14 — Tier II Environment incidents ease through DAY 15 (User 2026-10-15)
 
