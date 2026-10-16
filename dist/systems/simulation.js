@@ -185,7 +185,7 @@ function playRun(g,out,ctx){
     Tried and dropped in calibration (no gain or worse): spending brakes loosened to `spender`'s, rerolling until every
     visitor Hazard has a Counter, Counters ordered right after the meals, 50% to the top roster in D1-10.
     Calibrated with tools/calibrate-bot-v292.cjs --account. */
- const expert=policy==='expert',investor=policy==='investor',reader=policy==='reader'||expert||investor,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
+ const expert=policy==='expert',investor=policy==='investor',reader=policy==='reader'||expert||investor,bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend={...spending(policy),...(ctx.genome?.spend||{})};
  /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
     it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk
     that outlookFor() shows as 전투 전망 · 환경 대응 · 사망 위험 - trying each shelf Item in the Bag and taking the one that
@@ -212,9 +212,9 @@ function playRun(g,out,ctx){
     choose a potion, a meal, two Counters or 만반의 준비 for a backed customer, sell a cheap meal at 150% to one it is not
     backing, and keep a scarce Counter, potion or Insurance back for a backed customer later in today's queue. The
     acceptance chance it weighs is interest()'s, which the screen reads out only as 필요도. Pure reads; no RNG draw. */
- const INV={from:1,core:4,candidate:3,V:{explore:.6,core:1.5,candidate:.6,rest:.15}};
+ const INV0={from:1,core:4,candidate:3,V:{explore:.6,core:1.5,candidate:.6,rest:.15}},GN=ctx.genome||{},INV=GN.inv?{...INV0,...GN.inv,V:{...INV0.V,...(GN.inv.V||{})}}:INV0;/* ctx.genome: QA 탐색기(tools/qa-exploit-hunt.cjs)만 넘긴다. 없으면 기준 값 그대로 */
  /* a Deep nomination needs this forecast on the Deep Gate (1.5 x power) with the best Bag the shelf could sell */
- const DEEP_WIN=.65,DEEP_DEATH=.06;
+ const DEEP_WIN=GN.deepWin??.65,DEEP_DEATH=GN.deepDeath??.06;
  const firstSeen=new Map();let tierDay=-1,tiers=new Map();
  const invScore=(n,was)=>{
   if(!firstSeen.has(n.id))firstSeen.set(n.id,{level:n.level,visits:n.visits});
@@ -255,7 +255,7 @@ function playRun(g,out,ctx){
  /* the death limit is shared, so a 나머지 customer's Death costs at least 25 whatever its weight, and every Death weighs
     more as the limit nears (x limit / lives left, at most x4). The bot used to let rank-5+ customers go bare and die in
     D15~20 (1.4 Deaths a Run before DAY 21, all rank 5+, against 3 spare lives) while the User lost none. */
- const deathCost=V=>{const lim=G.Meta.deathLimit(s);return (Math.max(30*V,25)+4+12*s.stats.deaths/Math.max(1,lim))*Math.min(4,lim/Math.max(1,lim-s.stats.deaths));};
+ const deathCost=V=>{const lim=G.Meta.deathLimit(s);return (GN.deathScale??1)*(Math.max(30*V,25)+4+12*s.stats.deaths/Math.max(1,lim))*Math.min(4,lim/Math.max(1,lim-s.stats.deaths));};
  const utility=(f,V)=>V*(10*f.ok+4*f.great-3*f.lasting-f.tired)-f.death*deathCost(V)-f.lasting*.15*deathCost(V);
  /* the store is bleeding: several customers carry an Injury, or the death limit is half used. A player then reaches for the
     Supports that answer it (야전 들것 · 응급 처치대 · 길드 구조대 계약) ahead of the ranked list */
@@ -840,7 +840,7 @@ function simulate(count=100,policy='reader',account=null,pricing='adaptive',buil
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
   const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start('revision-'+seed);
-  playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware,relicPriority:opts?.relicPriority});
+  playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware,relicPriority:opts?.relicPriority,genome:opts?.genome});
  }
  return derive(out,count);
 }
