@@ -2284,9 +2284,11 @@ function replayLine(){const s=game.run,st=s.settlement;
    above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
 function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',finalView=muster||action==='final-view',blocked=muster&&(!n.alive||n.recovery);
  /* the FINAL muster card opens the adventurer's notebook; picking happens there (User 2026-09-25) */
- const condition=finalView?[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':'',(n.fatigue||0)>=Dungeon.fatiguePenaltyFrom()?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:''].filter(Boolean).join(' · '):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
- const call=!muster?'기록 보기':s.team.includes(n.id)?'선택됨':'기록 보기';
- return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${condition?E(condition)+' · ':''}방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
+ const rest=[n.injury===2?'중상':n.injury===1?'부상':'',n.recovery?n.recovery+'일 휴식':''].filter(Boolean).join(' · ');
+ const tired=(n.fatigue||0)>=Dungeon.fatiguePenaltyFrom()?'피로 '+n.fatigue+' · '+Dungeon.fatigueBand(n.fatigue).name:'';
+ const condition=finalView?(blocked?tired:[rest,tired].filter(Boolean).join(' · ')):n.status+(n.recovery?' · '+n.recovery+'일 휴식':'');
+ const call=!muster?'기록 보기':blocked?'출발 불가':s.team.includes(n.id)?'선택됨':'기록 보기';
+ return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p>${blocked&&rest?'<p class="muster-rest">'+E(rest)+'</p>':''}<p>${condition?E(condition)+' · ':''}방문 ${n.visits}회</p>${finalView?'<p class="final-candidate-wallet">'+walletChip(n,true)+'</p>':''}</div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
 /* FINAL-Q77: the one party-wide 토벌 전망, in the place and treatment the ordinary 전투 전망 reads
@@ -2417,8 +2419,8 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
     expeditions this adventurer began injured, counted back from the most recent record and
     reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
  {const streak=Dungeon.injuredStreak(n.records);if(streak>0)cond.push('연속 부상 출발 '+streak+'회');}
- let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
- return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'상품 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
+ let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+['장비: '+E(n.equipment.name)+' · 투력 +'+n.equipment.power].concat(cond.map(E)).join('<br>')+'</div>';
+ return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name}${n.injury?' · '+n.status:''}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'상품 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
    this reads the same truth the gate itself reads. */
 /* 길드 특제 도시락 / 세계수 생환부적 open on the account flag the run sets on reaching DAY 10 / 14 (Meta.itemUnlocked), not on metaUnlock. */
@@ -2786,8 +2788,8 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
   if(s?.phase==='final'&&!s.finalCommitted&&n&&!finalIsOrdering(s)){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
    footer=btn(inTeam?'원정대에서 빼기':'원정대 선택','final-team','stamp','data-id="'+id+'" '+(out||full?'disabled':''));}
   /* read only on D30 before the muster (back to the candidates) and after the party is confirmed (back to the prep) */
-  else if(s?.phase==='final'&&!s.finalCommitted)footer=btn('원정대 후보 보기','final-roster');
-  else if(s?.phase==='final')footer=btn(Copy.finalPrep.back,'dismiss');
+  else if(s?.phase==='final'&&!s.finalCommitted)footer=btn('원정대 후보 보기','final-roster','stamp act-brown');
+  else if(s?.phase==='final')footer=btn(Copy.finalPrep.back,'dismiss','stamp act-brown');
   else footer=btn('수첩으로','roster');}
  else if(modal==='codex'){title='도감';body=codex();if(preRunReturn)footer=btn('새 점포 준비로 돌아가기','store-return','stamp');}
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
