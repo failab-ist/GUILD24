@@ -74,6 +74,13 @@ Run; an economy or operation Decoration route alone should also climb. The Boss 
 - RELIC §GRADE / META §REACH UNLOCK: only unlocked 영웅 supports are drawn. A fresh account has 물류 본부계약 only; each Run
   that reaches DAY 15 opens one more of 응급 처치대 · 지역 거점점 계약 · 왕도 프리미엄 인증, each Run that reaches DAY 25 one more of
   평생 단골제 · 원정 작전실 · 24시간 신선체계 (one per pool per Run). 본사 우수 점포 훈장's DAY 0 영웅 pick ignores the unlock.
+- RELIC §GRADE / META §REACH UNLOCK — 희귀 first (User 2026-10-16, merged into v2.13.15): a fresh account opens four 희귀
+  (본사 추가발주권 · 단체 주문 창구 · 귀환 적립제 · 새벽 회수 계약); the other six open one per reach Day (DAY 5 · 10 · 15 · 20 · 25)
+  a Run gets to, and only once none is locked do DAY 15 / 25 open 영웅. A Run that ends on DAY 12 now opens two supports
+  instead of nothing. Measured against v2.13.15 main (investor, fresh 1000 + trajectory 200 × 10, same seeds): fresh D10 /
+  D15 / D30 reach 60 / 36 / 5.6 → 60 / 38 / 5.5%, clear 2.6 → 2.1%; first DAY 20 still the 4th Run on every route; first
+  DAY 30 within 10 Runs none 26 → 29%, survival 78 → 78%, economy 70 → 63%, operation 32 → 34% (±3~5%p noise). Logs
+  `reports/v2100-measure/v21315-ladder/rare-unlock-{base,r1}.log`.
 - META §REACH UNLOCK / ITEM: 상급 포션 opens on the account's first DAY 15 reach, 최상급 포션 on its first DAY 25 reach; once open
   they follow their ordinary appearance rule from that same Run. The toast reads `새 상품 해금` / `새 점포지원 해금` / `본사 해금`.
   An older account is seeded from its Best Day (≥ 15: 상급 포션 + 응급 처치대, ≥ 25: also 최상급 포션 + 평생 단골제).

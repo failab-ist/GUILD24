@@ -191,18 +191,19 @@ D14:
 `DIRECTOR DOCUMENT BASELINE` (User 2026-10-16): the account grows by how far its Runs reach.
 
 ```text
-first Run that reaches DAY 15 : account permanent unlock 상급 포션 (highpotion)
-first Run that reaches DAY 25 : account permanent unlock 최상급 포션 (toppotion)
-every Run that reaches DAY 15 : one more 영웅 점포지원 from the D15 pool (RELIC §GRADE)
-every Run that reaches DAY 25 : one more 영웅 점포지원 from the D25 pool (RELIC §GRADE)
+first Run that reaches DAY 15        : account permanent unlock 상급 포션 (highpotion)
+first Run that reaches DAY 25        : account permanent unlock 최상급 포션 (toppotion)
+every Run that reaches DAY 5/10/15/20/25 : one locked 희귀 점포지원 opens (RELIC §GRADE)
+once no 희귀 is locked, DAY 15 / 25  : one more 영웅 점포지원 from that Day's pool (RELIC §GRADE)
 ```
 
 - it opens at that Day's start; from then on the potion follows its ordinary appearance rule (ITEM), the same Run included
-- a fresh account starts with neither potion and only 물류 본부계약 among the 영웅 supports
-- the toast names what opened: `새 상품 해금 · {상품}`, `새 점포지원 해금 · {점포지원}`, or `본사 해금 · {상품} · {점포지원}` when both open
-- an account saved before this rule is seeded from its Best Day: ≥ DAY 15 opens 상급 포션 and the first D15-pool support,
-  ≥ DAY 25 also 최상급 포션 and the first D25-pool support
-- account fields: `unlocks.highpotion`, `unlocks.toppotion` (bool), `unlocks.epics` (opened 영웅 ids)
+- a fresh account starts with neither potion, four 희귀 and only 물류 본부계약 among the 영웅 supports
+- the toast names what opened: `새 상품 해금 · {상품}`, `새 점포지원 해금 · {점포지원}`, or `본사 해금 · {상품} · {점포지원}` when both
+  open the same morning (the DAY 10 / 14 product of §D10 / D14 PRODUCT UNLOCK included)
+- an older account is seeded from its Best Day: one locked 희귀 per reach Day passed; an account from before v2.13.15 also gets
+  상급 포션 and the first D15-pool 영웅 at ≥ DAY 15, and 최상급 포션 and the first D25-pool 영웅 at ≥ DAY 25
+- account fields: `unlocks.highpotion`, `unlocks.toppotion` (bool), `unlocks.rares`, `unlocks.epics` (opened 희귀 / 영웅 ids)
 
 Full Reset clears unlock + toast state. Run Abandon preserves unlock + toast state.
 The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX §END — REPLAY NUDGE).

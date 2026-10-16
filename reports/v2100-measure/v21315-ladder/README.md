@@ -16,6 +16,7 @@ JSON은 커서 커밋하지 않았다. 판 수 · 누적 플레이 날 수 집�
 | `e1.log` | n2 + 경제 · 운영 장식 낮은 안 (L, 탈락) |
 | `e2.log` | n2 + 장식 높은 안 (H; 휴식 바우처 3명 −5 시안) |
 | `f1.log` | 최종 패키지 (H + 휴식 바우처 2명 −6 + 쿠폰 원래대로 + 봇 쿠폰 교환 + 훈장 D0 해금 무시) |
+| `rare-unlock-base.log` · `rare-unlock-r1.log` | v2.13.15 main(d5ebca5) 대 희귀 도달 해금(처음 4종, 나머지 6종은 D5 · 10 · 15 · 20 · 25 도달마다 1종, 다 열린 뒤 D15 · D25 영웅). 결과는 CHANGELOG §v2.13.15 |
 
 요약: `round1-summary.txt` · `round2-summary.txt`(런별 끝난 날 · D30 도달 · 도달 시 클리어 · 장식 수),
 `round3-final-summary.txt`(10판 안 처음 D20 / D30 / 클리어까지 판 수 · 누적 플레이 날 수).

@@ -28,12 +28,14 @@ P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
   counts:counts.map((c,i)=>({count:c,percent:Math.round(odds[i]*1000)/10}))};};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
-  this.run.day++;
+  this.run.day++;const toastBefore=this.run.toast;
   if(this.run.day===G.Meta.ITEM_UNLOCK_DAY.guildlunch&&!this.account.unlocks?.guildlunch){this.account.unlocks??={};this.account.unlocks.guildlunch=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.guildlunch.name);}
   if(this.run.day===G.Meta.ITEM_UNLOCK_DAY.worldcharm&&!this.account.unlocks?.worldcharm){this.account.unlocks??={};this.account.unlocks.worldcharm=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.worldcharm.name);}
   {const o=G.Meta.reachUnlock(this.account,this.run.day),names=[...o.items.map(id=>D.itemBy[id].name),...o.relics.map(id=>D.relicBy[id].name)];
+   /* DAY 10 / 14 may already have opened a product this morning: one toast names both */
+   const prior=this.run.toast!==toastBefore&&this.run.toast?.startsWith('새 상품 해금 · ')?[this.run.toast.slice(10)]:[],items=o.items.length||prior.length;
    if(names.length){(this.run.dayUnlocked??=[]).push(...names);
-    this.run.toast=(o.items.length&&o.relics.length?'본사 해금':o.items.length?'새 상품 해금':'새 점포지원 해금')+' · '+names.join(' · ');}}
+    this.run.toast=(items&&o.relics.length?'본사 해금':items?'새 상품 해금':'새 점포지원 해금')+' · '+[...prior,...names].join(' · ');}}
   this.morning();
 };
 /* 발주 교환권: the free Rerolls come first, then the ordinary curve from its FIRST step
