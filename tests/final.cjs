@@ -693,8 +693,8 @@ test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exac
     owner-spec update rather than from a harness. */
  assert.equal(DATA.balance.bossPower,240,'WRATH is 240 (User 2026-10-03, v2.10.0; was 180)');
  assert.equal(t.prideCombatFactor,0.92,'PRIDE is 0.92, superseding 0.90');
- assert.equal(t.greedShortfallCap,15,'GREED shortfall caps at +15 (v2.10.0; was 11, scaled with WRATH 180 -> 240)');
- assert.equal(DATA.balance.bossPower+t.greedShortfallCap,255,'so GREED alone cannot pass 255');
+ assert.equal(t.greedShortfallCap,30,'GREED shortfall caps at +30 (v2.13.15; was 15)');
+ assert.equal(DATA.balance.bossPower+t.greedShortfallCap,270,'so GREED alone cannot pass 270');
  assert.deepEqual(t.slothBossPower,[267,252,228,199],'SLOTH by committed break count (v2.10.0: 200/189/171/149 x 4/3)');
  assert.equal(t.gluttonyStatFactor,0.50,'GLUTTONY halves the Item Core-Stat contribution');
  assert.equal(t.gluttonyRarityThreshold,undefined,'and keeps no Rarity threshold');

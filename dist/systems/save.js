@@ -30,6 +30,7 @@ function accountOk(a){
  if(typeof a.unlocks.guildlunch!=='boolean'||typeof a.unlocks.worldcharm!=='boolean')return false;
  for(const k of ['highpotion','toppotion'])if(a.unlocks[k]!==undefined&&typeof a.unlocks[k]!=='boolean')return false;
  if(a.unlocks.epics!==undefined&&!(Array.isArray(a.unlocks.epics)&&a.unlocks.epics.every(k=>typeof k==='string')))return false;
+ if(a.unlocks.rares!==undefined&&!(Array.isArray(a.unlocks.rares)&&a.unlocks.rares.every(k=>typeof k==='string')))return false;
  /* Mix levels are a presentation preference, not progression truth: checked for shape when
     present, the way tutorial is, and defaulted by the audio layer when a save predates them.
     A save that carries a level carries a real one - a string or a 7 is malformed, not old. */

@@ -500,28 +500,43 @@ test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0
  for(const [x,want] of Object.entries(DATA.relicRarityChance))assert.ok(Math.abs(n[x]/cards-want)<.03,DATA.rarities[x]+' share '+(n[x]/cards).toFixed(3));
  assert.ok(n[3]>0,'영웅 on D5 (the Keystone-from-D10 rule is gone)');
 });
-test('RELIC §GRADE reach unlock (User 2026-10-16): a new account draws one 영웅 support; D15 / D25 each open one more per Run',()=>{
+test('RELIC §GRADE reach unlock (User 2026-10-16): 희귀 open first, one per reach Day; then D15 / D25 open one 영웅 per Run',()=>{
  assert.deepEqual(DATA.relicEpicStart,['logisticsHQ']);
  assert.deepEqual(DATA.relicEpicPools,{15:['firstAidDesk','hub','royalCert'],25:['lifetime','opsRoom','fresh24']});
- const epicsSeen=g=>{const seen=new Set();for(let i=0;i<400;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);
-  for(const id of g.run.relicWindow.candidateIds)if(DATA.relicBy[id].rarity===3)seen.add(id);}return [...seen].sort();};
- {const g=new Game();g.autosave=false;g.start('reach-fresh');assert.deepEqual(epicsSeen(g),['logisticsHQ'],'a new account sees only 물류 본부계약');}
+ assert.deepEqual(DATA.relicRareStart,['extraOrder','groupOrder','returnPoints','dawnRecovery']);
+ assert.deepEqual(DATA.relicRareReachDays,[5,10,15,20,25]);
+ const locked=DATA.relics.filter(r=>r.rarity===2&&!DATA.relicRetired.includes(r.id)&&!DATA.relicRareStart.includes(r.id)).map(r=>r.id);
+ assert.equal(locked.length,6,'six 희귀 start locked');
+ const seen=(g,rarity)=>{const out=new Set();for(let i=0;i<400;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);
+  for(const id of g.run.relicWindow.candidateIds)if(DATA.relicBy[id].rarity===rarity)out.add(id);}return [...out].sort();};
+ {const g=new Game();g.autosave=false;g.start('reach-fresh');
+  assert.deepEqual(seen(g,3),['logisticsHQ'],'a new account sees only 물류 본부계약');
+  assert.deepEqual(seen(g,2),[...DATA.relicRareStart].sort(),'and only the four starting 희귀');}
  const a=Meta.fresh();
- for(let run=0;run<3;run++){a.runs=run;const o=Meta.reachUnlock(a,15);assert.equal(o.relics.length,1,'one 영웅 support per Run that reaches D15');
-  assert.equal(o.items.length,run===0?1:0,'상급 포션 opens once');}
+ /* run 0 reaches D25: five reach Days, five 희귀, both potions, no 영웅 yet */
+ for(const d of [5,10,15,20,25]){const o=Meta.reachUnlock(a,d);assert.equal(o.relics.length,1,'D'+d+' opens one');
+  assert.equal(DATA.relicBy[o.relics[0]].rarity,2,'a 희귀 while one is locked');assert.ok(Meta.reachUnlock(a,d+1).relics.length===0,'a non-reach Day opens nothing');}
+ assert.equal(a.unlocks.rares.length,5);assert.equal(a.unlocks.epics.length,0);
+ assert.equal(a.unlocks.highpotion,true);assert.equal(a.unlocks.toppotion,true);
+ assert.equal(Meta.itemUnlocked(a,DATA.itemBy.highpotion,1),true,'an opened potion follows its ordinary days');
+ /* run 1: D5 opens the last 희귀, D10 has nothing left, D15 then opens a 영웅 */
+ a.runs=1;assert.equal(DATA.relicBy[Meta.reachUnlock(a,5).relics[0]].rarity,2);assert.deepEqual([...a.unlocks.rares].sort(),[...locked].sort());
+ assert.deepEqual(Meta.reachUnlock(a,10).relics,[],'with every 희귀 open, D10 opens nothing');
+ for(let run=1;run<4;run++){a.runs=run;const o=Meta.reachUnlock(a,15);assert.equal(o.relics.length,1,'one 영웅 per Run that reaches D15');assert.equal(o.items.length,0,'상급 포션 opens once');}
  assert.deepEqual([...a.unlocks.epics].sort(),['firstAidDesk','hub','royalCert']);assert.equal(Meta.reachUnlock(a,15).relics.length,0,'a spent pool opens nothing');
- assert.equal(a.unlocks.highpotion,true);assert.equal(Meta.itemUnlocked(a,DATA.itemBy.highpotion,1),true,'an opened potion follows its ordinary days');
- assert.deepEqual(Meta.reachUnlock(a,25).items,['toppotion']);assert.equal(a.unlocks.epics.length,4);
- {const g=new Game(a);g.autosave=false;g.start('reach-open');const seen=epicsSeen(g);
-  assert.ok(seen.length>=4&&seen.every(id=>Meta.epicUnlocked(a,id)),'every drawn 영웅 card is an opened one');}
+ {const g=new Game(a);g.autosave=false;g.start('reach-open');
+  assert.ok(seen(g,3).every(id=>Meta.epicUnlocked(a,id))&&seen(g,2).length===10,'every drawn card is an opened one, and all ten 희귀 now come');}
  /* the reach is recorded the Day a Run gets there, with its own toast */
  {const b=Meta.fresh(),g=new Game(b);g.autosave=false;g.start('reach-day');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.day=14;g.nextDay();
-  assert.equal(b.unlocks.highpotion,true);assert.equal(b.unlocks.epics.length,1);
-  assert.ok(g.run.dayUnlocked.includes('상급 포션'),'END lists it under 본사 해금');}
- /* an account saved before the reach unlocks keeps what its best Day earned */
- {const old=Meta.fresh();delete old.unlocks.epics;delete old.unlocks.highpotion;delete old.unlocks.toppotion;old.bestDay=27;Meta.seedReachUnlocks(old);
-  assert.equal(old.unlocks.highpotion,true);assert.equal(old.unlocks.toppotion,true);assert.deepEqual(old.unlocks.epics,['firstAidDesk','lifetime']);
-  const young=Meta.fresh();delete young.unlocks.epics;young.bestDay=12;Meta.seedReachUnlocks(young);assert.deepEqual(young.unlocks.epics,[]);}
+  assert.equal(b.unlocks.highpotion,true);assert.equal(b.unlocks.rares.length,1);assert.equal(b.unlocks.epics.length,0);
+  assert.ok(g.run.dayUnlocked.includes('상급 포션'),'END lists it under 본사 해금');assert.ok(g.run.toast.startsWith('본사 해금 · 상급 포션 · '),g.run.toast);}
+ /* an older account keeps what its best Day earned: one 희귀 per passed reach Day, and the v2.13.15 영웅 seed */
+ {const old=Meta.fresh();delete old.unlocks.epics;delete old.unlocks.rares;delete old.unlocks.highpotion;delete old.unlocks.toppotion;old.bestDay=27;Meta.seedReachUnlocks(old);
+  assert.equal(old.unlocks.highpotion,true);assert.equal(old.unlocks.toppotion,true);assert.deepEqual(old.unlocks.epics,['firstAidDesk','lifetime']);assert.equal(old.unlocks.rares.length,5);
+  const young=Meta.fresh();delete young.unlocks.epics;delete young.unlocks.rares;young.bestDay=12;Meta.seedReachUnlocks(young);
+  assert.deepEqual(young.unlocks.epics,[]);assert.equal(young.unlocks.rares.length,2);
+  const v215=Meta.fresh();v215.unlocks.epics=['hub'];delete v215.unlocks.rares;v215.bestDay=16;Meta.seedReachUnlocks(v215);
+  assert.deepEqual(v215.unlocks.epics,['hub'],'a v2.13.15 account keeps its 영웅');assert.equal(v215.unlocks.rares.length,3);}
 });
 test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
  const g=new Game();g.autosave=false;g.start('relic-reroll');

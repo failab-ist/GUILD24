@@ -237,16 +237,23 @@ Draw, per card of a window:
    when that grade has nothing left, draw from the whole eligible pool
 3. no tag diversity and no build bias: the pick inside the grade is uniform (User 2026-10-10)
 
-영웅 reach unlock (account, User 2026-10-16): only unlocked 영웅 supports enter the eligible pool.
+Reach unlock (account, User 2026-10-16): only unlocked 희귀 and 영웅 supports enter the eligible pool.
 ```text
-start      : 물류 본부계약 (logisticsHQ)
-D15 pool   : 응급 처치대 · 지역 거점점 계약 · 왕도 프리미엄 인증
-D25 pool   : 평생 단골제 · 원정 작전실 · 24시간 신선체계
+희귀 start     : 본사 추가발주권 · 단체 주문 창구 · 귀환 적립제 · 새벽 회수 계약
+희귀 locked    : the other six, one shared pool
+reach Days     : DAY 5 · 10 · 15 · 20 · 25
+영웅 start     : 물류 본부계약 (logisticsHQ)
+영웅 D15 pool  : 응급 처치대 · 지역 거점점 계약 · 왕도 프리미엄 인증
+영웅 D25 pool  : 평생 단골제 · 원정 작전실 · 24시간 신선체계
 ```
-- a Run that reaches DAY 15 opens one more support from the D15 pool; a Run that reaches DAY 25 opens one from the D25 pool;
-  one per pool per Run, never two at once; the pick is the next unopened one in pool order offset by the Run count
+- each reach Day a Run gets to opens one locked 희귀 (a pick that varies with the Run count and the Day)
+- once no 희귀 is locked, a Run that reaches DAY 15 opens one more support from the 영웅 D15 pool and one that reaches DAY 25
+  one from the D25 pool; DAY 5 / 10 / 20 then open nothing
 - the unlock is told on the day it opens (the unlock toast, META §REACH UNLOCK); it counts from that same Run
-- an account from before this rule is seeded from its best day: ≥ DAY 15 opens the first D15 support, ≥ DAY 25 the first D25 one
+- a card whose grade has nothing unlocked left draws from the whole eligible pool (§Draw step 2), so the locked 희귀 do not
+  make an early Run weaker
+- an older account is seeded from its best day: one locked 희귀 per reach Day it has passed; a v2.13.15 account keeps the
+  영웅 it opened, an earlier one gets the first D15 / D25 영웅 for a best day of 15 / 25 or more
 - 본사 우수 점포 훈장's D0 영웅 pick ignores the unlock: its three cards draw from all seven 영웅 supports
 
 No grade is guaranteed in a window or a Run; 영웅 can come from D5. Presentation: the grade word under the support name, in the
