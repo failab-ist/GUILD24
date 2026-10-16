@@ -35,7 +35,7 @@ for(const [day,offset]of [[1,.125],[4,.25],[10,.5],[11,.55],[15,.75],[20,1],[21,
   const full=(term+offset*2+(isFire?[6,13,20][tier-1]:0))*scale;
   const half=(term+offset+(isFire?[6,13.5,21][tier-1]:0))*scale;
   /* DUNGEON_HAZARD §GATE POWER: one Day line (Tier I) x Tier combat 1 / 1.05 / 1.20 for every Family; golem Tier II / III keep their own term */
-  const t1=(21+Dungeon.gateDayTerm(day)+offset+DATA.balance.gateTier1Term)*.9;
+  const t1=(22+Dungeon.gateDayTerm(day)+offset+DATA.balance.gateTier1Term)*.9;
   if(tier===1)assert.ok(Math.abs(dungeon.power-t1)<1e-9,'1티어 공통 게이트 '+day+'/'+family);
   else if(!isFire)assert.ok(Math.abs(dungeon.power-t1*[1,1.05,1.20][tier-1])<1e-9,'티어 배수 게이트 '+day+'/'+family+'/'+tier);
   else{assert.ok(Math.abs(dungeon.power-half)<1e-9,'승인된 절반 게이트 '+day+'/'+family+'/'+tier);

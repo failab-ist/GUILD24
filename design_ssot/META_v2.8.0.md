@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.14
+DOC_VERSION=2.13.15
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.15
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -186,6 +186,24 @@ D14:
 - new Run still blocks appearance before D14
 - account toast once; copy: `새 상품 해금 · 세계수 생환부적`
 
+## REACH UNLOCK — EXACT
+
+`DIRECTOR DOCUMENT BASELINE` (User 2026-10-16): the account grows by how far its Runs reach.
+
+```text
+first Run that reaches DAY 15 : account permanent unlock 상급 포션 (highpotion)
+first Run that reaches DAY 25 : account permanent unlock 최상급 포션 (toppotion)
+every Run that reaches DAY 15 : one more 영웅 점포지원 from the D15 pool (RELIC §GRADE)
+every Run that reaches DAY 25 : one more 영웅 점포지원 from the D25 pool (RELIC §GRADE)
+```
+
+- it opens at that Day's start; from then on the potion follows its ordinary appearance rule (ITEM), the same Run included
+- a fresh account starts with neither potion and only 물류 본부계약 among the 영웅 supports
+- the toast names what opened: `새 상품 해금 · {상품}`, `새 점포지원 해금 · {점포지원}`, or `본사 해금 · {상품} · {점포지원}` when both open
+- an account saved before this rule is seeded from its Best Day: ≥ DAY 15 opens 상급 포션 and the first D15-pool support,
+  ≥ DAY 25 also 최상급 포션 and the first D25-pool support
+- account fields: `unlocks.highpotion`, `unlocks.toppotion` (bool), `unlocks.epics` (opened 영웅 ids)
+
 Full Reset clears unlock + toast state. Run Abandon preserves unlock + toast state.
 The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX §END — REPLAY NUDGE).
 
@@ -312,15 +330,15 @@ Ending Gold and remaining Inventory liquidation value are **not Store Capital in
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-D1-9    = 2%
-D10-19  = 2%
+D1-9    = 3%
+D10-19  = 3%
 D20-24  = 3%
 D25-29  = 3%
 D30     = 3%
 ```
 
-The top of the table is flat: a player who reaches D30 every Run would otherwise fill all four Slots within a few Runs, and
-the longer Run still earns more through its larger Gross Sales. The band is the Day the Run actually reached. Boss CLEAR does not multiply it. Buying a Decoration inside the first Run
+The table is flat (User 2026-10-16): a short early Run still banks capital toward the next Run's Decoration, and the
+longer Run still earns more through its larger Gross Sales. The band is the Day the Run actually reached. Boss CLEAR does not multiply it. Buying a Decoration inside the first Run
 is not a goal.
 
 ### Approved progression expectation
@@ -380,7 +398,7 @@ of the Run's Relic slots. A Decoration and a Relic that touch the same quantity 
 
 ### sign — 원정 지원금 간판 (id sponsorSign)
 ```text
-each visiting adventurer: an extra purchase budget of 50% of their current purse, that visit only
+each visiting adventurer: an extra purchase budget of 75% of their current purse, that visit only
 ```
 
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never
@@ -389,17 +407,17 @@ two shares add.
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [30, 34, 23, 10, 3]
+rare-NPC rarity weights = [20, 33, 29, 13, 5]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 70%), 영웅 and 전설 the most. This
+Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 80%), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first two customers to reach the counter: Wallet +200G each (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +400G each (cap 2000)
 ```
 
 Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
@@ -407,11 +425,11 @@ has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning, 60% chance of visitors +1
+each Morning: visitors +1
 ```
 
-The roll happens once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
-source. It is a chance, not a guarantee: most Days it adds nothing.
+It is added once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
+source.
 
 These Decorations carry none of the Start Contract negative sides: no +5% ORDER purchase penalty, no +20G / +25G
 operating-cost penalty, no rare-ORDER reduction penalty.
@@ -462,7 +480,7 @@ a Relic slot (the boundary above holds). The one with the larger measured effect
 
 ### sign — 단골 감사 현수막 (id cheerBanner)
 ```text
-투력 × (1 + floor(단골도 / 10) × 3%)
+투력 × (1 + floor(단골도 / 10) × 5%)
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF
@@ -473,13 +491,16 @@ counterfactual reads the same term.
 the DAY 0 free 점포지원 pick is drawn from 영웅 (3 cards) instead of 일반
 ```
 
+Those cards draw from all seven 영웅 supports, ignoring the account's 영웅 reach unlock (RELIC §GRADE).
+
+
 Only the DAY 0 window; every later window draws its grades as RELIC §GRADE says. That DAY 0 window may also be redrawn
 (RELIC §CANDIDATE REROLL) at the ordinary price curve, 지원 교환 쿠폰함 included; each redraw is again three 영웅 cards, free
 to take.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-each Night: the Day's first two customers to reach the counter, if alive: Fatigue -3 (floor 0)
+each Night: the Day's first two customers to reach the counter, if alive: Fatigue -6 (floor 0)
 ```
 
 The same "first two" as 알뜰 금고: the order in which that Day's customers reached the counter. Everyone else, visitor or

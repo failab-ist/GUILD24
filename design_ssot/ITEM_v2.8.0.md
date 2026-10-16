@@ -3,7 +3,7 @@
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
 DOC_VERSION=2.13.10
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.14
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.15
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -365,6 +365,8 @@ Forbidden as Item micro-systems: thirst, caffeine stacking, hidden fatigue chain
 `DIRECTOR DOCUMENT BASELINE`
 
 하급 / 중급 / 상급 / 최상급 포션 (Common / Uncommon / Rare / Epic; 투력 +10 / +14 / +19 / +25; Buy / Sell -> §ACTIVE CATALOG).
+상급 포션 opens on the account's first DAY 15 reach and 최상급 포션 on its first DAY 25 reach (META §REACH UNLOCK); before
+that they never appear.
 
 All four:
 ```text

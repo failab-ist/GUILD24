@@ -689,18 +689,18 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
    the live value - changing a parameter rewrites the line (User 2026-10-04: copy follows the code value). */
 test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decoration / Store Support / Loyalty copy follows the values',()=>{
  const EFFECTS={
-  sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
-  honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 70% (기존 40%)',
-  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 200G씩 늘어난다',
-  guildShelf:'매일 아침 60% 확률로 그날 손님이 1명 더 온다',
+  sponsorSign:'손님이 방문할 때마다 손님 소지금의 75%만큼 더 쓸 수 있다',
+  honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 80% (기존 40%)',
+  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 400G씩 늘어난다',
+  guildShelf:'매일 아침 손님이 1명 더 온다',
   trainingSign:'처음 찾아오는 모험가는 55% 확률로 레벨 +1로 온다',
   infirmaryPlaque:'부상당한 손님이 가게에 오면 50% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
   aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%) (마왕성 제외)',
   /* 운영형 (User 2026-10-04) */
   heroSign:'첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다. 점포지원 후보 교환도 할 수 있다 (300G → 600G…)',
-  cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다',
-  voucher:'매일 먼저 온 손님 2명은 그날 밤 피로가 3 줄어든다',
+  cheerBanner:'손님의 투력이 단골도 10마다 5% 오른다',
+  voucher:'매일 먼저 온 손님 2명은 그날 밤 피로가 6 줄어든다',
   rerollCoupon:'유료 점포지원 구매 기회마다 첫 후보 교환이 무료'};
  assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
  for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');

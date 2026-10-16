@@ -115,6 +115,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
     everything else has exactly one candidate left, so its presence or absence is the answer. */
  const eligibleAtD30=(id,previousSales)=>{
   const g=fresh('d30-'+id);const s=g.run;
+  g.account.unlocks.epics=[...DATA.relicEpicPools[15],...DATA.relicEpicPools[25]]; // every 영웅 opened (RELIC §GRADE reach unlock)
   s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!==id);
   s.previousSales=previousSales;s.day=30;s.relicWindow=null;
   g.relicWindow(30);
@@ -632,5 +633,5 @@ test('RELIC candidate draw reads no tag: diversity and build bias are gone',()=>
  assert.ok(!/tags|weighted/.test(fn),'drawCandidates reads no tag and no weight');
  const N=3000,c={0:0,2:0,3:0};
  for(let i=0;i<N;i++){const g=fresh('grade-'+i);g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);c[DATA.relicBy[g.run.relicWindow.candidateIds[0]].rarity]++;}
- for(const [k,want] of [[0,.60],[2,.28],[3,.12]])assert.ok(Math.abs(c[k]/N-want)<.03,'grade '+k+' share '+(c[k]/N).toFixed(3));
+ for(const [k,want] of [[0,.63],[2,.29],[3,.08]])assert.ok(Math.abs(c[k]/N-want)<.03,'grade '+k+' share '+(c[k]/N).toFixed(3));
 });
