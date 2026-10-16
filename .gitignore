@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 tools/.*.cjs
 
 # Local diff / scratch artifacts
