@@ -396,7 +396,7 @@ Therefore:
 - exceeding target does not create an unlimited Player bonus
 
 Exact:
-- greedRevenueTarget=18800
+- greedRevenueTarget=28000
 - shortfall is measured as a SHARE of the target, so the penalty means the same thing whatever the target is
 - the penalty is linear in the unmet share: no sales -> the full cap; target met -> 0
 

@@ -23,7 +23,7 @@ assert.equal(Dungeon.hazardState('cold',{survival:84},{day:30,tier:2,family:'fin
 assert.ok(Math.abs(Dungeon.hazardState('cold',{survival:0},{day:29,tier:3}).threat-39.65)<1e-9,'ordinary hazard curve unchanged');
 assert.ok(Math.abs(Dungeon.gateDayTerm(29)-38.71)<1e-9);assert.deepEqual(DATA.jobBy.mage.growth,[3.1,1.6,1.8,2.7]);
 assert.equal(DATA.balance.finalGapPenalty,2);assert.equal(DATA.bossTuning.firePairPower,12);assert.equal(DATA.bossTuning.finalPowerFactor,.95);
-for(const [boss,fire,seals,revenue,want]of [['WRATH',false,0,0,228],['WRATH',true,0,0,239.4],['GREED',false,0,0,242.25],['GREED',false,0,18800,228],['SLOTH',false,0,0,253.65],['SLOTH',true,0,0,265.05],['SLOTH',false,3,0,189.05]]){
+for(const [boss,fire,seals,revenue,want]of [['WRATH',false,0,0,228],['WRATH',true,0,0,239.4],['GREED',false,0,0,242.25],['GREED',false,0,28000,228],['SLOTH',false,0,0,253.65],['SLOTH',true,0,0,265.05],['SLOTH',false,3,0,189.05]]){
  const run={bossId:boss,final:{families:fire?['golem','spider']:['spider','snow']},stats:{revenue},sealBreakCount:seals};
  assert.ok(Math.abs(Game.prototype.effectiveBossPower.call({run},0)-want)<1e-9,boss+' effective requirement');}
 // 승인된 변경 폭의 절반: 앵커/보간/유지와 화염 계열을 함께 확인한다.
