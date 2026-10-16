@@ -238,8 +238,8 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
 G.DATA.bossTuning={
  prideCombatFactor:0.92, // PRIDE: every participant’s Final combat factor
  envyStatFactor:0.92,           // ENVY: the single ace's four Stats x this
- greedRevenueTarget:28000,      // GREED: cumulative gross sales the Run is measured against
- greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power
+ greedRevenueTarget:30000,      // GREED: cumulative gross sales the Run is measured against
+ greedShortfallCap:30,          // GREED: the most that a total shortfall can add to Boss Power
  /* GLUTTONY v2.7: the Rare+ threshold is superseded. EVERY positive Core-Stat contribution
     that came from an Item is halved, whatever its Rarity, after the Item-side amplification
     has produced that contribution. No Rarity threshold remains. */
