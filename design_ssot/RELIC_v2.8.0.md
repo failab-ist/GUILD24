@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.13.14
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.14
+DOC_VERSION=2.13.15
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.15
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -20,7 +20,7 @@ candidates/window=3
 
 D0: cost=0 · pick<=1 · eligible=일반 grade · defer=YES (until DAY 4)
 
-D5+: currency=G · buy<=1 · defer=YES · eligible=every grade · gradePerCard=일반 60% · 희귀 28% · 영웅 12% (§GRADE)
+D5+: currency=G · buy<=1 · defer=YES · eligible=every grade · gradePerCard=일반 63% · 희귀 29% · 영웅 8% (§GRADE)
 
 offered=34 · 일반=17 · 희귀=10 · 영웅=7 (§GRADE) · internal kinds Foundation / Hybrid / Keystone / Utility (§POOL ARCHITECTURE)
 
@@ -232,10 +232,22 @@ the internal kind.
 ```
 
 Draw, per card of a window:
-1. roll the card's grade: D5+ 일반 60% · 희귀 28% · 영웅 12%; D0 always 일반
+1. roll the card's grade: D5+ 일반 63% · 희귀 29% · 영웅 8%; D0 always 일반
 2. draw one support of that grade from the eligible pool (ownership, the D30 exclusions, the cool-down of the last three);
    when that grade has nothing left, draw from the whole eligible pool
 3. no tag diversity and no build bias: the pick inside the grade is uniform (User 2026-10-10)
+
+영웅 reach unlock (account, User 2026-10-16): only unlocked 영웅 supports enter the eligible pool.
+```text
+start      : 물류 본부계약 (logisticsHQ)
+D15 pool   : 응급 처치대 · 지역 거점점 계약 · 왕도 프리미엄 인증
+D25 pool   : 평생 단골제 · 원정 작전실 · 24시간 신선체계
+```
+- a Run that reaches DAY 15 opens one more support from the D15 pool; a Run that reaches DAY 25 opens one from the D25 pool;
+  one per pool per Run, never two at once; the pick is the next unopened one in pool order offset by the Run count
+- the unlock is told on the day it opens (the unlock toast, META §REACH UNLOCK); it counts from that same Run
+- an account from before this rule is seeded from its best day: ≥ DAY 15 opens the first D15 support, ≥ DAY 25 the first D25 one
+- 본사 우수 점포 훈장's D0 영웅 pick ignores the unlock: its three cards draw from all seven 영웅 supports
 
 No grade is guaranteed in a window or a Run; 영웅 can come from D5. Presentation: the grade word under the support name, in the
 Item rarity colours (일반 / 희귀 / 영웅 = the Item 일반 / 희귀 / 영웅 colours), and a grade colour line (UI_UX §STORE SUPPORT WINDOW).
@@ -955,7 +967,7 @@ PASS: The draw is the grade roll and a uniform pick inside the grade.
 SETUP: Inspect D0 and later windows.
 EXPECT:
 - D0 offers 일반 only
-- D5+ each card rolls 일반 60% · 희귀 28% · 영웅 12% and draws within that grade (whole pool when the grade is empty)
+- D5+ each card rolls 일반 63% · 희귀 29% · 영웅 8% and draws within that grade (whole pool when the grade is empty)
 - no tag diversity or build bias: the pick inside the grade is uniform
 PASS: no 희귀 / 영웅 on D0, the per-card grade shares hold, and no hidden guaranteed 영웅 path.
 

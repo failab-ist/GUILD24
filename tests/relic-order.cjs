@@ -484,11 +484,11 @@ test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is pai
    basePrice x a limited band (about +-15-20%), fixed for the window; buy<=1; maxOwned/run=7. */
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): from DAY 5 an open window redraws its three for 300G, doubling within the
    window and back to 300G on the next; never on DAY 0; the spend is Store Support investment and survives a reload. */
-test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0 offers 일반 only; D5+ cards roll 60 / 28 / 12',()=>{
+test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0 offers 일반 only; D5+ cards roll 63 / 29 / 8',()=>{
  // the 등급 is an Item rarity index (0 일반 · 2 희귀 · 3 영웅), so it reads the Item rarity names
  const offered=DATA.relics.filter(r=>!DATA.relicRetired.includes(r.id)),count=x=>offered.filter(r=>r.rarity===x).length;
  assert.deepEqual([count(0),count(2),count(3)],[17,10,7]);
- assert.deepEqual(DATA.relicRarityChance,{0:.60,2:.28,3:.12});
+ assert.deepEqual(DATA.relicRarityChance,{0:.63,2:.29,3:.08});
  assert.deepEqual([0,2,3].map(x=>DATA.rarities[x]),['일반','희귀','영웅']);
  for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('grade-d0-'+i);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].rarity===0),'D0 is 일반 only');}
  {const g=new Game();g.autosave=false;g.start('grade-owned');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities.push('fresh24');
@@ -499,6 +499,29 @@ test('RELIC §GRADE (User 2026-10-04): 일반 17 · 희귀 10 · 영웅 7; DAY 0
  for(let i=0;i<1500;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);for(const id of g.run.relicWindow.candidateIds){n[DATA.relicBy[id].rarity]++;cards++;}}
  for(const [x,want] of Object.entries(DATA.relicRarityChance))assert.ok(Math.abs(n[x]/cards-want)<.03,DATA.rarities[x]+' share '+(n[x]/cards).toFixed(3));
  assert.ok(n[3]>0,'영웅 on D5 (the Keystone-from-D10 rule is gone)');
+});
+test('RELIC §GRADE reach unlock (User 2026-10-16): a new account draws one 영웅 support; D15 / D25 each open one more per Run',()=>{
+ assert.deepEqual(DATA.relicEpicStart,['logisticsHQ']);
+ assert.deepEqual(DATA.relicEpicPools,{15:['firstAidDesk','hub','royalCert'],25:['lifetime','opsRoom','fresh24']});
+ const epicsSeen=g=>{const seen=new Set();for(let i=0;i<400;i++){g.run.facilities=[];g.run.relicWindow=null;g.relicWindow(5);
+  for(const id of g.run.relicWindow.candidateIds)if(DATA.relicBy[id].rarity===3)seen.add(id);}return [...seen].sort();};
+ {const g=new Game();g.autosave=false;g.start('reach-fresh');assert.deepEqual(epicsSeen(g),['logisticsHQ'],'a new account sees only 물류 본부계약');}
+ const a=Meta.fresh();
+ for(let run=0;run<3;run++){a.runs=run;const o=Meta.reachUnlock(a,15);assert.equal(o.relics.length,1,'one 영웅 support per Run that reaches D15');
+  assert.equal(o.items.length,run===0?1:0,'상급 포션 opens once');}
+ assert.deepEqual([...a.unlocks.epics].sort(),['firstAidDesk','hub','royalCert']);assert.equal(Meta.reachUnlock(a,15).relics.length,0,'a spent pool opens nothing');
+ assert.equal(a.unlocks.highpotion,true);assert.equal(Meta.itemUnlocked(a,DATA.itemBy.highpotion,1),true,'an opened potion follows its ordinary days');
+ assert.deepEqual(Meta.reachUnlock(a,25).items,['toppotion']);assert.equal(a.unlocks.epics.length,4);
+ {const g=new Game(a);g.autosave=false;g.start('reach-open');const seen=epicsSeen(g);
+  assert.ok(seen.length>=4&&seen.every(id=>Meta.epicUnlocked(a,id)),'every drawn 영웅 card is an opened one');}
+ /* the reach is recorded the Day a Run gets there, with its own toast */
+ {const b=Meta.fresh(),g=new Game(b);g.autosave=false;g.start('reach-day');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.day=14;g.nextDay();
+  assert.equal(b.unlocks.highpotion,true);assert.equal(b.unlocks.epics.length,1);
+  assert.ok(g.run.dayUnlocked.includes('상급 포션'),'END lists it under 본사 해금');}
+ /* an account saved before the reach unlocks keeps what its best Day earned */
+ {const old=Meta.fresh();delete old.unlocks.epics;delete old.unlocks.highpotion;delete old.unlocks.toppotion;old.bestDay=27;Meta.seedReachUnlocks(old);
+  assert.equal(old.unlocks.highpotion,true);assert.equal(old.unlocks.toppotion,true);assert.deepEqual(old.unlocks.epics,['firstAidDesk','lifetime']);
+  const young=Meta.fresh();delete young.unlocks.epics;young.bestDay=12;Meta.seedReachUnlocks(young);assert.deepEqual(young.unlocks.epics,[]);}
 });
 test('RELIC §CANDIDATE REROLL: 300G then 600G within a window, reset on the next, none on DAY 0',()=>{
  const g=new Game();g.autosave=false;g.start('relic-reroll');

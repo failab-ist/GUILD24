@@ -31,6 +31,9 @@ P.nextDay=function(){
   this.run.day++;
   if(this.run.day===G.Meta.ITEM_UNLOCK_DAY.guildlunch&&!this.account.unlocks?.guildlunch){this.account.unlocks??={};this.account.unlocks.guildlunch=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.guildlunch.name);}
   if(this.run.day===G.Meta.ITEM_UNLOCK_DAY.worldcharm&&!this.account.unlocks?.worldcharm){this.account.unlocks??={};this.account.unlocks.worldcharm=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.worldcharm.name);}
+  {const o=G.Meta.reachUnlock(this.account,this.run.day),names=[...o.items.map(id=>D.itemBy[id].name),...o.relics.map(id=>D.relicBy[id].name)];
+   if(names.length){(this.run.dayUnlocked??=[]).push(...names);
+    this.run.toast=(o.items.length&&o.relics.length?'본사 해금':o.items.length?'새 상품 해금':'새 점포지원 해금')+' · '+names.join(' · ');}}
   this.morning();
 };
 /* 발주 교환권: the free Rerolls come first, then the ordinary curve from its FIRST step
