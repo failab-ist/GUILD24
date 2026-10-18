@@ -951,6 +951,14 @@ The END tape's `점포 자본 정산` (META_v2.8.0.md §STORE CAPITAL Run-end se
 `현재 점포 자본` up from the prior total in 320 ms, a quiet `ui` cue at each Decoration price it passes (500 / 750 / 1000 /
 1500, read from META_v2.8.0.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
 
+### END — CAPITAL METER (User 2026-10-18)
+
+Under `현재 점포 자본` the settlement prints one tick bar: a tick per Slot the account has not filled, labelled with the Slot name and its
+price (read from META_v2.8.0.md §DECORATION's list), ordered by price at equal spacing; the bar fills to `현재 점포 자본`, in proportion
+between ticks, and a tick the capital has reached turns red. The labels are Slots only - every Slot offers all three kinds at one price, so
+no Decoration or kind is named or recommended. No bar once every Slot is filled. It reads the account when drawn, so a purchase from the
+ending prints the new state. Acceptance -> UI-Q-v29-54 (the settlement block).
+
 ### END — THIS RUN BLOCK (v2.9.12)
 
 (acceptance -> UI_UX §QA UI-Q-v29-54.) "이번 판은 이런 가게였다" must stay (GAME_VISION). The END tape carries `이 점포의 기록`
@@ -2831,7 +2839,8 @@ Verify UI_UX §END — THIS RUN BLOCK on END (Run Fail, bankruptcy, Final loss /
 PASS: `이 점포의 기록` sits between `지금까지 연 점포` and `점포 자본 정산`, five rows in order, COPY_AUDIT §10-4 wording; the figures
 are the Run's (Day, visited customers and regulars made, Deaths with 0 printed, the highest-Level customer - tie -> higher Loyalty,
 the dead included - all expedition records and their 대성공 count); no `원정` row without an expedition; a reload prints the same
-block; the settlement block and the replay line are unchanged.
+block; the settlement block and the replay line are unchanged. The settlement ends with the capital meter (UI_UX §END — CAPITAL METER):
+ticks only for unfilled Slots at 390 and 1280, no bar with all four filled.
 FAIL: a lost adventurer named in the block, a new save field, or the block after the settlement.
 
 #### UI-Q-v29-32 — ORDER CONFIRM CASCADE
