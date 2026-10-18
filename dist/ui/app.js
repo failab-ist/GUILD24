@@ -607,11 +607,15 @@ function showStub(){if(!stub)return;const st=stub;stub=null;
  el.textContent='단골도 ';
  if(st.refused){const value=document.createElement('span');value.className='loyalty-delta';value.textContent=delta;el.appendChild(value);}
  else el.appendChild(document.createTextNode(delta+' · 소지금 '+st.from+' → '+st.to));
- const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
+ const dock=$('.p-sale .dock'),kit=$('.p-sale .kit');
+ if(kit){el.style.top=Math.round(kit.getBoundingClientRect().bottom)+6+'px';el.classList.add('at-top');}
+ else el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
  document.body.appendChild(el);
+ const gone=()=>{el.remove();clearTimeout(stubTimer);};
+ document.addEventListener('pointerdown',gone,{capture:true,once:true});
  /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
  /* while a coach mark is open the line stays - the 50% lesson may be waiting behind the Bag mark - and goes once they close */
- const drop=()=>{if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
+ const drop=()=>{if(!el.isConnected)return;if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
  stubTimer=setTimeout(drop,motionOK()?2800+KEY_PRESS.down:2500);}
  // picking a product puts it on the counter tray - the tray contents arrive, the list does not move
 function cueSelect(A){const open=$('.counter-tray .tray-item');if(open)A(open,{opacity:[0,1],translateY:[8,0],duration:190,ease:'outQuad'});}
@@ -1936,17 +1940,17 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
    Item is sorted by is the one it showed when the Day's shelf first appeared, so selling out a batch never moves a row
    mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
    and the next Day sorts afresh. */
-const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
+const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{},seq:{}};
 /* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04); on the SALE shelf the
    current customer's own Gate leads them (User 2026-10-09) */
 const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];
 function shelfOrder(stocks,byHazard=true,npc=null){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,gate=npc&&game.claimedGateFor(npc),
  hz=byHazard?[...new Set([...(gate?gate.hazards:[]),...todayHazards()])]:[];
- if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
- for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
+ if(shelfHeld.key!==key)shelfHeld={key,at:{},seq:{}};const at=shelfHeld.at,seq=shelfHeld.seq;
+ for(const st of stocks)if(!(st.item in at)){at[st.item]=st.expires;seq[st.item]=Object.keys(seq).length;}
  const rank=st=>{const it=D.itemBy[st.item],c=Object.keys(it.effects).map(k=>hz.indexOf(k)).filter(i=>i>=0);
-  return [c.length?Math.min(...c):hz.length,SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity];};
- return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];});}
+  return [c.length?Math.min(...c):hz.length,SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity,seq[st.item]];};
+ return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3]||x[4]-y[4];});}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    /* SALE §MATCHING-EFFECT EMPHASIS — RETIRED (User 2026-09-24, v2.9.0): every effect text keeps the default
