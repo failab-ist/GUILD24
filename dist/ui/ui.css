@@ -2306,7 +2306,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* v2.9.6 (visual review, RUNTIME UX BUG): the narrow 1280 codex cards broke Hangul words mid-word (`상/자`, `3/분`) - break
    between words only, and still wrap a token that alone is wider than the card */
 .unlock-grid .unlock{word-break:keep-all;overflow-wrap:anywhere}
-.unlock.locked{opacity:.72}
+.unlock-grid .unlock{position:relative}
+/* a locked 본사 기록 card (상품 / 직업 / 점포지원) reads as shut: greyed, dashed frame, a padlock - only the line that says what opens it stays lit */
+.unlock.locked{background:#0000005c;box-shadow:none;outline:2px dashed #ffffff29;outline-offset:-4px}
+.unlock.locked>:not(.lock-mark):not(.gold-text){opacity:.45;filter:grayscale(1)}
+.unlock.locked h3{padding-right:26px}
+.unlock .lock-mark{position:absolute;top:12px;right:12px;width:18px;height:18px;color:#d9c48f}
 /* one adventurer on the muster list — a tag, not a profile card.
    USER DIRECTION 2026-09-22: rarity used to be a coloured strip down the card's left edge, the
    same grammar the Hazard rows use, and the card already states its rarity in the badge above
