@@ -92,20 +92,14 @@ const UNLOCK_LABELS=['새 상품 해금','새 점포지원 해금','본사 해�
 /* 해금 알림 (User 2026-10-18): an unlock is a card of its own, not a 3.4s toast over whatever is open. It queues while another
    panel is up (the morning's Boss report) and opens when that closes; the player confirms it. */
 let pendingUnlock=[],unlockNow=null;
-const UNLOCK_STYLE=()=>window.__unlockStyle||'card';
 function unlockEntry(name){const r=D.relics.find(x=>x.name===name),i=D.items.find(x=>x.name===name);
  if(r)return {name,kind:'점포지원 · '+D.rarities[r.rarity],desc:r.description,relic:true};
- if(i)return {name,kind:'상품',desc:i.description||''};
+ if(i)return {name,kind:'상품',desc:Presentation.rows(i.effects,undefined,i.category).map(r=>r.label+' '+r.text.replace(/<[^>]+>/g,'').trim()).join(' · '),item:true};
  return {name,kind:'',desc:''};}
-function queueUnlock(label,names){const u={label,entries:names.map(unlockEntry)};
- if(UNLOCK_STYLE()==='ribbon'){showRibbon(u);return;}
- pendingUnlock.push(u);}
-function showRibbon(u){let r=$('#unlock-ribbon');if(!r){r=document.createElement('button');r.id='unlock-ribbon';r.type='button';r.setAttribute('data-action','ribbon-ok');document.body.appendChild(r);}
- r.innerHTML='<span class="unlock-kind">'+E(u.label)+'</span><b class="unlock-name">'+E(u.entries.map(e=>e.name).join(' · '))+'</b>'+(u.entries[0]?.desc?'<span class="unlock-desc">'+E(u.entries[0].desc)+'</span>':'')+'<i>탭하여 닫기</i>';
- r.classList.add('show');sound('unlock');if(u.entries.some(e=>e.relic)&&game.run)game.run.relicNew=true;}
+function queueUnlock(label,names){pendingUnlock.push({label,entries:names.map(unlockEntry)});}
 function flushUnlock(){if(!pendingUnlock.length||modal==='unlock')return;clearTimeout(bossHold);bossHold=null;$('#app').inert=false;setModal(null);}
-function unlockBody(u){return '<div class="unlock-card">'+u.entries.map(e=>'<div class="unlock-one"><span class="unlock-kind">'+E(e.kind)+'</span><b class="unlock-name">'+E(e.name)+'</b>'+(e.desc?'<p>'+E(e.desc)+'</p>':'')+'</div>').join('')
- +(u.entries.some(e=>e.relic)?'<p class="unlock-where">이제 점포지원 후보로 나올 수 있습니다.</p>':'')+'</div>';}
+function unlockBody(u){return '<div class="unlock-card">'+u.entries.map(e=>'<div class="unlock-one"><span class="unlock-kind">'+E(e.kind)+'</span><b class="unlock-name">'+E(e.name)+'</b>'+(e.desc?'<p>'+E(e.desc)+'</p>':'')
+ +(e.relic?'<p class="unlock-where">이제 점포지원 후보로 나올 수 있습니다.</p>':e.item?'<p class="unlock-where">이제 발주 후보로 나올 수 있습니다.</p>':'')+'</div>').join('')+'</div>';}
 function toast(msg){const t=$('#toast'),m=String(msg),label=UNLOCK_LABELS.find(l=>m.startsWith(l+' · '));
  if(label){queueUnlock(label,m.slice(label.length+3).split(' · '));return;}
  t.classList.remove('unlock');t.textContent=m;
@@ -357,7 +351,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -977,7 +971,7 @@ function eventSlip(e){
    register and nothing else and the standing list lives in the store menu instead - the same
    modal, reached from where every other standing reference is reached. */
 function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())return '';
- return '<button class="brass" data-action="relics">'+(game.run.relicNew?'<i class="new-tag">NEW</i>':'')+'점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
+ return '<button class="brass" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
 function readout(n,extra=null,cls=''){
  const d=game.claimedGateFor(n);
@@ -2956,8 +2950,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
  case'fatigue':sound('ui');setModal('fatigue:'+id);break;
- case'ribbon-ok':$('#unlock-ribbon')?.classList.remove('show');break;
- case'relics':if(s)s.relicNew=false;sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;
+ case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;
  case'loadout':sound('ui');setModal('loadout');break;
  case'abandon':sound('ui');setModal('abandonConfirm');break;
  /* CORE_RUN §CURRENT RUN ABANDON: no settlement, no new Run - the no-Run pre-Run screen follows. */
