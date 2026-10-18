@@ -37,6 +37,7 @@ function accountOk(a){
  for(const k of ['bgm','sfx'])
   if(a.settings[k]!==undefined&&!(Number.isFinite(a.settings[k])&&a.settings[k]>=0&&a.settings[k]<=1))return false;
  if(a.settings.haptic!==undefined&&typeof a.settings.haptic!=='boolean')return false;
+ if(a.settings.prologue!==undefined&&typeof a.settings.prologue!=='boolean')return false;
  if(!Array.isArray(a.discovered)||!a.discovered.every(k=>typeof k==='string'))return false;
  if(a.tutorial!==undefined&&(typeof a.tutorial!=='object'||!a.tutorial))return false;
  /* META §BEST DAY: absent on a save that predates it (reads 0), a Day when present; the best 총매출 likewise, a whole Gold amount */

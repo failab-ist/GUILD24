@@ -437,8 +437,8 @@ reorder; fixed per-category order (`ITEM_v2.8.0.md` §PRESENTATION ORDER) for ev
 
 ### SALE — TRANSACTION RESULT STUB
 
-Each successful sale stamps a paper receipt stub (`.receipt-stub`) over the counter band for about 2.5 seconds:
-`단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). No reserved height, never blocks input, replaced by the next stub; under
+Each successful sale stamps a paper receipt stub (`.receipt-stub`) just under the customer's status panel (`.kit`, 상태 · 소지금 · 가방; User 2026-10-18) for about 2.5 seconds, and any tap or click dismisses it at once (the press still reaches what it hit):
+`단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). No reserved height, never blocks input (it does not cover the shelf), replaced by the next stub; under
 `prefers-reduced-motion` no motion. A refusal shows the customer's reply line (engine reason pool); when Loyalty actually
 decreases, the same stub location shows only `단골도 {−N}`, the existing receipt style, with only the negative number in muted red, for about 2.5 seconds, without new motion.
 
@@ -456,7 +456,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - tapping a shelf row puts its Item on the tray; the row is only highlighted; rows never change height
 - §SALE — SHELF ORDER (User 2026-10-04, 10-09): an Item that answers a Hazard of today's open Gates leads, the current customer's own Gate's Hazards first and then the other open Gates' in Gate order (any kind —
   a Food or Drink with a Hazard line counts); the rest follow by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
-  Rarity, ties as before; only that Hazard lead follows the customer (the warehouse keeps today's Gate order); sorted on the discard day shown when the Day's shelf first appeared,
+  Rarity, ties in the order first seen that Day; only that Hazard lead follows the customer (the warehouse keeps today's Gate order); sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
 - shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)
@@ -950,6 +950,14 @@ motion matches). No `어제보다 +N` line (deferred, v3.0+ router).
 The END tape's `점포 자본 정산` (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; rates 1 / 2 / 3 / 3 / 3%) counts
 `현재 점포 자본` up from the prior total in 320 ms, a quiet `ui` cue at each Decoration price it passes (500 / 750 / 1000 /
 1500, read from META_v2.8.0.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
+
+### END — CAPITAL METER (User 2026-10-18)
+
+Under `현재 점포 자본` the settlement prints one tick bar: a tick per Slot the account has not filled, labelled with the Slot name and its
+price (read from META_v2.8.0.md §DECORATION's list), ordered by price at equal spacing; the bar fills to `현재 점포 자본`, in proportion
+between ticks, and a tick the capital has reached turns red. The labels are Slots only - every Slot offers all three kinds at one price, so
+no Decoration or kind is named or recommended. No bar once every Slot is filled. It reads the account when drawn, so a purchase from the
+ending prints the new state. Acceptance -> UI-Q-v29-54 (the settlement block).
 
 ### END — THIS RUN BLOCK (v2.9.12)
 
@@ -2831,7 +2839,8 @@ Verify UI_UX §END — THIS RUN BLOCK on END (Run Fail, bankruptcy, Final loss /
 PASS: `이 점포의 기록` sits between `지금까지 연 점포` and `점포 자본 정산`, five rows in order, COPY_AUDIT §10-4 wording; the figures
 are the Run's (Day, visited customers and regulars made, Deaths with 0 printed, the highest-Level customer - tie -> higher Loyalty,
 the dead included - all expedition records and their 대성공 count); no `원정` row without an expedition; a reload prints the same
-block; the settlement block and the replay line are unchanged.
+block; the settlement block and the replay line are unchanged. The settlement ends with the capital meter (UI_UX §END — CAPITAL METER):
+ticks only for unfilled Slots at 390 and 1280, no bar with all four filled.
 FAIL: a lost adventurer named in the block, a new save field, or the block after the settlement.
 
 #### UI-Q-v29-32 — ORDER CONFIRM CASCADE

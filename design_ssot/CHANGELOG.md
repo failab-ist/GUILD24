@@ -64,6 +64,11 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
+## v2.13.15 — SALE shelf tie order held, receipt stub moved (User 2026-10-18)
+
+- UI_UX §SALE — SHELF ORDER: Items tied on Hazard lead, kind, discard day and Rarity keep the order first seen that Day, so a sale no longer swaps two drinks (e.g. 생수 / 진정 허브티).
+- UI_UX §SALE — TRANSACTION RESULT STUB: the receipt sits just under the customer's status panel instead of over the shelf, and any tap or click dismisses it.
+
 ## v2.13.15 — Meta ladder: a fresh Run is hard to take far, and the account climbs Run by Run (User 2026-10-16)
 
 The User's picture: reaching the Boss should mean about a 60% clear, but a fresh Run reached DAY 30 too easily. Reaching
@@ -101,6 +106,7 @@ Run; an economy or operation Decoration route alone should also climb. The Boss 
   unfair), Gate base 23 (a wall at DAY 10 every Run), 휴식 바우처 3 customers −5, two free coupon rerolls; Decoration prices
   were not cut. Logs `reports/v2100-measure/v21315-ladder/`.
 - BOSS §GREED — SALES TARGET (User 2026-10-16): `greedRevenueTarget` 18,800 → 30,000G and `greedShortfallCap` 15 → 30 (maximum effective Boss Power 256.5, was 242.25); the linear shortfall rule is unchanged, so a Run at the target still faces the WRATH 228 and a Run below it adds up to +30 × the unmet share. DAY 30 gross sales before Final Lock were 26.5k ~ 34.6k in seven full User saves (mean 29.5k, median 27.8k), and on v2.13.15 (investor, 786 DAY-30 Runs) min 24.0k, p10 28.5k, median 32.8k, p90 44.0k, so 18,800 never bit. With the Boss forced to GREED (fresh 1000 + trajectory 200 × 10, same seeds, DAY-30 Runs): trajectory clear 62.7% at the old 15 / 28,000, 62.6% at 30 / 30,000 and 62.5% at 45 / 30,000; the share of Runs that add Boss Power 7 → 24%, mean +0.05 → +0.39. A User Run of 27k adds about +3. Scratch logs, not committed.
+- UI_UX §END — CAPITAL METER (User 2026-10-18): the END `점포 자본 정산` ends with a tick bar of the Slot prices the account has not filled yet (진열대 500 / 계산대 750 / 벽면 1,000 / 간판 1,500), filled to `현재 점포 자본`; ticks the capital has passed turn red. Slots only, never a Decoration or a kind. A lost Run used to print the capital with no sense of how far the next Decoration was. UI only, no balance change.
 
 ## v2.13.14 — Tier II Environment incidents ease through DAY 15 (User 2026-10-15)
 

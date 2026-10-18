@@ -25,7 +25,7 @@ const plannedBranch=()=>new RNG(plannedSeed()).pick(D.brand.branches);
 let preRunReturn=false;
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): the ending's `다음 점포 열기` shows the preparation scene over a Run
    that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
-let prepOpen=false;
+let prepOpen=false,prepSeen=false; // prepSeen: this ending already played the prologue, so 결과 다시 보기 -> 다음 점포 does not replay it
 /* UI_UX §PROLOGUE (User 2026-10-04): five scenes before every new store - at start-up with no Run (in place of the
    loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on (every scene says so), 건너뛰기 ends it.
    Scenes 1~2 play the Boss track, scene 3 is silence, and from scene 4 the title runs on into the store screen. */
@@ -42,7 +42,7 @@ const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
 function prologueWake(){if(!prologue||prologue.woke)return;prologue.woke=true;if(!game.account.settings.muted&&Sound.locked()){Sound.restart();sound('ui');}}
 /* scene 3: the gag lands as the caption starts to fade in (its 0.6s delay), and the music cuts with it. A hidden tab holds the scene: no auto-advance, no page sound */
 function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},600);}
-function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
+function startPrologue(done){if(!prologueOn()){done();return;}prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
 function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);clearTimeout(prologue.g);
  if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);if(prologue.i===2)proGag();proTimer();return;}
  const done=prologue.done;if(!skip)sound('page');prologue=null;done();}
@@ -89,10 +89,20 @@ const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!
    happens to break. The message itself is the same string the Run stored; only its setting
    changes, and any other system message is still one plain line. */
 const UNLOCK_LABELS=['새 상품 해금','새 점포지원 해금','본사 해금'];
+/* 해금 알림 (User 2026-10-18): an unlock is a card of its own, not a 3.4s toast over whatever is open. It queues while another
+   panel is up (the morning's Boss report) and opens when that closes; the player confirms it. */
+let pendingUnlock=[],unlockNow=null;
+function unlockEntry(name){const r=D.relics.find(x=>x.name===name),i=D.items.find(x=>x.name===name);
+ if(r)return {name,kind:'점포지원 · '+D.rarities[r.rarity],desc:r.description,relic:true};
+ if(i)return {name,kind:'상품',desc:Presentation.rows(i.effects,undefined,i.category).map(r=>r.label+' '+r.text.replace(/<[^>]+>/g,'').trim()).join(' · '),item:true};
+ return {name,kind:'',desc:''};}
+function queueUnlock(label,names){pendingUnlock.push({label,entries:names.map(unlockEntry)});}
+function flushUnlock(){if(!pendingUnlock.length||modal==='unlock')return;clearTimeout(bossHold);bossHold=null;$('#app').inert=false;setModal(null);}
+function unlockBody(u){return '<div class="unlock-card">'+u.entries.map(e=>'<div class="unlock-one"><span class="unlock-kind">'+E(e.kind)+'</span><b class="unlock-name">'+E(e.name)+'</b>'+(e.desc?'<p>'+E(e.desc)+'</p>':'')
+ +(e.relic?'<p class="unlock-where">이제 점포지원 후보로 나올 수 있습니다.</p>':e.item?'<p class="unlock-where">이제 발주 후보로 나올 수 있습니다.</p>':'')+'</div>').join('')+'</div>';}
 function toast(msg){const t=$('#toast'),m=String(msg),label=UNLOCK_LABELS.find(l=>m.startsWith(l+' · '));
- if(label){t.classList.add('unlock');
-  t.innerHTML='<b class="toast-label">'+E(label)+'</b><span class="toast-name">'+E(m.slice(label.length+3))+'</span>';}
- else{t.classList.remove('unlock');t.textContent=m;}
+ if(label){queueUnlock(label,m.slice(label.length+3).split(' · '));return;}
+ t.classList.remove('unlock');t.textContent=m;
  $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,audioPhase(),st);Sound.play(kind);}
 /* the heal accent sits behind the arrival's own cue, the same way `rescue` sits behind an Outcome */
@@ -341,7 +351,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -597,11 +607,15 @@ function showStub(){if(!stub)return;const st=stub;stub=null;
  el.textContent='단골도 ';
  if(st.refused){const value=document.createElement('span');value.className='loyalty-delta';value.textContent=delta;el.appendChild(value);}
  else el.appendChild(document.createTextNode(delta+' · 소지금 '+st.from+' → '+st.to));
- const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
+ const dock=$('.p-sale .dock'),kit=$('.p-sale .kit');
+ if(kit){el.style.top=Math.round(kit.getBoundingClientRect().bottom)+6+'px';el.classList.add('at-top');}
+ else el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
  document.body.appendChild(el);
+ const gone=()=>{el.remove();clearTimeout(stubTimer);};
+ document.addEventListener('pointerdown',gone,{capture:true,once:true});
  /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
  /* while a coach mark is open the line stays - the 50% lesson may be waiting behind the Bag mark - and goes once they close */
- const drop=()=>{if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
+ const drop=()=>{if(!el.isConnected)return;if(activeCoach){stubTimer=setTimeout(drop,400);return;}el.remove();};
  stubTimer=setTimeout(drop,motionOK()?2800+KEY_PRESS.down:2500);}
  // picking a product puts it on the counter tray - the tray contents arrive, the list does not move
 function cueSelect(A){const open=$('.counter-tray .tray-item');if(open)A(open,{opacity:[0,1],translateY:[8,0],duration:190,ease:'outQuad'});}
@@ -796,6 +810,7 @@ function phaseScreen(phase){
 function openOwedModal(s,phase,changed){
  if(bossHold&&(phase!=='morning'||!bossRevealDue())){clearTimeout(bossHold);bossHold=null;$('#app').inert=false;}
  if(phase==='foundation')modal='relics';
+ else if(modal==='unlock'){/* an open 해금 카드 is not replaced by a panel that is merely due; it re-derives when closed */}
  /* UI_UX §BOSS REVEAL — MORNING LANDS FIRST (User 2026-09-26): a reveal due on a fresh MORNING entry waits for the
     shutter to land (BOSS_HOLD), so the dossier never opens in the same frame as the cut. Reduced motion opens it at once.
     The screen takes no input while it waits: the Day may not advance past an owed reveal (CORE_RUN §D0 briefing). */
@@ -1518,7 +1533,7 @@ const coachSteps={
  /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
  /* User 2026-10-04: the first Run end whose settlement carries 점포 자본 across a Decoration's price (settleStoreCapital's `reach`) - the
     one place the 점포 자본 is explained, once: it can buy a Decoration, and how it builds up */
- end:[['capital','.p-end .settlement.reach','점포 자본으로 장식을 들일 수 있다. 점포 자본은 보유 골드와 별개로, 영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다.']],
+ end:[['capital','.p-end .settlement.reach','점포 자본으로 장식을 들일 수 있다. 점포 자본은 보유 골드와 별개로, 영업이 끝날 때 총매출의 3%가 쌓인다.']],
  closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
@@ -1925,17 +1940,17 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
    Item is sorted by is the one it showed when the Day's shelf first appeared, so selling out a batch never moves a row
    mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
    and the next Day sorts afresh. */
-const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
+const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{},seq:{}};
 /* the Hazards of today's open Gates, in Gate order - what an Item is first sorted by (User 2026-10-04); on the SALE shelf the
    current customer's own Gate leads them (User 2026-10-09) */
 const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];
 function shelfOrder(stocks,byHazard=true,npc=null){const s=game.run,key=s.seed+':'+s.day+':'+s.phase,gate=npc&&game.claimedGateFor(npc),
  hz=byHazard?[...new Set([...(gate?gate.hazards:[]),...todayHazards()])]:[];
- if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
- for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
+ if(shelfHeld.key!==key)shelfHeld={key,at:{},seq:{}};const at=shelfHeld.at,seq=shelfHeld.seq;
+ for(const st of stocks)if(!(st.item in at)){at[st.item]=st.expires;seq[st.item]=Object.keys(seq).length;}
  const rank=st=>{const it=D.itemBy[st.item],c=Object.keys(it.effects).map(k=>hz.indexOf(k)).filter(i=>i>=0);
-  return [c.length?Math.min(...c):hz.length,SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity];};
- return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];});}
+  return [c.length?Math.min(...c):hz.length,SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity,seq[st.item]];};
+ return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3]||x[4]-y[4];});}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    /* SALE §MATCHING-EFFECT EMPHASIS — RETIRED (User 2026-09-24, v2.9.0): every effect text keeps the default
@@ -2242,7 +2257,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
     unlocks Meta.finish credited and the D10 / D14 products the Run recorded as they opened. */
  const openedNames=[...(s.unlocked||[]),...(s.dayUnlocked||[])];
  const opened=openedNames.length
-  ?'<div class="opened"><span>본사 해금</span><b>'+E(openedNames.join(' · '))+'</b></div>':'';
+  ?'<div class="opened"><span>본사 해금</span>'+openedNames.map(n=>{const e=unlockEntry(n);return '<b>'+E(n)+'</b>'+(e.kind?'<em>'+E(e.kind)+'</em>':'');}).join('')+'</div>':'';
  /* UI_UX_v2.8 §RUN-END SETTLEMENT FEEDBACK. Read in the order it is computed:
     총매출 -> (도달일 비율) -> 얻은 점포 자본 -> 현재 점포 자본. Ending Gold and the
     remaining stock may appear elsewhere as Run results, but never as inputs to this - they are
@@ -2251,9 +2266,9 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const st=s.settlement;
  const settle=st?'<div class="block settlement'+(st.reach?' reach':'')+'"><h4>점포 자본 정산</h4>'
   +row('총매출',st.sales.toLocaleString()+'<i>G</i>')
-  +row('DAY '+st.day+' 도달 비율','×'+Math.round(st.rate*100)+'%')
+  +row('점포 자본 비율','×'+Math.round(st.rate*100)+'%')
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
-  +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
+  +row('현재 점포 자본',st.capitalAfter.toLocaleString())+capitalMeter(st.capitalAfter)+'</div>':'';
  const nudge=opened?'':replayLine();
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+runBlock(row)+settle+opened
   /* User 2026-09-30: what the Run left behind reads before the link to the codex, and reads as the point */
@@ -2273,6 +2288,16 @@ function runBlock(row){const s=game.run,met=s.npcs.filter(n=>n.introduced),recs=
   +row('돌아오지 못한 사람',s.stats.deaths||0)
   +(top?row('가장 성장한 손님',E(top.name)+' Lv.'+top.level):'')
   +(recs.length?row('원정',recs.length+'건 · 대성공 '+recs.filter(r=>r.outcome==='대성공').length):'')+'</div>';}
+/* UI_UX §END — CAPITAL METER (User 2026-10-18): where 현재 점포 자본 stands against the Slot prices the account has not filled yet.
+   Prices are per Slot, every Slot offers all three kinds, so the tick labels are Slots and never a Decoration or a kind - nothing is
+   recommended. Equal spacing, filled in proportion between ticks. Printed once all four Slots are filled: nothing. */
+function capitalMeter(cap){const filled=new Set(Meta.ownedDecorations(game.account).map(id=>D.decorationBy[id].slot)),
+ ticks=D.decorationSlots.filter(sl=>!filled.has(sl)).map(sl=>({sl,price:D.decorations.find(d=>d.slot===sl).price})).sort((x,y)=>x.price-y.price);
+ if(!ticks.length)return '';
+ let fill=ticks.length;const at=ticks.findIndex(t=>cap<t.price);
+ if(at>=0){const lo=at?ticks[at-1].price:0;fill=at+(cap-lo)/(ticks[at].price-lo);}
+ return '<div class="cap-meter"><div class="cap-bar"><i style="width:'+Math.round(fill/ticks.length*100)+'%"></i></div><ul>'
+  +ticks.map(t=>'<li'+(cap>=t.price?' class="on"':'')+'><em>'+E(SLOT_COPY[t.sl])+'</em><b>'+t.price.toLocaleString()+'</b></li>').join('')+'</ul></div>';}
 function replayLine(){const s=game.run,st=s.settlement;
  if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
@@ -2427,11 +2452,21 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
 const DAY_UNLOCK=Meta.ITEM_UNLOCK_DAY;
 function unlockProgress(entry){const a=game.account;
  if(D.relicRetired.includes(entry.id))return '현재 후보로 나오지 않음';
+ if(D.relics?.includes(entry)&&(entry.rarity===2||entry.rarity===3)){/* RELIC §GRADE reach unlock: 희귀 open one per DAY 5 / 10 / 15 / 20 / 25 reached, 영웅 from the DAY 15 / 25 pool once no 희귀 is locked */
+  if(!isLocked(entry))return D.relicRareStart.includes(entry.id)||D.relicEpicStart.includes(entry.id)?'기본 제공':'해금 완료';
+  if(entry.rarity===2)return 'DAY 5 · 10 · 15 · 20 · 25 도달마다 1종씩 열린다';
+  const day=Object.keys(D.relicEpicPools).find(d=>D.relicEpicPools[d].includes(entry.id));
+  return day?'희귀가 모두 열린 뒤 DAY '+day+' 도달 시 열릴 수 있다':'현재 후보로 나오지 않음';}
+ {/* META §REACH UNLOCK: 상급 / 최상급 포션 open on the first DAY 15 / 25 a Run reaches */
+  const reach=Object.entries(Meta.REACH_UNLOCK||{}).find(([,id])=>id===entry.id)?.[0];
+  if(reach)return a.unlocks?.[entry.id]?'해금 완료':'DAY '+reach+' 도달 시 해금';}
  if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료 · 각 점포 DAY '+DAY_UNLOCK[entry.id]+'부터 발주 후보':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
  if(entry.metaUnlock)return Meta.distinctBossClear(a)>=entry.metaUnlock?'해금 완료'
   :'서로 다른 마왕 토벌 '+Meta.distinctBossClear(a)+'/'+entry.metaUnlock;
   return '기본 제공';}
-const isLocked=e=>DAY_UNLOCK[e.id]?!game.account.unlocks?.[e.id]:!!(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlock);
+/* a padlock drawn in the page, not a glyph: the same mark on every locked 본사 기록 card (상품 / 직업 / 점포지원) */
+const LOCK_MARK='<svg class="lock-mark" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="7" width="10" height="8" fill="currentColor"/><rect x="7" y="10" width="2" height="3" fill="#1c1512"/></svg>';
+const isLocked=e=>D.relics?.includes(e)?(D.relicRetired.includes(e.id)?false:e.rarity===2?!Meta.rareUnlocked(game.account,e.id):e.rarity===3?!Meta.epicUnlocked(game.account,e.id):false):DAY_UNLOCK[e.id]?!game.account.unlocks?.[e.id]:Object.values(Meta.REACH_UNLOCK||{}).includes(e.id)?!game.account.unlocks?.[e.id]:!!(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlock);
 
 /* META §PROGRESSION UI, in the codex the player already has rather than a new screen: the
    grade, the mastery of each Job, the Job x Boss grid those two are derived from, and what
@@ -2527,7 +2562,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    notebook. Presentation owns turning an event into words; anything it cannot describe is
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${isLocked(it)?LOCK_MARK:''}${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 /* UI_UX §CODEX BOSS TAB: the Bosses the Player has met, this Run's Boss first once its identity is shown. Only the Trait is kept -
    the Final Hazards change every Run - and a Boss never met is not listed at all. */
 function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=r.identitySeen?s?.bossId:null;
@@ -2593,6 +2628,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +`</div>`;}
 /* PLATFORM_RELEASE §HAPTICS: one short buzz at a result point, unless the player turned vibration off (default ON) */
 const hapticOn=()=>game.account.settings.haptic!==false;
+const prologueOn=()=>game.account.settings.prologue!==false;
 const haptic=()=>{if(hapticOn()&&!document.hidden)Native.vibrate();};
 /* PLATFORM_RELEASE §credits: what the build owes its sources (licences are shipped beside the files) and the AI-content notice. */
 function credits(){return `<div class="settings-content">
@@ -2607,12 +2643,13 @@ function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
  ${Native.canVibrate()?`<section class="settings-group" aria-labelledby="settings-haptic"><div class="settings-heading"><h3 id="settings-haptic">진동</h3>${btn(hapticOn()?'진동 끄기':'진동 켜기','haptic')}</div><p>${hapticOn()?'중요한 결과가 나올 때 짧게 진동한다.':'진동이 꺼져 있다.'}</p></section>`:''}
  <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
+ <section class="settings-group" aria-labelledby="settings-prologue"><div class="settings-heading"><h3 id="settings-prologue">프롤로그</h3>${btn(prologueOn()?'프롤로그 끄기':'프롤로그 켜기','prologue-toggle')}</div><p>${prologueOn()?'새 점포를 시작할 때마다 프롤로그가 나온다.':'프롤로그가 꺼져 있다. 새 점포를 바로 시작한다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3>${Native.inApp()?`<p>자동저장은 이 기기의 앱에 보관된다.${Native.cloudWorks()?' Play 게임즈에도 자동으로 백업된다.':''}</p>`:`<p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div>`}</section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-links">${btn('크레딧','credits','bare')}<a href="mailto:${SUPPORT_MAIL}">오류 신고</a><a href="${PRIVACY_URL}" target="_blank" rel="noopener">개인정보처리방침</a></p>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다.${Native.inApp()?'':' 소리는 처음에 꺼져 있다.'}</p><p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p></div>`;}
 /* COPY_AUDIT §8 / UI_UX §GLOBAL HELP: five flow lines, then eight sections under collapsed 자세히. */
-function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><p>손님 소지금은 최대 2000G까지 쌓인다. 그보다 많이 벌어도 2000G를 넘지 않는다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 일부가 쌓인다. 영업한 날이 길수록 그 비율이 오른다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><p>손님 소지금은 최대 2000G까지 쌓인다. 그보다 많이 벌어도 2000G를 넘지 않는다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 3%가 쌓인다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -2765,6 +2802,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
   }
  }
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
+ else if(modal==='unlock'&&unlockNow){title=E(unlockNow.label);body=unlockBody(unlockNow);footer=btn('확인','dismiss','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
 else if(modal==='gates'){title='오늘 열린 게이트';body=s.phase==='final'?finalThreat(s.final):'<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
 else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal.slice(8));title='오늘 피로 변화';body=r?fatigueModal(r):'';narrow=true;}
@@ -2855,7 +2893,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
- case'new':prepOpen=true;sound('newstore');startPrologue(render);break;
+ case'new':prepOpen=true;sound('newstore');if(prepSeen)render();else{prepSeen=true;startPrologue(render);}break;
  case'prologue-next':prologueWake();prologueStep(false);break;
  case'prologue-skip':prologueWake();prologueStep(true);break;
  case'prologue-sound':{const st=game.account.settings,was=!st.muted&&!prologue.woke&&Sound.locked();prologueWake();if(!was)st.muted=!st.muted;game.save();sound('ui');const b=$('.pro-sound');if(b){b.innerHTML=proSpeaker(st.muted);b.setAttribute('aria-label',st.muted?'소리 켜기':'소리 끄기');}break;}
@@ -2882,7 +2920,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      seed rather than re-rolling the DAY 0 support they have already seen. */
   const seed=plannedSeed();
   pendingSeed=null;                    // spent: a later new Run plans its own
-  preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);sound('begin');render();break;}
+  prepSeen=false;preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);sound('begin');render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
@@ -2977,6 +3015,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
  case'credits':sound('ui');setModal('credits');break;
+ case'prologue-toggle':game.account.settings.prologue=!prologueOn();game.save();sound('ui');render();if(modal)renderModal();break;
  /* §AUDIO HIERARCHY: Settings is Utility. Unmuting used to answer with the default cue, which
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
@@ -2989,7 +3028,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
   // Preparation rendering returns before modal refresh; keep its mute label current too.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
- case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
+ case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;{const wasUnlock=modal==='unlock';sound('ui');setModal(null);if(wasUnlock&&!modal)render();}break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'final-order-back':if(s.phase!=='final'||s.finalCommitted)break;finalOrdered=false;sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
@@ -3037,6 +3076,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  if(opened.length&&opened!==wasOpen)sound('unlock');
  if(opened.length&&game.run.phase!=='end'){toast('본사 해금 · '+opened.join(' · '));game.run.unlocked=[];}
  if(game.run?.toast){toast(game.run.toast);delete game.run.toast;game.save();}
+ flushUnlock();
  }catch(err){toast(err.message);}
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
