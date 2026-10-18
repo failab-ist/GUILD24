@@ -2232,7 +2232,7 @@ function finalSeal(){const s=game.run;if(!s.finalReport)return '';const b=D.boss
  return '<span class="seal '+(s.win?'won':'lost')+'" aria-hidden="true"><b>'+E(b?.name||'')+'</b></span>';}
 function endBanner(){const s=game.run,a=game.account;
  return '<div class="tape end-tape"><div class="tear top"></div><div class="print">'+finalSeal()
- +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제0게이트 폐쇄':'점포 종료')+' · '+E(s.branch)+'</span></div>'
+ +'<div class="head"><b>GUILD24</b><span>'+(s.win?'마왕 토벌 완료':'점포 종료')+' · '+E(s.branch)+'</span></div>'
  +'<p class="closed">'+E(endHeadline())+'</p>'
  +'<p class="reason">'+E(s.endReason)+'</p>'
  +ledger()+'</div><div class="tear bottom"></div></div>';}
@@ -2381,7 +2381,7 @@ function finalScreen(){
  const body='<div class="gate-zero">'
  +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
       :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
- +'<div class="who"><span class="label">제0게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
+ +'<div class="who"><span class="label">마왕성 토벌</span><h1>'+E(b.name)+'</h1></div></div>'
  +finalThreat(d)+finalMuster(s,need,committed)
  +ownedRelicView();
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
@@ -2394,13 +2394,14 @@ function finalScreen(){
    spent thirty days raising, and the last thing the store handed them, were computed into
    finalReport and never shown. They close the screen now, with the faces the player knows. */
 function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)return '';
- return '<section class="sent-off"><h3>'+(rep.cleared?'제0게이트를 닫고 온 사람들':'마왕성으로 보낸 사람들')+'</h3>'
+ return '<section class="sent-off"><h3>'+(rep.cleared?'마왕을 쓰러뜨리고 온 사람들':'마왕성으로 보낸 사람들')+'</h3>'
  +'<div class="went">'+rep.members.map(m=>{const n=s.npcs.find(x=>x.id===m.npcId);
    const carried=(m.items||[]).map(id=>D.itemBy[id]?.name).filter(Boolean);
-   return '<article class="goer">'+portrait(n,88)
+   return '<button type="button" class="goer" data-action="final-view" data-id="'+E(m.npcId)+'">'+portrait(n,88)
     +'<div><b>'+E(m.name)+'</b><span class="who-line">Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span>'
-    +'<span class="carried">'+(carried.length?'마지막 상품 · '+E(carried.join(' · ')):'빈손으로 갔다')+'</span></div>'
-    +'</article>';}).join('')+'</div></section>';}
+    +'<span class="carried">'+(carried.length?'<span class="last">마지막 상품</span> '+E(carried.join(' · ')):'빈손으로 갔다')+'</span>'
+    +'<span class="see">기록 보기</span></div>'
+    +'</button>';}).join('')+'</div></section>';}
 /* BATCH 3 END: a bankruptcy or death-limit closure is decided at closeDay(), after the last
    NIGHT and CLOSING were already read, yet the ending printed that whole night again under the
    tape - every record, its growth chips, even a speech balloon left over from the day. The
@@ -2828,13 +2829,14 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
   /* read only on D30 before the muster (back to the candidates) and after the party is confirmed (back to the prep) */
   else if(s?.phase==='final'&&!s.finalCommitted)footer=btn('원정대 후보 보기','final-roster','stamp act-brown');
   else if(s?.phase==='final')footer=btn(Copy.finalPrep.back,'dismiss','stamp act-brown');
+  else if(s?.phase==='end')footer=btn('닫기','dismiss','stamp act-brown');
   else footer=btn('수첩으로','roster');}
  else if(modal==='codex'){title='도감';body=codex();if(preRunReturn)footer=btn('새 점포 준비로 돌아가기','store-return','stamp');}
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
  else if(modal==='settings'){title='설정';body=settings();narrow=true;}
  else if(modal==='credits'){title='크레딧';body=credits();narrow=true;}
- else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다.<br>현재 보급 상태를 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
+ else if(modal==='bossConfirm'){title='마왕성 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다.<br>현재 보급 상태를 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
  else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss','stamp')+btn(c.under,'final-commit-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='이 점포를 폐점할까요?';body='<p>이번 점포의 영업을 끝내고 점포 자본을 정산한다.<br>모험가·재고·골드·점포지원은 다음 점포로 이어지지 않는다.<br>본사 기록·보유 점포 자본·보유 장식은 유지된다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점','retire-go','danger');narrow=true;}
  else if(modal==='exitConfirm'){title='게임을 종료할까요?';body='<p>진행 상황은 저장되었습니다.</p>';footer=btn('계속하기','dismiss','stamp')+btn('종료','exit-go','danger');narrow=true;}
