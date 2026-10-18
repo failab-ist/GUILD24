@@ -4306,3 +4306,13 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
  color:#dfcba9;font:400 13px/1.3 var(--ui);text-decoration:underline;text-underline-offset:3px}
 /* the start threw: one plain line in the middle of the screen, clear of the status bar */
 .boot-fail{margin:0;min-height:100vh;box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;padding:calc(var(--sa-top) + 24px) 24px calc(var(--sa-bottom) + 24px);line-height:1.6}
+
+/* END capital meter (UI_UX §END — CAPITAL METER) */
+.cap-meter{margin:10px 0 2px}
+.cap-bar{height:6px;background:#d9ceb4;overflow:hidden}
+.cap-bar i{display:block;height:100%;background:#b0482f}
+.cap-meter ul{display:flex;list-style:none;margin:6px 0 0;padding:0}
+.cap-meter li{flex:1;text-align:center;font:400 12px/1.35 var(--ui);color:#8a7d61}
+.cap-meter li em{display:block;font-style:normal}
+.cap-meter li b{display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.cap-meter li.on{color:#b0482f}

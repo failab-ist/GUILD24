@@ -2253,7 +2253,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('총매출',st.sales.toLocaleString()+'<i>G</i>')
   +row('점포 자본 비율','×'+Math.round(st.rate*100)+'%')
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
-  +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
+  +row('현재 점포 자본',st.capitalAfter.toLocaleString())+capitalMeter(st.capitalAfter)+'</div>':'';
  const nudge=opened?'':replayLine();
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+runBlock(row)+settle+opened
   /* User 2026-09-30: what the Run left behind reads before the link to the codex, and reads as the point */
@@ -2273,6 +2273,16 @@ function runBlock(row){const s=game.run,met=s.npcs.filter(n=>n.introduced),recs=
   +row('돌아오지 못한 사람',s.stats.deaths||0)
   +(top?row('가장 성장한 손님',E(top.name)+' Lv.'+top.level):'')
   +(recs.length?row('원정',recs.length+'건 · 대성공 '+recs.filter(r=>r.outcome==='대성공').length):'')+'</div>';}
+/* UI_UX §END — CAPITAL METER (User 2026-10-18): where 현재 점포 자본 stands against the Slot prices the account has not filled yet.
+   Prices are per Slot, every Slot offers all three kinds, so the tick labels are Slots and never a Decoration or a kind - nothing is
+   recommended. Equal spacing, filled in proportion between ticks. Printed once all four Slots are filled: nothing. */
+function capitalMeter(cap){const filled=new Set(Meta.ownedDecorations(game.account).map(id=>D.decorationBy[id].slot)),
+ ticks=D.decorationSlots.filter(sl=>!filled.has(sl)).map(sl=>({sl,price:D.decorations.find(d=>d.slot===sl).price})).sort((x,y)=>x.price-y.price);
+ if(!ticks.length)return '';
+ let fill=ticks.length;const at=ticks.findIndex(t=>cap<t.price);
+ if(at>=0){const lo=at?ticks[at-1].price:0;fill=at+(cap-lo)/(ticks[at].price-lo);}
+ return '<div class="cap-meter"><div class="cap-bar"><i style="width:'+Math.round(fill/ticks.length*100)+'%"></i></div><ul>'
+  +ticks.map(t=>'<li'+(cap>=t.price?' class="on"':'')+'><em>'+E(SLOT_COPY[t.sl])+'</em><b>'+t.price.toLocaleString()+'</b></li>').join('')+'</ul></div>';}
 function replayLine(){const s=game.run,st=s.settlement;
  if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
