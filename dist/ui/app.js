@@ -2427,11 +2427,16 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
 const DAY_UNLOCK=Meta.ITEM_UNLOCK_DAY;
 function unlockProgress(entry){const a=game.account;
  if(D.relicRetired.includes(entry.id))return '현재 후보로 나오지 않음';
+ if(D.relics?.includes(entry)&&(entry.rarity===2||entry.rarity===3)){/* RELIC §GRADE reach unlock: 희귀 open one per DAY 5 / 10 / 15 / 20 / 25 reached, 영웅 from the DAY 15 / 25 pool once no 희귀 is locked */
+  if(!isLocked(entry))return D.relicRareStart.includes(entry.id)||D.relicEpicStart.includes(entry.id)?'기본 제공':'해금 완료';
+  if(entry.rarity===2)return 'DAY 5 · 10 · 15 · 20 · 25 도달마다 1종씩 열린다';
+  const day=Object.keys(D.relicEpicPools).find(d=>D.relicEpicPools[d].includes(entry.id));
+  return day?'희귀가 모두 열린 뒤 DAY '+day+' 도달 시 열릴 수 있다':'현재 후보로 나오지 않음';}
  if(DAY_UNLOCK[entry.id])return a.unlocks?.[entry.id]?'해금 완료 · 각 점포 DAY '+DAY_UNLOCK[entry.id]+'부터 발주 후보':'DAY '+DAY_UNLOCK[entry.id]+' 도달 시 해금';
  if(entry.metaUnlock)return Meta.distinctBossClear(a)>=entry.metaUnlock?'해금 완료'
   :'서로 다른 마왕 토벌 '+Meta.distinctBossClear(a)+'/'+entry.metaUnlock;
   return '기본 제공';}
-const isLocked=e=>DAY_UNLOCK[e.id]?!game.account.unlocks?.[e.id]:!!(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlock);
+const isLocked=e=>D.relics?.includes(e)?(D.relicRetired.includes(e.id)?false:e.rarity===2?!Meta.rareUnlocked(game.account,e.id):e.rarity===3?!Meta.epicUnlocked(game.account,e.id):false):DAY_UNLOCK[e.id]?!game.account.unlocks?.[e.id]:!!(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlock);
 
 /* META §PROGRESSION UI, in the codex the player already has rather than a new screen: the
    grade, the mastery of each Job, the Job x Boss grid those two are derived from, and what
