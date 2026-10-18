@@ -89,10 +89,26 @@ const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!
    happens to break. The message itself is the same string the Run stored; only its setting
    changes, and any other system message is still one plain line. */
 const UNLOCK_LABELS=['새 상품 해금','새 점포지원 해금','본사 해금'];
+/* 해금 알림 (User 2026-10-18): an unlock is a card of its own, not a 3.4s toast over whatever is open. It queues while another
+   panel is up (the morning's Boss report) and opens when that closes; the player confirms it. */
+let pendingUnlock=[],unlockNow=null;
+const UNLOCK_STYLE=()=>window.__unlockStyle||'card';
+function unlockEntry(name){const r=D.relics.find(x=>x.name===name),i=D.items.find(x=>x.name===name);
+ if(r)return {name,kind:'점포지원 · '+D.rarities[r.rarity],desc:r.description,relic:true};
+ if(i)return {name,kind:'상품',desc:i.description||''};
+ return {name,kind:'',desc:''};}
+function queueUnlock(label,names){const u={label,entries:names.map(unlockEntry)};
+ if(UNLOCK_STYLE()==='ribbon'){showRibbon(u);return;}
+ pendingUnlock.push(u);}
+function showRibbon(u){let r=$('#unlock-ribbon');if(!r){r=document.createElement('button');r.id='unlock-ribbon';r.type='button';r.setAttribute('data-action','ribbon-ok');document.body.appendChild(r);}
+ r.innerHTML='<span class="unlock-kind">'+E(u.label)+'</span><b class="unlock-name">'+E(u.entries.map(e=>e.name).join(' · '))+'</b>'+(u.entries[0]?.desc?'<span class="unlock-desc">'+E(u.entries[0].desc)+'</span>':'')+'<i>탭하여 닫기</i>';
+ r.classList.add('show');sound('unlock');if(u.entries.some(e=>e.relic)&&game.run)game.run.relicNew=true;}
+function flushUnlock(){if(!pendingUnlock.length||modal==='unlock')return;clearTimeout(bossHold);bossHold=null;$('#app').inert=false;setModal(null);}
+function unlockBody(u){return '<div class="unlock-card">'+u.entries.map(e=>'<div class="unlock-one"><span class="unlock-kind">'+E(e.kind)+'</span><b class="unlock-name">'+E(e.name)+'</b>'+(e.desc?'<p>'+E(e.desc)+'</p>':'')+'</div>').join('')
+ +(u.entries.some(e=>e.relic)?'<p class="unlock-where">이제 점포지원 후보로 나올 수 있습니다.</p>':'')+'</div>';}
 function toast(msg){const t=$('#toast'),m=String(msg),label=UNLOCK_LABELS.find(l=>m.startsWith(l+' · '));
- if(label){t.classList.add('unlock');
-  t.innerHTML='<b class="toast-label">'+E(label)+'</b><span class="toast-name">'+E(m.slice(label.length+3))+'</span>';}
- else{t.classList.remove('unlock');t.textContent=m;}
+ if(label){queueUnlock(label,m.slice(label.length+3).split(' · '));return;}
+ t.classList.remove('unlock');t.textContent=m;
  $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,audioPhase(),st);Sound.play(kind);}
 /* the heal accent sits behind the arrival's own cue, the same way `rescue` sits behind an Outcome */
@@ -341,7 +357,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -796,6 +812,7 @@ function phaseScreen(phase){
 function openOwedModal(s,phase,changed){
  if(bossHold&&(phase!=='morning'||!bossRevealDue())){clearTimeout(bossHold);bossHold=null;$('#app').inert=false;}
  if(phase==='foundation')modal='relics';
+ else if(modal==='unlock'){/* an open 해금 카드 is not replaced by a panel that is merely due; it re-derives when closed */}
  /* UI_UX §BOSS REVEAL — MORNING LANDS FIRST (User 2026-09-26): a reveal due on a fresh MORNING entry waits for the
     shutter to land (BOSS_HOLD), so the dossier never opens in the same frame as the cut. Reduced motion opens it at once.
     The screen takes no input while it waits: the Day may not advance past an owed reveal (CORE_RUN §D0 briefing). */
@@ -960,7 +977,7 @@ function eventSlip(e){
    register and nothing else and the standing list lives in the store menu instead - the same
    modal, reached from where every other standing reference is reached. */
 function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())return '';
- return '<button class="brass" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
+ return '<button class="brass" data-action="relics">'+(game.run.relicNew?'<i class="new-tag">NEW</i>':'')+'점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
 function readout(n,extra=null,cls=''){
  const d=game.claimedGateFor(n);
@@ -2242,7 +2259,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
     unlocks Meta.finish credited and the D10 / D14 products the Run recorded as they opened. */
  const openedNames=[...(s.unlocked||[]),...(s.dayUnlocked||[])];
  const opened=openedNames.length
-  ?'<div class="opened"><span>본사 해금</span><b>'+E(openedNames.join(' · '))+'</b></div>':'';
+  ?'<div class="opened"><span>본사 해금</span>'+openedNames.map(n=>{const e=unlockEntry(n);return '<b>'+E(n)+'</b>'+(e.kind?'<em>'+E(e.kind)+'</em>':'');}).join('')+'</div>':'';
  /* UI_UX_v2.8 §RUN-END SETTLEMENT FEEDBACK. Read in the order it is computed:
     총매출 -> (도달일 비율) -> 얻은 점포 자본 -> 현재 점포 자본. Ending Gold and the
     remaining stock may appear elsewhere as Run results, but never as inputs to this - they are
@@ -2785,6 +2802,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
   }
  }
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
+ else if(modal==='unlock'&&unlockNow){title=E(unlockNow.label);body=unlockBody(unlockNow);footer=btn('확인','dismiss','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
 else if(modal==='gates'){title='오늘 열린 게이트';body=s.phase==='final'?finalThreat(s.final):'<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
 else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal.slice(8));title='오늘 피로 변화';body=r?fatigueModal(r):'';narrow=true;}
@@ -2936,7 +2954,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
  case'fatigue':sound('ui');setModal('fatigue:'+id);break;
- case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;
+ case'ribbon-ok':$('#unlock-ribbon')?.classList.remove('show');break;
+ case'relics':if(s)s.relicNew=false;sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;
  case'loadout':sound('ui');setModal('loadout');break;
  case'abandon':sound('ui');setModal('abandonConfirm');break;
  /* CORE_RUN §CURRENT RUN ABANDON: no settlement, no new Run - the no-Run pre-Run screen follows. */
@@ -3009,7 +3028,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();
   // Preparation rendering returns before modal refresh; keep its mute label current too.
   if(!s||(s.phase==='end'&&prepOpen))renderModal();break;
- case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
+ case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;{const wasUnlock=modal==='unlock';sound('ui');setModal(null);if(wasUnlock&&!modal)render();}break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'final-order-back':if(s.phase!=='final'||s.finalCommitted)break;finalOrdered=false;sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
@@ -3057,6 +3076,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  if(opened.length&&opened!==wasOpen)sound('unlock');
  if(opened.length&&game.run.phase!=='end'){toast('본사 해금 · '+opened.join(' · '));game.run.unlocked=[];}
  if(game.run?.toast){toast(game.run.toast);delete game.run.toast;game.save();}
+ flushUnlock();
  }catch(err){toast(err.message);}
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
