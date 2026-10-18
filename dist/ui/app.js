@@ -25,7 +25,7 @@ const plannedBranch=()=>new RNG(plannedSeed()).pick(D.brand.branches);
 let preRunReturn=false;
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): the ending's `다음 점포 열기` shows the preparation scene over a Run
    that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
-let prepOpen=false;
+let prepOpen=false,prepSeen=false; // prepSeen: this ending already played the prologue, so 결과 다시 보기 -> 다음 점포 does not replay it
 /* UI_UX §PROLOGUE (User 2026-10-04): five scenes before every new store - at start-up with no Run (in place of the
    loading screen; the art keeps loading behind it) and after `다음 점포 열기`. A tap goes on (every scene says so), 건너뛰기 ends it.
    Scenes 1~2 play the Boss track, scene 3 is silence, and from scene 4 the title runs on into the store screen. */
@@ -42,7 +42,7 @@ const proArt=n=>PRO_ART+'scene'+n+'-'+(proWide()?'wide':'phone')+'.webp';
 function prologueWake(){if(!prologue||prologue.woke)return;prologue.woke=true;if(!game.account.settings.muted&&Sound.locked()){Sound.restart();sound('ui');}}
 /* scene 3: the gag lands as the caption starts to fade in (its 0.6s delay), and the music cuts with it. A hidden tab holds the scene: no auto-advance, no page sound */
 function proGag(){clearTimeout(prologue.g);prologue.cut=false;prologue.g=setTimeout(()=>{if(prologue&&prologue.i===2){prologue.cut=true;sound('gag');}},600);}
-function startPrologue(done){prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
+function startPrologue(done){if(!prologueOn()){done();return;}prologue={i:0,done};if(modal)setModal(null);[1,2,4].forEach(n=>warm(proArt(n)));Sound.prime('boss');render();sound(PRO_CUE[0]);proTimer();}
 function prologueStep(skip){if(!prologue)return;clearTimeout(prologue.t);clearTimeout(prologue.g);
  if(!skip&&prologue.i<Copy.prologue.scenes.length-1){prologue.i++;const cue=PRO_CUE[prologue.i];render();if(cue)sound(cue);if(prologue.i===2)proGag();proTimer();return;}
  const done=prologue.done;if(!skip)sound('page');prologue=null;done();}
@@ -2613,6 +2613,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +`</div>`;}
 /* PLATFORM_RELEASE §HAPTICS: one short buzz at a result point, unless the player turned vibration off (default ON) */
 const hapticOn=()=>game.account.settings.haptic!==false;
+const prologueOn=()=>game.account.settings.prologue!==false;
 const haptic=()=>{if(hapticOn()&&!document.hidden)Native.vibrate();};
 /* PLATFORM_RELEASE §credits: what the build owes its sources (licences are shipped beside the files) and the AI-content notice. */
 function credits(){return `<div class="settings-content">
@@ -2627,6 +2628,7 @@ function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
  ${Native.canVibrate()?`<section class="settings-group" aria-labelledby="settings-haptic"><div class="settings-heading"><h3 id="settings-haptic">진동</h3>${btn(hapticOn()?'진동 끄기':'진동 켜기','haptic')}</div><p>${hapticOn()?'중요한 결과가 나올 때 짧게 진동한다.':'진동이 꺼져 있다.'}</p></section>`:''}
  <section class="settings-group" aria-labelledby="settings-coach"><div class="settings-heading"><h3 id="settings-coach">안내</h3>${btn(coachOff()?'도움말 다시 보기':'도움말 끄기','coach-toggle')}</div><p>${coachOff()?'안내가 꺼져 있다. 말풍선과 한 줄 안내가 나오지 않는다.':'필요한 때 말풍선과 한 줄 안내가 나온다.'}</p></section>
+ <section class="settings-group" aria-labelledby="settings-prologue"><div class="settings-heading"><h3 id="settings-prologue">프롤로그</h3>${btn(prologueOn()?'프롤로그 끄기':'프롤로그 켜기','prologue-toggle')}</div><p>${prologueOn()?'새 점포를 시작할 때마다 프롤로그가 나온다.':'프롤로그가 꺼져 있다. 새 점포를 바로 시작한다.'}</p></section>
  <section class="settings-group" aria-labelledby="settings-save"><h3 id="settings-save">저장</h3>${Native.inApp()?`<p>자동저장은 이 기기의 앱에 보관된다.${Native.cloudWorks()?' Play 게임즈에도 자동으로 백업된다.':''}</p>`:`<p>자동저장은 현재 브라우저에 보관된다. 다른 기기로 옮길 때는 저장 파일을 내보낸다.</p><div class="settings-save-actions">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div>`}</section>
  <section class="settings-group settings-reset" aria-labelledby="settings-reset"><h3 id="settings-reset">데이터 초기화</h3>${btn('전체 데이터 초기화','reset','danger')}</section>
  <p class="settings-links">${btn('크레딧','credits','bare')}<a href="mailto:${SUPPORT_MAIL}">오류 신고</a><a href="${PRIVACY_URL}" target="_blank" rel="noopener">개인정보처리방침</a></p>
@@ -2875,7 +2877,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
- case'new':prepOpen=true;sound('newstore');startPrologue(render);break;
+ case'new':prepOpen=true;sound('newstore');if(prepSeen)render();else{prepSeen=true;startPrologue(render);}break;
  case'prologue-next':prologueWake();prologueStep(false);break;
  case'prologue-skip':prologueWake();prologueStep(true);break;
  case'prologue-sound':{const st=game.account.settings,was=!st.muted&&!prologue.woke&&Sound.locked();prologueWake();if(!was)st.muted=!st.muted;game.save();sound('ui');const b=$('.pro-sound');if(b){b.innerHTML=proSpeaker(st.muted);b.setAttribute('aria-label',st.muted?'소리 켜기':'소리 끄기');}break;}
@@ -2902,7 +2904,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      seed rather than re-rolling the DAY 0 support they have already seen. */
   const seed=plannedSeed();
   pendingSeed=null;                    // spent: a later new Run plans its own
-  preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);sound('begin');render();break;}
+  prepSeen=false;preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);sound('begin');render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
@@ -2997,6 +2999,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
  case'credits':sound('ui');setModal('credits');break;
+ case'prologue-toggle':game.account.settings.prologue=!prologueOn();game.save();sound('ui');render();if(modal)renderModal();break;
  /* §AUDIO HIERARCHY: Settings is Utility. Unmuting used to answer with the default cue, which
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
     quiet utility click confirms the switch instead; muting stays silent on its own, because
