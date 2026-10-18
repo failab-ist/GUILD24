@@ -437,8 +437,8 @@ reorder; fixed per-category order (`ITEM_v2.8.0.md` §PRESENTATION ORDER) for ev
 
 ### SALE — TRANSACTION RESULT STUB
 
-Each successful sale stamps a paper receipt stub (`.receipt-stub`) over the counter band for about 2.5 seconds:
-`단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). No reserved height, never blocks input, replaced by the next stub; under
+Each successful sale stamps a paper receipt stub (`.receipt-stub`) just under the customer's status panel (`.kit`, 상태 · 소지금 · 가방; User 2026-10-18) for about 2.5 seconds, and any tap or click dismisses it at once (the press still reaches what it hit):
+`단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). No reserved height, never blocks input (it does not cover the shelf), replaced by the next stub; under
 `prefers-reduced-motion` no motion. A refusal shows the customer's reply line (engine reason pool); when Loyalty actually
 decreases, the same stub location shows only `단골도 {−N}`, the existing receipt style, with only the negative number in muted red, for about 2.5 seconds, without new motion.
 
@@ -456,7 +456,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - tapping a shelf row puts its Item on the tray; the row is only highlighted; rows never change height
 - §SALE — SHELF ORDER (User 2026-10-04, 10-09): an Item that answers a Hazard of today's open Gates leads, the current customer's own Gate's Hazards first and then the other open Gates' in Gate order (any kind —
   a Food or Drink with a Hazard line counts); the rest follow by kind — 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 — then days to discard (nearest first), then higher
-  Rarity, ties as before; only that Hazard lead follows the customer (the warehouse keeps today's Gate order); sorted on the discard day shown when the Day's shelf first appeared,
+  Rarity, ties in the order first seen that Day; only that Hazard lead follows the customer (the warehouse keeps today's Gate order); sorted on the discard day shown when the Day's shelf first appeared,
   so no sale moves a row within the Day (next Day sorts afresh)
 - shelf life in each row's price column (on a phone on one line with the stock, `재고 N · 폐기까지 N일`; the phone tray header does not repeat stock or shelf life, User 2026-10-03): `폐기까지 N일`, then `내일까지` / `오늘까지` (tray and 재고 정리 list alike), in the
   warehouse `.soon` color on the last day; every Item expires (no `유통기한 없음` state anywhere)

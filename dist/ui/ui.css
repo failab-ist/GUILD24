@@ -1348,6 +1348,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .receipt-stub.refused .loyalty-delta{color:#8e493e}
 /* on the desk SALE (User 2026-09-30) the stub lands on the counter in the middle area, where the tray was pressed */
 @media(min-width:1024px){.receipt-stub{left:calc(50% - 110px)}}
+.receipt-stub.at-top{transform-origin:left top}
+@media(min-width:1024px){.receipt-stub.at-top{left:calc(50% - 110px)}}
 .tray-empty{margin:0;min-height:44px;display:flex;align-items:center;font:400 14px/1.3 var(--ui);color:#a2947c}
 .tray-item{display:flex;align-items:center;gap:10px}
 .tray-icon{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;

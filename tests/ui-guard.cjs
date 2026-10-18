@@ -3109,8 +3109,8 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
  assert.ok(fn('shelf').includes('+shelfOrder(stocks,!isFinal,isFinal?null:n).map(st=>{'),'the shelf reads its order from shelfOrder (today\'s Hazard order off in the Final)');
  assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');
- assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at))at[st.item]=st.expires;'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
- assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3];')&&fn('shelfOrder').includes('-it.rarity'),'today\'s Hazard, then kind, then nearest discard, then higher Rarity; ties stay stable');
+ assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at)){at[st.item]=st.expires;seq[st.item]=Object.keys(seq).length;}'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
+ assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2]||x[3]-y[3]||x[4]-y[4];')&&fn('shelfOrder').includes('-it.rarity'),'today\'s Hazard, then kind, then nearest discard, then higher Rarity; ties keep the order first seen that Day');
  // UI_UX §SALE — SHELF ORDER (User 2026-10-04): an Item answering a Hazard of today's open Gates leads, in Gate order; the warehouse reads the same order
  assert.ok(fn('shelfOrder').includes('hz.indexOf(k)')&&fn('shelfOrder').includes('c.length?Math.min(...c):hz.length')&&app.includes('const todayHazards=()=>[...new Set(game.run.dungeons.flatMap(d=>d.hazards))];'),'an Item that counters a Hazard of today\'s open Gates sorts first, by that Hazard\'s Gate order');
  assert.ok(fn('stockSlots').includes('shelfOrder(groupStock())'),'the warehouse reads the shelf\'s order');
