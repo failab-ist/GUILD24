@@ -3433,7 +3433,7 @@ test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, d
  assert.ok(/const fromEnd=!!game\.run;/.test(p),'from the ending means a Run is still there');
  const act=app.slice(app.indexOf('async function action(el)'));
  /* UI_UX §PROLOGUE (User 2026-10-04): the store comes after the prologue, which renders it when it ends */
- assert.ok(/case'new':prepOpen=true;sound\('newstore'\);startPrologue\(render\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\);if\(prepSeen\)render\(\);else\{prepSeen=true;startPrologue\(render\);\}break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
  const back=act.slice(act.indexOf("case'new'"),act.indexOf("case'prep-back'")+60);
  assert.ok(!/game\.(start|end|abandon)|Meta\./.test(back),'and neither changes the Run or the Account');
 });
@@ -3961,7 +3961,7 @@ test('ending: the music before holds until the result lands, then the ending cue
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
  const ctx={game:{account:{settings:{},tutorial:{skipped:false}}},coachOff:()=>ctx.game.account.tutorial.skipped,
-  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,SUPPORT_MAIL:'x@y.z',PRIVACY_URL:'https://x.y/p'};
+  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,prologueOn:()=>true,SUPPORT_MAIL:'x@y.z',PRIVACY_URL:'https://x.y/p'};
  assert.ok(render([set],'settings()',ctx).includes('필요한 때 말풍선과 한 줄 안내가 나온다.'),'ON copy does not impose a Day limit');
  ctx.game.account.tutorial.skipped=true;
  const off=render([set],'settings()',ctx);
@@ -3971,6 +3971,14 @@ test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코�
  assert.ok(/const coachOff=\(\)=>game\.account\.tutorial\?\.skipped===true;/.test(app),'off is the existing tutorial.skipped, no new Save field');
  const sw=fn('coachSwitch');
  assert.ok(/t\.skipped=false;for\(const k of Object\.keys\(t\)\)if\(k\.startsWith\('coach-'\)\)delete t\[k\]/.test(sw),'turning it on clears every coach-* mark');
+});
+test('설정 > 프롤로그: 끄면 새 점포가 프롤로그 없이 바로 시작한다 (기본 켜짐)',()=>{
+ assert.ok(/const prologueOn=\(\)=>game\.account\.settings\.prologue!==false;/.test(app),'default ON, off is settings.prologue===false');
+ assert.ok(/function startPrologue\(done\)\{if\(!prologueOn\(\)\)\{done\(\);return;\}/.test(app),'one gate for the new-store and the start-up prologue');
+ const set=fn('settings');
+ assert.ok(set.includes("btn(prologueOn()?'프롤로그 끄기':'프롤로그 켜기','prologue-toggle')"),'the switch reads 프롤로그 끄기 / 프롤로그 켜기');
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\);if\(prepSeen\)render\(\);else\{prepSeen=true;startPrologue\(render\);\}/.test(app),'결과 다시 보기 뒤 다음 점포는 프롤로그를 다시 틀지 않는다');
+ assert.ok(/prepSeen=false;preRunReturn=false;prepOpen=false;game\.start\(seed\)/.test(app),'a new Run re-arms it for the next ending');
 });
 test('UI_UX §TUTORIAL: spotlight clips nested scrollports and the sticky board rail',()=>{
  const rect=(left,top,right,bottom)=>({left,top,right,bottom});
