@@ -306,7 +306,7 @@ function playRun(g,out,ctx){
      who could pay 정가 still gets the better 50% pair (User 2026-10-15: "돈 여유 있으면 반값을 더 낸다"; the User's cleared Run
      discounted 233G a Day from DAY 15, the bot 62G) */
   const curve=s.day<=15?1000:s.day<=20?1000+200*(s.day-15):Math.min(2500,2000+100*(s.day-20));
-  const V=weight(n),gw=s.money<2*g.expectedOperatingCost()?1/8:s.money>curve?1/30:1/15,purse=n.money+(n.eventBudget||0);
+  const V=weight(n),gw=(s.money<2*g.expectedOperatingCost()?1/8:s.money>curve?1/30:1/15)*(GN.goldScale??1),purse=n.money+(n.eventBudget||0);
   const later=s.queue.slice(s.cursor+1).map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.id!==n.id&&weight(m)>V+.1);
   const reserve=it=>{if(!later.length)return 0;
    const want=later.filter(m=>['potion','insurance'].includes(it.category)||G.Relics.directCounter(it,(g.claimedGateFor(m)||s.dungeons[0]).hazards));
@@ -315,12 +315,13 @@ function playRun(g,out,ctx){
      was selling 4~9 Items that Day (User 2026-10-15: a better find goes to the Final, the one it replaces to today's Gate) */
   const rescue=(n.injury||0)>0||forecast(n,[],d).ok<.5;
   let attempts=0;
-  while(n.pack.length<G.Adventurer.slots(n)&&attempts++<12){
+  while(n.pack.length<Math.min(G.Adventurer.slots(n),GN.slots??99)&&attempts++<12){
    const base=utility(forecast(n,n.pack,d),V),overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),seen=new Set(),singles=[];
    for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);
     const it=D.itemBy[st.item];if(held(it)&&!rescue)continue;const cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
     const gain=utility(forecast(n,[...n.pack,it.id],d),V)-base,waste=st.expires!=null&&st.expires<=s.day?cost*gw:0,hold=reserve(it);
-    const modes=[...(V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3?['overcharge']:[]),'full','half'];
+    const OC=GN.overcharge,ocOk=OC?V<=(OC.maxV??INV.V.rest)&&!overToday&&(OC.needed||!needed)&&(OC.cats==='all'||['food','drink'].concat(OC.cats==='foodgear'?['gear']:[]).includes(it.category))&&n.money>=it.sell*(OC.wallet??3):V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3;
+    const modes=[...(ocOk?['overcharge']:[]),'full','half'];
     for(const mode of modes){if(n.refused.includes(it.id+':'+mode))continue;const intent=g.interest(n,it,mode);if(intent.debit>purse)continue;
      const raw=gain+(intent.price-cost)*gw+waste+D.pricing[mode].loyalty*V*.2-hold;
      singles.push({st,it,mode,gain,chance:intent.chance,raw,value:intent.chance*raw,debit:intent.debit});}}
@@ -586,7 +587,7 @@ function playRun(g,out,ctx){
         하급 포션 in 19% of D1~14 Bags, this bot 6% when only a core visitor at or under the Gate got one) */
      {const r=G.Dungeon.preparedPower(bare)/(dd.power||1);if(r>=.8&&r<1.12)claim(it=>it.category==='potion',it=>it.effects.combat||0);}}}
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
-   else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
+   else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&(GN.skuCap==null||s.inventory.filter(x=>x.item===o.item).length+Object.entries(s.cart||{}).reduce((q,[j,c])=>q+(s.offers[j].item===o.item?c:0),0)<GN.skuCap)&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
        warehouse ceiling - and setQuantity throws for it. Counting only the pre-check reported a
        flat zero while the ceiling was really binding, so the throw is counted here too. */
@@ -876,7 +877,7 @@ function masterySpawnPatch(){
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false,relicPriority=null}={}){
+function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false,relicPriority=null,genome=null}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
  for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
@@ -893,7 +894,7 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
     loadout:{...G.Meta.storeLoadout(account)}};
    const g=new G.Game(account);g.autosave=false;
    g.lessons=false;g.start(prefix+'-'+t+'-'+i);
-   playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware,relicPriority});
+   playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware,relicPriority,genome});
    /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
       carries its own once-only guard, so a Run playRun already ended is not settled twice. */
    g.end(!!g.run.win,g.run.endReason||'측정 종료');
