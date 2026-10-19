@@ -155,20 +155,21 @@ effects               : cumulative - level N applies every effect of levels 1..N
 
 | level | name | effect |
 |---:|---|---|
-| 1 | 마왕성 경계 강화 | 적 전체 +2% (Gate requirement and Boss power) |
+| 1 | 마왕성 경계 강화 | 적 전체 +1% (Gate requirement and Boss power) |
 | 2 | 본사 감사 | 운영비 +10% |
 | 3 | 물류 파업 | ORDER offers 2 fewer (6 -> 4, never under 3) |
 | 4 | 원정 지원금 삭감 | Wallet income customers gain -5% |
-| 5 | 마왕의 이름값 | 적 전체 +2% |
+| 5 | 마왕의 이름값 | 적 전체 +1% |
 | 6 | 본사 예산 동결 | Store Support candidates 1 fewer (3 -> 2) |
 | 7 | 발주 수수료 인상 | ORDER Reroll base +50G (50 -> 100, then doubling) |
 | 8 | 창고 침수 | warehouse 3 slots fewer (18 -> 15) |
-| 9 | 마왕성 비상령 | 적 전체 +2% |
+| 9 | 마왕성 비상령 | 적 전체 +1% |
 | 10 | 마왕의 비기 | Boss power +5% (on top of 적 전체), Final Hazard Threat +2 (28 -> 30) |
 
 - The numbers live only in `D.ascension` (`dist/data/catalog.js`); engine code reads them through `D.ascent(level)`, which sums the
   levels. Boss power is multiplied once at the end of `effectiveBossPower`, Gate power once where a Gate is made.
-- The levels are a first frame; their difficulty is measured and tuned afterwards (no measured claim yet).
+- The levels are a first frame. Measured on the investor bot after the first clear (traj 100 x 20, `reports/v2100-measure/ascension-20261019/`):
+  적 전체 +2% per step cut DAY 30 reach 48 -> 35% at 승천 1 and 9 -> 2% by 승천 9, so the three steps are +1% each (User 2026-10-19: A).
 - Wallet income = the Wallet a customer gains on each visit and while away (`visitIncome` / `awayWallet`).
 - UI: NEW STORE screen - the name plate becomes `◀ 승천 N ▶` (store name shown on 승천 0 only), the board carries the level and this
   level's own effect (UI_UX §NEW STORE PREPARATION); one coach mark, once per account, when the picker first shows.

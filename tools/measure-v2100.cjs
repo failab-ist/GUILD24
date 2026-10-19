@@ -6,7 +6,7 @@
 // against the rest, cash per Day and the Capital gain; a third line the preparation lines (with / without an Item, the share of
 // Item expeditions whose result an Item changed, the top four's share of the Items sold); a fourth line that share by early /
 // mid / late Days, for all Item expeditions and for those with a chance (bare-handed power / Gate requirement 0.8 or more). The JSON (--out) also keeps accidents, visit Wallets and every Support's runs.
-//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,investor] [--decos none,economy,survival,operation] [--out file.json]
+//   node tools/measure-v2100.cjs [--before <root>] [--traj 200] [--fresh 1000] [--runs 10] [--workers N] [--policies reader,investor] [--decos none,economy,survival,operation] [--ascension 0,1,3,5,7,10] [--out file.json]
 // Each Run row also carries its Store Capital settlement (sales, rate, gain).
 // --before points at a checkout of the pre-change source (with this harness's relicPriority option); omit it to measure HEAD only.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
@@ -64,11 +64,15 @@ function jobMetrics(s,initial,jobBy,preparedPower,gapPenalty=2){
 }
 
 const BAL_DAYS=[5,10,15,20,25];
-function worker({root,kind,policy,deco,T,R,part}){
+function worker({root,kind,policy,deco,T,R,part,asc=null}){
  for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
   require(path.join(root,'dist',f+'.js'));
  const G=globalThis.GUILD24||globalThis,P=G.Game.prototype,end=P.end,open=P.open,seen=new WeakSet(),initial=new WeakMap(),rows=[];let k=0;const wallets={};
  useFirstRunLessons(P);
+ // 승천 측정 (User 2026-10-19): 첫 클리어로 계정이 열린 뒤부터 모든 단계를 열고 asc 단계로 시작한다. 클리어 전 런은 승천 0 그대로라
+ // 같은 시드의 단계끼리 첫 클리어까지 똑같이 짝지어진다. post = 그 런이 열린 계정으로 시작했는가.
+ const postRuns=new WeakSet();
+ if(asc!==null){const start=P.start;P.start=function(){const a=this.account.ascension;if(a&&a.max>=1){a.max=10;a.pick=asc;}const r=start.apply(this,arguments);if(a&&a.max>=1)postRuns.add(this.run);return r;};}
  // 가망 있는 원정 판정용: 출발 때 맨손 힘 / 게이트 요구를 원정 기록에 붙인다(측정 중에만, 게임 규칙은 그대로).
  {const Dg=G.Dungeon,resolve=Dg.resolve;Dg.resolve=function(n,d,r,fac){let bare=null;
   if(d.family!=='final'&&!d.deep){const pk=n.pack;n.pack=[];bare=Dg.preparedPower(Dg.prepare(n,d,fac).effects)/d.power;n.pack=pk;}
@@ -87,7 +91,7 @@ function worker({root,kind,policy,deco,T,R,part}){
   const late=recs.filter(x=>x.day>=20);
   rows.push({seed:s.seed,idx:k++%R,firstRun:!!s.firstRun,bands:BANDS.map(band),all:band([1,29]),...jobMetrics(s,initial,G.DATA.jobBy,G.Dungeon.preparedPower,G.DATA.balance.finalGapPenalty??2.5),
    out:['대성공','성공','퇴각','부상','중상','사망'].map(o=>recs.filter(x=>x.outcome===o).length),env:recs.filter(x=>x.environmentHurt).length,
-   day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
+   post:postRuns.has(s)?1:0,asc:s.ascension||0,day:s.day,reach:s.day>=30?1:0,win:s.win?1:0,boss:s.bossId||null,end:s.endReason||'',deaths:s.stats.deaths||0,
    zombie:s.day>=25&&late.length?late.filter(ok).length/late.length<.35:false,
    d10:recs.filter(x=>x.day<=10&&x.outcome==='사망').length,injDep:recs.filter(x=>x.departedInjured).length,
    d2:recs.filter(x=>x.day<=2&&x.outcome==='사망').length,
@@ -111,25 +115,34 @@ if(process.env.V2100_WORKER){process.on('message',j=>{const res=worker(j);proces
 else if(require.main===module){
  const args=process.argv.slice(2),flag=(k,d)=>{const i=args.indexOf(k);return i>=0?args[i+1]:d;};
  const here=path.resolve(__dirname,'..'),before=flag('--before',null),TT=+flag('--traj',200),FN=+flag('--fresh',1000),R=+flag('--runs',10),out=flag('--out',null);
- const POL=flag('--policies','reader,investor').split(','),DECOS=flag('--decos',null)?.split(',');
+ const POL=flag('--policies','reader,investor').split(','),DECOS=flag('--decos',null)?.split(','),ASC=flag('--ascension',null)?.split(',').map(Number);
  const cpus=Math.max(1,os.cpus().length),PARTS=4,jobs=[];
  const WORKERS=+flag('--workers',cpus);if(!Number.isInteger(WORKERS)||WORKERS<1)throw Error('--workers는 양의 정수여야 합니다.');
  const srcs=[['after',here],...(before?[['before',path.resolve(before)]]:[])];
  for(const [src,root] of srcs){
+  if(ASC){for(const policy of POL)for(const deco of DECOS||['best'])for(const a of ASC)for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'traj',policy,deco,T:Math.ceil(TT/PARTS),R,part:p,asc:a});continue;}
   for(const policy of POL)for(const deco of DECOS||(src==='after'?['none','economy','survival','operation']:['none','survival']))
    for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'traj',policy,deco,T:Math.ceil(TT/PARTS),R,part:p});
   for(const policy of POL)for(let p=0;p<PARTS;p++)jobs.push({src,root,kind:'fresh',policy,deco:'none',T:Math.ceil(FN/PARTS),R:1,part:p});
  }
  const acc={},t0=Date.now();let live=0,done=0,failed=false;const total=jobs.length;
  const finish=()=>{if(failed){process.exitCode=1;return;}const res={meta:{TT,FN,R,before,head:here,rank:RANK,deco:DECO,sec:Math.round((Date.now()-t0)/1000),schema:3,firstRunLessons:true,workers:WORKERS},arms:acc};
-  if(out)fs.writeFileSync(out,JSON.stringify(res));console.log(summary(res));};
+  if(out)fs.writeFileSync(out,JSON.stringify(res));console.log(ASC?ascSummary(res):summary(res));};
  const next=()=>{if(!jobs.length){if(!live)finish();return;}const j=jobs.shift();live++;
   const c=fork(__filename,[],{env:{...process.env,V2100_WORKER:'1'}});let received=false;
-  c.on('message',m=>{received=true;const key=[m.j.src,m.j.kind,m.j.policy,m.j.deco].join('/');const a=acc[key]??={rows:[],wallets:{}};a.rows.push(...m.rows);for(const [w,h] of Object.entries(m.wallets)){const t=a.wallets[w]??=new Array(201).fill(0);h.forEach((v,i)=>t[i]+=v);}});
+  c.on('message',m=>{received=true;const key=[m.j.src,m.j.kind,m.j.policy,m.j.deco].concat(m.j.asc!=null?['asc'+m.j.asc]:[]).join('/');const a=acc[key]??={rows:[],wallets:{}};a.rows.push(...m.rows);for(const [w,h] of Object.entries(m.wallets)){const t=a.wallets[w]??=new Array(201).fill(0);h.forEach((v,i)=>t[i]+=v);}});
   c.on('exit',code=>{if(code||!received){failed=true;process.stderr.write('\n측정 worker 실패: '+JSON.stringify(j)+' code='+code+'\n');}live--;done++;process.stderr.write('\r'+done+'/'+total+' jobs · '+Math.round((Date.now()-t0)/1000)+'s');next();});c.send(j);};
  for(let i=0;i<Math.min(WORKERS,total);i++)next();
 }
 
+function ascSummary(res){
+ const L=[],p=(a,b)=>b?(100*a/b).toFixed(1)+'%':'-',sum=(xs,f)=>xs.reduce((v,x)=>v+f(x),0);
+ L.push('','승천 측정 · '+res.meta.sec+'s · traj '+res.meta.TT+'x'+res.meta.R+' · 첫 클리어 뒤 런만');
+ for(const [key,a] of Object.entries(res.arms)){const rs=a.rows.filter(r=>r.post);const n=rs.length;if(!n){L.push(key+' 열린 계정 런 없음');continue;}
+  const reach=sum(rs,r=>r.reach),win=sum(rs,r=>r.win),ds=rs.map(r=>r.day).sort((x,y)=>x-y),avg=f=>sum(rs,f)/n,bal=i=>{const v=rs.map(r=>r.bal?.[i]).filter(x=>x!=null).sort((x,y)=>x-y);return v.length?v[v.length>>1]:'-';};
+  L.push(key+' n='+n+' | 성공 '+[0,1,2,3].map(k=>p(sum(rs,r=>r.bands[k][0]),sum(rs,r=>r.bands[k][1]))).join(' / ')+' | D30 도달 '+p(reach,n)+' 클리어|도달 '+p(win,reach)+' 클리어 '+p(win,n)+' | 사망/런 '+avg(r=>r.deaths).toFixed(2)+' | 끝난 날 중앙 '+ds[n>>1]+' | 현금/일 '+avg(r=>r.cash).toFixed(0)+' | 매출 '+avg(r=>r.sales).toFixed(0)+' | 잔액 D10 '+bal(1)+' D15 '+bal(2)+' D20 '+bal(3));}
+ return L.join('\n');
+}
 function summary(res){
  const L=[],p=(a,b)=>b?(100*a/b).toFixed(1)+'%':'-',sum=(xs,f)=>xs.reduce((v,x)=>v+f(x),0);
  L.push('','balance measure · '+res.meta.sec+'s · traj '+res.meta.TT+'x'+res.meta.R+' · fresh '+res.meta.FN);

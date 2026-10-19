@@ -3,7 +3,7 @@ const D=globalThis.DATA,near=(a,b,m)=>assert.ok(Math.abs(a-b)<1e-9,m+' '+a+' vs 
 /* META §ASCENSION: the ten levels stack, and level 0 is the unchanged game */
 assert.equal(D.ascension.length,10);assert.deepEqual(D.ascension.map(a=>a.id),[1,2,3,4,5,6,7,8,9,10]);
 const zero=D.ascent(0);for(const k in zero)assert.equal(zero[k],0,'level 0 changes nothing: '+k);
-near(D.ascent(1).foe,.02,'1');near(D.ascent(5).foe,.04,'5');near(D.ascent(9).foe,.06,'9');near(D.ascent(10).foe,.06,'10 foe');
+near(D.ascent(1).foe,.01,'1');near(D.ascent(5).foe,.02,'5');near(D.ascent(9).foe,.03,'9');near(D.ascent(10).foe,.03,'10 foe');
 near(D.ascent(10).boss,.05,'boss');assert.equal(D.ascent(10).hazard,2);near(D.ascent(10).op,.10,'op');assert.equal(D.ascent(10).offers,-2);
 assert.equal(D.ascent(10).relics,-1);assert.equal(D.ascent(10).reroll,50);assert.equal(D.ascent(10).warehouse,-3);near(D.ascent(10).wallet,-.05,'wallet');
 assert.deepEqual(D.ascent(99),D.ascent(10),'a level past the top reads as the top');assert.deepEqual(D.ascent(undefined),zero);
@@ -29,9 +29,9 @@ function at(level,seed='asc-fx'){const g=new Game();g.autosave=false;g.account.a
  assert.equal(base.rerollPrice(),50);assert.equal(at(6).rerollPrice(),50);assert.equal(at(7).rerollPrice(),100,'승천 7: ORDER reroll +50G');
  const card=()=>D.relics.find(r=>r.id==='rerollTicket').description;at(6);assert.ok(card().includes('50G → 100G'));at(7);assert.ok(card().includes('100G → 200G'),'승천 7: the 발주 교환권 card names the 100G base');at(0);
  base.run.day=12;const g2=at(2);g2.run.day=12;{const x=base.expectedOperatingCost(),y=g2.expectedOperatingCost();assert.ok(y>x&&Math.abs(y-x*1.1)<=10,'승천 2: operating cost x1.1 ('+x+' -> '+y+')');}
- const g1=at(1);g1.run.day=12;const a=base.makeDungeon('spider',1).power,b=g1.makeDungeon('spider',1).power;near(b/a,1.02,'승천 1: Gate x1.02');
+ const g1=at(1);g1.run.day=12;const a=base.makeDungeon('spider',1).power,b=g1.makeDungeon('spider',1).power;near(b/a,1.01,'승천 1: Gate x1.01');
  const g10=at(10);assert.equal(g10.makeFinal().threat,30);assert.equal(base.makeFinal().threat,28,'승천 10: Final Hazard Threat +2');
- const bp=g=>{g.run.bossId='WRATH';g.run.final=g.makeFinal();return g.effectiveBossPower(0,null);};near(bp(g10)/bp(base),1.06*1.05,'승천 10: Boss power x1.06 x1.05');near(bp(at(1))/bp(base),1.02,'승천 1: Boss x1.02');
+ const bp=g=>{g.run.bossId='WRATH';g.run.final=g.makeFinal();return g.effectiveBossPower(0,null);};near(bp(g10)/bp(base),1.03*1.05,'승천 10: Boss power x1.03 x1.05');near(bp(at(1))/bp(base),1.01,'승천 1: Boss x1.02');
  {const n={level:10},r={int:(lo,hi)=>hi},x=base.visitIncome(n,r),y=at(4).visitIncome(n,r);assert.equal(x,110);assert.equal(y,Math.round(110*.95),'승천 4: wallet income -5%');assert.equal(at(3).visitIncome(n,r),110);}
  const og=n=>{const g=at(n);g.run.phase='order';g.generateOffers({advancePity:false});return g.run.offers.length;};assert.equal(og(0),6);assert.equal(og(3),4,'승천 3: ORDER offers 6 -> 4');}
 console.log('PASS ascension: levels stack, unlock on clear, effects at each level, level 0 unchanged');
