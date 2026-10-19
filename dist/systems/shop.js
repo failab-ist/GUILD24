@@ -508,8 +508,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     charged or what has to be affordable - only how willingly the offer is taken. */
  /* 단골 묶음혜택: a 단골's second paid purchase today - the customer pays, and is judged on, half
     the charged price; the store still receives the whole of it and HQ pays the other half. */
- const bundle=this.has('memberBundle')&&G.Adventurer.isTrustedRegular(n)&&n.history.filter(h=>h.day===this.run.day&&h.paid>0).length===1?price-Math.round(price*D.relicParams.memberBundle.payShare):0;
- const judged=bundle?price-bundle:Math.round(list*(rule.intentMult??rule.mult));
+ let bundle=this.has('memberBundle')&&G.Adventurer.isTrustedRegular(n)&&n.history.filter(h=>h.day===this.run.day&&h.paid>0).length===1?price-Math.round(price*D.relicParams.memberBundle.payShare):0;
+ let judged=bundle?price-bundle:Math.round(list*(rule.intentMult??rule.mult));
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: 50% 할인 and 정가 are the
     accessible modes and share one flat base need. 바가지 alone keeps the pre-amendment
     Hazard-fit formula - this patch does not touch overcharge acceptance. */
@@ -534,7 +534,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
  if(this.run.event?.effects.drinkDemand&&it.category==='drink')need+=this.run.event.effects.drinkDemand;
  /* 길드 보증 진열대 reads the CHARGED price, both for the threshold and for the 20%. */
- const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
+ const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;/* 점포지원이 겹치면 남은 몫에 다시 반값이 적용된다(보증 뒤 묶음혜택: 판매가의 25%) - 둘이 겹쳐 0G가 되지 않는다 */
+ if(bundle&&guarantee){const rest=price-guarantee;bundle=rest-Math.round(rest*D.relicParams.memberBundle.payShare);judged=price-bundle;}
+ const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
     only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
     at all: chance read the flat per-mode sentiment and nothing about what the offer costs
