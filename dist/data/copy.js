@@ -352,6 +352,8 @@ Copy.deep={
 /* COPY_AUDIT_APPROVED_v2.8 §14-9 D30 원정대 선택 / 마왕성 준비, verbatim. Player copy never says
    `Final`. The forecast explanation is taught once by the coach and kept behind its ? (User
    decision 2026-09-23: no standing explanation line). */
+/* META §ASCENSION: the one coach mark, shown on the new store screen once 승천 has opened (User 2026-10-19) */
+Copy.ascension={coach:'마왕을 처음 잡아서 승천이 열렸다. 이름판의 ◀ ▶로 단계를 올리면 더 어려운 점포가 된다. 앞 단계의 효과도 모두 적용된다.'};
 Copy.finalPrep={
  coach:{
   intro:'오늘은 최종 원정이다. 점포지원과 마지막 발주를 확인한 뒤, 원정대를 선택해 보급하고 마왕성으로 출발한다.',

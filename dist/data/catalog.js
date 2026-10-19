@@ -295,6 +295,27 @@ G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.1
    5-8 points of skilled D30 reach and raised rescue dependence by 7 - and took the 18 slots,
    which produce about one capacity decision per eight order Days at almost no survival cost. */
 G.DATA.balance.orderOffers=6;G.DATA.balance.warehouse=18;
+/* META §ASCENSION: after the first Boss clear the account opens 승천 1, and clearing 승천 N opens N+1 (up to 10). Each level adds one
+   effect on top of every earlier one. This is the only numeric truth for the ten levels (User 2026-10-19: values are tuned here
+   later, nothing else holds a copy). fx is read through ascent(level), which sums the levels up to it:
+   foe = Gate requirement and Boss power x(1+) / boss = Boss power only x(1+) / hazard = Final Hazard Threat + / op = operating cost x(1+) /
+   wallet = wallet income x(1+) / offers = ORDER offers + / relics = Store Support candidates + / reroll = ORDER Reroll base + /
+   warehouse = warehouse slots +. */
+G.DATA.ascension=[
+ {id:1, name:'마왕성 경계 강화', effect:'적 전체 +2%', fx:{foe:.02}},
+ {id:2, name:'본사 감사', effect:'운영비 +10%', fx:{op:.10}},
+ {id:3, name:'물류 파업', effect:'발주 칸 2개 영구 삭제', fx:{offers:-2}},
+ {id:4, name:'원정 지원금 삭감', effect:'손님 소지금 -5%', fx:{wallet:-.05}},
+ {id:5, name:'마왕의 이름값', effect:'적 전체 +2%', fx:{foe:.02}},
+ {id:6, name:'본사 예산 동결', effect:'점포지원 후보 1장 감소', fx:{relics:-1}},
+ {id:7, name:'발주 수수료 인상', effect:'발주 교환 비용 +50G', fx:{reroll:50}},
+ {id:8, name:'창고 침수', effect:'창고 3칸 감소', fx:{warehouse:-3}},
+ {id:9, name:'마왕성 비상령', effect:'적 전체 +2%', fx:{foe:.02}},
+ {id:10, name:'마왕의 비기', effect:'마왕 전력 +5%, 마왕 위험 +2', fx:{boss:.05,hazard:2}}];
+G.DATA.ascensionMax=G.DATA.ascension.length;
+{const none={foe:0,boss:0,hazard:0,op:0,wallet:0,offers:0,relics:0,reroll:0,warehouse:0},cache=[none];
+ G.DATA.ascent=level=>{const L=Math.max(0,Math.min(G.DATA.ascensionMax,Math.floor(Number(level))||0));
+  return cache[L]??=G.DATA.ascension.filter(a=>a.id<=L).reduce((t,a)=>{for(const k in a.fx)t[k]+=a.fx[k];return t;},{...none});};}
 G.DATA.openingStock=[['rice',1],['water',1],['herbtea',1],['lowpotion',1]];
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);

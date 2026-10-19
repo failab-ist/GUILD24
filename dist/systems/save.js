@@ -43,6 +43,8 @@ function accountOk(a){
  /* META §BEST DAY: absent on a save that predates it (reads 0), a Day when present; the best 총매출 likewise, a whole Gold amount */
  if(a.bestDay!==undefined&&!(Number.isInteger(a.bestDay)&&a.bestDay>=0&&a.bestDay<=30))return false;
  if(a.bestSales!==undefined&&!(Number.isInteger(a.bestSales)&&a.bestSales>=0))return false;
+ /* META §ASCENSION: absent on a save that predates it; when present, the open level and the picked level (the pick never passes the open one) */
+ if(a.ascension!==undefined){const x=a.ascension;if(!x||typeof x!=='object'||!Number.isInteger(x.max)||x.max<0||x.max>G.DATA.ascensionMax||!Number.isInteger(x.pick)||x.pick<0||x.pick>x.max)return false;}
  /* META §BOSS LOG: absent on a save that predates it (reads empty); when present, rows of identity / trait booleans */
  if(a.bossLog!==undefined){const l=a.bossLog;
   if(!l||typeof l!=='object'||Array.isArray(l))return false;
@@ -264,7 +266,7 @@ G.Save={
  /* PLATFORM_RELEASE §Google Play Games Saved Games: every write carries a monotonic `rev` and a timestamp `at`; the larger rev (then the later at)
     is the newer Save when the local and the cloud copy are compared. Metadata only - never validated, never needed to load. */
  rev:0,
- migrate(s){if(s&&s.account){fillMatrix(s.account,G.DATA);G.Meta.seedReachUnlocks(s.account);}if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
+ migrate(s){if(s&&s.account){fillMatrix(s.account,G.DATA);G.Meta.seedReachUnlocks(s.account);G.Meta.seedAscension(s.account);}if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{
