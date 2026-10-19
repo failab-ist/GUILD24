@@ -849,9 +849,9 @@ const tip=(label,...lines)=>'<details class="tip" name="sale-tip"><summary aria-
    now` separately, so they are separate elements with the readiness explicitly labelled. */
 /* The short row's two parts: `대응 N 필요` over the smaller `{능력치} n당 대응 1 제공`; CSS joins them on one line at 900px+ (User 2026-09-25). */
 const pressCell=h=>h.need?'<span class="press"><b class="need">'+E(h.need)+'</b><small class="rate">'+E(h.rate)+'</small></span>':'<span class="press">'+E(h.pressure)+'</span>';
-const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentation.hazardRows(keys,d).map(h=>{
+const hazardList=(keys,states,d,compact=false)=>keys.length?'<ul class="hazards'+(compact?' compact':'')+'">'+Presentation.hazardRows(keys,d).map(h=>{
  const st=states&&states.find(x=>x.key===h.key);
- return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)
+ return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+(compact?'<span class="press"><b class="need">'+E(h.need)+'</b><small class="rate">'+E(h.rate.replace(/\u00a0대응\u00a01\u00a0제공$/,'\u00a01'))+'</small></span>':pressCell(h))
   +(st?'<span class="ready"><i>현재 대응</i><em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em></span>':'')
   +'</li>';}).join('')+'</ul>':'';
 // A Gate is a plank notice nailed to the wall: family colour burned along the top edge,
@@ -2336,8 +2336,8 @@ function finalThreat(d){
  return '<section class="threat"><h2>확인된 위협</h2><div class="fams">'
  +(d.families||[]).map(id=>{const b=D.dungeonBy[id],own=(D.familyTiers[id]||[])[1]||[];
    return '<div class="fam-col"><span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>'
-    +hazardList(d.hazards.filter(h=>own.includes(h)),null,d)+'</div>';}).join('')
- +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+finalTrait()+'</section>';
+    +hazardList(d.hazards.filter(h=>own.includes(h)),null,d,true)+'</div>';}).join('')
+ +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d,true)+finalTrait()+'</section>';
 }
 function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
  return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small><small class="who-traits">'+E(Presentation.traits(n).map(t=>D.traitBy[t].name).join(' · '))+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'

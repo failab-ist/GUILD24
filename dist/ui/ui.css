@@ -2299,6 +2299,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .threat .fams .fam-col:first-child .hazards{margin-top:4px}
 .threat .fams .fam-col+.fam-col .hazards{margin-top:-5px}
 .threat .hazards span{color:#a4938e}
+.threat .hazards.compact li{display:grid;grid-template-columns:5.6em 1fr auto;align-items:baseline;gap:8px;padding:2px 0}
+.threat .hazards.compact .press{display:contents}
+.threat .hazards.compact .need{display:block;font-size:var(--t-sm);color:#d6c5bd}
+.threat .hazards.compact .rate{display:block;font-size:12px;text-align:right;white-space:nowrap}
+.threat .hazards.compact .rate::before{content:none}
 /* the muster */
 .party-head{display:flex;align-items:baseline;gap:10px;padding:7px 0;margin-bottom:11px;
  box-shadow:inset 0 -3px 0 #ffffff1a}
