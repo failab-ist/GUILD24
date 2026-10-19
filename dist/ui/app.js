@@ -975,7 +975,7 @@ function eventSlip(e){
    register and nothing else and the standing list lives in the store menu instead - the same
    modal, reached from where every other standing reference is reached. */
 function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())return '';
- return '<button class="brass" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
+ return '<button class="stamp act-yellow relic-key" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
 function readout(n,extra=null,cls=''){
  const d=game.claimedGateFor(n);
@@ -2366,7 +2366,7 @@ function finalMuster(s,need,committed){
  +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))+btn('자세히 보기','final-detail','bare more','data-id="'+supplyNPC+'"')+'</div>':'')+'<div class="final-supply p-sale">'+shelf(true)+'</div>');
 }
 function finalDock(s,need,committed){const ready=s.team.length>0&&s.team.length<=need,held=Object.values(s.cart||{}).some(q=>q>0);
- if(!need)return relicWindowLink()+btn('출전 불가 · 점포 종료','boss','danger');
+ if(!need)return relicWindowLink()+btn('출전 불가 · 점포 종료','boss','stamp act-brick');
  if(finalIsOrdering(s))return stockSheetKey()+btn('발주 확정','confirm-order','stamp',held?'':'disabled')+btn('원정대 꾸리기','final-ordered','stamp leave',held?'disabled':'');
  return relicWindowLink()+(committed?btn('최종 원정 보내기','boss','stamp'):btn(Copy.finalPrep.returnOrder,'final-order-back','stamp final-order-back')+btn('원정대 확정','final-commit','stamp',ready?'':'disabled'));
 }
