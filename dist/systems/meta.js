@@ -27,7 +27,7 @@ function freshStore(){
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,bestDay:0,bestSales:0,bossLog:{},discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false,highpotion:false,toppotion:false,epics:[],rares:[]},
+  runs:0,wins:0,bestDay:0,bestSales:0,ascension:{max:0,pick:0},bossLog:{},discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false,highpotion:false,toppotion:false,epics:[],rares:[]},
   store:freshStore(),
   /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
@@ -91,6 +91,17 @@ function addCapital(a,amount){const st=store(a);st.capital+=Math.max(0,Math.roun
 function freshFranchise(){
  return {sales:0,overcharged:0,returning:0,relics:0,families:[],done:[]};
 }
+
+/* META §ASCENSION: `max` is the highest level the account has opened (0 = none; the first Boss clear opens 1), `pick` the level the
+   next Run starts at. The pick is always clamped to what is open, so an edited or older Save can never start a locked level. */
+function ascension(a){const x=a.ascension??={max:0,pick:0},top=G.DATA.ascensionMax;
+ x.max=Math.max(0,Math.min(top,Math.floor(Number(x.max))||0));x.pick=Math.max(0,Math.min(x.max,Math.floor(Number(x.pick))||0));return x;}
+const ascensionMax=a=>ascension(a).max;
+const ascensionPick=a=>ascension(a).pick;
+function setAscension(a,level){const x=ascension(a);x.pick=Math.max(0,Math.min(x.max,Math.floor(Number(level))||0));return x.pick;}
+/* An account that already beat a Boss before 승천 existed starts with 승천 1 open. */
+function seedAscension(a){if(!a)return;const had=a.ascension!==undefined;ascension(a);
+ if(!had&&((a.wins||0)>0||distinctBossClear(a)>0))a.ascension.max=1;}
 
 /* How many distinct Bosses this Job has beaten, 0..7. */
 /* Only the current Bosses count: a Save may keep a cell for a Boss this build does not have (PLATFORM_RELEASE §SAVE ACROSS UPDATES). */
@@ -186,6 +197,8 @@ function finish(a,run,win){
  if(!win)return [];
  a.wins++;
  const before=opened(a);
+ /* META §ASCENSION: clearing 승천 N opens N+1; the first clear (level 0) opens 승천 1. */
+ {const x=ascension(a),from=x.max;x.max=Math.min(G.DATA.ascensionMax,Math.max(x.max,(run.ascension||0)+1));run.ascensionOpened=x.max>from?x.max:0;}
  const jobs=[...new Set((run.finalReport?.members||[]).map(m=>m.job))];
  const wasMastery=Object.fromEntries(jobs.map(job=>[job,jobMastery(a,job)]));
  for(const job of jobs)if(a.matrix[job]&&run.bossId in a.matrix[job])a.matrix[job][run.bossId]=true;
@@ -214,5 +227,5 @@ const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
- freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
+ ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

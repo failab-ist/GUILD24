@@ -276,7 +276,7 @@ const TIER_THREAT=[2,6,12];
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD §HAZARD THREAT: ordinary curve; Final fixed requirement. */
- const rule=rules[h]||['survival',.2],threat=d.family==='final'?D.balance.finalHazardThreat:12+(d.day||1)*.35+Math.max(0,(d.day||1)-7)*.25+TIER_THREAT[(d.tier||1)-1],defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
+ const rule=rules[h]||['survival',.2],threat=d.family==='final'?(d.threat??D.balance.finalHazardThreat):12+(d.day||1)*.35+Math.max(0,(d.day||1)-7)*.25+TIER_THREAT[(d.tier||1)-1],defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */
