@@ -4353,3 +4353,10 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .asc-chip{display:none}
 @media(min-width:1024px){.asc-chip{display:block;position:absolute;top:calc(var(--sa-top) + 6px);right:calc(var(--sa-right) + 58px);z-index:30;height:44px;box-sizing:border-box;padding:0 14px;display:flex;align-items:center;background:#2a2118;border:2px solid #a98b52;color:#e0b85a;font:700 16px/1 var(--ui);pointer-events:none}}
 .menu-panel .asc-note{margin:0 0 12px}
+/* UI_UX §FINAL dock: 점포지원 and 출전 불가 wear the same notched `.stamp` as the other dock actions (they were the old flat `.brass` / `.danger` plates). */
+.p-final .dock>.stamp.relic-key{flex:0 0 auto;min-width:96px;min-height:48px;padding:6px 12px;background:#d9b23f;color:#211b0e;font:600 14px/1.3 var(--ui);letter-spacing:0;text-align:center;text-shadow:none;filter:drop-shadow(3px 3px 0 #140c07);box-shadow:inset 0 3px 0 #ffe89a,inset 0 -4px 0 #a86e16}
+.p-final .dock>.stamp.relic-key:hover{background:#e3bd4a;filter:drop-shadow(3px 3px 0 #140c07)}
+.p-final .dock>.stamp.relic-key:active{background:#c6a136;filter:drop-shadow(1px 1px 0 #140c07);box-shadow:inset 0 4px 0 #a86e16,inset 0 -3px 0 #ffe89a}
+.p-final.p-order .dock>.stamp.relic-key{flex:0 0 auto;min-width:96px;padding:6px 12px;background:#d9b23f;color:#211b0e;text-shadow:none;filter:drop-shadow(3px 3px 0 #2a2317bf);box-shadow:inset 0 3px 0 #ffe89a,inset 0 -4px 0 #a86e16}
+.p-final.p-order .dock>.stamp.act-brick{background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;box-shadow:inset 0 3px 0 #d4695b,inset 0 -4px 0 #45150f}
+.p-final.p-order .dock>.stamp.act-brick:not([disabled]):hover{background:#98342a}
