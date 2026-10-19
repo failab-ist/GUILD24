@@ -2096,15 +2096,11 @@ MORNING 게이트 판의 도장, `위험 보기` 창의 판, ORDER `오늘` 줄�
 **Lead**
 > DAY 30에 마왕이 깨어난다. 길드 조사대가 그 정체를 추적한다.
 
-**Body — 현재** (four entries, each a DAY label on the record's LED face over one line)
-> DAY 05  
-> 마왕의 정체가 밝혀진다.  
-> DAY 15  
-> 마왕 권능이 밝혀진다.  
-> DAY 25  
-> 최종 원정의 위험이 밝혀진다.  
-> DAY 30  
-> 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.
+**Body — 현재** (one timeline of four beats: a DAY label on the record's LED face over a two-word name, the two words split by a line break)
+> DAY 05 — 정체 / 공개  
+> DAY 15 — 권능 / 공개  
+> DAY 25 — 위험 / 공개  
+> DAY 30 — 마왕성 / 토벌
 
 **Button**
 > 확인

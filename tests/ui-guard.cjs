@@ -897,7 +897,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/now>=need\?' ok':''/.test(env)&&/then>=need\?' ok':''/.test(env)&&/<em>→<\/em>/.test(env),'green only at the need, the preview coloured on its own');
  assert.ok(/const pre=extra&&n\.pack\.length<Adventurer\.slots\(n\)\?Dungeon\.prepare\(\{\.\.\.v,pack:\[\.\.\.n\.pack,extra\]\}/.test(readout),'the preview is the resolver\'s number with the selected Item in the Bag');
  const plate=fn('destPlate');
- assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d,false,true\)/.test(plate),
   'the destination plate states the Gate\'s numbered Hazard rows only, off the known-Hazard truth');
  assert.ok(!/n\.outlook|n&&n\.outlook/.test(plate.replace(/\/\*[\s\S]*?\*\//g,'')),
   'the plate reads no readiness of its own');
@@ -2916,8 +2916,8 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
     objective is superseded by the briefing; the old strings are not kept as live copy. */
  assert.equal(c.d0.header,'마왕 조사 개시');
  assert.equal(c.d0.lead,'DAY 30에 마왕이 깨어난다. 길드 조사대가 그 정체를 추적한다.');
- /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-25): a DAY label over each of the two lines, no closing sentence */
- assert.deepEqual(c.d0.steps,[['DAY 05',['마왕의 정체가 밝혀진다.']],['DAY 15',['마왕 권능이 밝혀진다.']],['DAY 25',['최종 원정의 위험이 밝혀진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]]);assert.equal(c.d0.lines,undefined);
+ /* COPY_AUDIT §14-1 (User 2026-10-19): the four beats are a DAY label over a two-word name, no closing sentence */
+ assert.deepEqual(c.d0.steps,[['DAY 05',['정체','공개']],['DAY 15',['권능','공개']],['DAY 25',['위험','공개']],['DAY 30',['마왕성','토벌']]]);
  assert.equal(c.d0.close,undefined);assert.ok(!app.includes('조사 정보를 확인하며 토벌대를 준비하고'),'the closing sentence is gone');
  assert.ok(!/토벌 예정|길드 정보원/.test(read('dist/data/copy.js')+app),'the superseded D0 lines are gone');
  assert.ok(!/class="boss-art"|class="boss-id"|b\.name/.test(fn('bossReveal').split("stage==='d0'")[1].split('</div>\';')[0]),
@@ -3712,7 +3712,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
     Gate-detail sentence. The plate is never passed to .map bare. */
  assert.ok(!/\.map\(gatePlate\)/.test(app),'no Gate after the first is printed as Gate detail');
  const plate=fn('destPlate');
- assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d,false,true\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
  assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');
  // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29, no late term)
  assert.equal(Presentation.hazardShort('poison',{day:30,tier:2,family:'final'}),'대응 28 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
@@ -3743,9 +3743,9 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)
- assert.ok(fn('bossReveal').includes('<div class="d0-step"><b>'),'the D0 body is two labelled entries');
- assert.ok(/\.boss-reveal \.d0-step b\{display:block;[^}]*var\(--f-led\)[^}]*color:#7a281f\}/.test(css)&&/\.boss-reveal \.d0-step p\{margin:0;font:400 15px\/1\.6 var\(--ui\);color:#3c3527\}/.test(css),'label on the LED face, line in the body weight');
- assert.ok(!/d0-line|d0-close/.test(css)&&!/d0-line|d0-close/.test(app),'no orphan rule survives');
+ assert.ok(fn('bossReveal').includes('<ol class="d0-beats">')&&fn('bossReveal').includes('<b>\'+E(day)'),'the D0 body is one timeline of four labelled beats');
+ assert.ok(/\.boss-reveal \.d0-beats b\{font:500 16px\/1 var\(--f-led\)[^}]*color:#7a281f\}/.test(css)&&/\.boss-reveal \.d0-beats span\{font:600 14px\/1\.35 var\(--ui\);color:#2c2418/.test(css),'label on the LED face, the two-word name in the body weight');
+ assert.ok(!/d0-line|d0-close|d0-step/.test(css)&&!/d0-line|d0-close|d0-step/.test(app),'no orphan rule survives');
  // v2.9.0 F7 (User 2026-09-24): quick-view status line, purchase notice, Counter judgement split
  assert.ok(fn('ownedRelicView').includes('Relics.status(game,r.id)')&&fn('relicsModal').includes('Relics.status(game,r.id)')&&/<p class="status">/.test(app),'both owned lists carry the runtime status line');
  assert.ok(read('dist/systems/relics.js').includes("s.notice=D.relicBy[id].name+' 확보.';")&&!/다음 날부터 적용됩니다/.test(read('dist/systems/relics.js')),'§11-33 the notice is the name and 확보 only');

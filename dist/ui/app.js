@@ -849,9 +849,9 @@ const tip=(label,...lines)=>'<details class="tip" name="sale-tip"><summary aria-
    now` separately, so they are separate elements with the readiness explicitly labelled. */
 /* The short row's two parts: `대응 N 필요` over the smaller `{능력치} n당 대응 1 제공`; CSS joins them on one line at 900px+ (User 2026-09-25). */
 const pressCell=h=>h.need?'<span class="press"><b class="need">'+E(h.need)+'</b><small class="rate">'+E(h.rate)+'</small></span>':'<span class="press">'+E(h.pressure)+'</span>';
-const hazardList=(keys,states,d,compact=false)=>keys.length?'<ul class="hazards'+(compact?' compact':'')+'">'+Presentation.hazardRows(keys,d).map(h=>{
+const hazardList=(keys,states,d,compact=false,icons=false)=>keys.length?'<ul class="hazards'+(compact?' compact':'')+'">'+Presentation.hazardRows(keys,d).map(h=>{
  const st=states&&states.find(x=>x.key===h.key);
- return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+(compact?'<span class="press"><b class="need">'+E(h.need)+'</b><small class="rate">'+E(h.rate.replace(/\u00a0대응\u00a01\u00a0제공$/,'\u00a01'))+'</small></span>':pressCell(h))
+ return '<li data-hazard="'+h.key+'">'+(icons?Scene.hazardIcon(h.key,14):'')+'<b>'+E(h.name)+'</b>'+(compact?'<span class="press"><b class="need">'+E(h.need)+'</b><small class="rate">'+E(h.rate.replace(/\u00a0대응\u00a01\u00a0제공$/,'\u00a01'))+'</small></span>':pressCell(h))
   +(st?'<span class="ready"><i>현재 대응</i><em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em></span>':'')
   +'</li>';}).join('')+'</ul>':'';
 // A Gate is a plank notice nailed to the wall: family colour burned along the top edge,
@@ -1681,7 +1681,7 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
   /* UI_UX §SALE destination plate (User 2026-10-03): on a phone the `{능력치} n당 대응 1 제공` lines of every row read in one `?`; from 900px they are the row's own ` · ` tail */
   +rateTip(d)
   +'</div>'
-  +hazardList(Presentation.known(d,game),null,d)
+  +hazardList(Presentation.known(d,game),null,d,false,true)
  +'</div></div>';}
 // UI_UX §FINAL MODIFIER PREVIEW: read the same snapshots as resolution, without changing preparation.
 function statDisplay(n){const s=game.run,i=s.phase==='final'&&s.finalCommitted?s.team.indexOf(n.id):-1;
@@ -1697,6 +1697,9 @@ function statDisplay(n){const s=game.run,i=s.phase==='final'&&s.finalCommitted?s
 function statGrid(n){
    const prep = statDisplay(n);
    const values = prep.effects;
+   /* User 2026-10-19: on a sale screen the Hazard mark of each pressing Hazard sits at the right edge of the Stat it presses (same mark as the Gate plate and the 환경 대응 meter) */
+   const gate = game.run.phase==='sell'&&game.current?.()?.id===n.id ? game.claimedGateFor(n) : null;
+   const pressing = gate ? Presentation.known(gate,game).filter(h=>Presentation.hazardStat[h]) : [];
    /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
       presses, a small tag with the pressing Hazard name(s) - the one place the grid links to
       the Gate. No number, no verdict; 투력 is never pressed. */
@@ -1723,7 +1726,9 @@ function statGrid(n){
        never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
-    const face = '<label>'+label+'</label><strong>'+(applied?Presentation.stat(before,true)+' → ':'')+Presentation.stat(values[k],moved)+'</strong>';
+    const marks = pressing.filter(h=>Presentation.hazardStat[h]===k);
+    const face = '<label>'+label+'</label><strong>'+(applied?Presentation.stat(before,true)+' → ':'')+Presentation.stat(values[k],moved)+'</strong>'
+     +(marks.length?'<span class="press-marks m'+Math.min(marks.length,3)+'" aria-hidden="true">'+marks.map(h=>Scene.hazardIcon(h,marks.length===1?11:marks.length===2?10:8)).join('')+'</span>':'');
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
@@ -2012,17 +2017,17 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    breakdown. It moves when a sale commits; a selected, unsold Item moves only the tray. */
 /* Gold by default, green only once the number reaches the need (User 2026-10-02) - the whole number against the rounded-up need,
    so green never shows before the resolver's own 충분. `pre`: the selected Item's preview, `6 → 16`, coloured the same way. */
-function envMeter(p,d,pre=null){const whole=x=>Math.max(0,Math.floor(x+1e-9));
+function envMeter(p,d,pre=null,icons=true){const whole=x=>Math.max(0,Math.floor(x+1e-9));
  return '<span class="env-list env-meter-list">'+p.hazards.map((h,i)=>{const need=Presentation.hazardNeed(h.key,d),now=whole(h.defense),
   then=pre?whole(pre.hazards[i].defense):null;
-  return '<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'
+  return '<span class="env-row">'+(icons?'<i class="hz-mark">'+Scene.hazardIcon(h.key,16)+'<em class="hz-said">'+E(D.hazards[h.key])+'</em></i>':'<i>'+E(D.hazards[h.key])+'</i>')
   +'<b class="env-num'+(now>=need?' ok':'')+'">'+now+(then!==null&&then!==now?'<em>→</em><span class="pre'+(then>=need?' ok':'')+'">'+then+'</span>':'')
   +'<small>/'+need+'</small></b></span>';}).join('')+'</span>';}
 function finalEnvironment(p,d){
  const groups=(d.families||[]).map(id=>({id,hazards:p.hazards.filter(h=>(D.familyTiers[id]?.[1]||[]).includes(h.key))}));
  const other=p.hazards.filter(h=>!groups.some(g=>g.hazards.includes(h)));
  if(other.length)groups.push({id:'',hazards:other});
- return groups.filter(g=>g.hazards.length).map(g=>'<span class="env-family" data-family="'+E(g.id)+'"'+(g.id?' aria-label="'+E(D.dungeonBy[g.id].name)+'"':'')+'>'+envMeter({hazards:g.hazards},d)+'</span>').join('');
+ return groups.filter(g=>g.hazards.length).map(g=>'<span class="env-family" data-family="'+E(g.id)+'"'+(g.id?' aria-label="'+E(D.dungeonBy[g.id].name)+'"':'')+'>'+envMeter({hazards:g.hazards},d,null,false)+'</span>').join('');
 }
 function envReading(o){const b=l=>'<b class="env-'+(['취약','불안'].includes(l)?'lack':'ok')+'">'+E(l)+'</b>';
  return o.hazards.length>1?'<span class="env-list">'+o.hazards.map(h=>'<span class="env-row"><i>'+E(D.hazards[h.key])+'</i>'+b(h.label)+'</span>').join('')+'</span>':b(o.worst);}
@@ -2756,11 +2761,10 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    +'<p class="next-report">'+E(t.next)+'</p></div>';}
  /* SA-Q47 / BOSS_v2.8 §D0 INFORMATION BOUNDARY: the Run objective and the investigation cadence
     only - no Boss identity, no art, no Trait, no Final state. That is D5's beat onward. The two
-    Days are told apart by type on the same record, not by timeline cards. */
- /* v2.9.0 (COPY_AUDIT §14-1): the body is two lines; the closing sentence is gone */
+    Days are told apart on one timeline. */
  if(stage==='d0')return '<div class="boss-reveal d0">'+bossFiled()+'<p class="lede">'+E(c.d0.lead)+'</p>'
-  /* COPY_AUDIT §14-1 (User 2026-09-25): the DAY 05 / DAY 30 anchors read on their own LED label above each line */
-  +c.d0.steps.map(([day,lines])=>'<div class="d0-step"><b>'+E(day)+'</b>'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>').join('')+'</div>';
+  /* COPY_AUDIT §14-1 (User 2026-10-19): the four beats are one timeline - a dot on a line, the DAY label, a two-word name */
+  +'<ol class="d0-beats">'+c.d0.steps.map(([day,words],i)=>'<li'+(i===c.d0.steps.length-1?' class="last"':'')+'><i></i><b>'+E(day)+'</b><span>'+words.map(E).join('<br>')+'</span></li>').join('')+'</ol></div>';
  return '<div class="boss-reveal d5">'+bossFiled()+'<p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="info-line">'+E(c.d5.next)+'</p><p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
