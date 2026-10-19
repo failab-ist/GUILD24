@@ -115,7 +115,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   const d={...DATA.dungeonBy.spider,day:r.int(1,29),tier:2,hazards:['poison'],scale:1.6,power:r.int(60,140),reward:1};
   const rep=Dungeon.resolve(npc,d,r,[]);
   if(rep.outcome==='퇴각'){
-   assert.equal(Dungeon.WALLET_MULT['퇴각'],.40,'v2.13.9: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*8)*.40*(d.reward||1)),'a 퇴각 Loot follows its own formula');
+   assert.equal(Dungeon.WALLET_MULT['퇴각'],.40,'v2.13.9: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*6)*.40*(d.reward||1)),'a 퇴각 Loot follows its own formula');
    sampled++;
   }
  }
@@ -317,18 +317,18 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,400,'counter: the first two customers of the Day +400G each (User 2026-10-16)');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,300,'counter: the first two customers of the Day +300G each (User 2026-10-19)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,1,'길드 추천 매대 adds a visitor every Morning (User 2026-10-16)');
+ assert.equal(DATA.balance.wallVisitorChance,.5,'길드 추천 매대 adds a visitor at 50% in the shared Morning roll (User 2026-10-18)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
- assert.equal(DATA.decorationParams.sponsorSign.budgetShare,.75,'sign: 75% of the purse as a that-visit extra budget (User 2026-10-16)');
+ assert.equal(DATA.decorationParams.sponsorSign.budgetShare,.5,'sign: 50% of the purse as a that-visit extra budget (User 2026-10-19)');
  /* the 추가 구매 budget an arrival gets while the sign is worn, on a Day with no Event */
  {const a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.sponsorSign.price);Meta.buyDecoration(a,'sponsorSign');
   const g=new Game(a);g.autosave=false;g.start('sign-budget');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];g.run.event=null;
   const n=g.run.npcs[0];n.traits=[];n.money=400;n.injury=0;n.introduced=true;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
-  assert.equal(n.eventBudget,Math.round(n.money*.75),'the arrival may spend three quarters of its purse again, this visit only');}
+  assert.equal(n.eventBudget,Math.round(n.money*.5),'the arrival may spend half its purse again, this visit only');}
  assert.ok(!/sponsorSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.sponsorSign),'and no longer adds ORDER candidates');
  assert.ok(/wears\('honorFrame'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 고급 keeps its ordinary 27 - so

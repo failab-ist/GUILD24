@@ -14,9 +14,9 @@ test('food traits/relics enhance nutrition without amplifying counters or side e
  const itemSurvival=(traits,fac)=>Dungeon.prepare({...n,traits},d,fac).itemStats.find(x=>x.item==='dragonramen').stats.survival;
  const bare=itemSurvival([],[]);
  assert.equal(bare,DATA.itemBy.dragonramen.effects.survival,'the pool reads the Item table base');
- assert.ok(Math.abs(itemSurvival(['eater'],['kitchen','fresh24'])/bare-2.05)<1e-9,'대식가 +30% and the two Fresh Relics (+25% / +50%) add to base x2.05');
- assert.ok(Math.abs(itemSurvival([],['kitchen','fresh24'])/bare-1.75)<1e-9,'the two Fresh Relics alone are base x1.75');
- assert.ok(Math.abs(itemSurvival(['small'],['kitchen','fresh24'])/bare-1.55)<1e-9,'소식가 -20% subtracts from the same pool');
+ assert.ok(Math.abs(itemSurvival(['eater'],['kitchen','fresh24'])/bare-1.85)<1e-9,'대식가 +30% and the two Fresh Relics (+25% / +30%) add to base x1.85');
+ assert.ok(Math.abs(itemSurvival([],['kitchen','fresh24'])/bare-1.55)<1e-9,'the two Fresh Relics alone are base x1.55');
+ assert.ok(Math.abs(itemSurvival(['small'],['kitchen','fresh24'])/bare-1.35)<1e-9,'소식가 -20% subtracts from the same pool');
  const relicsOnly=Dungeon.prepare(n,d,['kitchen','fresh24']).effects;
  assert.equal(relicsOnly.supply,base.supply,'the Fresh Relics leave Supply exactly as the Item table wrote it');
  assert.equal(boost.supply,base.supply+DATA.traitBy.eater.effects.foodSupplyDelta,'only the Trait moves Supply');

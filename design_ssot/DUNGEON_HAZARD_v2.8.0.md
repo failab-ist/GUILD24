@@ -771,7 +771,7 @@ Then:
 
 Ordinary expedition Wallet reward:
 
-    baseWalletReward = 35 + Day × 8
+    baseWalletReward = 35 + Day × 6
 
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
@@ -1803,7 +1803,7 @@ Controlled seeded cases must verify (no Supply-deficit row):
 Reward PASS:
 - EXP base = 24.2 + Day×5.06
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50
-- Wallet base = 35 + Day×8
+- Wallet base = 35 + Day×6
 - Wallet outcome multipliers are 대성공 / 성공 1.25 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance is 0 on DAY 1~2, then 30 / 22 / 18 / 12% by Equipment tier 0 / 1 / 2 / 3+, plus explicit rare-loot modifier

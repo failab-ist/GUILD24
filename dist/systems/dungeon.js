@@ -392,7 +392,7 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
    chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that chance is. One formula for the real resolution
    and its proof. */
 /* META 단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x perTen), read where 구급품 진열장's power bonus is */
-const cheer=(on,loyalty)=>on?1+Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen:1;
+const cheer=(on,loyalty)=>on?1+Math.min(D.decorationParams.cheerBanner.max,Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen):1;
 function stoneChance(e,d){return clamp(.40+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
@@ -686,7 +686,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((24.2+d.day*5.06)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
  const xpBase=xp;xp=G.Adventurer.catchupXP(n,xp,d.day,outcome);const xpBoost=xp-xpBase;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
- let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
+ let loot=n.alive?Math.round((35+d.day*6)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<equipChance(n.equipment.tier,run?.day??d.day)+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money=Math.min(2000,n.money+loot);/* ECONOMY_ORDER §Persistent Wallet: every permanent increase clamps to 2000G, so a D30 party that skips the visit-time clamp never holds more */
  if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<envChance(bare.hazard,bare.effects.survival,d.day,d.tier)*(1-assist);

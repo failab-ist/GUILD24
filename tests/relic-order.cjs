@@ -255,15 +255,15 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  const food=DATA.items.find(i=>i.category==='food'&&i.effects.supply>0&&i.effects.survival>0);
  const drink=DATA.items.find(i=>i.category==='drink'&&i.effects.supply>0&&i.effects.survival>0);
  const base=id=>DATA.itemBy[id].effects.survival;
- // the owner's own worked examples, to the digit (즉석식품 코너 +25%, 24시간 신선체계 +50%)
+ // the owner's own worked examples, to the digit (즉석식품 코너 +25%, 24시간 신선체계 +30%)
  const cases=[
-  [food.id,[],['kitchen','fresh24'],1.75],
-  [food.id,['eater'],['kitchen','fresh24'],2.05],
+  [food.id,[],['kitchen','fresh24'],1.55],
+  [food.id,['eater'],['kitchen','fresh24'],1.85],
   // 원정 도시락 코너 no longer joins the native pool (2026-09-23 rework)
-  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.05],
-  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.55],
-  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.75],
-  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.75],
+  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.85],
+  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.35],
+  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.55],
+  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.55],
  ];
  for(const [id,traits,fac,want] of cases)
   assert.ok(Math.abs(contribution(id,traits,fac).survival/base(id)-want)<1e-9,
