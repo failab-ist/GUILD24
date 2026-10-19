@@ -69,13 +69,13 @@ D.relicParams={
  stamp:{loyaltyMult:1.75},
  member:{loyaltyRevisitMult:2},
  rareContract:{rareWeightMult:1.5,hqBonus:.10}, /* v2.9.11 (User 2026-09-29): was saleMult 1.1 paid by the customer */
- guarantee:{subsidyRate:.3},
+ guarantee:{subsidyRate:.5},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},
  fieldStretcher:{injuredCombatPenalty:.08},
  firstAidDesk:{healChance:.20},
  fridge:{shelfDays:2},
- kitchen:{statBonus:.25,overheadRate:.10}, /* User 2026-10-02: the +10% operating cost is back - the Fresh line clears more, pays more */
+ kitchen:{statBonus:.25,overheadRate:.15}, /* User 2026-10-02: the +10% operating cost is back - the Fresh line clears more, pays more */
  board:{minVisitors:4},
  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15,dailyCap:60},

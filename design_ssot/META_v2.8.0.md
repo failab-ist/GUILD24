@@ -399,7 +399,7 @@ of the Run's Relic slots. A Decoration and a Relic that touch the same quantity 
 
 ### sign — 원정 지원금 간판 (id sponsorSign)
 ```text
-each visiting adventurer: an extra purchase budget of 75% of their current purse, that visit only
+each visiting adventurer: an extra purchase budget of 50% of their current purse, that visit only
 ```
 
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never
@@ -418,7 +418,7 @@ rarity draw when the Decoration is active; it adds no extra spawn, no extra rari
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first two customers to reach the counter: Wallet +400G each (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +300G each (cap 2000)
 ```
 
 Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
@@ -501,10 +501,10 @@ to take.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-each Night: the Day's first two customers to reach the counter, if alive: Fatigue -6 (floor 0)
+each Night: the Day's first three customers to reach the counter, if alive: Fatigue -6 (floor 0)
 ```
 
-The same "first two" as 알뜰 금고: the order in which that Day's customers reached the counter. Everyone else, visitor or
+The same counter order as 알뜰 금고 (its first three here): the order in which that Day's customers reached the counter. Everyone else, visitor or
 not, keeps their Fatigue.
 
 ### display — 지원 교환 쿠폰함 (id rerollCoupon)

@@ -625,11 +625,11 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['stamp','단골 스탬프 기계',130,'손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4). 원정 뒤에 오르는 단골도는 그대로.'],
   ['member','회원 관리대장',130,'단골도가 손님이 다시 올 가능성에 주는 효과가 2배가 된다.'],
   ['rareContract','희귀상품 입고 계약',140,'발주 후보에 희귀 이상 상품이 1.5배 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 10%를 더 받는다.'],
-  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 70%만 내고 가게는 전액을 받는다.'],
+  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 50%만 내고 가게는 전액을 받는다.'],
   ['hazardBoard','원정 위험 게시판',60,'오늘 게이트 위험에 맞는 상품이 발주 후보에 1.5배 자주 나온다.'],
   ['fieldRepair','야전 정비대',80,'가게에서 판 상품의 위험 대응 수치가 40% 높아진다.'],
   ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-  ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 10% 오른다.'],
+  ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 15% 오른다.'],
   ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
   ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다(하루 최대 60G). 손님이 더 올 확률은 다른 효과와 합쳐 100%까지다.'],
@@ -689,9 +689,9 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
    the live value - changing a parameter rewrites the line (User 2026-10-04: copy follows the code value). */
 test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decoration / Store Support / Loyalty copy follows the values',()=>{
  const EFFECTS={
-  sponsorSign:'손님이 방문할 때마다 손님 소지금의 75%만큼 더 쓸 수 있다',
+  sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
   honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 80% (기존 40%)',
-  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 400G씩 늘어난다',
+  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 300G씩 늘어난다',
   guildShelf:'매일 아침 50% 확률로 그날 손님이 1명 더 온다. 손님이 더 올 확률은 다른 효과와 합쳐 100%까지다',
   trainingSign:'처음 찾아오는 모험가는 30% 확률로 레벨 +1로 온다',
   infirmaryPlaque:'부상당한 손님이 가게에 오면 25% 확률로 부상이 낫는다 (중상은 제외)',
@@ -700,7 +700,7 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
   /* 운영형 (User 2026-10-04) */
   heroSign:'첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다. 점포지원 후보 교환도 할 수 있다 (300G → 600G…)',
   cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다 (최대 20%)',
-  voucher:'매일 먼저 온 손님 2명은 그날 밤 피로가 6 줄어든다',
+  voucher:'매일 먼저 온 손님 3명은 그날 밤 피로가 6 줄어든다',
   rerollCoupon:'유료 점포지원 구매 기회마다 첫 후보 교환이 무료'};
  assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
  for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');

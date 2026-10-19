@@ -370,7 +370,7 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
   10% of the charged price on top, in every mode; no operating-cost modifier
 
 6. 길드 보증 진열대 · tag=Premium · 150AutoSuccess=NO · playerReceivesChosenPrice=YES
-- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 50%
   of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
 
@@ -410,7 +410,7 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-base operating cost +10% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
+base operating cost +15% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
   (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
@@ -1032,12 +1032,12 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
 - 희귀상품 입고 계약 -> Rare+ ORDER weight +50%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
-- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 50% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
 - COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +10% of overheadBase
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +15% of overheadBase
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> +1 visitor at 20% in the shared Morning extra-visitor roll; +15G HQ commission per sale from the Day's 5th, at most 60G per Day
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
