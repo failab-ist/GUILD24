@@ -30,12 +30,12 @@ for(const [boss,fire,seals,revenue,want]of [['WRATH',false,0,0,228],['WRATH',tru
 for(const [day,offset]of [[1,.125],[4,.25],[10,.5],[11,.55],[15,.75],[20,1],[21,1.1],[22,1.2],[25,1.5],[26,1.5],[29,1.5]]){
  for(const [family,base]of [['spider',2],['slime',2],['golem',3],['crypt',3],['snow',4]])for(const tier of [1,2,3]){
   let calls=0;const dungeon=Game.prototype.makeDungeon.call({run:{day},burden(){calls++;}},family,tier);
-  const isFire=family==='golem',scale=(isFire?.9:1)*.9,term=21+Dungeon.gateDayTerm(day)+(tier-1)*5+(base-2)*1.3;
+  const isFire=family==='golem',scale=(isFire?.9:1)*Dungeon.gateEase(day),term=21+Dungeon.gateDayTerm(day)+(tier-1)*5+(base-2)*1.3;
   const old=(term+(isFire?[6,14,22][tier-1]:0))*scale;
   const full=(term+offset*2+(isFire?[6,13,20][tier-1]:0))*scale;
   const half=(term+offset+(isFire?[6,13.5,21][tier-1]:0))*scale;
   /* DUNGEON_HAZARD §GATE POWER: one Day line (Tier I) x Tier combat 1 / 1.05 / 1.20 for every Family; golem Tier II / III keep their own term */
-  const t1=(22+Dungeon.gateDayTerm(day)+offset+DATA.balance.gateTier1Term)*.9;
+  const t1=(22+Dungeon.gateDayTerm(day)+offset+DATA.balance.gateTier1Term)*Dungeon.gateEase(day);
   if(tier===1)assert.ok(Math.abs(dungeon.power-t1)<1e-9,'1티어 공통 게이트 '+day+'/'+family);
   else if(!isFire)assert.ok(Math.abs(dungeon.power-t1*[1,1.05,1.20][tier-1])<1e-9,'티어 배수 게이트 '+day+'/'+family+'/'+tier);
   else{assert.ok(Math.abs(dungeon.power-half)<1e-9,'승인된 절반 게이트 '+day+'/'+family+'/'+tier);

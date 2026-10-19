@@ -965,6 +965,7 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
    if(s.phase!=='sell'){if(!step(g))break;continue;}
    const n=g.current();
    visits++;
+   if(visits%4===0)n.money=Math.min(n.money,120);  // controlled: every 4th customer is short of money, so a price refusal is reached
    for(const st of [...s.inventory]){
     for(const mode of order){
      const key=st.item+':'+mode;
