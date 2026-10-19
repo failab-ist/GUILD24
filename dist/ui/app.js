@@ -384,7 +384,7 @@ function stage(phase,label,head,body,dock,attrs='',classes=''){
 // landing. Presentation only — every one of these is a no-op when the library is
 // absent or the player asked for reduced motion, and none of them touch game state.
 const motionOK=()=>typeof anime==='object'&&!!anime.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
-let lastTill=null;
+let lastTill=null,eventPinned=null;
 const BOSS_HOLD=200;let bossHold=null; // UI_UX §BOSS REVEAL — MORNING LANDS FIRST
 /* v2.9.10 (User 2026-09-27): a card's art used to be fetched only when its card was drawn. The art the next beats will show
    is fetched and decoded ahead - the Boss's for today, and every living adventurer's (today's customers included, the
@@ -398,8 +398,13 @@ function warmAhead(s,phase){warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount))
 function phaseMorning(A){
   const shutter=$('.band.ceiling .band-art');
   if(shutter)A(shutter,{translateY:[-14,0],duration:420,ease:'outQuad'});
-  const slips=[...document.querySelectorAll('.pinned .slip')];
+  const ev=document.querySelector('.pinned .slip.event'),slips=[...document.querySelectorAll('.pinned .slip')].filter(el=>el!==ev);
   if(slips.length)A(slips,{translateY:[-10,0],opacity:[0,1],duration:260,delay:anime.stagger(70),ease:'outQuad'});
+  /* The Event has no window of its own: today's slip is pinned on after the day sign has turned, once per Event. */
+  const key=game.run.day+':'+game.run.event?.id;
+  if(ev&&eventPinned!==key){eventPinned=key;
+   A(ev,{translateY:[-34,3,0],rotate:[-3,.6,0],opacity:[0,1,1],duration:520,delay:340,ease:'outQuad'});
+   setTimeout(()=>Sound.play('page'),340+300);}
   const till=$('.till .coin');
   if(till){const to=game.run.money,from=lastTill===null?to:lastTill;lastTill=to;
    if(from!==to){const box={v:from};A(box,{v:to,duration:520,ease:'outQuad',onUpdate:()=>{till.textContent=fmt(box.v);}});}}
