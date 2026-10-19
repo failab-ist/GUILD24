@@ -64,7 +64,7 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
-## v2.13.15 — Economy: thinner win Wallets, one shared extra-visitor roll, six supports retuned (User 2026-10-18 ~ 19)
+## v2.13.15 — Economy: thinner win Wallets, one shared extra-visitor roll, nine supports retuned (User 2026-10-18 ~ 19)
 
 The User's third account Run cleared on the 3rd Run: the extra visitors (길드 추천 매대 every Morning + 단체 주문 창구) and
 the expedition-win Wallet kept every purse full, so many cheap Items sold at full price all Run long. Merged into v2.13.15
@@ -79,13 +79,17 @@ the expedition-win Wallet kept every purse full, so many cheap Items sold at ful
 - RELIC 왕도 프리미엄 인증: HQ commission 40% → 20% of the charged 150% price.
 - RELIC 24시간 신선체계: Food / Drink native Core-Stat +50% → +30%.
 - RELIC 평생 단골제: 단골 Core Stats +10% → +6%.
-- META 단골 감사 현수막: 투력 +5% → +3% per 10 단골도. META 의무실 현판: heal chance 50% → 25%.
-- COPY_AUDIT §9-5 / §11-13 · 22 · 23 · 25 · 26: the cards read the new numbers; the three extra-visitor cards add
+- META 단골 감사 현수막: 투력 +5% → +3% per 10 단골도, at most +20%. META 의무실 현판: heal chance 50% → 25%.
+- META 훈련소 제휴 간판: spawn Level +1 chance 55% → 30%.
+- RELIC 희귀상품 입고 계약: Rare+ ORDER weight ×1.7 → ×1.5.
+- COPY_AUDIT §9-5 / §11-5 · 13 · 22 · 23 · 25 · 26: the cards read the new numbers; the three extra-visitor cards add
   「손님이 더 올 확률은 다른 효과와 합쳐 100%까지다」.
 - Measured (`reports/v2100-measure/v21315-economy/`): fresh 1000 D30 reach 5.5 → 4.7%, clear 2.1 → 1.5%, cash / Day 27 → 16G;
   first DAY 30 within 10 Runs none 29 → 22%, economy 63 → 58%, survival 78 → 52%, operation 34 → 24%. The User's 3rd Run
   continued from DAY 15 (200 × bot): living NPC Wallets at the end 5104 → 3504G (median), win Wallet per Day 947 → 688G.
-  Per-support on / off tables (fresh 1000 and the DAY 15 save × 400) are in the same folder.
+  Per-support on / off tables (fresh 1000 and the DAY 15 save × 400) are in the same folder. 훈련소 30%: fresh D20 reach
+  +31.9 → +15.7%p; 현수막 20% cap: DAY 15 save D30 +22.5 → +18.3%p; 희귀상품 입고 ×1.5: DAY 15 save D30 +5.5 → +3.0%p, cash
+  / Day unchanged (+40G).
 
 ## v2.13.15 — SALE shelf tie order held, receipt stub moved (User 2026-10-18)
 

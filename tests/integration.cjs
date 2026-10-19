@@ -1421,7 +1421,7 @@ test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a roll
    if(ra.outcome==='부상'&&a.injury===1){hurt++;assert.equal(rb.outcome,'부상');assert.equal(b.injury,1,'the Injury stands with it worn');}}
   assert.ok(hurt>0,'an ordinary Injury case was checked');}
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 55% chance (User 2026-10-03, v2.10.0; 40% in v2.9.13, 65% before)',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 30% chance (User 2026-10-19)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
@@ -1429,11 +1429,11 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
- assert.equal(P.chance,.55);
+ assert.equal(P.chance,.30);
  let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
   P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
- assert.ok(up/all>.45&&up/all<.65,'about 55%: '+(up/all));
+ assert.ok(up/all>.20&&up/all<.40,'about 30%: '+(up/all));
 });
 test('알뜰 금고: the Day\'s first two customers bring +400G more each',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
@@ -1467,19 +1467,22 @@ test('본사 우수 점포 훈장: the DAY 0 free pick is three 영웅 cards; wi
   const c=new Game(account(['heroSign','rerollCoupon']));c.autosave=false;c.start('hero-coupon');assert.equal(c.relicRerollPrice(),0,'쿠폰함: the first redraw is free here too');
   c.rerollRelics();assert.equal(c.relicRerollPrice(),300);}
 });
-test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 3%) on the expedition; under 단골도 10 nothing changes',()=>{
- assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);
+test('단골 감사 현수막: 투력 x(1 + min(20%, floor(단골도 / 10) x 3%)) on the expedition; under 단골도 10 nothing changes',()=>{
+ assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);assert.equal(DATA.decorationParams.cheerBanner.max,.20);
  const g=past0(fresh('banner')),d=g.run.dungeons[0];
  const npc=loyalty=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=['rice','water'];n.injury=0;n.fatigue=0;n.records=[];n.loyalty=loyalty;return n;};
  const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(0),d).effects)*1.04};
- let won=0,lost=0,diff=0;
+ let won=0,lost=0,diff=0,capDiff=0;
  for(let i=0;i<300;i++){
   const b=Dungeon.resolve(npc(30),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),a=Dungeon.resolve(npc(30),even,new RNG('ban-'+i),[],{loadout:{}});
   if(b.combatWon&&!a.combatWon)won++;if(a.combatWon&&!b.combatWon)lost++;
   const c=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),e=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{}});
-  if(c.combatWon!==e.combatWon)diff++;}
+  if(c.combatWon!==e.combatWon)diff++;
+  const h=Dungeon.resolve(npc(100),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),f=Dungeon.resolve(npc(70),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}});
+  if(h.combatWon!==f.combatWon)capDiff++;}
  assert.ok(won>0&&lost===0,'단골도 30 (x1.09) only ever turns a lost fight into a won one: '+won);
  assert.equal(diff,0,'단골도 9 is floor 0 - the same fight');
+ assert.equal(capDiff,0,'단골도 100 and 70 both stop at +20% - the same fight');
 });
 test('휴식 바우처 꽂이: at night the Day\'s first two customers are 6 Fatigue lower than the same Day without it, everyone else the same',()=>{
  const drive=a=>{const g=new Game(a);g.autosave=false;g.start('voucher');g.buyRelic(g.run.relicWindow.candidateIds[0]);

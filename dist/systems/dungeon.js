@@ -392,7 +392,7 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
    chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that chance is. One formula for the real resolution
    and its proof. */
 /* META 단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x perTen), read where 구급품 진열장's power bonus is */
-const cheer=(on,loyalty)=>on?1+Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen:1;
+const cheer=(on,loyalty)=>on?1+Math.min(D.decorationParams.cheerBanner.max,Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen):1;
 function stoneChance(e,d){return clamp(.40+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;

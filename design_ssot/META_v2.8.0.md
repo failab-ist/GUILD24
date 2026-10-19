@@ -442,7 +442,7 @@ the dearer Slot.
 
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
-every adventurer created while it is worn: 55% chance of spawn Level +1
+every adventurer created while it is worn: 30% chance of spawn Level +1
 ```
 
 ### wall — 의무실 현판
@@ -481,7 +481,7 @@ a Relic slot (the boundary above holds). The one with the larger measured effect
 
 ### sign — 단골 감사 현수막 (id cheerBanner)
 ```text
-투력 × (1 + floor(단골도 / 10) × 3%)
+투력 × (1 + min(20%, floor(단골도 / 10) × 3%))
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF

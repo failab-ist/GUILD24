@@ -366,7 +366,7 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
 
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약 · tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +50%; a Rare+ sale is charged at the ordinary price and HQ pays the store
   10% of the charged price on top, in every mode; no operating-cost modifier
 
 6. 길드 보증 진열대 · tag=Premium · 150AutoSuccess=NO · playerReceivesChosenPrice=YES
@@ -1031,7 +1031,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +50%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee

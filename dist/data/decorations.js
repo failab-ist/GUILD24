@@ -34,7 +34,7 @@ G.DATA.decorations=[
   text:'붉은 상자가 놓인 유리장. 챙길 걸 다 챙긴 손님일수록 무사히 돌아온다.'},
  /* META §OPERATION DECORATIONS: 운영형 - something 본사 did for the store, one per Slot, the Slot's price; the stronger 현수막 on the
     dearer 간판 (User 2026-10-05). The ids stay (saves). */
- {id:'cheerBanner', kind:'operation', slot:'sign', name:'단골 감사 현수막', price:1500, effect:p=>'손님의 투력이 단골도 10마다 '+pct(p.cheerBanner.perTen)+' 오른다',
+ {id:'cheerBanner', kind:'operation', slot:'sign', name:'단골 감사 현수막', price:1500, effect:p=>'손님의 투력이 단골도 10마다 '+pct(p.cheerBanner.perTen)+' 오른다 (최대 '+pct(p.cheerBanner.max)+')',
   text:'본사가 보내 준 단골 감사 현수막. 단골일수록 어깨에 힘이 들어간다.'},
  {id:'heroSign', kind:'operation', slot:'wall', name:'본사 우수 점포 훈장', price:1000, effect:()=>{const b=G.DATA.balance.relicReroll.base;return '첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다. 점포지원 후보 교환도 할 수 있다 ('+b+'G → '+b*2+'G…)';},
   text:'본사가 우수 점포에 달아 준 훈장. 영웅급 지원이 따라온다.'},
@@ -46,8 +46,8 @@ G.DATA.decorations=[
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance); the effect copy above reads them. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={cheerBanner:{perTen:0.03},voucher:{customers:2,fatigue:6},sponsorSign:{budgetShare:0.75},thriftSafe:{firstWallet:400,customers:2},honorFrame:{weights:[20,33,29,13,5]},
- memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.25},trainingSign:{levelBonus:1,chance:.55},aidCabinet:{preparedFactor:.60,powerMult:1.05}};
+G.DATA.decorationParams={cheerBanner:{perTen:0.03,max:0.20},voucher:{customers:2,fatigue:6},sponsorSign:{budgetShare:0.75},thriftSafe:{firstWallet:400,customers:2},honorFrame:{weights:[20,33,29,13,5]},
+ memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.25},trainingSign:{levelBonus:1,chance:.30},aidCabinet:{preparedFactor:.60,powerMult:1.05}};
 /* META §INITIAL FOUR DECORATIONS copy (User 2026-10-04): who gains first, no closing period (COPY_AUDIT §9-5); every
    number is read from decorationParams / D.balance when the card is drawn, so `effect` is a getter over the live tables. */
 for(const d of G.DATA.decorations){const copy=d.effect;Object.defineProperty(d,'effect',{get:()=>copy(G.DATA.decorationParams),enumerable:true});}

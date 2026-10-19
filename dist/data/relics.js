@@ -68,7 +68,7 @@ D.relicParams={
  rotation:{supplyBonus:1},
  stamp:{loyaltyMult:1.75},
  member:{loyaltyRevisitMult:2},
- rareContract:{rareWeightMult:1.7,hqBonus:.10}, /* v2.9.11 (User 2026-09-29): was saleMult 1.1 paid by the customer */
+ rareContract:{rareWeightMult:1.5,hqBonus:.10}, /* v2.9.11 (User 2026-09-29): was saleMult 1.1 paid by the customer */
  guarantee:{subsidyRate:.3},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},
