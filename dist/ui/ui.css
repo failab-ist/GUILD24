@@ -3741,8 +3741,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout.ro2 .ro-head{display:flex;align-items:center;gap:6px;font:500 12px/1.2 var(--ui);color:#9c8d70;white-space:nowrap}
 .readout.ro2 .ro-head .tip{margin-left:auto}
 .readout.ro2 .top .ro-combat>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
-.readout.ro2 .fore.env-each>.env-list,.readout.ro2 .env-meter-list{display:grid;grid-template-columns:auto 1fr;gap:3px 6px;margin:0;order:0;flex:none}
-.readout.ro2 .env-row{display:contents}
+.readout.ro2 .fore.env-each>.env-list,.readout.ro2 .env-meter-list{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:flex-start;gap:2px 12px;margin:0;order:0;flex:none}
+.readout.ro2 .env-meter-list:has(.env-row:nth-child(3)){flex-wrap:wrap}
+.readout.ro2 .env-row{display:inline-flex;align-items:center;gap:4px}
 .readout.ro2 .env-row i{justify-self:start;align-self:baseline}
 .readout.ro2 .fore .env-row b{margin:0}
 .readout.ro2 .top b.env-num{padding:0;background:none;box-shadow:none;font-size:17px;white-space:nowrap}
@@ -4378,13 +4379,10 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .p-final.p-order .dock>.stamp.relic-key{flex:0 0 auto;min-width:96px;padding:6px 12px;background:#d9b23f;color:#211b0e;text-shadow:none;filter:drop-shadow(3px 3px 0 #2a2317bf);box-shadow:inset 0 3px 0 #ffe89a,inset 0 -4px 0 #a86e16}
 .p-final.p-order .dock>.stamp.act-brick{background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;box-shadow:inset 0 3px 0 #d4695b,inset 0 -4px 0 #45150f}
 .p-final.p-order .dock>.stamp.act-brick:not([disabled]):hover{background:#98342a}
-.detail-stat{position:relative}
-.press-marks{position:absolute;left:100%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-start;color:var(--warn);pointer-events:none}
+.press-marks{display:inline-flex;align-items:center;gap:3px;flex:none;color:var(--warn)}
 .press-marks svg{display:block}
 .dest-plate .hazards li{align-items:center}
 .dest-plate .hazards .hz-icon{display:block;flex-shrink:0;color:var(--warn)}
 .env-row i.hz-mark{display:inline-flex;color:var(--warn)}
 .env-row i.hz-mark svg{display:block}
 .env-row .hz-said{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.detail-stat:nth-child(odd) .press-marks{margin-left:4px}
-.detail-stat:nth-child(even) .press-marks{margin-left:1px}

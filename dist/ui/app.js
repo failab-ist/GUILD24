@@ -1697,7 +1697,7 @@ function statDisplay(n){const s=game.run,i=s.phase==='final'&&s.finalCommitted?s
 function statGrid(n){
    const prep = statDisplay(n);
    const values = prep.effects;
-   /* User 2026-10-19: on a sale screen the Hazard mark of each pressing Hazard sits at the right edge of the Stat it presses (same mark as the Gate plate and the 환경 대응 meter) */
+   /* User 2026-10-19: on a sale screen the Hazard mark of each pressing Hazard sits right of the name of the Stat it presses (same mark as the Gate plate and the 환경 대응 meter) */
    const gate = game.run.phase==='sell'&&game.current?.()?.id===n.id ? game.claimedGateFor(n) : null;
    const pressing = gate ? Presentation.known(gate,game).filter(h=>Presentation.hazardStat[h]) : [];
    /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
@@ -1727,8 +1727,7 @@ function statGrid(n){
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
     const marks = pressing.filter(h=>Presentation.hazardStat[h]===k);
-    const face = '<label>'+label+'</label><strong>'+(applied?Presentation.stat(before,true)+' → ':'')+Presentation.stat(values[k],moved)+'</strong>'
-     +(marks.length?'<span class="press-marks m'+Math.min(marks.length,3)+'" aria-hidden="true">'+marks.map(h=>Scene.hazardIcon(h,marks.length===1?11:marks.length===2?10:8)).join('')+'</span>':'');
+    const face = '<label>'+label+(marks.length?'<span class="press-marks" aria-hidden="true">'+marks.map(h=>Scene.hazardIcon(h,marks.length<3?12:10)).join('')+'</span>':'')+'</label><strong>'+(applied?Presentation.stat(before,true)+' → ':'')+Presentation.stat(values[k],moved)+'</strong>';
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
