@@ -55,6 +55,7 @@ and this table is their commit record.
 | v2.13.13 | 2026-10-12 | Decorations: 휴식 바우처 꽂이 first two customers −3, 길드 추천 매대 60%, 명예 모험가 액자 70%, 의무실 현판 50%, 본사 우수 점포 훈장 DAY 0 reroll, and version bump in one PR #194 | (the User sets it) |
 | v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15, 정가 refuses less, operating cost 200 / +10, visit Wallet floor back to 30, failure Death CombatDeficit × 0.50 | (the User sets it) |
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
+| v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -66,6 +67,14 @@ and this table is their commit record.
 
 ## v2.13.16 — 승천 skeleton, with the first-week Gate ease of the same release (User 2026-10-19)
 
+One version for two PRs the User merges together (User: 「같이머지하자」). Measurement of the Gate ease: `reports/v2100-measure/v21315-early-gate/`.
+
+- DUNGEON_HAZARD §Ordinary expedition Wallet reward: `35 + Day × 6` → `35 + Day × 5`.
+- DUNGEON_HAZARD §GATE POWER: the opening week eases — SuccessEase 0.90 × EarlyEase 0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99
+  on DAY 6~9, unchanged from DAY 10 (User: 「d9까지 조금 너프 … 대신 돈을 좀 쪼이고」). On the User's two fresh Runs Lv1~2
+  customers stayed at 0.83~0.90 of the D3~5 Gate with Items while the Gate climbed 26% from D1 to D5.
+  Measured with the Wallet change, investor fresh 1000: D1~7 success 43.8 → 52.0%, median end day 10 → 15, D30 3.4 → 5.1%,
+  clear 1.0 → 1.7%, D20 balance 1567 → 1533G; trajectories reach D20 first on the 3rd Run instead of the 4th~5th.
 - META §ASCENSION: ten cumulative levels opened by clearing (first Boss clear opens 승천 1), picked on the NEW STORE screen
   (`◀ 승천 N ▶` around the name plate, one board note, one coach mark). Effects are the first frame, not measured; numbers live in `D.ascension`.
 - GLOSSARY: 승천.
@@ -76,12 +85,7 @@ The User's third account Run cleared on the 3rd Run: the extra visitors (길드 
 the expedition-win Wallet kept every purse full, so many cheap Items sold at full price all Run long. Merged into v2.13.15
 (User: 「버전 일단 구대로」).
 
-- DUNGEON_HAZARD §Ordinary expedition Wallet reward: `35 + Day × 8` → `35 + Day × 5`.
-- DUNGEON_HAZARD §GATE POWER: the opening week eases — SuccessEase 0.90 × EarlyEase 0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99
-  on DAY 6~9, unchanged from DAY 10 (User: 「d9까지 조금 너프 … 대신 돈을 좀 쪼이고」). On the User's two fresh Runs Lv1~2
-  customers stayed at 0.83~0.90 of the D3~5 Gate with Items while the Gate climbed 26% from D1 to D5.
-  Measured with the Wallet change, investor fresh 1000: D1~7 success 43.8 → 52.0%, median end day 10 → 15, D30 3.4 → 5.1%,
-  clear 1.0 → 1.7%, D20 balance 1567 → 1533G; trajectories reach D20 first on the 3rd Run instead of the 4th~5th.
+- DUNGEON_HAZARD §Ordinary expedition Wallet reward: `35 + Day × 8` → `35 + Day × 6` (v2.13.16 lowers it to `× 5`).
 - RELIC §VISITOR SUPPORT COMPOSITION: 지역 거점점 계약, 단체 주문 창구 and 길드 추천 매대 share one Morning extra-visitor roll —
   the +1 chances added up, then hub's +2 band, capped at 100% together; at most +2 extra visitors a Morning.
 - META 길드 추천 매대: every Morning +1 → 50% (inside the shared roll).
