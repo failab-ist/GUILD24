@@ -70,7 +70,12 @@ The User's third account Run cleared on the 3rd Run: the extra visitors (길드 
 the expedition-win Wallet kept every purse full, so many cheap Items sold at full price all Run long. Merged into v2.13.15
 (User: 「버전 일단 구대로」).
 
-- DUNGEON_HAZARD §Ordinary expedition Wallet reward: `35 + Day × 8` → `35 + Day × 6`.
+- DUNGEON_HAZARD §Ordinary expedition Wallet reward: `35 + Day × 8` → `35 + Day × 5`.
+- DUNGEON_HAZARD §GATE POWER: the opening week eases — SuccessEase 0.90 × EarlyEase 0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99
+  on DAY 6~9, unchanged from DAY 10 (User: 「d9까지 조금 너프 … 대신 돈을 좀 쪼이고」). On the User's two fresh Runs Lv1~2
+  customers stayed at 0.83~0.90 of the D3~5 Gate with Items while the Gate climbed 26% from D1 to D5.
+  Measured with the Wallet change, investor fresh 1000: D1~7 success 43.8 → 52.0%, median end day 10 → 15, D30 3.4 → 5.1%,
+  clear 1.0 → 1.7%, D20 balance 1567 → 1533G; trajectories reach D20 first on the 3rd Run instead of the 4th~5th.
 - RELIC §VISITOR SUPPORT COMPOSITION: 지역 거점점 계약, 단체 주문 창구 and 길드 추천 매대 share one Morning extra-visitor roll —
   the +1 chances added up, then hub's +2 band, capped at 100% together; at most +2 extra visitors a Morning.
 - META 길드 추천 매대: every Morning +1 → 50% (inside the shared roll).

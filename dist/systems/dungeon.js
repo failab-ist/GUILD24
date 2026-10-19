@@ -328,8 +328,8 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    `early` per Day up to the knee, `step` on DAY 9~10, `mid` on DAY 11~20 (the NPC-growth check of the Run Progression
    Arc), `late` from DAY 21. DAY 1~9 steeper and DAY 11~20 flatter by the same 1.35 meet the old line at D20 (early-mid hump). */
 const GATE={knee:9,early:1.60,step:0.80,late:1.54,mid:0.965,midFrom:10,midTo:20};
-/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power, one value every ordinary Day) */
-const GATE_EASE=.90,gateEase=()=>GATE_EASE;
+/* DUNGEON_HAZARD §GATE POWER (SuccessEase on the finished Gate Power; DAY 1~9 eased by EARLY_EASE, 1 from DAY 10) */
+const GATE_EASE=.90,EARLY_EASE=[1,.96,.96,.96,.96,.96,.97,.98,.99,.99],gateEase=day=>GATE_EASE*(EARLY_EASE[day]??1);
 /* DUNGEON_HAZARD §Environment incident probability (ENV also splits the incident cause) */
 const ENV={base:.08,gap:.020,floor:.02,cap:.60};
 /* DUNGEON_HAZARD §Environment incident probability: Tier II Gates ease through DAY 15 (base / gap by last DAY), every other Gate keeps ENV */
@@ -686,7 +686,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((24.2+d.day*5.06)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?WIN.xp:.5)*e.xpMult*dayEv.xpMult):0;
  const xpBase=xp;xp=G.Adventurer.catchupXP(n,xp,d.day,outcome);const xpBoost=xp-xpBase;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward: keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
- let loot=n.alive?Math.round((35+d.day*6)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
+ let loot=n.alive?Math.round((35+d.day*5)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<equipChance(n.equipment.tier,run?.day??d.day)+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money=Math.min(2000,n.money+loot);/* ECONOMY_ORDER §Persistent Wallet: every permanent increase clamps to 2000G, so a D30 party that skips the visit-time clamp never holds more */
  if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<envChance(bare.hazard,bare.effects.survival,d.day,d.tier)*(1-assist);
@@ -707,5 +707,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={EQUIP,equipChance,opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={EQUIP,equipChance,opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,EARLY_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);
