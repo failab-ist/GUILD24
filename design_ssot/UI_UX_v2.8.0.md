@@ -106,7 +106,7 @@ mobile / tutorial / semantic delta / popover / Store Management / NIGHT layout.
 question=`오늘 어떤 날인가?` — 상황 읽기: 방문 예상 · 열린 Gate · Known Hazard · Event. No Order controls in bulk, no Sale
 controls, no Closing figures; the store scene never gets in the way of the situation.
 
-Event day: the Event Focused Reveal comes before Gate Detail, then the Event-applied Morning Situation; no EVENT Phase.
+Event day: the Event slip sits above the Gate plates on the board (no pop-up, User 2026-10-19), then the Event-applied Morning Situation; no EVENT Phase.
 Timing/effect -> EVENT_v2.8.0.md.
 
 게이트 임시 폐쇄가 있는 날: 닫힌 게이트는 열린 게이트 판 뒤에 흐린 판으로 남는다 — 이름에 취소선, `오늘 폐쇄` 도장 하나,
@@ -1632,7 +1632,7 @@ no Morning/Order information hidden.
 ### FIRST EVENT TUTORIAL
 
 (acceptance -> UI_UX §QA UI-Q-v29-56.) One contextual MORNING mark, like the Gate marks: the first time an Event slip (`.slip.event`)
-is on the board, after the Event reveal is closed, once per account, persisted and reset with the rest. On a fresh account it
+is on the board, once per account, persisted and reset with the rest. On a fresh account it
 lands on the first Run's DAY 2 (`CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS). It says that an Event may come any morning and changes
 that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-11.
 
@@ -1669,7 +1669,6 @@ On decision surfaces Function reads before Flavor.
 | Function / Effect | 14–15px class / 600 | normal/high contrast; numeric conditions and exact rule effects |
 | Secondary factual | 13px class / 400 | dimmer than Function |
 | Flavor on a decision surface | 12–13px class / 400 | lower contrast; 1–2 lines recommended; no numeric/rule payload |
-| Event Reveal | Flavor 13px / 400 / dim · Effect 15px / 600 / primary | |
 | Morning Event slip | Flavor 12px class · Effect 13px / 600 | |
 | Codex/Lore Flavor | 13px / 400 / dim | may be italic |
 | NPC Dialogue | 14–15px class | speech bubble |
@@ -2828,10 +2827,10 @@ FAIL: a retired mark still shows, a mark names an Item, or a price lesson shows 
 Verify UI_UX §FIRST EVENT TUTORIAL on a fresh account, tutorial on, at 390 and 1280.
 
 PASS:
-- the first Run's DAY 2 opens the 본사 1+1 행사 reveal; after `오늘 상황 보기` the board's Event slip carries COPY_AUDIT §3-11
+- the first Run's DAY 2 shows the 본사 1+1 행사 slip on the board; it carries COPY_AUDIT §3-11
 - once per account; a later Event shows no mark; 건너뛰기 and reset behave as the other marks; the mark names no Event or Item
 
-FAIL: the mark over the open reveal, on a board without an Event, or a second time.
+FAIL: the mark on a board without an Event, or a second time.
 
 #### UI-Q-v29-54 — END THIS RUN BLOCK (User 2026-09-30)
 

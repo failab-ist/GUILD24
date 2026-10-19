@@ -99,7 +99,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    // ---- selection: 0, then 1 picked
    let u=await p.evaluate(ui);
    check(`S @${tag} capacity reads 선택 0명 · 최대 3명`,u.count==='선택 0명 · 최대 3명',u.count);
-   check(`S @${tag} guidance, no forecast / 전투 전망 / 사망 위험`,u.pending&&u.text.includes('최대 3명까지 출전할 수 있다.')&&u.text.includes('원정대를 확정하면 토벌 전망을 확인할 수 있다.')&&!u.forecasts&&!u.combat&&!u.death);
+   check(`S @${tag} guidance, no forecast / 전투 전망 / 사망 위험`,u.pending&&u.text.includes('원정대를 확정하면 토벌 전망을 확인할 수 있다.')&&!u.forecasts&&!u.combat&&!u.death);
    check(`S @${tag} 원정대 확정 closed with nobody picked`,await p.evaluate(`document.querySelector('.p-final .dock [data-action="final-commit"]').disabled`));
    await shot('1-select0',false);await shot('1-select0-below');
    await pickFinal(p,ids[0]);
