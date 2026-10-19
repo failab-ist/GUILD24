@@ -11,6 +11,7 @@
 | `final3.log` | final2 + 희귀상품 입고 계약 1.5배 |
 | `bot7-oldnumbers.log` | final3 + 새 봇(점포지원 교환 규칙 · 영웅 효과 순서) |
 | `final4.log` | 새 봇 + 바우처 3명 · 지원금 간판 50% · 알뜰 금고 300G · 즉석식품 운영비 15% · 보증 진열대 50% = 브랜치 그대로 |
+| `final4-best.log` | final4 규칙, 칸마다 새 판 효과가 큰 장식만 사는 경로(`--decos best`) |
 
 `trajectory-summary.txt`: 10판 안 처음 D20 / D30 / 클리어 (base · a1 · final 순, 장식 경로별).
 
