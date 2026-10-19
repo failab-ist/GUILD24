@@ -64,6 +64,12 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
+## After v2.13.15 — 승천 skeleton (User 2026-10-19)
+
+- META §ASCENSION: ten cumulative levels opened by clearing (first Boss clear opens 승천 1), picked on the NEW STORE screen
+  (`◀ 승천 N ▶` around the name plate, one board note, one coach mark). Effects are the first frame, not measured; numbers live in `D.ascension`.
+- GLOSSARY: 승천.
+
 ## v2.13.15 — Economy: thinner win Wallets, one shared extra-visitor roll, fourteen supports retuned (User 2026-10-18 ~ 19)
 
 The User's third account Run cleared on the 3rd Run: the extra visitors (길드 추천 매대 every Morning + 단체 주문 창구) and
