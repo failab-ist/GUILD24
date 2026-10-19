@@ -2828,6 +2828,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
       body=body.replace(/(<button[^>]*data-action="([^"]+)"[^>]*>)([^<]+)/g,(_,open,action,label)=>open+'<img class="menu-icon" src="ui/assets/presentation/menu/'+icons[action]+'.webp" alt="" aria-hidden="true"><span class="menu-label">'+label+'</span>');
       narrow=true;}
    else if(modal==='loadout'){title='이번 점포의 장식';body=loadoutModal();footer=btn('확인','dismiss','stamp');narrow=true;}
+   else if(modal==='departConfirm'){title='이 손님을 그냥 보내도 될까요?';body='<p>고른 상품을 아직 팔지 않았다.<br>그냥 보내면 그 상품은 손님이 가져가지 않는다.</p>';footer=btn('계속 판매','dismiss')+btn('그냥 보내기','depart-go','danger');narrow=true;}
    else if(modal==='abandonConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','abandon-go','danger');narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}
  /* D30 last order (User 2026-09-30): the muster's own candidates, read only - each card opens the notebook, nothing is picked */
@@ -2855,7 +2856,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body=Native.inApp()?`<p>현재 영업과 본사 기록을 포함한 이 기기의 GUILD24 저장 데이터를 모두 지운다.${Native.cloudWorks()?' Play 게임즈의 백업도 함께 지운다.':''} 되돌릴 수 없다.</p>`:'<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.</p>';footer=(Native.inApp()?'':btn('저장 내보내기','export'))+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체한다. 기존 진행을 남기려면 먼저 내보내야 한다.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- const utility=modal==='menu'?'menu-panel':['roster','codex','help','loadout','abandonConfirm'].includes(modal)?'wood-frame':['settings','resetConfirm','importConfirm','credits','exitConfirm'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':modal==='exitConfirm'?'exit-confirm':''):'';
+ const utility=modal==='menu'?'menu-panel':['roster','codex','help','loadout','abandonConfirm','departConfirm'].includes(modal)?'wood-frame':['settings','resetConfirm','importConfirm','credits','exitConfirm'].includes(modal)?'settings-wood '+(modal==='settings'?'settings-panel':modal==='exitConfirm'?'exit-confirm':''):'';
  root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''} ${utility}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&!ownCancel.has(modal)&&!d0Owed()?btn(CLOSE_X,'dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  sentenceBreaks(root);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
@@ -3017,7 +3018,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     displayed - so it owes that result its own Outcome cue. It used to play the generic return
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
     return until the player pressed 다음. */
- case'depart':playExit(()=>{game.depart();selected=null;render();document.querySelector('.receipt-stub')?.remove();
+ case'depart-go':setModal(null);
+ case'depart':if(a==='depart'&&s.firstRun&&selected){sound('ui');setModal('departConfirm');break;}/* first Run only: a Good picked but not priced goes with the Customer unsold */
+  playExit(()=>{game.depart();selected=null;render();document.querySelector('.receipt-stub')?.remove();
   if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');healCue();});break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();sound('spend');render();break;
