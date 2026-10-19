@@ -1445,6 +1445,8 @@ function closingScreen(){
 /* User 2026-10-10: survival first, then what the sold Item did, then what changes the next decision, then the rewards */
 const NIGHT_MARKS=['death','severe','injured','accident','counter','prepared','fatigue','great','earn'];
 const coachSteps={
+ /* META §ASCENSION (User 2026-10-19): the first time the new store screen shows the picker, once per account */
+ prep:[['ascension','.asc-row',Copy.ascension.coach]],
  /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
@@ -1622,7 +1624,7 @@ function showCoach(){
  const s=game.run,relicD30=modal==='relics'&&s?.phase==='final'&&s.day===30&&s.relicWindow?.milestoneDay===30;
  if(tutorial.skipped||(modal&&!relicD0&&!relicD30)||bossHold)return;
  const finalGroup=s?.finalCommitted?'final':finalIsOrdering(s)?'finalOrder':'finalRoster';
- const steps=relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);
+ const steps=document.querySelector('.stage.p-prep')?coachSteps.prep:relicD0?coachSteps.relic:relicD30?coachSteps.finalRelic:s?.phase==='final'?coachSteps[finalGroup]:(coachSteps[s?.phase]||[]);
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
@@ -2586,6 +2588,15 @@ function stockModal(){const s=game.run;return `<p class="muted" style="margin-bo
    Decoration Slot is its own place in the room, and the Store Capital is a small plate on the counter where the till
    will stand. The loadout is the Account's planned one (the Run's is frozen only at start). An empty Slot is a neutral
    state, not a warning; every Slot - empty ones included - opens 점포 장식 already on that Slot. */
+/* META §ASCENSION on the new store screen (User 2026-10-19): once 승천 has opened the name plate becomes the picker - ◀ ▶ around it,
+   the store's name only on 승천 0 and `승천 N` above it - and the board carries one cream line pair: the level and a short
+   note that the earlier levels still apply, then this level's own effect. Effects are read from D.ascension, never copied. */
+function ascPicker(a){const max=Meta.ascensionMax(a),lv=Meta.ascensionPick(a);
+ if(!max)return '<span class="branchplate">'+E(plannedBranch())+'</span>';
+ const arrow=(act,off,label,glyph)=>'<button class="asc-arrow" data-action="'+act+'"'+(off?' disabled':'')+' aria-label="'+label+'">'+glyph+'</button>';
+ return '<div class="asc-row">'+arrow('asc-prev',lv<=0,'승천 단계 낮추기','◀')+'<span class="branchplate">'+E(lv?'승천 '+lv:plannedBranch())+'</span>'+arrow('asc-next',lv>=max,'승천 단계 올리기','▶')+'</div>';}
+function ascNote(a){const lv=Meta.ascensionPick(a),x=lv&&D.ascension[lv-1];if(!x)return '';
+ return '<div class="asc-note"><p class="asc-head"><b>승천 '+lv+'</b><span>앞 단계 효과도 적용</span></p><p class="asc-fx">'+E(x.name+': '+x.effect)+'</p></div>';}
 function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta.ownedDecorations(a),capital=Meta.storeCapital(a);
  /* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a Slot whose unowned Decoration the capital covers now says
     so - a current state, not a "new" flag, and no Decoration named. */
@@ -2603,13 +2614,13 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    /* the store's name is a plate right under the title (User 2026-09-27): the counter front carries the Store Capital */
    +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="170" alt="마왕 잡는 편의점"></h1>'
-   +'<span class="branchplate">'+E(plannedBranch())+'</span></div></span></div>'
+   +ascPicker(a)+'</div></span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
    +'<p class="board-rail">새 점포 준비</p>'
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
     +'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다.</b>'
     +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>'
-    +'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
+    +ascNote(a)+'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="store-capital capital-plate"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
@@ -2900,6 +2911,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'prologue-skip':prologueWake();prologueStep(true);break;
  case'prologue-sound':{const st=game.account.settings,was=!st.muted&&!prologue.woke&&Sound.locked();prologueWake();if(!was)st.muted=!st.muted;game.save();sound('ui');const b=$('.pro-sound');if(b){b.innerHTML=proSpeaker(st.muted);b.setAttribute('aria-label',st.muted?'소리 켜기':'소리 끄기');}break;}
  case'prep-back':prepOpen=false;sound('ui');render();break;
+ case'asc-prev':case'asc-next':Meta.setAscension(game.account,Meta.ascensionPick(game.account)+(a==='asc-next'?1:-1));game.save();sound('ui');render();break;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW: buying and equipping are only legal outside a Run, and
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
