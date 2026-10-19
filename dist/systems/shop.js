@@ -252,12 +252,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      knows about it. */
   const rawVisitors=this.rng.int(3,6);
   const baseVisitors=s.dayFacilities.includes('board')?Math.max(D.relicParams.board.minVisitors,rawVisitors):rawVisitors;
-  let hubExtra=0;
-  if(s.dayFacilities.includes('hub')){const r=this.rng.next(),{p1,p2}=D.relicParams.hub;hubExtra=r<p1?1:r<p1+p2?2:0;}
-  /* 단체 주문 창구: its own Morning roll too, independent of board, hub and the wall. */
-  const flyerExtra=s.dayFacilities.includes('groupOrder')&&this.rng.next()<D.relicParams.groupOrder.visitorChance?1:0;
-  /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
-  const decoExtra=this.wears('guildShelf')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
+  /* RELIC §VISITOR SUPPORT COMPOSITION: one Morning roll for every extra-customer source - the +1 chances summed,
+     then hub's +2 band, the whole capped at 100% (the +1 sum gives way so the +2 band keeps its share). */
+  const hub=s.dayFacilities.includes('hub'),p2=hub?D.relicParams.hub.p2:0,one=[hub?D.relicParams.hub.p1:0,s.dayFacilities.includes('groupOrder')?D.relicParams.groupOrder.visitorChance:0,this.wears('guildShelf')?D.balance.wallVisitorChance:0];
+  let hubExtra=0,flyerExtra=0,decoExtra=0;
+  if(p2+one[0]+one[1]+one[2]>0){const r=this.rng.next();
+   const room=1-p2;let acc=0,hit=-1;for(let i=0;i<3&&hit<0;i++){const p=Math.min(one[i],Math.max(0,room-acc));if(r<acc+p)hit=i;acc+=p;}
+   if(hit===0)hubExtra=1;else if(hit===1)flyerExtra=1;else if(hit===2)decoExtra=1;else if(r<acc+p2)hubExtra=2;}
   s.expectedVisitors=baseVisitors+hubExtra+flyerExtra+decoExtra;
   return {rawVisitors,baseVisitors,hubExtra,flyerExtra,decoExtra};
  }
@@ -581,7 +582,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* 희귀상품 입고 계약 (v2.9.11, User 2026-09-29): a Rare+ sale is charged at the ordinary price and HQ pays the store 10%
     of the charged price on top - the customer is never asked for it (it was a +10% the customer paid). */
  if(this.has('rareContract')&&it.rarity>=2)commission+=Math.round(intent.price*D.relicParams.rareContract.hqBonus);
- if(this.has('groupOrder')&&s.daily.sales>=D.relicParams.groupOrder.commissionFrom)commission+=D.relicParams.groupOrder.commission;
+ {const g=D.relicParams.groupOrder;if(this.has('groupOrder')&&s.daily.sales>=g.commissionFrom&&(s.daily.groupOrderPaid||0)+g.commission<=g.dailyCap){commission+=g.commission;s.daily.groupOrderPaid=(s.daily.groupOrderPaid||0)+g.commission;}}
  /* 원정 전문 인증: the buyer of a Counter for their own Gate collects +50G on the next visit, once per purchase Day */
  s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;

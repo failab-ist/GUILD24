@@ -23,7 +23,7 @@ const rows=[
 ['kitchen','즉석식품 코너','foundation',['fresh'],200,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.kitchen.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 '+pct(p.kitchen.overheadRate)+' 오른다.'],
 ['board','길드 전광판','foundation',['customer'],110,p=>'손님 수가 적게 나와도 하루 기본 '+p.board.minVisitors+'명은 온다 (기존 3명).'],
 ['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,p=>'처음 온 손님의 손님 소지금 +'+p.firstVisitCoupon.arrivalGold+'G, 그 손님의 구매 의사 +'+pp(p.firstVisitCoupon.intentBonus)+'.'],
-['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,p=>'매일 아침 '+pct(p.groupOrder.visitorChance)+' 확률로 손님이 1명 더 온다. 하루 '+p.groupOrder.commissionFrom+'번째 판매부터는 팔 때마다 가게가 '+p.groupOrder.commission+'G를 더 받는다.'],
+['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,p=>'매일 아침 '+pct(p.groupOrder.visitorChance)+' 확률로 손님이 1명 더 온다. 하루 '+p.groupOrder.commissionFrom+'번째 판매부터는 팔 때마다 가게가 '+p.groupOrder.commission+'G를 더 받는다(하루 최대 '+p.groupOrder.dailyCap+'G). 손님이 더 올 확률은 다른 효과와 합쳐 100%까지다.'],
 ['memberBundle','단골 묶음혜택','hybrid',['rotation','vip'],190,p=>'단골 손님이 오늘 두 번째 상품을 살 때, 손님은 '+(p.memberBundle.payShare===.5?'반값':'판매가의 '+pct(1-p.memberBundle.payShare))+'만 내고 가게는 전액을 받는다.'],
 ['premiumMember','프리미엄 멤버십','hybrid',['vip','premium'],200,p=>'다시 온 손님의 손님 소지금 +'+p.premiumMember.arrivalGold+'G, 희귀 이상 상품 구매 의사 +'+pp(p.premiumMember.rareIntentBonus)+'. 그 손님이 희귀 이상 상품을 정가나 할인으로 사면 단골도가 '+p.premiumMember.rareLoyalty+' 더 오른다.'],
 ['returnPoints','귀환 적립제','hybrid',['vip','expedition'],240,p=>'오늘 상품을 산 손님이 원정에서 살아 돌아오면, 그 손님의 단골도 +'+p.returnPoints.loyaltyBonus+', 손님 소지금 +'+p.returnPoints.goldBonus+'G.'],
@@ -36,7 +36,7 @@ const rows=[
 ['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,p=>'바가지(150%)로 팔면 가게가 판매가의 '+pct(p.royalCert.commissionRate)+'를 더 받고, 손님의 바가지 구매 의사 +'+pp(p.royalCert.intentBonus)+'. 대신 기본 운영비가 '+pct(p.royalCert.overheadRate)+' 오른다.'],
 ['opsRoom','원정 작전실','keystone',['expedition'],290,p=>'손님의 위험 대응이 필요한 수치를 넘긴 만큼 투력이 오른다 (최대 +'+pct(p.opsRoom.overshootCap*p.opsRoom.mult)+').'],
 ['fresh24','24시간 신선체계','keystone',['fresh'],360,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.fresh24.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +'+pct(p.fresh24.orderPriceMult-1)+'.'],
-['hub','지역 거점점 계약','keystone',['customer'],340,p=>'매일 아침 손님이 '+pct(p.hub.p1)+' 확률로 1명, '+pct(p.hub.p2)+' 확률로 2명 더 온다. 대신 기본 운영비가 '+pct(p.hub.overheadRate)+' 오른다.'],
+['hub','지역 거점점 계약','keystone',['customer'],340,p=>'매일 아침 손님이 '+pct(p.hub.p1)+' 확률로 1명, '+pct(p.hub.p2)+' 확률로 2명 더 온다.'+(p.hub.overheadRate>0?' 대신 기본 운영비가 '+pct(p.hub.overheadRate)+' 오른다.':'')+' 손님이 더 올 확률은 다른 효과와 합쳐 100%까지다.'],
 ['warehouse','후방 창고 증설','utility',[],130,p=>'창고에 둘 수 있는 상품이 '+p.warehouse.slots+'칸 늘어난다.'],
 ['extraOrder','본사 추가발주권','utility',[],190,p=>'발주 칸이 '+p.extraOrder.extraOffers+'칸 늘어난다.'],
 ['rerollTicket','발주 교환권','utility',[],120,()=>{const b=D.balance.rerollBase;return '매일 첫 발주 후보 교환은 무료. 그다음부터 '+b+'G → '+b*2+'G → '+b*4+'G… 로 오른다.';}],
@@ -78,7 +78,7 @@ D.relicParams={
  kitchen:{statBonus:.25,overheadRate:.10}, /* User 2026-10-02: the +10% operating cost is back - the Fresh line clears more, pays more */
  board:{minVisitors:4},
  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
- groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},
+ groupOrder:{visitorChance:.20,commissionFrom:5,commission:15,dailyCap:60},
  memberBundle:{payShare:.5},
  premiumMember:{rareIntentBonus:.15,arrivalGold:25,rareLoyalty:10},
  returnPoints:{loyaltyBonus:4,goldBonus:20}, /* User 2026-10-04: Loyalty 5 -> 4 with the returning-customer condition gone */
@@ -87,11 +87,11 @@ D.relicParams={
  supplyCert:{commissionRate:.40,goldBonus:30},
  dawnRecovery:{refundRate:.5,extraOffers:1},
  logisticsHQ:{perSale:.03,maxDiscount:.30}, /* v2.9.11 remake (User 2026-09-29): was same-SKU 3+ -25% after 6 sales */
- lifetime:{statBonus:.10}, /* User 2026-10-02 remake: no Gold, no revisit weight - 단골 Stats +10%, and the 단골 line holds */
- royalCert:{commissionRate:.40,intentBonus:.10,overheadRate:.10},
+ lifetime:{statBonus:.06}, /* User 2026-10-02 remake: no Gold, no revisit weight - 단골 Stats +10%, and the 단골 line holds */
+ royalCert:{commissionRate:.20,intentBonus:.10,overheadRate:.10},
  opsRoom:{overshootCap:.5,mult:.6,final:true}, /* User 2026-10-02: 원정 전문 인증 remade; 투력 +30% at most */
- fresh24:{statBonus:.50,orderPriceMult:1.15},
- hub:{p1:.45,p2:.15,overheadRate:.10},
+ fresh24:{statBonus:.30,orderPriceMult:1.15},
+ hub:{p1:.45,p2:.15,overheadRate:0},
  warehouse:{slots:5}, /* v2.9.2 fourth pass (User 2026-09-26): +10 -> +5 */
  extraOrder:{extraOffers:2},
  rerollTicket:{freeRerolls:1},

@@ -60,14 +60,14 @@ test('return points pays a paid buyer who survives, first visit included; exclud
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
  const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,4,'no Loyalty threshold');assert.equal(lr.money-lb.money,20);
 });
-/* RELIC 22 (User 2026-10-02 remake): 평생 단골제 pays no Gold and weights no visit - a 단골's four Core Stats +10% (shown among
+/* RELIC 22 (User 2026-10-02 remake): 평생 단골제 pays no Gold and weights no visit - a 단골's four Core Stats +6% (shown among
    each Stat's sources, the Final party included), and once a 단골, Loyalty does not drop below 51 while it is owned. */
-test('RELIC 22: 평생 단골제 - 단골 Stats +10% and the 단골 line holds; no Gold, no revisit weight',()=>{
+test('RELIC 22: 평생 단골제 - 단골 Stats +6% and the 단골 line holds; no Gold, no revisit weight',()=>{
  const g=fresh('lifetime'),n={...g.run.npcs[0],traits:[],injury:0,fatigue:0,pack:[]},d={...g.run.dungeons[0],requiredSupply:0};
  const reg={...n,loyalty:51},plain=Dungeon.prepare(reg,d,[]),owned=Dungeon.prepare(reg,d,['lifetime']);
  for(const k of ['combat','survival','mobility','spirit']){
-  assert.ok(Math.abs(owned.effects[k]-plain.effects[k]*1.1)<1e-9,k+' +10% for a 단골');
-  assert.ok(owned.sources[k].some(x=>x.name==='평생 단골제'&&x.isPct&&x.v===10),k+' lists the source');}
+  assert.ok(Math.abs(owned.effects[k]-plain.effects[k]*1.06)<1e-9,k+' +6% for a 단골');
+  assert.ok(owned.sources[k].some(x=>x.name==='평생 단골제'&&x.isPct&&x.v===6),k+' lists the source');}
  const not={...n,loyalty:50};assert.deepEqual(Dungeon.prepare(not,d,['lifetime']).effects,Dungeon.prepare(not,d,[]).effects,'below 51: nothing');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  assert.ok(!/relicParams\.lifetime\.(goldBonus|revisitMult)/.test(src),'no Gold, no revisit weight');
@@ -91,7 +91,7 @@ test('overhead matches day effects',()=>{
   assert.equal(nightWith([id]).g.run.daily.operating-base.g.run.daily.operating,
    charged(modifier)-charged(0),id+' day overhead');
  }
- assert.equal(raw.hub,base.g.overheadBase()*0.10,'hub is 10% of the overhead base, the approved rate');
+ assert.equal(raw.hub,0,'hub carries no overhead (User 2026-10-19)');
 });
 /* REL-Q-v28-18. The D30 pool is the ordinary eligible pool MINUS an explicit no-effect set, so
    this asserts the whole membership directly rather than sampling windows and hoping: sampling
@@ -209,7 +209,20 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
  // the stated mean, straight off the approved rates
  assert.ok(Math.abs((.45*1+.15*2+.40*0)-0.75)<1e-12,'+0.75 visitors per applicable Day');
  assert.equal(DATA.relicBy.hub.price,340);
- assert.equal(DATA.balance.hubOverheadRate,.10,'the operating modifier stays overheadBase +10%');
+ assert.equal(DATA.balance.hubOverheadRate,0,'no operating modifier (User 2026-10-19)');
+});
+
+/* RELIC §VISITOR SUPPORT COMPOSITION (User 2026-10-18): hub, 단체 주문 창구 and the wall share one Morning roll -
+   the +1 chances summed, then hub's +2 band, capped at 100% - so the extras never stack past +2. */
+test('VISITOR SUPPORT COMPOSITION: one shared extra-visitor roll, +1 chances summed, capped at 100%',()=>{
+ const g=fresh('visitor-share'),s=g.run;
+ const at=(fac,shelf,r)=>{s.dayFacilities=fac;s.loadout={...(s.loadout||{}),display:shelf?'guildShelf':null};let calls=0;g.rng={int:()=>3,next:()=>{calls++;return r;}};const v=g.morningVisitors();return {extra:s.expectedVisitors-3,v,calls};};
+ // groupOrder 20% then the wall 50%: [0,.2) +1 from 단체 주문, [.2,.7) +1 from the wall, the rest nothing
+ for(const [r,want,key] of [[0,1,'flyerExtra'],[.1999,1,'flyerExtra'],[.2,1,'decoExtra'],[.6999,1,'decoExtra'],[.7,0,null],[.99,0,null]]){
+  const o=at(['groupOrder'],true,r);assert.equal(o.extra,want,'r='+r);if(key)assert.equal(o.v[key],1,'r='+r+' from '+key);assert.equal(o.calls,1,'one roll');}
+ // all three: +1 band = min(.45+.20+.50, 1-.15) = .85, then +2 for the last 15%; never +3 or +4
+ for(const [r,want] of [[0,1],[.8499,1],[.85,2],[.9999,2]])assert.equal(at(['hub','groupOrder'],true,r).extra,want,'all three, r='+r);
+ assert.equal(at([],false,0).calls,0,'no source held, no roll drawn');
 });
 
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): 야전 들것 and 응급 처치대 ease an injury. */
@@ -253,9 +266,9 @@ test('REMAKE 첫 방문 쿠폰: first-ever visit +30G on arrival and intent +20%
  assert.ok(!/dayFacilities\.includes\('firstVisitCoupon'\)/.test(src),'the support no longer seats anyone');
 });
 
-/* 2026-09-23 remake: 단체 주문 창구 - its own 20% Morning roll for +1 visitor, and +15G commission
-   on every sale from the Day's 5th. */
-test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sale from the 5th',()=>{
+/* 2026-09-23 remake: 단체 주문 창구 - a 20% Morning chance of +1 visitor, and +15G commission on every sale from
+   the Day's 5th, at most 60G a Day (User 2026-10-18). */
+test('REMAKE 단체 주문 창구: 20% Morning chance of +1 visitor; +15G per sale from the 5th, at most 60G a Day',()=>{
  const g=fresh('group-window'),s=g.run;
  for(const [r,want] of [[0,1],[.1999,1],[.2,0],[.9,0]]){
   s.dayFacilities=['groupOrder'];g.rng={int:()=>3,next:()=>r};const v=g.morningVisitors();
@@ -266,9 +279,9 @@ test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sal
  const g2=fresh('group-commission'),t=g2.run;t.facilities=['groupOrder'];t.dayFacilities=['groupOrder'];t.phase='sell';t.daily.commission=0;
  g2.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
  const got=[];
- for(let i=0;i<7;i++){const n=t.npcs[i%t.npcs.length];n.traits=[];n.money=99999;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
+ for(let i=0;i<12;i++){const n=t.npcs[i%t.npcs.length];n.traits=[];n.money=99999;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
   t.queue=[n.id];t.cursor=0;g2.stock('rice',1);const c=t.daily.commission;assert.equal(g2.sell(t.inventory.at(-1).id,'full'),true);got.push(t.daily.commission-c);}
- assert.deepEqual(got,[0,0,0,0,15,15,15]);
+ assert.deepEqual(got,[0,0,0,0,15,15,15,15,0,0,0,0],'four paid sales reach the 60G cap');
 });
 
 /* 2026-09-23 remake: 새벽 회수 계약 - expiring Food/Drink is taken back at 50% of its cost instead
@@ -313,7 +326,7 @@ test('SA-Q16: buying 전문 포션 유통 계약 extends no stock; 대형 냉장
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7 / 33: HQ commission is 40% of list (supplyCert), 40% of charged 150% (royalCert), 10% of charged Potion sales (coldcase)',()=>{
+test('REL-Q-v28-5 / 7 / 33: HQ commission is 40% of list (supplyCert), 20% of charged 150% (royalCert, User 2026-10-19), 10% of charged Potion sales (coldcase)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -329,8 +342,8 @@ test('REL-Q-v28-5 / 7 / 33: HQ commission is 40% of list (supplyCert), 40% of ch
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const common=DATA.items.find(i=>i.rarity===0);
  assert.ok(plain&&insured,'the catalogue has both a plain Rare+ and a Rare+ insurance role');
- assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.40),'royalCert pays 40% of the charged 150% price');
- assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.40),'at any rarity');
+ assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.20),'royalCert pays 20% of the charged 150% price');
+ assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.20),'at any rarity');
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.40),'supplyCert pays 40% of list (User 2026-10-04)');
  const fineFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity>=1),plainFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&i.rarity===0);
@@ -358,7 +371,8 @@ test('REL §23: 왕도 프리미엄 인증 - 바가지 intent +10%p and base ope
  assert.equal(g.interest(n,it,'full').chance,(s.facilities=[],g.interest(n,it,'full').chance),'정가 is untouched');
  const base=g.overheadBase(15),cost=f=>g.expectedOperatingCost({day:15,facilities:f,event:null});
  assert.equal(cost(['royalCert']),Math.round(base*1.10/10)*10,'operating cost +10% of overheadBase');
- assert.equal(cost(['royalCert','hub']),Math.round(base*1.20/10)*10,'with 지역 거점점 계약: the two shares add');
+ assert.equal(cost(['royalCert','kitchen']),Math.round(base*1.20/10)*10,'with 즉석식품 코너: the two shares add');
+ assert.equal(cost(['royalCert','hub']),Math.round(base*1.10/10)*10,'지역 거점점 계약 adds no share (User 2026-10-19)');
  assert.equal(cost([]),Math.round(base/10)*10,'without it, unchanged');
 });
 
@@ -418,12 +432,12 @@ test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ 
  assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,189,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
-test('즉석식품 코너 takes overheadBase +10% (User 2026-10-02), added to hub\'s 10%, never compounded',()=>{
- const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','hub']);
+test('즉석식품 코너 takes overheadBase +10% (User 2026-10-02), added to 왕도 인증\'s 10%, never compounded',()=>{
+ const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','royalCert']);
  const b=base.g.overheadBase(),charged=x=>Math.round((b+x)/10)*10;
  assert.equal(DATA.relicParams.kitchen.overheadRate,.10);
  assert.equal(kitchen.g.run.daily.operating,charged(b*.10),'kitchen takes 10% of the base');
- assert.equal(both.g.run.daily.operating,charged(b*.20),'with hub: 10% + 10% of the same base');
+ assert.equal(both.g.run.daily.operating,charged(b*.20),'with 왕도 인증: 10% + 10% of the same base');
 });
 test('원정 도시락 코너: Food/Drink ORDER price x1.15 (User 2026-10-04), with 24시간 신선체계 x1.15 too; other Items untouched',()=>{
  const g=fresh('meal-price'),s=g.run;
@@ -612,19 +626,19 @@ test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime trut
 test('운영비 가산은 구입 당일부터 합산하며 운영 효율 매뉴얼은 다음 날부터',()=>{
  const g=fresh('support-overhead-timing'),s=g.run;Object.assign(s,{day:5,phase:'order',npcs:[],queue:[],team:[],cursor:0,facilities:[],dayFacilities:[],money:5000,offers:[],cart:{},event:null});
  assert.equal(g.expectedOperatingCost(),200,'D5 base204 rounds to200');
- const ids=['kitchen','royalCert','hub'],prices=[200,320,340],want=[220,240,270];
+ const ids=['kitchen','royalCert'],prices=[200,320],want=[220,240];
  for(let i=0;i<ids.length;i++){
   s.relicWindow={milestoneDay:5,candidateIds:[ids[i]],candidatePrices:[prices[i]],purchased:null,expiryDay:10,focusedRevealSeen:true};
   g.buyRelic(ids[i]);assert.equal(g.expectedOperatingCost(),want[i],ids[i]+' adds10% of204 on acquisition Day');
   assert.deepEqual(s.dayFacilities,[],'purchase does not rewrite the morning snapshot');
  }
  assert.equal(g.expectedOperatingCost({facilities:[],event:null}),200,'explicit modifier set is preserved');
- s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),270,'same-Day efficiency remains deferred');
- assert.equal(g.tomorrowOperatingCost(),240,'D6:205*1.30-30=236.5 rounds to240');
- assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),320,'flat Event +50 is not multiplied');
+ s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),240,'same-Day efficiency remains deferred');
+ assert.equal(g.tomorrowOperatingCost(),220,'D6:205*1.20-30=216 rounds to220');
+ assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),290,'flat Event +50 is not multiplied');
  assert.equal(g.expectedOperatingCost({event:{effects:{overheadFree:true,overheadAdd:50}}}),0,'operating-free Event overrides owned surcharges');
  const saved=Save.import(Save.export(g.account,s));const restored=new Game(saved.account,saved.run);restored.autosave=false;
- assert.equal(restored.expectedOperatingCost(),270,'owned/dayFacilities timing survives Save/Load');
+ assert.equal(restored.expectedOperatingCost(),240,'owned/dayFacilities timing survives Save/Load');
 });
 
 /* RELIC §CANDIDATE RULES (User 2026-10-10): the tag steps are gone; the pick inside a grade is uniform. */

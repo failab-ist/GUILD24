@@ -426,11 +426,11 @@ has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning: visitors +1
+each Morning: visitors +1 at 50% (D.balance.wallVisitorChance)
 ```
 
-It is added once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
-source.
+Its chance joins the one Morning extra-visitor roll shared with 지역 거점점 계약 and 단체 주문 창구, capped at 100%
+together (RELIC §VISITOR SUPPORT COMPOSITION).
 
 These Decorations carry none of the Start Contract negative sides: no +5% ORDER purchase penalty, no +20G / +25G
 operating-cost penalty, no rare-ORDER reduction penalty.
@@ -447,7 +447,7 @@ every adventurer created while it is worn: 55% chance of spawn Level +1
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 50% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 25% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE
@@ -481,7 +481,7 @@ a Relic slot (the boundary above holds). The one with the larger measured effect
 
 ### sign — 단골 감사 현수막 (id cheerBanner)
 ```text
-투력 × (1 + floor(단골도 / 10) × 5%)
+투력 × (1 + floor(단골도 / 10) × 3%)
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF

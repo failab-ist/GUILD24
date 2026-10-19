@@ -115,7 +115,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   const d={...DATA.dungeonBy.spider,day:r.int(1,29),tier:2,hazards:['poison'],scale:1.6,power:r.int(60,140),reward:1};
   const rep=Dungeon.resolve(npc,d,r,[]);
   if(rep.outcome==='퇴각'){
-   assert.equal(Dungeon.WALLET_MULT['퇴각'],.40,'v2.13.9: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*8)*.40*(d.reward||1)),'a 퇴각 Loot follows its own formula');
+   assert.equal(Dungeon.WALLET_MULT['퇴각'],.40,'v2.13.9: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*6)*.40*(d.reward||1)),'a 퇴각 Loot follows its own formula');
    sampled++;
   }
  }
@@ -319,7 +319,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  assert.equal(eff.counter.id,'thriftSafe');
  assert.equal(DATA.decorationParams.thriftSafe.firstWallet,400,'counter: the first two customers of the Day +400G each (User 2026-10-16)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,1,'길드 추천 매대 adds a visitor every Morning (User 2026-10-16)');
+ assert.equal(DATA.balance.wallVisitorChance,.5,'길드 추천 매대 adds a visitor at 50% in the shared Morning roll (User 2026-10-18)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
