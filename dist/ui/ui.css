@@ -3742,7 +3742,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .readout.ro2 .ro-head .tip{margin-left:auto}
 .readout.ro2 .top .ro-combat>b{margin:0;font:500 20px/1 var(--f-led);color:var(--gold)}
 .readout.ro2 .fore.env-each>.env-list,.readout.ro2 .env-meter-list{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:flex-start;gap:2px 12px;margin:0;order:0;flex:none}
-.readout.ro2 .env-meter-list:has(.env-row:nth-child(3)){flex-wrap:wrap}
+.readout.ro2 .env-meter-list:has(.pre),.readout.ro2 .env-meter-list:has(.env-row:nth-child(3)){flex-wrap:wrap}
 .readout.ro2 .env-row{display:inline-flex;align-items:center;gap:4px}
 .readout.ro2 .env-row i{justify-self:start;align-self:baseline}
 .readout.ro2 .fore .env-row b{margin:0}
