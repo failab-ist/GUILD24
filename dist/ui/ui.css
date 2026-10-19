@@ -2997,13 +2997,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    flat recessed plane, the members seated on it and parted by a seam - read-only, nothing that
    looks pressable, and the same people in the same order. */
 .went{display:grid;gap:0;padding:2px 12px;background:#0d0a07;box-shadow:inset 0 2px 0 #00000080}
-.goer{display:flex;align-items:center;gap:12px;padding:10px 0;background:none}
+.goer{display:flex;align-items:center;gap:12px;width:100%;padding:10px 0;background:none;border:0;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.goer{box-shadow:none}
+.goer:hover,.goer:active{background:#ffffff0d;transform:none}
 .goer+.goer{box-shadow:inset 0 1px 0 #ffffff14}
 .goer .pfp{flex:0 0 auto;width:var(--pfp);height:var(--pfp);object-fit:contain}
 .goer b{display:block;font:500 16px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f2e4c6}
 /* .line is the Order form's item row; this one is its own */
 .goer .who-line{display:block;margin-top:3px;font:400 13px/1.4 var(--ui);color:#a2947c}
 .goer .carried{display:block;margin-top:5px;font:400 13px/1.5 var(--ui);color:#cbb98d}
+.goer .carried .last{font-weight:600;color:#f2e4c6}
+.goer>div{flex:1 1 auto;min-width:0}
+/* the same plain muted 「기록 보기」 line the notebook's npc-card ends with */
+.goer .see{display:block;margin-top:6px;text-align:right;font:400 13px/1.4 var(--ui);color:#a2947c}
 /* its own class names: .verdict / .why belong to the Night beat and carry a display word
    with a rule under it, which is not what a printed statement is */
 /* v2.9.2 H5 — THE FINAL SEAL (UI_UX §FINAL RESULT — SEAL STAMP). One carved seal bearing the Boss's name, struck on the
