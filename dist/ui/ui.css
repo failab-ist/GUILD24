@@ -4385,3 +4385,18 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .env-row i.hz-mark{display:inline-flex;color:var(--warn)}
 .env-row i.hz-mark svg{display:block}
 .env-row .hz-said{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fx-hz{display:inline-flex;align-items:center;gap:3px;vertical-align:middle}
+.fx-hz .hz-mark{display:inline-flex;color:var(--warn)}
+.fx-hz .hz-mark svg{display:block}
+.fx-hz .hz-said{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* 피로 단계: a sideways gauge, filled to the settled Fatigue with a tick at each band start; the band list below dims everything but that band */
+.fatigue-gauge{margin:0 0 12px}
+.fg-track{position:relative;height:12px;background:#3a3126;overflow:hidden}
+.fg-fill{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+.fg-track u{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#211a13}
+.fg-nums{position:relative;height:16px;margin-top:3px}
+.fg-nums span{position:absolute;top:0;transform:translateX(-50%);font:400 11px/1.4 var(--ui);color:#8f8470}
+.fg-nums span:first-child{transform:none}
+.fg-nums span:last-child{transform:translateX(-100%)}
+.fatigue-bands p{opacity:.55}
+.fatigue-bands p.now{opacity:1;color:#f2e7cd}
