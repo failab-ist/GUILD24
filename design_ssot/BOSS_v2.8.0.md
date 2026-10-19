@@ -396,7 +396,7 @@ Therefore:
 - exceeding target does not create an unlimited Player bonus
 
 Exact:
-- greedRevenueTarget=30000
+- greedRevenueTarget=40000
 - shortfall is measured as a SHARE of the target, so the penalty means the same thing whatever the target is
 - the penalty is linear in the unmet share: no sales -> the full cap; target met -> 0
 
@@ -405,12 +405,12 @@ Keep the existing Gross-Sales metric and revenue target unless separately rebala
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-shortfallCap = 30 Boss Power
+shortfallCap = 40 Boss Power
 ```
 
 Thus with WRATH base 240:
 - target met -> effective Boss Power 228 (without FIRE)
-- maximum shortfall penalty -> effective Boss Power 256.5 (without FIRE)
+- maximum shortfall penalty -> effective Boss Power 266 (without FIRE)
 
 Displayed strengthening must still derive from the actual applied Greed bonus.
 
@@ -786,9 +786,9 @@ PASS:
 ### BOSS-Q72 — GREED CAP / SNAPSHOT / FINAL TRANSFER ACCOUNTING
 PASS:
 - existing revenue metric/target path is reused
-- applied shortfall strengthening caps at +30 Boss Power
+- applied shortfall strengthening caps at +40 Boss Power
 - target met returns to effective 228 baseline (nominal base 240)
-- maximum shortfall cannot exceed 270 through GREED alone
+- maximum shortfall cannot exceed 280 through GREED alone
 - every committed Final transfer contributes its exact fixed 50% / 매입가 amount to Gross Sales exactly once
 - committed Gross Sales snapshot occurs at Final Lock after Final preparation completes
 - no committed Final transfer is excluded or double-counted
