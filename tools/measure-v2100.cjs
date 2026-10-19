@@ -13,7 +13,9 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{for
 const RANK=['fresh24','hub','expeditionMeal','kitchen','dawnRecovery','opsRoom','extraOrder','returnPoints','lifetime','member','rotation',
  'firstAidDesk','bulk','board','coldcase','hazardBoard','premiumMember','fieldStretcher','groupOrder','guarantee','royalCert','supplyCert',
  'firstVisitCoupon','fridge','rerollTicket','stamp','warehouse','logisticsHQ','memberBundle','fieldRepair','efficiency','rareContract'];
-const DECO={none:[],economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],operation:['rerollCoupon','voucher','heroSign','cheerBanner']};
+const DECO={none:[],economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],operation:['rerollCoupon','voucher','heroSign','cheerBanner'],
+ /* --decos best (User 2026-10-19): one per slot, the larger fresh-Run D20 gain, bought in gain-per-price order */
+ best:['aidCabinet','thriftSafe','sponsorSign','honorFrame']};
 const BANDS=[[1,7],[8,14],[15,21],[22,29]];
 // The four highest-Level adventurers at the Run's end against everyone else: [wins, expeditions, deaths] each
 function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),out={top:[0,0,0],rest:[0,0,0]};
