@@ -551,9 +551,9 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  for(const [day,term] of [[10,15.2],[11,16.165],[12,17.13],[20,24.85],[21,26.39],[24,31.01],[29,38.71],[30,40.25]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
- /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 on every ordinary Day */
+ /* DUNGEON_HAZARD §GATE POWER SuccessEase: the whole ordinary Gate Power x .90 x EarlyEase (DAY 1~9 eased, 1 from DAY 10) */
  assert.equal(Dungeon.GATE_EASE,.90);
- for(const [day,ease] of [[1,.90],[5,.90],[8,.90],[21,.90],[22,.90],[29,.90]])assert.equal(Dungeon.gateEase(day),ease,'D'+day+' SuccessEase');
+ for(const [day,ease] of [[1,.90*.96],[5,.90*.96],[6,.90*.97],[7,.90*.98],[8,.90*.99],[9,.90*.99],[10,.90],[21,.90],[22,.90],[29,.90]])assert.ok(Math.abs(Dungeon.gateEase(day)-ease)<1e-12,'D'+day+' SuccessEase');
  /* makeDungeon applies SuccessEase once, on the finished Gate Power (read off real Gates, golem's Family Combat included) */
  {const g=new Game();g.autosave=false;g.start('gate-ease');
   for(const day of [3,8,22])for(const id of ['spider','golem'])for(const tier of [1,2]){g.run.day=day;const b=D.dungeonBy[id],gate=g.makeDungeon(id,tier);

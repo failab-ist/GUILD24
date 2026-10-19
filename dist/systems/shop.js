@@ -9,7 +9,7 @@ function syncDeepReport(n,report,beforeStats){
  Object.assign(report,fields);Object.assign(n.records.at(-1),fields);
 }
 class Game{
- constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;
+ constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;D.liveAscension=run?.ascension||0;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;
   // EVENT §41: an older active sheet also respects the remaining supply cap; paid stock stays intact.
   if(run?.event?.effects.orderCap&&['morning','order','final'].includes(run.phase))for(const o of run.offers||[])o.quantity=Math.min(o.quantity,run.event.effects.orderCap);
  }
@@ -24,6 +24,8 @@ class Game{
  this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],npcNames:2,notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   /* UI_UX §BUILD MARKER: the build this Run started on, kept beside the save's last-written build */
   {const b=G.GUILD24_BUILD;if(b)this.run.startBuild={version:b.version,commit:b.commit};}
+  /* META §ASCENSION: the level this Run plays at, frozen here like the loadout */
+  this.run.ascension=G.Meta.ascensionPick(this.account);D.liveAscension=this.run.ascension;
   for(const[id,num]of D.openingStock)this.stock(id,num);
   /* CORE_RUN §FIRST-RUN LESSONS: the account's first Run (no Run settled yet). Measurement harnesses set `lessons=false`. */
   this.run.firstRun=this.lessons!==false&&!(this.account.runs>0);
@@ -42,7 +44,7 @@ class Game{
  if(this.run.bossId==='SLOTH'){this.run.slothDays=boss.shuffle([15,20,25]).slice(0,2).sort((a,b)=>a-b);this.run.sealBreakCount=0;}
 this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
- capacity(){return D.balance.warehouse+(this.has('warehouse')?D.relicParams.warehouse.slots:0);}
+ capacity(){return D.balance.warehouse+D.ascent(this.run?.ascension).warehouse+(this.has('warehouse')?D.relicParams.warehouse.slots:0);}
  /* ECONOMY_ORDER §OPERATING COST (Stage 10, approved). Overhead follows the Day AND the quality
     of the roster the player has actually built, so a store that grows good adventurers keeps
     having to sell well to hold on to them - the pressure does not fall away after the mid-game.
@@ -66,7 +68,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const base=this.overheadBase(day),hub=(current?.includes('hub')?base*D.relicParams.hub.overheadRate:0)
    +(current?.includes('royalCert')?base*D.relicParams.royalCert.overheadRate:0)
    +(current?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0);
-  return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
+  return ev.overheadFree?0:Math.round((base+hub+extras)*(1+D.ascent(s.ascension).op)/10)*10;}
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
     next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */
  tomorrowOperatingCost(){const s=this.run;return this.expectedOperatingCost({day:s.day+1,facilities:[...s.facilities],event:null});}
@@ -144,12 +146,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  makeFinal(){const s=this.run,base=D.dungeonBy.final;
   const families=new G.RNG(String(s.seed)+':final').shuffle(['spider','slime','golem','crypt','snow']).slice(0,2);
   const hazards=[...new Set(families.flatMap(id=>D.familyTiers[id][1]))];
-  return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,power:D.balance.bossPower/3,reward:2};}
+  return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',threat:D.balance.finalHazardThreat+D.ascent(s.ascension).hazard,scale:4.6,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
  // DUNGEON_HAZARD §GATE POWER: one Day line (Tier I) x gateTierCombat for every Family; golem Tier II / III keep their own combat term. Final uses makeFinal.
  const gateOffset=s.day<=10?.125+(s.day-1)/24:s.day<=20?.5+(s.day-10)/20:s.day<=25?1+(s.day-20)/10:1.5;
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(tier===1||id!=='golem'?(22+gateOffset+G.Dungeon.gateDayTerm(s.day)+D.balance.gateTier1Term)*D.balance.gateTierCombat[tier-1]:(21+gateOffset+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1))*G.Dungeon.gateEase(s.day),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(tier===1||id!=='golem'?(22+gateOffset+G.Dungeon.gateDayTerm(s.day)+D.balance.gateTier1Term)*D.balance.gateTierCombat[tier-1]:(21+gateOffset+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*7.5:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1))*G.Dungeon.gateEase(s.day)*(1+D.ascent(s.ascension).foe),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -363,8 +365,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
      cleared every Morning so a stale v8 save cannot carry one back in. */
   s.special=null;
  }
- offerCounterCap(){const s=this.run,ev=s.event?.effects||{},num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));
-  return D.balance.offerCounterMax+Math.max(0,num-D.balance.orderOffers)+(ev.blackmarket?1:0)+(this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0)+(this.has('coldcase')?D.relicParams.coldcase.extraOffers:0);}
+ offerCounterCap(){const s=this.run,ev=s.event?.effects||{},floor=D.balance.orderOffers+D.ascent(s.ascension).offers,num=Math.max(3,floor+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));
+  return D.balance.offerCounterMax+Math.max(0,num-floor)+(ev.blackmarket?1:0)+(this.has('dawnRecovery')?D.relicParams.dawnRecovery.extraOffers:0)+(this.has('coldcase')?D.relicParams.coldcase.extraOffers:0);}
  recordOffers(offers){const s=this.run;for(const o of offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}}
  appendSupportOffers(id,record=false){const s=this.run;if(!['extraOrder','dawnRecovery','coldcase'].includes(id)||!this.has(id))return;
   this.counterCap=this.offerCounterCap();const only=id==='dawnRecovery'?G.Relics.food:id==='coldcase'?it=>it.category==='potion':null,added=[];
@@ -373,7 +375,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    const hazards=G.Relics.known(this);s.pity.hazards??={};for(const h of hazards)if(added.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
    s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]||0));}
  }
- generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];
+ generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+D.ascent(s.ascension).offers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: the Counter cap grows one for one with every slot a Store Support or an Event adds */
  this.counterCap=this.offerCounterCap();for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  /* EVENT §02. 본사 1+1 행사: HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
@@ -458,8 +460,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     from the run RNG, so taking the snapshot does not move the seeded stream. */
  /* ECONOMY_ORDER §Away Wallet: per banked Day half an ordinary visit's average income, at most maxDays */
  /* ECONOMY_ORDER §Ordinary NPC Wallet on visit: Level x perLevel + min~max */
- visitIncome(n,rng){const v=D.balance.visitWallet;return n.level*v.perLevel+rng.int(v.min,v.max);}
- awayWallet(n){const a=D.balance.awayWallet,k=Math.min(a.maxDays,n.awayDays||0);return n.introduced?k*(n.level*a.perLevel+a.base):0;}
+ visitIncome(n,rng){const v=D.balance.visitWallet;return Math.round((n.level*v.perLevel+rng.int(v.min,v.max))*(1+D.ascent(this.run.ascension).wallet));}
+ awayWallet(n){const a=D.balance.awayWallet,k=Math.min(a.maxDays,n.awayDays||0);return n.introduced?Math.round(k*(n.level*a.perLevel+a.base)*(1+D.ascent(this.run.ascension).wallet)):0;}
  outlookFor(n){
   const d=this.claimedGateFor(n)||this.run.dungeons[0];
   const v={...n};  // the snapshot is a systems-layer calculation; it does not reach for the UI module
@@ -508,8 +510,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     charged or what has to be affordable - only how willingly the offer is taken. */
  /* 단골 묶음혜택: a 단골's second paid purchase today - the customer pays, and is judged on, half
     the charged price; the store still receives the whole of it and HQ pays the other half. */
- const bundle=this.has('memberBundle')&&G.Adventurer.isTrustedRegular(n)&&n.history.filter(h=>h.day===this.run.day&&h.paid>0).length===1?price-Math.round(price*D.relicParams.memberBundle.payShare):0;
- const judged=bundle?price-bundle:Math.round(list*(rule.intentMult??rule.mult));
+ let bundle=this.has('memberBundle')&&G.Adventurer.isTrustedRegular(n)&&n.history.filter(h=>h.day===this.run.day&&h.paid>0).length===1?price-Math.round(price*D.relicParams.memberBundle.payShare):0;
+ let judged=bundle?price-bundle:Math.round(list*(rule.intentMult??rule.mult));
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: 50% 할인 and 정가 are the
     accessible modes and share one flat base need. 바가지 alone keeps the pre-amendment
     Hazard-fit formula - this patch does not touch overcharge acceptance. */
@@ -534,7 +536,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
  if(this.run.event?.effects.drinkDemand&&it.category==='drink')need+=this.run.event.effects.drinkDemand;
  /* 길드 보증 진열대 reads the CHARGED price, both for the threshold and for the 20%. */
- const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
+ const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;/* 점포지원이 겹치면 남은 몫에 다시 반값이 적용된다(보증 뒤 묶음혜택: 판매가의 25%) - 둘이 겹쳐 0G가 되지 않는다 */
+ if(bundle&&guarantee){const rest=price-guarantee;bundle=rest-Math.round(rest*D.relicParams.memberBundle.payShare);judged=price-bundle;}
+ const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
     only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
     at all: chance read the flat per-mode sentiment and nothing about what the offer costs

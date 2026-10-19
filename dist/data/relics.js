@@ -39,7 +39,7 @@ const rows=[
 ['hub','지역 거점점 계약','keystone',['customer'],340,p=>'매일 아침 손님이 '+pct(p.hub.p1)+' 확률로 1명, '+pct(p.hub.p2)+' 확률로 2명 더 온다.'+(p.hub.overheadRate>0?' 대신 기본 운영비가 '+pct(p.hub.overheadRate)+' 오른다.':'')+' 손님이 더 올 확률은 다른 효과와 합쳐 100%까지다.'],
 ['warehouse','후방 창고 증설','utility',[],130,p=>'창고에 둘 수 있는 상품이 '+p.warehouse.slots+'칸 늘어난다.'],
 ['extraOrder','본사 추가발주권','utility',[],190,p=>'발주 칸이 '+p.extraOrder.extraOffers+'칸 늘어난다.'],
-['rerollTicket','발주 교환권','utility',[],120,()=>{const b=D.balance.rerollBase;return '매일 첫 발주 후보 교환은 무료. 그다음부터 '+b+'G → '+b*2+'G → '+b*4+'G… 로 오른다.';}],
+['rerollTicket','발주 교환권','utility',[],120,()=>{const b=D.balance.rerollBase+D.ascent(D.liveAscension).reroll;return '매일 첫 발주 후보 교환은 무료. 그다음부터 '+b+'G → '+b*2+'G → '+b*4+'G… 로 오른다.';}],
 ['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
 ['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 15%).'],

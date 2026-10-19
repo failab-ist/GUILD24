@@ -3,7 +3,7 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
 DOC_VERSION=2.13.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.15
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -330,7 +330,8 @@ golem Tier II / III Gate Power
 
 FireTerm = 6 + (Tier - 1) × 7.5 (Tier II / III = 13.5 / 21)
 FamilyCombat = golemCombat 0.90
-SuccessEase = 0.90 on every ordinary Day (ordinary Gates; the Final's Boss Power is its own owner)
+SuccessEase = 0.90 × EarlyEase (ordinary Gates; the Final's Boss Power is its own owner)
+EarlyEase = 0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99 on DAY 6 / 7 / 8 / 9, 1 from DAY 10
 familyBase (golem Tier II / III only): golem 3
 
 Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard, and the
@@ -771,7 +772,7 @@ Then:
 
 Ordinary expedition Wallet reward:
 
-    baseWalletReward = 35 + Day × 6
+    baseWalletReward = 35 + Day × 5
 
 Outcome multiplier (keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
@@ -1513,7 +1514,7 @@ PASS:
 - add the ordinary base offset at D1 +0.125 / D10 +0.5 / D20 +1 / D25 +1.5, linear interpolation and holding +1.5 through D29
 - ordinary golem FireTerm is 13.5 / 21 on Tier II / III; the separate Final firePairPower12 is unchanged
 - the Day term reads D9 13.05, D10 13.85, D12 16.05, D18 22.65, D20 24.85, D24 29.05, D29 34.30
-- SuccessEase multiplies the whole ordinary Gate Power once: 0.90 on every ordinary Day
+- SuccessEase multiplies the whole ordinary Gate Power once: 0.90 × EarlyEase (0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99 on DAY 6~9, 1 from DAY 10)
 
 FAIL:
 - a single slope applied across all Days

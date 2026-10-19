@@ -3309,7 +3309,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
     here directly: the branch stays far under the title it sits below. */
  /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE; User 2026-09-27): the branch is MORNING's plate, in the plate face
     at its crisp design size, hanging right under the title in the opening's own column - the counter carries the Capital */
- assert.ok(/<\/h1>'\n\s*\+'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span><\/div>/.test(back),'the branch plate is under the title');
+ assert.ok(/<\/h1>'\n\s*\+ascPicker\(a\)\+'<\/div>/.test(back)&&/'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span>'/.test(read('dist/ui/app.js')),'the branch plate (via the ascension picker) is under the title');
  assert.ok(!/band counter[\s\S]*branchplate/.test(back),'and not on the counter');
  assert.ok(/\.p-morning \.branchplate\{[^}]*font:500 12px\/1 var\(--f-plate\)/.test(read('dist/ui/director-review.css')),'in the plate face at a crisp Mulmaru design size');
  assert.ok(/\.p-morning\.p-prep \.opening \.branchplate\{position:static;/.test(css),'in the opening\'s column, centred with the title');
@@ -3321,7 +3321,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(/@container \(min-height:800px\) and \(max-width:399\.98px\)\{\n \.p-prep \.capital-plate\{font-size:17px;/.test(css),'a phone under 400 wide keeps the 17 px plate');
  assert.ok(/\.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{grid-auto-flow:row;gap:1px;top:72%\}\n \.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{font-size:min\(15px,/.test(css),'the desk 간판 tag stacks and stops growing where it would leave the stage');
  // 3: the branch comes from the existing catalogue, through the existing pick
- assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
+ assert.ok(back.includes('ascPicker(a)')&&app.includes('plannedBranch()'),'the backdrop renders the planned branch');
  assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),
   'derived from DATA.brand.branches with the same first-pick behaviour Game.start uses');
  assert.equal((app.match(/brand\.branches/g)||[]).length,1,'there is no second branch catalogue or selection rule');
