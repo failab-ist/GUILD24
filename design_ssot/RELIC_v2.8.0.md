@@ -366,11 +366,11 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.8.0.m
 
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약 · tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +50%; a Rare+ sale is charged at the ordinary price and HQ pays the store
   10% of the charged price on top, in every mode; no operating-cost modifier
 
 6. 길드 보증 진열대 · tag=Premium · 150AutoSuccess=NO · playerReceivesChosenPrice=YES
-- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 50%
   of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
 
@@ -410,7 +410,7 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-base operating cost +10% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
+base operating cost +15% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
   (User 2026-10-02: the Fresh line clears more and pays more)
 ```
 
@@ -433,9 +433,8 @@ base 3 -> 4 · base 4 -> 4 · base 5 -> 5 · base 6 -> 6
 
 ### HYBRID
 13. 단체 주문 창구 · tags=[Rotation,Customer]
-- 단체 주문 창구: its own Morning roll, 20% -> expected visitors +1, independent of 길드 전광판 /
-  지역 거점점 계약 / wall Decoration
-- from the Day's 5th sale, each sale -> HQ commission +15G
+- 단체 주문 창구: +1 visitor at 20%, read in the one shared Morning extra-visitor roll (§VISITOR SUPPORT COMPOSITION)
+- from the Day's 5th sale, each sale -> HQ commission +15G, at most 60G per Day
 - it discounts no ORDER
 
 14. 단골 묶음혜택 · tags=[Rotation,VIP] · consumerSlotRule=UNCHANGED
@@ -501,9 +500,9 @@ effect=Rare+ expedition-response items gain premium-economy viability
 22. 평생 단골제 · tag=VIP · User 2026-10-02 remake (no Gold, no revisit weight)
 effect=a 단골 is stronger, and stays a 단골
 - Price = 310G
-- 단골 (Trusted Regular, Loyalty >= 51): the four Core Stats x1.10 in the prepared reading (after Items and condition,
+- 단골 (Trusted Regular, Loyalty >= 51): the four Core Stats x1.06 in the prepared reading (after Items and condition,
   before the Hazard reading), so Hazard Counters through the Stat routes rise too; listed among each Stat's sources
-  (`평생 단골제 +10%`); the Final party reads it the same way
+  (`평생 단골제 +6%`); the Final party reads it the same way
 - while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
   an adventurer not yet a 단골 has no floor
 - the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51
@@ -511,7 +510,7 @@ effect=a 단골 is stronger, and stays a 단골
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
 - Price = 320G
-- HQ commission = 40% of the charged (150%) sale price
+- HQ commission = 20% of the charged (150%) sale price
 - the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16)
 - base operating cost +10% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
 - the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
@@ -554,17 +553,14 @@ RiskReward penalty unchanged
 
 26. 지역 거점점 계약 · tag=Customer · livingNpcCapIgnored=NO · `DIRECTOR DOCUMENT BASELINE`
 
-Role: pay overhead to widen the catchment. Price = 340G.
+Role: widen the catchment. Price = 340G. No operating-cost surcharge.
 
-Each applicable Morning, exactly one mutually exclusive visitor result:
-+1 visitor = 45% · +2 visitors = 15% · no visitor increase = 40%
+Its chances are read in the one shared Morning extra-visitor roll (§VISITOR SUPPORT COMPOSITION):
++2 visitors = 15% · +1 visitor = 45%
 
-Expected visitor delta = +0.75 / applicable Day before ordinary availability caps.
+Held alone: expected visitor delta = +0.75 / applicable Day before ordinary availability caps.
 The visitor increase is subject to the ordinary active/available adventurer cap.
 
-Operating cost: `overheadBase + overheadBase × 0.10 + other flat extras`, then the existing operating-cost rounding
-rule. The 10% applies to `overheadBase` only; it is not applied again to other Event or Relic flat modifiers and does
-not compound with them. The surcharge applies from the acquisition Day; the visitor roll remains a Morning effect.
 
 ### UTILITY
 27. 후방 창고 증설
@@ -620,7 +616,7 @@ it plays as its blueprint above.
 
 Positive native Core Stat means the Item's own positive contribution to 투력/강인함/기동/정신 before unrelated effects.
 Fresh native-Stat bonuses stack additively from the Item's base native positive Stat:
-    즉석식품 코너 + 24시간 신선체계 = +25% +50% => base positive native Stat ×1.75
+    즉석식품 코너 + 24시간 신선체계 = +25% +30% => base positive native Stat ×1.55
 
 Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive
 pool under `ITEM_v2.8.0.md`. Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second
@@ -629,17 +625,19 @@ sequential layer. This high point is an allowed coherent-build reward.
 ## VISITOR SUPPORT COMPOSITION
 
 The supports answer different questions and none is a strict upgrade of another.
-`board`, `hub`, `groupOrder` and the `wall` Decoration are independent and may all be held at once.
+`board`, `hub`, `groupOrder` and the `wall` Decoration may all be held at once.
 
 ```text
 board      = base-roll floor
-hub        = probabilistic catchment, paid for in overhead
-groupOrder = its own 20% Morning roll, +1 visitor
-wall       = 10% Morning proc (Decoration, not a Relic)
+hub        = +2 visitors 15%, +1 visitor 45%
+groupOrder = +1 visitor 20%
+wall       = +1 visitor, D.balance.wallVisitorChance (50%; Decoration, not a Relic)
 ```
 
-They share no ownership, no purchase candidacy and no slot. Holding more than one applies each in its own place: the
-board floor first on the base roll, then the probabilistic additions.
+They share no ownership, no purchase candidacy and no slot. The board floor resolves first on the base roll. The
+extra visitors are one Morning roll for every held source together (User 2026-10-18): the +1 chances added up, then
+hub's +2 band, the whole capped at 100% (the +1 sum gives way, so the +2 band keeps its 15%). At most +2 extra visitors a Morning; one source's +1 never stacks on
+another's. The roll is drawn only when some source is held.
 
 ## ITEM / BUILD COMPATIBILITY
 
@@ -726,7 +724,7 @@ Price should follow actual ROI, not label alone.
 
 ## OPERATING COST TIMING
 
-Percentage operating-cost surcharges from kitchen, royalCert and hub apply from the Day of acquisition.
+Percentage operating-cost surcharges from kitchen and royalCert apply from the Day of acquisition.
 They read the currently acquired supports and add their shares of overheadBase before the existing rounding.
 efficiency's flat reduction keeps its next-Day timing; ordinary visitor generation remains a Morning effect.
 An operating-cost-free Event still overrides the charge. Final Day has no daily operating charge.
@@ -1033,15 +1031,15 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
-- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +50%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 50% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
 - COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +10% of overheadBase
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +15% of overheadBase
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
-- 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
+- 단체 주문 창구 -> +1 visitor at 20% in the shared Morning extra-visitor roll; +15G HQ commission per sale from the Day's 5th, at most 60G per Day
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
 - 프리미엄 멤버십 -> 다시 온 손님 arrival NPC Wallet +25G; Rare+ purchase intent +15%p; a Rare+ purchase at 100% / 50% 단골도 +10
@@ -1049,7 +1047,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 전문 포션 유통 계약 -> +1 independent Potion-only ORDER slot from acquisition, including Rerolls; ordinary Potion SALE +10% HQ commission on the charged price
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   acquisition and every offer generation, including Rerolls
-- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15; no shelf life
+- 24시간 신선체계 -> Food/Drink native Core-Stat +30%; Food/Drink ORDER price x1.15; no shelf life
 - 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read
 - 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so
 - 후방 창고 증설 -> inventory capacity +5
@@ -1132,9 +1130,9 @@ Expected: eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wa
 #### REL-Q-v28-7 — ROYAL PREMIUM
 
 Expected:
-    150% sale of any rarity -> HQ commission = 40% of the charged sale price
+    150% sale of any rarity -> HQ commission = 20% of the charged sale price
     the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16)
-    the acquisition Day's base operating cost carries +10% of overheadBase, added to 지역 거점점 계약's
+    the acquisition Day's base operating cost carries +10% of overheadBase, added to the other percentage surcharges
     the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
 
 #### REL-Q36 — PREMIUM POOL SUPPORT
@@ -1233,7 +1231,7 @@ PASS:
 
 Expected:
 - 즉석식품 코너 native Core-Stat +25%
-- 24시간 신선체계 native Core-Stat +50%
+- 24시간 신선체계 native Core-Stat +30%
 - 원정 도시락 코너 adds no native Core-Stat bonus
 
 Composition is base-additive: kitchen + fresh24 => ×1.75 native positive Stat.
@@ -1328,32 +1326,31 @@ FAIL:
 ##### hub
 
 PASS:
-- the three outcomes never combine on one Morning
-- operating cost is `overheadBase + overheadBase × 0.10 + other flat extras`, then the existing
-  rounding rule
-- the 10% is taken on `overheadBase` alone
+- held alone: +2 at 15%, +1 at 45%, nothing at 40%
+- no operating-cost surcharge
 
 FAIL:
 - +1 and +2 both applying on the same Morning
-- the 10% applied to Event or Relic flat modifiers as well
-- the 10% compounding with another percentage overhead modifier
+- a hub overhead share added to operating cost
 
 ##### composition
 
 PASS:
-- board, hub, 단체 주문 창구 and the `wall` Decoration may all be held at once and each applies in its own place
-- 단체 주문 창구 makes its own 20% Morning roll for +1 visitor
+- board, hub, 단체 주문 창구 and the `wall` Decoration may all be held at once
+- hub, 단체 주문 창구 and the `wall` Decoration share one Morning extra-visitor roll: +1 at the held +1 chances added up,
+  then +2 at hub's 15%, the whole capped at 100%; at most +2 extra visitors a Morning
 - holding the `wall` Decoration does not mark board owned, remove it from a purchase window,
   or consume a Relic slot
 - the board floor resolves on the base roll before the probabilistic additions
 
 #### REL-Q-v28-17 — REGION HUB
 
-On each applicable Morning exactly one outcome occurs: +1 visitor: 45% · +2 visitors: 15% · +0 visitors: 40%
+Held alone, on each applicable Morning exactly one outcome occurs: +1 visitor: 45% · +2 visitors: 15% · +0 visitors: 40%
 
 Expected mean before ordinary availability caps: +0.75 visitor / applicable Day
 
-Also: Price 340G · operating modifier overheadBase +10% · outcomes are mutually exclusive
+Also: Price 340G · no operating modifier · outcomes are mutually exclusive · with other extra-visitor sources the +1
+chances share the capped Morning roll (§VISITOR SUPPORT COMPOSITION)
 
 ### UTILITY SUPPORTS
 

@@ -399,7 +399,7 @@ of the Run's Relic slots. A Decoration and a Relic that touch the same quantity 
 
 ### sign — 원정 지원금 간판 (id sponsorSign)
 ```text
-each visiting adventurer: an extra purchase budget of 75% of their current purse, that visit only
+each visiting adventurer: an extra purchase budget of 50% of their current purse, that visit only
 ```
 
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never
@@ -418,7 +418,7 @@ rarity draw when the Decoration is active; it adds no extra spawn, no extra rari
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first two customers to reach the counter: Wallet +400G each (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +300G each (cap 2000)
 ```
 
 Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
@@ -426,11 +426,11 @@ has no receipt row.
 
 ### display — 길드 추천 매대 (id guildShelf)
 ```text
-each Morning: visitors +1
+each Morning: visitors +1 at 50% (D.balance.wallVisitorChance)
 ```
 
-It is added once per Morning, alongside the ordinary visitor generation, and is independent of every other visitor
-source.
+Its chance joins the one Morning extra-visitor roll shared with 지역 거점점 계약 and 단체 주문 창구, capped at 100%
+together (RELIC §VISITOR SUPPORT COMPOSITION).
 
 These Decorations carry none of the Start Contract negative sides: no +5% ORDER purchase penalty, no +20G / +25G
 operating-cost penalty, no rare-ORDER reduction penalty.
@@ -442,12 +442,12 @@ the dearer Slot.
 
 ### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
-every adventurer created while it is worn: 55% chance of spawn Level +1
+every adventurer created while it is worn: 30% chance of spawn Level +1
 ```
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 50% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 25% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE
@@ -481,7 +481,7 @@ a Relic slot (the boundary above holds). The one with the larger measured effect
 
 ### sign — 단골 감사 현수막 (id cheerBanner)
 ```text
-투력 × (1 + floor(단골도 / 10) × 5%)
+투력 × (1 + min(20%, floor(단골도 / 10) × 3%))
 ```
 
 Applied where 구급품 진열장's 투력 bonus is, on every expedition and on the Final party's snapshots. The RESULT-PROOF
@@ -501,10 +501,10 @@ to take.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-each Night: the Day's first two customers to reach the counter, if alive: Fatigue -6 (floor 0)
+each Night: the Day's first three customers to reach the counter, if alive: Fatigue -6 (floor 0)
 ```
 
-The same "first two" as 알뜰 금고: the order in which that Day's customers reached the counter. Everyone else, visitor or
+The same counter order as 알뜰 금고 (its first three here): the order in which that Day's customers reached the counter. Everyone else, visitor or
 not, keeps their Fatigue.
 
 ### display — 지원 교환 쿠폰함 (id rerollCoupon)

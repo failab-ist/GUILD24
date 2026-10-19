@@ -1190,23 +1190,20 @@ test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exc
   'board floors the base roll at its parameter and leaves higher rolls alone');
  assert.equal(DATA.relicParams.board.minVisitors,4,'board raises the base roll to 4 and leaves 5 and 6 alone');
  /* hub: one roll, three mutually exclusive outcomes. */
- assert.ok(src.includes("const r=this.rng.next(),{p1,p2}=D.relicParams.hub;hubExtra=r<p1?1:r<p1+p2?2:0;"),
-  'hub makes exactly one roll against its two parameters');
+ {const g=fresh('hub-one-roll'),t=g.run;t.dayFacilities=['hub'];t.loadout={};let calls=0;g.rng={int:()=>3,next:()=>{calls++;return .5;}};
+  const v=g.morningVisitors();assert.equal(calls,1,'hub makes exactly one roll against its two parameters');assert.equal(v.hubExtra,2,'r=.5 lands in the +2 band');}
  const {p1,p2}=DATA.relicParams.hub;
  assert.deepEqual([p1,p2],[.45,.15],'hub makes exactly one roll: REL-Q-v28-17 45% +1, 15% +2, otherwise none');
  const seen=new Set();
  const rate=[0,0,0];for(let i=0;i<1000;i++){const r=i/1000,x=r<p1?1:r<p1+p2?2:0;seen.add(x);rate[x]++;}
  assert.deepEqual(rate,[400,450,150],'the approved 45 / 15 / 40 split, and it sums to one roll');
  assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
- /* hub's cost is a share of overheadBase alone - never of the flat extras. */
- assert.equal(DATA.balance.hubOverheadRate,.10,'the approved rate ships');
+ /* hub carries no operating-cost share (User 2026-10-19). */
+ assert.equal(DATA.balance.hubOverheadRate,0,'the approved rate ships');
  const g=fresh('visitor-relics');
  const plain=g.expectedOperatingCost();
  g.run.facilities.push('hub');g.run.dayFacilities=[...g.run.facilities];
- const withHub=g.expectedOperatingCost();
- assert.equal(withHub,Math.round((g.overheadBase()*(1+DATA.balance.hubOverheadRate))/10)*10,
-  'overhead is base + 10% of base, then the existing rounding');
- assert.ok(withHub>plain,'and it really is a cost');
+ assert.equal(g.expectedOperatingCost(),plain,'holding hub leaves the operating cost alone');
  assert.ok(!src.includes("includes('hub')?35:0"),'the retired flat +35G is gone');
  /* board, hub and the wall Decoration are independent: none marks another owned or shares a slot. */
  assert.equal(g.wears('guildShelf'),false,'holding the Relic does not equip the Decoration');
@@ -1391,7 +1388,7 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
   n.injury=1;n.status='부상';s.queue=[n.id];s.cursor=0;g.arrive();tries++;
   if(n.healedBy){healed++;assert.equal(n.injury,0);assert.equal(n.status,'건강');assert.equal(s.daily.infirmaryHeals,1);}
   else assert.equal(n.injury,1,'a miss leaves the Injury');}
- const rate=healed/tries;assert.ok(rate>.35&&rate<.55,'about 45% heal (v2.9.1 balance; was 35%): '+rate);
+ const rate=healed/tries;assert.ok(rate>.17&&rate<.33,'about 25% heal (User 2026-10-19): '+rate);
  const g=wearing(['infirmaryPlaque'],'infirmary-severe'),n=g.run.npcs[0];n.injury=2;n.recovery=2;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
  assert.equal(n.injury,2,'중상 is not touched');assert.equal(n.healedBy,null);
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
@@ -1424,7 +1421,7 @@ test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a roll
    if(ra.outcome==='부상'&&a.injury===1){hurt++;assert.equal(rb.outcome,'부상');assert.equal(b.injury,1,'the Injury stands with it worn');}}
   assert.ok(hurt>0,'an ordinary Injury case was checked');}
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 55% chance (User 2026-10-03, v2.10.0; 40% in v2.9.13, 65% before)',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 30% chance (User 2026-10-19)',()=>{
  const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
@@ -1432,22 +1429,22 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
- assert.equal(P.chance,.55);
+ assert.equal(P.chance,.30);
  let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
   P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
- assert.ok(up/all>.45&&up/all<.65,'about 55%: '+(up/all));
+ assert.ok(up/all>.20&&up/all<.40,'about 30%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first two customers bring +400G more each',()=>{
+test('알뜰 금고: the Day\'s first two customers bring +300G more each',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
  for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
  s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
- assert.equal(a.money,500,'the first customer to reach the counter: +400G');
- s.cursor=1;g.arrive();assert.equal(b.money,500,'the second too');
+ assert.equal(a.money,400,'the first customer to reach the counter: +300G');
+ s.cursor=1;g.arrive();assert.equal(b.money,400,'the second too');
  s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,400);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,300);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
 /* ---- META §OPERATION DECORATIONS (User 2026-10-04) ---------------------------------------- */
@@ -1470,26 +1467,29 @@ test('본사 우수 점포 훈장: the DAY 0 free pick is three 영웅 cards; wi
   const c=new Game(account(['heroSign','rerollCoupon']));c.autosave=false;c.start('hero-coupon');assert.equal(c.relicRerollPrice(),0,'쿠폰함: the first redraw is free here too');
   c.rerollRelics();assert.equal(c.relicRerollPrice(),300);}
 });
-test('단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x 5%) on the expedition; under 단골도 10 nothing changes',()=>{
- assert.equal(DATA.decorationParams.cheerBanner.perTen,.05);
+test('단골 감사 현수막: 투력 x(1 + min(20%, floor(단골도 / 10) x 3%)) on the expedition; under 단골도 10 nothing changes',()=>{
+ assert.equal(DATA.decorationParams.cheerBanner.perTen,.03);assert.equal(DATA.decorationParams.cheerBanner.max,.20);
  const g=past0(fresh('banner')),d=g.run.dungeons[0];
  const npc=loyalty=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=['rice','water'];n.injury=0;n.fatigue=0;n.records=[];n.loyalty=loyalty;return n;};
  const even={...d,power:Dungeon.preparedPower(Dungeon.prepare(npc(0),d).effects)*1.04};
- let won=0,lost=0,diff=0;
+ let won=0,lost=0,diff=0,capDiff=0;
  for(let i=0;i<300;i++){
   const b=Dungeon.resolve(npc(30),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),a=Dungeon.resolve(npc(30),even,new RNG('ban-'+i),[],{loadout:{}});
   if(b.combatWon&&!a.combatWon)won++;if(a.combatWon&&!b.combatWon)lost++;
   const c=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),e=Dungeon.resolve(npc(9),even,new RNG('ban-'+i),[],{loadout:{}});
-  if(c.combatWon!==e.combatWon)diff++;}
- assert.ok(won>0&&lost===0,'단골도 30 (x1.15) only ever turns a lost fight into a won one: '+won);
+  if(c.combatWon!==e.combatWon)diff++;
+  const h=Dungeon.resolve(npc(100),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}}),f=Dungeon.resolve(npc(70),even,new RNG('ban-'+i),[],{loadout:{wall:'cheerBanner'}});
+  if(h.combatWon!==f.combatWon)capDiff++;}
+ assert.ok(won>0&&lost===0,'단골도 30 (x1.09) only ever turns a lost fight into a won one: '+won);
  assert.equal(diff,0,'단골도 9 is floor 0 - the same fight');
+ assert.equal(capDiff,0,'단골도 100 and 70 both stop at +20% - the same fight');
 });
-test('휴식 바우처 꽂이: at night the Day\'s first two customers are 6 Fatigue lower than the same Day without it, everyone else the same',()=>{
+test('휴식 바우처 꽂이: at night the Day\'s first three customers are 6 Fatigue lower than the same Day without it, everyone else the same',()=>{
  const drive=a=>{const g=new Game(a);g.autosave=false;g.start('voucher');g.buyRelic(g.run.relicWindow.candidateIds[0]);
   g.run.npcs.forEach(n=>n.fatigue=40);let k=0;while(g.run.phase!=='night'&&k++<500)step(g);return g.run;};
- const worn=drive(account(['voucher'])),bare=drive(Meta.fresh()),first=worn.queue.slice(0,2);
- assert.equal(worn.npcs.length,bare.npcs.length);assert.deepEqual(worn.queue,bare.queue);assert.ok(worn.queue.length>2,'a Day with a third customer');
- worn.npcs.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,first.includes(n.id)?Math.max(0,bare.npcs[i].fatigue-6):bare.npcs[i].fatigue,n.name+(first.includes(n.id)?': first two, -6 overnight':': not among the first two, unchanged'));});
+ const worn=drive(account(['voucher'])),bare=drive(Meta.fresh()),first=worn.queue.slice(0,3);
+ assert.equal(worn.npcs.length,bare.npcs.length);assert.deepEqual(worn.queue,bare.queue);assert.ok(worn.queue.length>3,'a Day with a fourth customer');
+ worn.npcs.forEach((n,i)=>{if(!n.alive)return;assert.equal(n.fatigue,first.includes(n.id)?Math.max(0,bare.npcs[i].fatigue-6):bare.npcs[i].fatigue,n.name+(first.includes(n.id)?': first three, -6 overnight':': not among the first three, unchanged'));});
 });
 test('지원 교환 쿠폰함: each window\'s first redraw is free, then 300G, 600G; without it 300G first',()=>{
  const g=wearing(['rerollCoupon'],'coupon'),h=past0(fresh('coupon-plain'));

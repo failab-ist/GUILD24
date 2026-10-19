@@ -1104,7 +1104,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(fin.includes('D.bossBy[s.bossId]')&&/<h1>'\+E\(b\.name\)/.test(fin),
   'and names the Boss it is about');
  assert.ok(!/<h1>마왕성<\/h1>/.test(fin),'the generic castle plate is not the headline any more');
- assert.ok(fin.includes('제0게이트 · 마왕성'),'the castle stays as the place, under the name');
+ assert.ok(fin.includes('마왕성 토벌'),'the castle stays as the place, under the name');
  assert.ok(/class="boss-face"/.test(fin),'the art is a figure, not an icon beside a card');
  assert.ok(/\.gate-zero \.boss-face img\{[^}]*object-fit:contain/.test(css),
   'a silhouette is never cropped to fit');
@@ -2943,8 +2943,8 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.ok(sloth.includes('점포지원을 받는 날 대신')&&sloth.includes('그날 점포지원은 받지 못하고'),'SLOTH uses 점포지원');
  assert.ok(!/유물/.test(JSON.stringify(c)),'no active Boss copy says 유물');
  // §14-8 spacing
- assert.ok(!/제 0 게이트/.test(app+read('dist/data/copy.js')),'제0게이트 is written without spaces');
- assert.ok(app.includes('제0게이트 · 마왕성'),'and the castle still names the gate');
+ assert.ok(!/제0게이트/.test(app+read('dist/data/copy.js')+read('dist/data/catalog.js')),'the castle is called 마왕성, not the gate number');
+ assert.ok(app.includes('마왕성 토벌'),'and the castle is named by the Boss hunt');
  /* SA-Q47 / BOSS_v2.8 §SAME-DAY ORDERING: D0 is the deliberate exception to the D5-D25
     milestone cadence below - first Store Support choice, THEN a separate D0 Boss-information
     beat, THEN ordinary DAY 1. It is not printed inside the first Store Support decision

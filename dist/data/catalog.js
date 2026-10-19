@@ -139,7 +139,7 @@ dungeons:[
 {id:'crypt',name:'망자역 지하묘지',short:'망자역',base:3,icon:'☾',color:'#b3a1d0',hazards:['fear','dark'],tags:['undead'],reward:1.1},
 {id:'snow',name:'북부 설원 폐허',short:'설원 폐허',base:4,icon:'❄',color:'#a0d5e0',hazards:['cold','whiteout'],reward:1.25},
 {id:'slime',name:'슬라임 하수도',short:'슬라임 하수도',base:2,icon:'◉',color:'#8ac3a8',hazards:['corrosion','mire'],reward:1},
-{id:'final',name:'제0게이트 — 마왕성',short:'마왕성',base:5,icon:'♜',color:'#e28e9c',hazards:[],reward:2}
+{id:'final',name:'마왕성',short:'마왕성',base:5,icon:'♜',color:'#e28e9c',hazards:[],reward:2}
 ],
 hazards:{poison:'독',bind:'속박',corrosion:'부식',mire:'진창',fire:'화염',fear:'공포',dark:'어둠',cold:'냉기',whiteout:'화이트아웃'},
 // BOSS ROSTER (BOSS_v2.5.0 / PLAYER-FACING IDENTITY). One of these is dealt per Run and
@@ -267,7 +267,7 @@ G.DATA.rarityBands=[
  {maxDay:30,weights:[34,24,21,20,1]}];
 // EVENT: shared fixed rules; descriptions and their consumers read the same values.
 G.DATA.eventRules={auditMinimum:6,auditPerItem:5,auditMaximum:100,blackmarketPrice:1.35,pilgrimageMin:1,pilgrimageMax:3,promoUnits:2};
-G.DATA.balance={finalHazardThreat:28,gateTier1Term:1.5,gateTierCombat:[1,1.05,1.20],finalGapPenalty:2,finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,paidVisitLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:1,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.12,rerollBase:50,golemCombat:.90,
+G.DATA.balance={finalHazardThreat:28,gateTier1Term:1.5,gateTierCombat:[1,1.05,1.20],finalGapPenalty:2,finalRoll:{lo:.92,hi:1.08},loyaltyRevisit:.03,returnLoyalty:1,paidVisitLoyalty:1,visitWallet:{perLevel:4,min:30,max:70},awayWallet:{perLevel:2,base:25,maxDays:3},offerSameItemMax:2,offerCounterMax:4,wallVisitorChance:.5,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:240,combatNoise:.12,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:10}],
