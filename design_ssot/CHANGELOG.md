@@ -77,6 +77,7 @@ One version for two PRs the User merges together (User: 「같이머지하자」
   clear 1.0 → 1.7%, D20 balance 1567 → 1533G; trajectories reach D20 first on the 3rd Run instead of the 4th~5th.
 - META §ASCENSION: ten cumulative levels opened by clearing (first Boss clear opens 승천 1), picked on the NEW STORE screen
   (`◀ 승천 N ▶` around the name plate, one board note, one coach mark). Effects are the first frame, not measured; numbers live in `D.ascension`.
+- Measured (investor, after the first clear, traj 100 x 20, `reports/v2100-measure/ascension-20261019/`): with 적 전체 +2% on 승천 1 / 5 / 9, DAY 30 reach fell 47.9% (승천 0) -> 34.8% (1) -> 8.5% (5) -> 1.9% (9). 적 전체 is +1% each (User 2026-10-19), which gives 45.1% (1) -> 14.9% (5) -> 8.1% (9); clear once DAY 30 is reached stays near 60% through 승천 2. 승천 3 (ORDER offers 4) is the other large step (-19 points of reach).
 - GLOSSARY: 승천.
 
 ## v2.13.15 — Economy: thinner win Wallets, one shared extra-visitor roll, fourteen supports retuned (User 2026-10-18 ~ 19)
