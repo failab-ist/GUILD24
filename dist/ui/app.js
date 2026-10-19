@@ -362,7 +362,7 @@ let lastPhase=null;
 // ---- stage ----------------------------------------------------------------
 // The only frame every Phase shares: a 100dvh box that never scrolls, one scroll
 // surface, one dock. What goes in them belongs to the Phase, not to a shell.
-const menuFab=()=>'<button class="menu-pin" data-action="menu" aria-label="게임 메뉴">'+Art.glyph('menu',24)+'</button>';
+const menuFab=()=>(game.run?.ascension?'<span class="asc-chip">승천 '+game.run.ascension+'</span>':'')+'<button class="menu-pin" data-action="menu" aria-label="게임 메뉴">'+Art.glyph('menu',24)+'</button>';
 const pips=(total,at)=>'<span class="pips" aria-hidden="true">'+Array.from({length:Math.min(total,12)},(_,k)=>'<i class="'+(k===at?'now':k<at?'on':'')+'"></i>').join('')+'</span>';
 const sigilOf=d=>D.dungeonBy[d.family&&d.family!=='final'?d.family:d.id]||D.dungeonBy[d.id]||{};
 /* v2.9.0 UI_UX §TUTORIAL — TASK LINE, DAY 1~3 (COPY_AUDIT §3-8, User 2026-09-24): one fixed text line at the top of
@@ -2595,7 +2595,8 @@ function ascPicker(a){const max=Meta.ascensionMax(a),lv=Meta.ascensionPick(a);
  if(!max)return '<span class="branchplate">'+E(plannedBranch())+'</span>';
  const arrow=(act,off,label,glyph)=>'<button class="asc-arrow" data-action="'+act+'"'+(off?' disabled':'')+' aria-label="'+label+'">'+glyph+'</button>';
  return '<div class="asc-row">'+arrow('asc-prev',lv<=0,'승천 단계 낮추기','◀')+'<span class="branchplate">'+E(lv?'승천 '+lv:plannedBranch())+'</span>'+arrow('asc-next',lv>=max,'승천 단계 올리기','▶')+'</div>';}
-function ascNote(a){const lv=Meta.ascensionPick(a),x=lv&&D.ascension[lv-1];if(!x)return '';
+function ascNote(a){return ascNoteOf(Meta.ascensionPick(a));}
+function ascNoteOf(lv){const x=lv&&D.ascension[lv-1];if(!x)return '';
  return '<div class="asc-note"><p class="asc-head"><b>승천 '+lv+'</b><span>앞 단계 효과도 적용</span></p><p class="asc-fx">'+E(x.name+': '+x.effect)+'</p></div>';}
 function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta.ownedDecorations(a),capital=Meta.storeCapital(a);
  /* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a Slot whose unowned Decoration the capital covers now says
@@ -2821,7 +2822,7 @@ else if(modal?.startsWith('fatigue:')){const r=s.results.find(x=>x.npcId===modal
    /* UI_UX §MENU / SETTINGS — EXACT COMPOSITION (User 2026-09-24, v2.9.0): 점포지원 routes to the selection
       only while a window is purchasable; 이번 점포의 장식 is the frozen loadout, read-only; 현재 지점 포기 confirms
       (§1-3) and then discards the Run at once. */
-   else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 점포의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')
+   else if(modal==='menu'){title='점포 메뉴';body=(game.run?ascNoteOf(game.run.ascension):'')+'<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 점포의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')
       +(game.run?btn('현재 지점 포기','abandon','danger'):'')+'</div>';
       const icons={roster:'roster',codex:'codex',relics:'support',loadout:'decor',help:'guide',settings:'settings',abandon:'abandon'};
       body=body.replace(/(<button[^>]*data-action="([^"]+)"[^>]*>)([^<]+)/g,(_,open,action,label)=>open+'<img class="menu-icon" src="ui/assets/presentation/menu/'+icons[action]+'.webp" alt="" aria-hidden="true"><span class="menu-label">'+label+'</span>');

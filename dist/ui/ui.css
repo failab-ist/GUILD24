@@ -4344,8 +4344,12 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 @container (min-height:800px) or (min-width:1000px){
  .asc-row{gap:22px}.asc-row .branchplate{min-width:9em}
 }
-.p-prep .asc-note{margin:0 6px 6px;padding:7px 10px;background:#efe3c2;border:2px solid #a98b52;color:#3a2812;box-shadow:0 2px 0 #0008;display:flex;flex-direction:column;gap:3px;text-align:left}
-.p-prep .asc-note p{margin:0}
-.p-prep .asc-head{display:flex;align-items:center;gap:8px;font:400 12px/1.3 var(--ui);color:#6b5334}
-.p-prep .asc-head b{padding:1px 8px;background:#b5482f;color:#fff3d8;font:700 14px/1.4 var(--ui)}
-.p-prep .asc-fx{font:700 15px/1.45 var(--ui);color:#3a2812;word-break:keep-all}
+.asc-note{margin:0 6px 6px;padding:7px 10px;background:#efe3c2;border:2px solid #a98b52;color:#3a2812;box-shadow:0 2px 0 #0008;display:flex;flex-direction:column;gap:3px;text-align:left}
+.asc-note p{margin:0}
+.asc-head{display:flex;align-items:center;gap:8px;font:400 12px/1.3 var(--ui);color:#6b5334}
+.asc-head b{padding:1px 8px;background:#b5482f;color:#fff3d8;font:700 14px/1.4 var(--ui)}
+.asc-fx{font:700 15px/1.45 var(--ui);color:#3a2812;word-break:keep-all}
+/* 판 도중 승천 표시 (User 2026-10-19): the desktop top bar keeps a chip beside the menu button; a phone is full, so it reads from the 점포 메뉴 note */
+.asc-chip{display:none}
+@media(min-width:1024px){.asc-chip{display:block;position:absolute;top:calc(var(--sa-top) + 6px);right:calc(var(--sa-right) + 58px);z-index:30;height:44px;box-sizing:border-box;padding:0 14px;display:flex;align-items:center;background:#2a2118;border:2px solid #a98b52;color:#e0b85a;font:700 16px/1 var(--ui);pointer-events:none}}
+.menu-panel .asc-note{margin:0 0 12px}
