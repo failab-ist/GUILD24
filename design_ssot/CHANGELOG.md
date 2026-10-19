@@ -75,6 +75,10 @@ One version for two PRs the User merges together (User: 「같이머지하자」
   customers stayed at 0.83~0.90 of the D3~5 Gate with Items while the Gate climbed 26% from D1 to D5.
   Measured with the Wallet change, investor fresh 1000: D1~7 success 43.8 → 52.0%, median end day 10 → 15, D30 3.4 → 5.1%,
   clear 1.0 → 1.7%, D20 balance 1567 → 1533G; trajectories reach D20 first on the 3rd Run instead of the 4th~5th.
+- BOSS §GREED — SALES TARGET: `greedRevenueTarget` 30,000 → 40,000G and `greedShortfallCap` 30 → 40 (maximum effective
+  Boss Power 266, was 256.5). At 30,000G GREED met its target in most Runs and became WRATH, the Boss with no Trait.
+  Same 1,053 investor DAY-30 parties against every Boss (main 12fd11f): GREED 63.4 → 57.8% (WRATH 63.8, PRIDE 53.5, GLUTTONY 46.0);
+  parties under 32,000G 48 → 39% (PRIDE 39); 40,000G and above unchanged at 85%. `reports/v2100-measure/greed-boss-20261019/`.
 - META §ASCENSION: ten cumulative levels opened by clearing (first Boss clear opens 승천 1), picked on the NEW STORE screen
   (`◀ 승천 N ▶` around the name plate, one board note, one coach mark). Effects are the first frame, not measured; numbers live in `D.ascension`.
 - Measured (investor, after the first clear, traj 100 x 20, `reports/v2100-measure/ascension-20261019/`): with 적 전체 +2% on 승천 1 / 5 / 9, DAY 30 reach fell 47.9% (승천 0) -> 34.8% (1) -> 8.5% (5) -> 1.9% (9). 적 전체 is +1% each (User 2026-10-19), which gives 45.1% (1) -> 14.9% (5) -> 8.1% (9); clear once DAY 30 is reached stays near 60% through 승천 2. 승천 3 (ORDER offers 4) is the other large step (-19 points of reach).
