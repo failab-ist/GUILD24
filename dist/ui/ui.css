@@ -577,6 +577,14 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .ledger .out b{font:600 28px/1.1 var(--ui);color:var(--ink)}
 .ledger .out b i{font-style:normal;font-size:15px;margin-left:2px;opacity:.7}
 .ledger .out.short b{color:#a1372c}
+/* order ledger on two columns: the four lines read as one block, so the offers start higher */
+#order-register{grid-template-columns:1fr 1fr;column-gap:22px;row-gap:0;padding-top:8px;padding-bottom:10px}
+#order-register div{min-width:0}
+#order-register b{font-size:17px;line-height:1.45}
+#order-register span{white-space:nowrap;gap:6px}
+#order-register span:after{min-width:6px}
+#order-register .out{grid-column:1/-1;margin-top:4px;padding-top:6px}
+#order-register .out b{font-size:26px}
 .brief{padding:10px 16px 12px;display:grid;gap:9px;box-shadow:inset 0 -2px 0 var(--paper-rule)}
 .brief .when{display:grid;grid-template-columns:38px minmax(0,1fr);gap:2px 10px;align-items:baseline}
 .brief .when>*:not(.k){grid-column:2}
@@ -748,8 +756,8 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
    face contrast, the label contrast, the external depth (`.stamp:disabled` already drops the
    filter) and the press affordance. */
 .p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);filter:none;
- background:#8d959c;color:#3f464c;opacity:1;transform:none;text-shadow:none;
- box-shadow:inset 0 4px 0 #6e767d,inset 0 -3px 0 #a3aab0}
+ background:#252c32;color:#7b858d;opacity:1;transform:none;text-shadow:none;
+ box-shadow:inset 0 4px 0 #14181c,inset 0 -3px 0 #333c43}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
@@ -1076,14 +1084,14 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
    the rank this rule exists to fix. The drop is a filter now, and it is the shortest on the
    screen while a price decision is open. */
 .p-sale .dock .stamp{margin-left:auto;min-height:56px;min-width:158px;
- font:600 18px/1 var(--ui);letter-spacing:.04em;background:#3c3122;color:#e7d9b8;
- filter:drop-shadow(3px 3px 0 #000000a6);text-shadow:0 2px 0 #241c11;
- box-shadow:inset 0 3px 0 #5c4b2c,inset 0 -4px 0 #241c11}
-.p-sale .dock .stamp:hover{background:#473a29;color:#f2e6c9;
+ font:600 18px/1 var(--ui);letter-spacing:.04em;background:var(--brown);color:var(--brown-ink);
+ filter:drop-shadow(3px 3px 0 #000000a6);text-shadow:0 2px 0 var(--brown-deep);
+ box-shadow:inset 0 3px 0 var(--brown-lit),inset 0 -4px 0 var(--brown-deep)}
+.p-sale .dock .stamp:hover{background:#85502f;color:#fff2e0;
  filter:drop-shadow(3px 3px 0 #000000a6) brightness(1.1)}
-.p-sale .dock .stamp:active{transform:translate(2px,2px);background:#342a1d;
+.p-sale .dock .stamp:active{transform:translate(2px,2px);background:#5e3822;
  filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 3px 0 #463823,inset 0 -4px 0 #1f180e}
+ box-shadow:inset 0 3px 0 #8a5436,inset 0 -4px 0 #2c1b12}
 .pips{display:flex;gap:3px;align-items:center}
 /* the line of customers: one small figure each, waiting ones pale, served ones gold, the current one lit */
 .pips i{width:13px;height:15px;display:block;background:#e6dac2;opacity:.8;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2012%2014%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20x%3D%224%22%20y%3D%220%22%20width%3D%224%22%20height%3D%224%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%225%22%20width%3D%226%22%20height%3D%222%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%227%22%20width%3D%2210%22%20height%3D%227%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2012%2014%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20x%3D%224%22%20y%3D%220%22%20width%3D%224%22%20height%3D%224%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%225%22%20width%3D%226%22%20height%3D%222%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%227%22%20width%3D%2210%22%20height%3D%227%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
@@ -4246,7 +4254,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-order .form-head .candidate-look{float:right;margin-top:6px;min-height:32px;padding:6px 0;background:none;box-shadow:none;font:600 13px/1.4 var(--ui);color:#6b6350;text-decoration:underline dotted #6b635099;text-underline-offset:4px}
 .p-final.p-order .dock{flex-wrap:nowrap;gap:8px;padding:12px var(--gutter) max(10px,var(--sa-bottom));background:var(--tex-paper),#efe5c5;box-shadow:none}
 .p-final.p-order .dock .stamp{flex:1 1 0;min-width:0;min-height:48px;margin:0;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;font:600 15px/1.2 var(--ui);letter-spacing:0;background:#2f3a44;color:#eef6fa;text-shadow:0 2px 0 #1f272e;filter:drop-shadow(3px 3px 0 #2a2317bf);box-shadow:inset 0 3px 0 #7fb0c4,inset 0 -4px 0 #1f272e}
-.p-final.p-order .dock .stamp[disabled]{background:#8d959c;color:#3f464c;text-shadow:none;filter:none;clip-path:var(--stamp-cut);box-shadow:inset 0 3px 0 #6e767d,inset 0 -2px 0 #a3aab0}
+.p-final.p-order .dock .stamp[disabled]{background:#252c32;color:#7b858d;text-shadow:none;filter:none;clip-path:var(--stamp-cut);box-shadow:inset 0 3px 0 #14181c,inset 0 -2px 0 #333c43}
 .p-final.p-order .dock .stamp:not([disabled]):active{transform:translate(2px,2px);filter:drop-shadow(1px 1px 0 #2a2317bf)}
 .p-final.p-order .dock .stamp[data-action=final-ordered]{flex-grow:1.25}
 .final-trait{margin-top:8px;border-top:2px dotted #735342}
