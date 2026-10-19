@@ -3323,12 +3323,12 @@ DAY 30 점포지원:
 Reuse the existing `subjugation` Coach ID and forecast target. The detailed forecast explanation remains in its `?` Help below. Staged triggers and skip boundaries -> UI_UX §FIRST-EVER FINAL EXPEDITION COACH.
 
 **원정대 선택 안내**
-> 최대 3명까지 출전할 수 있다.  
 > 원정대를 확정하면 토벌 전망을 확인할 수 있다.
+
+최대 인원은 단계 머리의 `선택 N명 · 최대 3명`이 말한다. `최대 3명까지 출전할 수 있다.`는 원정대 후보 창의 안내에만 쓴다 (User 2026-10-19).
 
 **확정 전 발주 왕복**
 > 발주로 돌아가기
-> 원정대 확정 전에는 발주로 돌아가 추가 발주할 수 있다.
 
 **D30 흐름 버튼 / 수첩 편성**
 > 마지막 발주 (단계 제목)  

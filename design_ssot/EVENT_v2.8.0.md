@@ -93,8 +93,8 @@ No special Event-Hazard merge rule is added.
 4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다. **이번 Run에 이미 나온 Event는 Pool에서 빠진다**
    (한 Run에 같은 Event는 한 번만. 발생 기록은 Run에 저장된다).
 5. 선택된 Event 하나만 적용한다.
-6. Event가 있다면 Event Reveal을 먼저 보여준다.
-7. 이후 Morning Situation을 보여준다.
+6. Event가 있다면 Morning 게시판의 Event 슬립(제목 · 효과 · 짧은 상황)으로 보여준다. 별도 창은 열지 않는다 (User 2026-10-19).
+7. 같은 게시판에서 Morning Situation을 보여준다.
 
 ### Selection Weight
 
@@ -117,7 +117,7 @@ DAY START
 ↓
 Event 판정 / 적용
 ↓
-Event가 있으면 Focused Reveal
+Event가 있으면 게시판 Event 슬립 (창 없음)
 ↓
 Morning Situation
 ↓
@@ -126,11 +126,11 @@ Order
 Sale
 ```
 
-Event가 없으면 Focused Reveal 없이 Morning Situation으로 간다.
+Event가 없으면 Event 슬립 없이 Morning Situation으로 간다.
 
 ### Event를 Gate 정보보다 먼저 보여준다
 
-Event가 발생한 날에는 플레이어가 Gate Detail을 읽기 전에 Event Reveal을 먼저 본다.
+Event가 발생한 날에는 게시판에서 Event 슬립이 Gate 카드보다 위에 놓여 먼저 읽힌다.
 Event는 오늘의 Gate / Hazard / Order / Visitor / Price 판단을 바꾸는 조건이기 때문이다.
 
 Event가 적용된 뒤 Morning은 최종 상태의 열린 Gate · Known Hazard · 방문 예상 · 기타 오늘 상황을 보여준다.
@@ -139,8 +139,7 @@ Event가 적용된 뒤 Morning은 최종 상태의 열린 Gate · Known Hazard �
 
 ## EVENT PRESENTATION
 
-Event는 일반 정보 Card 사이에 묻지 않는다. 발생 시 Focused Overlay · Modal · 중앙 Highlight 등 현재 UI 구조에 맞는
-**Focused Reveal**로 보여준다. 새 Phase는 만들지 않는다.
+Event는 일반 정보 Card 사이에 묻지 않는다. 게시판 맨 위의 **Event 슬립**으로 보여주고 Modal은 열지 않는다. 새 Phase는 만들지 않는다.
 
 기본 구성:
 
@@ -151,10 +150,9 @@ EVENT TITLE
 
 오늘 실제 Effect
 
-[오늘 상황 보기]
 ```
 
-Effect는 Flavor에 묻히지 않는다. Event Reveal 이후에는 같은 긴 설명을 반복하지 않는다.
+Effect는 Flavor에 묻히지 않는다. 같은 설명을 다른 곳에서 반복하지 않는다.
 
 ---
 
@@ -164,7 +162,7 @@ Effect는 Flavor에 묻히지 않는다. Event Reveal 이후에는 같은 긴 �
 
 ### MORNING
 
-Event 전체 Reveal 후, Morning Situation에서 Event가 반영된 최종 상태를 보여준다.
+Morning Situation은 Event 슬립 아래에 Event가 반영된 최종 상태를 보여준다.
 
 ### ORDER
 
@@ -1087,9 +1085,9 @@ Full Run에서 확인한다.
 ### Importance
 
 - Event가 Gate 정보에 묻히지 않는가?
-- Event가 있으면 Gate Detail보다 먼저 Focused Reveal 되는가?
+- Event가 있으면 Gate 카드보다 위에서 먼저 읽히는가?
 - 발생 직후 무엇이 달라졌는지 이해되는가?
-- Event Reveal이 매번 귀찮은 Pop-up으로 느껴지지 않는가?
+- Event가 매번 귀찮은 Pop-up 없이 게시판에서 바로 읽히는가?
 
 ### Decision
 

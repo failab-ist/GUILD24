@@ -143,7 +143,7 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  // BRICK: the flow Actions, named one at a time off the data-action Source already carries
  const brickRule=(css.match(/\.p-end \.dock \.stamp,[\s\S]*?\}/)||[''])[0];
  assert.ok(/--act:var\(--brick\)/.test(brickRule),'the flow family is BRICK');
- for(const act of ['start','store-return','event-seen','boss-go'])
+ for(const act of ['start','store-return','boss-go'])
   assert.ok(brickRule.includes('[data-action="'+act+'"]'),'BRICK reaches the flow Action: '+act);
  assert.ok(/--act:var\(--brick\)/.test(ruleFor('.p-closing .dock .stamp{')),'and the day\'s last Action');
  // ...and reaches nothing that is only an acknowledgement or a utility
@@ -272,10 +272,9 @@ test('UI-Q01: Morning and Order are different screens, not one template',()=>{
   assert.ok(!order.includes(shared),'Order does not reuse the Morning composition: '+shared);
 });
 
-test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is explained inline',()=>{
- assert.ok(/modal='event'/.test(app),'an Event day opens with a focused reveal before Gate detail');
- assert.ok(app.includes('eventSeen'),'the reveal is consumed exactly once');
- assert.ok(app.includes('class="slip event"'),'after the reveal the Event stays pinned to the notice board');
+test('UI-Q03 / UI-Q35: Morning shows the Event on the board, and every Gate Hazard is explained inline',()=>{
+ assert.ok(!/modal='event'/.test(app),'an Event day opens no pop-up (User 2026-10-19): the board slip is the one place it is read');
+ assert.ok(app.includes('class="slip event"'),'the Event is pinned to the notice board');
  assert.ok(app.includes('Presentation.hazardRows'),'Gate Hazards render their canonical pressure line');
  assert.ok(!/title="/.test(app),'no hover-only title= tooltip survives in the render path');
  assert.ok(!/[❄\u{1F577}☾◆◉♜]/u.test(app),'gate marks are drawn sprites, never emoji');
@@ -285,7 +284,7 @@ test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is expl
 test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hierarchy',()=>{
  const order=(fn('orderOffer')+fn('orderForm'))+fn('orderScreen');
  assert.ok(order.includes('본사 발주')||order.includes('발주서'),'the form is titled as the HQ order');
- for(const label of ['운영비(예상)','창고 잔여 칸','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
+ for(const label of ['운영비(예상)','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
  assert.ok(!/내일|tierLine|gateLine/.test(order)&&!/function (tierLine|gateLine)\(/.test(app),'no next-day forecast block on ORDER (User 2026-09-24, v2.9.0)');
  /* v2.9.10 (User 2026-09-27): the identity line reads `{category} · {rarity}`, the rarity word in its colour */
@@ -606,9 +605,9 @@ test('C04: a redraw keeps the keyboard where it was, on #app and inside an open 
 
 test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is meant to inform',()=>{
  const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"));
- const boss=chain.indexOf("modal='boss'"),event=chain.indexOf("modal='event'"),relic=chain.indexOf("focusedRevealSeen");
- assert.ok(boss>=0&&event>=0&&relic>=0,'all three focused reveals are in one chain');
- assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
+ const boss=chain.indexOf("modal='boss'"),relic=chain.indexOf("focusedRevealSeen");
+ assert.ok(boss>=0&&relic>=0,'the focused reveals are in one chain (the Event has none since User 2026-10-19)');
+ assert.ok(boss<relic,'the Boss reveal is offered ahead of the Relic window');
  assert.ok(!/phase==='boss'/.test(app),'the reveal is a beat in the existing chain, not a new Phase');
  // seen state is persisted per stage, so a reload cannot replay or reorder a reveal
  for(const flag of ['identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])
@@ -1312,10 +1311,9 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the notice says what happened as well as what it switched on');
  assert.ok(/\.slip\.event \.effect\{[^}]*border-bottom:1px dashed/.test(css),'and the two are set apart');
  assert.ok(fn('eventSlip').indexOf('class="effect"')<fn('eventSlip').indexOf('class="flavor"')
-        && fn('eventReveal').indexOf('class="effect"')<fn('eventReveal').indexOf('class="flavor"'),'the effect leads and the situation follows');
- assert.ok(/\.slip\.event \.flavor>span[^{]*\{[^}]*white-space:pre-line/.test(css)
-        && /\.event-reveal \.flavor>span[^{]*\{[^}]*white-space:pre-line/.test(css),
-  'a situation authored across lines keeps its lines, on the board and in the reveal');
+        ,'the effect leads and the situation follows');
+ assert.ok(/\.slip\.event \.flavor>span[^{]*\{[^}]*white-space:pre-line/.test(css),
+  'a situation authored across lines keeps its lines on the board');
 
  // D-9. The slots say the count as well as showing it - a row of boxes has to be counted first.
  // v2.9.0 (User 2026-09-24): the Bag is NOT moved - it keeps its place in the state strip, one step larger.
@@ -1844,7 +1842,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
 test('UI-Q-v29-56: the first Event mark - on the Event slip, verbatim',()=>{
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),morning=/morning:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  assert.ok(morning.includes(`['event','.slip.event','아침마다 사건이 생길 수 있다. 사건마다 영향과 적용 기간이 다르다. 사건의 효과를 확인한다.']`),'COPY_AUDIT §3-11 Event mark');
- assert.ok(/class="slip event" data-action="event-again"/.test(app),'the MORNING board carries the Event slip the mark anchors to');
+ assert.ok(/class="slip event"/.test(app),'the MORNING board carries the Event slip the mark anchors to');
 });
 
 /* UI_UX §GATE TIER / FIRE GATE TUTORIAL (UI-Q-v29-52, User 2026-09-30): two contextual MORNING marks on the Gate plate */
@@ -1954,7 +1952,7 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/querySelectorAll\('li\.wh-slot\[data-item="'\+item\+'"\]'\)\]\.slice\(h\.before\?\.\[item\]\|\|0\)/.test(o),'the SKU\'s new cells - past its prior count - drop in on its one landing (v2.9.11 rack)');
  assert.ok(/if\(i<ORDER_BEAT\.hits\)orderCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(i\?'crate':'order'\),land\)\)/.test(o),'at most three audible landings');
  assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
- assert.ok(/\.stock-head em/.test(o)&&/\.stock-head b/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
+ assert.ok(/\.stock-head em/.test(o)&&/\.stock-head b/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸 and N종 move together on the last landing');
  assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus,sheetH\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
  assert.ok(/'<li class="wh-slot'\+mark\+'" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
  /* User 2026-10-01: an order that passes a row of the phone sheet grows it to the new height over the first beat, never a one-frame jump */
@@ -2111,7 +2109,7 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
  assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(m)
   &&/const BOSS_WAIT=1200,/.test(src)&&/warmAhead\(s,phase\);/.test(r),
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
- assert.ok(m.indexOf('bossRevealDue()')<m.indexOf("modal='event'")&&m.indexOf('bossRevealDue()')<m.indexOf("modal='relics';\n",m.indexOf('bossRevealDue()'))&&/openOwedModal\(s,phase,changed\);[\s\S]*renderModal\(\)/.test(r),'the reveal keeps its place ahead of the Event and the Relic window');
+ assert.ok(m.indexOf('bossRevealDue()')<m.indexOf("modal='relics';\n",m.indexOf('bossRevealDue()'))&&/openOwedModal\(s,phase,changed\);[\s\S]*renderModal\(\)/.test(r),'the reveal keeps its place ahead of the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
  /* User 2026-10-09: a coach mark covers the customer's line - the line waits while a mark is up, then gets its full time */
  assert.ok(/queueMicrotask\(\(\)=>holdSpeech\(!!activeCoach\)\);/.test(fn('showCoach'))&&/if\(sayHeld\)return;/.test(fn('armSpeech'))

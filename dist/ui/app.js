@@ -351,7 +351,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -643,12 +643,10 @@ function cueOrder(A,h){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_B
     A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});}
    if(i<ORDER_BEAT.hits)orderCueAt.push(setTimeout(()=>Sound.play(i?'crate':'order'),land));});
   if(!k.length)Sound.play('order');
-  /* the warehouse figures - the summary's `N / M칸` and `N종`, and the register's 창고 잔여 칸 - are one fact; all three move on the last landing */
+  /* the warehouse figures - the summary's `N / M칸` and `N종` - are one fact; both move on the last landing */
   if(k.length){const last=Math.round((k.length-1)*step)+STAMP_FALL,
-    room=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='창고 잔여 칸')?.querySelector('b'),
     held=[...[...document.querySelectorAll('.p-order .stock-head b')].map(el=>[el,h.used+' / '+game.capacity()+'칸']),
-     ...[...document.querySelectorAll('.p-order .stock-head em')].map(el=>[el,Object.keys(h.before||{}).length+'종']),
-     [room,(game.capacity()-h.used)+' / '+game.capacity()]].filter(([el])=>el);
+     ...[...document.querySelectorAll('.p-order .stock-head em')].map(el=>[el,Object.keys(h.before||{}).length+'종'])].filter(([el])=>el);
    const now=held.map(([el])=>el.textContent);held.forEach(([el,was])=>{el.textContent=was;});
    A({t:0},{t:1,duration:last,onComplete:()=>{held.forEach(([el],i)=>{el.textContent=now[i];});}});}
   const gold=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='보유 골드')?.querySelector('b');
@@ -817,7 +815,6 @@ function openOwedModal(s,phase,changed){
  else if(bossRevealDue()){if(bossHold){}else if(changed&&phase==='morning'&&motionOK()){$('#app').inert=true;
   bossHold=setTimeout(()=>Promise.race([warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount)),new Promise(r=>setTimeout(r,BOSS_WAIT))])
    .then(()=>{if(!bossHold)return;bossHold=null;$('#app').inert=false;render();}),BOSS_HOLD);}else modal='boss';}
- else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
 }
 function syncWatchers(phase){
@@ -966,10 +963,10 @@ function deepSlip(){
  +'</div>';}
 /* EVENT §3-1: show the current effect and saved situation separately. */
 function eventSlip(e){
- return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
+ return '<div class="slip event"><span class="pin"></span>'
  +'<span class="stamp-line">오늘의 사건</span><b>'+E(e.name)+'</b>'
  +'<span class="effect"><i>효과</i><span>'+E(Presentation.eventDescription(e))+'</span></span>'
- +'<span class="flavor"><span>'+E(e.reveal)+'</span></span></button>';}
+ +'<span class="flavor"><span>'+E(e.reveal)+'</span></span></div>';}
 /* Owned store support used to sit on the counter as a row of brass plates, which is where
    the float is. It crowded the till off its own surface, so the counter now carries the
    register and nothing else and the standing list lives in the store menu instead - the same
@@ -1829,7 +1826,7 @@ function queueRef(s){return '<details class="tip q-tip" name="sale-tip"><summary
    quantity tap makes (`railShown`), so the rail does not blink on every tap. */
 function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
  const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),out=$('.p-order #order-register .out'),sc=$('.p-order .stage-scroll');
- if(!rail||!brief||!sc||typeof IntersectionObserver!=='function')return;
+ if(!rail||!sc||typeof IntersectionObserver!=='function')return;
  /* the stuck rail sits under the scroll box's top padding, so its lower edge is that padding plus its own height */
  const h=rail.offsetHeight,edge=(parseFloat(getComputedStyle(sc).paddingTop)||0)+h;
  orderWatch=new IntersectionObserver(es=>{for(const e of es){const gone=!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+edge;
@@ -1837,7 +1834,7 @@ function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
   railShown=['show-today','show-gold'].filter(c=>rail.classList.contains(c)).map(c=>' '+c).join('');
   if(rail.offsetHeight!==h)watchOrderToday();},
   {root:sc,rootMargin:'-'+edge+'px 0px 0px 0px',threshold:0});
- orderWatch.observe(brief);if(out)orderWatch.observe(out);}
+ if(brief)orderWatch.observe(brief);if(out)orderWatch.observe(out);}
 function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
     /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
     const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
@@ -1848,9 +1845,10 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
     /* v2.9.10 (User 2026-09-27): an offer whose whole supply was already ordered today reads as sold out - a quiet
        stamp where the quantity controls were and the paper a shade worked - so it is not tapped again for more */
     const out=o.quantity<=0;
+    const owned=s.inventory.filter(st=>st.item===it.id).length;
     return '<li class="line r'+it.rarity+(q?' on':'')+(out?' soldout':'')+'" data-offer="'+i+'">'
     +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
-    +Scene.crate(Art.itemIcon(it.id,30),46)
+    +'<span class="own">'+Scene.crate(Art.itemIcon(it.id,30),46)+(owned?'<b>재고 '+owned+'</b>':'')+'</span>'
     +'<span class="col">'
      /* UI_UX §ORDER — ITEM INFORMATION HIERARCHY (User 2026-09-26, v2.9.6, COPY_AUDIT §4-26): the tag is what 발주 spends, labelled;
          the sale price is the smaller muted tag under it; floated so the name, rarity and effects wrap beside it */
@@ -1870,12 +1868,12 @@ function orderOffer(s,o,i){const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.q
         The data stays: ordering weights and Relic conditions read `category`. What the row
         needs is right underneath it, in the effects summary. */
        +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
-     +'<span class="have">수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+' · <i>유통기한 '+sl+'일</i></span>'
+     +'<span class="have">수익 +'+(it.sell-o.price)+'G'+' · <i>유통기한 '+sl+'일</i></span>'
   +'</span>'
   +(out?'<span class="dial"><em class="soldout-mark">품절</em></span></li>':'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
-   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
+   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn(max?'최대 '+max:'최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
 }
 function finalRiskSummary(d){const groups=(d.families||[]).map(id=>d.hazards.filter(h=>(D.familyTiers[id]?.[1]||[]).includes(h)));
  const other=d.hazards.filter(h=>!groups.some(g=>g.includes(h)));if(other.length)groups.push(other);
@@ -1905,14 +1903,13 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
      +'<span class="rail-line rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
-   +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'
    +'<div><span>보유 골드</span><b>'+fmt(s.money)+'</b></div>'
    +'<div class="pick"><span>발주 금액</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
    +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
    +'<div class="ref-row"><button class="look" data-action="gates">위험 보기</button>'+relicRef()+'</div>'
    // today only: who is coming and where (no next-day block, User 2026-09-24)
-   +'<div class="brief"><div class="when"><span class="k">'+(isFinal?'위험':'오늘')+'</span>'
-     +'<p>'+(isFinal?today:todayLine(counts,'b'))+'</p></div></div>'
+   +(isFinal?'':'<div class="brief"><div class="when"><span class="k">오늘</span>'
+     +'<p>'+todayLine(counts,'b')+'</p></div></div>')
    /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
       so they sit with the other planning signals on ORDER rather than arriving on D30. It is
       the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */
@@ -2134,7 +2131,6 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +(isFinal?'':'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>')
  +status+'<div class="tills">'+actions+'</div></div>';}
-function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="effect"><i>효과</i><span>'+E(Presentation.eventDescription(e))+'</span></p><p class="flavor"><span>'+E(e.reveal)+'</span></p></div>';}
 /* RELIC §GRADE: the 등급 word under the name, in the Item rarity name and colour */
 const relicRarity=r=>'<span class="relic-rarity r'+r.rarity+'">'+E(D.rarities[r.rarity])+'</span>';
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</details>';}
@@ -2263,7 +2259,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
     unlocks Meta.finish credited and the D10 / D14 products the Run recorded as they opened. */
  const openedNames=[...(s.unlocked||[]),...(s.dayUnlocked||[])];
  const opened=openedNames.length
-  ?'<div class="opened"><span>본사 해금</span>'+openedNames.map(n=>{const e=unlockEntry(n);return '<b>'+E(n)+'</b>'+(e.kind?'<em>'+E(e.kind)+'</em>':'');}).join('')+'</div>':'';
+  ?'<div class="opened"><span>본사 해금</span>'+openedNames.map(n=>{const e=unlockEntry(n);return '<div class="op"><b>'+E(n)+'</b>'+(e.kind?'<em>'+E(e.kind)+'</em>':'')+'</div>';}).join('')+'</div>':'';
  /* UI_UX_v2.8 §RUN-END SETTLEMENT FEEDBACK. Read in the order it is computed:
     총매출 -> (도달일 비율) -> 얻은 점포 자본 -> 현재 점포 자본. Ending Gold and the
     remaining stock may appear elsewhere as Run results, but never as inputs to this - they are
@@ -2272,8 +2268,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const st=s.settlement;
  const settle=st?'<div class="block settlement'+(st.reach?' reach':'')+'"><h4>점포 자본 정산</h4>'
   +row('총매출',st.sales.toLocaleString()+'<i>G</i>')
-  +row('점포 자본 비율','×'+Math.round(st.rate*100)+'%')
-  +row('얻은 점포 자본','+'+st.gain.toLocaleString())
+  +row('얻은 점포 자본','×'+Math.round(st.rate*100)+'% → +'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+capitalMeter(st.capitalAfter)+'</div>':'';
  const nudge=opened?'':replayLine();
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+runBlock(row)+settle+opened
@@ -2346,7 +2341,7 @@ function finalThreat(d){
 function finalMemberBody(n,p,d){const slots=Adventurer.slots(n);
  return '<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small><small class="who-traits">'+E(Presentation.traits(n).map(t=>D.traitBy[t].name).join(' · '))+'</small></span><span class="wallet">'+walletChip(n)+'</span></span>'
  +'<div class="final-loadout"><div><span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
- +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></div>'
+ +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'"'+(n.pack[i]?'':' aria-label="빈 칸"')+'>'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'')+'</div>').join('')+'</div></div>'
  +'<span class="final-environments"><span class="env-caption">환경 대응 (권능 적용 전)</span>'+finalEnvironment(p,d)+'</span></div>';
 }
 function finalMemberPin(){const s=game.run,t=game.finalPreRoll(),index=s.team.indexOf(supplyNPC),n=s.npcs.find(n=>n.id===supplyNPC);if(!n||index<0)return '';
@@ -2363,7 +2358,7 @@ function finalMuster(s,need,committed){
  ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order-layout"><div class="order-desk final-order open">'+orderForm()+'</div>'+stockSide()+'</div>'
  :!committed
  ?'<div class="party-head"><h2>원정대 꾸리기</h2><span class="count">'+E(pickCount)+'</span></div>'
- +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'<br>'+E(Copy.finalPrep.returnNote)+'</p></div>'
+ +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.unlock)+'</p></div>'
  +'<div class="npc-grid final-roster">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
  :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'+finalForecastView()
  +'<div class="final-team">'+s.team.map((id,index)=>{const n=s.npcs.find(x=>x.id===id);return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'+finalMemberBody(n,preparation.preparations[index],preparation.d)+'</button>';}).join('')+'</div>'
@@ -2422,7 +2417,7 @@ function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업
  const lost=s.stats.deaths,limit=Meta.deathLimit(s);
  return '<p class="lost-count'+(lost>=limit-2?' near':'')+'">돌아오지 못한 사람 <b>'+lost+' / '+limit+'</b>'
  +'<span>'+limit+'명에 이르면 소문이 퍼져 이 점포의 영업이 끝난다.</span></p>'
- +'<p class="smalltext">이름을 누르면 마지막 상품과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
+ +'<p class="smalltext">사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
  +s.npcs.filter(n=>n.introduced).sort((a,b)=>Number(b.alive)-Number(a.alive)||b.loyalty-a.loyalty).map(n=>npcCard(n)).join('')+'</div>';}
 function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  let cond=[];
@@ -2817,7 +2812,6 @@ function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;
    body+='</div>';footer=btn('확인','shop','stamp');narrow=true;
   }
  }
- else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='unlock'&&unlockNow){title=E(unlockNow.label);body=unlockBody(unlockNow);footer=btn('확인','dismiss','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
 else if(modal==='gates'){title='오늘 열린 게이트';body=s.phase==='final'?finalThreat(s.final):'<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+closedPlates()+'</div>';}
@@ -2969,8 +2963,6 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   anchorOffer(key,y0);break;}
  case'night-next':clearSavedFly();s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();
   nightSound(s.results[s.nightCursor]);if(s.phase==='closing')closingSound();break;
- case'event-seen':setModal(null);render();break;
- case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
  case'fatigue':sound('ui');setModal('fatigue:'+id);break;
  case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;

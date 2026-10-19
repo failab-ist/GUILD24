@@ -742,7 +742,7 @@ async function focusProbe(page){
   const last=await page.evaluate(`(()=>{const all=[...document.querySelectorAll('#app [data-action="qty"]')];
    const rows=all.filter(x=>x.textContent.trim()==='+'&&!x.disabled).map(x=>Number(x.dataset.index))
     .filter(i=>{const plus=all.filter(x=>x.dataset.index===String(i)&&x.textContent.trim()==='+')[0];
-     const cap=all.filter(x=>x.dataset.index===String(i)&&x.textContent.trim()==='최대')[0];
+     const cap=all.filter(x=>x.dataset.index===String(i)&&/^최대/.test(x.textContent.trim()))[0];
      return plus&&cap&&Number(cap.dataset.q)>=Number(plus.dataset.q)+1;});
    return rows.length?Math.max(...rows):-1;})()`);
   if(last<0)warn.push('no quantity row on this order screen can be raised twice; the same-view restore was not probed');
