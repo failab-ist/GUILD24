@@ -46,6 +46,12 @@ test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
   assert.equal(e.supply,base.supply,id+' does not touch Supply');}
  const it=DATA.itemBy.guildlunch;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.equal(Relics.shelf(g,it),f,'only 대형 냉장고 extends the shelf');assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
 });
+test('보증 진열대와 묶음혜택이 겹쳐도 손님은 판매가의 25%를 낸다(0G가 되지 않는다)',()=>{
+ const g=fresh(),n=g.run.npcs[0],it={...DATA.itemBy.energy,sell:190};n.traits=[];n.money=999;n.loyalty=80;n.history=[{day:g.run.day,paid:50}];
+ g.run.facilities=['guarantee','memberBundle'];const q=g.interest(n,it,'overcharge');
+ assert.equal(q.price,285);assert.equal(q.guarantee,143);assert.equal(q.debit,71);
+ g.run.facilities=['memberBundle'];assert.equal(g.interest(n,it,'overcharge').debit,143,'묶음혜택만이면 반값');
+});
 test('premium guarantee obeys wallet, daily limit and never guarantees acceptance',()=>{
  const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.guildlunch;n.traits=[];n.money=999;
  const base=g.interest(n,it,'overcharge');g.run.facilities=['guarantee'];const credit=g.interest(n,it,'overcharge');assert.equal(credit.price,base.price);assert.ok(credit.debit<base.debit);assert.ok(credit.chance<1);

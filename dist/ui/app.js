@@ -1993,7 +1993,7 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
       extra depth; `pct` stays the mode's number, the word is what the coach already says. */
    /* `refused`: the first 바가지 refusal's lesson anchors here (UI_UX §SALE PRICE LESSONS) */
    const face=game.run.phase==='sell'?'<em class="price-role"><span>'+role.split(' ')[0]+'</span>'+(mode==='full'?'':' <span class="price-rate">'+pct+'%</span>')+'</em>':'<em>'+role+'</em>';
-   return btn(face+'<strong>'+q.price+'<span class="price-unit">G</span></strong><small'+(blocked?' class="price-block"':'')+'>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
+   return btn(face+'<strong>'+q.price+'<span class="price-unit">G</span></strong><small'+(blocked?' class="price-block"':'')+'>'+(blocked||(q.debit<q.price?'<span class="sup-tag">점포지원</span><span class="sup-dot"> · </span>':'')+'이익 '+(q.price-st.cost)+'G')+'</small>','sell',[mode==='full'?'stamp':'',blocked==='오늘 거절됨'?'refused':''].filter(Boolean).join(' '),
     'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');}
 /* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): the chosen Item sits on a fixed tray above the dock,
    outside the scrolled column - header line, the one delta list on one wrapping line, 특수 효과, then

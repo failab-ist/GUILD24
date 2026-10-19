@@ -3838,6 +3838,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale:not(.sale-desk) .counter-tray .tills .price-rate{font-size:10px;line-height:1.2}
 .p-sale:not(.sale-desk) .counter-tray .tills strong{grid-column:2;grid-row:1;align-self:end;line-height:19px}
 .p-sale:not(.sale-desk) .counter-tray .tills small{grid-column:2;grid-row:2;align-self:start;white-space:nowrap}
+.sale-desk .counter-tray .tills small .sup-tag{display:block}
+.sale-desk .counter-tray .tills small .sup-dot{display:none}
 .p-sale:not(.sale-desk) .counter-tray .tills .price-block{grid-column:1 / -1;grid-row:3;white-space:normal;padding:2px 4px 0;word-break:keep-all}
 .p-sale:not(.sale-desk) .counter-tray .tills em,.p-sale:not(.sale-desk) .counter-tray .tills small{font-size:11px;line-height:1.15}
 .p-sale:not(.sale-desk) .counter-tray .tills strong{font-size:18px}
