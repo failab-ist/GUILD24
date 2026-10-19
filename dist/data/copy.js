@@ -280,8 +280,8 @@ Copy.boss={
  /* COPY_AUDIT §14-1 D0 — the first-Morning briefing: the Run objective and the investigation
     cadence, and nothing about the Boss itself. Verbatim. */
  d0:{header:'마왕 조사 개시',lead:'DAY 30에 마왕이 깨어난다. 길드 조사대가 그 정체를 추적한다.',
-  /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-25): a DAY label over each of the two lines; the closing sentence stays deleted */
-  steps:[['DAY 05',['마왕의 정체가 밝혀진다.']],['DAY 15',['마왕 권능이 밝혀진다.']],['DAY 25',['최종 원정의 위험이 밝혀진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],button:'확인'},
+  /* COPY_AUDIT §14-1 (User 2026-10-19): the four beats read as one timeline - a DAY label over a two-word name, the words split by a line break */
+  steps:[['DAY 05',['정체','공개']],['DAY 15',['권능','공개']],['DAY 25',['위험','공개']],['DAY 30',['마왕성','토벌']]],button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   next:'DAY 15에 마왕 권능이 밝혀진다. 밝혀진 정보는 도감 > 마왕에서 다시 볼 수 있다.',
   flavor:{
