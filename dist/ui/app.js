@@ -2063,9 +2063,11 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  /* User 2026-09-25: the Item's own effects only (the retired `피로 A → 출발 B` line is not back). */
  /* User 2026-10-02 (UI_UX §SALE — ENVIRONMENT METER): a Hazard Counter row is this Item's own share, `공포 대응 +10` - the
     total it adds to lives in the 환경 대응 meter, so the tray no longer shows a running count starting from 0 */
- const parts=moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'
-  +E(r.label)+' '+(r.key in D.hazards?(r.after-r.before>=0?'+':'')+Math.round(r.after-r.before)
-   :Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after))+'</b>');
+ /* SALE tray (User 2026-10-19): the placed Item's Counter row is the Hazard's own mark + number - the mark the Gate card
+    and the 환경 대응 meter carry - so the answer is matched to the need by eye; the name stays for assistive reading. */
+ const parts=moved.direct.map(r=>r.key in D.hazards
+  ?'<b class="'+(r.bad?'effect-bad':'')+'"><span class="fx-hz"><i class="hz-mark">'+Scene.hazardIcon(r.key,16)+'<em class="hz-said">'+E(r.label)+'</em></i>'+(r.after-r.before>=0?'+':'')+Math.round(r.after-r.before)+'</span></b>'
+  :'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  /* A numberless utility's full condition is the useful explanation. Retain the no-change warning
     for an unapplied numeric effect; merely having a remaining effect is not sufficient to hide it. */
@@ -2770,11 +2772,15 @@ const ownCancel=new Set(['underConfirm','bossConfirm']);
 let dossierShown=null;const stageKey=()=>game.run?game.run.day+':'+bossRevealStage():null;
 function fatigueModal(r){
  const settled=r.settledFatigue??r.finalFatigue,rows=Presentation.fatigueRows(r),start=rows[0];
+ const bands=Dungeon.fatigueBands(),now=bands.find(b=>settled>=b.min&&settled<=b.max)||bands[bands.length-1];
  const row=(label,value,kind='')=>'<div class="'+kind+'"><span>'+E(label)+'</span><b>'+E(value)+'</b></div>';
  const changes=rows.slice(1).map(x=>row(x.label,(x.delta>0?'+':'')+x.delta,x.delta>0?'harm':'benefit'));
  return '<div class="fatigue-overview"><div><span>'+E(start.label)+'</span><b>'+E(start.value)+'</b></div><i aria-hidden="true">→</i><div><span>귀환 후 피로</span><b>'+E(settled)+'</b></div></div>'
  +'<div class="fatigue-ledger">'+changes.join('')+'</div>'
- +'<div class="fatigue-bands"><h3>피로 단계</h3>'+Dungeon.fatigueBands().map(b=>'<p><b>'+E(b.name)+' '+b.min+(b.max>b.min?'~'+b.max:'')+'</b><span>'+E(b.text||'페널티 없음')+'</span></p>').join('')+'</div>';
+ +'<div class="fatigue-bands"><h3>피로 단계</h3>'
+ +'<div class="fatigue-gauge" aria-hidden="true"><div class="fg-track"><i class="fg-fill" style="width:'+Math.min(100,Math.round(settled/Dungeon.FATIGUE_MAX*100))+'%"></i>'+bands.slice(1).map(b=>'<u style="left:'+Math.round(b.min/Dungeon.FATIGUE_MAX*100)+'%"></u>').join('')+'</div>'
+ +'<div class="fg-nums">'+bands.map(b=>'<span style="left:'+Math.round(b.min/Dungeon.FATIGUE_MAX*100)+'%">'+b.min+'</span>').join('')+'</div></div>'
+ +bands.map(b=>'<p'+(b===now?' class="now"':'')+'><b>'+E(b.name)+' '+b.min+(b.max>b.min?'~'+b.max:'')+'</b><span>'+E(b.text||'페널티 없음')+'</span></p>').join('')+'</div>';
 }
 function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
