@@ -42,7 +42,7 @@ function priceTag(text,tone='sign'){
 // The User's drawn silhouettes, tinted with the text colour through a mask.
 const HAZARD_ICON=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
 function hazardIcon(key,size=20){
- if(HAZARD_ICON.includes(key))return `<i class="hz-icon" style="width:${size}px;height:${size}px;--hz:url(ui/assets/presentation/hazard/${key}.png)" aria-hidden="true"></i>`;
+ if(HAZARD_ICON.includes(key))return `<i class="hz-icon" style="width:${size}px;height:${size}px;-webkit-mask-image:url(ui/assets/presentation/hazard/${key}.png);mask-image:url(ui/assets/presentation/hazard/${key}.png)" aria-hidden="true"></i>`;
  return `<svg class="hz-icon" width="${size}" height="${size}" viewBox="0 0 20 20" shape-rendering="crispEdges" aria-hidden="true">${r(5,5,10,10,'currentColor')}</svg>`;
 }
 

@@ -102,7 +102,7 @@ h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
 img.mark{display:block;object-fit:contain;image-rendering:auto}
-i.hz-icon{display:block;flex:none;background:currentColor;-webkit-mask:var(--hz) center/contain no-repeat;mask:var(--hz) center/contain no-repeat}
+i.hz-icon{display:block;flex:none;background:currentColor;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
 /* Emphasis is the INFORMATION face's real SemiBold. 750 was a weight neither family ships,
    which only ever resolved to a synthesised bold. */
 b,strong{font-weight:600}
