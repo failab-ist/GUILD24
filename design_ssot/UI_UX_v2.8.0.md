@@ -1400,7 +1400,7 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
 
 An empty Slot is neutral ("비움" without "주의 ·"). Before a Run every Slot place (§NEW STORE PREPARATION — STORE SCENE), "비움"
 included, opens 점포 장식 (codex tab) scrolled to that Slot in the existing panel (no second selector); during a Run the frozen
-loadout is read-only. A Slot with an affordable, unowned Decoration ends with a small `들일 수 있음` mark (a state, not a "new"
+loadout is read-only. A Slot with an affordable, unowned Decoration ends with a small `구매 가능` mark (a state, not a "new"
 flag, naming no Decoration; COPY_AUDIT §1-8).
 
 ### DECORATION DECISION SURFACE
@@ -1715,7 +1715,7 @@ the Galaxy stage (360x597). On a portrait stage under 640 high:
   first Gate plate read whole; till, plate and pieces stay put (§LIVE STORE DECORATION SEATING) and a 벽면 piece there goes
   behind the board — the situation reads before the room (§MORNING)
 - 새 점포 준비: the note takes the short-desk tighter step so the status line stays on the board; the 간판 keeps its gap from
-  the title; the title is at most 180 px; an empty 간판's tag (wider once it carries `들일 수 있음`) runs from the piece edge
+  the title; the title is at most 180 px; an empty 간판's tag (wider once it carries `구매 가능`) runs from the piece edge
   nearest the title toward the screen edge, hanging under the build mark, never covering the title
 - SALE stays sale-first (§MOBILE SALE PLAYABILITY): preserve the character scale (§SALE — MOBILE AUTHORITY), use the local
   readable type ladder and lower-right stock metadata, keys still 44 px or more. Representative one-/two-Hazard visits keep
@@ -2627,7 +2627,7 @@ PASS, in priority order, at most one line, never beside `본사 해금`, the sam
 - else beating the best 총매출 prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G`, N the tape's own `총매출`; beating both prints
   the best Day line
 - a tie, the account's first ending and a manual 현재 지점 포기 print no record line, and an abandon never moves either record
-- 새 점포 준비: exactly the Slot places with an affordable unowned Decoration carry `들일 수 있음`
+- 새 점포 준비: exactly the Slot places with an affordable unowned Decoration carry `구매 가능`
 - no new motion, sound, screen or button
 FAIL: a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot whose
 unowned Decorations cost more than the capital.
@@ -3575,7 +3575,7 @@ PASS:
 - after a phone call or another app, the music comes back on return or at the latest on the next tap
 - with the silent switch on, the game is silent and music from another app keeps playing
 - on an iPhone SE and a Galaxy with its bars (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its tag -
-  `들일 수 있음` included - and the status line on the board; MORNING shows the Event whole (its effect line included) and the top
+  `구매 가능` included - and the status line on the board; MORNING shows the Event whole (its effect line included) and the top
   of the first Gate without scrolling
 - no console or runtime error
 - runtime evidence (Chromium): `tools/qa-bgm.cjs` resumes a suspended context on return; `tests/ui-guard.cjs` UI-Q-v29-49;

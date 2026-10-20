@@ -23,7 +23,7 @@
 (규칙 owner UI_UX §Pre-Run Decoration empty-slot interaction)
 
 **현재**
-> 들일 수 있음
+> 구매 가능
 
 ---
 

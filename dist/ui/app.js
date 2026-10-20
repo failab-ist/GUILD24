@@ -2620,9 +2620,9 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
  const canBuy=slot=>D.decorations.some(x=>x.slot===slot&&!Meta.decorationOwned(a,x.id)&&x.price<=capital);
  const place=slot=>{const id=loadout[slot],d=id&&D.decorationBy[id],art=d&&Scene.decoration(id),mark=canBuy(slot);
   return '<button class="decoplate '+slot+' prep-slot'+(art?'':' empty')+'" data-action="store-manage" data-id="'+E(slot)+'"'
-   +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+(mark?' · 들일 수 있음':'')+' · 점포 장식에서 보기">'
+   +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+(mark?' · 구매 가능':'')+' · 점포 장식에서 보기">'
    +(art||'<span class="slot-empty" aria-hidden="true"></span>')
-   +'<span class="slot-tag"><i>'+E(SLOT_COPY[slot]||slot)+'</i><b>'+(d?E(d.name):'비움')+'</b>'+(mark?'<em class="can-buy">들일 수 있음</em>':'')+'</span></button>';};
+   +'<span class="slot-tag"><i>'+E(SLOT_COPY[slot]||slot)+'</i><b>'+(d?E(d.name):'비움')+'</b>'+(mark?'<em class="can-buy">구매 가능</em>':'')+'</span></button>';};
  const fromEnd=!!game.run;
  return '<div class="stage p-morning p-prep">'+menuFab()
  +'<p class="build-mark">v'+E(BUILD.version)+' · '+E(BUILD.commit)+'</p>'

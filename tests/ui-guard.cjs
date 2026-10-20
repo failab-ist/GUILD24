@@ -2023,7 +2023,7 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/s\.salesBefore>0&&st\?\.sales>s\.salesBefore\)return '지금까지 가장 많이 판 점포다 · 총매출 '\+st\.sales\.toLocaleString\(\)\+'G';/.test(r),'strictly above an existing record, in the receipt\'s own 총매출 format');
  assert.ok(/G\.Meta\.recordBestSales\(this\.account,s,s\.stats\.revenue\)/.test(read('dist/systems/run.js')),'the ending records the best 총매출 from the settlement\'s Gross Sales');
  assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
- assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('prepScreen'))&&/x\.price<=capital/.test(fn('prepScreen')),'the pre-Run Slot mark reads the current capital');
+ assert.ok(/<em class="can-buy">구매 가능<\/em>/.test(fn('prepScreen'))&&/x\.price<=capital/.test(fn('prepScreen')),'the pre-Run Slot mark reads the current capital');
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
