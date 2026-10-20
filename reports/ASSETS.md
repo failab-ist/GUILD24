@@ -5,6 +5,12 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 위험 아이콘 9종 — User 제공 원본 (2026-10-20)
+
+- `dist/ui/assets/presentation/hazard/{poison,bind,corrosion,mire,fire,fear,dark,cold,whiteout}.png`: User가 준 흑백 PNG(각 1254×1254)의
+  흰 부분만 남겨 투명 여백을 자르고 64×64 알파 마스크로 줄였다. 화면에서는 CSS mask로 글자 색을 입혀 10~18px로 보인다.
+- User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
+
 ### 원정지 아이콘 5종 — User 제공 원본 (2026-10-20)
 
 - `dist/ui/assets/presentation/dungeon/{spider,golem,crypt,snow,slime}.png`: User가 준 RGBA PNG(각 1254×1254)를
