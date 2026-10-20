@@ -1014,6 +1014,8 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 /* ORDER today-fit emphasis: the same typographic rule as SALE, on paper */
 /* 점주 가이드: 처음 3일 first, the rest under 자세히 */
 .stack .first-days p{margin:0 0 4px}
+.stack details.more>h3{margin:16px 0 4px}
+.stack details.more>p{margin:0 0 4px}
 .stack details.more>summary{cursor:pointer;margin:12px 0 6px;font:600 13px/1.3 var(--ui);color:#a2947c;letter-spacing:.08em}
 /* ---- layer 2 : what is known -------------------------------------------------- */
 /* The stat/forecast dossier, the shelf and the Trait rows read stat -> goods -> Traits
@@ -1951,6 +1953,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    Scoped by `.tabs`, which is the Codex and nothing else, so the utility overlays are
    untouched.
    ===================================================================== */
+/* 도감 탭마다 내용 길이가 달라도 창 높이는 그대로 */
+.modal:has(.tabs){height:92dvh}
 .modal:has(.tabs){background:var(--tex-wood),#33241a;background-size:32px 12px;
  border-style:solid;border-width:10px;
  border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32' height='32' shape-rendering='crispEdges'><g fill='%230f0a05'><rect x='0' y='0' width='32' height='2'/><rect x='0' y='10' width='2' height='12'/><rect x='30' y='10' width='2' height='12'/><rect x='0' y='30' width='32' height='2'/></g><g fill='%235a4028'><rect x='0' y='2' width='2' height='1'/><rect x='7' y='2' width='18' height='1'/><rect x='30' y='2' width='2' height='1'/><rect x='2' y='10' width='1' height='12'/><rect x='29' y='10' width='1' height='12'/><rect x='0' y='29' width='2' height='1'/><rect x='7' y='29' width='18' height='1'/><rect x='30' y='29' width='2' height='1'/></g><g fill='%23e0bc70'><rect x='2' y='2' width='5' height='1'/><rect x='25' y='2' width='5' height='1'/><rect x='2' y='3' width='1' height='4'/><rect x='29' y='3' width='1' height='4'/><rect x='5' y='5' width='1' height='1'/><rect x='26' y='5' width='1' height='1'/><rect x='2' y='25' width='1' height='5'/><rect x='29' y='25' width='1' height='5'/><rect x='5' y='26' width='1' height='1'/><rect x='26' y='26' width='1' height='1'/><rect x='3' y='29' width='4' height='1'/><rect x='25' y='29' width='4' height='1'/></g><g fill='%2346301d'><rect x='0' y='3' width='2' height='2'/><rect x='7' y='3' width='18' height='2'/><rect x='30' y='3' width='2' height='2'/><rect x='4' y='4' width='3' height='1'/><rect x='25' y='4' width='3' height='1'/><rect x='3' y='10' width='2' height='12'/><rect x='27' y='10' width='2' height='12'/><rect x='0' y='27' width='2' height='2'/><rect x='4' y='27' width='24' height='1'/><rect x='30' y='27' width='2' height='2'/><rect x='7' y='28' width='18' height='1'/></g><g fill='%236b5029'><rect x='3' y='3' width='4' height='1'/><rect x='25' y='3' width='4' height='1'/><rect x='3' y='4' width='1' height='3'/><rect x='28' y='4' width='1' height='3'/><rect x='0' y='8' width='32' height='1'/><rect x='8' y='10' width='1' height='12'/><rect x='23' y='10' width='1' height='12'/><rect x='0' y='23' width='32' height='1'/><rect x='3' y='25' width='1' height='4'/><rect x='28' y='25' width='1' height='4'/><rect x='4' y='28' width='3' height='1'/><rect x='25' y='28' width='3' height='1'/></g><g fill='%233a2717'><rect x='0' y='5' width='2' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='6' y='5' width='20' height='1'/><rect x='27' y='5' width='1' height='1'/><rect x='30' y='5' width='2' height='1'/><rect x='5' y='10' width='1' height='12'/><rect x='26' y='10' width='1' height='12'/><rect x='0' y='26' width='2' height='1'/><rect x='4' y='26' width='1' height='1'/><rect x='6' y='26' width='20' height='1'/><rect x='27' y='26' width='1' height='1'/><rect x='30' y='26' width='2' height='1'/></g><g fill='%232a1a0f'><rect x='0' y='6' width='2' height='1'/><rect x='4' y='6' width='24' height='1'/><rect x='30' y='6' width='2' height='1'/><rect x='6' y='10' width='1' height='12'/><rect x='25' y='10' width='1' height='12'/><rect x='0' y='25' width='2' height='1'/><rect x='4' y='25' width='24' height='1'/><rect x='30' y='25' width='2' height='1'/></g><g fill='%23b08a42'><rect x='0' y='7' width='32' height='1'/><rect x='7' y='10' width='1' height='12'/><rect x='24' y='10' width='1' height='12'/><rect x='0' y='24' width='32' height='1'/></g><g fill='%23120c06'><rect x='0' y='9' width='32' height='1'/><rect x='9' y='10' width='1' height='13'/><rect x='22' y='10' width='1' height='13'/><rect x='0' y='22' width='9' height='1'/><rect x='10' y='22' width='12' height='1'/><rect x='23' y='22' width='9' height='1'/></g></svg>") 10 stretch;
@@ -3941,6 +3945,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.exit-confirm .modal-footer{padding-top:12px;box-shadow:none}
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,var(--sa-bottom));
  background:none;box-shadow:inset 0 1px 0 #9b6433}
+/* 확인 창 버튼은 같은 폭으로 줄을 채운다(두 개면 반씩, 세 개면 두 개 + 한 줄) */
+.settings-wood .modal-footer button:not(.bare),.wood-frame .modal-footer button:not(.bare){flex:1 1 40%}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
  border-image:url('assets/presentation/settings/blue-key.webp') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
  background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
@@ -3960,8 +3966,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:url('assets/presentation/settings/supply-backdrop.webp') right bottom / 100% auto no-repeat;opacity:.22}
 .settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
 .settings-group+.settings-group{padding-top:22px;box-shadow:inset 0 1px 0 #97612e}
-.settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
- width:6px;height:6px;background:#ad7d42;transform:rotate(45deg);pointer-events:none}
 .settings-wood .settings-group h3{margin:0;font:500 21px/1.3 var(--f-plate);color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .settings-group p{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
 .settings-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
