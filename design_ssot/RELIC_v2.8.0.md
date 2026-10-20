@@ -766,7 +766,7 @@ The Player can always inspect current owned Store Supports through the existing 
 ## COPY TRUTH
 
 단골 스탬프 기계 Player copy:
-    손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4). 원정 뒤에 오르는 단골도는 그대로.
+    손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4).
 
 Do not mention 무료 보급; the active price system has no free-sale mode.
 
@@ -1399,7 +1399,7 @@ Expected:
 #### REL-Q-v28-12 — STAMP COPY
 
 Expected:
-    손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4). 원정 뒤에 오르는 단골도는 그대로.
+    손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4).
 
 FAIL:
 - active copy mentions 무료 보급
