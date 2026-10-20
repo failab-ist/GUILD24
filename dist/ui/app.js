@@ -794,7 +794,7 @@ function render(){
  syncWatchers(phase);
 }
 function phaseScreen(phase){
- return phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">매입가, 손님 수, 창고 같은 가게 운영을 이번 점포가 끝날 때까지 도와주는 카드입니다. 하나를 고르세요.</p></div>','');
+ return phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2></div>','');
 }
 /* The warehouse is a native disclosure, but its preference is an account-level presentation
    choice: it opens for a new player and, once folded, stays folded on later Days and reloads
@@ -1543,7 +1543,7 @@ const coachSteps={
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
     names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
     COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
- relic:[['relic-what','.relic-open','점포지원은 영업 내내 적용된다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
+ relic:[['relic-what','.relic-open','점포지원은 매입가, 손님 수, 창고 같은 가게 운영을 이번 점포가 끝날 때까지 도와주는 카드다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
 };
 let activeCoach=null;
 let riskMarked=null;
@@ -2190,9 +2190,9 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
     window was open until DAY N. A disabled action says why it is disabled, on the line that
     would otherwise contradict it. The seven is the same literal ownedRelicView prints - it
     is the rule's own number, not a balance parameter to be promoted. */
- +'<p>'+(first?(s.phase==='foundation'?'매입가, 손님 수, 창고 같은 가게 운영을 이번 점포가 끝날 때까지 도와주는 카드입니다. 하나를 고르세요.':until+' 무료로 고를 수 있다.')
+ +((first&&s.phase==='foundation')?'':'<p>'+(first?until+' 무료로 고를 수 있다.'
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
-   :until+' 구매할 수 있다 · 보유 골드 '+fmt(s.money)+'G')+'</p></div>'
+   :until+' 구매할 수 있다 · 보유 골드 '+fmt(s.money)+'G')+'</p>')+'</div>'
  +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
  /* Three states, and the card has to say which one it is before the Player reads the label:
     the one taken (`owned`), one still open, and one that cannot be taken right now because the
