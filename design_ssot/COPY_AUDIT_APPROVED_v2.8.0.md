@@ -3278,8 +3278,7 @@ Label:
 Heading:
     첫 점포지원
 
-Body:
-    매입가, 손님 수, 창고 같은 가게 운영을 이번 점포가 끝날 때까지 도와주는 카드입니다. 하나를 고르세요.
+Body (DAY 0): none. 점포지원이 무엇인지는 점주 안내(COPY_WORLD_VOICE §Tutorial, 점포지원 DAY 0)가 말한다.
 
 Body when reopened on DAY 1~4:
     DAY 4까지 무료로 고를 수 있다.
