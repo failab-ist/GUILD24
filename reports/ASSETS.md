@@ -5,6 +5,13 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
+### 원정지 아이콘 5종 — User 제공 원본 (2026-10-20)
+
+- `dist/ui/assets/presentation/dungeon/{spider,golem,crypt,snow,slime}.png`: User가 준 RGBA PNG(각 1254×1254)를
+  128×128로 줄였다. 투명 여백을 잘라 정사각형 가운데에 두고, 각 칸을 원본 주요 색 중 가장 많은 색으로 채워 테두리 잡색 픽셀을 지웠다.
+- 아침 게이트 쪽지·판매 원정지 판·마왕전 위협 칸에서 24~32px로 보인다. 마왕성(final)은 기존 스프라이트를 쓴다.
+- User 제공 파일로 기록하며 별도의 제작 도구·제3자 라이선스를 추정하지 않는다.
+
 ### 발주 후보 교환 아이콘 — 프로젝트 생성 (2026-10-05)
 
 - `dist/ui/assets/presentation/order/reroll.png`: OpenAI 내장 이미지 생성 도구로 제작한 RGBA PNG, 1254×1254, 342,574 bytes.

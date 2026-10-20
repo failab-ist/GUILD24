@@ -101,6 +101,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
+img.mark{display:block;object-fit:contain;image-rendering:auto}
 /* Emphasis is the INFORMATION face's real SemiBold. 750 was a weight neither family ships,
    which only ever resolved to a synthesised bold. */
 b,strong{font-weight:600}
