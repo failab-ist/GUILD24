@@ -3,11 +3,11 @@
 // D10 record are set before the real ending so each END states one case (end() itself settles and records):
 //   1 first ending, small settlement            -> no line
 //   1b a tie with the best Day, a higher 총매출 -> 지금까지 가장 많이 판 점포다 · 총매출 1,500G   (and a reload prints it again)
-//   2 settlement crosses 500 (unowned 500s; 17,000G x 3% = 510)      -> 점포 자본으로 새 장식을 들일 수 있다.  (and a purchase from END keeps it)
+//   2 settlement crosses 500 (unowned 500s; 17,000G x 3% = 510)      -> 점포 자본으로 새 장식을 구매할 수 있다.  (and a purchase from END keeps it)
 //   3 no crossing, a higher Day                  -> 지금까지 가장 오래 버틴 점포다 · DAY 18   (and a reload prints it again)
 //   4 a tie with the best Day                    -> no line
 //   5 the Run opened 길드 특제 도시락 at D10       -> 본사 해금 lists it, no line
-// then 새 점포 준비: only the display Slot (500) carries 들일 수 있음 at a capital of 500~749.
+// then 새 점포 준비: only the display Slot (500) carries 구매 가능 at a capital of 500~749.
 //   node tools/qa-replay-nudge.cjs [out-dir]
 const {spawn}=require('node:child_process'),path=require('node:path'),fs=require('node:fs');
 const PORT=Number(process.env.QA_PORT||5196),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',OUT=process.argv[2]?path.resolve(process.argv[2]):null;
@@ -36,12 +36,12 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    r=await ending('1b',12,1500);check(width+' 1b a new best 총매출',r.line==='지금까지 가장 많이 판 점포다 · 총매출 1,500G',r.line);
    await p.reload({waitUntil:'load'});await p.waitForSelector('.p-end');
    const kept=await p.evaluate(()=>document.querySelector('.end-tape .replay')?.textContent||'');check(width+' 1b a reload of the ended Run prints the same line',kept===r.line,kept);
-   r=await ending(2,15,17000);check(width+' 2 a settlement that crosses an unowned price names no Decoration',r.line==='점포 자본으로 새 장식을 들일 수 있다.',r.line);
+   r=await ending(2,15,17000);check(width+' 2 a settlement that crosses an unowned price names no Decoration',r.line==='점포 자본으로 새 장식을 구매할 수 있다.',r.line);
    // a Decoration bought from the ending does not rewrite the receipt (judged once at the settlement); the purchase is undone
    // after so the rest of the account story is unchanged
    const after=await p.evaluate(()=>{const a=Guild24.game.account,kept=JSON.parse(JSON.stringify(a.store));Meta.buyDecoration(a,DATA.decorations.find(d=>d.slot==='display'&&d.kind==='economy').id);Guild24.render();
     const line=document.querySelector('.end-tape .replay')?.textContent||'';a.store=kept;Guild24.game.save();Guild24.render();return line;});
-   check(width+' 2 a purchase from the ending leaves the printed line as it was',after==='점포 자본으로 새 장식을 들일 수 있다.',after);
+   check(width+' 2 a purchase from the ending leaves the printed line as it was',after==='점포 자본으로 새 장식을 구매할 수 있다.',after);
    r=await ending(3,18,1000);check(width+' 3 a new best Day',r.line==='지금까지 가장 오래 버틴 점포다 · DAY 18',r.line);
    await p.reload({waitUntil:'load'});await p.waitForSelector('.p-end');
    const again=await p.evaluate(()=>document.querySelector('.end-tape .replay')?.textContent||'');check(width+' 3 a reload of the ended Run prints the same line',again===r.line,again);
@@ -52,7 +52,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    await p.click('[data-action="new"]');await p.waitForSelector('.p-prep .prep-slot');
    const marks=await p.evaluate(()=>({capital:Meta.storeCapital(Guild24.game.account),slots:DATA.decorationSlots.map(slot=>!!document.querySelector('.p-prep .prep-slot[data-id="'+slot+'"] .can-buy'))}));
    if(OUT)await p.screenshot({path:path.join(OUT,`nudge-${width}-prerun.png`)});
-   check(width+' pre-run: only the Slot the capital covers carries 들일 수 있음',marks.capital>=500&&marks.capital<750&&JSON.stringify(marks.slots)===JSON.stringify([false,false,false,true]),JSON.stringify(marks));
+   check(width+' pre-run: only the Slot the capital covers carries 구매 가능',marks.capital>=500&&marks.capital<750&&JSON.stringify(marks.slots)===JSON.stringify([false,false,false,true]),JSON.stringify(marks));
    await ctx.close();}
  }finally{await browser.close();server.kill();}
  const failed=results.filter(r=>!r.ok).length;
