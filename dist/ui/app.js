@@ -1537,7 +1537,7 @@ const coachSteps={
  /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
  /* User 2026-10-04: the first Run end whose settlement carries 점포 자본 across a Decoration's price (settleStoreCapital's `reach`) - the
     one place the 점포 자본 is explained, once: it can buy a Decoration, and how it builds up */
- end:[['capital','.p-end .settlement.reach','점포 자본으로 장식을 들일 수 있다. 점포 자본은 보유 골드와 별개로, 영업이 끝날 때 총매출의 3%가 쌓인다.']],
+ end:[['capital','.p-end .settlement.reach','점포 자본으로 장식을 구매할 수 있다. 점포 자본은 보유 골드와 별개로, 영업이 끝날 때 총매출의 3%가 쌓인다.']],
  closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
@@ -2317,7 +2317,7 @@ function capitalMeter(cap){const filled=new Set(Meta.ownedDecorations(game.accou
  return '<div class="cap-meter"><div class="cap-bar"><i style="width:'+Math.round(fill/ticks.length*100)+'%"></i></div><ul>'
   +ticks.map(t=>'<li'+(cap>=t.price?' class="on"':'')+'><em>'+E(SLOT_COPY[t.sl])+'</em><b>'+t.price.toLocaleString()+'</b></li>').join('')+'</ul></div>';}
 function replayLine(){const s=game.run,st=s.settlement;
- if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
+ if(st?.reach)return '점포 자본으로 새 장식을 구매할 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
  if(s.salesBefore>0&&st?.sales>s.salesBefore)return '지금까지 가장 많이 판 점포다 · 총매출 '+st.sales.toLocaleString()+'G';
  return '';}

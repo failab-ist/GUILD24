@@ -977,7 +977,7 @@ progress bar, remaining-count, mission or reward.
   / D14 PRODUCT UNLOCK), recorded when they open (their Day toast unchanged)
 - if the Run opened nothing, one bold line may close the tape above `도감에서 보기`, the first that applies:
   1. the settlement crossed the price of a Decoration the account did not own at that settlement (before < price <= after;
-     judged once — buying from the ending does not change it): `점포 자본으로 새 장식을 들일 수 있다.` — never naming one (each
+     judged once — buying from the ending does not change it): `점포 자본으로 새 장식을 구매할 수 있다.` — never naming one (each
      Slot offers two)
   2. new best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
   3. new best 총매출 (META §BEST DAY): `지금까지 가장 많이 판 점포다 · 총매출 {N}G` — N is the tape's `총매출` row
@@ -2621,7 +2621,7 @@ FAIL: a %, a verdict word, a second line, a `?`, or the line on a healthy or fir
 PASS, in priority order, at most one line, never beside `본사 해금`, the same line after a reload of the ended Run:
 - a first-on-account D10 / D14 product unlock is listed in `본사 해금` beside any distinct-Boss unlock; the Day toast still fires
   once; a later Run reaching D10 again lists nothing
-- else a settlement crossing an unowned Decoration's price prints `점포 자본으로 새 장식을 들일 수 있다.` (nothing if capital was
+- else a settlement crossing an unowned Decoration's price prints `점포 자본으로 새 장식을 구매할 수 있다.` (nothing if capital was
   already above it or the Decoration is owned)
 - else beating the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`
 - else beating the best 총매출 prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G`, N the tape's own `총매출`; beating both prints
