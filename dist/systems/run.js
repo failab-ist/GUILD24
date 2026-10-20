@@ -80,7 +80,7 @@ P.liquidate=function(stockId){const s=this.run;
 /* CORE_RUN §CURRENT RUN ABANDON (User 2026-09-24, v2.9.0): the Run is discarded at once with no
    settlement - end() is deliberately NOT called - and the Game is back in the no-Run state the
    pre-Run screen serves (Decorations purchasable). The next Run starts on the ordinary start() path. */
-P.abandon=function(){if(!this.run)return;this.run=null;this.rng=null;this.save();};
+P.abandon=function(){if(!this.run)return;G.Telemetry?.report(this,'abandon');this.run=null;this.rng=null;this.save();};
 P.settleStoreCapital=function(){const s=this.run;
  if(s.settled)return s.settlement;
  const sales=s.stats.revenue,rate=G.Meta.capitalRate(s.day);
@@ -92,7 +92,7 @@ P.settleStoreCapital=function(){const s=this.run;
  const reach=D.decorations.some(d=>!G.Meta.decorationOwned(this.account,d.id)&&before<d.price&&d.price<=after);
  s.settlement={day:s.day,sales,rate,gain,capitalAfter:after,reach};
  return s.settlement;};
-P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);G.Meta.recordBestSales(this.account,s,s.stats.revenue);this.settleStoreCapital();this.save();};
+P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);G.Meta.recordBestSales(this.account,s,s.stats.revenue);this.settleStoreCapital();this.save();G.Telemetry?.report(this,'end');};
 /* FINAL_EXPEDITION v2.8 party rule: the CAP of the party. Any 1..cap may be committed - a 1- or
    2-person challenge is a valid choice even with 3+ eligible - and 0 eligible is a Run Fail.
    No participant-count bonus, penalty, multiplier or auto-fill exists anywhere. */
