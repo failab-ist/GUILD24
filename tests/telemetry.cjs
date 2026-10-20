@@ -4,6 +4,7 @@ for(const f of ['data/catalog','data/relics','data/decorations','data/copy','sys
 const G=globalThis,T=G.Telemetry;
 const store={};globalThis.localStorage={getItem:k=>store[k]??null,setItem:(k,v)=>{store[k]=String(v);},removeItem:k=>{delete store[k];}};
 const sent=[];let fail=false;globalThis.fetch=async(u,o)=>{sent.push([u,o.body]);return{ok:!fail};};
+let app=false;G.Native={inApp:()=>app};
 const mk=seed=>{const g=new G.Game();g.autosave=false;g.start(seed);return g;};
 const tick=()=>new Promise(r=>setTimeout(r,5));
 (async()=>{
@@ -16,10 +17,15 @@ const tick=()=>new Promise(r=>setTimeout(r,5));
  assert.equal(T.on(g.account),true,'on by default');
  T.report(g,'abandon');await tick();assert.equal(sent.length,0,'no endpoint, nothing sent');
  T.endpoint='https://example.invalid/exec';
+ g.account.settings.stats=true;T.report(g,'abandon');await tick();assert.equal(sent.length,0,'the web build sends nothing');
+ app=true;
  g.account.settings.stats=false;T.report(g,'abandon');await tick();assert.equal(sent.length,0,'switched off, nothing sent');
  g.account.settings.stats=true;g.abandon();await tick();assert.equal(sent.length,1,'abandon sends one');assert.equal(JSON.parse(sent[0][1]).kind,'abandon');
  fail=true;g=mk('tele-b');g.run.day=3;g.end(false,'소문');await tick();assert.equal(sent.length,2,'tried once');
  assert.equal(JSON.parse(store['guild24.stats.queue']).length,1,'a failed send waits in the queue');
  fail=false;await T.flush();assert.equal(JSON.parse(store['guild24.stats.queue']).length,0,'and goes out next time');
+ g=mk('tele-c');g.run.playMs=12345;g.run.reportHistory.push({day:1,playMs:5,refuse:2,refusePrice:1});
+ assert.ok(G.Save.valid(JSON.parse(G.Save.export(g.account,g.run))),'a save carrying the new fields is valid');
+ const old=mk('tele-d');delete old.run.playMs;assert.ok(G.Save.valid(JSON.parse(G.Save.export(old.account,old.run))),'and one without them still is');
  console.log('telemetry ok');
 })();

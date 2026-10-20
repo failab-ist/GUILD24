@@ -2,7 +2,7 @@
 /* PLATFORM_RELEASE anonymous run statistics: when a Run ends (or is abandoned) one summary of the numbers goes to the
    developer's collector, so balance can be read off real play as well as off the bots. No name, account, device id,
    location or screen log is ever in it; the only id is a random code made on this device. The Player's switch is
-   account.settings.stats (on unless set false). With no endpoint nothing is sent. Failed sends wait in a short queue
+   account.settings.stats (on unless set false). With no endpoint, or outside the Android app (the web build sends nothing), nothing is sent. Failed sends wait in a short queue
    and go out with the next report; the collector drops a repeated rid. */
 const QUEUE='guild24.stats.queue',MAX_QUEUE=3;
 const D=()=>G.DATA;
@@ -41,7 +41,7 @@ async function flush(){
 }
 function report(game,kind){
  try{
-  if(!T.endpoint||!on(game.account))return;
+  if(!T.endpoint||!G.Native?.inApp?.()||!on(game.account))return;
   anon(game.account);
   const p=build(game,kind);if(!p)return;
   const q=readQ();q.push(JSON.stringify(p));writeQ(q);flush();
