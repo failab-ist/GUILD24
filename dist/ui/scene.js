@@ -38,20 +38,12 @@ function priceTag(text,tone='sign'){
  +`<path d="M13 0H78V32H13L0 16Z" fill="currentColor"/>`+r(7,13,5,5,'#00000059')
  +`</svg><b>${text}</b></span>`;
 }
-/* ---- hazard pictograms: one sign per canonical Hazard, readable at 20px ---- */
+/* ---- hazard pictograms: one sign per canonical Hazard, readable at 12px ---- */
+// The User's drawn silhouettes, tinted with the text colour through a mask.
+const HAZARD_ICON=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
 function hazardIcon(key,size=20){
- const c='currentColor';let s='';
- if(key==='poison')s=r(6,1,8,2,c)+r(8,3,4,4,c)+r(5,7,10,2,c)+r(3,9,14,7,c)+r(5,16,10,2,c)+r(5,11,3,3,'#00000080')+r(11,10,2,2,'#00000080')+r(10,13,3,2,'#00000080');
- if(key==='bind')s=r(2,4,6,4,c)+r(2,12,6,4,c)+r(12,4,6,4,c)+r(12,12,6,4,c)+r(8,8,4,4,c)+r(6,6,2,2,c)+r(12,6,2,2,c)+r(6,12,2,2,c)+r(12,12,2,2,c);
- if(key==='corrosion')s=r(6,2,8,3,c)+r(4,5,12,6,c)+r(6,11,3,4,c)+r(11,11,3,6,c)+r(8,15,2,3,c);
- if(key==='mire')s=r(2,10,16,3,c)+r(4,13,12,3,c)+r(6,4,3,6,c)+r(11,2,3,8,c)+r(2,16,16,2,c);
- if(key==='fire')s=r(10,1,2,3,c)+r(9,4,4,3,c)+r(14,6,2,4,c)+r(7,7,8,4,c)+r(5,10,10,3,c)+r(4,13,12,4,c)+r(6,17,8,2,c)+r(9,12,3,5,'#00000047');
- if(key==='fear')s=r(5,2,10,12,c)+r(3,5,2,6,c)+r(15,5,2,6,c)+r(7,6,2,3,'#00000080')+r(11,6,2,3,'#00000080')+r(6,15,8,3,c)+r(8,10,4,2,'#00000080');
- if(key==='dark')s=r(4,2,12,3,c)+r(2,5,3,10,c)+r(15,5,3,10,c)+r(4,15,12,3,c)+r(7,7,6,6,c);
- if(key==='cold')s=r(9,1,3,18,c)+r(1,9,18,3,c)+r(4,4,3,3,c)+r(13,4,3,3,c)+r(4,13,3,3,c)+r(13,13,3,3,c);
- if(key==='whiteout')s=r(1,3,18,3,c)+r(3,8,14,3,c)+r(1,13,18,3,c)+r(6,3,3,13,'#00000047');
- if(!s)s=r(5,5,10,10,c);
- return `<svg class="hz-icon" width="${size}" height="${size}" viewBox="0 0 20 20" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
+ if(HAZARD_ICON.includes(key))return `<i class="hz-icon" style="width:${size}px;height:${size}px;-webkit-mask-image:url(ui/assets/presentation/hazard/${key}.png);mask-image:url(ui/assets/presentation/hazard/${key}.png)" aria-hidden="true"></i>`;
+ return `<svg class="hz-icon" width="${size}" height="${size}" viewBox="0 0 20 20" shape-rendering="crispEdges" aria-hidden="true">${r(5,5,10,10,'currentColor')}</svg>`;
 }
 
 
