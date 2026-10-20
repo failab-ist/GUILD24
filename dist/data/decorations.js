@@ -36,7 +36,7 @@ G.DATA.decorations=[
     dearer 간판 (User 2026-10-05). The ids stay (saves). */
  {id:'cheerBanner', kind:'operation', slot:'sign', name:'단골 감사 현수막', price:1500, effect:p=>'손님의 투력이 단골도 10마다 '+pct(p.cheerBanner.perTen)+' 오른다 (최대 '+pct(p.cheerBanner.max)+')',
   text:'본사가 보내 준 단골 감사 현수막. 단골일수록 어깨에 힘이 들어간다.'},
- {id:'heroSign', kind:'operation', slot:'wall', name:'본사 우수 점포 훈장', price:1000, effect:()=>{const b=G.DATA.balance.relicReroll.base;return '첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다. 점포지원 후보 교환도 할 수 있다 ('+b+'G → '+b*2+'G…)';},
+ {id:'heroSign', kind:'operation', slot:'wall', name:'본사 우수 점포 훈장', price:1000, effect:()=>'첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다',
   text:'본사가 우수 점포에 달아 준 훈장. 영웅급 지원이 따라온다.'},
  {id:'voucher', kind:'operation', slot:'counter', name:'휴식 바우처 꽂이', price:750, effect:p=>'매일 먼저 온 손님 '+p.voucher.customers+'명은 그날 밤 피로가 '+p.voucher.fatigue+' 줄어든다',
   text:'본사가 제휴 여관 휴식 바우처를 보내 왔다. 손님들이 한 장씩 집어 간다.'},
