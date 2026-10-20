@@ -18,7 +18,7 @@ G.DATA.decorations=[
   text:'이름난 모험가의 초상. 저 벽에 걸리고 싶은 사람이 문을 연다.'},
  {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:750, effect:p=>'매일 먼저 온 손님 '+p.thriftSafe.customers+'명은 손님 소지금이 '+p.thriftSafe.firstWallet+'G씩 늘어난다',
   text:'카운터 아래 작은 금고. 먼저 온 손님들의 손님 소지금에 길드 적립금을 보태 준다.'},
- {id:'guildShelf', kind:'economy', slot:'display', name:'길드 추천 매대',   price:500, effect:()=>G.DATA.balance.wallVisitorChance>=1?'매일 아침 손님이 1명 더 온다':'매일 아침 '+pct(G.DATA.balance.wallVisitorChance)+' 확률로 그날 손님이 1명 더 온다. 손님이 더 올 확률은 다른 효과와 합쳐 100%까지다',
+ {id:'guildShelf', kind:'economy', slot:'display', name:'길드 추천 매대',   price:500, effect:()=>G.DATA.balance.wallVisitorChance>=1?'매일 아침 손님이 1명 더 온다':'매일 아침 '+pct(G.DATA.balance.wallVisitorChance)+' 확률로 그날 손님이 1명 더 온다',
   text:'길드 추천 딱지가 붙은 매대. 가끔 이걸 보고 한 명이 더 들른다.'},
  /* Survival / combat alternatives, one per Slot (User decision 2026-09-24). A Slot still wears
     ONE Decoration, so each Slot is a choice between running the store and keeping people alive.
