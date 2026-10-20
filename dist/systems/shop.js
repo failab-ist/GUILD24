@@ -570,7 +570,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(mode==='overcharge'&&s.event?.effects.noOvercharge){if(!n.refused.includes(key))n.refused.push(key);return false;}
  const intent=this.interest(n,it,mode);if(n.money+(n.eventBudget||0)<intent.debit)throw Error('손님의 소지금이 부족합니다.');
  const accepted=this.rng.next()<intent.chance;
- if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
+ if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';s.daily.refuse=(s.daily.refuse||0)+1;if(reason==='price')s.daily.refusePrice=(s.daily.refusePrice||0)+1;n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
   /* SALE §SAME-ITEM REFUSAL PRICE CEILING: any refusal of a SKU closes every higher price for it this visit, whatever the
      reason; a refused 바가지 closes the SKU outright and costs Loyalty (refusalLoyalty). No other SKU is touched. */
   const over=mode==='overcharge';
@@ -664,7 +664,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   if(rep){if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
    rep.settledFatigue=n.fatigue;n.records.at(-1).settledFatigue=n.fatigue;}
  }}
- s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money,rerolls:s.rerollCount||0,gates:s.dungeons.map(d=>[d.family,d.tier||1,d.temporary?1:0])});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
+ s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money,playMs:s.playMs||0,rerolls:s.rerollCount||0,gates:s.dungeons.map(d=>[d.family,d.tier||1,d.temporary?1:0])});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;
 })(globalThis);
