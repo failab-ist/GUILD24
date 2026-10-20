@@ -101,6 +101,8 @@ body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
+img.mark{display:block;object-fit:contain;image-rendering:auto}
+i.hz-icon{display:block;flex:none;background:currentColor;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
 /* Emphasis is the INFORMATION face's real SemiBold. 750 was a weight neither family ships,
    which only ever resolved to a synthesised bold. */
 b,strong{font-weight:600}
@@ -463,7 +465,6 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20shape-rendering%3D%22crispEdges%22%3E%3Cg%20fill%3D%22%23e3776c%22%3E%3Crect%20x%3D%226%22%20y%3D%220%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%221%22%20width%3D%228%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%222%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%224%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%225%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%227%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%228%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23c4453c%22%3E%3Crect%20x%3D%225%22%20y%3D%222%22%20width%3D%224%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%223%22%20width%3D%224%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%224%22%20width%3D%226%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%225%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%226%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%227%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%228%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%229%22%20width%3D%228%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2210%22%20width%3D%226%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%2211%22%20width%3D%224%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%238b2b25%22%3E%3Crect%20x%3D%2211%22%20y%3D%222%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%223%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2211%22%20y%3D%224%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%225%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%227%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2211%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2210%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%2210%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%2211%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2211%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2212%22%20width%3D%228%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%2213%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23f2a99e%22%3E%3Crect%20x%3D%224%22%20y%3D%223%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center/14px 14px no-repeat;
  filter:drop-shadow(0 3px 0 #00000059)}
 .slip.gate{padding-left:52px;--edge:var(--fam)}
-.slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
 /* BATCH 1: the crest is the notice's insignia, so it centres on the title it belongs to
    rather than starting at the same top edge - at 32px against a 21px line it read 5px low. */
 .slip .crest{position:absolute;left:12px;top:9px;width:32px;height:32px;display:grid;place-items:center;background:#0000001a}
@@ -1099,7 +1100,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .pips i.on{background:var(--gold);opacity:1}
 .pips i.now{background:var(--sign-lit);opacity:1;transform:scale(1.15)}
 .dest-plate{position:relative;display:grid;grid-template-columns:38px 1fr;gap:10px;margin:0 0 12px;padding:11px 12px;
- background:#0d0904a6;box-shadow:inset 0 3px 0 var(--fam,var(--gold)),inset 3px 0 0 #000000a6,
+ background:#0d0904a6;box-shadow:inset 3px 0 0 #000000a6,
             inset -2px -2px 0 #ffffff12}
 .dest-plate .mark{background:#00000047;padding:2px}
 .dest-plate label{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#9c8d70;display:block;margin-bottom:4px}
@@ -2291,7 +2292,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .threat h2{font:600 11px/1 var(--ui);letter-spacing:.18em;color:#b09a92;margin-bottom:10px}
 .fams{display:grid;gap:7px;margin-bottom:11px}
 .fam{display:flex;align-items:center;gap:9px;padding:7px 10px;font:400 14px/1.3 var(--ui);color:#f2e0da;
- background:#00000047;box-shadow:inset 4px 0 0 var(--fam,#8a2f26)}
+ background:#00000047}
 .threat .hazards b{color:#e8a08e}
 /* the Family columns (BATCH 5-1): flat on a phone, so the two Families read first and their
    Hazards follow as one run, exactly as before; the desk rule below makes them columns */
@@ -3397,11 +3398,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the disclosed Families, as two entries ON the record rather than two cards floating over a
    panel: the family colour stays the left rule it already was, on paper stock */
 .boss-reveal .fam-card{padding:9px 11px;background:#2c24180a;
- box-shadow:inset 4px 0 0 var(--fam,#8a2f26),inset 0 0 0 1px #2c24181f}
+ box-shadow:inset 0 0 0 1px #2c24181f}
 .boss-reveal .fam-card .hazards li{color:#5f5440}
 .boss-reveal .fam-card .hazards .press{color:#8a7c60}
-.boss-reveal .fam-card>b{display:block;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
+.boss-reveal .fam-card>b{display:flex;align-items:center;gap:8px;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
  -webkit-font-smoothing:none;color:var(--ink)}
+.boss-reveal .fam-card>b .mark{box-sizing:content-box;padding:4px;background:#0000001a}
 .boss-reveal .fam-card .hazards{margin:0}
 /* UI_UX §BOSS INFORMATION PRESENTATION: every investigation shares one viewport-bounded art cap. */
 @media (max-width:719px){
@@ -3495,8 +3497,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .trait-name b{display:block;font:500 23px/1.25 var(--f-plate);-webkit-font-smoothing:none;color:var(--ink)}
 .boss-reveal.final .lede{font:600 16px/1.45 var(--ui);color:var(--ink)}
 .boss-reveal.final .fams{gap:0;margin:0;box-shadow:none}
-.boss-reveal.final .fam-card{padding:11px 0 11px 13px;background:none;box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
-.boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26),inset 0 1px 0 #2c241833}
+.boss-reveal.final .fam-card{padding:11px 0;background:none;box-shadow:none}
+.boss-reveal.final .fam-card+.fam-card{box-shadow:inset 0 1px 0 #2c241833}
 .boss-reveal.final .fam-card>b{margin-bottom:5px;font-size:16px}
 /* UI_UX §BOSS INFORMATION PRESENTATION: D10 / D20 keep the shared illustration and shorter report text. */
 .boss-reveal.d10 .lede,.boss-reveal.d20 .lede{font:400 15px/1.6 var(--ui);color:#3c3527}
@@ -3525,7 +3527,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font-size:14.5px;color:#4a402e;text-align:left}
 @media (min-width:720px){
  .boss-reveal.final .fams{column-gap:22px}
- .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
+ .boss-reveal.final .fam-card+.fam-card{box-shadow:none}
 }
 /* a desk gives the major records a document measure instead of the 460px utility sheet; the
    compact D10 / D20 records keep theirs */

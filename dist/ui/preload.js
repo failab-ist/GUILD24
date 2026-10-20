@@ -21,6 +21,8 @@ function required(wide){
   P+'morning/day-sign.png',P+'night/store-night.webp',P+'sale/shelf-plank.png',
   ...['discount','markup','off','regular'].map(n=>P+'sale/till-'+n+'.png'),
   P+'settings/wood-panel.webp',P+'settings/blue-key.webp',P+'settings/red-key.webp',P+'settings/supply-backdrop.webp',
+  ...['spider','golem','crypt','snow','slime'].map(n=>P+'dungeon/'+n+'.png'),
+  ...['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'].map(n=>P+'hazard/'+n+'.png'),
   P+'support/order-paper.png',P+'support/'+PAPER+(wide?'-wide':'')+'-blank.webp',P+'support/choice-tag-blank.webp',P+'support/return-tag-blank.webp',P+'order/reroll.png',
   ...MENU.map(n=>P+'menu/'+n+'.webp'),
   ...DECO.map(n=>A+'deco/'+n+'.svg'),

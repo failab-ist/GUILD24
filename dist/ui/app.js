@@ -2747,7 +2747,7 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
   return '<div class="boss-reveal final">'+bossFiled()+'<p class="lede">'+E(c.final.intro)+'</p>'+bossGuide('finalCoach',c.final.guide)
    +plate
    +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
-     return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
+     return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+Art.mark(id,24)+E(f.name)+'</b>'
       +hazardList(D.familyTiers[id][1],null,d)+'</article>';}).join('')
    +'</div></div>';}
  if(stage==='d15'){const name=c.d15.trait[s.bossId][0],lines=traitLines(s.bossId);
