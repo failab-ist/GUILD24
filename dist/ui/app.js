@@ -2070,9 +2070,19 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
     total it adds to lives in the 환경 대응 meter, so the tray no longer shows a running count starting from 0 */
  /* SALE tray (User 2026-10-19): the placed Item's Counter row is the Hazard's own mark + number - the mark the Gate card
     and the 환경 대응 meter carry - so the answer is matched to the need by eye; the name stays for assistive reading. */
- const parts=moved.direct.map(r=>r.key in D.hazards
-  ?'<b class="'+(r.bad?'effect-bad':'')+'"><span class="fx-hz"><i class="hz-mark">'+Scene.hazardIcon(r.key,16)+'<em class="hz-said">'+E(r.label)+'</em></i>'+(r.after-r.before>=0?'+':'')+Math.round(r.after-r.before)+'</span></b>'
-  :'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
+ const gate=game.claimedGateFor(n),own={...n,traits:Presentation.traits(n)},
+  base=Dungeon.prepare(own,gate,s.facilities),withIt=Dungeon.prepare({...own,pack:[...n.pack,it.id]},gate,s.facilities),
+  fat0=base.effects.fatigueBeforeExpedition,fat1=withIt.effects.fatigueBeforeExpedition;
+ /* SALE tray (User 2026-10-19): the delta line states only what this Item moves - 피로 as the customer's Fatigue before it
+    leaves, a Stat as where it lands (`→ 36.6`, the standing value is on the Stat panel), and each Hazard of the Gate as the Counter this
+    Item adds (its own Counter plus the Stat-route share, the resolver's number) in the Hazard's own mark. */
+ const mark=(key,label,v)=>'<b><span class="fx-hz"><i class="hz-mark">'+Scene.hazardIcon(key,16)+'<em class="hz-said">'+E(label)+'</em></i>+'+v+'</span></b>';
+ const gain=withIt.hazards.map((h,i)=>({key:h.key,v:Math.round(h.defense-base.hazards[i].defense)})).filter(x=>x.v>0),gateKeys=new Set(withIt.hazards.map(h=>h.key));
+ const parts=[...moved.direct.filter(r=>!(r.key in D.hazards)).map(r=>r.key==='supply'?(fat1<fat0?'<b>피로 → '+fat1+'</b>':'')
+  :Adventurer.keys.includes(r.key)?'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' → '+Presentation.amount(r.key,r.after)+'</b>'
+  :'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>').filter(Boolean),
+  ...moved.direct.filter(r=>r.key in D.hazards&&!gateKeys.has(r.key)).map(r=>mark(r.key,r.label,Math.round(r.after-r.before))),
+  ...gain.map(x=>mark(x.key,D.hazards[x.key],x.v))];
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  /* A numberless utility's full condition is the useful explanation. Retain the no-change warning
     for an unapplied numeric effect; merely having a remaining effect is not sufficient to hide it. */
