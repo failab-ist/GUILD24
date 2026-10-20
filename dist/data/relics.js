@@ -13,7 +13,7 @@ const rows=[
 ['bulk','묶음발주 계약','foundation',['rotation'],130,p=>'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 '+pct(p.bulk.discount)+' 싸진다.'],
 ['rotation','회전 진열대','foundation',['rotation'],80,p=>'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 '+p.rotation.supplyBonus+'개 늘어난다.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],130,p=>{const up=m=>Math.round(D.pricing[m].loyalty*p.stamp.loyaltyMult);
- return '손님의 구매로 오르는 단골도: 정가 +'+up('full')+' (기존 +'+D.pricing.full.loyalty+'), 50% 할인 +'+up('half')+' (기존 +'+D.pricing.half.loyalty+'). 원정 뒤에 오르는 단골도는 그대로.';}],
+ return '손님의 구매로 오르는 단골도: 정가 +'+up('full')+' (기존 +'+D.pricing.full.loyalty+'), 50% 할인 +'+up('half')+' (기존 +'+D.pricing.half.loyalty+').';}],
 ['member','회원 관리대장','foundation',['vip'],130,p=>'단골도가 손님이 다시 올 가능성에 주는 효과가 '+times(p.member.loyaltyRevisitMult)+'가 된다.'],
 ['rareContract','희귀상품 입고 계약','foundation',['premium'],140,p=>'발주 후보에 희귀 이상 상품이 '+times(p.rareContract.rareWeightMult)+' 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 '+pct(p.rareContract.hqBonus)+'를 더 받는다.'],
 ['guarantee','길드 보증 진열대','foundation',['premium'],140,p=>'하루 한 번, '+GUARANTEE_MIN_PRICE+'G 이상에 파는 상품은 손님이 판매가의 '+pct(1-p.guarantee.subsidyRate)+'만 내고 가게는 전액을 받는다.'],
