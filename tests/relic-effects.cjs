@@ -614,16 +614,16 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
 
 test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime truth, COPY_AUDIT §11-32 exact',()=>{
  const g=fresh('status'),s=g.run;s.facilities=['rotation','logisticsHQ','guarantee','groupOrder','rerollTicket','bulk','memberBundle','fieldRepair'];
- s.previousSales=3;assert.equal(Relics.status(g,'rotation'),'전날 판매 3건 · 오늘 미적용');s.previousSales=4;assert.equal(Relics.status(g,'rotation'),'전날 판매 4건 · 오늘 적용 중');
- assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 매입가 -12%');s.previousSales=12;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 12건 · 오늘 매입가 -30%');s.previousSales=0;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 0건 · 오늘 미적용');s.previousSales=6;
+ s.previousSales=3;assert.equal(Relics.status(g,'rotation'),'전날 판매 3건, 오늘 미적용');s.previousSales=4;assert.equal(Relics.status(g,'rotation'),'전날 판매 4건, 오늘 적용 중');
+ assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건, 오늘 매입가 -12%');s.previousSales=12;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 12건, 오늘 매입가 -30%');s.previousSales=0;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 0건, 오늘 미적용');s.previousSales=6;
  s.guaranteeUsed=false;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 1회 남음');s.guaranteeUsed=true;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 사용함');
- s.daily.sales=2;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 2건 · 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 4건 · 판매마다 +15G 지급 중');
+ s.daily.sales=2;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 2건, 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 4건, 판매마다 +15G 지급 중');
  s.rerollCount=0;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 남음');s.rerollCount=1;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 사용함');
  s.phase='sell';assert.equal(Relics.status(g,'bulk'),'','묶음발주 계약 speaks only at ORDER');
  s.phase='order';g.generateOffers();s.cart={};assert.equal(Relics.status(g,'bulk'),'지금 발주에서 적용 없음');s.cart={0:3};assert.equal(Relics.status(g,'bulk'),'지금 발주에서 1종 적용');
  assert.equal(Relics.status(g,'memberBundle'),'','단골 묶음혜택 speaks only at SALE');
- s.phase='sell';const n=s.npcs[0];s.queue=[n.id];s.cursor=0;n.loyalty=10;n.history=[];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 아님');
- n.loyalty=60;n.history=[{day:s.day,paid:50}];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 · 오늘 유료 구매 1건');
+ s.phase='sell';const n=s.npcs[0];s.queue=[n.id];s.cursor=0;n.loyalty=10;n.history=[];assert.equal(Relics.status(g,'memberBundle'),n.name+': 단골 아님');
+ n.loyalty=60;n.history=[{day:s.day,paid:50}];assert.equal(Relics.status(g,'memberBundle'),n.name+': 단골, 오늘 유료 구매 1건');
  assert.equal(Relics.status(g,'fieldRepair'),'','an always-on support carries no line');
  assert.equal(Relics.status(g,'lifetime'),'','평생 단골제 has no daily use state to read');
 });

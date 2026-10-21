@@ -288,7 +288,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
  assert.ok(!/내일|tierLine|gateLine/.test(order)&&!/function (tierLine|gateLine)\(/.test(app),'no next-day forecast block on ORDER (User 2026-09-24, v2.9.0)');
  /* v2.9.10 (User 2026-09-27): the identity line reads `{category} · {rarity}`, the rarity word in its colour */
- assert.ok(/<span class="kind">'\+E\(itemKind\(it\)\)\+' · <i class="rar r'\+it\.rarity\+'">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/i><\/span>/.test(order),'each offer row carries the category and rarity line');
+ assert.ok(/<span class="kind">'\+E\(itemKind\(it\)\)\+' <i class="rar r'\+it\.rarity\+'">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/i><\/span>/.test(order),'each offer row carries the category and rarity line');
  assert.ok(/lim=game\.quantityLimit\(i\)/.test(order)&&/aria-disabled="true" data-reason=/.test(order),'a blocked quantity control is dim but tappable, with its reason');
  for(const t of ['창고 칸이 부족합니다.','오늘 공급 최대 수량입니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
  assert.ok(/getAttribute\('aria-disabled'\)==='true'/.test(app),'the click listener answers a blocked control with the toast and nothing else');
@@ -297,7 +297,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(order.includes('발주 후보 교환'),'the reroll names its full-offer scope');
  assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
  assert.ok(order.includes('발주 교환권'),'the free first use is called out');
- assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
+ assert.ok(/발주 확정 '\+fmt\([^)]+\)\+'G/.test(app),'the docked stamp states the amount');
 });
 
 test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row, one pressed Stat each (3 / 3 / 3, no Gate shares a Stat); the labels are retired',()=>{
@@ -486,7 +486,7 @@ test('SA-Q21 / SA-Q34: Closing is economics-only, and supply-impact attribution 
  const build=read('dist/ui/app.js')+read('dist/ui/presentation.js')+read('dist/systems/dungeon.js');
  for(const rejected of ['환경 부담을 줄였다','대응 보급이','환경 피해를 막았다'])
   assert.ok(!build.includes(rejected),'the rejected generic supply wording is gone: '+rejected);
- assert.ok(/supplyLines[\s\S]{0,400}items\.join\(' · '\)\+' → '/.test(read('dist/ui/presentation.js')),
+ assert.ok(/supplyLines[\s\S]{0,400}items\.join\(', '\)\+' → '/.test(read('dist/ui/presentation.js')),
   'an impact line reads product -> result');
  assert.ok(/if\(!items\.length\)continue;/.test(read('dist/ui/presentation.js')),
   'an event with no attributable item is never reported');
@@ -960,7 +960,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  const tips=[...fn('readout').matchAll(/tip\('([^']+)'/g)].map(m=>m[1]);
  assert.deepEqual(tips,['전투 전망','환경 대응'],'exactly two counter tooltips, on the two readout cells');
  assert.ok(!fn('readout').includes('<span class="fore">실패 시 사망 위험'),'no always-on Death cell');
- assert.ok(app.includes("tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')"),'전투 전망 carries the approved two lines');
+ assert.ok(app.includes("tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세·접전·불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')"),'전투 전망 carries the approved two lines');
  assert.ok(app.includes("tip('환경 대응','손님의 능력치·특성에 판 상품의 위험 대응을 더한 값. 뒤는 필요한 수치다.','필요한 수치까지 채우면 그 위험으로 생기는 사고를 막는다.')"),'환경 대응 carries the approved §4-2 lines (User 2026-10-02)');
  assert.ok(!app.includes('실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.'),'the retired §4-3 line is gone');
  assert.ok(fn('npcDetail').includes("'실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%'"),'§5-7 the NPC detail states the same value');
@@ -1257,12 +1257,12 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const dl=fn('deathLimitItem');
  assert.ok(dl.includes('Meta.deathLimit(s)')&&dl.includes('Meta.deathLimitSegmentEnd(s)'),
   'the line reads the segment table through Meta, not a copy of it');
- assert.ok(/'">사망 '\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'exact COPY_AUDIT §4-23 format');
+ assert.ok(/'">사망 '\+n\+' \/ '\+limit\+' \(D'\+end\+'까지\)<\/b>'/.test(dl),'exact COPY_AUDIT §4-23 format');
  assert.ok(/warn=n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
  assert.ok(!/popover|badge|title=/.test(dl),'no popover, badge or extra text');
  assert.ok(fn('morningScreen').includes('deathLimitItem()'),'MORNING shows the line, always on screen');
  assert.ok((fn('orderOffer')+fn('orderForm')).includes('deathLimitItem(true)'),'ORDER shows the same line, 사망 set as its label (User 2026-09-29)');
- assert.ok(/labelled\?'<i>사망<\/i><b class="death-limit'\+warn\+'">'\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'the same words, split into label and value');
+ assert.ok(/labelled\?'<i>사망<\/i><b class="death-limit'\+warn\+'">'\+n\+' \/ '\+limit\+' \(D'\+end\+'까지\)<\/b>'/.test(dl),'the same words, split into label and value');
 
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
     the form showed only a per-SKU 재고 N. The warehouse is on it now, from the same grouping
@@ -1830,7 +1830,7 @@ test('UI-Q-v29-53: coach diet - retired marks are gone, kept marks remain',()=>{
  for(const id of ['visitors','gates','relic-card','relic-buy','order-gates','order-stock','offer','quantity','hazard','pricing','result'])assert.ok(!ids.has(id),'retired: '+id);
  /* COPY_AUDIT §3-14: the first eligible DAY is 4, even with another ORDER mark. */
  assert.ok(steps.includes("['reroll','.p-order [data-action=\"reroll\"]','후보가 마음에 안 들면 발주 후보 교환으로 새로 받는다. 이번 교환 비용은 버튼에 표시된다.',,4]"),'the DAY 4 reroll mark, verbatim');
- assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'발주 후보 교환 · '"),'the 발주 후보 교환 key carries the refresh icon and keeps its name');
+ assert.ok(/'<button class="rubber" data-action="reroll" '/.test(app)&&app.includes("'+REROLL_ICON+'발주 후보 교환 '"),'the 발주 후보 교환 key carries the refresh icon and keeps its name');
  /* the retired 창고 mark's fact is on the head: DAY 1, nothing ordered yet */
  assert.ok(/hq=s\.day===1&&!\(s\.daily\?\.spent>0\)/.test(fn('stockHead'))&&/\(hq\?'본사 기본 상품 ':''\)\+n\+'종<\/em>'/.test(fn('stockHead')),'DAY 1 창고 head reads 본사 기본 상품 N종');
  assert.ok(steps.includes("closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']]"),'CLOSING keeps its first clause only');
@@ -1935,7 +1935,7 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  assert.ok(/shelfEffects\(Presentation\.rows\(/.test(sh),'the row hands every row to one owner');
  assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'desk density classes remain; the approved phone SALE override wraps at its readable step');
  for(const [c,px] of [['tight',13],['dense',12],['densest',11]])assert.ok(new RegExp('\\.good \\.what span\\.'+c+'\\{font-size:'+px+'px').test(css),c+' is '+px+'px');
- assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소모품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
+ assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상, 부상 → 무사',duplicate:'다음 소모품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
  // the core is the approved line's own words, not new copy
  const rowsFor=k=>Presentation.rows({[k]:1}).map(r=>r.label).join('');
  assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소모품 효과 2회'),'both cores are cut from the approved lines');
@@ -2014,13 +2014,13 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  /* User 2026-09-30: the line reads before the codex link, in bold */
  {const l=fn('ledger');assert.ok(l.indexOf('<p class="replay">')>0&&l.indexOf('<p class="replay">')<l.indexOf("btn('도감에서 보기'"),'the replay line sits above 도감에서 보기');
   assert.ok(/\.end-tape \.replay\{[^}]*font:700 /.test(css),'and is bold');}
- assert.ok(r.indexOf("'점포 자본으로 새 장식을 구매할 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '"),'a Decoration newly in reach comes before a best Day');
+ assert.ok(r.indexOf("'점포 자본으로 새 장식을 구매할 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 (DAY '"),'a Decoration newly in reach comes before a best Day');
  const run=read('dist/systems/run.js');
  assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 구매할 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
  assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
  /* User 2026-09-30: the best 총매출 is the third line, after the best Day, on the END receipt's own 총매출 */
- assert.ok(r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '")<r.indexOf("'지금까지 가장 많이 판 점포다 · 총매출 '"),'a best Day comes before a best 총매출');
- assert.ok(/s\.salesBefore>0&&st\?\.sales>s\.salesBefore\)return '지금까지 가장 많이 판 점포다 · 총매출 '\+st\.sales\.toLocaleString\(\)\+'G';/.test(r),'strictly above an existing record, in the receipt\'s own 총매출 format');
+ assert.ok(r.indexOf("'지금까지 가장 오래 버틴 점포다 (DAY '")<r.indexOf("'지금까지 가장 많이 판 점포다 (총매출 '"),'a best Day comes before a best 총매출');
+ assert.ok(/s\.salesBefore>0&&st\?\.sales>s\.salesBefore\)return '지금까지 가장 많이 판 점포다 \(총매출 '\+st\.sales\.toLocaleString\(\)\+'G\)';/.test(r),'strictly above an existing record, in the receipt\'s own 총매출 format');
  assert.ok(/G\.Meta\.recordBestSales\(this\.account,s,s\.stats\.revenue\)/.test(read('dist/systems/run.js')),'the ending records the best 총매출 from the settlement\'s Gross Sales');
  assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
  assert.ok(/<em class="can-buy">구매 가능<\/em>/.test(fn('prepScreen'))&&/x\.price<=capital/.test(fn('prepScreen')),'the pre-Run Slot mark reads the current capital');
@@ -2076,9 +2076,9 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  const r=fn('render'),open=r.slice(0,r.indexOf('const phase=s.phase'));
  /* v2.9.9: the opening screen is the preparation scene (UI_UX §NEW STORE PREPARATION — STORE SCENE) */
  assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);sentenceBreaks\(\$\('#app'\)\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
-  &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
+  &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
- assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'설정 ends with the same pair, readable mid-Run (v2.9.7)');
+ assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'설정 ends with the same pair, readable mid-Run (v2.9.7)');
  assert.ok(/\.p-prep \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
  const wf=read('.github/workflows/pages.yml');
  assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
@@ -2386,7 +2386,7 @@ test('D-34: the store float is on the screen that spends it, and a closed window
  const win=fn('relicWindow')||app.slice(app.indexOf('relic-takeover'),app.indexOf('function sealChoice'));
  assert.ok(win.includes("game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다."),
   'a full store says so where it used to say the window is open until DAY N');
- assert.ok(win.includes('구매할 수 있다 · 보유 골드'),'and still says the open case when it is open');
+ assert.ok(win.includes('구매할 수 있다 (보유 골드'),'and still says the open case when it is open');
 });
 
 /* UI_UX §TUTORIAL / UI-Q105. The coach mark shipped for a long time with markup and no
@@ -2927,13 +2927,13 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.equal(c.d5.button,'확인');
  assert.equal(c.d10.header,'2차 조사 시작');
  assert.equal(c.d10.line,'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 권능이 밝혀진다.');
- assert.equal(c.d10.next,'다음 보고 · DAY 15');
+ assert.equal(c.d10.next,'다음 보고: DAY 15');
  assert.equal(c.d15.header,'2차 조사 보고');
  assert.equal(c.d15.intro,'전투 기록에서 마왕 권능이 확인됐다.');
  assert.equal(c.d15.button,'확인');
  assert.equal(c.d20.header,'최종 정찰 시작');
  assert.equal(c.d20.line,'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다. DAY 25에 위험이 밝혀진다.');
- assert.equal(c.d20.next,'최종 보고 · DAY 25');
+ assert.equal(c.d20.next,'최종 보고: DAY 25');
  assert.equal(c.final.header,'최종 정찰 보고');
  assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다.');
  // §14-5 / SA-Q22: the SLOTH lines say 점포지원, never 유물
@@ -3115,7 +3115,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">'+lastSaleDay(left)+'</em>`),'every row carries its last sale day (v2.9.10), emphasized on its last day');
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
- assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
+ assert.ok(read('dist/ui/app.js').includes("' <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
 });
 
 test('SALE fatigue: the status uses committed-Bag preparation without changing stored Fatigue',()=>{
@@ -3163,14 +3163,14 @@ test('META Day unlock: account award, offer eligibility and codex use one date',
   g.run.day=day-1;g.nextDay();assert.equal(g.account.unlocks[id],true,'account unlock on its Day');
   assert.equal(Meta.itemUnlocked(g.account,it,day-1),false,'each Run blocks earlier offers');
   assert.equal(Meta.itemUnlocked(g.account,it,day),true,'eligible on the Day');
-  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'해금 완료 · 각 점포 DAY '+day+'부터 발주 후보');
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:it}),'해금 완료: 각 점포 DAY '+day+'부터 발주 후보');
  }
  const old=Meta.ITEM_UNLOCK_DAY.guildlunch;
  try{Meta.ITEM_UNLOCK_DAY.guildlunch=12;g.account.unlocks.guildlunch=false;g.run.day=11;g.nextDay();
   assert.equal(g.account.unlocks.guildlunch,true,'award follows changed date');
   assert.equal(Meta.itemUnlocked(g.account,DATA.itemBy.guildlunch,11),false);
   assert.equal(Meta.itemUnlocked(g.account,DATA.itemBy.guildlunch,12),true);
-  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:DATA.itemBy.guildlunch}),'해금 완료 · 각 점포 DAY 12부터 발주 후보');
+  assert.equal(render([fn('unlockProgress')],'unlockProgress(entry)',{...ctx,entry:DATA.itemBy.guildlunch}),'해금 완료: 각 점포 DAY 12부터 발주 후보');
  }finally{Meta.ITEM_UNLOCK_DAY.guildlunch=old;}
 });
 
@@ -3188,8 +3188,8 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  const surfaces=app+read('dist/ui/presentation.js');
  assert.ok(!/생존 -20%|생존 \+|'생존'/.test(surfaces),'no Player-facing surface says 생존');
  assert.equal(Presentation.labels.survival,'강인함','the Stat is named 강인함');
- assert.ok(app.includes("'부상 효과: 투력 '+combat+' · 강인함 -20%'"),'Injury detail reads 투력 -> 강인함');
- assert.ok(read('dist/ui/presentation.js').includes("value:'투력 '+combat+' · 강인함 -20%'"),'and so does the NIGHT row');
+ assert.ok(app.includes("'부상 효과: 투력 '+combat+', 강인함 -20%'"),'Injury detail reads 투력 -> 강인함');
+ assert.ok(read('dist/ui/presentation.js').includes("value:'투력 '+combat+', 강인함 -20%'"),'and so does the NIGHT row');
  // SA-Q04: one human-readable Injury state, never duplicated as a number
  const kit=fn('kitLine');
  assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
@@ -3220,7 +3220,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  const source=fn('help'),ctx={game:{rescueLimit:Game.prototype.rescueLimit},Copy,Adventurer,E:x=>x};
  const h=render([source],'help()',ctx);
  for(const line of [
-  'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
+  'DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5, 10, 15, 20, 25, 30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
   '오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.',
   '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
@@ -3255,7 +3255,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  /* v2.9.0 §8-0: the guide opens on 하루의 흐름 (five lines) and keeps the eight sections under a collapsed 자세히 */
  assert.ok(h.indexOf('<h3>하루의 흐름</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'하루의 흐름 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
- for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
+ for(const l of ['아침: 오늘 열린 게이트의 위험을 본다.','발주: 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매: 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤: 원정 결과와 손님의 변화를 본다.','마감: 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
 });
 
@@ -3267,10 +3267,10 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.ok(!/자본[^<'`]{0,24}G\b/.test(fn('codex')+fn('storePanel')),'no Capital figure carries a G suffix');
  /* the pre-Run screen no longer prints a starting-Gold sentence, so Run Gold is witnessed
     where it is still shown to the player. */
- assert.ok(/보유 골드/.test(app)&&/fmt\(s\.money\)\+'G'/.test(app),'actual Run Gold still uses G');
+ assert.ok(/보유 골드/.test(app)&&/fmt\(s\.money\)\+'G/.test(app),'actual Run Gold still uses G');
  // §15-1 / §15-2 / §15-3
  assert.equal(Copy.deep.brief,'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.');
- assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
+ assert.equal(Copy.deep.terms,'성공 시 추가 성장, 점포 수익 없음');
  assert.equal(Copy.deep.confirmed,'심층원정 확정');
  const offer=fn('deepOfferUI');
  assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the sponsorship');
@@ -3278,7 +3278,7 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.ok(offer.includes('c.terms'),'and the reward terms in one line');
  for(const gone of ['c.note','c.gain','c.sink','c.gate'])
   assert.ok(!offer.includes(gone),'the nomination does not restate the tutorial: '+gone);
- assert.ok(/E\(c\.confirmed\)\+' · '/.test(offer),'after nomination it confirms the Gate');
+ assert.ok(/E\(c\.confirmed\)\+': '/.test(offer),'after nomination it confirms the Gate');
  // §6-2 / §6-8
  const pres=read('dist/ui/presentation.js');
  assert.ok(pres.includes("'예상보다 큰 성과를 내고 돌아왔다.'"),'§6-2 the Great Success outcome');
@@ -3660,8 +3660,8 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
  assert.ok(sale.indexOf("+'</main>'")<sale.indexOf('+tray()')&&sale.indexOf('+tray()')<sale.indexOf('<div class="dock">'),'the tray sits between the scrolled column and the dock');
  assert.ok(/open&&isFinal\?till\(\):''/.test(shelf),'an ordinary SALE row opens no panel of its own; FINAL keeps its panel');
  assert.ok(tray.includes('상품을 누르면 계산대에 올라온다.'),'the empty tray says what to do (COPY_AUDIT §4-23)');
- assert.ok(/class="tray-icon r'\+it\.rarity\+'"/.test(tray)&&/\.tray-icon\{[^}]*inset 0 -3px 0 var\(--rare,var\(--r0\)\)\}/.test(css)&&/'에게<\/b> · '\+walletChip\(n\)/.test(tray),'header: the Item (its tile edge in its rarity colour, as on the shelf - v2.9.10) and who is buying with what (COPY_AUDIT §4-24)');
- assert.ok(/판매 후 변화/.test(tray)&&/parts\.join\('<i> · <\/i>'\)/.test(tray)&&/현재 준비 변화 없음/.test(tray),'one delta list on one wrapping line');
+ assert.ok(/class="tray-icon r'\+it\.rarity\+'"/.test(tray)&&/\.tray-icon\{[^}]*inset 0 -3px 0 var\(--rare,var\(--r0\)\)\}/.test(css)&&/'에게<\/b><span class="sp">'\+walletChip\(n\)/.test(tray),'header: the Item (its tile edge in its rarity colour, as on the shelf - v2.9.10) and who is buying with what (COPY_AUDIT §4-24)');
+ assert.ok(/판매 후 변화/.test(tray)&&/parts\.join\('<i>, <\/i>'\)/.test(tray)&&/현재 준비 변화 없음/.test(tray),'one delta list on one wrapping line');
  assert.ok(/특수 효과/.test(tray)&&/priceKeys\(n,it,st\)/.test(tray),'특수 효과 and the same three price keys');
  assert.ok(fn('till').includes(':priceKeys(n,it,st);'),'the FINAL panel and the tray share the one price-key owner');
  assert.ok(/\.p-sale \.counter-tray\{flex:0 0 auto;/.test(css)&&/\.tray-empty\{margin:0;min-height:44px/.test(css),'fixed band, 44px when empty');
@@ -3677,7 +3677,7 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
 test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and plate help, ORDER today-fit + per-Gate counts',()=>{
  const css=read('dist/ui/ui.css');
  // task line: five exact strings, DAY 1~3 while the tutorial is not skipped, one line
- for(const [ph,line] of [['morning','오늘 할 일 — 열린 게이트의 위험을 본다'],['order','오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다'],['sell','오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다'],['night','오늘 할 일 — 준비가 어떻게 됐는지 확인한다'],['closing','오늘 할 일 — 오늘 장사를 정리한다']])
+ for(const [ph,line] of [['morning','오늘 할 일: 열린 게이트의 위험을 본다'],['order','오늘 할 일: 위험에 맞는 능력을 올리는 상품을 발주한다'],['sell','오늘 할 일: 손님이 갈 게이트를 보고 상품과 가격을 정한다'],['night','오늘 할 일: 준비가 어떻게 됐는지 확인한다'],['closing','오늘 할 일: 오늘 장사를 정리한다']])
   assert.ok(app.includes(ph+":'"+line+"'"),'task line for '+ph+' is the §3-8 string');
  const tl=fn('taskLine');
  assert.ok(/t\.skipped\|\|!\(s\.day>=1&&s\.day<=3\)/.test(tl),'DAY 1~3 only, hidden when the tutorial is skipped (no DAY 0, no DAY 4)');
@@ -3697,11 +3697,11 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',3],fear:['spirit',3],dark:['mobility',3]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
  for(const [day,tier] of [[1,1],[6,2],[18,3]]){const d={day,tier};
   for(const k of Object.keys(DATA.hazards)){const st=Presentation.hazardStat[k],need=Math.ceil(Dungeon.hazardState(k,{},d).threat);
-   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공 · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
-   assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공',k+' short row');
+   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+': 대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공. '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
+   assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공',k+' short row');
    assert.deepEqual(Presentation.hazardParts(k,d),{need:'대응 '+need+' 필요',rate:Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공'},k+' two parts');}}
  assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
- assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독 — 대응 15 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공 · 독 대응 상품이 막는다','the DAY 1 T1 example');
+ assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독: 대응 15 필요, 강인함\u00a03당\u00a0대응\u00a01\u00a0제공. 독 대응 상품이 막는다','the DAY 1 T1 example');
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');
  assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/pressCell\(h\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row (need over rate)');
@@ -3713,7 +3713,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d,false,true\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
  assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');
  // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29, no late term)
- assert.equal(Presentation.hazardShort('poison',{day:30,tier:2,family:'final'}),'대응 28 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
+ assert.equal(Presentation.hazardShort('poison',{day:30,tier:2,family:'final'}),'대응 28 필요, 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
  assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d,true\)/.test(fn('finalThreat')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');
@@ -3737,7 +3737,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
   assert.deepEqual(ks,[...ks].sort((a,b)=>a-b),it.name+' follows Counter -> 피로 회복 -> stat -> rest');}
  // §TRANSACTION RESULT STUB
  assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money,mode:el\.dataset\.mode\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
- assert.ok(fn('showStub').includes("el.textContent='단골도 '")&&fn('showStub').includes("delta+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('cueSale').includes("$('.receipt-stub')"),'§4-24 sale format, refusal Loyalty only, about 2.5 s');
+ assert.ok(fn('showStub').includes("el.textContent='단골도 '")&&fn('showStub').includes("w.textContent='소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('cueSale').includes("$('.receipt-stub')"),'§4-24 sale format, refusal Loyalty only, about 2.5 s');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)

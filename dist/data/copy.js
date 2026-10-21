@@ -147,11 +147,11 @@ const OCCASIONAL=new Set(['“저승 문 앞까지 갔다가 영수증만 받아
    않던 죽은 Pool이었으므로(§DIALOGUE EXPOSURE 채택), 쓸 만한 줄은 `plain`으로 합치고 나머지는
    새로 썼다 - 별도 이름을 유지할 실제 분기가 없었다. */
 const night={
- deathTraded:['마지막 영수증만 남았다. 원정에서 돌아오지 못했다.','오늘의 거래가 마지막 거래가 됐다.','계산대를 나선 뒤 다시 돌아오지 않았다.','장부에는 마지막 구매 기록과 사망 기록이 함께 남았다.',
+ deathTraded:['마지막 영수증만 남았다.','오늘의 거래가 마지막 거래가 됐다.','계산대를 나선 뒤 다시 돌아오지 않았다.','장부에는 마지막 구매 기록과 사망 기록이 함께 남았다.',
   '오늘 산 물건이 마지막 구매가 됐다.','다음 영수증은 없다. 게이트에서 목숨을 잃었다.'],
- deathKnown:['여러 번 돌아오던 사람이, 이번 원정에서는 돌아오지 못했다.','수첩의 지난 원정 기록이 마지막 기록이 됐다.','익숙한 이름 옆에 사망 기록이 남았다.','다음 방문 날짜는 끝내 적히지 않았다.',
+ deathKnown:['여러 번 돌아오던 사람이었다.','수첩의 지난 원정 기록이 마지막 기록이 됐다.','익숙한 이름 옆에 사망 기록이 남았다.','다음 방문 날짜는 끝내 적히지 않았다.',
   '늘 돌아오던 길에서 이번에는 목숨을 잃었다.','수첩의 다음 줄은 비었다. 더 적을 방문이 없다.'],
- deathStranger:['처음 들른 날이 마지막 방문이 됐다. 원정에서 돌아오지 못했다.','이름을 적은 날, 사망 기록까지 함께 남았다.','한 번 들렀고, 그날 게이트에서 목숨을 잃었다.','이름 한 줄만 남기고 다시 오지 않았다.',
+ deathStranger:['처음 들른 날이 마지막 방문이 됐다.','이름을 적은 날, 사망 기록까지 함께 남았다.','한 번 들렀고, 그날 게이트에서 목숨을 잃었다.','이름 한 줄만 남기고 다시 오지 않았다.',
   '얼굴을 익힐 새도 없이 사망 소식이 먼저 왔다.','첫 원정이 마지막 원정이 됐다.'],
  /* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09): the customer whose result the sold Item (or 만반의 준비) turned
     speaks to that turn, one pool per case; {상품} is the Item the proof names. The last line of each is OCCASIONAL. */
@@ -200,7 +200,7 @@ const Copy={
     guide and the 단골 mark follow the values. Order = the price keys' own order (50% · 100% · 150%). */
  loyalty:{
   sign:x=>(x>0?'+':'')+x,
-  sale(){const P=G.DATA.pricing,s=this.sign;return '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 기본 단골도는 각각 '+s(P.half.loyalty)+'·'+s(P.full.loyalty)+'·'+s(P.overcharge.loyalty)+'.';},
+  sale(){const P=G.DATA.pricing,s=this.sign;return '상품 가격은 50%, 100%, 150% 중에서 정한다. 팔리면 기본 단골도는 각각 '+s(P.half.loyalty)+', '+s(P.full.loyalty)+', '+s(P.overcharge.loyalty)+'.';},
   rule(){const P=G.DATA.pricing,B=G.DATA.balance,s=this.sign;return '기본 단골도는 상품을 살 때 정가 '+s(P.full.loyalty)+', 50% 할인 '+s(P.half.loyalty)+', 150% 바가지 '+s(P.overcharge.loyalty)+'로 바뀐다. 상품을 사고 떠날 때 '+s(B.paidVisitLoyalty)+', 원정에서 살아 돌아오면 '+s(B.returnLoyalty)+', 바가지를 거절하면 '+s(P.overcharge.refusalLoyalty)+'다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.';},
   coach(){return '단골 손님. 단골도 '+G.Adventurer.TRUSTED_REGULAR+'부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.';}},
  lessonPayday:'“오늘 보수 받았어요. 값은 신경 안 써요.”',
@@ -293,8 +293,8 @@ Copy.boss={
    LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
    SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
  /* one-tap information beats: they open a question the next report answers. */
- d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 권능이 밝혀진다.',next:'다음 보고 · DAY 15',button:'확인'},
- d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다. DAY 25에 위험이 밝혀진다.',next:'최종 보고 · DAY 25',button:'확인'},
+ d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다. DAY 15에 마왕 권능이 밝혀진다.',next:'다음 보고: DAY 15',button:'확인'},
+ d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다. DAY 25에 위험이 밝혀진다.',next:'최종 보고: DAY 25',button:'확인'},
  d15:{header:'2차 조사 보고',intro:'전투 기록에서 마왕 권능이 확인됐다.',button:'확인',
   label:'마왕 권능',
   guide:'마왕 권능은 최종 원정에 영향을 주는 마왕의 능력이다. 마왕마다 권능이 다르다. 확인한 권능을 감안해 최종 원정을 준비한다.',
@@ -343,7 +343,7 @@ Copy.deep={
  /* COPY_AUDIT §15: the two operational surfaces repeat every applicable Day, so each says only
     what its own decision needs. The full explanation is the first-occurrence coach mark. */
  brief:'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
- terms:'성공 시 추가 성장 · 점포 수익 없음',
+ terms:'성공 시 추가 성장, 점포 수익 없음',
  confirmed:'심층원정 확정',
  result:'심층원정',
  reward:'심층원정 보상'
@@ -374,7 +374,7 @@ Copy.finalPrep={
  forecastWhy:['확정된 원정대의 능력과 보급,','확인된 위협과 마왕의 권능을 함께 반영한 전망.','보급이 바뀌면 전망도 함께 갱신된다.'],
  noEffect:'마왕성에서는 효과 없음',
  noEffectWhy:'이번 원정에서는 효과를 발휘하지 않아 챙겨갈 수 없다.',
- wallet:'소지금 부족 · {need}G 필요 / {have}G 보유'
+ wallet:'소지금 부족: {need}G 필요 / {have}G 보유'
 };
 
 /* Korean particle by the final consonant of the word's last syllable (받침 -> the first form;

@@ -88,7 +88,7 @@ test('COPY_AUDIT §17: every Trait arrival pool belongs to a Trait the build has
  for(const id of Object.keys(V.trait))assert.ok(cat.includes("['"+id+"','"),id+' is an active Trait');
 });
 test('COPY_AUDIT: the letter-suffixed section id parses without attributing to its parent',()=>{
- assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
+ assert.deepEqual(approved['11-31'],['확보 완료: {점포지원명}','보유 중']);
 });
 
 /* COPY_AUDIT §25 / COPY_WORLD_VOICE §RARE REFERENCE NPC (User 2026-09-28, v2.9.11): the Rare Reference customers and their
@@ -680,7 +680,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   assert.ok(!all.includes(stale),'no Store Support row still says "'+stale+'"');
  /* §11-31: the acquired state reads as 확보/보유, not 설치 - 계약·인증·매뉴얼 are not installed. */
  const app=read('dist/ui/app.js');
- assert.ok(app.includes('확보 완료 · ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
+ assert.ok(app.includes('확보 완료: ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
  assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
  assert.ok(app.includes("poor?'골드 부족':price?'구매':'선택'"),'a free card is chosen (선택), a priced one bought (구매) - COPY_AUDIT §11-31b');
 });
@@ -709,8 +709,8 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  assert.ok(swap(DATA.decorationParams.thriftSafe,'firstWallet',300,()=>DATA.decorationBy.thriftSafe.effect).includes('300G씩'),'알뜰 금고 reads its wallet value');
  assert.ok(swap(DATA.relicParams.returnPoints,'loyaltyBonus',6,()=>DATA.relicBy.returnPoints.description).includes('단골도 +6'),'귀환 적립제 reads its Loyalty value');
  assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
- assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4·+1·-5.'),'the guide reads the 150% Loyalty');
- assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4·+1·-4.');
+ assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4, +1, -5.'),'the guide reads the 150% Loyalty');
+ assert.equal(Copy.loyalty.sale(),'상품 가격은 50%, 100%, 150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4, +1, -4.');
  assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -4로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
  assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.');
 });
