@@ -9,10 +9,11 @@
 
 새 측정을 생각하기 전에 아래를 순서대로 찾는다. 질문에 답할 수 있으면 측정하지 않는다.
 
-1. 이번 대화·스레드에서 이미 잰 결과(스크래치 JSON · 로그)
-2. `WORK_STATE.md` §Current가 가리키는 기준 로그와 `reports/v2100-measure/` 최신 폴더의 `README.md`
-3. 같은 질문을 다뤘던 지난 측정(`reports/v2100-measure/*/README.md`를 주제어로 검색)
-4. User 세이브(`/mnt/project-files/saves/`)는 `tools/save-check.cjs`로 읽는다. 재생이 없어 컨펌 없이 돌린다.
+1. 장식 · 점포지원 하나씩 켠 효과와 지금 버전 장식 경로: `reports/DECO-SUPPORT-EFFECTS.md`
+2. 이번 대화·스레드에서 이미 잰 결과(스크래치 JSON · 로그)
+3. `WORK_STATE.md` §Current가 가리키는 기준 로그와 `reports/v2100-measure/` 최신 폴더의 `README.md`
+4. 같은 질문을 다뤘던 지난 측정(`reports/v2100-measure/*/README.md`를 주제어로 검색)
+5. User 세이브(`/mnt/project-files/saves/`)는 `tools/save-check.cjs`로 읽는다. 재생이 없어 컨펌 없이 돌린다.
 
 - `measure-v2100`은 같은 소스 · 같은 명령이면 같은 숫자가 나온다. 기준 조건을 이미 쟀다면 다시 돌리지 않고 바꾼 조건만 잰다.
   예: 사본 A(지금) 결과가 있으면 후보 B 하나만 돌려 A와 비교한다.
