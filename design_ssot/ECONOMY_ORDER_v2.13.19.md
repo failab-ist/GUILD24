@@ -390,7 +390,7 @@ categories/counts and acquisition/pity acceptance -> RELIC §18 / §20 / §28 / 
 
 ## ORDER OFFER VARIETY
 
-(User 2026-10-02.) One ORDER sheet holds an Item on at most `offerSameItemMax` = 2 slots: a slot already supplies 2~4 units
+(User 2026-10-02.) One ORDER sheet holds an Item on at most `offerSameItemMax` = 2 slots: a slot already supplies 2~3 units
 (Common / Uncommon), so a third copy only hides another Item. It holds for the Day's sheet, every Reroll and the extra Event /
 Store Support slots; each rolled slot draws from the Items still under the cap (Rarity first, as above), and the Counter
 guarantee picks a Counter still under it when one exists. Only when no Item is left under the cap does the cap yield, rather
@@ -421,7 +421,7 @@ The most one ORDER offer lets the store stock, rolled when the offer is made:
 
 | Rarity | Units |
 |---|---|
-| Common · Uncommon | 2~4 |
+| Common · Uncommon | 2~3 (User 2026-10-21, was 2~4: 「재고 max 3」, so a busy Day cannot be covered with Food and Drinks alone without a Reroll) |
 | Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 

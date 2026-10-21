@@ -170,8 +170,8 @@ test('DUN-Q70/Q71: prepared Power weights and the Hazard Threat curve',()=>{
  assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:0,spirit:1}),.27);
  const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/dungeon.js'),'utf8');
  assert.ok(!/(combat|survival|mobility|spirit)\s*\*\s*\.(58|32|24|16)\b/.test(src),'no stale ordinary-expedition stat weight survives');
- /* DUNGEON_HAZARD §HAZARD THREAT: 12 + Day*.35 + max(0, Day-7)*.25 + TierTerm 2/6/12, at the owner's own anchors. */
- for(const [day,tier,want] of [[1,1,14.35],[7,1,16.45],[12,1,19.45],[18,2,27.05],[24,2,30.65],[29,3,39.65],[30,2,34.25]])
+ /* DUNGEON_HAZARD §HAZARD THREAT: 12 + Day*.35 + max(0, Day-7)*.25 + TierTerm 3/6/12 (Tier I 2 -> 3, User 2026-10-21), at the owner's own anchors. */
+ for(const [day,tier,want] of [[1,1,15.35],[7,1,17.45],[12,1,20.45],[18,2,27.05],[24,2,30.65],[29,3,39.65],[30,2,34.25]])
   assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day,tier}).threat-want)<1e-9,
    'D'+day+' T'+tier+' threat is '+want);
  assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day:30,tier:2,family:'final'}).threat-28)<1e-9,'Final requirement is exactly28; ordinary curve unchanged');

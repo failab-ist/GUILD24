@@ -108,15 +108,15 @@ No pressure label row anywhere: `강인함으로 버틴다` / `기동으로 피�
 
 Full Hazard sentence (Gate detail only; the Gate-level requirement number first):
 - `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for every Stat (×1/3)
-- e.g. `독 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `부식 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `속박 — 대응 15 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `진창 — 대응 15 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 15 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `공포 — 대응 15 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `어둠 — 대응 15 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화이트아웃 — 대응 15 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `독 — 대응 16 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `냉기 — 대응 16 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `부식 — 대응 16 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 16 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 16 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 16 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 16 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 16 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 16 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 
 Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need. The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+).
 
@@ -334,7 +334,7 @@ EarlyEase = 0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99 on DAY 6 / 7 / 8 / 9, 1 f
 familyBase (golem Tier II / III only): golem 3
 
 Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard, and the
-TierTerm reads +2 / +6 / +12 Hazard Threat at Tier I / II / III), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
+TierTerm reads +3 / +6 / +12 Hazard Threat at Tier I / II / III), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
 Gates are where a grown adventurer breaks through on strength.
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
@@ -362,12 +362,13 @@ For each canonical Hazard:
 Hazard Threat
 = 12 + Day × 0.35 + LateTerm + TierTerm
 LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates
-TierTerm = 2 / 6 / 12 for Tier I / II / III
+TierTerm = 3 / 6 / 12 for Tier I / II / III
 Final (마왕성): Hazard Threat = 28, fixed for every selected T2 Hazard; no ordinary late term.
 ```
 
-Tier I carries TierTerm 2 so two Stat Drinks do not cover a one-Hazard Gate as surely as one Common Counter does; the
-Counter keeps its worth there while a Drink keeps its Power (`ITEM_v2.8.0.md` §COUNTER LADDER).
+Tier I carries TierTerm 3 so two Stat Drinks do not cover a one-Hazard Gate as surely as one Common Counter does; the
+Counter keeps its worth there while a Drink keeps its Power (`ITEM_v2.8.0.md` §COUNTER LADDER). (User 2026-10-21: 2 → 3,
+「1티어 위험은 정말 살짝만 더 올리고」; in the User's saves a Stat-only Tier I bag won 77% of 304 Tier I expeditions.)
 
 Every Hazard reads the same Threat whatever Stat it presses: every Core Stat converts to Defense at ÷3, and an average
 adventurer's own share is about the same in 강인함, 기동 and 정신, so no Stat group needs its own factor. The ÷3 conversion keeps
@@ -1529,7 +1530,7 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = 12 + Day*.35 + LateTerm + TierTerm, LateTerm = max(0, Day-7)*.25, TierTerm = 2 / 6 / 12 by Tier (ordinary Gates; 0 for the Final); no Stat-group factor
+Threat = 12 + Day*.35 + LateTerm + TierTerm, LateTerm = max(0, Day-7)*.25, TierTerm = 3 / 6 / 12 by Tier (ordinary Gates; 0 for the Final); no Stat-group factor
 ```
 
 Exact anchors (every Hazard):
