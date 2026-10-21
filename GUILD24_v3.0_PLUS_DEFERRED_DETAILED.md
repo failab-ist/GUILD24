@@ -9,7 +9,7 @@
 > work classified as P2 or later is not part of v2.8 or v2.9.0.
 > It is deferred to v3.0+ unless the User later promotes it.
 > (2026-09-24: v2.9.0 was scoped to readability / onboarding / transaction visibility / rule
-> simplification only — see SPEC_INDEX §CURRENT v2.9.0 PURPOSE — so every section here moved to v3.0+.)
+> simplification only — see `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.0 — so every section here moved to v3.0+.)
 
 ---
 

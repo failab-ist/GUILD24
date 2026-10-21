@@ -229,37 +229,10 @@ play and valid RNG.
 No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
 in the current game. Archive ownership is routed to META_v2.8.0.md.
 
-## CURRENT v2.9.0 PURPOSE — "쉽게 배우고, 깊게 파는"
+## DEFERRED EXPANSION
 
-v2.9.0 answers three playtest findings: "너무 복잡하다", "뭘 어떻게 하는 건지
-모르겠다", and "손님에게 직접 파는 게임인데 그것이 보이지 않는다". The goal is easy to learn, hard to
-master: the fun axes stay (Hazard Counter, three price modes, Traits, the four Core Stats always
-visible); the screens explain themselves; complexity that is not fun is removed; the transaction is
-seen. Documents are amended first, Source follows per owner (docs-first).
-
-Scope (owner amendments are the truth; this list is routing):
-
-    A. the transaction is visible — counter tray, hand-over motion into the Bag, customer reaction,
-       customer exit/entry, price-mode sound family, refusal beat        -> PRESENTATION_PRINCIPLES / UI_UX / SALE
-    B. the screen says what to do — DAY 1~3 task line, first-order coach order, Hazard rows that
-       say what resists them, per-Gate visitor counts (counts only; no ORDER today-fit emphasis),
-       NIGHT -> next-decision line, shorter D1 briefing / guide              -> UI_UX / ECONOMY_ORDER / NIGHT_CLOSING / COPY
-    C. SALE reads at a glance — today's pressure tag on the Stat grid, fixed per-category effect order on
-       rows (no matching-effect emphasis), one delta list after a sale, the per-customer receipt stub, price-role words, no always-on Death %, folded last
-       expedition above the Stat grid; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
-    D. simpler rules — Supply becomes Fatigue recovery only (no required Supply, Fatigue 0~40 with
-       five bands), single-Stat Hazard pressure 3/3/3 without 투력 (no Gate shares a Stat), Store Support card copy in two
-       clauses, presentation leftovers                                       -> DUNGEON_HAZARD / ITEM / NIGHT_CLOSING / NPC_TRAIT / RELIC
-
-Not in v2.9.0: a "simple view" toggle, hiding zero receipt rows, direct hints such as
-`도움 됨 / 무관`, extra price depth, removing Hazard Counter / price modes / Traits.
-Every P2+ expansion stays in GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md.
-
-Scope rule: pull forward whatever the current playtest needs, defer whatever it does not. Against the three
-findings nothing from the v3.0+ router is promoted. Drag (§6) does not choose a price, so the hand-over is shown by
-motion on the existing tap flow; desktop redesign (§8), item memory (§3) and art waves (§18) do not answer any
-finding; customer reaction is done by motion, not new art. Deferred to v3.0+: moving the folded last-expedition line
-below the Stat grid, clause-per-line card wrapping (scope D's two-clause card copy stands).
+Every P2+ expansion stays in GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md until the User promotes it.
+The v2.9.0 scope ("쉽게 배우고, 깊게 파는") is history: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.0.
 
 ## VERSION POLICY
 
