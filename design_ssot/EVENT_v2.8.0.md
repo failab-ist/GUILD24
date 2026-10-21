@@ -336,7 +336,7 @@ Work는 임의로 Event를 추가하거나 Effect / Trigger / Role을 재설계�
 모든 Event는 한 Run에 한 번(§EVENT SELECTION) 발생하며, 적용 기간과 예외는 §EVENT DURATION을 따른다.
 WEIGHT는 따로 적지 않으면 1.0이다(§Selection Weight).
 
-Exact player-facing title/reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-N (N = Event 번호).
+Exact player-facing title/reveal copy -> `COPY_AUDIT_APPROVED_v2.13.18.md` §13-N (N = Event 번호).
 
 ### 01. 물류대란
 
@@ -1064,7 +1064,7 @@ EVENT가 소유하지 않음:
 - Night / Closing 기본 Rule → `NIGHT_CLOSING_v2.8.0.md`
 - Presentation Layout → `UI_UX_v2.13.17.md`
 - Global Voice / Flavor 작성 기준 → `COPY_WORLD_VOICE_v2.8.0.md`
-- Exact Event title / Function / Flavor copy → `COPY_AUDIT_APPROVED_v2.8.0.md`
+- Exact Event title / Function / Flavor copy → `COPY_AUDIT_APPROVED_v2.13.18.md`
 
 다른 Spec이 소유한 Rule을 EVENT에서 중복 재정의하지 않는다.
 

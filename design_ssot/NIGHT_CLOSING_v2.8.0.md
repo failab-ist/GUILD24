@@ -48,7 +48,7 @@ Zero-result Night: softlock=NO; 즉시 Closing으로 진행 가능해야 한다.
 게이트 순례 주간:
 - Night header/summary may show `실제 변경 N명`
 - affected NPC result shows `예상 목적지 -> 실제 목적지`
-- the route-change line (pilgrimage reroute / 거짓말쟁이 Trait) is exact in `COPY_AUDIT_APPROVED_v2.8.0.md` §14-10; the name 허세 never appears and the particles follow the final consonant
+- the route-change line (pilgrimage reroute / 거짓말쟁이 Trait) is exact in `COPY_AUDIT_APPROVED_v2.13.18.md` §14-10; the name 허세 never appears and the particles follow the final consonant
 - no separate Event result screen is added
 
 ## NIGHT CONTROLS — EXACT

@@ -275,7 +275,7 @@ const Copy={
    anywhere - the information itself is the decision material. GLUTTONY has no rarity boundary:
    the effect reaches every Item contribution, which is what its D15 line says. */
 Copy.boss={
- /* COPY_AUDIT_APPROVED_v2.8.0 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
+ /* COPY_AUDIT_APPROVED_v2.13.18 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
     D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
  /* COPY_AUDIT §14-1 D0 — the first-Morning briefing: the Run objective and the investigation
     cadence, and nothing about the Boss itself. Verbatim. */

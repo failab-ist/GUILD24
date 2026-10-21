@@ -2,7 +2,7 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.15
+DOC_VERSION=2.13.18
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -443,17 +443,17 @@ two shares add.
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [20, 33, 29, 13, 5]
+rare-NPC rarity weights = [50, 30, 13, 5.5, 1.5]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 80%), 영웅 and 전설 the most. This
+Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 50%, User 2026-10-21), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first two customers to reach the counter: Wallet +300G each (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +100G each (cap 2000)
 ```
 
 Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
@@ -498,12 +498,12 @@ counterfactual reads the same availability.
 
 ### display — 구급품 진열장 (id aidCabinet)
 ```text
-while worn, an adventurer who departs 만반의 준비: 투력 × 1.05, and preparedFactor 0.80 -> 0.60
+while worn, an adventurer who departs 만반의 준비: 투력 × 1.03, and preparedFactor 0.80 -> 0.60
 (DUNGEON_HAZARD §Preparation / Level Death reduction)
 ```
 
 Only an adventurer who departs 만반의 준비 (healthy, Fatigue under 20, 2 Items in the Bag) is helped, on an ordinary
-expedition (not the Final): the prepared 투력 is × 1.05 before the combat roll, and the failure Death roll is judged against
+expedition (not the Final): the prepared 투력 is × 1.03 before the combat roll, and the failure Death roll is judged against
 failureDeathChance × 0.60. No count, no new roll; the SALE outlook and `실패 시 사망 위험` stay the pre-supply readings. The
 RESULT-PROOF counterfactual reads the same two terms.
 
