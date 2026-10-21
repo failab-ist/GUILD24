@@ -57,6 +57,7 @@ and this table is their commit record.
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
 | v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
+| v2.13.20 | 2026-10-21 | 지역 거점점 +1 visitor 45 → 35% (#275), 휴식 바우처 꽂이 first three → two, and version bump in one PR | (the User sets it) |
 | v2.13.19 | 2026-10-21 | RESULT-PROOF no longer credits an Item whose only role was filling the 2nd Bag slot (만반의 준비); 바가지 소지금 보너스 · 단골도 -8 · 상한 90% without a version bump (User 2026-10-21) | (the User sets it) |
 | v2.13.18 | 2026-10-21 | Decorations: 알뜰 금고 +300 → +100G, 구급품 진열장 투력 +5 → +3%, 명예 모험가 액자 above 일반 80 → 50%, and version bump in one PR | (the User sets it) |
 
@@ -67,6 +68,20 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
+
+- RELIC 지역 거점점 계약 (merged first as #275 under v2.13.19, version raised here: 「20」): the User's Run with 본사 우수 점포 훈장 → 지역 거점점 from DAY 1 kept far more Gold
+  (D24 2711G) with the same Gold per customer, from 0.5~1 more customers a Day (「35 / 15로 줄이고」). RELIC §26 / REL-Q-v28-17: +1 visitor
+  35% (was 45%), +2 visitors 15%, nothing 50%; expected +0.65 a Day (was +0.75). Help copy (COPY_AUDIT §11-26) follows the number.
+  Measurement (new investor bot, fresh 1000, 훈장 with its DAY 0 window fixed to 거점점): customers / Day 5.23 → 5.18, sales / Day 935 → 918,
+  D15 balance 1234 → 1206G, clears 4.6 → 3.2% (no Decoration: 4.48 · 813 · 981G · 1.6%). Logs: `reports/v2100-measure/hub-medal-20261021/`.
+- META 휴식 바우처 꽂이: the Day's first three customers → first two, Fatigue −6 each Night (User 2026-10-21: 「3명은 최소 오는 사람 다
+  해주는 거니까」; with three it covered every customer on a three-visitor Day, so Food lost its Fatigue role). In the User's saves a voucher
+  Run sent 5% of expeditions out above 10 Fatigue on 23% Food (a Run without it 22% on 25%). Help copy (COPY_AUDIT §counter) follows.
+  Measurement (new investor bot, fresh 1000, the voucher alone): D30 5.0 → 11.1% with three (×2.2) and 8.0% with two (×1.6), clears
+  1.6 → 7.2% / 4.6%, expeditions above 10 Fatigue 8.8 → 0.6% / 1.8%; 3명 −4 gave 9.2% · 5.9% · 1.2%. The older Decoration table read the
+  voucher as small (+2.9%p) because the old bot's D30 base was 2.7%; its ratio was the same ×2. Logs: `reports/v2100-measure/voucher-20261021/`.
 
 ## v2.13.19 — Night result: no Item credit for 만반의 준비 (User 2026-10-21)
 
@@ -114,14 +129,6 @@ The User found that early Tier I bags were won with Stat Food and Drinks rather 
   602 → 488, operation 231 → 168, best 427 → 361. First clear within 10 Runs none 24 → 22%, survival 68 → 63%. D1~10 Counter sales
   30.8 → 32.4%, Rerolls / Day 0.20 → 0.23 (the bot barely rerolls, so the money pressure is for human Runs to show).
   Logs: `reports/v2100-measure/stock-tier1-20261021/`.
-
-### v2.13.19 addendum — 지역 거점점 +1 visitor 45% → 35% (User 2026-10-21, same version)
-
-The User's Run with 본사 우수 점포 훈장 → 지역 거점점 from DAY 1 kept far more Gold (D24 2711G) with the same Gold per customer, from
-0.5~1 more customers a Day (「35 / 15로 줄이고」). RELIC §26 / REL-Q-v28-17: +1 visitor 35% (was 45%), +2 visitors 15%, nothing 50%;
-expected +0.65 a Day (was +0.75). Help copy (COPY_AUDIT §11-26) follows the number. Measurement (new investor bot, fresh 1000, 훈장 with its
-DAY 0 window fixed to 거점점): customers / Day 5.23 → 5.18, sales / Day 935 → 918, D15 balance 1234 → 1206G, clears 4.6 → 3.2%
-(no Decoration: 4.48 · 813 · 981G · 1.6%). Logs: `reports/v2100-measure/hub-medal-20261021/`.
 
 ## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 

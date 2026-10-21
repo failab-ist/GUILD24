@@ -2,7 +2,7 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.18
+DOC_VERSION=2.13.20
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -536,10 +536,11 @@ to take.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-each Night: the Day's first three customers to reach the counter, if alive: Fatigue -6 (floor 0)
+each Night: the Day's first two customers to reach the counter, if alive: Fatigue -6 (floor 0)
 ```
 
-The same counter order as 알뜰 금고 (its first three here): the order in which that Day's customers reached the counter. Everyone else, visitor or
+(User 2026-10-21, v2.13.20: first three → first two; with three it covered every customer on a three-visitor Day, so Food lost its Fatigue role.)
+The same counter order as 알뜰 금고 (its first two here): the order in which that Day's customers reached the counter. Everyone else, visitor or
 not, keeps their Fatigue.
 
 ### display — 지원 교환 쿠폰함 (id rerollCoupon)
