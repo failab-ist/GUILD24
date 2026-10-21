@@ -514,7 +514,7 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
  assert.equal(cert.n.money-plain.n.money,30,'the buyer of a qualifying sale gets +30G');
  assert.equal(cert.s.daily.commission,Math.round(insured.sell*.40));
  const common=sellOnce(['supplyCert'],'full','rice');assert.equal(common.n.money,sellOnce([],'full','rice').n.money,'a non-qualifying sale gives nothing');
- // 왕도 프리미엄 인증: +10%p on 150% only; the price burden and the 바가지 Loyalty -4 stay
+ // 왕도 프리미엄 인증: +10%p on 150% only; the price burden and the 바가지 Loyalty -8 stay
  const g=fresh('royal-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
  for(const id of ['rice','rope','guildlunch']){const it=DATA.itemBy[id];
@@ -522,7 +522,7 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
   g.run.facilities=['royalCert'];const b=g.interest(n,it,'overcharge');
   assert.ok(Math.abs(b.chance-Math.min(.97,a.chance+.10))<1e-9,id+' 150% intent +10%p');assert.equal(b.price,a.price);assert.equal(b.debit,a.debit);
   assert.equal(g.interest(n,it,'full').chance,f,id+' 100% unchanged');}
- const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-4,'Loyalty -4 unchanged');
+ const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-8,'Loyalty -8 unchanged');
 });
 
 /* RELIC 33 · 34 · 35 and the retired 단골 묶음혜택 (User 2026-10-04) */

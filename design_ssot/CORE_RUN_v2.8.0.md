@@ -72,7 +72,7 @@ This is an information beat, not a new gameplay Phase. Opening the D0 briefing:
 - does not itself generate the Boss identity, Trait or Final state.
 
 The briefing owns no Boss reveal beyond the Run objective / investigation cadence.
-Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.13.18.md.
+Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.13.19.md.
 Boss information boundary -> BOSS_v2.8.0.md.
 Presentation -> UI_UX_v2.13.17.md.
 
@@ -126,9 +126,9 @@ Order timing:
 - no next-day forecast is shown; today's Gates are the whole planning context
 
 Within ORDER, confirming a purchase does **not** advance the phase.
-The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.13.17.md`.
+The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.13.19.md` / `UI_UX_v2.13.17.md`.
 
-Canonical economy/order -> ECONOMY_ORDER_v2.8.0.md
+Canonical economy/order -> ECONOMY_ORDER_v2.13.19.md
 
 ### SALE
 question=`이 손님에게 무엇을, 얼마에 팔까?`
@@ -239,7 +239,7 @@ Base order offers: 6/day. Base visitors: 3–6/day.
 
 Visitors may be modified by Relics, Events and Living NPC Cap. Visitor modifiers must respect Living NPC Cap rules.
 
-Canonical -> ECONOMY_ORDER_v2.8.0.md / NPC_TRAIT_v2.8.0.md / RELIC_v2.8.0.md
+Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v2.13.19.md / RELIC_v2.13.19.md
 
 ## PERSISTENT NPC ROSTER
 
@@ -248,7 +248,7 @@ injuries · fatigue/conditions · alive/dead state · visit/history state.
 
 Dead NPC remains dead for the Run and does not return as a normal visitor.
 
-Living NPC capacity, recovery/death slot semantics, newcomer/revisit behavior -> NPC_TRAIT_v2.8.0.md.
+Living NPC capacity, recovery/death slot semantics, newcomer/revisit behavior -> NPC_TRAIT_v2.13.19.md.
 CORE_RUN does not redefine the NPC cap or visitor-pool algorithm.
 
 ## GATE / DUNGEON STATE
@@ -266,7 +266,7 @@ Random results that are meant to be fixed before player choice must be persisted
 Relic windows:
 [D0,D5,D10,D15,D20,D25,D30]
 
-Canonical acquisition/state -> RELIC_v2.8.0.md
+Canonical acquisition/state -> RELIC_v2.13.19.md
 
 D0 relic choice occurs before first normal business flow.
 D30 relic purchase closes before Final Expedition lock.
@@ -571,7 +571,7 @@ Weak NPCs may be ignored or lost. The game does not need a separate punishment s
 Their loss should matter through existing long-term systems: lost growth · lost Wallet · lost Loyalty/Revisit ·
 lost future sales · lost Final roster value.
 
-Canonical NPC value -> NPC_TRAIT_v2.8.0.md
+Canonical NPC value -> NPC_TRAIT_v2.13.19.md
 
 ## META / CROSS-RUN BOUNDARY
 
@@ -1318,11 +1318,11 @@ CORE_RUN §QA retains only Run-flow, D30 timing, stock timing, save/resume, and 
 ## RELATED
 
 Game philosophy -> SPEC_INDEX §GAME CORE
-Economy / order / Final fixed price / Wallet / Gold -> `ECONOMY_ORDER_v2.8.0.md`
-NPC persistence / growth / level -> `NPC_TRAIT_v2.8.0.md`
+Economy / order / Final fixed price / Wallet / Gold -> `ECONOMY_ORDER_v2.13.19.md`
+NPC persistence / growth / level -> `NPC_TRAIT_v2.13.19.md`
 Dungeon generation -> `DUNGEON_HAZARD_v2.13.19.md`
 Item / stock / start-stock identity -> `ITEM_v2.8.0.md`
-Relic / windows -> `RELIC_v2.8.0.md`
+Relic / windows -> `RELIC_v2.13.19.md`
 Sale / Final Item handling -> `SALE_v2.8.0.md`
 Night / closing -> `NIGHT_CLOSING_v2.8.0.md`
 Event / day modifier -> `EVENT_v2.8.0.md`
@@ -1331,4 +1331,4 @@ Boss identity / trait / reveal / cadence / GREED -> `BOSS_v2.8.0.md`
 Meta / mastery / knowledge / Account -> `META_v2.13.18.md`
 Presentation / mobile / tutorial presentation / Decoration UI -> `UI_UX_v2.13.17.md`
 Player-facing copy / abandon wording -> `COPY_WORLD_VOICE_v2.8.0.md`
-Exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`
+Exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`

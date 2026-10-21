@@ -540,12 +540,12 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(bundle&&guarantee){const rest=price-guarantee;bundle=rest-Math.round(rest*D.relicParams.memberBundle.payShare);judged=price-bundle;}
  const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
-    only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
+    정가 and 바가지 do (바가지 since User 2026-10-21). Until this existed the approved .65 threshold could not move an acceptance
     at all: chance read the flat per-mode sentiment and nothing about what the offer costs
     against this customer's purse. The term is pivoted on the measured median 정가 burden, and it
     only ever adds: a light offer may gain a bonus, and at or above the pivot the burden term
-    contributes 0 and never subtracts. 할인 and 바가지
-    declare no weight, so their term is zero and they are decided exactly as they always were. */
+    contributes 0 and never subtracts. 할인
+    declares no weight, so its term is zero and it is decided exactly as it always was. */
  const weight=rule.intentWeight||0;
  /* The term is a BONUS for a light offer, never a penalty for a heavy one: max(0, ...) floors it
     at zero, so price burden can only ever help 정가 acceptance. A purse that cannot cover the
@@ -559,8 +559,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     it lifted the whole penalty before); nothing else about 150% moves. */
  const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+D.relicParams.royalCert.intentBonus:rule.intent;
  /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): only 정가 carries one, applied after the
-    floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio. */
- const chance=wallet<debit?0:payday?1:Math.max(clamp(need+n.loyalty*.002+flat+burdenIntentBonus+(counters?D.balance.counterIntentBonus:0),.08,.97)*(rule.finalScale||1),rule.finalFloor||0);
+    floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio.
+    바가지 instead carries a 0.90 cap (User 2026-10-21) so it never beats 정가 for the same customer. */
+ const chance=wallet<debit?0:payday?1:Math.min(rule.cap??1,Math.max(clamp(need+n.loyalty*.002+flat+burdenIntentBonus+(counters?D.balance.counterIntentBonus:0),.08,.97)*(rule.finalScale||1),rule.finalFloor||0));
  return {price,debit,guarantee,bundle,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

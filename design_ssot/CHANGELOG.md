@@ -57,7 +57,7 @@ and this table is their commit record.
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
 | v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
-| v2.13.19 | 2026-10-21 | RESULT-PROOF no longer credits an Item whose only role was filling the 2nd Bag slot (만반의 준비) | (the User sets it) |
+| v2.13.19 | 2026-10-21 | RESULT-PROOF no longer credits an Item whose only role was filling the 2nd Bag slot (만반의 준비); 바가지 소지금 보너스 · 단골도 -8 · 상한 90% without a version bump (User 2026-10-21) | (the User sets it) |
 | v2.13.18 | 2026-10-21 | Decorations: 알뜰 금고 +300 → +100G, 구급품 진열장 투력 +5 → +3%, 명예 모험가 액자 above 일반 80 → 50%, and version bump in one PR | (the User sets it) |
 
 
@@ -73,6 +73,24 @@ and this table is their commit record.
 The Night line 「{Item} 덕분에 살아 돌아왔다」 named an Item that did nothing at the Gate (a 축성 손전등 on 북부 설원 폐허 II),
 because the proof's shadow Bag lost 만반의 준비 whenever any Item was removed. Shadow Bags now keep the real Bag's 만반의 준비 standing
 (DUNGEON_HAZARD §RESULT-PROOF), so only an Item's own effect is credited; 만반의 준비 keeps its own line. Outcomes and rolls are unchanged.
+
+### v2.13.19 addendum — 바가지 reads the customer's purse (User 2026-10-21, same version: 「버전 그대로」)
+
+The User wants players to learn that 정가 alone runs dry and 바가지 has to earn its share, without 바가지 ever being easier than
+정가 for any customer (「돈많다고 정가보다 쉬워지거나 비등하면 안될듯」).
+
+- ECONOMY_ORDER §PURCHASE INTENT: 바가지 takes 정가's affordability bonus, 0.50 × max(0, 0.36 − judged price ÷ Wallet), on its own
+  1.5x judged price; 단골도 keeps one rule for every price, +0.002 per point (「단골도는 기준 똑같이」). 바가지's final chance is
+  capped at 0.90, under 정가's 0.92, so a 단골 with a full purse buying a direct Counter cannot accept it more readily than 정가.
+- NPC_TRAIT §ORDINARY PURCHASE LOYALTY: a successful 바가지 costs 단골도 −8 (was −4); a refused 바가지 stays −2. Help copy
+  (COPY_AUDIT §8-3 · §8-4) follows the number.
+- Measurement (investor bot, fresh 1000 + trajectories 200 × 10, copy of main cdd2adf, cap not yet added; the bot does not
+  overcharge, so the cap changes nothing for it): fresh D30 54 → 56 Runs, clears 19 → 19, deaths / Run 6.71 → 6.71; every
+  Decoration route within ±5 Runs. 바가지 stayed 0.0% of the bot's D1~10 sales even with an overcharge-leaning bot, so the
+  numbers show that 정가 play is not hurt, not how much a person gains. By formula (Wallet 1500G, 단골도 0 / 51 / 100), 바가지
+  chance and expected revenue against 정가: an unrelated Item 52 / 62 / 72% (0.93 / 1.01 / 1.17x), a Stat-related Item 62~68 /
+  72~78 / 82~88% (1.0~1.1 / 1.2~1.3 / 1.3~1.4x), a direct Counter 74 / 85 / 90% (1.23 / 1.38 / 1.47x); a poor customer (200G)
+  37~54% (0.73~0.98x). 정가 is 83~92% in the same cases. A refusal closes the Item for that customer. Logs: `reports/v2100-measure/gouge-20261021/`.
 
 ## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 

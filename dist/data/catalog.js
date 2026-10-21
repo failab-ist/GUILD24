@@ -281,8 +281,14 @@ G.DATA.balance={finalHazardThreat:28,gateTier1Term:1.5,gateTierCombat:[1,1.05,1.
    100: a properly prepared product sold at list stops failing on intent RNG, because the
    economy's difficulty is meant to sit in what was ordered, what was kept in stock, and how
    each sale was priced - not in a die roll against a fair offer. */
-G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-4,refusalLoyalty:-2},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
-  /* ECONOMY_ORDER §PURCHASE INTENT: only 정가 receives the positive affordability bonus. */
+G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-8,refusalLoyalty:-2,
+  /* ECONOMY_ORDER §PURCHASE INTENT (User 2026-10-21): 바가지 takes the same affordability bonus as 정가, judged on its
+     1.5x price, so a rich customer is easier to overcharge - never easier than 정가, which keeps its 0.65 judged price. */
+  intentPivot:.36,intentWeight:.5,
+  /* ...and its final chance stops at 0.90, so a 단골 with a full purse buying a direct Counter can never accept
+     바가지 more readily than 정가 (whose 0.97 x 0.95 tops out at 0.92). */
+  cap:.90},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
+  /* ECONOMY_ORDER §PURCHASE INTENT: 정가 and 바가지 receive the positive affordability bonus; 50% 할인 does not. */
   intentPivot:.36,intentWeight:.5,
   /* ECONOMY_ORDER §PURCHASE ACCEPTANCE: the FINAL 정가 purchase chance, the 관련 준비 case included, is scaled by
      finalScale and then raised to finalFloor. 할인 and 바가지 carry neither; the shared need is untouched. */

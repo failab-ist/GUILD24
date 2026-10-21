@@ -2,7 +2,7 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.13.15
+DOC_VERSION=2.13.19
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -628,7 +628,7 @@ Result proof -> `NIGHT_CLOSING_v2.8.0.md`
 These systems support long-term customer value: a saved/invested NPC becomes more economically valuable over
 time, loyalty increases revisit value, wallet growth creates future premium-sale opportunities.
 
-Exact Wallet / purchase formulas -> ECONOMY_ORDER_v2.8.0.md
+Exact Wallet / purchase formulas -> ECONOMY_ORDER_v2.13.19.md
 
 Relics may modify these systems, but Character identity remains owned by NPC/Trait system.
 
@@ -655,7 +655,7 @@ Base Loyalty change on a successful ordinary paid purchase, before any explicitl
 
     50% sale  -> +4
     100% sale -> +1
-    150% sale -> -4
+    150% sale -> -8 (-4 before v2.13.19, User 2026-10-21)
 
 A refusal grants no purchase Loyalty change, except a refused 150%, which costs 2 (§NPC-Q-v28-2B). Other visit/survival Loyalty changes are separate.
 
@@ -680,7 +680,7 @@ The ordinary hidden purchase-acceptance formula receives:
 
     +0.002 purchase chance per current Loyalty point
 
-Full purchase formula -> ECONOMY_ORDER_v2.8.0.md.
+Full purchase formula -> ECONOMY_ORDER_v2.13.19.md.
 
 ### Loyalty effect on revisit weighting — exact
 
@@ -704,7 +704,7 @@ The Player must be able to learn that Loyalty:
 Loyalty does not directly increase the four Core Stats.
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.18.md.
+Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.19.md.
 
 ## DEEP EXPEDITION NPC REWARD
 
@@ -777,7 +777,7 @@ PASS: No Job is mandatory for a Family and no Job solves all Families.
 
 ### NPC-Q-v28-7 — JOB BASE / GROWTH TABLE EXACT
 
-Expect exactly the six Job rows in NPC_TRAIT_v2.8.0.md.
+Expect exactly the six Job rows in NPC_TRAIT_v2.13.19.md.
 
 For a controlled NPC:
 - Lv1 Stats equal the Job row
@@ -1202,13 +1202,13 @@ For one successful ordinary paid purchase before explicit modifier effects:
 
     50% sale  -> Loyalty +4
     100% sale -> Loyalty +1
-    150% sale -> Loyalty -4
+    150% sale -> Loyalty -8
     150% refused -> Loyalty -2 (the only refusal that moves Loyalty)
 
 PASS:
 - a refusal does not apply the purchase Loyalty delta; a refused 150% applies -2
 - explicit Trait / Store Support modifiers apply only through their owned rules
-- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.18.md
+- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.19.md
 
 ### NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
 

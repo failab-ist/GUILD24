@@ -1,0 +1,6 @@
+f50 runs 300 D1~10 판매 overcharge 0.0% full 51.5% half 48.5% 바가지 매출/런 1
+G runs 300 D1~10 판매 overcharge 0.0% full 51.6% half 48.3% 바가지 매출/런 4
+P runs 300 D1~10 판매 overcharge 0.0% full 51.5% half 48.5% 바가지 매출/런 1
+PG runs 300 D1~10 판매 overcharge 0.0% full 51.6% half 48.3% 바가지 매출/런 4
+L runs 300 D1~10 판매 overcharge 0.0% full 51.5% half 48.5% 바가지 매출/런 0
+LG runs 300 D1~10 판매 overcharge 0.0% full 51.6% half 48.4% 바가지 매출/런 2

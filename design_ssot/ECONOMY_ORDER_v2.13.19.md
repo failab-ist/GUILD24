@@ -2,7 +2,7 @@
 
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
-DOC_VERSION=2.12.2
+DOC_VERSION=2.13.19
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -164,7 +164,7 @@ and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half a
 so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's
 way to the money is still a regular who comes often. Clamped by the 2000 cap like every other increase.
 
-`rich` is separate (`NPC_TRAIT_v2.8.0.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
+`rich` is separate (`NPC_TRAIT_v2.13.19.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
 actual arrival, not Morning formula; cap 2000 after application.
 
 - **Event temporary purchase budget**: Persistent Wallet과 완전 분리(Cap 미포함, 이월 안됨).
@@ -184,7 +184,7 @@ Logical retry behavior:
 
 Refusal state must not incorrectly lock/unlock unrelated price choices.
 
-Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`
+Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`
 
 ## ORDINARY SALE PURCHASE ACCEPTANCE
 
@@ -250,7 +250,7 @@ If effectiveWallet < actualDebit:
 
 Otherwise:
 
-For 정가 only:
+For 정가 and 바가지 (바가지 since v2.13.19, User 2026-10-21):
 
     burden
     = max(0, judgedPrice - applicable owned guarantee support)
@@ -259,7 +259,9 @@ For 정가 only:
     burdenIntentBonus
     = 0.50 × max(0, 0.36 - burden)
 
-For 50% 할인 and 바가지:
+burden reads each mode's own judged price (정가 × 0.65, 바가지 × 1.50), so the same purse helps 정가 more.
+
+For 50% 할인:
     burdenIntentBonus = 0
 
 For every affordable mode:
@@ -283,9 +285,10 @@ For non-Counter 50% 할인 / 정가:
     purchaseChance = clamp(rawChance, 0.08, 0.97)
 
 For 바가지:
-    purchaseChance = clamp(rawChance, 0.08, 0.97)
+    purchaseChance = min(0.90, clamp(rawChance, 0.08, 0.97))
 
-바가지 has no Counter bonus.
+바가지 has no Counter bonus. Its 0.90 cap keeps it under 정가 (0.97 × 0.95 = 0.92) even for a 단골 with a full
+purse buying a direct Counter (User 2026-10-21: 바가지 must never be easier than or equal to 정가).
 
 Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
 기동 on 속박/진창 Gates is 관련 준비, not a Counter.
@@ -422,7 +425,7 @@ The most one ORDER offer lets the store stock, rolled when the offer is made:
 | Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 
-Store Support that adds supply quantity (`RELIC_v2.8.0.md`) adds on top, unchanged.
+Store Support that adds supply quantity (`RELIC_v2.13.19.md`) adds on top, unchanged.
 
 ### ORDER Rare+ pity — exact
 
@@ -517,7 +520,7 @@ Confirmed Inventory is never removed by Reroll.
 `발주 교환권` may modify the base reroll only as defined in RELIC.
 Its exact modifier model is owned by RELIC and must not be inferred here.
 
-Canonical Relic rule -> `RELIC_v2.8.0.md`
+Canonical Relic rule -> `RELIC_v2.13.19.md`
 
 ## NEXT-DAY FORECAST — RETIRED
 
@@ -550,7 +553,7 @@ Do not reveal before customer appearance:
 - Wallet
 - individual destination (a liar's or a pilgrimage-rerouted customer's true Gate stays hidden)
 
-Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.8.0.md`
+Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.13.19.md`
 
 ## BASE OPERATING COST
 
@@ -591,7 +594,7 @@ Economic choice: current inventory vs NPC investment through pricing vs store in
 
 D30: final Item preparation vs last Relic must be a meaningful final Gold Sink decision.
 
-Canonical Relic pricing/window -> `RELIC_v2.8.0.md`
+Canonical Relic pricing/window -> `RELIC_v2.13.19.md`
 
 ## GREAT SUCCESS STORE GOLD
 
@@ -618,7 +621,7 @@ Deep Expedition exception:
 - no separate Deep/Guild cash prize
 
 Great Success probability and NPC growth reward are not reduced by this Store-Gold rule;
-they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v2.8.0.md.
+they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v2.13.19.md.
 
 ## DEEP EXPEDITION SPONSORSHIP COST
 
@@ -640,7 +643,7 @@ If the Store cannot afford the sponsorship, nomination cannot be confirmed.
 If no NPC is nominated, no sponsorship is charged.
 
 Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.13.19.md.
-Deep NPC reward -> NPC_TRAIT_v2.8.0.md.
+Deep NPC reward -> NPC_TRAIT_v2.13.19.md.
 
 ## D30 FINAL PREPARATION PRICE / WALLET / GOLD
 
@@ -825,7 +828,7 @@ PASS: No misleading generic reason.
 
 #### ECO-Q-v28-3 — ORDINARY PURCHASE ACCEPTANCE BASELINE
 
-Controlled states reproduce ECONOMY_ORDER_v2.8.0 exactly.
+Controlled states reproduce ECONOMY_ORDER_v2.13.19 exactly.
 
 PASS:
 - mode charged / intent multipliers remain:
@@ -839,12 +842,13 @@ PASS:
 - one occupied Bag slot applies no purchase penalty
 - Loyalty remains +0.002 per point
 - current Trait / Store Support / Event modifiers remain active
-- only 100% keeps pivot 0.36 / weight 0.50 burden bonus, never a penalty
+- 100% and 150% keep pivot 0.36 / weight 0.50 burden bonus on their own judged price, never a penalty; 50% has none
+- 150% final chance is at most 0.90
 - effective Wallet includes temporary Event purchase budget
 - unaffordable debit -> chance 0
 - affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> rawChance + 0.10, clamp 0.08–0.97
 - no separate purchase-only Counter definition; 기동 on 속박/진창 is 관련 준비, not a Counter
-- non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
+- non-Counter 50% / 100% use normal 0.08–0.97 clamp; 150% uses it, then the 0.90 cap
 - 150% receives no Counter bonus
 - 100% only: the final chance above (관련 준비 bonus included) is × 0.95, then at least 0.75; 50% / 150% carry
   no scale or floor; accessible base need 0.72 is not lowered for it
@@ -1293,7 +1297,7 @@ Item catalog / Rarity identities / item roles -> `ITEM_v2.8.0.md`
 Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss/GREED accounting -> `BOSS_v2.8.0.md`
-npc wallet/loyalty -> `NPC_TRAIT_v2.8.0.md`
-relic costs/build -> `RELIC_v2.8.0.md`
+npc wallet/loyalty -> `NPC_TRAIT_v2.13.19.md`
+relic costs/build -> `RELIC_v2.13.19.md`
 closing settlement -> `NIGHT_CLOSING_v2.8.0.md`
 run starting resources/inventory -> `CORE_RUN_v2.8.0.md`

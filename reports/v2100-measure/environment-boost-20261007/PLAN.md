@@ -17,7 +17,7 @@ User 2026-10-07 승인. Production 변경 없이 별도 worktree 후보로 측�
 
 기존 보호 ON full5 결과와 비교하되 full5 대비 변화는 화염+부스트의 합성 효과다. 이번 두 안 사이에서만 환경 차감의 효과를 분리한다. 부스트 단독 효과라고 표현하지 않는다.
 
-추가 승인(User 2026-10-07): 다른 세션의 전문 포션 유통 계약 밸런스도 측정한다. 변경 근거는 `codex/final-minor-feedback`의 `b22afde7`, owner `design_ssot/RELIC_v2.8.0.md` §18 및 ADDITIONAL ORDER SLOTS다. 가격180G·포션 전용 칸+1·등급은 통상 일차 곡선·판매 추가수입 없음이다.
+추가 승인(User 2026-10-07): 다른 세션의 전문 포션 유통 계약 밸런스도 측정한다. 변경 근거는 `codex/final-minor-feedback`의 `b22afde7`, owner `design_ssot/RELIC_v2.13.19.md` §18 및 ADDITIONAL ORDER SLOTS다. 가격180G·포션 전용 칸+1·등급은 통상 일차 곡선·판매 추가수입 없음이다.
 
 포션 비교의 공통 배경은 env20이다(Production 채택 의미 없음). b22afde7의 `dist/data/relics.js`, `dist/systems/relics.js`, `dist/systems/shop.js` 변경만 두 사본에 동일 적용한다. 새벽 회수/추가발주권 획득 당일 적용·리롤 유지도 공통이다. potion0은 포션 추가 칸만0, potion1은1이고 같은 가격·후보·봇 지원 순위를 유지한다. 무효 대조군도 구매 비용을 지불하므로 이는 계약 자체의 구매 가치 전체가 아니라 +1칸 효과를 분리하는 실험이다. 기존 고급 식자재 계약과 직접 비교한 결과가 아니다.
 

@@ -154,7 +154,7 @@ recovery:
 사망       0
 ```
 
-Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.8.0.md`.
+Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.13.19.md`.
 
 Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue.
 
@@ -510,7 +510,7 @@ choice and optional Insurance/Escape.
 
 Affinity should emerge from stats + visible Item/Trait effects.
 
-Related: item -> `ITEM_v2.8.0.md` · job -> `NPC_TRAIT_v2.8.0.md`
+Related: item -> `ITEM_v2.8.0.md` · job -> `NPC_TRAIT_v2.13.19.md`
 
 ## FAMILY INTRODUCTION
 
@@ -984,7 +984,7 @@ preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 i
   중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
 - the SALE `실패 시 사망 위험` snapshot is the raw `failureDeathChance` and never includes `preparedFactor`
   (it depends on the Bag, which the snapshot excludes)
-- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`
+- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`
 
 ### Resolution order
 
@@ -1019,7 +1019,7 @@ That displayed value:
 The actual expedition still recalculates `failureDeathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
 Do not update the displayed `실패 시 사망 위험` to reveal the post-supply answer.
 
-Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md` / `COPY_AUDIT_APPROVED_v2.13.18.md`.
+Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md` / `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
@@ -1033,7 +1033,7 @@ Rules:
 - apply to the same Severe-vs-ordinary Injury decision point already used by the ordinary resolution
 - do not create a second independent Severe roll
 - apply the +15%p before the normal clamp used by that branch
-- the ordinary Injury Stat penalty itself is owned by `NPC_TRAIT_v2.8.0.md`
+- the ordinary Injury Stat penalty itself is owned by `NPC_TRAIT_v2.13.19.md`
 
 This modifier is about the danger of sending an already-wounded adventurer back out, not about making the four visible Stats secretly lower than their listed Injury penalty.
 
@@ -1050,7 +1050,7 @@ k = the unbroken run of this adventurer's immediately preceding expeditions that
   succeeds is already healed by the ordinary Injury step)
 - independent of 구급키트; one draw, only on this path
 - the Night report says the adventurer recovered with one line; the chance is never shown; exact copy ->
-  `COPY_AUDIT_APPROVED_v2.13.18.md`
+  `COPY_AUDIT_APPROVED_v2.13.19.md`
 
 ## BAD-LUCK PREPARATION ASSIST (hidden)
 
@@ -1090,7 +1090,7 @@ Hazard / Supply / Insurance / Trait rules remain in their existing systems.
 Great Success uses Combat-Power margin after ordinary Success qualification.
 
 When the Player-facing Great Success opportunity threshold is met, presentation must explicitly signal the opportunity.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`. Presentation -> `UI_UX_v2.13.17.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`. Presentation -> `UI_UX_v2.13.17.md`.
 Signal threshold must match the actual calculation.
 
 Margin formula:
@@ -1119,7 +1119,7 @@ The intended positive loop:
     -> faster NPC growth
 
 Do not lower this probability merely because a skilled Run produces repeated Great Success.
-Economic reinforcement is controlled separately by ECONOMY_ORDER_v2.8.0.md.
+Economic reinforcement is controlled separately by ECONOMY_ORDER_v2.13.19.md.
 
 SALE owns when the signal is recomputed.
 The signal remains qualitative; exact probability stays hidden.
@@ -1177,9 +1177,9 @@ Deep Expedition replaces that NPC's ordinary destination for the Day.
 No second segment / second roll / second result.
 
 Deep Expedition Store Gold reward is always 0.
-NPC bonus reward remains owned by NPC_TRAIT_v2.8.0.md.
-Sponsorship cost -> `ECONOMY_ORDER_v2.8.0.md`.
-Normal Great Success Store Gold -> `ECONOMY_ORDER_v2.8.0.md`.
+NPC bonus reward remains owned by NPC_TRAIT_v2.13.19.md.
+Sponsorship cost -> `ECONOMY_ORDER_v2.13.19.md`.
+Normal Great Success Store Gold -> `ECONOMY_ORDER_v2.13.19.md`.
 
 ## RESULT-PROOF COUNTERFACTUAL — PURPOSE
 
@@ -1941,7 +1941,7 @@ EXPECT:
 PASS:
 - Retreat does not clear ordinary Injury
 - generic completion/non-Injury result does not clear it
-- Severe recovery remains its separate rule in `NPC_TRAIT_v2.8.0.md`
+- Severe recovery remains its separate rule in `NPC_TRAIT_v2.13.19.md`
 - First Aid Aftercare may still override persistent Injury exactly as ITEM owns
 
 #### DUN-Q11 — CAUSALITY
@@ -2084,16 +2084,16 @@ Record at minimum:
 ## RELATED
 
 item counters -> `ITEM_v2.8.0.md`
-job/stat coverage -> `NPC_TRAIT_v2.8.0.md`
-order/tier forecast -> `ECONOMY_ORDER_v2.8.0.md`
+job/stat coverage -> `NPC_TRAIT_v2.13.19.md`
+order/tier forecast -> `ECONOMY_ORDER_v2.13.19.md`
 forecast UI -> `UI_UX_v2.13.17.md`
 night causality -> `NIGHT_CLOSING_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 boss modifier -> `BOSS_v2.8.0.md`
 Item Supply/Counter/Epic preparation -> `ITEM_v2.8.0.md`
-Injury persistence/re-expedition state -> `NPC_TRAIT_v2.8.0.md`
-Fatigue Trait -> `NPC_TRAIT_v2.8.0.md`
+Injury persistence/re-expedition state -> `NPC_TRAIT_v2.13.19.md`
+Fatigue Trait -> `NPC_TRAIT_v2.13.19.md`
 Sale preview -> `SALE_v2.8.0.md`
 Night resolved fields -> `NIGHT_CLOSING_v2.8.0.md`
-Next-day forecast presentation -> `ECONOMY_ORDER_v2.8.0.md`
+Next-day forecast presentation -> `ECONOMY_ORDER_v2.13.19.md`
 Final Hazard aggregation -> `FINAL_EXPEDITION_v2.8.0.md`

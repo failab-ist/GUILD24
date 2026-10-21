@@ -2,7 +2,7 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.13.15
+DOC_VERSION=2.13.19
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -74,7 +74,7 @@ After one first support is chosen, or the choice is deferred (`나중에 결정`
 A deferred D0 window stays open, still free, through DAY 4 and reopens like any deferred window (§WINDOW STATE); it does not
 pop up again, and the D5 window replaces it. A pick on DAY 1~4 applies from that moment like any later purchase.
 
-Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.18.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
+Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.19.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
 
 ### D5 / D10 / D15 / D20 / D25
 cand=3 · buy<=1 · currency=G · firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION · defer=YES
@@ -175,7 +175,7 @@ ownedRelicQuickView: mode=READ_ONLY · availablePhases=[Morning,Order,Sale]
 A Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one
 status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save
 field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
-written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.18.md` §11-32. The conditional supports are exactly:
+written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.19.md` §11-32. The conditional supports are exactly:
 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it is always on for every 단골.
 
@@ -338,7 +338,7 @@ existing Customer effects rather than adding another workload system.
 
 ## RELIC BLUEPRINTS
 
-Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.18.md §11 (§11-1..§11-30 for blueprints
+Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.19.md §11 (§11-1..§11-30 for blueprints
 1–30, §11-30b 야전 들것, §11-30c 응급 처치대). The following Store Support Functions are exact.
 
 ### ROTATION — Foundation
@@ -504,7 +504,7 @@ effect=a 단골 is stronger, and stays a 단골
   (`평생 단골제 +6%`); the Final party reads it the same way
 - while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
   an adventurer not yet a 단골 has no floor
-- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51
+- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.13.19.md owns 단골 at 51
 
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
@@ -512,7 +512,7 @@ effect=successful 150% sale of any rarity -> extra premium commission
 - HQ commission = 20% of the charged (150%) sale price
 - the flat 150% purchase-intent penalty is -0.06 for the owner (+0.10 on -0.16)
 - base operating cost +10% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
-- the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
+- the 1.5x price burden and the 150% Loyalty -8 (refused -2) are unchanged
 
 24. 원정 작전실 (`opsRoom`) · tag=Expedition · User 2026-10-02 remake of 원정 전문 인증 (`expeditionCert`; a save's old id is
     read as `opsRoom` on load)
@@ -575,7 +575,7 @@ pity farming=NO
 - applies to canonical full-offer reroll; current eligibility/coverage/rarity rules preserved
 - after the free first use, same-Day Reroll follows the normal curve from its first step
 
-Paid Reroll costs use the current authoritative curve from `ECONOMY_ORDER_v2.8.0.md`. With the current curve:
+Paid Reroll costs use the current authoritative curve from `ECONOMY_ORDER_v2.13.19.md`. With the current curve:
 
 ```text
 normal: 50 -> 100 -> 200 -> 400 -> 800 -> x2 thereafter
@@ -735,7 +735,7 @@ Gold tension: current cash vs NPC investment vs store investment
 price modes: 150%=current Gold focus · 100%=stable operation · 50%=NPC future-value investment ·
 Relic=store future-value investment
 
-Canonical economy -> ECONOMY_ORDER_v2.8.0.md
+Canonical economy -> ECONOMY_ORDER_v2.13.19.md
 
 ## INFORMATION
 
@@ -1025,7 +1025,7 @@ No active Store Support uses 쇼케이스 in these two names.
 
 #### REL-Q-v28-21 — SUPPORT EXACT FUNCTIONS
 
-Verify these exact Store Support functions in RELIC_v2.8.0.md:
+Verify these exact Store Support functions in RELIC_v2.13.19.md:
 
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
@@ -1059,7 +1059,7 @@ FAIL if Source omits one of these exact functions or uses a different numeric va
 #### REL-Q26 — PRICE BAND
 SETUP: Sample prices.
 EXPECT: Limited random band around approved base. Starting target around ±15–20%.
-PASS: Exact final values match `RELIC_v2.8.0.md` §PRICE.
+PASS: Exact final values match `RELIC_v2.13.19.md` §PRICE.
 
 #### REL-Q-v28-22 — SUPPORT BASE PRICES
 
@@ -1132,7 +1132,7 @@ Expected:
     150% sale of any rarity -> HQ commission = 20% of the charged sale price
     the owner's flat 150% purchase-intent penalty is -0.06 (+0.10 on -0.16)
     the acquisition Day's base operating cost carries +10% of overheadBase, added to the other percentage surcharges
-    the 1.5x price burden and the 150% Loyalty -4 (refused -2) are unchanged
+    the 1.5x price burden and the 150% Loyalty -8 (refused -2) are unchanged
 
 #### REL-Q36 — PREMIUM POOL SUPPORT
 SETUP: Simulate Premium build with canonical Item catalog.
@@ -1305,7 +1305,7 @@ A returning adventurer receives nothing.
 
 #### RELIC-Q-v27-VISITOR — BOARD / HUB
 
-Owner rule: `RELIC_v2.8.0.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
+Owner rule: `RELIC_v2.13.19.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
 
 ##### board
 
@@ -1465,8 +1465,8 @@ Do not FAIL a support merely because late acquisition is rationally skipped. Bal
 run/save -> CORE_RUN_v2.8.0.md
 final expedition / D25 Final state -> FINAL_EXPEDITION_v2.8.0.md
 boss/sloth seal / Sloth Boss value -> BOSS_v2.8.0.md
-gold/order/reroll -> ECONOMY_ORDER_v2.8.0.md
+gold/order/reroll -> ECONOMY_ORDER_v2.13.19.md
 sale phase -> SALE_v2.8.0.md
-npc value -> NPC_TRAIT_v2.8.0.md
+npc value -> NPC_TRAIT_v2.13.19.md
 Item/category/composition -> `ITEM_v2.8.0.md`
 Order/UI -> `UI_UX_v2.13.17.md`
