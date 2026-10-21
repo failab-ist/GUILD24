@@ -259,7 +259,7 @@ These files are review inputs for Presentation work. They are not part of the bu
 are never requested at runtime, and no pixel of them is reused in the UI.
 
 ### v2.8 current-vs-target quality pair
-- files: `reports/reference/quality-pair-current.jpg`, `reports/reference/quality-pair-target.png`
+- files: `reports/references/quality-pair-current.jpg`, `reports/references/quality-pair-target.png`
 - source: provided by the User on 2026-09-22 for the v2.8 Presentation Upgrade
 - why: `PRESENTATION_SYSTEM_v2.8.0.md` §VISUAL HARNESS CONTRACT lists the User-provided
   current-vs-target pair as a review input and forbids reconstructing it from memory once it
