@@ -43,7 +43,7 @@ Do not treat a Canonical file as missing because it is absent from initial conte
 Required order:
 
 ```text
-SPEC_INDEX
+SPEC_INDEX (find it by stem: `ls design_ssot/SPEC_INDEX_v*.md`; the version in a filename changes, §10-A)
 → identify exact current filename
 → explicitly Search/Open that Project Source
 → read only the relevant Spec / QA / Source
@@ -357,8 +357,13 @@ Versioning / manifest changes must reflect the current project routing rather th
 
 ## 10-A. 설계 문서 파일 이름 버전 (User 2026-10-21)
 
+**이름 앞부분은 고정, 끝의 버전은 고정이 아니다.** `SPEC_INDEX_` · `GLOSSARY_` · `EVENT_` 같은 앞부분은 절대 안 바뀌고,
+`_v<버전>`은 그 문서를 고칠 때마다 지금 버전으로 바뀐다. SPEC_INDEX도 예외가 아니다.
+그래서 설계 문서는 기억한 파일 이름이 아니라 앞부분으로 찾는다: `ls design_ssot/SPEC_INDEX_v*.md`.
+
 - `design_ssot/`의 문서를 고치면 그 파일 이름의 버전도 지금 게임 버전(`dist/build.js`의 `version`)으로 올린다.
-  예: v2.13.17에서 EVENT를 고치면 `EVENT_v2.8.0.md` → `EVENT_v2.13.17.md`. 문서만 고쳐 게임 버전이 그대로여도 지금 버전을 쓴다.
+  예: 게임이 v2.13.18일 때 EVENT 문서를 고치면 이름 끝이 `_v2.8.0`에서 `_v2.13.18`로 바뀐다. 문서만 고쳐 게임 버전이 그대로여도 지금 버전을 쓴다.
+- 고칠 때마다 확인한다: 커밋 전에 `git diff --name-only origin/main -- design_ssot/`에 나온 파일의 이름 끝이 지금 버전인가.
 - 한꺼번에 바꾸지 않는다. 그 작업에서 고친 파일만 올리고, 안 고친 파일은 옛 버전 이름 그대로 둔다.
   다른 문서의 이름이 바뀌어 링크만 고친 파일은 고친 것으로 치지 않는다.
 - 이름을 바꿀 때:
@@ -367,6 +372,8 @@ Versioning / manifest changes must reflect the current project routing rather th
   - `archive/` 밖(문서 · `tests/` · `tools/` · `dist/` 주석)의 옛 이름을 모두 새 이름으로 바꾼다.
     `git grep -n "<옛 파일 이름>" -- ':!archive'`가 비어야 한다. `archive/`는 옛 이름 그대로 둔다(그때의 기록). 단 목록인 `archive/README.md`는 새 이름으로 바꾼다.
   - SPEC_INDEX §CURRENT CANONICAL FILE SET은 자동으로 따라온다(같은 치환).
+- `npm test`의 `tests/doc-names.cjs`가 남은 옛 이름 링크와, 이름과 `DOC_VERSION=`이 어긋난 문서를 잡는다.
+  다만 고쳤는데 이름을 안 올린 것은 테스트가 모른다. 그래서 위 확인은 작업자가 커밋 전에 직접 한다.
 - 예외: `PLATFORM_RELEASE_v3.0.0.md`는 출시 목표 버전 이름이라 고쳐도 이름을 그대로 둔다. `CHANGELOG.md`는 버전이 없다.
 
 ---
