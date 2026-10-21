@@ -1282,18 +1282,35 @@ function nightScreen(){
  const rail=s.results.length?'<div class="rail" aria-label="귀환 '+Math.min(at+1,s.results.length)+' / '+s.results.length+'">'
   +s.results.slice(0,12).map((_,k)=>'<span class="rtag">'+Scene.returnTag(k===at?'now':k<at?'done':'wait')+'</span>').join('')
   +'<span class="count">'+Math.min(at+1,s.results.length)+' / '+s.results.length+'</span></div>':'';
- const dock=btn('전체 건너뛰기','closing','bare')
+ const recap=nightRecap&&nightRecap.day===s.day?nightRecap:null;
+ const dock=recap?btn('마감으로','recap-done','stamp')
+ :btn('전체 건너뛰기','closing','bare')
  /* USER CONFIRMED 2026-09-22: the last result hands over to the day's close, so it names it. */
  +btn(last?'마감으로':'다음','night-next','stamp');
  return '<div class="stage p-night'+(r&&r.outcome==='사망'?' cold':'')+'">'+menuFab()
  +'<div class="nightband" aria-hidden="true"></div>'+taskLine('night')
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
-  +rail
-  +'<div class="beat-room">'
+  +(recap?'':rail)
+  +(recap?nightRecapList(s,recap.from)
+  :'<div class="beat-room">'
    +(s.pilgrimage?'<p class="event-note">게이트 순례 주간: 실제 변경 '+s.pilgrimage+'명</p>':'')
    +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
-  +'</div>'
+  +'</div>')
  +'</main><div class="dock">'+dock+'</div></div>';}
+/* 전체 건너뛰기 leaves the beats unread, so the night is told once more as one list: only the results not yet
+   read, one row per adventurer - outcome, name, the one or two changes that matter. Read-only; the resolution
+   is untouched. The list is a view of this Day and is never saved. */
+let nightRecap=null;
+function nightRecapList(s,from){
+ const rows=s.results.slice(from).map(r=>{
+  const tone=Presentation.nightTone(r),n=s.npcs.find(x=>x.id===r.npcId),gone=r.outcome==='사망';
+  const bits=gone?[]:Presentation.nightChanges(r,n,s.facilities).filter(c=>c.group!=='reward'&&!c.note);
+  return '<li class="t-'+tone+'">'+portrait(n,60,'recap-face')
+   +'<div class="rb"><p class="rt"><b class="rv">'+E(Presentation.nightVerdict(r))+'</b><span class="rn">'+E(r.name)+'</span><i>Lv.'+r.level+'</i></p>'
+   +(bits.length?'<p class="rc">'+bits.map(c=>'<span><i>'+E(c.label)+'</i> '+E(c.value)+'</span>').join('')+'</p>':'')+'</div></li>';});
+ /* at most five to a panel, split evenly (8 = 4+4): the desktop lays panels side by side (one centred while it fits, more beside it), the phone stacks them as one list */
+ const count=Math.max(1,Math.ceil(rows.length/5)),per=Math.ceil(rows.length/count),panels=[];for(let i=0;i<rows.length;i+=per)panels.push(rows.slice(i,i+per));
+ return '<div class="recap-wrap" aria-label="밤 요약">'+panels.map(g=>'<section class="recap"><h3>밤 요약</h3><ul>'+g.join('')+'</ul></section>').join('')+'</div>';}
 // The tone of a beat is the actual outcome, never a score: 대성공 warm, 퇴각/부상 ember,
 // 중상 blood, 사망 bone. 위기에서 생환 keeps its own reading so the rescue is not
 // presented as an ordinary success.
@@ -2997,7 +3014,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
  case'reroll-relics':game.rerollRelics();sound('spend');render();break;
  case'defer-relic':game.deferFoundationRelic();setModal(null);render();sound('ui');break;
- case'closing':clearSavedFly();game.finishNight();game.save();render();nightSound(null);closingSound();break;
+ case'recap-done':nightRecap=null;clearSavedFly();game.finishNight();game.save();render();nightSound(null);closingSound();break;
+ case'closing':clearSavedFly();if(s.results.length-(s.nightCursor||0)>=2){nightRecap={day:s.day,from:s.nightCursor||0};render();break;}game.finishNight();game.save();render();nightSound(null);closingSound();break;
  case'open':game.open();selected=null;render();healCue();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
     sits above the viewport the shelf below it slides up by the height of the panel that

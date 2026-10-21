@@ -2158,7 +2158,8 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&!/sound\('receipt'\)/.test(cs),'no printer tick - the money cue alone (User 2026-10-09) - and a stale timer is cleared first');
  assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
  assert.ok(/closingCueAt=setTimeout\(\(\)=>sound\(kind\),CLOSING_STAMP\.hold\+STAMP_FALL\)/.test(cs),'the stamp cue lands on the same frame as the visual stamp');
- assert.ok(/case'closing':(?:clearSavedFly\(\);)?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
+ assert.ok(/case'closing':(?:clearSavedFly\(\);)?(?:if\(s\.results\.length-\(s\.nightCursor\|\|0\)>=2\)\{nightRecap=\{day:s\.day,from:s\.nightCursor\|\|0\};render\(\);break;\})?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
+ assert.ok(/case'recap-done':nightRecap=null;(?:clearSavedFly\(\);)?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'the 밤 요약 마감으로 press hands over to the closing the same way, once');
  assert.ok(/nightSound\(s\.results\[s\.nightCursor\]\);if\(s\.phase==='closing'\)closingSound\(\);break;/.test(app),'the ordinary 마감으로 press (night-next reaching the last result) plays it too');
  const end=bare(fn('phaseEnd'));
  assert.ok(/\[\.\.\.new Set\(D\.decorations\.map\(d=>d\.price\)\)\]/.test(end),'the price lines are read from the live Decoration list, never a second copy of the numbers');
@@ -2283,7 +2284,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(/if\(st\.saved\)savedPlay\(A,r,st,tag\);\s*else if\(st\.print&&r\)/.test(app),'the saved beat replaces the plain first print');
  assert.ok(/savedBeat\(r\)\?'<span class="hero-items" aria-hidden="true">'/.test(app),'the Item stays beside its line');
  assert.ok(/const ids=savedItems\(r\),slot=\$\('\.beat \.cause li\.hero \.hero-items'\);if\(!ids\.length\|\|!slot\)return;/.test(app),'no hero line, no flying Item (만반의 준비 has none)');
- assert.ok(/case'closing':(?:clearSavedFly\(\);)?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
+ assert.ok(/case'closing':(?:clearSavedFly\(\);)?(?:if\(s\.results\.length-\(s\.nightCursor\|\|0\)>=2\)\{nightRecap=\{day:s\.day,from:s\.nightCursor\|\|0\};render\(\);break;\})?game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
  for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
  assert.ok(!/\n death:\{[^}]*hit:1/.test(audio)&&!/\n rescue:\{[^}]*hit:1/.test(audio),'사망 keeps its restrained attack; rescue is an accent');
