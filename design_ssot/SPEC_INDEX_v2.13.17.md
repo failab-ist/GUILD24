@@ -236,6 +236,10 @@ The v2.9.0 scope ("쉽게 배우고, 깊게 파는") is history: `archive/change
 
 ## VERSION POLICY
 
+**The filename stem is fixed; the version in the filename is not.** `SPEC_INDEX_`, `GLOSSARY_`, `EVENT_` and every other
+stem never change, and the `_v<version>` suffix moves to the current version each time that file is edited, this index
+included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by a remembered full name.
+
 - An owner's filename carries the project version in which that owner last changed: `<OWNER>_v<version>.md`
   (User 2026-10-21). It is renamed only when the owner is edited, never in bulk, so untouched owners keep an older
   version in their name. Steps and the one exception (PLATFORM_RELEASE): AGENTS §10-A.
