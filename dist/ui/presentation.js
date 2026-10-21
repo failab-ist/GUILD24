@@ -24,7 +24,7 @@ function hazardNeed(k,d){return Math.ceil(G.Dungeon.hazardState(k,{},d).threat);
 function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+'\u00a0'+Math.round(1/r.coef)+'당\u00a0대응\u00a01\u00a0제공';}
 /* The short row's two parts (User 2026-09-25): the requirement line and the smaller conversion sub-line. */
 function hazardParts(k,d){return {need:'대응 '+hazardNeed(k,d)+' 필요',rate:hazardRate(k)};}
-function hazardSentence(k,d){return D.hazards[k]+' — 대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k)+' · '+D.hazards[k]+' 대응 상품이 막는다';}
+function hazardSentence(k,d){return D.hazards[k]+': 대응 '+hazardNeed(k,d)+' 필요, '+hazardRate(k)+'. '+D.hazards[k]+' 대응 상품이 막는다';}
 function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요, '+hazardRate(k);}
 /* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);
    the Stat-grid pressure tag and the matching-effect emphasis read it; 투력 is never a pressed Stat. */

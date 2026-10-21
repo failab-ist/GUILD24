@@ -3255,7 +3255,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  /* v2.9.0 §8-0: the guide opens on 하루의 흐름 (five lines) and keeps the eight sections under a collapsed 자세히 */
  assert.ok(h.indexOf('<h3>하루의 흐름</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'하루의 흐름 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
- for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
+ for(const l of ['아침: 오늘 열린 게이트의 위험을 본다.','발주: 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매: 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤: 원정 결과와 손님의 변화를 본다.','마감: 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
 });
 
@@ -3677,7 +3677,7 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
 test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and plate help, ORDER today-fit + per-Gate counts',()=>{
  const css=read('dist/ui/ui.css');
  // task line: five exact strings, DAY 1~3 while the tutorial is not skipped, one line
- for(const [ph,line] of [['morning','오늘 할 일 — 열린 게이트의 위험을 본다'],['order','오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다'],['sell','오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다'],['night','오늘 할 일 — 준비가 어떻게 됐는지 확인한다'],['closing','오늘 할 일 — 오늘 장사를 정리한다']])
+ for(const [ph,line] of [['morning','오늘 할 일: 열린 게이트의 위험을 본다'],['order','오늘 할 일: 위험에 맞는 능력을 올리는 상품을 발주한다'],['sell','오늘 할 일: 손님이 갈 게이트를 보고 상품과 가격을 정한다'],['night','오늘 할 일: 준비가 어떻게 됐는지 확인한다'],['closing','오늘 할 일: 오늘 장사를 정리한다']])
   assert.ok(app.includes(ph+":'"+line+"'"),'task line for '+ph+' is the §3-8 string');
  const tl=fn('taskLine');
  assert.ok(/t\.skipped\|\|!\(s\.day>=1&&s\.day<=3\)/.test(tl),'DAY 1~3 only, hidden when the tutorial is skipped (no DAY 0, no DAY 4)');
@@ -3697,11 +3697,11 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',3],fear:['spirit',3],dark:['mobility',3]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
  for(const [day,tier] of [[1,1],[6,2],[18,3]]){const d={day,tier};
   for(const k of Object.keys(DATA.hazards)){const st=Presentation.hazardStat[k],need=Math.ceil(Dungeon.hazardState(k,{},d).threat);
-   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공 · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
+   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+': 대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공. '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
    assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공',k+' short row');
    assert.deepEqual(Presentation.hazardParts(k,d),{need:'대응 '+need+' 필요',rate:Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공'},k+' two parts');}}
  assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
- assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독 — 대응 15 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공 · 독 대응 상품이 막는다','the DAY 1 T1 example');
+ assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독: 대응 15 필요, 강인함\u00a03당\u00a0대응\u00a01\u00a0제공. 독 대응 상품이 막는다','the DAY 1 T1 example');
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');
  assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/pressCell\(h\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row (need over rate)');

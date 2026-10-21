@@ -279,7 +279,7 @@ G.Save={
    this.error=null;
    return true;
   }catch(e){
-   this.error=inApp()?'자동저장에 실패했습니다. 기기 저장 공간을 확인해 주세요.':'자동저장 불가 — 저장 내보내기로 진행을 보관하세요.';
+   this.error=inApp()?'자동저장에 실패했습니다. 기기 저장 공간을 확인해 주세요.':'자동저장 불가: 저장 내보내기로 진행을 보관하세요.';
    return false;
   }
  },
