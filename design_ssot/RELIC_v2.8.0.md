@@ -3,7 +3,7 @@
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
 DOC_VERSION=2.13.15
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.17
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -593,7 +593,7 @@ earlier acquisition can repay its price and create meaningful remaining-Run econ
 ### ADDED SUPPORTS (User 2026-10-04)
 
 33. 소문 수집 게시판 (rumorBoard) · tags=[] · Price = 60G
-- every Normal Event Day rolls an Event (chance 100% instead of 40%; EVENT §EVENT TIMING / FREQUENCY): every morning except
+- every Normal Event Day rolls an Event (chance 100% instead of 30%; EVENT §EVENT TIMING / FREQUENCY): every morning except
   the Store Support window Days and this Run's 심층원정 Days, and on the account's first Run DAY 1 too
 - the Events themselves are the ordinary catalogue draw - good and bad alike; this is a variance pick, not a power pick
 

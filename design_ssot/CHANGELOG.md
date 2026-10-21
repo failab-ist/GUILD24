@@ -56,6 +56,7 @@ and this table is their commit record.
 | v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15, 정가 refuses less, operating cost 200 / +10, visit Wallet floor back to 30, failure Death CombatDeficit × 0.50 | (the User sets it) |
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
+| v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -64,6 +65,18 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.17 — Daily Event chance 30%, one name for the unattributed accident (User 2026-10-21)
+
+Measurement: `reports/v2100-measure/event-30-20261021/`.
+
+- EVENT §발생 확률: `dailyEventChance` 40% → 30% (about 6.3 Events by DAY 30 instead of 8.4; Runs with 10 or more
+  Events 31% → 7%). The User found Events too frequent: their saves met 13 and 11 by DAY 30. 소문 수집 게시판 stays 100%.
+  Investor fresh 1000 (main e7f71d7): D1~7 success 52.0 → 52.2%, median end day 15 → 15, D30 5.1 → 6.3%, clear 1.7 → 2.6%,
+  deaths / Run 7.40 → 7.31, cash / Day 21 → 21G. Trajectories 200 × 10, first clear within 10 Runs: none 14 → 10%, economy
+  68 → 71%, survival 52 → 40%, operation 26 → 25%, best 61 → 50%; first DAY 20 on the 3rd Run → 3rd~4th.
+- COPY: the first-accident coach line calls the accident with no Hazard behind it 「예상치 못한 사고」, the same name the
+  NIGHT Outcome sentence uses (was 「운 나쁜 사고」).
 
 ## v2.13.16 — 승천 skeleton, with the first-week Gate ease of the same release (User 2026-10-19)
 

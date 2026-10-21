@@ -176,12 +176,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     draws before it asks this, so a suppressed Day costs the run stream no draw. */
  eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day)&&!(this.run.firstRun&&day===1&&!this.has('rumorBoard'));}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
- /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
+ /* EVENT §EVENT SELECTION: 30% on an eligible Day, and an Event that already happened this
     Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),
     so rolling alone records nothing; a save from before the log reads as an empty one. */
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-01): the account's first Run meets 본사 1+1 행사 on DAY 2, the one Event before
     DAY 3. The ordinary roll still draws and is ignored, and no pick is drawn, so the Run's stream is unchanged. */
- rollEvent(){const s=this.run,fired=this.rng.next()<(this.has('rumorBoard')?D.relicParams.rumorBoard.eventChance:.40);if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
+ rollEvent(){const s=this.run,fired=this.rng.next()<(this.has('rumorBoard')?D.relicParams.rumorBoard.eventChance:.30);if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
   if(!this.eventEligibleDay(s.day)||!fired)return null;
   const seen=s.eventLog||[],pool=D.events.filter(e=>!seen.includes(e.id)&&this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
  /* CORE_RUN §MORNING: Event, intake, retained Gates, then Deep designation. */
