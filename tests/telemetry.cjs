@@ -15,7 +15,7 @@ const tick=()=>new Promise(r=>setTimeout(r,5));
  for(const n of g.run.npcs)assert.ok(!text.includes(n.name),'no adventurer name in the payload');
  const bad=text.match(/email|device|location|"name"/i);assert.ok(!bad,'no identity keys '+(bad&&text.slice(bad.index-40,bad.index+40)));
  assert.equal(T.on(g.account),true,'on by default');
- T.report(g,'abandon');await tick();assert.equal(sent.length,0,'no endpoint, nothing sent');
+ T.endpoint='';T.report(g,'abandon');await tick();assert.equal(sent.length,0,'no endpoint, nothing sent');
  T.endpoint='https://example.invalid/exec';
  g.account.settings.stats=true;T.report(g,'abandon');await tick();assert.equal(sent.length,0,'the web build sends nothing');
  app=true;

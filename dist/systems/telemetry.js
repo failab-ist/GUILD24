@@ -47,6 +47,6 @@ function report(game,kind){
   const q=readQ();q.push(JSON.stringify(p));writeQ(q);flush();
  }catch(e){}
 }
-/* the collector's web-app URL (tools/stats-collector/README.md); empty until it is made */
-const T=G.Telemetry={endpoint:'',on,build,report,flush};
+/* the collector's address (tools/stats-collector/README-cloudflare.md) */
+const T=G.Telemetry={endpoint:'https://guild24-stats.f-ai-shion-lab.workers.dev/',on,build,report,flush};
 })(globalThis);
