@@ -1,5 +1,7 @@
 # GUILD24 v2.8 COPY AUDIT — USER APPROVED
 
+DOC_VERSION=2.13.17
+
 - 상태: **USER APPROVED / CANONICAL COPY**
 - 범위: **Player-facing exact Copy**
 - **ACTIVE COPY TRUTH = `현재`.** 구현·복구 근거는 `현재`뿐이다.
