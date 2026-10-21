@@ -34,7 +34,9 @@ const SPEND={
  'human':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
  'reader':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
  'expert':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
- 'investor':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
+ /* investor (User 2026-10-21, same-account comparison with the User's saves, reports/v2100-measure/bot-human-20261021): a person orders with the
+    till near empty (tonight's sales pay the operating cost); a 140G floor left the bot half-stocked after a poor Day and cost it the Run */
+ 'investor':{stockPerVisitor:2,stockSlack:4,cashFloor:0,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
 /* Boss clear is `power * roll >= bossPower` with roll uniform on the Final roll band (FINAL_EXPEDITION §FINAL ROLL), so
@@ -213,6 +215,13 @@ function playRun(g,out,ctx){
     backing, and keep a scarce Counter, potion or Insurance back for a backed customer later in today's queue. The
     acceptance chance it weighs is interest()'s, which the screen reads out only as 필요도. Pure reads; no RNG draw. */
  const INV={from:1,core:4,candidate:3,V:{explore:.6,core:1.5,candidate:.6,rest:.15}};
+ /* human-like order (variant A, User 2026-10-21: buy the Counter, or food / drink for the stat when there is none, mix them, reroll only when neither is on offer):
+    every visitor today with an open Hazard gets the cheapest Item that closes at least COVER of that Hazard's threat (a Counter, or food / drink whose
+    stat the Hazard presses), from the shelf, the cart or the sheet; the sheet is rerolled only when some visitor's Hazard has neither. */
+ const GOUGE=investor&&(typeof process==='undefined'||process.env.G24_BOT_GOUGE!=='0'),VO=investor&&(!!ctx.omniscient||(typeof process!=='undefined'&&!!process.env.G24_BOT_ORACLE)),VA=investor,COVER=.1,coverMemo=new Map();
+ const coverGain=(m,dd,h,it)=>{const k=s.day+'|'+m.id+'|'+h+'|'+it.id+'|'+m.injury;let v=coverMemo.get(k);if(v===undefined){
+  const b=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects,w=G.Dungeon.prepare({...m,pack:[it.id]},dd,s.facilities).effects,hb=G.Dungeon.hazardState(h,b,dd),hw=G.Dungeon.hazardState(h,w,dd);
+  v=Math.min(1,hw.defense/hw.threat)-Math.min(1,hb.defense/hb.threat);coverMemo.set(k,v);}return v;};
  /* a Deep nomination needs this forecast on the Deep Gate (1.5 x power) with the best Bag the shelf could sell */
  const DEEP_WIN=.65,DEEP_DEATH=.06;
  const firstSeen=new Map();let tierDay=-1,tiers=new Map();
@@ -320,10 +329,17 @@ function playRun(g,out,ctx){
    for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);
     const it=D.itemBy[st.item];if(held(it)&&!rescue)continue;const cost=Number.isFinite(st.cost)?st.cost:it.buy,needed=G.Relics.relatedPrep(it,d.hazards);
     const gain=utility(forecast(n,[...n.pack,it.id],d),V)-base,waste=st.expires!=null&&st.expires<=s.day?cost*gw:0,hold=reserve(it);
-    const modes=[...(V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3?['overcharge']:[]),'full','half'];
+    const gouge=GOUGE?!overToday&&!s.event?.effects.noOvercharge:V<=INV.V.rest&&!overToday&&!needed&&['food','drink'].includes(it.category)&&n.money>=it.sell*3;
+    const modes=[...(gouge?['overcharge']:[]),'full','half'],first=singles.length;
     for(const mode of modes){if(n.refused.includes(it.id+':'+mode))continue;const intent=g.interest(n,it,mode);if(intent.debit>purse)continue;
      const raw=gain+(intent.price-cost)*gw+waste+D.pricing[mode].loyalty*V*.2-hold;
-     singles.push({st,it,mode,gain,chance:intent.chance,raw,value:intent.chance*raw,debit:intent.debit});}}
+     singles.push({st,it,mode,gain,chance:intent.chance,raw,value:intent.chance*raw,debit:intent.debit});}
+    /* 바가지 (User 2026-10-21: "거절 위험을 감수하게"): the 150% try is weighed with what a refusal costs (loyalty -2, the Item then goes at 정가 or 50% instead)
+       and what a success costs (loyalty -8 through `raw`), so it is taken only when the expected value beats the plain price - a poor till (gw 1/8) or a
+       rich wallet and a Counter the customer needs pushes it over, a backed customer's loyalty keeps it out */
+    if(GOUGE){const mine=singles.slice(first),over=mine.find(x=>x.mode==='overcharge');
+     if(over){const plain=Math.max(0,...mine.filter(x=>x.mode!=='overcharge').map(x=>x.value));
+      over.value=over.chance*over.raw+(1-over.chance)*(plain+D.pricing.overcharge.refusalLoyalty*V*.2);}}}
    if(!singles.length)break;
    singles.sort((a,b)=>b.value-a.value);let best=singles[0];
    /* two free slots: a pair can be worth more than its halves (만반의 준비, two Hazards, food + potion) */
@@ -492,7 +508,7 @@ function playRun(g,out,ctx){
  if(reader){if(!w.candidateIds.some(id=>D.relicBy[id].rarity>=3)&&g.canRerollRelics()){const cost=g.relicRerollPrice(),paid=paidRerolls.get(w.milestoneDay)||0;
    if(cost===0||(!paid&&s.money>=1500)){g.rerollRelics();if(cost)paidRerolls.set(w.milestoneDay,paid+1);else out.couponRerolls=(out.couponRerolls||0)+1;return buySupport();}}}
  else if(g.wears('rerollCoupon')&&!w.rerolls&&g.canRerollRelics()&&g.relicRerollPrice()===0&&!w.candidateIds.some(id=>D.relicBy[id].rarity>=2)){g.rerollRelics();out.couponRerolls=(out.couponRerolls||0)+1;return buySupport();}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=reader?synergy:id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};const hero=id=>{if(D.relicBy[id].rarity<3)return 0;const order=w.milestoneDay<10?HERO_EARLY:HERO_LATE,i=order.indexOf(id);return 1e4+(i<0?0:(order.length-i)*100);};
-  return (reader?hero(b)-hero(a):0)+val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+  return (reader?hero(b)-hero(a):0)+val(b)-val(a);});for(const id of candidates){if(!g.canBuyRelic())break;const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
@@ -587,9 +603,12 @@ function playRun(g,out,ctx){
     /* an injured visitor today gets a 구급키트 on the shelf, backed or not: the Injury is the next Death */
     for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.injury===1))claim(it=>!!it.effects.aftercare,()=>1);
     for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&(m.fatigue||0)>=15))claim(it=>(it.effects.supply||0)>=3,it=>it.effects.supply||0);
+    if(VA)for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive).sort((x,y)=>weight(y)-weight(x))){const dd=g.claimedGateFor(m);if(!dd)continue;
+     const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
+     for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')claim(it=>coverGain(m,dd,h,it)>=COVER,it=>coverGain(m,dd,h,it));}
     for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
-     if(open.length)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
+     if(open.length&&!VA)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
      /* a potion for a backed visitor whose fight is close - bare power 0.8~1.12 of the Gate (User saves 2026-10-11:
         하급 포션 in 19% of D1~14 Bags, this bot 6% when only a core visitor at or under the Gate got one) */
      {const r=G.Dungeon.preparedPower(bare)/(dd.power||1);if(r>=.8&&r<1.12)claim(it=>it.category==='potion',it=>it.effects.combat||0);}}}
@@ -613,7 +632,25 @@ function playRun(g,out,ctx){
       customer today still has a Hazard of their Gate open with no Counter on the shelf or the sheet. Before each reroll one
       Item for the Stat that Hazard presses (cold -> 강인함) is picked up as a stand-in; a Counter that shows up later is
       taken. Up to two rerolls when the till is comfortable, one when thin, none when tight. */
-   if(reader&&spend.reroll){let used=0;const statHeld={};
+   if(VA&&spend.reroll){let used=0;
+    const op=g.expectedOperatingCost(),budget=s.money>=spend.cashFloor+4*op?2:s.money>=spend.cashFloor+op?1:0;
+    const openPairs=()=>{const res=[];for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.money+(m.eventBudget||0)>=40).sort((x,y)=>weight(y)-weight(x))){
+      const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
+      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')res.push({m,dd,h});}return res;};
+    for(;;){let missing=false;
+     const held=[...s.inventory.map(x=>x.item),...Object.entries(s.cart||{}).flatMap(([i,q])=>Array(q).fill(s.offers[i].item))];
+     for(const {m,dd,h} of openPairs()){
+      const k=held.findIndex(id=>coverGain(m,dd,h,D.itemBy[id])>=COVER);if(k>=0){held.splice(k,1);continue;}
+      const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&coverGain(m,dd,h,x.it)>=COVER&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((x,y)=>x.o.price-y.o.price)[0];
+      if(c){try{g.setQuantity(c.i,(s.cart?.[c.i]||0)+1);act();(out.items[c.o.item]??={ordered:0,sold:0}).ordered++;continue;}catch(e){}}
+      missing=true;}
+     try{g.confirmOrder();act();}catch(e){}
+     if(!missing||used>=budget)break;
+     const cost=g.rerollPrice();if(s.money-cost<spend.cashFloor+op)break;
+     try{g.reroll();}catch(e){break;}act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;
+     buyRound();try{g.confirmOrder();act();}catch(e){}}
+    out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
+   if(reader&&spend.reroll&&!VA){let used=0;const statHeld={};
     const op=g.expectedOperatingCost(),budget=s.money>=spend.cashFloor+4*op?2:s.money>=spend.cashFloor+2*op?1:0;
     const alive=s.npcs.filter(x=>x.alive).sort((a,b)=>b.level-a.level),cut=alive[Math.min(3,alive.length-1)]?.level??0;
     const key=m=>investor?tierOf(m)==='core'||tierOf(m)!=='rest'&&s.money>=spend.cashFloor+2*op:m.level>=cut;
@@ -635,6 +672,33 @@ function playRun(g,out,ctx){
      try{g.reroll();}catch(e){break;}act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;
      buyRound();try{g.confirmOrder();act();}catch(e){}}
     out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
+   /* all-knowing order (variant O, off by default, set G24_BOT_ORACLE; User 2026-10-21: "일일이 다 계산하긴 어렵고 값으로만 알고 거기서 최선 선택"): after the ordinary order the till is spent on whatever raises
+      today's best Bags the most. Every customer's best one- or two-Item Bag from shelf + cart + sheet is read off forecast() (hidden stats included), the
+      customers are served in weight order from one shared stock, and an offer is bought while the Bag value it adds is worth its price
+      (15G per utility, the same exchange investorSell uses). Looks again (reroll) while a backed customer's best Bag is still under 75% to win. */
+   if(VO&&s.phase==='order'){
+    const fcMemo=new Map(),fc=(m,pack,dd)=>{const k=m.id+'|'+[...pack].sort().join(',')+'|'+m.injury+'|'+(m.fatigue||0);let v=fcMemo.get(k);if(v===undefined){v=forecast(m,pack,dd);fcMemo.set(k,v);}return v;};
+    const today=()=>s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&g.claimedGateFor(m)).sort((x,y)=>weight(y)-weight(x)).map(m=>({m,dd:g.claimedGateFor(m),V:weight(m)}));
+    const bag=(c,ids)=>{const base=utility(fc(c.m,[],c.dd),c.V),uniq=[...new Set(ids)].map(id=>D.itemBy[id]);
+     const top=uniq.map(it=>({it,u:utility(fc(c.m,[it.id],c.dd),c.V)-base})).sort((x,y)=>y.u-x.u).slice(0,5);
+     let best={u:0,used:[],ok:fc(c.m,[],c.dd).ok};
+     for(let i=0;i<top.length;i++){if(top[i].u>best.u)best={u:top[i].u,used:[top[i].it.id],ok:fc(c.m,[top[i].it.id],c.dd).ok};
+      if(G.Adventurer.slots(c.m)<2)continue;
+      for(let j=i;j<top.length;j++){if(i===j&&ids.filter(id=>id===top[i].it.id).length<2)continue;const pk=[top[i].it.id,top[j].it.id],u=utility(fc(c.m,pk,c.dd),c.V)-base;if(u>best.u)best={u,used:pk,ok:fc(c.m,pk,c.dd).ok};}}
+     return best;};
+    const plan=(ids,cs)=>{const left=[...ids];let tot=0;const oks=[];for(const c of cs){const r=bag(c,left);tot+=r.u;oks.push({c,ok:r.ok});for(const id of r.used){const k=left.indexOf(id);if(k>=0)left.splice(k,1);}}return {tot,oks};};
+    const held=()=>[...s.inventory.map(x=>x.item),...Object.entries(s.cart||{}).flatMap(([i,q])=>Array(q).fill(s.offers[i].item))];
+    const topUp=()=>{const cs=today();if(!cs.length)return;
+     for(let guard=0;guard<10;guard++){const ids=held(),base=plan(ids,cs).tot;
+      const pick=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it))
+       .map(x=>({...x,d:plan([...ids,x.it.id],cs).tot-base})).filter(x=>x.d*15>=x.o.price).sort((x,y)=>y.d/y.o.price-x.d/x.o.price)[0];
+      if(!pick)break;try{g.setQuantity(pick.i,(s.cart?.[pick.i]||0)+1);act();(out.items[pick.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){break;}}};
+    let looks=0;const op=g.expectedOperatingCost(),cap=s.money>=spend.cashFloor+4*op?3:s.money>=spend.cashFloor+2*op?2:s.money>=spend.cashFloor+op?1:0;
+    for(;;){topUp();try{g.confirmOrder();act();}catch(e){}
+     const cs=today(),weak=plan(held(),cs).oks.some(x=>x.c.V>=INV.V.candidate&&x.ok<.75);
+     if(!weak||looks>=cap)break;const cost=g.rerollPrice();if(s.money-cost<spend.cashFloor+op)break;
+     try{g.reroll();}catch(e){break;}act();looks++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
+    out.rerollDepth[Math.min(4,looks)]=(out.rerollDepth[Math.min(4,looks)]||0)+1;}
    if(capacityHit)out.shortage.capacityDay++;
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
    /* SALE opened. An empty shelf here is a different failure from running out mid-Day. */
@@ -847,8 +911,9 @@ function playRun(g,out,ctx){
 function simulate(count=100,policy='reader',account=null,pricing='adaptive',build='hybrid',opts={}){
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
-  const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start('revision-'+seed);
-  playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware,relicPriority:opts?.relicPriority});
+  const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.lessons=false;g.start(opts?.seedFn?opts.seedFn(seed):(opts?.seedPrefix||'revision-')+seed);
+  const ended=playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware,relicPriority:opts?.relicPriority});
+  if(opts?.onRun)opts.onRun(ended,g,seed);
  }
  return derive(out,count);
 }
@@ -990,6 +1055,7 @@ function continueRun(account,run,count=200,policy='investor',opts={}){
  for(let seed=0;seed<count;seed++){
   const g=new G.Game(copy(account),copy(run));g.autosave=false;g.lessons=true;g.rng=new G.RNG('continue-'+seed);
   const s=playRun(g,out,{policy,pricing:'adaptive',build:'hybrid',seed,relicAware:opts.relicAware!==false,relicPriority:opts.relicPriority});
+  if(opts.onRun)opts.onRun(s,g,seed);
   rows.push({day:s.day,win:!!s.win,final:!!s.bossDebug,deaths:s.stats.deaths,limit:G.Meta.deathLimit(s),alive:s.npcs.filter(n=>n.alive).map(n=>n.id)});}
  return rows;}
 G.Debug={simulate,trajectory,clearChance,contribution,masterySpawnPatch,continueRun};
