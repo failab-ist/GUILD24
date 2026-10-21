@@ -32,7 +32,7 @@ If Canonical and Source differ:
 
 Never change approved Design without User approval.
 
-Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.8.0.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
+Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.13.17.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
 
 ---
 
@@ -43,7 +43,7 @@ Do not treat a Canonical file as missing because it is absent from initial conte
 Required order:
 
 ```text
-SPEC_INDEX
+SPEC_INDEX (find it by stem: `ls design_ssot/SPEC_INDEX_v*.md`; the version in a filename changes, §10-A)
 → identify exact current filename
 → explicitly Search/Open that Project Source
 → read only the relevant Spec / QA / Source
@@ -313,6 +313,7 @@ After User-approved Design change:
 ## 9-B. 밸런스는 `tools/measure-v2100.cjs`로 잰다 (User 2026-10-04)
 
 밸런스를 바꾸거나 판단할 때의 기준 측정이다. 돌리기 전 9-A대로 User 컨펌을 받는다.
+밸런스를 점검하거나 바꿀 때는 먼저 `BALANCE_CHECK.md`(있는 자료부터 보기 · 물은 것만 재기 · 읽기 · 보고 · 넣기 순서)를 읽는다(User 2026-10-21).
 
 ```text
 node tools/measure-v2100.cjs --traj 200 --fresh 1000
@@ -354,6 +355,28 @@ Do not:
 
 Follow the current `SPEC_INDEX` routing and inheritance structure.
 Versioning / manifest changes must reflect the current project routing rather than historical examples in this file.
+
+## 10-A. 설계 문서 파일 이름 버전 (User 2026-10-21)
+
+**이름 앞부분은 고정, 끝의 버전은 고정이 아니다.** `SPEC_INDEX_` · `GLOSSARY_` · `EVENT_` 같은 앞부분은 절대 안 바뀌고,
+`_v<버전>`은 그 문서를 고칠 때마다 지금 버전으로 바뀐다. SPEC_INDEX도 예외가 아니다.
+그래서 설계 문서는 기억한 파일 이름이 아니라 앞부분으로 찾는다: `ls design_ssot/SPEC_INDEX_v*.md`.
+
+- `design_ssot/`의 문서를 고치면 그 파일 이름의 버전도 지금 게임 버전(`dist/build.js`의 `version`)으로 올린다.
+  예: 게임이 v2.13.18일 때 EVENT 문서를 고치면 이름 끝이 `_v2.8.0`에서 `_v2.13.18`로 바뀐다. 문서만 고쳐 게임 버전이 그대로여도 지금 버전을 쓴다.
+- 고칠 때마다 확인한다: 커밋 전에 `git diff --name-only origin/main -- design_ssot/`에 나온 파일의 이름 끝이 지금 버전인가.
+- 게임 버전이 올라가도 사양이 안 바뀐 문서는 그대로 둔다(이름 · 머리글 모두). 지금 게임 버전은 SPEC_INDEX의 `DESIGN_SSOT=` 한 곳에만 적는다.
+- 한꺼번에 바꾸지 않는다. 그 작업에서 고친 파일만 올리고, 안 고친 파일은 옛 버전 이름 그대로 둔다.
+  다른 문서의 이름이 바뀌어 링크만 고친 파일은 고친 것으로 치지 않는다.
+- 이름을 바꿀 때:
+  - `git mv`로 옮긴다.
+  - 머리글 `DOC_VERSION=`을 같은 버전으로 맞춘다.
+  - `archive/` 밖(문서 · `tests/` · `tools/` · `dist/` 주석)의 옛 이름을 모두 새 이름으로 바꾼다.
+    `git grep -n "<옛 파일 이름>" -- ':!archive'`가 비어야 한다. `archive/`는 옛 이름 그대로 둔다(그때의 기록). 단 목록인 `archive/README.md`는 새 이름으로 바꾼다.
+  - SPEC_INDEX §CURRENT CANONICAL FILE SET은 자동으로 따라온다(같은 치환).
+- `npm test`의 `tests/doc-names.cjs`가 남은 옛 이름 링크와, 이름과 `DOC_VERSION=`이 어긋난 문서를 잡는다.
+  다만 고쳤는데 이름을 안 올린 것은 테스트가 모른다. 그래서 위 확인은 작업자가 커밋 전에 직접 한다.
+- 예외: `PLATFORM_RELEASE_v3.0.0.md`는 출시 목표 버전 이름이라 고쳐도 이름을 그대로 둔다. `CHANGELOG.md`는 버전이 없다.
 
 ---
 

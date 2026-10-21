@@ -169,14 +169,14 @@ test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run 
  assert.notEqual(start,h.rng.state,'and on an ordinary eligible Day');
 });
 
-test('EVENT-001: daily chance is 40% (v2.9.11; was 35%), never the retired 74%',()=>{
+test('EVENT-001: daily chance is 30%, never the retired 74%',()=>{
  // an ordinary eligible Day for this Run: D7 is a candidate Deep window, and on a Run that
- // actually holds it the chance is 0 by design rather than 40%.
+ // actually holds it the chance is 0 by design rather than 30%.
  const g=fresh('rate');g.run.day=[...Array(30).keys()].find(d=>d>=3&&g.eventEligibleDay(d));
  let fired=0;const N=6000;
  for(let i=0;i<N;i++)if(g.rollEvent())fired++;
  const rate=fired/N;
- assert.ok(Math.abs(rate-.40)<.03,'observed daily event rate '+rate.toFixed(3));
+ assert.ok(Math.abs(rate-.30)<.03,'observed daily event rate '+rate.toFixed(3));
  g.run.day=10;assert.equal([...Array(400)].filter(()=>g.rollEvent()).length,0,'no Event on a Relic window day');
 });
 

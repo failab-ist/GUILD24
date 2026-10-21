@@ -101,6 +101,8 @@ body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
+img.mark{display:block;object-fit:contain;image-rendering:auto}
+i.hz-icon{display:block;flex:none;background:currentColor;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
 /* Emphasis is the INFORMATION face's real SemiBold. 750 was a weight neither family ships,
    which only ever resolved to a synthesised bold. */
 b,strong{font-weight:600}
@@ -224,7 +226,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .hazards .press .need{display:block;font-weight:600;color:inherit}
 .dest-plate .hazards .press .need{color:#f2e7cd}
 .hazards .press .rate{display:block;font-size:11px;line-height:1.35;color:var(--dim)}
-@media(min-width:900px){.hazards .press .need,.hazards .press .rate{display:inline;font-size:inherit;line-height:inherit}.hazards .press .rate::before{content:' · '}}
+@media(min-width:900px){.hazards .press .need,.hazards .press .rate{display:inline;font-size:inherit;line-height:inherit}.hazards .press .rate{margin-left:.6em}}
 /* The readiness is labelled, so it cannot be read as more of the pressure sentence. */
 .hazards .ready{margin-left:auto;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
 .hazards .ready i{font-style:normal;font-weight:600;font-size:11px;letter-spacing:.08em;color:#9c8d70}
@@ -291,7 +293,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
    be a second copy of the same reading, at the end of the scroll where it is no use before a
    decision, so the compact control replaces it. The desk has room for both and keeps the
    disclosure it already had - the min-width block below hands it back. */
-.effect-bad span:before{content:'주의 · ';font-size:var(--t-xs);color:var(--tone-cost)}
+.effect-bad span:before{content:'주의: ';font-size:var(--t-xs);color:var(--tone-cost)}
 .tone-benefit{color:var(--tone-benefit)}.tone-cost{color:var(--tone-cost)}.tone-neutral{color:var(--tone-neutral)}
 .rare-badge{font-size:var(--t-xs);color:var(--rare,var(--r0));white-space:nowrap;font-weight:600;font-family:var(--mono);letter-spacing:.06em}
 .r0{--rare:var(--r0)}.r1{--rare:var(--r1)}.r2{--rare:var(--r2)}.r3{--rare:var(--r3)}.r4{--rare:var(--r4)}
@@ -463,7 +465,6 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20shape-rendering%3D%22crispEdges%22%3E%3Cg%20fill%3D%22%23e3776c%22%3E%3Crect%20x%3D%226%22%20y%3D%220%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%221%22%20width%3D%228%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%222%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%224%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%225%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%227%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%228%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23c4453c%22%3E%3Crect%20x%3D%225%22%20y%3D%222%22%20width%3D%224%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%223%22%20width%3D%224%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%224%22%20width%3D%226%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%225%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%226%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%227%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%228%22%20width%3D%2210%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%229%22%20width%3D%228%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2210%22%20width%3D%226%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%2211%22%20width%3D%224%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%238b2b25%22%3E%3Crect%20x%3D%2211%22%20y%3D%222%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%223%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2211%22%20y%3D%224%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%225%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%227%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2211%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2210%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%2210%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%2211%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2211%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2212%22%20width%3D%228%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%2213%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23f2a99e%22%3E%3Crect%20x%3D%224%22%20y%3D%223%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center/14px 14px no-repeat;
  filter:drop-shadow(0 3px 0 #00000059)}
 .slip.gate{padding-left:52px;--edge:var(--fam)}
-.slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
 /* BATCH 1: the crest is the notice's insignia, so it centres on the title it belongs to
    rather than starting at the same top edge - at 32px against a 21px line it read 5px low. */
 .slip .crest{position:absolute;left:12px;top:9px;width:32px;height:32px;display:grid;place-items:center;background:#0000001a}
@@ -493,6 +494,23 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .slip.event .effect i{display:block;margin-bottom:2px;font:600 11px/1.3 var(--ui);font-style:normal;letter-spacing:.06em;color:#2f7a4d}
 .slip.event .effect>span,.slip.event .flavor>span{display:block;white-space:pre-line}
 .slip.event .flavor{display:block;margin-top:12px;font:400 12px/1.7 var(--ui);color:#7a6d55}
+/* 폰 아침(User 2026-10-20): 사건 하나 + 원정지 두 장이 스크롤 없이 보이도록 게시판을 아래로 늘리고 쪽지 안 세로 여백을 한 단계 줄인다.
+   사건 도장과 제목, 「효과」와 문장은 한 줄로 붙인다 */
+@media (max-width:1023px){
+ .p-morning:not(.p-prep) .board{max-height:none}
+ .p-morning:not(.p-prep) .band.counter{margin-top:calc(-1 * max(0px,calc((var(--ph) - 100cqh) / 2 + var(--cap-top) * var(--band-c) * var(--ph) - 14px)))}
+ .p-morning:not(.p-prep) .slip.gate>b{margin-bottom:4px}
+ .p-morning:not(.p-prep) .slip .hazards li{line-height:1.4}
+ .p-morning:not(.p-prep) .pinned{gap:9px;padding:10px 10px 11px}
+ .p-morning:not(.p-prep) .slip{padding-top:11px;padding-bottom:9px}
+ .p-morning:not(.p-prep) .slip.event{padding-top:12px}
+ .p-morning:not(.p-prep) .slip.event .stamp-line{margin:0 8px 4px 0;vertical-align:2px}
+ .p-morning:not(.p-prep) .slip.event>b{display:inline}
+ .p-morning:not(.p-prep) .slip.event .effect{margin-top:6px;padding:6px 8px}
+ .p-morning:not(.p-prep) .slip.event .effect i{display:inline;margin:0 6px 0 0}
+ .p-morning:not(.p-prep) .slip.event .effect>span{display:inline}
+ .p-morning:not(.p-prep) .slip.event .flavor{margin-top:7px;line-height:1.55}
+}
 /* ---- counter band: the till and the store support tray ---- */
 /* BATCH 1: the cap is the display's printed label and was two values off the housing it sits
    on - legible in the editor, not at phone scale. It keeps its size and spacing and gains the
@@ -637,7 +655,10 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .line .own{display:flex;flex-direction:column;align-items:center;gap:3px;align-self:start}
 .line .own b{font:600 12px/1.2 var(--ui);color:#6b5f48;white-space:nowrap}
 .line .have{display:block;margin-top:5px;font:400 12px/1.5 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72;word-break:keep-all}
-.line .have i{font-style:normal;white-space:nowrap} /* `유통기한 N일` never splits (keep-all still breaks between a digit and 일) */
+.line .have i{font-style:normal;white-space:nowrap;margin-left:.6em} /* `유통기한 N일` never splits (keep-all still breaks between a digit and 일) */
+.line .kind>i{margin-left:.6em}
+/* one gap between two different facts on one line, where a middle dot used to sit */
+.sp{margin-left:.6em}
 /* the price tag hangs at the end of the name row, never off the paper */
 /* BATCH 2A. The tag was a saturated web-shop green, the loudest object on a paper form and
    louder than the Item it prices. It is the same tag, tied on in the phase's own steel. */
@@ -1014,6 +1035,8 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 /* ORDER today-fit emphasis: the same typographic rule as SALE, on paper */
 /* 점주 가이드: 처음 3일 first, the rest under 자세히 */
 .stack .first-days p{margin:0 0 4px}
+.stack details.more>h3{margin:16px 0 4px}
+.stack details.more>p{margin:0 0 4px}
 .stack details.more>summary{cursor:pointer;margin:12px 0 6px;font:600 13px/1.3 var(--ui);color:#a2947c;letter-spacing:.08em}
 /* ---- layer 2 : what is known -------------------------------------------------- */
 /* The stat/forecast dossier, the shelf and the Trait rows read stat -> goods -> Traits
@@ -1097,7 +1120,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .pips i.on{background:var(--gold);opacity:1}
 .pips i.now{background:var(--sign-lit);opacity:1;transform:scale(1.15)}
 .dest-plate{position:relative;display:grid;grid-template-columns:38px 1fr;gap:10px;margin:0 0 12px;padding:11px 12px;
- background:#0d0904a6;box-shadow:inset 0 3px 0 var(--fam,var(--gold)),inset 3px 0 0 #000000a6,
+ background:#0d0904a6;box-shadow:inset 3px 0 0 #000000a6,
             inset -2px -2px 0 #ffffff12}
 .dest-plate .mark{background:#00000047;padding:2px}
 .dest-plate label{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#9c8d70;display:block;margin-bottom:4px}
@@ -1747,7 +1770,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the equipment cell's two facts: identity, then its Stat effect, told apart by a middle dot
    rather than by a second cell (UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM) */
 .tok>em{font-style:normal;font:600 14px/1.4 var(--ui);color:#9fd6a8;font-variant-numeric:tabular-nums}
-.tok>em:before{content:'·';margin-right:6px;color:#8b93a0;font-weight:400}
+.tok>em{margin-left:.35em}
 .tok.up b{color:#9fd6a8}
 .tok.gain b{color:var(--gold)}
 .tok.down b{color:#e8927f}
@@ -1811,7 +1834,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print{padding:16px 16px 15px;background:var(--tex-paper),#efe7d2;background-size:16px 16px;color:#2c2418}
 .print .head{text-align:center;padding-bottom:11px;margin-bottom:11px;box-shadow:inset 0 -2px 0 #2c241826}
 .print .head b{display:block;font:500 24px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.14em}
-.print .head span{display:block;margin-top:5px;font:500 12px/1.5 var(--f-led);color:#6b6350;letter-spacing:.04em}
+.print .head>span{display:block;margin-top:5px;font:500 12px/1.5 var(--f-led);color:#6b6350;letter-spacing:.04em}
 .print .block{padding:9px 0;box-shadow:inset 0 -1px 0 #2c241826}
 /* label, dotted leader, figure: the tape's own way of setting a line */
 .print .row{display:flex;align-items:baseline;gap:6px;padding:3px 0;font:400 13px/1.6 var(--ui)}
@@ -1951,6 +1974,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    Scoped by `.tabs`, which is the Codex and nothing else, so the utility overlays are
    untouched.
    ===================================================================== */
+/* 도감 탭마다 내용 길이가 달라도 창 높이는 그대로 */
+.modal:has(.tabs){height:92dvh}
 .modal:has(.tabs){background:var(--tex-wood),#33241a;background-size:32px 12px;
  border-style:solid;border-width:10px;
  border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32' height='32' shape-rendering='crispEdges'><g fill='%230f0a05'><rect x='0' y='0' width='32' height='2'/><rect x='0' y='10' width='2' height='12'/><rect x='30' y='10' width='2' height='12'/><rect x='0' y='30' width='32' height='2'/></g><g fill='%235a4028'><rect x='0' y='2' width='2' height='1'/><rect x='7' y='2' width='18' height='1'/><rect x='30' y='2' width='2' height='1'/><rect x='2' y='10' width='1' height='12'/><rect x='29' y='10' width='1' height='12'/><rect x='0' y='29' width='2' height='1'/><rect x='7' y='29' width='18' height='1'/><rect x='30' y='29' width='2' height='1'/></g><g fill='%23e0bc70'><rect x='2' y='2' width='5' height='1'/><rect x='25' y='2' width='5' height='1'/><rect x='2' y='3' width='1' height='4'/><rect x='29' y='3' width='1' height='4'/><rect x='5' y='5' width='1' height='1'/><rect x='26' y='5' width='1' height='1'/><rect x='2' y='25' width='1' height='5'/><rect x='29' y='25' width='1' height='5'/><rect x='5' y='26' width='1' height='1'/><rect x='26' y='26' width='1' height='1'/><rect x='3' y='29' width='4' height='1'/><rect x='25' y='29' width='4' height='1'/></g><g fill='%2346301d'><rect x='0' y='3' width='2' height='2'/><rect x='7' y='3' width='18' height='2'/><rect x='30' y='3' width='2' height='2'/><rect x='4' y='4' width='3' height='1'/><rect x='25' y='4' width='3' height='1'/><rect x='3' y='10' width='2' height='12'/><rect x='27' y='10' width='2' height='12'/><rect x='0' y='27' width='2' height='2'/><rect x='4' y='27' width='24' height='1'/><rect x='30' y='27' width='2' height='2'/><rect x='7' y='28' width='18' height='1'/></g><g fill='%236b5029'><rect x='3' y='3' width='4' height='1'/><rect x='25' y='3' width='4' height='1'/><rect x='3' y='4' width='1' height='3'/><rect x='28' y='4' width='1' height='3'/><rect x='0' y='8' width='32' height='1'/><rect x='8' y='10' width='1' height='12'/><rect x='23' y='10' width='1' height='12'/><rect x='0' y='23' width='32' height='1'/><rect x='3' y='25' width='1' height='4'/><rect x='28' y='25' width='1' height='4'/><rect x='4' y='28' width='3' height='1'/><rect x='25' y='28' width='3' height='1'/></g><g fill='%233a2717'><rect x='0' y='5' width='2' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='6' y='5' width='20' height='1'/><rect x='27' y='5' width='1' height='1'/><rect x='30' y='5' width='2' height='1'/><rect x='5' y='10' width='1' height='12'/><rect x='26' y='10' width='1' height='12'/><rect x='0' y='26' width='2' height='1'/><rect x='4' y='26' width='1' height='1'/><rect x='6' y='26' width='20' height='1'/><rect x='27' y='26' width='1' height='1'/><rect x='30' y='26' width='2' height='1'/></g><g fill='%232a1a0f'><rect x='0' y='6' width='2' height='1'/><rect x='4' y='6' width='24' height='1'/><rect x='30' y='6' width='2' height='1'/><rect x='6' y='10' width='1' height='12'/><rect x='25' y='10' width='1' height='12'/><rect x='0' y='25' width='2' height='1'/><rect x='4' y='25' width='24' height='1'/><rect x='30' y='25' width='2' height='1'/></g><g fill='%23b08a42'><rect x='0' y='7' width='32' height='1'/><rect x='7' y='10' width='1' height='12'/><rect x='24' y='10' width='1' height='12'/><rect x='0' y='24' width='32' height='1'/></g><g fill='%23120c06'><rect x='0' y='9' width='32' height='1'/><rect x='9' y='10' width='1' height='13'/><rect x='22' y='10' width='1' height='13'/><rect x='0' y='22' width='9' height='1'/><rect x='10' y='22' width='12' height='1'/><rect x='23' y='22' width='9' height='1'/></g></svg>") 10 stretch;
@@ -2287,7 +2312,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .threat h2{font:600 11px/1 var(--ui);letter-spacing:.18em;color:#b09a92;margin-bottom:10px}
 .fams{display:grid;gap:7px;margin-bottom:11px}
 .fam{display:flex;align-items:center;gap:9px;padding:7px 10px;font:400 14px/1.3 var(--ui);color:#f2e0da;
- background:#00000047;box-shadow:inset 4px 0 0 var(--fam,#8a2f26)}
+ background:#00000047}
 .threat .hazards b{color:#e8a08e}
 /* the Family columns (BATCH 5-1): flat on a phone, so the two Families read first and their
    Hazards follow as one run, exactly as before; the desk rule below makes them columns */
@@ -2426,6 +2451,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    forecast ? on a phone (where it is pinned to the readout's right). Each keeps clear of it by the
    pin's own width; nothing else in the head or the readout moves, and the pin is unchanged. */
 .p-final .party-head{padding-right:44px}
+/* 마왕전 준비 첫 화면에서 「마지막 발주」 제목이 아래 바 톱니에 반쯤 걸리지 않게 위 칸(.threat 아래 여백 20px)과 더 띄운다.
+   폰 36px은 384×640~915, 데스크 42px은 1024·1280×800·880에서 제목이 톱니 위에 다 보이거나 아래에 다 숨는 값 */
+.p-final .threat+.party-head{margin-top:42px}
+@media (max-width:719px){.p-final .threat+.party-head{margin-top:36px}}
 .p-final .final-forecast .fore>.tip{right:30px}
 .p-final .final-forecast .top{margin-bottom:0}
 .p-final .good.final-noop .tile{opacity:.5}
@@ -2731,6 +2760,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the empty plaque's tag hangs from the top of its spot rather than its middle: the board is right above it, and a tag
    grown with a tall or wide stage grows down onto bare wall instead of up into the board */
 .p-prep .prep-slot.wall.empty .slot-tag{top:0;transform:none}
+/* 첫 화면 아래 줄 세 표(진열대 비움 · 점포 자본 · 계산대 비움)가 같은 높이에 앉게, 빈 진열대·계산대 표는 칸 바닥(계산대 윗면)에 붙인다 */
+.p-prep .prep-slot.display.empty .slot-tag,.p-prep .prep-slot.counter.empty .slot-tag{top:auto;bottom:0;transform:none}
 /* the 간판 hangs just above the board, so its tag is one line: under it on a phone (the branch plate is beside it),
    to its left on a desk (the board is right under it and the branch plate to its right) */
 .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:calc(100% + 3px);grid-auto-flow:column;align-items:baseline;gap:5px}
@@ -3072,7 +3103,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .room{max-height:52dvh}
  .notices{grid-template-columns:1fr 1fr}
  .line{grid-template-columns:30px 52px 1fr auto}
- .line .crate{width:52px;height:52px}
+ .line .crate{width:60px;height:60px}
  .dial{grid-column:3/-1;margin-top:8px}
  /* UI-Q-v28-29. `-` / qty / `+` and the 1 · 3 · 최대 quick set are two halves of one quantity
     control. On a phone the row is ~296px wide and `margin-left:auto` reads as the quiet right
@@ -3167,6 +3198,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* and NIGHT's window band is drawn at the width it is given against a fixed sky line: wider, it grew taller and the rail
     covered its moon and lamp - the band keeps the old width, centred, on the wider stage */
  .p-night .nightband{max-width:1120px;margin:0 auto}
+ /* the band's painted sides fade into the room instead of ending on a hard cut */
+ .p-night .nightband{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}
  .p-night{background:#0e0a06} /* the band's own edge colour, so its sides read as the same dark room */
  .room{max-height:50dvh}
  .notices{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
@@ -3342,7 +3375,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .sale-desk .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
  .sale-desk .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
  /* the counter itself: the mat the tray lies on, the same dark well as the tray, so an empty counter reads as the counter */
- .sale-desk>.counter-mat{grid-area:tray;background:#15100a;box-shadow:inset 0 4px 0 #000000b3,inset 4px 0 0 #00000066,inset -4px 0 0 #00000066}
+ .sale-desk>.counter-mat{grid-area:tray;background:var(--tex-wood),#1b130d;background-size:32px 12px;box-shadow:inset 0 4px 0 #000000b3,inset 4px 0 0 #00000066,inset -4px 0 0 #00000066}
  .sale-desk>.counter-tray{grid-area:tray;align-self:start;display:block;padding:14px 16px 16px;box-shadow:none;background:none}
  .sale-desk>.counter-tray>*{grid-column:auto}
  .sale-desk>.counter-tray .tills{margin-top:14px}
@@ -3391,11 +3424,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the disclosed Families, as two entries ON the record rather than two cards floating over a
    panel: the family colour stays the left rule it already was, on paper stock */
 .boss-reveal .fam-card{padding:9px 11px;background:#2c24180a;
- box-shadow:inset 4px 0 0 var(--fam,#8a2f26),inset 0 0 0 1px #2c24181f}
+ box-shadow:inset 0 0 0 1px #2c24181f}
 .boss-reveal .fam-card .hazards li{color:#5f5440}
 .boss-reveal .fam-card .hazards .press{color:#8a7c60}
-.boss-reveal .fam-card>b{display:block;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
+.boss-reveal .fam-card>b{display:flex;align-items:center;gap:8px;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
  -webkit-font-smoothing:none;color:var(--ink)}
+.boss-reveal .fam-card>b .mark{box-sizing:content-box;padding:4px;background:#0000001a}
 .boss-reveal .fam-card .hazards{margin:0}
 /* UI_UX §BOSS INFORMATION PRESENTATION: every investigation shares one viewport-bounded art cap. */
 @media (max-width:719px){
@@ -3489,8 +3523,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .trait-name b{display:block;font:500 23px/1.25 var(--f-plate);-webkit-font-smoothing:none;color:var(--ink)}
 .boss-reveal.final .lede{font:600 16px/1.45 var(--ui);color:var(--ink)}
 .boss-reveal.final .fams{gap:0;margin:0;box-shadow:none}
-.boss-reveal.final .fam-card{padding:11px 0 11px 13px;background:none;box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
-.boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26),inset 0 1px 0 #2c241833}
+.boss-reveal.final .fam-card{padding:11px 0;background:none;box-shadow:none}
+.boss-reveal.final .fam-card+.fam-card{box-shadow:inset 0 1px 0 #2c241833}
 .boss-reveal.final .fam-card>b{margin-bottom:5px;font-size:16px}
 /* UI_UX §BOSS INFORMATION PRESENTATION: D10 / D20 keep the shared illustration and shorter report text. */
 .boss-reveal.d10 .lede,.boss-reveal.d20 .lede{font:400 15px/1.6 var(--ui);color:#3c3527}
@@ -3519,7 +3553,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font-size:14.5px;color:#4a402e;text-align:left}
 @media (min-width:720px){
  .boss-reveal.final .fams{column-gap:22px}
- .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
+ .boss-reveal.final .fam-card+.fam-card{box-shadow:none}
 }
 /* a desk gives the major records a document measure instead of the 460px utility sheet; the
    compact D10 / D20 records keep theirs */
@@ -3939,6 +3973,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.exit-confirm .modal-footer{padding-top:12px;box-shadow:none}
 .settings-wood .modal-footer,.wood-frame .modal-footer{padding:16px 12px max(12px,var(--sa-bottom));
  background:none;box-shadow:inset 0 1px 0 #9b6433}
+/* 확인 창 버튼은 같은 폭으로 줄을 채운다(두 개면 반씩, 세 개면 두 개 + 한 줄) */
+.settings-wood .modal-footer button:not(.bare),.wood-frame .modal-footer button:not(.bare){flex:1 1 40%}
 .settings-wood button:not(.bare),.wood-frame .modal-footer button:not(.bare){min-height:56px;min-width:0;padding:9px 12px;border:12px solid transparent;
  border-image:url('assets/presentation/settings/blue-key.webp') 170 175 170 175 fill / 12px 10px / 4px 0 stretch;
  background:none;color:#f2eee4;font:600 14px/1.3 var(--ui);white-space:normal;
@@ -3958,8 +3994,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:url('assets/presentation/settings/supply-backdrop.webp') right bottom / 100% auto no-repeat;opacity:.22}
 .settings-group{position:relative;display:grid;gap:14px;padding:0 0 22px}
 .settings-group+.settings-group{padding-top:22px;box-shadow:inset 0 1px 0 #97612e}
-.settings-group+.settings-group::before{content:"";position:absolute;top:-3px;left:calc(50% - 3px);
- width:6px;height:6px;background:#ad7d42;transform:rotate(45deg);pointer-events:none}
 .settings-wood .settings-group h3{margin:0;font:500 21px/1.3 var(--f-plate);color:#ffe8b7;text-shadow:0 2px 0 #100905}
 .settings-group p{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
 .settings-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -4400,3 +4434,22 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .fg-nums span:last-child{transform:translateX(-100%)}
 .fatigue-bands p{opacity:.55}
 .fatigue-bands p.now{opacity:1;color:#f2e7cd}
+/* 밤 요약: 전체 건너뛰기 뒤 안 읽은 귀환을 한 명씩. 평평한 불투명 패널, 결과 낱말만 톤 색 */
+.p-night .recap{background:#0c0906;padding:12px 12px 4px;box-shadow:inset 0 2px 0 #00000080}
+.p-night .recap h3{margin:0 0 4px;font:600 15px/1.3 var(--ui);color:#e8e1d0}
+.p-night .recap ul{list-style:none;margin:0;padding:0}
+.p-night .recap li{display:flex;align-items:center;gap:12px;padding:13px 0;box-shadow:inset 0 1px 0 #ffffff12}
+.p-night .recap li:first-child{box-shadow:none}
+.p-night .recap .recap-face{flex:none;width:60px;height:60px;object-fit:contain}
+.p-night .recap .rb{min-width:0;flex:1}
+.p-night .recap p{margin:0}
+.p-night .recap .rt{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.p-night .recap .t-gone{--rt-ink:#cfd3dd}
+.p-night .recap .recap-face.gone{filter:grayscale(1) brightness(.8)}
+.p-night .recap .rv{font:600 15px/1.3 var(--ui);color:var(--rt-ink,#addfb4)}
+.p-night .recap .rn{font:600 15px/1.3 var(--ui);color:#e8e1d0}
+.p-night .recap .rt i{font:400 12px/1 var(--ui);font-style:normal;color:#8f94a6}
+.p-night .recap .rc{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:4px;font:600 13px/1.4 var(--ui);color:#e8e1d0}
+.p-night .recap .rc i{font:400 13px/1.4 var(--ui);font-style:normal;color:#8f94a6}
+.p-night .recap+.recap{padding-top:0}.p-night .recap+.recap h3{display:none}.p-night .recap:not(:last-child){padding-bottom:0}
+@media(min-width:1024px){.p-night .recap-wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:16px;width:min(1240px,calc(100vw - 32px));position:relative;left:50%;translate:-50% 0}.p-night .recap,.p-night .recap+.recap,.p-night .recap:not(:last-child){width:400px;box-sizing:border-box;padding:12px 12px 4px}.p-night .recap+.recap h3{display:block}}

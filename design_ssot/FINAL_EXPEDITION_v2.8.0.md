@@ -3,7 +3,6 @@
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
 DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE / NON-NEGOTIABLE
@@ -44,7 +43,7 @@ FINAL_EXPEDITION receives that Boss state as input and performs the existing Fin
 On D25, before ordinary D25 management decisions that can use the information:
 
 1. select exactly two distinct authoritative Dungeon Families using the existing seeded/fixed Final selection principle
-2. read each selected Family's authoritative T2 Hazard keys from `DUNGEON_HAZARD_v2.8.0.md`
+2. read each selected Family's authoritative T2 Hazard keys from `DUNGEON_HAZARD_v2.13.19.md`
 3. merge those Hazard keys into the Final Hazard Pool without inventing a new Family table
 4. persist the exact Family Pair and Final Hazard Pool
 5. reveal that exact Pair/Hazard information to the Player
@@ -189,7 +188,7 @@ For each selected participant:
 ```
 
 Exact ordinary SALE handling -> `SALE_v2.8.0.md`.
-Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.8.0.md`.
+Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.13.19.md`.
 
 Final-specific override:
 - exactly 2 Item slots per participant
@@ -221,7 +220,7 @@ After party commitment, show exactly one party-wide qualitative forecast:
 토벌 전망 · {우세|접전|불리}
 ```
 
-Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
+Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 The forecast:
 - reads the entire committed party, whether it contains 1, 2 or 3 participants;
@@ -275,7 +274,7 @@ The D30 ORDER sheet never offers these, on its first sheet or after a Reroll: D3
 Final Bag. Same explicit no-effect exclusion D30 Store Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
 
 Player-facing copy must not use the internal term `Final`.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 Boss-caused visible Item changes must use the same current Final truth that resolution will use.
 This applies to both the shelf summary and the focused Item preview; they may not contradict each other.
@@ -292,7 +291,7 @@ With no purchase/refusal roll, a valid affordable transfer succeeds deterministi
 Ordinary SALE refusal dialogue / customer chatter does not appear in Final preparation.
 
 If Wallet is insufficient, block the transfer and show the system reason with exact required and owned
-Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
+Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 ### Result
 
@@ -385,7 +384,7 @@ Day = 30
 Tier = T2
 ```
 
-Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
+Exact threat ownership -> `DUNGEON_HAZARD_v2.13.19.md`.
 No separate Final-only Hazard defense table.
 No standalone `scale=4.6` path is used in Final resolution. Ordinary Gate Hazard Threat is unchanged.
 
@@ -484,11 +483,11 @@ effective Boss Power exact numeric value -> `BOSS_v2.8.0.md`.
 
 Display order (H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a clear, faint and
 crooked for a failure, never one per member and never the NIGHT death tape - and the existing result sentence follows it.
-It changes no result, wording or settlement. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+It changes no result, wording or settlement. Timing -> UI_UX_v2.13.17.md §FINAL RESULT — SEAL STAMP.
 
 Before the ending (H7) the resolved Final is played out once as a card fight - each member is handed what they carried,
 each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap skips it; it decides nothing.
--> UI_UX_v2.8.0.md §FINAL — CLASH SCENE.
+-> UI_UX_v2.13.17.md §FINAL — CLASH SCENE.
 
 ## FINAL INSURANCE VALUE — EXACT
 
@@ -609,7 +608,7 @@ PASS:
 
 ### FINAL-Q71 — HAZARD THREAT SOURCE
 PASS:
-- each Final Hazard uses fixed Final threat 28 and ordinary defense/gap truth from `DUNGEON_HAZARD_v2.8.0.md`
+- each Final Hazard uses fixed Final threat 28 and ordinary defense/gap truth from `DUNGEON_HAZARD_v2.13.19.md`
 - no standalone `scale=4.6` Final path exists
 
 ### FINAL-Q72 — MEAN GAP PENALTY
@@ -726,10 +725,10 @@ FINAL_EXPEDITION이 소유하지 않음:
 ## RELATED
 
 Timeline/save -> `CORE_RUN_v2.8.0.md`
-Hazard truth -> `DUNGEON_HAZARD_v2.8.0.md`
+Hazard truth -> `DUNGEON_HAZARD_v2.13.19.md`
 Item/Insurance -> `ITEM_v2.8.0.md`
 Boss -> `BOSS_v2.8.0.md`
-Relic D30 window -> `RELIC_v2.8.0.md`
+Relic D30 window -> `RELIC_v2.13.19.md`
 Sale handling -> `SALE_v2.8.0.md`
-Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.8.0.md`
-UI -> `UI_UX_v2.8.0.md`
+Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.13.19.md`
+UI -> `UI_UX_v2.13.17.md`

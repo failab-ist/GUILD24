@@ -56,6 +56,9 @@ and this table is their commit record.
 | v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15, 정가 refuses less, operating cost 200 / +10, visit Wallet floor back to 30, failure Death CombatDeficit × 0.50 | (the User sets it) |
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
+| v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
+| v2.13.19 | 2026-10-21 | RESULT-PROOF no longer credits an Item whose only role was filling the 2nd Bag slot (만반의 준비); 바가지 소지금 보너스 · 단골도 -8 · 상한 90% without a version bump (User 2026-10-21) | (the User sets it) |
+| v2.13.18 | 2026-10-21 | Decorations: 알뜰 금고 +300 → +100G, 구급품 진열장 투력 +5 → +3%, 명예 모험가 액자 above 일반 80 → 50%, and version bump in one PR | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -64,6 +67,71 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.19 — Night result: no Item credit for 만반의 준비 (User 2026-10-21)
+
+The Night line 「{Item} 덕분에 살아 돌아왔다」 named an Item that did nothing at the Gate (a 축성 손전등 on 북부 설원 폐허 II),
+because the proof's shadow Bag lost 만반의 준비 whenever any Item was removed. Shadow Bags now keep the real Bag's 만반의 준비 standing
+(DUNGEON_HAZARD §RESULT-PROOF), so only an Item's own effect is credited; 만반의 준비 keeps its own line. Outcomes and rolls are unchanged.
+
+### v2.13.19 addendum — 바가지 reads the customer's purse (User 2026-10-21, same version: 「버전 그대로」)
+
+The User wants players to learn that 정가 alone runs dry and 바가지 has to earn its share, without 바가지 ever being easier than
+정가 for any customer (「돈많다고 정가보다 쉬워지거나 비등하면 안될듯」).
+
+- ECONOMY_ORDER §PURCHASE INTENT: 바가지 takes 정가's affordability bonus, 0.50 × max(0, 0.36 − judged price ÷ Wallet), on its own
+  1.5x judged price; 단골도 keeps one rule for every price, +0.002 per point (「단골도는 기준 똑같이」). 바가지's final chance is
+  capped at 0.90, under 정가's 0.92, so a 단골 with a full purse buying a direct Counter cannot accept it more readily than 정가.
+- NPC_TRAIT §ORDINARY PURCHASE LOYALTY: a successful 바가지 costs 단골도 −8 (was −4); a refused 바가지 stays −2. Help copy
+  (COPY_AUDIT §8-3 · §8-4) follows the number.
+- Measurement (investor bot, fresh 1000 + trajectories 200 × 10, copy of main cdd2adf, cap not yet added; the bot does not
+  overcharge, so the cap changes nothing for it): fresh D30 54 → 56 Runs, clears 19 → 19, deaths / Run 6.71 → 6.71; every
+  Decoration route within ±5 Runs. 바가지 stayed 0.0% of the bot's D1~10 sales even with an overcharge-leaning bot, so the
+  numbers show that 정가 play is not hurt, not how much a person gains. By formula (Wallet 1500G, 단골도 0 / 51 / 100), 바가지
+  chance and expected revenue against 정가: an unrelated Item 52 / 62 / 72% (0.93 / 1.01 / 1.17x), a Stat-related Item 62~68 /
+  72~78 / 82~88% (1.0~1.1 / 1.2~1.3 / 1.3~1.4x), a direct Counter 74 / 85 / 90% (1.23 / 1.38 / 1.47x); a poor customer (200G)
+  37~54% (0.73~0.98x). 정가 is 83~92% in the same cases. A refusal closes the Item for that customer. Logs: `reports/v2100-measure/gouge-20261021/`.
+
+
+### v2.13.19 addendum — save keeps the order and sale trace (User 2026-10-21, same version)
+
+The User's saves said how much was spent and how many rerolls, but not what the sheet offered, what was bought or at which price mode, so a
+person's rerolls and prices could not be compared with the bot's. Each Day's ledger now carries `trace` (every sheet shown, every order, every
+sale and refusal), and so `reportHistory[].trace` in the save, about 600 bytes a Day. Reads only: outcomes and roll order are unchanged
+(40 investor Runs hash identically with the trace removed). `tools/save-check.cjs` §8 reads it.
+
+## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
+
+The economy route cleared first far ahead of the others; the User asked for the economy Decorations reviewed as a whole (「경제도 전체적으로 재검토」).
+
+- META 알뜰 금고: the Day's first two customers +300G → +100G Wallet each (User 2026-10-21: 「100골드로 가고」). The economy
+  route cleared first far ahead of the others. Trajectories 200 × 10 on main deb36cf, first clear within 10 Runs at 300 / 150 / 100G:
+  economy 71 / 63 / 60%, best 50 / 56 / 51%, survival · operation · none 40 · 25 · 10% unchanged; economy cash / Day 55 / 50 / 44G,
+  deaths / Run 7.3 in all three. Fresh Runs wear no Decoration and are unchanged. Measurement: `reports/v2100-measure/thrift-safe-20261021/`.
+- META 구급품 진열장: 만반의 준비 투력 × 1.05 → × 1.03 (User 2026-10-21: 「진열장 3퍼는 일단 넣는걸로」); Death × 0.60 stays.
+  A third run of the User's (save mvhh3bss, only this Decoration) reached D29, and the +5% turned about five lost D1~10
+  expeditions into wins. With 금고 100G, trajectories 200 × 10, first clear within 10 Runs +5 → +3%: survival 40 → 32%,
+  best 51 → 50%, economy · operation · none 60 · 25 · 10% unchanged; survival first D30 74 → 62%. Candidate measured and kept
+  out: 원정 지원금 간판 50 → 25% on top (economy 60 → 57%, best 50 → 45%, D25 balance on the economy route 2866 → 2844G).
+  Measurement: `reports/v2100-measure/aid-cabinet-20261021/`.
+- META 명예 모험가 액자: a new adventurer above 일반 80 → 50%, weights [20, 33, 29, 13, 5] → [50, 30, 13, 5.5, 1.5]
+  (User 2026-10-21: 「50 넣고」; no frame stays [60, 27, 10, 2.5, 0.5] = 40%). The frame, not the money, set the economy
+  route apart: its boss party's customer grade was 1.84 to survival's 1.02. With 진열장 +3%, trajectories 200 × 10, economy
+  80 / 55 / 50%: first clear within 10 Runs 60 / 48 / 42%, first D30 72 / 64 / 65% (survival 62%), clear once at D30
+  70 / 62 / 53%, boss-party grade 1.84 / 1.40 / 1.34; sales / Day 1001 / 981 / 977G stay above survival's 780G; best first
+  clear 50 → 43%. Measurement: `reports/v2100-measure/honor-frame-20261021/`.
+
+## v2.13.17 — Daily Event chance 30%, one name for the unattributed accident (User 2026-10-21)
+
+Measurement: `reports/v2100-measure/event-30-20261021/`.
+
+- EVENT §발생 확률: `dailyEventChance` 40% → 30% (about 6.3 Events by DAY 30 instead of 8.4; Runs with 10 or more
+  Events 31% → 7%). The User found Events too frequent: their saves met 13 and 11 by DAY 30. 소문 수집 게시판 stays 100%.
+  Investor fresh 1000 (main e7f71d7): D1~7 success 52.0 → 52.2%, median end day 15 → 15, D30 5.1 → 6.3%, clear 1.7 → 2.6%,
+  deaths / Run 7.40 → 7.31, cash / Day 21 → 21G. Trajectories 200 × 10, first clear within 10 Runs: none 14 → 10%, economy
+  68 → 71%, survival 52 → 40%, operation 26 → 25%, best 61 → 50%; first DAY 20 on the 3rd Run → 3rd~4th.
+- COPY: the first-accident coach line calls the accident with no Hazard behind it 「예상치 못한 사고」, the same name the
+  NIGHT Outcome sentence uses (was 「운 나쁜 사고」).
 
 ## v2.13.16 — 승천 skeleton, with the first-week Gate ease of the same release (User 2026-10-19)
 
@@ -480,7 +548,7 @@ Minor version: balance, coaching, sound and night-result work since v2.11.1. Det
 
 ## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
-- **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
+- **GLOSSARY_v2.13.17.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
   set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final,
   `발주 후보 교환` / `점포지원 후보 교환` (the bare `후보 교환` is retired), `요구 전력`, `상품` = the goods and `보급` = handing goods over, `이번 점포의 장식`.
 - **마왕의 능력 = 「마왕 권능」** (User 2026-10-04): 「특성」은 모험가의 개성만 가리킨다. The forecast line reads `마왕의 권능`. The 마왕 report, 도감 탭 and coach

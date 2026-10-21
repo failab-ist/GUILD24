@@ -284,12 +284,12 @@ test('the contradictions found in visual QA stay fixed',()=>{
  const injuredBase = {...base, outcome:'부상', combatWon:false, injury:1};
  const p1 = P.nightChanges(injuredBase, {traits:[]}).find(c=>c.label==='남은 부상')?.value;
  /* SA-Q03: the Player-facing Stat is 강인함, never 생존, and the pair reads 투력 -> 강인함. */
- assert.equal(p1, '투력 -15% · 강인함 -20%', 'base injury penalty');
+ assert.equal(p1, '투력 -15%, 강인함 -20%', 'base injury penalty');
  const p2 = P.nightChanges(injuredBase, {traits:['grit']}).find(c=>c.label==='남은 부상')?.value;
- assert.equal(p2, '투력 +20% · 강인함 -20%', 'grit replaces combat penalty');
+ assert.equal(p2, '투력 +20%, 강인함 -20%', 'grit replaces combat penalty');
  /* 야전 들것 sets the penalty prepare() applies, so the card prints that figure (User 2026-10-01 review) */
  const p3 = P.nightChanges(injuredBase, {traits:[]}, ['fieldStretcher']).find(c=>c.label==='남은 부상')?.value;
- assert.equal(p3, '투력 -'+Math.round(D.relicParams.fieldStretcher.injuredCombatPenalty*100)+'% · 강인함 -20%', 'the stretcher figure, not the base 15%');
+ assert.equal(p3, '투력 -'+Math.round(D.relicParams.fieldStretcher.injuredCombatPenalty*100)+'%, 강인함 -20%', 'the stretcher figure, not the base 15%');
  assert.equal(Dungeon.injuryPenaltyFor(['fieldStretcher']), D.relicParams.fieldStretcher.injuredCombatPenalty, 'one owner for the figure');
  // a hazard event with no carried item is not attributed to anything
  const bare={...base,outcome:'성공',combatWon:true,xp:20,loot:30,
@@ -697,6 +697,20 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
    escape-succeeded threshold (.11, v2.9.1 balance - was .13) and the escape-failed one (.36,
    v2.9.1 balance - was .42) so it never itself decides the case - only the escape chance the
    departure snapshot produces does). */
+test('RESULT-PROOF: an Item is never credited for the 만반의 준비 its Bag slot supplied (v2.13.19)',()=>{
+ const g=new Game();g.autosave=false;g.start('result-proof-prepared-slot');
+ const gate=g.makeDungeon('snow',2);
+ const mk=pack=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack,injury:0,fatigue:0,alive:true,recovery:0,level:2,xp:0}));
+ let onlyPrepared=0,credited=0;
+ for(let i=0;i<600;i++){
+  const r=Dungeon.resolve(mk(['holylight','choco']),{...gate,day:6},new RNG('slot'+i),[]);
+  assert.ok(!r.heroProof?.outcome?.items?.includes('holylight'),'축성 손전등 has no effect on 북부 설원 폐허, so it is never named');
+  if(r.heroProof?.outcome?.items?.includes('choco'))credited++;
+  if(r.events?.some(e=>e.id==='prepared')&&!r.heroProof?.outcome)onlyPrepared++;
+ }
+ assert.ok(credited>0,'초코바 still earns its own credit');
+ assert.ok(onlyPrepared>0,'a 만반의 준비 save stands alone, with no Item credit');
+});
 test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expedition Growth',()=>{
  /* If the shadow used the returned (post-growth) NPC instead of a frozen pre-resolution
     snapshot, this proof would silently vanish once growth pushed mobility high enough that
@@ -867,7 +881,7 @@ test('RESULT-PROOF: the counterfactual proof functions carry no RNG draw / resee
     no way to draw one. No production `skipProof` flag and no test-only gameplay behavior are
     introduced - this reads dist/systems/dungeon.js as text and asserts on it. */
  const src=read('dist/systems/dungeon.js');
- const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){');
+ const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation,keepPrepared){');
  const end=src.indexOf('function resolve(n,d,r,facilities=[],run,assist=0){');
  assert.ok(start>=0&&end>start,
   'sanity: both region boundaries (shadowOutcome start, resolve start) are found in Source, in order');

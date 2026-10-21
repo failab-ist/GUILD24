@@ -317,7 +317,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,300,'counter: the first two customers of the Day +300G each (User 2026-10-19)');
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,100,'counter: the first two customers of the Day +100G each (User 2026-10-21)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
  assert.equal(DATA.balance.wallVisitorChance,.5,'길드 추천 매대 adds a visitor at 50% in the shared Morning roll (User 2026-10-18)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
@@ -339,7 +339,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 일반 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[20,33,29,13,5],'일반 60% -> 20%, so above 일반 40% -> 80% (User 2026-10-16)');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[50,30,13,5.5,1.5],'일반 60% -> 50%, so above 일반 40% -> 50% (User 2026-10-21, was 80%)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -
@@ -439,17 +439,18 @@ test('COPY §9 (v2.9.11): the Rare Reference roll is gone, its one draw is kept'
  assert.ok(!/EASTER|easter/.test(add),'and reads nothing of the removed identities');
 });
 
-/* ECONOMY_ORDER §PURCHASE INTENT. The judged price is 정가's mechanism and only 정가's: the
-   threshold has to reach the decision, and 할인 / 바가지 have to decide exactly as they did
-   before that wiring existed. Both halves are asserted, because the first one alone is what
+/* ECONOMY_ORDER §PURCHASE INTENT. The judged price is 정가's mechanism (and, since User 2026-10-21,
+   바가지's, on its own 1.5x judged price): the threshold has to reach the decision, and 할인 has to
+   decide exactly as it did before that wiring existed. Both halves are asserted, because the first one alone is what
    made the term leak into the other two modes. */
-test('정가 threshold reaches the decision, and 할인/바가지 are untouched by it',()=>{
+test('정가 threshold reaches the decision, and 할인 is untouched by it',()=>{
  const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;
  const g=fresh();g.open();const n=g.current();n.money=400;n.traits=[];
  const rule=DATA.pricing.full;
  assert.ok(rule.intentWeight>0&&rule.intentPivot>0,'정가 declares a weight for the judged price');
- for(const mode of ['half','overcharge'])
-  assert.ok(!DATA.pricing[mode].intentWeight,mode+' declares none');
+ assert.ok(!DATA.pricing.half.intentWeight,'half declares none');
+ assert.equal(DATA.pricing.overcharge.intentPivot,rule.intentPivot,'바가지 shares 정가 pivot');
+ assert.equal(DATA.pricing.overcharge.intentWeight,rule.intentWeight,'and its weight');
 
  /* Turning 정가's weight off is exactly the pre-wiring decision, so it is the control. */
  const off=(fn)=>{const w=rule.intentWeight;rule.intentWeight=0;try{return fn();}finally{rule.intentWeight=w;}};
@@ -458,9 +459,8 @@ test('정가 threshold reaches the decision, and 할인/바가지 are untouched 
  const gate=g.gateFor(n),floored=it=>Relics.relatedPrep(it,gate.hazards);
  let fullMoved=0,movable=0;
  for(const it of DATA.items){
-  for(const mode of ['half','overcharge'])
-   assert.deepEqual(g.interest(n,it,mode),off(()=>g.interest(n,it,mode)),
-    mode+' decides the same as before the judged price reached chance');
+  assert.deepEqual(g.interest(n,it,'half'),off(()=>g.interest(n,it,'half')),
+   'half decides the same as before the judged price reached chance');
   if(floored(it)){const q=g.interest(n,it,'full'),b=DATA.balance;const was=b.counterIntentBonus;b.counterIntentBonus=0;let base;try{base=g.interest(n,it,'full').chance/DATA.pricing.full.finalScale;}finally{b.counterIntentBonus=was;}
    assert.ok(Math.abs(q.chance-(q.debit>n.money?0:Math.min(.97,base+was)*DATA.pricing.full.finalScale))<1e-9,it.id+' adds the 관련 준비 bonus to its chance (x final scale at 정가) when affordable');continue;}
   movable++;if(g.interest(n,it,'full').chance!==off(()=>g.interest(n,it,'full')).chance)fullMoved++;
@@ -530,6 +530,27 @@ test('the 정가 burden term is a bonus only, and never a penalty',()=>{
 DATA.pricing.full.finalFloor=ff;
 });
 
+/* ECONOMY_ORDER §PURCHASE INTENT (User 2026-10-21): 바가지 gains the same bonus, weight x (pivot - burden),
+   with burden judged on its 1.5x price; floored at zero, never above 정가 for the same customer and Item. */
+test('바가지 burden bonus: same formula on the 1.5x price, never a penalty, never above 정가',()=>{
+ const g=fresh();g.open();const n=g.current();n.traits=[];n.loyalty=0;
+ const rule=DATA.pricing.overcharge;
+ const parts=(x,money)=>{n.money=money;const on=g.interest(n,x,'overcharge').chance;
+  const w=rule.intentWeight;rule.intentWeight=0;const off=g.interest(n,x,'overcharge').chance;rule.intentWeight=w;
+  return {on,off,burden:Math.round(x.sell*rule.intentMult)/Math.max(1,money)};};
+ const it=DATA.itemBy.rice,light=parts(it,4000);
+ assert.ok(light.burden<rule.intentPivot,'the light case is under the pivot');
+ if(light.off>.08&&light.on<.97)assert.ok(Math.abs(light.on-light.off-.5*(.36-light.burden))<1e-9,'gains weight x (pivot - burden)');
+ for(const money of [50,120,300,700,1500,9000])
+  for(const x of DATA.items){
+   const p=parts(x,money);
+   assert.ok(p.on>=p.off,x.id+' at '+money+'G: the burden term lowered 바가지 acceptance');
+   for(const loyalty of [0,51,100]){n.loyalty=loyalty;n.money=money;
+    assert.ok(g.interest(n,x,'overcharge').chance<=g.interest(n,x,'full').chance+1e-9,x.id+' at '+money+'G, 단골도 '+loyalty+': 바가지 never beats 정가');}
+   n.loyalty=0;
+  }
+});
+
 test('the 정가 burden bonus changes nothing else about acceptance',()=>{
  const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;
  const g=fresh();g.open();const n=g.current();n.traits=[];
@@ -538,10 +559,10 @@ test('the 정가 burden bonus changes nothing else about acceptance',()=>{
  n.money=1;
  for(const mode of ['half','full','overcharge'])
   assert.equal(g.interest(n,it,mode).chance,0,mode+': an unaffordable debit is still refused outright');
- // 할인 and 바가지 are decided exactly as before: they declare no weight, so no term exists
+ // 할인 is decided exactly as before: it declares no weight, so no term exists
  n.money=4000;
  const rule=DATA.pricing.full;
- for(const mode of ['half','overcharge']){
+ for(const mode of ['half']){
   assert.ok(!DATA.pricing[mode].intentWeight,mode+' declares no weight');
   const before=g.interest(n,it,mode);
   const p=DATA.pricing[mode].intentPivot;DATA.pricing[mode].intentPivot=.9;
@@ -857,7 +878,7 @@ test('a refused 바가지 closes the SKU and costs Loyalty 2; a sold one costs 4
   assert.ok(!n.refused.includes(st.item+':half'),'a 정가 refusal still leaves 50% open');assert.equal(n.loyalty,30,'and moves no Loyalty');}
  {const {g,n}=visit('over-sold');const st=g.run.inventory[0];
   const next=g.rng.next;g.rng.next=()=>0;assert.equal(g.sell(st.id,'overcharge'),true);g.rng.next=next;
-  assert.equal(n.loyalty,26,'a sold 바가지 costs Loyalty 4');}
+  assert.equal(n.loyalty,22,'a sold 바가지 costs Loyalty 8');}
 });
 
 test('DUNGEON_HAZARD §Environment incident probability: only Tier II eases, through DAY 15, in two steps',()=>{

@@ -2,8 +2,7 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.13.15
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
+DOC_VERSION=2.13.19
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -98,7 +97,7 @@ Stat order:
     = Job Growth × that NPC's internal Potential
 
 Potential is an internal growth input, never exposed as a relationship reward (→ §PLAYER-FACING GROWTH TRUTH).
-Job Mastery does not alter this table; current Job Mastery effect -> META_v2.8.0.md.
+Job Mastery does not alter this table; current Job Mastery effect -> META_v2.13.18.md.
 
 ### Job contribution — internal comparison
 
@@ -122,7 +121,7 @@ At Level L, contribution = Lv1 contribution + (L − 1) × per-Level contributio
 
 ## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
 
-Meta progress source -> META_v2.8.0.md
+Meta progress source -> META_v2.13.18.md
 
 - Job × Boss clear matrix, Mastery count and unlock thresholds are owned by META
 - before unlock, 도적/광전사 are not eligible for normal NPC Job generation
@@ -152,7 +151,7 @@ Each playable Job should have >=2 Families where natural stats provide a meaning
 
 Forbidden: one Job required for one Family; one Job naturally solves all 5 Families.
 
-Dungeon affinity emerges from Stats + Items + visible Traits. Authoritative -> DUNGEON_HAZARD_v2.8.0.md
+Dungeon affinity emerges from Stats + Items + visible Traits. Authoritative -> DUNGEON_HAZARD_v2.13.19.md
 
 ## JOB × ITEM
 
@@ -300,7 +299,7 @@ Trait logic uses current authoritative systems only. Forbidden active Trait reso
 - `undead` as Hazard
 
 Rules:
-- `long` is not a Hazard and no Gate requires Supply; Food/Drink Supply only reduces Fatigue (`DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE).
+- `long` is not a Hazard and no Gate requires Supply; Food/Drink Supply only reduces Fatigue (`DUNGEON_HAZARD_v2.13.19.md` §SUPPLY -> FATIGUE).
 - `thirst` is not a authoritative Condition/penalty system.
 - `wet` is flavor only.
 - `armor` and `undead` are not authoritative Hazards.
@@ -368,7 +367,7 @@ Entry format: `N. **name** — internalDirection — effects`.
 36. **내열성** (heatproof) — POSITIVE — [benefit] fire 대응 +6
 37. **약시** (nearsight) — NEGATIVE — [cost] dark 대응 -4, whiteout 대응 -4
 
-Hazard Trait values are one scale for every Hazard (no Stat-group factor, `DUNGEON_HAZARD_v2.8.0.md` §HAZARD THREAT): 6 for a
+Hazard Trait values are one scale for every Hazard (no Stat-group factor, `DUNGEON_HAZARD_v2.13.19.md` §HAZARD THREAT): 6 for a
 one-Hazard Trait, 4 per Hazard for a two-Hazard Trait.
 
 ### HONEST
@@ -418,7 +417,7 @@ Result-fatigue modifiers:
 They apply to `성공` / `대성공` / `퇴각` / `부상`.
 They do not apply to `중상` / `사망`: for Severe Injury / Death, final expedition-result Fatigue gain is exactly 0 regardless of those Trait modifiers.
 
-Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply -> Fatigue recovery order -> `DUNGEON_HAZARD_v2.8.0.md`.
+Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply -> Fatigue recovery order -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 ## NPC RARITY
 
@@ -482,7 +481,7 @@ investment → survival → level/growth → loot → wallet → loyalty → rev
 Player should feel: `얘 살려놓길 잘했다.`
 
 Returning NPC presentation should make relevant history/change easy to notice without requiring the Player to
-reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.8.0.md
+reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.13.17.md
 
 Ignoring weak NPCs is allowed, with opportunity cost through lost future customer/roster value.
 No separate punishment system is required solely to force attachment.
@@ -549,7 +548,7 @@ When an NPC departs while already `injury=1`:
 - these are outcome-risk modifiers, not hidden changes to the four Core Stats
 - they apply only while the NPC begins the expedition already injured
 
-Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.8.0.md`.
+Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 ### Severe Injury
 
@@ -621,7 +620,7 @@ Rules:
 - no unlimited timeline is added by this rule
 - Product XP / Favorite Meter / Familiarity Bonus are not created
 
-Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.8.0.md`
+Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md`
 Result proof -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## WALLET / LOYALTY / REVISIT
@@ -629,7 +628,7 @@ Result proof -> `NIGHT_CLOSING_v2.8.0.md`
 These systems support long-term customer value: a saved/invested NPC becomes more economically valuable over
 time, loyalty increases revisit value, wallet growth creates future premium-sale opportunities.
 
-Exact Wallet / purchase formulas -> ECONOMY_ORDER_v2.8.0.md
+Exact Wallet / purchase formulas -> ECONOMY_ORDER_v2.13.19.md
 
 Relics may modify these systems, but Character identity remains owned by NPC/Trait system.
 
@@ -656,7 +655,7 @@ Base Loyalty change on a successful ordinary paid purchase, before any explicitl
 
     50% sale  -> +4
     100% sale -> +1
-    150% sale -> -4
+    150% sale -> -8 (-4 before v2.13.19, User 2026-10-21)
 
 A refusal grants no purchase Loyalty change, except a refused 150%, which costs 2 (§NPC-Q-v28-2B). Other visit/survival Loyalty changes are separate.
 
@@ -681,7 +680,7 @@ The ordinary hidden purchase-acceptance formula receives:
 
     +0.002 purchase chance per current Loyalty point
 
-Full purchase formula -> ECONOMY_ORDER_v2.8.0.md.
+Full purchase formula -> ECONOMY_ORDER_v2.13.19.md.
 
 ### Loyalty effect on revisit weighting — exact
 
@@ -705,7 +704,7 @@ The Player must be able to learn that Loyalty:
 Loyalty does not directly increase the four Core Stats.
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/tutorial placement -> UI_UX_v2.8.0.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.19.md.
 
 ## DEEP EXPEDITION NPC REWARD
 
@@ -778,7 +777,7 @@ PASS: No Job is mandatory for a Family and no Job solves all Families.
 
 ### NPC-Q-v28-7 — JOB BASE / GROWTH TABLE EXACT
 
-Expect exactly the six Job rows in NPC_TRAIT_v2.8.0.md.
+Expect exactly the six Job rows in NPC_TRAIT_v2.13.19.md.
 
 For a controlled NPC:
 - Lv1 Stats equal the Job row
@@ -1140,7 +1139,7 @@ EXPECT:
 ```
 
 PASS:
-- Retreat cures ordinary Injury only through `DUNGEON_HAZARD_v2.8.0.md` §RETREAT HEALING (its own chance, one draw)
+- Retreat cures ordinary Injury only through `DUNGEON_HAZARD_v2.13.19.md` §RETREAT HEALING (its own chance, one draw)
 - merely completing another expedition does not cure Injury
 - Severe/Death follow their own outcome/state paths
 - First Aid Aftercare may still override the persistent state after outcome resolution exactly as ITEM owns
@@ -1150,7 +1149,7 @@ PASS:
 SETUP: same NPC/Gate except departure Injury state.
 
 PASS:
-- `injury=1` departure activates the +10%p failure-conditioned Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.8.0.md`
+- `injury=1` departure activates the +10%p failure-conditioned Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.13.19.md`
 - the +10%p modifier is part of the single failure-conditioned Death-risk calculation and does not create a second Death roll
 - the modifier applies only because the NPC **began** that expedition injured
 - recovery during/after result cannot retroactively erase the risk state used for that expedition
@@ -1203,13 +1202,13 @@ For one successful ordinary paid purchase before explicit modifier effects:
 
     50% sale  -> Loyalty +4
     100% sale -> Loyalty +1
-    150% sale -> Loyalty -4
+    150% sale -> Loyalty -8
     150% refused -> Loyalty -2 (the only refusal that moves Loyalty)
 
 PASS:
 - a refusal does not apply the purchase Loyalty delta; a refused 150% applies -2
 - explicit Trait / Store Support modifiers apply only through their owned rules
-- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.8.0.md
+- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.19.md
 
 ### NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
 
@@ -1365,6 +1364,6 @@ FAIL if:
 ## RELATED
 
 Bag/transaction -> `SALE_v2.8.0.md`
-Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.8.0.md`
+Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.13.19.md`
 Item/Potion/Food/Aftercare -> `ITEM_v2.8.0.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`

@@ -24,8 +24,8 @@ function hazardNeed(k,d){return Math.ceil(G.Dungeon.hazardState(k,{},d).threat);
 function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+'\u00a0'+Math.round(1/r.coef)+'당\u00a0대응\u00a01\u00a0제공';}
 /* The short row's two parts (User 2026-09-25): the requirement line and the smaller conversion sub-line. */
 function hazardParts(k,d){return {need:'대응 '+hazardNeed(k,d)+' 필요',rate:hazardRate(k)};}
-function hazardSentence(k,d){return D.hazards[k]+' — 대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k)+' · '+D.hazards[k]+' 대응 상품이 막는다';}
-function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k);}
+function hazardSentence(k,d){return D.hazards[k]+': 대응 '+hazardNeed(k,d)+' 필요, '+hazardRate(k)+'. '+D.hazards[k]+' 대응 상품이 막는다';}
+function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요, '+hazardRate(k);}
 /* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);
    the Stat-grid pressure tag and the matching-effect emphasis read it; 투력 is never a pressed Stat. */
 function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];if(s)(m[s]=m[s]||[]).push(k);}return m;}
@@ -37,7 +37,7 @@ function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];i
    that leak. The player-visible '포션' identity is drawn elsewhere, off the same marker, as
    the item-kind badge, not as an effect row. */
 /* v2.9.0 (User 2026-09-24): the three numberless utility lines are compact - exact strings COPY_AUDIT §4-22 */
-const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)',duplicate:'다음 소모품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망·중상 → 무사 퇴각 1회'};
+const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)',duplicate:'다음 소모품 효과 2회 (1칸 사용, 중첩 불가)',revive:'사망·중상 → 무사 퇴각 1회'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e)){
@@ -59,7 +59,7 @@ function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e))
  return out;}
 function traitEffects(id){const t=D.traitBy[id];return rows(t.effects,t.tones);}
 function traits(n){return n.traits;}
-function traitText(id){const t=D.traitBy[id],parts=traitEffects(id).map(r=>r.label+' '+r.text);if(t.note)parts.push(t.note);return parts.join(' · ');}
+function traitText(id){const t=D.traitBy[id],parts=traitEffects(id).map(r=>r.label+' '+r.text);if(t.note)parts.push(t.note);return parts.join(', ');}
 function known(d,g){return d.hazards;}
 /* SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH. Preparation can move through four different
    channels, and a single flat list of before -> after makes every one of them look like a
@@ -218,7 +218,7 @@ function fatigueRows(r){
  // Older saves retain only the expedition chain; never invent missing daily causes.
  const rows=[{label:'출발',value:r.fatigueBeforeExpedition}];
  if(r.rawOutcomeFatigueGain)rows.push({label:r.outcome,delta:r.rawOutcomeFatigueGain});
- if(r.outcomeBufferUsed)rows.push({label:'음식·음료 · 원정 후',delta:-r.outcomeBufferUsed});
+ if(r.outcomeBufferUsed)rows.push({label:'원정 후 음식·음료',delta:-r.outcomeBufferUsed});
  const capped=r.finalFatigue-(r.fatigueBeforeExpedition+r.actualOutcomeFatigueGain);
  if(capped)rows.push({label:'피로 상한 40',delta:capped});
  return rows;
@@ -232,14 +232,14 @@ function nightChanges(r, npc, facilities=[]){const out=[];
    const n=npc;
    if(n){
     const combat=n.traits.includes('grit')?'+20%':'-'+Math.round(G.Dungeon.injuryPenaltyFor(facilities)*100)+'%';
-    out.push({kind:'down',group:'after',label:'남은 부상',value:'투력 '+combat+' · 강인함 -20%'});
+    out.push({kind:'down',group:'after',label:'남은 부상',value:'투력 '+combat+', 강인함 -20%'});
    }
   }
   if(r.finalFatigue!==undefined){
    /* NIGHT_CLOSING §FATIGUE RESULT / COPY_AUDIT §6-6: one settled value, daily causes on demand;
       band from 10 up, next-decision penalty from 10 up, thresholds owned by Dungeon. */
      const settled=r.settledFatigue??r.finalFatigue,band=G.Dungeon.fatigueBand(settled);
-     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=10?' · '+band.name:''),
+     out.push({kind:settled>r.beforeFatigue?'down':'up',group:'after',label:'귀환 후 피로',value:settled+(band.min>=10?' ('+band.name+')':''),
       detail:true});
      if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:band.name,extra:band.text});
   }
@@ -278,11 +278,11 @@ function supplyLines(r){const out=[];
   const effect=supplyEffect(ev,r);if(!effect)continue;
   const items=[...new Set((ev.items||[]).map(itemName).filter(Boolean))];
   if(!items.length)continue;                       /* nothing honest to attribute */
-  out.push({items,effect,text:items.join(' · ')+' → '+effect});}
+  out.push({items,effect,text:items.join(', ')+' → '+effect});}
  return out;}
 /* The same lines with the adventurer named, for Closing where the NPC is not on screen. */
 function supplyImpact(r){return supplyLines(r).map(l=>({...l,who:r.name,
- text:l.items.join(' · ')+' → '+r.name+'의 '+l.effect}));}
+ text:l.items.join(', ')+' → '+r.name+'의 '+l.effect}));}
 function modeLabel(mode){return D.pricing[mode]?.label||({normal:'정가(이전)',discount:'25% 할인(이전)',free:'무료 제공(이전)',supply:'최종 원정 보급'}[mode])||'이전 거래';}
 /* UI_UX §PLAYER STAT TERMINOLOGY - one display rule, shared by every stat the player reads.
    Growth adds `growth * potential`, so the stored value is fractional almost always; showing

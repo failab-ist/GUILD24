@@ -4,7 +4,7 @@
 
 브랜치 `codex/minor-ui-v2111`, 구현 기준 `a23a47be`. User가 마이너 UI와 마왕성 최종 화면을 컨펌했고, main 머지와 패치 버전 2.11.1을 승인했다(2026-10-05).
 
-승인된 단계별 코치와 개인별 환경 대응 UI는 구현했다. COPY_AUDIT_APPROVED_v2.8.0.md §14-9 / UI_UX_v2.8.0.md §FIRST-EVER FINAL EXPEDITION COACH가 현재 문구와 트리거를 소유한다. 개인별 수치는 finalPreRoll().preparations의 Hazard 결과를 읽으며, FINAL_EXPEDITION_v2.8.0.md §FINAL CALCULATION ORDER가 판정 경계다.
+승인된 단계별 코치와 개인별 환경 대응 UI는 구현했다. COPY_AUDIT_APPROVED_v2.13.18.md §14-9 / UI_UX_v2.13.17.md §FIRST-EVER FINAL EXPEDITION COACH가 현재 문구와 트리거를 소유한다. 개인별 수치는 finalPreRoll().preparations의 Hazard 결과를 읽으며, FINAL_EXPEDITION_v2.8.0.md §FINAL CALCULATION ORDER가 판정 경계다.
 
 전투 안내는 User가 직접 제안한 문구를 그대로 적용했다. 정확한 문구는 COPY_AUDIT §14-9에 있으며 기존 subjugation ID를 유지한다. '?'의 상세 설명은 그대로다.
 

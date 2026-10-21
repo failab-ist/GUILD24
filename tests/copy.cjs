@@ -51,7 +51,7 @@ const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3'
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
  'night.rescued':'19-7','night.grew':'19-8','night.savedDeathWin':'19-10','night.savedDeathRetreat':'19-11','night.savedDeathHurt':'19-12','night.savedSevereWin':'19-13','night.savedPrepared':'19-14','night.savedHurt':'19-15','night.savedRetreat':'19-16','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -66,7 +66,7 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
 /* COPY_WORLD_VOICE §DIALOGUE EXPOSURE — OCCASIONAL (User 2026-10-04): the `가끔` list under a §16-§18 pool is the set
    of its long lines that come up on 1 pick in 5; every other pick uses the pool's other lines. */
 const occasionalDoc=(()=>{const out={};let sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -88,7 +88,7 @@ test('COPY_AUDIT §17: every Trait arrival pool belongs to a Trait the build has
  for(const id of Object.keys(V.trait))assert.ok(cat.includes("['"+id+"','"),id+' is an active Trait');
 });
 test('COPY_AUDIT: the letter-suffixed section id parses without attributing to its parent',()=>{
- assert.deepEqual(approved['11-31'],['확보 완료 · {점포지원명}','보유 중']);
+ assert.deepEqual(approved['11-31'],['확보 완료: {점포지원명}','보유 중']);
 });
 
 /* COPY_AUDIT §25 / COPY_WORLD_VOICE §RARE REFERENCE NPC (User 2026-09-28, v2.9.11): the Rare Reference customers and their
@@ -125,7 +125,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const rendered=[...DATA.events.map(e=>e.description),...DATA.relics.map(r=>r.description),...DATA.decorations.map(d=>d.name+' — '+d.effect),
   Copy.loyalty.sale(),Copy.loyalty.coach()].join('\n');
  const missing=new Set();let checked=0,sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
   if((h=l.match(/^##\s+((\d+)-\d+[a-z]?)\./))){sec=h[1];mode=null;if(+h[2]>=16&&+h[2]<=20)sec=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -613,7 +613,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
 });
 
-/* COPY_AUDIT_APPROVED_v2.8.0 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
+/* COPY_AUDIT_APPROVED_v2.13.19 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
    text, so this is equality, not a pattern: a paraphrase, a dropped middot or a stale number is
    a FAIL here rather than something a looser assertion can absorb. Price and name are pinned in
    the same table because §11 renames two rows and RELIC_v2.8 re-prices two more, and a row that
@@ -680,7 +680,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   assert.ok(!all.includes(stale),'no Store Support row still says "'+stale+'"');
  /* §11-31: the acquired state reads as 확보/보유, not 설치 - 계약·인증·매뉴얼 are not installed. */
  const app=read('dist/ui/app.js');
- assert.ok(app.includes('확보 완료 · ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
+ assert.ok(app.includes('확보 완료: ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
  assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
  assert.ok(app.includes("poor?'골드 부족':price?'구매':'선택'"),'a free card is chosen (선택), a priced one bought (구매) - COPY_AUDIT §11-31b');
 });
@@ -690,13 +690,13 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
 test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decoration / Store Support / Loyalty copy follows the values',()=>{
  const EFFECTS={
   sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
-  honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 80% (기존 40%)',
-  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 300G씩 늘어난다',
+  honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 50% (기존 40%)',
+  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 100G씩 늘어난다',
   guildShelf:'매일 아침 50% 확률로 그날 손님이 1명 더 온다',
   trainingSign:'처음 찾아오는 모험가는 30% 확률로 레벨 +1로 온다',
   infirmaryPlaque:'부상당한 손님이 가게에 오면 25% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
-  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +5%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%) (마왕성 제외)',
+  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +3%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%) (마왕성 제외)',
   /* 운영형 (User 2026-10-04) */
   heroSign:'첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다',
   cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다 (최대 20%)',
@@ -709,9 +709,9 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  assert.ok(swap(DATA.decorationParams.thriftSafe,'firstWallet',300,()=>DATA.decorationBy.thriftSafe.effect).includes('300G씩'),'알뜰 금고 reads its wallet value');
  assert.ok(swap(DATA.relicParams.returnPoints,'loyaltyBonus',6,()=>DATA.relicBy.returnPoints.description).includes('단골도 +6'),'귀환 적립제 reads its Loyalty value');
  assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
- assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4·+1·-5.'),'the guide reads the 150% Loyalty');
- assert.equal(Copy.loyalty.sale(),'상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4·+1·-4.');
- assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -4로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
+ assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4, +1, -5.'),'the guide reads the 150% Loyalty');
+ assert.equal(Copy.loyalty.sale(),'상품 가격은 50%, 100%, 150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4, +1, -8.');
+ assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -8로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
  assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.');
 });
 

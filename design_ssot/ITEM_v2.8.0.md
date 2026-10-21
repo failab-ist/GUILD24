@@ -3,7 +3,6 @@
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
 DOC_VERSION=2.13.10
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -140,7 +139,7 @@ Rules:
 - Supply is NOT a Hazard Counter
 - no thirst/hunger subsystem; no Food+Drink pairing requirement
 - leftover Supply is not persisted and gives no extra expedition bonus
-- exact Supply -> Fatigue order and formulas -> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
+- exact Supply -> Fatigue order and formulas -> `DUNGEON_HAZARD_v2.13.19.md` §SUPPLY -> FATIGUE
 
 Fatigue-recovery contract: Food is the main recovery route; a Drink recovers 1~2; no Food recovers more than 6 except
 길드 특제 도시락 (Rare, 7) and 영웅 결전 도시락 (Epic, 9), so the worst single outcome gain (+9) is never erased by one
@@ -164,7 +163,7 @@ Fresh / Food-affinity / Potionbody modifiers use their owned composition rules f
 
 ## PRICE
 
-Canonical price modes: 50% / 100% / 150%. Full price/economy rules -> `ECONOMY_ORDER_v2.8.0.md`.
+Canonical price modes: 50% / 100% / 150%. Full price/economy rules -> `ECONOMY_ORDER_v2.13.19.md`.
 
 Balance considers buy cost, sale price, margin, NPC wallet burden, role, typical day, rarity, Relic/build interaction.
 
@@ -235,7 +234,7 @@ GLUTTONY's Final reduction, when applicable, occurs after the final Item-side po
 Food/Drink category-affinity or Fresh Relic effects do not automatically multiply Hazard Counter, Insurance,
 RiskReward penalty or unrelated special effects.
 
-Exact Trait modifiers -> `NPC_TRAIT_v2.8.0.md`. Exact Fresh Relic effects -> `RELIC_v2.8.0.md`.
+Exact Trait modifiers -> `NPC_TRAIT_v2.13.19.md`. Exact Fresh Relic effects -> `RELIC_v2.13.19.md`.
 
 ## HAZARD COVERAGE CONTRACT
 
@@ -256,20 +255,20 @@ Rules:
 - T3 must retain viable <=2 required-prep-slot routes
 - proper Main/Direct prep should feel reliable, especially T1/T2
 
-Canonical Dungeon behavior -> `DUNGEON_HAZARD_v2.8.0.md`.
+Canonical Dungeon behavior -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 ## HAZARD COUNTER BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
 
-Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동, 화염 -> 정신) -> `DUNGEON_HAZARD_v2.8.0.md`
+Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동, 화염 -> 정신) -> `DUNGEON_HAZARD_v2.13.19.md`
 
 ### STAT FOOD / DRINK LADDER
 
 Every Core Stat counts alike (Prepared Power .27 each, Hazard Defense ÷3), so a Stat Food / Drink carries one value per Rarity
 whatever Stat it raises: Drink (the Stat line, 피로 회복 2) Common 12 · Uncommon 17 · Epic 20 with 투력 +5; Food (the 피로 회복
 line) Common 6 · Uncommon 9 · Rare 12 · Epic 15 with 투력 +5. What tells two of them apart is the Stat's own role (강인함
-fewer incidents, 기동 more retreats on a lost fight, 정신 a lower failure Death chance - `DUNGEON_HAZARD_v2.8.0.md`), the
+fewer incidents, 기동 more retreats on a lost fight, 정신 a lower failure Death chance - `DUNGEON_HAZARD_v2.13.19.md`), the
 lunch line's 손님 소지금 획득 (간단 도시락 +10%, 길드 특제 도시락 +25%) and the Epic 투력.
 
 ### COUNTER LADDER
@@ -280,7 +279,7 @@ Hazards (속박 / 진창 / 어둠 / 화이트아웃) start at Tier 2. Per Hazard
 초반 대응 > 초반 하이브리드 on a Gate's first Hazard, and 중반 대응 > 후반 하이브리드 > 초반 하이브리드 on its second, so the
 hybrid never answers the Tier 1 Hazard better than the rung built for it. Each rung's role, read with the adventurer's own
 pressed-Stat share
-(`DUNGEON_HAZARD_v2.8.0.md` Hazard defense):
+(`DUNGEON_HAZARD_v2.13.19.md` Hazard defense):
 
 - 초반 대응 (Common, one Hazard): clears a Tier 1 Hazard on its own through the opening week (DAY 1~7); short of Tier 2
 - 초반 하이브리드 (Uncommon, both Hazards of a Gate): under 초반 대응 on the first Hazard, so an average adventurer only just
@@ -317,7 +316,7 @@ Counter Food Supply: 컵라면 3 · 집중 사탕 2 · 불룡볶음면 3. Counte
 | 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 12 | 방한 두건 냉기 10 · 화이트아웃 12 | 불룡볶음면 냉기 23 · 설원 고글 화이트아웃 28 | 백설 방한고글 18 · 18 |
 | 화염 골렘 광산 (화염) | 얼음컵 화염 12 | — | 쿨링 이온음료 화염 23 | 마그마 냉각장비 화염 18 · 투력 10 |
 
-The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT).
+The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.13.19.md` §COUNTER JUDGEMENT).
 
 Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog
 exception says otherwise; their cost is narrow coverage.
@@ -329,7 +328,7 @@ Matrix rule:
 - Main specialist remains the most reliable single-Hazard answer
 - Alternative routes must remain viable without becoming identical substitutes
 
-Hazard Threat/readiness -> `DUNGEON_HAZARD_v2.8.0.md`.
+Hazard Threat/readiness -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 ## ITEM INTERACTION
 
@@ -379,7 +378,7 @@ Insurance = 0
 - all Potion tiers use the ordinary Potion-family shelf-life behavior (rows -> §SHELF LIFE — EXACT); `중급 포션` is not non-expiring or tool-like
 - `최상급 포션` is the top-end pure raw-Power slot-efficiency option, not a Hazard specialist
 
-Potion Trait interaction -> `NPC_TRAIT_v2.8.0.md`.
+Potion Trait interaction -> `NPC_TRAIT_v2.13.19.md`.
 
 ## BANDAGE RETIREMENT / SPIRIT STAT ROUTE
 
@@ -462,7 +461,7 @@ Do not say current 소지금 +20% / +40%.
 ## EPIC LATE-RUN VALUE LAYER — EXACT
 
 There are 10 Epic preparation Items. They are not D20-hard-unlocked; their late-Run identity comes from the Day-band
-Rarity weights owned by `ECONOMY_ORDER_v2.8.0.md`.
+Rarity weights owned by `ECONOMY_ORDER_v2.13.19.md`.
 
 ```text
 5 Epic Field Gear
@@ -519,7 +518,7 @@ It lowers the resolved expedition Outcome one step, after the higher-priority em
 ```
 
 This is Item Aftercare, not natural recovery. It does not change the natural Severe-Injury recovery rule owned by
-`NPC_TRAIT_v2.8.0.md`. It has no hidden injury-risk percentage.
+`NPC_TRAIT_v2.13.19.md`. It has no hidden injury-risk percentage.
 
 ### 귀환석
 rarity=Rare
@@ -536,13 +535,13 @@ Rules:
 - retreat loot ≈ almost none
 - does not own Death -> Severe conversion
 - an expedition that ends in neither 성공 nor 대성공 (부상 / 중상 / 사망) rolls once more for a retreat
-- that roll's chance = the adventurer's own retreat chance (`DUNGEON_HAZARD_v2.8.0.md` escapeChance: 기동, Traits,
+- that roll's chance = the adventurer's own retreat chance (`DUNGEON_HAZARD_v2.13.19.md` escapeChance: 기동, Traits,
   Gate scale) + escapeBonus, clamped 0.15~0.94 as the retreat chance is
 - a hit makes the Outcome 퇴각
 - the stone adds nothing to the combat-failure retreat roll itself (that roll reads the Traits only)
 
 escapeBonus=+20%p
-player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.13.19.md` §4-22)
 
 Outcome-share evidence: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` (v2.9.10, Insurance).
 
@@ -561,7 +560,7 @@ Rules:
 - clearly above Return Stone in survival hierarchy: the remaining Death or Severe Injury is stopped outright, where 귀환석 only makes it less likely
 - a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
 - not Food/Drink; Fresh-category effect does not apply
-- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.13.19.md` §4-22)
 
 ### Insurance resolution order
 
@@ -680,7 +679,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
 - Insurance / Special: 구급키트 4, 귀환석 4, 세계수 생환부적 5, 황금 1+1 쿠폰 5
-- 대형 냉장고 extends Food/Drink exactly as `RELIC_v2.8.0.md` states; nothing else moves a shelf life
+- 대형 냉장고 extends Food/Drink exactly as `RELIC_v2.13.19.md` states; nothing else moves a shelf life
 
 | ID | Item | Category | Shelf |
 |---|---|---|---:|
@@ -794,7 +793,7 @@ Rules:
 - Fresh must have broad Food/Drink access across price/rarity and must not erase specialist FieldGear advantage
 - Rotation/low-cost play must remain viable through cheap useful SKUs and bulk ordering
 
-Build-filtered Relics must not depend on one single eligible SKU. Canonical Relic interaction -> `RELIC_v2.8.0.md`.
+Build-filtered Relics must not depend on one single eligible SKU. Canonical Relic interaction -> `RELIC_v2.13.19.md`.
 
 ## RARITY / UPGRADE
 
@@ -812,7 +811,7 @@ jobIdEffectModifier=NO
 jobIdPurchaseBias=NO
 jobIdCounterModifier=NO
 
-Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v2.8.0.md`.
+Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v2.13.19.md`.
 
 ## INFORMATION
 
@@ -848,7 +847,7 @@ Material hidden behavior=NO
 ## SALE / INVENTORY
 
 Inventory view, stacking, nearest-expiry consumption and the consumer-slot limit -> `SALE_v2.8.0.md` §INVENTORY VIEW;
-shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER).
+shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.13.17.md` §SALE — SHELF ORDER).
 
 ## BALANCE QA
 
@@ -1203,7 +1202,7 @@ PASS:
 PASS:
 - all 10 Epic preparation Items use the ordinary Epic pool
 - no per-Item `day>=20` hard eligibility gate exists for them
-- practical late-Run frequency comes only from current `ECONOMY_ORDER_v2.8.0.md` Day-band Rarity progression plus existing general eligibility rules
+- practical late-Run frequency comes only from current `ECONOMY_ORDER_v2.13.19.md` Day-band Rarity progression plus existing general eligibility rules
 
 ### ITEM INTERACTION / MODIFIER SCOPE
 
@@ -1411,11 +1410,11 @@ PASS:
 
 ## RELATED
 
-Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.8.0.md`
-Job / Trait multipliers -> `NPC_TRAIT_v2.8.0.md`
-Relic / build modifiers -> `RELIC_v2.8.0.md`
+Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.13.19.md`
+Job / Trait multipliers -> `NPC_TRAIT_v2.13.19.md`
+Relic / build modifiers -> `RELIC_v2.13.19.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
-Order / reroll / pricing / Rarity progression -> `ECONOMY_ORDER_v2.8.0.md`
+Order / reroll / pricing / Rarity progression -> `ECONOMY_ORDER_v2.13.19.md`
 Final usefulness -> `FINAL_EXPEDITION_v2.8.0.md`
-Meta unlock -> `META_v2.8.0.md`
+Meta unlock -> `META_v2.13.18.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`

@@ -3,7 +3,6 @@
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
 DOC_VERSION=2.12.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -49,7 +48,7 @@ Zero-result Night: softlock=NO; 즉시 Closing으로 진행 가능해야 한다.
 게이트 순례 주간:
 - Night header/summary may show `실제 변경 N명`
 - affected NPC result shows `예상 목적지 -> 실제 목적지`
-- the route-change line (pilgrimage reroute / 거짓말쟁이 Trait) is exact in `COPY_AUDIT_APPROVED_v2.8.0.md` §14-10; the name 허세 never appears and the particles follow the final consonant
+- the route-change line (pilgrimage reroute / 거짓말쟁이 Trait) is exact in `COPY_AUDIT_APPROVED_v2.13.19.md` §14-10; the name 허세 never appears and the particles follow the final consonant
 - no separate Event result screen is added
 
 ## NIGHT CONTROLS — EXACT
@@ -130,7 +129,7 @@ when a separate proven Item line follows.
 
 ## HERO ITEM FEEDBACK
 
-Use strong Item feedback only when DUNGEON_HAZARD_v2.8.0.md proves a resolved Outcome/state difference.
+Use strong Item feedback only when DUNGEON_HAZARD_v2.13.19.md proves a resolved Outcome/state difference.
 
 Preferred short grammar:
 
@@ -148,7 +147,7 @@ two slots, so this is what a whole-Bag proof means; User 2026-10-02): both are n
     {Item A}·{Item B} 덕분에 부상을 피했다.
     {Item} 2개 덕분에 부상을 피했다.        (the same Item twice)
 
-The fight alone (User 2026-10-04; DUNGEON_HAZARD_v2.8.0.md §COMBAT PROOF): when no worse Outcome is proven but removing an Item would have
+The fight alone (User 2026-10-04; DUNGEON_HAZARD_v2.13.19.md §COMBAT PROOF): when no worse Outcome is proven but removing an Item would have
 lost the combat check, and only then - on a `성공` / `대성공` record only (User 2026-10-09: on 퇴각 / 부상 / 중상 / 사망 the
 fight line reads as if it explained the Outcome):
     {Item} 덕분에 전투에서 이겼다.
@@ -157,7 +156,7 @@ Do not use vague Hero claims such as `부식 위험 감소` / `환경을 철저�
 A hidden risk decrease without a proven resolved difference is not Hero feedback.
 
 Display order: when present, the Hero Item line is the after-motion of the NIGHT verdict stamp - it settles once after
-the stamp lands and the figures do not count up; the cause outranks the money. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT —
+the stamp lands and the figures do not count up; the cause outranks the money. Timing -> UI_UX_v2.13.17.md §NIGHT LAYOUT —
 VERDICT STAMP.
 
 ## DISCOVERY LINE
@@ -219,12 +218,12 @@ away (`사망` when `avoidedDeath`, otherwise the Outcome its event names - 귀�
 중상; User 2026-10-09) and the resolved label `생환` overstamps it; the proof lines that name
 the Insurance appear on that overstamp. Only a turned-away Death reverses: those two result flags, and a Death 만반의 준비
 turned into 부상 / 중상 (its `prepared` event); 강골 / 구급키트 never do. The wording, the proof and the resolved Outcome
-are unchanged by this order. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
+are unchanged by this order. Timing -> UI_UX_v2.13.17.md §NIGHT LAYOUT — VERDICT STAMP.
 
 A sale the engine proves saved the adventurer (the Hero Item proof, `heroProof.outcome.worse` 사망 / 중상) may show the
 proven worse verdict first and be pushed off by that Item: a Death kept away, or a Severe Injury turned into 성공 /
 대성공 (User 2026-10-09). The wording and the
-resolved Outcome are unchanged. Timing -> UI_UX_v2.8.0.md §NIGHT — SAVED BY THE SALE.
+resolved Outcome are unchanged. Timing -> UI_UX_v2.13.17.md §NIGHT — SAVED BY THE SALE.
 
 ### RETURN STONE
 When it actually changes the escape/retreat outcome (a 부상 / 중상 / 사망 turned into 퇴각): show it as meaningful escape
@@ -269,7 +268,7 @@ consequence than normal Injury and may require multi-day rest according to canon
 
 Recovery/availability is consistent across Night result, next-day NPC state, Notebook and visitor eligibility.
 
-Canonical NPC state -> NPC_TRAIT_v2.8.0.md
+Canonical NPC state -> NPC_TRAIT_v2.13.19.md
 
 ### INJURY RESULT
 
@@ -278,7 +277,7 @@ completion goes directly to healthy (`2 -> 0`).
 
 ### ORDINARY INJURY RESULT CONTINUITY
 
-Natural ordinary-Injury recovery is owned by `NPC_TRAIT_v2.8.0.md`; Night/result truth preserves it exactly.
+Natural ordinary-Injury recovery is owned by `NPC_TRAIT_v2.13.19.md`; Night/result truth preserves it exactly.
 
 If the NPC began the expedition at `injury=1`:
 
@@ -307,7 +306,7 @@ Death is permanent within the Run. Result makes permanence clear without debug/s
 
 Dead NPC: no future visits; does not consume Living NPC Cap; retained only where needed for history/notebook/result record.
 
-Canonical -> CORE_RUN_v2.8.0.md / NPC_TRAIT_v2.8.0.md
+Canonical -> CORE_RUN_v2.8.0.md / NPC_TRAIT_v2.13.19.md
 
 ## FATIGUE RESULT
 
@@ -325,7 +324,7 @@ Fatigue band penalty applies (10 and up; nothing at 정상):
     다음 원정 기동·정신 -15%
     다음 원정 기동·정신 -40%
 
-Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
+Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 Tapping the settled Fatigue row opens an overlay: today's starting value, actual source-labelled
 changes (arrival Event, Food/Drink before departure, Outcome, Trait, result Event, Food/Drink buffer,
@@ -343,7 +342,7 @@ Player-facing labels not used: 밤 피로 · 보급 회복 · 보급 완화 · �
 Show the actual resolved path, not every hypothetical branch.
 - omit zero-value subrows when that improves readability
 - actual Outcome Fatigue gain must not be confused with net Fatigue delta
-- Severe Injury / Death actual result Fatigue gain is 0 under the `DUNGEON_HAZARD_v2.8.0.md` owner rule
+- Severe Injury / Death actual result Fatigue gain is 0 under the `DUNGEON_HAZARD_v2.13.19.md` owner rule
 
 ### RESULT FATIGUE FIELDS
 
@@ -370,7 +369,7 @@ Definitions:
 - `outcomeBufferUsed` = amount of remaining Supply actually consumed to reduce that raw gain
 - `actualOutcomeFatigueGain` = final gain after the buffer
 
-Exact arithmetic -> `DUNGEON_HAZARD_v2.8.0.md`.
+Exact arithmetic -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 Do not reuse `fatigueRecovery` as an ambiguous combined field for both pre-expedition recovery and post-outcome buffering.
 Internal compatibility aliases are allowed only if Player-facing/report truth remains unambiguous.
@@ -417,7 +416,7 @@ Use `손님 소지금 획득`. Do not use `전리품` where it can be read as St
 
 ## RECENT EXPEDITION SNAPSHOT WRITE
 
-After an expedition result is fully resolved, write the latest snapshot owned by `NPC_TRAIT_v2.8.0.md` using:
+After an expedition result is fully resolved, write the latest snapshot owned by `NPC_TRAIT_v2.13.19.md` using:
 - completed Day
 - actual destination
 - final Outcome
@@ -444,7 +443,7 @@ Dialogue pool size and recent-repeat handling follow COPY_WORLD_VOICE_v2.8.0.md.
 ## RESULT PRESENTATION ROUTING
 
 NIGHT_CLOSING owns the resolved result category and causal truth.
-UI_UX_v2.8.0.md owns the visual/audio presentation of that already-resolved state.
+UI_UX_v2.13.17.md owns the visual/audio presentation of that already-resolved state.
 
 Presentation may distinguish: ordinary return / success, Great Success, retreat, injury, severe injury, Death, proven
 rescue / avoided-death accents. It must not create a new outcome category, change rewards, reorder proof, or imply an
@@ -453,25 +452,25 @@ Item cause that the existing result proof does not establish.
 Death remains narration/report treatment rather than living NPC speech. Narration treatment is about VOICE, not about
 position: the Death line occupies the same place and the same visual weight as a living adventurer's line and reads as a
 neutral status message there - never as an utterance, and never relegated to a separate narration line beneath the
-report body. Exact placement/styling -> UI_UX_v2.8.0.md §NIGHT LAYOUT.
+report body. Exact placement/styling -> UI_UX_v2.13.17.md §NIGHT LAYOUT.
 
 The proven rescue reads exactly:
 
     생환
 
 with the existing approved Outcome summary `사망 위기를 넘기고 살아 돌아왔다.` beneath it.
-The fight verdict sentence is not shown on the player-facing NIGHT record (see UI_UX_v2.8.0.md §NIGHT LAYOUT); the
+The fight verdict sentence is not shown on the player-facing NIGHT record (see UI_UX_v2.13.17.md §NIGHT LAYOUT); the
 resolved combat state itself is unchanged.
 
 The Death record carries no follow-up growth or settlement figures. Its player-facing payload is the death status
 message, the character, `사망`, the NPC name, the Dungeon · Lv and the Outcome summary - nothing else.
 Level / Stat / equipment / injury / rest / Fatigue / EXP / Wallet / reward rows are not rendered for a Death, and the
 region leaves no divider or reserved space behind. The resolution still records whatever it recorded; this is a render
-rule. Exact treatment -> UI_UX_v2.8.0.md §NIGHT LAYOUT — DEATH PAYLOAD.
+rule. Exact treatment -> UI_UX_v2.13.17.md §NIGHT LAYOUT — DEATH PAYLOAD.
 Exception: a Death record may carry the §DISCOVERY LINE coach mark for the Death limit.
 
 Every Outcome label is one size; Outcomes differ by copy and tone only. The three-volume rank remains a presentation
-weight rule, but it does not change the Outcome, NPC name or summary type size. Exact size -> UI_UX_v2.8.0.md §NIGHT
+weight rule, but it does not change the Outcome, NPC name or summary type size. Exact size -> UI_UX_v2.13.17.md §NIGHT
 LAYOUT — OUTCOME TYPE, EXACT.
 
 ## RARE ACCIDENT COPY
@@ -481,7 +480,7 @@ Examples of flavor: 장비가 순간적으로 벗겨짐 / 장비 일부가 손�
 
 T1/T2 proper preparation should not repeatedly produce copy that makes Counter preparation feel useless.
 
-Canonical hazard reliability -> DUNGEON_HAZARD_v2.8.0.md
+Canonical hazard reliability -> DUNGEON_HAZARD_v2.13.19.md
 
 ## DEBUG LANGUAGE
 
@@ -530,7 +529,7 @@ ends with, and by what moved in between - not by cost of goods sold, margin or a
 5. `내일 운영비 예상 {N}G` - tomorrow's base operating cost with today's Store Support and roster, no Event; not on DAY 29
    (the Final Day has no operating cost)
 
-No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.8.0.md.
+No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.13.19.md.
 
 Closing answers: `오늘 돈이 얼마 남았고, 내일 괜찮은가?`
 
@@ -595,9 +594,9 @@ Acceptance criteria: CORE_RUN §QA · DUNGEON_HAZARD / ITEM §QA · NPC_TRAIT §
 game philosophy -> SPEC_INDEX §GAME CORE
 run/save -> `CORE_RUN_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
-npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.8.0.md`
-hazard causality, Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.8.0.md`
+npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.13.19.md`
+hazard causality, Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.13.19.md`
 item/insurance/Aftercare -> `ITEM_v2.8.0.md`
-economy/settlement -> `ECONOMY_ORDER_v2.8.0.md`
+economy/settlement -> `ECONOMY_ORDER_v2.13.19.md`
 sale commitments, Sale revisit display -> `SALE_v2.8.0.md`
-presentation / UI -> `UI_UX_v2.8.0.md`
+presentation / UI -> `UI_UX_v2.13.17.md`

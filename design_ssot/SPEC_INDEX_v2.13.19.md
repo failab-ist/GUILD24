@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.13.16
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
+DOC_VERSION=2.13.19
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.19
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_13_16_OPEN (v2.13.15 is closed; v2.13.16 = 승천 skeleton + first-week Gate ease, CHANGELOG §v2.13.16)
-SOURCE_ADOPTION_STATUS=V2_13_16_ADOPTED (every version through v2.13.16 is adopted in Source on main; CHANGELOG §v2.13.16)
+FREEZE_STATUS=V2_13_19_OPEN (v2.13.18 is closed; v2.13.19 = 증명 문구에서 만반의 준비 몫 분리 + 바가지 소지금 보너스 · 단골도 -8 · 상한 90%(같은 버전, #265), CHANGELOG §v2.13.19; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
+SOURCE_ADOPTION_STATUS=V2_13_19_ADOPTED (every version through v2.13.19 is adopted in Source on main; CHANGELOG §v2.13.19)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -19,7 +19,7 @@ PUBLIC_RELEASE_CANONICAL=PLATFORM_RELEASE_v3.0.0.md
 3. current Source
 4. older chat / proposal / report / historical spec
 
-NAMES = GLOSSARY_v2.8.0.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
+NAMES = GLOSSARY_v2.13.17.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
 
 DESIGN TRUTH = current routed Design SSOT.
 IMPLEMENTATION TRUTH = current Source.
@@ -178,7 +178,7 @@ Do not merge the two systems.
 - 최종 정답을 대신 계산하는 단일 안전점수
 
 Current SALE may expose the exact **failure-conditioned Death risk** owned by
-DUNGEON_HAZARD_v2.8.0.md. This is the chance of Death after the expedition has entered its failure
+DUNGEON_HAZARD_v2.13.19.md. This is the chance of Death after the expedition has entered its failure
 path; it is not the unconditional whole-expedition Death probability. It is exposed in the outlook help and
 the NPC detail, not as an always-on cell.
 
@@ -227,74 +227,53 @@ play and valid RNG.
 
 ### INACTIVE LEGACY BOUNDARY
 No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
-in the current game. Archive ownership is routed to META_v2.8.0.md.
+in the current game. Archive ownership is routed to META_v2.13.18.md.
 
-## CURRENT v2.9.0 PURPOSE — "쉽게 배우고, 깊게 파는"
+## DEFERRED EXPANSION
 
-v2.9.0 answers three playtest findings: "너무 복잡하다", "뭘 어떻게 하는 건지
-모르겠다", and "손님에게 직접 파는 게임인데 그것이 보이지 않는다". The goal is easy to learn, hard to
-master: the fun axes stay (Hazard Counter, three price modes, Traits, the four Core Stats always
-visible); the screens explain themselves; complexity that is not fun is removed; the transaction is
-seen. Documents are amended first, Source follows per owner (docs-first).
-
-Scope (owner amendments are the truth; this list is routing):
-
-    A. the transaction is visible — counter tray, hand-over motion into the Bag, customer reaction,
-       customer exit/entry, price-mode sound family, refusal beat        -> PRESENTATION_PRINCIPLES / UI_UX / SALE
-    B. the screen says what to do — DAY 1~3 task line, first-order coach order, Hazard rows that
-       say what resists them, per-Gate visitor counts (counts only; no ORDER today-fit emphasis),
-       NIGHT -> next-decision line, shorter D1 briefing / guide              -> UI_UX / ECONOMY_ORDER / NIGHT_CLOSING / COPY
-    C. SALE reads at a glance — today's pressure tag on the Stat grid, fixed per-category effect order on
-       rows (no matching-effect emphasis), one delta list after a sale, the per-customer receipt stub, price-role words, no always-on Death %, folded last
-       expedition above the Stat grid; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
-    D. simpler rules — Supply becomes Fatigue recovery only (no required Supply, Fatigue 0~40 with
-       five bands), single-Stat Hazard pressure 3/3/3 without 투력 (no Gate shares a Stat), Store Support card copy in two
-       clauses, presentation leftovers                                       -> DUNGEON_HAZARD / ITEM / NIGHT_CLOSING / NPC_TRAIT / RELIC
-
-Not in v2.9.0: a "simple view" toggle, hiding zero receipt rows, direct hints such as
-`도움 됨 / 무관`, extra price depth, removing Hazard Counter / price modes / Traits.
-Every P2+ expansion stays in GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md.
-
-Scope rule: pull forward whatever the current playtest needs, defer whatever it does not. Against the three
-findings nothing from the v3.0+ router is promoted. Drag (§6) does not choose a price, so the hand-over is shown by
-motion on the existing tap flow; desktop redesign (§8), item memory (§3) and art waves (§18) do not answer any
-finding; customer reaction is done by motion, not new art. Deferred to v3.0+: moving the folded last-expedition line
-below the Stat grid, clause-per-line card wrapping (scope D's two-clause card copy stands).
+Every P2+ expansion stays in GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md until the User promotes it.
+The v2.9.0 scope ("쉽게 배우고, 깊게 파는") is history: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` §v2.9.0.
 
 ## VERSION POLICY
 
-Versions are managed the way a maintained project does it, not by renaming files.
-- Owner filenames are stable lineage names (`<OWNER>_v2.8.0.md` stays the file for v2.9.0 and later).
-  Tests and routing keep their paths.
-- `DESIGN_SSOT=` in every owner header names the project version the file belongs to.
-- `DOC_VERSION=` in an owner header is bumped to the project version in which that owner last changed.
+**The filename stem is fixed; the version in the filename is not.** `SPEC_INDEX_`, `GLOSSARY_`, `EVENT_` and every other
+stem never change, and the `_v<version>` suffix moves to the current version each time that file is edited, this index
+included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by a remembered full name.
+
+- An owner's filename carries the project version in which that owner last changed: `<OWNER>_v<version>.md`
+  (User 2026-10-21). It is renamed only when the owner is edited, never in bulk, so untouched owners keep an older
+  version in their name. Steps and the one exception (PLATFORM_RELEASE): AGENTS §10-A.
+- The project version lives only in this index's `DESIGN_SSOT=` line. Owners carry no project-version line, so a
+  version bump touches only the owners whose spec changed; an owner whose spec did not change keeps its name and header.
+- `DOC_VERSION=` in an owner header is the project version in which that owner last changed; a renamed owner's
+  `DOC_VERSION=` matches its filename.
 - `design_ssot/CHANGELOG.md` records what each version changed, per owner, with the User decision date.
 - A release is closed by a git tag (`v2.9.0`) on the commit where SPEC_INDEX, CHANGELOG, owners and
-  Source agree; the tag, not a filename, is the version.
+  Source agree.
 - Owners state the current spec only; what changed and why is CHANGELOG's, older wording is in git history.
 
 ## CURRENT CANONICAL FILE SET
 
 Core / Run / Meta:
-- SPEC_INDEX_v2.8.0.md (this index; §GAME CORE)
-- GLOSSARY_v2.8.0.md (game terms: names, meanings, retired names)
+- SPEC_INDEX_v2.13.19.md (this index; §GAME CORE)
+- GLOSSARY_v2.13.17.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
-- META_v2.8.0.md
+- META_v2.13.18.md
 
 Economy / NPC / Dungeon / Item / Store Build:
-- ECONOMY_ORDER_v2.8.0.md
-- NPC_TRAIT_v2.8.0.md
-- DUNGEON_HAZARD_v2.8.0.md
+- ECONOMY_ORDER_v2.13.19.md
+- NPC_TRAIT_v2.13.19.md
+- DUNGEON_HAZARD_v2.13.19.md
 - ITEM_v2.8.0.md
-- RELIC_v2.8.0.md
+- RELIC_v2.13.19.md
 
 Flow / Result / UI / Copy:
 - SALE_v2.8.0.md
 - NIGHT_CLOSING_v2.8.0.md
-- UI_UX_v2.8.0.md
+- UI_UX_v2.13.17.md
 - PRESENTATION_PRINCIPLES_v2.8.0.md
 - COPY_WORLD_VOICE_v2.8.0.md
-- COPY_AUDIT_APPROVED_v2.8.0.md
+- COPY_AUDIT_APPROVED_v2.13.19.md
 - EVENT_v2.8.0.md
 - BOSS_v2.8.0.md
 - FINAL_EXPEDITION_v2.8.0.md
@@ -314,19 +293,19 @@ audit-HEAD Source defect record, every SA-Q adopted at the v2.8 release; Source 
 
 GAME CORE / CROSS-RUN IDENTITY -> SPEC_INDEX §GAME CORE (this index)
 RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN_v2.8.0.md
-META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.8.0.md
-PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.8.0.md
-NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.8.0.md
-DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.8.0.md
+META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.18.md
+PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.13.19.md
+NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.13.19.md
+DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.13.19.md
 ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
-STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
+STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.13.19.md
 SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
-UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.8.0.md
+UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.13.17.md
 PRESENTATION PRINCIPLES / VISUAL CONSTRUCTION / ASSET QUALITY / ORNAMENT BUDGET / AUDIO PRESENTATION / VISUAL REVIEW -> PRESENTATION_PRINCIPLES_v2.8.0.md
-TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.8.0.md
+TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.13.17.md
 COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
-EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.8.0.md
+EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.13.19.md
 EVENT -> EVENT_v2.8.0.md
 BOSS -> BOSS_v2.8.0.md
 FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.8.0.md
@@ -347,7 +326,7 @@ Do not delete history files merely because they are old.
 ## RETIRED ACTIVE SYSTEMS
 
 Franchise Grade, Franchise Achievement track, Grade ORDER discount and Start Contract selection / gating are
-historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.8.0.md.
+historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.13.18.md.
 
 ## DOCUMENT BASELINE POLICY
 
@@ -378,7 +357,7 @@ A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
-    SPEC_INDEX_v2.8.0
+    SPEC_INDEX_v2.13.19
     -> exact routed owner
     -> related current QA
     -> Current Source

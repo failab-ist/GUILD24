@@ -684,7 +684,7 @@ test('FINAL: reaching D30 with nobody to send is a Final failure, not an unpaid 
  /* The UI used to send this to retire, which closes the store for overheads it had in fact
     paid. boss() has always owned this ending. */
  const app=source('dist/ui/app.js');
- assert.ok(/출전 불가 · 점포 종료','boss'/.test(app),'the button goes to the Final, not to retire');
+ assert.ok(/출전 불가: 점포 종료','boss'/.test(app),'the button goes to the Final, not to retire');
  assert.ok(/case'boss':if\(!game\.finalRequired\(\)\)\{game\.boss\(\)/.test(app),
   'and with nobody to send there is no party to confirm first');
 
@@ -1395,8 +1395,8 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a rolled Death chance of x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
- assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.05);assert.equal(Dungeon.PREPARED.factor,.80);
+test('구급품 진열장: 만반의 준비 departs with 투력 x1.03 (User 2026-10-21, was x1.05) and a rolled Death chance of x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
+ assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.03);assert.equal(Dungeon.PREPARED.factor,.80);
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
  const npc=pack=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;n.fatigue=0;n.records=[];return n;};
  let saved=0,worse=0,diff=0;
@@ -1436,16 +1436,16 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.20&&up/all<.40,'about 30%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first two customers bring +300G more each',()=>{
+test('알뜰 금고: the Day\'s first two customers bring +100G more each',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
  for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
  s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
- assert.equal(a.money,400,'the first customer to reach the counter: +300G');
- s.cursor=1;g.arrive();assert.equal(b.money,400,'the second too');
+ assert.equal(a.money,200,'the first customer to reach the counter: +100G');
+ s.cursor=1;g.arrive();assert.equal(b.money,200,'the second too');
  s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,300);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,100);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
 /* ---- META §OPERATION DECORATIONS (User 2026-10-04) ---------------------------------------- */

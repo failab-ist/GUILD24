@@ -176,12 +176,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     draws before it asks this, so a suppressed Day costs the run stream no draw. */
  eventEligibleDay(day){return day>=1&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day)&&!(this.run.firstRun&&day===1&&!this.has('rumorBoard'));}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
- /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
+ /* EVENT §EVENT SELECTION: 30% on an eligible Day, and an Event that already happened this
     Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),
     so rolling alone records nothing; a save from before the log reads as an empty one. */
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-01): the account's first Run meets 본사 1+1 행사 on DAY 2, the one Event before
     DAY 3. The ordinary roll still draws and is ignored, and no pick is drawn, so the Run's stream is unchanged. */
- rollEvent(){const s=this.run,fired=this.rng.next()<(this.has('rumorBoard')?D.relicParams.rumorBoard.eventChance:.40);if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
+ rollEvent(){const s=this.run,fired=this.rng.next()<(this.has('rumorBoard')?D.relicParams.rumorBoard.eventChance:.30);if(s.firstRun&&s.day===2&&!(s.eventLog||[]).length)return D.events.find(e=>e.id==='oneplus')||null;
   if(!this.eventEligibleDay(s.day)||!fired)return null;
   const seen=s.eventLog||[],pool=D.events.filter(e=>!seen.includes(e.id)&&this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
  /* CORE_RUN §MORNING: Event, intake, retained Gates, then Deep designation. */
@@ -375,7 +375,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    const hazards=G.Relics.known(this);s.pity.hazards??={};for(const h of hazards)if(added.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
    s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]||0));}
  }
- generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+D.ascent(s.ascension).offers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];
+ /* Save trace (User 2026-10-21: the User's saves had no record of what the sheet offered or what was bought, so a person's rerolls and prices could not be
+    compared with the bot's): every sheet shown today, every order, every sale and refusal, kept on today's ledger and so in reportHistory. Reads only. */
+ traceOf(){const d=this.run.daily;return d?(d.trace??={sheets:[],bought:[],sold:[],refused:[]}):null;}
+ generateOffers(opts){const r=this.generateOffersCore(opts),t=this.traceOf();if(t)t.sheets.push(this.run.offers.map(o=>[o.item,o.quantity,o.price]));return r;}
+ generateOffersCore({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+D.ascent(s.ascension).offers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: the Counter cap grows one for one with every slot a Store Support or an Event adds */
  this.counterCap=this.offerCounterCap();for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  /* EVENT §02. 본사 1+1 행사: HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
@@ -449,7 +453,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);
   const rates=band.weights.map((w,v)=>v===2?w+(s.pity.rare>=5?3:0):w);const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('rareContract')&&v>=2?D.relicParams.rareContract.rareWeightMult:1));pool=pool.filter(it=>it.rarity===rarity);
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
- order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?D.eventRules.promoUnits:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
+ order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?D.eventRules.promoUnits:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;this.traceOf()?.bought.push([o.item,1,o.price]);for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
  open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';if(s.queue.length)this.arrive();else{this.night();this.finishNight();}this.save();}
  /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY. The expedition outlook the decision surface
     shows is a SALE-ENTRY snapshot, taken before this visit's first transaction and frozen for
@@ -540,12 +544,12 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(bundle&&guarantee){const rest=price-guarantee;bundle=rest-Math.round(rest*D.relicParams.memberBundle.payShare);judged=price-bundle;}
  const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
-    only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
+    정가 and 바가지 do (바가지 since User 2026-10-21). Until this existed the approved .65 threshold could not move an acceptance
     at all: chance read the flat per-mode sentiment and nothing about what the offer costs
     against this customer's purse. The term is pivoted on the measured median 정가 burden, and it
     only ever adds: a light offer may gain a bonus, and at or above the pivot the burden term
-    contributes 0 and never subtracts. 할인 and 바가지
-    declare no weight, so their term is zero and they are decided exactly as they always were. */
+    contributes 0 and never subtracts. 할인
+    declares no weight, so its term is zero and it is decided exactly as it always was. */
  const weight=rule.intentWeight||0;
  /* The term is a BONUS for a light offer, never a penalty for a heavy one: max(0, ...) floors it
     at zero, so price burden can only ever help 정가 acceptance. A purse that cannot cover the
@@ -559,8 +563,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     it lifted the whole penalty before); nothing else about 150% moves. */
  const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+D.relicParams.royalCert.intentBonus:rule.intent;
  /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): only 정가 carries one, applied after the
-    floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio. */
- const chance=wallet<debit?0:payday?1:Math.max(clamp(need+n.loyalty*.002+flat+burdenIntentBonus+(counters?D.balance.counterIntentBonus:0),.08,.97)*(rule.finalScale||1),rule.finalFloor||0);
+    floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio.
+    바가지 instead carries a 0.90 cap (User 2026-10-21) so it never beats 정가 for the same customer. */
+ const chance=wallet<debit?0:payday?1:Math.min(rule.cap??1,Math.max(clamp(need+n.loyalty*.002+flat+burdenIntentBonus+(counters?D.balance.counterIntentBonus:0),.08,.97)*(rule.finalScale||1),rule.finalFloor||0));
  return {price,debit,guarantee,bundle,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){
@@ -570,7 +575,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(mode==='overcharge'&&s.event?.effects.noOvercharge){if(!n.refused.includes(key))n.refused.push(key);return false;}
  const intent=this.interest(n,it,mode);if(n.money+(n.eventBudget||0)<intent.debit)throw Error('손님의 소지금이 부족합니다.');
  const accepted=this.rng.next()<intent.chance;
- if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';s.daily.refuse=(s.daily.refuse||0)+1;if(reason==='price')s.daily.refusePrice=(s.daily.refusePrice||0)+1;n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
+ if(!accepted){this.traceOf()?.refused.push([n.id,it.id,mode]);n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';s.daily.refuse=(s.daily.refuse||0)+1;if(reason==='price')s.daily.refusePrice=(s.daily.refusePrice||0)+1;n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
   /* SALE §SAME-ITEM REFUSAL PRICE CEILING: any refusal of a SKU closes every higher price for it this visit, whatever the
      reason; a refused 바가지 closes the SKU outright and costs Loyalty (refusalLoyalty). No other SKU is touched. */
   const over=mode==='overcharge';
@@ -579,7 +584,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   s.say={npc:n.id,text:G.Copy.refuse(n,it.id,over?'overcharge':reason,s.day,s)};this.save();return false;}
  if(mode==='overcharge'&&this.run.firstRun&&n.lessonPayday===s.day)n.lessonPaydayTaken=true;
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
- if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
+ if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;this.traceOf()?.sold.push([n.id,it.id,mode,intent.price]);s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('premiumMember')&&it.rarity>=2&&!n.newToday&&mode!=='overcharge')loyalty+=D.relicParams.premiumMember.rareLoyalty;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
  if(s.event?.effects.halfPrice&&mode==='half'&&!s.halfPriceUsed){s.money+=D.balance.halfPriceSupport;s.daily.subsidy+=D.balance.halfPriceSupport;s.halfPriceUsed=true;}
  let commission=0;if(this.has('coldcase')&&it.category==='potion')commission+=Math.round(intent.price*D.relicParams.coldcase.commissionRate);if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
@@ -614,7 +619,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   for(let n=1;n<=o.quantity;n++){const cart={...(s.cart||{}),[i]:n};try{this.validateCart(cart);q=n;}catch(e){reason=e.message==='발주 자금이 부족합니다.'?'money':/까지만 발주/.test(e.message)?'cap':'space';if(reason==='money')lack=this.cartTotal(cart)-s.money;break;}}
   return {max:q,reason,lack};}
  maxQuantity(i){return this.quantityLimit(i).max;}
- confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?D.eventRules.promoUnits:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
+ confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;this.traceOf()?.bought.push([o.item,q,price]);const units=q*(o.promo?D.eventRules.promoUnits:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
  /* RELIC 평생 단골제 (User 2026-10-02): once a 단골 while it is owned, Loyalty never drops below the 단골 line again */
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,was&&this.has('lifetime')?G.Adventurer.TRUSTED_REGULAR:0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
  /* NPC_TRAIT §Non-purchase Loyalty: only a visit with a paid purchase earns departure Loyalty. */

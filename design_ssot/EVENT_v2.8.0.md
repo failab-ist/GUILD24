@@ -3,7 +3,6 @@
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
 DOC_VERSION=2.13.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.16
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## NON-NEGOTIABLE
@@ -51,14 +50,14 @@ Pool에서 빠진다. 나머지 Event의 발생 조건은 그대로다.
 ### 발생 확률
 
 ```text
-dailyEventChance = 40%
+dailyEventChance = 30%
 점포지원 소문 수집 게시판 보유 시 = 100% (RELIC §33)
 ```
 
 목표 평균:
 
 ```text
-21–22 × 0.40 ≈ 8.4–8.8 Events / Run
+21–22 × 0.30 ≈ 6.3–6.6 Events / Run
 ```
 
 실제 분포는 전체 런 밸런스 측정에서 측정한다. 측정 결과를 이유로 `dailyEventChance`를 자동으로 바꾸지 않는다
@@ -73,10 +72,10 @@ Deep Expedition is not a Normal Daily Event and is not selected from the Event c
 For D7 / D14 / D21 / D28:
 1. read this Run's persisted Deep Expedition schedule
 2. if Deep Expedition is active today: skip Normal Event roll; do not select/apply Normal Event
-3. otherwise: use ordinary EVENT eligibility / 40% roll
+3. otherwise: use ordinary EVENT eligibility / 30% roll
 
 On Deep Expedition Days there is no Normal Event Focused Reveal; the Deep notice / first-use Tutorial may be the special
-Morning beat under `UI_UX_v2.8.0.md`.
+Morning beat under `UI_UX_v2.13.17.md`.
 
 Because Normal Event is suppressed, Event-added 한파/독안개 cannot coexist with Deep Expedition on the same Day.
 No special Event-Hazard merge rule is added.
@@ -89,7 +88,7 @@ No special Event-Hazard merge rule is added.
 
 1. 오늘 Gate / Roster / 누적 상태 등 필요한 Day State를 준비한다.
 2. 오늘 조건상 발생할 수 없는 Event를 Pool에서 제외한다.
-3. Event Eligible Day라면 40% 발생 Roll을 한다.
+3. Event Eligible Day라면 30% 발생 Roll을 한다.
 4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다. **이번 Run에 이미 나온 Event는 Pool에서 빠진다**
    (한 Run에 같은 Event는 한 번만. 발생 기록은 Run에 저장된다).
 5. 선택된 Event 하나만 적용한다.
@@ -337,7 +336,7 @@ Work는 임의로 Event를 추가하거나 Effect / Trigger / Role을 재설계�
 모든 Event는 한 Run에 한 번(§EVENT SELECTION) 발생하며, 적용 기간과 예외는 §EVENT DURATION을 따른다.
 WEIGHT는 따로 적지 않으면 1.0이다(§Selection Weight).
 
-Exact player-facing title/reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-N (N = Event 번호).
+Exact player-facing title/reveal copy -> `COPY_AUDIT_APPROVED_v2.13.19.md` §13-N (N = Event 번호).
 
 ### 01. 물류대란
 
@@ -365,7 +364,7 @@ EFFECT: 오늘 발주 후보 중 행사 상품 1종을 지정한다. 해당 상�
 행사 상품은 그날 첫 발주 후보에서만 지정한다. 발주 후보 교환을 하면 행사가 끝나고, 새 후보에는 1+1이 없다.
 
 행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
-(모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
+(모양 -> `UI_UX_v2.13.17.md` §ORDER — ITEM INFORMATION HIERARCHY).
 
 ### 03. 게이트 순례 주간
 
@@ -748,7 +747,7 @@ EFFECT:
 
 사망 한도 구간과 추모 방명록 -> `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.
 
-발생 조건은 다른 일반 Event와 같다: 같은 Eligible Day, 같은 40% 발생 Roll, 같은 Weight 기반 선택.
+발생 조건은 다른 일반 Event와 같다: 같은 Eligible Day, 같은 30% 발생 Roll, 같은 Weight 기반 선택.
 따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않는다. 다른 Event처럼 한 Run에 한 번만 나온다.
 
 ### 24. 길드 의료단 순회
@@ -1006,7 +1005,7 @@ Rare Easter Egg 2종은 둘 다 명확한 Positive Event다.
 Canonical:
 
 ```text
-dailyEventChance = 40%
+dailyEventChance = 30%
 normalWeight = 1.0
 rareEasterEggWeight = 0.35
 ```
@@ -1057,15 +1056,15 @@ EVENT가 소유: Event 발생 Day · Event 발생 확률 · Event Eligibility ·
 EVENT가 소유하지 않음:
 
 - Item Effect / Counter → `ITEM_v2.8.0.md`
-- NPC Roster / Trait / Growth / Revisit → `NPC_TRAIT_v2.8.0.md`
-- Gate / Hazard 기본 Formula → `DUNGEON_HAZARD_v2.8.0.md`
-- Order 기본 Offer / Price → `ECONOMY_ORDER_v2.8.0.md`
+- NPC Roster / Trait / Growth / Revisit → `NPC_TRAIT_v2.13.19.md`
+- Gate / Hazard 기본 Formula → `DUNGEON_HAZARD_v2.13.19.md`
+- Order 기본 Offer / Price → `ECONOMY_ORDER_v2.13.19.md`
 - Sale 기본 Purchase / Price Rule → `SALE_v2.8.0.md`
-- Relic Effect → `RELIC_v2.8.0.md`
+- Relic Effect → `RELIC_v2.13.19.md`
 - Night / Closing 기본 Rule → `NIGHT_CLOSING_v2.8.0.md`
-- Presentation Layout → `UI_UX_v2.8.0.md`
+- Presentation Layout → `UI_UX_v2.13.17.md`
 - Global Voice / Flavor 작성 기준 → `COPY_WORLD_VOICE_v2.8.0.md`
-- Exact Event title / Function / Flavor copy → `COPY_AUDIT_APPROVED_v2.8.0.md`
+- Exact Event title / Function / Flavor copy → `COPY_AUDIT_APPROVED_v2.13.19.md`
 
 다른 Spec이 소유한 Rule을 EVENT에서 중복 재정의하지 않는다.
 
@@ -1164,7 +1163,7 @@ FAIL 시 우선순위:
 - scheduled Deep Day -> no Normal Event roll or Event selection
 - no nomination later that Day does not restore an Event
 - non-Deep D7/D14/D21/D28 still use ordinary Event rules
-- `dailyEventChance` is 40% until a later approved rebalance
+- `dailyEventChance` is 30% until a later approved rebalance
 - an Event already met this Run never fires again that Run; a save carries the Run's Event log
 
 ### Event numeric acceptance

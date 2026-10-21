@@ -127,8 +127,8 @@ function supplyState(n,finalSupply){
    detail read the band from here rather than keeping thresholds of their own. */
 const FATIGUE_MAX=40;
 const FATIGUE_BANDS=[
- {min:40,name:'탈진',mobility:.40,combat:.40,text:'모든 능력치 -40% · 실패 시 사망 위험 +10%p'},
- {min:30,name:'소진',mobility:.40,combat:.20,text:'기동·정신 -40% · 투력·강인함 -20%'},
+ {min:40,name:'탈진',mobility:.40,combat:.40,text:'모든 능력치 -40%, 실패 시 사망 위험 +10%p'},
+ {min:30,name:'소진',mobility:.40,combat:.20,text:'기동·정신 -40%, 투력·강인함 -20%'},
  {min:20,name:'과로',mobility:.40,combat:0,text:'기동·정신 -40%'},
  {min:10,name:'지침',mobility:.15,combat:0,text:'기동·정신 -15%'},
  {min:0,name:'정상',mobility:0,combat:0,text:''}];
@@ -144,8 +144,8 @@ function fatigueLedger(n,run,outcome,e,baseline,raw,buffer,final){
  const hasFood=n.pack.some(id=>D.itemBy[id].category==='food');
  const foodSources=n.traits.filter(id=>D.traitBy[id].effects.supplyPerItem||(hasFood&&D.traitBy[id].effects.foodSupplyDelta)).map(id=>D.traitBy[id].name);
  if(hasFood&&n.feast>1&&run?.event)foodSources.push(run.event.name);
- const food='음식·음료'+(foodSources.length?' ('+foodSources.join(' · ')+')':'');
- add(food+' · 출발 전',-e.preRecovery);
+ const food='음식·음료'+(foodSources.length?' ('+foodSources.join(', ')+')':'');
+ add('출발 전 '+food,-e.preRecovery);
  add(outcome,baseline);
  const severe=outcome==='중상'||outcome==='사망';
  let adjusted=baseline;
@@ -153,7 +153,7 @@ function fatigueLedger(n,run,outcome,e,baseline,raw,buffer,final){
   const bounded=Math.max(0,adjusted);add('피로 하한 0',bounded-adjusted);adjusted=bounded;
   if((run?.event?.effects.outcomeFatigue||1)!==1)add(run.event.name,raw-adjusted);
  }
- add(food+' · 원정 후',-buffer);
+ add('원정 후 '+food,-buffer);
  add('피로 상한 40',final-(e.fatigueBeforeExpedition+Math.max(0,raw-buffer)));
  return rows;
 }
@@ -172,7 +172,7 @@ function conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty){
  const band=fatigueBand(effectiveFatigue);
  if(band.mobility){mobilityMod-=band.mobility;spiritMod-=band.mobility;}
  if(band.combat){combatMod-=band.combat;survivalMod-=band.combat;}
- if(band.min>0)why.push('피로 '+effectiveFatigue+' · '+band.name+': '+band.text);
+ if(band.min>0)why.push('피로 '+effectiveFatigue+' ('+band.name+'): '+band.text);
  return {combat:combatMod,survival:survivalMod,mobility:mobilityMod,spirit:spiritMod};
 }
 
@@ -195,7 +195,7 @@ function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
  }
  for(const st of itemStats)for(const k of STAT_KEYS)
   if(st.stats[k])sources[k].push({name:D.itemBy[st.item].name,v:st.stats[k]});
- const band=fatigueBand(effectiveFatigue),tag='피로 · '+band.name;
+ const band=fatigueBand(effectiveFatigue),tag='피로: '+band.name;
  if(band.mobility){sources.mobility.push({name:tag,v:-Math.round(band.mobility*100),isPct:true});sources.spirit.push({name:tag,v:-Math.round(band.mobility*100),isPct:true});}
  if(band.combat){sources.combat.push({name:tag,v:-Math.round(band.combat*100),isPct:true});sources.survival.push({name:tag,v:-Math.round(band.combat*100),isPct:true});}
  return sources;
@@ -381,8 +381,8 @@ function failureDeathRisk(n,d,facilities=[]){
    under-reporting is preferred to false causality. */
 const OUTCOME_ORDER=['대성공','성공','퇴각','부상','중상','사망'];
 const UNPROVEN=Symbol('unproven');
-function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
- const s=shadowSettle(departure,d,facilities,pack,ev,severeEscalation);
+function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation,keepPrepared){
+ const s=shadowSettle(departure,d,facilities,pack,ev,severeEscalation,keepPrepared);
  return s===UNPROVEN?UNPROVEN:s.tier;
 }
 /* The settled shadow: the Outcome tier AND the persistent Injury it leaves, so the state proof
@@ -394,9 +394,12 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 /* META 단골 감사 현수막: 투력 x(1 + floor(단골도 / 10) x perTen), read where 구급품 진열장's power bonus is */
 const cheer=(on,loyalty)=>on?1+Math.min(D.decorationParams.cheerBanner.max,Math.floor((loyalty||0)/10)*D.decorationParams.cheerBanner.perTen):1;
 function stoneChance(e,d){return clamp(.40+e.mobility*.003+e.escape-(d.scale||1)*.024,.15,.94);}
-function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
+/* `keepPrepared`: the shadow bag keeps the real bag's 만반의 준비 standing, so an Item is only credited for its own effect -
+   losing a slot's 만반의 준비 is credited to 만반의 준비 (its own line), never to whichever Item was removed. */
+function shadowSettle(departure,d,facilities,pack,ev,severeEscalation,keepPrepared){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
- if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+ const sFull=()=>keepPrepared??fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition);
+ if(ev.cabinet&&sFull())se.combat*=D.decorationParams.aidCabinet.powerMult;
  se.combat*=cheer(ev.banner,departure.loyalty);
  const sAbility=preparedPower(se);
  const sAssist=ev.assist||0;
@@ -426,7 +429,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   /* DUNGEON_HAZARD §Preparation / Level Death reduction: the shadow Bag can lose 만반의 준비
      (2+ Items in the Bag) that the real Bag had, which is exactly the path that proves a second
      sold Item kept the death roll out of the removed band. */
-  const sPrepared=fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition)?(ev.preparedFactor??PREPARED.factor):1;
+  const sPrepared=sFull()?(ev.preparedFactor??PREPARED.factor):1;
   const sRolled=sDeathChance*sPrepared;
   if(ev.deathRoll<sRolled){
    sOutcome=ev.firstRunGuard?'중상':'사망'; // the real path's first-run guard (resolve) applies here too
@@ -487,17 +490,22 @@ function kitSettle(tier,hasKit,departureInjury){
    separate removals), then the whole Bag if no single Item is individually provable. Ties on
    the SAME resulting worse tier are credited together; a worse tier beats a milder one rather
    than stacking several heroic claims. */
+/* Whether the real departure Bag stood 만반의 준비: every shadow Bag keeps that, see shadowSettle. */
+function realPrepared(departure,pack,d,facilities){
+ return fullyPrepared({injury:departure.injury,pack},prepare({...departure,pack},d,facilities).effects.fatigueBeforeExpedition);
+}
 function outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome){
  const idx=OUTCOME_ORDER.indexOf(actualOutcome);
  if(!pack.length)return null;
- const per=pack.map((id,i)=>({id,tier:shadowOutcome(departure,d,facilities,pack.filter((_,j)=>j!==i),ev,severeEscalation)}));
+ const kept=realPrepared(departure,pack,d,facilities);
+ const per=pack.map((id,i)=>({id,tier:shadowOutcome(departure,d,facilities,pack.filter((_,j)=>j!==i),ev,severeEscalation,kept)}));
  const proven=per.filter(x=>x.tier!==UNPROVEN&&OUTCOME_ORDER.indexOf(x.tier)>idx);
  if(proven.length){
   const worstIdx=Math.max(...proven.map(x=>OUTCOME_ORDER.indexOf(x.tier)));
   const items=[...new Set(proven.filter(x=>OUTCOME_ORDER.indexOf(x.tier)===worstIdx).map(x=>x.id))];
   return {items,worse:OUTCOME_ORDER[worstIdx]};
  }
- const bareTier=shadowOutcome(departure,d,facilities,[],ev,severeEscalation);
+ const bareTier=shadowOutcome(departure,d,facilities,[],ev,severeEscalation,kept);
  if(bareTier!==UNPROVEN&&OUTCOME_ORDER.indexOf(bareTier)>idx)return {items:null,worse:bareTier};
  return null;
 }
@@ -510,16 +518,17 @@ function outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutc
 function stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
  if(!actualAftercare||!pack.length)return null;
  const idx=OUTCOME_ORDER.indexOf(actualOutcome);
+ const kept=realPrepared(departure,pack,d,facilities);
  const items=[...new Set(pack.map((id,i)=>{
   const shadowPack=pack.filter((_,j)=>j!==i);
-  const s=shadowSettle(departure,d,facilities,shadowPack,ev,severeEscalation);
+  const s=shadowSettle(departure,d,facilities,shadowPack,ev,severeEscalation,kept);
   if(s===UNPROVEN||OUTCOME_ORDER.indexOf(s.tier)!==idx)return null; // a differing tier is outcomeProof's claim, not this one
   return s.injury>actualAftercare.to?id:null;
  }).filter(Boolean))];
  if(items.length)return {items};
  /* Whole-Bag fallback: no single Item alone proves it, but removing the whole Bag might -
     same pattern as outcomeProof's bare-tier fallback. Never invented as one Item's credit. */
- const bare=shadowSettle(departure,d,facilities,[],ev,severeEscalation);
+ const bare=shadowSettle(departure,d,facilities,[],ev,severeEscalation,kept);
  if(bare===UNPROVEN||OUTCOME_ORDER.indexOf(bare.tier)!==idx)return null;
  if(bare.injury>actualAftercare.to)return {items:null};
  return null;
@@ -539,7 +548,7 @@ function combatProof(departure,pack,d,facilities,ev){
  if(!ev.combatSuccess)return null;
  const items=[...new Set(pack.filter((_,i)=>{
   const sp=prepare({...departure,pack:pack.filter((_,j)=>j!==i)},d,facilities),se=sp.effects;
-  if(ev.cabinet&&fullyPrepared({injury:departure.injury,pack:pack.filter((_,j)=>j!==i)},se.fatigueBeforeExpedition))se.combat*=D.decorationParams.aidCabinet.powerMult;
+  if(ev.cabinet&&realPrepared(departure,pack,d,facilities))se.combat*=D.decorationParams.aidCabinet.powerMult;
   se.combat*=cheer(ev.banner,departure.loyalty);
   const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
   return preparedPower(se)*(1+(ev.assist||0))*sNoise<d.power;
