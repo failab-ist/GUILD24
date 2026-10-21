@@ -1395,8 +1395,8 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: 만반의 준비 departs with 투력 x1.05 and a rolled Death chance of x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
- assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.05);assert.equal(Dungeon.PREPARED.factor,.80);
+test('구급품 진열장: 만반의 준비 departs with 투력 x1.03 (User 2026-10-21, was x1.05) and a rolled Death chance of x .60 instead of x .80 (User 2026-10-03, v2.10.0)',()=>{
+ assert.equal(DATA.decorationParams.aidCabinet.preparedFactor,.60);assert.equal(DATA.decorationParams.aidCabinet.powerMult,1.03);assert.equal(Dungeon.PREPARED.factor,.80);
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
  const npc=pack=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;n.fatigue=0;n.records=[];return n;};
  let saved=0,worse=0,diff=0;

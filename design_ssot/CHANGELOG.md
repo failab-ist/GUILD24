@@ -56,7 +56,7 @@ and this table is their commit record.
 | v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15, 정가 refuses less, operating cost 200 / +10, visit Wallet floor back to 30, failure Death CombatDeficit × 0.50 | (the User sets it) |
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
-| v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR; 알뜰 금고 +300 → +100G in a second PR | (the User sets it) |
+| v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR; 알뜰 금고 +300 → +100G and 구급품 진열장 투력 +5 → +3% in a second PR | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -79,6 +79,12 @@ Measurement: `reports/v2100-measure/event-30-20261021/`.
   route cleared first far ahead of the others. Trajectories 200 × 10 on main deb36cf, first clear within 10 Runs at 300 / 150 / 100G:
   economy 71 / 63 / 60%, best 50 / 56 / 51%, survival · operation · none 40 · 25 · 10% unchanged; economy cash / Day 55 / 50 / 44G,
   deaths / Run 7.3 in all three. Fresh Runs wear no Decoration and are unchanged. Measurement: `reports/v2100-measure/thrift-safe-20261021/`.
+- META 구급품 진열장: 만반의 준비 투력 × 1.05 → × 1.03 (User 2026-10-21: 「진열장 3퍼는 일단 넣는걸로」); Death × 0.60 stays.
+  A third run of the User's (save mvhh3bss, only this Decoration) reached D29, and the +5% turned about five lost D1~10
+  expeditions into wins. With 금고 100G, trajectories 200 × 10, first clear within 10 Runs +5 → +3%: survival 40 → 32%,
+  best 51 → 50%, economy · operation · none 60 · 25 · 10% unchanged; survival first D30 74 → 62%. Candidate measured and kept
+  out: 원정 지원금 간판 50 → 25% on top (economy 60 → 57%, best 50 → 45%, D25 balance on the economy route 2866 → 2844G).
+  Measurement: `reports/v2100-measure/aid-cabinet-20261021/`.
 - COPY: the first-accident coach line calls the accident with no Hazard behind it 「예상치 못한 사고」, the same name the
   NIGHT Outcome sentence uses (was 「운 나쁜 사고」).
 
