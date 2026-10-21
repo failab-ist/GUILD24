@@ -364,6 +364,7 @@ Versioning / manifest changes must reflect the current project routing rather th
 - `design_ssot/`의 문서를 고치면 그 파일 이름의 버전도 지금 게임 버전(`dist/build.js`의 `version`)으로 올린다.
   예: 게임이 v2.13.18일 때 EVENT 문서를 고치면 이름 끝이 `_v2.8.0`에서 `_v2.13.18`로 바뀐다. 문서만 고쳐 게임 버전이 그대로여도 지금 버전을 쓴다.
 - 고칠 때마다 확인한다: 커밋 전에 `git diff --name-only origin/main -- design_ssot/`에 나온 파일의 이름 끝이 지금 버전인가.
+- 게임 버전이 올라가도 사양이 안 바뀐 문서는 그대로 둔다(이름 · 머리글 모두). 지금 게임 버전은 SPEC_INDEX의 `DESIGN_SSOT=` 한 곳에만 적는다.
 - 한꺼번에 바꾸지 않는다. 그 작업에서 고친 파일만 올리고, 안 고친 파일은 옛 버전 이름 그대로 둔다.
   다른 문서의 이름이 바뀌어 링크만 고친 파일은 고친 것으로 치지 않는다.
 - 이름을 바꿀 때:
