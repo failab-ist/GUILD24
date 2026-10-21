@@ -168,12 +168,12 @@ D0 must not reveal or depict:
 - Final Family / Hazard state;
 - the per-Boss FINAL domain backdrop.
 
-Exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Exact copy -> COPY_AUDIT_APPROVED_v2.13.17.md.
 D5 remains the first Boss identity / art reveal.
 
 ## REVEAL ORDER
 
-Presentation -> UI_UX_v2.13.17.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Presentation -> UI_UX_v2.13.17.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.17.md.
 
 ### D5
 
@@ -287,7 +287,7 @@ Balance intent:
 - first clear must still be possible at Job Mastery 0 through strong Run growth/preparation/build/player mastery
 - no new permanent power is granted merely for failing Runs
 
-Meta progression remains owned by `META_v2.8.0.md`.
+Meta progression remains owned by `META_v2.13.17.md`.
 
 ---
 
@@ -507,7 +507,7 @@ Rules:
 - Gluttony does not suppress the entire Item effect bundle
 
 Item effect ownership -> `ITEM_v2.8.0.md`
-Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.8.0.md`.
+Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.17.md`.
 
 ---
 
@@ -701,7 +701,7 @@ Boss CLEAR continues to feed:
 - Job x Boss matrix / Job Mastery
 - distinct-Boss unlock progression
 
-Cross-run Job Mastery / distinct-Boss unlock processing is owned by `META_v2.8.0.md`.
+Cross-run Job Mastery / distinct-Boss unlock processing is owned by `META_v2.13.17.md`.
 BOSS does not duplicate Meta progression state.
 
 ---
@@ -835,7 +835,7 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 
 Final state / formula / family / party / clear / Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Relic / Seal window / Sloth opportunity -> `RELIC_v2.8.0.md`
-Meta / mastery / unlock -> `META_v2.8.0.md`
+Meta / mastery / unlock -> `META_v2.13.17.md`
 Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.8.0.md`
 Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`
 Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.8.0.md`
@@ -843,4 +843,4 @@ Sale revenue commit -> `SALE_v2.8.0.md`
 Closing revenue report -> `NIGHT_CLOSING_v2.8.0.md`
 Presentation / UI reveal -> `UI_UX_v2.13.17.md`
 Copy / terminology -> `COPY_WORLD_VOICE_v2.8.0.md`
-Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.17.md

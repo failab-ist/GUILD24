@@ -4,7 +4,7 @@
 
 `npm run audit`가 현재 Source에서 자동 생성한다. 이 파일은 설계 원본이 아니며 직접 수정하지 않는다. 실험 후보·시뮬 결과는 포함하지 않는다. 기본 가격·고유 효과를 적었으며 사건·특성·점포지원·메타에 따른 추가 보정은 별도다.
 
-설계 원본: [ITEM](../design_ssot/ITEM_v2.8.0.md) · [RELIC](../design_ssot/RELIC_v2.8.0.md) · [META](../design_ssot/META_v2.8.0.md) · [DUNGEON_HAZARD](../design_ssot/DUNGEON_HAZARD_v2.8.0.md) · [FINAL](../design_ssot/FINAL_EXPEDITION_v2.8.0.md)
+설계 원본: [ITEM](../design_ssot/ITEM_v2.8.0.md) · [RELIC](../design_ssot/RELIC_v2.8.0.md) · [META](../design_ssot/META_v2.13.17.md) · [DUNGEON_HAZARD](../design_ssot/DUNGEON_HAZARD_v2.8.0.md) · [FINAL](../design_ssot/FINAL_EXPEDITION_v2.8.0.md)
 
 ## 1. 공통 밸런스 수치
 

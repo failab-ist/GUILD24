@@ -185,7 +185,7 @@ Logical retry behavior:
 
 Refusal state must not incorrectly lock/unlock unrelated price choices.
 
-Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`
+Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`
 
 ## ORDINARY SALE PURCHASE ACCEPTANCE
 

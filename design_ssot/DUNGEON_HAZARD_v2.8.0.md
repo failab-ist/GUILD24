@@ -985,7 +985,7 @@ preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 i
   중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
 - the SALE `실패 시 사망 위험` snapshot is the raw `failureDeathChance` and never includes `preparedFactor`
   (it depends on the Bag, which the snapshot excludes)
-- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`
+- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`
 
 ### Resolution order
 
@@ -1020,7 +1020,7 @@ That displayed value:
 The actual expedition still recalculates `failureDeathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
 Do not update the displayed `실패 시 사망 위험` to reveal the post-supply answer.
 
-Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md` / `COPY_AUDIT_APPROVED_v2.8.0.md`.
+Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md` / `COPY_AUDIT_APPROVED_v2.13.17.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
@@ -1051,7 +1051,7 @@ k = the unbroken run of this adventurer's immediately preceding expeditions that
   succeeds is already healed by the ordinary Injury step)
 - independent of 구급키트; one draw, only on this path
 - the Night report says the adventurer recovered with one line; the chance is never shown; exact copy ->
-  `COPY_AUDIT_APPROVED_v2.8.0.md`
+  `COPY_AUDIT_APPROVED_v2.13.17.md`
 
 ## BAD-LUCK PREPARATION ASSIST (hidden)
 
@@ -1091,7 +1091,7 @@ Hazard / Supply / Insurance / Trait rules remain in their existing systems.
 Great Success uses Combat-Power margin after ordinary Success qualification.
 
 When the Player-facing Great Success opportunity threshold is met, presentation must explicitly signal the opportunity.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`. Presentation -> `UI_UX_v2.13.17.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`. Presentation -> `UI_UX_v2.13.17.md`.
 Signal threshold must match the actual calculation.
 
 Margin formula:

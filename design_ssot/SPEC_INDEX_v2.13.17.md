@@ -227,7 +227,7 @@ play and valid RNG.
 
 ### INACTIVE LEGACY BOUNDARY
 No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
-in the current game. Archive ownership is routed to META_v2.8.0.md.
+in the current game. Archive ownership is routed to META_v2.13.17.md.
 
 ## DEFERRED EXPANSION
 
@@ -253,7 +253,7 @@ Core / Run / Meta:
 - SPEC_INDEX_v2.13.17.md (this index; §GAME CORE)
 - GLOSSARY_v2.13.17.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
-- META_v2.8.0.md
+- META_v2.13.17.md
 
 Economy / NPC / Dungeon / Item / Store Build:
 - ECONOMY_ORDER_v2.8.0.md
@@ -268,7 +268,7 @@ Flow / Result / UI / Copy:
 - UI_UX_v2.13.17.md
 - PRESENTATION_PRINCIPLES_v2.8.0.md
 - COPY_WORLD_VOICE_v2.8.0.md
-- COPY_AUDIT_APPROVED_v2.8.0.md
+- COPY_AUDIT_APPROVED_v2.13.17.md
 - EVENT_v2.8.0.md
 - BOSS_v2.8.0.md
 - FINAL_EXPEDITION_v2.8.0.md
@@ -288,7 +288,7 @@ audit-HEAD Source defect record, every SA-Q adopted at the v2.8 release; Source 
 
 GAME CORE / CROSS-RUN IDENTITY -> SPEC_INDEX §GAME CORE (this index)
 RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN_v2.8.0.md
-META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.8.0.md
+META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.17.md
 PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.8.0.md
 NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.8.0.md
 DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.8.0.md
@@ -300,7 +300,7 @@ UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.
 PRESENTATION PRINCIPLES / VISUAL CONSTRUCTION / ASSET QUALITY / ORNAMENT BUDGET / AUDIO PRESENTATION / VISUAL REVIEW -> PRESENTATION_PRINCIPLES_v2.8.0.md
 TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.13.17.md
 COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
-EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.8.0.md
+EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.13.17.md
 EVENT -> EVENT_v2.8.0.md
 BOSS -> BOSS_v2.8.0.md
 FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.8.0.md
@@ -321,7 +321,7 @@ Do not delete history files merely because they are old.
 ## RETIRED ACTIVE SYSTEMS
 
 Franchise Grade, Franchise Achievement track, Grade ORDER discount and Start Contract selection / gating are
-historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.8.0.md.
+historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.13.17.md.
 
 ## DOCUMENT BASELINE POLICY
 

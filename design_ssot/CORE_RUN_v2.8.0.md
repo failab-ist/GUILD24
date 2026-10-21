@@ -73,7 +73,7 @@ This is an information beat, not a new gameplay Phase. Opening the D0 briefing:
 - does not itself generate the Boss identity, Trait or Final state.
 
 The briefing owns no Boss reveal beyond the Run objective / investigation cadence.
-Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.13.17.md.
 Boss information boundary -> BOSS_v2.8.0.md.
 Presentation -> UI_UX_v2.13.17.md.
 
@@ -527,7 +527,7 @@ Exact tutorial content/presentation -> `UI_UX_v2.13.17.md`.
 ## RUN-END STORE CAPITAL SETTLEMENT
 
 Normal Run end settles Store Capital exactly once from accumulated actual Gross Sales and the reached-Day band.
-Exact formula/rates -> META_v2.8.0.md.
+Exact formula/rates -> META_v2.13.17.md.
 
 Bankruptcy, Death-limit closure, Final failure and Boss CLEAR are eligible normal endings.
 Manual Run Abandon yields 0 Store Capital.
@@ -559,7 +559,7 @@ D21~D30  10
 ```
 
 - the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
-- 추모 방명록 adds the current Decoration bonus to every segment limit (`META_v2.8.0.md` §counter — 추모 방명록)
+- 추모 방명록 adds the current Decoration bonus to every segment limit (`META_v2.13.17.md` §counter — 추모 방명록)
 - the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
 - the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.13.17.md`)
 - death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
@@ -578,7 +578,7 @@ Canonical NPC value -> NPC_TRAIT_v2.8.0.md
 
 Core Run identity resets each Run.
 
-Cross-run progression / Knowledge / unlock truth is owned by -> META_v2.8.0.md
+Cross-run progression / Knowledge / unlock truth is owned by -> META_v2.13.17.md
 
 There is no Global Meta XP. Run Day advancement itself grants no Job Mastery or Boss-clear progress.
 
@@ -1312,7 +1312,7 @@ Boss identity / reveal / Trait / Sloth acceptance criteria are owned by:
 -> BOSS_v2.8.0.md
 
 Meta progression acceptance criteria are owned by:
--> META_v2.8.0.md
+-> META_v2.13.17.md
 
 CORE_RUN §QA retains only Run-flow, D30 timing, stock timing, save/resume, and complete-loop integration checks.
 
@@ -1329,7 +1329,7 @@ Night / closing -> `NIGHT_CLOSING_v2.8.0.md`
 Event / day modifier -> `EVENT_v2.8.0.md`
 D25/D30 Final flow / Final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss identity / trait / reveal / cadence / GREED -> `BOSS_v2.8.0.md`
-Meta / mastery / knowledge / Account -> `META_v2.8.0.md`
+Meta / mastery / knowledge / Account -> `META_v2.13.17.md`
 Presentation / mobile / tutorial presentation / Decoration UI -> `UI_UX_v2.13.17.md`
 Player-facing copy / abandon wording -> `COPY_WORLD_VOICE_v2.8.0.md`
-Exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`
+Exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`

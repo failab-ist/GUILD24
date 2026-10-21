@@ -98,7 +98,7 @@ Stat order:
     = Job Growth × that NPC's internal Potential
 
 Potential is an internal growth input, never exposed as a relationship reward (→ §PLAYER-FACING GROWTH TRUTH).
-Job Mastery does not alter this table; current Job Mastery effect -> META_v2.8.0.md.
+Job Mastery does not alter this table; current Job Mastery effect -> META_v2.13.17.md.
 
 ### Job contribution — internal comparison
 
@@ -122,7 +122,7 @@ At Level L, contribution = Lv1 contribution + (L − 1) × per-Level contributio
 
 ## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
 
-Meta progress source -> META_v2.8.0.md
+Meta progress source -> META_v2.13.17.md
 
 - Job × Boss clear matrix, Mastery count and unlock thresholds are owned by META
 - before unlock, 도적/광전사 are not eligible for normal NPC Job generation
@@ -705,7 +705,7 @@ The Player must be able to learn that Loyalty:
 Loyalty does not directly increase the four Core Stats.
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.17.md.
 
 ## DEEP EXPEDITION NPC REWARD
 
@@ -1209,7 +1209,7 @@ For one successful ordinary paid purchase before explicit modifier effects:
 PASS:
 - a refusal does not apply the purchase Loyalty delta; a refused 150% applies -2
 - explicit Trait / Store Support modifiers apply only through their owned rules
-- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.8.0.md
+- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.17.md
 
 ### NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
 

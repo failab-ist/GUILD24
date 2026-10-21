@@ -542,7 +542,7 @@ Rules:
 - the stone adds nothing to the combat-failure retreat roll itself (that roll reads the Traits only)
 
 escapeBonus=+20%p
-player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.13.17.md` §4-22)
 
 Outcome-share evidence: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` (v2.9.10, Insurance).
 
@@ -561,7 +561,7 @@ Rules:
 - clearly above Return Stone in survival hierarchy: the remaining Death or Severe Injury is stopped outright, where 귀환석 only makes it less likely
 - a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
 - not Food/Drink; Fresh-category effect does not apply
-- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.13.17.md` §4-22)
 
 ### Insurance resolution order
 
@@ -1417,5 +1417,5 @@ Relic / build modifiers -> `RELIC_v2.8.0.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
 Order / reroll / pricing / Rarity progression -> `ECONOMY_ORDER_v2.8.0.md`
 Final usefulness -> `FINAL_EXPEDITION_v2.8.0.md`
-Meta unlock -> `META_v2.8.0.md`
+Meta unlock -> `META_v2.13.17.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`
