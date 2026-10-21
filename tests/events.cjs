@@ -142,7 +142,7 @@ test('EVENT 24~55: every new Event effect moves its own channel',()=>{
   const prior=h.rng;h.rng={int:(lo,hi)=>hi};
   for(const rarity of [0,1,2,3,4]){const it=DATA.items.find(it=>it.rarity===rarity);assert.ok(it,'each rarity has a test subject');assert.ok(h.offerFor(it).quantity<=2,'rarity '+rarity+' supply cap includes support bonuses');}
   assert.equal(h.offerFor(DATA.itemBy.rice).quantity,2);t.event=null;t.facilities=[];
-  assert.equal(h.offerFor(DATA.itemBy.rice).quantity,4,'ordinary supply remains 2 to 4');h.rng=prior;
+  assert.equal(h.offerFor(DATA.itemBy.rice).quantity,3,'ordinary supply remains 2 to 3 (User 2026-10-21, was 2 to 4)');h.rng=prior;
  }
  // SALE: 바가지 closed, drink intent up
  {const ffl=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;/* this reads a Trait / Event shift, not the 정가 floor */const h=fresh('ev-sale'),t=h.run;t.phase='sell';const n=t.npcs[0];n.traits=[];n.money=9999;n.pack=[];n.refused=[];t.queue=[n.id];t.cursor=0;h.stock('water',1);
@@ -593,12 +593,13 @@ test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat acco
 
 test('NPC_TRAIT destinationDefault (User 2026-09-25): with as many visitors as Gates, every open Gate is claimed by someone',()=>{
  let days=0,covered=0,fixes=0;
- for(let k=1;k<=60;k++){const g=fresh('gate-cover-'+k);
+ for(let k=1;k<=80;k++){const g=fresh('gate-cover-'+k);
   for(let d=0;d<30&&g.run.phase!=='end';d++){const s=g.run;
    if(s.phase==='morning'&&s.dungeons.length>1&&s.queue.length>=s.dungeons.length){days++;
     const claimed=new Set(s.queue.map(id=>s.npcs.find(n=>n.id===id).claimedDestination));
     if(claimed.size===s.dungeons.length)covered++;}
    s.money=5000;advance(g);}}
+ /* 60 -> 80 Runs (User 2026-10-21 stock 2~3 · Tier I +3 end Runs a little sooner) */
  assert.ok(days>50,'enough multi-Gate Days were seen: '+days);
  assert.equal(covered,days,'every multi-Gate Day with enough visitors covers every Gate');
 

@@ -272,7 +272,7 @@ const FIRST_TIER2_DAY=(()=>{for(let d=1;d<=29;d++)if(tierWeights(d)[1]>0)return 
 const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/3],mire:['mobility',1/3],fire:['spirit',1/3],fear:['spirit',1/3],dark:['mobility',1/3],whiteout:['spirit',1/3]};
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
 /* DUNGEON_HAZARD §HAZARD THREAT: TierTerm by Tier I / II / III. */
-const TIER_THREAT=[2,6,12];
+const TIER_THREAT=[3,6,12];
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD §HAZARD THREAT: ordinary curve; Final fixed requirement. */

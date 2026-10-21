@@ -100,6 +100,21 @@ person's rerolls and prices could not be compared with the bot's. Each Day's led
 sale and refusal), and so `reportHistory[].trace` in the save, about 600 bytes a Day. Reads only: outcomes and roll order are unchanged
 (40 investor Runs hash identically with the trace removed). `tools/save-check.cjs` §8 reads it.
 
+### v2.13.19 addendum — Common / Uncommon stock 2~3, Tier I Hazard +3 (User 2026-10-21, same version: 「19로 가고 문서만 정리」)
+
+The User found that early Tier I bags were won with Stat Food and Drinks rather than Counters (in the User's saves a Stat-only Tier I bag won
+77% of 304 Tier I expeditions, 44~51% with a Counter, the same injury after a win), and wanted a busy Day to need a Reroll for money pressure
+(「재고 max 3」, 「1티어 위험은 정말 살짝만」).
+
+- ECONOMY_ORDER §ORDER OFFER QUANTITY: one Common / Uncommon offer stocks 2~3 units (was 2~4), so one Item holds at most 6 on a sheet (was 8).
+  Store Support and Event additions are unchanged.
+- DUNGEON_HAZARD §HAZARD THREAT: Tier I TierTerm 2 → 3 (Tier II / III stay 6 / 12); the DAY 1 Tier I example reads 대응 16 (COPY_AUDIT §4-16 example follows).
+- Measurement (new investor bot #268, fresh 1000 + trajectories 200 × 10, main 6072564 copies): fresh D30 9.2 → 9.3%, clears 2.8 → 3.0%,
+  deaths / Run 7.73 → 7.52, ended Day median 17 → 16; Runs reaching D30 in the trajectories none 152 → 114, economy 276 → 214, survival
+  602 → 488, operation 231 → 168, best 427 → 361. First clear within 10 Runs none 24 → 22%, survival 68 → 63%. D1~10 Counter sales
+  30.8 → 32.4%, Rerolls / Day 0.20 → 0.23 (the bot barely rerolls, so the money pressure is for human Runs to show).
+  Logs: `reports/v2100-measure/stock-tier1-20261021/`.
+
 ## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 
 The economy route cleared first far ahead of the others; the User asked for the economy Decorations reviewed as a whole (「경제도 전체적으로 재검토」).
