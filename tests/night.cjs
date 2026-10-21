@@ -284,12 +284,12 @@ test('the contradictions found in visual QA stay fixed',()=>{
  const injuredBase = {...base, outcome:'부상', combatWon:false, injury:1};
  const p1 = P.nightChanges(injuredBase, {traits:[]}).find(c=>c.label==='남은 부상')?.value;
  /* SA-Q03: the Player-facing Stat is 강인함, never 생존, and the pair reads 투력 -> 강인함. */
- assert.equal(p1, '투력 -15% · 강인함 -20%', 'base injury penalty');
+ assert.equal(p1, '투력 -15%, 강인함 -20%', 'base injury penalty');
  const p2 = P.nightChanges(injuredBase, {traits:['grit']}).find(c=>c.label==='남은 부상')?.value;
- assert.equal(p2, '투력 +20% · 강인함 -20%', 'grit replaces combat penalty');
+ assert.equal(p2, '투력 +20%, 강인함 -20%', 'grit replaces combat penalty');
  /* 야전 들것 sets the penalty prepare() applies, so the card prints that figure (User 2026-10-01 review) */
  const p3 = P.nightChanges(injuredBase, {traits:[]}, ['fieldStretcher']).find(c=>c.label==='남은 부상')?.value;
- assert.equal(p3, '투력 -'+Math.round(D.relicParams.fieldStretcher.injuredCombatPenalty*100)+'% · 강인함 -20%', 'the stretcher figure, not the base 15%');
+ assert.equal(p3, '투력 -'+Math.round(D.relicParams.fieldStretcher.injuredCombatPenalty*100)+'%, 강인함 -20%', 'the stretcher figure, not the base 15%');
  assert.equal(Dungeon.injuryPenaltyFor(['fieldStretcher']), D.relicParams.fieldStretcher.injuredCombatPenalty, 'one owner for the figure');
  // a hazard event with no carried item is not attributed to anything
  const bare={...base,outcome:'성공',combatWon:true,xp:20,loot:30,

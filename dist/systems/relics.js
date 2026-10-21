@@ -18,13 +18,13 @@ function relatedPrep(it,hazards){return directCounter(it,hazards)||hazards.some(
 /* RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime truth of a condition-type support, read at render
    time - no Save field, no verdict word; an always-on support returns ''. Exact lines COPY_AUDIT §11-32. */
 function status(g,id){const s=g.run,p=D.relicParams;if(!s)return '';switch(id){
- case 'rotation':{const n=s.previousSales||0;return '전날 판매 '+n+'건 · '+(n>=4?'오늘 적용 중':'오늘 미적용');}
- case 'logisticsHQ':{const n=s.previousSales||0,f=p.logisticsHQ,d=Math.round(100*Math.min(f.maxDiscount,f.perSale*n));return '전날 판매 '+n+'건 · '+(d>0?'오늘 매입가 -'+d+'%':'오늘 미적용');}
+ case 'rotation':{const n=s.previousSales||0;return '전날 판매 '+n+'건, '+(n>=4?'오늘 적용 중':'오늘 미적용');}
+ case 'logisticsHQ':{const n=s.previousSales||0,f=p.logisticsHQ,d=Math.round(100*Math.min(f.maxDiscount,f.perSale*n));return '전날 판매 '+n+'건, '+(d>0?'오늘 매입가 -'+d+'%':'오늘 미적용');}
  case 'guarantee':return s.guaranteeUsed?'오늘 지원 사용함':'오늘 지원 1회 남음';
- case 'groupOrder':{const n=s.daily?.sales||0,f=p.groupOrder;return '오늘 판매 '+n+'건 · '+(n>=f.commissionFrom-1?'판매마다 +'+f.commission+'G 지급 중':f.commissionFrom+'번째부터 +'+f.commission+'G');}
+ case 'groupOrder':{const n=s.daily?.sales||0,f=p.groupOrder;return '오늘 판매 '+n+'건, '+(n>=f.commissionFrom-1?'판매마다 +'+f.commission+'G 지급 중':f.commissionFrom+'번째부터 +'+f.commission+'G');}
  case 'rerollTicket':return (s.rerollCount||0)<p.rerollTicket.freeRerolls?'오늘 무료 교환 남음':'오늘 무료 교환 사용함';
  case 'bulk':{if(!['order','final'].includes(s.phase))return '';const cart=s.cart||{};const skus=[...new Set(Object.keys(cart).filter(i=>cart[i]>0).map(i=>s.offers[i]?.item))];const n=skus.filter(item=>Object.keys(cart).filter(i=>s.offers[i]?.item===item).reduce((a,i)=>a+cart[i],0)>=3).length;return n?'지금 발주에서 '+n+'종 적용':'지금 발주에서 적용 없음';}
- case 'memberBundle':{if(s.phase!=='sell')return '';const n=g.current();if(!n)return '';if(!G.Adventurer.isTrustedRegular(n))return n.name+' · 단골 아님';return n.name+' · 단골 · 오늘 유료 구매 '+n.history.filter(h=>h.day===s.day&&h.paid>0).length+'건';}
+ case 'memberBundle':{if(s.phase!=='sell')return '';const n=g.current();if(!n)return '';if(!G.Adventurer.isTrustedRegular(n))return n.name+': 단골 아님';return n.name+': 단골, 오늘 유료 구매 '+n.history.filter(h=>h.day===s.day&&h.paid>0).length+'건';}
  default:return '';}}
 /* RELIC_v2.8 §D30 CANDIDATE ELIGIBILITY. D30 subtracts the explicit no-effect set from the
    ordinary pool and does nothing else: no previousSales gate lives here any more. 회전 진열대 and

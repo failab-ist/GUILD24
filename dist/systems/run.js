@@ -60,8 +60,8 @@ P.liquidate=function(stockId){const s=this.run;
  const st=s.inventory[i],price=Math.round((st.cost??D.itemBy[st.item].buy)*.5);
  if(s.rescueDay!==s.day){s.rescueUsed=(s.rescueUsed||0)+1;s.rescueDay=s.day;}
  s.inventory.splice(i,1);s.money+=price;s.daily.liquidation=(s.daily.liquidation||0)+price;
- s.notice=D.itemBy[st.item].name+' 재고 정리 · '+price+'G 회수'
-  +(s.money>=0?' · 회생 완료':'')+' (회생 '+s.rescueUsed+' / '+this.rescueLimit()+')';
+ s.notice=D.itemBy[st.item].name+' 재고 정리: '+price+'G 회수'
+  +(s.money>=0?', 회생 완료':'')+' (회생 '+s.rescueUsed+' / '+this.rescueLimit()+')';
  this.save();return true;};
 /* META_v2.8 §Run-end settlement structure:
      Store Capital Gain = round(Gross Sales x Day-reach conversion rate)
@@ -121,7 +121,7 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
  const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');
  const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');
  const item=s.inventory[i].item,price=this.finalPrice(item);
- if(this.finalNoEffect(item))throw Error(G.Copy.finalPrep.noEffect+' · '+G.Copy.finalPrep.noEffectWhy);
+ if(this.finalNoEffect(item))throw Error(G.Copy.finalPrep.noEffect+': '+G.Copy.finalPrep.noEffectWhy);
  if(n.money<price)throw Error('이 모험가의 소지금으로는 살 수 없습니다.');
  n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
  n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});

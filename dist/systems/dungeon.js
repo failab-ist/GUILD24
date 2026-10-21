@@ -127,8 +127,8 @@ function supplyState(n,finalSupply){
    detail read the band from here rather than keeping thresholds of their own. */
 const FATIGUE_MAX=40;
 const FATIGUE_BANDS=[
- {min:40,name:'탈진',mobility:.40,combat:.40,text:'모든 능력치 -40% · 실패 시 사망 위험 +10%p'},
- {min:30,name:'소진',mobility:.40,combat:.20,text:'기동·정신 -40% · 투력·강인함 -20%'},
+ {min:40,name:'탈진',mobility:.40,combat:.40,text:'모든 능력치 -40%, 실패 시 사망 위험 +10%p'},
+ {min:30,name:'소진',mobility:.40,combat:.20,text:'기동·정신 -40%, 투력·강인함 -20%'},
  {min:20,name:'과로',mobility:.40,combat:0,text:'기동·정신 -40%'},
  {min:10,name:'지침',mobility:.15,combat:0,text:'기동·정신 -15%'},
  {min:0,name:'정상',mobility:0,combat:0,text:''}];
@@ -144,8 +144,8 @@ function fatigueLedger(n,run,outcome,e,baseline,raw,buffer,final){
  const hasFood=n.pack.some(id=>D.itemBy[id].category==='food');
  const foodSources=n.traits.filter(id=>D.traitBy[id].effects.supplyPerItem||(hasFood&&D.traitBy[id].effects.foodSupplyDelta)).map(id=>D.traitBy[id].name);
  if(hasFood&&n.feast>1&&run?.event)foodSources.push(run.event.name);
- const food='음식·음료'+(foodSources.length?' ('+foodSources.join(' · ')+')':'');
- add(food+' · 출발 전',-e.preRecovery);
+ const food='음식·음료'+(foodSources.length?' ('+foodSources.join(', ')+')':'');
+ add('출발 전 '+food,-e.preRecovery);
  add(outcome,baseline);
  const severe=outcome==='중상'||outcome==='사망';
  let adjusted=baseline;
@@ -153,7 +153,7 @@ function fatigueLedger(n,run,outcome,e,baseline,raw,buffer,final){
   const bounded=Math.max(0,adjusted);add('피로 하한 0',bounded-adjusted);adjusted=bounded;
   if((run?.event?.effects.outcomeFatigue||1)!==1)add(run.event.name,raw-adjusted);
  }
- add(food+' · 원정 후',-buffer);
+ add('원정 후 '+food,-buffer);
  add('피로 상한 40',final-(e.fatigueBeforeExpedition+Math.max(0,raw-buffer)));
  return rows;
 }
@@ -172,7 +172,7 @@ function conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty){
  const band=fatigueBand(effectiveFatigue);
  if(band.mobility){mobilityMod-=band.mobility;spiritMod-=band.mobility;}
  if(band.combat){combatMod-=band.combat;survivalMod-=band.combat;}
- if(band.min>0)why.push('피로 '+effectiveFatigue+' · '+band.name+': '+band.text);
+ if(band.min>0)why.push('피로 '+effectiveFatigue+' ('+band.name+'): '+band.text);
  return {combat:combatMod,survival:survivalMod,mobility:mobilityMod,spirit:spiritMod};
 }
 
@@ -195,7 +195,7 @@ function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
  }
  for(const st of itemStats)for(const k of STAT_KEYS)
   if(st.stats[k])sources[k].push({name:D.itemBy[st.item].name,v:st.stats[k]});
- const band=fatigueBand(effectiveFatigue),tag='피로 · '+band.name;
+ const band=fatigueBand(effectiveFatigue),tag='피로: '+band.name;
  if(band.mobility){sources.mobility.push({name:tag,v:-Math.round(band.mobility*100),isPct:true});sources.spirit.push({name:tag,v:-Math.round(band.mobility*100),isPct:true});}
  if(band.combat){sources.combat.push({name:tag,v:-Math.round(band.combat*100),isPct:true});sources.survival.push({name:tag,v:-Math.round(band.combat*100),isPct:true});}
  return sources;
