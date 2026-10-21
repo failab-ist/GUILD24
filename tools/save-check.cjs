@@ -137,6 +137,14 @@ function report(save){
  if(known.length){const short=known.filter(h=>h.wallet<(D.itemBy[h.item]?.sell??0));
   L.push('반값 판매 '+sales.length+'개 중 지갑이 기록된 '+known.length+'개: 정가를 낼 돈이 없었던 판매 **'+short.length+'개**, 정가를 낼 수 있었는데 깎아 준 판매 **'+(known.length-short.length)+'개**.','');}
  else L.push('할인이 투자였는지 지갑 부족이었는지는 판매 순간의 지갑이 기록에 없어(v2.13.12 전 세이브) 가리지 않는다.','');
+ /* 발주·판매 기록 (User 2026-10-21): 이 줄부터 세이브가 진열대 · 산 것 · 판 가격 방식을 하루마다 남긴다. 그 전 세이브는 건너뛴다. */
+ const traced=hist.filter(d=>d.trace);
+ if(traced.length){L.push('','## 8. 발주 · 판매 기록 (진열대 · 산 것 · 가격 방식)','');
+  head(['구간','기록 일수','하루 진열대 수','리롤한 날','산 개수/일','산 종류/일','정가','반값','바가지','거절/일']);
+  for(const [a,z] of BANDS){const H=traced.filter(d=>d.day>=a&&d.day<=z);if(!H.length)continue;
+   const sold=H.flatMap(d=>d.trace.sold),mode=m=>sold.filter(x=>x[2]===m).length,n=H.length;
+   row([a+'~'+z,n,(sum(H,d=>d.trace.sheets.length)/n).toFixed(1),pct(H.filter(d=>d.trace.sheets.length>1).length/n),(sum(H,d=>sum(d.trace.bought,b=>b[1]))/n).toFixed(1),(H.reduce((v,d)=>v+new Set(d.trace.bought.map(b=>b[0])).size,0)/n).toFixed(1),mode('full'),mode('half'),mode('overcharge'),(sum(H,d=>d.trace.refused.length)/n).toFixed(1)]);}
+  L.push('','리롤한 날 = 그날 진열대를 두 번 이상 본 날. 날마다의 진열대 · 산 것 · 판 것은 세이브의 `reportHistory[].trace`에 있다.');}
  return L.join('\n');
 }
 
