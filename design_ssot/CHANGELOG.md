@@ -92,6 +92,14 @@ The User wants players to learn that 정가 alone runs dry and 바가지 has to 
   72~78 / 82~88% (1.0~1.1 / 1.2~1.3 / 1.3~1.4x), a direct Counter 74 / 85 / 90% (1.23 / 1.38 / 1.47x); a poor customer (200G)
   37~54% (0.73~0.98x). 정가 is 83~92% in the same cases. A refusal closes the Item for that customer. Logs: `reports/v2100-measure/gouge-20261021/`.
 
+
+### v2.13.19 addendum — save keeps the order and sale trace (User 2026-10-21, same version)
+
+The User's saves said how much was spent and how many rerolls, but not what the sheet offered, what was bought or at which price mode, so a
+person's rerolls and prices could not be compared with the bot's. Each Day's ledger now carries `trace` (every sheet shown, every order, every
+sale and refusal), and so `reportHistory[].trace` in the save, about 600 bytes a Day. Reads only: outcomes and roll order are unchanged
+(40 investor Runs hash identically with the trace removed). `tools/save-check.cjs` §8 reads it.
+
 ## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 
 The economy route cleared first far ahead of the others; the User asked for the economy Decorations reviewed as a whole (「경제도 전체적으로 재검토」).
