@@ -2,7 +2,7 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.13.9
+DOC_VERSION=2.13.19
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -1188,6 +1188,10 @@ proves that removing the Item would have produced a meaningfully worse result/st
 
 This is proof/presentation logic. It does not change the actual expedition outcome.
 
+Every shadow Bag keeps the real Bag's 만반의 준비 standing (User 2026-10-21): removing one Item may not lose the 2-Item
+bonus in the comparison, so an Item is named only for its own effect. A result only 만반의 준비 saved reads as
+「만반의 준비 덕분에 목숨을 건졌다」 alone, with no Item name; an Item that really helped is named without the others.
+
 ## ACTUAL RESOLUTION FIRST
 
 The real expedition resolves exactly once under ordinary canonical rules.
@@ -1409,7 +1413,7 @@ SETUP:
 Use a Final Expedition that selects canonical Dungeon Families.
 
 EXPECT:
-Final reads each selected Family's existing T2 Hazard definition from `DUNGEON_HAZARD_v2.8.0.md`.
+Final reads each selected Family's existing T2 Hazard definition from `DUNGEON_HAZARD_v2.13.19.md`.
 No alternate/duplicated Final-only Family Hazard table exists here.
 
 PASS:
@@ -1474,7 +1478,7 @@ Gate count PASS (generation before visitor coverage; NPC_TRAIT §DESTINATION may
 - D30 does not run ordinary Gate-count generation
 
 Tier PASS:
-- exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
+- exact anchor rows equal DUNGEON_HAZARD_v2.13.19.md
 - all in-between Days use linear interpolation between surrounding anchors
 - DAY 21~29 then move 0.10 of T2 to T3 (D24 10 / 50 / 40 · D29 0 / 35 / 65); no other Day shifts
 - D30 does not run ordinary Tier generation
@@ -1553,7 +1557,7 @@ Hazard readiness ratio:
 - otherwise -> 취약
 
 PASS:
-- Hazard Defense uses the exact Core-Stat coefficients in DUNGEON_HAZARD_v2.8.0.md
+- Hazard Defense uses the exact Core-Stat coefficients in DUNGEON_HAZARD_v2.13.19.md
 - displayed label and actual underlying preparation state read the same calculation
 - exact hidden formula is not exposed merely because QA knows it
 

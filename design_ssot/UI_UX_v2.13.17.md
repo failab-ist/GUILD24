@@ -161,7 +161,7 @@ writes nothing. No full-screen DAY transition.
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
 No next-day Gate-count or Tier forecast anywhere. Today's open Gates, their numbered Hazard rows and the per-open-Gate
-visitor count (public at MORNING and ORDER) are the whole preparation context; `DUNGEON_HAZARD_v2.8.0.md` generation stays
+visitor count (public at MORNING and ORDER) are the whole preparation context; `DUNGEON_HAZARD_v2.13.19.md` generation stays
 internal. Hidden: next-day Family / Gate composition / Hazard set; any future customer's identity / destination;
 recommended Item/category/quantity prose.
 
@@ -368,7 +368,7 @@ the pin too). Below the width that holds both cells on one line the 환경 대�
 
 Never show exact expedition Success %, the hidden readiness thresholds (0.75 / 0.40) and Defense formula, or exact Great
 Success % (`대응 {N} 필요` and `{능력치} {n}당 대응 1 제공` are public Gate facts, §HAZARD NUDGE). The % follows
-`DUNGEON_HAZARD_v2.8.0.md`: the chance an ordinary failed expedition escalates to Death, not unconditional Death odds.
+`DUNGEON_HAZARD_v2.13.19.md`: the chance an ordinary failed expedition escalates to Death, not unconditional Death odds.
 
 After a purchase commits in the visit, the Combat Forecast and the death % stay the snapshot — never `접전 -> 우세`, `12% -> 5%`;
 환경 대응 is the live meter instead (§SALE — ENVIRONMENT METER, User 2026-10-02). The
@@ -666,7 +666,7 @@ transaction state. Mechanics -> `SALE_v2.8.0.md`.
 
 ## SUPPLY / FATIGUE PREVIEW
 
-Public deterministic arithmetic from `DUNGEON_HAZARD_v2.8.0.md`, e.g. `피로 9 -> 출발 7` — not an Outcome prediction. Fatigue
+Public deterministic arithmetic from `DUNGEON_HAZARD_v2.13.19.md`, e.g. `피로 9 -> 출발 7` — not an Outcome prediction. Fatigue
 stays numeric (0~40), no `양호/주의/위험` tiers; band names (정상 / 지침 / 과로 / 소진 / 탈진) and effects belong to DUNGEON_HAZARD
 and the band is named from 20 up. With a penalty active: 10+ (지침) gets readable Stat-source feedback; 20+ (과로 / 소진 / 탈진,
 ceiling 40) strong danger treatment.
@@ -694,7 +694,7 @@ the system, not what to buy.
 Combat 우세 / 접전 / 불리; Hazard 취약 / 불안 / 대응 / 충분 — labelled as an estimate; no success %, master safety score or fake
 precision. The first forecast tutorial says the expedition may differ from the prediction. Destination reliability is taught
 as the system rule, not around 허세: `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.` (COPY_WORLD_VOICE_v2.8.0.md
-tutorial coach). Logic -> DUNGEON_HAZARD_v2.8.0.md.
+tutorial coach). Logic -> DUNGEON_HAZARD_v2.13.19.md.
 
 ## STAT PRESENTATION
 
@@ -723,7 +723,7 @@ number first, on every row (MORNING Gate plate, SALE destination plate, D25 scou
 disclosure give the same information; hoverOnly=NO. Never explain some Hazards and leave others name-only. Allowed: clear
 labels, readable contrast/icon, preparedness label, highlighting what is relevant. Never: an alarm naming the required Item,
 `이 아이템 사세요`, automatic optimal picks — clarify ingredients, do not provide the answer. Ownership ->
-DUNGEON_HAZARD_v2.8.0.md.
+DUNGEON_HAZARD_v2.13.19.md.
 
 ## ITEM INFO
 
@@ -1608,7 +1608,7 @@ Player sees why another useful Item matters even when Success looks likely. The 
 
 ### 만반의 준비 TUTORIAL
 
-No mark before the fact: the first time 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) turns away a
+No mark before the fact: the first time 만반의 준비 (`DUNGEON_HAZARD_v2.13.19.md` §Preparation / Level Death reduction) turns away a
 Death, that NIGHT record names condition and effect in words (`NIGHT_CLOSING_v2.8.0.md` §DISCOVERY LINE). Fatigue likewise has
 no SUPPLY mark; the SALE counter anchors neither.
 
@@ -1640,7 +1640,7 @@ that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDI
 (acceptance -> UI_UX §QA UI-Q-v29-52.) Two contextual MORNING marks, like Deep: first time such a Gate is on the board, once per
 account, persisted and reset with the rest, anchored on that Gate's plate, rule only, never the answering Item (§READ THE
 SYSTEM):
-- the first tier II Gate that is not FIRE (`DUNGEON_HAZARD_v2.8.0.md` §Family T2): II Gates carry two base Hazards (Events may add another), each pressing its
+- the first tier II Gate that is not FIRE (`DUNGEON_HAZARD_v2.13.19.md` §Family T2): II Gates carry two base Hazards (Events may add another), each pressing its
   own Stat. Keyed on the tier, not the Hazard count (User 2026-10-02): a tier I Gate an Event (한파 · 독안개) gave a second
   Hazard, and a tier III Gate, never draw it
 - the first FIRE tier II or III Gate: the base Hazard stays one from II onward, while Events may add another. A FIRE tier I Gate never shows this mark. Existing completion/reset state is preserved.
@@ -2455,7 +2455,7 @@ attributed to 집중 사탕; no `보급 부족 완화` row.
 ##### Case B — its 피로 회복 releases a Fatigue band
 
 PASS:
-- effective Core Stats may rise per the current Fatigue owner (`DUNGEON_HAZARD_v2.8.0.md` bands)
+- effective Core Stats may rise per the current Fatigue owner (`DUNGEON_HAZARD_v2.13.19.md` bands)
 - the band recovery is not listed in `판매 후 변화` and is never attributed to the Item; the UI does not imply 집중 사탕 directly
   grants those Stats; the direct Item effect stays separately readable
 - displayed pre-supply Hazard Readiness and 실패 시 사망 위험 stay frozen, not replaced by a new label / percentage
@@ -3594,7 +3594,7 @@ night/closing / Night result -> NIGHT_CLOSING_v2.8.0.md
 npc presentation -> NPC_TRAIT_v2.8.0.md
 item info -> ITEM_v2.8.0.md
 relic choice -> RELIC_v2.8.0.md
-forecast / Fatigue / Supply -> DUNGEON_HAZARD_v2.8.0.md
+forecast / Fatigue / Supply -> DUNGEON_HAZARD_v2.13.19.md
 event reveal -> EVENT_v2.8.0.md
 final expedition / Final preparation -> FINAL_EXPEDITION_v2.8.0.md
 Boss modifier truth -> BOSS_v2.8.0.md

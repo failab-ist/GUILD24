@@ -13,7 +13,7 @@
 
 Design SSOT entry point:
 
-- `design_ssot/SPEC_INDEX_v2.13.18.md` (the stem `SPEC_INDEX_` is fixed; the version in the name changes when the file is edited, AGENTS §10-A)
+- `design_ssot/SPEC_INDEX_v2.13.19.md` (the stem `SPEC_INDEX_` is fixed; the version in the name changes when the file is edited, AGENTS §10-A)
 
 Use only the current owner Spec / QA routed by that index.
 Older planning / Vision amendments are history unless the current index or owner explicitly references them.

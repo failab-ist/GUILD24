@@ -285,7 +285,7 @@ Stat / Counter / `피로 회복 N` / explicit penalty.
 When the Player focuses/selects an **uncommitted** Item, UI may additionally show:
 - that Item's exact effects
 - selected price / affordability
-- a Food/Drink's own `피로 회복 N` row (no `피로 {A} → 출발 {B}` line; the arithmetic is `DUNGEON_HAZARD_v2.8.0.md`'s and NIGHT shows it)
+- a Food/Drink's own `피로 회복 N` row (no `피로 {A} → 출발 {B}` line; the arithmetic is `DUNGEON_HAZARD_v2.13.19.md`'s and NIGHT shows it)
 
 Before actual purchase commitment, do **not** show a hypothetical post-Item derived answer such as `접전 -> 우세`,
 `불안 -> 충분`, a 실패 시 사망 위험 `% -> %` change, a Great Success signal change, exact expedition success chance, or a
@@ -296,7 +296,7 @@ Nor add a relative Stat-contribution percent, a contribution score, a new live p
 qualitative best/worse Item labels. The Player sees exact ingredients and learns the final contribution from resolved
 NIGHT evidence; this boundary keeps the decision from turning into answer-following.
 
-The exact 실패 시 사망 위험 % shown here is the fixed **pre-supply** snapshot owned by `DUNGEON_HAZARD_v2.8.0.md`, not a hypothetical post-Item answer. It is conditional on the expedition entering a failure path and is not the unconditional whole-expedition Death probability.
+The exact 실패 시 사망 위험 % shown here is the fixed **pre-supply** snapshot owned by `DUNGEON_HAZARD_v2.13.19.md`, not a hypothetical post-Item answer. It is conditional on the expedition entering a failure path and is not the unconditional whole-expedition Death probability.
 
 ## PREVIEW
 
@@ -325,7 +325,7 @@ Hazard name, pressured Stat/readiness and qualitative preparedness form one read
 decision signal as multiple equal-priority labels. Long explanatory prose is secondary Help/Tooltip content, not
 always-on Core Decision copy.
 
-Canonical Dungeon -> DUNGEON_HAZARD_v2.8.0.md.
+Canonical Dungeon -> DUNGEON_HAZARD_v2.13.19.md.
 
 ## FROZEN OUTLOOK
 
@@ -385,7 +385,7 @@ Rules:
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
 - post-commit delta rows may show the exact Core-Stat / Counter / 피로 회복 changes the Item itself makes, never a Fatigue arithmetic line; they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists
 - post-commit feedback shows exact changed values/effects with readable source attribution rather than a new derived expedition answer
-- Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
+- Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.13.19.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope
 
 Example boundary:
@@ -727,7 +727,7 @@ game philosophy -> SPEC_INDEX §GAME CORE
 NPC / Trait / destination / growth / recent snapshot -> `NPC_TRAIT_v2.8.0.md`
 Item / inventory / Item effects -> `ITEM_v2.8.0.md`
 price / Economy / Wallet -> `ECONOMY_ORDER_v2.8.0.md`
-dungeon forecast / Hazard / Fatigue / Supply -> `DUNGEON_HAZARD_v2.8.0.md`
+dungeon forecast / Hazard / Fatigue / Supply -> `DUNGEON_HAZARD_v2.13.19.md`
 run / phase -> `CORE_RUN_v2.8.0.md`
 night result / Night proof -> `NIGHT_CLOSING_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`

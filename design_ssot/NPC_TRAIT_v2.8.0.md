@@ -151,7 +151,7 @@ Each playable Job should have >=2 Families where natural stats provide a meaning
 
 Forbidden: one Job required for one Family; one Job naturally solves all 5 Families.
 
-Dungeon affinity emerges from Stats + Items + visible Traits. Authoritative -> DUNGEON_HAZARD_v2.8.0.md
+Dungeon affinity emerges from Stats + Items + visible Traits. Authoritative -> DUNGEON_HAZARD_v2.13.19.md
 
 ## JOB × ITEM
 
@@ -299,7 +299,7 @@ Trait logic uses current authoritative systems only. Forbidden active Trait reso
 - `undead` as Hazard
 
 Rules:
-- `long` is not a Hazard and no Gate requires Supply; Food/Drink Supply only reduces Fatigue (`DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE).
+- `long` is not a Hazard and no Gate requires Supply; Food/Drink Supply only reduces Fatigue (`DUNGEON_HAZARD_v2.13.19.md` §SUPPLY -> FATIGUE).
 - `thirst` is not a authoritative Condition/penalty system.
 - `wet` is flavor only.
 - `armor` and `undead` are not authoritative Hazards.
@@ -367,7 +367,7 @@ Entry format: `N. **name** — internalDirection — effects`.
 36. **내열성** (heatproof) — POSITIVE — [benefit] fire 대응 +6
 37. **약시** (nearsight) — NEGATIVE — [cost] dark 대응 -4, whiteout 대응 -4
 
-Hazard Trait values are one scale for every Hazard (no Stat-group factor, `DUNGEON_HAZARD_v2.8.0.md` §HAZARD THREAT): 6 for a
+Hazard Trait values are one scale for every Hazard (no Stat-group factor, `DUNGEON_HAZARD_v2.13.19.md` §HAZARD THREAT): 6 for a
 one-Hazard Trait, 4 per Hazard for a two-Hazard Trait.
 
 ### HONEST
@@ -417,7 +417,7 @@ Result-fatigue modifiers:
 They apply to `성공` / `대성공` / `퇴각` / `부상`.
 They do not apply to `중상` / `사망`: for Severe Injury / Death, final expedition-result Fatigue gain is exactly 0 regardless of those Trait modifiers.
 
-Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply -> Fatigue recovery order -> `DUNGEON_HAZARD_v2.8.0.md`.
+Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply -> Fatigue recovery order -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 ## NPC RARITY
 
@@ -548,7 +548,7 @@ When an NPC departs while already `injury=1`:
 - these are outcome-risk modifiers, not hidden changes to the four Core Stats
 - they apply only while the NPC begins the expedition already injured
 
-Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.8.0.md`.
+Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 ### Severe Injury
 
@@ -1139,7 +1139,7 @@ EXPECT:
 ```
 
 PASS:
-- Retreat cures ordinary Injury only through `DUNGEON_HAZARD_v2.8.0.md` §RETREAT HEALING (its own chance, one draw)
+- Retreat cures ordinary Injury only through `DUNGEON_HAZARD_v2.13.19.md` §RETREAT HEALING (its own chance, one draw)
 - merely completing another expedition does not cure Injury
 - Severe/Death follow their own outcome/state paths
 - First Aid Aftercare may still override the persistent state after outcome resolution exactly as ITEM owns
@@ -1149,7 +1149,7 @@ PASS:
 SETUP: same NPC/Gate except departure Injury state.
 
 PASS:
-- `injury=1` departure activates the +10%p failure-conditioned Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.8.0.md`
+- `injury=1` departure activates the +10%p failure-conditioned Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.13.19.md`
 - the +10%p modifier is part of the single failure-conditioned Death-risk calculation and does not create a second Death roll
 - the modifier applies only because the NPC **began** that expedition injured
 - recovery during/after result cannot retroactively erase the risk state used for that expedition
@@ -1364,6 +1364,6 @@ FAIL if:
 ## RELATED
 
 Bag/transaction -> `SALE_v2.8.0.md`
-Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.8.0.md`
+Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.13.19.md`
 Item/Potion/Food/Aftercare -> `ITEM_v2.8.0.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`

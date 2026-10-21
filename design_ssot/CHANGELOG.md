@@ -57,6 +57,7 @@ and this table is their commit record.
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
 | v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
+| v2.13.19 | 2026-10-21 | RESULT-PROOF no longer credits an Item whose only role was filling the 2nd Bag slot (만반의 준비) | (the User sets it) |
 | v2.13.18 | 2026-10-21 | Decorations: 알뜰 금고 +300 → +100G, 구급품 진열장 투력 +5 → +3%, 명예 모험가 액자 above 일반 80 → 50%, and version bump in one PR | (the User sets it) |
 
 
@@ -66,6 +67,12 @@ and this table is their commit record.
 - DUNGEON_HAZARD §Tier generation: Tier II share D8 30 → 40%, D12 35 → 50%, D13 42 → 52% (T1 60 / 50 / 45%); DAY 7 and earlier unchanged. The middle of the Run asks for growth sooner.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
+
+## v2.13.19 — Night result: no Item credit for 만반의 준비 (User 2026-10-21)
+
+The Night line 「{Item} 덕분에 살아 돌아왔다」 named an Item that did nothing at the Gate (a 축성 손전등 on 북부 설원 폐허 II),
+because the proof's shadow Bag lost 만반의 준비 whenever any Item was removed. Shadow Bags now keep the real Bag's 만반의 준비 standing
+(DUNGEON_HAZARD §RESULT-PROOF), so only an Item's own effect is credited; 만반의 준비 keeps its own line. Outcomes and rolls are unchanged.
 
 ## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 
