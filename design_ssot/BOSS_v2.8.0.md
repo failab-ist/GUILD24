@@ -200,7 +200,7 @@ Do not expose exact Final success probability.
 If SLOTH and this Day is a selected Seal opportunity, expose the Seal choice with that Day's Relic window.
 
 The exact Final Family Pair + Hazard Pool is generated/revealed/persisted on D25 by `FINAL_EXPEDITION_v2.8.0.md`.
-Two Families do NOT imply exactly two Hazard keys; use the actual T2 Hazard set owned by `DUNGEON_HAZARD_v2.8.0.md`.
+Two Families do NOT imply exactly two Hazard keys; use the actual T2 Hazard set owned by `DUNGEON_HAZARD_v2.13.19.md`.
 
 ### D30
 

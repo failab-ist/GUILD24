@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.13.18
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.18
+DOC_VERSION=2.13.19
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.19
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_13_18_OPEN (v2.13.17 is closed; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
-SOURCE_ADOPTION_STATUS=V2_13_18_ADOPTED (every version through v2.13.18 is adopted in Source on main; CHANGELOG §v2.13.18)
+FREEZE_STATUS=V2_13_19_OPEN (v2.13.18 is closed; v2.13.19 = 증명 문구에서 만반의 준비 몫 분리, CHANGELOG §v2.13.19; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
+SOURCE_ADOPTION_STATUS=V2_13_19_ADOPTED (every version through v2.13.19 is adopted in Source on main; CHANGELOG §v2.13.19)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -178,7 +178,7 @@ Do not merge the two systems.
 - 최종 정답을 대신 계산하는 단일 안전점수
 
 Current SALE may expose the exact **failure-conditioned Death risk** owned by
-DUNGEON_HAZARD_v2.8.0.md. This is the chance of Death after the expedition has entered its failure
+DUNGEON_HAZARD_v2.13.19.md. This is the chance of Death after the expedition has entered its failure
 path; it is not the unconditional whole-expedition Death probability. It is exposed in the outlook help and
 the NPC detail, not as an always-on cell.
 
@@ -255,7 +255,7 @@ included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by 
 ## CURRENT CANONICAL FILE SET
 
 Core / Run / Meta:
-- SPEC_INDEX_v2.13.18.md (this index; §GAME CORE)
+- SPEC_INDEX_v2.13.19.md (this index; §GAME CORE)
 - GLOSSARY_v2.13.17.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
 - META_v2.13.18.md
@@ -263,7 +263,7 @@ Core / Run / Meta:
 Economy / NPC / Dungeon / Item / Store Build:
 - ECONOMY_ORDER_v2.8.0.md
 - NPC_TRAIT_v2.8.0.md
-- DUNGEON_HAZARD_v2.8.0.md
+- DUNGEON_HAZARD_v2.13.19.md
 - ITEM_v2.8.0.md
 - RELIC_v2.8.0.md
 
@@ -296,7 +296,7 @@ RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN
 META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.18.md
 PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.8.0.md
 NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.8.0.md
-DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.8.0.md
+DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.13.19.md
 ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
 STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
 SALE -> SALE_v2.8.0.md
@@ -357,7 +357,7 @@ A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
-    SPEC_INDEX_v2.13.18
+    SPEC_INDEX_v2.13.19
     -> exact routed owner
     -> related current QA
     -> Current Source

@@ -311,7 +311,7 @@ Morning reveals current-day Gate/Hazard information → player places Order → 
 Current Day: actual open Gate information is known before Order commitment; known Hazard information is the primary preparation context.
 Next Day: nothing is shown; Family / actual Gate result remain hidden.
 
-Canonical Gate generation/reveal -> `DUNGEON_HAZARD_v2.8.0.md`
+Canonical Gate generation/reveal -> `DUNGEON_HAZARD_v2.13.19.md`
 Canonical phase flow -> `CORE_RUN_v2.8.0.md`
 
 ## ORDER FLOW
@@ -521,7 +521,7 @@ Canonical Relic rule -> `RELIC_v2.8.0.md`
 
 ## NEXT-DAY FORECAST — RETIRED
 
-No next-day Gate-count or Tier forecast is shown at MORNING or ORDER. The seeded generation rules (`DUNGEON_HAZARD_v2.8.0.md`) remain internal; no forecast is drawn at all, so Save/Load cannot create a forecast-only RNG path.
+No next-day Gate-count or Tier forecast is shown at MORNING or ORDER. The seeded generation rules (`DUNGEON_HAZARD_v2.13.19.md`) remain internal; no forecast is drawn at all, so Save/Load cannot create a forecast-only RNG path.
 
 Keep hidden:
 - next-day Family
@@ -618,7 +618,7 @@ Deep Expedition exception:
 - no separate Deep/Guild cash prize
 
 Great Success probability and NPC growth reward are not reduced by this Store-Gold rule;
-they are owned by DUNGEON_HAZARD_v2.8.0.md and NPC_TRAIT_v2.8.0.md.
+they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v2.8.0.md.
 
 ## DEEP EXPEDITION SPONSORSHIP COST
 
@@ -639,7 +639,7 @@ it only commits the Store to the Deep Expedition opportunity.
 If the Store cannot afford the sponsorship, nomination cannot be confirmed.
 If no NPC is nominated, no sponsorship is charged.
 
-Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.8.0.md.
+Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.13.19.md.
 Deep NPC reward -> NPC_TRAIT_v2.8.0.md.
 
 ## D30 FINAL PREPARATION PRICE / WALLET / GOLD
@@ -1287,7 +1287,7 @@ Report Gold In / Out by channel and explain target miss causes.
 
 ## RELATED
 
-Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.8.0.md`
+Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.13.19.md`
 Morning / Order presentation -> `UI_UX_v2.13.17.md`
 Item catalog / Rarity identities / item roles -> `ITEM_v2.8.0.md`
 Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`

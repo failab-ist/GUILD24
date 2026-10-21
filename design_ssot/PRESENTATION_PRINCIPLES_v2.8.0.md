@@ -13,7 +13,7 @@ It holds no per-screen layout, pixel value or per-surface component spec.
 - implemented per-surface presentation detail lives in Current Source
 - exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.13.18.md
 - UI / UX / mobile / tutorial / layout rules -> UI_UX_v2.13.17.md; acceptance -> UI_UX §QA
-- mechanics and information cadence -> their routed owners (SPEC_INDEX_v2.13.18.md)
+- mechanics and information cadence -> their routed owners (SPEC_INDEX_v2.13.19.md)
 
 Read path for presentation work: SPEC_INDEX -> this file -> the relevant current owners -> only the
 relevant Source.

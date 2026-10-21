@@ -43,7 +43,7 @@ FINAL_EXPEDITION receives that Boss state as input and performs the existing Fin
 On D25, before ordinary D25 management decisions that can use the information:
 
 1. select exactly two distinct authoritative Dungeon Families using the existing seeded/fixed Final selection principle
-2. read each selected Family's authoritative T2 Hazard keys from `DUNGEON_HAZARD_v2.8.0.md`
+2. read each selected Family's authoritative T2 Hazard keys from `DUNGEON_HAZARD_v2.13.19.md`
 3. merge those Hazard keys into the Final Hazard Pool without inventing a new Family table
 4. persist the exact Family Pair and Final Hazard Pool
 5. reveal that exact Pair/Hazard information to the Player
@@ -384,7 +384,7 @@ Day = 30
 Tier = T2
 ```
 
-Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
+Exact threat ownership -> `DUNGEON_HAZARD_v2.13.19.md`.
 No separate Final-only Hazard defense table.
 No standalone `scale=4.6` path is used in Final resolution. Ordinary Gate Hazard Threat is unchanged.
 
@@ -608,7 +608,7 @@ PASS:
 
 ### FINAL-Q71 — HAZARD THREAT SOURCE
 PASS:
-- each Final Hazard uses fixed Final threat 28 and ordinary defense/gap truth from `DUNGEON_HAZARD_v2.8.0.md`
+- each Final Hazard uses fixed Final threat 28 and ordinary defense/gap truth from `DUNGEON_HAZARD_v2.13.19.md`
 - no standalone `scale=4.6` Final path exists
 
 ### FINAL-Q72 — MEAN GAP PENALTY
@@ -725,7 +725,7 @@ FINAL_EXPEDITION이 소유하지 않음:
 ## RELATED
 
 Timeline/save -> `CORE_RUN_v2.8.0.md`
-Hazard truth -> `DUNGEON_HAZARD_v2.8.0.md`
+Hazard truth -> `DUNGEON_HAZARD_v2.13.19.md`
 Item/Insurance -> `ITEM_v2.8.0.md`
 Boss -> `BOSS_v2.8.0.md`
 Relic D30 window -> `RELIC_v2.8.0.md`

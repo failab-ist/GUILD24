@@ -253,7 +253,7 @@ CORE_RUN does not redefine the NPC cap or visitor-pool algorithm.
 
 ## GATE / DUNGEON STATE
 
-Dungeon generation follows -> DUNGEON_HAZARD_v2.8.0.md
+Dungeon generation follows -> DUNGEON_HAZARD_v2.13.19.md
 
 Generated Day/Gate state must remain stable for that Day.
 
@@ -1320,7 +1320,7 @@ CORE_RUN §QA retains only Run-flow, D30 timing, stock timing, save/resume, and 
 Game philosophy -> SPEC_INDEX §GAME CORE
 Economy / order / Final fixed price / Wallet / Gold -> `ECONOMY_ORDER_v2.8.0.md`
 NPC persistence / growth / level -> `NPC_TRAIT_v2.8.0.md`
-Dungeon generation -> `DUNGEON_HAZARD_v2.8.0.md`
+Dungeon generation -> `DUNGEON_HAZARD_v2.13.19.md`
 Item / stock / start-stock identity -> `ITEM_v2.8.0.md`
 Relic / windows -> `RELIC_v2.8.0.md`
 Sale / Final Item handling -> `SALE_v2.8.0.md`

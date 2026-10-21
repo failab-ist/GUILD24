@@ -129,7 +129,7 @@ when a separate proven Item line follows.
 
 ## HERO ITEM FEEDBACK
 
-Use strong Item feedback only when DUNGEON_HAZARD_v2.8.0.md proves a resolved Outcome/state difference.
+Use strong Item feedback only when DUNGEON_HAZARD_v2.13.19.md proves a resolved Outcome/state difference.
 
 Preferred short grammar:
 
@@ -147,7 +147,7 @@ two slots, so this is what a whole-Bag proof means; User 2026-10-02): both are n
     {Item A}·{Item B} 덕분에 부상을 피했다.
     {Item} 2개 덕분에 부상을 피했다.        (the same Item twice)
 
-The fight alone (User 2026-10-04; DUNGEON_HAZARD_v2.8.0.md §COMBAT PROOF): when no worse Outcome is proven but removing an Item would have
+The fight alone (User 2026-10-04; DUNGEON_HAZARD_v2.13.19.md §COMBAT PROOF): when no worse Outcome is proven but removing an Item would have
 lost the combat check, and only then - on a `성공` / `대성공` record only (User 2026-10-09: on 퇴각 / 부상 / 중상 / 사망 the
 fight line reads as if it explained the Outcome):
     {Item} 덕분에 전투에서 이겼다.
@@ -324,7 +324,7 @@ Fatigue band penalty applies (10 and up; nothing at 정상):
     다음 원정 기동·정신 -15%
     다음 원정 기동·정신 -40%
 
-Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
+Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 Tapping the settled Fatigue row opens an overlay: today's starting value, actual source-labelled
 changes (arrival Event, Food/Drink before departure, Outcome, Trait, result Event, Food/Drink buffer,
@@ -342,7 +342,7 @@ Player-facing labels not used: 밤 피로 · 보급 회복 · 보급 완화 · �
 Show the actual resolved path, not every hypothetical branch.
 - omit zero-value subrows when that improves readability
 - actual Outcome Fatigue gain must not be confused with net Fatigue delta
-- Severe Injury / Death actual result Fatigue gain is 0 under the `DUNGEON_HAZARD_v2.8.0.md` owner rule
+- Severe Injury / Death actual result Fatigue gain is 0 under the `DUNGEON_HAZARD_v2.13.19.md` owner rule
 
 ### RESULT FATIGUE FIELDS
 
@@ -369,7 +369,7 @@ Definitions:
 - `outcomeBufferUsed` = amount of remaining Supply actually consumed to reduce that raw gain
 - `actualOutcomeFatigueGain` = final gain after the buffer
 
-Exact arithmetic -> `DUNGEON_HAZARD_v2.8.0.md`.
+Exact arithmetic -> `DUNGEON_HAZARD_v2.13.19.md`.
 
 Do not reuse `fatigueRecovery` as an ambiguous combined field for both pre-expedition recovery and post-outcome buffering.
 Internal compatibility aliases are allowed only if Player-facing/report truth remains unambiguous.
@@ -480,7 +480,7 @@ Examples of flavor: 장비가 순간적으로 벗겨짐 / 장비 일부가 손�
 
 T1/T2 proper preparation should not repeatedly produce copy that makes Counter preparation feel useless.
 
-Canonical hazard reliability -> DUNGEON_HAZARD_v2.8.0.md
+Canonical hazard reliability -> DUNGEON_HAZARD_v2.13.19.md
 
 ## DEBUG LANGUAGE
 
@@ -595,7 +595,7 @@ game philosophy -> SPEC_INDEX §GAME CORE
 run/save -> `CORE_RUN_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.8.0.md`
-hazard causality, Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.8.0.md`
+hazard causality, Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.13.19.md`
 item/insurance/Aftercare -> `ITEM_v2.8.0.md`
 economy/settlement -> `ECONOMY_ORDER_v2.8.0.md`
 sale commitments, Sale revisit display -> `SALE_v2.8.0.md`

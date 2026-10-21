@@ -697,6 +697,20 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
    escape-succeeded threshold (.11, v2.9.1 balance - was .13) and the escape-failed one (.36,
    v2.9.1 balance - was .42) so it never itself decides the case - only the escape chance the
    departure snapshot produces does). */
+test('RESULT-PROOF: an Item is never credited for the 만반의 준비 its Bag slot supplied (v2.13.19)',()=>{
+ const g=new Game();g.autosave=false;g.start('result-proof-prepared-slot');
+ const gate=g.makeDungeon('snow',2);
+ const mk=pack=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack,injury:0,fatigue:0,alive:true,recovery:0,level:2,xp:0}));
+ let onlyPrepared=0,credited=0;
+ for(let i=0;i<600;i++){
+  const r=Dungeon.resolve(mk(['holylight','choco']),{...gate,day:6},new RNG('slot'+i),[]);
+  assert.ok(!r.heroProof?.outcome?.items?.includes('holylight'),'축성 손전등 has no effect on 북부 설원 폐허, so it is never named');
+  if(r.heroProof?.outcome?.items?.includes('choco'))credited++;
+  if(r.events?.some(e=>e.id==='prepared')&&!r.heroProof?.outcome)onlyPrepared++;
+ }
+ assert.ok(credited>0,'초코바 still earns its own credit');
+ assert.ok(onlyPrepared>0,'a 만반의 준비 save stands alone, with no Item credit');
+});
 test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expedition Growth',()=>{
  /* If the shadow used the returned (post-growth) NPC instead of a frozen pre-resolution
     snapshot, this proof would silently vanish once growth pushed mobility high enough that
@@ -867,7 +881,7 @@ test('RESULT-PROOF: the counterfactual proof functions carry no RNG draw / resee
     no way to draw one. No production `skipProof` flag and no test-only gameplay behavior are
     introduced - this reads dist/systems/dungeon.js as text and asserts on it. */
  const src=read('dist/systems/dungeon.js');
- const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){');
+ const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation,keepPrepared){');
  const end=src.indexOf('function resolve(n,d,r,facilities=[],run,assist=0){');
  assert.ok(start>=0&&end>start,
   'sanity: both region boundaries (shadowOutcome start, resolve start) are found in Source, in order');
