@@ -1191,13 +1191,13 @@ test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exc
   'board floors the base roll at its parameter and leaves higher rolls alone');
  assert.equal(DATA.relicParams.board.minVisitors,4,'board raises the base roll to 4 and leaves 5 and 6 alone');
  /* hub: one roll, three mutually exclusive outcomes. */
- {const g=fresh('hub-one-roll'),t=g.run;t.dayFacilities=['hub'];t.loadout={};let calls=0;g.rng={int:()=>3,next:()=>{calls++;return .5;}};
-  const v=g.morningVisitors();assert.equal(calls,1,'hub makes exactly one roll against its two parameters');assert.equal(v.hubExtra,2,'r=.5 lands in the +2 band');}
+ {const g=fresh('hub-one-roll'),t=g.run;t.dayFacilities=['hub'];t.loadout={};let calls=0;g.rng={int:()=>3,next:()=>{calls++;return .45;}};
+  const v=g.morningVisitors();assert.equal(calls,1,'hub makes exactly one roll against its two parameters');assert.equal(v.hubExtra,2,'r=.45 lands in the +2 band');}
  const {p1,p2}=DATA.relicParams.hub;
- assert.deepEqual([p1,p2],[.45,.15],'hub makes exactly one roll: REL-Q-v28-17 45% +1, 15% +2, otherwise none');
+ assert.deepEqual([p1,p2],[.35,.15],'hub makes exactly one roll: REL-Q-v28-17 35% +1, 15% +2, otherwise none (User 2026-10-21, was 45%)');
  const seen=new Set();
  const rate=[0,0,0];for(let i=0;i<1000;i++){const r=i/1000,x=r<p1?1:r<p1+p2?2:0;seen.add(x);rate[x]++;}
- assert.deepEqual(rate,[400,450,150],'the approved 45 / 15 / 40 split, and it sums to one roll');
+ assert.deepEqual(rate,[500,350,150],'the approved 35 / 15 / 50 split, and it sums to one roll');
  assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
  /* hub carries no operating-cost share (User 2026-10-19). */
  assert.equal(DATA.balance.hubOverheadRate,0,'the approved rate ships');

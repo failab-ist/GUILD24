@@ -202,18 +202,18 @@ test('REL-Q-v28-15: 물류 본부계약 takes 3% off every ORDER per previous-Da
 
 /* REL-Q-v28-17. The three outcomes are one roll and mutually exclusive, so the boundaries are
    pinned on a stubbed stream rather than inferred from a sample - a distribution test cannot
-   tell 45/15/40 from a 44/16/40 that happens to land the same way. */
-test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, exclusively',()=>{
+   tell 35/15/50 from a 34/16/50 that happens to land the same way. */
+test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 35% / +2 15% / +0 50%, exclusively (User 2026-10-21, was 45 / 15 / 40)',()=>{
  const g=fresh('region-hub'),s=g.run;s.dayFacilities=['hub'];
  const at=r=>{g.rng={int:()=>3,next:()=>r};return g.morningVisitors();};
- for(const [r,want] of [[0,1],[.2,1],[.4499,1],[.45,2],[.5,2],[.5999,2],[.6,0],[.9,0],[.9999,0]]){
+ for(const [r,want] of [[0,1],[.2,1],[.3499,1],[.35,2],[.4,2],[.4999,2],[.5,0],[.9,0],[.9999,0]]){
   const v=at(r);
   assert.equal(v.hubExtra,want,'r='+r+' gives +'+want);
   assert.equal(v.baseVisitors,3,'and the base roll is untouched by the hub');
   assert.equal(s.expectedVisitors,3+want,'exactly one outcome reaches the visitor count');
  }
  // the stated mean, straight off the approved rates
- assert.ok(Math.abs((.45*1+.15*2+.40*0)-0.75)<1e-12,'+0.75 visitors per applicable Day');
+ assert.ok(Math.abs((.35*1+.15*2+.50*0)-0.65)<1e-12,'+0.65 visitors per applicable Day');
  assert.equal(DATA.relicBy.hub.price,340);
  assert.equal(DATA.balance.hubOverheadRate,0,'no operating modifier (User 2026-10-19)');
 });

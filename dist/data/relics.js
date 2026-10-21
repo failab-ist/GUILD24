@@ -91,7 +91,7 @@ D.relicParams={
  royalCert:{commissionRate:.20,intentBonus:.10,overheadRate:.10},
  opsRoom:{overshootCap:.5,mult:.6,final:true}, /* User 2026-10-02: 원정 전문 인증 remade; 투력 +30% at most */
  fresh24:{statBonus:.30,orderPriceMult:1.15},
- hub:{p1:.45,p2:.15,overheadRate:0},
+ hub:{p1:.35,p2:.15,overheadRate:0},
  warehouse:{slots:5}, /* v2.9.2 fourth pass (User 2026-09-26): +10 -> +5 */
  extraOrder:{extraOffers:2},
  rerollTicket:{freeRerolls:1},
