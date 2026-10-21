@@ -1305,7 +1305,7 @@ function nightRecapList(s,from){
  const rows=s.results.slice(from).map(r=>{
   const tone=Presentation.nightTone(r),n=s.npcs.find(x=>x.id===r.npcId),gone=r.outcome==='사망';
   const bits=gone?[]:Presentation.nightChanges(r,n,s.facilities).filter(c=>c.group!=='reward'&&!c.note);
-  return '<li class="t-'+tone+'">'+portrait(n,60,'recap-face')
+  return '<li class="t-'+tone+'">'+portrait(n,60,'recap-face'+(gone?' gone':''))
    +'<div class="rb"><p class="rt"><b class="rv">'+E(Presentation.nightVerdict(r))+'</b><span class="rn">'+E(r.name)+'</span><i>Lv.'+r.level+'</i></p>'
    +(bits.length?'<p class="rc">'+bits.map(c=>'<span><i>'+E(c.label)+'</i> '+E(c.value)+'</span>').join('')+'</p>':'')+'</div></li>';});
  /* at most five to a panel, split evenly (8 = 4+4): the desktop lays panels side by side (one centred while it fits, more beside it), the phone stacks them as one list */
