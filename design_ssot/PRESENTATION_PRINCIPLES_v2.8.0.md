@@ -13,8 +13,8 @@ It holds no per-screen layout, pixel value or per-surface component spec.
 
 - implemented per-surface presentation detail lives in Current Source
 - exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
-- UI / UX / mobile / tutorial / layout rules -> UI_UX_v2.8.0.md; acceptance -> UI_UX §QA
-- mechanics and information cadence -> their routed owners (SPEC_INDEX_v2.8.0.md)
+- UI / UX / mobile / tutorial / layout rules -> UI_UX_v2.13.17.md; acceptance -> UI_UX §QA
+- mechanics and information cadence -> their routed owners (SPEC_INDEX_v2.13.17.md)
 
 Read path for presentation work: SPEC_INDEX -> this file -> the relevant current owners -> only the
 relevant Source.
@@ -87,7 +87,7 @@ Composition change requires an existing Canonical requirement, runtime evidence 
 composition fails owned UX / responsive QA, or explicit User approval.
 
 Approved composition change: the SALE product area is a fixed counter tray above the dock
-(UI_UX_v2.8.0.md §SALE — COUNTER TRAY).
+(UI_UX_v2.13.17.md §SALE — COUNTER TRAY).
 
     SAME SCREEN
     + BETTER CRAFT / MATERIAL / EDGES / CONTROL FEEL / TYPOGRAPHY / SPACING
@@ -404,7 +404,7 @@ General contract, every beat:
 | A7 | first-sale price coach | none: the PRICING coach keeps its two sentences and gains no hand-over clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
 | A8 | 영수증 조각 transaction result stub | on a price commit that succeeds, a paper receipt stub stamps in over the counter band (scale 1.12→1, ≤ 200 ms) reading `단골도 {±N} · 소지금 {A} → {B}` for that customer, stays about 2.5 s and fades (≤ 300 ms); the next sale's stub replaces it; no reserved height; under reduced motion it appears and disappears without motion. A refusal with actual Loyalty loss shows only its small muted-red delta at the same location, without a Wallet row or new motion; the reason-pool reply line (A2) remains. Exact surface -> UI_UX §SALE — TRANSACTION RESULT STUB; copy -> COPY_AUDIT §4-24 |
 
-Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX §QA.
+Exact surface / layout -> UI_UX_v2.13.17.md §SALE; acceptance -> UI_UX §QA.
 
 ## GAME FEEL BEAT
 

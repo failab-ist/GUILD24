@@ -173,7 +173,7 @@ D5 remains the first Boss identity / art reveal.
 
 ## REVEAL ORDER
 
-Presentation -> UI_UX_v2.8.0.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Presentation -> UI_UX_v2.13.17.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
 
 ### D5
 
@@ -227,7 +227,7 @@ No new RNG is consumed by merely showing a report.
 
 ## PRESENTATION PAYOFF
 
-UI_UX_v2.8.0.md may strengthen the visual/audio acknowledgement of:
+UI_UX_v2.13.17.md may strengthen the visual/audio acknowledgement of:
 - D0 investigation start
 - D5 identity
 - D10 combat-question investigation
@@ -595,7 +595,7 @@ break one Sloth Seal for 0G
 
 Existing Relic candidate generation / Defer lifecycle is reused.
 Relic-window lifecycle -> `RELIC_v2.8.0.md`.
-Exact UI ownership -> `RELIC_v2.8.0.md` / `UI_UX_v2.8.0.md`.
+Exact UI ownership -> `RELIC_v2.8.0.md` / `UI_UX_v2.13.17.md`.
 
 ### Final difficulty ordering
 
@@ -841,6 +841,6 @@ Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`
 Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.8.0.md`
 Sale revenue commit -> `SALE_v2.8.0.md`
 Closing revenue report -> `NIGHT_CLOSING_v2.8.0.md`
-Presentation / UI reveal -> `UI_UX_v2.8.0.md`
+Presentation / UI reveal -> `UI_UX_v2.13.17.md`
 Copy / terminology -> `COPY_WORLD_VOICE_v2.8.0.md`
 Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md

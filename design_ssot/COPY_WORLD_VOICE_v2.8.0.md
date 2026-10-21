@@ -8,7 +8,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
 
-> 용어(이름과 뜻, 쓰지 않는 말)는 `GLOSSARY_v2.8.0.md`가 정한다. 이 문서에는 용어 정의를 두지 않는다.
+> 용어(이름과 뜻, 쓰지 않는 말)는 `GLOSSARY_v2.13.17.md`가 정한다. 이 문서에는 용어 정의를 두지 않는다.
 >
 > Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Authoritative Design Spec.
 >
@@ -150,9 +150,9 @@ COPY는 그 안에서 사용되는 문장 Voice만 소유한다.
 Item truth -> `ITEM_v2.8.0.md`
 Boss identity/trait function -> `BOSS_v2.8.0.md`
 Final reveal timing -> `CORE_RUN_v2.8.0.md` / `FINAL_EXPEDITION_v2.8.0.md`
-Run abandon function/UI -> `CORE_RUN_v2.8.0.md` / `UI_UX_v2.8.0.md`
+Run abandon function/UI -> `CORE_RUN_v2.8.0.md` / `UI_UX_v2.13.17.md`
 Event function -> `EVENT_v2.8.0.md`
-Sale/UI -> `SALE_v2.8.0.md` / `UI_UX_v2.8.0.md`
+Sale/UI -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## PLAYER COPY MATRIX
@@ -178,7 +178,7 @@ Night causality -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## PLAYER-FACING TERMINOLOGY
 
-용어(능력치 이름, 잠긴 용어, 심층원정, 원정 후원금, 상품 갈래, 쓰지 않는 말)는 `GLOSSARY_v2.8.0.md`가 정한다. 이 문서는 용어를 두 번 정하지 않는다.
+용어(능력치 이름, 잠긴 용어, 심층원정, 원정 후원금, 상품 갈래, 쓰지 않는 말)는 `GLOSSARY_v2.13.17.md`가 정한다. 이 문서는 용어를 두 번 정하지 않는다.
 
 아래는 용어가 아니라 문구 규칙이라 이 문서가 맡는다.
 
@@ -964,7 +964,7 @@ Direct and derived changed rows remain readable under the current single-heading
 Internal markers such as `potion` are never Player effects.
 
 Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.8.0.md §4-19).
-The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.8.0.md §Customer speech).
+The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.13.17.md §Customer speech).
 
 ## RESULT CAUSALITY COPY
 

@@ -486,12 +486,12 @@ Before order commitment show/readably expose:
 - each offer's rarity name under the Item name
 - the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap
 
-Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY.
+Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.13.17.md` §ORDER — ITEM INFORMATION HIERARCHY.
 
 Expected operating cost is derived from the same current-day rules used by Closing.
 It is decision information, not a separate charge.
 
-Detailed visual layout -> `UI_UX_v2.8.0.md`
+Detailed visual layout -> `UI_UX_v2.13.17.md`
 
 ## REROLL
 
@@ -536,7 +536,7 @@ Keep hidden:
 ## MORNING / ORDER PRESENTATION CONTRACT
 
 MORNING shows today's Gates and Hazards; ORDER repeats today's Gate / Hazard context, the per-Gate visitor count and the offer rows. No next-day block.
-Exact visual layout is owned by `UI_UX_v2.8.0.md`.
+Exact visual layout is owned by `UI_UX_v2.13.17.md`.
 
 ## VISITOR FORECAST
 
@@ -1289,7 +1289,7 @@ Report Gold In / Out by channel and explain target miss causes.
 ## RELATED
 
 Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.8.0.md`
-Morning / Order presentation -> `UI_UX_v2.8.0.md`
+Morning / Order presentation -> `UI_UX_v2.13.17.md`
 Item catalog / Rarity identities / item roles -> `ITEM_v2.8.0.md`
 Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`

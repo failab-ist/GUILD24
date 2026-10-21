@@ -13,7 +13,7 @@
 
 Design SSOT entry point:
 
-- `design_ssot/SPEC_INDEX_v2.8.0.md`
+- `design_ssot/SPEC_INDEX_v2.13.17.md`
 
 Use only the current owner Spec / QA routed by that index.
 Older planning / Vision amendments are history unless the current index or owner explicitly references them.

@@ -1,6 +1,6 @@
 # archive — 닫힌 버전의 증거 보관소
 
-여기 있는 파일은 **현행 규칙이 아니다.** 현행 Design은 `design_ssot/`(입구 `SPEC_INDEX_v2.8.0.md`)에 있고, 현행 Source는 `dist/`에 있다.
+여기 있는 파일은 **현행 규칙이 아니다.** 현행 Design은 `design_ssot/`(입구 `SPEC_INDEX_v2.13.17.md`)에 있고, 현행 Source는 `dist/`에 있다.
 이 폴더는 이미 닫힌 버전의 결정 근거와 측정 기록을 남겨 두는 곳이다. 보관한 파일은 옮기기만 했고 내용은 고치지 않았다.
 그래서 문서 안의 경로는 옮기기 전 위치(`reports/…`, `tools/…`)를 가리킨다. 아래 표로 옛 위치와 새 위치를 찾으면 된다.
 
@@ -22,6 +22,7 @@ D10 fork 쌍 비교 틀은 `v2.9.2/tools/measure-package-v292.cjs`가 가장 최
 |---|---|---|
 | `WORK_HISTORY_v2.8.md` | v2.8 작업 이력 | (원래 여기) |
 | `inactive/v2_7_franchise/` | 폐기된 v2.7 프랜차이즈 코드(`tests/revision.cjs`가 읽고, `dist/systems/meta.js` · META가 가리킨다) | `dist/systems/` |
+| `v2.8/DEFERRED_ROUTER_RETIRED.md` | v3.0+ 보류 라우터에서 뺀 절(기본 거절 아이디어 §4 · §6~9 · §11 · §13 · §14, 2026-09 플레이테스트 · 디자인 강연 검토, v2.8 진입 조건 §19). 2026-10-21 정리 | 루트 `GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md` |
 | `v2.8/GUILD24_v2.8_RELEASE_VISION.md` | v2.8 방향 문서(비Canonical) | 루트 |
 | `changelog/CHANGELOG_v2.8.0-v2.9.11.md` | v2.8.0 ~ v2.9.11 버전별 변경 기록(현행 CHANGELOG는 v2.9.12부터와 RELEASE RECORD) | `design_ssot/CHANGELOG.md` |
 | `v2.8/SOURCE_ADOPTION_QA_v2.8.0.md` | v2.8 Source 결함 기록(SA-Q, 모두 v2.8 출시 때 채택). Source · 테스트 주석이 SA-Q 번호로 가리킨다 | `design_ssot/` |
