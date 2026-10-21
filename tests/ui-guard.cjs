@@ -3961,7 +3961,7 @@ test('ending: the music before holds until the result lands, then the ending cue
 test('설정 > 안내: 한 스위치가 코치를 끄고, 다시 켜면 본 코치도 다시 나온다',()=>{
  const set=fn('settings');
  const ctx={game:{account:{settings:{},tutorial:{skipped:false}}},coachOff:()=>ctx.game.account.tutorial.skipped,
-  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,prologueOn:()=>true,SUPPORT_MAIL:'x@y.z',PRIVACY_URL:'https://x.y/p'};
+  btn:(label)=>'<button>'+label+'</button>',mixer:()=>'',E:x=>x,BUILD:{version:'test',commit:'test'},Native:{canVibrate:()=>false,inApp:()=>false,cloudWorks:()=>false},hapticOn:()=>true,prologueOn:()=>true,statsOn:()=>true,SUPPORT_MAIL:'x@y.z',PRIVACY_URL:'https://x.y/p'};
  assert.ok(render([set],'settings()',ctx).includes('필요한 때 말풍선과 한 줄 안내가 나온다.'),'ON copy does not impose a Day limit');
  ctx.game.account.tutorial.skipped=true;
  const off=render([set],'settings()',ctx);
@@ -3979,6 +3979,11 @@ test('설정 > 프롤로그: 끄면 새 점포가 프롤로그 없이 바로 시
  assert.ok(set.includes("btn(prologueOn()?'프롤로그 끄기':'프롤로그 켜기','prologue-toggle')"),'the switch reads 프롤로그 끄기 / 프롤로그 켜기');
  assert.ok(/case'new':prepOpen=true;sound\('newstore'\);if\(prepSeen\)render\(\);else\{prepSeen=true;startPrologue\(render\);\}/.test(app),'결과 다시 보기 뒤 다음 점포는 프롤로그를 다시 틀지 않는다');
  assert.ok(/prepSeen=false;preRunReturn=false;prepOpen=false;game\.start\(seed\)/.test(app),'a new Run re-arms it for the next ending');
+});
+test('설정 > 익명 통계 보내기: 기본 켜짐, 끄면 전송 안 함 (개인정보처리방침 제1조)',()=>{
+ assert.ok(/const statsOn=\(\)=>game\.account\.settings\.stats!==false;/.test(app),'default ON, off is settings.stats===false');
+ assert.ok(fn('settings').includes("btn(statsOn()?'통계 끄기':'통계 켜기','stats-toggle')"),'the switch reads 통계 끄기 / 통계 켜기');
+ assert.ok(/case'stats-toggle':game\.account\.settings\.stats=!statsOn\(\)/.test(app),'one tap flips settings.stats');
 });
 test('UI_UX §TUTORIAL: spotlight clips nested scrollports and the sticky board rail',()=>{
  const rect=(left,top,right,bottom)=>({left,top,right,bottom});
