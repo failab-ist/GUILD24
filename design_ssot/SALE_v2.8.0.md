@@ -302,7 +302,7 @@ The exact 실패 시 사망 위험 % shown here is the fixed **pre-supply** snap
 
 Item selection previews direct, player-readable changes where useful, e.g. 투력 +X / 강인함 +X / 독 대응 +X / 피로 회복 N / 보험 효과.
 
-After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `손님 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`).
+After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `손님 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`).
 
 Preview must not expose exact expedition success %, exact death %, internal formula, or a fake master safety score.
 Canonical information principle -> SPEC_INDEX §GAME CORE.
@@ -319,7 +319,7 @@ Hazard:
 
 No single final safety score, exact Success %, hidden Power or master safety score. Forecast is an estimate, not a guarantee.
 
-The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so one worst label would hide which side is open. It is the same frozen snapshot and gives no number, threshold or Item. The exact failure-conditioned Death risk is exposed at SALE entry at Help level — the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and the NPC detail — not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`).
+The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so one worst label would hide which side is open. It is the same frozen snapshot and gives no number, threshold or Item. The exact failure-conditioned Death risk is exposed at SALE entry at Help level — the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and the NPC detail — not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`).
 
 Hazard name, pressured Stat/readiness and qualitative preparedness form one readable hierarchy; do not repeat the same
 decision signal as multiple equal-priority labels. Long explanatory prose is secondary Help/Tooltip content, not
@@ -450,7 +450,7 @@ Canonical economy -> ECONOMY_ORDER_v2.8.0.md.
 
 Player should understand the role difference without seeing exact purchase probability.
 
-Each price button carries its role word with the mode and price (`할인 50%` / `정가` / `바가지 150%`) and the small line `이익 {N}G` (or the existing disabled reason) under it; exact face copy -> `COPY_AUDIT_APPROVED_v2.13.17.md`. Three modes only, no extra depth.
+Each price button carries its role word with the mode and price (`할인 50%` / `정가` / `바가지 150%`) and the small line `이익 {N}G` (or the existing disabled reason) under it; exact face copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`. Three modes only, no extra depth.
 
 ## PURCHASE DECISION
 
@@ -557,7 +557,7 @@ No partial state where Gold changed but stock did not, or stock changed without 
 
 The real result of the player's own price choice is shown at the moment of each sale or refusal, for that customer, never as a summary at the end of the day.
 
-- sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.13.17.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
+- sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.13.18.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
 - refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). A refusal that reduces Loyalty also shows `단골도 {−N}` at the receipt-stub location for about 2.5 seconds, small and muted red, without a Wallet row or new motion. Use the actual clamped decrease. No new reply pool is added.
 - both are presentation of the resolved state: no gameplay rule, Save field or RNG draw.
 

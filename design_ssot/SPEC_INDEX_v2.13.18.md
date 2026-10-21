@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.13.17
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.17
+DOC_VERSION=2.13.18
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.18
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_13_17_OPEN (v2.13.16 is closed; v2.13.17 = daily Event chance 30% + accident wording, CHANGELOG §v2.13.17)
-SOURCE_ADOPTION_STATUS=V2_13_17_ADOPTED (every version through v2.13.17 is adopted in Source on main; CHANGELOG §v2.13.17)
+FREEZE_STATUS=V2_13_18_OPEN (v2.13.17 is closed; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
+SOURCE_ADOPTION_STATUS=V2_13_18_ADOPTED (every version through v2.13.18 is adopted in Source on main; CHANGELOG §v2.13.18)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -227,7 +227,7 @@ play and valid RNG.
 
 ### INACTIVE LEGACY BOUNDARY
 No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
-in the current game. Archive ownership is routed to META_v2.13.17.md.
+in the current game. Archive ownership is routed to META_v2.13.18.md.
 
 ## DEFERRED EXPANSION
 
@@ -255,10 +255,10 @@ included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by 
 ## CURRENT CANONICAL FILE SET
 
 Core / Run / Meta:
-- SPEC_INDEX_v2.13.17.md (this index; §GAME CORE)
+- SPEC_INDEX_v2.13.18.md (this index; §GAME CORE)
 - GLOSSARY_v2.13.17.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
-- META_v2.13.17.md
+- META_v2.13.18.md
 
 Economy / NPC / Dungeon / Item / Store Build:
 - ECONOMY_ORDER_v2.8.0.md
@@ -273,7 +273,7 @@ Flow / Result / UI / Copy:
 - UI_UX_v2.13.17.md
 - PRESENTATION_PRINCIPLES_v2.8.0.md
 - COPY_WORLD_VOICE_v2.8.0.md
-- COPY_AUDIT_APPROVED_v2.13.17.md
+- COPY_AUDIT_APPROVED_v2.13.18.md
 - EVENT_v2.8.0.md
 - BOSS_v2.8.0.md
 - FINAL_EXPEDITION_v2.8.0.md
@@ -293,7 +293,7 @@ audit-HEAD Source defect record, every SA-Q adopted at the v2.8 release; Source 
 
 GAME CORE / CROSS-RUN IDENTITY -> SPEC_INDEX §GAME CORE (this index)
 RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN_v2.8.0.md
-META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.17.md
+META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.18.md
 PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.8.0.md
 NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.8.0.md
 DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.8.0.md
@@ -305,7 +305,7 @@ UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.
 PRESENTATION PRINCIPLES / VISUAL CONSTRUCTION / ASSET QUALITY / ORNAMENT BUDGET / AUDIO PRESENTATION / VISUAL REVIEW -> PRESENTATION_PRINCIPLES_v2.8.0.md
 TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.13.17.md
 COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
-EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.13.17.md
+EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.13.18.md
 EVENT -> EVENT_v2.8.0.md
 BOSS -> BOSS_v2.8.0.md
 FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.8.0.md
@@ -326,7 +326,7 @@ Do not delete history files merely because they are old.
 ## RETIRED ACTIVE SYSTEMS
 
 Franchise Grade, Franchise Achievement track, Grade ORDER discount and Start Contract selection / gating are
-historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.13.17.md.
+historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.13.18.md.
 
 ## DOCUMENT BASELINE POLICY
 
@@ -357,7 +357,7 @@ A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
-    SPEC_INDEX_v2.13.17
+    SPEC_INDEX_v2.13.18
     -> exact routed owner
     -> related current QA
     -> Current Source

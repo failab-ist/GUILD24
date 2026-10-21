@@ -56,7 +56,8 @@ and this table is their commit record.
 | v2.13.14 | 2026-10-15 | Tier II Environment incident probability eased through DAY 15, 정가 refuses less, operating cost 200 / +10, visit Wallet floor back to 30, failure Death CombatDeficit × 0.50 | (the User sets it) |
 | v2.13.15 | 2026-10-16 | Meta ladder: 영웅 점포지원 and 상급 / 최상급 포션 reach unlocks, 점포지원 grades 63 / 29 / 8, injured departure +0.15, Gate base 22, Store Capital 3% everywhere, economy / operation Decorations re-tuned, and version bump in one PR | (the User sets it) |
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
-| v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR; 알뜰 금고 +300 → +100G and 구급품 진열장 투력 +5 → +3% in a second PR | (the User sets it) |
+| v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
+| v2.13.18 | 2026-10-21 | Decorations: 알뜰 금고 +300 → +100G, 구급품 진열장 투력 +5 → +3%, 명예 모험가 액자 above 일반 80 → 50%, and version bump in one PR | (the User sets it) |
 
 
 ## v2.12.4 — Death limit 6 / 8 / 10, earlier Tier II, one even late Gate slope (User 2026-10-10)
@@ -66,15 +67,10 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
-## v2.13.17 — Daily Event chance 30%, one name for the unattributed accident (User 2026-10-21)
+## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 
-Measurement: `reports/v2100-measure/event-30-20261021/`.
+The economy route cleared first far ahead of the others; the User asked for the economy Decorations reviewed as a whole (「경제도 전체적으로 재검토」).
 
-- EVENT §발생 확률: `dailyEventChance` 40% → 30% (about 6.3 Events by DAY 30 instead of 8.4; Runs with 10 or more
-  Events 31% → 7%). The User found Events too frequent: their saves met 13 and 11 by DAY 30. 소문 수집 게시판 stays 100%.
-  Investor fresh 1000 (main e7f71d7): D1~7 success 52.0 → 52.2%, median end day 15 → 15, D30 5.1 → 6.3%, clear 1.7 → 2.6%,
-  deaths / Run 7.40 → 7.31, cash / Day 21 → 21G. Trajectories 200 × 10, first clear within 10 Runs: none 14 → 10%, economy
-  68 → 71%, survival 52 → 40%, operation 26 → 25%, best 61 → 50%; first DAY 20 on the 3rd Run → 3rd~4th.
 - META 알뜰 금고: the Day's first two customers +300G → +100G Wallet each (User 2026-10-21: 「100골드로 가고」). The economy
   route cleared first far ahead of the others. Trajectories 200 × 10 on main deb36cf, first clear within 10 Runs at 300 / 150 / 100G:
   economy 71 / 63 / 60%, best 50 / 56 / 51%, survival · operation · none 40 · 25 · 10% unchanged; economy cash / Day 55 / 50 / 44G,
@@ -85,6 +81,22 @@ Measurement: `reports/v2100-measure/event-30-20261021/`.
   best 51 → 50%, economy · operation · none 60 · 25 · 10% unchanged; survival first D30 74 → 62%. Candidate measured and kept
   out: 원정 지원금 간판 50 → 25% on top (economy 60 → 57%, best 50 → 45%, D25 balance on the economy route 2866 → 2844G).
   Measurement: `reports/v2100-measure/aid-cabinet-20261021/`.
+- META 명예 모험가 액자: a new adventurer above 일반 80 → 50%, weights [20, 33, 29, 13, 5] → [50, 30, 13, 5.5, 1.5]
+  (User 2026-10-21: 「50 넣고」; no frame stays [60, 27, 10, 2.5, 0.5] = 40%). The frame, not the money, set the economy
+  route apart: its boss party's customer grade was 1.84 to survival's 1.02. With 진열장 +3%, trajectories 200 × 10, economy
+  80 / 55 / 50%: first clear within 10 Runs 60 / 48 / 42%, first D30 72 / 64 / 65% (survival 62%), clear once at D30
+  70 / 62 / 53%, boss-party grade 1.84 / 1.40 / 1.34; sales / Day 1001 / 981 / 977G stay above survival's 780G; best first
+  clear 50 → 43%. Measurement: `reports/v2100-measure/honor-frame-20261021/`.
+
+## v2.13.17 — Daily Event chance 30%, one name for the unattributed accident (User 2026-10-21)
+
+Measurement: `reports/v2100-measure/event-30-20261021/`.
+
+- EVENT §발생 확률: `dailyEventChance` 40% → 30% (about 6.3 Events by DAY 30 instead of 8.4; Runs with 10 or more
+  Events 31% → 7%). The User found Events too frequent: their saves met 13 and 11 by DAY 30. 소문 수집 게시판 stays 100%.
+  Investor fresh 1000 (main e7f71d7): D1~7 success 52.0 → 52.2%, median end day 15 → 15, D30 5.1 → 6.3%, clear 1.7 → 2.6%,
+  deaths / Run 7.40 → 7.31, cash / Day 21 → 21G. Trajectories 200 × 10, first clear within 10 Runs: none 14 → 10%, economy
+  68 → 71%, survival 52 → 40%, operation 26 → 25%, best 61 → 50%; first DAY 20 on the 3rd Run → 3rd~4th.
 - COPY: the first-accident coach line calls the accident with no Hazard behind it 「예상치 못한 사고」, the same name the
   NIGHT Outcome sentence uses (was 「운 나쁜 사고」).
 

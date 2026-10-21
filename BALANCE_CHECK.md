@@ -21,7 +21,7 @@
 
 ### 봇 참고선 (봇이 바뀌면 그 봇으로 다시 잰 값으로 바꾼다)
 
-v2.13.17 + 알뜰 금고 100G, investor, 출처 `reports/v2100-measure/thrift-safe-20261021/t100.log`:
+v2.13.17 + 알뜰 금고 100G(장식 없는 새 판이라 v2.13.18도 같음), investor, 출처 `reports/v2100-measure/thrift-safe-20261021/t100.log`:
 새 판 1000판 D10 도달 71.7% · D30 도달 6.3% · 클리어 2.6% · 끝난 날 중앙 D15. 장식 경로별 10판 안 첫 클리어는 `reports/DECO-SUPPORT-EFFECTS.md` §1.
 
 ## 2. User가 물은 것만 잰다

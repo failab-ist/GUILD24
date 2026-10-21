@@ -339,7 +339,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 일반 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[20,33,29,13,5],'일반 60% -> 20%, so above 일반 40% -> 80% (User 2026-10-16)');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[50,30,13,5.5,1.5],'일반 60% -> 50%, so above 일반 40% -> 50% (User 2026-10-21, was 80%)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -

@@ -2,7 +2,7 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.17
+DOC_VERSION=2.13.18
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -443,11 +443,11 @@ two shares add.
 
 ### wall — 명예 모험가 액자 (id honorFrame)
 ```text
-rare-NPC rarity weights = [20, 33, 29, 13, 5]
+rare-NPC rarity weights = [50, 30, 13, 5.5, 1.5]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 80%), 영웅 and 전설 the most. This
+Every grade above 일반 is lifted (ordinary [60, 27, 10, 2.5, 0.5]; above 일반 40% -> 50%, User 2026-10-21), 영웅 and 전설 the most. This
 reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active; it adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 

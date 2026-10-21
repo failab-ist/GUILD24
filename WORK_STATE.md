@@ -1,11 +1,11 @@
 # WORK_STATE
 
 DATE: 2026-10-21
-STATE: V2_13_17 (설계 진입점 `design_ssot/SPEC_INDEX_v2.13.17.md`, 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD)
+STATE: V2_13_17 (설계 진입점 `design_ssot/SPEC_INDEX_v2.13.18.md`, 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD)
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. 현행 버전은 v2.13.17이다(내용은 CHANGELOG §v2.13.17, 지난 버전의 변경 내역도 CHANGELOG). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
+- repository: `failab-ist/GUILD24`. 현행 버전은 v2.13.18이다(내용은 CHANGELOG §v2.13.18, 지난 버전의 변경 내역도 CHANGELOG). 앱(Android) 포장 규칙은 `design_ssot/PLATFORM_RELEASE_v3.0.0.md`, 준비 상황은 `reports/v3.0-prep.md`, 실제 수치 자료집은 `reports/BALANCE-CATALOG.md`다.
 - 승인된 밸런스는 이미 채택됐다: PR #116의 성장·처진 인원 경험치·Final 조정·포션 유통, PR #123의 직업 및 절반 강도 일반 게이트/화염. 현행 숫자는 각각 NPC_TRAIT / DUNGEON_HAZARD / BOSS / FINAL_EXPEDITION / RELIC owner를 따른다. 과거 후보를 현재 미적용 상태라고 다시 적지 않는다.
 - 기존 측정 근거: `reports/v2100-measure/gate-growth-20261009/ADOPTION.md`와 `REPORT.md`, 포션 수입은 `reports/v2100-measure/potion-income-20261008/REPORT.md`. 측정한 전강도/필요 대응28.5 후보의 결과를 현재 절반 게이트/대응28의 승률로 인용하지 않는다. 지금 기준 측정 로그는 `reports/v2100-measure/newcomer-band-20261010/3-band-half-both.log`(새 손님 레벨 폭 + 영웅 4/9/15 · 장비 30/22/18/12%, 프레시 3000판 reader · investor)다. 같은 폴더의 1 · 2번은 채택하지 않은 후보, 0번은 v2.12.1이다. investor 봇은 그 뒤 DAY 6부터 핵심을 고르고 핵심 몫을 더 주도록 고쳤다(User 2026-10-10). 고친 봇의 기준은 4번 로그(investor만, D30 도달 12.7% · 클리어 5.5%)다. 환경+1 · +2 후보는 `snowball-20261010/`에 있고 채택하지 않았다. v2.12.3(게이트 1티어 공통)부터 기준은 `reports/v2100-measure/gate-tier1-20261010/main-vs-tier1-common.log`의 `after` 줄(프레시 1000판 · 궤적 200×10런 장식 4루트, reader · investor)이다. v2.13.0부터 기준은 `reports/v2100-measure/tier-hazard-20261010/`의 `라` 줄(프레시 2000판 reader · investor, 궤적은 아직 안 잼)이다. v2.13.2부터 기준은 `reports/v2100-measure/gate-hump-20261011/v2131-vs-hump1-potionbot.log`의 `after` 줄(프레시 2000판 investor, 포션 규칙을 더한 봇)이다. v2.13.5부터 기준은 `reports/v2100-measure/fail-loot-20261011/fail-loot.log`(프레시 1000판 investor)다. v2.13.9부터 기준은 `reports/v2100-measure/item-roles-20261011/package-5810.log`(프레시 1000판 investor)다. 장식 궤적(investor 200×10런 4루트)은 같은 폴더 `traj-v2138-vs-v2139.log`다. v2.13.10은 재지 않았다. v2.13.12부터 기준은 `reports/v2100-measure/early-money-20261012/fresh1000-main-A-D-E.log`의 `D` 줄(프레시 1000판 investor)이다. v2.13.14 #209부터 기준은 `reports/v2100-measure/v21315-death-money-s1m1.log`의 `after/fresh/investor` 줄(프레시 1000판 investor, 궤적 200×10)이다. v2.13.15부터 기준은 `reports/v2100-measure/v21315-ladder/f1.log`(프레시 1000판 investor, 궤적 200×10 장식 4루트)와 같은 폴더 `round3-final-summary.txt`(10판 안 처음 D20 / D30 / 클리어까지 판 수 · 누적 플레이 날 수)다. v2.12.4 기준(`mid-difficulty-20261010/` `AB` 줄)은 비교용이다.
 

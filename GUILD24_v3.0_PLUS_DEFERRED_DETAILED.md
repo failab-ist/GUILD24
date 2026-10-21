@@ -4,7 +4,7 @@
 > Document role: **v3.0+ DEFERRED DESIGN ROUTER / FUTURE CANDIDATE CONTEXT**
 > Status: **NOT CURRENT DESIGN SSOT**
 > Retired sections (rejected ideas, 2026-09 reviews, v2.8 entry gate): `archive/v2.8/DEFERRED_ROUTER_RETIRED.md`
-> Current Design Truth entry: `design_ssot/SPEC_INDEX_v2.13.17.md`
+> Current Design Truth entry: `design_ssot/SPEC_INDEX_v2.13.18.md`
 >
 > User decision:
 > work classified as P2 or later is not part of v2.8 or v2.9.0.
@@ -53,7 +53,7 @@ It does not own:
 - current QA
 - current Source-adoption work
 
-For all current truth, use `design_ssot/SPEC_INDEX_v2.13.17.md`.
+For all current truth, use `design_ssot/SPEC_INDEX_v2.13.18.md`.
 
 ---
 
