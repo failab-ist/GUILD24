@@ -37,7 +37,7 @@
 | C2 | 세이브는 `localStorage` 하나. 앱으로 갈 때 생기는 문제 | `reports/v3.0-prep.md` §6-7 D-2 | — | S |
 | C3 | 배포 JS의 43%가 주석이었다 — AI가 결정 근거를 코드에 써 두는 습관의 양면 | `interview-1st-place.md`(app.js 229KB 중 99KB) | 주석 캡처 | S |
 | C4 | 폰트 2.3MB → 62KB: 게임에 쓰인 글자만 서브셋 | `reports/ASSETS.md` Wanted Sans, `tools/vendor-assets.py` | 전후 숫자 | S |
-| C5 | 한국어 단어 중간 줄바꿈 297곳을 0으로 — `keep-all` 전역 적용과 검사 도구 | `reports/text-audit-v2911.md`, `tools/qa-text.cjs` | 전후 캡처 | S |
+| C5 | 한국어 단어 중간 줄바꿈 297곳을 0으로 — `keep-all` 전역 적용과 검사 도구 | `archive/v2.9.11/text-audit-v2911.md`, `tools/qa-text.cjs` | 전후 캡처 | S |
 | C6 | 가로로 눕힌 폰에서 게임이 왜 안 되는가 — 폭이 아니라 높이 400px | `reports/v3.0-prep.md` §7-3 | 캡처 | S |
 
 ## D. 밸런스 — 봇 3천 명이 대신 플레이한다
@@ -47,7 +47,7 @@
 | D1 | 봇 성향 셋: 균형 · 숙련 · 사람(내 플레이 세이브로 보정) | `tests/simulation.cjs` policy, `tools/calibrate-bot-v292.cjs` | — | S → T |
 | D2 | 봇이 내 세이브보다 손님을 잃길래 "화면을 읽는 봇"을 새로 만든 날 | `reader` 봇 주석(User 2026-09-26) | — | S |
 | D3 | 클리어율 1.7% vs 11.7% — 균형 봇과 숙련 봇의 차이가 곧 난이도 곡선 | `reports/v3.0-prep.md` §9-5-3 | 표 | S |
-| D4 | 점포지원 카드 32장 중 D30 도달률을 0.0%p 올리는 카드 — 수치로는 안 살아나는 DESIGN ISSUE | `reports/remeasure-v2911.md` §12-2 · §12-3 | 표 | S |
+| D4 | 점포지원 카드 32장 중 D30 도달률을 0.0%p 올리는 카드 — 수치로는 안 살아나는 DESIGN ISSUE | `archive/v2.9.11/remeasure-v2911.md` §12-2 · §12-3 | 표 | S |
 | D5 | 마왕 7명의 승률 폭 56.7~81.8% — 알고도 안 고친 이유 | 같은 §12-3-1 (User 결정 유지) | — | S |
 | D6 | 사건 55종이 한 판에 4.6개, 중복 0 — 풀 회전 검증 | §12-1 | — | S |
 | D7 | 첫 판에는 D1 창고에 대응 상품 하나가 들어간다 — "가르치지 말고 만나게 한다" | `CHANGELOG.md` §v2.9.12 First-Run lessons(사망 0.21 → 0) | 숫자 | S |
@@ -83,7 +83,7 @@
 | G1 | 손님 초상 219장을 AI로: 원본 218 → 성별 폴더 → 이름 매핑 → 게임 | `GUILD24_NPC_PRODUCTION/` 00~04, `RENAME_MAPPING.json` | 초상 격자 | S → T |
 | G2 | 이름 200개 중 35개가 실존 인물이 떠올라서 바꿨다 — 퍼블리시티권 | `v3.0-prep.md` §6-1-A, `v2.9.11-drafts.md` §A | 교체표 일부 | S → T |
 | G3 | 임요환 · 페이커 패러디 손님 3명을 지운 이유(2022 부경법 (타)목) | §6-1 Rare Reference | — | S |
-| G4 | 문구 4배치 교정, NPC 대사 14개 — "겁쟁이 유행어"는 남긴 결정 | `reports/copy-proofread-v2911.md` | 대사 캡처 | S |
+| G4 | 문구 4배치 교정, NPC 대사 14개 — "겁쟁이 유행어"는 남긴 결정 | `archive/v2.9.11/copy-proofread-v2911.md` | 대사 캡처 | S |
 | G5 | 모든 플레이어 문구는 승인 원장에 있다 — 문구 하나 바꾸는 절차 | `COPY_AUDIT_APPROVED` (26절) | — | S |
 | G6 | 배경음 10곡을 Lyria로, 루프 지점은 원곡 96% 보존해서 손으로 | `reports/bgm-loops.md`, `tools/bgm-loop.py` | 표 | S → T |
 | G7 | Suno · Lyria · ElevenLabs · Udio 약관 비교 — 게임에 AI 음악 넣을 때 | `v3.0-prep.md` §3-2 표 | 표 | T |
