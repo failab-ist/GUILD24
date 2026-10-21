@@ -126,7 +126,7 @@ source is under the rail; no new copy (no `위험 보기` button). One type ladd
 column, values in one face and size. A key at the box's top-right folds the whole box, Death line included, to a `요약` chip
 and back (account-level, kept across Days and reloads); on a phone key and chip keep clear of the menu pin.
 
-### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
+### ORDER — WAREHOUSE PANEL
 
 Contract-origin added rows show a quiet bordered source chip above the purchase-price tag: 새벽 회수 / 포션 계약,
 13px / 500 Wanted Sans with readable parchment contrast. Ordinary added rows need no source label.
@@ -152,7 +152,7 @@ hover-only). Header: small `창고` label, `N / M칸`, `K종` (the Death box's l
   height first, never jumping in one frame); with the sheet folded the handle's figures move on the
   last landing.
 
-### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
+### MORNING — DAY SIGN FLIP
 
 Entering a new Day's MORNING within the session, the ceiling DAY number rolls once (yesterday's rises out as today's rises
 in, one curve, never overlapping): 300 ms inside the number's box, no sound, within PRESENTATION §GAME FEEL BEAT (≤ 320 ms,
@@ -300,13 +300,13 @@ Compact state: active Injury only (omit `건강`, no `부상 1`-style number), F
 rarity word and the card frame already say it); no large Loyalty bar, no `?` / Loyalty popover (coach teaches it; global Help stays separate). No equipment text here (NPC
 detail and proven Stat-source attribution carry it).
 
-### SALE — SHELF LIP (v2.9.9)
+### SALE — SHELF LIP
 
 (acceptance -> UI_UX §QA UI-Q-v29-45.) Each shelf row ends on the thin lit edge of a display-case board, so goods stand on a
 shelf; the row's dark face, type, height and row count are unchanged (the open row keeps its board under its recess); the row
 is not turned to wood (price and stock legibility first).
 
-### SALE — SHELF HEAD (v2.9.9)
+### SALE — SHELF HEAD
 
 (acceptance -> UI_UX §QA UI-Q-v29-45.) The SALE `진열대` head (no `{N}종 · {M}개` count, User 2026-10-03) is one step lower and its `점포지원 {n} / {m}` plate
 compact; the plate keeps its frame (a control) and an about-44 px target through an invisible margin.
@@ -442,7 +442,7 @@ Each successful sale stamps a paper receipt stub (`.receipt-stub`) just under th
 `prefers-reduced-motion` no motion. A refusal shows the customer's reply line (engine reason pool); when Loyalty actually
 decreases, the same stub location shows only `단골도 {−N}`, the existing receipt style, with only the negative number in muted red, for about 2.5 seconds, without new motion.
 
-### SALE — CUSTOMER ARRIVAL (v2.9.10)
+### SALE — CUSTOMER ARRIVAL
 
 The customer's card walks a few steps in to the counter (~0.56 s). A newcomer's portrait is fetched on arrival: a plain head-and-
 shoulders silhouette holds the card until it decodes, then the portrait rises in, at most 1.5 s later; the Day's other
@@ -868,7 +868,7 @@ top-left) — with no new columns, duplicates or hierarchy change. The 36px Outc
 scale, but all Outcomes share one size per breakpoint; QA rejects Outcome-specific portrait sizing, not one shared desktop
 size.
 
-### NIGHT LAYOUT — VERDICT STAMP (v2.9.2 H1)
+### NIGHT LAYOUT — VERDICT STAMP
 
 (contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX §QA UI-Q-v29-27.)
 
@@ -937,7 +937,7 @@ phones, `store-rain-wide.jpg` from 1024px), covered and dimmed; the wood texture
 lit by its colour and shadow alone and, on phones, indents to the receipt's text line. The END `총매출` figure sets its `G` unit small
 (the same rule as SALE prices).
 
-### CLOSING — RECEIPT STAMP (v2.9.2 H4)
+### CLOSING — RECEIPT STAMP
 
 (contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX §QA UI-Q-v29-33.)
 
@@ -959,7 +959,7 @@ between ticks, and a tick the capital has reached turns red. The labels are Slot
 no Decoration or kind is named or recommended. No bar once every Slot is filled. It reads the account when drawn, so a purchase from the
 ending prints the new state. Acceptance -> UI-Q-v29-54 (the settlement block).
 
-### END — THIS RUN BLOCK (v2.9.12)
+### END — THIS RUN BLOCK
 
 (acceptance -> UI_UX §QA UI-Q-v29-54.) "이번 판은 이런 가게였다" must stay (GAME_VISION). The END tape carries `이 점포의 기록`
 between `지금까지 연 점포` and `점포 자본 정산` (story → settlement → 본사 해금 → replay line):
@@ -969,7 +969,7 @@ between `지금까지 연 점포` and `점포 자본 정산` (story → settleme
 - no expedition (DAY 1 bankruptcy) → no `원정` row; no names of the lost (the notebook's `돌아오지 못한 사람` list has them)
 - read from existing Run data, no save field; copy -> COPY_AUDIT §10-4
 
-### END — REPLAY NUDGE (v2.9.4)
+### END — REPLAY NUDGE
 
 (acceptance -> UI_UX §QA UI-Q-v29-37.) Show, never assign: the tape says what this Run left behind — no task, checklist,
 progress bar, remaining-count, mission or reward.
@@ -1059,7 +1059,7 @@ Recon dispatch · D25 exact persisted Final Family/Hazard disclosure · D30 reus
 
 All Boss-information beats use the Guild investigation dossier family.
 
-### BOSS REVEAL — MORNING LANDS FIRST (v2.9.2)
+### BOSS REVEAL — MORNING LANDS FIRST
 
 (acceptance -> UI_UX §QA UI-Q-v29-35.) A reveal due on entering MORNING (every stage: D0 briefing, D5 ~ D25) opens after
 MORNING has landed: a 200 ms hold, then the shade at once and the sheet rising into place in 260 ms with the art already on it.
@@ -1160,7 +1160,7 @@ SB2; SB3 -> D30 SB3. The Final Boss is never name-only when its art exists.
   `슬로스 봉인 강화 {N} / 3`; the chip itself is unchanged
 - no new permanent Phase; Seen state stable across Save/Reload; art never pushes decision information far below the fold
 
-### FINAL — BOSS REVEAL ENTRY (v2.9.2 H6)
+### FINAL — BOSS REVEAL ENTRY
 
 (contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX §QA UI-Q-v29-34.) FINAL is the only H6 entry
 (CLOSING, END and DAY 0 already have entry beats): the `.gate-zero` block (art/backdrop with the name plate) settles once,
@@ -1251,7 +1251,7 @@ required/owned Gold in the Item area, transfer disabled, inline status, no refus
 Any blocked transfer (no-effect / Wallet / Bag full) shows its reason as compact inline status, while the disabled action keeps
 its normal face. Action labels never wrap by accident on mobile; body text may.
 
-### FINAL RESULT — SEAL STAMP (v2.9.2 H5)
+### FINAL RESULT — SEAL STAMP
 
 (contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX §QA UI-Q-v29-30.) A Final ending strikes one
 carved seal with the Boss's name at the right of the headline (one seal for 1~3 members; none on non-Final endings):
@@ -1263,7 +1263,7 @@ carved seal with the Boss's name at the right of the headline (one seal for 1~3 
   plays once
 - the seal is aria-hidden (the headline states the result); reduced motion: all at once, same end state
 
-### FINAL — CLASH SCENE (v2.9.9 H7)
+### FINAL — CLASH SCENE
 
 (exception -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT H7; acceptance -> UI_UX §QA UI-Q-v29-46.) After `마왕성으로 출발`
 the already-resolved result plays as a card fight over the FINAL stage, then the ending (§FINAL RESULT — SEAL STAMP); the scene
@@ -1371,7 +1371,7 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
   `클릭하여 넘기기` with a mouse. `건너뛰기` (top right) ends it. It ends on the store screen.
 - Copy owner: `Copy.prologue`. Art: `dist/ui/assets/presentation/prologue/` (phone and wide per scene).
 
-### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
+### NEW STORE PREPARATION — STORE SCENE
 
 (acceptance -> UI_UX §QA UI-Q-v29-42.) 새 점포 준비 is the store about to open — MORNING's painted room (same framing, bands and
 §LIVE STORE DECORATION SEATING) — whenever there is no Run, and after `다음 점포 열기` from the ending.
@@ -1469,7 +1469,7 @@ controls use Wanted Sans, with the existing numeric role where applicable. Gamep
 Ordinary settings are localized and gameplay-facing: no developer Seed controls pre-Run, no technical runtime footer (the build
 line, §BUILD MARKER, excepted); no Debug menu needed.
 
-### OPENING TITLE LOGO (v2.9.9)
+### OPENING TITLE LOGO
 
 (acceptance -> UI_UX §QA UI-Q-v29-41; asset -> reports/ASSETS.md §Title logo.) `마왕 잡는 편의점` is the drawn logo, not type,
 hanging from the store scene's ceiling: one image with the name as alt text in the `h1`, no added shadow or frame; no larger
@@ -1477,7 +1477,7 @@ than needed — phone at most 190 px wide or 53% of the width, clear of the buil
 letters (shipped as a 960 px derivative with the 점 받침 reading as ㅁ). The branch name stays visible, unemphasised: MORNING's
 plate under the logo.
 
-### PRIMARY ACTION GRAMMAR (v2.9.9)
+### PRIMARY ACTION GRAMMAR
 
 (acceptance -> UI_UX §QA UI-Q-v29-44.) Each Phase's single dock Action — `첫 점포지원 고르기`, `문 열기`, `영업 시작` (or
 `발주 확정`), `손님 보내기`, NIGHT `다음`, `다음 날`, `다음 점포 열기`, the FINAL gate bar — presses the same way; material,
@@ -1500,7 +1500,7 @@ colour, silhouette and place vary by Phase.
 - per-Phase material → §STRONG GREEN SEMANTIC table (MORNING's shutter square, no cut); NIGHT's cast is deep cobalt, the FINAL
   red bar's cast a step darker than its foot (black is lost on its dock); each keeps its dock place
 
-### BUILD MARKER (v2.9.3)
+### BUILD MARKER
 
 (acceptance -> UI_UX §QA UI-Q-v29-36.) So a play report can name its build, `v{version} · {commit}` shows small (10 px) and muted in
 the top-left of the opening screen (no Run: 새 점포 준비) above the room — not a control, taking no title space — and centred at the
@@ -1569,7 +1569,7 @@ visits and buying) beside the payday customer. DAY 4 the Stats mark (why - 투�
 three; COPY_AUDIT §3-7 STATS) beside 발주 후보 교환. A step carries the first DAY it may show, so no DAY is buried. The kit mark belongs to the day the kit actually arrives.
 No Hazard marks (Hazard rows say what answers them). Never `독이면 X 아이템을 사세요`-style scripts.
 
-### TUTORIAL — COACH DIET (v2.9.12)
+### TUTORIAL — COACH DIET
 
 (acceptance -> UI_UX §QA UI-Q-v29-53.) One rule, one place: a mark only where the rule must be known before the decision and no
 screen says it; otherwise none, or taught after the fact.
@@ -1588,7 +1588,7 @@ screen says it; otherwise none, or taught after the fact.
   `창고 N / M칸` alone). The readout title is `전투 전망`, short enough to share the row with `환경 대응` on a phone; the outlook mark carries when the reading is taken
 - after the fact: the first refused 바가지 (§SALE PRICE LESSONS), beside NIGHT discovery marks (NIGHT_CLOSING §DISCOVERY LINE) and the Wallet gain row (`손님 소지금 획득`, on a 성공 / 대성공 record only; User 2026-10-10); a NIGHT tells one mark, the most serious rule first
 
-### SALE PRICE LESSONS (v2.9.12)
+### SALE PRICE LESSONS
 
 One contextual mark, once per account, persisted and reset with the rest: the first 150% (바가지) refusal, on the refused key
 (`오늘 거절됨`). The price keys themselves carry the §TUTORIAL — COACH DIET mark before it. Words only; copy ->
