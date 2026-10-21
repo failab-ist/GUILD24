@@ -19,7 +19,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 Exact approved Player-facing replacements, deletions, Event Flavor, Store Support descriptions,
 NPC dialogue pools, Boss/Deep text, Settings/Help text and death narration are owned by:
 
-    COPY_AUDIT_APPROVED_v2.13.19.md
+    COPY_AUDIT_APPROVED_v2.13.20.md
 
 This owner holds terminology, truth boundaries, exposure/cooldown rules and non-duplicated
 copy-system rules. Do not maintain a second exact-copy list here.
@@ -202,7 +202,7 @@ Exact Player-facing action label:
 현재 지점 포기
 ```
 
-Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.13.19.md` §1-3.
+Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.13.20.md` §1-3.
 
 The function remains the current Run-only abandon action; Account/Meta preservation and Full Data Reset remain separate mechanics.
 
@@ -568,7 +568,7 @@ BAD:
 Result 발생 조건 / Severity / Gameplay Consequence는 NIGHT_CLOSING 및 관련 Spec을 따른다.
 COPY는 문장 Variant만 소유한다.
 
-예: 사망 — **DATA** `사망` / **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.13.19.md`.
+예: 사망 — **DATA** `사망` / **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.13.20.md`.
 
 History가 필요한 문장은 실제 해당 History가 있을 때만 사용한다.
 가짜 과거를 만들지 않는다.
@@ -602,7 +602,7 @@ D. 반복되는 중요한 NPC Result
 Dialogue must not imply a purchase preference that the owning Trait does not implement.
 
 Exact active ARRIVAL / TRAIT / SALE / NIGHT / DEATH pools are owned by
-COPY_AUDIT_APPROVED_v2.13.19.md.
+COPY_AUDIT_APPROVED_v2.13.20.md.
 
 ### DIALOGUE EXPOSURE / RECENT REPEAT — EXACT
 
@@ -751,7 +751,7 @@ Tutorial may point to the relevant UI value without selecting the answer for the
 
 Keep each coach step short: one system-reading job, usually one or two sentences (the DAY 0 점포지원 step also says the first pick may wait, until when, and where).
 
-Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 전망 (§3-4) / 가방 (상품 사용) / 재방문 손님 / II 게이트 · 화염 게이트 (§3-10) / 첫 사건 (§3-11) / 본사 구급키트 (§3-12) / 보수날 손님 (§3-13) steps -> `COPY_AUDIT_APPROVED_v2.13.19.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record (COPY_AUDIT §26-2) and 가격 after the first refusal / 50% sale (COPY_AUDIT §26-3). There is no 방문객, 게이트 (MORNING and ORDER), 창고, 후보, 수량, 점포지원 카드 · 구매 or NIGHT mark (UI_UX §TUTORIAL — COACH DIET); the CLOSING mark is its first clause only.
+Exact copy for the 심층원정 / 발주 확정 / 능력치 (STATS) / 전망 (§3-4) / 가방 (상품 사용) / 재방문 손님 / II 게이트 · 화염 게이트 (§3-10) / 첫 사건 (§3-11) / 본사 구급키트 (§3-12) / 보수날 손님 (§3-13) steps -> `COPY_AUDIT_APPROVED_v2.13.20.md` §3; 대성공 / 보급 / 만반의 준비 are taught after the fact on the NIGHT record (COPY_AUDIT §26-2) and 가격 after the first refusal / 50% sale (COPY_AUDIT §26-3). There is no 방문객, 게이트 (MORNING and ORDER), 창고, 후보, 수량, 점포지원 카드 · 구매 or NIGHT mark (UI_UX §TUTORIAL — COACH DIET); the CLOSING mark is its first clause only.
 
 ```text
 점포지원 (DAY 0)
@@ -768,7 +768,7 @@ CLOSING (first clause only)
 
 The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신.
 
-The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.13.19.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone.
+The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.13.20.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone.
 
 ## IMPORTANT RESULT
 
@@ -845,7 +845,7 @@ unless an owning tutorial explicitly requires instructional text.
 
 ## FIRST AID KIT
 
-Concise player function (exact string -> `COPY_AUDIT_APPROVED_v2.13.19.md` §4-22):
+Concise player function (exact string -> `COPY_AUDIT_APPROVED_v2.13.20.md` §4-22):
 
     원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)
 
@@ -881,7 +881,7 @@ Exact Death-risk label:
 실패 시 사망 위험
 ```
 
-`실패 시 사망 위험` is a help line, not a readout cell: the SALE readout shows 전투 전망 and 환경 대응 only; the exact % is the second line of the 전투 전망 `?` and an NPC detail line (exact lines -> COPY_AUDIT_APPROVED_v2.13.19.md §4-1 / §5-7).
+`실패 시 사망 위험` is a help line, not a readout cell: the SALE readout shows 전투 전망 and 환경 대응 only; the exact % is the second line of the 전투 전망 `?` and an NPC detail line (exact lines -> COPY_AUDIT_APPROVED_v2.13.20.md §4-1 / §5-7).
 
 This block covers:
 - qualitative Combat Forecast
@@ -896,7 +896,7 @@ Do not rewrite the copy to imply the shown Forecast / Readiness / 실패 시 사
 ## ANCHORED HELP ROUTING
 
 Exact Player-facing SALE Help for 전투 전망 (two lines, the second is `실패 시 사망 위험 {N}%`) / 환경 대응 is owned by
-COPY_AUDIT_APPROVED_v2.13.19.md.
+COPY_AUDIT_APPROVED_v2.13.20.md.
 
 피로 explanation:
     음식·음료는 피로를 줄인다. 출발 전 피로부터 줄이고, 남으면 이번 원정에서 쌓이는 피로를 줄인다.
@@ -906,7 +906,7 @@ COPY_AUDIT_APPROVED_v2.13.19.md.
 Normal SALE shows only the compact Loyalty value/state and no separate Loyalty `?`.
 
 Exact normal-SALE, tutorial/coach and compact global Help wording is owned by
-COPY_AUDIT_APPROVED_v2.13.19.md.
+COPY_AUDIT_APPROVED_v2.13.20.md.
 
 Do not append Store Support/Boss condition detail to the normal SALE state.
 Boss-specific information must obey its reveal boundary.
@@ -914,7 +914,7 @@ Boss-specific information must obey its reveal boundary.
 ## DEEP EXPEDITION COPY BOUNDARY
 
 The first contextual tutorial may explain the system.
-Repeat surfaces use the compact exact copy owned by COPY_AUDIT_APPROVED_v2.13.19.md.
+Repeat surfaces use the compact exact copy owned by COPY_AUDIT_APPROVED_v2.13.20.md.
 
 Do not repeat the full Hazard/cost/growth/store-income tutorial paragraph on every Morning and again
 inside SALE.
@@ -922,7 +922,7 @@ inside SALE.
 ## NIGHT HERO FEEDBACK
 
 Use the short proven-result grammar owned by NIGHT_CLOSING_v2.8.0.md and the exact active copy in
-COPY_AUDIT_APPROVED_v2.13.19.md.
+COPY_AUDIT_APPROVED_v2.13.20.md.
 
 Do not use generic 위험 감소 as Hero feedback.
 
@@ -948,7 +948,7 @@ Death uses narration, not quoted living dialogue.
 
 ## FIRST STORE SUPPORT COPY BOUNDARY
 
-Exact DAY 0 first-support copy is owned by COPY_AUDIT_APPROVED_v2.13.19.md.
+Exact DAY 0 first-support copy is owned by COPY_AUDIT_APPROVED_v2.13.20.md.
 
 The candidate price/state communicates the free first choice, and the flow itself requires a
 selection. The D0 Boss objective belongs to the separate Boss-information beat after the first
@@ -957,12 +957,12 @@ support choice; it is not embedded on the Store Support surface.
 ## SALE COPY BOUNDARY
 
 Exact selected-Item headings, conditional-effect labels, forecast Help and global Help text are owned
-by COPY_AUDIT_APPROVED_v2.13.19.md.
+by COPY_AUDIT_APPROVED_v2.13.20.md.
 
 Direct and derived changed rows remain readable under the current single-heading structure.
 Internal markers such as `potion` are never Player effects.
 
-Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.13.19.md §4-19).
+Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.13.20.md §4-19).
 The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.13.17.md §Customer speech).
 
 ## RESULT CAUSALITY COPY
@@ -982,7 +982,7 @@ when the resolved report cannot prove that exact cause.
 ## EVENT COPY ROUTING
 
 Event mechanic truth -> EVENT_v2.8.0.md
-Exact approved Event Function / Flavor text -> COPY_AUDIT_APPROVED_v2.13.19.md
+Exact approved Event Function / Flavor text -> COPY_AUDIT_APPROVED_v2.13.20.md
 
 ### EVENT 05
 
@@ -991,12 +991,12 @@ Mechanic ownership -> `EVENT_v2.8.0.md`. Required mechanic truth:
 - current-day Potion buy price +35%
 - retired `마석 가격 폭등` / `Special 매입가 +35%` wording is forbidden
 
-Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.13.19.md` §13-5.
+Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.13.20.md` §13-5.
 
 ## TRAIT / CURRENCY / SETTINGS COPY ROUTING
 
 Exact active Trait-effect labels, Store Capital display text and Settings localization are owned by
-COPY_AUDIT_APPROVED_v2.13.19.md.
+COPY_AUDIT_APPROVED_v2.13.20.md.
 
 Use mathematically truthful weighting terms such as 재방문 가중치 where replacing them with 확률
 would be false.
@@ -1022,11 +1022,11 @@ Factor, Modifier, sealBreakCount, effectiveBossPower when an approved world/play
 ### BOSS INFORMATION COPY ROUTING
 
 Exact D0 / D5 / D10 / D15 / D20 / D25 Player-facing Boss information copy is owned by
-COPY_AUDIT_APPROVED_v2.13.19.md.
+COPY_AUDIT_APPROVED_v2.13.20.md.
 
 Reveal timing and information ownership remain governed by BOSS_v2.8.0.md.
 
-This owner carries the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below (`COPY_AUDIT_APPROVED_v2.13.19.md` §14-2 / §14-4 / §23).
+This owner carries the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below (`COPY_AUDIT_APPROVED_v2.13.20.md` §14-2 / §14-4 / §23).
 
 ### Final Family / Hazard reveal timing
 
@@ -1042,7 +1042,7 @@ Do not add a second D30 Family-intro copy that implies newly generated informati
 
 ### D5
 
-Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.13.19.md` §14-2.
+Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.13.20.md` §14-2.
 
 #### 분노의 마왕 래스
 
@@ -1072,7 +1072,7 @@ D5 Flavor는 Trait을 암시할 수 있지만 exact Function을 공개하지 않
 
 ### D15
 
-Header / Intro / Button / 안내 line / every Boss Trait name and sentence -> `COPY_AUDIT_APPROVED_v2.13.19.md` §14-4.
+Header / Intro / Button / 안내 line / every Boss Trait name and sentence -> `COPY_AUDIT_APPROVED_v2.13.20.md` §14-4.
 SLOTH seal lines -> §14-5. 도감 > 마왕 tab copy -> §14-11.
 
 Voice rules for the Trait sentences:
@@ -1113,7 +1113,7 @@ No Rare+-based Function sentence.
 
 ### D25 — 최종 정찰 보고
 
-Header / Intro -> `COPY_AUDIT_APPROVED_v2.13.19.md` §14-7.
+Header / Intro -> `COPY_AUDIT_APPROVED_v2.13.20.md` §14-7.
 
 Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 29).
 

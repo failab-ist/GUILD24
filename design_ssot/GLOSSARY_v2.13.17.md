@@ -12,7 +12,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 ```text
 이름과 뜻            -> GLOSSARY (이 문서)
 규칙과 수치          -> 각 owner 문서
-정확한 화면 문구     -> COPY_AUDIT_APPROVED_v2.13.19.md
+정확한 화면 문구     -> COPY_AUDIT_APPROVED_v2.13.20.md
 문구의 목소리와 경계 -> COPY_WORLD_VOICE_v2.8.0.md
 ```
 

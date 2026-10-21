@@ -46,7 +46,7 @@ G.DATA.decorations=[
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance); the effect copy above reads them. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={cheerBanner:{perTen:0.03,max:0.20},voucher:{customers:3,fatigue:6},sponsorSign:{budgetShare:0.5},thriftSafe:{firstWallet:100,customers:2},honorFrame:{weights:[50,30,13,5.5,1.5]},
+G.DATA.decorationParams={cheerBanner:{perTen:0.03,max:0.20},voucher:{customers:2,fatigue:6},sponsorSign:{budgetShare:0.5},thriftSafe:{firstWallet:100,customers:2},honorFrame:{weights:[50,30,13,5.5,1.5]},
  memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.25},trainingSign:{levelBonus:1,chance:.30},aidCabinet:{preparedFactor:.60,powerMult:1.03}};
 /* META §INITIAL FOUR DECORATIONS copy (User 2026-10-04): who gains first, no closing period (COPY_AUDIT §9-5); every
    number is read from decorationParams / D.balance when the card is drawn, so `effect` is a getter over the live tables. */

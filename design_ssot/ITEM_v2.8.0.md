@@ -234,7 +234,7 @@ GLUTTONY's Final reduction, when applicable, occurs after the final Item-side po
 Food/Drink category-affinity or Fresh Relic effects do not automatically multiply Hazard Counter, Insurance,
 RiskReward penalty or unrelated special effects.
 
-Exact Trait modifiers -> `NPC_TRAIT_v2.13.19.md`. Exact Fresh Relic effects -> `RELIC_v2.13.19.md`.
+Exact Trait modifiers -> `NPC_TRAIT_v2.13.19.md`. Exact Fresh Relic effects -> `RELIC_v2.13.20.md`.
 
 ## HAZARD COVERAGE CONTRACT
 
@@ -316,7 +316,7 @@ Counter Food Supply: 컵라면 3 · 집중 사탕 2 · 불룡볶음면 3. Counte
 | 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 12 | 방한 두건 냉기 10 · 화이트아웃 12 | 불룡볶음면 냉기 23 · 설원 고글 화이트아웃 28 | 백설 방한고글 18 · 18 |
 | 화염 골렘 광산 (화염) | 얼음컵 화염 12 | — | 쿨링 이온음료 화염 23 | 마그마 냉각장비 화염 18 · 투력 10 |
 
-The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.13.19.md` §COUNTER JUDGEMENT).
+The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.13.20.md` §COUNTER JUDGEMENT).
 
 Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog
 exception says otherwise; their cost is narrow coverage.
@@ -541,7 +541,7 @@ Rules:
 - the stone adds nothing to the combat-failure retreat roll itself (that roll reads the Traits only)
 
 escapeBonus=+20%p
-player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.13.19.md` §4-22)
+player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.13.20.md` §4-22)
 
 Outcome-share evidence: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` (v2.9.10, Insurance).
 
@@ -560,7 +560,7 @@ Rules:
 - clearly above Return Stone in survival hierarchy: the remaining Death or Severe Injury is stopped outright, where 귀환석 only makes it less likely
 - a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
 - not Food/Drink; Fresh-category effect does not apply
-- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.13.19.md` §4-22)
+- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.13.20.md` §4-22)
 
 ### Insurance resolution order
 
@@ -679,7 +679,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
 - Insurance / Special: 구급키트 4, 귀환석 4, 세계수 생환부적 5, 황금 1+1 쿠폰 5
-- 대형 냉장고 extends Food/Drink exactly as `RELIC_v2.13.19.md` states; nothing else moves a shelf life
+- 대형 냉장고 extends Food/Drink exactly as `RELIC_v2.13.20.md` states; nothing else moves a shelf life
 
 | ID | Item | Category | Shelf |
 |---|---|---|---:|
@@ -793,7 +793,7 @@ Rules:
 - Fresh must have broad Food/Drink access across price/rarity and must not erase specialist FieldGear advantage
 - Rotation/low-cost play must remain viable through cheap useful SKUs and bulk ordering
 
-Build-filtered Relics must not depend on one single eligible SKU. Canonical Relic interaction -> `RELIC_v2.13.19.md`.
+Build-filtered Relics must not depend on one single eligible SKU. Canonical Relic interaction -> `RELIC_v2.13.20.md`.
 
 ## RARITY / UPGRADE
 
@@ -1412,9 +1412,9 @@ PASS:
 
 Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.13.19.md`
 Job / Trait multipliers -> `NPC_TRAIT_v2.13.19.md`
-Relic / build modifiers -> `RELIC_v2.13.19.md`
+Relic / build modifiers -> `RELIC_v2.13.20.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
 Order / reroll / pricing / Rarity progression -> `ECONOMY_ORDER_v2.13.19.md`
 Final usefulness -> `FINAL_EXPEDITION_v2.8.0.md`
-Meta unlock -> `META_v2.13.18.md`
+Meta unlock -> `META_v2.13.20.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`
