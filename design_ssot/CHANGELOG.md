@@ -115,6 +115,14 @@ The User found that early Tier I bags were won with Stat Food and Drinks rather 
   30.8 → 32.4%, Rerolls / Day 0.20 → 0.23 (the bot barely rerolls, so the money pressure is for human Runs to show).
   Logs: `reports/v2100-measure/stock-tier1-20261021/`.
 
+### v2.13.19 addendum — 지역 거점점 +1 visitor 45% → 35% (User 2026-10-21, same version)
+
+The User's Run with 본사 우수 점포 훈장 → 지역 거점점 from DAY 1 kept far more Gold (D24 2711G) with the same Gold per customer, from
+0.5~1 more customers a Day (「35 / 15로 줄이고」). RELIC §26 / REL-Q-v28-17: +1 visitor 35% (was 45%), +2 visitors 15%, nothing 50%;
+expected +0.65 a Day (was +0.75). Help copy (COPY_AUDIT §11-26) follows the number. Measurement (new investor bot, fresh 1000, 훈장 with its
+DAY 0 window fixed to 거점점): customers / Day 5.23 → 5.18, sales / Day 935 → 918, D15 balance 1234 → 1206G, clears 4.6 → 3.2%
+(no Decoration: 4.48 · 813 · 981G · 1.6%). Logs: `reports/v2100-measure/hub-medal-20261021/`.
+
 ## v2.13.18 — Decorations: 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50% (User 2026-10-21)
 
 The economy route cleared first far ahead of the others; the User asked for the economy Decorations reviewed as a whole (「경제도 전체적으로 재검토」).

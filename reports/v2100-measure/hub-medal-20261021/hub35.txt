@@ -1,0 +1,2 @@
+35% none / force:hub (copy of main 2eba2e4 with hub p1 .35)
+force:hub      n 1000 | 끝난날 중앙 10 | D20 21.9% D30 5.8% 클리어 3.2% | 사망 6.99 파산 1 | 손님/일 5.18 매출/일 918 | D10 잔액 897 D15 1206

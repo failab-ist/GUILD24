@@ -555,9 +555,9 @@ RiskReward penalty unchanged
 Role: widen the catchment. Price = 340G. No operating-cost surcharge.
 
 Its chances are read in the one shared Morning extra-visitor roll (§VISITOR SUPPORT COMPOSITION):
-+2 visitors = 15% · +1 visitor = 45%
++2 visitors = 15% · +1 visitor = 35% (User 2026-10-21: was 45%, 「35 / 15로 줄이고」)
 
-Held alone: expected visitor delta = +0.75 / applicable Day before ordinary availability caps.
+Held alone: expected visitor delta = +0.65 / applicable Day before ordinary availability caps.
 The visitor increase is subject to the ordinary active/available adventurer cap.
 
 
@@ -628,7 +628,7 @@ The supports answer different questions and none is a strict upgrade of another.
 
 ```text
 board      = base-roll floor
-hub        = +2 visitors 15%, +1 visitor 45%
+hub        = +2 visitors 15%, +1 visitor 35%
 groupOrder = +1 visitor 20%
 wall       = +1 visitor, D.balance.wallVisitorChance (50%; Decoration, not a Relic)
 ```
@@ -1325,7 +1325,7 @@ FAIL:
 ##### hub
 
 PASS:
-- held alone: +2 at 15%, +1 at 45%, nothing at 40%
+- held alone: +2 at 15%, +1 at 35%, nothing at 50%
 - no operating-cost surcharge
 
 FAIL:
@@ -1344,9 +1344,9 @@ PASS:
 
 #### REL-Q-v28-17 — REGION HUB
 
-Held alone, on each applicable Morning exactly one outcome occurs: +1 visitor: 45% · +2 visitors: 15% · +0 visitors: 40%
+Held alone, on each applicable Morning exactly one outcome occurs: +1 visitor: 35% · +2 visitors: 15% · +0 visitors: 50%
 
-Expected mean before ordinary availability caps: +0.75 visitor / applicable Day
+Expected mean before ordinary availability caps: +0.65 visitor / applicable Day
 
 Also: Price 340G · no operating modifier · outcomes are mutually exclusive · with other extra-visitor sources the +1
 chances share the capped Morning roll (§VISITOR SUPPORT COMPOSITION)
