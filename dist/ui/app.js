@@ -2684,7 +2684,7 @@ function credits(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="credits-code"><h3 id="credits-code">소리와 코드</h3><p>효과음: Kenney, uisfx (CC0 1.0)</p><p>애니메이션: anime.js, Julian Garnier (MIT)</p></section></div>`;}
 /* the one support address: the 오류 신고 link here and the privacy page's contact line */
 const SUPPORT_MAIL='f.ai.shion.lab@gmail.com';
-const PRIVACY_URL='https://failab-ist.github.io/GUILD24/privacy.html';
+const PRIVACY_URL='https://guild24.f-ai-shion-lab.workers.dev/privacy.html';
 const coachOff=()=>game.account.tutorial?.skipped===true;
 function settings(){return `<div class="settings-content">
  <section class="settings-group" aria-labelledby="settings-sound"><div class="settings-heading"><h3 id="settings-sound">소리</h3>${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}</section>
