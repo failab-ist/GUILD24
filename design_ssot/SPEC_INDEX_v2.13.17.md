@@ -243,7 +243,8 @@ included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by 
 - An owner's filename carries the project version in which that owner last changed: `<OWNER>_v<version>.md`
   (User 2026-10-21). It is renamed only when the owner is edited, never in bulk, so untouched owners keep an older
   version in their name. Steps and the one exception (PLATFORM_RELEASE): AGENTS §10-A.
-- `DESIGN_SSOT=` in every owner header names the project version the file belongs to.
+- The project version lives only in this index's `DESIGN_SSOT=` line. Owners carry no project-version line, so a
+  version bump touches only the owners whose spec changed; an owner whose spec did not change keeps its name and header.
 - `DOC_VERSION=` in an owner header is the project version in which that owner last changed; a renamed owner's
   `DOC_VERSION=` matches its filename.
 - `design_ssot/CHANGELOG.md` records what each version changed, per owner, with the User decision date.
