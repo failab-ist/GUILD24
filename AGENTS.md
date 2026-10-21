@@ -313,6 +313,7 @@ After User-approved Design change:
 ## 9-B. 밸런스는 `tools/measure-v2100.cjs`로 잰다 (User 2026-10-04)
 
 밸런스를 바꾸거나 판단할 때의 기준 측정이다. 돌리기 전 9-A대로 User 컨펌을 받는다.
+밸런스를 점검하거나 바꿀 때는 먼저 `BALANCE_CHECK.md`(있는 자료부터 보기 · 물은 것만 재기 · 읽기 · 보고 · 넣기 순서)를 읽는다(User 2026-10-21).
 
 ```text
 node tools/measure-v2100.cjs --traj 200 --fresh 1000
