@@ -2758,7 +2758,7 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
       under a small 특성 label, with its explanation attached in the same ruled entry - one
       entry, not a card. The line's text is unchanged; the dash only stops being visible
       once the label sits on its own line. */
-   +'<div class="trait"><p class="trait-name">'+(lines.length?'<span class="trait-k">'+E(c.d15.label)+'</span><span class="trait-sep">: </span>':'')+'<b>'+E(name)+'</b></p>'
+   +'<div class="trait"><p class="trait-name">'+(lines.length?'<span class="trait-k">'+E(c.d15.label)+'</span><span class="trait-sep"> — </span>':'')+'<b>'+E(name)+'</b></p>'
    +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+(s.bossId==='GREED'?greedSales(true)+'<p>'+E(c.d15.salesNote)+'</p>':'')+'</div></div></div>';}
  /* D10 / D20 are one-tap information beats: they open the question the next report answers and
     disclose nothing new about the Boss. BATCH 4B (UI_UX §D5 / D10 / D15 / D20 / D25): the Boss
