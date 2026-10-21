@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-10-21
-STATE: V2_13_17 (설계 진입점 `design_ssot/SPEC_INDEX_v2.8.0.md`, 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD)
+STATE: V2_13_17 (설계 진입점 `design_ssot/SPEC_INDEX_v2.13.17.md`, 버전마다 머지 PR · 커밋 · 태그는 `design_ssot/CHANGELOG.md` §RELEASE RECORD)
 
 ## Current
 

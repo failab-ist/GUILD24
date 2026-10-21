@@ -75,7 +75,7 @@ This is an information beat, not a new gameplay Phase. Opening the D0 briefing:
 The briefing owns no Boss reveal beyond the Run objective / investigation cadence.
 Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
 Boss information boundary -> BOSS_v2.8.0.md.
-Presentation -> UI_UX_v2.8.0.md.
+Presentation -> UI_UX_v2.13.17.md.
 
 Acknowledgement:
 - one `확인` action completes the beat;
@@ -127,7 +127,7 @@ Order timing:
 - no next-day forecast is shown; today's Gates are the whole planning context
 
 Within ORDER, confirming a purchase does **not** advance the phase.
-The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.8.0.md`.
+The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.13.17.md`.
 
 Canonical economy/order -> ECONOMY_ORDER_v2.8.0.md
 
@@ -522,7 +522,7 @@ Rules:
 - implementation adoption must audit the current tutorial trigger/persistence path
 - if the existing tutorial is present but its reset/trigger path is broken, fix that path rather than replacing the tutorial wholesale
 
-Exact tutorial content/presentation -> `UI_UX_v2.8.0.md`.
+Exact tutorial content/presentation -> `UI_UX_v2.13.17.md`.
 
 ## RUN-END STORE CAPITAL SETTLEMENT
 
@@ -561,7 +561,7 @@ D21~D30  10
 - the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
 - 추모 방명록 adds the current Decoration bonus to every segment limit (`META_v2.8.0.md` §counter — 추모 방명록)
 - the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
-- the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.8.0.md`)
+- the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.13.17.md`)
 - death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
 - checked at Closing before the money branch; it uses the existing ending copy
 
@@ -1330,6 +1330,6 @@ Event / day modifier -> `EVENT_v2.8.0.md`
 D25/D30 Final flow / Final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss identity / trait / reveal / cadence / GREED -> `BOSS_v2.8.0.md`
 Meta / mastery / knowledge / Account -> `META_v2.8.0.md`
-Presentation / mobile / tutorial presentation / Decoration UI -> `UI_UX_v2.8.0.md`
+Presentation / mobile / tutorial presentation / Decoration UI -> `UI_UX_v2.13.17.md`
 Player-facing copy / abandon wording -> `COPY_WORLD_VOICE_v2.8.0.md`
 Exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`

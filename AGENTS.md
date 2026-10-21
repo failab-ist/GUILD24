@@ -32,7 +32,7 @@ If Canonical and Source differ:
 
 Never change approved Design without User approval.
 
-Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.8.0.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
+Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.13.17.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
 
 ---
 
@@ -354,6 +354,20 @@ Do not:
 
 Follow the current `SPEC_INDEX` routing and inheritance structure.
 Versioning / manifest changes must reflect the current project routing rather than historical examples in this file.
+
+## 10-A. 설계 문서 파일 이름 버전 (User 2026-10-21)
+
+- `design_ssot/`의 문서를 고치면 그 파일 이름의 버전도 지금 게임 버전(`dist/build.js`의 `version`)으로 올린다.
+  예: v2.13.17에서 EVENT를 고치면 `EVENT_v2.8.0.md` → `EVENT_v2.13.17.md`. 문서만 고쳐 게임 버전이 그대로여도 지금 버전을 쓴다.
+- 한꺼번에 바꾸지 않는다. 그 작업에서 고친 파일만 올리고, 안 고친 파일은 옛 버전 이름 그대로 둔다.
+  다른 문서의 이름이 바뀌어 링크만 고친 파일은 고친 것으로 치지 않는다.
+- 이름을 바꿀 때:
+  - `git mv`로 옮긴다.
+  - 머리글 `DOC_VERSION=`을 같은 버전으로 맞춘다.
+  - `archive/` 밖(문서 · `tests/` · `tools/` · `dist/` 주석)의 옛 이름을 모두 새 이름으로 바꾼다.
+    `git grep -n "<옛 파일 이름>" -- ':!archive'`가 비어야 한다. `archive/`는 옛 이름 그대로 둔다(그때의 기록). 단 목록인 `archive/README.md`는 새 이름으로 바꾼다.
+  - SPEC_INDEX §CURRENT CANONICAL FILE SET은 자동으로 따라온다(같은 치환).
+- 예외: `PLATFORM_RELEASE_v3.0.0.md`는 출시 목표 버전 이름이라 고쳐도 이름을 그대로 둔다. `CHANGELOG.md`는 버전이 없다.
 
 ---
 

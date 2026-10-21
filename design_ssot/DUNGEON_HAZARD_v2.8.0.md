@@ -130,7 +130,7 @@ Rules:
 - SLIME secondary player-facing Hazard is `진창`
 - do not explain only some Hazards while leaving others name-only
 
-Interaction ownership -> `UI_UX_v2.8.0.md`
+Interaction ownership -> `UI_UX_v2.13.17.md`
 
 ## GLOBAL PRESSURES
 
@@ -1020,7 +1020,7 @@ That displayed value:
 The actual expedition still recalculates `failureDeathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
 Do not update the displayed `실패 시 사망 위험` to reveal the post-supply answer.
 
-Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.8.0.md` / `COPY_AUDIT_APPROVED_v2.8.0.md`.
+Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md` / `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
@@ -1091,7 +1091,7 @@ Hazard / Supply / Insurance / Trait rules remain in their existing systems.
 Great Success uses Combat-Power margin after ordinary Success qualification.
 
 When the Player-facing Great Success opportunity threshold is met, presentation must explicitly signal the opportunity.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`. Presentation -> `UI_UX_v2.8.0.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`. Presentation -> `UI_UX_v2.13.17.md`.
 Signal threshold must match the actual calculation.
 
 Margin formula:
@@ -2083,7 +2083,7 @@ Record at minimum:
 item counters -> `ITEM_v2.8.0.md`
 job/stat coverage -> `NPC_TRAIT_v2.8.0.md`
 order/tier forecast -> `ECONOMY_ORDER_v2.8.0.md`
-forecast UI -> `UI_UX_v2.8.0.md`
+forecast UI -> `UI_UX_v2.13.17.md`
 night causality -> `NIGHT_CLOSING_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 boss modifier -> `BOSS_v2.8.0.md`
