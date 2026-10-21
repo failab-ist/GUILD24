@@ -188,7 +188,7 @@ For each selected participant:
 ```
 
 Exact ordinary SALE handling -> `SALE_v2.8.0.md`.
-Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.8.0.md`.
+Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.13.19.md`.
 
 Final-specific override:
 - exactly 2 Item slots per participant
@@ -220,7 +220,7 @@ After party commitment, show exactly one party-wide qualitative forecast:
 토벌 전망 · {우세|접전|불리}
 ```
 
-Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`.
+Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 The forecast:
 - reads the entire committed party, whether it contains 1, 2 or 3 participants;
@@ -274,7 +274,7 @@ The D30 ORDER sheet never offers these, on its first sheet or after a Reroll: D3
 Final Bag. Same explicit no-effect exclusion D30 Store Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
 
 Player-facing copy must not use the internal term `Final`.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 Boss-caused visible Item changes must use the same current Final truth that resolution will use.
 This applies to both the shelf summary and the focused Item preview; they may not contradict each other.
@@ -291,7 +291,7 @@ With no purchase/refusal roll, a valid affordable transfer succeeds deterministi
 Ordinary SALE refusal dialogue / customer chatter does not appear in Final preparation.
 
 If Wallet is insufficient, block the transfer and show the system reason with exact required and owned
-Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.13.18.md`.
+Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 ### Result
 
@@ -728,7 +728,7 @@ Timeline/save -> `CORE_RUN_v2.8.0.md`
 Hazard truth -> `DUNGEON_HAZARD_v2.13.19.md`
 Item/Insurance -> `ITEM_v2.8.0.md`
 Boss -> `BOSS_v2.8.0.md`
-Relic D30 window -> `RELIC_v2.8.0.md`
+Relic D30 window -> `RELIC_v2.13.19.md`
 Sale handling -> `SALE_v2.8.0.md`
-Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.8.0.md`
+Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.13.19.md`
 UI -> `UI_UX_v2.13.17.md`

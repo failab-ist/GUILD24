@@ -48,7 +48,7 @@ Zero-result Night: softlock=NO; 즉시 Closing으로 진행 가능해야 한다.
 게이트 순례 주간:
 - Night header/summary may show `실제 변경 N명`
 - affected NPC result shows `예상 목적지 -> 실제 목적지`
-- the route-change line (pilgrimage reroute / 거짓말쟁이 Trait) is exact in `COPY_AUDIT_APPROVED_v2.13.18.md` §14-10; the name 허세 never appears and the particles follow the final consonant
+- the route-change line (pilgrimage reroute / 거짓말쟁이 Trait) is exact in `COPY_AUDIT_APPROVED_v2.13.19.md` §14-10; the name 허세 never appears and the particles follow the final consonant
 - no separate Event result screen is added
 
 ## NIGHT CONTROLS — EXACT
@@ -268,7 +268,7 @@ consequence than normal Injury and may require multi-day rest according to canon
 
 Recovery/availability is consistent across Night result, next-day NPC state, Notebook and visitor eligibility.
 
-Canonical NPC state -> NPC_TRAIT_v2.8.0.md
+Canonical NPC state -> NPC_TRAIT_v2.13.19.md
 
 ### INJURY RESULT
 
@@ -277,7 +277,7 @@ completion goes directly to healthy (`2 -> 0`).
 
 ### ORDINARY INJURY RESULT CONTINUITY
 
-Natural ordinary-Injury recovery is owned by `NPC_TRAIT_v2.8.0.md`; Night/result truth preserves it exactly.
+Natural ordinary-Injury recovery is owned by `NPC_TRAIT_v2.13.19.md`; Night/result truth preserves it exactly.
 
 If the NPC began the expedition at `injury=1`:
 
@@ -306,7 +306,7 @@ Death is permanent within the Run. Result makes permanence clear without debug/s
 
 Dead NPC: no future visits; does not consume Living NPC Cap; retained only where needed for history/notebook/result record.
 
-Canonical -> CORE_RUN_v2.8.0.md / NPC_TRAIT_v2.8.0.md
+Canonical -> CORE_RUN_v2.8.0.md / NPC_TRAIT_v2.13.19.md
 
 ## FATIGUE RESULT
 
@@ -416,7 +416,7 @@ Use `손님 소지금 획득`. Do not use `전리품` where it can be read as St
 
 ## RECENT EXPEDITION SNAPSHOT WRITE
 
-After an expedition result is fully resolved, write the latest snapshot owned by `NPC_TRAIT_v2.8.0.md` using:
+After an expedition result is fully resolved, write the latest snapshot owned by `NPC_TRAIT_v2.13.19.md` using:
 - completed Day
 - actual destination
 - final Outcome
@@ -529,7 +529,7 @@ ends with, and by what moved in between - not by cost of goods sold, margin or a
 5. `내일 운영비 예상 {N}G` - tomorrow's base operating cost with today's Store Support and roster, no Event; not on DAY 29
    (the Final Day has no operating cost)
 
-No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.8.0.md.
+No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.13.19.md.
 
 Closing answers: `오늘 돈이 얼마 남았고, 내일 괜찮은가?`
 
@@ -594,9 +594,9 @@ Acceptance criteria: CORE_RUN §QA · DUNGEON_HAZARD / ITEM §QA · NPC_TRAIT §
 game philosophy -> SPEC_INDEX §GAME CORE
 run/save -> `CORE_RUN_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
-npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.8.0.md`
+npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.13.19.md`
 hazard causality, Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.13.19.md`
 item/insurance/Aftercare -> `ITEM_v2.8.0.md`
-economy/settlement -> `ECONOMY_ORDER_v2.8.0.md`
+economy/settlement -> `ECONOMY_ORDER_v2.13.19.md`
 sale commitments, Sale revisit display -> `SALE_v2.8.0.md`
 presentation / UI -> `UI_UX_v2.13.17.md`

@@ -758,10 +758,10 @@ Removed XP/Grade direct bonuses do not remain as hidden modifiers.
 Core identity -> SPEC_INDEX §GAME CORE
 Run timing / Run save -> `CORE_RUN_v2.8.0.md`
 Decoration UX -> `UI_UX_v2.13.17.md`
-Economy / Wallet -> `ECONOMY_ORDER_v2.8.0.md`
+Economy / Wallet -> `ECONOMY_ORDER_v2.13.19.md`
 Gate / Hazard / monster family knowledge -> `DUNGEON_HAZARD_v2.13.19.md`
 Item Counter / item unlock/effect -> `ITEM_v2.8.0.md`
-Job growth -> `NPC_TRAIT_v2.8.0.md`
+Job growth -> `NPC_TRAIT_v2.13.19.md`
 Boss clear signal -> `BOSS_v2.8.0.md`
 Final preparation/clear -> `FINAL_EXPEDITION_v2.8.0.md`
 copy -> `COPY_WORLD_VOICE_v2.8.0.md`

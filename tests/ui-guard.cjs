@@ -2519,7 +2519,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* COPY_AUDIT §3-12 (User 2026-10-02): the DAY 3 HQ 구급키트 line is pinned exact too - it tells a gift that already
     arrived (what it is, once, what it does), not a pick, so it is the one mark that names an Item */
  const EXACT=['stats','destination','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
- assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.13.18.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
+ assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
@@ -2581,7 +2581,7 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
  // both Wallet surfaces read that chip; neither prints a bare n.money any more
  assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n,true\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
- assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.13.18.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
+ assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
  assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
  assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
  // the two figures are printed side by side and never summed into one
@@ -3701,7 +3701,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
    assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+': 대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공. '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
    assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공',k+' short row');
    assert.deepEqual(Presentation.hazardParts(k,d),{need:'대응 '+need+' 필요',rate:Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공'},k+' two parts');}}
- assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.13.18.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
+ assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
  assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독: 대응 15 필요, 강인함\u00a03당\u00a0대응\u00a01\u00a0제공. 독 대응 상품이 막는다','the DAY 1 T1 example');
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');

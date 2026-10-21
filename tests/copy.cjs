@@ -51,7 +51,7 @@ const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3'
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
  'night.rescued':'19-7','night.grew':'19-8','night.savedDeathWin':'19-10','night.savedDeathRetreat':'19-11','night.savedDeathHurt':'19-12','night.savedSevereWin':'19-13','night.savedPrepared':'19-14','night.savedHurt':'19-15','night.savedRetreat':'19-16','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.18.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -66,7 +66,7 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
 /* COPY_WORLD_VOICE §DIALOGUE EXPOSURE — OCCASIONAL (User 2026-10-04): the `가끔` list under a §16-§18 pool is the set
    of its long lines that come up on 1 pick in 5; every other pick uses the pool's other lines. */
 const occasionalDoc=(()=>{const out={};let sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.18.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -125,7 +125,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const rendered=[...DATA.events.map(e=>e.description),...DATA.relics.map(r=>r.description),...DATA.decorations.map(d=>d.name+' — '+d.effect),
   Copy.loyalty.sale(),Copy.loyalty.coach()].join('\n');
  const missing=new Set();let checked=0,sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.18.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
   if((h=l.match(/^##\s+((\d+)-\d+[a-z]?)\./))){sec=h[1];mode=null;if(+h[2]>=16&&+h[2]<=20)sec=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -613,7 +613,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
 });
 
-/* COPY_AUDIT_APPROVED_v2.13.18 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
+/* COPY_AUDIT_APPROVED_v2.13.19 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
    text, so this is equality, not a pattern: a paraphrase, a dropped middot or a stale number is
    a FAIL here rather than something a looser assertion can absorb. Price and name are pinned in
    the same table because §11 renames two rows and RELIC_v2.8 re-prices two more, and a row that
@@ -710,8 +710,8 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  assert.ok(swap(DATA.relicParams.returnPoints,'loyaltyBonus',6,()=>DATA.relicBy.returnPoints.description).includes('단골도 +6'),'귀환 적립제 reads its Loyalty value');
  assert.ok(swap(DATA.relicParams.stamp,'loyaltyMult',2,()=>DATA.relicBy.stamp.description).includes('정가 +2 (기존 +1), 50% 할인 +8 (기존 +4)'),'단골 스탬프 기계 rounds the live multiplier');
  assert.ok(swap(DATA.pricing.overcharge,'loyalty',-5,()=>Copy.loyalty.sale()).endsWith('+4, +1, -5.'),'the guide reads the 150% Loyalty');
- assert.equal(Copy.loyalty.sale(),'상품 가격은 50%, 100%, 150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4, +1, -4.');
- assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -4로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
+ assert.equal(Copy.loyalty.sale(),'상품 가격은 50%, 100%, 150% 중에서 정한다. 팔리면 기본 단골도는 각각 +4, +1, -8.');
+ assert.equal(Copy.loyalty.rule(),'기본 단골도는 상품을 살 때 정가 +1, 50% 할인 +4, 150% 바가지 -8로 바뀐다. 상품을 사고 떠날 때 +1, 원정에서 살아 돌아오면 +1, 바가지를 거절하면 -2다. 특성·점포지원과 단골도 한도에 따라 실제 변화량은 달라질 수 있다.');
  assert.equal(Copy.loyalty.coach(),'단골 손님. 단골도 51부터 단골이 된다. 단골도가 높을수록 자주 찾아오고 상품도 더 잘 산다.');
 });
 

@@ -167,12 +167,12 @@ D0 must not reveal or depict:
 - Final Family / Hazard state;
 - the per-Boss FINAL domain backdrop.
 
-Exact copy -> COPY_AUDIT_APPROVED_v2.13.18.md.
+Exact copy -> COPY_AUDIT_APPROVED_v2.13.19.md.
 D5 remains the first Boss identity / art reveal.
 
 ## REVEAL ORDER
 
-Presentation -> UI_UX_v2.13.17.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.18.md.
+Presentation -> UI_UX_v2.13.17.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.19.md.
 
 ### D5
 
@@ -213,7 +213,7 @@ Before the D30 Relic focused reveal / decision and before Final party lock:
 4. Final lock
 
 Family generation / Final Hazard Pool ownership -> FINAL_EXPEDITION_v2.8.0.md
-Relic-window ownership -> RELIC_v2.8.0.md
+Relic-window ownership -> RELIC_v2.13.19.md
 
 ## PERSISTENCE
 
@@ -370,7 +370,7 @@ Cumulative Gross Sales
 = sum of actual rounded sale revenue committed before Final lock
 ```
 
-Metric ownership -> `ECONOMY_ORDER_v2.8.0.md` / `SALE_v2.8.0.md` / `NIGHT_CLOSING_v2.8.0.md`
+Metric ownership -> `ECONOMY_ORDER_v2.13.19.md` / `SALE_v2.8.0.md` / `NIGHT_CLOSING_v2.8.0.md`
 
 Rule:
 
@@ -433,7 +433,7 @@ Therefore:
 - do not exclude them merely because there is no ordinary Final SALE phase
 - do not count them a second time during Final resolution
 
-Exact Wallet/Gold/fixed-price preparation truth -> `ECONOMY_ORDER_v2.8.0.md` / `FINAL_EXPEDITION_v2.8.0.md`
+Exact Wallet/Gold/fixed-price preparation truth -> `ECONOMY_ORDER_v2.13.19.md` / `FINAL_EXPEDITION_v2.8.0.md`
 §FINAL ACCOUNTING — EXACT.
 
 No separate wealth meter.
@@ -506,7 +506,7 @@ Rules:
 - Gluttony does not suppress the entire Item effect bundle
 
 Item effect ownership -> `ITEM_v2.8.0.md`
-Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.18.md`.
+Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.19.md`.
 
 ---
 
@@ -515,7 +515,7 @@ Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.18.md`.
 identity=tests long-term NPC relationship investment, not Job composition
 
 LUST does not define a new affection meter, charm meter, Loyalty threshold or Boss-specific relationship state.
-Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v2.8.0.md`.
+Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v2.13.19.md`.
 
 Evaluation timing:
 - D15 reveals the rule
@@ -593,8 +593,8 @@ break one Sloth Seal for 0G
 ```
 
 Existing Relic candidate generation / Defer lifecycle is reused.
-Relic-window lifecycle -> `RELIC_v2.8.0.md`.
-Exact UI ownership -> `RELIC_v2.8.0.md` / `UI_UX_v2.13.17.md`.
+Relic-window lifecycle -> `RELIC_v2.13.19.md`.
+Exact UI ownership -> `RELIC_v2.13.19.md` / `UI_UX_v2.13.17.md`.
 
 ### Final difficulty ordering
 
@@ -833,13 +833,13 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 ## RELATED
 
 Final state / formula / family / party / clear / Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
-Relic / Seal window / Sloth opportunity -> `RELIC_v2.8.0.md`
+Relic / Seal window / Sloth opportunity -> `RELIC_v2.13.19.md`
 Meta / mastery / unlock -> `META_v2.13.18.md`
-Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.8.0.md`
+Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.13.19.md`
 Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`
-Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.8.0.md`
+Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.13.19.md`
 Sale revenue commit -> `SALE_v2.8.0.md`
 Closing revenue report -> `NIGHT_CLOSING_v2.8.0.md`
 Presentation / UI reveal -> `UI_UX_v2.13.17.md`
 Copy / terminology -> `COPY_WORLD_VOICE_v2.8.0.md`
-Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.18.md
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.19.md
