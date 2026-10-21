@@ -2215,7 +2215,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  +sealChoice() +(w.purchased||w.consumedBySealBreak?closeX():'')+'<div class="close">'+(w.purchased||w.consumedBySealBreak?''
   /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01): the free first pick may wait until DAY 4; on DAY 0 deferring opens DAY 1 */
   :first?relicReroll()+btn('나중에 결정',s.phase==='foundation'?'defer-relic':'dismiss','stamp')
-  :'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+  :relicReroll()+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* RELIC §CANDIDATE REROLL (User 2026-10-02): a footer key beside 나중에 결정, the same rank and look, one line, while the window
    can still be bought from (DAY 0 only with 본사 우수 점포 훈장). A short wallet greys it the way ORDER's 발주 후보 교환 does - the label keeps its one
