@@ -5,7 +5,7 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.13.19
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.19
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_13_19_OPEN (v2.13.18 is closed; v2.13.19 = 증명 문구에서 만반의 준비 몫 분리, CHANGELOG §v2.13.19; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
+FREEZE_STATUS=V2_13_19_OPEN (v2.13.18 is closed; v2.13.19 = 증명 문구에서 만반의 준비 몫 분리 + 바가지 소지금 보너스 · 단골도 -8 · 상한 90%(같은 버전, #265), CHANGELOG §v2.13.19; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
 SOURCE_ADOPTION_STATUS=V2_13_19_ADOPTED (every version through v2.13.19 is adopted in Source on main; CHANGELOG §v2.13.19)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
