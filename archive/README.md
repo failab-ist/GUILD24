@@ -6,7 +6,7 @@
 
 현행 측정 도구는 `tools/`에 있다: 기준 밸런스 측정 `tools/measure-v2100.cjs`(AGENTS §9-B), 세이브 점검 `tools/save-check.cjs`,
 봇 보정 `tools/calibrate-bot-v292.cjs`(User 런 보정), UI_UX 코치 QA가 쓰는 `tools/measure-first-sale-v30.cjs`, 한 레버만 보는
-`deco-single` · `deco-trajectory` · `relic-contribution` · `rarity-value`. 그 밖의 측정 도구는 2026-10-04에 이 폴더로 옮겼다(User).
+`deco-single` · `relic-contribution`(`deco-trajectory` · `rarity-value`는 2026-10-21에 `v2.13.17/tools/`로 옮겼다). 그 밖의 측정 도구는 2026-10-04에 이 폴더로 옮겼다(User).
 D10 fork 쌍 비교 틀은 `v2.9.2/tools/measure-package-v292.cjs`가 가장 최근 본이다.
 
 보관한 도구는 여기서 실행하지 않는다. `require('../dist/…')` 같은 상대 경로가 옛 위치 기준이고, 측정 대상 Source도 이미 바뀌었다.
@@ -57,6 +57,7 @@ D10 fork 쌍 비교 틀은 `v2.9.2/tools/measure-package-v292.cjs`가 가장 최
 | `v2.9.13/counter-ladder-v2913.md`, `item-price-v2913.md` | v2.9.13 대응 사다리 · 상품 가격 기여도 재검수 | `reports/counter-ladder-v2913/`, `reports/item-price-v2913/` |
 | `v3.0-prep/v3-prep-measure-v2911.md` | v3.0 준비 §8 측정 · 캡처 검토(곡선, 화염 조합, SALE 트레이 높이) | `reports/` |
 | `v2.10.0/v2100-measure/` | v2.10.0 성공 메타 측정 보고(`README.md`)와 그 로그, 버린 안 로그(`qp3-bundle`, `qp3-option1-lv033`) | `reports/v2100-measure/` |
+| `v2.13.17/tools/deco-trajectory.cjs`, `rarity-value.cjs`, `qa-final-seal.cjs`, `v2.13.17/reports/final-coach-plan.md` | 문서 정리(User 2026-10-21): 어디서도 부르지 않던 옛 장식 · 등급 측정(지금은 `measure-v2100 --decos`), v2.9.2 FINAL 도장 캡처, v2.11.1 마왕성 코치 작업 메모(끝남) | `tools/`, `reports/` |
 | `v2.13.3/tools/qa-*.cjs`(9개), `trailer-frames.cjs`, `v2.13.3/tests/antifarm.cjs`, `progression.cjs` | 앱 출시 전 정리(User 2026-10-11): 어디서도 부르지 않던 일회성 화면 점검 · 비교 도구, `qa:runtime`에 안 들어간 점검 하네스(판매 리본 · 판매 비교 · 게이트 범위 · 발주 약속 · 최종 계획 · 최종 귀환), 끝난 트레일러 프레임 도구, `npm test`에 없는 옛 측정 하네스 | `tools/`, `tests/` |
 
 ## 규칙

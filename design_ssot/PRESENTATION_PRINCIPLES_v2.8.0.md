@@ -54,7 +54,7 @@ decisions are unusually clear and tactile.
 ### Quality references
 
 The current FINAL / BOSS-CONFIRM family and the User-provided current-vs-target pair
-(reports/reference/, review input only - not a shipped asset, not a skin, not a motif library) are
+(reports/references/, review input only - not a shipped asset, not a skin, not a motif library) are
 QUALITY-BAR references, not a universal skin.
 
 Take from them: authored frame construction rather than browser-default boxes; deliberate outer edge /
@@ -325,7 +325,7 @@ into an asset.
   vendored locally, no runtime hotlink, compatible with offline use, adapted only within license;
   "free" is not sufficient - the asset must improve the runtime result
 - User-authored or project-generated art records that provenance instead of inventing a licence
-- shipped presentation graphics live under dist/ui/assets/presentation/<surface>/; reports/reference/
+- shipped presentation graphics live under dist/ui/assets/presentation/<surface>/; reports/references/
   is review evidence only
 - names describe role, not iteration
 - a supplied original that a task marks for preservation (e.g. the seven Boss domain backdrops) is stored

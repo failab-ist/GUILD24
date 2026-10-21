@@ -37,7 +37,7 @@ Use the scripts currently defined in `package.json`:
 - `npm run qa:runtime` - pass/fail browser harnesses
 - `npm run qa:visual` - the full visual / mobile gate (captures to `reports/ui/`, ignored)
 - `npm run dev` - local preview server
-- `npm run balance` / `longitudinal` / `mastery` - measurement harnesses (write `tests/*-results-v5.json`, ignored)
+- `npm run balance` / `longitudinal` / `mastery` - past measurement harnesses, not the baseline (write `tests/*-results-v5.json`, ignored); the baseline is `tools/measure-v2100.cjs` (AGENTS §9-B)
 - `npm run assets` / `npm run hooks` - vendor assets / install the git hooks
 
 `npm run qa:runtime` runs the pass/fail browser harnesses (D0 flow, D30 FINAL prep / BOSS CONFIRM / FINAL->END /
