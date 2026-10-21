@@ -1436,16 +1436,16 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.20&&up/all<.40,'about 30%: '+(up/all));
 });
-test('알뜰 금고: the Day\'s first two customers bring +300G more each',()=>{
+test('알뜰 금고: the Day\'s first two customers bring +100G more each',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run,[a,b,c3]=s.npcs;
  for(const n of [a,b,c3]){n.traits=[];n.money=100;n.introduced=true;}
  s.queue=[a.id,b.id,c3.id];s.cursor=0;g.arrive();
- assert.equal(a.money,400,'the first customer to reach the counter: +300G');
- s.cursor=1;g.arrive();assert.equal(b.money,400,'the second too');
+ assert.equal(a.money,200,'the first customer to reach the counter: +100G');
+ s.cursor=1;g.arrive();assert.equal(b.money,200,'the second too');
  s.cursor=2;g.arrive();assert.equal(c3.money,100,'the third gets nothing');assert.deepEqual(s.daily.safeWallets,[a.id,b.id]);
  const plain=past0(fresh('safe')),[c]=plain.run.npcs;c.traits=[];c.money=100;c.introduced=true;plain.run.queue=[c.id];plain.run.cursor=0;plain.arrive();
  assert.equal(c.money,100,'without it, nothing');
- assert.equal(DATA.decorationParams.thriftSafe.firstWallet,300);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
+ assert.equal(DATA.decorationParams.thriftSafe.firstWallet,100);assert.equal(DATA.decorationParams.thriftSafe.customers,2);
 });
 
 /* ---- META §OPERATION DECORATIONS (User 2026-10-04) ---------------------------------------- */
