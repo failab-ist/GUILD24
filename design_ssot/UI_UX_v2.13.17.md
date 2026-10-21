@@ -2,7 +2,7 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.12.6
+DOC_VERSION=2.13.17
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.17
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
@@ -1858,7 +1858,7 @@ Acceptance criteria for this owner. Status values are not stored here; FAIL is v
 
 ### SCOPE
 
-Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
+Design owner under test -> UI_UX_v2.13.17.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
 Rule text lives in the body; a QA item points there with `→ UI_UX §SECTION` and keeps only what it checks.
 
 ### PHASE IDENTITY / VISUAL LANGUAGE

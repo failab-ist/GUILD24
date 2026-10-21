@@ -48,7 +48,7 @@ Before the Player chooses a price, the same decision surface makes readable:
 - whether the NPC can afford that price
 
 NPC Wallet is not optional secondary detail: the Player must be able to judge affordability before committing a price.
-Exact layout -> UI_UX_v2.8.0.md.
+Exact layout -> UI_UX_v2.13.17.md.
 
 ## CUSTOMER FLOW
 
@@ -84,8 +84,8 @@ Rules:
 - do not merge both slots into one cart checkout
 - no separate handling minigame/resource/QTE
 - Item tap is sufficient for the full flow; drag is optional enhancement only
-- the chosen Item is shown on the counter tray (fixed above the dock) with its `판매 후 변화` and the three price keys; the shelf rows never change height (`UI_UX_v2.8.0.md` §SALE — COUNTER TRAY)
-- the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION)
+- the chosen Item is shown on the counter tray (fixed above the dock) with its `판매 후 변화` and the three price keys; the shelf rows never change height (`UI_UX_v2.13.17.md` §SALE — COUNTER TRAY)
+- the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.13.17.md` §BAG PRESENTATION)
 
 ## CURRENT CUSTOMER COMPACT STATE
 
@@ -98,7 +98,7 @@ Mobile current-customer state includes Injury state (without numeric duplication
 - Normal SALE places no separate Loyalty `?` / popover trigger beside this value; the tutorial/coach teaches its
   contextual meaning. The global compact Help may retain its separately owned reference text.
 - Equipment text is not part of the compact top strip; it stays readable in NPC detail and may appear as a proven Core-Stat source.
-- Bag is exactly two slots (§NORMAL CONSUMER BAG — EXACT). Exact compact/mobile layout -> UI_UX_v2.8.0.md.
+- Bag is exactly two slots (§NORMAL CONSUMER BAG — EXACT). Exact compact/mobile layout -> UI_UX_v2.13.17.md.
 
 Fatigue in this strip:
 
@@ -239,13 +239,13 @@ Do not:
 Player must be able to compare relevant Item information without leaving Sale repeatedly.
 
 Useful decision info may include: major Stat effect, Counter effect, Condition effect, Insurance behavior, explicit
-penalty, sell price at current selected mode. Exact UI -> UI_UX_v2.8.0.md.
+penalty, sell price at current selected mode. Exact UI -> UI_UX_v2.13.17.md.
 
 The compared Item's detail lives on the counter tray, so comparing two Items never moves the shelf list.
 
 Shelf order: rows are ordered by kind, then days left before discard (nearest first), then higher Rarity, ties in the
 existing order, held for the Day; every row carries its shelf life (`폐기까지 N일 / 내일까지 / 오늘까지`) and a row on its
-last day is emphasized (exact -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
+last day is emphasized (exact -> `UI_UX_v2.13.17.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
 recommendation order; only the Hazard-answer lead follows the current customer's own Gate (User 2026-10-09).
 
 ### MATCHING-EFFECT EMPHASIS — RETIRED
@@ -653,7 +653,7 @@ Requirements:
 
 Do not solve pacing by removing a decision that can change after a purchase/refusal result.
 
-Detailed presentation -> UI_UX_v2.8.0.md.
+Detailed presentation -> UI_UX_v2.13.17.md.
 
 ## SALE RUNTIME CONTINUITY
 
@@ -732,4 +732,4 @@ dungeon forecast / Hazard / Fatigue / Supply -> `DUNGEON_HAZARD_v2.8.0.md`
 run / phase -> `CORE_RUN_v2.8.0.md`
 night result / Night proof -> `NIGHT_CLOSING_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
-presentation -> `UI_UX_v2.8.0.md`
+presentation -> `UI_UX_v2.13.17.md`

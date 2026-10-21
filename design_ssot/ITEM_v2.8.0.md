@@ -848,7 +848,7 @@ Material hidden behavior=NO
 ## SALE / INVENTORY
 
 Inventory view, stacking, nearest-expiry consumption and the consumer-slot limit -> `SALE_v2.8.0.md` §INVENTORY VIEW;
-shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER).
+shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.13.17.md` §SALE — SHELF ORDER).
 
 ## BALANCE QA
 

@@ -482,7 +482,7 @@ investment → survival → level/growth → loot → wallet → loyalty → rev
 Player should feel: `얘 살려놓길 잘했다.`
 
 Returning NPC presentation should make relevant history/change easy to notice without requiring the Player to
-reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.8.0.md
+reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.13.17.md
 
 Ignoring weak NPCs is allowed, with opportunity cost through lost future customer/roster value.
 No separate punishment system is required solely to force attachment.
@@ -621,7 +621,7 @@ Rules:
 - no unlimited timeline is added by this rule
 - Product XP / Favorite Meter / Familiarity Bonus are not created
 
-Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.8.0.md`
+Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md`
 Result proof -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## WALLET / LOYALTY / REVISIT
@@ -705,7 +705,7 @@ The Player must be able to learn that Loyalty:
 Loyalty does not directly increase the four Core Stats.
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/tutorial placement -> UI_UX_v2.8.0.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
 
 ## DEEP EXPEDITION NPC REWARD
 

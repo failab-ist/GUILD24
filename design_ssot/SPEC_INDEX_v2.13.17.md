@@ -19,7 +19,7 @@ PUBLIC_RELEASE_CANONICAL=PLATFORM_RELEASE_v3.0.0.md
 3. current Source
 4. older chat / proposal / report / historical spec
 
-NAMES = GLOSSARY_v2.8.0.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
+NAMES = GLOSSARY_v2.13.17.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
 
 DESIGN TRUTH = current routed Design SSOT.
 IMPLEMENTATION TRUTH = current Source.
@@ -236,21 +236,22 @@ The v2.9.0 scope ("쉽게 배우고, 깊게 파는") is history: `archive/change
 
 ## VERSION POLICY
 
-Versions are managed the way a maintained project does it, not by renaming files.
-- Owner filenames are stable lineage names (`<OWNER>_v2.8.0.md` stays the file for v2.9.0 and later).
-  Tests and routing keep their paths.
+- An owner's filename carries the project version in which that owner last changed: `<OWNER>_v<version>.md`
+  (User 2026-10-21). It is renamed only when the owner is edited, never in bulk, so untouched owners keep an older
+  version in their name. Steps and the one exception (PLATFORM_RELEASE): AGENTS §10-A.
 - `DESIGN_SSOT=` in every owner header names the project version the file belongs to.
-- `DOC_VERSION=` in an owner header is bumped to the project version in which that owner last changed.
+- `DOC_VERSION=` in an owner header is the project version in which that owner last changed; a renamed owner's
+  `DOC_VERSION=` matches its filename.
 - `design_ssot/CHANGELOG.md` records what each version changed, per owner, with the User decision date.
 - A release is closed by a git tag (`v2.9.0`) on the commit where SPEC_INDEX, CHANGELOG, owners and
-  Source agree; the tag, not a filename, is the version.
+  Source agree.
 - Owners state the current spec only; what changed and why is CHANGELOG's, older wording is in git history.
 
 ## CURRENT CANONICAL FILE SET
 
 Core / Run / Meta:
-- SPEC_INDEX_v2.8.0.md (this index; §GAME CORE)
-- GLOSSARY_v2.8.0.md (game terms: names, meanings, retired names)
+- SPEC_INDEX_v2.13.17.md (this index; §GAME CORE)
+- GLOSSARY_v2.13.17.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
 - META_v2.8.0.md
 
@@ -264,7 +265,7 @@ Economy / NPC / Dungeon / Item / Store Build:
 Flow / Result / UI / Copy:
 - SALE_v2.8.0.md
 - NIGHT_CLOSING_v2.8.0.md
-- UI_UX_v2.8.0.md
+- UI_UX_v2.13.17.md
 - PRESENTATION_PRINCIPLES_v2.8.0.md
 - COPY_WORLD_VOICE_v2.8.0.md
 - COPY_AUDIT_APPROVED_v2.8.0.md
@@ -295,9 +296,9 @@ ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
 STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
 SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
-UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.8.0.md
+UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.13.17.md
 PRESENTATION PRINCIPLES / VISUAL CONSTRUCTION / ASSET QUALITY / ORNAMENT BUDGET / AUDIO PRESENTATION / VISUAL REVIEW -> PRESENTATION_PRINCIPLES_v2.8.0.md
-TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.8.0.md
+TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.13.17.md
 COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
 EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.8.0.md
 EVENT -> EVENT_v2.8.0.md
@@ -351,7 +352,7 @@ A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
-    SPEC_INDEX_v2.8.0
+    SPEC_INDEX_v2.13.17
     -> exact routed owner
     -> related current QA
     -> Current Source

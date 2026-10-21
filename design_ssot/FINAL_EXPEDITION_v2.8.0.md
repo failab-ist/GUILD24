@@ -484,11 +484,11 @@ effective Boss Power exact numeric value -> `BOSS_v2.8.0.md`.
 
 Display order (H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a clear, faint and
 crooked for a failure, never one per member and never the NIGHT death tape - and the existing result sentence follows it.
-It changes no result, wording or settlement. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+It changes no result, wording or settlement. Timing -> UI_UX_v2.13.17.md §FINAL RESULT — SEAL STAMP.
 
 Before the ending (H7) the resolved Final is played out once as a card fight - each member is handed what they carried,
 each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap skips it; it decides nothing.
--> UI_UX_v2.8.0.md §FINAL — CLASH SCENE.
+-> UI_UX_v2.13.17.md §FINAL — CLASH SCENE.
 
 ## FINAL INSURANCE VALUE — EXACT
 
@@ -732,4 +732,4 @@ Boss -> `BOSS_v2.8.0.md`
 Relic D30 window -> `RELIC_v2.8.0.md`
 Sale handling -> `SALE_v2.8.0.md`
 Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.8.0.md`
-UI -> `UI_UX_v2.8.0.md`
+UI -> `UI_UX_v2.13.17.md`

@@ -564,7 +564,7 @@ first Decoration is the earliest within reach.
 
 ## STORE-GROWTH VISUAL PROJECTION — PRESENTATION ONLY
 
-Store-growth presentation may project already-owned/current state into the live store through UI_UX_v2.8.0.md,
+Store-growth presentation may project already-owned/current state into the live store through UI_UX_v2.13.17.md,
 including equipped Decorations, alongside run-state traces owned by other current Specs (Store Support, Trusted
 Regular, revealed Final-preparation state).
 
@@ -758,7 +758,7 @@ Removed XP/Grade direct bonuses do not remain as hidden modifiers.
 
 Core identity -> SPEC_INDEX §GAME CORE
 Run timing / Run save -> `CORE_RUN_v2.8.0.md`
-Decoration UX -> `UI_UX_v2.8.0.md`
+Decoration UX -> `UI_UX_v2.13.17.md`
 Economy / Wallet -> `ECONOMY_ORDER_v2.8.0.md`
 Gate / Hazard / monster family knowledge -> `DUNGEON_HAZARD_v2.8.0.md`
 Item Counter / item unlock/effect -> `ITEM_v2.8.0.md`

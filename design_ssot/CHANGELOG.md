@@ -493,7 +493,7 @@ Minor version: balance, coaching, sound and night-result work since v2.11.1. Det
 
 ## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
-- **GLOSSARY_v2.8.0.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
+- **GLOSSARY_v2.13.17.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
   set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final,
   `발주 후보 교환` / `점포지원 후보 교환` (the bare `후보 교환` is retired), `요구 전력`, `상품` = the goods and `보급` = handing goods over, `이번 점포의 장식`.
 - **마왕의 능력 = 「마왕 권능」** (User 2026-10-04): 「특성」은 모험가의 개성만 가리킨다. The forecast line reads `마왕의 권능`. The 마왕 report, 도감 탭 and coach

@@ -76,7 +76,7 @@ For D7 / D14 / D21 / D28:
 3. otherwise: use ordinary EVENT eligibility / 30% roll
 
 On Deep Expedition Days there is no Normal Event Focused Reveal; the Deep notice / first-use Tutorial may be the special
-Morning beat under `UI_UX_v2.8.0.md`.
+Morning beat under `UI_UX_v2.13.17.md`.
 
 Because Normal Event is suppressed, Event-added 한파/독안개 cannot coexist with Deep Expedition on the same Day.
 No special Event-Hazard merge rule is added.
@@ -365,7 +365,7 @@ EFFECT: 오늘 발주 후보 중 행사 상품 1종을 지정한다. 해당 상�
 행사 상품은 그날 첫 발주 후보에서만 지정한다. 발주 후보 교환을 하면 행사가 끝나고, 새 후보에는 1+1이 없다.
 
 행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
-(모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
+(모양 -> `UI_UX_v2.13.17.md` §ORDER — ITEM INFORMATION HIERARCHY).
 
 ### 03. 게이트 순례 주간
 
@@ -1063,7 +1063,7 @@ EVENT가 소유하지 않음:
 - Sale 기본 Purchase / Price Rule → `SALE_v2.8.0.md`
 - Relic Effect → `RELIC_v2.8.0.md`
 - Night / Closing 기본 Rule → `NIGHT_CLOSING_v2.8.0.md`
-- Presentation Layout → `UI_UX_v2.8.0.md`
+- Presentation Layout → `UI_UX_v2.13.17.md`
 - Global Voice / Flavor 작성 기준 → `COPY_WORLD_VOICE_v2.8.0.md`
 - Exact Event title / Function / Flavor copy → `COPY_AUDIT_APPROVED_v2.8.0.md`
 
