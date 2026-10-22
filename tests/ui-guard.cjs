@@ -512,7 +512,7 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(!/\.seal-(choice|count)\{[^}]*box-shadow:inset 4px 0/.test(css),'no violet edge bar on the seal surfaces (User 2026-09-28)');
  // the seal plate folds to a chip on a tap on itself (not its key, not the candidates) and opens unfolded
  assert.ok(app.includes("if(sealFolded)return '<button class=\"seal-chip\" data-action=\"seal-fold\"")&&app.includes("'<div class=\"seal-choice\" data-action=\"seal-fold\"")
-  &&app.includes("case'seal-fold':sealFolded=!sealFolded;")&&app.includes("const SEAL_FOLD_KEY='<button class=\"seal-fold\" data-action=\"seal-fold\" aria-label=\"봉인 칸 접기\">접기</button>'")&&app.includes("function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;"),'seal plate fold / chip / reset');
+  &&app.includes("case'seal-fold':sealFolded=!sealFolded;")&&app.includes("const SEAL_FOLD_KEY='<button class=\"seal-fold\" data-action=\"seal-fold\" aria-label=\"봉인 칸 접기\">접기</button>'")&&app.includes("function setModal(value){decoPending=null;if(value==='relics'){sealFolded=false;ownedOpen=false;}"),'seal plate fold / chip / reset');
  assert.ok(!/relic-plate[^'"]*data-action="seal-fold"/.test(app),'the candidates never fold it');
  assert.ok(/focusedRevealSeen/.test(app),'the Relic milestone reveal is once per window');
 });
