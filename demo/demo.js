@@ -23,6 +23,14 @@ P.closeDay=function(){const s=this.run;
 
 D.masteryRanks.length=Math.min(D.masteryRanks.length,2);
 
+/* Customers: a portrait belongs to a name (systems/adventurer.js), so the demo keeps the names whose portraits it ships,
+   NORMAL/<M|F>/001..FACES and the one X. A DAY 20 Run meets about 15 customers. The portrait map was built when
+   adventurer.js loaded, so trimming the pool in place leaves every kept name on its own portrait. */
+const FACES={M:15,F:15};
+{const A=G.Adventurer,keep=A.names.filter(n=>{const p=A.portraitOf(n);return p&&(p.gender==='X'||p.slot<=FACES[p.gender]);});
+ A.names.splice(0,A.names.length,...keep);}
+if(G.NPCAssets)G.NPCAssets.normal={...G.NPCAssets.normal,...FACES};
+
 /* The prep slip: the full game's says 30 days and a Boss on the last day */
 function prepNote(){
  return '<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">체험판은 DAY '+END_DAY+'까지 길드24 편의점을 운영한다.</b>'
@@ -49,5 +57,5 @@ function endScreen(k){const {stage,btn,ledger,portrait,E,game,Scene}=k,s=game.ru
  const dock=(STORE_URL?'<a class="bare" href="'+E(STORE_URL)+'" target="_blank" rel="noopener">정식판 보기</a>':'')+btn('다음 점포 열기','new','stamp');
  return stage('end','점포 종료','',tape+crew+castle+full,dock);}
 
-G.GUILD24_DEMO={endDay:END_DAY,boss:BOSS,reason:REASON,storeUrl:STORE_URL,prepNote,endScreen};
+G.GUILD24_DEMO={endDay:END_DAY,boss:BOSS,reason:REASON,storeUrl:STORE_URL,faces:FACES,prepNote,endScreen};
 })(globalThis);

@@ -8,6 +8,9 @@ require(path.join(root,'demo','demo.js'));
 const G=globalThis,DEMO=G.GUILD24_DEMO,P=G.Game.prototype;
 assert.ok(DEMO,'demo.js defines GUILD24_DEMO');
 assert.equal(G.DATA.masteryRanks.length,2,'Job Mastery ranks 1 and 2 only');
+{const A=G.Adventurer,F=DEMO.faces;
+ assert.equal(A.names.length,F.M+F.F+1,'the demo keeps the names whose portraits it ships');
+ for(const n of A.names){const p=A.portraitOf(n);assert.ok(p.gender==='X'||p.slot<=F[p.gender],n+' keeps its own portrait');}}
 
 const play=prefix=>{const ends=[],end=P.end;
  P.end=function(win,reason){const s=this.run,first=s.phase!=='end',before=G.Meta.storeCapital(this.account);const r=end.apply(this,arguments);
