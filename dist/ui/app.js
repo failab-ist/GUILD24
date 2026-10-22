@@ -2580,7 +2580,7 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
                   ?'<div class="deco-confirm"><p class="smalltext">'+E(d.name)+': '
                     +d.price.toLocaleString()+' 자본을 씁니다. 남는 자본 '
                     +Math.max(0,Meta.storeCapital(a)-d.price).toLocaleString()+'.</p>'
-                    +btn('구매 확정','deco-confirm','small active','data-id="'+d.id+'"')
+                    +btn('구매 확정','deco-confirm','small','data-id="'+d.id+'"')
                     +btn('취소','deco-cancel','small')+'</div>'
                   :btn('구매 <small>'+d.price.toLocaleString()+' 자본</small>','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
@@ -2606,7 +2606,7 @@ function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a)
     :!open?'<span class="muted">마왕 '+r.bosses+'종<br>토벌 후</span>'
     :inRun?'<span class="muted">'+r.price.toLocaleString()+' 자본</span>'
     :masteryPending?'<div class="deco-confirm"><p class="smalltext">숙련 '+(i+1)+'단: '+r.price.toLocaleString()+' 자본을 씁니다. 남는 자본 '
-      +Math.max(0,cap-r.price).toLocaleString()+'.</p>'+btn('구매 확정','mastery-confirm','small active')+btn('취소','mastery-cancel','small')+'</div>'
+      +Math.max(0,cap-r.price).toLocaleString()+'.</p>'+btn('구매 확정','mastery-confirm','small')+btn('취소','mastery-cancel','small')+'</div>'
     :btn('구매 <small>'+r.price.toLocaleString()+' 자본</small>','mastery-buy','small',cap<r.price?'disabled':'');
    return '<div class="slot-option'+(owned?' on':'')+(owned||next&&open?'':' locked')+'">'
     +'<b class="deco-name">숙련 '+(i+1)+'단</b>'+state

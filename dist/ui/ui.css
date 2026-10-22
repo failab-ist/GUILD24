@@ -2956,7 +2956,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* YELLOW. Acquiring the Decoration is the purchase on this card, so it is the one face that
    pops - and it pops inside the card, never across the screen. Equipping something already
    owned is a state change, not an acquisition, so it keeps the neutral key above. */
-.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]),.deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]){
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){
  background:var(--yellow);color:var(--yellow-ink);
  box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-lit),
   inset 0 -6px 0 var(--yellow-deep),inset -5px 0 0 var(--yellow-deep)}
@@ -4209,7 +4209,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .slot-option>button:hover{background:#68442a}
 .modal.wood-frame .slot-option>button:active{transform:none;background:#4a301b;
  box-shadow:inset 3px 0 0 #140b06,inset 0 5px 0 #2c1a0d,inset 0 -6px 0 #8a5f3a,inset -5px 0 0 #2c1a0d}
-.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]),.modal.wood-frame .deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]){
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){
  background:#dba93a;color:#2b1806;box-shadow:inset 3px 0 0 #17130d,inset 0 5px 0 #f7d77c,inset 0 -6px 0 #9a6212,inset -5px 0 0 #9a6212}
 .modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):hover{background:#e6b84d}
 .modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):active{background:#c4932c;
@@ -4221,16 +4221,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .slot-option>button,.modal.wood-frame .deco-confirm button{--nd:4px;width:128px;min-width:128px;min-height:50px;
  padding:6px 10px 6px 24px;font:600 15px/1.2 var(--ui);letter-spacing:0;color:#f3e2bd;transform:none;clip-path:none;filter:none;box-shadow:none;
  background:transparent url('assets/presentation/support/return-tag-blank.webp') center / 100% 100% no-repeat}
-.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]),.modal.wood-frame .deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]){
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){
  width:120px;min-width:120px;padding:6px 8px;color:#2b1a08;text-shadow:0 1px 0 #f6dc8a;min-height:46px;box-shadow:inset 0 -5px 0 #a8761c,inset -4px 0 0 #a8761c;
  background:#e2b23f;clip-path:var(--stamp-cut-6,polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 6px),0 calc(100% - 6px)));
  filter:none}
 .modal.wood-frame .slot-option>button small{display:block;margin-top:2px;font:500 12px/1.2 var(--ui);color:inherit;opacity:.85}
 @media (hover:hover){
  .modal.wood-frame .slot-option>button:not([disabled]):hover,.modal.wood-frame .deco-confirm button:hover{background-color:transparent;filter:brightness(1.08)}
- .modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):not([disabled]):hover,.modal.wood-frame .deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]):hover{background:#ecbf52;text-decoration:none}}
+ .modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):not([disabled]):hover{background:#ecbf52;text-decoration:none}}
 .modal.wood-frame .slot-option>button:not([disabled]):active,.modal.wood-frame .deco-confirm button:active{background-color:transparent;transform:translate(0,2px);box-shadow:none}
-.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):not([disabled]):active,.modal.wood-frame .deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]):active{
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):not([disabled]):active{
  transform:translate(0,3px);background:#cf9f30;box-shadow:inset 0 -2px 0 #a8761c,inset -2px 0 0 #a8761c}
 .modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):disabled{background:#3a2a19;color:#a99472;text-shadow:none;filter:none;box-shadow:none}
 .modal.wood-frame .deco-confirm{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;align-items:center}
