@@ -2,7 +2,10 @@
 'use strict';Native.hydrate(Save.keys).then(()=>Native.cloudPull(Save.hasLocal()?2000:6000)).then(raw=>{if(raw)Save.cloudMerge(raw);}).then(function(){
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
 /* UI_UX §BUILD MARKER (v2.9.3): the build a report was played on - the opening screen's corner and the console */
-const BUILD=window.GUILD24_BUILD||{version:'dev',commit:'dev'};console.info('GUILD24 v'+BUILD.version+' · '+BUILD.commit);
+const BUILD=window.GUILD24_BUILD||{version:'dev',commit:'dev'};
+/* 체험판 (User 2026-10-22): the demo build alone defines GUILD24_DEMO (demo/demo.js); the full game leaves it unset and
+   these two hooks do nothing - the prep slip and the DAY 20 ending are the demo's. */
+const DEMO=window.GUILD24_DEMO||null;console.info('GUILD24 v'+BUILD.version+' · '+BUILD.commit);
 /* PLATFORM_RELEASE (User 2026-10-10): the app starts with sound on - it is an app, not a page the browser keeps locked until a tap. Only a Save-less start: a saved choice wins, and the web keeps its off default. */
 const freshAccount=()=>{const a=Meta.fresh();if(Native.inApp())a.settings.muted=false;return a;};
 let stored=Save.read(),game=new Game(stored?.account||freshAccount(),stored?.run||null),selected=null,modal=null,codexTab='items',supplyNPC=null,toastTimer,previousFocus=null;
@@ -2455,6 +2458,7 @@ function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)r
    one -> the next store (PRESENTATION_POLISH_BATCH3 §END); NIGHT stays the owner of those
    records. A Final ending never had them (run.js clears s.results there). */
 function endScreen(){
+ if(DEMO&&game.run.endReason===DEMO.reason)return DEMO.endScreen({stage,btn,ledger,portrait,E,game,Scene});
  return stage('end','점포 종료','',endBanner()+sentOff(),btn('다음 점포 열기','new','stamp'));}
 /* The failure line is not a hidden threshold: the book that already lists the dead says how
    many that is, and how many the store has. */
@@ -2687,8 +2691,8 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
    +'<p class="board-rail">새 점포 준비</p>'
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
-    +'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다.</b>'
-    +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>'
+    +(DEMO?DEMO.prepNote():'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다.</b>'
+    +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>')
     +ascNote(a)+'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
