@@ -16,6 +16,11 @@ const RANK=['fresh24','hub','expeditionMeal','kitchen','dawnRecovery','opsRoom',
 const DECO={none:[],economy:['guildShelf','thriftSafe','honorFrame','sponsorSign'],survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],operation:['rerollCoupon','voucher','heroSign','cheerBanner'],
  /* --decos best (User 2026-10-19): one per slot, the larger fresh-Run D20 gain, bought in gain-per-price order */
  best:['aidCabinet','thriftSafe','sponsorSign','honorFrame']};
+/* Job Mastery ranks 1 and 2 need only Capital (300G, 1200G), so the trajectory buys them like a player does, in price order with the Decorations
+   (User 2026-10-22: "3단계 전, 클리어 전까지는 사게 해야 사람처럼"). Ranks 3~5 need Boss clears and are left out, because a purchase the account cannot make
+   yet stops the rest of the order. G24_NO_MASTERY=1 gives the old Decoration-only order. */
+if(!process.env.G24_NO_MASTERY){const PRICE={guildShelf:500,aidCabinet:500,rerollCoupon:500,thriftSafe:750,memorialBook:750,voucher:750,honorFrame:1000,infirmaryPlaque:1000,heroSign:1000,sponsorSign:1500,trainingSign:1500,cheerBanner:1500};
+ for(const k of Object.keys(DECO))DECO[k]=[...DECO[k].map(id=>[PRICE[id],id]),[300,'mastery'],[1200,'mastery']].sort((x,y)=>x[0]-y[0]).map(x=>x[1]);}
 const BANDS=[[1,7],[8,14],[15,21],[22,29]];
 // The four highest-Level adventurers at the Run's end against everyone else: [wins, expeditions, deaths] each
 function split(npcs,ok){const top=new Set([...npcs].sort((a,b)=>b.level-a.level).slice(0,4)),out={top:[0,0,0],rest:[0,0,0]};
@@ -68,6 +73,8 @@ function worker({root,kind,policy,deco,T,R,part,asc=null}){
  for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
   require(path.join(root,'dist',f+'.js'));
  const G=globalThis.GUILD24||globalThis,P=G.Game.prototype,end=P.end,open=P.open,seen=new WeakSet(),initial=new WeakMap(),rows=[];let k=0;const wallets={};
+ // trajectory()'s acquisition summary reads every order id's price off decorationBy; give 'mastery' one, hidden from enumeration
+ if(!G.DATA.decorationBy.mastery)Object.defineProperty(G.DATA.decorationBy,'mastery',{value:{price:300},enumerable:false});
  useFirstRunLessons(P);
  // 승천 측정 (User 2026-10-19): 첫 클리어로 계정이 열린 뒤부터 모든 단계를 열고 asc 단계로 시작한다. 클리어 전 런은 승천 0 그대로라
  // 같은 시드의 단계끼리 첫 클리어까지 똑같이 짝지어진다. post = 그 런이 열린 계정으로 시작했는가.
