@@ -6,7 +6,7 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 
 const CANON_HAZARDS=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
 const LEGACY=['thirst','caffeine','alcohol','long','wet','armor','undead','slow','food'];
-const CATALOG=['삼각김밥','생수','컵라면','간단 도시락','초코바','녹차 양갱','캔커피','진정 허브티','하급 포션','얼음컵','중화 탄산수','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','방한 두건','방독 작업장갑','축성 손전등','방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','중급 포션','길드 특제 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰','거미줄 방호세트','연금 방수슈트','성화 랜턴','백설 방한고글','마그마 냉각장비','영웅 결전 도시락','왕도 천연암반수','초고속 에너지드링크','대현자 허브엘릭서','최상급 포션'];
+const CATALOG=['삼각김밥','생수','컵라면','간단 도시락','초코바','녹차 양갱','캔커피','진정 허브티','하급 포션','얼음컵','중화 탄산수','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','방한 두건','방독 작업장갑','축성 손전등','일회용 방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','중급 포션','길드 특제 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰','거미줄 방호세트','연금 방수슈트','성화 랜턴','백설 방한고글','마그마 냉각장비','영웅 결전 도시락','왕도 바나나우유','초고속 에너지드링크','대현자 허브엘릭서','최상급 포션'];
 
 test('DUN-Q04/Q19: exactly the 9 canonical Hazards, mire present, slow absent',()=>{
  assert.deepEqual(Object.keys(DATA.hazards).sort(),[...CANON_HAZARDS].sort());
@@ -40,7 +40,7 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladde
   ['lunchbox','간단 도시락',1,90,180,'food',2,{survival:12,supply:6,loot:0.1}],
   ['guildlunch','길드 특제 도시락',2,165,330,'food',2,{survival:15,supply:7,loot:0.25}],
   ['battlelunch','영웅 결전 도시락',3,205,410,'food',2,{combat:5,survival:18,supply:9}],
-  ['kingwater','왕도 천연암반수',3,180,360,'drink',3,{combat:5,survival:22,supply:2}]]){
+  ['kingwater','왕도 바나나우유',3,180,360,'drink',3,{combat:5,survival:22,supply:2}]]){
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');

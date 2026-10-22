@@ -12,10 +12,13 @@ function avatar(n,size=96){if(!n)return '';const v=n.appearance,job=DATA.jobBy[n
 }
 function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=it.icon;let s='';const base='#e5e8dc',dark='#344642',pink='#d897a0',green='#66bda3';
  if(p==='rice')s=`<path d="M6 34L20 8L34 34V38H6Z" fill="${base}"/><path d="M14 29H26V38H14Z" fill="${dark}"/>`+rect(14,20,13,5,'#eaaa67')+rect(17,21,7,2,'#f6ecd1');
- /* SA-Q51: 왕도 천연암반수 shares the bottled-water silhouette this language already has for
-    every bottle-shaped drink, distinguished by its own colour rather than a recoloured cousin. */
- if(['water','potion','antidote','wine','kingwater'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:p==='kingwater'?'#4f86b0':'#b094be';s=rect(16,3,10,5,p==='water'||p==='kingwater'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
- if(['coffee','energy'].includes(p))s=rect(12,7,19,30,p==='coffee'?'#bc9971':'#9abb75')+rect(12,5,19,3,'#cbd9d0')+rect(12,35,19,3,'#9baea6')+rect(14,17,15,11,'#efe3c4')+`<path d="M23 17L17 24H22L18 31L27 22H22Z" fill="${dark}"/>`;
+ /* 생수 is a slim clear PET bottle (convenience-store look, User 2026-10-22). 왕도 바나나우유 is a squat foil-lidded jar, 농축 해독제 a brown recovery-drink bottle and 중화 탄산수 a slim green soda bottle (convenience-store look, User 2026-10-22). */
+ if(p==='water')s=rect(19,2,6,3,'#3f78a8')+rect(20,5,4,3,'#cfe6ee')+rect(17,8,10,3,'#a9d6e4')+rect(15,11,14,2,'#a9d6e4')+rect(14,13,16,24,'#a9d6e4')+rect(15,37,14,1,'#a9d6e4')+rect(14,15,16,1,'#8cc3d4')+rect(14,34,16,1,'#8cc3d4')+rect(14,19,16,9,'#3f78a8')+rect(16,22,3,2,'#f0efe0')+rect(19,23,3,2,'#f0efe0')+rect(22,22,3,2,'#f0efe0')+rect(25,23,3,2,'#f0efe0')+rect(16,16,2,2,'#d8eef4');
+ if(p==='bananamilk')s=rect(13,6,18,2,'#2e6b44')+rect(13,8,18,3,'#f2d96b')+rect(12,11,20,3,'#f2d96b')+rect(11,14,22,3,'#f2d96b')+rect(10,17,24,4,'#f2d96b')+rect(9,21,26,3,'#f8f0c8')+rect(10,24,24,8,'#f2d96b')+rect(11,32,22,3,'#f2d96b')+rect(12,35,20,3,'#f2d96b')+rect(11,14,22,3,'#f6efd8')+rect(10,17,24,3,'#f6efd8')+rect(27,14,3,3,'#e0b83c')+rect(24,16,3,3,'#e0b83c')+rect(21,17,3,3,'#e0b83c')+rect(17,18,4,2,'#e0b83c')+rect(29,13,2,2,'#7a5a28')+rect(11,25,2,5,'#faeaa0');
+ if(p==='antidote')s=rect(17,3,10,5,'#d9b25f')+rect(18,8,8,6,'#8a5a34')+rect(14,14,16,24,'#8a5a34')+rect(14,21,16,11,'#efe8d0')+rect(19,23,6,3,green)+rect(21,26,2,4,green)+rect(16,16,2,4,'#b07a4c');
+ if(['potion','wine'].includes(p)){const c=p==='potion'?'#e09b9c':'#b094be';s=rect(16,3,10,5,'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
+ if(p==='coffee')s=rect(12,11,20,26,'#a87a4e')+rect(12,9,20,3,'#cbd9d0')+rect(12,35,20,3,'#9baea6')+rect(12,18,20,11,'#efe3c4')+rect(19,19,6,9,'#5a3a24')+rect(18,20,8,7,'#5a3a24')+rect(21,20,2,7,'#efe3c4')+rect(15,13,2,3,'#c79a6c');
+ if(p==='energy')s=rect(15,3,14,35,'#9abb75')+rect(15,2,14,3,'#cbd9d0')+rect(15,36,14,3,'#9baea6')+rect(15,12,14,16,'#2f3b3a')+`<path d="M23 13L18 21H22L20 27L27 19H23Z" fill="#f2d96b"/>`;
  if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='dragonramen'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
  /* SA-Q51: 간단 도시락 is a simple single-tier meal box - its own silhouette, distinct from the
     다칸 길드 특제 도시락 ('lunch') and the stacked 영웅 결전 도시락 ('battlelunch') - replacing
@@ -27,8 +30,7 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(['bandage','kit','mask'].includes(p)){const col=p==='kit'?'#d5dfcc':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,'#bd7d6a')+rect(14,21,15,5,'#bd7d6a');}
  /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): 중화 탄산수 is a fizzing can; 방독 작업장갑 a two-layer rubber glove;
     축성 손전등 a torch with a holy-water window and a light fan; 방한 두건 (the old 핫팩 id) a knit balaclava with a tinted eye slit. */
- if(p==='soda')s=rect(15,1,2,2,'#cfe6e0')+rect(21,2,2,2,'#cfe6e0')+rect(26,0,2,2,'#cfe6e0')+rect(12,7,19,30,'#8fc4b5')+rect(12,5,19,3,'#dfe9e4')+rect(12,35,19,3,'#6f9c8f')
-  +rect(12,15,19,13,'#f0efe0')+rect(16,18,3,3,'#7fb8cc')+rect(22,21,4,4,'#7fb8cc')+rect(17,24,2,2,'#7fb8cc')+rect(24,17,2,2,'#7fb8cc');
+ if(p==='soda')s=rect(18,2,8,3,'#dfe9e4')+rect(19,5,6,11,'#8fc4b5')+rect(14,16,16,22,'#8fc4b5')+rect(14,36,16,2,'#6f9c8f')+rect(14,22,16,10,'#f0efe0')+rect(18,24,3,3,'#7fb8cc')+rect(23,27,4,4,'#7fb8cc')+rect(19,29,2,2,'#7fb8cc')+rect(24,24,2,2,'#7fb8cc')+rect(16,18,2,6,'#cfe6e0');
  if(p==='gloves')s=rect(12,8,4,10,'#d3c25e')+rect(17,5,4,13,'#d3c25e')+rect(22,6,4,12,'#d3c25e')+rect(27,9,4,10,'#d3c25e')+rect(6,20,7,6,'#d3c25e')
   +rect(11,16,20,19,'#d3c25e')+rect(14,21,14,11,'#b09d3e')+rect(17,24,8,5,'#d3c25e')+rect(10,34,22,7,'#5f7d57')+rect(10,36,22,2,'#86a37a');
  if(p==='holylight')s=rect(4,17,22,11,'#56666e')+rect(4,19,22,2,'#6f8088')+rect(26,14,8,17,'#8a9aa2')+rect(34,16,3,13,'#f6e4b4')
@@ -49,8 +51,7 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='potionHigh')s=rect(15,2,14,6,'#d8b465')+rect(17,8,10,5,base)+rect(12,13,20,4,'#8f2f2e')
   +rect(9,17,26,20,'#b0413f')+rect(9,17,26,2,'#d4726d')+rect(12,20,4,14,'#e07b78')
   +rect(15,23,16,10,base)+rect(17,25,12,2,'#8f2f2e')+rect(17,29,12,2,'#8f2f2e');
- if(p==='ion')s=rect(18,3,8,4,'#cfd9cf')+rect(15,7,14,6,'#7fb6c4')+rect(13,13,18,24,'#9fd4dc')
-  +rect(13,19,18,6,'#4e8ba0')+rect(16,26,12,3,'#eff7f4')+rect(13,13,4,24,'#d7eef0');
+ if(p==='ion')s=rect(16,5,12,4,'#eff7f4')+rect(18,9,8,3,'#b8662a')+rect(13,12,18,3,'#e8903a')+rect(10,15,24,22,'#e8903a')+rect(11,37,22,1,'#b8662a')+rect(10,21,24,8,'#eff7f4')+rect(10,24,24,2,'#4e8ba0')+rect(12,16,3,4,'#f6c58a');
  if(p==='candy')s=`<path d="M4 13L13 21L4 31Z" fill="#e9b9cc"/><path d="M40 13L31 21L40 31Z" fill="#e9b9cc"/>`
   +rect(11,19,3,7,'#c98aa4')+rect(30,19,3,7,'#c98aa4')+rect(13,11,18,21,'#f0dce6')
   +rect(16,15,12,13,'#d3708f')+rect(19,19,6,5,'#f7eef3');

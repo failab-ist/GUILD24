@@ -311,7 +311,7 @@ Counter Food Supply: 컵라면 3 · 집중 사탕 2 · 불룡볶음면 3. Counte
 | Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
 |---|---|---|---|---|
 | 독거미 동굴 (독 · 속박) | 방진마스크 독 14 | 방독 작업장갑 독 10 · 속박 12 | 농축 해독제 독 28 · 경량 로프 속박 28 | 거미줄 방호세트 18 · 18 |
-| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 12 | 방수망토 부식 10 · 진창 12 | 부식 방지 코팅제 28 · 원정용 장화 28 | 연금 방수슈트 18 · 18 |
+| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 12 | 일회용 방수망토 부식 10 · 진창 12 | 부식 방지 코팅제 28 · 원정용 장화 28 | 연금 방수슈트 18 · 18 |
 | 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 12 | 축성 손전등 공포 10 · 어둠 12 | 용사의 곡주 공포 25 · 랜턴 건전지 어둠 28 | 성화 랜턴 공포 18 · 어둠 18 |
 | 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 12 | 방한 두건 냉기 10 · 화이트아웃 12 | 불룡볶음면 냉기 23 · 설원 고글 화이트아웃 28 | 백설 방한고글 18 · 18 |
 | 화염 골렘 광산 (화염) | 얼음컵 화염 12 | — | 쿨링 이온음료 화염 23 | 마그마 냉각장비 화염 18 · 투력 10 |
@@ -419,7 +419,7 @@ For `lunchbox` / `kingwater`:
 
 Required icons:
 - `lunchbox` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
-- `kingwater` / 왕도 천연암반수 -> bottled/mineral-water icon in the existing Item-art language
+- `kingwater` / 왕도 바나나우유 -> foil-lidded banana-milk jar icon in the existing Item-art language
 
 Do not use a Hotbar / skewered-stick silhouette for either ID.
 This is visual identity only; Category, Rarity, price, effect, shelf life and save ID are as the catalog states.
@@ -429,8 +429,8 @@ This is visual identity only; Category, Rarity, price, effect, shelf life and sa
 \`lunchbox\` / 간단 도시락:
     반찬은 단출하지만 빈칸은 없다.
 
-\`kingwater\` / 왕도 천연암반수:
-    왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.
+\`kingwater\` / 왕도 바나나우유:
+    항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.
 
 삼각김밥 / 생수 / 길드 특제 도시락 / 영웅 결전 도시락 keep their existing compatible Flavor.
 No Hotbar/skewer wording on these IDs.
@@ -486,7 +486,7 @@ The `투력 +10` on `마그마 냉각장비` is an explicit catalog exception; i
 ### EPIC FOOD / DRINK / POTION — TOP-END PREPARATION
 
 초고속 에너지드링크 / 대현자 허브엘릭서 / 최상급 포션 (rows -> §ACTIVE CATALOG) and the Epic meal / water rows
-(`battlelunch` 영웅 결전 도시락, `kingwater` 왕도 천연암반수) in the ACTIVE CATALOG meal / water table.
+(`battlelunch` 영웅 결전 도시락, `kingwater` 왕도 바나나우유) in the ACTIVE CATALOG meal / water table.
 
 Fresh/Food-affinity/Potionbody rules apply normally by category. No separate Epic-only amplifier exists.
 
@@ -590,7 +590,7 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | lunchbox | 간단 도시락 | Food U | 90 / 180 | 강인함 +12, Supply 6, 손님 소지금 획득 +10% | 2d |
 | guildlunch | 길드 특제 도시락 | Food R | 165 / 330 | 강인함 +15, Supply 7, 손님 소지금 획득 +25% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 205 / 410 | 투력 +5, 강인함 +18, Supply 9 | 2d |
-| kingwater | 왕도 천연암반수 | Drink E | 180 / 360 | 투력 +5, 강인함 +22, Supply 2 | 3d |
+| kingwater | 왕도 바나나우유 | Drink E | 180 / 360 | 투력 +5, 강인함 +22, Supply 2 | 3d |
 
 The meal 강인함 ladder rises readably by tier; the water route is more Stat-concentrated than the meal at the same broad
 stage, with much lower Supply (Fatigue recovery).
@@ -623,7 +623,7 @@ approved ITEM amendment; QA does not auto-tune it.
 | 18 | 방한 두건 | Field Gear U | 75 / 150 | 냉기 +10, 화이트아웃 +12 | Snow 초반 하이브리드 |
 | 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +10, 속박 +12 | Spider 초반 하이브리드 |
 | 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +10, 어둠 +12 | Crypt 초반 하이브리드 |
-| 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +10, 진창 +12 | Slime 초반 하이브리드 |
+| 19 | 일회용 방수망토 | Field Gear U | 75 / 150 | 부식 +10, 진창 +12 | Slime 초반 하이브리드 |
 | 20 | 부식 방지 코팅제 | Field Gear R | 95 / 190 | 부식 +28 | Corrosion 중반 대응 |
 | 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +28 | Mire 중반 대응 |
 | 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +28 | Whiteout 중반 대응 |
@@ -700,7 +700,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 | energy | 에너지드링크 | Drink | 3d |
 | wine | 용사의 곡주 | Drink | 4d |
 | ion | 쿨링 이온음료 | Drink | 5d |
-| kingwater | 왕도 천연암반수 | Drink | 3d |
+| kingwater | 왕도 바나나우유 | Drink | 3d |
 | hyperenergy | 초고속 에너지드링크 | Drink | 3d |
 | sageelixir | 대현자 허브엘릭서 | Drink | 3d |
 | lowpotion | 하급 포션 | Potion | 3d |
@@ -713,7 +713,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 | hood | 방한 두건 | Field Gear | 4d |
 | webgloves | 방독 작업장갑 | Field Gear | 4d |
 | holylight | 축성 손전등 | Field Gear | 4d |
-| cloak | 방수망토 | Field Gear | 4d |
+| cloak | 일회용 방수망토 | Field Gear | 4d |
 | coating | 부식 방지 코팅제 | Field Gear | 5d |
 | boots | 원정용 장화 | Field Gear | 5d |
 | snowgoggles | 설원 고글 | Field Gear | 5d |
@@ -749,7 +749,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 18. 방한 두건 — roles=[HybridCounter] counters=[cold,whiteout] identity=Snow 초반 하이브리드
 42. 방독 작업장갑 — roles=[HybridCounter] counters=[poison,bind] identity=Spider 초반 하이브리드
 43. 축성 손전등 — roles=[HybridCounter] counters=[fear,dark] identity=Crypt 초반 하이브리드
-19. 방수망토 — roles=[HybridCounter] counters=[corrosion,mire] identity=Slime 초반 하이브리드
+19. 일회용 방수망토 — roles=[HybridCounter] counters=[corrosion,mire] identity=Slime 초반 하이브리드
 rule=stays under the Slime 후반 하이브리드 and each 중반 대응 on its own Hazard (§COUNTER LADDER)
 
 ### Rare / Rarity 2
@@ -986,8 +986,8 @@ PASS:
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
-간단 도시락 90 · 에너지드링크 95 · 중급 포션 125 · 길드 특제 도시락 165 · 초고속 에너지드링크 / 대현자 허브엘릭서 / 왕도 천연암반수 180 · 영웅 결전 도시락 205
-방진마스크 45 · 중화 탄산수 40 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
+간단 도시락 90 · 에너지드링크 95 · 중급 포션 125 · 길드 특제 도시락 165 · 초고속 에너지드링크 / 대현자 허브엘릭서 / 왕도 바나나우유 180 · 영웅 결전 도시락 205
+방진마스크 45 · 중화 탄산수 40 · 일회용 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
 농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 95 · 용사의 곡주 / 쿨링 이온음료 100 · 불룡볶음면 115 95
 거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
 ```
@@ -1028,14 +1028,14 @@ Expect exactly:
 | 간단 도시락 | U | 90/180 | +12 | 6 | expedition Wallet +10% |
 | 길드 특제 도시락 | R | 165/330 | +15 | 7 | expedition Wallet +25% |
 | 영웅 결전 도시락 | E | 205/410 | +18 | 9 | 투력 +5 (every Epic Food / Drink fights: 길드 특제 도시락 is the earning lunch) |
-| 왕도 천연암반수 | E | 180/360 | +22 | 2 | 투력 +5 |
+| 왕도 바나나우유 | E | 180/360 | +22 | 2 | 투력 +5 |
 
 PASS:
 - active catalog count is 43
 - active Rarity distribution is C11 / U8 / R12 / E11 / L1
 - no unrelated Item Rarity is moved from the approved active distribution
 - Hotbar names are not active player Items
-- meal shelf life 2; 생수 2, 왕도 천연암반수 3
+- meal shelf life 2; 생수 2, 왕도 바나나우유 3
 - Supply is the direct Fatigue reduction (`피로 회복 N`, current Fatigue first, remainder buffers this expedition's gain); no replacement carries any other Fatigue effect
 
 #### DI-Q-v28-2 — WALLET GAIN SCOPE
@@ -1062,7 +1062,7 @@ This is a design-shape check, not permission to auto-tune numbers.
 
 PASS:
 - `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
-- `kingwater` reads visually as 왕도 천연암반수 / bottled water
+- `kingwater` reads visually as 왕도 바나나우유 / banana-milk jar
 - neither retains the retired Hotbar/skewered-stick silhouette
 - icon change does not alter ID, Category, Rarity, price, effect or save compatibility
 
@@ -1070,7 +1070,7 @@ PASS:
 
 Expected:
 - 간단 도시락 -> \`반찬은 단출하지만 빈칸은 없다.\`
-- 왕도 천연암반수 -> \`왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.\`
+- 왕도 바나나우유 -> \`항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.\`
 
 FAIL:
 - skewer/Hotbar Flavor survives on either replacement ID

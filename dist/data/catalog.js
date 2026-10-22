@@ -27,7 +27,7 @@ item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기
 item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:10,potion:1}),
 item('ice','얼음컵',0,35,70,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:12,supply:1}),
 /* ITEM §COUNTER LADDER: the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
-item('soda','중화 탄산수',0,40,80,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:12,supply:1}),
+item('soda','중화 탄산수',0,40,80,'drink',3,'soda','용사픽','병뚜껑 따는 소리에 부식도 잠깐 멈춘다.',{corrosion:12,supply:1}),
 item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:28}),
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:28}),
 item('candy','집중 사탕',0,50,100,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:12,supply:2}),
@@ -42,13 +42,13 @@ item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나
 item('hood','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:10,whiteout:12}),
 item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:10,bind:12}),
 item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:10,dark:12}),
-item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:10,mire:12}),
+item('cloak','일회용 방수망토',1,75,150,'gear',4,'cloak','귀환안심','한 번 입으면 접히지 않는다. 그래도 비 오는 날엔 제일 먼저 나간다.',{corrosion:10,mire:12}),
 item('coating','부식 방지 코팅제',2,95,190,'gear',5,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:28}),
 item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:28}),
 item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:28}),
 item('highpotion','상급 포션',2,195,390,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:19,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
-item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:28}),
+item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','독에도 듣고 숙취에도 듣는다고 적혀 있다. 한 병이면 충분하다.',{poison:28}),
 item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.2}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
@@ -67,7 +67,7 @@ item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안
 item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,205,410,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{combat:5,survival:18,supply:9}),
-item('kingwater','왕도 천연암반수',3,180,360,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{combat:5,survival:22,supply:2}),
+item('kingwater','왕도 바나나우유',3,180,360,'drink',3,'bananamilk','길드초이스','항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.',{combat:5,survival:22,supply:2}),
 item('hyperenergy','초고속 에너지드링크',3,180,360,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{combat:5,mobility:22,supply:2}),
 item('sageelixir','대현자 허브엘릭서',3,180,360,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{combat:5,spirit:22,supply:2}),
 item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:25,potion:1})
