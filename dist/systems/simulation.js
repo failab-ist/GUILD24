@@ -606,6 +606,9 @@ function playRun(g,out,ctx){
     if(VA)for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive).sort((x,y)=>weight(y)-weight(x))){const dd=g.claimedGateFor(m);if(!dd)continue;
      const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')claim(it=>coverGain(m,dd,h,it)>=COVER,it=>coverGain(m,dd,h,it));}
+    /* the 원정 작전실 pays for a Counter past the Hazard's Threat, so with it owned a backed visitor whose Gate has one or two Hazards gets a second Counter claimed for each (a person stocks two of the same Counter for a one-Hazard Gate) */
+    if(VA&&s.facilities.includes('opsRoom')&&(typeof process==='undefined'||process.env.G24_BOT_OPSFIT!=='0'))for(const m of backed){const dd=g.claimedGateFor(m);if(!dd||dd.hazards.length>2)continue;
+     for(const h of dd.hazards)claim(it=>coverGain(m,dd,h,it)>=COVER,it=>coverGain(m,dd,h,it));}
     for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
      if(open.length&&!VA)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
