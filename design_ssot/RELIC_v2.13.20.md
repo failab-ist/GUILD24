@@ -74,7 +74,7 @@ After one first support is chosen, or the choice is deferred (`나중에 결정`
 A deferred D0 window stays open, still free, through DAY 4 and reopens like any deferred window (§WINDOW STATE); it does not
 pop up again, and the D5 window replaces it. A pick on DAY 1~4 applies from that moment like any later purchase.
 
-Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.20.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
+Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.21.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
 
 ### D5 / D10 / D15 / D20 / D25
 cand=3 · buy<=1 · currency=G · firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION · defer=YES
@@ -175,7 +175,7 @@ ownedRelicQuickView: mode=READ_ONLY · availablePhases=[Morning,Order,Sale]
 A Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one
 status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save
 field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
-written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.20.md` §11-32. The conditional supports are exactly:
+written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.21.md` §11-32. The conditional supports are exactly:
 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it is always on for every 단골.
 
@@ -338,7 +338,7 @@ existing Customer effects rather than adding another workload system.
 
 ## RELIC BLUEPRINTS
 
-Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.20.md §11 (§11-1..§11-30 for blueprints
+Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.21.md §11 (§11-1..§11-30 for blueprints
 1–30, §11-30b 야전 들것, §11-30c 응급 처치대). The following Store Support Functions are exact.
 
 ### ROTATION — Foundation
@@ -504,7 +504,7 @@ effect=a 단골 is stronger, and stays a 단골
   (`평생 단골제 +6%`); the Final party reads it the same way
 - while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
   an adventurer not yet a 단골 has no floor
-- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.13.19.md owns 단골 at 51
+- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.13.21.md owns 단골 at 51
 
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
@@ -1467,6 +1467,6 @@ final expedition / D25 Final state -> FINAL_EXPEDITION_v2.8.0.md
 boss/sloth seal / Sloth Boss value -> BOSS_v2.8.0.md
 gold/order/reroll -> ECONOMY_ORDER_v2.13.19.md
 sale phase -> SALE_v2.8.0.md
-npc value -> NPC_TRAIT_v2.13.19.md
+npc value -> NPC_TRAIT_v2.13.21.md
 Item/category/composition -> `ITEM_v2.8.0.md`
-Order/UI -> `UI_UX_v2.13.17.md`
+Order/UI -> `UI_UX_v2.13.21.md`

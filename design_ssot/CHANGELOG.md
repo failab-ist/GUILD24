@@ -58,6 +58,7 @@ and this table is their commit record.
 | v2.13.16 | 2026-10-19 | 승천 skeleton (ten cumulative post-clear difficulty levels, META §ASCENSION), first-week Gate ease (DAY 1~9) and expedition-win Wallet 35 + Day × 5, in two PRs merged together | (the User sets it) |
 | v2.13.17 | 2026-10-21 | Daily Event chance 40 → 30% and one name for the unattributed expedition accident, with the version bump in one PR | (the User sets it) |
 | v2.13.20 | 2026-10-21 | 지역 거점점 +1 visitor 45 → 35% (#275), 휴식 바우처 꽂이 first three → two, and version bump in one PR | (the User sets it) |
+| v2.13.21 | 2026-10-22 | Job Mastery bought with Store Capital (five ranks, every Job), the store sheet switch and the Capital plate, and version bump in one PR | (the User sets it) |
 | v2.13.19 | 2026-10-21 | RESULT-PROOF no longer credits an Item whose only role was filling the 2nd Bag slot (만반의 준비); 바가지 소지금 보너스 · 단골도 -8 · 상한 90% without a version bump (User 2026-10-21) | (the User sets it) |
 | v2.13.18 | 2026-10-21 | Decorations: 알뜰 금고 +300 → +100G, 구급품 진열장 투력 +5 → +3%, 명예 모험가 액자 above 일반 80 → 50%, and version bump in one PR | (the User sets it) |
 
@@ -69,12 +70,27 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
-## 편의점 상품 이름·그림·설명 정리 (v2.13.20 유지, User 2026-10-22)
+## v2.13.21 — Job Mastery bought with Store Capital (User 2026-10-22)
 
-- ITEM §ACTIVE CATALOG: 왕도 천연암반수 → 왕도 바나나우유 (id `kingwater` → `bananamilk`, Save compatibility not kept), 방수망토 → 일회용 방수망토. Effects, prices, Rarity and shelf life unchanged.
-- Flavor: 왕도 바나나우유, 농축 해독제, 중화 탄산수, 일회용 방수망토 (COPY_AUDIT §12-3 / §12-4 follow).
-- Item art only: 생수 (slim PET bottle), 쿨링 이온음료 (orange sports bottle, so it no longer reads like 생수 or the water-blue Fire Counter), 캔커피 (short can with a coffee bean), 에너지드링크 (slim can), 농축 해독제 (brown recovery-drink bottle), 중화 탄산수 (soda bottle), 왕도 바나나우유 (green-lidded jar).
-- The 고급 Drink slot stays 에너지드링크 only (the Tier I Fear / Toughness Stat routes are already 생수 and 용사의 곡주).
+- META §JOB MASTERY: the User's account (no Boss clear, three Decorations) ended two Runs in a row before D10, and Job Mastery
+  was locked behind Boss clears it had never made, so the ladder gave nothing (「사다리가 작동못하는거아님 결국?」). Mastery is
+  now one account-wide rank bought in order with Store Capital: 1 = 300 (main Stats +0.5), 2 = 1200 (+1), 3 = 2500 after 1
+  distinct Boss (+1 Lv 10%), 4 = 4000 after 3 (+1 Lv 15% · +2 Lv 5%), 5 = 6000 after 7 (+1 Lv 20% · +2 Lv 10%). Main Stats are each
+  Job's two highest Growth values, added once at creation to every Job's new adventurer. Boss clears no longer raise a spawn
+  bonus; the Job × Boss matrix stays as the record (Franchise Grade, unlocks). Decorations are not nerfed.
+- Measurement (v2.13.20 rules, the User's account with 3 Decorations, investor bot oracle off, 500 fresh Runs each): main Stats
+  +0 / +0.5 / +1 ended before D10 29 / 23 / 17%, reached D20 41 / 50 / 57%, D30 16 / 24 / 31%, cleared 9.8 / 13.6 / 18%. +3
+  was too strong (D30 60%). No Decoration: +0 / +0.5 = 44 / 39% before D10. Logs: `reports/v2100-measure/mastery-capital-20261022/`; oracle on: before D10 35 / 29 / 23%, D30 18 / 23 / 29%.
+- UI_UX §STORE SHEET: a 장식 / 직업 숙련 switch bar (no underline), rank cards in the Decoration card shape, yellow pixel purchase
+  keys (적용 / 해제 / 취소 stay wooden tags). The prep Capital plate opens the sheet on the side the Capital can buy (both: 장식).
+  The ending's replay line adds `점포 자본으로 직업 숙련을 구매할 수 있다.`; COPY §1-10, §3-15, §8-7, §10-3, §10-5 follow.
+  The progress tab's per-Job table leaves the screen (the record stays in the save): one row of the seven Bosses, and the
+  ending names only a newly beaten Boss (`새로 토벌한 마왕`). The codex header reads the bought rank, 직업 숙련 n / 5.
+- Convenience-store names, art and Flavor (merged as #282 under this version, User 2026-10-22):
+  - ITEM §ACTIVE CATALOG: 왕도 천연암반수 → 왕도 바나나우유 (id `kingwater` → `bananamilk`, Save compatibility not kept), 방수망토 → 일회용 방수망토. Effects, prices, Rarity and shelf life unchanged.
+  - Flavor: 왕도 바나나우유, 농축 해독제, 중화 탄산수, 일회용 방수망토 (COPY_AUDIT §12-3 / §12-4 follow).
+  - Item art only: 생수 (slim PET bottle), 쿨링 이온음료 (orange sports bottle, so it no longer reads like 생수 or the water-blue Fire Counter), 캔커피 (short can with a coffee bean), 에너지드링크 (slim can), 농축 해독제 (brown recovery-drink bottle), 중화 탄산수 (soda bottle), 왕도 바나나우유 (green-lidded jar).
+  - The 고급 Drink slot stays 에너지드링크 only (the Tier I Fear / Toughness Stat routes are already 생수 and 용사의 곡주).
 
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 
@@ -585,7 +601,7 @@ Minor version: balance, coaching, sound and night-result work since v2.11.1. Det
 
 ## Game glossary after v2.10.3 (User 2026-10-04; the version stays 2.10.3)
 
-- **GLOSSARY_v2.13.17.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
+- **GLOSSARY_v2.13.21.md is the parent owner for names and terms**: one rule document, 「이 개념은 이 용어로 쓴다」. Linked from SPEC_INDEX (authority, file
   set, routing), COPY_WORLD_VOICE §ROLE and AGENTS.md. Decided with it: 점포 = one 30-day store, 영업 = one day's business, `최종 원정` for the Final,
   `발주 후보 교환` / `점포지원 후보 교환` (the bare `후보 교환` is retired), `요구 전력`, `상품` = the goods and `보급` = handing goods over, `이번 점포의 장식`.
 - **마왕의 능력 = 「마왕 권능」** (User 2026-10-04): 「특성」은 모험가의 개성만 가리킨다. The forecast line reads `마왕의 권능`. The 마왕 report, 도감 탭 and coach

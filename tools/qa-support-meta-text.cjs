@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),assert=require('node:assert/strict'),{spawn}=require('node:child_process');
 const {chromium}=require('playwright'),{ready}=require('./qa-ready.cjs');
 const root=path.resolve(__dirname,'..'),out=path.resolve(process.argv[2]||path.join(os.tmpdir(),'guild24-support-meta-text')),before=process.argv.includes('--before'),port=5288,checks=[],findings=[];
-const MASTERY='서로 다른 마왕을 토벌할 때, 출전한 직업의 숙련이 쌓인다. 숙련이 높을수록 새로 오는 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.';
+const MASTERY='서로 다른 마왕을 잡을수록 새 직업과 상품, 직업 숙련 3단부터가 열린다. 직업 숙련은 점포 자본으로 구매한다.';
 function check(name,ok){assert.ok(ok,name);checks.push(name);}
 async function open(p,action){await p.locator('[data-action="menu"]').click();await p.locator('#modal-root [data-action="'+action+'"]').click();}
 async function shot(p,name){await p.screenshot({path:path.join(out,'batch6-'+(before?'before':'after')+'-'+name+'.png')});check(name+' 가로 넘침 없음',await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
@@ -28,7 +28,7 @@ for(const width of [390,1280])for(const kind of ['kitchen','royalCert','hub','de
  }else if(kind==='retired'){
   await open(p,'codex');await p.locator('[data-action="codex-tab"][data-id="facilities"]').click();const row=p.locator('.unlock').filter({hasText:'단골 묶음혜택'});await row.scrollIntoViewIfNeeded();const text=await row.innerText();await shot(p,'retired-'+width);if(before)findings.push({width,kind,text});else check(width+' 이전 지원 후보 제외 표시',text.includes('현재 후보로 나오지 않음')&&!text.includes('기본 제공'));
  }else if(kind==='mastery'){
-  await p.evaluate(()=>{Guild24.game.account.matrix.warrior.WRATH=true;});await open(p,'codex');await p.locator('[data-action="codex-tab"][data-id="progress"]').click();const text=await p.locator('.progress-panel').innerText();await shot(p,'mastery-'+width);if(before)findings.push({width,kind,text});else{check(width+' 숙련 의미',text.includes(MASTERY));check(width+' 숙련 수치 유지',(await p.locator('.matrix .tally').first().innerText())==='1 / 7');}
+  await p.evaluate(()=>{Guild24.game.account.matrix.warrior.WRATH=true;});await open(p,'codex');await p.locator('[data-action="codex-tab"][data-id="progress"]').click();const text=await p.locator('.progress-panel').innerText();await shot(p,'mastery-'+width);if(before)findings.push({width,kind,text});else{check(width+' 숙련 의미',text.includes(MASTERY));check(width+' 분노 토벌 표시',(await p.locator('.matrix td.done').count())===1);}
  }else{
   await p.evaluate(()=>{Guild24.game.run.facilities=['firstVisitCoupon','premiumMember'];Guild24.render();});await open(p,'relics');const text=await p.locator('#modal-root').innerText();await shot(p,'wallet-support-'+width);if(before)findings.push({width,kind,text});else check(width+' 방문 지원 상한 문구 없음',!text.includes('소지금 상한 적용'));
  }

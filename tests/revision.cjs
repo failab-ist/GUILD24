@@ -378,54 +378,48 @@ test('META-Q01/Q14 + RUN-Q30: the legacy XP ladder and its fourteen keys are gon
    f+' reads no account XP');
 });
 
-test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide multiplier exists',()=>{
- // Mastery that does not cross an unlock gate must change nothing at all. Twelve Mastery
- // across only two distinct Bosses leaves the Job pool exactly as it was, so any difference
- // in the adventurers it rolls would be a bonus leaking in where none is approved.
- const plain=Meta.fresh(),masterly=Meta.fresh();
- for(const job of Meta.JOBS())for(const boss of Meta.BOSSES().slice(0,2))masterly.matrix[job][boss]=true;
- assert.equal(Meta.totalJobMastery(masterly),12,'real Mastery');
- /* META_v2.8 keeps Mastery separate from Store growth: playing well does not buy Decorations
-    and Decorations do not buy Mastery. */
- assert.equal(Meta.storeCapital(masterly),0,'which buys no Store Capital');
- assert.deepEqual(Meta.ownedDecorations(masterly),[],'and owns no Decoration');
- assert.equal(Meta.distinctBossClear(masterly),2,'but below every content gate');
- assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(masterly,j)).map(j=>j.id),
+test('NPC-Q10 / META §JOB MASTERY (v2.13.21): Boss clears buy nothing, a bought rank is the only channel',()=>{
+ // Boss clears that do not cross an unlock gate must change nothing at all: the Job x Boss
+ // matrix is a record now, and Mastery is bought with Store Capital.
+ const plain=Meta.fresh(),cleared=Meta.fresh();
+ for(const job of Meta.JOBS())for(const boss of Meta.BOSSES().slice(0,2))cleared.matrix[job][boss]=true;
+ assert.equal(Meta.totalJobMastery(cleared),12,'the record is kept');
+ assert.equal(Meta.masteryRank(cleared),0,'but it is not a bought rank');
+ assert.equal(Meta.storeCapital(cleared),0,'and buys no Store Capital');
+ assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(cleared,j)).map(j=>j.id),
                   DATA.jobs.filter(j=>Meta.jobUnlocked(plain,j)).map(j=>j.id),'so the Job pool is unchanged');
- const a=new Game(plain),b=new Game(masterly);a.autosave=b.autosave=false;
- a.start('mastery');b.start('mastery');
- assert.equal(b.run.money,a.run.money,'and the same starting funds');
- assert.equal(b.capacity(),a.capacity(),'and the same warehouse');
- /* Stage 10 gives Mastery its approved channel: the owning Job's people turn up at a higher
-    spawn Level more often. What NPC-Q10 / NPC-Q03 still forbid is everything else, and this is
-    where that is held. Mastery on ONE Job must leave every other Job's adventurer untouched -
-    the bonus roll is drawn for every NPC whatever its Job, so the stream cannot shift and any
-    difference outside the mastered Job would be a leak. */
- const one=Meta.fresh();
- for(const boss of Meta.BOSSES().slice(0,2))one.matrix.warrior[boss]=true;
- assert.equal(Meta.jobMastery(one,'warrior'),2,'one Job carries Mastery');
- for(const j of DATA.jobs)if(j.id!=='warrior')assert.equal(Meta.jobMastery(one,j.id),0,j.id+' has none');
- assert.equal(Meta.distinctBossClear(one),2,'and it stays below every content gate, so the Job pool is identical');
- const c=new Game(one);c.autosave=false;c.start('mastery');
  const strip=n=>({job:n.job,level:n.level,stats:n.stats,potential:n.potential});
- assert.deepEqual(c.run.npcs.map(n=>n.job),a.run.npcs.map(n=>n.job),'the same Jobs are drawn in the same order');
- for(let i=0;i<a.run.npcs.length;i++){
-  if(a.run.npcs[i].job==='warrior')continue;
-  assert.deepEqual(strip(c.run.npcs[i]),strip(a.run.npcs[i]),
-   'Mastery in 전사 did not touch the '+a.run.npcs[i].job+' at index '+i);
+ const spawn=acct=>{const g=new Game(acct);g.autosave=false;g.start('mastery');return g.run;};
+ const a=spawn(plain),b=spawn(cleared);
+ assert.equal(b.money,a.money,'the same starting funds');
+ assert.deepEqual(b.npcs.map(strip),a.npcs.map(strip),'and the very same adventurers');
+ /* buying: in order, gated by Capital and by distinct Bosses */
+ const buyer=Meta.fresh();buyer.store.capital=299;
+ assert.throws(()=>Meta.buyMastery(buyer),/점포 자본/,'300 is needed for rank 1');
+ buyer.store.capital=1500;Meta.buyMastery(buyer);Meta.buyMastery(buyer);
+ assert.equal(Meta.masteryRank(buyer),2,'ranks are bought one after another');
+ assert.equal(Meta.storeCapital(buyer),0,'at 300 then 1200');
+ buyer.store.capital=99999;
+ assert.throws(()=>Meta.buyMastery(buyer),/마왕 1종/,'rank 3 waits for one distinct Boss');
+ buyer.matrix.warrior[Meta.BOSSES()[0]]=true;Meta.buyMastery(buyer);
+ assert.throws(()=>Meta.buyMastery(buyer),/마왕 3종/,'rank 4 waits for three');
+ /* rank 1 and 2: the same draws, the same Levels; only the two main Base Stats move */
+ for(const [rank,add] of [[1,.5],[2,1]]){
+  const acct=Meta.fresh();acct.store.mastery=rank;const c=spawn(acct);
+  assert.deepEqual(c.npcs.map(n=>[n.job,n.level,n.potential]),a.npcs.map(n=>[n.job,n.level,n.potential]),'rank '+rank+' draws the same adventurers');
+  c.npcs.forEach((n,i)=>{const main=Adventurer.mainStats(DATA.jobBy[n.job]).map(k=>Adventurer.keys[k]);
+   for(const k of Adventurer.keys)assert.equal(n.stats[k],a.npcs[i].stats[k]+(main.includes(k)?add:0),'rank '+rank+' '+n.job+' '+k);});
  }
- for(let i=0;i<a.run.npcs.length;i++)if(a.run.npcs[i].job==='warrior')
-  assert.ok(c.run.npcs[i].level>=a.run.npcs[i].level,'a mastered 전사 is never spawned lower');
- // and the power still arrives as Level, never as a stat channel on the Job table
+ assert.deepEqual(DATA.jobs.map(j=>Adventurer.mainStats(j).map(i=>Adventurer.keys[i]).join('+')),
+  ['combat+survival','combat+mobility','combat+spirit','survival+spirit','combat+mobility','combat+survival'],'the main stats are each Job\'s two highest Growth');
  for(const j of DATA.jobs)assert.equal(j.masteryBonus,undefined,j.id+' has no mastery power field');
- /* the bonus is a single mutually exclusive roll, and its expected value is the approved one */
- for(const [rank,expected] of [[0,0],[1,.05],[3,.25],[6,.85],[7,1.15]]){
-  const acct=Meta.fresh();
-  for(let k=0;k<rank;k++)acct.matrix.warrior[Meta.BOSSES()[k]]=true;
+ /* the Level part is a single exclusive roll from rank 3, and its expected value is the approved one */
+ for(const [rank,expected] of [[0,0],[2,0],[3,.10],[4,.25],[5,.40]]){
+  const acct=Meta.fresh();acct.store.mastery=rank;
   const r=new RNG('mastery-ev-'+rank);let sum=0;
-  for(let k=0;k<40000;k++){const v=Adventurer.masterySpawnBonus(r,acct,'warrior');
-   assert.ok(v===0||v===1||v===2||v===3,'one roll yields one of +0/+1/+2/+3');sum+=v;}
-  assert.ok(Math.abs(sum/40000-expected)<.03,'Mastery '+rank+' averages about +'+expected+' Levels');
+  for(let k=0;k<40000;k++){const v=Adventurer.masterySpawnBonus(r,acct);
+   assert.ok(v===0||v===1||v===2,'one roll yields one of +0/+1/+2');sum+=v;}
+  assert.ok(Math.abs(sum/40000-expected)<.02,'Mastery '+rank+' averages about +'+expected+' Levels');
  }
 });
 

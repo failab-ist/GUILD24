@@ -2,7 +2,7 @@
 
 DOC=GLOSSARY
 OWNER=game_terms,player_term_names
-DOC_VERSION=2.13.17
+DOC_VERSION=2.13.21
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -12,7 +12,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 ```text
 이름과 뜻            -> GLOSSARY (이 문서)
 규칙과 수치          -> 각 owner 문서
-정확한 화면 문구     -> COPY_AUDIT_APPROVED_v2.13.20.md
+정확한 화면 문구     -> COPY_AUDIT_APPROVED_v2.13.21.md
 문구의 목소리와 경계 -> COPY_WORLD_VOICE_v2.8.0.md
 ```
 
@@ -44,7 +44,7 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 - **다시 온 손님**: 예전에 온 적이 있는 손님이 또 온 것. 쓰지 않는 말: 재방문 손님(「재방문 가중치」 같은 규칙 설명은 예외).
 - **단골도**: 손님이 이 가게를 믿는 정도, 0~100. 높을수록 상품을 살 마음과 다시 올 가능성이 커진다. 쓰지 않는 말: 친밀도.
 - **단골**: 단골도 51 이상인 손님.
-- **직업, 직업 숙련**: 직업은 모험가의 기본 능력과 성장 방향. 숙련은 그 직업으로 마왕을 잡을 때 쌓인다.
+- **직업, 직업 숙련**: 직업은 모험가의 기본 능력과 성장 방향. 직업 숙련은 점포 자본으로 구매하며, 새로 오는 모든 직업의 손님에게 적용된다. 마왕을 잡으면 그 직업에 토벌 기록이 남는다.
 - **특성**: 모험가의 개성. 마왕의 능력에는 쓰지 않는다.
 - **경험치**: 모험가가 원정으로 얻어 레벨을 올리는 수치.
 

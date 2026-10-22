@@ -937,22 +937,21 @@ function simulate(count=100,policy='reader',account=null,pricing='adaptive',buil
    `Meta.buyDecoration`. Nothing here reimplements either.
 
    `purchaseOrder` is measurement INPUT, not a strategy this harness invents: the caller names
-   the order, and the trajectory buys the next one whenever the Capital it actually earned
+   the order (Decoration ids, and 'mastery' for the next Job Mastery rank), and the trajectory buys the next one whenever the Capital it actually earned
    covers the price. Passing null buys nothing, which is the pure-Meta arm. */
-/* Job Mastery isolation, HARNESS ONLY. Mastery is a spawn-Level bonus on the owning Job's new
-   adventurers, and an account that has it also has unlocked Jobs and items - so a tier-to-tier
-   difference cannot say which of the two did the work. This neutralises the bonus table while
-   leaving every unlock in place, so the same account can be measured with and without it. The
-   roll is still drawn either way, so the seeded stream does not move. */
+/* Job Mastery isolation, HARNESS ONLY. Mastery (bought with Store Capital) adds main-stat and
+   spawn-Level bonuses to every new adventurer. This neutralises both while leaving the bought
+   rank in place, so the same account can be measured with and without them. The roll is still
+   drawn either way, so the seeded stream does not move. */
 function masterySpawnPatch(){
- const table=G.Adventurer.MASTERY_SPAWN,saved=table.map(row=>row.slice());
- for(let i=0;i<table.length;i++)table[i]=[];
- return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
+ const table=G.DATA.masteryRanks,saved=table.map(row=>({stat:row.stat,level:row.level}));
+ for(const row of table){row.stat=0;row.level=[];}
+ return ()=>saved.forEach((v,i)=>Object.assign(table[i],v));
 }
 function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false,relicPriority=null}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
- for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
+ for(const id of order)if(id!=='mastery'&&!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
@@ -974,7 +973,14 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
    /* The purchase: the named order, the real Meta call, and only what the earned Capital
       covers. No Capital is granted and no price is touched. */
    const bought=[];
+   /* 'mastery' in the order is the next Job Mastery rank; the n-th 'mastery' entry is rank n. */
+   let ranks=0;
    for(const id of order){
+    if(id==='mastery'){
+     if(G.Meta.masteryRank(account)>ranks++)continue;
+     const next=D.masteryRanks[G.Meta.masteryRank(account)];
+     if(!next||G.Meta.distinctBossClear(account)<next.bosses||G.Meta.storeCapital(account)<next.price)break;
+     G.Meta.buyMastery(account);bought.push('mastery-'+G.Meta.masteryRank(account));continue;}
     if(G.Meta.decorationOwned(account,id))continue;
     if(G.Meta.storeCapital(account)<D.decorationBy[id].price)break;
     G.Meta.buyDecoration(account,id);bought.push(id);
@@ -1047,7 +1053,7 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
 }
 
 /* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what
-   the Mastery bonus alone contributes, with the unlocks it came with held constant. Harness only. */
+   the Mastery bonus alone contributes, with everything else on the account held constant. Harness only. */
 /* One saved Run played on from where it stands, `count` times with a fresh roll stream each time (tools/continue-save.cjs,
    User 2026-10-11: the same save measured before and after a rule change). Measurement only. */
 function continueRun(account,run,count=200,policy='investor',opts={}){

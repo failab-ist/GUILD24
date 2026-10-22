@@ -23,7 +23,7 @@ function freshStore(){
  /* META_v2.8 §DECORATION COLLECTION / LOADOUT. Ownership and activation are separate, and the
     loadout is keyed by Slot rather than by the four ids, so a Slot can hold alternatives later
     without this shape changing. */
- return {capital:0,owned:[],loadout:Object.fromEntries(D.decorationSlots.map(s=>[s,null]))};
+ return {capital:0,owned:[],loadout:Object.fromEntries(D.decorationSlots.map(s=>[s,null])),mastery:0};
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
@@ -52,6 +52,20 @@ function buyDecoration(a,id){
  if(!fits(d.slot,st.loadout[d.slot]))st.loadout[d.slot]=id;
  return d;
 }
+/* META §JOB MASTERY: the rank bought so far (0 = none) and the one purchase that raises it by one. */
+const masteryRank=a=>Math.max(0,Math.min(D.masteryRanks.length,store(a).mastery||0));
+function buyMastery(a){
+ const st=store(a),rank=masteryRank(a),next=D.masteryRanks[rank];
+ if(!next)throw Error('이미 모든 단계를 구매했습니다.');
+ if(distinctBossClear(a)<next.bosses)throw Error('서로 다른 마왕 '+next.bosses+'종을 토벌해야 합니다.');
+ if(st.capital<next.price)throw Error('점포 자본이 부족합니다.');
+ st.capital-=next.price;st.mastery=rank+1;return next;
+}
+/* META §JOB MASTERY / STORE SHEET: which purchases the Capital covers right now - the store sheet opens on the one that has
+   something to buy; with both, on the Decorations (a Slot choice to weigh), and with neither, where the Player last was */
+function affordable(a){const cap=store(a).capital,next=D.masteryRanks[masteryRank(a)];
+ return {deco:D.decorations.some(d=>!store(a).owned.includes(d.id)&&d.price<=cap),
+  mastery:!!next&&distinctBossClear(a)>=next.bosses&&next.price<=cap};}
 function equipDecoration(a,slot,id){
  const st=store(a);
  if(!D.decorationSlots.includes(slot))throw Error('없는 자리입니다.');
@@ -112,7 +126,8 @@ const totalJobMastery=a=>JOBS().reduce((sum,job)=>sum+jobMastery(a,job),0);
 
 /* How many Bosses have been beaten at least once, by anyone, 0..7. Beating the same Boss
    with a second Job adds Mastery but not another distinct clear. */
-const distinctBossClear=a=>BOSSES().filter(boss=>JOBS().some(job=>a.matrix?.[job]?.[boss])).length;
+const bossCleared=(a,boss)=>JOBS().some(job=>a.matrix?.[job]?.[boss]);
+const distinctBossClear=a=>BOSSES().filter(boss=>bossCleared(a,boss)).length;
 
 /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM. Franchise Grade, the ten Achievements, the Grade
    ORDER discount and the Grade-gated Start Contract are retired from active gameplay. The final
@@ -200,11 +215,13 @@ function finish(a,run,win){
  /* META §ASCENSION: clearing 승천 N opens N+1; the first clear (level 0) opens 승천 1. */
  {const x=ascension(a),from=x.max;x.max=Math.min(G.DATA.ascensionMax,Math.max(x.max,(run.ascension||0)+1));run.ascensionOpened=x.max>from?x.max:0;}
  const jobs=[...new Set((run.finalReport?.members||[]).map(m=>m.job))];
- const wasMastery=Object.fromEntries(jobs.map(job=>[job,jobMastery(a,job)]));
+ const wasMastery=Object.fromEntries(jobs.map(job=>[job,jobMastery(a,job)])),wasCleared=bossCleared(a,run.bossId);
  for(const job of jobs)if(a.matrix[job]&&run.bossId in a.matrix[job])a.matrix[job][run.bossId]=true;
  run.metaGain={
   jobs:jobs.filter(job=>jobMastery(a,job)>wasMastery[job])
            .map(job=>({job,from:wasMastery[job],to:jobMastery(a,job)})),
+  /* v2.13.21: what the ending reports - the Boss this clear added to the distinct count, or null */
+  boss:!wasCleared&&bossCleared(a,run.bossId)?run.bossId:null,
   grade:null};
  const after=opened(a);
  const names=[...D.items,...D.jobs];
@@ -225,7 +242,7 @@ function recordBestSales(a,run,sales){if(run.salesBefore!==undefined)return;run.
 const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
-G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
+G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,bossCleared,distinctBossClear,
  opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
- ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
+ ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,masteryRank,buyMastery,affordable,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

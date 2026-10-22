@@ -39,24 +39,24 @@ function name(r,rarity){return r.pick(names);}
 const SLOTS=100,genderOf=i=>i<SLOTS?'M':i<2*SLOTS?'F':'X';
 const portraits=new Map(names.map((n,i)=>[n,{gender:genderOf(i),slot:i<2*SLOTS?(i%SLOTS)+1:i-2*SLOTS+1}]));
 const portraitOf=name=>portraits.get(name)||null;
-/* META / NPC_TRAIT §JOB MASTERY (Stage 10, approved structure).
-   Mastery does NOT multiply a Job's Base Stats or its Growth. What beating Bosses with a Job
-   earns is that the Job's people turn up better prepared: the ordinary spawn Level is decided
-   first, and Mastery then rolls once for a chance at +1, +2 or +3 Levels on top.
-   The roll is single and mutually exclusive - +1/+2/+3 never stack - and it is ALWAYS drawn,
-   including at Mastery 0, so an account's Mastery cannot shift the seeded stream out from
-   under a comparison. Rows are [p(+1), p(+2), p(+3)] by Mastery rank 0..7.
-   NPC-Q10 / NPC-Q03: this touches only the owning Job. There is no hidden account-wide
-   multiplier and no combat bonus anywhere - a Mastery NPC is an ordinary NPC of its Level.
-   The probabilities are a first balance candidate and are re-measured (§K-3). */
-const MASTERY_SPAWN=[[],[.05],[.10],[.15,.05],[.20,.10],[.25,.15],[.30,.20,.05],[.35,.25,.10]];
-function masterySpawnBonus(r,account,jobId){
+/* META / NPC_TRAIT §JOB MASTERY (User 2026-10-22, v2.13.21). Mastery is bought with Store
+   Capital, one account-wide rank 0..5 (D.masteryRanks), and applies to EVERY Job's new
+   adventurers at creation. Two parts, both read from the rank's row:
+   - stat: added to the Job's two main Base Stats (its two highest Growth values), once, at
+     creation. Not a Growth multiplier - later level-ups are untouched.
+   - level: one exclusive roll [p(+1), p(+2)] on top of the ordinary spawn Level. The roll is
+     ALWAYS drawn, including at rank 0, so buying a rank cannot shift the seeded stream out
+     from under a comparison.
+   Beating Bosses no longer raises it; the Job x Boss matrix stays as the record the Franchise
+   Grade reads. There is no hidden multiplier and no combat bonus anywhere. */
+const mainStats=job=>job.growth.map((v,i)=>[v,i]).sort((p,q)=>q[0]-p[0]).slice(0,2).map(([,i])=>i).sort((x,y)=>x-y);
+const masteryRow=account=>{const rank=account?G.Meta.masteryRank(account):0;return rank?D.masteryRanks[rank-1]:null;};
+function masterySpawnBonus(r,account){
  const roll=r.next();
- const row=MASTERY_SPAWN[Math.min(MASTERY_SPAWN.length-1,G.Meta.jobMastery(account,jobId))]||[];
- const p1=row[0]||0,p2=row[1]||0,p3=row[2]||0;
- if(roll<p3)return 3;
- if(roll<p3+p2)return 2;
- if(roll<p3+p2+p1)return 1;
+ const row=masteryRow(account)?.level||[];
+ const p1=row[0]||0,p2=row[1]||0;
+ if(roll<p2)return 2;
+ if(roll<p2+p1)return 1;
  return 0;
 }
 function create(r,index,day,account,opts={}){
@@ -65,10 +65,12 @@ function create(r,index,day,account,opts={}){
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
  /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 + the Day term (User 2026-10-10: no min+2 newcomer) */
  const spawnLevel=Math.max(1,r.int(1,2)+(newcomerMinLevel(day)-1)+(opts.royal?3:0));
- const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);
+ const level=spawnLevel+masterySpawnBonus(r,account)+(opts.levelBonus||0);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  /* NPC_TRAIT §NPC RARITY: growth potential 1 + 0.10 x Rarity + a 0~0.10 roll */
  let potential=1+rarity*.10+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
+ /* META §JOB MASTERY: the bought stat lands on the two main Base Stats after rounding, as measured. */
+ {const add=masteryRow(account)?.stat||0;if(add)for(const i of mainStats(job))stats[keys[i]]+=add;}
  return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],introduced:false};
 }
 const growthCost=level=>18+level*9;
@@ -91,7 +93,7 @@ function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=growthCost(n.level)
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,growthCost,newcomerMinLevel,catchupXP,CATCHUP_MULT,CATCHUP_GAP_SHARE,keys,isTrustedRegular,TRUSTED_REGULAR,
+G.Adventurer={create,mainStats,masteryRow,masterySpawnBonus,name,names,portraitOf,grow,growthCost,newcomerMinLevel,catchupXP,CATCHUP_MULT,CATCHUP_GAP_SHARE,keys,isTrustedRegular,TRUSTED_REGULAR,
  /* SALE_v2.7 §NORMAL CONSUMER BAG and FINAL_EXPEDITION_v2.7: exactly two slots, for every NPC
     regardless of Level, Job, Rarity or Trait, and the Final uses the same two-slot handling.
     The Lv10+ third slot is gone - not disabled, not ghosted, not hidden. */

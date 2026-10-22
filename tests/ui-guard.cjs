@@ -163,7 +163,7 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  assert.ok(!/#3a2c1d/.test(footerRest),'and the retired dead brown is not its default');
  // YELLOW: a purchase, inside a card, never a screen's Action
  assert.ok(/choice-tag-blank\.webp/.test(ruleFor('.relic-plate .stamp{')),'User 2026-10-03: Store Support purchase uses a compact gold paper tag');
- assert.ok(/background:var\(--yellow\)/.test(ruleFor('.slot-option>button[data-action="deco-buy"]')),
+ assert.ok(/background:var\(--yellow\)/.test(ruleFor('.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"])')),
   'and so is a Decoration purchase');
  /* ...but only the purchase. Equipping something already owned is a state change, so the
     card's default face stays neutral. */
@@ -512,7 +512,7 @@ test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progre
  assert.ok(!/\.seal-(choice|count)\{[^}]*box-shadow:inset 4px 0/.test(css),'no violet edge bar on the seal surfaces (User 2026-09-28)');
  // the seal plate folds to a chip on a tap on itself (not its key, not the candidates) and opens unfolded
  assert.ok(app.includes("if(sealFolded)return '<button class=\"seal-chip\" data-action=\"seal-fold\"")&&app.includes("'<div class=\"seal-choice\" data-action=\"seal-fold\"")
-  &&app.includes("case'seal-fold':sealFolded=!sealFolded;")&&app.includes("const SEAL_FOLD_KEY='<button class=\"seal-fold\" data-action=\"seal-fold\" aria-label=\"봉인 칸 접기\">접기</button>'")&&app.includes("function setModal(value){decoPending=null;if(value==='relics'){sealFolded=false;ownedOpen=false;}"),'seal plate fold / chip / reset');
+  &&app.includes("case'seal-fold':sealFolded=!sealFolded;")&&app.includes("const SEAL_FOLD_KEY='<button class=\"seal-fold\" data-action=\"seal-fold\" aria-label=\"봉인 칸 접기\">접기</button>'")&&app.includes("function setModal(value){decoPending=null;masteryPending=false;if(value==='relics'){sealFolded=false;ownedOpen=false;}"),'seal plate fold / chip / reset');
  assert.ok(!/relic-plate[^'"]*data-action="seal-fold"/.test(app),'the candidates never fold it');
  assert.ok(/focusedRevealSeen/.test(app),'the Relic milestone reveal is once per window');
 });
@@ -1140,11 +1140,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const led=fn('ledger');
  assert.ok(!/Meta\.grade\(a\)|Meta\.totalJobMastery\(a\)/.test(bannerFn+led),
   'the ending never prints a standing total that this Run did not move');
- assert.ok(led.includes('s.metaGain')&&/gain\?\.jobs/.test(led),'it reports the recorded before/after instead');
- assert.ok(/g\.from\+' → '\+g\.to/.test(led),'as the move each one made');
+ assert.ok(led.includes('s.metaGain')&&/gain\?\.boss\?row\('새로 토벌한 마왕'/.test(led),'it reports the Boss this clear newly added instead (v2.13.21)');
  const metaSrc=read('dist/systems/meta.js');
  assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
   'a Job already credited for this Boss moved nothing and is not listed');
+ assert.ok(/boss:!wasCleared&&bossCleared\(a,run\.bossId\)\?run\.bossId:null,/.test(metaSrc),'a Boss already beaten by any Job is not new');
  assert.ok(/if\(!win\)return \[\];/.test(metaSrc),'a failure records no Job x Boss gain at all');
  assert.ok(/run\.metaGain=null;/.test(metaSrc),'and no gain line for the result screen');
  /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Run end credits no Achievement at all, and
@@ -1159,8 +1159,8 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(cx.includes('progressPanel()'),'and it renders in the same grid as every other tab');
  const panel=fn('progressPanel'),screen=cx+panel;
  for(const [what,re] of [['the Store Capital',/Meta\.storeCapital\(a\)/],
-                         ['each Job mastery',/Meta\.jobMastery\(a,j\.id\)/],
-                         ['the Job x Boss grid',/a\.matrix\?\.\[j\.id\]\?\.\[b\.id\]/],
+                         ['the bought Job Mastery rank',/Meta\.masteryRank\(a\)/],
+                         ['each Boss beaten or not',/Meta\.bossCleared\(a,b\.id\)/],
                          ['distinct Boss clears',/Meta\.distinctBossClear\(a\)/]])
   assert.ok(re.test(screen),'the codex shows '+what);
  // ...and the three the header already states are not repeated inside the panel
@@ -2001,7 +2001,7 @@ test('UI-Q-v29-54: END 이 점포의 기록 - five rows, before the settlement, 
  assert.ok(/\(recs\.length\?row\('원정'/.test(b)&&/r\.outcome==='대성공'/.test(b),'no 원정 row without an expedition; 대성공 counted from the records');
  assert.ok(/n\.level>b\.level\|\|\(n\.level===b\.level&&n\.loyalty>b\.loyalty\)/.test(b)&&/s\.npcs\.filter\(n=>n\.introduced\)/.test(b),'the highest Level among the visited (dead included), a tie to the higher Loyalty');
  assert.ok(!/run\.\w*record|account\.\w*record/.test(b)&&!/this-run|runBlock/.test(read('dist/systems/run.js')+read('dist/systems/meta.js')),'no save field: presentation only');
- assert.ok(/'<div class="block settlement'\+\(st\.reach\?' reach':''\)\+'"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged');
+ assert.ok(/'<div class="block settlement'\+\(st\.reach\|\|st\.reachMastery\?' reach':''\)\+'"><h4>점포 자본 정산<\/h4>'/.test(l),'the settlement block is unchanged but for the Mastery reach (v2.13.21)');
 });
 
 /* UI-Q-v29-37 (UI_UX §END — REPLAY NUDGE, User 2026-09-26, v2.9.4): show, never assign - one line at most, only when the
@@ -2016,7 +2016,7 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
   assert.ok(/\.end-tape \.replay\{[^}]*font:700 /.test(css),'and is bold');}
  assert.ok(r.indexOf("'점포 자본으로 새 장식을 구매할 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 (DAY '"),'a Decoration newly in reach comes before a best Day');
  const run=read('dist/systems/run.js');
- assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 구매할 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
+ assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 구매할 수 있다\.';/.test(r)&&/if\(st\?\.reachMastery\)return '점포 자본으로 직업 숙련을 구매할 수 있다\.';/.test(r)&&/const reachMastery=!!nextRank&&G\.Meta\.distinctBossClear\(this\.account\)>=nextRank\.bosses&&before<nextRank\.price&&nextRank\.price<=after;/.test(run),'an unowned price this settlement crossed, judged once at the settlement');
  assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
  /* User 2026-09-30: the best 총매출 is the third line, after the best Day, on the END receipt's own 총매출 */
  assert.ok(r.indexOf("'지금까지 가장 오래 버틴 점포다 (DAY '")<r.indexOf("'지금까지 가장 많이 판 점포다 (총매출 '"),'a best Day comes before a best 총매출');
@@ -2519,7 +2519,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* COPY_AUDIT §3-12 (User 2026-10-02): the DAY 3 HQ 구급키트 line is pinned exact too - it tells a gift that already
     arrived (what it is, once, what it does), not a pick, so it is the one mark that names an Item */
  const EXACT=['stats','destination','kit'],KIT=(steps.match(/\['kit','[^']+','([^']+)'\]/)||[])[1];
- assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.13.20.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
+ assert.ok(KIT&&KIT===read('design_ssot/COPY_AUDIT_APPROVED_v2.13.21.md').match(/## 3-12[\s\S]*?\n> (.+)/)?.[1],'the kit lesson is the §3-12 line verbatim');
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
@@ -2581,7 +2581,7 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
  // both Wallet surfaces read that chip; neither prints a bare n.money any more
  assert.ok(/class="npc-wallet'\+\(game\.run\.firstRun&&n\.lessonPayday===game\.run\.day\?' payday':''\)\+'">'\+walletChip\(n,true\)/.test(app),'the NPC vitals row uses it (the first Run\'s payday customer anchors its mark there)');
- assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.13.20.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
+ assert.ok(app.includes("['payday','.npc-wallet.payday','"+read('design_ssot/COPY_AUDIT_APPROVED_v2.13.21.md').match(/## 3-13[\s\S]*?\n> (.+)/)[1]+"']"),'the payday mark is the §3-13 line verbatim, on that wallet');
  assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
  assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
  // the two figures are printed side by side and never summed into one
@@ -2871,7 +2871,7 @@ test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>
 test('SA-Q36: the Decoration comparison shows only what the decision is made on',()=>{
  /* the real storePanel (with app.js's own btn / SLOT_COPY) for an account owning one sign, out of a Run and in one */
  const Meta=globalThis.Meta,a=Meta.fresh();Meta.addCapital(a,DATA.decorationBy.trainingSign.price);Meta.buyDecoration(a,'trainingSign');
- const panel=run=>render([constLine('btn'),constLine('SLOT_COPY'),fn('storePanel')],'storePanel()',{game:{account:a,run},Meta,D:DATA,E:globalThis.Art.esc,decoPending:null});
+ const panel=run=>render([constLine('btn'),constLine('SLOT_COPY'),fn('storePanel')],'storePanel()',{game:{account:a,run},Meta,D:DATA,E:globalThis.Art.esc,decoPending:null,storeView:'deco',masteryPending:false});
  const out=panel(null),inRun=panel({phase:'sell'}),row=(html,id)=>html.split('<div class="slot-option').find(r=>r.includes('data-id="'+id+'"')||r.includes('>'+DATA.decorationBy[id].name+'<'));
  // what stays: name, exact effect, price / ownership, equipped state
  for(const d of DATA.decorations){const r=row(out,d.id);
@@ -3227,7 +3227,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
   '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
   '판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.',
   '적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 3번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다.',
-  '영업이 끝날 때 총매출의 3%가 쌓인다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.',
+  '영업이 끝날 때 총매출의 3%가 쌓인다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식과 직업 숙련을 구매하는 데 쓴다.',
   '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.'])
   assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
  assert.ok(h.includes('상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.'),'the guide directs the player to the actual Item effects');
@@ -3426,7 +3426,8 @@ test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, d
  assert.ok(/\.p-prep \.deco-layer \.prep-slot\{pointer-events:auto;/.test(css),'the places take taps though the layer does not');
  assert.ok(/\.p-prep \.slot-empty\{display:block;width:100%;min-height:44px;/.test(css),'an empty place still has a 44 px target');
  // the Capital is a plate where the till will stand, never the till
- assert.ok(/<span class="store-capital capital-plate">/.test(p)&&!/class="till"/.test(p),'the Capital is a plate, not the till');
+ assert.ok(/<span class="store-capital capital-plate" role="button" tabindex="0" data-action="store-open"/.test(p)&&!/class="till"/.test(p),'the Capital is a plate, not the till - and (v2.13.21) it opens the store sheet');
+ assert.ok(/if\(\(ev\.key==='Enter'\|\|ev\.key===' '\)&&ev\.target\.matches\?\.\('\[role="button"\]\[data-action\]'\)\)/.test(app),'and answers the keyboard like a button');
  // the Action and the way back from the ending
  assert.ok(/\(fromEnd\?btn\('결과 다시 보기','prep-back','bare'\):''\)\+btn\('첫 점포지원 고르기','start','stamp'\)/.test(p),'the Action in the dock, and 결과 다시 보기 only from the ending');
  assert.ok(/const fromEnd=!!game\.run;/.test(p),'from the ending means a Run is still there');
@@ -3701,7 +3702,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
    assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+': 대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공. '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
    assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요, '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공',k+' short row');
    assert.deepEqual(Presentation.hazardParts(k,d),{need:'대응 '+need+' 필요',rate:Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공'},k+' two parts');}}
- assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.13.20.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
+ assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.13.21.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
  assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독: 대응 16 필요, 강인함\u00a03당\u00a0대응\u00a01\u00a0제공. 독 대응 상품이 막는다','the DAY 1 T1 example');
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');
