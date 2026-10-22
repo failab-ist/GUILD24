@@ -72,7 +72,7 @@ function endReveal(){const s=game.run;clearTimeout(endAt);
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
-let decoPending=null,decoFocus=null;
+let decoPending=null,decoFocus=null,storeView='deco',masteryPending=false;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
@@ -351,7 +351,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;masteryPending=false;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -2538,9 +2538,14 @@ function decoPlate(slot){const id=game.run?.loadout?.[slot];if(!id)return '';
  return '<span class="decoplate '+slot+'" role="img" aria-label="'+E(SLOT_COPY[slot]||slot)+' · '+E(d.name)+'">'+art+'</span>';}
 function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='end');
  const loadout=Meta.storeLoadout(a);
+ /* META §JOB MASTERY: the store sheet holds both things Store Capital buys - Decorations and Job Mastery - one view at a time */
+ const views='<div class="tabs store-views">'+[['deco','장식'],['mastery','직업 숙련 '+Meta.masteryRank(a)+' / '+D.masteryRanks.length]]
+  .map(([id,label])=>btn(label,'store-view',storeView===id?'small active':'small','data-id="'+id+'"')).join('')+'</div>';
+ if(storeView==='mastery')return masteryPanel(views,inRun);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+Meta.storeCapital(a).toLocaleString()+'</b>'
  +'<span class="sp">'+(inRun?'이번 점포의 장식은 고정됨.':'장식은 점포를 열기 전에 변경할 수 있습니다.')+'</span></p>'
+ +views
  +D.decorationSlots.map(slot=>{
    const options=D.decorations.filter(d=>d.slot===slot),active=loadout[slot];
    /* a stable handle so a Slot row elsewhere can open this panel already on that Slot */
@@ -2567,6 +2572,31 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
        +'<span class="smalltext deco-effect">'+E(d.effect)+'</span>'
        +'</div>';}).join('')
     +'</div>';}).join('')
+ +'</div>';}
+const MASTERY_STAT={combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신'};
+/* the two Stats a Job grows most - the ones Job Mastery raises */
+const masteryStats=j=>j.growth.map((v,i)=>[v,i]).sort((p,q)=>q[0]-p[0]).slice(0,2).map(([,i])=>i).sort().map(i=>['combat','survival','mobility','spirit'][i]);
+const masteryEffect=r=>r.level.length?r.level.map((p,i)=>Math.round(p*100)+'% 확률로 레벨 +'+(i+1)).join(', ')
+ :'주 능력치 2개 +'+r.stat;
+function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a),cap=Meta.storeCapital(a),beaten=Meta.distinctBossClear(a);
+ return '<div class="decoration-panel">'
+ +'<p class="smalltext">점포 자본 <b class="gold-text">'+cap.toLocaleString()+'</b>'
+ +'<span class="sp">숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.</span></p>'
+ +views
+ +'<p class="smalltext">주 능력치: '+D.jobs.map(j=>E(j.name)+' '+masteryStats(j).map(k=>MASTERY_STAT[k]).join('·')).join(', ')+'</p>'
+ +'<div class="slot"><h4>직업 숙련</h4>'
+ +D.masteryRanks.map((r,i)=>{const owned=i<rank,next=i===rank,open=beaten>=r.bosses;
+   const state=owned?'<span class="muted">보유</span>'
+    :!next?'<span class="muted">'+(open?(i)+'단 먼저':'마왕 '+r.bosses+'종<br>토벌 후')+'</span>'
+    :!open?'<span class="muted">마왕 '+r.bosses+'종<br>토벌 후</span>'
+    :inRun?'<span class="muted">'+r.price.toLocaleString()+' 자본</span>'
+    :masteryPending?'<div class="deco-confirm"><p class="smalltext">숙련 '+(i+1)+'단: '+r.price.toLocaleString()+' 자본을 씁니다. 남는 자본 '
+      +Math.max(0,cap-r.price).toLocaleString()+'.</p>'+btn('구매 확정','mastery-confirm','small active')+btn('취소','mastery-cancel','small')+'</div>'
+    :btn('구매 <small>'+r.price.toLocaleString()+' 자본</small>','mastery-buy','small',cap<r.price?'disabled':'');
+   return '<div class="slot-option'+(owned?' on':'')+(owned||next&&open?'':' locked')+'">'
+    +'<b class="deco-name">숙련 '+(i+1)+'단</b>'+state
+    +'<span class="smalltext deco-effect">'+E(masteryEffect(r))+'</span></div>';}).join('')
+ +'</div>'
  +'</div>';}
 function progressPanel(){const a=game.account;
  /* the grade, the total and the distinct count are already stated in the codex header
@@ -2657,7 +2687,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
     +ascNote(a)+'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
-   +'<span class="store-capital capital-plate"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
+   +'<span class="store-capital capital-plate" role="button" tabindex="0" data-action="store-mastery" aria-label="점포 자본 '+capital.toLocaleString()+', 직업 숙련 열기"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
   +'<div class="deco-layer">'+D.decorationSlots.map(place).join('')+'</div>'
  +'</div>'
  +'<div class="dock">'+(fromEnd?btn('결과 다시 보기','prep-back','bare'):'')+btn('첫 점포지원 고르기','start','stamp')+'</div></div>';}
@@ -2955,7 +2985,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
+ case'store-mastery':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='mastery';decoFocus=null;sound('ui');setModal('codex');break;
+ case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='deco';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
  /* Back to preparation. It only changes which panel is open: nothing is spent, no Decoration
     state is re-rolled, the Run is neither reseeded nor started. */
  case'store-return':preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;
@@ -2977,6 +3008,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
+ case'store-view':storeView=id;decoPending=null;masteryPending=false;sound('ui');renderModal();break;
+ case'mastery-buy':masteryPending=true;renderModal();break;
+ case'mastery-cancel':masteryPending=false;renderModal();break;
+ case'mastery-confirm':{if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 숙련을 살 수 없습니다.');
+  masteryPending=false;Meta.buyMastery(game.account);toast('직업 숙련 '+Meta.masteryRank(game.account)+'단 구매 (점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음)');sound('purchase');
+  game.save();renderModal();render();break;}
  case'deco-buy':{const back=keepDecoRow(el);decoPending=id;renderModal();back();break;}
  case'deco-cancel':{const back=keepDecoRow(el);decoPending=null;renderModal();back();break;}
  case'deco-confirm':case'deco-equip':case'deco-unequip':{const back=keepDecoRow(el);

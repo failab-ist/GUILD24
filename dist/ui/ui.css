@@ -2023,7 +2023,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal:has(.tabs) .slot-option>button:active{transform:none;background:#332e27;
  box-shadow:inset 0 0 0 2px #12100a,inset 0 3px 0 #221d18,inset 0 -5px 0 #6a6152,
   inset 3px 0 0 #12100a}
-.modal:has(.tabs) .slot-option>button[data-action="deco-buy"]{background:var(--yellow);color:var(--yellow-ink);
+.modal:has(.tabs) .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){background:var(--yellow);color:var(--yellow-ink);
  box-shadow:inset 0 0 0 2px var(--yellow-line),inset 0 3px 0 var(--yellow-lit),
   inset 0 -5px 0 var(--yellow-deep),inset 3px 0 0 var(--yellow-line)}
 /* UNAVAILABLE recedes, it does not shout: the key loses its depth and becomes a quiet sunken
@@ -2915,6 +2915,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* UI_UX §DECORATION DECISION SURFACE: name and key share the first row, the effect line takes the whole second row */
 .slot-option>.deco-name{grid-column:1;grid-row:1;min-width:0;min-height:48px;display:flex;align-items:center} /* the key's height, so the row holds while the inline confirmation stands in for the key */
 .slot-option>button,.slot-option>.muted{grid-column:2;grid-row:1}
+/* META §JOB MASTERY: a locked rank names its condition here; it wraps inside the card rather than running past its edge */
+.slot-option>span.muted{white-space:normal;word-break:keep-all}
+.p-prep .capital-plate[data-action]{cursor:pointer}
 .slot-option>.deco-effect{grid-column:1/-1;grid-row:2}
 .slot-option+.slot-option{margin-top:8px}
 /* equipped: the same construction, with the seam in gold - the state arrives on the edge the
@@ -2954,12 +2957,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* YELLOW. Acquiring the Decoration is the purchase on this card, so it is the one face that
    pops - and it pops inside the card, never across the screen. Equipping something already
    owned is a state change, not an acquisition, so it keeps the neutral key above. */
-.slot-option>button[data-action="deco-buy"],.deco-confirm [data-action="deco-confirm"]{
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]),.deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]){
  background:var(--yellow);color:var(--yellow-ink);
  box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-lit),
   inset 0 -6px 0 var(--yellow-deep),inset -5px 0 0 var(--yellow-deep)}
-.slot-option>button[data-action="deco-buy"]:hover{background:#f7d669}
-.slot-option>button[data-action="deco-buy"]:active{background:#dcb53c;
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):hover{background:#f7d669}
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):active{background:#dcb53c;
  box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-deep),
   inset 0 -6px 0 var(--yellow-lit),inset -5px 0 0 var(--yellow-deep)}
 /* UNAVAILABLE is not the same plane with the colour drained: the key loses its depth entirely
@@ -4207,10 +4210,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .slot-option>button:hover{background:#68442a}
 .modal.wood-frame .slot-option>button:active{transform:none;background:#4a301b;
  box-shadow:inset 3px 0 0 #140b06,inset 0 5px 0 #2c1a0d,inset 0 -6px 0 #8a5f3a,inset -5px 0 0 #2c1a0d}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"],.modal.wood-frame .deco-confirm [data-action="deco-confirm"]{
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]),.modal.wood-frame .deco-confirm :is([data-action="deco-confirm"],[data-action="mastery-confirm"]){
  background:#dba93a;color:#2b1806;box-shadow:inset 3px 0 0 #17130d,inset 0 5px 0 #f7d77c,inset 0 -6px 0 #9a6212,inset -5px 0 0 #9a6212}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"]:hover{background:#e6b84d}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"]:active{background:#c4932c;
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):hover{background:#e6b84d}
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):active{background:#c4932c;
  box-shadow:inset 3px 0 0 #17130d,inset 0 5px 0 #9a6212,inset 0 -6px 0 #f7d77c,inset -5px 0 0 #9a6212}
 .modal.wood-frame .slot-option>button:disabled{background:#1b1009;color:#a8946f;box-shadow:inset 3px 0 0 #0b0907,inset 0 3px 0 #00000080,inset 0 -2px 0 #ffffff08}
 

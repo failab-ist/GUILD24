@@ -52,6 +52,15 @@ function buyDecoration(a,id){
  if(!fits(d.slot,st.loadout[d.slot]))st.loadout[d.slot]=id;
  return d;
 }
+/* META §JOB MASTERY: the rank bought so far (0 = none) and the one purchase that raises it by one. */
+const masteryRank=a=>Math.max(0,Math.min(D.masteryRanks.length,store(a).mastery||0));
+function buyMastery(a){
+ const st=store(a),rank=masteryRank(a),next=D.masteryRanks[rank];
+ if(!next)throw Error('이미 모든 단계를 구매했습니다.');
+ if(distinctBossClear(a)<next.bosses)throw Error('서로 다른 마왕 '+next.bosses+'종을 토벌해야 합니다.');
+ if(st.capital<next.price)throw Error('점포 자본이 부족합니다.');
+ st.capital-=next.price;st.mastery=rank+1;return next;
+}
 function equipDecoration(a,slot,id){
  const st=store(a);
  if(!D.decorationSlots.includes(slot))throw Error('없는 자리입니다.');
@@ -227,5 +236,5 @@ const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
- ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
+ ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,masteryRank,buyMastery,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);
