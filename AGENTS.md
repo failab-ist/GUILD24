@@ -316,8 +316,8 @@ After User-approved Design change:
 밸런스를 점검하거나 바꿀 때는 먼저 `BALANCE_CHECK.md`(있는 자료부터 보기 · 물은 것만 재기 · 읽기 · 보고 · 넣기 순서)를 읽는다(User 2026-10-21).
 
 ```text
-node tools/measure-v2100.cjs --policies investor --traj 200 --fresh 1000 --out off.json
-G24_BOT_ORACLE=1 node tools/measure-v2100.cjs --policies investor --traj 200 --fresh 1000 --out on.json
+node tools/measure-v2100.cjs --policies investor --traj 200 --fresh 1000 --runs 15 --out off.json
+G24_BOT_ORACLE=1 node tools/measure-v2100.cjs --policies investor --traj 200 --fresh 1000 --runs 15 --out on.json
 ```
 
 - 기본 봇(User 2026-10-21): **investor 하나를 오라클 끔 · 켬으로 두 번** 잰다. 두 값을 같이 보고한다.
@@ -333,7 +333,9 @@ G24_BOT_ORACLE=1 node tools/measure-v2100.cjs --policies investor --traj 200 --f
   셋째 줄(`└ 준비`)에 상품 들고 간 원정 대 맨손 원정의 성공 · 사망, 상품이 결과를 바꾼 비율(그중 사망을 막은 비율), 상위 4명이 받은 상품 몫(User 2026-10-09).
   넷째 줄에 상품이 결과를 바꾼 비율을 초(D1~7) · 중(D8~20) · 후(D21~29)로, 전체와 가망 있는 원정(맨손 힘 / 게이트 요구 0.8 이상)만 따로 적는다(User 2026-10-10). 방문 지갑 · 점포지원 궤적은 `--out` JSON에 남는다.
   다섯째 줄(`└ 잔액`)에 D5 · D10 · D15 · D20 · D25 마감 잔액의 중앙, 그 날까지 간 런의 비율, 1500G · 2000G 이상 비율을 적는다(User 2026-10-15). 날짜별 잔액은 JSON의 `bal`에도 있다.
-- 규모: 봇마다(오라클 끔 · 켬) 프레시 계정 1000판, 궤적 200 × 10런(장식 none / economy / survival / operation). 균형 봇은 기준 밸런스 평가에서 제외한다(User 2026-10-06).
+- 규모: 봇마다(오라클 끔 · 켬) 프레시 계정 1000판, 궤적 200 × 15런(장식 none / economy / survival / operation).
+  궤적은 15런으로 본다(User 2026-10-22): 10런에는 장식이 3~3.5개뿐이라 1500G 장식이 거의 안 쓰인다(`reports/v2100-measure/deco-support-20261022/`).
+  v2.13.21부터 사다리에 직업 숙련도 넣는다. `purchaseOrder`의 `'mastery'`가 다음 숙련 단계이고, 숙련 · 장식을 모두 싼 것부터 산다(같은 폴더의 `mv-loo.cjs`). 기본 도구의 길 목록은 아직 장식만이다. 균형 봇은 기준 밸런스 평가에서 제외한다(User 2026-10-06).
   investor는 DAY 1부터 매일 숨은 성장력까지 보고 핵심 4명 · 후보 3명을 다시 고르고(User 2026-10-11) 가방 조합을 결과 기대값으로 고르고, 부상 손님 몫 구급키트를 들여놓고, 부상 · 사망이 쌓이면 부상 대응 점포지원을 먼저 고르고, DAY 25부터 돈이 남으면 리롤하며 최종 파티에 줄 템을 모아 두는 봇이다(User 2026-10-09, expert 자리 교체).
   #268(User 2026-10-21)부터 investor는 손님마다 대응템 또는 그 위험을 받쳐 주는 능력치 음식 · 음료로 채워 섞어 사고, 둘 다 없을 때만 리롤한다. 발주 하한은 0G(재고 여유 +4)이고, 바가지는 기대값(성공 단골도 −8, 거절 −2와 정가 대체 판매)으로 고른다. 근거 `reports/v2100-measure/bot-human-20261021/`.
   점포지원은 등급 + 가진 지원과 겹치는 태그로 고르고, 사고 나서 500 밑이면 넘긴다(User 2026-10-11).
