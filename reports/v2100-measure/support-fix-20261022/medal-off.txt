@@ -11,3 +11,4 @@ B  교환 0판   고른 영웅 logisticsHQ 417 · firstAidDesk 281 · opsRoom 16
 B2 교환 580판 고른 영웅 logisticsHQ 861 · firstAidDesk 71 · opsRoom 36 · lifetime 23 · fresh24 6
 B3 교환 582판 고른 영웅 logisticsHQ 863 · firstAidDesk 71 · opsRoom 36 · lifetime 23 · fresh24 6
 #296 전 봇: 물류가 나온 417판 중 135판에서 응급 처치대를 고름(B-A clear +0.7 · D30 +1.1, 물류 강제 시 +2.1 · +4.5)
+정정: 사람 세이브 훈장 첫 창 3번 모두 교환 없음(거점점·작전실·거점점) → #rr=1은 위쪽 값, 판정 보류.
