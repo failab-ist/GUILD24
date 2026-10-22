@@ -1140,11 +1140,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const led=fn('ledger');
  assert.ok(!/Meta\.grade\(a\)|Meta\.totalJobMastery\(a\)/.test(bannerFn+led),
   'the ending never prints a standing total that this Run did not move');
- assert.ok(led.includes('s.metaGain')&&/gain\?\.jobs/.test(led),'it reports the recorded before/after instead');
- assert.ok(/g\.from\+' → '\+g\.to/.test(led),'as the move each one made');
+ assert.ok(led.includes('s.metaGain')&&/gain\?\.boss\?row\('새로 토벌한 마왕'/.test(led),'it reports the Boss this clear newly added instead (v2.13.21)');
  const metaSrc=read('dist/systems/meta.js');
  assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
   'a Job already credited for this Boss moved nothing and is not listed');
+ assert.ok(/boss:!wasCleared&&bossCleared\(a,run\.bossId\)\?run\.bossId:null,/.test(metaSrc),'a Boss already beaten by any Job is not new');
  assert.ok(/if\(!win\)return \[\];/.test(metaSrc),'a failure records no Job x Boss gain at all');
  assert.ok(/run\.metaGain=null;/.test(metaSrc),'and no gain line for the result screen');
  /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Run end credits no Achievement at all, and
@@ -1159,8 +1159,8 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(cx.includes('progressPanel()'),'and it renders in the same grid as every other tab');
  const panel=fn('progressPanel'),screen=cx+panel;
  for(const [what,re] of [['the Store Capital',/Meta\.storeCapital\(a\)/],
-                         ['each Job mastery',/Meta\.jobMastery\(a,j\.id\)/],
-                         ['the Job x Boss grid',/a\.matrix\?\.\[j\.id\]\?\.\[b\.id\]/],
+                         ['the bought Job Mastery rank',/Meta\.masteryRank\(a\)/],
+                         ['each Boss beaten or not',/Meta\.bossCleared\(a,b\.id\)/],
                          ['distinct Boss clears',/Meta\.distinctBossClear\(a\)/]])
   assert.ok(re.test(screen),'the codex shows '+what);
  // ...and the three the header already states are not repeated inside the panel

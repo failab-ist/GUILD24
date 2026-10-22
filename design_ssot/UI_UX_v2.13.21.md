@@ -1431,7 +1431,7 @@ Store Capital / Decoration management and run-end settlement stay as META_v2.13.
 
 ## META UI
 
-The progress table is the Job × Boss record (column `토벌`, n / 7) and says Job Mastery is bought with Store Capital (COPY §10-5). Retired Store Supports keep their description but read 현재 후보로 나오지 않음 (COPY §10-6).
+The progress panel shows one row of the seven Bosses, beaten or not (v2.13.21: the per-Job table left the screen; the Job × Boss record stays in the save), and says Job Mastery is bought with Store Capital (COPY §10-5). The ending's ledger names only a Boss newly added to the distinct count: `새로 토벌한 마왕 {name}`. Retired Store Supports keep their description but read 현재 후보로 나오지 않음 (COPY §10-6).
 Meta gameplay -> META_v2.13.21.md. Keep distinct: Job × Boss clear record (0..7 per Job, Total 0..42) · Job Mastery rank 0..5 (bought) ·
 The product codex distinguishes permanent account unlock from each Run's DAY-based offer eligibility (META §D10 / D14 PRODUCT UNLOCK — EXACT, COPY_AUDIT §8-9).
 Distinct Boss Clear 0..7 · approved 1/3/6 unlock milestones; no legacy Global Meta XP as progression. Monster Knowledge has no

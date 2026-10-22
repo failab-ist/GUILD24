@@ -2295,7 +2295,8 @@ function endHeadline(){const s=game.run;
    reachable from the store menu at any time. */
 function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const row=(label,value)=>'<div class="row"><span>'+label+'</span><b>'+value+'</b></div>';
- const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 마왕 토벌',g.from+' → '+g.to)).join('');
+ /* v2.13.21: per-Job counts no longer matter; the ending names the Boss newly added to the distinct count */
+ const moved=gain?.boss?row('새로 토벌한 마왕',E(D.bossBy[gain.boss]?.name||gain.boss)):'';
  /* UI_UX §END — REPLAY NUDGE (User 2026-09-26, v2.9.4): 본사 해금 lists everything this Run opened - the distinct-Boss
     unlocks Meta.finish credited and the D10 / D14 products the Run recorded as they opened. */
  const openedNames=[...(s.unlocked||[]),...(s.dayUnlocked||[])];
@@ -2607,20 +2608,14 @@ function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a)
  +'</div>'
  +'</div>';}
 function progressPanel(){const a=game.account;
- /* the grade, the total and the distinct count are already stated in the codex header
-    directly above this, so the panel does not say them a second time. */
+ /* v2.13.21: the per-Job table is retired from view (the matrix stays in the save); one row of the seven Bosses. The distinct
+    count is already stated in the codex header directly above this, so the panel does not say it a second time. */
  return '<div class="progress-panel">'
- +'<p class="smalltext">서로 다른 마왕을 토벌하면, 출전한 직업에 토벌 기록이 남는다. 직업 숙련은 점포 자본으로 구매한다.</p>'
- +'<table class="matrix"><thead><tr><th scope="col">직업</th>'
- +D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')
- +'<th scope="col">토벌</th></tr></thead><tbody>'
- +D.jobs.map(j=>{const locked=!Meta.jobUnlocked(a,j);
-   return '<tr'+(locked?' class="locked"':'')+'><th scope="row">'+E(j.name)+'</th>'
-    +D.bosses.map(b=>{const done=!!a.matrix?.[j.id]?.[b.id];
-      return '<td class="'+(done?'done':'open')+'"><span aria-label="'+E(b.name)+' '
-       +(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
-    +'<td class="tally">'+Meta.jobMastery(a,j.id)+' / 7</td></tr>';}).join('')
- +'</tbody></table>'
+ +'<p class="smalltext">서로 다른 마왕을 토벌하면 본사 해금이 열린다. 직업 숙련은 점포 자본으로 구매한다.</p>'
+ +'<table class="matrix"><thead><tr>'+D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')+'</tr></thead><tbody><tr>'
+ +D.bosses.map(b=>{const done=Meta.bossCleared(a,b.id);
+   return '<td class="'+(done?'done':'open')+'"><span aria-label="'+E(b.name)+' '+(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
+ +'</tr></tbody></table>'
  +unlockBoard()+'</div>';}
 function unlockBoard(){const {done,next}=unlockLists();
  // something already open does not need a counter saying it is open
