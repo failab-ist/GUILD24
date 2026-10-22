@@ -555,7 +555,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  /* 포만감 was a third named effect in two Relic descriptions. There is no such channel.
     Under RELIC_v2.7 these two move the native Core Stat and leave Supply alone, so the
     description has to say the channel it moves and the ones it does not. */
- for(const id of ['kitchen','fresh24']){
+ for(const id of ['fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
   assert.ok(/올려 주는 능력치가 \d+% 더 오른다/.test(DATA.relicBy[id].description),id+' names the channel it does move (COPY_AUDIT §11-10 / §11-25 wording, User 2026-10-04)');
   assert.ok(/피로 회복·위험 대응은 그대로/.test(DATA.relicBy[id].description)&&!/피로 회복 \+/.test(DATA.relicBy[id].description),
@@ -625,11 +625,11 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['stamp','단골 스탬프 기계',130,'손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4).'],
   ['member','회원 관리대장',130,'단골도가 손님이 다시 올 가능성에 주는 효과가 2배가 된다.'],
   ['rareContract','희귀상품 입고 계약',140,'발주 후보에 희귀 이상 상품이 1.5배 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 10%를 더 받는다.'],
-  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 50%만 내고 가게는 전액을 받는다.'],
+  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 60%만 내고 가게는 전액을 받는다.'],
   ['hazardBoard','원정 위험 게시판',60,'오늘 게이트 위험에 맞는 상품이 발주 후보에 1.5배 자주 나온다.'],
   ['fieldRepair','야전 정비대',80,'가게에서 판 상품의 위험 대응 수치가 40% 높아진다.'],
   ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-  ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 15% 오른다.'],
+  ['kitchen','즉석식품 코너',200,'음식의 피로 회복이 2, 음료는 1 더 오른다. 대신 기본 운영비가 5% 오른다.'],
   ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
   ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다(하루 최대 60G).'],
@@ -652,7 +652,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 하루 기본 운영비가 30G 적어진다.'],
   /* v2.9.11 (User 2026-09-28): COPY_AUDIT §11-30b / §11-30c */
   ['fieldStretcher','야전 들것',80,'부상당한 손님의 투력 감소 8% (기존 15%).'],
-  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 20% 확률로 부상이 낫는다 (중상은 제외).'],
+  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 25% 확률로 부상이 낫는다 (중상은 제외).'],
   /* User 2026-10-04: COPY_AUDIT §11-30d / §11-30e / §11-30f */
   ['rumorBoard','소문 수집 게시판',60,'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
   ['postcard','단골 추천 엽서함',80,'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 5 오른다.'],
@@ -694,7 +694,7 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
   thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 100G씩 늘어난다',
   guildShelf:'매일 아침 50% 확률로 그날 손님이 1명 더 온다',
   trainingSign:'처음 찾아오는 모험가는 30% 확률로 레벨 +1로 온다',
-  infirmaryPlaque:'부상당한 손님이 가게에 오면 25% 확률로 부상이 낫는다 (중상은 제외)',
+  infirmaryPlaque:'부상당한 손님이 가게에 오면 30% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
   aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +3%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%) (마왕성 제외)',
   /* 운영형 (User 2026-10-04) */

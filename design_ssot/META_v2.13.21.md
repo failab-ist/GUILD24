@@ -470,7 +470,7 @@ every adventurer created while it is worn: 30% chance of spawn Level +1
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 25% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 30% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE

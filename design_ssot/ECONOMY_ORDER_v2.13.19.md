@@ -425,7 +425,7 @@ The most one ORDER offer lets the store stock, rolled when the offer is made:
 | Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 
-Store Support that adds supply quantity (`RELIC_v2.13.20.md`) adds on top, unchanged.
+Store Support that adds supply quantity (`RELIC_v2.13.21.md`) adds on top, unchanged.
 
 ### ORDER Rare+ pity — exact
 
@@ -520,7 +520,7 @@ Confirmed Inventory is never removed by Reroll.
 `발주 교환권` may modify the base reroll only as defined in RELIC.
 Its exact modifier model is owned by RELIC and must not be inferred here.
 
-Canonical Relic rule -> `RELIC_v2.13.20.md`
+Canonical Relic rule -> `RELIC_v2.13.21.md`
 
 ## NEXT-DAY FORECAST — RETIRED
 
@@ -594,7 +594,7 @@ Economic choice: current inventory vs NPC investment through pricing vs store in
 
 D30: final Item preparation vs last Relic must be a meaningful final Gold Sink decision.
 
-Canonical Relic pricing/window -> `RELIC_v2.13.20.md`
+Canonical Relic pricing/window -> `RELIC_v2.13.21.md`
 
 ## GREAT SUCCESS STORE GOLD
 
@@ -1298,6 +1298,6 @@ Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss/GREED accounting -> `BOSS_v2.8.0.md`
 npc wallet/loyalty -> `NPC_TRAIT_v2.13.21.md`
-relic costs/build -> `RELIC_v2.13.20.md`
+relic costs/build -> `RELIC_v2.13.21.md`
 closing settlement -> `NIGHT_CLOSING_v2.8.0.md`
 run starting resources/inventory -> `CORE_RUN_v2.8.0.md`

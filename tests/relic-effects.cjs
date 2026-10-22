@@ -40,16 +40,23 @@ test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
     that was the v2.5 shape this assertion was written against - so what is measured is the
     Core Stat the Item actually carries, with the Hazard Counter and the Supply held fixed. */
  const g=fresh(),n={...g.run.npcs[0],traits:[],pack:['dragonramen']},d=g.makeDungeon('snow',2),base=Dungeon.prepare(n,d).effects;
- for(const id of ['kitchen','fresh24']){const e=Dungeon.prepare(n,d,[id]).effects;
-  assert.ok(e.survival>base.survival,id+' raises the Food native Core Stat');
-  assert.equal(e.cold,base.cold,id+' does not touch the Hazard Counter');
-  assert.equal(e.supply,base.supply,id+' does not touch Supply');}
+ {const e=Dungeon.prepare(n,d,['fresh24']).effects;
+  assert.ok(e.survival>base.survival,'fresh24 raises the Food native Core Stat');
+  assert.equal(e.cold,base.cold,'fresh24 does not touch the Hazard Counter');
+  assert.equal(e.supply,base.supply,'fresh24 does not touch Supply');}
+ /* RELIC 10 즉석식품 코너 (User 2026-10-22): Food Supply +2, Drink Supply +1, nothing else */
+ {const e=Dungeon.prepare(n,d,['kitchen']).effects;
+  assert.equal(e.survival,base.survival,'kitchen leaves the native Core Stat');
+  assert.equal(e.cold,base.cold,'kitchen does not touch the Hazard Counter');
+  assert.equal(e.supply,base.supply+2,'kitchen adds 2 Supply to a Food');
+  const drink={...n,pack:['water']},b2=Dungeon.prepare(drink,d).effects,k2=Dungeon.prepare(drink,d,['kitchen']).effects;
+  assert.equal(k2.supply,b2.supply+1,'and 1 to a Drink');assert.equal(k2.survival,b2.survival);}
  const it=DATA.itemBy.guildlunch;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.equal(Relics.shelf(g,it),f,'only 대형 냉장고 extends the shelf');assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
 });
-test('보증 진열대와 묶음혜택이 겹쳐도 손님은 판매가의 25%를 낸다(0G가 되지 않는다)',()=>{
+test('보증 진열대와 묶음혜택이 겹쳐도 손님은 판매가의 30%를 낸다(0G가 되지 않는다)',()=>{
  const g=fresh(),n=g.run.npcs[0],it={...DATA.itemBy.energy,sell:190};n.traits=[];n.money=999;n.loyalty=80;n.history=[{day:g.run.day,paid:50}];
  g.run.facilities=['guarantee','memberBundle'];const q=g.interest(n,it,'overcharge');
- assert.equal(q.price,285);assert.equal(q.guarantee,143);assert.equal(q.debit,71);
+ assert.equal(q.price,285);assert.equal(q.guarantee,114);assert.equal(q.debit,86);
  g.run.facilities=['memberBundle'];assert.equal(g.interest(n,it,'overcharge').debit,143,'묶음혜택만이면 반값');
 });
 test('premium guarantee obeys wallet, daily limit and never guarantees acceptance',()=>{
@@ -245,10 +252,10 @@ test('RELIC 31 야전 들것: an ordinary Injury costs 투력 8% instead of 15%,
  assert.ok(!DATA.relicD30NoEffect.includes('fieldStretcher'),'the D30 Final reads preparation too, so it stays D30-eligible');
 });
 
-test('RELIC 32 응급 처치대: an injured arrival recovers at 20%, only while owned, and says so',()=>{
+test('RELIC 32 응급 처치대: an injured arrival recovers at 25%, only while owned, and says so',()=>{
  const run=(fac,seed)=>{const g=fresh(seed),s=g.run,n=s.npcs[0];n.traits=[];n.injury=1;n.status='부상';s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n;};
  let healed=0;const N=4000;for(let i=0;i<N;i++){const n=run(['firstAidDesk'],'aid-'+i);if(n.injury===0){healed++;assert.equal(n.healedBy,'firstAidDesk');assert.equal(n.status,'건강');}}
- assert.ok(Math.abs(healed/N-.20)<.025,'about 20% of injured arrivals: '+(healed/N).toFixed(3));
+ assert.ok(Math.abs(healed/N-.25)<.025,'about 25% of injured arrivals: '+(healed/N).toFixed(3));
  for(let i=0;i<200;i++)assert.equal(run([],'aid-'+i).injury,1,'without it nothing heals at the door');
  assert.equal(DATA.relicBy.firstAidDesk.kind,'keystone');assert.deepEqual(DATA.relicBy.firstAidDesk.tags,['expedition']);
  assert.equal(DATA.relicBy.firstAidDesk.price,300);
@@ -377,7 +384,7 @@ test('REL §23: 왕도 프리미엄 인증 - 바가지 intent +10%p and base ope
  assert.equal(g.interest(n,it,'full').chance,(s.facilities=[],g.interest(n,it,'full').chance),'정가 is untouched');
  const base=g.overheadBase(15),cost=f=>g.expectedOperatingCost({day:15,facilities:f,event:null});
  assert.equal(cost(['royalCert']),Math.round(base*1.10/10)*10,'operating cost +10% of overheadBase');
- assert.equal(cost(['royalCert','kitchen']),Math.round(base*1.25/10)*10,'with 즉석식품 코너: the two shares add');
+ assert.equal(cost(['royalCert','kitchen']),Math.round(base*1.15/10)*10,'with 즉석식품 코너: the two shares add');
  assert.equal(cost(['royalCert','hub']),Math.round(base*1.10/10)*10,'지역 거점점 계약 adds no share (User 2026-10-19)');
  assert.equal(cost([]),Math.round(base/10)*10,'without it, unchanged');
 });
@@ -423,27 +430,27 @@ function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999,newTo
  assert.equal(g.sell(s.inventory.at(-1).id,mode),true,itemId+' sale was accepted');
  return {g,s,n,store:s.money-before.store,paid:before.wallet-n.money,last:n.history.at(-1)};
 }
-test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 50% of it',()=>{
+test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 40% of it',()=>{
  const g=fresh('guarantee-charged'),n=g.run.npcs[0];n.traits=[];n.money=9999;g.run.facilities=['guarantee'];
  const bar=DATA.itemBy.lunchbox,premium=DATA.itemBy.guildlunch;           // list 180 / 330
  const over=g.interest(n,bar,'overcharge');                          // charged 270 on a 180 list price
- assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.5),'a 150% sale over 200G is covered, 50% of charged');
- assert.equal(over.debit,270-135);
+ assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.4),'a 150% sale over 200G is covered, 40% of charged');
+ assert.equal(over.debit,270-108);
  assert.equal(g.interest(n,bar,'full').guarantee,0,'180G charged is under the threshold');
  // a 200G list price lands exactly on the threshold, which the >= check covers
- assert.equal(g.interest(n,{...bar,sell:200},'full').guarantee,Math.round(200*.5),'200G charged reaches the threshold (>=)');
+ assert.equal(g.interest(n,{...bar,sell:200},'full').guarantee,Math.round(200*.4),'200G charged reaches the threshold (>=)');
  assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 165G is not covered');
- assert.equal(g.interest(n,premium,'full').guarantee,Math.round(330*.5));
+ assert.equal(g.interest(n,premium,'full').guarantee,Math.round(330*.4));
  const r=sellOnce(['guarantee'],'overcharge','lunchbox');
- assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,135,'the customer pays 50%');
+ assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,162,'the customer pays 60%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
-test('즉석식품 코너 takes overheadBase +15% (User 2026-10-19), added to 왕도 인증\'s 10%, never compounded',()=>{
+test('즉석식품 코너 takes overheadBase +5% (User 2026-10-22), added to 왕도 인증\'s 10%, never compounded',()=>{
  const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','royalCert']);
  const b=base.g.overheadBase(),charged=x=>Math.round((b+x)/10)*10;
- assert.equal(DATA.relicParams.kitchen.overheadRate,.15);
- assert.equal(kitchen.g.run.daily.operating,charged(b*.15),'kitchen takes 15% of the base');
- assert.equal(both.g.run.daily.operating,charged(b*.25),'with 왕도 인증: 15% + 10% of the same base');
+ assert.equal(DATA.relicParams.kitchen.overheadRate,.05);
+ assert.equal(kitchen.g.run.daily.operating,charged(b*.05),'kitchen takes 5% of the base');
+ assert.equal(both.g.run.daily.operating,charged(b*.15),'with 왕도 인증: 5% + 10% of the same base');
 });
 test('원정 도시락 코너: Food/Drink ORDER price x1.15 (User 2026-10-04), with 24시간 신선체계 x1.15 too; other Items untouched',()=>{
  const g=fresh('meal-price'),s=g.run;
@@ -632,19 +639,19 @@ test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime trut
 test('운영비 가산은 구입 당일부터 합산하며 운영 효율 매뉴얼은 다음 날부터',()=>{
  const g=fresh('support-overhead-timing'),s=g.run;Object.assign(s,{day:5,phase:'order',npcs:[],queue:[],team:[],cursor:0,facilities:[],dayFacilities:[],money:5000,offers:[],cart:{},event:null});
  assert.equal(g.expectedOperatingCost(),200,'D5 base204 rounds to200');
- const ids=['kitchen','royalCert'],prices=[200,320],want=[230,260];
+ const ids=['kitchen','royalCert'],prices=[200,320],want=[210,230];
  for(let i=0;i<ids.length;i++){
   s.relicWindow={milestoneDay:5,candidateIds:[ids[i]],candidatePrices:[prices[i]],purchased:null,expiryDay:10,focusedRevealSeen:true};
-  g.buyRelic(ids[i]);assert.equal(g.expectedOperatingCost(),want[i],ids[i]+' adds its share of204 on acquisition Day (kitchen 15%, 왕도 인증 10%)');
+  g.buyRelic(ids[i]);assert.equal(g.expectedOperatingCost(),want[i],ids[i]+' adds its share of204 on acquisition Day (kitchen 5%, 왕도 인증 10%)');
   assert.deepEqual(s.dayFacilities,[],'purchase does not rewrite the morning snapshot');
  }
  assert.equal(g.expectedOperatingCost({facilities:[],event:null}),200,'explicit modifier set is preserved');
- s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),260,'same-Day efficiency remains deferred');
- assert.equal(g.tomorrowOperatingCost(),230,'D6:205*1.25-30=226 rounds to230');
- assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),310,'flat Event +50 is not multiplied (204*1.25+50=305)');
+ s.facilities.push('efficiency');assert.equal(g.expectedOperatingCost(),230,'same-Day efficiency remains deferred');
+ assert.equal(g.tomorrowOperatingCost(),210,'D6:205*1.15-30=206 rounds to210');
+ assert.equal(g.expectedOperatingCost({event:{effects:{overheadAdd:50}}}),280,'flat Event +50 is not multiplied (204*1.15+50=285)');
  assert.equal(g.expectedOperatingCost({event:{effects:{overheadFree:true,overheadAdd:50}}}),0,'operating-free Event overrides owned surcharges');
  const saved=Save.import(Save.export(g.account,s));const restored=new Game(saved.account,saved.run);restored.autosave=false;
- assert.equal(restored.expectedOperatingCost(),260,'owned/dayFacilities timing survives Save/Load');
+ assert.equal(restored.expectedOperatingCost(),230,'owned/dayFacilities timing survives Save/Load');
 });
 
 /* RELIC §CANDIDATE RULES (User 2026-10-10): the tag steps are gone; the pick inside a grade is uniform. */

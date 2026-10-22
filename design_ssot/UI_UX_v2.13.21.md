@@ -1002,7 +1002,7 @@ the paper's edge. All three D5 cards still fit at 1280×880.
 Owned Relic Quick View — Morning=YES, Order=YES, Sale=YES, readOnly=YES: name + actual effect/condition; a condition-type
 support adds one runtime status line (RELIC §QUICK VIEW STATUS LINE; lines COPY_AUDIT §11-32); no HUD, badge or verdict word;
 no purchase/defer/timing change during Sale. A Relic reads as a Run-build choice, not a settings menu. Authoritative ->
-RELIC_v2.13.20.md.
+RELIC_v2.13.21.md.
 
 ### STORE SUPPORT OWNED REFERENCE
 
@@ -3322,7 +3322,7 @@ FAIL: the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `�
 
 SETUP: the DAY 0 Store Support takeover and the owned-Relic modal on a Run that owns several Store Supports, at 360 and 1280.
 PASS: all thirty card bodies match `COPY_AUDIT_APPROVED_v2.13.21.md` §11-1 … §11-30 verbatim (effect first, condition after ` · `,
-no HQ-accounting clause); values and effects match RELIC_v2.13.20.md.
+no HQ-accounting clause); values and effects match RELIC_v2.13.21.md.
 FAIL: a body that is not the §11 line.
 
 #### UI-Q-v29-16 — NO SECOND OWNED-RELIC BLOCK IN SALE
@@ -3611,7 +3611,7 @@ sale -> SALE_v2.8.0.md
 night/closing / Night result -> NIGHT_CLOSING_v2.8.0.md
 npc presentation -> NPC_TRAIT_v2.13.21.md
 item info -> ITEM_v2.8.0.md
-relic choice -> RELIC_v2.13.20.md
+relic choice -> RELIC_v2.13.21.md
 forecast / Fatigue / Supply -> DUNGEON_HAZARD_v2.13.19.md
 event reveal -> EVENT_v2.8.0.md
 final expedition / Final preparation -> FINAL_EXPEDITION_v2.8.0.md

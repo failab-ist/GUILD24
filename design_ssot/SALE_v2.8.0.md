@@ -459,7 +459,7 @@ Relic effects, other canonical visible systems.
 
 Hidden Job-based purchase bonus=NO
 
-The acceptance floor for an accessible-mode offer reads 관련 준비 (a direct Counter for one of the customer's Gate Hazards, or the Stat that Hazard presses), one owner: `RELIC_v2.13.20.md` §COUNTER JUDGEMENT.
+The acceptance floor for an accessible-mode offer reads 관련 준비 (a direct Counter for one of the customer's Gate Hazards, or the Stat that Hazard presses), one owner: `RELIC_v2.13.21.md` §COUNTER JUDGEMENT.
 
 Exact purchase probability=HIDDEN
 
