@@ -91,6 +91,18 @@ and this table is their commit record.
   - Flavor: 왕도 바나나우유, 농축 해독제, 중화 탄산수, 일회용 방수망토 (COPY_AUDIT §12-3 / §12-4 follow).
   - Item art only: 생수 (slim PET bottle), 쿨링 이온음료 (orange sports bottle, so it no longer reads like 생수 or the water-blue Fire Counter), 캔커피 (short can with a coffee bean), 에너지드링크 (slim can), 농축 해독제 (brown recovery-drink bottle), 중화 탄산수 (soda bottle), 왕도 바나나우유 (green-lidded jar).
   - The 고급 Drink slot stays 에너지드링크 only (the Tier I Fear / Toughness Stat routes are already 생수 and 용사의 곡주).
+- Store Support / Decoration values by direction (User 2026-10-22, no version bump: they ship together in 3.0.0). Judged by
+  each item's own direction (money, survival, combat) against the next price or grade, mid-game accounts (Job Mastery 2~3,
+  8 Runs played), investor oracle off, 1000 Runs each with one roll stream per Run; logs `reports/v2100-measure/support-fix-20261022/`:
+  - META 의무실 현판: heal on arrival 25% → 30% (D20 +9.6 → +12.2, D30 +5.8 → +8.0; 구급품 진열장 +12.1 / +7.3, 추모 방명록 +16.6 / +12.2).
+  - RELIC 응급 처치대: 20% → 25% (D20 +6.0 → +8.7, D30 +4.2 → +5.6; 길드 구조대 +12.7 / +5.9). Both owned roll apart, 47.5%
+    together (D20 +15.2, D30 +11.4: about one 추모 방명록).
+  - RELIC 길드 보증 진열대: HQ covers 50% → 40% of the charged price (D15 Gold +407 → +290; 프리미엄 멤버십 +379), so the Common
+    no longer out-earns the Rares. With 단골 묶음혜택 the customer pays 30% (was 25%).
+  - RELIC 즉석식품 코너 rework: Food / Drink native Stat +25% → Supply (피로 회복) +2 per Food, +1 per Drink, flat; operating cost
+    +15% → +5%. It did 24시간 신선체계's job at a lower grade (D20 +4.0 vs +4.3). Supply with the old +15% cost lost Gold
+    (D15 −155G, D20 −4.1), +5% keeps it a performance pick paid in Gold: clear +3.1, D15 −59G (was +2.8 / −71G).
+    24시간 신선체계 stays at +30% (35% measured clear +3.3 → +4.3, within noise; held after the old 「too strong」).
 
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 

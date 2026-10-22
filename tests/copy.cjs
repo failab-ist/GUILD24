@@ -555,7 +555,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  /* 포만감 was a third named effect in two Relic descriptions. There is no such channel.
     Under RELIC_v2.7 these two move the native Core Stat and leave Supply alone, so the
     description has to say the channel it moves and the ones it does not. */
- for(const id of ['kitchen','fresh24']){
+ for(const id of ['fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
   assert.ok(/올려 주는 능력치가 \d+% 더 오른다/.test(DATA.relicBy[id].description),id+' names the channel it does move (COPY_AUDIT §11-10 / §11-25 wording, User 2026-10-04)');
   assert.ok(/피로 회복·위험 대응은 그대로/.test(DATA.relicBy[id].description)&&!/피로 회복 \+/.test(DATA.relicBy[id].description),
@@ -629,7 +629,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['hazardBoard','원정 위험 게시판',60,'오늘 게이트 위험에 맞는 상품이 발주 후보에 1.5배 자주 나온다.'],
   ['fieldRepair','야전 정비대',80,'가게에서 판 상품의 위험 대응 수치가 40% 높아진다.'],
   ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-  ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 15% 오른다.'],
+  ['kitchen','즉석식품 코너',200,'음식의 피로 회복이 2, 음료는 1 더 오른다. 대신 기본 운영비가 5% 오른다.'],
   ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
   ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다(하루 최대 60G).'],

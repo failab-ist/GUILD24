@@ -20,7 +20,7 @@ const rows=[
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,p=>'오늘 게이트 위험에 맞는 상품이 발주 후보에 '+times(p.hazardBoard.weightMult)+' 자주 나온다.'],
 ['fieldRepair','야전 정비대','foundation',['expedition'],80,p=>'가게에서 판 상품의 위험 대응 수치가 '+pct(p.fieldRepair.counterMult-1)+' 높아진다.'],
 ['fridge','대형 냉장고','foundation',['fresh'],60,p=>'음식·음료의 유통기한이 '+p.fridge.shelfDays+'일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-['kitchen','즉석식품 코너','foundation',['fresh'],200,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.kitchen.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 '+pct(p.kitchen.overheadRate)+' 오른다.'],
+['kitchen','즉석식품 코너','foundation',['fresh'],200,p=>'음식의 피로 회복이 '+p.kitchen.foodSupply+', 음료는 '+p.kitchen.drinkSupply+' 더 오른다. 대신 기본 운영비가 '+pct(p.kitchen.overheadRate)+' 오른다.'],
 ['board','길드 전광판','foundation',['customer'],110,p=>'손님 수가 적게 나와도 하루 기본 '+p.board.minVisitors+'명은 온다 (기존 3명).'],
 ['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,p=>'처음 온 손님의 손님 소지금 +'+p.firstVisitCoupon.arrivalGold+'G, 그 손님의 구매 의사 +'+pp(p.firstVisitCoupon.intentBonus)+'.'],
 ['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,p=>'매일 아침 '+pct(p.groupOrder.visitorChance)+' 확률로 손님이 1명 더 온다. 하루 '+p.groupOrder.commissionFrom+'번째 판매부터는 팔 때마다 가게가 '+p.groupOrder.commission+'G를 더 받는다(하루 최대 '+p.groupOrder.dailyCap+'G).'],
@@ -75,7 +75,7 @@ D.relicParams={
  fieldStretcher:{injuredCombatPenalty:.08},
  firstAidDesk:{healChance:.25},
  fridge:{shelfDays:2},
- kitchen:{statBonus:.25,overheadRate:.15}, /* User 2026-10-02: the +10% operating cost is back - the Fresh line clears more, pays more */
+ kitchen:{foodSupply:2,drinkSupply:1,overheadRate:.05}, /* User 2026-10-22: Supply instead of native Stat (24시간 신선체계 keeps that), operating cost +5% */
  board:{minVisitors:4},
  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15,dailyCap:60},

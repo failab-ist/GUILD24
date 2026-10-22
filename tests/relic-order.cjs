@@ -244,7 +244,7 @@ test('a Save that claims both a Relic and a Seal Break from one window is refuse
  assert.equal(Save.valid(bad),false,'one window cannot have produced both');
 });
 
-test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-additive pool',()=>{
+test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and 24시간 신선체계 are ONE base-additive pool (즉석식품 코너 left it, User 2026-10-22)',()=>{
  const g=fresh('native-pool');
  const bare={...g.run.npcs[0],traits:[],pack:[]};
  const gate={...g.makeDungeon('spider',2),requiredSupply:3,hazards:['bind']};
@@ -255,26 +255,26 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  const food=DATA.items.find(i=>i.category==='food'&&i.effects.supply>0&&i.effects.survival>0);
  const drink=DATA.items.find(i=>i.category==='drink'&&i.effects.supply>0&&i.effects.survival>0);
  const base=id=>DATA.itemBy[id].effects.survival;
- // the owner's own worked examples, to the digit (즉석식품 코너 +25%, 24시간 신선체계 +30%)
+ // the owner's own worked examples, to the digit (24시간 신선체계 +30%; 즉석식품 코너 moves Supply now, not the pool)
  const cases=[
-  [food.id,[],['kitchen','fresh24'],1.55],
-  [food.id,['eater'],['kitchen','fresh24'],1.85],
+  [food.id,[],['kitchen','fresh24'],1.30],
+  [food.id,['eater'],['kitchen','fresh24'],1.60],
   // 원정 도시락 코너 no longer joins the native pool (2026-09-23 rework)
-  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.85],
-  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.35],
-  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.55],
-  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.55],
+  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.60],
+  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.10],
+  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.30],
+  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.30],
  ];
  for(const [id,traits,fac,want] of cases)
   assert.ok(Math.abs(contribution(id,traits,fac).survival/base(id)-want)<1e-9,
    id+' '+JSON.stringify(traits)+' '+JSON.stringify(fac)+' is base x'+want);
- // sequential multiplication would give 1.3 x 1.25 x 1.5 = 2.4375, which is what this rules out
- assert.ok(Math.abs(contribution(food.id,['eater'],['kitchen','fresh24']).survival/base(food.id)-1.3*1.25*1.5)>1e-6,
+ // sequential multiplication would give 1.3 x 1.3 = 1.69, which is what this rules out
+ assert.ok(Math.abs(contribution(food.id,['eater'],['fresh24']).survival/base(food.id)-1.3*1.3)>1e-6,
   'the layers are summed, never multiplied one after another');
  // and the pool is the POSITIVE NATIVE Core Stat only
- assert.equal(Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,['kitchen','fresh24']).effects.supply,
+ assert.equal(Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,['fresh24']).effects.supply,
               Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,[]).effects.supply,
-              'no Fresh Relic touches Supply');
+              '24시간 신선체계 does not touch Supply');
  const counterFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&gate.hazards.some(h=>(i.effects[h]||0)>0));
  if(counterFood){
   const h=gate.hazards.find(x=>(counterFood.effects[x]||0)>0);

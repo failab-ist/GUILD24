@@ -39,7 +39,6 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
  const isFood=item.category==='food';
  if(isFood||item.category==='drink'){
   let pool=isFood?mult.foodMult-1:0;
-  if(facilities.includes('kitchen'))pool+=D.relicParams.kitchen.statBonus;
   if(facilities.includes('fresh24'))pool+=D.relicParams.fresh24.statBonus;
   return 1+pool;
  }
@@ -87,6 +86,8 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
    if(k==='potion')continue;
    let value=v*power;
    if(k==='supply')value=supplyContribution(item,value,foodSupplyDelta,supplyPerItem);
+   /* RELIC 10 즉석식품 코너 (User 2026-10-22): a flat Supply (피로 회복) bonus per Food / Drink, not a native-Stat percentage */
+   if(k==='supply'&&facilities.includes('kitchen'))value+=item.category==='food'?D.relicParams.kitchen.foodSupply:item.category==='drink'?D.relicParams.kitchen.drinkSupply:0;
    /* EVENT 31 길드 연회 (v2.9.11): today's Food recovers double - read off the adventurer, so SALE and NIGHT agree */
    if(k==='supply'&&item.category==='food'&&n.feast>1)value*=n.feast;
    value*=nativeStatFactor(item,k,v,mult,facilities,d);

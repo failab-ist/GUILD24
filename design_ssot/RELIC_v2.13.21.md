@@ -404,13 +404,14 @@ No Stat/Supply multiplier. dailyRepeatedExtension=NO · infinitePreservation=NO
 10. 즉석식품 코너 · tag=Fresh · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-Food/Drink positive native Core-Stat contribution +25%
-Supply (피로 회복) unchanged
+each Food in the bag: Supply (피로 회복) +2; each Drink: Supply +1 (flat, added after the Trait Supply deltas)
+native Core Stat unchanged (24시간 신선체계 alone owns the Fresh native-Stat bonus)
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-base operating cost +15% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
-  (User 2026-10-02: the Fresh line clears more and pays more)
+base operating cost +5% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
+  (User 2026-10-22: Supply instead of native Stat, so it no longer does 24시간 신선체계's job; the Fresh line keeps
+   paying for its strength, at +5%; flat values so no fractional Supply)
 ```
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect] · newCombatSystem=NO
@@ -615,7 +616,7 @@ it plays as its blueprint above.
 
 Positive native Core Stat means the Item's own positive contribution to 투력/강인함/기동/정신 before unrelated effects.
 Fresh native-Stat bonuses stack additively from the Item's base native positive Stat:
-    즉석식품 코너 + 24시간 신선체계 = +25% +30% => base positive native Stat ×1.55
+    24시간 신선체계 = +30% => base positive native Stat ×1.30 (즉석식품 코너 moves Supply, not this pool, from 2026-10-22)
 
 Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive
 pool under `ITEM_v2.8.0.md`. Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second
@@ -1036,7 +1037,7 @@ Verify these exact Store Support functions in RELIC_v2.13.21.md:
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
 - COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +15% of overheadBase
+- 즉석식품 코너 -> Food Supply +2, Drink Supply +1 (flat); base operating cost +5% of overheadBase
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> +1 visitor at 20% in the shared Morning extra-visitor roll; +15G HQ commission per sale from the Day's 5th, at most 60G per Day
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
@@ -1229,15 +1230,16 @@ PASS:
 #### REL-Q-v28-13 — FRESH NATIVE-STAT REBASELINE
 
 Expected:
-- 즉석식품 코너 native Core-Stat +25%
+- 즉석식품 코너 adds no native Core-Stat bonus (Supply +2 Food / +1 Drink instead)
 - 24시간 신선체계 native Core-Stat +30%
 - 원정 도시락 코너 adds no native Core-Stat bonus
 
-Composition is base-additive: kitchen + fresh24 => ×1.75 native positive Stat.
+Composition is base-additive with the Food Traits: 대식가 + fresh24 => ×1.60 native positive Stat.
 
 FAIL:
 - any alternate native-Stat percentages are active
 - Supply (피로 회복) itself is multiplied by these native-Stat percentages
+- 즉석식품 코너's Supply bonus is a percentage, or reaches anything but Food / Drink Supply
 
 #### REL-Q31 — FRESH CORE-EFFECT SCOPE
 SETUP: Use 즉석식품 코너 / 24시간 신선체계 with multi-role Food/Drink Items.
