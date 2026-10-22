@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),assert=require('node:assert/strict'),{spawn}=require('node:child_process');
 const {chromium}=require('playwright'),{ready}=require('./qa-ready.cjs');
 const root=path.resolve(__dirname,'..'),out=path.resolve(process.argv[2]||path.join(os.tmpdir(),'guild24-support-meta-text')),before=process.argv.includes('--before'),port=5288,checks=[],findings=[];
-const MASTERY='서로 다른 마왕을 토벌하면 본사 해금이 열린다. 직업 숙련은 점포 자본으로 구매한다.';
+const MASTERY='서로 다른 마왕을 잡을수록 새 직업과 상품, 직업 숙련 3단부터가 열린다. 직업 숙련은 점포 자본으로 구매한다.';
 function check(name,ok){assert.ok(ok,name);checks.push(name);}
 async function open(p,action){await p.locator('[data-action="menu"]').click();await p.locator('#modal-root [data-action="'+action+'"]').click();}
 async function shot(p,name){await p.screenshot({path:path.join(out,'batch6-'+(before?'before':'after')+'-'+name+'.png')});check(name+' 가로 넘침 없음',await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}

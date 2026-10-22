@@ -2611,7 +2611,7 @@ function progressPanel(){const a=game.account;
  /* v2.13.21: the per-Job table is retired from view (the matrix stays in the save); one row of the seven Bosses. The distinct
     count is already stated in the codex header directly above this, so the panel does not say it a second time. */
  return '<div class="progress-panel">'
- +'<p class="smalltext">서로 다른 마왕을 토벌하면 본사 해금이 열린다. 직업 숙련은 점포 자본으로 구매한다.</p>'
+ +'<p class="smalltext">서로 다른 마왕을 잡을수록 새 직업과 상품, 직업 숙련 3단부터가 열린다. 직업 숙련은 점포 자본으로 구매한다.</p>'
  +'<table class="matrix"><thead><tr>'+D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')+'</tr></thead><tbody><tr>'
  +D.bosses.map(b=>{const done=Meta.bossCleared(a,b.id);
    return '<td class="'+(done?'done':'open')+'"><span aria-label="'+E(b.name)+' '+(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
