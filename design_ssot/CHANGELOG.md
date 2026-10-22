@@ -69,6 +69,13 @@ and this table is their commit record.
 - DUNGEON_HAZARD §GATE POWER: SuccessEase is one 0.90 on every ordinary Day (the × 0.95 step on DAY 22 is gone) and the DAY 21+ Day-term slope is 1.05 → 1.54, so the late Gates climb evenly and DAY 29 asks about 2% more than before (Tier I DAY 22 48.1 → 46.5, DAY 29 55.1 → 56.2).
 - Measured against main, investor fresh 2000 (same seeds): D10 reach 78.5 → 89.5%, mid (D8~20) success 43.2 → 41.3%, clear 5.4 → 2.8%, clear once DAY 30 is reached 46 → 48% (Boss held), lucky / normal clear ratio 2.2 → 1.0; investor Decoration trajectories (400 × 10 Runs) first clear median: economy 10th, survival 8th, operation and none past the 10th Run. Potion −15% / −10% with Hazard and Counter +2 / +1 was measured and left out (clear once reached 48 → 37~38%). Log: `reports/v2100-measure/mid-difficulty-20261010/`.
 
+## 편의점 상품 이름·그림·설명 정리 (v2.13.20 유지, User 2026-10-22)
+
+- ITEM §ACTIVE CATALOG: 왕도 천연암반수 → 왕도 바나나우유 (id `kingwater` → `bananamilk`, Save compatibility not kept), 방수망토 → 일회용 방수망토. Effects, prices, Rarity and shelf life unchanged.
+- Flavor: 왕도 바나나우유, 농축 해독제, 중화 탄산수, 일회용 방수망토 (COPY_AUDIT §12-3 / §12-4 follow).
+- Item art only: 생수 (slim PET bottle), 쿨링 이온음료 (orange sports bottle, so it no longer reads like 생수 or the water-blue Fire Counter), 캔커피 (short can with a coffee bean), 에너지드링크 (slim can), 농축 해독제 (brown recovery-drink bottle), 중화 탄산수 (soda bottle), 왕도 바나나우유 (green-lidded jar).
+- The 고급 Drink slot stays 에너지드링크 only (the Tier I Fear / Toughness Stat routes are already 생수 and 용사의 곡주).
+
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 
 - RELIC 지역 거점점 계약 (merged first as #275 under v2.13.19, version raised here: 「20」): the User's Run with 본사 우수 점포 훈장 → 지역 거점점 from DAY 1 kept far more Gold
