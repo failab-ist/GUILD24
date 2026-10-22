@@ -23,7 +23,7 @@ function freshStore(){
  /* META_v2.8 §DECORATION COLLECTION / LOADOUT. Ownership and activation are separate, and the
     loadout is keyed by Slot rather than by the four ids, so a Slot can hold alternatives later
     without this shape changing. */
- return {capital:0,owned:[],loadout:Object.fromEntries(D.decorationSlots.map(s=>[s,null]))};
+ return {capital:0,owned:[],loadout:Object.fromEntries(D.decorationSlots.map(s=>[s,null])),mastery:0};
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
