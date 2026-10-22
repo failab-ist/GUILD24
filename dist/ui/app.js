@@ -2583,7 +2583,7 @@ function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a)
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+cap.toLocaleString()+'</b>'
  +'<span class="sp">숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.</span></p>'
  +views
- +'<p class="smalltext">주 능력치: '+D.jobs.map(j=>E(j.name)+' '+masteryStats(j).map(k=>MASTERY_STAT[k]).join('·')).join(', ')+'</p>'
+ +'<div class="slot"><h4>직업별 주 능력치</h4><dl class="mastery-stats">'+D.jobs.map(j=>'<div><dt>'+E(j.name)+'</dt><dd>'+masteryStats(j).map(k=>MASTERY_STAT[k]).join(', ')+'</dd></div>').join('')+'</dl></div>'
  +'<div class="slot"><h4>직업 숙련</h4>'
  +D.masteryRanks.map((r,i)=>{const owned=i<rank,next=i===rank,open=beaten>=r.bosses;
    const state=owned?'<span class="muted">보유</span>'
