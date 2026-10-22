@@ -121,7 +121,7 @@ so buying a rank does not shift the seeded stream.
 
 Measured (v2.13.20 rules, 근석 account with 3 Decorations, 500 fresh Runs, investor bot oracle off): Main Stats +0 / +0.5 /
 +1 ended before D10 in 29 / 23 / 17%, reached D20 41 / 50 / 57%, reached D30 16 / 24 / 31%
-(notes/balance/mastery-capital-20261022).
+(reports/v2100-measure/mastery-capital-20261022; oracle on: before D10 35 / 29 / 23%, D30 18 / 23 / 29%).
 
 Player-facing meaning (store sheet):
     숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.

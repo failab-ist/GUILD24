@@ -80,7 +80,7 @@ and this table is their commit record.
   bonus; the Job × Boss matrix stays as the record (Franchise Grade, unlocks). Decorations are not nerfed.
 - Measurement (v2.13.20 rules, the User's account with 3 Decorations, investor bot oracle off, 500 fresh Runs each): main Stats
   +0 / +0.5 / +1 ended before D10 29 / 23 / 17%, reached D20 41 / 50 / 57%, D30 16 / 24 / 31%, cleared 9.8 / 13.6 / 18%. +3
-  was too strong (D30 60%). No Decoration: +0 / +0.5 = 44 / 39% before D10. Logs: `notes/balance/mastery-capital-20261022/`.
+  was too strong (D30 60%). No Decoration: +0 / +0.5 = 44 / 39% before D10. Logs: `reports/v2100-measure/mastery-capital-20261022/`; oracle on: before D10 35 / 29 / 23%, D30 18 / 23 / 29%.
 - UI_UX §STORE SHEET: a 장식 / 직업 숙련 switch bar (no underline), rank cards in the Decoration card shape, yellow pixel purchase
   keys (적용 / 해제 / 취소 stay wooden tags). The prep Capital plate opens the sheet on the side the Capital can buy (both: 장식).
   The ending's replay line adds `점포 자본으로 직업 숙련을 구매할 수 있다.`; COPY §1-10, §3-15, §8-7, §10-3, §10-5 follow.
