@@ -43,3 +43,4 @@ __pycache__/
 google-services.json
 /*.apk
 /*.aab
+/build/
