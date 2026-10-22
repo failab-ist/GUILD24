@@ -2145,6 +2145,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:600 16px/1.2 var(--ui);letter-spacing:0;color:#392a1c;
  background:transparent url('assets/presentation/support/choice-tag-blank.webp') center / 100% 100% no-repeat;
  transform:none;clip-path:none;filter:none;box-shadow:none}
+.relic-plate .stamp:not([disabled]):hover{text-decoration:none}
 .relic-plate .stamp:not([disabled]):active{transform:translate(0,2px)}
 /* Same paper and footprint; a committed tag is ink instead of purchase gold. */
 .relic-plate.owned{box-shadow:none}
