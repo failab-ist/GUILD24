@@ -86,6 +86,11 @@ and this table is their commit record.
   The ending's replay line adds `점포 자본으로 직업 숙련을 구매할 수 있다.`; COPY §1-10, §3-15, §8-7, §10-3, §10-5 follow.
   The progress tab's per-Job table leaves the screen (the record stays in the save): one row of the seven Bosses, and the
   ending names only a newly beaten Boss (`새로 토벌한 마왕`). The codex header reads the bought rank, 직업 숙련 n / 5.
+- Convenience-store names, art and Flavor (merged as #282 under this version, User 2026-10-22):
+  - ITEM §ACTIVE CATALOG: 왕도 천연암반수 → 왕도 바나나우유 (id `kingwater` → `bananamilk`, Save compatibility not kept), 방수망토 → 일회용 방수망토. Effects, prices, Rarity and shelf life unchanged.
+  - Flavor: 왕도 바나나우유, 농축 해독제, 중화 탄산수, 일회용 방수망토 (COPY_AUDIT §12-3 / §12-4 follow).
+  - Item art only: 생수 (slim PET bottle), 쿨링 이온음료 (orange sports bottle, so it no longer reads like 생수 or the water-blue Fire Counter), 캔커피 (short can with a coffee bean), 에너지드링크 (slim can), 농축 해독제 (brown recovery-drink bottle), 중화 탄산수 (soda bottle), 왕도 바나나우유 (green-lidded jar).
+  - The 고급 Drink slot stays 에너지드링크 only (the Tier I Fear / Toughness Stat routes are already 생수 and 용사의 곡주).
 
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 

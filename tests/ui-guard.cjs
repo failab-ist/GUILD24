@@ -1357,7 +1357,7 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
     it is a premium version of, so they are exactly the ones worth pinning. */
  const named=['rope','candy','coating','boots','goggles','ion','worldcharm','potionHigh','potion',
   'herbtea','midpotion','spiderkit','slimesuit','cryptlantern','snowvisor','magmagear',
-  'battlelunch','kingwater','hyperenergy','sageelixir','toppotion'];
+  'battlelunch','bananamilk','hyperenergy','sageelixir','toppotion'];
  const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
  const drawn=new Map();
  for(const it of D.items){

@@ -6,7 +6,7 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 
 const CANON_HAZARDS=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
 const LEGACY=['thirst','caffeine','alcohol','long','wet','armor','undead','slow','food'];
-const CATALOG=['삼각김밥','생수','컵라면','간단 도시락','초코바','녹차 양갱','캔커피','진정 허브티','하급 포션','얼음컵','중화 탄산수','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','방한 두건','방독 작업장갑','축성 손전등','방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','중급 포션','길드 특제 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰','거미줄 방호세트','연금 방수슈트','성화 랜턴','백설 방한고글','마그마 냉각장비','영웅 결전 도시락','왕도 천연암반수','초고속 에너지드링크','대현자 허브엘릭서','최상급 포션'];
+const CATALOG=['삼각김밥','생수','컵라면','간단 도시락','초코바','녹차 양갱','캔커피','진정 허브티','하급 포션','얼음컵','중화 탄산수','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','방한 두건','방독 작업장갑','축성 손전등','일회용 방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','중급 포션','길드 특제 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰','거미줄 방호세트','연금 방수슈트','성화 랜턴','백설 방한고글','마그마 냉각장비','영웅 결전 도시락','왕도 바나나우유','초고속 에너지드링크','대현자 허브엘릭서','최상급 포션'];
 
 test('DUN-Q04/Q19: exactly the 9 canonical Hazards, mire present, slow absent',()=>{
  assert.deepEqual(Object.keys(DATA.hazards).sort(),[...CANON_HAZARDS].sort());
@@ -40,7 +40,7 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 44 (v2.9.7 Counter ladde
   ['lunchbox','간단 도시락',1,90,180,'food',2,{survival:12,supply:6,loot:0.1}],
   ['guildlunch','길드 특제 도시락',2,165,330,'food',2,{survival:15,supply:7,loot:0.25}],
   ['battlelunch','영웅 결전 도시락',3,205,410,'food',2,{combat:5,survival:18,supply:9}],
-  ['kingwater','왕도 천연암반수',3,180,360,'drink',3,{combat:5,survival:22,supply:2}]]){
+  ['bananamilk','왕도 바나나우유',3,180,360,'drink',3,{combat:5,survival:22,supply:2}]]){
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
@@ -63,12 +63,12 @@ test('ITEM-Q02/Q03: every Item declares canonical roles and every effect is pres
 });
 
 test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to the digit',()=>{
- const shelf={rice:2,ramen:3,lunchbox:2,choco:2,yanggaeng:2,candy:4,dragonramen:3,guildlunch:2,battlelunch:2,water:2,coffee:2,herbtea:2,ice:3,soda:3,energy:3,wine:4,ion:5,kingwater:3,hyperenergy:3,sageelixir:3,
+ const shelf={rice:2,ramen:3,lunchbox:2,choco:2,yanggaeng:2,candy:4,dragonramen:3,guildlunch:2,battlelunch:2,water:2,coffee:2,herbtea:2,ice:3,soda:3,energy:3,wine:4,ion:5,bananamilk:3,hyperenergy:3,sageelixir:3,
   lowpotion:3,midpotion:4,highpotion:5,toppotion:5,battery:5,rope:5,mask:3,hood:4,webgloves:4,holylight:4,cloak:4,coating:5,boots:5,snowgoggles:5,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,worldcharm:5,coupon:5};
  assert.equal(Object.keys(shelf).length,44);
  for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
  // ITEM §ACTIVE CATALOG: direct-counter Food/Drink recovery is distinct from the Stat line.
- const supply={soda:1,rice:5,ramen:3,lunchbox:6,choco:5,yanggaeng:5,candy:2,dragonramen:3,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,kingwater:2,hyperenergy:2,sageelixir:2};
+ const supply={soda:1,rice:5,ramen:3,lunchbox:6,choco:5,yanggaeng:5,candy:2,dragonramen:3,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,bananamilk:2,hyperenergy:2,sageelixir:2};
  for(const [id,v] of Object.entries(supply))assert.equal(DATA.itemBy[id].effects.supply,v,id+' 피로 회복');
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
