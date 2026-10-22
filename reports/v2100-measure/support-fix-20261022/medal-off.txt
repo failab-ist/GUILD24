@@ -1,0 +1,13 @@
+훈장 첫 창 측정 (main f56e28a, 중반 계정 100 × 시드 10 = 1000판, investor 오라클 끔, 짝 차이 ± = 표준오차 x2)
+node med.cjs 100 10 8 "none,deco:heroSign,deco:heroSign#rr=1,deco:heroSign+deco:rerollCoupon#rr=1,deco:rerollCoupon" <root> <out>
+(#rr=1: D0 창에 물류 본부계약이 없으면 한 번 교환, 값은 그 판 돈에서 뺌. #hq=1: 물류가 있으면 물류를 삼, #296 전 봇 확인용)
+B-A   clear 1.4±2.0 D10 4.7±3.4 D20 7.9±4.2 D30 2.8±3.0
+B2-A  clear 2.4±2.1 D10 3.0±3.5 D20 8.9±4.3 D30 4.0±3.1
+B2-B  clear 1.0±1.5 D10 -1.7±2.8 D20 1.0±3.3 D30 1.2±2.5
+C-A   clear 0.8±1.9 D10 0.0±3.1 D20 -3.6±3.8 D30 -1.3±2.7
+B3-A  clear 3.6±2.1 D10 3.8±3.4 D20 10.9±4.2 D30 4.3±3.1
+B3-C  clear 2.8±2.3 D10 3.8±3.5 D20 14.5±4.3 D30 5.6±3.2
+B  교환 0판   고른 영웅 logisticsHQ 417 · firstAidDesk 281 · opsRoom 164 · lifetime 105 · fresh24 32
+B2 교환 580판 고른 영웅 logisticsHQ 861 · firstAidDesk 71 · opsRoom 36 · lifetime 23 · fresh24 6
+B3 교환 582판 고른 영웅 logisticsHQ 863 · firstAidDesk 71 · opsRoom 36 · lifetime 23 · fresh24 6
+#296 전 봇: 물류가 나온 417판 중 135판에서 응급 처치대를 고름(B-A clear +0.7 · D30 +1.1, 물류 강제 시 +2.1 · +4.5)
