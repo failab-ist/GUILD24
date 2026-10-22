@@ -61,6 +61,11 @@ function buyMastery(a){
  if(st.capital<next.price)throw Error('점포 자본이 부족합니다.');
  st.capital-=next.price;st.mastery=rank+1;return next;
 }
+/* META §JOB MASTERY / STORE SHEET: which purchases the Capital covers right now - the store sheet opens on the one that has
+   something to buy; with both, on the Decorations (a Slot choice to weigh), and with neither, where the Player last was */
+function affordable(a){const cap=store(a).capital,next=D.masteryRanks[masteryRank(a)];
+ return {deco:D.decorations.some(d=>!store(a).owned.includes(d.id)&&d.price<=cap),
+  mastery:!!next&&distinctBossClear(a)>=next.bosses&&next.price<=cap};}
 function equipDecoration(a,slot,id){
  const st=store(a);
  if(!D.decorationSlots.includes(slot))throw Error('없는 자리입니다.');
@@ -236,5 +241,5 @@ const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
- ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,masteryRank,buyMastery,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
+ ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,masteryRank,buyMastery,affordable,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

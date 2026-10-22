@@ -2687,7 +2687,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
     +ascNote(a)+'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
-   +'<span class="store-capital capital-plate" role="button" tabindex="0" data-action="store-mastery" aria-label="점포 자본 '+capital.toLocaleString()+', 직업 숙련 열기"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
+   +'<span class="store-capital capital-plate" role="button" tabindex="0" data-action="store-open" aria-label="점포 자본 '+capital.toLocaleString()+', 장식과 직업 숙련 구매"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
   +'<div class="deco-layer">'+D.decorationSlots.map(place).join('')+'</div>'
  +'</div>'
  +'<div class="dock">'+(fromEnd?btn('결과 다시 보기','prep-back','bare'):'')+btn('첫 점포지원 고르기','start','stamp')+'</div></div>';}
@@ -2985,7 +2985,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-mastery':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='mastery';decoFocus=null;sound('ui');setModal('codex');break;
+ case'store-open':{preRunReturn=!game.run||prepOpen;codexTab='store';const can=Meta.affordable(game.account);storeView=can.deco?'deco':can.mastery?'mastery':storeView;
+  /* opened on the Decorations because one is affordable: land on the first Slot that has one, as a Slot plate would */
+  decoFocus=storeView==='deco'&&can.deco?D.decorationSlots.find(sl=>D.decorations.some(d=>d.slot===sl&&!Meta.decorationOwned(game.account,d.id)&&d.price<=Meta.storeCapital(game.account)))||null:null;sound('ui');setModal('codex');break;}
  case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='deco';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
  /* Back to preparation. It only changes which panel is open: nothing is spent, no Decoration
     state is re-rolled, the Run is neither reseeded nor started. */
