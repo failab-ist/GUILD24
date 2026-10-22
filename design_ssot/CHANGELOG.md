@@ -103,6 +103,15 @@ and this table is their commit record.
     +15% → +5%. It did 24시간 신선체계's job at a lower grade (D20 +4.0 vs +4.3). Supply with the old +15% cost lost Gold
     (D15 −155G, D20 −4.1), +5% keeps it a performance pick paid in Gold: clear +3.1, D15 −59G (was +2.8 / −71G).
     24시간 신선체계 stays at +30% (35% measured clear +3.3 → +4.3, within noise; held after the old 「too strong」).
+  - RELIC 묶음발주 계약: the same item 3+ in one ORDER now takes 10% off every unit of it (was 20% off the 3rd and later units;
+    User 2026-10-22, 「b로」: with offers capped at 3, Commons and Advanced were the only items it reached). Same mid-game
+    measurement, given free at the D5 window: clear +1.1 → +2.1, D30 +0.1 → +2.5, D15 Gold +50 → +88G; it applies on 68% of ORDER
+    Days, saving 32G a Day (was 24G). Price 130G kept. COPY_AUDIT §11-1 follows (「한 번 발주할 때 같은 상품을 3개 이상 사면, 그 상품
+    전부의 매입가가 10% 싸진다.」). Log `support-fix-20261022/bulk-off.txt`.
+  - GAME_VISION (User 2026-10-22, after a GPT review of goals and measurement): D20 is 「met once within 3~4 Runs」, not a gate;
+    Job Mastery 1·2 are bought with Capital and 3+ open with Boss clears; first clear in 1~3 hours is this game's own target,
+    checked with anonymous play-time stats after release (the genre comparison line is removed); the Boss ~60% is an overall
+    reference, not tuned per Decoration path. How to read bot numbers against these moved to BALANCE_CHECK §4 · §5.
 
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 

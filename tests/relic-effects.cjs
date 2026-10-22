@@ -203,7 +203,7 @@ test('REL-Q-v28-15: 물류 본부계약 takes 3% off every ORDER per previous-Da
  // no quantity, SKU or rarity condition: a single unit and a second SKU are both discounted
  s.previousSales=5;s.cart={0:1,2:2};assert.equal(g.cartTotal(),Math.round(100*.85)+2*Math.round(40*.85),'every ORDER line');
  // with 묶음발주 계약 the two multiply and the internal 45% floor is not reached
- s.previousSales=10;s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),70+70+Math.round(100*.7*.8));
+ s.previousSales=10;s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),3*Math.round(100*.7*.9));
  assert.equal(DATA.relicBy.logisticsHQ.price,300,'the price is kept');
 });
 

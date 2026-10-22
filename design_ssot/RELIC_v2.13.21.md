@@ -343,7 +343,7 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.21
 
 ### ROTATION — Foundation
 1. 묶음발주 계약 · tag=Rotation · purpose=reward inventory-risk-taking
-- 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
+- 묶음발주 계약: same SKU 3+ in one ORDER (offer slots summed) -> every unit of that SKU purchase price -10%
 
 2. 회전 진열대 · tag=Rotation · purpose=sales->order->sales loop · `DIRECTOR DOCUMENT BASELINE`
 - Price = 80G
@@ -1028,7 +1028,7 @@ No active Store Support uses 쇼케이스 in these two names.
 
 Verify these exact Store Support functions in RELIC_v2.13.21.md:
 
-- 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
+- 묶음발주 계약 -> same SKU 3+ in one ORDER, every unit -10%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
 - 희귀상품 입고 계약 -> Rare+ ORDER weight +50%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
