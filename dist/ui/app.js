@@ -75,7 +75,7 @@ function endReveal(){const s=game.run;clearTimeout(endAt);
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
-let decoPending=null,decoFocus=null,storeView='deco',masteryPending=false;
+let decoPending=null,decoFocus=null,storeView='deco',storeViewPicked=false,masteryPending=false;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
@@ -2995,7 +2995,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-open':{preRunReturn=!game.run||prepOpen;codexTab='store';const can=Meta.affordable(game.account);storeView=can.deco&&!can.mastery?'deco':can.mastery&&!can.deco?'mastery':storeView;
+ case'store-open':{preRunReturn=!game.run||prepOpen;codexTab='store';const can=Meta.affordable(game.account);storeView=can.deco&&!can.mastery?'deco':can.mastery&&!can.deco?'mastery':can.mastery&&!storeViewPicked?'mastery':storeView;
   /* opened on the Decorations because one is affordable: land on the first Slot that has one, as a Slot plate would */
   decoFocus=storeView==='deco'&&can.deco?D.decorationSlots.find(sl=>D.decorations.some(d=>d.slot===sl&&!Meta.decorationOwned(game.account,d.id)&&d.price<=Meta.storeCapital(game.account)))||null:null;sound('ui');setModal('codex');break;}
  case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='deco';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
@@ -3020,7 +3020,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
- case'store-view':storeView=id;decoPending=null;masteryPending=false;sound('ui');renderModal();break;
+ case'store-view':storeView=id;storeViewPicked=true;decoPending=null;masteryPending=false;sound('ui');renderModal();break;
  case'mastery-buy':{const back=keepDecoRow(el);masteryPending=true;renderModal();back();break;}
  case'mastery-cancel':{const back=keepDecoRow(el);masteryPending=false;renderModal();back();break;}
  case'mastery-confirm':{const back=keepDecoRow(el);if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 숙련을 살 수 없습니다.');
