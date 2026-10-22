@@ -270,7 +270,7 @@ function playRun(g,out,ctx){
     Supports that answer it (야전 들것 · 응급 처치대 · 길드 구조대 계약) ahead of the ranked list */
  const INJURY_SUPPORT=['firstAidDesk','fieldStretcher','rescueContract'];
  const bleeding=()=>{const alive=s.npcs.filter(x=>x.alive&&x.introduced),hurt=alive.filter(x=>x.injury>0).length;
-  return hurt>=3||hurt>=alive.length*.25||s.stats.deaths>=G.Meta.deathLimit(s)*.5;};
+  return hurt>=3||hurt>0&&hurt>=alive.length*.25||s.stats.deaths>=G.Meta.deathLimit(s)*.5;};
  /* investor, the Final (User 2026-10-09: "25일부터는 돈 남으면 리롤치면서 영웅급 대응 + 영웅급 포션이나 음식 음료 모은다"). From
     DAY 25 the Final's Families are on screen (s.final), so a player with Gold to spare buys - and rerolls for - the Items
     the likely Final party would carry, and holds them off the shelf. The party is read the way the Final reads it: each
@@ -508,7 +508,7 @@ function playRun(g,out,ctx){
  if(reader){if(!w.candidateIds.some(id=>D.relicBy[id].rarity>=3)&&g.canRerollRelics()){const cost=g.relicRerollPrice(),paid=paidRerolls.get(w.milestoneDay)||0;
    if(cost===0||(!paid&&s.money>=1500)){g.rerollRelics();if(cost)paidRerolls.set(w.milestoneDay,paid+1);else out.couponRerolls=(out.couponRerolls||0)+1;return buySupport();}}}
  else if(g.wears('rerollCoupon')&&!w.rerolls&&g.canRerollRelics()&&g.relicRerollPrice()===0&&!w.candidateIds.some(id=>D.relicBy[id].rarity>=2)){g.rerollRelics();out.couponRerolls=(out.couponRerolls||0)+1;return buySupport();}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=reader?synergy:id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};const hero=id=>{if(D.relicBy[id].rarity<3)return 0;const order=w.milestoneDay<10?HERO_EARLY:HERO_LATE,i=order.indexOf(id);return 1e4+(i<0?0:(order.length-i)*100);};
-  return (reader?hero(b)-hero(a):0)+val(b)-val(a);});for(const id of candidates){if(!g.canBuyRelic())break;const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+  return ((reader||investor)?hero(b)-hero(a):0)+val(b)-val(a);});for(const id of candidates){if(!g.canBuyRelic())break;const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
