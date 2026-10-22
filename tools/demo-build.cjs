@@ -23,6 +23,18 @@ for(const f of ['data/catalog','data/relics','data/decorations','data/copy','sys
  require(path.join(SRC,f+'.js'));
 require(path.join(ROOT,'demo','demo.js'));
 const DEMO=globalThis.GUILD24_DEMO,FACES=DEMO.faces;
+/* What must not be readable in the shipped game: the player-facing names of everything cut, taken from the full data
+   (the systems above loaded it before any pruning). A boss counts by its full name and its short one (래스). */
+const FORBIDDEN=(()=>{const D=globalThis.DATA,by=(list,id)=>list.find(x=>x.id===id)?.name;
+ const w=[...CUT.items.map(id=>by(D.items,id)),...CUT.decorations.map(id=>by(D.decorations,id)),...CUT.jobs.map(id=>by(D.jobs,id)),
+  ...CUT.bosses.flatMap(id=>{const n=by(D.bosses,id);return [n,n.split(' ').pop()];})];
+ if(w.some(x=>!x))throw new Error('a cut id has no entry in the data: '+JSON.stringify(CUT));
+ return w;})();
+/* Every string the minified game carries (literals and template text), each forbidden word that occurs in one. */
+function leaks(code){const strings=[];
+ walk.full(acorn.parse(code,{ecmaVersion:'latest'}),n=>{if(n.type==='Literal'&&typeof n.value==='string')strings.push(n.value);
+  if(n.type==='TemplateElement')strings.push(n.value.cooked??n.value.raw);});
+ return FORBIDDEN.map(w=>[w,strings.filter(t=>t.includes(w))]).filter(([,hits])=>hits.length);}
 
 /* Scripts, in index.html order. demo.js goes in right before ui/app.js, which reads it. */
 const SCRIPT={
@@ -86,6 +98,10 @@ function prune(file,src){
    const gone=new Set(n.properties.map((p,i)=>CUT_IDS.has(keyOf(p))?i:-1).filter(i=>i>=0));
    for(const i of gone)log.push(file+': key '+keyOf(n.properties[i]));
    if(gone.size)dropItems(n.properties,gone,edits);}
+  /* A line that names something cut sits on a path the demo cannot reach (the Final, a cut Decoration's effect): it
+     is emptied rather than shipped. leaks() below proves none is left. */
+  if(n.type==='Literal'&&typeof n.value==='string'&&FORBIDDEN.some(w=>n.value.includes(w))){log.push(file+': text '+n.value.slice(0,50));edits.push([n.start,n.end,"''"]);}
+  if(n.type==='TemplateElement'&&FORBIDDEN.some(w=>n.value.raw.includes(w))){log.push(file+': text '+n.value.raw.slice(0,50));edits.push([n.start,n.end,'']);}
   if(n.type==='IfStatement'&&!n.alternate&&cutTest(n.test)){log.push(file+': if '+src.slice(n.test.start,n.test.end).slice(0,60));edits.push([n.start,n.end,';']);}});
  return apply(src,edits);}
 /* Edits never overlap except where an outer removal already covers an inner one: keep the outer. */
@@ -156,6 +172,8 @@ async function main(){
  /* G24_DEMO_PLAIN=1: the same build, unminified and readable, for finding a fault in it. Never upload that one. */
  const plain=process.env.G24_DEMO_PLAIN==='1';
  const min=plain?{code:joined}:await minify(joined,{ecma:2020,compress:{passes:2},mangle:true,format:{comments:false}});
+ const leak=leaks(min.code);
+ if(leak.length)throw new Error('cut names still in the game:\n  '+leak.map(([w,h])=>w+': '+h.slice(0,3).map(t=>JSON.stringify(t.slice(0,90))).join(' / ')).join('\n  '));
  const code=plain?min.code:Obfuscator.obfuscate(min.code,{compact:true,target:'browser',stringArray:true,stringArrayThreshold:1,stringArrayEncoding:['base64'],
   stringArrayRotate:true,stringArrayShuffle:true,splitStrings:false,controlFlowFlattening:false,deadCodeInjection:false,
   identifierNamesGenerator:'mangled',renameGlobals:false,selfDefending:false,sourceMap:false,unicodeEscapeSequence:false}).getObfuscatedCode();
