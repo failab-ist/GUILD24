@@ -12,7 +12,7 @@ if(process.env.MW==='build'){
  const G=load(),{RANK}=require(path.join(root,'tools/measure-v2100.cjs'));const accs=[];
  for(let t=0;t<T;t++){let acc=G.Meta.fresh();
   for(let i=0;i<K;i++){const g=new G.Game(acc);g.autosave=false;g.lessons=false;g.start('mid-'+t+'-'+i);
-   G.Debug.continueRun(g.account,g.run,1,'investor',{relicPriority:RANK,onRun:(s,gg)=>{gg.end(!!s.win,s.endReason||'측정 종료');acc=gg.account;}});
+   globalThis.__BK=null;G.Debug.continueRun(g.account,g.run,1,'investor',{relicPriority:RANK,onRun:(s,gg)=>{gg.end(!!s.win,s.endReason||'측정 종료');acc=gg.account;}});
    while(G.Meta.affordable(acc).mastery)G.Meta.buyMastery(acc);}
   accs.push(acc);}
  fs.writeFileSync(path.join(out,'accounts.json'),JSON.stringify(accs));process.exit(0);}
@@ -28,10 +28,13 @@ if(process.env.MW){
   P.relicWindow=function(day){const r=orig.apply(this,arguments),s=this.run;for(const x of relics){const [rid,dd]=x.split('@');if(day===+dd&&s&&!s.facilities.includes(rid)){s.facilities.push(rid);const w=s.relicWindow;const k=w?w.candidateIds.indexOf(rid):-1;if(k>=0){w.candidateIds.splice(k,1);w.candidatePrices.splice(k,1);}}}return r;};}
  if((tweak||'').includes('hq=1')){const P=G.Game.prototype,o2=P.relicWindow;P.relicWindow=function(day){const r=o2.apply(this,arguments),w=this.run&&this.run.relicWindow;if(day===0&&w&&!w.purchased&&w.candidateIds.includes('logisticsHQ')&&this.canBuyRelic())this.buyRelic('logisticsHQ');return r;};}
  if((tweak||'').includes('rr=1')){const P=G.Game.prototype,o3=P.relicWindow;P.relicWindow=function(day){const r=o3.apply(this,arguments),w=this.run&&this.run.relicWindow;if(day===0&&w&&!w.purchased&&!w.candidateIds.includes('logisticsHQ')&&this.canRerollRelics()&&this.run.money>=this.relicRerollPrice()){this.rerollRelics();globalThis.__RR=(globalThis.__RR||0)+1;}return r;};}
+ {const P=G.Game.prototype,oq=P.relicQuote,allMode=(tweak||'').includes('bk=b');
+  if(allMode)P.relicQuote=function(index,quantity,cart=this.run.cart||{}){const s=this.run,o=s.offers[index];const skuTotal=Object.keys(cart).filter(i=>s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0);let sum=0;for(let u=1;u<=quantity;u++){let mult=1;if(skuTotal>=3&&this.has('bulk'))mult*=1-0.10;if(this.has('logisticsHQ')){const f=D.relicParams.logisticsHQ;mult*=1-Math.min(f.maxDiscount,f.perSale*(s.previousSales||0));}sum+=Math.round(o.price*Math.max(.45,mult));}return sum;};
+  const oc=P.confirmOrder;P.confirmOrder=function(){const s=this.run,cart=s.cart||{};if(this.has('bulk')&&Object.keys(cart).length){const st=globalThis.__BK??={days:0,hit:0,saved:0};st.days++;const withB=this.cartTotal(cart);const fac=s.facilities,i=fac.indexOf('bulk');fac.splice(i,1);const noB=this.cartTotal(cart);fac.splice(i,0,'bulk');if(noB>withB){st.hit++;st.saved+=noB-withB;}}return oc.apply(this,arguments);};}
  for(let t=0;t<accs.length;t++)for(let k=0;k<S;k++){const a=copy(accs[t]);
   for(const id of decos){const d=D.decorationBy[id];if(!a.store.owned.includes(id))a.store.owned.push(id);a.store.loadout[d.slot]=id;}
   const g=new G.Game(a);g.autosave=false;g.lessons=false;g.start('mx-'+t+'-'+k);globalThis.__SEED='mx-roll-'+t+'-'+k;
-  G.Debug.continueRun(g.account,g.run,1,'investor',{relicPriority:RNK,onRun:s=>{const W0=(s.relicHistory||[])[0]||{};const H=s.reportHistory||[];rows.push({t,k,day:s.day,win:!!s.win,deaths:s.stats.deaths,b15:(H.find(h=>h.day===15)||{}).balance,b25:(H.find(h=>h.day===25)||{}).balance,rev:H.reduce((a,h)=>a+h.revenue,0),days:H.length,c0:W0.candidateIds,p0:W0.purchased,rr:W0.rerolls||0});}});}
+  globalThis.__BK=null;G.Debug.continueRun(g.account,g.run,1,'investor',{relicPriority:RNK,onRun:s=>{const W0=(s.relicHistory||[])[0]||{};const H=s.reportHistory||[];rows.push({t,k,day:s.day,win:!!s.win,deaths:s.stats.deaths,b15:(H.find(h=>h.day===15)||{}).balance,b25:(H.find(h=>h.day===25)||{}).balance,rev:H.reduce((a,h)=>a+h.revenue,0),days:H.length,c0:W0.candidateIds,p0:W0.purchased,rr:W0.rerolls||0,bk:globalThis.__BK||null});}});}
  fs.writeFileSync(path.join(out,process.env.MW.replace(/[:@#=.~+]/g,'_')+'.json'),JSON.stringify(rows));process.exit(0);}
 const t0=Date.now(),W=require('os').cpus().length;
 const run=(c,cb)=>fork(__filename,process.argv.slice(2),{env:{...process.env,MW:c}}).on('exit',code=>{console.error(c+' exit '+code+' '+Math.round((Date.now()-t0)/1000)+'s');cb();});

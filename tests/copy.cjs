@@ -620,7 +620,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
    reads right at the wrong price is still the wrong row. */
 test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are the approved text',()=>{
  const SUPPORTS=[
-  ['bulk','묶음발주 계약',130,'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 20% 싸진다.'],
+  ['bulk','묶음발주 계약',130,'한 번 발주할 때 같은 상품을 3개 이상 사면, 그 상품 전부의 매입가가 10% 싸진다.'],
   ['rotation','회전 진열대',80,'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 1개 늘어난다.'],
   ['stamp','단골 스탬프 기계',130,'손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4).'],
   ['member','회원 관리대장',130,'단골도가 손님이 다시 올 가능성에 주는 효과가 2배가 된다.'],

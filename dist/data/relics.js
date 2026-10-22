@@ -10,7 +10,7 @@ const GUARANTEE_MIN_PRICE=200;
    change), so a description is a function of the live tables, not a literal. A changed value reads `새 값 (기존 값)`. */
 const pct=x=>Math.round(x*100)+'%',pp=x=>Math.round(x*100)+'%p',times=x=>x+'배';
 const rows=[
-['bulk','묶음발주 계약','foundation',['rotation'],130,p=>'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 '+pct(p.bulk.discount)+' 싸진다.'],
+['bulk','묶음발주 계약','foundation',['rotation'],130,p=>'한 번 발주할 때 같은 상품을 3개 이상 사면, 그 상품 전부의 매입가가 '+pct(p.bulk.discount)+' 싸진다.'],
 ['rotation','회전 진열대','foundation',['rotation'],80,p=>'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 '+p.rotation.supplyBonus+'개 늘어난다.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],130,p=>{const up=m=>Math.round(D.pricing[m].loyalty*p.stamp.loyaltyMult);
  return '손님의 구매로 오르는 단골도: 정가 +'+up('full')+' (기존 +'+D.pricing.full.loyalty+'), 50% 할인 +'+up('half')+' (기존 +'+D.pricing.half.loyalty+').';}],
@@ -64,7 +64,7 @@ D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
    SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;
    only how strong the effect is lives here, and the descriptions above read it. */
 D.relicParams={
- bulk:{discount:.20},
+ bulk:{discount:.10},
  rotation:{supplyBonus:1},
  stamp:{loyaltyMult:1.75},
  member:{loyaltyRevisitMult:2},
