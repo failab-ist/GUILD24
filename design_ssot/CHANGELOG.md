@@ -84,6 +84,8 @@ and this table is their commit record.
 - UI_UX §STORE SHEET: a 장식 / 직업 숙련 switch bar (no underline), rank cards in the Decoration card shape, yellow pixel purchase
   keys (적용 / 해제 / 취소 stay wooden tags). The prep Capital plate opens the sheet on the side the Capital can buy (both: 장식).
   The ending's replay line adds `점포 자본으로 직업 숙련을 구매할 수 있다.`; COPY §1-10, §3-15, §8-7, §10-3, §10-5 follow.
+  The progress tab's per-Job table leaves the screen (the record stays in the save): one row of the seven Bosses, and the
+  ending names only a newly beaten Boss (`새로 토벌한 마왕`). The codex header reads the bought rank, 직업 숙련 n / 5.
 
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 
