@@ -7,7 +7,7 @@
 const fs=require('fs'),path=require('path'),root=path.join(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])require(path.join(root,'dist',f+'.js'));
 const G=globalThis.GUILD24||globalThis,D=G.DATA;
-const args=process.argv.slice(2),bi=args.indexOf('--bot'),N=bi>=0?+args[bi+1]:0,files=args.filter((a,i)=>a!=='--bot'&&i!==bi+1);
+const args=process.argv.slice(2),bi=args.indexOf('--bot'),N=bi>=0?+args[bi+1]:0,files=args.filter((a,i)=>bi<0||a!=='--bot'&&i!==bi+1);
 const CL=['strong','hopeless','rest'],acc=()=>Object.fromEntries(CL.map(c=>[c,{n:0,items:0,gold:0}]));
 const read=(a,recs)=>{for(const r of recs){if(r.deep)continue;const bare=r.bareRatio,prep=1+(r.greatMargin??0);if(bare==null)continue;
  const c=bare>=1.12?'strong':prep<0.85?'hopeless':'rest',x=a[c];x.n++;for(const id of r.items||[]){x.items++;x.gold+=D.itemBy[id]?.buy||0;}}};

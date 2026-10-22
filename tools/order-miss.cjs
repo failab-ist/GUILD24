@@ -6,7 +6,7 @@
 const fs=require('fs'),path=require('path'),root=path.join(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])require(path.join(root,'dist',f+'.js'));
 const G=globalThis.GUILD24||globalThis,D=G.DATA;
-const args=process.argv.slice(2),bi=args.indexOf('--bot'),N=bi>=0?+args[bi+1]:0,files=args.filter((a,i)=>a!=='--bot'&&i!==bi+1);
+const args=process.argv.slice(2),bi=args.indexOf('--bot'),N=bi>=0?+args[bi+1]:0,files=args.filter((a,i)=>bi<0||a!=='--bot'&&i!==bi+1);
 const acc=()=>({days:0,need:0,offered:0,bought:0,offeredNotBought:0,noOffer:0,dayCounters:0,rerollDays:0});
 const read=(a,hist)=>{for(const h of hist){if(!h.trace||!h.gates)continue;a.days++;if((h.rerolls||0)>0)a.rerollDays++;
  const need=new Set(h.gates.filter(g=>g[0]!=='final'&&D.familyTiers[g[0]]).flatMap(g=>D.familyTiers[g[0]][(g[1]||1)-1]));
