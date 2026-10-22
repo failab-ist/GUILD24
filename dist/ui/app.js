@@ -2539,8 +2539,8 @@ function decoPlate(slot){const id=game.run?.loadout?.[slot];if(!id)return '';
 function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='end');
  const loadout=Meta.storeLoadout(a);
  /* META §JOB MASTERY: the store sheet holds both things Store Capital buys - Decorations and Job Mastery - one view at a time */
- const views='<div class="tabs store-views">'+[['deco','장식'],['mastery','직업 숙련 '+Meta.masteryRank(a)+' / '+D.masteryRanks.length]]
-  .map(([id,label])=>btn(label,'store-view',storeView===id?'small active':'small','data-id="'+id+'"')).join('')+'</div>';
+ const views='<div class="tabs store-views">'+[['deco','장식','<small>'+Meta.ownedDecorations(a).length+' / '+D.decorations.length+'</small>'],['mastery','직업 숙련','<small>'+Meta.masteryRank(a)+' / '+D.masteryRanks.length+'</small>']]
+  .map(([id,label,count])=>btn('<span>'+label+'</span>'+count,'store-view',storeView===id?'small active':'small','data-id="'+id+'" aria-pressed="'+(storeView===id)+'"')).join('')+'</div>';
  if(storeView==='mastery')return masteryPanel(views,inRun);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+Meta.storeCapital(a).toLocaleString()+'</b>'
