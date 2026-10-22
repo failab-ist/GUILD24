@@ -1617,13 +1617,15 @@ function paintCoach(step,target){
 }
 /* UI_UX §TUTORIAL: track geometry while moving, then sleep until scroll or resize. */
 function settleCoach(step,target){
- cancelAnimationFrame(coachSettle);let last=null,still=0,frames=0;
+ cancelAnimationFrame(coachSettle);let last=null,still=0,frames=0;const t0=performance.now();
+ /* a slip drops in with a short pin-and-tilt entrance that can hold still for a few frames before it moves, so a still target
+    only counts as settled once the entrance time has passed (the cutout used to freeze on the first, tilted frame) */
  const tick=()=>{
   if(activeCoach!==step||!target.isConnected)return;
   const key=coachKey(target);
   if(key!==coachPainted)coachPainted=paintCoach(step,target);
   if(key===last)still++;else{last=key;still=0;}
-  if(still<2&&++frames<48)coachSettle=requestAnimationFrame(tick);
+  if((still<2||performance.now()-t0<1200)&&++frames<120)coachSettle=requestAnimationFrame(tick);
  };
  coachSettle=requestAnimationFrame(tick);
 }
