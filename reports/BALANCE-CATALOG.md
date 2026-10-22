@@ -1,10 +1,10 @@
 # 상품 · 점포지원 · 장식 — 현재 소스 밸런스 자료집
 
-소스 버전 **v2.13.20 (로컬 수정 포함)** · 데이터 서명 `945bd91425db` · 상품 **44종** · 활성 점포지원 **34종** · 장식 **12종**
+소스 버전 **v2.13.21 (로컬 수정 포함)** · 데이터 서명 `74545f68c355` · 상품 **44종** · 활성 점포지원 **34종** · 장식 **12종**
 
 `npm run audit`가 현재 Source에서 자동 생성한다. 이 파일은 설계 원본이 아니며 직접 수정하지 않는다. 실험 후보·시뮬 결과는 포함하지 않는다. 기본 가격·고유 효과를 적었으며 사건·특성·점포지원·메타에 따른 추가 보정은 별도다.
 
-설계 원본: [ITEM](../design_ssot/ITEM_v2.8.0.md) · [RELIC](../design_ssot/RELIC_v2.13.20.md) · [META](../design_ssot/META_v2.13.20.md) · [DUNGEON_HAZARD](../design_ssot/DUNGEON_HAZARD_v2.13.19.md) · [FINAL](../design_ssot/FINAL_EXPEDITION_v2.8.0.md)
+설계 원본: [ITEM](../design_ssot/ITEM_v2.8.0.md) · [RELIC](../design_ssot/RELIC_v2.13.20.md) · [META](../design_ssot/META_v2.13.21.md) · [DUNGEON_HAZARD](../design_ssot/DUNGEON_HAZARD_v2.13.19.md) · [FINAL](../design_ssot/FINAL_EXPEDITION_v2.8.0.md)
 
 ## 1. 공통 밸런스 수치
 

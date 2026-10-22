@@ -32,7 +32,7 @@ If Canonical and Source differ:
 
 Never change approved Design without User approval.
 
-Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.13.17.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
+Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.13.21.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
 
 ---
 

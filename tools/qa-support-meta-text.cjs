@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),assert=require('node:assert/strict'),{spawn}=require('node:child_process');
 const {chromium}=require('playwright'),{ready}=require('./qa-ready.cjs');
 const root=path.resolve(__dirname,'..'),out=path.resolve(process.argv[2]||path.join(os.tmpdir(),'guild24-support-meta-text')),before=process.argv.includes('--before'),port=5288,checks=[],findings=[];
-const MASTERY='서로 다른 마왕을 토벌할 때, 출전한 직업의 숙련이 쌓인다. 숙련이 높을수록 새로 오는 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.';
+const MASTERY='서로 다른 마왕을 토벌하면, 출전한 직업에 토벌 기록이 남는다. 직업 숙련은 점포 자본으로 구매한다.';
 function check(name,ok){assert.ok(ok,name);checks.push(name);}
 async function open(p,action){await p.locator('[data-action="menu"]').click();await p.locator('#modal-root [data-action="'+action+'"]').click();}
 async function shot(p,name){await p.screenshot({path:path.join(out,'batch6-'+(before?'before':'after')+'-'+name+'.png')});check(name+' 가로 넘침 없음',await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}

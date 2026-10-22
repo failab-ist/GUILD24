@@ -2,7 +2,7 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.13.17
+DOC_VERSION=2.13.21
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Implementation detail (exact px / ms / selectors) lives in Source (dist/ui/); this owner fixes the player-facing behaviour and the values tests assert.
@@ -38,7 +38,7 @@ uncommitted-Item derived Forecast answer, or failure diagnosis without proven ru
 ## RETIRED ACTIVE UI
 
 Never expose Franchise Grade, Franchise Achievement list/progress/toast, Grade ORDER discount, Start Contract selection or
-its Grade-gated unlock progress. Archive policy -> META_v2.13.20.md.
+its Grade-gated unlock progress. Archive policy -> META_v2.13.21.md.
 
 ## VISUAL DIRECTION
 
@@ -115,7 +115,7 @@ Timing/effect -> EVENT_v2.8.0.md.
 
 The Run's Death count and current segment limit (`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always in the top status
 line at MORNING and ORDER, not only in the 도감: one compact item — count / current limit / the Day the segment ends (copy ->
-`COPY_AUDIT_APPROVED_v2.13.20.md` §4-23); warning color at count = limit − 1; the limit shown includes 추모 방명록 and 위령제;
+`COPY_AUDIT_APPROVED_v2.13.21.md` §4-23); warning color at count = limit − 1; the limit shown includes 추모 방명록 and 위령제;
 no popover, badge or explanation; the same line on both screens.
 
 ORDER — FLOATING TODAY LINE: the Death line floats at the top of the scrolled 발주서. When the `오늘` block (visitors, per-Gate
@@ -181,7 +181,7 @@ Full-offer reroll + cost/state 6. sticky `발주 XXXG · 발주 확정`.
 
 오늘 brief line: `{N}명 · {Gate}`, or with two+ open Gates `{N}명 · {Gate A} {a} · {Gate B} {b}` — counted by each customer's
 claimed destination (a liar's or pilgrimage-rerouted true Gate stays hidden), summing to the visitor count; no name, Job,
-Trait or Wallet. Exact line -> `COPY_AUDIT_APPROVED_v2.13.20.md`.
+Trait or Wallet. Exact line -> `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 `위험 보기` shares the row with `점포지원`, directly above the visitor-count column rather than the `오늘` label. Both references use a close dotted underline; the reference row and today's brief keep a compact vertical gap.
 
@@ -385,7 +385,7 @@ Header:
 ```
 
 The 전투 전망 `?` help is two lines, the second `실패 시 사망 위험 {N}%`; no `실패 시 사망 위험` readout cell. Copy ->
-`COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help -> `COPY_AUDIT_APPROVED_v2.13.20.md` §4-1.
+`COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help -> `COPY_AUDIT_APPROVED_v2.13.21.md` §4-1.
 
 ### SALE — ENVIRONMENT METER (User 2026-10-02)
 
@@ -480,7 +480,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
   No role/percentage, actual price or disabled reason is omitted. Desktop keeps its existing
   header composition. All three price keys remain
   directly reachable. The phone `손님 보내기` target is 44px high; safe-area padding stays outside it (User 2026-10-03).
-- empty: one prompt line on DAY 1~3 while the tutorial is not skipped (`COPY_AUDIT_APPROVED_v2.13.20.md` §4-23), otherwise no
+- empty: one prompt line on DAY 1~3 while the tutorial is not skipped (`COPY_AUDIT_APPROVED_v2.13.21.md` §4-23), otherwise no
   height
 - the keys never move; a sale clears the tray (Item into the Bag) and shows the stub; a refusal keeps the Item with the
   refused key locked; the hand-over (§TRANSACTION BEAT A1) starts from the tray icon
@@ -560,7 +560,7 @@ only if direct and derived effects read clearly apart; otherwise remove it.
 ### SALE — PRICE ROLE WORDS
 
 `할인 50% · {price}G` / `정가 · {price}G` / `바가지 150% · {price}G`, each with `이익 {N}G` (or the disabled reason) under it;
-three modes, no extra depth. Copy -> `COPY_AUDIT_APPROVED_v2.13.20.md`; roles -> `SALE_v2.8.0.md` §PRICE ROLE.
+three modes, no extra depth. Copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`; roles -> `SALE_v2.8.0.md` §PRICE ROLE.
 
 ### SALE — REFUSAL PRICE CEILING UI
 
@@ -679,7 +679,7 @@ answer:
     귀환 후 피로 N
     귀환 후 피로 N · {band}
 
-Band from 10 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.13.20.md §6-6. The Fatigue row opens an overlay
+Band from 10 up; copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.13.21.md §6-6. The Fatigue row opens an overlay
 of actual daily causes (Function/Effect: 15px / 600), with the five bands in smaller type below (14px / 600, readable contrast). The overlay starts with a compact starting-to-settled row (15px / 600 figures; secondary labels 13px / 400), then lists the actual deltas; rule text keeps at least 4.5:1 contrast on a solid dark plane. NIGHT_CLOSING §FATIGUE RESULT owns the recorded path
 and settled value; the inline next-decision line does not repeat the numeric Fatigue.
 
@@ -707,7 +707,7 @@ equal-priority internal coefficients; Hazard detail appears where the destinatio
 Trait card: 1. name 2. actual effects 3. condition/scope when needed. Never show 이점 / 양면 / 약점 / ▲ / ◆ / ▼ (internal
 POSITIVE/MIXED/NEGATIVE stays for generation/Event logic). Each effect takes its data-driven tone (benefit / cost / neutral),
 never from the sign — `신중함`: injuryRisk -4%p = benefit, loot -8% = cost; wording reads without colour; no quality-grade
-header/background. Authoritative -> NPC_TRAIT_v2.13.19.md.
+header/background. Authoritative -> NPC_TRAIT_v2.13.21.md.
 
 ## HAZARD NUDGE
 
@@ -719,7 +719,7 @@ number first, on every row (MORNING Gate plate, SALE destination plate, D25 scou
 - 진창 · 대응 21 필요 · 기동 3당 대응 1 제공
 
 (no `{위험} · {label}` row; no `?` on the SALE plate.) Gate detail adds the full sentence, e.g.
-`냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (forms -> COPY_AUDIT_APPROVED_v2.13.20.md §4-16). PC hover/focus or touch tap/inline
+`냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (forms -> COPY_AUDIT_APPROVED_v2.13.21.md §4-16). PC hover/focus or touch tap/inline
 disclosure give the same information; hoverOnly=NO. Never explain some Hazards and leave others name-only. Allowed: clear
 labels, readable contrast/icon, preparedness label, highlighting what is relevant. Never: an alarm naming the required Item,
 `이 아이템 사세요`, automatic optimal picks — clarify ingredients, do not provide the answer. Ownership ->
@@ -760,7 +760,7 @@ Contextual explanations use anchored popovers, never a modal/accordion pushing g
 The 점주 가이드 uses the compact Copy text (current rules only, no internal arithmetic, no parallel long manual): first block
 `하루의 흐름` of exactly five lines (아침 / 발주 / 판매 / 밤 / 마감), one Item-effect reading line (COPY_AUDIT §8-0, vocabulary only,
 never a recommendation), then the eight sections under a collapsed `자세히` disclosure inside the help modal. Five lines ->
-COPY_AUDIT_APPROVED_v2.13.20.md §8.
+COPY_AUDIT_APPROVED_v2.13.21.md §8.
 
 ## NIGHT
 
@@ -783,7 +783,7 @@ Exactly two controls, both easy to reach on mobile and never demoted: `다음` (
 → 귀환 후 2
 ```
 
-Copy -> COPY_AUDIT_APPROVED_v2.13.20.md §6-6. A First Aid Kit Aftercare that actually changed Injury may show as a proven
+Copy -> COPY_AUDIT_APPROVED_v2.13.21.md §6-6. A First Aid Kit Aftercare that actually changed Injury may show as a proven
 contribution; no speculative failure diagnosis.
 
 ### NIGHT LAYOUT
@@ -946,14 +946,14 @@ closing `보유 골드` figure (its box also holds `영업 손익`) stamps (중�
 tape gives and settles. It stays cream; `영업 손익` beneath is green up, red down, gold at exactly 0 (each set in CSS so reduced
 motion matches). No `어제보다 +N` line (deferred, v3.0+ router).
 
-The END tape's `점포 자본 정산` (META_v2.13.20.md §STORE CAPITAL Run-end settlement structure; rates 1 / 2 / 3 / 3 / 3%) counts
+The END tape's `점포 자본 정산` (META_v2.13.21.md §STORE CAPITAL Run-end settlement structure; rates 1 / 2 / 3 / 3 / 3%) counts
 `현재 점포 자본` up from the prior total in 320 ms, a quiet `ui` cue at each Decoration price it passes (500 / 750 / 1000 /
-1500, read from META_v2.13.20.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
+1500, read from META_v2.13.21.md §DECORATION's list, not copied); 일반, no hold. Reduced motion: everything at once.
 
 ### END — CAPITAL METER (User 2026-10-18)
 
 Under `현재 점포 자본` the settlement prints one tick bar: a tick per Slot the account has not filled, labelled with the Slot name and its
-price (read from META_v2.13.20.md §DECORATION's list), ordered by price at equal spacing; the bar fills to `현재 점포 자본`, in proportion
+price (read from META_v2.13.21.md §DECORATION's list), ordered by price at equal spacing; the bar fills to `현재 점포 자본`, in proportion
 between ticks, and a tick the capital has reached turns red. The labels are Slots only - every Slot offers all three kinds at one price, so
 no Decoration or kind is named or recommended. No bar once every Slot is filled. It reads the account when drawn, so a purchase from the
 ending prints the new state. Acceptance -> UI-Q-v29-54 (the settlement block).
@@ -978,6 +978,8 @@ progress bar, remaining-count, mission or reward.
   1. the settlement crossed the price of a Decoration the account did not own at that settlement (before < price <= after;
      judged once — buying from the ending does not change it): `점포 자본으로 새 장식을 구매할 수 있다.` — never naming one (each
      Slot offers two)
+     1b. else the settlement crossed the price of the next Job Mastery rank the account may buy (same test, v2.13.21):
+     `점포 자본으로 직업 숙련을 구매할 수 있다.`
   2. new best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
   3. new best 총매출 (META §BEST DAY): `지금까지 가장 많이 판 점포다 · 총매출 {N}G` — N is the tape's `총매출` row
   4. otherwise nothing
@@ -1043,7 +1045,7 @@ bury it in stacked cards or repeat it every Phase. Catalog -> EVENT_v2.8.0.md.
 
 ## BOSS / FINAL REVEAL UI
 
-Gameplay -> BOSS_v2.8.0.md; Final Family -> FINAL_EXPEDITION_v2.8.0.md; wording -> COPY_AUDIT_APPROVED_v2.13.20.md.
+Gameplay -> BOSS_v2.8.0.md; Final Family -> FINAL_EXPEDITION_v2.8.0.md; wording -> COPY_AUDIT_APPROVED_v2.13.21.md.
 - D5: `Boss Identity` focused reveal -> D5 Relic reveal
 - D15: `Boss Trait` focused reveal -> D15 Relic window decision (`Relic 획득` vs `봉인 강화` when Sloth opportunity)
 - D30: D30 Relic window decision (`Relic 획득` vs `봉인 강화` for Sloth) -> Final preparation / lock
@@ -1071,7 +1073,7 @@ opens at once.
 ### D0 — FIRST MORNING BRIEFING
 
 Objective information, not spectacle: the first step of DAY 1 MORNING after the first Store Support choice (process ->
-CORE_RUN_v2.8.0.md; copy -> COPY_AUDIT_APPROVED_v2.13.20.md). No Boss art, silhouette, backdrop, fake portrait or timeline
+CORE_RUN_v2.8.0.md; copy -> COPY_AUDIT_APPROVED_v2.13.21.md). No Boss art, silhouette, backdrop, fake portrait or timeline
 cards. Under the header `마왕 조사 개시` and lead line: a DAY label (the record's LED face) over each of its four lines (DAY 05 / 15 / 25 / 30),
 no closing sentence (§14-1); one `확인`. Compact like onboarding, yet the objective cannot be missed.
 
@@ -1143,7 +1145,7 @@ Before Final Lock, every Boss-changed visible value shows `original → applied`
 - SLOTH: 봉인 강화 상태 · 현재 위협 단계
 
 The committed member Stat grid and read-only detail use finalPreRoll snapshots; changed final modifiers show prepared → applied with proven source deltas. 단골 감사 현수막 is a separate source. Uncommitted candidates and SALE keep their preparation readings.
-No Final success %. Identity `탐식의 마왕 글러트니`; Trait prose -> `COPY_AUDIT_APPROVED_v2.13.20.md`.
+No Final success %. Identity `탐식의 마왕 글러트니`; Trait prose -> `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 ### FINAL BOSS ART
 
@@ -1410,12 +1412,27 @@ row; the effect line runs the card's full width on the row below, so neither the
 
 ### STORE GROWTH SURFACE
 
-Store Capital / Decoration management and run-end settlement stay as META_v2.13.20.md and CORE_RUN_v2.8.0.md own them.
+Store Capital / Decoration management and run-end settlement stay as META_v2.13.21.md and CORE_RUN_v2.8.0.md own them.
+
+### STORE SHEET — DECORATIONS AND JOB MASTERY (User 2026-10-22, v2.13.21)
+
+- The store sheet (codex tab `store`) has a two-half switch bar at the top: `장식 N / 12` and `직업 숙련 N / 5`. The chosen
+  half is a lighter wood plane (#6a4527, light text), the other the dark base; no underline or accent stroke marks it.
+- Tapping the Capital plate on `새 점포 준비` opens the sheet (Enter / Space as well). It opens on the side that has
+  something the Capital can buy now: only Job Mastery -> 직업 숙련; Decorations (alone, or both) -> 장식, scrolled to the
+  first Slot with an affordable Decoration; neither -> the side last seen. `장식 관리` keeps opening 장식.
+- 직업 숙련 shows the Capital line with `숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.`, a `직업별 주 능력치`
+  grid (two columns on a phone, three from 700 px) and five rank cards in the Decoration card shape. A card reads 보유,
+  `n단 먼저`, `마왕 N종 / 토벌 후` (two lines), its price during a Run, or the buy key; the buy asks inline like a Decoration.
+- Purchase keys (Decoration and Mastery `구매` / `구매 확정`) are a yellow pixel plane like the Night `다음`: stamp-cut
+  corners, inset depth, a 3 px press. Without the Capital the key is a plain dark plane with readable text. 적용 / 해제 /
+  취소 stay the wooden return tag. No key underlines on hover.
+- The codex header's `직업 숙련` reads the bought rank, `직업 숙련 {n} / 5` (it read the 0..42 record total before v2.13.21).
 
 ## META UI
 
-The progress table explains Job Mastery's same-Job spawn-Level meaning (COPY §10-5). Retired Store Supports keep their description but read 현재 후보로 나오지 않음 (COPY §10-6).
-Meta gameplay -> META_v2.13.20.md. Keep distinct: Job × Boss clear matrix · Job Mastery 0..7 per Job · Total Job Mastery ·
+The progress table is the Job × Boss record (column `토벌`, n / 7) and says Job Mastery is bought with Store Capital (COPY §10-5). Retired Store Supports keep their description but read 현재 후보로 나오지 않음 (COPY §10-6).
+Meta gameplay -> META_v2.13.21.md. Keep distinct: Job × Boss clear record (0..7 per Job, Total 0..42) · Job Mastery rank 0..5 (bought) ·
 The product codex distinguishes permanent account unlock from each Run's DAY-based offer eligibility (META §D10 / D14 PRODUCT UNLOCK — EXACT, COPY_AUDIT §8-9).
 Distinct Boss Clear 0..7 · approved 1/3/6 unlock milestones; no legacy Global Meta XP as progression. Monster Knowledge has no
 player surface and no codex `몬스터 지식` tab (all Hazards are public from MORNING); the record stays, unshown (META §MONSTER
@@ -1512,7 +1529,7 @@ them still loads.
 
 ## RUN ABANDON UX
 
-Confirmation copy -> `COPY_AUDIT_APPROVED_v2.13.20.md` (현재 지점 포기 Confirm); no legacy XP / settlement / reward promise.
+Confirmation copy -> `COPY_AUDIT_APPROVED_v2.13.21.md` (현재 지점 포기 Confirm); no legacy XP / settlement / reward promise.
 
 ## QA / DEBUG REPRODUCTION ACCESS — EXACT
 
@@ -1544,13 +1561,13 @@ Coach Mark / Spotlight / FTUE Overlay: the screen stays visible, dimmed, a spotl
 On DAY 1, 2 and 3 while `tutorial.skipped` is false, one fixed text line tops the phase content (under the menu pin, above the
 first block) on MORNING, ORDER, SALE, NIGHT and CLOSING: none from DAY 4 or on DAY 0, hidden when skipped; not a coach mark
 (no spotlight or button); never two lines at 360; tutorial state only, no Save field. Strings (`오늘 할 일 — …`) ->
-COPY_AUDIT_APPROVED_v2.13.20.md §3.
+COPY_AUDIT_APPROVED_v2.13.21.md §3.
 
 ### TUTORIAL — FIRST-ORDER COACH ORDER
 
 (§TUTORIAL — COACH DIET.) The first ORDER has two marks, `kinds` (what each Item kind is for, on the first offer's kind label; User 2026-10-10)
 then `confirm` (발주 확정); no `gates`, `stock`, `offer`, `quantity` or `gold` marks — the 오늘 line and `위험 보기`, the 창고 head (DAY 1: `창고 · 본사 기본 상품 N종`), the effect lines, `최대` and the
-register say them. The `reroll` mark is the DAY 4 ORDER's, even when another ORDER coach appears that day: the key keeps the name `발주 후보 교환` and gains a transparent local raster refresh icon with an open arc and a distinct attached triangular arrowhead. The mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.13.20.md §3-7 / §3-14.
+register say them. The `reroll` mark is the DAY 4 ORDER's, even when another ORDER coach appears that day: the key keeps the name `발주 후보 교환` and gains a transparent local raster refresh icon with an open arc and a distinct attached triangular arrowhead. The mark says each press doubles the price. Strings -> COPY_AUDIT_APPROVED_v2.13.21.md §3-7 / §3-14.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
@@ -1591,7 +1608,7 @@ screen says it; otherwise none, or taught after the fact.
 
 One contextual mark, once per account, persisted and reset with the rest: the first 150% (바가지) refusal, on the refused key
 (`오늘 거절됨`). The price keys themselves carry the §TUTORIAL — COACH DIET mark before it. Words only; copy ->
-COPY_AUDIT_APPROVED_v2.13.20.md §26-3.
+COPY_AUDIT_APPROVED_v2.13.21.md §26-3.
 
 ### TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED
 
@@ -1633,7 +1650,7 @@ no Morning/Order information hidden.
 (acceptance -> UI_UX §QA UI-Q-v29-56.) One contextual MORNING mark, like the Gate marks: the first time an Event slip (`.slip.event`)
 is on the board, once per account, persisted and reset with the rest. On a fresh account it
 lands on the first Run's DAY 2 (`CORE_RUN_v2.8.0.md` §FIRST-RUN LESSONS). It says that an Event may come any morning and changes
-that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDIT_APPROVED_v2.13.20.md` §3-11.
+that one Day; it never names an Event or what to do about it. Copy -> `COPY_AUDIT_APPROVED_v2.13.21.md` §3-11.
 
 ### GATE TIER / FIRE GATE TUTORIAL
 
@@ -1644,7 +1661,7 @@ SYSTEM):
   own Stat. Keyed on the tier, not the Hazard count (User 2026-10-02): a tier I Gate an Event (한파 · 독안개) gave a second
   Hazard, and a tier III Gate, never draw it
 - the first FIRE tier II or III Gate: the base Hazard stays one from II onward, while Events may add another. A FIRE tier I Gate never shows this mark. Existing completion/reset state is preserved.
-- copy -> `COPY_AUDIT_APPROVED_v2.13.20.md` §3-10
+- copy -> `COPY_AUDIT_APPROVED_v2.13.21.md` §3-10
 
 ## COPY HIERARCHY
 
@@ -1857,7 +1874,7 @@ Acceptance criteria for this owner. Status values are not stored here; FAIL is v
 
 ### SCOPE
 
-Design owner under test -> UI_UX_v2.13.17.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
+Design owner under test -> UI_UX_v2.13.21.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
 Rule text lives in the body; a QA item points there with `→ UI_UX §SECTION` and keeps only what it checks.
 
 ### PHASE IDENTITY / VISUAL LANGUAGE
@@ -2621,7 +2638,8 @@ PASS, in priority order, at most one line, never beside `본사 해금`, the sam
 - a first-on-account D10 / D14 product unlock is listed in `본사 해금` beside any distinct-Boss unlock; the Day toast still fires
   once; a later Run reaching D10 again lists nothing
 - else a settlement crossing an unowned Decoration's price prints `점포 자본으로 새 장식을 구매할 수 있다.` (nothing if capital was
-  already above it or the Decoration is owned)
+  already above it or the Decoration is owned); else one crossing the next buyable Job Mastery rank prints
+  `점포 자본으로 직업 숙련을 구매할 수 있다.`
 - else beating the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`
 - else beating the best 총매출 prints `지금까지 가장 많이 판 점포다 · 총매출 {N}G`, N the tape's own `총매출`; beating both prints
   the best Day line
@@ -3105,14 +3123,14 @@ changes a mechanic.
 No active Store Capital display appends G. Gold still uses G.
 
 #### UI-Q-v28-14 — DECORATION ART / SETTLEMENT
-Decoration-art, Store Capital settlement and Franchise-retirement checks stay active as defined by META_v2.13.20.md and
+Decoration-art, Store Capital settlement and Franchise-retirement checks stay active as defined by META_v2.13.21.md and
 CORE_RUN_v2.8.0.md.
 
 #### UI-Q42 — META PROGRESSION PRESENTATION
 Meta/HQ progression on accounts with different matrix states.
 EXPECT: no Global Meta XP progress bar as current truth; Job × Boss clear cells readable; per-Job Mastery and Total Mastery derive
 consistently; Distinct Boss unlock milestones 1/3/6 clear.
-PASS: the UI matches META_v2.13.20.md and does not resurrect legacy progression truth.
+PASS: the UI matches META_v2.13.21.md and does not resurrect legacy progression truth.
 
 #### UI-Q39 — MONSTER KNOWLEDGE — RETIRED FROM THE CODEX
 → UI_UX §META UI.
@@ -3247,7 +3265,7 @@ SETUP: fresh account with the tutorial not skipped: DAY 1, 2, 3 and 4 of one Run
 account whose tutorial is skipped (`tutorial.skipped` true) on DAY 1 (→ UI_UX §TUTORIAL — TASK LINE, DAY 1~3).
 PASS:
 - DAY 1~3 MORNING / ORDER / SALE / NIGHT / CLOSING each show one fixed line at the top of the phase content (under the menu pin,
-  above the first block; no coach mark, spotlight or button), exactly the `COPY_AUDIT_APPROVED_v2.13.20.md` §3-8 string:
+  above the first block; no coach mark, spotlight or button), exactly the `COPY_AUDIT_APPROVED_v2.13.21.md` §3-8 string:
   `오늘 할 일 — 열린 게이트의 위험을 본다` / `오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다` / `오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다` / `오늘 할 일 — 준비가 어떻게 됐는지 확인한다` / `오늘 할 일 — 오늘 장사를 정리한다`
 - never wraps at 360; absent on DAY 0, from DAY 4, and with the tutorial skipped
 - reuses the tutorial state, adds no Save field, adds exactly one line of page height (the approved exception to "tutorial does
@@ -3279,7 +3297,7 @@ FAIL: a badge / word / reorder marks the fit, or any effect is emphasised.
 
 SETUP: ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's
 customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
-PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.13.20.md` §4-21 - one Gate `전체 {N}명 {Hazard}{Tier}` with no count; two or
+PASS: the ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.13.21.md` §4-21 - one Gate `전체 {N}명 {Hazard}{Tier}` with no count; two or
 more `전체 {N}명 {Hazard}{Tier} {a}명 …` (a Tier II-III Gate lists both Hazards with its one count); an Event-closed Gate beside one open Gate
 `전체 {N}명 {Hazard}{Tier} {n}명 {닫힌 Gate의 Hazard}{Tier} 오늘 폐쇄`; each count follows the claimed destination, never exposing a liar's or
 rerouted customer's true Gate; no name, Job, Trait, Wallet or individual destination of a future customer (UI-Q91 / UI-Q101,
@@ -3303,7 +3321,7 @@ FAIL: the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `�
 #### UI-Q-v29-15 — STORE SUPPORT CARD COPY, TWO CLAUSES
 
 SETUP: the DAY 0 Store Support takeover and the owned-Relic modal on a Run that owns several Store Supports, at 360 and 1280.
-PASS: all thirty card bodies match `COPY_AUDIT_APPROVED_v2.13.20.md` §11-1 … §11-30 verbatim (effect first, condition after ` · `,
+PASS: all thirty card bodies match `COPY_AUDIT_APPROVED_v2.13.21.md` §11-1 … §11-30 verbatim (effect first, condition after ` · `,
 no HQ-accounting clause); values and effects match RELIC_v2.13.20.md.
 FAIL: a body that is not the §11 line.
 
@@ -3591,14 +3609,14 @@ run phases / Final timeline / fresh init -> CORE_RUN_v2.8.0.md
 order / Economy / Final Wallet / Gold -> ECONOMY_ORDER_v2.13.19.md
 sale -> SALE_v2.8.0.md
 night/closing / Night result -> NIGHT_CLOSING_v2.8.0.md
-npc presentation -> NPC_TRAIT_v2.13.19.md
+npc presentation -> NPC_TRAIT_v2.13.21.md
 item info -> ITEM_v2.8.0.md
 relic choice -> RELIC_v2.13.20.md
 forecast / Fatigue / Supply -> DUNGEON_HAZARD_v2.13.19.md
 event reveal -> EVENT_v2.8.0.md
 final expedition / Final preparation -> FINAL_EXPEDITION_v2.8.0.md
 Boss modifier truth -> BOSS_v2.8.0.md
-Meta / Store Capital / Decoration -> META_v2.13.20.md
+Meta / Store Capital / Decoration -> META_v2.13.21.md
 copy/voice -> COPY_WORLD_VOICE_v2.8.0.md
-exact player-facing copy -> COPY_AUDIT_APPROVED_v2.13.20.md
+exact player-facing copy -> COPY_AUDIT_APPROVED_v2.13.21.md
 presentation principles / audio -> PRESENTATION_PRINCIPLES_v2.8.0.md

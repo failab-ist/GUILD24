@@ -167,12 +167,12 @@ D0 must not reveal or depict:
 - Final Family / Hazard state;
 - the per-Boss FINAL domain backdrop.
 
-Exact copy -> COPY_AUDIT_APPROVED_v2.13.20.md.
+Exact copy -> COPY_AUDIT_APPROVED_v2.13.21.md.
 D5 remains the first Boss identity / art reveal.
 
 ## REVEAL ORDER
 
-Presentation -> UI_UX_v2.13.17.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.20.md.
+Presentation -> UI_UX_v2.13.21.md. Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.21.md.
 
 ### D5
 
@@ -226,7 +226,7 @@ No new RNG is consumed by merely showing a report.
 
 ## PRESENTATION PAYOFF
 
-UI_UX_v2.13.17.md may strengthen the visual/audio acknowledgement of:
+UI_UX_v2.13.21.md may strengthen the visual/audio acknowledgement of:
 - D0 investigation start
 - D5 identity
 - D10 combat-question investigation
@@ -286,7 +286,7 @@ Balance intent:
 - first clear must still be possible at Job Mastery 0 through strong Run growth/preparation/build/player mastery
 - no new permanent power is granted merely for failing Runs
 
-Meta progression remains owned by `META_v2.13.20.md`.
+Meta progression remains owned by `META_v2.13.21.md`.
 
 ---
 
@@ -506,7 +506,7 @@ Rules:
 - Gluttony does not suppress the entire Item effect bundle
 
 Item effect ownership -> `ITEM_v2.8.0.md`
-Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.20.md`.
+Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 ---
 
@@ -515,7 +515,7 @@ Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.13.20.md`.
 identity=tests long-term NPC relationship investment, not Job composition
 
 LUST does not define a new affection meter, charm meter, Loyalty threshold or Boss-specific relationship state.
-Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v2.13.19.md`.
+Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v2.13.21.md`.
 
 Evaluation timing:
 - D15 reveals the rule
@@ -594,7 +594,7 @@ break one Sloth Seal for 0G
 
 Existing Relic candidate generation / Defer lifecycle is reused.
 Relic-window lifecycle -> `RELIC_v2.13.20.md`.
-Exact UI ownership -> `RELIC_v2.13.20.md` / `UI_UX_v2.13.17.md`.
+Exact UI ownership -> `RELIC_v2.13.20.md` / `UI_UX_v2.13.21.md`.
 
 ### Final difficulty ordering
 
@@ -700,7 +700,7 @@ Boss CLEAR continues to feed:
 - Job x Boss matrix / Job Mastery
 - distinct-Boss unlock progression
 
-Cross-run Job Mastery / distinct-Boss unlock processing is owned by `META_v2.13.20.md`.
+Cross-run Job Mastery / distinct-Boss unlock processing is owned by `META_v2.13.21.md`.
 BOSS does not duplicate Meta progression state.
 
 ---
@@ -834,12 +834,12 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 
 Final state / formula / family / party / clear / Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Relic / Seal window / Sloth opportunity -> `RELIC_v2.13.20.md`
-Meta / mastery / unlock -> `META_v2.13.20.md`
-Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.13.19.md`
+Meta / mastery / unlock -> `META_v2.13.21.md`
+Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.13.21.md`
 Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`
 Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.13.19.md`
 Sale revenue commit -> `SALE_v2.8.0.md`
 Closing revenue report -> `NIGHT_CLOSING_v2.8.0.md`
-Presentation / UI reveal -> `UI_UX_v2.13.17.md`
+Presentation / UI reveal -> `UI_UX_v2.13.21.md`
 Copy / terminology -> `COPY_WORLD_VOICE_v2.8.0.md`
-Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.20.md
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.13.21.md
