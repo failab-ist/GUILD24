@@ -220,7 +220,7 @@ After party commitment, show exactly one party-wide qualitative forecast:
 토벌 전망 · {우세|접전|불리}
 ```
 
-Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.13.20.md`.
+Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 The forecast:
 - reads the entire committed party, whether it contains 1, 2 or 3 participants;
@@ -274,7 +274,7 @@ The D30 ORDER sheet never offers these, on its first sheet or after a Reroll: D3
 Final Bag. Same explicit no-effect exclusion D30 Store Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
 
 Player-facing copy must not use the internal term `Final`.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.13.20.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 Boss-caused visible Item changes must use the same current Final truth that resolution will use.
 This applies to both the shelf summary and the focused Item preview; they may not contradict each other.
@@ -291,7 +291,7 @@ With no purchase/refusal roll, a valid affordable transfer succeeds deterministi
 Ordinary SALE refusal dialogue / customer chatter does not appear in Final preparation.
 
 If Wallet is insufficient, block the transfer and show the system reason with exact required and owned
-Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.13.20.md`.
+Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 ### Result
 
@@ -483,11 +483,11 @@ effective Boss Power exact numeric value -> `BOSS_v2.8.0.md`.
 
 Display order (H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a clear, faint and
 crooked for a failure, never one per member and never the NIGHT death tape - and the existing result sentence follows it.
-It changes no result, wording or settlement. Timing -> UI_UX_v2.13.17.md §FINAL RESULT — SEAL STAMP.
+It changes no result, wording or settlement. Timing -> UI_UX_v2.13.21.md §FINAL RESULT — SEAL STAMP.
 
 Before the ending (H7) the resolved Final is played out once as a card fight - each member is handed what they carried,
 each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap skips it; it decides nothing.
--> UI_UX_v2.13.17.md §FINAL — CLASH SCENE.
+-> UI_UX_v2.13.21.md §FINAL — CLASH SCENE.
 
 ## FINAL INSURANCE VALUE — EXACT
 
@@ -731,4 +731,4 @@ Boss -> `BOSS_v2.8.0.md`
 Relic D30 window -> `RELIC_v2.13.20.md`
 Sale handling -> `SALE_v2.8.0.md`
 Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.13.19.md`
-UI -> `UI_UX_v2.13.17.md`
+UI -> `UI_UX_v2.13.21.md`

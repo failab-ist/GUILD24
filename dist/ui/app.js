@@ -72,7 +72,7 @@ function endReveal(){const s=game.run;clearTimeout(endAt);
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
-let decoPending=null,decoFocus=null;
+let decoPending=null,decoFocus=null,storeView='deco',masteryPending=false;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 /* the sheet header's close control: a bare X, named 창 닫기 for assistive tech */
 const CLOSE_X='<svg class="x-icon" viewBox="0 0 14 14" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" fill="none"/></svg>';
@@ -351,7 +351,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){decoPending=null;if(value==='relics'){sealFolded=false;ownedOpen=false;}if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;masteryPending=false;if(value==='relics'){sealFolded=false;ownedOpen=false;}if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -1554,7 +1554,7 @@ const coachSteps={
  /* COACH DIET (User 2026-09-30): the first clause only - the warehouse clause is dropped and the receipt gains no row */
  /* User 2026-10-04: the first Run end whose settlement carries 점포 자본 across a Decoration's price (settleStoreCapital's `reach`) - the
     one place the 점포 자본 is explained, once: it can buy a Decoration, and how it builds up */
- end:[['capital','.p-end .settlement.reach','점포 자본으로 장식을 구매할 수 있다. 점포 자본은 보유 골드와 별개로, 영업이 끝날 때 총매출의 3%가 쌓인다.']],
+ end:[['capital','.p-end .settlement.reach','점포 자본으로 장식과 직업 숙련을 구매할 수 있다. 보유 골드와 별개로, 영업이 끝날 때 총매출의 3%가 쌓인다. 새 점포 준비 화면의 점포 자본 판을 눌러 구매한다.']],
  closing:[['receipt','.tape .purse','영업 시작 골드와 보유 골드를 비교한다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
@@ -2295,7 +2295,8 @@ function endHeadline(){const s=game.run;
    reachable from the store menu at any time. */
 function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const row=(label,value)=>'<div class="row"><span>'+label+'</span><b>'+value+'</b></div>';
- const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 숙련',g.from+' → '+g.to)).join('');
+ /* v2.13.21: per-Job counts no longer matter; the ending names the Boss newly added to the distinct count */
+ const moved=gain?.boss?row('새로 토벌한 마왕',E(D.bossBy[gain.boss]?.name||gain.boss)):'';
  /* UI_UX §END — REPLAY NUDGE (User 2026-09-26, v2.9.4): 본사 해금 lists everything this Run opened - the distinct-Boss
     unlocks Meta.finish credited and the D10 / D14 products the Run recorded as they opened. */
  const openedNames=[...(s.unlocked||[]),...(s.dayUnlocked||[])];
@@ -2307,7 +2308,7 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
     not inputs. Printed from the settlement the Run recorded, not recomputed here, so a reload
     shows the same figures and cannot appear to earn again. */
  const st=s.settlement;
- const settle=st?'<div class="block settlement'+(st.reach?' reach':'')+'"><h4>점포 자본 정산</h4>'
+ const settle=st?'<div class="block settlement'+(st.reach||st.reachMastery?' reach':'')+'"><h4>점포 자본 정산</h4>'
   +row('총매출',st.sales.toLocaleString()+'<i>G</i>')
   +row('얻은 점포 자본','×'+Math.round(st.rate*100)+'% → +'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+capitalMeter(st.capitalAfter)+'</div>':'';
@@ -2342,6 +2343,7 @@ function capitalMeter(cap){const filled=new Set(Meta.ownedDecorations(game.accou
   +ticks.map(t=>'<li'+(cap>=t.price?' class="on"':'')+'><em>'+E(SLOT_COPY[t.sl])+'</em><b>'+t.price.toLocaleString()+'</b></li>').join('')+'</ul></div>';}
 function replayLine(){const s=game.run,st=s.settlement;
  if(st?.reach)return '점포 자본으로 새 장식을 구매할 수 있다.';
+ if(st?.reachMastery)return '점포 자본으로 직업 숙련을 구매할 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 (DAY '+s.day+')';
  if(s.salesBefore>0&&st?.sales>s.salesBefore)return '지금까지 가장 많이 판 점포다 (총매출 '+st.sales.toLocaleString()+'G)';
  return '';}
@@ -2545,9 +2547,14 @@ function decoPlate(slot){const id=game.run?.loadout?.[slot];if(!id)return '';
  return '<span class="decoplate '+slot+'" role="img" aria-label="'+E(SLOT_COPY[slot]||slot)+' · '+E(d.name)+'">'+art+'</span>';}
 function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='end');
  const loadout=Meta.storeLoadout(a);
+ /* META §JOB MASTERY: the store sheet holds both things Store Capital buys - Decorations and Job Mastery - one view at a time */
+ const views='<div class="tabs store-views">'+[['deco','장식','<small>'+Meta.ownedDecorations(a).length+' / '+D.decorations.length+'</small>'],['mastery','직업 숙련','<small>'+Meta.masteryRank(a)+' / '+D.masteryRanks.length+'</small>']]
+  .map(([id,label,count])=>btn('<span>'+label+'</span>'+count,'store-view',storeView===id?'small active':'small','data-id="'+id+'" aria-pressed="'+(storeView===id)+'"')).join('')+'</div>';
+ if(storeView==='mastery')return masteryPanel(views,inRun);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+Meta.storeCapital(a).toLocaleString()+'</b>'
  +'<span class="sp">'+(inRun?'이번 점포의 장식은 고정됨.':'장식은 점포를 열기 전에 변경할 수 있습니다.')+'</span></p>'
+ +views
  +D.decorationSlots.map(slot=>{
    const options=D.decorations.filter(d=>d.slot===slot),active=loadout[slot];
    /* a stable handle so a Slot row elsewhere can open this panel already on that Slot */
@@ -2575,21 +2582,40 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
        +'</div>';}).join('')
     +'</div>';}).join('')
  +'</div>';}
+const MASTERY_STAT={combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신'};
+/* the two Stats a Job grows most - the ones Job Mastery raises */
+const masteryStats=j=>Adventurer.mainStats(j).map(i=>Adventurer.keys[i]);
+const masteryEffect=r=>r.level.length?r.level.map((p,i)=>Math.round(p*100)+'% 확률로 레벨 +'+(i+1)).join(', ')
+ :'주 능력치 2개 +'+r.stat;
+function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a),cap=Meta.storeCapital(a),beaten=Meta.distinctBossClear(a);
+ return '<div class="decoration-panel">'
+ +'<p class="smalltext">점포 자본 <b class="gold-text">'+cap.toLocaleString()+'</b>'
+ +'<span class="sp">숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.</span></p>'
+ +views
+ +'<div class="slot"><h4>직업별 주 능력치</h4><dl class="mastery-stats">'+D.jobs.map(j=>'<div><dt>'+E(j.name)+'</dt><dd>'+masteryStats(j).map(k=>MASTERY_STAT[k]).join(', ')+'</dd></div>').join('')+'</dl></div>'
+ +'<div class="slot"><h4>직업 숙련</h4>'
+ +D.masteryRanks.map((r,i)=>{const owned=i<rank,next=i===rank,open=beaten>=r.bosses;
+   const state=owned?'<span class="muted">보유</span>'
+    :!next?'<span class="muted">'+(open?(i)+'단 먼저':'마왕 '+r.bosses+'종<br>토벌 후')+'</span>'
+    :!open?'<span class="muted">마왕 '+r.bosses+'종<br>토벌 후</span>'
+    :inRun?'<span class="muted">'+r.price.toLocaleString()+' 자본</span>'
+    :masteryPending?'<div class="deco-confirm"><p class="smalltext">숙련 '+(i+1)+'단: '+r.price.toLocaleString()+' 자본을 씁니다. 남는 자본 '
+      +Math.max(0,cap-r.price).toLocaleString()+'.</p>'+btn('구매 확정','mastery-confirm','small active')+btn('취소','mastery-cancel','small')+'</div>'
+    :btn('구매 <small>'+r.price.toLocaleString()+' 자본</small>','mastery-buy','small',cap<r.price?'disabled':'');
+   return '<div class="slot-option'+(owned?' on':'')+(owned||next&&open?'':' locked')+'">'
+    +'<b class="deco-name">숙련 '+(i+1)+'단</b>'+state
+    +'<span class="smalltext deco-effect">'+E(masteryEffect(r))+'</span></div>';}).join('')
+ +'</div>'
+ +'</div>';}
 function progressPanel(){const a=game.account;
- /* the grade, the total and the distinct count are already stated in the codex header
-    directly above this, so the panel does not say them a second time. */
+ /* v2.13.21: the per-Job table is retired from view (the matrix stays in the save); one row of the seven Bosses. The distinct
+    count is already stated in the codex header directly above this, so the panel does not say it a second time. */
  return '<div class="progress-panel">'
- +'<p class="smalltext">서로 다른 마왕을 토벌할 때, 출전한 직업의 숙련이 쌓인다. 숙련이 높을수록 새로 오는 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.</p>'
- +'<table class="matrix"><thead><tr><th scope="col">직업</th>'
- +D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')
- +'<th scope="col">숙련</th></tr></thead><tbody>'
- +D.jobs.map(j=>{const locked=!Meta.jobUnlocked(a,j);
-   return '<tr'+(locked?' class="locked"':'')+'><th scope="row">'+E(j.name)+'</th>'
-    +D.bosses.map(b=>{const done=!!a.matrix?.[j.id]?.[b.id];
-      return '<td class="'+(done?'done':'open')+'"><span aria-label="'+E(b.name)+' '
-       +(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
-    +'<td class="tally">'+Meta.jobMastery(a,j.id)+' / 7</td></tr>';}).join('')
- +'</tbody></table>'
+ +'<p class="smalltext">서로 다른 마왕을 잡을수록 새 직업과 상품, 직업 숙련 3단부터가 열린다. 직업 숙련은 점포 자본으로 구매한다.</p>'
+ +'<table class="matrix"><thead><tr>'+D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')+'</tr></thead><tbody><tr>'
+ +D.bosses.map(b=>{const done=Meta.bossCleared(a,b.id);
+   return '<td class="'+(done?'done':'open')+'"><span aria-label="'+E(b.name)+' '+(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
+ +'</tr></tbody></table>'
  +unlockBoard()+'</div>';}
 function unlockBoard(){const {done,next}=unlockLists();
  // something already open does not need a counter saying it is open
@@ -2605,7 +2631,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    notebook. Presentation owns turning an event into words; anything it cannot describe is
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()}<span class="sp">보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</span></p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42<span class="sp">서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</span></p></div><span class="muted">${a.runs}회 영업<span class="sp">${a.wins}회 마왕 토벌</span></span></div><details><summary>발견 수첩: ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${isLocked(it)?LOCK_MARK:''}${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()}<span class="sp">보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</span></p><p class="smalltext">직업 숙련 ${Meta.masteryRank(a)} / ${D.masteryRanks.length}<span class="sp">서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</span></p></div><span class="muted">${a.runs}회 영업<span class="sp">${a.wins}회 마왕 토벌</span></span></div><details><summary>발견 수첩: ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${isLocked(it)?LOCK_MARK:''}${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 /* UI_UX §CODEX BOSS TAB: the Bosses the Player has met, this Run's Boss first once its identity is shown. Only the Trait is kept -
    the Final Hazards change every Run - and a Boss never met is not listed at all. */
 function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=r.identitySeen?s?.bossId:null;
@@ -2664,7 +2690,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
     +ascNote(a)+'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
-   +'<span class="store-capital capital-plate"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
+   +'<span class="store-capital capital-plate" role="button" tabindex="0" data-action="store-open" aria-label="점포 자본 '+capital.toLocaleString()+', 장식과 직업 숙련 구매"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
   +'<div class="deco-layer">'+D.decorationSlots.map(place).join('')+'</div>'
  +'</div>'
  +'<div class="dock">'+(fromEnd?btn('결과 다시 보기','prep-back','bare'):'')+btn('첫 점포지원 고르기','start','stamp')+'</div></div>';}
@@ -2704,7 +2730,7 @@ function settings(){return `<div class="settings-content">
  <p class="settings-links">${btn('크레딧','credits','bare')}<a href="mailto:${SUPPORT_MAIL}">오류 신고</a><a href="${PRIVACY_URL}" target="_blank" rel="noopener">개인정보처리방침</a></p>
  <p class="settings-note">게임의 시간은 행동할 때만 흐른다.${Native.inApp()?'':' 소리는 처음에 꺼져 있다.'}</p><p class="build-line">v${E(BUILD.version)} ${E(BUILD.commit)}</p></div>`;}
 /* COPY_AUDIT §8 / UI_UX §GLOBAL HELP: five flow lines, then eight sections under collapsed 자세히. */
-function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침: 오늘 열린 게이트의 위험을 본다.</p><p>발주: 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매: 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤: 원정 결과와 손님의 변화를 본다.</p><p>마감: 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5, 10, 15, 20, 25, 30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><p>손님 소지금은 최대 2000G까지 쌓인다. 그보다 많이 벌어도 2000G를 넘지 않는다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 3%가 쌓인다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식을 들이는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>하루의 흐름</h3><p>아침: 오늘 열린 게이트의 위험을 본다.</p><p>발주: 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매: 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤: 원정 결과와 손님의 변화를 본다.</p><p>마감: 오늘 번 돈과 쓴 돈을 확인하고 다음 날로 간다.</p><p class="grammar">상품마다 능력치 강화, 위험 대응, 피로 회복, 실패 완화 효과가 다르다. 상품의 효과를 확인한다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개는 DAY 4까지 고를 수 있다. 이후 DAY 5, 10, 15, 20, 25, 30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 위험을 보고, 보유 골드 안에서 상품 수량을 정한다. 발주 확정 뒤에도 추가 발주와 발주 후보 교환이 가능하다.</p><h3>판매</h3><p>${E(Copy.loyalty.sale())}</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다. 바가지를 거절하면 그 상품은 그날 그 손님에게 팔 수 없다.</p><p>손님 소지금은 최대 2000G까지 쌓인다. 그보다 많이 벌어도 2000G를 넘지 않는다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. ${E(Copy.loyalty.rule())} 단골도 ${Adventurer.TRUSTED_REGULAR}부터 ‘단골’로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 손님은 게이트의 적과 환경을 둘 다 넘어야 한다. 적은 싸워서 이기고, 환경은 대응으로 버틴다. 하나라도 못 넘기면 실패하고, 다치거나 죽을 수 있다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 점포에서 최대 ${game.rescueLimit()}번의 마감에 이용할 수 있다. 회생 기회나 재고가 없어 적자를 해결하지 못하면 폐점한다. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포도 끝난다.</p><h3>점포 자본</h3><p>영업이 끝날 때 총매출의 3%가 쌓인다. 보유 골드와는 별개로, 다음 점포로 이어진다. 장식과 직업 숙련을 구매하는 데 쓴다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·보유 골드·점포지원은 새로 시작한다.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -2963,7 +2989,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
+ case'store-open':{preRunReturn=!game.run||prepOpen;codexTab='store';const can=Meta.affordable(game.account);storeView=can.deco?'deco':can.mastery?'mastery':storeView;
+  /* opened on the Decorations because one is affordable: land on the first Slot that has one, as a Slot plate would */
+  decoFocus=storeView==='deco'&&can.deco?D.decorationSlots.find(sl=>D.decorations.some(d=>d.slot===sl&&!Meta.decorationOwned(game.account,d.id)&&d.price<=Meta.storeCapital(game.account)))||null:null;sound('ui');setModal('codex');break;}
+ case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='deco';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
  /* Back to preparation. It only changes which panel is open: nothing is spent, no Decoration
     state is re-rolled, the Run is neither reseeded nor started. */
  case'store-return':preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;
@@ -2985,6 +3014,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
+ case'store-view':storeView=id;decoPending=null;masteryPending=false;sound('ui');renderModal();break;
+ case'mastery-buy':masteryPending=true;renderModal();break;
+ case'mastery-cancel':masteryPending=false;renderModal();break;
+ case'mastery-confirm':{if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 숙련을 살 수 없습니다.');
+  masteryPending=false;Meta.buyMastery(game.account);toast('직업 숙련 '+Meta.masteryRank(game.account)+'단 구매 (점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음)');sound('purchase');
+  game.save();renderModal();render();break;}
  case'deco-buy':{const back=keepDecoRow(el);decoPending=id;renderModal();back();break;}
  case'deco-cancel':{const back=keepDecoRow(el);decoPending=null;renderModal();back();break;}
  case'deco-confirm':case'deco-equip':case'deco-unequip':{const back=keepDecoRow(el);
@@ -3204,7 +3239,10 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);
+ /* a plate that acts (the prep Capital plate) answers Enter and Space like a button */
+ if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('[role="button"][data-action]')){ev.preventDefault();ev.target.click();return;}
+ if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 /* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level Back asks before leaving (exitConfirm); the app saves and exits only on its 종료. */
 Native.onBack(()=>{

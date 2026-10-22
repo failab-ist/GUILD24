@@ -51,6 +51,15 @@ G.DATA.decorationParams={cheerBanner:{perTen:0.03,max:0.20},voucher:{customers:2
 /* META §INITIAL FOUR DECORATIONS copy (User 2026-10-04): who gains first, no closing period (COPY_AUDIT §9-5); every
    number is read from decorationParams / D.balance when the card is drawn, so `effect` is a getter over the live tables. */
 for(const d of G.DATA.decorations){const copy=d.effect;Object.defineProperty(d,'effect',{get:()=>copy(G.DATA.decorationParams),enumerable:true});}
+/* META §JOB MASTERY (User 2026-10-22): bought with Store Capital, one ladder for every Job, in order. The first two need
+   Capital only and raise the two Stats that Job grows most (base only, at creation); the rest also need distinct Bosses
+   beaten and add a small Level chance on top of what came before - the +1 / +2 columns are exclusive outcomes. */
+G.DATA.masteryRanks=[
+ {price:300, bosses:0,stat:0.5,level:[]},
+ {price:1200,bosses:0,stat:1,  level:[]},
+ {price:2500,bosses:1,stat:1,  level:[.10]},
+ {price:4000,bosses:3,stat:1,  level:[.15,.05]},
+ {price:6000,bosses:7,stat:1,  level:[.20,.10]}];
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META §STORE CAPITAL · §Day-reach conversion rate — EXACT. The band is the Day the Run actually reached, and it
    multiplies Gross Sales, not an end-state net worth. A Decoration inside the first Run is not a goal; the longer Run

@@ -234,7 +234,7 @@ GLUTTONY's Final reduction, when applicable, occurs after the final Item-side po
 Food/Drink category-affinity or Fresh Relic effects do not automatically multiply Hazard Counter, Insurance,
 RiskReward penalty or unrelated special effects.
 
-Exact Trait modifiers -> `NPC_TRAIT_v2.13.19.md`. Exact Fresh Relic effects -> `RELIC_v2.13.20.md`.
+Exact Trait modifiers -> `NPC_TRAIT_v2.13.21.md`. Exact Fresh Relic effects -> `RELIC_v2.13.20.md`.
 
 ## HAZARD COVERAGE CONTRACT
 
@@ -378,7 +378,7 @@ Insurance = 0
 - all Potion tiers use the ordinary Potion-family shelf-life behavior (rows -> §SHELF LIFE — EXACT); `중급 포션` is not non-expiring or tool-like
 - `최상급 포션` is the top-end pure raw-Power slot-efficiency option, not a Hazard specialist
 
-Potion Trait interaction -> `NPC_TRAIT_v2.13.19.md`.
+Potion Trait interaction -> `NPC_TRAIT_v2.13.21.md`.
 
 ## BANDAGE RETIREMENT / SPIRIT STAT ROUTE
 
@@ -518,7 +518,7 @@ It lowers the resolved expedition Outcome one step, after the higher-priority em
 ```
 
 This is Item Aftercare, not natural recovery. It does not change the natural Severe-Injury recovery rule owned by
-`NPC_TRAIT_v2.13.19.md`. It has no hidden injury-risk percentage.
+`NPC_TRAIT_v2.13.21.md`. It has no hidden injury-risk percentage.
 
 ### 귀환석
 rarity=Rare
@@ -541,7 +541,7 @@ Rules:
 - the stone adds nothing to the combat-failure retreat roll itself (that roll reads the Traits only)
 
 escapeBonus=+20%p
-player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.13.20.md` §4-22)
+player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.13.21.md` §4-22)
 
 Outcome-share evidence: `archive/changelog/CHANGELOG_v2.8.0-v2.9.11.md` (v2.9.10, Insurance).
 
@@ -560,7 +560,7 @@ Rules:
 - clearly above Return Stone in survival hierarchy: the remaining Death or Severe Injury is stopped outright, where 귀환석 only makes it less likely
 - a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
 - not Food/Drink; Fresh-category effect does not apply
-- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.13.20.md` §4-22)
+- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.13.21.md` §4-22)
 
 ### Insurance resolution order
 
@@ -811,7 +811,7 @@ jobIdEffectModifier=NO
 jobIdPurchaseBias=NO
 jobIdCounterModifier=NO
 
-Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v2.13.19.md`.
+Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v2.13.21.md`.
 
 ## INFORMATION
 
@@ -847,7 +847,7 @@ Material hidden behavior=NO
 ## SALE / INVENTORY
 
 Inventory view, stacking, nearest-expiry consumption and the consumer-slot limit -> `SALE_v2.8.0.md` §INVENTORY VIEW;
-shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.13.17.md` §SALE — SHELF ORDER).
+shelf order and shelf-life line -> `SALE_v2.8.0.md` §ITEM SELECTION (exact UI -> `UI_UX_v2.13.21.md` §SALE — SHELF ORDER).
 
 ## BALANCE QA
 
@@ -1411,10 +1411,10 @@ PASS:
 ## RELATED
 
 Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.13.19.md`
-Job / Trait multipliers -> `NPC_TRAIT_v2.13.19.md`
+Job / Trait multipliers -> `NPC_TRAIT_v2.13.21.md`
 Relic / build modifiers -> `RELIC_v2.13.20.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
 Order / reroll / pricing / Rarity progression -> `ECONOMY_ORDER_v2.13.19.md`
 Final usefulness -> `FINAL_EXPEDITION_v2.8.0.md`
-Meta unlock -> `META_v2.13.20.md`
+Meta unlock -> `META_v2.13.21.md`
 Night causality -> `NIGHT_CLOSING_v2.8.0.md`
