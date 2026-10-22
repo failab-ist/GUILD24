@@ -67,7 +67,7 @@ item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안
 item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,205,410,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{combat:5,survival:18,supply:9}),
-item('kingwater','왕도 바나나우유',3,180,360,'drink',3,'bananamilk','길드초이스','항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.',{combat:5,survival:22,supply:2}),
+item('bananamilk','왕도 바나나우유',3,180,360,'drink',3,'bananamilk','길드초이스','항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.',{combat:5,survival:22,supply:2}),
 item('hyperenergy','초고속 에너지드링크',3,180,360,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{combat:5,mobility:22,supply:2}),
 item('sageelixir','대현자 허브엘릭서',3,180,360,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{combat:5,spirit:22,supply:2}),
 item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:25,potion:1})

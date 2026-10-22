@@ -963,7 +963,7 @@ current v9 starts clean without compatibility logic for older internal-test prog
 
 #### RUN-Q-v28-6 — ITEM ID REUSE / SAVE
 
-The meal / water ids are `lunchbox` / `kingwater`; no reused id remains to test.
+The meal / water ids are `lunchbox` / `bananamilk`; no reused id remains to test.
 
 PASS:
 - no active Item carries a v2.8-reused id (`bar`, `herobar`)

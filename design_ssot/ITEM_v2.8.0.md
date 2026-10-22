@@ -410,7 +410,7 @@ Thus:
 
 ### REPLACEMENT ID BOUNDARY
 
-For `lunchbox` / `kingwater`:
+For `lunchbox` / `bananamilk`:
 - no Fatigue-reduction role beyond the Item's own Supply value is active
 - no hidden Hotbar role is active
 - no Hotbar name is a Player-facing alias
@@ -419,7 +419,7 @@ For `lunchbox` / `kingwater`:
 
 Required icons:
 - `lunchbox` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
-- `kingwater` / 왕도 바나나우유 -> foil-lidded banana-milk jar icon in the existing Item-art language
+- `bananamilk` / 왕도 바나나우유 -> foil-lidded banana-milk jar icon in the existing Item-art language
 
 Do not use a Hotbar / skewered-stick silhouette for either ID.
 This is visual identity only; Category, Rarity, price, effect, shelf life and save ID are as the catalog states.
@@ -429,7 +429,7 @@ This is visual identity only; Category, Rarity, price, effect, shelf life and sa
 \`lunchbox\` / 간단 도시락:
     반찬은 단출하지만 빈칸은 없다.
 
-\`kingwater\` / 왕도 바나나우유:
+\`bananamilk\` / 왕도 바나나우유:
     항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.
 
 삼각김밥 / 생수 / 길드 특제 도시락 / 영웅 결전 도시락 keep their existing compatible Flavor.
@@ -486,7 +486,7 @@ The `투력 +10` on `마그마 냉각장비` is an explicit catalog exception; i
 ### EPIC FOOD / DRINK / POTION — TOP-END PREPARATION
 
 초고속 에너지드링크 / 대현자 허브엘릭서 / 최상급 포션 (rows -> §ACTIVE CATALOG) and the Epic meal / water rows
-(`battlelunch` 영웅 결전 도시락, `kingwater` 왕도 바나나우유) in the ACTIVE CATALOG meal / water table.
+(`battlelunch` 영웅 결전 도시락, `bananamilk` 왕도 바나나우유) in the ACTIVE CATALOG meal / water table.
 
 Fresh/Food-affinity/Potionbody rules apply normally by category. No separate Epic-only amplifier exists.
 
@@ -590,7 +590,7 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | lunchbox | 간단 도시락 | Food U | 90 / 180 | 강인함 +12, Supply 6, 손님 소지금 획득 +10% | 2d |
 | guildlunch | 길드 특제 도시락 | Food R | 165 / 330 | 강인함 +15, Supply 7, 손님 소지금 획득 +25% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 205 / 410 | 투력 +5, 강인함 +18, Supply 9 | 2d |
-| kingwater | 왕도 바나나우유 | Drink E | 180 / 360 | 투력 +5, 강인함 +22, Supply 2 | 3d |
+| bananamilk | 왕도 바나나우유 | Drink E | 180 / 360 | 투력 +5, 강인함 +22, Supply 2 | 3d |
 
 The meal 강인함 ladder rises readably by tier; the water route is more Stat-concentrated than the meal at the same broad
 stage, with much lower Supply (Fatigue recovery).
@@ -700,7 +700,7 @@ Day's waste (`오늘 폐기` on its CLOSING receipt). The rule behind the table:
 | energy | 에너지드링크 | Drink | 3d |
 | wine | 용사의 곡주 | Drink | 4d |
 | ion | 쿨링 이온음료 | Drink | 5d |
-| kingwater | 왕도 바나나우유 | Drink | 3d |
+| bananamilk | 왕도 바나나우유 | Drink | 3d |
 | hyperenergy | 초고속 에너지드링크 | Drink | 3d |
 | sageelixir | 대현자 허브엘릭서 | Drink | 3d |
 | lowpotion | 하급 포션 | Potion | 3d |
@@ -1062,7 +1062,7 @@ This is a design-shape check, not permission to auto-tune numbers.
 
 PASS:
 - `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
-- `kingwater` reads visually as 왕도 바나나우유 / banana-milk jar
+- `bananamilk` reads visually as 왕도 바나나우유 / banana-milk jar
 - neither retains the retired Hotbar/skewered-stick silhouette
 - icon change does not alter ID, Category, Rarity, price, effect or save compatibility
 
