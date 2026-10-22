@@ -14,7 +14,7 @@ const CASES=(process.argv[4]||'day0,closing,final,end').split(',');
 const PORT=Number(process.env.QA_PORT||5193),FIXED_NOW=1790112000000;
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
-const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
+const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]')){await p.click('.p-final .dock [data-action="final-ordered"]');/* 해금 카드 may open over the muster; close each before the next press */for(let i=0;i<4&&await p.$('#modal-root [data-action="dismiss"]');i++)await p.click('#modal-root [data-action="dismiss"]');}};
 const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
 function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
  return new Promise((res,rej)=>{child.stdout.on('data',d=>String(d).includes('ready')&&res(child));setTimeout(()=>rej(Error('preview server did not start')),8000);});}

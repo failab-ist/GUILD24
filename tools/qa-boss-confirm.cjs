@@ -10,7 +10,7 @@
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
-const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
+const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]')){await p.click('.p-final .dock [data-action="final-ordered"]');/* 해금 카드 may open over the muster; close each before the next press */for(let i=0;i<4&&await p.$('#modal-root [data-action="dismiss"]');i++)await p.click('#modal-root [data-action="dismiss"]');}};
 const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
 const {AUDIT,PAIR}=require('./qa-controls.cjs');
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/boss-confirm');
