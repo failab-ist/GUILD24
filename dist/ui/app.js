@@ -351,7 +351,7 @@ function sentenceBreaks(root){if(!root)return;for(const p of root.querySelectorA
  const cs=getComputedStyle(p);if(cs.whiteSpace==='nowrap'||cs.textOverflow==='ellipsis'||cs.display.includes('flex')||cs.display.includes('grid')||(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'))continue;
  const parts=[];for(const t of p.textContent.trim().split(/(?<=[.!?][”’]?)\s+/))if(parts.length&&parts[parts.length-1].length<4)parts[parts.length-1]+=' '+t;else parts.push(t);
  if(parts.length<2)continue;p.dataset.sent='1';p.textContent='';parts.forEach((t,i)=>{const e=document.createElement('span');e.className='sent';e.textContent=t;p.append(e);if(i<parts.length-1)p.append(' ');});}}
-function setModal(value){decoPending=null;masteryPending=false;if(value==='relics')sealFolded=false;if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;masteryPending=false;if(value==='relics'){sealFolded=false;ownedOpen=false;}if(!value&&pendingUnlock.length){value='unlock';unlockNow=pendingUnlock.shift();sound('unlock');}const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -2194,6 +2194,13 @@ function relicsModal(){
    /* RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): one runtime line for a condition-type support, none otherwise */
    return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+relicRarity(r)+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
+/* User 2026-10-22: what the Store already runs, readable while choosing. A wood tag at the sign's top right (the footer
+   keys' own tag) opens a paper sheet under the sign; it overlays the contracts and never pushes them. Same rows as the
+   owned-relics list (name, effect, status line). */
+function relicOwnedTag(){const owned=game.ownedRelics();if(!owned.length)return '';
+ return '<button class="owned-tag" data-action="owned-toggle" aria-expanded="'+ownedOpen+'" aria-label="보유 점포지원 '+owned.length+' / 7">보유 '+owned.length+'/7</button>'
+ +(ownedOpen?'<div class="owned-sheet" data-action="owned-toggle"><div class="row between"><b>보유 점포지원 '+owned.length+'/7</b><span>닫기</span></div>'+sealCount()
+  +owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</div>':'');}
 function relicTakeover(){const s=game.run,w=s.relicWindow;
  if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 DAY 5, 10, 15, 20, 25, 30에 도착한다.</p></div></div>'+closeX()+'</div>';
  if(!w.focusedRevealSeen){w.focusedRevealSeen=true;game.save();}
@@ -2202,7 +2209,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  /* SA-Q47 / BOSS_v2.8 §SAME-DAY ORDERING: the D0 Boss objective is not printed on this Store
     Support decision surface. It is a separate Boss-information beat that follows the first
     choice - see bossRevealStage()/bossReveal() for D0. */
- +'<div class="relic-open"><span class="label">'+(first?'DAY 0':'DAY '+w.milestoneDay)+'</span><h2>'+(first?'첫 점포지원':'점포지원이 도착했다')+'</h2>'
+ +'<div class="relic-open">'+relicOwnedTag()+'<span class="label">'+(first?'DAY 0':'DAY '+w.milestoneDay)+'</span><h2>'+(first?'첫 점포지원':'점포지원이 도착했다')+'</h2>'
  /* D-34. With all seven slots filled every 구매 greys out, and this line went on saying the
     window was open until DAY N. A disabled action says why it is disabled, on the line that
     would otherwise contradict it. The seven is the same literal ownedRelicView prints - it
@@ -2245,7 +2252,7 @@ function relicReroll(){if(!game.canRerollRelics())return '';const price=game.rel
 /* v2.9.10 quick patch (User 2026-09-28): on a phone the seal panel sits under the list and hides the last candidate, so a
    tap on the panel itself - anywhere but its 봉인 강화 key - folds it to a chip, and the chip unfolds it. A window opens
    unfolded; the candidates never fold it. */
-let sealFolded=false;
+let sealFolded=false,ownedOpen=false;
 /* the small 접기 key at the plate's top right says the plate folds; the rest of the plate folds it too (User 2026-09-28) */
 const SEAL_FOLD_KEY='<button class="seal-fold" data-action="seal-fold" aria-label="봉인 칸 접기">접기</button>';
 function sealChoice(){const s=game.run,w=s.relicWindow;
@@ -2963,6 +2970,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* v2.9.10 quick patch (User 2026-09-28, RUNTIME UX BUG): breaking a seal spends the window exactly as 구매 does, so it
     closes the window as 구매 does - it used to redraw in place and leave `나중에 결정` under a decision already made */
  case'break-seal':game.breakSeal();setModal(null);render();sound('boss');break;
+ case'owned-toggle':ownedOpen=!ownedOpen;sound('ui');render();break;
  case'seal-fold':sealFolded=!sealFolded;sound('ui');render();break;
  case'menu':sound('ui');setModal('menu');break;
  case'begin-order':game.beginOrder();sound('open');render();break;
