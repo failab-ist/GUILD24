@@ -213,7 +213,7 @@ Before the D30 Relic focused reveal / decision and before Final party lock:
 4. Final lock
 
 Family generation / Final Hazard Pool ownership -> FINAL_EXPEDITION_v2.8.0.md
-Relic-window ownership -> RELIC_v2.13.20.md
+Relic-window ownership -> RELIC_v2.13.21.md
 
 ## PERSISTENCE
 
@@ -593,8 +593,8 @@ break one Sloth Seal for 0G
 ```
 
 Existing Relic candidate generation / Defer lifecycle is reused.
-Relic-window lifecycle -> `RELIC_v2.13.20.md`.
-Exact UI ownership -> `RELIC_v2.13.20.md` / `UI_UX_v2.13.21.md`.
+Relic-window lifecycle -> `RELIC_v2.13.21.md`.
+Exact UI ownership -> `RELIC_v2.13.21.md` / `UI_UX_v2.13.21.md`.
 
 ### Final difficulty ordering
 
@@ -833,7 +833,7 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 ## RELATED
 
 Final state / formula / family / party / clear / Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
-Relic / Seal window / Sloth opportunity -> `RELIC_v2.13.20.md`
+Relic / Seal window / Sloth opportunity -> `RELIC_v2.13.21.md`
 Meta / mastery / unlock -> `META_v2.13.21.md`
 Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.13.21.md`
 Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`

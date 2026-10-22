@@ -46,10 +46,10 @@ test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
   assert.equal(e.supply,base.supply,id+' does not touch Supply');}
  const it=DATA.itemBy.guildlunch;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.equal(Relics.shelf(g,it),f,'only 대형 냉장고 extends the shelf');assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
 });
-test('보증 진열대와 묶음혜택이 겹쳐도 손님은 판매가의 25%를 낸다(0G가 되지 않는다)',()=>{
+test('보증 진열대와 묶음혜택이 겹쳐도 손님은 판매가의 30%를 낸다(0G가 되지 않는다)',()=>{
  const g=fresh(),n=g.run.npcs[0],it={...DATA.itemBy.energy,sell:190};n.traits=[];n.money=999;n.loyalty=80;n.history=[{day:g.run.day,paid:50}];
  g.run.facilities=['guarantee','memberBundle'];const q=g.interest(n,it,'overcharge');
- assert.equal(q.price,285);assert.equal(q.guarantee,143);assert.equal(q.debit,71);
+ assert.equal(q.price,285);assert.equal(q.guarantee,114);assert.equal(q.debit,86);
  g.run.facilities=['memberBundle'];assert.equal(g.interest(n,it,'overcharge').debit,143,'묶음혜택만이면 반값');
 });
 test('premium guarantee obeys wallet, daily limit and never guarantees acceptance',()=>{
@@ -245,10 +245,10 @@ test('RELIC 31 야전 들것: an ordinary Injury costs 투력 8% instead of 15%,
  assert.ok(!DATA.relicD30NoEffect.includes('fieldStretcher'),'the D30 Final reads preparation too, so it stays D30-eligible');
 });
 
-test('RELIC 32 응급 처치대: an injured arrival recovers at 20%, only while owned, and says so',()=>{
+test('RELIC 32 응급 처치대: an injured arrival recovers at 25%, only while owned, and says so',()=>{
  const run=(fac,seed)=>{const g=fresh(seed),s=g.run,n=s.npcs[0];n.traits=[];n.injury=1;n.status='부상';s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n;};
  let healed=0;const N=4000;for(let i=0;i<N;i++){const n=run(['firstAidDesk'],'aid-'+i);if(n.injury===0){healed++;assert.equal(n.healedBy,'firstAidDesk');assert.equal(n.status,'건강');}}
- assert.ok(Math.abs(healed/N-.20)<.025,'about 20% of injured arrivals: '+(healed/N).toFixed(3));
+ assert.ok(Math.abs(healed/N-.25)<.025,'about 25% of injured arrivals: '+(healed/N).toFixed(3));
  for(let i=0;i<200;i++)assert.equal(run([],'aid-'+i).injury,1,'without it nothing heals at the door');
  assert.equal(DATA.relicBy.firstAidDesk.kind,'keystone');assert.deepEqual(DATA.relicBy.firstAidDesk.tags,['expedition']);
  assert.equal(DATA.relicBy.firstAidDesk.price,300);
@@ -423,19 +423,19 @@ function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999,newTo
  assert.equal(g.sell(s.inventory.at(-1).id,mode),true,itemId+' sale was accepted');
  return {g,s,n,store:s.money-before.store,paid:before.wallet-n.money,last:n.history.at(-1)};
 }
-test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 50% of it',()=>{
+test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 40% of it',()=>{
  const g=fresh('guarantee-charged'),n=g.run.npcs[0];n.traits=[];n.money=9999;g.run.facilities=['guarantee'];
  const bar=DATA.itemBy.lunchbox,premium=DATA.itemBy.guildlunch;           // list 180 / 330
  const over=g.interest(n,bar,'overcharge');                          // charged 270 on a 180 list price
- assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.5),'a 150% sale over 200G is covered, 50% of charged');
- assert.equal(over.debit,270-135);
+ assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.4),'a 150% sale over 200G is covered, 40% of charged');
+ assert.equal(over.debit,270-108);
  assert.equal(g.interest(n,bar,'full').guarantee,0,'180G charged is under the threshold');
  // a 200G list price lands exactly on the threshold, which the >= check covers
- assert.equal(g.interest(n,{...bar,sell:200},'full').guarantee,Math.round(200*.5),'200G charged reaches the threshold (>=)');
+ assert.equal(g.interest(n,{...bar,sell:200},'full').guarantee,Math.round(200*.4),'200G charged reaches the threshold (>=)');
  assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 165G is not covered');
- assert.equal(g.interest(n,premium,'full').guarantee,Math.round(330*.5));
+ assert.equal(g.interest(n,premium,'full').guarantee,Math.round(330*.4));
  const r=sellOnce(['guarantee'],'overcharge','lunchbox');
- assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,135,'the customer pays 50%');
+ assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,162,'the customer pays 60%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
 test('즉석식품 코너 takes overheadBase +15% (User 2026-10-19), added to 왕도 인증\'s 10%, never compounded',()=>{

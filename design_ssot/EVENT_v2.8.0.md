@@ -1060,7 +1060,7 @@ EVENT가 소유하지 않음:
 - Gate / Hazard 기본 Formula → `DUNGEON_HAZARD_v2.13.19.md`
 - Order 기본 Offer / Price → `ECONOMY_ORDER_v2.13.19.md`
 - Sale 기본 Purchase / Price Rule → `SALE_v2.8.0.md`
-- Relic Effect → `RELIC_v2.13.20.md`
+- Relic Effect → `RELIC_v2.13.21.md`
 - Night / Closing 기본 Rule → `NIGHT_CLOSING_v2.8.0.md`
 - Presentation Layout → `UI_UX_v2.13.21.md`
 - Global Voice / Flavor 작성 기준 → `COPY_WORLD_VOICE_v2.8.0.md`

@@ -2,7 +2,7 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.13.20
+DOC_VERSION=2.13.21
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -369,7 +369,7 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.21
   10% of the charged price on top, in every mode; no operating-cost modifier
 
 6. 길드 보증 진열대 · tag=Premium · 150AutoSuccess=NO · playerReceivesChosenPrice=YES
-- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 50%
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 40%
   of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
 
@@ -531,7 +531,7 @@ effect=successful 150% sale of any rarity -> extra premium commission
 
 32. 응급 처치대 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
 - Price = 300G
-- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn
+- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 25% (the 의무실 현판 door heal, drawn
   after it; only for an injured arrival and only while owned)
 - the SALE state strip says so once (COPY_AUDIT §9-4b)
 - D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
@@ -1025,13 +1025,13 @@ No active Store Support uses 쇼케이스 in these two names.
 
 #### REL-Q-v28-21 — SUPPORT EXACT FUNCTIONS
 
-Verify these exact Store Support functions in RELIC_v2.13.20.md:
+Verify these exact Store Support functions in RELIC_v2.13.21.md:
 
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
 - 희귀상품 입고 계약 -> Rare+ ORDER weight +50%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
-- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 50% of
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 40% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
@@ -1048,7 +1048,7 @@ Verify these exact Store Support functions in RELIC_v2.13.20.md:
   acquisition and every offer generation, including Rerolls
 - 24시간 신선체계 -> Food/Drink native Core-Stat +30%; Food/Drink ORDER price x1.15; no shelf life
 - 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read
-- 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so
+- 응급 처치대 -> an injured SALE arrival recovers with 25%, after the 의무실 현판 roll; the state strip says so
 - 후방 창고 증설 -> inventory capacity +5
 - 본사 추가발주권 -> acquisition and every ORDER-offer generation candidate count +2
 
@@ -1059,7 +1059,7 @@ FAIL if Source omits one of these exact functions or uses a different numeric va
 #### REL-Q26 — PRICE BAND
 SETUP: Sample prices.
 EXPECT: Limited random band around approved base. Starting target around ±15–20%.
-PASS: Exact final values match `RELIC_v2.13.20.md` §PRICE.
+PASS: Exact final values match `RELIC_v2.13.21.md` §PRICE.
 
 #### REL-Q-v28-22 — SUPPORT BASE PRICES
 
@@ -1305,7 +1305,7 @@ A returning adventurer receives nothing.
 
 #### RELIC-Q-v27-VISITOR — BOARD / HUB
 
-Owner rule: `RELIC_v2.13.20.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
+Owner rule: `RELIC_v2.13.21.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
 
 ##### board
 

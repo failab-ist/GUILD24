@@ -239,7 +239,7 @@ Base order offers: 6/day. Base visitors: 3–6/day.
 
 Visitors may be modified by Relics, Events and Living NPC Cap. Visitor modifiers must respect Living NPC Cap rules.
 
-Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v2.13.21.md / RELIC_v2.13.20.md
+Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v2.13.21.md / RELIC_v2.13.21.md
 
 ## PERSISTENT NPC ROSTER
 
@@ -266,7 +266,7 @@ Random results that are meant to be fixed before player choice must be persisted
 Relic windows:
 [D0,D5,D10,D15,D20,D25,D30]
 
-Canonical acquisition/state -> RELIC_v2.13.20.md
+Canonical acquisition/state -> RELIC_v2.13.21.md
 
 D0 relic choice occurs before first normal business flow.
 D30 relic purchase closes before Final Expedition lock.
@@ -1322,7 +1322,7 @@ Economy / order / Final fixed price / Wallet / Gold -> `ECONOMY_ORDER_v2.13.19.m
 NPC persistence / growth / level -> `NPC_TRAIT_v2.13.21.md`
 Dungeon generation -> `DUNGEON_HAZARD_v2.13.19.md`
 Item / stock / start-stock identity -> `ITEM_v2.8.0.md`
-Relic / windows -> `RELIC_v2.13.20.md`
+Relic / windows -> `RELIC_v2.13.21.md`
 Sale / Final Item handling -> `SALE_v2.8.0.md`
 Night / closing -> `NIGHT_CLOSING_v2.8.0.md`
 Event / day modifier -> `EVENT_v2.8.0.md`

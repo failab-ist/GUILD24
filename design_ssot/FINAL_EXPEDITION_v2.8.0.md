@@ -728,7 +728,7 @@ Timeline/save -> `CORE_RUN_v2.8.0.md`
 Hazard truth -> `DUNGEON_HAZARD_v2.13.19.md`
 Item/Insurance -> `ITEM_v2.8.0.md`
 Boss -> `BOSS_v2.8.0.md`
-Relic D30 window -> `RELIC_v2.13.20.md`
+Relic D30 window -> `RELIC_v2.13.21.md`
 Sale handling -> `SALE_v2.8.0.md`
 Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.13.19.md`
 UI -> `UI_UX_v2.13.21.md`

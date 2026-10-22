@@ -1,7 +1,7 @@
 # 장식 · 점포지원 효과표
 
 > 밸런스 작업 전에 읽는 측정 모음이다(`BALANCE_CHECK.md` §1). 새로 재기 전에 여기서 먼저 찾는다.
-> 효과 문구와 수치의 정답은 Canonical owner(`design_ssot/META_v2.13.21.md` 장식 · `design_ssot/RELIC_v2.13.20.md` 점포지원)와
+> 효과 문구와 수치의 정답은 Canonical owner(`design_ssot/META_v2.13.21.md` 장식 · `design_ssot/RELIC_v2.13.21.md` 점포지원)와
 > `reports/BALANCE-CATALOG.md`다. 이 표는 그 효과를 **켰을 때 결과가 얼마나 바뀌었는지**만 모은다.
 > 장식이나 점포지원 수치를 바꾸면 그 줄을 새 측정으로 고치거나 「미측정」으로 바꾼다.
 
