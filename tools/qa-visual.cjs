@@ -165,8 +165,13 @@ async function drive(page,target,seed){
  // way a player reaches them: the notice is still unseen on its Day, the other two are a click.
  if(target==='event')await page.evaluate(`(()=>{const s=Guild24.game.run;s.eventSeen=false;Guild24.render();})()`);
  if(['codex','menu','help','settings'].includes(target)){
-  await page.evaluate(`(()=>{document.querySelector('[data-action="menu"]').click();})()`);
-  await page.waitForTimeout(120);
+  // an unlock notice (UNLOCK_LABELS) may be queued over the screen and come back after each close: dismiss it like a
+  // player and open the menu again until the menu itself is up
+  for(let i=0;i<6;i++){
+   const st=await page.evaluate(`(()=>{const m=document.querySelector('#modal-root');if(m&&m.querySelector('[data-action="settings"]'))return 'menu';
+    const b=m&&/해금/.test(m.textContent)&&m.querySelector('[data-action="dismiss"]');if(b){b.click();return 'dismissed';}
+    document.querySelector('[data-action="menu"]')?.click();return 'opened';})()`);
+   await page.waitForTimeout(400);if(st==='menu')break;}
   // Help and Settings are reached from the menu the way a player reaches them, not rendered by hand
   for(const leaf of ['codex','help','settings'])if(target===leaf){
    await page.evaluate(`(()=>{document.querySelector('#modal-root [data-action="${leaf}"]').click();})()`);
