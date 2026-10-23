@@ -2995,9 +2995,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-open':{preRunReturn=!game.run||prepOpen;codexTab='store';const can=Meta.affordable(game.account);storeView=can.deco?'deco':can.mastery?'mastery':storeView;
-  /* opened on the Decorations because one is affordable: land on the first Slot that has one, as a Slot plate would */
-  decoFocus=storeView==='deco'&&can.deco?D.decorationSlots.find(sl=>D.decorations.some(d=>d.slot===sl&&!Meta.decorationOwned(game.account,d.id)&&d.price<=Meta.storeCapital(game.account)))||null:null;sound('ui');setModal('codex');break;}
+ case'store-open':{preRunReturn=!game.run||prepOpen;codexTab='store';const can=Meta.affordable(game.account);storeView=can.deco&&!can.mastery?'deco':can.mastery&&!can.deco?'mastery':storeView;
+  /* opened on the Decorations because only a Decoration is affordable: land on the first Slot that has one, as a Slot plate would */
+  decoFocus=storeView==='deco'&&can.deco&&!can.mastery?D.decorationSlots.find(sl=>D.decorations.some(d=>d.slot===sl&&!Meta.decorationOwned(game.account,d.id)&&d.price<=Meta.storeCapital(game.account)))||null:null;sound('ui');setModal('codex');break;}
  case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';storeView='deco';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
  /* Back to preparation. It only changes which panel is open: nothing is spent, no Decoration
     state is re-rolled, the Run is neither reseeded nor started. */
@@ -3021,11 +3021,11 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
  case'store-view':storeView=id;decoPending=null;masteryPending=false;sound('ui');renderModal();break;
- case'mastery-buy':masteryPending=true;renderModal();break;
- case'mastery-cancel':masteryPending=false;renderModal();break;
- case'mastery-confirm':{if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 숙련을 살 수 없습니다.');
+ case'mastery-buy':{const back=keepDecoRow(el);masteryPending=true;renderModal();back();break;}
+ case'mastery-cancel':{const back=keepDecoRow(el);masteryPending=false;renderModal();back();break;}
+ case'mastery-confirm':{const back=keepDecoRow(el);if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 숙련을 살 수 없습니다.');
   masteryPending=false;Meta.buyMastery(game.account);toast('직업 숙련 '+Meta.masteryRank(game.account)+'단 구매 (점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음)');sound('purchase');
-  game.save();renderModal();render();break;}
+  game.save();renderModal();render();back();break;}
  case'deco-buy':{const back=keepDecoRow(el);decoPending=id;renderModal();back();break;}
  case'deco-cancel':{const back=keepDecoRow(el);decoPending=null;renderModal();back();break;}
  case'deco-confirm':case'deco-equip':case'deco-unequip':{const back=keepDecoRow(el);
