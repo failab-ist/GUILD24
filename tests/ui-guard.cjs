@@ -1442,9 +1442,9 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  const LAND='@media(min-width:1024px),(min-width:768px) and (orientation:landscape){';   // a phone turned sideways too (closeout)
  assert.ok(review.includes(LAND+"\n .p-morning{background-image")&&css.includes(LAND+'\n .deco-layer{--ar:1.7768')&&css.split(LAND).length===3,
   'the wide framing, its points and the preparation scene\'s desk layout switch together');
- assert.ok(/\.p-morning \.branchplate\{right:7%;left:auto;top:min\(52%,calc\(100cqh - var\(--dock-room\) - var\(--plate-h\) - var\(--band-top\)\)\)/.test(review),'the branch plate stays clear of the dock');
+ assert.ok(/\.p-morning \.branchplate\{right:7%;left:auto;top:min\(48%,calc\(100cqh - var\(--dock-room\) - var\(--plate-h\) - var\(--band-top\)\)\)/.test(review),'the branch plate stays clear of the dock');
  assert.ok(/\.decoplate\.sign\{top:max\(var\(--gap\),/.test(css),'the 간판 never hangs above the stage');
- assert.ok(/@media\(min-width:1024px\) and \(min-height:760px\),\(min-width:768px\) and \(min-height:760px\) and \(orientation:landscape\)\{\n \.p-morning\{--plate-h:25px\}/.test(review),'the plate takes its desk size only on a tall enough stage');
+ assert.ok(/@media\(min-width:1024px\) and \(min-height:760px\),\(min-width:768px\) and \(min-height:760px\) and \(orientation:landscape\)\{\n .p-morning\{--plate-h:30px\}/.test(review),'the plate takes its desk size only on a tall enough stage');
  assert.ok(/\.p-morning \.till\{left:calc\(var\(--till-x\) \* 100%\)!important;width:calc\(var\(--till-w\) \* 100%\)!important;\s*top:calc\(var\(--till-top\) \* 100%\)!important;height:calc\(var\(--till-h\) \* 100%\)!important\}/.test(review),
   'and the housing is placed by the same numbers');
  for(const slot of D.decorationSlots){
@@ -3312,7 +3312,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
     at its crisp design size, hanging right under the title in the opening's own column - the counter carries the Capital */
  assert.ok(/<\/h1>'\n\s*\+ascPicker\(a\)\+'<\/div>/.test(back)&&/'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span>'/.test(read('dist/ui/app.js')),'the branch plate (via the ascension picker) is under the title');
  assert.ok(!/band counter[\s\S]*branchplate/.test(back),'and not on the counter');
- assert.ok(/\.p-morning \.branchplate\{[^}]*font:500 12px\/1 var\(--f-plate\)/.test(read('dist/ui/director-review.css')),'in the plate face at a crisp Mulmaru design size');
+ assert.ok(/\.p-morning \.branchplate\{[^}]*font:500 14px\/1 var\(--f-plate\)/.test(read('dist/ui/director-review.css')),'in the plate face at a crisp Mulmaru design size');
  assert.ok(/\.p-morning\.p-prep \.opening \.branchplate\{position:static;/.test(css),'in the opening\'s column, centred with the title');
  // the tags keep their 360x640 share of a bigger stage; the pixel-face plates step on its 12 px grid (User 2026-09-27)
  assert.ok(/\.p-prep \.slot-tag\{[^}]*font:500 min\(20px,max\(11px,1\.72cqh,1\.4cqw\)\)/.test(css),'the tags grow with the stage');

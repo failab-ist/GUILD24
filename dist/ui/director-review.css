@@ -251,9 +251,9 @@
 /* v2.9.9: on a portrait tablet the painted counter front runs down behind the dock, so the plate keeps its spot on the
    front only while that clears the dock (--dock-room: the Action and a gap); otherwise it rises to just above it.
    --band-top is the counter band's top edge in the stage, declared on .store with --ph (§.band.counter). */
-.p-morning{--dock-room:80px;--plate-h:18px}
-.p-morning .branchplate{right:7%;left:auto;top:min(52%,calc(100cqh - var(--dock-room) - var(--plate-h) - var(--band-top)));bottom:auto;padding:3px 9px;opacity:1;
- font:500 12px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;
+.p-morning{--dock-room:80px;--plate-h:22px}
+.p-morning .branchplate{right:7%;left:auto;top:min(48%,calc(100cqh - var(--dock-room) - var(--plate-h) - var(--band-top)));bottom:auto;padding:4px 11px;opacity:1;white-space:nowrap;
+ font:500 14px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;
  box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
 .p-morning .store>.board{position:relative;z-index:2}
@@ -282,13 +282,13 @@
  .p-morning .store{--ar:1.7768}
  /* the wide file's counter face starts lower inside its own band, and the plate has a wider
     surface to sit on here, so it takes one step up in size - a plate, still not a sign */
- .p-morning .branchplate{top:min(56%,calc(100cqh - var(--dock-room) - var(--plate-h) - var(--band-top)))}
+ .p-morning .branchplate{top:min(58%,calc(100cqh - var(--dock-room) - var(--plate-h) - var(--band-top)))}
 }
 /* the plate's desk size needs a tall enough stage: between the counter pieces and the dock Action a 700-high stage has
    room only for the phone plate (v2.9.9, User 2026-09-27) */
 @media(min-width:1024px) and (min-height:760px),(min-width:768px) and (min-height:760px) and (orientation:landscape){
- .p-morning{--plate-h:25px}
- .p-morning .branchplate{padding:5px 13px;font-size:15px;letter-spacing:.02em}
+ .p-morning{--plate-h:30px}
+ .p-morning .branchplate{padding:6px 15px;font-size:17px;letter-spacing:.02em}
 }
 
 /* ---- start-up preload screen (ui/preload.js): shown only until the first render() replaces #app ---- */
@@ -886,7 +886,7 @@
 @media(min-width:1024px){
  .front-side .kit{font-size:15px;}
  .front-side .kit .slot-label{font-size:16px;}
- .p-morning .branchplate{font:500 14px/1 var(--f-plate);}
+ .p-morning .branchplate{font:500 15px/1 var(--f-plate);}
 }
 @media(min-width:1024px) and (min-height:760px),(min-width:1024px) and (min-width:768px) and (min-height:760px) and (orientation:landscape){
  .p-morning .branchplate{font-size:17px;}
