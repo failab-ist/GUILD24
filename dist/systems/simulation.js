@@ -583,6 +583,7 @@ function playRun(g,out,ctx){
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
+   const hazardDemand=()=>{const need={};for(const id of s.queue){const m=s.npcs.find(x=>x.id===id),dd=m&&m.alive?g.claimedGateFor(m):null;if(dd)for(const h of dd.hazards)need[h]=(need[h]||0)+1;}for(const h of Object.keys(need))need[h]=Math.min(2,need[h]);return need;};
    const buyRound=()=>{
    let offers=sortedOffers();
    /* reader: one meal per expected visitor goes on the sheet before anything else */
@@ -637,14 +638,13 @@ function playRun(g,out,ctx){
       taken. Up to two rerolls when the till is comfortable, one when thin, none when tight. */
    if(VA&&spend.reroll){let used=0;
     const op=g.expectedOperatingCost(),budget=s.money>=spend.cashFloor+4*op?2:s.money>=spend.cashFloor+op?1:0;
-    const openPairs=()=>{const res=[];for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.money+(m.eventBudget||0)>=40).sort((x,y)=>weight(y)-weight(x))){
-      const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
-      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')res.push({m,dd,h});}return res;};
+    /* a Hazard of today's Gates (the order screen shows the Gates and how many visitors head there, not who) with fewer Counters held or on
+       the cart than visitors (two at most) takes the cheapest Counter on the sheet; a sheet with none is what sends the bot to the reroll */
     for(;;){let missing=false;
      const held=[...s.inventory.map(x=>x.item),...Object.entries(s.cart||{}).flatMap(([i,q])=>Array(q).fill(s.offers[i].item))];
-     for(const {m,dd,h} of openPairs()){
-      const k=held.findIndex(id=>coverGain(m,dd,h,D.itemBy[id])>=COVER);if(k>=0){held.splice(k,1);continue;}
-      const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&coverGain(m,dd,h,x.it)>=COVER&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((x,y)=>x.o.price-y.o.price)[0];
+     for(const [h,k] of Object.entries(hazardDemand()))for(let i=0;i<k;i++){
+      const j=held.findIndex(id=>G.Relics.directCounter(D.itemBy[id],[h]));if(j>=0){held.splice(j,1);continue;}
+      const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&G.Relics.directCounter(x.it,[h])&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((x,y)=>x.o.price-y.o.price)[0];
       if(c){try{g.setQuantity(c.i,(s.cart?.[c.i]||0)+1);act();(out.items[c.o.item]??={ordered:0,sold:0}).ordered++;continue;}catch(e){}}
       missing=true;}
      try{g.confirmOrder();act();}catch(e){}
