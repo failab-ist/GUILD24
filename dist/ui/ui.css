@@ -1283,8 +1283,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* ---- layer 3 : what to sell — the display case and the register ---------------- */
 .shelf{position:relative;margin:0;padding:0 11px 11px;background:#1b140c;
  box-shadow:inset 0 0 0 3px #6b5029,inset 0 0 0 6px #2a1e11,4px 4px 0 #00000066}
-.shelf:before{content:'';position:absolute;z-index:1;left:6px;right:6px;top:6px;height:30px;pointer-events:none;
- background:linear-gradient(180deg,#ffffff1c 0,#ffffff00 100%)}
 .shelf-head{display:flex;align-items:baseline;gap:8px;margin:0 -11px 6px;padding:5px 13px;
  background:linear-gradient(180deg,#8d6c3b 0,#5b421f 100%);
  box-shadow:inset 0 2px 0 #ffffff33,inset 0 -3px 0 #00000080}
