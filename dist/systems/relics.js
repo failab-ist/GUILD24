@@ -55,7 +55,7 @@ P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&(w.milesto
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
  s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;
- (w.seen??=[]).push([...w.candidateIds]);/* the three that were traded away, for the anonymous statistics (privacy.html 제2조의2) */
+ (w.seen??=[]).push([...w.candidateIds]);/* the three that were traded away, for the anonymous statistics (privacy.html 제1조) */
  Object.assign(w,drawCandidates(this,w.milestoneDay,w.candidateIds));w.rerolls=(w.rerolls||0)+1;this.save();};
 /* Sloth's seals are not a second choice path: they are the other thing this window's one
    acquisition can be spent on. Two of D15/D20/D25 were drawn with the Run and D30 always

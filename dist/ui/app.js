@@ -3380,7 +3380,7 @@ Native.onBack(()=>{
 /* anonymous statistics: how long a Run is actually played - 5 s steps, only while the page is shown and the Player touched it in the last minute */
 {let lastTouch=Date.now();for(const ev of['pointerdown','keydown'])window.addEventListener(ev,()=>{lastTouch=Date.now();},{passive:true});
  setInterval(()=>{const s=game.run;if(document.hidden||!s||s.phase==='end'||Date.now()-lastTouch>60000)return;s.playMs=(s.playMs||0)+5000;},5000);}
-window.addEventListener('pagehide',()=>{game.save();Native.cloudFlush();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden){game.save();Native.cloudFlush();}Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
+window.addEventListener('pagehide',()=>{game.save();Native.cloudFlush();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden){game.save();Native.cloudFlush();Telemetry.part(game);}Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);Sound.wake();});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
    would replace the control under the pointer and end the drag. */
