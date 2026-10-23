@@ -258,6 +258,13 @@ function renamedNpcs(r){
 const build=()=>{const b=G.GUILD24_BUILD;return b?{version:b.version,commit:b.commit}:undefined;};
 
 const revOf=s=>Number.isInteger(s?.rev)&&s.rev>=0?s.rev:0;
+/* CLOUD HOLD (User 2026-10-23): a Run dropped because a NEWER build wrote it (another phone already updated) is not overwritten
+   in Play Games by this older build - no cloud upload until this phone runs a different build, i.e. it is updated too */
+const HOLD='guild24.cloud.hold';
+const verNum=v=>String(v||'').split('.').map(x=>parseInt(x,10)||0);
+const verNewer=(a,b)=>{const x=verNum(a),y=verNum(b);for(let i=0;i<Math.max(x.length,y.length);i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)>(y[i]||0);}return false;};
+const holdNewer=s=>{const mine=build()?.version;if(mine&&verNewer(s?.build?.version,mine))try{localStorage.setItem(HOLD,mine);}catch(e){}};
+const cloudHeld=()=>{try{const h=localStorage.getItem(HOLD);if(!h)return false;if(h===build()?.version)return true;localStorage.removeItem(HOLD);return false;}catch(e){return false;}};
 const atOf=s=>Number.isFinite(s?.at)?s.at:0;
 const newer=(a,b)=>revOf(a)!==revOf(b)?revOf(a)>revOf(b):atOf(a)>atOf(b);
 
@@ -281,7 +288,7 @@ G.Save={
    const previous=localStorage.getItem(KEY);
    if(previous){localStorage.setItem(BACKUP,previous);G.Native?.put(BACKUP,previous);}
    localStorage.setItem(KEY,json);G.Native?.put(KEY,json);
-   this.rev=rev;G.Native?.cloudPush(json,rev,at);
+   this.rev=rev;if(!cloudHeld())G.Native?.cloudPush(json,rev,at);
    this.error=null;
    return true;
   }catch(e){
@@ -314,11 +321,11 @@ G.Save={
      that Run. The account goes on; the Run is dropped the way an abandon drops it, and its original is set aside under KEPT. */
   const [s,raw]=this.readable(h)?[h,head]:this.readable(b)?[b,backup]:[null,null];
   if(s){
-   set(raw);s.run=null;this.rev=revOf(s);
+   set(raw);holdNewer(s);s.run=null;this.rev=revOf(s);
    this.error='업데이트로 진행 중이던 영업은 이어갈 수 없어 새 점포를 엽니다. 본사 기록은 그대로입니다.';
    return this.migrate(s);
   }
-  set(head||backup);
+  set(head||backup);holdNewer(parse(head)||b);
   this.error=inApp()?'저장된 진행을 읽지 못했습니다. 원본 저장은 이 기기에 따로 보관해 두었습니다. 설정의 오류 신고로 알려 주세요.':'저장된 진행을 읽지 못했습니다. 원본 저장은 보존됩니다. 설정에서 저장 파일을 가져올 수 있습니다.';
   return null;
  },
