@@ -2506,7 +2506,7 @@ function hallMaybe(){const s=game.run,e=game.account.hall?.[0];
  el.innerHTML=hallMarkup(e);document.body.appendChild(el);$('#app').inert=true;
  hall={el,e,timers:[],anims:[]};
  el.addEventListener('click',ev=>{if(!ev.target.closest('[data-action]'))hallFinish();});
- if(!motionOK()){el.classList.add('done','still');el.querySelector('.hall-go').focus();return;}
+ if(!motionOK()){el.classList.add('done','still','whole');el.querySelector('.hall-go').focus({preventScroll:true});return;}
  const go=(node,frames,opt)=>{const a=node.animate(frames,{fill:'both',...opt});hall.anims.push(a);return a;},
   at=(ms,fn)=>hall.timers.push(setTimeout(fn,ms)),H=HALL,spot=el.querySelector('.hall-spot'),cards=[...el.querySelectorAll('.hall-card')];
  go(el.querySelector('.hall-dim'),[{opacity:0},{opacity:1}],{duration:H.fade,easing:'ease-out'});

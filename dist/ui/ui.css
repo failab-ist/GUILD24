@@ -4549,8 +4549,8 @@ html.in-app .relic-takeover .close{margin-bottom:max(40px,var(--sa-bottom))}
 @media(min-width:1024px){.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:0}}
 /* 명예의 전당 (User 2026-10-23): the clear's party, after the Pokemon Hall of Fame - one member at a time in a spotlight
    with a name plate, then the whole line, three across, under falling light. Opaque flat cards; no stamp (the title says it). */
-.hall{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
- padding:calc(56px + var(--sa-top)) 12px calc(24px + var(--sa-bottom));overflow-y:auto;color:#f3e6c8}
+.hall{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-start;justify-content:center;
+ padding:calc(20px + var(--sa-top)) 12px calc(24px + var(--sa-bottom));overflow-y:auto;color:#f3e6c8;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .hall-dim{position:fixed;inset:0;background:#0d0b10}
 .hall-light{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 46% 58% at 50% 42%,#f6d77a2e,#f6d77a0a 55%,#0000 72%)}
 .hall-flash{position:fixed;inset:0;pointer-events:none;background:#fff;opacity:0}
@@ -4578,7 +4578,7 @@ html.in-app .relic-takeover .close{margin-bottom:max(40px,var(--sa-bottom))}
 .hall-sparks i:nth-child(18){left:58%;animation-delay:-0.6s;animation-duration:3.3s}
 @keyframes hall-fall{from{transform:translateY(0)}to{transform:translateY(105vh)}}
 @media(prefers-reduced-motion:reduce){.hall-sparks{display:none}}
-.hall-body{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.hall-body{position:relative;width:100%;max-width:420px;margin:auto 0;display:flex;flex-direction:column;align-items:center;gap:16px}
 .hall-head{text-align:center}
 .hall-head h2{font:500 32px/1.1 var(--f-plate);-webkit-font-smoothing:none;color:#f6d77a;letter-spacing:.06em}
 .hall-head p{margin-top:8px;font:500 13px/1.4 var(--ui);color:#cdbfa3}
@@ -4602,6 +4602,9 @@ html.in-app .relic-takeover .close{margin-bottom:max(40px,var(--sa-bottom))}
 .hall-foot{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4px}
 .hall-count{font:500 14px/1.5 var(--ui);color:#f3e6c8;text-align:center;word-break:keep-all}
 .hall-go{min-width:200px}
+/* 작은 폰: 한 명씩 서는 칸을 줄여 제목이 위로 잘리지 않게 한다 */
+@media(max-height:760px){.hall-spot{height:190px;gap:8px}.hall-spot .pfp{width:112px;height:112px}}
+@media(max-height:700px){.hall-spot{height:160px}.hall-spot .pfp{width:96px;height:96px}}
 /* the prologue's tap hint, same words and look */
 .hall-hint{position:fixed;z-index:1;left:50%;bottom:calc(10px + var(--sa-bottom));transform:translateX(-50%);margin:0;padding:6px 12px;
  text-shadow:0 1px 3px #000,0 0 6px #000;font:500 13px/1 var(--ui);color:#f3e9d6b3;white-space:nowrap;pointer-events:none}
