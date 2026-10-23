@@ -39,5 +39,13 @@ const tick=()=>new Promise(r=>setTimeout(r,5));
  const w5=T.build(g,'end').run.relics.find(w=>w.d===5);
  assert.equal(w5.rr,1,'the window reroll count');assert.deepEqual(w5.x[0].map(c=>c[0]),before,'the three traded away');
  assert.ok(G.Save.valid(JSON.parse(G.Save.export(g.account,g.run))),'a save carrying the traded-away three is valid');
+ /* BALANCE DETAIL (User 2026-10-23): the Day's trace and the expedition detail go to the statistics' own store, not the save */
+ {app=true;const h=mk('tele-live');h.account.settings.stats=true;const r=h.run;
+  h.buyRelic(r.relicWindow.candidateIds[0]);h.open();h.beginOrder();h.setQuantity(0,1);h.finishOrder();while(r.phase==='sell')h.depart();h.closeDay();
+  const live=JSON.parse(store['guild24.stats.live']);
+  assert.equal(live.days.length,1,'one Day taken');assert.ok(live.days[0].tr,'with its order / sale trace');
+  assert.ok(!r.reportHistory.some(x=>x.trace),'and the save keeps no trace');
+  const pl=T.build(h,'end');assert.ok(pl.run.days[0].tr,'the report carries the Day trace');assert.equal(pl.detail.length,live.days[0].x.length,'and the expedition detail');
+  h.end(false,'소문');await tick();assert.equal(store['guild24.stats.live'],undefined,'sent with the Run and cleared');}
  console.log('telemetry ok');
 })();
