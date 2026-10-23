@@ -2018,7 +2018,7 @@ function shelf(isFinal=false){
    keeps one effect line: a longer line takes one or two type steps down instead of wrapping or being cut. */
 /* User 2026-09-25: the two utility Items read their core on the shelf only - the approved line's own words, the
    condition in brackets left to the tray's 특수 효과 and the codex, which keep the full line */
-const SHELF_CORE={aftercare:'중상 → 부상, 부상 → 무사',duplicate:'다음 소모품 효과 2회'};
+const SHELF_CORE={aftercare:'중상 → 부상, 부상 → 무사',duplicate:'함께 챙긴 소모품 효과 2회'};
 function shelfEffects(rows){const t=rows.map(r=>SHELF_CORE[r.key]||(r.utility?r.label.replace(/ \([^)]*\)$/,''):(r.label+' '+r.text).trim())).join(', '),len=[...t].length;
  return '<span'+(len>28?' class="densest"':len>24?' class="dense"':len>19?' class="tight"':'')+'>'+E(t)+'</span>';}
 const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
@@ -2672,8 +2672,10 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
 const MASTERY_STAT={combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신'};
 /* the two Stats a Job grows most - the ones Job Mastery raises */
 const masteryStats=j=>Adventurer.mainStats(j).map(i=>Adventurer.keys[i]);
-const masteryEffect=r=>r.level.length?r.level.map((p,i)=>Math.round(p*100)+'% 확률로 레벨 +'+(i+1)).join(', ')
- :'주 능력치 2개 +'+r.stat;
+/* User 2026-10-23: each rank reads as the total it gives, not what it adds - the stat bonus carries on from rank 2 and
+   the level chances replace the rank before */
+const masteryEffect=(r,i)=>['주 능력치 2개 +'+r.stat+(i&&r.stat!==D.masteryRanks[i-1].stat?' ('+i+'단 포함)':'')]
+ .concat(r.level.map((p,k)=>Math.round(p*100)+'% 확률로 레벨 +'+(k+1))).join(', ');
 function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a),cap=Meta.storeCapital(a),beaten=Meta.distinctBossClear(a);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+cap.toLocaleString()+'</b>'
@@ -2691,7 +2693,7 @@ function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a)
     :btn('구매 <small>'+r.price.toLocaleString()+' 자본</small>','mastery-buy','small',cap<r.price?'disabled':'');
    return '<div class="slot-option'+(owned?' on':'')+(owned||next&&open?'':' locked')+'">'
     +'<b class="deco-name">숙련 '+(i+1)+'단</b>'+state
-    +'<span class="smalltext deco-effect">'+E(masteryEffect(r))+'</span></div>';}).join('')
+    +'<span class="smalltext deco-effect">'+E(masteryEffect(r,i))+'</span></div>';}).join('')
  +'</div>'
  +'</div>';}
 function progressPanel(){const a=game.account;
@@ -3395,6 +3397,8 @@ Native.cloudLate(raw=>{if(Save.cloudMerge(raw)!=='cloud')return;const s=Save.rea
  game=new Game(s.account,s.run);selected=null;setModal(null);
  if(prologue){const d=prologue.done;prologue.done=()=>{d();toast(msg);};return;}
  render();toast(msg);});
+/* anonymous statistics: a report a failed send left in the queue goes out at launch, not only when the next Run ends */
+if(Native.inApp?.()&&Telemetry.on(game.account))setTimeout(()=>Telemetry.flush(),3000);
 window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
 /* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
 /* UI_UX §PROLOGUE: with no Run the prologue takes the loading screen's place; if it ends before the art is in, the

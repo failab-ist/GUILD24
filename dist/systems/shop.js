@@ -6,10 +6,12 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 // NIGHT_CLOSING §GROWTH PRESENTATION: sync already-paid Deep growth, without resolving or granting rewards.
 function syncDeepReport(n,report,beforeStats){
  const fields={level:n.level,deep:report.deep,statChanges:G.Adventurer.keys.filter(key=>n.stats[key]!==beforeStats[key]).map(key=>({key,before:beforeStats[key],after:n.stats[key]}))};
- Object.assign(report,fields);Object.assign(n.records.at(-1),fields);
+ Object.assign(report,fields);Object.assign(n.records.at(-1),{level:fields.level,deep:fields.deep});
 }
 class Game{
- constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;D.liveAscension=run?.ascension||0;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;
+ constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;
+  /* SAVE SIZE (User 2026-10-23): a Run saved before the compact record keeps its older, larger records - trim them on load */
+  for(const n of run?.npcs||[])if(Array.isArray(n.records))n.records=n.records.map(G.Dungeon.savedRecord);D.liveAscension=run?.ascension||0;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;
   // EVENT §41: an older active sheet also respects the remaining supply cap; paid stock stays intact.
   if(run?.event?.effects.orderCap&&['morning','order','final'].includes(run.phase))for(const o of run.offers||[])o.quantity=Math.min(o.quantity,run.event.effects.orderCap);
  }
@@ -475,11 +477,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   const p=G.Dungeon.prepare(v,d,this.run.facilities);
   const hazards=p.hazards.map(h=>({key:h.key,label:h.label}));
   return {day:this.run.day,gate:d.id,
-   combat:G.Dungeon.estimate(v,d,this.run.facilities),
+   combat:G.Dungeon.estimate(v,d,this.run.facilities,this.run),
    hazards,
    worst:hazards.length?['취약','불안','대응','충분'].find(l=>hazards.some(h=>h.label===l)):null,
-   deathRisk:G.Dungeon.failureDeathRisk(v,d,this.run.facilities).chance,
-   greatSignal:G.Dungeon.greatSuccessSignal(v,d,this.run.facilities)};
+   deathRisk:G.Dungeon.failureDeathRisk(v,d,this.run.facilities,this.run).chance,
+   greatSignal:G.Dungeon.greatSuccessSignal(v,d,this.run.facilities,this.run)};
  }
  /* SA-Q25: `last.events.length` was broader than sold-Item causality - a Trait-only event
     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
@@ -605,7 +607,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     위험 % are arrival information, and refreshing them as Items are committed is the
     answer-following SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY forbids. A refused or failed
     sale returns above this line, so it cannot reach the recompute at all. */
- if(n.outlook)n.outlook.greatSignal=G.Dungeon.greatSuccessSignal({...n},this.claimedGateFor(n)||s.dungeons[0],s.facilities);
+ if(n.outlook)n.outlook.greatSignal=G.Dungeon.greatSuccessSignal({...n},this.claimedGateFor(n)||s.dungeons[0],s.facilities,s);
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day,s)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}

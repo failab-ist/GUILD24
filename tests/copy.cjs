@@ -542,8 +542,8 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
 
  /* A threshold the player is subject to is not written out by hand next to the rule that
     uses it - both read the same constant, so the sentence cannot drift from the behaviour. */
- assert.ok(Presentation.labels.priceBias.startsWith(String(DATA.balance.frugalThreshold)),
-  'the frugal label is built from the threshold it describes');
+ /* User 2026-10-23: 정가 is judged at 65%, so a written 120G would not match what the player charges - the label names no number */
+ assert.equal(Presentation.labels.priceBias,'비싼 상품 구매 의사','the frugal label names no price it cannot keep');
  const guarantee=DATA.relicBy.guarantee;
  assert.ok(guarantee.description.includes(guarantee.minPrice+'G'),'the guild guarantee states what 고가상품 means');
  assert.ok(read('dist/systems/shop.js').includes('D.relicBy.guarantee.minPrice'),'from the same number the rule reads');

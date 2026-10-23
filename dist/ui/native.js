@@ -6,22 +6,26 @@
 const plug=name=>{try{return G.Capacitor?.Plugins?.[name]||null;}catch(e){return null;}};
 const inApp=()=>{try{return !!G.Capacitor?.isNativePlatform?.();}catch(e){return false;}};
 const prefs=()=>inApp()?plug('Preferences'):null;
-const HYDRATE_MS=1500,CLOUD_MS=30000;
+const HYDRATE_MS=1500,CLOUD_MS=30000,PREFS_MS=2000;
 const CLOUD_OK='guild24.cloudok';
 /* a browser can only set how long the motor runs, and 40 ms read as weak on a phone (User 2026-10-10): one firmer pulse, not a pattern */
 const WEB_MS=70;
 const webVibrate=()=>{try{return typeof navigator!=='undefined'&&!!navigator.vibrate&&!!matchMedia('(pointer:coarse)').matches;}catch(e){return false;}};
 const okMark=()=>{try{localStorage.setItem(CLOUD_OK,'1');}catch(e){}};
-let pending=null,timer=null,cloudRev=null,late=null,lateRaw=null;
+let pending=null,timer=null,cloudRev=null,late=null,lateRaw=null,prefsPending=new Map(),prefsTimer=null;
 
 try{if(inApp())document.documentElement.classList.add('in-app');}catch(e){}
 
 G.Native={
  inApp,
  /* The save lives in localStorage while the game runs; in the app a copy is kept in the shell's own storage
-    (Preferences), which survives the WebView's data being cleared. */
- put(key,value){try{prefs()?.set({key,value}).catch(()=>{});}catch(e){}},
- drop(key){try{prefs()?.remove({key}).catch(()=>{});}catch(e){}},
+    (Preferences), which survives the WebView's data being cleared. That copy is written once things go quiet
+    (PREFS_MS) and when the app is hidden, not on every tap: a D30 save written there on each sale made a slow phone lag
+    (User 2026-10-23). localStorage itself is still written at once. */
+ put(key,value){if(!prefs())return;prefsPending.set(key,value);if(prefsTimer)clearTimeout(prefsTimer);prefsTimer=setTimeout(()=>G.Native.prefsFlush(),PREFS_MS);},
+ prefsFlush(){clearTimeout(prefsTimer);prefsTimer=null;const p=prefs(),jobs=[...prefsPending];prefsPending.clear();if(!p)return;
+  for(const [key,value] of jobs)try{p.set({key,value}).catch(()=>{});}catch(e){}},
+ drop(key){prefsPending.delete(key);try{prefs()?.remove({key}).catch(()=>{});}catch(e){}},
  /* Before the game reads its save: a key missing from localStorage is restored from Preferences. A key that is
     present is kept (it is never older than the copy) and mirrored. Never blocks the start for long. */
  hydrate(keys){
@@ -56,6 +60,7 @@ G.Native={
   pending={data,rev,at};if(!timer)timer=setTimeout(()=>G.Native.cloudFlush(),CLOUD_MS);
  },
  async cloudFlush(){
+  G.Native.prefsFlush();
   clearTimeout(timer);timer=null;const c=inApp()?plug('PlayGamesSaves'):null,job=pending;pending=null;if(!c||!job)return;
   try{
    if(cloudRev===null){const r=await c.load();cloudRev=r&&r.found?Number(r.rev)||0:0;}
@@ -77,12 +82,12 @@ G.Native={
    if(h){h.vibrate({duration:ms}).catch(()=>{});return;}
    if(webVibrate()&&!(navigator.userActivation&&!navigator.userActivation.hasBeenActive))navigator.vibrate(Math.max(ms,WEB_MS));}catch(e){}
  },
- exit(){try{const a=inApp()?plug('App'):null;if(a)a.exitApp();}catch(e){}},
+ exit(){G.Native.prefsFlush();try{const a=inApp()?plug('App'):null;if(a)a.exitApp();}catch(e){}},
  /* Android Back. `handle()` closes the topmost surface or asks to leave and returns true; false lets the app exit. */
  onBack(handle){
   try{const a=inApp()?plug('App'):null;if(!a)return;
    a.addListener('backButton',()=>{let used=false;try{used=handle()===true;}catch(e){}
-    if(!used)a.exitApp();});}catch(e){}
+    if(!used){G.Native.prefsFlush();a.exitApp();}});}catch(e){}
  }
 };
 })(globalThis);
