@@ -2766,6 +2766,13 @@ function ascPicker(a){const max=Meta.ascensionMax(a),lv=Meta.ascensionPick(a);
 function ascNote(a){return ascNoteOf(Meta.ascensionPick(a));}
 function ascNoteOf(lv){const x=lv&&D.ascension[lv-1];if(!x)return '';
  return '<div class="asc-note"><p class="asc-head"><b>승천 '+lv+'</b><span>앞 단계 효과도 적용</span></p><p class="asc-fx">'+E(x.name+': '+x.effect)+'</p></div>';}
+/* With a 승천 level picked the board's note is that level's (the 30-day line is known by then), in the same three lines, so the
+   screen keeps the height it has without 승천 and the Decorations below stay uncovered. */
+function prepNote(a){const lv=Meta.ascensionPick(a),x=lv&&D.ascension[lv-1];
+ if(!x)return '<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다.</b>'
+  +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>';
+ return '<div class="slip prep-note asc-slip"><span class="pin"></span><b class="welcome-title">승천 '+lv+': '+E(x.name)+'</b>'
+  +'<span class="flavor">'+E(x.effect)+'</span><span class="welcome-band">'+(lv>1?'앞 단계 효과도 적용':'')+'</span></div>';}
 function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta.ownedDecorations(a),capital=Meta.storeCapital(a);
  /* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a Slot whose unowned Decoration the capital covers now says
     so - a current state, not a "new" flag, and no Decoration named. */
@@ -2785,11 +2792,10 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
    +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="170" alt="마왕 잡는 편의점"></h1>'
    +ascPicker(a)+'</div></span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
-   +'<p class="board-rail">새 점포 준비</p>'
+   +'<p class="board-rail">새 점포 준비<b class="rail-note">'+(owned.length?'보유 장식은 점포를 열면 고정됩니다':'보유 장식 없음')+'</b></p>'
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
-    +(DEMO?DEMO.prepNote():'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다.</b>'
-    +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>')
-    +ascNote(a)+'<p class="prep-status">'+(owned.length?'점포를 열면 이번 점포에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
+    +(DEMO?DEMO.prepNote():prepNote(a))
+    +'</div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="store-capital capital-plate" role="button" tabindex="0" data-action="store-open" aria-label="점포 자본 '+capital.toLocaleString()+', 장식과 직업 숙련 구매"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'

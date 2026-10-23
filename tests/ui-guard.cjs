@@ -3441,7 +3441,7 @@ test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, d
 });
 
 test('OPENING: the preparation scene starts on the three axes, with no franchise eyebrow',()=>{
- const intro=fn('prepScreen');
+ const intro=fn('prepScreen')+fn('prepNote');
  // 8: the eyebrow is gone
  assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation carries no 길드리테일 가맹점 eyebrow');
  assert.ok(!app.includes('길드리테일 가맹점'),'and it is gone from the build');
@@ -3450,7 +3450,7 @@ test('OPENING: the preparation scene starts on the three axes, with no franchise
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
   assert.ok(intro.includes(line),'the approved line is present: '+line);
  /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the three lines are one note pinned to the `새 점포 준비` board */
- assert.ok(/<p class="board-rail">새 점포 준비<\/p>/.test(intro),'the board is titled 새 점포 준비');
+ assert.ok(/<p class="board-rail">새 점포 준비<b class="rail-note">/.test(intro),'the board is titled 새 점포 준비, with the decoration note on the same rail');
  assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
  assert.ok(/<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다\.<\/span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\.<\/span>/.test(intro),'lines 2 and 3 follow it');
  // everything the change was scoped to keep

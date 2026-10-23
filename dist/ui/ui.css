@@ -2637,10 +2637,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .stock-side .wh-slot em{font-size:11px;right:3px;bottom:2px}
  .p-order .dock .stock-handle,.p-order .dock .stock-sheet{display:none}
 }
-}
 .lost-count{display:block;margin-bottom:12px;
  padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;
  font:400 15px/1.4 var(--ui);color:#efe3c8}
+.lost-count:not(.near){padding:0 0 9px;background:none;box-shadow:none}
 .lost-count b{font-variant-numeric:tabular-nums;color:var(--gold)}
 .lost-count span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:#b8a888}
 .lost-count.near{box-shadow:inset 0 0 0 2px #8a2f26}
@@ -2729,7 +2729,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-prep .prep-note{padding-top:16px}
 .p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
 .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
-.p-prep .prep-status{margin:-2px 0 0;padding:0 0 6px;font:500 12px/1.4 var(--ui);color:#fff3d6;text-shadow:0 1px 0 #3a2814,0 0 3px #3a2814;text-align:center}
 /* each Slot is its place in the room: the Decoration standing there, or its empty spot, and a small tag naming it */
 /* a place is at least a 44 px target: it grows away from the surface it is seated on (the counter pieces and the plaque
    upward from their foot / down from their nail, the 간판 up into the ceiling it hangs from), so its drawing does not move */
@@ -2781,7 +2780,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-prep .band.ceiling .opening{padding-top:calc(var(--sa-top) + 14px)}
  .p-prep .slot-tag{font-size:min(20px,max(12px,1.72cqh,1.4cqw))}
  .p-prep .slot-tag b{font-size:min(22px,max(13px,1.875cqh,1.5cqw))}
- .p-prep .prep-status{font-size:13px}
  /* the board ends above the painted wall's plaque spot: on a stage under 800 high (a 1366x680 laptop browser, a landscape
     tablet, a 768-high desk) the note is one step tighter - the same type, less air - while the status strip under it keeps
     its full height; an 800-high stage gets the note's air back below */
@@ -4624,3 +4622,5 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 /* 손가락 닿는 영역: 작은 「?」 도움말 버튼은 보이는 크기는 두고 눌리는 영역만 44px 쪽으로 넓힌다 */
 .readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary{position:relative}
 .readout .tip>summary::after,.dest-plate .tip>summary::after,.kit .tip>summary::after{content:'';position:absolute;inset:-10px}
+/* 승천 선택 시 점포 준비 안내는 같은 세 줄 높이를 지킨다(1단계는 셋째 줄이 비어도 높이 유지) */
+.p-prep .prep-note.asc-slip .welcome-band:empty::before{content:'\200b'}
