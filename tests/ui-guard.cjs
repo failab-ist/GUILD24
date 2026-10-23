@@ -3555,7 +3555,7 @@ test('의무실 현판: the heal note sits in the kit under the bag, wraps, and 
 test('DAY 0 Store Support tutorial: one mark over the takeover, DAY 0 only, no answer given',()=>{
  const steps=(app.match(/ relic:\[(\['relic-what'[\s\S]*?\]\])\n\};/)||[])[1];
  assert.ok(steps,'the relic lesson exists');
- assert.ok(steps.includes("['relic-what','.relic-open'"),'relic-what points at .relic-open');
+ assert.ok(steps.includes("['relic-what','.relic-takeover .relic-open'"),'relic-what points at the takeover panel, not the DAY 0 stage copy behind it');
  /* UI_UX §TUTORIAL — COACH DIET (User 2026-09-30): the card and key marks are retired */
  assert.ok(!/relic-card|relic-buy/.test(steps),'the card and key marks are gone');
  for(const r of DATA.relics)assert.ok(!steps.includes(r.name),'no Store Support is named as the answer: '+r.name);
