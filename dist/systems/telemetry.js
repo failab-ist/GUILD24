@@ -2,11 +2,13 @@
 /* PLATFORM_RELEASE anonymous run statistics: when a Run ends (or is abandoned) one summary of the numbers goes to the
    developer's collector, so balance can be read off real play as well as off the bots. No name, account, device id,
    location or screen log is ever in it; the only id is a random code made on this device. The Player's switch is
-   account.settings.stats (on unless set false). With no endpoint, or outside the Android app (the web build sends nothing), nothing is sent. Failed sends wait in a short queue
+   account.settings.stats (on unless set false). With no endpoint, or outside the Android app and the web demo (the full web build sends nothing), nothing is sent. Failed sends wait in a short queue
    and go out at the next launch or with the next report; the collector drops a repeated rid. */
-const QUEUE='guild24.stats.queue',MAX_QUEUE=3,LIVE='guild24.stats.live';
+const QUEUE='guild24.stats.queue',MAX_QUEUE=12,PART_DAYS=3,LIVE='guild24.stats.live';
 const D=()=>G.DATA;
 const on=a=>!!a&&a.settings?.stats!==false;
+/* Where reports go out: the Android app, and the web demo (demo/demo.js, User 2026-10-22), whose reports carry demo:1 */
+const demo=()=>!!G.GUILD24_DEMO,sends=()=>!!G.Native?.inApp?.()||demo();
 const r3=x=>Math.round(x*1000)/1000;
 function anon(a){if(!a.anonId){let id='';try{const b=new Uint8Array(8);crypto.getRandomValues(b);id=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){id=Math.random().toString(16).slice(2,18);}a.anonId=id;}return a.anonId;}
 const depLv=x=>{const m=(x.changes||[]).map(c=>/^Lv\.(\d+) → Lv\.(\d+)$/.exec(c)).find(Boolean);return m?+m[1]:x.level;};
@@ -28,18 +30,35 @@ const writeLive=v=>{try{if(v)localStorage.setItem(LIVE,JSON.stringify(v));else l
 const ridOf=(s,a)=>s.seed+'-'+anon(a).slice(0,6);
 function detail(s,r){return{d:r.day,n:s.npcs.findIndex(n=>n.id===r.npcId),why:r.why?.length?r.why:undefined,
  sc:r.statChanges?.length?r.statChanges.map(c=>[c.key,r2(c.after-c.before)]):undefined,fl:r.fatigueLedger?.map(x=>[x.label,x.value??x.delta])};}
-function day(game,trace){
+function day(game,trace,totals){
  try{
-  const s=game.run,a=game.account;if(!s||!G.Native?.inApp?.()||!on(a))return;
+  const s=game.run,a=game.account;if(!s||!sends()||!on(a))return;
   const rid=ridOf(s,a);let live=readLive();if(!live||live.rid!==rid)live={rid,days:[]};
-  live.days=live.days.filter(x=>x.d!==s.day);live.days.push({d:s.day,tr:trace,x:(s.results||[]).map(r=>detail(s,r))});writeLive(live);
+  const recs=[];s.npcs.forEach((n,i)=>{for(const r of n.records||[])if(r.day===s.day)recs.push({n:i,...rec(r)});});
+  live.days=live.days.filter(x=>x.d!==s.day);live.days.push({d:s.day,tr:trace,x:(s.results||[]).map(r=>detail(s,r)),r:recs,t:totals&&{rev:totals.revenue,sp:totals.spent,op:totals.operating,sales:totals.sales,waste:totals.waste,m:salesByDay(s.npcs)[s.day]}});
+  writeLive(live);if(live.days.filter(x=>!x.sent).length>=PART_DAYS)part(game);
+ }catch(e){}
+}
+/* A Run that stops before its end still has to be readable: every PART_DAYS Days (and when the app goes to the background) the Days not yet sent
+   go out as one small 'part' - the first one also carries the Run's head. The end report is still the whole Run; the collector keeps both. */
+function part(game){
+ try{
+  const s=game.run,a=game.account;if(!s||!T.endpoint||!sends()||!on(a)||s.phase==='end')return;
+  const live=readLive();if(!live||live.rid!==ridOf(s,a))return;
+  const days=live.days.filter(x=>!x.sent);if(!days.length)return;
+  const B=G.GUILD24_BUILD||{},head=live.head?undefined:{seed:s.seed,branch:s.branch,startBuild:s.startBuild,expected:s.expectedVisitors,asc:s.ascension||0,contract:s.contract,loadout:s.loadout,first:!!s.firstRun,
+   decos:D().decorations.filter(d=>G.Meta.decorationOwned(a,d.id)).map(d=>d.id),runs:a.runs,wins:a.wins};
+  const body={schema:2,rid:live.rid,kind:'part',demo:demo()?1:undefined,at:new Date().toISOString(),build:B.version,commit:B.commit,anon:a.anonId,head,day:s.day,money:s.money,supports:s.facilities,playMs:s.playMs||0,days,
+   npcs:s.npcs.map(n=>({...npc(n),rec:undefined}))};
+  for(const d of days)d.sent=1;live.head=1;writeLive(live);
+  const q=readQ();q.push(JSON.stringify(body));writeQ(q);flush();
  }catch(e){}
 }
 function build(game,kind){
  const s=game.run,a=game.account;if(!s)return null;anon(a);const sbd=salesByDay(s.npcs);
  const live=readLive(),own=live&&live.rid===ridOf(s,a)?live.days:[],liveDay=d=>own.find(x=>x.d===d);
  const B=G.GUILD24_BUILD||{};
- return{schema:1,rid:ridOf(s,a),at:new Date().toISOString(),kind,build:B.version,commit:B.commit,app:!!G.Native?.inApp?.(),anon:a.anonId,
+ return{schema:1,rid:ridOf(s,a),at:new Date().toISOString(),kind,build:B.version,commit:B.commit,app:!!G.Native?.inApp?.(),demo:demo()?1:undefined,anon:a.anonId,
   account:{runs:a.runs,wins:a.wins,bestDay:a.bestDay,bestSales:a.bestSales,asc:a.ascension,decos:D().decorations.filter(d=>G.Meta.decorationOwned(a,d.id)).map(d=>d.id),discovered:(a.discovered||[]).length},
   run:{seed:s.seed,branch:s.branch,startBuild:s.startBuild,expected:s.expectedVisitors,day:s.day,phase:s.phase,win:!!s.win,end:s.endReason,first:!!s.firstRun,asc:s.ascension||0,contract:s.contract,loadout:s.loadout,money:s.money,stats:s.stats,boss:s.bossId,
    supports:s.facilities,rerolls:s.rerollCount||0,playMs:s.playMs||0,relics:(s.relicHistory||[]).concat(s.relicWindow?[s.relicWindow]:[]).map(w=>({d:w.milestoneDay,c:w.candidateIds.map(id=>[id,D().relicBy[id]?.rarity]),p:w.purchased,rr:w.rerolls||undefined,x:w.seen?.length?w.seen.map(ids=>ids.map(id=>[id,D().relicBy[id]?.rarity])):undefined})),
@@ -63,12 +82,12 @@ async function flush(){
 }
 function report(game,kind){
  try{
-  if(!T.endpoint||!G.Native?.inApp?.()||!on(game.account))return;
+  if(!T.endpoint||!sends()||!on(game.account))return;
   anon(game.account);
   const p=build(game,kind);if(!p)return;
   const q=readQ();q.push(JSON.stringify(p));writeQ(q);writeLive(null);flush();
  }catch(e){}
 }
 /* the collector's address (tools/stats-collector/README-cloudflare.md) */
-const T=G.Telemetry={endpoint:'https://guild24-stats.f-ai-shion-lab.workers.dev/',on,build,report,flush,day};
+const T=G.Telemetry={endpoint:'https://guild24-stats.f-ai-shion-lab.workers.dev/',on,build,report,flush,day,part};
 })(globalThis);

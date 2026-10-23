@@ -36,9 +36,23 @@ function fromStats(p){
  return {build:p.build?{version:p.build,commit:p.commit}:null,run:{branch:r.branch||'(익명 통계)',day:r.day,phase:r.phase,money:r.money,facilities:r.supports||[],stats:r.stats||{},
   loadout:r.loadout||{},ascension:r.asc||0,startBuild:r.startBuild,expectedVisitors:r.expected,reportHistory:(r.days||[]).map(day),npcs},stats:p};
 }
+/* a Run that has no end report: its 'part' pieces (schema 2, dist/systems/telemetry.js part()) put back together as a payload that stopped at the last Day sent */
+function fromParts(parts){
+ const last=parts.at(-1),head=parts.find(x=>x.head)?.head||{},byDay=new Map();
+ for(const x of parts)for(const d of x.days)byDay.set(d.d,d);
+ const days=[...byDay.values()].sort((a,b)=>a.d-b.d),recs=new Map();
+ for(const d of days)for(const r of d.r||[]){if(!recs.has(r.n))recs.set(r.n,[]);recs.get(r.n).push(r);}
+ const npcs=(last.npcs||[]).map((n,i)=>({...n,rec:recs.get(i)||[]}));
+ return {schema:1,rid:last.rid,kind:'quit',build:last.build,commit:last.commit,demo:last.demo,anon:last.anon,
+  run:{seed:head.seed,branch:head.branch,startBuild:head.startBuild,expected:head.expected,day:last.day,phase:'(그만둠)',asc:head.asc,contract:head.contract,loadout:head.loadout,first:head.first,
+   money:last.money,supports:last.supports,playMs:last.playMs,stats:{},
+   days:days.map(d=>({d:d.d,rev:d.t?.rev,sp:d.t?.sp,op:d.t?.op,sales:d.t?.sales,waste:d.t?.waste,m:d.t?.m,tr:d.tr}))},npcs};
+}
 function readStats(file){
- return fs.readFileSync(file,'utf8').split(/\r?\n/).filter(l=>l.trim()).map(l=>{try{return JSON.parse(l);}catch(e){return null;}})
-  .filter(p=>p&&p.schema&&p.run&&Array.isArray(p.npcs)).map(fromStats);
+ const rows=fs.readFileSync(file,'utf8').split(/\r?\n/).filter(l=>l.trim()).map(l=>{try{return JSON.parse(l);}catch(e){return null;}}).filter(Boolean);
+ const ends=rows.filter(p=>p.schema===1&&p.run&&Array.isArray(p.npcs)),done=new Set(ends.map(p=>p.rid)),open=new Map();
+ for(const p of rows)if(p.schema===2&&p.kind==='part'&&!done.has(p.rid)){if(!open.has(p.rid))open.set(p.rid,[]);open.get(p.rid).push(p);}
+ return [...ends,...[...open.values()].map(fromParts)].map(fromStats);
 }
 
 const pct=(x,dp=0)=>(x*100).toFixed(dp)+'%';
