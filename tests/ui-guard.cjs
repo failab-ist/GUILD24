@@ -1996,7 +1996,7 @@ test('UI-Q-v29-54: END 이 점포의 기록 - five rows, before the settlement, 
  assert.ok(/'<div class="block">'\+moved\+row\('지금까지 연 점포',a\.runs\)\+'<\/div>'\+runBlock\(row\)\+settle\+opened/.test(l),'after 지금까지 연 점포, before 점포 자본 정산 and 본사 해금');
  assert.ok(b.includes("'<div class=\"block this-run\"><h4>이 점포의 기록</h4>'"),'the COPY_AUDIT §10-4 title');
  const labels=[...b.matchAll(/row\('([^']+)'/g)].map(m=>m[1]);
- assert.deepEqual(labels,['버틴 날','손님','가장 자주 온 손님','돌아오지 못한 사람','가장 성장한 손님','원정'],'six rows in order, COPY_AUDIT §10-4 labels');
+ assert.deepEqual(labels,['버틴 날','손님','가장 성장한 손님','가장 자주 온 손님','돌아오지 못한 사람','원정'],'six rows in order, COPY_AUDIT §10-4 labels');
  /* User 2026-10-23: the most missed of the lost hangs under 돌아오지 못한 사람, indented, only when someone was lost */
  assert.ok(b.includes("(missed?'<div class=\"row sub\"><span>그중 가장 아쉬운 손님</span>"),'the most missed of the lost, under the count');
  assert.ok(/row\('돌아오지 못한 사람',s\.stats\.deaths\|\|0\)/.test(b),'the lost as a number, 0 printed');
