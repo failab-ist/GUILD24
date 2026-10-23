@@ -11,6 +11,7 @@ const PAPER=['con','tract'].join('');   /* the support-choice paper; the plain w
 const WIDE='(min-width:1024px)',CAP=15000;
 const keep=[];                       // hold the decoded images
 function one(src){return new Promise(done=>{const img=new Image();keep.push(img);img.decoding='async';
+ if(src.includes('/hazard/'))img.crossOrigin='anonymous';   /* mask-image requests use CORS mode; a plain Image() entry is not reused for them */
  img.onerror=()=>done(false);
  img.onload=()=>(img.decode?img.decode().catch(()=>{}):Promise.resolve()).then(()=>done(true));
  img.src=src;});}
