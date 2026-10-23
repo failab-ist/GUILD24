@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=3.0.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v3.0.0
+DOC_VERSION=3.0.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v3.0.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V3_0_0_OPEN (v2.13.21 is closed; v3.0.0 = 출시판: 최종 폴리싱, 반복 느낌 줄이기, 엔진 최종 점검, 익명 통계 개편, 강제 업데이트, CHANGELOG §v3.0.0; v2.13.21 = 직업 숙련을 점포 자본으로 구매(5단, 전 직업), CHANGELOG §v2.13.21; v2.13.20 = 지역 거점점 +1명 45 → 35%, 휴식 바우처 꽂이 먼저 온 3명 → 2명, CHANGELOG §v2.13.20; v2.13.19 = 증명 문구 만반의 준비 몫 분리 + 바가지 소지금 보너스 · 단골도 -8 · 상한 90% + 재고 2~3 · 1티어 위험 +3, CHANGELOG §v2.13.19)
-SOURCE_ADOPTION_STATUS=V3_0_0_ADOPTED (every version through v3.0.0 is adopted in Source on main; CHANGELOG §v3.0.0)
+FREEZE_STATUS=V3_0_1_OPEN (v3.0.1 = 앱 화면 마무리(버튼 · 여백 · 가운데 창 · 명예의 전당 · 글자 선택 막기), CHANGELOG §v3.0.1; v3.0.0 = 출시판: 최종 폴리싱, 반복 느낌 줄이기, 엔진 최종 점검, 익명 통계 개편, 강제 업데이트, CHANGELOG §v3.0.0; v2.13.21 = 직업 숙련을 점포 자본으로 구매(5단, 전 직업), CHANGELOG §v2.13.21; v2.13.20 = 지역 거점점 +1명 45 → 35%, 휴식 바우처 꽂이 먼저 온 3명 → 2명, CHANGELOG §v2.13.20; v2.13.19 = 증명 문구 만반의 준비 몫 분리 + 바가지 소지금 보너스 · 단골도 -8 · 상한 90% + 재고 2~3 · 1티어 위험 +3, CHANGELOG §v2.13.19)
+SOURCE_ADOPTION_STATUS=V3_0_1_ADOPTED (every version through v3.0.1 is adopted in Source on main; CHANGELOG §v3.0.1)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -255,7 +255,7 @@ included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by 
 ## CURRENT CANONICAL FILE SET
 
 Core / Run / Meta:
-- SPEC_INDEX_v3.0.0.md (this index; §GAME CORE)
+- SPEC_INDEX_v3.0.1.md (this index; §GAME CORE)
 - GLOSSARY_v2.13.21.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
 - META_v3.0.0.md
@@ -357,7 +357,7 @@ A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
-    SPEC_INDEX_v3.0.0
+    SPEC_INDEX_v3.0.1
     -> exact routed owner
     -> related current QA
     -> Current Source
