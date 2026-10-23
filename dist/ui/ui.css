@@ -4504,3 +4504,14 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .relic-takeover .owned-sheet b{font:600 14px/1.4 var(--ui)}
 .relic-takeover .owned-sheet p{margin:0;font:400 13px/1.5 var(--ui);color:#2a2118}
 .relic-takeover .owned-sheet .status{color:#6b4a2e}
+
+/* 정보는 상자 대신 여백과 가는 선으로 묶는다: 판매 능력치, 도감 점포 목록. 남기는 전망 상자의 모서리 점은 뺀다 */
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{background:#120c06}
+/* 폰 능력치는 위 전망 · 환경 대응 상자와 같은 두 칸, 글자 시작선과 줄 길이를 상자에 맞춘다 */
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{grid-template-columns:minmax(0,1fr) minmax(max-content,1fr);gap:0 5px;padding:0;background:none;box-shadow:none}
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding-left:10px;padding-right:10px}
+@media(min-width:1024px){.p-sale .dossier:not(.traits)>.detail-stats{background:none;box-shadow:none;padding:6px 2px 8px}}
+.modal:has(.tabs) .slot-option,.modal:has(.tabs) .slot-option.locked,.modal:has(.tabs) .slot-option.on{background:none;box-shadow:none;padding:14px 2px 16px}
+.modal:has(.tabs) .slot-option+.slot-option{margin-top:0;box-shadow:inset 0 1px 0 #ffffff1f}
+.modal.wood-frame:has(.tabs) .slot-option>.deco-effect{box-shadow:none;padding-top:2px}
