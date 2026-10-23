@@ -2474,8 +2474,8 @@ function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)r
     +'<span class="see">기록 보기</span></div>'
     +'</button>';}).join('')+'</div></section>';}
 /* 명예의 전당 (User 2026-10-23, a hall-of-fame roll call): a Boss clear, on arriving at the ending, first plays its party one
-   member at a time on a dark stage, then strikes a 명예의 전당 stamp. A tap jumps to the finished frame; 건너뛰기 leaves at
-   once; either way the ending underneath is the same and its seal lands when the stage lifts. Shown once per Run
+   member at a time on a dark stage, then lights the whole line. A tap (or Back / Escape) jumps to the finished frame, and 계속
+   closes it (no separate skip key, User 2026-10-23: the tap already does that); the ending underneath is the same and its seal lands when the stage lifts. Shown once per Run
    (run.hallSeen). The record itself lives on the account (Meta.recordHall) and in the codex. */
 let hall=null;
 /* The beat follows the Pokemon Hall of Fame: each member steps alone into a spotlight with their name plate, then takes
@@ -2492,7 +2492,8 @@ function hallSpot(m){const n={name:m.name,appearance:m.appearance,job:m.job};
  return portrait(n,168)+'<div class="hall-plate"><b>'+E(m.name)+'</b><span>Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span></div>';}
 function hallMarkup(e){const b=D.bossBy[e.boss];
  return '<div class="hall-dim"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-sparks" aria-hidden="true">'+'<i></i>'.repeat(18)+'</div>'
-  +'<div class="hall-flash" aria-hidden="true"></div><button type="button" class="hall-skip" data-action="hall-done">건너뛰기</button>'
+  +'<div class="hall-flash" aria-hidden="true"></div>'
+  +'<p class="hall-hint" aria-hidden="true">'+E(matchMedia('(hover:hover) and (pointer:fine)').matches?Copy.prologue.click:Copy.prologue.tap)+'</p>'
   +'<div class="hall-body"><header class="hall-head"><h2>명예의 전당</h2><p class="hall-boss">'+E(b?.name||'')+' 토벌</p>'
   +'<p class="hall-where"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p></header>'
   +'<div class="hall-spot" aria-hidden="true"></div>'
@@ -3353,7 +3354,7 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);
+document.addEventListener('keydown',ev=>{if(hall&&ev.key==='Escape'){ev.preventDefault();hall.el.classList.contains('done')?hallClose():hallFinish();return;}if(ev.key==='Escape')closeTips(null);
  /* a plate that acts (the prep Capital plate) answers Enter and Space like a button */
  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('[role="button"][data-action]')){ev.preventDefault();ev.target.click();return;}
  if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
@@ -3362,6 +3363,7 @@ $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[
 Native.onBack(()=>{
  /* a scene a tap would skip: Back skips it too, never leaving the app mid-scene; the boss hold is a moment-long lock */
  if(clash){finishClash();return true;}
+ if(hall){hall.el.classList.contains('done')?hallClose():hallFinish();return true;}
  if(prologue){prologueStep(true);return true;}
  if(bossHold)return true;
  if(document.querySelector('.tip[open],.wh-tip[open]')){closeTips(null);whClose();return true;}

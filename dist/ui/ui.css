@@ -4599,12 +4599,14 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .hall-foot{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4px}
 .hall-count{font:500 14px/1.5 var(--ui);color:#f3e6c8;text-align:center;word-break:keep-all}
 .hall-go{min-width:200px}
-.hall-skip{position:fixed;z-index:1;top:calc(12px + var(--sa-top));right:12px;padding:8px 12px;background:#231d24;color:#cdbfa3;
- border:0;box-shadow:inset 0 0 0 2px #4a3d4c;font:600 13px/1 var(--ui);cursor:pointer}
-.hall.done .hall-skip{visibility:hidden}
+/* the prologue's tap hint, same words and look */
+.hall-hint{position:fixed;z-index:1;left:50%;bottom:calc(10px + var(--sa-bottom));transform:translateX(-50%);margin:0;padding:6px 12px;
+ text-shadow:0 1px 3px #000,0 0 6px #000;font:500 13px/1 var(--ui);color:#f3e9d6b3;white-space:nowrap;pointer-events:none}
+html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
+.hall.done .hall-hint{visibility:hidden}
 @media(min-width:1024px){.hall-body{max-width:960px;gap:22px}.hall-head h2{font-size:44px}.hall-spot{height:330px}
  .hall-spot .pfp{width:220px;height:220px}.hall-cards{gap:16px}.hall-card{padding:18px 10px 16px}.hall-card .pfp{width:140px;height:140px}
- .hall-card b{font-size:22px}.hall-card .who-line{font-size:14px}.hall-card .visits,.hall-card .carried{font-size:13px}}
+ .hall-card b{font-size:22px}.hall-card .who-line{font-size:14px}.hall-hint{bottom:18px;font-size:15px}.hall-card .visits,.hall-card .carried{font-size:13px}}
 .hall-entry{grid-column:1/-1}
 .hall-entry-boss{margin-top:4px;font:600 15px/1.4 var(--ui);color:var(--gold)}
 .hall-entry .hall-where{justify-content:flex-start;margin-top:4px}
