@@ -116,6 +116,18 @@ and this table is their commit record.
     Job Mastery 1·2 are bought with Capital and 3+ open with Boss clears; first clear in 1~3 hours is this game's own target,
     checked with anonymous play-time stats after release (the genre comparison line is removed); the Boss ~60% is an overall
     reference, not tuned per Decoration path. How to read bot numbers against these moved to BALANCE_CHECK §4 · §5.
+- Less repeat feel across Runs (merged as #320, User 2026-10-23, no version bump):
+  - Customer names: a new Run does not draw any name from the previous finished Run (`account.lastNames`, written at the end;
+    an abandoned Run does not count). The demo is not handled separately.
+  - Customer lines: 97 new lines across back, regular, first, hurt, helped, sale full / half / overcharge, refuse price, need,
+    choice (COPY_AUDIT §16-1 ~ §16-5, §18-1 ~ §18-6, picked by the User).
+  - 명예의 전당: a Boss clear records the Run (Run number, Boss, 일반 / 승천 N, branch, three members with Job, level, look,
+    visits, items) in `account.hall`, newest first, capped at 50 (about 0.4 KB each). The clear plays a hall scene once (members
+    lit one by one, then three in a row, sparks and a flash, 건너뛰기, tap jumps to the end) with two new cues `hallstep` /
+    `hallflash` (synth, levels fitted by `tools/qa-sfx-mix.cjs`). The codex gets a 명예의 전당 tab, 10 entries per page with
+    더 보기. Clears before this change are not back-filled.
+  - End receipt: 가장 성장한 손님, then 가장 자주 온 손님 (name, Lv, visits), and under 돌아오지 못한 사람 an indented 그중 가장
+    아쉬운 손님 (highest level among the dead, ties by visits). A won Run drops 버틴 날 (always 30). COPY_AUDIT §10-4 follows.
 
 ## v2.13.20 — 지역 거점점 +1명 35%, 휴식 바우처 꽂이 first two (User 2026-10-21)
 

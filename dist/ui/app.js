@@ -2493,6 +2493,7 @@ function hallSpot(m){const n={name:m.name,appearance:m.appearance,job:m.job};
 function hallMarkup(e){const b=D.bossBy[e.boss];
  return '<div class="hall-dim"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-sparks" aria-hidden="true">'+'<i></i>'.repeat(18)+'</div>'
   +'<div class="hall-flash" aria-hidden="true"></div><button type="button" class="hall-skip" data-action="hall-done">건너뛰기</button>'
+  +'<p class="hall-hint" aria-hidden="true">'+E(matchMedia('(hover:hover) and (pointer:fine)').matches?Copy.prologue.click:Copy.prologue.tap)+'</p>'
   +'<div class="hall-body"><header class="hall-head"><h2>명예의 전당</h2><p class="hall-boss">'+E(b?.name||'')+' 토벌</p>'
   +'<p class="hall-where"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p></header>'
   +'<div class="hall-spot" aria-hidden="true"></div>'
@@ -3347,7 +3348,7 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);
+document.addEventListener('keydown',ev=>{if(hall&&ev.key==='Escape'){ev.preventDefault();hall.el.classList.contains('done')?hallClose():hallFinish();return;}if(ev.key==='Escape')closeTips(null);
  /* a plate that acts (the prep Capital plate) answers Enter and Space like a button */
  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('[role="button"][data-action]')){ev.preventDefault();ev.target.click();return;}
  if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
@@ -3356,6 +3357,7 @@ $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[
 Native.onBack(()=>{
  /* a scene a tap would skip: Back skips it too, never leaving the app mid-scene; the boss hold is a moment-long lock */
  if(clash){finishClash();return true;}
+ if(hall){hall.el.classList.contains('done')?hallClose():hallFinish();return true;}
  if(prologue){prologueStep(true);return true;}
  if(bossHold)return true;
  if(document.querySelector('.tip[open],.wh-tip[open]')){closeTips(null);whClose();return true;}
