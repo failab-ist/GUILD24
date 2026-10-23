@@ -18,10 +18,11 @@ class Game{
     neutral baseline and the Account's Decoration loadout is frozen into the Run here. Changing
     the Account loadout afterwards cannot reach a Run that has already started. */
  start(seed){
- const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
+ const prevRun=this.run,loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  /* 알뜰 금고 is paid by morningReset, which DAY 1 also runs once the DAY 0 pick is made */
  const startGold=700; /* CORE_RUN §START STATE */
  this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],npcNames:2,notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+  this.run.avoidNames=(prevRun?prevRun.npcs.map(n=>n.name):this.account.lastNames||[]);
   /* UI_UX §BUILD MARKER: the build this Run started on, kept beside the save's last-written build */
   {const b=G.GUILD24_BUILD;if(b)this.run.startBuild={version:b.version,commit:b.commit};}
   /* META §ASCENSION: the level this Run plays at, frozen here like the loadout */
@@ -132,7 +133,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* The Rare Reference roll is gone (v2.9.11, User 2026-09-28: removed before a paid release); its one draw stays, so a
      seeded Run keeps the stream it had whenever that roll missed. */
   this.rng.next();
-  for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
+  /* 반복 느낌 줄이기 (User 2026-10-23): a name that appeared in the account's previous Run is not drawn again (run.avoidNames is
+     the names of the Run being left, or account.lastNames once it is gone - end() keeps them); only a Run with no previous Run, or a save from before this, skips it. */
+  for(let retry=0;(s.npcs.some(x=>x.alive&&x.name===n.name)||s.avoidNames?.includes(n.name))&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
   s.npcs.push(n);return n;}
  /* v2.9.0 (User 2026-09-24): no Gate requires Supply - the Supply Burden modifier is gone. The one
     draw it used to make is kept as a dead draw so every seeded stream and fixture stays identical. */
