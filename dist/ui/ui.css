@@ -4518,12 +4518,27 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 /* 마감 영수증의 영업 시작 골드는 다른 줄과 같은 줄로 둔다 (결과 상자 하나만 눈에 띄게) */
 .print .row.open,.p-closing .print .row.open{background:none;box-shadow:none;clip-path:none;padding:8px 0}
 /* 도감 상품 목록: 상자 없이 아이콘을 이름 옆에, 항목 사이는 가는 줄 */
-.modal .unlock-grid:has(>.unlock>svg){gap:0 22px}
-.modal .unlock:has(>svg){display:grid;grid-template-columns:42px minmax(0,1fr) auto;column-gap:12px;align-items:start;padding:14px 4px;background:none;box-shadow:inset 0 1px 0 #ffffff1f}
-.modal .unlock:has(>svg):first-child{box-shadow:none}
-.modal .unlock:has(>svg)>svg{grid-row:1/span 4;grid-column:1;margin-top:2px}
-.modal .unlock:has(>svg)>:not(svg):not(.lock-mark){grid-column:2/span 2}
-.modal .unlock:has(>svg)>h3{grid-column:2;grid-row:1;margin-bottom:6px}
-.modal .unlock:has(>svg)>.gold-text{grid-column:3;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
-.modal .unlock:has(>svg).locked{outline:0}
-@media(min-width:1024px){.modal .unlock:has(>svg)>.gold-text{grid-column:2/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
+.modal .unlock-grid:has(>.unlock>svg:not(.lock-mark)){gap:0 22px}
+.modal .unlock:has(>svg:not(.lock-mark)){display:grid;grid-template-columns:42px minmax(0,1fr) auto;column-gap:12px;align-items:start;padding:14px 4px;background:none;box-shadow:inset 0 1px 0 #ffffff1f}
+.modal .unlock:has(>svg:not(.lock-mark)):first-child{box-shadow:none}
+.modal .unlock:has(>svg:not(.lock-mark))>svg:not(.lock-mark){grid-row:1/span 4;grid-column:1;margin-top:2px}
+.modal .unlock:has(>svg:not(.lock-mark))>:not(svg):not(.lock-mark){grid-column:2/span 2}
+.modal .unlock:has(>svg:not(.lock-mark))>h3{grid-column:2;grid-row:1;margin-bottom:6px}
+.modal .unlock:has(>svg:not(.lock-mark))>.gold-text{grid-column:3;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
+.modal .unlock:has(>svg:not(.lock-mark)).locked{outline:0}
+@media(min-width:1024px){.modal .unlock:has(>svg:not(.lock-mark))>.gold-text{grid-column:2/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
+/* 아침 게이트 카드: 베이지 바탕에서 옅던 「대응 N 필요」 글씨를 본문 갈색 쪽으로 */
+.slip .hazards .press{color:#5a4e38}
+.slip .hazards .press .rate{color:#766a52}
+/* 점주 가이드: 한 문장이 두 줄로 꺾일 때 짧은 꼬리 줄이 남지 않게 */
+.stack .first-days p{text-wrap:balance}
+/* 도감 직업·점포지원 목록: 상품 목록과 같은 모양(상자 없이 가는 줄, 해금 조건은 이름 줄 오른쪽) */
+.modal .unlock-grid{gap:0 22px}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark))){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:start;padding:14px 4px;background:none;box-shadow:inset 0 1px 0 #ffffff1f;outline:0}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark))):first-child{box-shadow:none}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>*{grid-column:1/span 2}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>h3{grid-column:1;grid-row:1;padding-right:0;margin-bottom:6px}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>.gold-text{grid-column:2;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
+@media(min-width:1024px){.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>.gold-text{grid-column:1/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
+.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:26px}
+@media(min-width:1024px){.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:0}}
