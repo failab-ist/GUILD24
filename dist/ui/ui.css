@@ -4528,6 +4528,10 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .modal .unlock:has(>svg:not(.lock-mark))>h3{grid-column:2;grid-row:1;margin-bottom:6px}
 .modal .unlock:has(>svg:not(.lock-mark))>.gold-text{grid-column:3;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
 .modal .unlock:has(>svg:not(.lock-mark)).locked{outline:0}
+/* 좁은 칸에서 「손님 소지금 획득」이 세 줄로 꺾이지 않게: 이름은 한 줄, 수치가 모자라면 아래로 */
+.modal .unlock .effects li{flex-wrap:wrap;column-gap:8px}
+.modal .unlock .effects li>span{white-space:nowrap}
+.modal .unlock .effects li>b{margin-left:auto}
 @media(min-width:1024px){.modal .unlock:has(>svg:not(.lock-mark))>.gold-text{grid-column:2/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
 /* 아침 게이트 카드: 베이지 바탕에서 옅던 「대응 N 필요」 글씨를 본문 갈색 쪽으로 */
 .slip .hazards .press{color:#5a4e38}

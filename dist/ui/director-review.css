@@ -863,9 +863,10 @@
  .hall-card .who-line{font:600 14px/1.3 var(--ui);}
  .hall-card .visits,.hall-card .carried{font:400 13px/1.35 var(--ui);}
  .hall-count{font:500 16px/1.5 var(--ui);}
- .hall-skip{font:600 15px/1 var(--ui);}
+ .hall-hint{font:500 15px/1 var(--ui);}
  .hall-card b{font-size:24px;}
  .hall-card .who-line{font-size:16px;}
+ .hall-hint{font-size:17px;}
  .hall-card .visits,.hall-card .carried{font-size:15px;}
  .hall-entry-boss{font:600 17px/1.4 var(--ui);}
  .hall-tier{font:600 14px/1 var(--ui);}
