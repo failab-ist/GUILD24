@@ -487,7 +487,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&!n.newToday)n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&!n.newToday)n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
  /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +75G more each (User 2026-10-23) */
  {const T=D.decorationParams.thriftSafe,paid=this.run.daily.safeWallets??=[];if(this.wears('thriftSafe')&&paid.length<T.customers&&!paid.includes(n.id)){n.money+=T.firstWallet;paid.push(n.id);}}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
@@ -502,7 +502,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   if(n.injury===1&&dv.healVisitors){n.injury=0;n.status='건강';n.healedBy='medcorps';}
   if(dv.arrivalFatigue)n.fatigue=Math.max(0,(n.fatigue||0)-dv.arrivalFatigue);
   n.fatigueArrival.recovered=n.fatigueArrival.before-(n.fatigue||0);
-  n.feast=dv.feast||0;}const ev=this.run.event?.effects||{};
+  n.feast=dv.feast||0;}
+ /* SALE-entry outlook: taken only after every door effect above (heal, visit Fatigue recovery) has settled, so it reads the state the sale starts from */
+ n.outlook=this.outlookFor(n);const ev=this.run.event?.effects||{};
   /* META §sign — 원정 지원금 간판: the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
   n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)))+(ev.flatBudget||0)+(n.injury===1?(ev.injuredBudget||0):0)+(this.run.firstRun&&n.lessonPayday===this.run.day?LESSON.paydayBudget:0)

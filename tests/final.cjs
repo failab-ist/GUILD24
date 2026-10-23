@@ -734,4 +734,13 @@ test('WALLET cap: an expedition reward never lifts a Persistent Wallet past 2000
  }
 });
 
+test('ENVY target counts 단골 감사 현수막: the ace is the one the Final really counts',()=>{
+ const g=atFinal('envy-banner'),prep=c=>({effects:{combat:c,survival:0,mobility:0,spirit:0},hazards:[]});
+ const a={id:'A',loyalty:0},b={id:'B',loyalty:100},preps=[prep(100),prep(90)];
+ g.run.loadout={};assert.equal(g.envyTarget([a,b],preps),'A','no banner: A is ahead');
+ g.run.loadout={sign:'cheerBanner'};assert.equal(g.envyTarget([a,b],preps),'B','the banner turns 90 into 108: B is the ace');
+ assert.equal(g.envyTarget([{id:'A',loyalty:100},b],preps),'A','the banner keeps the order when it does not reverse it');
+ assert.equal(g.envyTarget([{id:'B',loyalty:0},{id:'A',loyalty:0}],[prep(50),prep(50)]),'A','a tie falls to the lower NPC id');
+});
+
 console.log(count+' final groups passed');

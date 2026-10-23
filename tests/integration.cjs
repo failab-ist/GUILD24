@@ -1383,6 +1383,14 @@ test('추모 방명록: the Death line that ends a Run is one higher while it is
  const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+1;h.closeDay();
  assert.equal(h.run.phase,'end','at the bonused (+1) line, it closes');
 });
+test('SALE 전망: arrival heals and visit Fatigue recovery land before the outlook is taken',()=>{
+ let checked=0;
+ for(let i=0;i<60;i++){const g=wearing(['infirmaryPlaque'],'outlook-heal-'+i),s=g.run,n=s.npcs[0];
+  n.injury=1;n.status='부상';n.fatigue=30;s.event={effects:{arrivalFatigue:10}};s.queue=[n.id];s.cursor=0;g.arrive();
+  assert.equal(n.fatigue,20);assert.deepEqual(n.outlook,g.outlookFor(n),'the stored outlook is the state the sale starts from');
+  if(n.healedBy){checked++;assert.equal(n.injury,0);}}
+ assert.ok(checked>0,'the heal branch was reached');
+});
 test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
  let healed=0,tries=0;
  for(let i=0;i<200;i++){const g=wearing(['infirmaryPlaque'],'infirmary-'+i),s=g.run,n=s.npcs[0];
