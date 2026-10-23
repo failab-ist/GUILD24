@@ -441,7 +441,7 @@ rarity draw when the Decoration is active; it adds no extra spawn, no extra rari
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first two customers to reach the counter: Wallet +100G each (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +75G each (cap 2000)
 ```
 
 Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it

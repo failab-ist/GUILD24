@@ -21,7 +21,7 @@ if(process.env.MW){
  const R0=G.RNG;G.RNG=class extends R0{constructor(s,st){super(s==='continue-0'&&globalThis.__SEED?globalThis.__SEED:s,st);}};
  for(const tw of (tweak?tweak.split('~'):[])){const [k,v]=tw.split('=');const x=+v;
   if(k==='ih')D.decorationParams.infirmaryPlaque.healChance=x;if(k==='fh')D.relicParams.firstAidDesk.healChance=x;
-  if(k==='sub')D.relicParams.guarantee.subsidyRate=x;if(k==='ks')D.relicParams.kitchen.supplyBonus=x;if(k==='kd')D.relicParams.kitchen.supplyDrink=x;if(k==='ko')D.relicParams.kitchen.overheadRate=x;if(k==='fs')D.relicParams.fresh24.statBonus=x;if(k==='min')D.relicBy.guarantee.minPrice=x;}
+  if(k==='sub')D.relicParams.guarantee.subsidyRate=x;if(k==='ks')D.relicParams.kitchen.supplyBonus=x;if(k==='kd')D.relicParams.kitchen.supplyDrink=x;if(k==='ko')D.relicParams.kitchen.overheadRate=x;if(k==='fs')D.relicParams.fresh24.statBonus=x;if(k==='min')D.relicBy.guarantee.minPrice=x;if(k==='tsc')D.decorationParams.thriftSafe.customers=x;if(k==='tsw')D.decorationParams.thriftSafe.firstWallet=x;}
  const parts=cond.split('+').map(p=>p.split(':'));const decos=parts.filter(p=>p[0]==='deco').map(p=>p[1]),relics=parts.filter(p=>p[0]==='relicAt').map(p=>p[1]);
  const accs=JSON.parse(fs.readFileSync(path.join(out,'accounts.json')));
  if(relics.length){const P=G.Game.prototype,orig=P.relicWindow;
