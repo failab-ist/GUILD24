@@ -4542,3 +4542,7 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 @media(min-width:1024px){.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>.gold-text{grid-column:1/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
 .modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:26px}
 @media(min-width:1024px){.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:0}}
+/* 도감 직업: 특화 능력치와 시작 능력치. 잠긴 직업도 보이게 한다(해금 동기) */
+.job-info span{display:block}
+.job-info .job-start{margin-top:4px;color:#b9ab8c}
+.unlock.locked>:not(.lock-mark):not(.gold-text).job-info{opacity:.8;filter:none}
