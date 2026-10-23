@@ -1689,4 +1689,26 @@ test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: an update that changes the lists k
   console.log('PASS PLATFORM_RELEASE §CLOUD: a late cloud answer reaches the running game once');
  }catch(e){console.error(e);process.exitCode=1;}finally{delete global.Capacitor;}
 })();
+// Forced update: the shell is asked once with the config URL; a browser, a missing plugin and a failed call never block the start.
+(async()=>{
+ await new Promise(r=>setTimeout(r,200)); // after the cloud-answer group above, which owns global.Capacitor until then
+ try{
+  require('../dist/ui/native.js');
+  assert.equal(await Native.updateCheck(),false,'a browser does nothing');
+  const asked=[];
+  global.Capacitor={isNativePlatform:()=>true,Plugins:{}};
+  assert.equal(await Native.updateCheck(),false,'an app shell without the plugin lets the game start');
+  global.Capacitor.Plugins.AppUpdate={check:o=>{asked.push(o.url);return Promise.resolve({forced:true});}};
+  assert.equal(await Native.updateCheck(),true,'an older install is told it was sent to Play');
+  assert.ok(/^https:\/\/.+\/app-config\.json$/.test(asked[0]),'the config is read from the site');
+  global.Capacitor.Plugins.AppUpdate={check:()=>Promise.reject(new Error('offline'))};
+  assert.equal(await Native.updateCheck(),false,'a failed check never blocks the game');
+  global.Capacitor.Plugins.AppUpdate={check:()=>{throw new Error('boom');}};
+  assert.equal(await Native.updateCheck(),false,'a throwing plugin never blocks the game');
+  const cfg=JSON.parse(require('fs').readFileSync(require('path').join(__dirname,'../docs/app-config.json'),'utf8'));
+  const gradle=require('fs').readFileSync(require('path').join(__dirname,'../android/version.properties'),'utf8');
+  assert.ok(cfg.minVersionCode<=Number(/versionCode=(\d+)/.exec(gradle)[1]),'the shipped minimum never locks out the current build');
+  console.log('PASS PLATFORM_RELEASE §UPDATE: forced update check never blocks the start');
+ }catch(e){console.error(e);process.exitCode=1;}finally{delete global.Capacitor;}
+})();
 console.log(count+' integration groups passed');

@@ -8,6 +8,7 @@ const inApp=()=>{try{return !!G.Capacitor?.isNativePlatform?.();}catch(e){return
 const prefs=()=>inApp()?plug('Preferences'):null;
 const HYDRATE_MS=1500,CLOUD_MS=30000,PREFS_MS=2000;
 const CLOUD_OK='guild24.cloudok';
+const UPDATE_URL='https://guild24.f-ai-shion-lab.workers.dev/app-config.json';
 /* a browser can only set how long the motor runs, and 40 ms read as weak on a phone (User 2026-10-10): one firmer pulse, not a pattern */
 const WEB_MS=70;
 const webVibrate=()=>{try{return typeof navigator!=='undefined'&&!!navigator.vibrate&&!!matchMedia('(pointer:coarse)').matches;}catch(e){return false;}};
@@ -81,6 +82,12 @@ G.Native={
   try{const h=inApp()?plug('Haptics'):null;
    if(h){h.vibrate({duration:ms}).catch(()=>{});return;}
    if(webVibrate()&&!(navigator.userActivation&&!navigator.userActivation.hasBeenActive))navigator.vibrate(Math.max(ms,WEB_MS));}catch(e){}
+ },
+ /* Forced update: the app shell reads UPDATE_URL (a tiny {"minVersionCode":N}) and, only if this install is older, opens Play's
+    full-screen update. Offline, a bad answer or a missing plugin all mean the game simply starts. Browsers do nothing. */
+ updateCheck(){
+  try{const c=inApp()?plug('AppUpdate'):null;if(!c)return Promise.resolve(false);
+   return c.check({url:UPDATE_URL}).then(r=>!!(r&&r.forced),()=>false);}catch(e){return Promise.resolve(false);}
  },
  exit(){G.Native.prefsFlush();try{const a=inApp()?plug('App'):null;if(a)a.exitApp();}catch(e){}},
  /* Android Back. `handle()` closes the topmost surface or asks to leave and returns true; false lets the app exit. */
