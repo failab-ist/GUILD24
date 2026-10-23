@@ -51,7 +51,7 @@ const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3'
  'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
  'night.rescued':'19-7','night.grew':'19-8','night.savedDeathWin':'19-10','night.savedDeathRetreat':'19-11','night.savedDeathHurt':'19-12','night.savedSevereWin':'19-13','night.savedPrepared':'19-14','night.savedHurt':'19-15','night.savedRetreat':'19-16','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
 const approved=(()=>{const out={};let sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.21.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -66,7 +66,7 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
 /* COPY_WORLD_VOICE §DIALOGUE EXPOSURE — OCCASIONAL (User 2026-10-04): the `가끔` list under a §16-§18 pool is the set
    of its long lines that come up on 1 pick in 5; every other pick uses the pool's other lines. */
 const occasionalDoc=(()=>{const out={};let sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.21.md').split('\n')){let h;
   if((h=l.match(/^##\s+(\d+-\d+[a-z]?)\./))){sec=h[1];mode=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -125,7 +125,7 @@ test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
  const rendered=[...DATA.events.map(e=>e.description),...DATA.relics.map(r=>r.description),...DATA.decorations.map(d=>d.name+' — '+d.effect),
   Copy.loyalty.sale(),Copy.loyalty.coach()].join('\n');
  const missing=new Set();let checked=0,sec=null,mode=null;
- for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.19.md').split('\n')){let h;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.13.21.md').split('\n')){let h;
   if((h=l.match(/^##\s+((\d+)-\d+[a-z]?)\./))){sec=h[1];mode=null;if(+h[2]>=16&&+h[2]<=20)sec=null;continue;}
   if(/^#\s/.test(l)){sec=null;continue;}
   if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
@@ -555,7 +555,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  /* 포만감 was a third named effect in two Relic descriptions. There is no such channel.
     Under RELIC_v2.7 these two move the native Core Stat and leave Supply alone, so the
     description has to say the channel it moves and the ones it does not. */
- for(const id of ['kitchen','fresh24']){
+ for(const id of ['fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
   assert.ok(/올려 주는 능력치가 \d+% 더 오른다/.test(DATA.relicBy[id].description),id+' names the channel it does move (COPY_AUDIT §11-10 / §11-25 wording, User 2026-10-04)');
   assert.ok(/피로 회복·위험 대응은 그대로/.test(DATA.relicBy[id].description)&&!/피로 회복 \+/.test(DATA.relicBy[id].description),
@@ -592,7 +592,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
   snowvisor:'김은 안 서린다. 눈썹은 얼 수 있다.',
   magmagear:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',
   battlelunch:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',
-  kingwater:'왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',
+  bananamilk:'항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.',
   hyperenergy:'마시고 나면 계산대보다 먼저 문을 나선다.',
   sageelixir:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',
   toppotion:'병은 작다. 값은 작지 않다.'};
@@ -613,23 +613,23 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
 });
 
-/* COPY_AUDIT_APPROVED_v2.13.19 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
+/* COPY_AUDIT_APPROVED_v2.13.21 §11 — STORE SUPPORT 32/32 (rewritten User 2026-10-04: who gains first, numbers read from relicParams). The approved amendment is exact Player
    text, so this is equality, not a pattern: a paraphrase, a dropped middot or a stale number is
    a FAIL here rather than something a looser assertion can absorb. Price and name are pinned in
    the same table because §11 renames two rows and RELIC_v2.8 re-prices two more, and a row that
    reads right at the wrong price is still the wrong row. */
 test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are the approved text',()=>{
  const SUPPORTS=[
-  ['bulk','묶음발주 계약',130,'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 20% 싸진다.'],
+  ['bulk','묶음발주 계약',130,'한 번 발주할 때 같은 상품을 3개 이상 사면, 그 상품 전부의 매입가가 10% 싸진다.'],
   ['rotation','회전 진열대',80,'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 1개 늘어난다.'],
   ['stamp','단골 스탬프 기계',130,'손님의 구매로 오르는 단골도: 정가 +2 (기존 +1), 50% 할인 +7 (기존 +4).'],
   ['member','회원 관리대장',130,'단골도가 손님이 다시 올 가능성에 주는 효과가 2배가 된다.'],
   ['rareContract','희귀상품 입고 계약',140,'발주 후보에 희귀 이상 상품이 1.5배 자주 나온다. 희귀 이상 상품을 팔면 가게가 판매가의 10%를 더 받는다.'],
-  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 50%만 내고 가게는 전액을 받는다.'],
+  ['guarantee','길드 보증 진열대',140,'하루 한 번, 200G 이상에 파는 상품은 손님이 판매가의 60%만 내고 가게는 전액을 받는다.'],
   ['hazardBoard','원정 위험 게시판',60,'오늘 게이트 위험에 맞는 상품이 발주 후보에 1.5배 자주 나온다.'],
   ['fieldRepair','야전 정비대',80,'가게에서 판 상품의 위험 대응 수치가 40% 높아진다.'],
   ['fridge','대형 냉장고',60,'음식·음료의 유통기한이 2일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-  ['kitchen','즉석식품 코너',200,'음식·음료가 올려 주는 능력치가 25% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 15% 오른다.'],
+  ['kitchen','즉석식품 코너',200,'음식의 피로 회복이 2, 음료는 1 더 오른다. 대신 기본 운영비가 5% 오른다.'],
   ['board','길드 전광판',110,'손님 수가 적게 나와도 하루 기본 4명은 온다 (기존 3명).'],
   ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님의 손님 소지금 +30G, 그 손님의 구매 의사 +20%p.'],
   ['groupOrder','단체 주문 창구',200,'매일 아침 20% 확률로 손님이 1명 더 온다. 하루 5번째 판매부터는 팔 때마다 가게가 15G를 더 받는다(하루 최대 60G).'],
@@ -645,17 +645,17 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['royalCert','왕도 프리미엄 인증',320,'바가지(150%)로 팔면 가게가 판매가의 20%를 더 받고, 손님의 바가지 구매 의사 +10%p. 대신 기본 운영비가 10% 오른다.'],
   ['opsRoom','원정 작전실',290,'손님의 위험 대응이 필요한 수치를 넘긴 만큼 투력이 오른다 (최대 +30%).'],
   ['fresh24','24시간 신선체계',360,'음식·음료가 올려 주는 능력치가 30% 더 오른다 (피로 회복·위험 대응은 그대로). 대신 음식·음료 매입가 +15%.'],
-  ['hub','지역 거점점 계약',340,'매일 아침 손님이 45% 확률로 1명, 15% 확률로 2명 더 온다.'],
+  ['hub','지역 거점점 계약',340,'매일 아침 손님이 35% 확률로 1명, 15% 확률로 2명 더 온다.'],
   ['warehouse','후방 창고 증설',130,'창고에 둘 수 있는 상품이 5칸 늘어난다.'],
   ['extraOrder','본사 추가발주권',190,'발주 칸이 2칸 늘어난다.'],
   ['rerollTicket','발주 교환권',120,'매일 첫 발주 후보 교환은 무료. 그다음부터 50G → 100G → 200G… 로 오른다.'],
   ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 하루 기본 운영비가 30G 적어진다.'],
   /* v2.9.11 (User 2026-09-28): COPY_AUDIT §11-30b / §11-30c */
   ['fieldStretcher','야전 들것',80,'부상당한 손님의 투력 감소 8% (기존 15%).'],
-  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 20% 확률로 부상이 낫는다 (중상은 제외).'],
+  ['firstAidDesk','응급 처치대',300,'부상당한 손님이 가게에 오면 25% 확률로 부상이 낫는다 (중상은 제외).'],
   /* User 2026-10-04: COPY_AUDIT §11-30d / §11-30e / §11-30f */
   ['rumorBoard','소문 수집 게시판',60,'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
-  ['postcard','단골 추천 엽서함',80,'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 5 오른다.'],
+  ['postcard','단골 추천 엽서함',80,'단골이 먼저 다녀간 날, 그 뒤에 온 손님은 떠날 때 단골도가 5 오른다.'],
   ['rescueContract','길드 구조대 계약',240,'원정에서 사망 결과가 나오면 15% 확률로 중상으로 바뀌어 돌아온다.']];
  /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30c exact (32 since v2.9.11) */
  assert.equal(SUPPORTS.length,35,'§11 audits all 35 Store Supports (단골 묶음혜택 retired but still readable)');
@@ -691,16 +691,16 @@ test('COPY_AUDIT §9-5 / §11: Decoration lines are the approved text, and Decor
  const EFFECTS={
   sponsorSign:'손님이 방문할 때마다 손님 소지금의 50%만큼 더 쓸 수 있다',
   honorFrame:'새로 오는 모험가가 일반보다 높은 등급일 확률 50% (기존 40%)',
-  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 100G씩 늘어난다',
+  thriftSafe:'매일 먼저 온 손님 2명은 손님 소지금이 75G씩 늘어난다',
   guildShelf:'매일 아침 50% 확률로 그날 손님이 1명 더 온다',
   trainingSign:'처음 찾아오는 모험가는 30% 확률로 레벨 +1로 온다',
-  infirmaryPlaque:'부상당한 손님이 가게에 오면 25% 확률로 부상이 낫는다 (중상은 제외)',
+  infirmaryPlaque:'부상당한 손님이 가게에 오면 30% 확률로 부상이 낫는다 (중상은 제외)',
   memorialBook:'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 1명 늘어난다',
-  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +3%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%) (마왕성 제외)',
+  aidCabinet:'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +3%. 원정에 실패해도 죽을 확률이 40% 줄어든다 (기존 20%, 마왕성 제외)',
   /* 운영형 (User 2026-10-04) */
   heroSign:'첫 점포지원은 영웅 등급 3장 중에서 무료로 고른다',
   cheerBanner:'손님의 투력이 단골도 10마다 3% 오른다 (최대 20%)',
-  voucher:'매일 먼저 온 손님 3명은 그날 밤 피로가 6 줄어든다',
+  voucher:'매일 먼저 온 손님 2명은 그날 밤 피로가 6 줄어든다',
   rerollCoupon:'유료 점포지원 구매 기회마다 첫 후보 교환이 무료'};
  assert.deepEqual(DATA.decorations.map(d=>d.id).sort(),Object.keys(EFFECTS).sort(),'all twelve Decorations are audited');
  for(const d of DATA.decorations)assert.equal(d.effect,EFFECTS[d.id],d.id+' effect is the approved §9-5 text, verbatim');

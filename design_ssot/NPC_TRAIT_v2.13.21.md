@@ -2,7 +2,7 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.13.19
+DOC_VERSION=2.13.21
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -97,7 +97,7 @@ Stat order:
     = Job Growth × that NPC's internal Potential
 
 Potential is an internal growth input, never exposed as a relationship reward (→ §PLAYER-FACING GROWTH TRUTH).
-Job Mastery does not alter this table; current Job Mastery effect -> META_v2.13.18.md.
+Job Mastery does not alter this table (its Main Stats bonus is a one-time addition at creation); current Job Mastery effect -> META_v2.13.21.md.
 
 ### Job contribution — internal comparison
 
@@ -121,9 +121,9 @@ At Level L, contribution = Lv1 contribution + (L − 1) × per-Level contributio
 
 ## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
 
-Meta progress source -> META_v2.13.18.md
+Meta progress source -> META_v2.13.21.md
 
-- Job × Boss clear matrix, Mastery count and unlock thresholds are owned by META
+- Job × Boss clear record, Job Mastery rank and unlock thresholds are owned by META
 - before unlock, 도적/광전사 are not eligible for normal NPC Job generation
 - Job Mastery may not create a hidden generic account-wide combat multiplier or a hidden Final-only Job Mastery multiplier
 
@@ -481,7 +481,7 @@ investment → survival → level/growth → loot → wallet → loyalty → rev
 Player should feel: `얘 살려놓길 잘했다.`
 
 Returning NPC presentation should make relevant history/change easy to notice without requiring the Player to
-reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.13.17.md
+reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.13.21.md
 
 Ignoring weak NPCs is allowed, with opportunity cost through lost future customer/roster value.
 No separate punishment system is required solely to force attachment.
@@ -620,7 +620,7 @@ Rules:
 - no unlimited timeline is added by this rule
 - Product XP / Favorite Meter / Familiarity Bonus are not created
 
-Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md`
+Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.13.21.md`
 Result proof -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## WALLET / LOYALTY / REVISIT
@@ -704,7 +704,7 @@ The Player must be able to learn that Loyalty:
 Loyalty does not directly increase the four Core Stats.
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/tutorial placement -> UI_UX_v2.13.17.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.19.md.
+Exact compact UI/tutorial placement -> UI_UX_v2.13.21.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.21.md.
 
 ## DEEP EXPEDITION NPC REWARD
 
@@ -777,7 +777,7 @@ PASS: No Job is mandatory for a Family and no Job solves all Families.
 
 ### NPC-Q-v28-7 — JOB BASE / GROWTH TABLE EXACT
 
-Expect exactly the six Job rows in NPC_TRAIT_v2.13.19.md.
+Expect exactly the six Job rows in NPC_TRAIT_v2.13.21.md.
 
 For a controlled NPC:
 - Lv1 Stats equal the Job row
@@ -805,29 +805,27 @@ EXPECT: no hidden generic account-wide combat/Final multiplier.
 
 PASS: Job identity remains BaseStats+Growth and Mastery does not create a second hidden Job system.
 
-### NPC-Q-v28-9 — JOB MASTERY SPAWN MODEL
+### NPC-Q-v28-9 — JOB MASTERY SPAWN MODEL (v2.13.21: bought with Store Capital)
 
-For Mastery ranks 0–7, expect mutually exclusive +1/+2/+3 Level probabilities:
+For Mastery ranks 0–5 (one rank per account, META §JOB MASTERY), expect:
 
-| Mastery | +1 | +2 | +3 |
+| Rank | Main Stats | +1 Lv | +2 Lv |
 |---:|---:|---:|---:|
-| 0 | 0% | 0% | 0% |
-| 1 | 5% | 0% | 0% |
-| 2 | 10% | 0% | 0% |
-| 3 | 15% | 5% | 0% |
-| 4 | 20% | 10% | 0% |
-| 5 | 25% | 15% | 0% |
-| 6 | 30% | 20% | 5% |
-| 7 | 35% | 25% | 10% |
+| 0 | +0 | 0% | 0% |
+| 1 | +0.5 | 0% | 0% |
+| 2 | +1 | 0% | 0% |
+| 3 | +1 | 10% | 0% |
+| 4 | +1 | 15% | 5% |
+| 5 | +1 | 20% | 10% |
 
 PASS:
-- ordinary spawn Level resolves before Mastery bonus
-- only the generated NPC's own Job Mastery applies
+- ordinary spawn Level resolves before the Mastery Level roll
+- the rank applies to every Job; Main Stats are each Job's two highest Growth values, added once after the Stats are rounded
 - exactly one Mastery roll is consumed per spawn, including rank 0
-- outcomes never stack
+- outcomes never stack; there is no +3
 - an already-created NPC is never retroactively changed
+- Boss clears (the Job × Boss record) change nothing on a new NPC
 - no account-wide combat multiplier exists
-- Player-facing meaning does not expose the exact table unless separately approved
 
 ### QA ID NOTE
 
@@ -1208,7 +1206,7 @@ For one successful ordinary paid purchase before explicit modifier effects:
 PASS:
 - a refusal does not apply the purchase Loyalty delta; a refused 150% applies -2
 - explicit Trait / Store Support modifiers apply only through their owned rules
-- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.19.md
+- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.21.md
 
 ### NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
 

@@ -2,7 +2,7 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.13.19
+DOC_VERSION=2.13.21
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -74,7 +74,7 @@ After one first support is chosen, or the choice is deferred (`나중에 결정`
 A deferred D0 window stays open, still free, through DAY 4 and reopens like any deferred window (§WINDOW STATE); it does not
 pop up again, and the D5 window replaces it. A pick on DAY 1~4 applies from that moment like any later purchase.
 
-Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.19.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
+Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.21.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
 
 ### D5 / D10 / D15 / D20 / D25
 cand=3 · buy<=1 · currency=G · firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION · defer=YES
@@ -175,7 +175,7 @@ ownedRelicQuickView: mode=READ_ONLY · availablePhases=[Morning,Order,Sale]
 A Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one
 status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save
 field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
-written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.19.md` §11-32. The conditional supports are exactly:
+written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.21.md` §11-32. The conditional supports are exactly:
 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it is always on for every 단골.
 
@@ -338,12 +338,12 @@ existing Customer effects rather than adding another workload system.
 
 ## RELIC BLUEPRINTS
 
-Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.19.md §11 (§11-1..§11-30 for blueprints
+Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.21.md §11 (§11-1..§11-30 for blueprints
 1–30, §11-30b 야전 들것, §11-30c 응급 처치대). The following Store Support Functions are exact.
 
 ### ROTATION — Foundation
 1. 묶음발주 계약 · tag=Rotation · purpose=reward inventory-risk-taking
-- 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
+- 묶음발주 계약: same SKU 3+ in one ORDER (offer slots summed) -> every unit of that SKU purchase price -10%
 
 2. 회전 진열대 · tag=Rotation · purpose=sales->order->sales loop · `DIRECTOR DOCUMENT BASELINE`
 - Price = 80G
@@ -369,7 +369,7 @@ Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.19
   10% of the charged price on top, in every mode; no operating-cost modifier
 
 6. 길드 보증 진열대 · tag=Premium · 150AutoSuccess=NO · playerReceivesChosenPrice=YES
-- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 50%
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 40%
   of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
 
@@ -404,13 +404,14 @@ No Stat/Supply multiplier. dailyRepeatedExtension=NO · infinitePreservation=NO
 10. 즉석식품 코너 · tag=Fresh · `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-Food/Drink positive native Core-Stat contribution +25%
-Supply (피로 회복) unchanged
+each Food in the bag: Supply (피로 회복) +2; each Drink: Supply +1 (flat, added after the Trait Supply deltas)
+native Core Stat unchanged (24시간 신선체계 alone owns the Fresh native-Stat bonus)
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-base operating cost +15% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
-  (User 2026-10-02: the Fresh line clears more and pays more)
+base operating cost +5% of overheadBase from the acquisition Day, added to the other percentage surcharges, never compounded
+  (User 2026-10-22: Supply instead of native Stat, so it no longer does 24시간 신선체계's job; the Fresh line keeps
+   paying for its strength, at +5%; flat values so no fractional Supply)
 ```
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect] · newCombatSystem=NO
@@ -504,7 +505,7 @@ effect=a 단골 is stronger, and stays a 단골
   (`평생 단골제 +6%`); the Final party reads it the same way
 - while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
   an adventurer not yet a 단골 has no floor
-- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.13.19.md owns 단골 at 51
+- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.13.21.md owns 단골 at 51
 
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
@@ -531,7 +532,7 @@ effect=successful 150% sale of any rarity -> extra premium commission
 
 32. 응급 처치대 · tag=Expedition · `DIRECTOR DOCUMENT BASELINE`
 - Price = 300G
-- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn
+- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 25% (the 의무실 현판 door heal, drawn
   after it; only for an injured arrival and only while owned)
 - the SALE state strip says so once (COPY_AUDIT §9-4b)
 - D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
@@ -555,9 +556,9 @@ RiskReward penalty unchanged
 Role: widen the catchment. Price = 340G. No operating-cost surcharge.
 
 Its chances are read in the one shared Morning extra-visitor roll (§VISITOR SUPPORT COMPOSITION):
-+2 visitors = 15% · +1 visitor = 45%
++2 visitors = 15% · +1 visitor = 35% (User 2026-10-21: was 45%, 「35 / 15로 줄이고」)
 
-Held alone: expected visitor delta = +0.75 / applicable Day before ordinary availability caps.
+Held alone: expected visitor delta = +0.65 / applicable Day before ordinary availability caps.
 The visitor increase is subject to the ordinary active/available adventurer cap.
 
 
@@ -597,8 +598,8 @@ earlier acquisition can repay its price and create meaningful remaining-Run econ
 - the Events themselves are the ordinary catalogue draw - good and bad alike; this is a variance pick, not a power pick
 
 34. 단골 추천 엽서함 (postcard) · tags=[VIP] · Price = 80G
-- on a Day a 단골 visited, every other visitor of that Day gains 단골도 +5 at the Night (before the expeditions); two 단골
-  on the same Day give each other the gain too
+- (User 2026-10-23) a visitor who leaves after a 단골 already visited that Day gains 단골도 +5 at departure; whoever came
+  before the first 단골 gets nothing, and a later 단골 gains too when an earlier 단골 came first
 - not a purchase gain: 단골 스탬프 기계 does not multiply it; 평생 단골제's floor and the 0~100 clamp apply
 
 35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 240G
@@ -615,7 +616,7 @@ it plays as its blueprint above.
 
 Positive native Core Stat means the Item's own positive contribution to 투력/강인함/기동/정신 before unrelated effects.
 Fresh native-Stat bonuses stack additively from the Item's base native positive Stat:
-    즉석식품 코너 + 24시간 신선체계 = +25% +30% => base positive native Stat ×1.55
+    24시간 신선체계 = +30% => base positive native Stat ×1.30 (즉석식품 코너 moves Supply, not this pool, from 2026-10-22)
 
 Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive
 pool under `ITEM_v2.8.0.md`. Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second
@@ -628,7 +629,7 @@ The supports answer different questions and none is a strict upgrade of another.
 
 ```text
 board      = base-roll floor
-hub        = +2 visitors 15%, +1 visitor 45%
+hub        = +2 visitors 15%, +1 visitor 35%
 groupOrder = +1 visitor 20%
 wall       = +1 visitor, D.balance.wallVisitorChance (50%; Decoration, not a Relic)
 ```
@@ -1025,18 +1026,18 @@ No active Store Support uses 쇼케이스 in these two names.
 
 #### REL-Q-v28-21 — SUPPORT EXACT FUNCTIONS
 
-Verify these exact Store Support functions in RELIC_v2.13.19.md:
+Verify these exact Store Support functions in RELIC_v2.13.21.md:
 
-- 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
+- 묶음발주 계약 -> same SKU 3+ in one ORDER, every unit -10%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> the 단골도 visit term counts double, from the Day it is acquired
 - 희귀상품 입고 계약 -> Rare+ ORDER weight +50%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price; no operating-cost modifier
-- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 50% of
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 40% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Hazard Counter values x1.40, any category; no offer weight / quantity effect
 - COUNTER JUDGEMENT: the Counter pity and 길드 납품 인증 read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; base operating cost +15% of overheadBase
+- 즉석식품 코너 -> Food Supply +2, Drink Supply +1 (flat); base operating cost +5% of overheadBase
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> +1 visitor at 20% in the shared Morning extra-visitor roll; +15G HQ commission per sale from the Day's 5th, at most 60G per Day
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
@@ -1048,7 +1049,7 @@ Verify these exact Store Support functions in RELIC_v2.13.19.md:
   acquisition and every offer generation, including Rerolls
 - 24시간 신선체계 -> Food/Drink native Core-Stat +30%; Food/Drink ORDER price x1.15; no shelf life
 - 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read
-- 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so
+- 응급 처치대 -> an injured SALE arrival recovers with 25%, after the 의무실 현판 roll; the state strip says so
 - 후방 창고 증설 -> inventory capacity +5
 - 본사 추가발주권 -> acquisition and every ORDER-offer generation candidate count +2
 
@@ -1059,7 +1060,7 @@ FAIL if Source omits one of these exact functions or uses a different numeric va
 #### REL-Q26 — PRICE BAND
 SETUP: Sample prices.
 EXPECT: Limited random band around approved base. Starting target around ±15–20%.
-PASS: Exact final values match `RELIC_v2.13.19.md` §PRICE.
+PASS: Exact final values match `RELIC_v2.13.21.md` §PRICE.
 
 #### REL-Q-v28-22 — SUPPORT BASE PRICES
 
@@ -1229,15 +1230,16 @@ PASS:
 #### REL-Q-v28-13 — FRESH NATIVE-STAT REBASELINE
 
 Expected:
-- 즉석식품 코너 native Core-Stat +25%
+- 즉석식품 코너 adds no native Core-Stat bonus (Supply +2 Food / +1 Drink instead)
 - 24시간 신선체계 native Core-Stat +30%
 - 원정 도시락 코너 adds no native Core-Stat bonus
 
-Composition is base-additive: kitchen + fresh24 => ×1.75 native positive Stat.
+Composition is base-additive with the Food Traits: 대식가 + fresh24 => ×1.60 native positive Stat.
 
 FAIL:
 - any alternate native-Stat percentages are active
 - Supply (피로 회복) itself is multiplied by these native-Stat percentages
+- 즉석식품 코너's Supply bonus is a percentage, or reaches anything but Food / Drink Supply
 
 #### REL-Q31 — FRESH CORE-EFFECT SCOPE
 SETUP: Use 즉석식품 코너 / 24시간 신선체계 with multi-role Food/Drink Items.
@@ -1305,7 +1307,7 @@ A returning adventurer receives nothing.
 
 #### RELIC-Q-v27-VISITOR — BOARD / HUB
 
-Owner rule: `RELIC_v2.13.19.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
+Owner rule: `RELIC_v2.13.21.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
 
 ##### board
 
@@ -1325,7 +1327,7 @@ FAIL:
 ##### hub
 
 PASS:
-- held alone: +2 at 15%, +1 at 45%, nothing at 40%
+- held alone: +2 at 15%, +1 at 35%, nothing at 50%
 - no operating-cost surcharge
 
 FAIL:
@@ -1344,9 +1346,9 @@ PASS:
 
 #### REL-Q-v28-17 — REGION HUB
 
-Held alone, on each applicable Morning exactly one outcome occurs: +1 visitor: 45% · +2 visitors: 15% · +0 visitors: 40%
+Held alone, on each applicable Morning exactly one outcome occurs: +1 visitor: 35% · +2 visitors: 15% · +0 visitors: 50%
 
-Expected mean before ordinary availability caps: +0.75 visitor / applicable Day
+Expected mean before ordinary availability caps: +0.65 visitor / applicable Day
 
 Also: Price 340G · no operating modifier · outcomes are mutually exclusive · with other extra-visitor sources the +1
 chances share the capped Morning roll (§VISITOR SUPPORT COMPOSITION)
@@ -1467,6 +1469,6 @@ final expedition / D25 Final state -> FINAL_EXPEDITION_v2.8.0.md
 boss/sloth seal / Sloth Boss value -> BOSS_v2.8.0.md
 gold/order/reroll -> ECONOMY_ORDER_v2.13.19.md
 sale phase -> SALE_v2.8.0.md
-npc value -> NPC_TRAIT_v2.13.19.md
+npc value -> NPC_TRAIT_v2.13.21.md
 Item/category/composition -> `ITEM_v2.8.0.md`
-Order/UI -> `UI_UX_v2.13.17.md`
+Order/UI -> `UI_UX_v2.13.21.md`

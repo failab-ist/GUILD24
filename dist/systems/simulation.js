@@ -270,7 +270,7 @@ function playRun(g,out,ctx){
     Supports that answer it (야전 들것 · 응급 처치대 · 길드 구조대 계약) ahead of the ranked list */
  const INJURY_SUPPORT=['firstAidDesk','fieldStretcher','rescueContract'];
  const bleeding=()=>{const alive=s.npcs.filter(x=>x.alive&&x.introduced),hurt=alive.filter(x=>x.injury>0).length;
-  return hurt>=3||hurt>=alive.length*.25||s.stats.deaths>=G.Meta.deathLimit(s)*.5;};
+  return hurt>=3||hurt>0&&hurt>=alive.length*.25||s.stats.deaths>=G.Meta.deathLimit(s)*.5;};
  /* investor, the Final (User 2026-10-09: "25일부터는 돈 남으면 리롤치면서 영웅급 대응 + 영웅급 포션이나 음식 음료 모은다"). From
     DAY 25 the Final's Families are on screen (s.final), so a player with Gold to spare buys - and rerolls for - the Items
     the likely Final party would carry, and holds them off the shelf. The party is read the way the Final reads it: each
@@ -508,7 +508,7 @@ function playRun(g,out,ctx){
  if(reader){if(!w.candidateIds.some(id=>D.relicBy[id].rarity>=3)&&g.canRerollRelics()){const cost=g.relicRerollPrice(),paid=paidRerolls.get(w.milestoneDay)||0;
    if(cost===0||(!paid&&s.money>=1500)){g.rerollRelics();if(cost)paidRerolls.set(w.milestoneDay,paid+1);else out.couponRerolls=(out.couponRerolls||0)+1;return buySupport();}}}
  else if(g.wears('rerollCoupon')&&!w.rerolls&&g.canRerollRelics()&&g.relicRerollPrice()===0&&!w.candidateIds.some(id=>D.relicBy[id].rarity>=2)){g.rerollRelics();out.couponRerolls=(out.couponRerolls||0)+1;return buySupport();}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=reader?synergy:id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),rank=priority.indexOf(id);return (investor&&INJURY_SUPPORT.includes(id)&&bleeding()?1000:0)+(rank>=0?(priority.length-rank)*10:0)+(build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};const hero=id=>{if(D.relicBy[id].rarity<3)return 0;const order=w.milestoneDay<10?HERO_EARLY:HERO_LATE,i=order.indexOf(id);return 1e4+(i<0?0:(order.length-i)*100);};
-  return (reader?hero(b)-hero(a):0)+val(b)-val(a);});for(const id of candidates){if(!g.canBuyRelic())break;const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+  return ((reader||investor)?hero(b)-hero(a):0)+val(b)-val(a);});for(const id of candidates){if(!g.canBuyRelic())break;const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:reader?SUPPORT_FLOOR:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
@@ -583,6 +583,7 @@ function playRun(g,out,ctx){
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
+   const hazardDemand=()=>{const need={};for(const id of s.queue){const m=s.npcs.find(x=>x.id===id),dd=m&&m.alive?g.claimedGateFor(m):null;if(dd)for(const h of dd.hazards)need[h]=(need[h]||0)+1;}for(const h of Object.keys(need))need[h]=Math.min(2,need[h]);return need;};
    const buyRound=()=>{
    let offers=sortedOffers();
    /* reader: one meal per expected visitor goes on the sheet before anything else */
@@ -606,6 +607,9 @@ function playRun(g,out,ctx){
     if(VA)for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive).sort((x,y)=>weight(y)-weight(x))){const dd=g.claimedGateFor(m);if(!dd)continue;
      const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')claim(it=>coverGain(m,dd,h,it)>=COVER,it=>coverGain(m,dd,h,it));}
+    /* the 원정 작전실 pays for a Counter past the Hazard's Threat, so with it owned a backed visitor whose Gate has one or two Hazards gets a second Counter claimed for each (a person stocks two of the same Counter for a one-Hazard Gate) */
+    if(VA&&s.facilities.includes('opsRoom')&&(typeof process==='undefined'||process.env.G24_BOT_OPSFIT!=='0'))for(const m of backed){const dd=g.claimedGateFor(m);if(!dd||dd.hazards.length>2)continue;
+     for(const h of dd.hazards)claim(it=>coverGain(m,dd,h,it)>=COVER,it=>coverGain(m,dd,h,it));}
     for(const m of backed){const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
      const open=dd.hazards.filter(h=>G.Dungeon.hazardState(h,bare,dd).label!=='충분');
      if(open.length&&!VA)claim(it=>G.Relics.directCounter(it,open),it=>open.reduce((a,h)=>a+Math.max(0,it.effects[h]||0),0));
@@ -634,14 +638,13 @@ function playRun(g,out,ctx){
       taken. Up to two rerolls when the till is comfortable, one when thin, none when tight. */
    if(VA&&spend.reroll){let used=0;
     const op=g.expectedOperatingCost(),budget=s.money>=spend.cashFloor+4*op?2:s.money>=spend.cashFloor+op?1:0;
-    const openPairs=()=>{const res=[];for(const m of s.queue.map(id=>s.npcs.find(x=>x.id===id)).filter(m=>m&&m.alive&&m.money+(m.eventBudget||0)>=40).sort((x,y)=>weight(y)-weight(x))){
-      const dd=g.claimedGateFor(m);if(!dd)continue;const bare=G.Dungeon.prepare({...m,pack:[]},dd,s.facilities).effects;
-      for(const h of dd.hazards)if(G.Dungeon.hazardState(h,bare,dd).label!=='충분')res.push({m,dd,h});}return res;};
+    /* a Hazard of today's Gates (the order screen shows the Gates and how many visitors head there, not who) with fewer Counters held or on
+       the cart than visitors (two at most) takes the cheapest Counter on the sheet; a sheet with none is what sends the bot to the reroll */
     for(;;){let missing=false;
      const held=[...s.inventory.map(x=>x.item),...Object.entries(s.cart||{}).flatMap(([i,q])=>Array(q).fill(s.offers[i].item))];
-     for(const {m,dd,h} of openPairs()){
-      const k=held.findIndex(id=>coverGain(m,dd,h,D.itemBy[id])>=COVER);if(k>=0){held.splice(k,1);continue;}
-      const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&coverGain(m,dd,h,x.it)>=COVER&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((x,y)=>x.o.price-y.o.price)[0];
+     for(const [h,k] of Object.entries(hazardDemand()))for(let i=0;i<k;i++){
+      const j=held.findIndex(id=>G.Relics.directCounter(D.itemBy[id],[h]));if(j>=0){held.splice(j,1);continue;}
+      const c=s.offers.map((o,i)=>({o,i,it:D.itemBy[o.item]})).filter(x=>x.o.quantity-(s.cart?.[x.i]||0)>0&&G.Relics.directCounter(x.it,[h])&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor&&g.canStock(x.it)).sort((x,y)=>x.o.price-y.o.price)[0];
       if(c){try{g.setQuantity(c.i,(s.cart?.[c.i]||0)+1);act();(out.items[c.o.item]??={ordered:0,sold:0}).ordered++;continue;}catch(e){}}
       missing=true;}
      try{g.confirmOrder();act();}catch(e){}
@@ -937,22 +940,21 @@ function simulate(count=100,policy='reader',account=null,pricing='adaptive',buil
    `Meta.buyDecoration`. Nothing here reimplements either.
 
    `purchaseOrder` is measurement INPUT, not a strategy this harness invents: the caller names
-   the order, and the trajectory buys the next one whenever the Capital it actually earned
+   the order (Decoration ids, and 'mastery' for the next Job Mastery rank), and the trajectory buys the next one whenever the Capital it actually earned
    covers the price. Passing null buys nothing, which is the pure-Meta arm. */
-/* Job Mastery isolation, HARNESS ONLY. Mastery is a spawn-Level bonus on the owning Job's new
-   adventurers, and an account that has it also has unlocked Jobs and items - so a tier-to-tier
-   difference cannot say which of the two did the work. This neutralises the bonus table while
-   leaving every unlock in place, so the same account can be measured with and without it. The
-   roll is still drawn either way, so the seeded stream does not move. */
+/* Job Mastery isolation, HARNESS ONLY. Mastery (bought with Store Capital) adds main-stat and
+   spawn-Level bonuses to every new adventurer. This neutralises both while leaving the bought
+   rank in place, so the same account can be measured with and without them. The roll is still
+   drawn either way, so the seeded stream does not move. */
 function masterySpawnPatch(){
- const table=G.Adventurer.MASTERY_SPAWN,saved=table.map(row=>row.slice());
- for(let i=0;i<table.length;i++)table[i]=[];
- return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
+ const table=G.DATA.masteryRanks,saved=table.map(row=>({stat:row.stat,level:row.level}));
+ for(const row of table){row.stat=0;row.level=[];}
+ return ()=>saved.forEach((v,i)=>Object.assign(table[i],v));
 }
 function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false,relicPriority=null}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
- for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
+ for(const id of order)if(id!=='mastery'&&!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
@@ -974,7 +976,14 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
    /* The purchase: the named order, the real Meta call, and only what the earned Capital
       covers. No Capital is granted and no price is touched. */
    const bought=[];
+   /* 'mastery' in the order is the next Job Mastery rank; the n-th 'mastery' entry is rank n. */
+   let ranks=0;
    for(const id of order){
+    if(id==='mastery'){
+     if(G.Meta.masteryRank(account)>ranks++)continue;
+     const next=D.masteryRanks[G.Meta.masteryRank(account)];
+     if(!next||G.Meta.distinctBossClear(account)<next.bosses||G.Meta.storeCapital(account)<next.price)break;
+     G.Meta.buyMastery(account);bought.push('mastery-'+G.Meta.masteryRank(account));continue;}
     if(G.Meta.decorationOwned(account,id))continue;
     if(G.Meta.storeCapital(account)<D.decorationBy[id].price)break;
     G.Meta.buyDecoration(account,id);bought.push(id);
@@ -1047,7 +1056,7 @@ function trajectory({trajectories=20,runs=12,policy='reader',pricing='adaptive',
 }
 
 /* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what
-   the Mastery bonus alone contributes, with the unlocks it came with held constant. Harness only. */
+   the Mastery bonus alone contributes, with everything else on the account held constant. Harness only. */
 /* One saved Run played on from where it stands, `count` times with a fresh roll stream each time (tools/continue-save.cjs,
    User 2026-10-11: the same save measured before and after a rule change). Measurement only. */
 function continueRun(account,run,count=200,policy='investor',opts={}){

@@ -922,7 +922,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
  bottom:calc(92px + var(--sa-bottom));
  transform:translateX(-50%) translateY(140%);
  max-width:min(90vw,420px);padding:10px 16px;
- font:400 14px/1.45 var(--ui);color:var(--ink);text-align:center;
+ font:400 14px/1.45 var(--ui);color:var(--ink);text-align:center;word-break:keep-all;text-wrap:balance;
  background:var(--paper-2);box-shadow:inset 0 0 0 2px #00000026,3px 4px 0 #00000080;
  opacity:0;visibility:hidden;
  transition:transform .18s ease-out,opacity .18s ease-out,visibility 0s linear .18s;
@@ -1005,7 +1005,7 @@ html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 /* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu; the file is cut to the drawn
    letters (v2.9.9: the branch plate that sat under it is MORNING's counter plate now, UI_UX §NEW STORE PREPARATION) */
 .opening-logo{display:block;width:min(190px,53vw);height:auto}
-.line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
+.line-up{cursor:pointer;position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
  margin-left:calc(var(--cardw)*var(--deck)*-.58);
@@ -2023,7 +2023,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal:has(.tabs) .slot-option>button:active{transform:none;background:#332e27;
  box-shadow:inset 0 0 0 2px #12100a,inset 0 3px 0 #221d18,inset 0 -5px 0 #6a6152,
   inset 3px 0 0 #12100a}
-.modal:has(.tabs) .slot-option>button[data-action="deco-buy"]{background:var(--yellow);color:var(--yellow-ink);
+.modal:has(.tabs) .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){background:var(--yellow);color:var(--yellow-ink);
  box-shadow:inset 0 0 0 2px var(--yellow-line),inset 0 3px 0 var(--yellow-lit),
   inset 0 -5px 0 var(--yellow-deep),inset 3px 0 0 var(--yellow-line)}
 /* UNAVAILABLE recedes, it does not shout: the key loses its depth and becomes a quiet sunken
@@ -2145,7 +2145,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:600 16px/1.2 var(--ui);letter-spacing:0;color:#392a1c;
  background:transparent url('assets/presentation/support/choice-tag-blank.webp') center / 100% 100% no-repeat;
  transform:none;clip-path:none;filter:none;box-shadow:none}
-.relic-plate .stamp:not([disabled]):hover{text-decoration:underline;text-underline-offset:4px}
+.relic-plate .stamp:not([disabled]):hover{text-decoration:none}
 .relic-plate .stamp:not([disabled]):active{transform:translate(0,2px)}
 /* Same paper and footprint; a committed tag is ink instead of purchase gold. */
 .relic-plate.owned{box-shadow:none}
@@ -2165,7 +2165,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:600 15px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;
  background:transparent url('assets/presentation/support/return-tag-blank.webp') center / 100% 100% no-repeat;
  clip-path:none;filter:none;box-shadow:none}
-.relic-takeover .close .stamp:hover{text-decoration:underline;text-underline-offset:4px}
 .relic-takeover .close .stamp:active{transform:translate(0,2px)}
 @media(min-width:1024px){
  .relic-takeover{background-image:url('assets/presentation/support/backroom-wide.jpg')}
@@ -2728,7 +2727,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-prep .prep-note{padding-top:16px}
 .p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
 .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
-.p-prep .prep-status{margin:0;font:400 12px/1.4 var(--ui);color:#d9c9a8;text-align:center}
+.p-prep .prep-status{margin:-2px 0 0;padding:0 0 6px;font:500 12px/1.4 var(--ui);color:#fff3d6;text-shadow:0 1px 0 #3a2814,0 0 3px #3a2814;text-align:center}
 /* each Slot is its place in the room: the Decoration standing there, or its empty spot, and a small tag naming it */
 /* a place is at least a 44 px target: it grows away from the surface it is seated on (the counter pieces and the plaque
    upward from their foot / down from their nail, the 간판 up into the ceiling it hangs from), so its drawing does not move */
@@ -2915,6 +2914,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* UI_UX §DECORATION DECISION SURFACE: name and key share the first row, the effect line takes the whole second row */
 .slot-option>.deco-name{grid-column:1;grid-row:1;min-width:0;min-height:48px;display:flex;align-items:center} /* the key's height, so the row holds while the inline confirmation stands in for the key */
 .slot-option>button,.slot-option>.muted{grid-column:2;grid-row:1}
+/* META §JOB MASTERY: a locked rank names its condition here; it wraps inside the card rather than running past its edge */
+.slot-option>span.muted{white-space:normal;word-break:keep-all}
+.p-prep .capital-plate[data-action]{cursor:pointer}
 .slot-option>.deco-effect{grid-column:1/-1;grid-row:2}
 .slot-option+.slot-option{margin-top:8px}
 /* equipped: the same construction, with the seam in gold - the state arrives on the edge the
@@ -2954,12 +2956,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* YELLOW. Acquiring the Decoration is the purchase on this card, so it is the one face that
    pops - and it pops inside the card, never across the screen. Equipping something already
    owned is a state change, not an acquisition, so it keeps the neutral key above. */
-.slot-option>button[data-action="deco-buy"],.deco-confirm [data-action="deco-confirm"]{
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){
  background:var(--yellow);color:var(--yellow-ink);
  box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-lit),
   inset 0 -6px 0 var(--yellow-deep),inset -5px 0 0 var(--yellow-deep)}
-.slot-option>button[data-action="deco-buy"]:hover{background:#f7d669}
-.slot-option>button[data-action="deco-buy"]:active{background:#dcb53c;
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):hover{background:#f7d669}
+.slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):active{background:#dcb53c;
  box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-deep),
   inset 0 -6px 0 var(--yellow-lit),inset -5px 0 0 var(--yellow-deep)}
 /* UNAVAILABLE is not the same plane with the colour drained: the key loses its depth entirely
@@ -3068,7 +3070,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the seal grows from its own top-right corner so the fall stays on the tape */
 .end-tape .print:has(.seal) .closed{padding-right:84px}
 .end-tape .print:has(.seal) .closed,.end-tape .print:has(.seal) .reason{word-break:keep-all}
-.end-tape .seal.lost{color:#6d3b30;box-shadow:inset 0 0 0 2px #6d3b30,inset 0 0 0 5px #6d3b3000;rotate:9deg;translate:-6px 6px;opacity:.5;
+.end-tape .seal.lost{color:#6d3b30;box-shadow:inset 0 0 0 2px #6d3b30,inset 0 0 0 5px #6d3b3000;rotate:9deg;translate:-6px 6px;opacity:.7;
  clip-path:polygon(0 0,100% 0,100% 62%,86% 62%,86% 100%,0 100%)}
 .end-tape .closed{margin:12px 0 0;font:500 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 .end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
@@ -4207,12 +4209,48 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.wood-frame .slot-option>button:hover{background:#68442a}
 .modal.wood-frame .slot-option>button:active{transform:none;background:#4a301b;
  box-shadow:inset 3px 0 0 #140b06,inset 0 5px 0 #2c1a0d,inset 0 -6px 0 #8a5f3a,inset -5px 0 0 #2c1a0d}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"],.modal.wood-frame .deco-confirm [data-action="deco-confirm"]{
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){
  background:#dba93a;color:#2b1806;box-shadow:inset 3px 0 0 #17130d,inset 0 5px 0 #f7d77c,inset 0 -6px 0 #9a6212,inset -5px 0 0 #9a6212}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"]:hover{background:#e6b84d}
-.modal.wood-frame .slot-option>button[data-action="deco-buy"]:active{background:#c4932c;
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):hover{background:#e6b84d}
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):active{background:#c4932c;
  box-shadow:inset 3px 0 0 #17130d,inset 0 5px 0 #9a6212,inset 0 -6px 0 #f7d77c,inset -5px 0 0 #9a6212}
 .modal.wood-frame .slot-option>button:disabled{background:#1b1009;color:#a8946f;box-shadow:inset 3px 0 0 #0b0907,inset 0 3px 0 #00000080,inset 0 -2px 0 #ffffff08}
+/* UI_UX §STORE PURCHASE (User 2026-10-22): buying is the night 다음 key in purchase gold - one flat plane in the pixel cut,
+   one hard depth the press travels into; fitting, taking off and cancelling are the store-support window's wood return tag. */
+.modal.wood-frame .slot-option{grid-template-columns:minmax(0,1fr) 128px}
+.modal.wood-frame .slot-option>button,.modal.wood-frame .deco-confirm button{--nd:4px;width:128px;min-width:128px;min-height:50px;
+ padding:6px 10px 6px 24px;font:600 15px/1.2 var(--ui);letter-spacing:0;color:#f3e2bd;transform:none;clip-path:none;filter:none;box-shadow:none;
+ background:transparent url('assets/presentation/support/return-tag-blank.webp') center / 100% 100% no-repeat}
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]){
+ width:120px;min-width:120px;padding:6px 8px;color:#2b1a08;text-shadow:0 1px 0 #f6dc8a;min-height:46px;box-shadow:inset 0 -5px 0 #a8761c,inset -4px 0 0 #a8761c;
+ background:#e2b23f;clip-path:var(--stamp-cut-6,polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 6px),0 calc(100% - 6px)));
+ filter:none}
+.modal.wood-frame .slot-option>button small{display:block;margin-top:2px;font:500 12px/1.2 var(--ui);color:inherit;opacity:.85}
+@media (hover:hover){
+ .modal.wood-frame .slot-option>button:not([disabled]):hover,.modal.wood-frame .deco-confirm button:hover{background-color:transparent;filter:brightness(1.08)}
+ .modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):not([disabled]):hover{background:#ecbf52;text-decoration:none}}
+.modal.wood-frame .slot-option>button:not([disabled]):active,.modal.wood-frame .deco-confirm button:active{background-color:transparent;transform:translate(0,2px);box-shadow:none}
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):not([disabled]):active{
+ transform:translate(0,3px);background:#cf9f30;box-shadow:inset 0 -2px 0 #a8761c,inset -2px 0 0 #a8761c}
+.modal.wood-frame .slot-option>button:is([data-action="deco-buy"],[data-action="mastery-buy"]):disabled{background:#3a2a19;color:#a99472;text-shadow:none;filter:none;box-shadow:none}
+.modal.wood-frame .deco-confirm{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;align-items:center}
+.modal.wood-frame .deco-confirm>p{flex:1 1 100%}
+/* the sheet's two views: one bar split in two, the open half a lit wood plane and the other left in the bar's dark - a switch between two lists, not two more chips */
+.modal:has(.tabs) .tabs.store-views{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:2px 0 4px;
+ background:#1a0f08;box-shadow:inset 0 0 0 2px #0b0604,3px 3px 0 #0000004d}
+.modal:has(.tabs) .tabs.store-views .small{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:8px 10px;
+ font:600 15px/1 var(--ui);color:#8f7a5a;background:transparent;clip-path:none;filter:none;box-shadow:none}
+.modal:has(.tabs) .tabs.store-views .small small{font:500 12px/1 var(--ui);color:#7a6749}
+.modal:has(.tabs) .tabs.store-views .small:hover{background:#2a190d;color:#efdcb6}
+.modal:has(.tabs) .tabs.store-views .small:active{transform:none}
+.modal:has(.tabs) .tabs.store-views .small.active{background:#6a4527;color:#fff4dc;box-shadow:inset 0 0 0 2px #0b0604}
+.modal:has(.tabs) .tabs.store-views .small.active small{color:#f0dcb4}
+/* META §JOB MASTERY: each Job and the two Stats its Mastery raises, one cell per Job */
+.mastery-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0}
+.mastery-stats>div{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;background:#2a190d;box-shadow:inset 0 0 0 2px #140b06}
+.mastery-stats dt{font:600 14px/1.3 var(--ui);color:#fff0cf}
+.mastery-stats dd{margin:0;font:500 14px/1.3 var(--ui);color:#e2cfa6;text-align:right}
+@media (min-width:700px){.mastery-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 /* sentence-level line breaks for plain prose (sentenceBreaks in app.js) */
 .sent{display:inline-block;max-width:100%}
@@ -4453,3 +4491,54 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .p-night .recap .rc i{font:400 13px/1.4 var(--ui);font-style:normal;color:#8f94a6}
 .p-night .recap+.recap{padding-top:0}.p-night .recap+.recap h3{display:none}.p-night .recap:not(:last-child){padding-bottom:0}
 @media(min-width:1024px){.p-night .recap-wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:16px;width:min(1240px,calc(100vw - 32px));position:relative;left:50%;translate:-50% 0}.p-night .recap,.p-night .recap+.recap,.p-night .recap:not(:last-child){width:400px;box-sizing:border-box;padding:12px 12px 4px}.p-night .recap+.recap h3{display:block}}
+
+/* User 2026-10-22: 보유 점포지원 tag on the support window's sign, and the sheet it opens (overlays the contracts) */
+.relic-takeover .owned-tag{position:absolute;top:4px;right:6px;z-index:2;min-height:36px;min-width:88px;padding:6px 12px 6px 22px;
+ font:600 14px/1.2 var(--ui);color:#f5e8ce;white-space:nowrap;border:0;box-shadow:none;clip-path:none;filter:none;
+ background:transparent url('assets/presentation/support/return-tag-blank.webp') center / 100% 100% no-repeat}
+.relic-takeover .owned-tag:active{transform:translate(0,2px)}
+.relic-takeover .owned-sheet{position:absolute;z-index:5;left:0;right:0;top:calc(100% + 6px);padding:12px 14px;text-align:left;cursor:pointer;
+ background:#f1e6cc;color:#2a2118;box-shadow:inset 0 0 0 2px #7a5f45,0 4px 0 #0008}
+.relic-takeover .owned-sheet .row{padding-bottom:8px;font:600 15px/1.2 var(--ui)}
+.relic-takeover .owned-sheet>div+div{padding:7px 0;border-top:1px solid #b9a679}
+.relic-takeover .owned-sheet b{font:600 14px/1.4 var(--ui)}
+.relic-takeover .owned-sheet p{margin:0;font:400 13px/1.5 var(--ui);color:#2a2118}
+.relic-takeover .owned-sheet .status{color:#6b4a2e}
+
+/* 정보는 상자 대신 여백과 가는 선으로 묶는다: 판매 능력치, 도감 점포 목록. 남기는 전망 상자의 모서리 점은 뺀다 */
+.readout.ro2 .top>.fore,.readout.ro2 .top:has(.env-each)>.fore{background:#120c06}
+/* 폰 능력치는 위 전망 · 환경 대응 상자와 같은 두 칸, 글자 시작선과 줄 길이를 상자에 맞춘다 */
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{grid-template-columns:minmax(0,1fr) minmax(max-content,1fr);gap:0 5px;padding:0;background:none;box-shadow:none}
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
+.p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding-left:10px;padding-right:10px}
+@media(min-width:1024px){.p-sale .dossier:not(.traits)>.detail-stats{background:none;box-shadow:none;padding:6px 2px 8px}}
+.modal:has(.tabs) .slot-option,.modal:has(.tabs) .slot-option.locked,.modal:has(.tabs) .slot-option.on{background:none;box-shadow:none;padding:14px 2px 16px}
+.modal:has(.tabs) .slot-option+.slot-option{margin-top:0;box-shadow:inset 0 1px 0 #ffffff1f}
+.modal.wood-frame:has(.tabs) .slot-option>.deco-effect{box-shadow:none;padding-top:2px}
+/* 마감 영수증의 영업 시작 골드는 다른 줄과 같은 줄로 둔다 (결과 상자 하나만 눈에 띄게) */
+.print .row.open,.p-closing .print .row.open{background:none;box-shadow:none;clip-path:none;padding:8px 0}
+/* 도감 상품 목록: 상자 없이 아이콘을 이름 옆에, 항목 사이는 가는 줄 */
+.modal .unlock-grid:has(>.unlock>svg:not(.lock-mark)){gap:0 22px}
+.modal .unlock:has(>svg:not(.lock-mark)){display:grid;grid-template-columns:42px minmax(0,1fr) auto;column-gap:12px;align-items:start;padding:14px 4px;background:none;box-shadow:inset 0 1px 0 #ffffff1f}
+.modal .unlock:has(>svg:not(.lock-mark)):first-child{box-shadow:none}
+.modal .unlock:has(>svg:not(.lock-mark))>svg:not(.lock-mark){grid-row:1/span 4;grid-column:1;margin-top:2px}
+.modal .unlock:has(>svg:not(.lock-mark))>:not(svg):not(.lock-mark){grid-column:2/span 2}
+.modal .unlock:has(>svg:not(.lock-mark))>h3{grid-column:2;grid-row:1;margin-bottom:6px}
+.modal .unlock:has(>svg:not(.lock-mark))>.gold-text{grid-column:3;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
+.modal .unlock:has(>svg:not(.lock-mark)).locked{outline:0}
+@media(min-width:1024px){.modal .unlock:has(>svg:not(.lock-mark))>.gold-text{grid-column:2/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
+/* 아침 게이트 카드: 베이지 바탕에서 옅던 「대응 N 필요」 글씨를 본문 갈색 쪽으로 */
+.slip .hazards .press{color:#5a4e38}
+.slip .hazards .press .rate{color:#766a52}
+/* 점주 가이드: 한 문장이 두 줄로 꺾일 때 짧은 꼬리 줄이 남지 않게 */
+.stack .first-days p{text-wrap:balance}
+/* 도감 직업·점포지원 목록: 상품 목록과 같은 모양(상자 없이 가는 줄, 해금 조건은 이름 줄 오른쪽) */
+.modal .unlock-grid{gap:0 22px}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark))){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:start;padding:14px 4px;background:none;box-shadow:inset 0 1px 0 #ffffff1f;outline:0}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark))):first-child{box-shadow:none}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>*{grid-column:1/span 2}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>h3{grid-column:1;grid-row:1;padding-right:0;margin-bottom:6px}
+.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>.gold-text{grid-column:2;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
+@media(min-width:1024px){.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>.gold-text{grid-column:1/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
+.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:26px}
+@media(min-width:1024px){.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:0}}

@@ -8,6 +8,12 @@
 // One staged value (User 2026-10-01, trailer v4 §11): in the SALE take only, the customer's money is raised to SALE_MONEY so
 // all three price keys are live; the key pressed stays the recorded run's (PRICE_MODE). Every other value is the record's.
 // REVISIT (optional, snap.revisit): the same customer's later arrival in the same run, as recorded (its own arrival line).
+// Video-only presentation switches (User 2026-10-21; the shipped game is untouched, they apply to the capture browser only):
+//   TRAILER_ART='{"map":{"로엔담":12},"pool":[62,71,...]}'  every customer's portrait resolves to a female portrait slot (map: fixed per name,
+//     pool: the rest by name index), so one face stays the same on every screen. Names, stats, rolls and results are the record's.
+//   (with TRAILER_ART the on-screen names read as the portrait's own game name, e.g. the F003 portrait is 지오닝)
+//   BOSS_NAME_SHORT=1   the boss's on-screen name reads 마왕 러스트 (no 색욕) in the capture.
+//   REVISIT_LINE='“…”'  the revisit arrival shows this line from the game's own line list (instead of the one the roll gave).
 //   SALE_MONEY=300 PRICE_MODE=half node tools/trailer-shoot.cjs <snap.json> <itemName> <npcId> <outDir>
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const ROOT=path.resolve(__dirname,'..'),PORT=Number(process.env.QA_PORT||5217),EXEC=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',DPR=3;
@@ -18,10 +24,21 @@ function serve(){const c=spawn(process.execPath,[ROOT+'/tools/preview.cjs','--po
  return new Promise((res,rej)=>{c.stdout.on('data',d=>String(d).includes('ready')&&res(c));setTimeout(()=>rej(Error('no server')),8000);});}
 async function load(ctx,snap,opts={}){const page=await ctx.newPage();page.on('pageerror',e=>console.log('PAGEERROR',e.message));
  await page.clock.install();
+ if(process.env.TRAILER_ART){const ART=process.env.TRAILER_ART;
+  await page.route('**/systems/adventurer.js',async route=>{const r=await route.fetch();let t=await r.text();
+   t=t.replace('const portraitOf=name=>portraits.get(name)||null;','const __A='+ART+';const portraitOf=name=>{const b=portraits.get(name);if(!b)return null;const m=__A.map[name];return {gender:"F",slot:m!=null?m:__A.pool[names.indexOf(name)%__A.pool.length]};};globalThis.__NAMEMAP=Object.fromEntries(names.map((n,i)=>[n,names[100+((__A.map[n]!=null?__A.map[n]:__A.pool[i%__A.pool.length])-1)]]));');
+   await route.fulfill({response:r,body:t});});}
+ if(process.env.BOSS_NAME_SHORT||process.env.TRAILER_ART)await page.addInitScript(([short,art])=>{let RX=null;const fix=()=>{if(art&&!RX&&globalThis.__NAMEMAP){const ks=Object.keys(globalThis.__NAMEMAP).sort((a,b)=>b.length-a.length);RX=new RegExp(ks.join('|'),'g');}const w=document.createTreeWalker(document.documentElement,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.__done===n.nodeValue)continue;let v=n.nodeValue;if(short&&v.includes('색욕의 마왕 러스트'))v=v.replace('색욕의 마왕 러스트','마왕 러스트');if(RX)v=v.replace(RX,m=>globalThis.__NAMEMAP[m]);if(v!==n.nodeValue)n.nodeValue=v;n.__done=n.nodeValue;}};
+   new MutationObserver(fix).observe(document,{subtree:true,childList:true,characterData:true});document.addEventListener('DOMContentLoaded',fix);},[!!process.env.BOSS_NAME_SHORT,!!process.env.TRAILER_ART]);
  await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+ // with no Run the prologue takes the boot's place (UI_UX §PROLOGUE); skip it so the import lands on a plain screen
+ await page.waitForFunction(()=>!document.querySelector('#app .boot')||!!document.querySelector('[data-action="prologue-skip"]'),null,{timeout:30000});
+ {const sk=await page.$('[data-action="prologue-skip"]');if(sk){await sk.click();await page.waitForFunction(()=>!document.querySelector('[data-action="prologue-skip"]')&&!document.querySelector('#app .boot'),null,{timeout:30000});}}
  await page.evaluate(()=>{window.__cues=[];const p=Sound.play.bind(Sound);Sound.play=(k,...a)=>{window.__cues.push([k,performance.now()]);return p(k,...a);};});
  const run=JSON.parse(JSON.stringify(snap.run));run.rngState=snap.rng.state;if(opts.cursor!=null)run.nightCursor=opts.cursor;
  if(opts.money!=null){const n=run.npcs.find(x=>x.id===opts.npc);if(n)n.money=opts.money;}
+ if(opts.line&&run.say)run.say.text=opts.line;
+ run.unlocked=[];delete run.toast; // a 본사 해금 toast the bot never rendered would open its card over the take; the END receipt still lists dayUnlocked
  const account=JSON.parse(JSON.stringify(snap.account));(account.tutorial??={}).skipped=true;
  // hold: the page clock stops before the import, so a line's on-screen timer (SAY_MS) starts with the take, not during the load wait
  if(opts.hold){const now=await page.evaluate(()=>Date.now());await page.clock.pauseAt(now+50);}
@@ -59,13 +76,16 @@ const clickJS=(page,sel)=>page.evaluate(s=>{const e=document.querySelector(s);if
    {t:8.45,name:'rPrice',rects:{price:`.tills button[data-action="sell"]${PRICE_MODE?`[data-mode="${PRICE_MODE}"]`:':not([disabled])'}`,keys:'.tills button[data-action="sell"]',live:'.tills button[data-action="sell"]:not([disabled])'}},{t:10.0,name:'r2',rects:S}]);
   await ctx.close();
   // NIGHT: the same customer's card
-  const nightIdx=snaps.night.run.results.findIndex(r=>r.npcId===npcId);ctx=await mk();p=await load(ctx,snaps.night,{cursor:Math.max(0,nightIdx-1)});
+  let nightIdx=snaps.night.run.results.findIndex(r=>r.npcId===npcId);
+  // the take starts one card before the hero's and presses 다음; a hero who is the night's first card is moved to second (record order only)
+  if(nightIdx===0&&snaps.night.run.results.length>1){const R=snaps.night.run.results;[R[0],R[1]]=[R[1],R[0]];nightIdx=1;}
+  ctx=await mk();p=await load(ctx,snaps.night,{cursor:Math.max(0,nightIdx-1)});
   const N={beat:'.beat',verdict:'.beat .verdict',hero:'.beat .cause li.hero',what:'.beat .what',stand:'.beat .stand-in',name:'.beat .who h3',say:'.beat .say',changes:'.beat-room, .beat .changed'};
   takes.night=await shoot(p,'night',6.5,[{t:0.5,name:'next',fn:pg=>clickJS(pg,'[data-action="night-next"]')},{t:0.55,name:'r0',rects:N},
    {t:3.5,name:'r1',rects:N,fn:pg=>pg.evaluate(dpr=>{const li=document.querySelector('.beat .cause li.hero');if(!li)return {};const rg=document.createRange();rg.selectNodeContents(li);
     const r=rg.getBoundingClientRect();return {heroText:[r.left*dpr,r.top*dpr,r.width*dpr,r.height*dpr].map(v=>Math.round(v))};},DPR)}]);await ctx.close();
   // REVISIT: the same customer, later in the same run, arriving with the line the game gave it
-  if(snaps.revisit){ctx=await mk();p=await load(ctx,snaps.revisit,{dismiss:true,hold:true});
+  if(snaps.revisit){ctx=await mk();p=await load(ctx,snaps.revisit,{dismiss:true,hold:true,line:process.env.REVISIT_LINE||null});
    takes.revisit=await shoot(p,'revisit',3.5,[{t:0.2,name:'r0',rects:{say:'.say',portrait:'.who .portrait, .who img, .who',who:'.who',dest:'.dest-plate'}}]);await ctx.close();}
   // FINAL: the boss screen, 마왕성으로 출발, the clash, the END receipt
   ctx=await mk();p=await load(ctx,snaps.finalBefore,{dismiss:true});

@@ -12,7 +12,7 @@
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
-const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
+const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]')){await p.click('.p-final .dock [data-action="final-ordered"]');/* 해금 카드 may open over the muster; close each before the next press */for(let i=0;i<4&&await p.$('#modal-root [data-action="dismiss"]');i++)await p.click('#modal-root [data-action="dismiss"]');}};
 const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/final-end');
 const WIDTHS=(process.argv[3]||'390,1280').split(',').map(Number);
@@ -100,26 +100,26 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     check(`${kind} @${tag} resolved ${won?'CLEAR':'FAIL'}: win / finalReport.cleared / Lock / bossDebug agree`,
      s.phase==='end'&&s.win===won&&s.report&&s.report.cleared===won&&!!s.lock&&!!s.debug&&(s.debug.assault>=s.debug.bossPower)===won,
      JSON.stringify({win:s.win,cleared:s.report&&s.report.cleared,assault:s.debug&&Math.round(s.debug.assault*10)/10,bossPower:s.debug&&s.debug.bossPower}));
-    check(`${kind} @${tag} END headline / reason read the resolved result`,dom.closed===(won?'마왕이 쓰러졌다.':'마왕을 토벌하지 못했다.')&&dom.reason===s.reason&&dom.head.includes(won?'제0게이트 폐쇄':'점포 종료'),JSON.stringify({closed:dom.closed,reason:dom.reason}));
+    check(`${kind} @${tag} END headline / reason read the resolved result`,dom.closed===(won?'마왕이 쓰러졌다.':'마왕을 토벌하지 못했다.')&&dom.reason===s.reason&&dom.head.includes(won?'마왕 토벌 완료':'점포 종료'),JSON.stringify({closed:dom.closed,reason:dom.reason}));
     // 3 one resolution
     check(`${kind} @${tag} one resolution: boss() 1, Final Roll 1, end() 1, settlement 1, Meta.finish 1, Store Capital added 1`,
      q.boss===1&&q.draws===1&&q.end===1&&q.settle===1&&q.finish===1&&q.capital===1,JSON.stringify({boss:q.boss,roll:q.draws,end:q.end,settle:q.settle,finish:q.finish,capital:q.capital}));
     check(`${kind} @${tag} the Final cue once, nothing replays it on END`,q.cues.filter(x=>x==='final').length===1,JSON.stringify(q.cues));
     // 4 party and last supply = the Final snapshot
     const expect=await p.evaluate(team=>team.map(m=>({name:m.name,who:'Lv.'+m.level+' '+DATA.jobBy[m.job].name,
-     carried:m.pack.length?'마지막 상품 · '+m.pack.map(i=>DATA.itemBy[i].name).join(' · '):'빈손으로 갔다'})),pre.team);
-    check(`${kind} @${tag} sent-off heading follows the result`,dom.sentH===(won?'제0게이트를 닫고 온 사람들':'마왕성으로 보낸 사람들'),dom.sentH);
+     carried:m.pack.length?'마지막 상품 '+m.pack.map(i=>DATA.itemBy[i].name).join(', '):'빈손으로 갔다'})),pre.team);
+    check(`${kind} @${tag} sent-off heading follows the result`,dom.sentH===(won?'마왕을 쓰러뜨리고 온 사람들':'마왕성으로 보낸 사람들'),dom.sentH);
     check(`${kind} @${tag} exactly the departed members, their Final Lv / Job, their actual last Bag`,JSON.stringify(dom.goers)===JSON.stringify(expect),JSON.stringify(dom.goers));
     check(`${kind} @${tag} the evidence is the finalReport snapshot (live packs are already cleared)`,
      await p.evaluate(`Guild24.game.run.team.every(id=>Guild24.game.run.npcs.find(n=>n.id===id).pack.length===0)`)&&JSON.stringify(s.report.members.map(m=>m.items))===JSON.stringify(pre.team.map(m=>m.pack)));
     // 9 settlement truth
     const st=s.settlement;
     check(`${kind} @${tag} settlement reads the recorded Gross Sales (Final transfer included) - not Gold or Inventory`,
-     st&&st.sales===pre.revenue&&pre.revenue===rev0+price&&st.gain===Math.round(st.sales*st.rate)&&a1.capital===a0.capital+st.gain&&/* reach (v2.9.4 REPLAY NUDGE) is a verdict on the settlement, never an input to it */Object.keys(st).sort().join()==='capitalAfter,day,gain,rate,reach,sales',
+     st&&st.sales===pre.revenue&&pre.revenue===rev0+price&&st.gain===Math.round(st.sales*st.rate)&&a1.capital===a0.capital+st.gain&&/* reach (v2.9.4 REPLAY NUDGE) is a verdict on the settlement, never an input to it */Object.keys(st).sort().join()==='capitalAfter,day,gain,rate,reach,reachMastery,sales',
      JSON.stringify({sales:st&&st.sales,transfer:price,gain:st&&st.gain,capital:[a0.capital,a1.capital],gold:pre.gold,stock:pre.stock}));
     // 10 unlock
     check(`${kind} @${tag} ${won?'the clear credits once; runs +1, wins +1':'a fail credits a run only'}`,a1.runs===a0.runs+1&&a1.wins===a0.wins+(won?1:0),JSON.stringify({a0,a1}));
-    if(won)check(`${kind} @${tag} unlocks (if any) are shown once, on the END statement, with no toast`,/* v2.9.4: 본사 해금 also lists the D10 / D14 opens the Run recorded */[...(s.unlocked||[]),...(s.dayUnlocked||[])].length?dom.opened.length===1&&dom.opened[0].includes([...(s.unlocked||[]),...(s.dayUnlocked||[])].join(' · '))&&!dom.toast.length:!dom.opened.length&&!dom.toast.length,
+    if(won)check(`${kind} @${tag} unlocks (if any) are shown once, on the END statement, with no toast`,/* v2.9.4: 본사 해금 also lists the D10 / D14 opens the Run recorded */[...(s.unlocked||[]),...(s.dayUnlocked||[])].length?dom.opened.length===1&&[...(s.unlocked||[]),...(s.dayUnlocked||[])].every(n=>dom.opened[0].includes(n))&&!dom.toast.length:!dom.opened.length&&!dom.toast.length,
      JSON.stringify({unlocked:s.unlocked,opened:dom.opened,toast:dom.toast}));
     // 7 / 8 / 14 no Final leak
     const leak=await p.evaluate(LEAK);

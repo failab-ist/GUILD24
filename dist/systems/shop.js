@@ -441,12 +441,12 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     Final transfer each read their own price and are untouched. */
  /* ECONOMY_ORDER §ORDER OFFER QUANTITY / EVENT §41: normal supply and support bonuses are capped per offer when the Event applies. */
  offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)*(this.has('expeditionMeal')&&G.Relics.food(it)?D.relicParams.expeditionMeal.orderPriceMult:1)),
-  quantity:Math.min(ev.orderCap??Infinity,(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0))};}
+  quantity:Math.min(ev.orderCap??Infinity,(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,3))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0))};}
  rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary: D30 has no SALE, and an Item with no Final effect
    cannot go in a Final Bag, so the D30 sheet never offers one - the same explicit no-effect exclusion D30 Store Supports use */
  let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&(!only||only(it))&&!(s.day>=30&&this.finalNoEffect(it.id)));
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: one sheet holds an Item on at most offerSameItemMax slots - a slot
-    already supplies 2~4 units, so a third copy only hides another Item. The sheet being built is s.offers; with nothing left
+    already supplies 2~3 units, so a third copy only hides another Item. The sheet being built is s.offers; with nothing left
     under the cap the cap yields rather than leave a slot empty. */
  const roomy=pool.filter(it=>(s.offers||[]).filter(o=>o.item===it.id).length<D.balance.offerSameItemMax);if(roomy.length)pool=roomy;
  /* ECONOMY_ORDER §ORDER OFFER VARIETY: a sheet holds at most offerCounterMax Hazard Counters; past it a slot draws from the rest */
@@ -486,7 +486,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
  arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&!n.newToday)n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
- /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +200G more each */
+ /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +75G more each (User 2026-10-23) */
  {const T=D.decorationParams.thriftSafe,paid=this.run.daily.safeWallets??=[];if(this.wears('thriftSafe')&&paid.length<T.customers&&!paid.includes(n.id)){n.money+=T.firstWallet;paid.push(n.id);}}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
     door. The roll is drawn only while the Decoration is worn and only for an injured arrival. */
@@ -543,7 +543,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
  if(this.run.event?.effects.drinkDemand&&it.category==='drink')need+=this.run.event.effects.drinkDemand;
  /* 길드 보증 진열대 reads the CHARGED price, both for the threshold and for the 20%. */
- const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;/* 점포지원이 겹치면 남은 몫에 다시 반값이 적용된다(보증 뒤 묶음혜택: 판매가의 25%) - 둘이 겹쳐 0G가 되지 않는다 */
+ const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&price>=D.relicBy.guarantee.minPrice?Math.round(price*D.relicParams.guarantee.subsidyRate):0;/* 점포지원이 겹치면 남은 몫에 다시 반값이 적용된다(보증 뒤 묶음혜택: 판매가의 30%) - 둘이 겹쳐 0G가 되지 않는다 */
  if(bundle&&guarantee){const rest=price-guarantee;bundle=rest-Math.round(rest*D.relicParams.memberBundle.payShare);judged=price-bundle;}
  const debit=Math.max(0,price-guarantee-bundle);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
@@ -626,7 +626,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* RELIC 평생 단골제 (User 2026-10-02): once a 단골 while it is owned, Loyalty never drops below the 단골 line again */
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,was&&this.has('lifetime')?G.Adventurer.TRUSTED_REGULAR:0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
  /* NPC_TRAIT §Non-purchase Loyalty: only a visit with a paid purchase earns departure Loyalty. */
- depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,D.balance.paidVisitLoyalty);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
+ depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,D.balance.paidVisitLoyalty);
+  /* RELIC 단골 추천 엽서함: a visitor who leaves after a 단골 already visited that Day gains 단골도 (the 단골 must have come first) */
+  if(n&&this.has('postcard')&&s.queue.slice(0,s.cursor).some(id=>{const m=s.npcs.find(x=>x.id===id);return m&&m!==n&&m.alive&&G.Adventurer.isTrustedRegular(m);})){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}
+  s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
  /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11; was the next morning): stock whose last sale day is today - the shelf's
     `오늘까지` - and that did not sell is discarded tonight, when SALE closes, so it lands on today's receipt as `오늘 폐기`.
     A save from an earlier build may still hold stock past its day; it goes with tonight's. */
@@ -640,9 +643,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
   s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
  night(){const s=this.run;if(s.phase!=='sell')return;
-  /* RELIC 단골 추천 엽서함: on a Day a 단골 came, every other visitor of the Day gains 단골도 */
-  if(this.has('postcard')){const vs=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.alive),regs=vs.filter(n=>G.Adventurer.isTrustedRegular(n));
-   for(const n of vs)if(regs.some(m=>m!==n)){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}}const ev=s.event?.effects||{};s.results=[];
+  const ev=s.event?.effects||{};s.results=[];
   s.daily.noVisitors=!s.queue.length;s.daily.recoveryOnly=s.daily.noVisitors&&s.npcs.some(n=>n.alive)&&s.npcs.filter(n=>n.alive).every(n=>n.recovery>0);
   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never

@@ -164,7 +164,7 @@ and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half a
 so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's
 way to the money is still a regular who comes often. Clamped by the 2000 cap like every other increase.
 
-`rich` is separate (`NPC_TRAIT_v2.13.19.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
+`rich` is separate (`NPC_TRAIT_v2.13.21.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
 actual arrival, not Morning formula; cap 2000 after application.
 
 - **Event temporary purchase budget**: Persistent Wallet과 완전 분리(Cap 미포함, 이월 안됨).
@@ -184,7 +184,7 @@ Logical retry behavior:
 
 Refusal state must not incorrectly lock/unlock unrelated price choices.
 
-Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`
+Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`
 
 ## ORDINARY SALE PURCHASE ACCEPTANCE
 
@@ -390,7 +390,7 @@ categories/counts and acquisition/pity acceptance -> RELIC §18 / §20 / §28 / 
 
 ## ORDER OFFER VARIETY
 
-(User 2026-10-02.) One ORDER sheet holds an Item on at most `offerSameItemMax` = 2 slots: a slot already supplies 2~4 units
+(User 2026-10-02.) One ORDER sheet holds an Item on at most `offerSameItemMax` = 2 slots: a slot already supplies 2~3 units
 (Common / Uncommon), so a third copy only hides another Item. It holds for the Day's sheet, every Reroll and the extra Event /
 Store Support slots; each rolled slot draws from the Items still under the cap (Rarity first, as above), and the Counter
 guarantee picks a Counter still under it when one exists. Only when no Item is left under the cap does the cap yield, rather
@@ -421,11 +421,11 @@ The most one ORDER offer lets the store stock, rolled when the offer is made:
 
 | Rarity | Units |
 |---|---|
-| Common · Uncommon | 2~4 |
+| Common · Uncommon | 2~3 (User 2026-10-21, was 2~4: 「재고 max 3」, so a busy Day cannot be covered with Food and Drinks alone without a Reroll) |
 | Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 
-Store Support that adds supply quantity (`RELIC_v2.13.19.md`) adds on top, unchanged.
+Store Support that adds supply quantity (`RELIC_v2.13.21.md`) adds on top, unchanged.
 
 ### ORDER Rare+ pity — exact
 
@@ -488,12 +488,12 @@ Before order commitment show/readably expose:
 - each offer's rarity name under the Item name
 - the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap
 
-Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.13.17.md` §ORDER — ITEM INFORMATION HIERARCHY.
+Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.13.21.md` §ORDER — ITEM INFORMATION HIERARCHY.
 
 Expected operating cost is derived from the same current-day rules used by Closing.
 It is decision information, not a separate charge.
 
-Detailed visual layout -> `UI_UX_v2.13.17.md`
+Detailed visual layout -> `UI_UX_v2.13.21.md`
 
 ## REROLL
 
@@ -520,7 +520,7 @@ Confirmed Inventory is never removed by Reroll.
 `발주 교환권` may modify the base reroll only as defined in RELIC.
 Its exact modifier model is owned by RELIC and must not be inferred here.
 
-Canonical Relic rule -> `RELIC_v2.13.19.md`
+Canonical Relic rule -> `RELIC_v2.13.21.md`
 
 ## NEXT-DAY FORECAST — RETIRED
 
@@ -538,7 +538,7 @@ Keep hidden:
 ## MORNING / ORDER PRESENTATION CONTRACT
 
 MORNING shows today's Gates and Hazards; ORDER repeats today's Gate / Hazard context, the per-Gate visitor count and the offer rows. No next-day block.
-Exact visual layout is owned by `UI_UX_v2.13.17.md`.
+Exact visual layout is owned by `UI_UX_v2.13.21.md`.
 
 ## VISITOR FORECAST
 
@@ -553,7 +553,7 @@ Do not reveal before customer appearance:
 - Wallet
 - individual destination (a liar's or a pilgrimage-rerouted customer's true Gate stays hidden)
 
-Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.13.19.md`
+Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.13.21.md`
 
 ## BASE OPERATING COST
 
@@ -594,7 +594,7 @@ Economic choice: current inventory vs NPC investment through pricing vs store in
 
 D30: final Item preparation vs last Relic must be a meaningful final Gold Sink decision.
 
-Canonical Relic pricing/window -> `RELIC_v2.13.19.md`
+Canonical Relic pricing/window -> `RELIC_v2.13.21.md`
 
 ## GREAT SUCCESS STORE GOLD
 
@@ -621,7 +621,7 @@ Deep Expedition exception:
 - no separate Deep/Guild cash prize
 
 Great Success probability and NPC growth reward are not reduced by this Store-Gold rule;
-they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v2.13.19.md.
+they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v2.13.21.md.
 
 ## DEEP EXPEDITION SPONSORSHIP COST
 
@@ -643,7 +643,7 @@ If the Store cannot afford the sponsorship, nomination cannot be confirmed.
 If no NPC is nominated, no sponsorship is charged.
 
 Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.13.19.md.
-Deep NPC reward -> NPC_TRAIT_v2.13.19.md.
+Deep NPC reward -> NPC_TRAIT_v2.13.21.md.
 
 ## D30 FINAL PREPARATION PRICE / WALLET / GOLD
 
@@ -1292,12 +1292,12 @@ Report Gold In / Out by channel and explain target miss causes.
 ## RELATED
 
 Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.13.19.md`
-Morning / Order presentation -> `UI_UX_v2.13.17.md`
+Morning / Order presentation -> `UI_UX_v2.13.21.md`
 Item catalog / Rarity identities / item roles -> `ITEM_v2.8.0.md`
 Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss/GREED accounting -> `BOSS_v2.8.0.md`
-npc wallet/loyalty -> `NPC_TRAIT_v2.13.19.md`
-relic costs/build -> `RELIC_v2.13.19.md`
+npc wallet/loyalty -> `NPC_TRAIT_v2.13.21.md`
+relic costs/build -> `RELIC_v2.13.21.md`
 closing settlement -> `NIGHT_CLOSING_v2.8.0.md`
 run starting resources/inventory -> `CORE_RUN_v2.8.0.md`

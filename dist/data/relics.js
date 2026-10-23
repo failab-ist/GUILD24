@@ -10,7 +10,7 @@ const GUARANTEE_MIN_PRICE=200;
    change), so a description is a function of the live tables, not a literal. A changed value reads `새 값 (기존 값)`. */
 const pct=x=>Math.round(x*100)+'%',pp=x=>Math.round(x*100)+'%p',times=x=>x+'배';
 const rows=[
-['bulk','묶음발주 계약','foundation',['rotation'],130,p=>'같은 상품을 한 번에 3개 이상 발주하면, 3번째부터 매입가가 '+pct(p.bulk.discount)+' 싸진다.'],
+['bulk','묶음발주 계약','foundation',['rotation'],130,p=>'한 번 발주할 때 같은 상품을 3개 이상 사면, 그 상품 전부의 매입가가 '+pct(p.bulk.discount)+' 싸진다.'],
 ['rotation','회전 진열대','foundation',['rotation'],80,p=>'전날 4개 이상 팔았으면, 오늘 발주 후보마다 들일 수 있는 수량이 '+p.rotation.supplyBonus+'개 늘어난다.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],130,p=>{const up=m=>Math.round(D.pricing[m].loyalty*p.stamp.loyaltyMult);
  return '손님의 구매로 오르는 단골도: 정가 +'+up('full')+' (기존 +'+D.pricing.full.loyalty+'), 50% 할인 +'+up('half')+' (기존 +'+D.pricing.half.loyalty+').';}],
@@ -20,7 +20,7 @@ const rows=[
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,p=>'오늘 게이트 위험에 맞는 상품이 발주 후보에 '+times(p.hazardBoard.weightMult)+' 자주 나온다.'],
 ['fieldRepair','야전 정비대','foundation',['expedition'],80,p=>'가게에서 판 상품의 위험 대응 수치가 '+pct(p.fieldRepair.counterMult-1)+' 높아진다.'],
 ['fridge','대형 냉장고','foundation',['fresh'],60,p=>'음식·음료의 유통기한이 '+p.fridge.shelfDays+'일 늘어난다. 이미 가진 재고도 한 번 늘어난다.'],
-['kitchen','즉석식품 코너','foundation',['fresh'],200,p=>'음식·음료가 올려 주는 능력치가 '+pct(p.kitchen.statBonus)+' 더 오른다 (피로 회복·위험 대응은 그대로). 대신 기본 운영비가 '+pct(p.kitchen.overheadRate)+' 오른다.'],
+['kitchen','즉석식품 코너','foundation',['fresh'],200,p=>'음식의 피로 회복이 '+p.kitchen.foodSupply+', 음료는 '+p.kitchen.drinkSupply+' 더 오른다. 대신 기본 운영비가 '+pct(p.kitchen.overheadRate)+' 오른다.'],
 ['board','길드 전광판','foundation',['customer'],110,p=>'손님 수가 적게 나와도 하루 기본 '+p.board.minVisitors+'명은 온다 (기존 3명).'],
 ['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,p=>'처음 온 손님의 손님 소지금 +'+p.firstVisitCoupon.arrivalGold+'G, 그 손님의 구매 의사 +'+pp(p.firstVisitCoupon.intentBonus)+'.'],
 ['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,p=>'매일 아침 '+pct(p.groupOrder.visitorChance)+' 확률로 손님이 1명 더 온다. 하루 '+p.groupOrder.commissionFrom+'번째 판매부터는 팔 때마다 가게가 '+p.groupOrder.commission+'G를 더 받는다(하루 최대 '+p.groupOrder.dailyCap+'G).'],
@@ -46,7 +46,7 @@ const rows=[
 ['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).'],
 /* RELIC 33 · 34 · 35 (User 2026-10-04): a troll pick, a 단골 build piece, and the 희귀 survival line */
 ['rumorBoard','소문 수집 게시판','utility',[],60,()=>'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
-['postcard','단골 추천 엽서함','foundation',['vip'],80,p=>'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 '+p.postcard.loyalty+' 오른다.'],
+['postcard','단골 추천 엽서함','foundation',['vip'],80,p=>'단골이 먼저 다녀간 날, 그 뒤에 온 손님은 떠날 때 단골도가 '+p.postcard.loyalty+' 오른다.'],
 ['rescueContract','길드 구조대 계약','hybrid',['expedition'],240,p=>'원정에서 사망 결과가 나오면 '+pct(p.rescueContract.chance)+' 확률로 중상으로 바뀌어 돌아온다.']
 ];
 /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */
@@ -64,18 +64,18 @@ D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
    SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;
    only how strong the effect is lives here, and the descriptions above read it. */
 D.relicParams={
- bulk:{discount:.20},
+ bulk:{discount:.10},
  rotation:{supplyBonus:1},
  stamp:{loyaltyMult:1.75},
  member:{loyaltyRevisitMult:2},
  rareContract:{rareWeightMult:1.5,hqBonus:.10}, /* v2.9.11 (User 2026-09-29): was saleMult 1.1 paid by the customer */
- guarantee:{subsidyRate:.5},
+ guarantee:{subsidyRate:.4},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},
  fieldStretcher:{injuredCombatPenalty:.08},
- firstAidDesk:{healChance:.20},
+ firstAidDesk:{healChance:.25},
  fridge:{shelfDays:2},
- kitchen:{statBonus:.25,overheadRate:.15}, /* User 2026-10-02: the +10% operating cost is back - the Fresh line clears more, pays more */
+ kitchen:{foodSupply:2,drinkSupply:1,overheadRate:.05}, /* User 2026-10-22: Supply instead of native Stat (24시간 신선체계 keeps that), operating cost +5% */
  board:{minVisitors:4},
  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15,dailyCap:60},
@@ -91,7 +91,7 @@ D.relicParams={
  royalCert:{commissionRate:.20,intentBonus:.10,overheadRate:.10},
  opsRoom:{overshootCap:.5,mult:.6,final:true}, /* User 2026-10-02: 원정 전문 인증 remade; 투력 +30% at most */
  fresh24:{statBonus:.30,orderPriceMult:1.15},
- hub:{p1:.45,p2:.15,overheadRate:0},
+ hub:{p1:.35,p2:.15,overheadRate:0},
  warehouse:{slots:5}, /* v2.9.2 fourth pass (User 2026-09-26): +10 -> +5 */
  extraOrder:{extraOffers:2},
  rerollTicket:{freeRerolls:1},
@@ -134,7 +134,7 @@ D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['
 D.categories={food:'음식',drink:'음료',potion:'포션',gear:'야외장비',insurance:'보험',special:'특수'};
 D.roles={stat:'능력 보강',supply:'보급',direct:'전문 대응',hybrid:'복합 대응',condition:'컨디션',insurance:'생환 보험',risk:'위험·보상',economy:'원정 수익',utility:'특수 운용'};
 // Functional roles are declared per ITEM ACTIVE CATALOG, not inferred from effect shape.
-D.itemRoles={rice:['supply'],water:['supply'],ramen:['supply','direct'],lunchbox:['supply','stat'],choco:['supply','stat'],yanggaeng:['supply','stat'],coffee:['supply','stat'],herbtea:['supply','stat'],lowpotion:['stat'],ice:['supply','direct'],soda:['supply','direct'],battery:['direct'],rope:['direct'],candy:['supply','direct'],dragonramen:['supply','stat','direct'],energy:['supply','stat'],wine:['supply','direct','risk'],kit:['insurance'],mask:['direct'],hood:['hybrid'],webgloves:['hybrid'],holylight:['hybrid'],cloak:['hybrid'],coating:['direct'],boots:['direct'],snowgoggles:['direct'],highpotion:['stat'],antidote:['direct'],stone:['insurance'],midpotion:['stat'],guildlunch:['supply','economy'],ion:['supply','direct'],worldcharm:['insurance'],coupon:['utility'],spiderkit:['hybrid'],slimesuit:['hybrid'],cryptlantern:['hybrid'],snowvisor:['hybrid'],magmagear:['hybrid','stat'],battlelunch:['supply','stat'],kingwater:['supply','stat'],hyperenergy:['supply','stat'],sageelixir:['supply','stat'],toppotion:['stat']};
+D.itemRoles={rice:['supply'],water:['supply'],ramen:['supply','direct'],lunchbox:['supply','stat'],choco:['supply','stat'],yanggaeng:['supply','stat'],coffee:['supply','stat'],herbtea:['supply','stat'],lowpotion:['stat'],ice:['supply','direct'],soda:['supply','direct'],battery:['direct'],rope:['direct'],candy:['supply','direct'],dragonramen:['supply','stat','direct'],energy:['supply','stat'],wine:['supply','direct','risk'],kit:['insurance'],mask:['direct'],hood:['hybrid'],webgloves:['hybrid'],holylight:['hybrid'],cloak:['hybrid'],coating:['direct'],boots:['direct'],snowgoggles:['direct'],highpotion:['stat'],antidote:['direct'],stone:['insurance'],midpotion:['stat'],guildlunch:['supply','economy'],ion:['supply','direct'],worldcharm:['insurance'],coupon:['utility'],spiderkit:['hybrid'],slimesuit:['hybrid'],cryptlantern:['hybrid'],snowvisor:['hybrid'],magmagear:['hybrid','stat'],battlelunch:['supply','stat'],bananamilk:['supply','stat'],hyperenergy:['supply','stat'],sageelixir:['supply','stat'],toppotion:['stat']};
 /* The `fresh` category alias is retired with v2.7: Food is a category, not a flag. */
 for(const it of D.items){it.roles=D.itemRoles[it.id]||[];}
 })(globalThis);

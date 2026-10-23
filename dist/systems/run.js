@@ -90,7 +90,10 @@ P.settleStoreCapital=function(){const s=this.run;
  /* UI_UX §END — REPLAY NUDGE: whether this settlement carried the capital across an unowned Decoration's price is a fact of
     the settlement, judged once here - a purchase made from the ending later cannot rewrite what the ending printed. */
  const reach=D.decorations.some(d=>!G.Meta.decorationOwned(this.account,d.id)&&before<d.price&&d.price<=after);
- s.settlement={day:s.day,sales,rate,gain,capitalAfter:after,reach};
+ /* META §JOB MASTERY: the next Job Mastery rank the Account may buy, judged the same way and kept apart */
+ const nextRank=D.masteryRanks[G.Meta.masteryRank(this.account)];
+ const reachMastery=!!nextRank&&G.Meta.distinctBossClear(this.account)>=nextRank.bosses&&before<nextRank.price&&nextRank.price<=after;
+ s.settlement={day:s.day,sales,rate,gain,capitalAfter:after,reach,reachMastery};
  return s.settlement;};
 P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';this.account.lastNames=s.npcs.map(n=>n.name);s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);G.Meta.recordBestSales(this.account,s,s.stats.revenue);this.settleStoreCapital();this.save();G.Telemetry?.report(this,'end');};
 /* FINAL_EXPEDITION v2.8 party rule: the CAP of the party. Any 1..cap may be committed - a 1- or

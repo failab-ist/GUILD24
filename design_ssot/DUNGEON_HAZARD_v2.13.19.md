@@ -108,15 +108,15 @@ No pressure label row anywhere: `강인함으로 버틴다` / `기동으로 피�
 
 Full Hazard sentence (Gate detail only; the Gate-level requirement number first):
 - `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for every Stat (×1/3)
-- e.g. `독 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `부식 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `속박 — 대응 15 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `진창 — 대응 15 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 15 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `공포 — 대응 15 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `어둠 — 대응 15 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화이트아웃 — 대응 15 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `독 — 대응 16 필요 · 강인함 3당 대응 1 제공 · 독 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `냉기 — 대응 16 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `부식 — 대응 16 필요 · 강인함 3당 대응 1 제공 · 부식 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 16 필요 · 기동 3당 대응 1 제공 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 16 필요 · 기동 3당 대응 1 제공 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 16 필요 · 정신 3당 대응 1 제공 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 16 필요 · 정신 3당 대응 1 제공 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 16 필요 · 기동 3당 대응 1 제공 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 16 필요 · 정신 3당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 
 Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need. The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+).
 
@@ -129,7 +129,7 @@ Rules:
 - SLIME secondary player-facing Hazard is `진창`
 - do not explain only some Hazards while leaving others name-only
 
-Interaction ownership -> `UI_UX_v2.13.17.md`
+Interaction ownership -> `UI_UX_v2.13.21.md`
 
 ## GLOBAL PRESSURES
 
@@ -154,7 +154,7 @@ recovery:
 사망       0
 ```
 
-Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.13.19.md`.
+Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.13.21.md`.
 
 Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue.
 
@@ -334,7 +334,7 @@ EarlyEase = 0.96 on DAY 1~5, 0.97 / 0.98 / 0.99 / 0.99 on DAY 6 / 7 / 8 / 9, 1 f
 familyBase (golem Tier II / III only): golem 3
 
 Combat strength is carried by the Day line; the Tier mostly changes the Hazards (Tier II / III add a second Hazard, and the
-TierTerm reads +2 / +6 / +12 Hazard Threat at Tier I / II / III), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
+TierTerm reads +3 / +6 / +12 Hazard Threat at Tier I / II / III), with only the small TierCombat step left in combat. Tier III keeps the larger step: the late
 Gates are where a grown adventurer breaks through on strength.
 
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
@@ -362,12 +362,13 @@ For each canonical Hazard:
 Hazard Threat
 = 12 + Day × 0.35 + LateTerm + TierTerm
 LateTerm = max(0, Day − 7) × 0.25 on ordinary Gates
-TierTerm = 2 / 6 / 12 for Tier I / II / III
+TierTerm = 3 / 6 / 12 for Tier I / II / III
 Final (마왕성): Hazard Threat = 28, fixed for every selected T2 Hazard; no ordinary late term.
 ```
 
-Tier I carries TierTerm 2 so two Stat Drinks do not cover a one-Hazard Gate as surely as one Common Counter does; the
-Counter keeps its worth there while a Drink keeps its Power (`ITEM_v2.8.0.md` §COUNTER LADDER).
+Tier I carries TierTerm 3 so two Stat Drinks do not cover a one-Hazard Gate as surely as one Common Counter does; the
+Counter keeps its worth there while a Drink keeps its Power (`ITEM_v2.8.0.md` §COUNTER LADDER). (User 2026-10-21: 2 → 3,
+「1티어 위험은 정말 살짝만 더 올리고」; in the User's saves a Stat-only Tier I bag won 77% of 304 Tier I expeditions.)
 
 Every Hazard reads the same Threat whatever Stat it presses: every Core Stat converts to Defense at ÷3, and an average
 adventurer's own share is about the same in 강인함, 기동 and 정신, so no Stat group needs its own factor. The ÷3 conversion keeps
@@ -510,7 +511,7 @@ choice and optional Insurance/Escape.
 
 Affinity should emerge from stats + visible Item/Trait effects.
 
-Related: item -> `ITEM_v2.8.0.md` · job -> `NPC_TRAIT_v2.13.19.md`
+Related: item -> `ITEM_v2.8.0.md` · job -> `NPC_TRAIT_v2.13.21.md`
 
 ## FAMILY INTRODUCTION
 
@@ -984,7 +985,7 @@ preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 i
   중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
 - the SALE `실패 시 사망 위험` snapshot is the raw `failureDeathChance` and never includes `preparedFactor`
   (it depends on the Bag, which the snapshot excludes)
-- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`
+- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`
 
 ### Resolution order
 
@@ -1019,7 +1020,7 @@ That displayed value:
 The actual expedition still recalculates `failureDeathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
 Do not update the displayed `실패 시 사망 위험` to reveal the post-supply answer.
 
-Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.17.md` / `COPY_AUDIT_APPROVED_v2.13.19.md`.
+Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.21.md` / `COPY_AUDIT_APPROVED_v2.13.21.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
@@ -1033,7 +1034,7 @@ Rules:
 - apply to the same Severe-vs-ordinary Injury decision point already used by the ordinary resolution
 - do not create a second independent Severe roll
 - apply the +15%p before the normal clamp used by that branch
-- the ordinary Injury Stat penalty itself is owned by `NPC_TRAIT_v2.13.19.md`
+- the ordinary Injury Stat penalty itself is owned by `NPC_TRAIT_v2.13.21.md`
 
 This modifier is about the danger of sending an already-wounded adventurer back out, not about making the four visible Stats secretly lower than their listed Injury penalty.
 
@@ -1050,7 +1051,7 @@ k = the unbroken run of this adventurer's immediately preceding expeditions that
   succeeds is already healed by the ordinary Injury step)
 - independent of 구급키트; one draw, only on this path
 - the Night report says the adventurer recovered with one line; the chance is never shown; exact copy ->
-  `COPY_AUDIT_APPROVED_v2.13.19.md`
+  `COPY_AUDIT_APPROVED_v2.13.21.md`
 
 ## BAD-LUCK PREPARATION ASSIST (hidden)
 
@@ -1090,7 +1091,7 @@ Hazard / Supply / Insurance / Trait rules remain in their existing systems.
 Great Success uses Combat-Power margin after ordinary Success qualification.
 
 When the Player-facing Great Success opportunity threshold is met, presentation must explicitly signal the opportunity.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`. Presentation -> `UI_UX_v2.13.17.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`. Presentation -> `UI_UX_v2.13.21.md`.
 Signal threshold must match the actual calculation.
 
 Margin formula:
@@ -1177,7 +1178,7 @@ Deep Expedition replaces that NPC's ordinary destination for the Day.
 No second segment / second roll / second result.
 
 Deep Expedition Store Gold reward is always 0.
-NPC bonus reward remains owned by NPC_TRAIT_v2.13.19.md.
+NPC bonus reward remains owned by NPC_TRAIT_v2.13.21.md.
 Sponsorship cost -> `ECONOMY_ORDER_v2.13.19.md`.
 Normal Great Success Store Gold -> `ECONOMY_ORDER_v2.13.19.md`.
 
@@ -1529,7 +1530,7 @@ FAIL:
 
 EXPECT:
 ```text
-Threat = 12 + Day*.35 + LateTerm + TierTerm, LateTerm = max(0, Day-7)*.25, TierTerm = 2 / 6 / 12 by Tier (ordinary Gates; 0 for the Final); no Stat-group factor
+Threat = 12 + Day*.35 + LateTerm + TierTerm, LateTerm = max(0, Day-7)*.25, TierTerm = 3 / 6 / 12 by Tier (ordinary Gates; 0 for the Final); no Stat-group factor
 ```
 
 Exact anchors (every Hazard):
@@ -1941,7 +1942,7 @@ EXPECT:
 PASS:
 - Retreat does not clear ordinary Injury
 - generic completion/non-Injury result does not clear it
-- Severe recovery remains its separate rule in `NPC_TRAIT_v2.13.19.md`
+- Severe recovery remains its separate rule in `NPC_TRAIT_v2.13.21.md`
 - First Aid Aftercare may still override persistent Injury exactly as ITEM owns
 
 #### DUN-Q11 — CAUSALITY
@@ -2084,15 +2085,15 @@ Record at minimum:
 ## RELATED
 
 item counters -> `ITEM_v2.8.0.md`
-job/stat coverage -> `NPC_TRAIT_v2.13.19.md`
+job/stat coverage -> `NPC_TRAIT_v2.13.21.md`
 order/tier forecast -> `ECONOMY_ORDER_v2.13.19.md`
-forecast UI -> `UI_UX_v2.13.17.md`
+forecast UI -> `UI_UX_v2.13.21.md`
 night causality -> `NIGHT_CLOSING_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 boss modifier -> `BOSS_v2.8.0.md`
 Item Supply/Counter/Epic preparation -> `ITEM_v2.8.0.md`
-Injury persistence/re-expedition state -> `NPC_TRAIT_v2.13.19.md`
-Fatigue Trait -> `NPC_TRAIT_v2.13.19.md`
+Injury persistence/re-expedition state -> `NPC_TRAIT_v2.13.21.md`
+Fatigue Trait -> `NPC_TRAIT_v2.13.21.md`
 Sale preview -> `SALE_v2.8.0.md`
 Night resolved fields -> `NIGHT_CLOSING_v2.8.0.md`
 Next-day forecast presentation -> `ECONOMY_ORDER_v2.13.19.md`

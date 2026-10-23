@@ -2,7 +2,7 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.18
+DOC_VERSION=2.13.21
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -17,7 +17,7 @@ Meta가 Run 판단을 대체하는 자동 승리 장치가 되어서는 안 된�
 
 Active long-term progression is:
 
-1. **Store Growth** - Store Capital · permanent Decoration ownership · Decoration loadout
+1. **Store Growth** - Store Capital · permanent Decoration ownership · Decoration loadout · Job Mastery rank (v2.13.21)
 2. **Job Mastery / Boss progression** - successful-clear identity · Job×Boss matrix / distinct-Boss unlock roles
 
 No third generic fail-to-power currency is added.
@@ -73,70 +73,58 @@ A cell becomes CLEAR only when:
 
 ## JOB MASTERY
 
-Store Capital cannot buy Mastery. Decoration ownership cannot substitute for Boss CLEAR in the Job×Boss matrix.
-Its active reward effect is the exact spawn-Level model below.
+**v2.13.21 (User 2026-10-22): Job Mastery is bought with Store Capital.** Before v2.13.21 a Job's Mastery was its count of
+distinct Boss clears and raised only that Job's spawn Level; an account with no Boss clear never had any, so the ladder
+gave a new player nothing. Now the Job × Boss matrix is a **record** (the clear cells, the per-Job distinct count the code
+still names `jobMastery`, the Total the Franchise Grade reads) and grants no power. The power is one account-wide
+**Mastery rank 0..5**, bought in order from the store sheet with Store Capital (`DATA.masteryRanks`, `Meta.buyMastery`).
 
 ```text
-Job Mastery = number of distinct Boss IDs cleared with that Job represented in the successful Final party   (0..7 per Job)
-Total Job Mastery = sum of all six Job Mastery counts = 0..42
+Job × Boss record = number of distinct Boss IDs cleared with that Job in the successful Final party   (0..7 per Job)
+Total record      = sum of all six = 0..42
+Mastery rank      = ranks bought with Store Capital, 0..5, one per account (store.mastery)
 ```
 
-Job Mastery is Player-readable. The clear matrix is the source of truth; do not maintain an independent drifting counter.
+| Rank | Price (Store Capital) | Needs | Main Stats | Spawn Level roll |
+|---:|---:|---|---:|---|
+| 1 | 300 | - | +0.5 | none |
+| 2 | 1200 | rank 1 | +1 | none |
+| 3 | 2500 | rank 2, 1 distinct Boss cleared | +1 | +1 Lv 10% |
+| 4 | 4000 | rank 3, 3 distinct Bosses | +1 | +1 Lv 15% · +2 Lv 5% |
+| 5 | 6000 | rank 4, 7 distinct Bosses | +1 | +1 Lv 20% · +2 Lv 10% |
 
-### Successful-clear identity
-
-```text
-Job × Boss CLEAR
--> that Job's distinct Boss clear count
--> Job Mastery
-```
-
-- 6 Jobs × 7 Bosses = 42 possible Job×Boss clear cells
-- Job Mastery is the job-specific successful conquest / permanent growth channel
-- no failed Run directly increments Job Mastery
+- Ranks 1~2 are Capital only, to help the early ladder; ranks 3~5 need Boss clears and add only a little ("찔끔"):
+  after a Boss, the account has already done what the ladder asks. There is no +3 Lv (measured too strong).
+- Store Capital is one pool: a rank and a Decoration compete for the same Capital. A rank is never refunded.
+- Decoration ownership cannot substitute for a Boss clear in the record, and buying a rank writes no record cell.
 
 ### Gameplay reward boundary
 
-- no hidden generic Final multiplier
-- no hidden account-wide combat multiplier
-- no separate mastery-only combat Stat
-- the Mastery power effect is visible and Job-specific
+- applies to EVERY Job's newly generated NPC; nothing changes on an NPC that already exists
+- no hidden generic Final multiplier, no hidden account-wide combat multiplier, no mastery-only combat Stat
+- no Growth multiplier: later level-ups use the normal Job Growth × Potential (NPC_TRAIT)
 
-### Exact spawn-Level model
-
-Job Mastery does **not** multiply Job Base Stats, multiply Job Growth, create a hidden account-wide combat bonus or
-change an already-created NPC. It improves the chance that a newly generated NPC of that same Job arrives at a higher
-starting Level. Mastery rank is the number of distinct Bosses cleared with that Job, from 0 through 7.
+### Exact spawn model
 
 For each newly generated NPC:
 1. resolve the ordinary spawn Level = max(1, randomInt(1, 2) + floor((Day − 1) × 0.4)) from DAY 5; randomInt(1, 2) with
    no Day term on DAY 1~4 (the opening roster and the first newcomers); the royal profile adds +3 (EVENT).
    A newcomer arrives at most one Level above the Day's minimum, so a lucky high-Level newcomer does not carry a Run
    (User 2026-10-10)
-2. read Mastery for that NPC's Job
-3. make one mutually exclusive Mastery bonus roll
-4. add at most one of +1 / +2 / +3 Levels
+2. make one mutually exclusive Mastery roll and add at most one of +1 / +2 Levels from the rank's row (none below rank 3)
+3. compute the Stats as NPC_TRAIT does (Job Base + (Level − 1) × Growth × Potential, rounded)
+4. add the rank's Main Stats value to the Job's two **main Stats**, its two highest Growth values:
+   전사 투력·강인함, 궁수 투력·기동, 마법사 투력·정신, 사제 강인함·정신, 도적 투력·기동, 광전사 투력·강인함
 
-| Mastery | +1 Lv | +2 Lv | +3 Lv |
-|---:|---:|---:|---:|
-| 0 | 0% | 0% | 0% |
-| 1 | 5% | 0% | 0% |
-| 2 | 10% | 0% | 0% |
-| 3 | 15% | 5% | 0% |
-| 4 | 20% | 10% | 0% |
-| 5 | 25% | 15% | 0% |
-| 6 | 30% | 20% | 5% |
-| 7 | 35% | 25% | 10% |
+For deterministic seeded comparison, the spawn path consumes the same single Mastery roll at every rank, rank 0 included,
+so buying a rank does not shift the seeded stream.
 
-The three columns are mutually exclusive outcomes, not stacking rolls. The Mastery roll belongs only to the NPC's own
-Job; a Job's Mastery cannot affect another Job. For deterministic seeded comparison, the spawn path consumes the same
-single Mastery roll even at Mastery 0; the row at 0 simply yields no bonus. After the bonus Level is resolved, the NPC is
-an ordinary NPC of that final Level and uses the normal Job/Growth rules owned by NPC_TRAIT.
+Measured (v2.13.20 rules, 근석 account with 3 Decorations, 500 fresh Runs, investor bot oracle off): Main Stats +0 / +0.5 /
++1 ended before D10 in 29 / 23 / 17%, reached D20 41 / 50 / 57%, reached D30 16 / 24 / 31%
+(reports/v2100-measure/mastery-capital-20261022; oracle on: before D10 35 / 29 / 23%, D30 18 / 23 / 29%).
 
-Player-facing meaning:
-    해당 직업 숙련도가 높을수록 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.
-
-Do not expose the exact probability table unless a later approved Meta information rule explicitly does so.
+Player-facing meaning (store sheet):
+    숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.
 
 ---
 
@@ -359,7 +347,7 @@ Ending Gold and remaining Inventory liquidation value are **not Store Capital in
 
 - Manual Run Abandon / explicit early retirement grants `Store Capital Gain = 0`
 - a Run with `Gross Sales = 0` earns `Store Capital Gain = 0` regardless of reached Day (no inactivity / no-sale farming)
-- Boss CLEAR does not multiply Store Capital settlement; Boss success progression is owned by Job Mastery
+- Boss CLEAR does not multiply Store Capital settlement; Boss success progression is owned by the Job × Boss record and the unlocks; Store Capital buys Decorations and Job Mastery ranks (§JOB MASTERY)
 
 ### Day-reach conversion rate — EXACT
 
@@ -453,7 +441,7 @@ rarity draw when the Decoration is active; it adds no extra spawn, no extra rari
 
 ### counter — 알뜰 금고
 ```text
-each Day, the first two customers to reach the counter: Wallet +100G each (cap 2000)
+each Day, the first two customers to reach the counter: Wallet +75G each (cap 2000)
 ```
 
 Twice a Day, on those customers' arrivals with the other arrival Wallet bonuses; it pays the customer, not the Store, so it
@@ -482,7 +470,7 @@ every adventurer created while it is worn: 30% chance of spawn Level +1
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 25% chance
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 30% chance
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and is shown on the SALE
@@ -536,10 +524,11 @@ to take.
 
 ### counter — 휴식 바우처 꽂이 (id voucher)
 ```text
-each Night: the Day's first three customers to reach the counter, if alive: Fatigue -6 (floor 0)
+each Night: the Day's first two customers to reach the counter, if alive: Fatigue -6 (floor 0)
 ```
 
-The same counter order as 알뜰 금고 (its first three here): the order in which that Day's customers reached the counter. Everyone else, visitor or
+(User 2026-10-21, v2.13.20: first three → first two; with three it covered every customer on a three-visitor Day, so Food lost its Fatigue role.)
+The same counter order as 알뜰 금고 (its first two here): the order in which that Day's customers reached the counter. Everyone else, visitor or
 not, keeps their Fatigue.
 
 ### display — 지원 교환 쿠폰함 (id rerollCoupon)
@@ -563,7 +552,7 @@ first Decoration is the earliest within reach.
 
 ## STORE-GROWTH VISUAL PROJECTION — PRESENTATION ONLY
 
-Store-growth presentation may project already-owned/current state into the live store through UI_UX_v2.13.17.md,
+Store-growth presentation may project already-owned/current state into the live store through UI_UX_v2.13.21.md,
 including equipped Decorations, alongside run-state traces owned by other current Specs (Store Support, Trusted
 Regular, revealed Final-preparation state).
 
@@ -757,11 +746,11 @@ Removed XP/Grade direct bonuses do not remain as hidden modifiers.
 
 Core identity -> SPEC_INDEX §GAME CORE
 Run timing / Run save -> `CORE_RUN_v2.8.0.md`
-Decoration UX -> `UI_UX_v2.13.17.md`
+Decoration UX -> `UI_UX_v2.13.21.md`
 Economy / Wallet -> `ECONOMY_ORDER_v2.13.19.md`
 Gate / Hazard / monster family knowledge -> `DUNGEON_HAZARD_v2.13.19.md`
 Item Counter / item unlock/effect -> `ITEM_v2.8.0.md`
-Job growth -> `NPC_TRAIT_v2.13.19.md`
+Job growth -> `NPC_TRAIT_v2.13.21.md`
 Boss clear signal -> `BOSS_v2.8.0.md`
 Final preparation/clear -> `FINAL_EXPEDITION_v2.8.0.md`
 copy -> `COPY_WORLD_VOICE_v2.8.0.md`

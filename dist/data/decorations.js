@@ -30,7 +30,7 @@ G.DATA.decorations=[
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
  {id:'memorialBook', kind:'survival', slot:'counter', name:'추모 방명록',   price:750, effect:p=>'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 '+p.memorialBook.deathLimitBonus+'명 늘어난다',
   text:'계산대 옆 방명록과 초. 사람들은 이 점포가 잊지 않는다는 걸 안다.'},
- {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:p=>'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +'+pct(p.aidCabinet.powerMult-1)+'. 원정에 실패해도 죽을 확률이 '+pct(1-p.aidCabinet.preparedFactor)+' 줄어든다 (기존 20%) (마왕성 제외)',
+ {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:p=>'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +'+pct(p.aidCabinet.powerMult-1)+'. 원정에 실패해도 죽을 확률이 '+pct(1-p.aidCabinet.preparedFactor)+' 줄어든다 (기존 20%, 마왕성 제외)',
   text:'붉은 상자가 놓인 유리장. 챙길 걸 다 챙긴 손님일수록 무사히 돌아온다.'},
  /* META §OPERATION DECORATIONS: 운영형 - something 본사 did for the store, one per Slot, the Slot's price; the stronger 현수막 on the
     dearer 간판 (User 2026-10-05). The ids stay (saves). */
@@ -46,11 +46,20 @@ G.DATA.decorations=[
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
    balance); the effect copy above reads them. The wall chance stays
    D.balance.wallVisitorChance, its original owner. */
-G.DATA.decorationParams={cheerBanner:{perTen:0.03,max:0.20},voucher:{customers:3,fatigue:6},sponsorSign:{budgetShare:0.5},thriftSafe:{firstWallet:100,customers:2},honorFrame:{weights:[50,30,13,5.5,1.5]},
- memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.25},trainingSign:{levelBonus:1,chance:.30},aidCabinet:{preparedFactor:.60,powerMult:1.03}};
+G.DATA.decorationParams={cheerBanner:{perTen:0.03,max:0.20},voucher:{customers:2,fatigue:6},sponsorSign:{budgetShare:0.5},thriftSafe:{firstWallet:75,customers:2},honorFrame:{weights:[50,30,13,5.5,1.5]},
+ memorialBook:{deathLimitBonus:1},infirmaryPlaque:{healChance:.30},trainingSign:{levelBonus:1,chance:.30},aidCabinet:{preparedFactor:.60,powerMult:1.03}};
 /* META §INITIAL FOUR DECORATIONS copy (User 2026-10-04): who gains first, no closing period (COPY_AUDIT §9-5); every
    number is read from decorationParams / D.balance when the card is drawn, so `effect` is a getter over the live tables. */
 for(const d of G.DATA.decorations){const copy=d.effect;Object.defineProperty(d,'effect',{get:()=>copy(G.DATA.decorationParams),enumerable:true});}
+/* META §JOB MASTERY (User 2026-10-22): bought with Store Capital, one ladder for every Job, in order. The first two need
+   Capital only and raise the two Stats that Job grows most (base only, at creation); the rest also need distinct Bosses
+   beaten and add a small Level chance on top of what came before - the +1 / +2 columns are exclusive outcomes. */
+G.DATA.masteryRanks=[
+ {price:300, bosses:0,stat:0.5,level:[]},
+ {price:1200,bosses:0,stat:1,  level:[]},
+ {price:2500,bosses:1,stat:1,  level:[.10]},
+ {price:4000,bosses:3,stat:1,  level:[.15,.05]},
+ {price:6000,bosses:7,stat:1,  level:[.20,.10]}];
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META §STORE CAPITAL · §Day-reach conversion rate — EXACT. The band is the Day the Run actually reached, and it
    multiplies Gross Sales, not an end-state net worth. A Decoration inside the first Run is not a goal; the longer Run

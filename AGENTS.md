@@ -32,7 +32,7 @@ If Canonical and Source differ:
 
 Never change approved Design without User approval.
 
-Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.13.17.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
+Names and terms (what a thing is called, and what it must not be called) are resolved from `design_ssot/GLOSSARY_v2.13.21.md`. Do not coin or reuse a name that GLOSSARY lists as retired.
 
 ---
 
@@ -314,10 +314,19 @@ After User-approved Design change:
 
 밸런스를 바꾸거나 판단할 때의 기준 측정이다. 돌리기 전 9-A대로 User 컨펌을 받는다.
 밸런스를 점검하거나 바꿀 때는 먼저 `BALANCE_CHECK.md`(있는 자료부터 보기 · 물은 것만 재기 · 읽기 · 보고 · 넣기 순서)를 읽는다(User 2026-10-21).
+봇 숫자를 목표에 대 읽는 법(바꾸기 전 대비 변화로만, 참고선 안은 목표 달성이 아님, 사람 가정은 세이브로 먼저)은 그 문서 §4 · §5가 정한다(User 2026-10-22).
 
 ```text
-node tools/measure-v2100.cjs --traj 200 --fresh 1000
+node tools/measure-v2100.cjs --policies investor --traj 200 --fresh 1000 --runs 15 --out off.json
 ```
+
+- 기본 봇(User 2026-10-22): **investor 오라클 끔 하나**로 잰다. 판단 · 수치 비교 · 참고선은 모두 이 값이다.
+  오라클 켬은 「잘하는 사람이면 어떻게 되나」를 따로 봐야 할 때만, User에게 그 이유를 말하고 더 잰다(2026-10-21의 끔 · 켬 두 번 규칙을 바꿈).
+  - 끔(기본): 변수 없이 돌린다. 사람에 맞춘 봇(#268)이다.
+  - 켬(필요할 때만): `G24_BOT_ORACLE=1`. 「다 아는 봇」이다. 보통 발주를 마친 뒤, 숨은 능력치까지 읽어 그날 손님마다 가장 좋은 가방(1~2칸)을 한 재고로 함께 계산하고, 가방 값을 값만큼 올려 주는 상품을 더 산다. 잘하는 사람의 위쪽 선으로 읽는다.
+  - 끌 때는 변수를 아예 두지 않는다(`G24_BOT_ORACLE=0`도 켜짐으로 읽힌다).
+  - 측정 도구를 스크래치에서 본떠 만들 때(장식 · 점포지원 하나씩 등)도 끔으로 잰다. 켬을 더 잴 때는 로그 · JSON 이름에 `off` · `on`을 붙인다.
+  - reader · expert는 지난 측정과 견줄 때만 `--policies`에 넣는다. 도구의 `--policies` 기본값(reader,investor)은 쓰지 않는다.
 
 - 재는 것: 구간별(D1~7 / 8~14 / 15~21 / 22~29) 원정 성공률, D30 도달 · 클리어, 사망 / 런, 좀비, 장식.
   둘째 줄(`└`)에 종료 이유(사망 한도 · 파산 · 마왕 실패), 끝난 날 중앙값, D10까지 사망, 부상 출발과 그 사망률,
@@ -325,9 +334,14 @@ node tools/measure-v2100.cjs --traj 200 --fresh 1000
   셋째 줄(`└ 준비`)에 상품 들고 간 원정 대 맨손 원정의 성공 · 사망, 상품이 결과를 바꾼 비율(그중 사망을 막은 비율), 상위 4명이 받은 상품 몫(User 2026-10-09).
   넷째 줄에 상품이 결과를 바꾼 비율을 초(D1~7) · 중(D8~20) · 후(D21~29)로, 전체와 가망 있는 원정(맨손 힘 / 게이트 요구 0.8 이상)만 따로 적는다(User 2026-10-10). 방문 지갑 · 점포지원 궤적은 `--out` JSON에 남는다.
   다섯째 줄(`└ 잔액`)에 D5 · D10 · D15 · D20 · D25 마감 잔액의 중앙, 그 날까지 간 런의 비율, 1500G · 2000G 이상 비율을 적는다(User 2026-10-15). 날짜별 잔액은 JSON의 `bal`에도 있다.
-- 규모: reader(기준) · investor(투자형) 봇의 프레시 계정 1000판, reader · investor의 궤적 200 × 10런(장식 none / economy / survival / operation). 균형 봇은 기준 밸런스 평가에서 제외한다(User 2026-10-06).
+- 규모: 오라클 끔으로 프레시 계정 1000판, 궤적 200 × 15런(장식 none / economy / survival / operation).
+  궤적은 15런으로 본다(User 2026-10-22): 10런에는 장식이 3~3.5개뿐이라 1500G 장식이 거의 안 쓰인다(`reports/v2100-measure/deco-support-20261022/`).
+  v2.13.21부터 사다리에 직업 숙련도 넣는다. `purchaseOrder`의 `'mastery'`가 다음 숙련 단계이고, 숙련 · 장식을 모두 싼 것부터 산다(같은 폴더의 `mv-loo.cjs`). 기본 도구(`measure-v2100.cjs`)의 길 목록에는 숙련 1 · 2단계(300G · 1200G, 마왕 토벌 없이 삼)를 장식과 싼 순서로 넣었다(User 2026-10-22). 3단계부터는 마왕 토벌이 필요해 빼고, `G24_NO_MASTERY=1`이면 옛 장식만 순서다. 균형 봇은 기준 밸런스 평가에서 제외한다(User 2026-10-06).
   investor는 DAY 1부터 매일 숨은 성장력까지 보고 핵심 4명 · 후보 3명을 다시 고르고(User 2026-10-11) 가방 조합을 결과 기대값으로 고르고, 부상 손님 몫 구급키트를 들여놓고, 부상 · 사망이 쌓이면 부상 대응 점포지원을 먼저 고르고, DAY 25부터 돈이 남으면 리롤하며 최종 파티에 줄 템을 모아 두는 봇이다(User 2026-10-09, expert 자리 교체).
-  reader · investor는 첫 시트에서 먼저 사고 확정한 뒤, 핵심 손님의 위험이 안 막혔는데 시트에 대응템이 없을 때만 리롤한다(돈에 따라 0~2번, 리롤 전 관련 스탯템 하나). 점포지원은 등급 + 가진 지원과 겹치는 태그로 고르고, 사고 나서 500 밑이면 넘긴다(User 2026-10-11). expert는 지난 측정과 비교할 때만 `--policies reader,expert`로 쓴다.
+  #268(User 2026-10-21)부터 investor는 손님마다 대응템 또는 그 위험을 받쳐 주는 능력치 음식 · 음료로 채워 섞어 사고, 둘 다 없을 때만 리롤한다. 발주 하한은 0G(재고 여유 +4)이고, 바가지는 기대값(성공 단골도 −8, 거절 −2와 정가 대체 판매)으로 고른다. 근거 `reports/v2100-measure/bot-human-20261021/`.
+  점포지원은 창에 영웅이 있으면 정한 영웅 순서(`HERO_EARLY` · `HERO_LATE`)로 영웅을 먼저 고르고(#296), 아니면 등급 + 가진 지원과 겹치는 태그로 고르고, 사고 나서 500 밑이면 넘긴다(User 2026-10-11).
+  부상 대응 점포지원 먼저 고르기는 부상 · 사망이 실제로 쌓였을 때만 걸린다(#296, DAY 0에 걸리던 버그 고침). 이번 판에 실제로 얼마나 이득인지를 계산해 고르지는 않는다(순서표).
+  영웅만 나오는 창(훈장 첫 창)은 교환하지 않는다. 사람 세이브도 3번 모두 교환 안 함(`reports/v2100-measure/support-fix-20261022/medal-off.txt`).
   `--before`로 비교할 때 이전 소스에 investor가 없으면 그 worktree에 `dist/systems/simulation.js`의 봇 코드를 먼저 옮긴다.
 - 첫 계정 보호는 실제 플레이와 같이 켠다. 프레시는 첫 런 보호 ON, 연속 궤적은 첫 런에만 ON이다. 이전 보호 OFF 측정과 혼동하지 않는다(User 2026-10-06). 최종 보급 여부도 JSON에 기록해 템을 준 파티의 도달 시 클리어를 따로 읽는다.
 - 시간: 한 조건 5~8분, 두 조건을 동시에 돌리면 13~17분

@@ -47,7 +47,7 @@ Before the Player chooses a price, the same decision surface makes readable:
 - whether the NPC can afford that price
 
 NPC Wallet is not optional secondary detail: the Player must be able to judge affordability before committing a price.
-Exact layout -> UI_UX_v2.13.17.md.
+Exact layout -> UI_UX_v2.13.21.md.
 
 ## CUSTOMER FLOW
 
@@ -83,8 +83,8 @@ Rules:
 - do not merge both slots into one cart checkout
 - no separate handling minigame/resource/QTE
 - Item tap is sufficient for the full flow; drag is optional enhancement only
-- the chosen Item is shown on the counter tray (fixed above the dock) with its `판매 후 변화` and the three price keys; the shelf rows never change height (`UI_UX_v2.13.17.md` §SALE — COUNTER TRAY)
-- the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.13.17.md` §BAG PRESENTATION)
+- the chosen Item is shown on the counter tray (fixed above the dock) with its `판매 후 변화` and the three price keys; the shelf rows never change height (`UI_UX_v2.13.21.md` §SALE — COUNTER TRAY)
+- the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.13.21.md` §BAG PRESENTATION)
 
 ## CURRENT CUSTOMER COMPACT STATE
 
@@ -97,7 +97,7 @@ Mobile current-customer state includes Injury state (without numeric duplication
 - Normal SALE places no separate Loyalty `?` / popover trigger beside this value; the tutorial/coach teaches its
   contextual meaning. The global compact Help may retain its separately owned reference text.
 - Equipment text is not part of the compact top strip; it stays readable in NPC detail and may appear as a proven Core-Stat source.
-- Bag is exactly two slots (§NORMAL CONSUMER BAG — EXACT). Exact compact/mobile layout -> UI_UX_v2.13.17.md.
+- Bag is exactly two slots (§NORMAL CONSUMER BAG — EXACT). Exact compact/mobile layout -> UI_UX_v2.13.21.md.
 
 Fatigue in this strip:
 
@@ -121,7 +121,7 @@ Morning/Order에서 공개 가능: 오늘 방문 예정 인원.
 
 미리 공개하지 않음: 이름 / Job / Trait / Wallet / 목적지 정보.
 
-Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Canonical NPC rule -> NPC_TRAIT_v2.13.19.md.
+Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Canonical NPC rule -> NPC_TRAIT_v2.13.21.md.
 
 ## QUEUE INFORMATION BOUNDARY
 
@@ -136,8 +136,8 @@ Player-facing label: `예상 목적지`
 
 Default:
 - expected destination = actual assigned destination
-- destination is random among eligible open Gates according to `NPC_TRAIT_v2.13.19.md`
-- when a Day has at least as many visitors as open Gates, every open Gate is some visitor's expected destination: a Gate the draw left empty takes one visitor from a Gate that holds two or more (`NPC_TRAIT_v2.13.19.md` destinationCoverage)
+- destination is random among eligible open Gates according to `NPC_TRAIT_v2.13.21.md`
+- when a Day has at least as many visitors as open Gates, every open Gate is some visitor's expected destination: a Gate the draw left empty takes one visitor from a Gate that holds two or more (`NPC_TRAIT_v2.13.21.md` destinationCoverage)
 
 Canonical uncertainty:
 - an explicitly defined Event may change actual destination while leaving the earlier expected destination as the player-facing expectation
@@ -152,7 +152,7 @@ destination remain hidden; Night reveals actual changed destination for affected
 System must not auto-route NPC to best Job fit / best Stat fit / safest Dungeon / hardest Dungeon.
 
 Explicit Event destination changes and confirmed Deep Expedition destination replacement follow their owning rules
-(Deep -> §DEEP EXPEDITION NOMINATION). Canonical routing / information reliability -> NPC_TRAIT_v2.13.19.md, EVENT_v2.8.0.md.
+(Deep -> §DEEP EXPEDITION NOMINATION). Canonical routing / information reliability -> NPC_TRAIT_v2.13.21.md, EVENT_v2.8.0.md.
 
 ## DEEP EXPEDITION NOMINATION
 
@@ -238,13 +238,13 @@ Do not:
 Player must be able to compare relevant Item information without leaving Sale repeatedly.
 
 Useful decision info may include: major Stat effect, Counter effect, Condition effect, Insurance behavior, explicit
-penalty, sell price at current selected mode. Exact UI -> UI_UX_v2.13.17.md.
+penalty, sell price at current selected mode. Exact UI -> UI_UX_v2.13.21.md.
 
 The compared Item's detail lives on the counter tray, so comparing two Items never moves the shelf list.
 
 Shelf order: rows are ordered by kind, then days left before discard (nearest first), then higher Rarity, ties in the
 existing order, held for the Day; every row carries its shelf life (`폐기까지 N일 / 내일까지 / 오늘까지`) and a row on its
-last day is emphasized (exact -> `UI_UX_v2.13.17.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
+last day is emphasized (exact -> `UI_UX_v2.13.21.md` §SALE — SHELF ORDER). This is stock management, never a best-fit or
 recommendation order; only the Hazard-answer lead follows the current customer's own Gate (User 2026-10-09).
 
 ### MATCHING-EFFECT EMPHASIS — RETIRED
@@ -302,7 +302,7 @@ The exact 실패 시 사망 위험 % shown here is the fixed **pre-supply** snap
 
 Item selection previews direct, player-readable changes where useful, e.g. 투력 +X / 강인함 +X / 독 대응 +X / 피로 회복 N / 보험 효과.
 
-After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `손님 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`).
+After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `손님 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`).
 
 Preview must not expose exact expedition success %, exact death %, internal formula, or a fake master safety score.
 Canonical information principle -> SPEC_INDEX §GAME CORE.
@@ -319,7 +319,7 @@ Hazard:
 
 No single final safety score, exact Success %, hidden Power or master safety score. Forecast is an estimate, not a guarantee.
 
-The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so one worst label would hide which side is open. It is the same frozen snapshot and gives no number, threshold or Item. The exact failure-conditioned Death risk is exposed at SALE entry at Help level — the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and the NPC detail — not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`).
+The always-on outlook is two cells, 전투 전망 + 환경 대응. On a Gate with two Hazards (T2 on) 환경 대응 names each Hazard with its own state (`{위험} {충분|대응|불안|취약}` per Hazard) instead of the worst one alone: the sum of both gaps decides the environment, so one worst label would hide which side is open. It is the same frozen snapshot and gives no number, threshold or Item. The exact failure-conditioned Death risk is exposed at SALE entry at Help level — the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and the NPC detail — not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`).
 
 Hazard name, pressured Stat/readiness and qualitative preparedness form one readable hierarchy; do not repeat the same
 decision signal as multiple equal-priority labels. Long explanatory prose is secondary Help/Tooltip content, not
@@ -450,7 +450,7 @@ Canonical economy -> ECONOMY_ORDER_v2.13.19.md.
 
 Player should understand the role difference without seeing exact purchase probability.
 
-Each price button carries its role word with the mode and price (`할인 50%` / `정가` / `바가지 150%`) and the small line `이익 {N}G` (or the existing disabled reason) under it; exact face copy -> `COPY_AUDIT_APPROVED_v2.13.19.md`. Three modes only, no extra depth.
+Each price button carries its role word with the mode and price (`할인 50%` / `정가` / `바가지 150%`) and the small line `이익 {N}G` (or the existing disabled reason) under it; exact face copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`. Three modes only, no extra depth.
 
 ## PURCHASE DECISION
 
@@ -459,7 +459,7 @@ Relic effects, other canonical visible systems.
 
 Hidden Job-based purchase bonus=NO
 
-The acceptance floor for an accessible-mode offer reads 관련 준비 (a direct Counter for one of the customer's Gate Hazards, or the Stat that Hazard presses), one owner: `RELIC_v2.13.19.md` §COUNTER JUDGEMENT.
+The acceptance floor for an accessible-mode offer reads 관련 준비 (a direct Counter for one of the customer's Gate Hazards, or the Stat that Hazard presses), one owner: `RELIC_v2.13.21.md` §COUNTER JUDGEMENT.
 
 Exact purchase probability=HIDDEN
 
@@ -557,7 +557,7 @@ No partial state where Gold changed but stock did not, or stock changed without 
 
 The real result of the player's own price choice is shown at the moment of each sale or refusal, for that customer, never as a summary at the end of the day.
 
-- sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.13.19.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
+- sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.13.21.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
 - refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). A refusal that reduces Loyalty also shows `단골도 {−N}` at the receipt-stub location for about 2.5 seconds, small and muted red, without a Wallet row or new motion. Use the actual clamped decrease. No new reply pool is added.
 - both are presentation of the resolved state: no gameplay rule, Save field or RNG draw.
 
@@ -580,7 +580,7 @@ No separate punishment subsystem exists solely because Player sold nothing.
 
 ## RETURNING NPC — LAST EXPEDITION QUICK SURFACE
 
-When a returning NPC has a recent-expedition snapshot owned by `NPC_TRAIT_v2.13.19.md`, show one compact quick surface:
+When a returning NPC has a recent-expedition snapshot owned by `NPC_TRAIT_v2.13.21.md`, show one compact quick surface:
 
 ```text
 지난 원정 · DAY X · 결과 · [item] [item]
@@ -601,7 +601,7 @@ Paid purchases may affect Loyalty according to canonical NPC/economy rules.
 - 150%: higher current-profit direction
 - Free/Event actions must not create repeatable Loyalty farming.
 
-Canonical -> NPC_TRAIT_v2.13.19.md, ECONOMY_ORDER_v2.13.19.md.
+Canonical -> NPC_TRAIT_v2.13.21.md, ECONOMY_ORDER_v2.13.19.md.
 
 ## SALE INFORMATION HONESTY
 
@@ -652,7 +652,7 @@ Requirements:
 
 Do not solve pacing by removing a decision that can change after a purchase/refusal result.
 
-Detailed presentation -> UI_UX_v2.13.17.md.
+Detailed presentation -> UI_UX_v2.13.21.md.
 
 ## SALE RUNTIME CONTINUITY
 
@@ -724,11 +724,11 @@ Deep Expedition nomination acceptance:
 ## RELATED
 
 game philosophy -> SPEC_INDEX §GAME CORE
-NPC / Trait / destination / growth / recent snapshot -> `NPC_TRAIT_v2.13.19.md`
+NPC / Trait / destination / growth / recent snapshot -> `NPC_TRAIT_v2.13.21.md`
 Item / inventory / Item effects -> `ITEM_v2.8.0.md`
 price / Economy / Wallet -> `ECONOMY_ORDER_v2.13.19.md`
 dungeon forecast / Hazard / Fatigue / Supply -> `DUNGEON_HAZARD_v2.13.19.md`
 run / phase -> `CORE_RUN_v2.8.0.md`
 night result / Night proof -> `NIGHT_CLOSING_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
-presentation -> `UI_UX_v2.13.17.md`
+presentation -> `UI_UX_v2.13.21.md`

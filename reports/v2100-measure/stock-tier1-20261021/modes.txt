@@ -1,0 +1,4 @@
+B runs 300 D1~10 판매 overcharge 12.6% full 38.2% half 49.1% 바가지 매출/런 1260
+Q runs 300 D1~10 판매 overcharge 12.2% full 38.6% half 49.2% 바가지 매출/런 1195
+H runs 300 D1~10 판매 overcharge 12.7% full 37.4% half 49.9% 바가지 매출/런 1248
+QH runs 300 D1~10 판매 overcharge 12.7% full 37.8% half 49.5% 바가지 매출/런 1238

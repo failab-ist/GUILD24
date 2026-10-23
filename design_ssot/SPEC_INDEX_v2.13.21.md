@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.13.19
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.19
+DOC_VERSION=2.13.21
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.13.21
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_13_19_OPEN (v2.13.18 is closed; v2.13.19 = 증명 문구에서 만반의 준비 몫 분리 + 바가지 소지금 보너스 · 단골도 -8 · 상한 90%(같은 버전, #265), CHANGELOG §v2.13.19; v2.13.18 = 알뜰 금고 100G, 구급품 진열장 +3%, 명예 모험가 액자 50%, CHANGELOG §v2.13.18)
-SOURCE_ADOPTION_STATUS=V2_13_19_ADOPTED (every version through v2.13.19 is adopted in Source on main; CHANGELOG §v2.13.19)
+FREEZE_STATUS=V2_13_21_OPEN (v2.13.20 is closed; v2.13.21 = 직업 숙련을 점포 자본으로 구매(5단, 전 직업), CHANGELOG §v2.13.21; v2.13.20 = 지역 거점점 +1명 45 → 35%, 휴식 바우처 꽂이 먼저 온 3명 → 2명, CHANGELOG §v2.13.20; v2.13.19 = 증명 문구 만반의 준비 몫 분리 + 바가지 소지금 보너스 · 단골도 -8 · 상한 90% + 재고 2~3 · 1티어 위험 +3, CHANGELOG §v2.13.19)
+SOURCE_ADOPTION_STATUS=V2_13_21_ADOPTED (every version through v2.13.21 is adopted in Source on main; CHANGELOG §v2.13.21)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -19,7 +19,7 @@ PUBLIC_RELEASE_CANONICAL=PLATFORM_RELEASE_v3.0.0.md
 3. current Source
 4. older chat / proposal / report / historical spec
 
-NAMES = GLOSSARY_v2.13.17.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
+NAMES = GLOSSARY_v2.13.21.md. What a thing is called, and what it must not be called, is decided there; rules and exact copy stay with their owners.
 
 DESIGN TRUTH = current routed Design SSOT.
 IMPLEMENTATION TRUTH = current Source.
@@ -227,7 +227,7 @@ play and valid RNG.
 
 ### INACTIVE LEGACY BOUNDARY
 No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
-in the current game. Archive ownership is routed to META_v2.13.18.md.
+in the current game. Archive ownership is routed to META_v2.13.21.md.
 
 ## DEFERRED EXPANSION
 
@@ -255,25 +255,25 @@ included. Find a file by its stem (`ls design_ssot/SPEC_INDEX_v*.md`), never by 
 ## CURRENT CANONICAL FILE SET
 
 Core / Run / Meta:
-- SPEC_INDEX_v2.13.19.md (this index; §GAME CORE)
-- GLOSSARY_v2.13.17.md (game terms: names, meanings, retired names)
+- SPEC_INDEX_v2.13.21.md (this index; §GAME CORE)
+- GLOSSARY_v2.13.21.md (game terms: names, meanings, retired names)
 - CORE_RUN_v2.8.0.md
-- META_v2.13.18.md
+- META_v2.13.21.md
 
 Economy / NPC / Dungeon / Item / Store Build:
 - ECONOMY_ORDER_v2.13.19.md
-- NPC_TRAIT_v2.13.19.md
+- NPC_TRAIT_v2.13.21.md
 - DUNGEON_HAZARD_v2.13.19.md
 - ITEM_v2.8.0.md
-- RELIC_v2.13.19.md
+- RELIC_v2.13.21.md
 
 Flow / Result / UI / Copy:
 - SALE_v2.8.0.md
 - NIGHT_CLOSING_v2.8.0.md
-- UI_UX_v2.13.17.md
+- UI_UX_v2.13.21.md
 - PRESENTATION_PRINCIPLES_v2.8.0.md
 - COPY_WORLD_VOICE_v2.8.0.md
-- COPY_AUDIT_APPROVED_v2.13.19.md
+- COPY_AUDIT_APPROVED_v2.13.21.md
 - EVENT_v2.8.0.md
 - BOSS_v2.8.0.md
 - FINAL_EXPEDITION_v2.8.0.md
@@ -293,19 +293,19 @@ audit-HEAD Source defect record, every SA-Q adopted at the v2.8 release; Source 
 
 GAME CORE / CROSS-RUN IDENTITY -> SPEC_INDEX §GAME CORE (this index)
 RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN_v2.8.0.md
-META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.18.md
+META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.13.21.md
 PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.13.19.md
-NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.13.19.md
+NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.13.21.md
 DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.13.19.md
 ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
-STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.13.19.md
+STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.13.21.md
 SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
-UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.13.17.md
+UI / UX / MOBILE / TUTORIAL / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.13.21.md
 PRESENTATION PRINCIPLES / VISUAL CONSTRUCTION / ASSET QUALITY / ORNAMENT BUDGET / AUDIO PRESENTATION / VISUAL REVIEW -> PRESENTATION_PRINCIPLES_v2.8.0.md
-TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.13.17.md
+TERMS / NAMES / RETIRED NAMES -> GLOSSARY_v2.13.21.md
 COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
-EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.13.19.md
+EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.13.21.md
 EVENT -> EVENT_v2.8.0.md
 BOSS -> BOSS_v2.8.0.md
 FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.8.0.md
@@ -326,7 +326,7 @@ Do not delete history files merely because they are old.
 ## RETIRED ACTIVE SYSTEMS
 
 Franchise Grade, Franchise Achievement track, Grade ORDER discount and Start Contract selection / gating are
-historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.13.18.md.
+historical only -> §INACTIVE LEGACY BOUNDARY; their inactive archive policy is owned by META_v2.13.21.md.
 
 ## DOCUMENT BASELINE POLICY
 
@@ -357,7 +357,7 @@ A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
-    SPEC_INDEX_v2.13.19
+    SPEC_INDEX_v2.13.21
     -> exact routed owner
     -> related current QA
     -> Current Source

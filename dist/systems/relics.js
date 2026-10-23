@@ -55,6 +55,7 @@ P.canRerollRelics=function(){const w=this.run.relicWindow;return !!w&&(w.milesto
 P.rerollRelics=function(){const s=this.run,w=s.relicWindow;if(!this.canRerollRelics())throw Error('지금은 점포지원 후보를 교환할 수 없습니다.');
  const price=this.relicRerollPrice();if(s.money<price)throw Error('점포지원 후보 교환 자금이 부족합니다.');
  s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;
+ (w.seen??=[]).push([...w.candidateIds]);/* the three that were traded away, for the anonymous statistics (privacy.html 제2조의2) */
  Object.assign(w,drawCandidates(this,w.milestoneDay,w.candidateIds));w.rerolls=(w.rerolls||0)+1;this.save();};
 /* Sloth's seals are not a second choice path: they are the other thing this window's one
    acquisition can be spent on. Two of D15/D20/D25 were drawn with the Run and D30 always
@@ -91,7 +92,7 @@ w.purchaseDay=s.phase==='foundation'?0:s.day;
 /* RELIC §ACQUISITION WINDOWS D0 (User 2026-10-01, v2.9.13 quick patch 3): the free first pick may wait. Deferring
    opens DAY 1 exactly as a pick does, and the D0 window stays open, still free, until the D5 window replaces it. */
 P.deferFoundationRelic=function(){if(this.run.phase!=='foundation')throw Error('지금은 점포지원 선택을 넘길 수 없습니다.');this.morning();this.save();};
-P.relicQuote=function(index,quantity,cart=this.run.cart||{}){const s=this.run,o=s.offers[index],it=D.itemBy[o.item];const entries=Object.keys(cart),skuTotal=entries.filter(i=>s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0),prior=entries.filter(i=>Number(i)<Number(index)&&s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0);let sum=0;for(let unit=1;unit<=quantity;unit++){let mult=1;if(skuTotal>=3){if(this.has('bulk')&&prior+unit>=3)mult*=1-D.relicParams.bulk.discount;}if(this.has('logisticsHQ')){const f=D.relicParams.logisticsHQ;mult*=1-Math.min(f.maxDiscount,f.perSale*(s.previousSales||0));}sum+=Math.round(o.price*Math.max(.45,mult));}return sum;};
+P.relicQuote=function(index,quantity,cart=this.run.cart||{}){const s=this.run,o=s.offers[index],it=D.itemBy[o.item];const entries=Object.keys(cart),skuTotal=entries.filter(i=>s.offers[i].item===o.item).reduce((n,i)=>n+cart[i],0);let sum=0;for(let unit=1;unit<=quantity;unit++){let mult=1;/* 묶음발주 계약 (User 2026-10-22): same item 3+ in one ORDER -> every unit of it */if(skuTotal>=3&&this.has('bulk'))mult*=1-D.relicParams.bulk.discount;if(this.has('logisticsHQ')){const f=D.relicParams.logisticsHQ;mult*=1-Math.min(f.maxDiscount,f.perSale*(s.previousSales||0));}sum+=Math.round(o.price*Math.max(.45,mult));}return sum;};
 P.ownedRelics=function(){return this.run.facilities.map(id=>D.relicBy[id]).filter(Boolean).map(r=>({id:r.id,name:r.name,rarity:r.rarity,description:r.description}));};
 G.Relics={food,field,known,directCounter,relatedPrep,status,offerWeight(g,it){let w=1;const has=id=>g.has(id);if(has('rareContract')&&it.rarity>=2)w*=D.relicParams.rareContract.rareWeightMult;if(has('hazardBoard')&&relatedPrep(it,known(g)))w*=D.relicParams.hazardBoard.weightMult;return w;},shelf(g,it){if(!food(it))return 0;const p=D.relicParams;return g.has('fridge')?p.fridge.shelfDays:0;}};
 })(globalThis);
