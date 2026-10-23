@@ -534,7 +534,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     SA-Q48: the former one-Bag-slot-filled -0.10 modifier is retired - the two-slot Bag is the
     capacity decision by itself. */
   if(n.injury&&it.category==='insurance')need+=.25;
- for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
+ for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;/* 구두쇠 (User 2026-10-23): judged on the price actually paid, so the trait line can name it exactly */if((bundle?price-bundle:price)>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&!n.newToday)need+=D.relicParams.premiumMember.rareIntentBonus;
  /* CORE_RUN §FIRST-RUN LESSONS (User 2026-10-02): the DAY 3 payday customer of the account's first Run takes the first
     150% offer it can pay for - once; every later one is decided as any customer's */

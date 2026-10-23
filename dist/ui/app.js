@@ -2672,10 +2672,12 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
 const MASTERY_STAT={combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신'};
 /* the two Stats a Job grows most - the ones Job Mastery raises */
 const masteryStats=j=>Adventurer.mainStats(j).map(i=>Adventurer.keys[i]);
-/* User 2026-10-23: each rank reads as the total it gives, not what it adds - the stat bonus carries on from rank 2 and
-   the level chances replace the rank before */
-const masteryEffect=(r,i)=>['주 능력치 2개 +'+r.stat+(i&&r.stat!==D.masteryRanks[i-1].stat?' ('+i+'단 포함)':'')]
- .concat(r.level.map((p,k)=>Math.round(p*100)+'% 확률로 레벨 +'+(k+1))).join(', ');
+/* User 2026-10-23: each rank names only what it changes from the rank before - the stat bonus as old → new, a level chance
+   as old → new (the chances replace, they do not add) */
+const masteryEffect=(r,i)=>{const prev=i?D.masteryRanks[i-1]:null,pc=x=>Math.round(x*100)+'%',out=[];
+ if(!prev)out.push('주 능력치 2개 +'+r.stat);else if(r.stat!==prev.stat)out.push('주 능력치 +'+prev.stat+' → +'+r.stat);
+ r.level.forEach((p,k)=>{const q=prev?.level[k]||0;if(p!==q)out.push('레벨 +'+(k+1)+' 확률 '+(q?pc(q)+' → ':'')+pc(p));});
+ return out.join(', ');};
 function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a),cap=Meta.storeCapital(a),beaten=Meta.distinctBossClear(a);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+cap.toLocaleString()+'</b>'
@@ -2685,7 +2687,7 @@ function masteryPanel(views,inRun){const a=game.account,rank=Meta.masteryRank(a)
  +'<div class="slot"><h4>직업 숙련</h4>'
  +D.masteryRanks.map((r,i)=>{const owned=i<rank,next=i===rank,open=beaten>=r.bosses;
    const state=owned?'<span class="muted">보유</span>'
-    :!next?'<span class="muted">'+(open?(i)+'단 먼저':'마왕 '+r.bosses+'종<br>토벌 후')+'</span>'
+    :!next?'<span class="muted">'+(open?(i)+'단 구매 후':'마왕 '+r.bosses+'종<br>토벌 후')+'</span>'
     :!open?'<span class="muted">마왕 '+r.bosses+'종<br>토벌 후</span>'
     :inRun?'<span class="muted">'+r.price.toLocaleString()+' 자본</span>'
     :masteryPending?'<div class="deco-confirm"><p class="smalltext">숙련 '+(i+1)+'단: '+r.price.toLocaleString()+' 자본을 씁니다. 남는 자본 '
