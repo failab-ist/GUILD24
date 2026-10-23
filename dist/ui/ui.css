@@ -3070,7 +3070,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the seal grows from its own top-right corner so the fall stays on the tape */
 .end-tape .print:has(.seal) .closed{padding-right:84px}
 .end-tape .print:has(.seal) .closed,.end-tape .print:has(.seal) .reason{word-break:keep-all}
-.end-tape .seal.lost{color:#6d3b30;box-shadow:inset 0 0 0 2px #6d3b30,inset 0 0 0 5px #6d3b3000;rotate:9deg;translate:-6px 6px;opacity:.5;
+.end-tape .seal.lost{color:#6d3b30;box-shadow:inset 0 0 0 2px #6d3b30,inset 0 0 0 5px #6d3b3000;rotate:9deg;translate:-6px 6px;opacity:.7;
  clip-path:polygon(0 0,100% 0,100% 62%,86% 62%,86% 100%,0 100%)}
 .end-tape .closed{margin:12px 0 0;font:500 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 .end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
@@ -4517,3 +4517,13 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .modal.wood-frame:has(.tabs) .slot-option>.deco-effect{box-shadow:none;padding-top:2px}
 /* 마감 영수증의 영업 시작 골드는 다른 줄과 같은 줄로 둔다 (결과 상자 하나만 눈에 띄게) */
 .print .row.open,.p-closing .print .row.open{background:none;box-shadow:none;clip-path:none;padding:8px 0}
+/* 도감 상품 목록: 상자 없이 아이콘을 이름 옆에, 항목 사이는 가는 줄 */
+.modal .unlock-grid:has(>.unlock>svg){gap:0 22px}
+.modal .unlock:has(>svg){display:grid;grid-template-columns:42px minmax(0,1fr) auto;column-gap:12px;align-items:start;padding:14px 4px;background:none;box-shadow:inset 0 1px 0 #ffffff1f}
+.modal .unlock:has(>svg):first-child{box-shadow:none}
+.modal .unlock:has(>svg)>svg{grid-row:1/span 4;grid-column:1;margin-top:2px}
+.modal .unlock:has(>svg)>:not(svg):not(.lock-mark){grid-column:2/span 2}
+.modal .unlock:has(>svg)>h3{grid-column:2;grid-row:1;margin-bottom:6px}
+.modal .unlock:has(>svg)>.gold-text{grid-column:3;grid-row:1;margin:3px 0 0;text-align:right;white-space:nowrap}
+.modal .unlock:has(>svg).locked{outline:0}
+@media(min-width:1024px){.modal .unlock:has(>svg)>.gold-text{grid-column:2/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
