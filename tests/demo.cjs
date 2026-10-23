@@ -19,7 +19,7 @@ const play=prefix=>{const ends=[],end=P.end;
  try{G.Debug.trajectory({trajectories:8,runs:3,policy:'investor',prefix});}finally{P.end=end;}
  return ends;};
 
-const a=play('demo-test');
+const a=play('demo-test2');
 assert.equal(a.length,24,'every Run ends');
 for(const e of a){
  assert.equal(e.boss,'PRIDE','the demo Boss is 프라이드');
@@ -32,5 +32,5 @@ const reached=a.filter(e=>e.reason===DEMO.reason);
 assert.ok(reached.length>0,'some Run reaches the DAY '+DEMO.endDay+' ending');
 for(const e of reached){assert.equal(e.day,DEMO.endDay);assert.ok(e.gain>0,'a DAY '+DEMO.endDay+' Run earns Capital');}
 assert.ok(a.some(e=>e.reason!==DEMO.reason),'a death-limit or bankrupt close still ends the usual way');
-assert.deepEqual(play('demo-test').map(e=>[e.day,e.reason,e.gain]),a.map(e=>[e.day,e.reason,e.gain]),'the same seeds play the same way');
+assert.deepEqual(play('demo-test2').map(e=>[e.day,e.reason,e.gain]),a.map(e=>[e.day,e.reason,e.gain]),'the same seeds play the same way');
 console.log('demo rules ok · '+a.length+' Runs, '+reached.length+' reached DAY '+DEMO.endDay);

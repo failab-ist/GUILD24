@@ -797,6 +797,7 @@ function render(){
  if(phase==='morning'&&arrived)dayFlip(s.day);
  if(phase==='morning'&&changed)Preload.faces([...s.npcs.filter(n=>n.introduced),...s.npcs.filter(n=>!n.introduced)].map(n=>Scene.npcArt(n)).filter(Boolean));
  if(phase==='end'&&arrived)endReveal();
+ if(phase==='end')hallMaybe();
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to
@@ -2344,11 +2345,18 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
    no save field. The lost are a number (the notebook lists their names); a Run with no expedition prints no 원정 row. */
 function runBlock(row){const s=game.run,met=s.npcs.filter(n=>n.introduced),recs=s.npcs.flatMap(n=>n.records||[]);
  const top=met.reduce((b,n)=>!b||n.level>b.level||(n.level===b.level&&n.loyalty>b.loyalty)?n:b,null);
+ /* User 2026-10-23 (반복 느낌 줄이기): the customer who came most often, and among the lost the one the store had raised
+    furthest - the highest Level, then the more frequent visitor. Read off the Run; no save field. */
+ const often=met.reduce((b,n)=>!b||(n.visits||0)>(b.visits||0)?n:b,null),
+  missed=met.filter(n=>!n.alive).reduce((b,n)=>!b||n.level>b.level||(n.level===b.level&&(n.visits||0)>(b.visits||0))?n:b,null);
  return '<div class="block this-run"><h4>이 점포의 기록</h4>'
-  +row('버틴 날','DAY '+s.day)
+  /* User 2026-10-23: a clear always stands on DAY 30, so the row says nothing there */
+  +(s.win?'':row('버틴 날','DAY '+s.day))
   +row('손님',met.length+' (단골 '+(s.stats.regulars||0)+')')
-  +row('돌아오지 못한 사람',s.stats.deaths||0)
   +(top?row('가장 성장한 손님',E(top.name)+' Lv.'+top.level):'')
+  +(often?row('가장 자주 온 손님',E(often.name)+' Lv.'+often.level+' '+often.visits+'회'):'')
+  +row('돌아오지 못한 사람',s.stats.deaths||0)
+  +(missed?'<div class="row sub"><span>그중 가장 아쉬운 손님</span><b>'+E(missed.name)+' Lv.'+missed.level+'</b></div>':'')
   +(recs.length?row('원정',recs.length+'건 (대성공 '+recs.filter(r=>r.outcome==='대성공').length+')'):'')+'</div>';}
 /* UI_UX §END — CAPITAL METER (User 2026-10-18): where 현재 점포 자본 stands against the Slot prices the account has not filled yet.
    Prices are per Slot, every Slot offers all three kinds, so the tick labels are Slots and never a Decoration or a kind - nothing is
@@ -2465,6 +2473,64 @@ function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)r
     +'<span class="carried">'+(carried.length?'<span class="last">마지막 상품</span> '+E(carried.join(', ')):'빈손으로 갔다')+'</span>'
     +'<span class="see">기록 보기</span></div>'
     +'</button>';}).join('')+'</div></section>';}
+/* 명예의 전당 (User 2026-10-23, a hall-of-fame roll call): a Boss clear, on arriving at the ending, first plays its party one
+   member at a time on a dark stage, then strikes a 명예의 전당 stamp. A tap jumps to the finished frame; 건너뛰기 leaves at
+   once; either way the ending underneath is the same and its seal lands when the stage lifts. Shown once per Run
+   (run.hallSeen). The record itself lives on the account (Meta.recordHall) and in the codex. */
+let hall=null;
+/* The beat follows the Pokemon Hall of Fame: each member steps alone into a spotlight with their name plate, then takes
+   their place in the line; once the line is whole, light falls, a camera flash takes the picture and the line is
+   recorded. Times in ms. */
+const HALL={fade:300,first:900,each:1700,enter:420,hold:1050,leave:260,flash:240};
+function hallCard(m,i){const n={name:m.name,appearance:m.appearance,job:m.job};
+ const carried=(m.items||[]).map(id=>D.itemBy[id]?.name).filter(Boolean);
+ return '<div class="hall-card" style="--i:'+i+'">'+portrait(n,88)
+  +'<b>'+E(m.name)+'</b><span class="who-line">Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span>'
+  +'<span class="visits">방문 '+(m.visits||0)+'회</span>'
+  +'<span class="carried">'+(carried.length?E(carried.join(', ')):'빈손')+'</span></div>';}
+function hallSpot(m){const n={name:m.name,appearance:m.appearance,job:m.job};
+ return portrait(n,168)+'<div class="hall-plate"><b>'+E(m.name)+'</b><span>Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span></div>';}
+function hallMarkup(e){const b=D.bossBy[e.boss];
+ return '<div class="hall-dim"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-sparks" aria-hidden="true">'+'<i></i>'.repeat(18)+'</div>'
+  +'<div class="hall-flash" aria-hidden="true"></div><button type="button" class="hall-skip" data-action="hall-done">건너뛰기</button>'
+  +'<div class="hall-body"><header class="hall-head"><h2>명예의 전당</h2><p class="hall-boss">'+E(b?.name||'')+' 토벌</p>'
+  +'<p class="hall-where"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p></header>'
+  +'<div class="hall-spot" aria-hidden="true"></div>'
+  +'<div class="hall-cards">'+e.members.map(hallCard).join('')+'</div>'
+  +'<div class="hall-foot"><p class="hall-count">'+e.run+'번째 점포의 원정대가 명예의 전당에 기록되었다.</p>'
+  +btn('계속','hall-done','stamp hall-go')+'</div></div>';}
+function hallMaybe(){const s=game.run,e=game.account.hall?.[0];
+ if(hall||!s||s.phase!=='end'||!s.win||!s.finalReport||s.hallSeen||!e||e.run!==game.account.runs)return;
+ const el=document.createElement('div');el.className='hall';el.setAttribute('role','dialog');el.setAttribute('aria-label','명예의 전당');
+ el.innerHTML=hallMarkup(e);document.body.appendChild(el);$('#app').inert=true;
+ hall={el,e,timers:[],anims:[]};
+ el.addEventListener('click',ev=>{if(!ev.target.closest('[data-action]'))hallFinish();});
+ if(!motionOK()){el.classList.add('done','still');el.querySelector('.hall-go').focus();return;}
+ const go=(node,frames,opt)=>{const a=node.animate(frames,{fill:'both',...opt});hall.anims.push(a);return a;},
+  at=(ms,fn)=>hall.timers.push(setTimeout(fn,ms)),H=HALL,spot=el.querySelector('.hall-spot'),cards=[...el.querySelectorAll('.hall-card')];
+ go(el.querySelector('.hall-dim'),[{opacity:0},{opacity:1}],{duration:H.fade,easing:'ease-out'});
+ go(el.querySelector('.hall-head'),[{opacity:0,transform:'translateY(-12px)'},{opacity:1,transform:'none'}],{duration:H.fade,delay:H.fade,easing:'ease-out'});
+ go(el.querySelector('.hall-light'),[{opacity:0},{opacity:1}],{duration:H.enter,delay:H.first-200,easing:'ease-out'});
+ cards.forEach(c=>go(c,[{opacity:0},{opacity:0}],{duration:1}));
+ e.members.forEach((m,i)=>{const t=H.first+i*H.each;
+  at(t,()=>{spot.innerHTML=hallSpot(m);Sound.play('hallstep');
+   go(spot,[{opacity:0,transform:'translateX(64px)'},{opacity:1,transform:'none'}],{duration:H.enter,easing:'cubic-bezier(.2,.8,.3,1)'});
+   go(spot.querySelector('.pfp'),[{filter:'brightness(4)'},{filter:'brightness(1)'}],{duration:H.enter*1.6,easing:'ease-out'});
+   go(spot.querySelector('.hall-plate'),[{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:240,delay:H.enter-80,easing:'ease-out'});});
+  at(t+H.enter+H.hold,()=>{go(spot,[{opacity:1,transform:'none'},{opacity:0,transform:'translateY(24px) scale(.6)'}],{duration:H.leave,easing:'ease-in'});
+   go(cards[i],[{opacity:0,transform:'scale(.7)'},{opacity:1,transform:'scale(1.06)',offset:.7},{opacity:1,transform:'none'}],{duration:H.leave+160,delay:H.leave-80,easing:'ease-out'});});});
+ const end=H.first+e.members.length*H.each;
+ at(end,()=>{el.classList.add('whole');Sound.play('hallflash');
+  go(el.querySelector('.hall-flash'),[{opacity:0},{opacity:.85,offset:.25},{opacity:0}],{duration:H.flash*2,easing:'ease-out'});
+  go(el.querySelector('.hall-light'),[{opacity:1},{opacity:.35}],{duration:600,easing:'ease-out'});});
+ go(el.querySelector('.hall-count'),[{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:320,delay:end+H.flash,easing:'ease-out'});
+ go(el.querySelector('.hall-go'),[{opacity:0},{opacity:1}],{duration:300,delay:end+H.flash+300,easing:'ease-out'});
+ at(end+H.flash+300,()=>{el.classList.add('done');el.querySelector('.hall-go').focus({preventScroll:true});});}
+/* a tap on the stage: every beat lands at once */
+function hallFinish(){if(!hall||hall.el.classList.contains('done'))return;hall.timers.forEach(clearTimeout);hall.anims.forEach(a=>a.cancel());hall.anims=[];hall.el.classList.add('done','whole');hall.el.querySelector('.hall-go').focus({preventScroll:true});}
+function hallClose(){if(!hall)return;const h=hall;hall=null;h.timers.forEach(clearTimeout);h.anims.forEach(a=>a.cancel());h.el.remove();
+ $('#app').inert=false;const s=game.run;if(s){s.hallSeen=true;game.save();}
+ playPhase('end');}
 /* BATCH 3 END: a bankruptcy or death-limit closure is decided at closeDay(), after the last
    NIGHT and CLOSING were already read, yet the ending printed that whole night again under the
    tape - every record, its growth chips, even a speech balloon left over from the day. The
@@ -2653,9 +2719,23 @@ function unlockBoard(){const {done,next}=unlockLists();
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
 function jobInfo(job){const main=Adventurer.mainStats(job);
  return `<p class="tale job-info"><span>특화 능력치: ${main.map(i=>MASTERY_STAT[Adventurer.keys[i]]).join(', ')}</span><span class="job-start">시작 능력치: ${Adventurer.keys.map((k,i)=>`${MASTERY_STAT[k]} ${job.stats[i]}`).join(', ')}</span></p>`;}
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()}<span class="sp">보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</span></p><p class="smalltext">직업 숙련 ${Meta.masteryRank(a)} / ${D.masteryRanks.length}<span class="sp">서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</span></p></div><span class="muted">${a.runs}회 영업<span class="sp">${a.wins}회 마왕 토벌</span></span></div><details><summary>발견 수첩: ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${isLocked(it)?LOCK_MARK:''}${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}${codexTab==='jobs'?jobInfo(it):`<p class="tale">${E(it.description||'')}</p>`}<p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()}<span class="sp">보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</span></p><p class="smalltext">직업 숙련 ${Meta.masteryRank(a)} / ${D.masteryRanks.length}<span class="sp">서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</span></p></div><span class="muted">${a.runs}회 영업<span class="sp">${a.wins}회 마왕 토벌</span></span></div><details><summary>발견 수첩: ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['boss','마왕'],['hall','명예의 전당'],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='boss'?bossCodex():codexTab==='hall'?hallCodex():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${isLocked(it)?LOCK_MARK:''}${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}${codexTab==='jobs'?jobInfo(it):`<p class="tale">${E(it.description||'')}</p>`}<p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 /* UI_UX §CODEX BOSS TAB: the Bosses the Player has met, this Run's Boss first once its identity is shown. Only the Trait is kept -
    the Final Hazards change every Run - and a Boss never met is not listed at all. */
+/* 명예의 전당 (User 2026-10-23): every clearing party the account kept, newest first. Each clear says whether it was an
+   ordinary store or an Ascension; each member is its own card, three across. The record is capped (Meta HALL_MAX) and the
+   tab opens on the newest HALL_PAGE, with 더 보기 for the next page, so a long history never becomes one endless scroll. */
+const HALL_PAGE=10;let hallShown=HALL_PAGE;
+const hallTier=e=>e.ascension?'승천 '+e.ascension:'일반';
+const hallTag=e=>'<span class="hall-tier'+(e.ascension?' asc':'')+'">'+hallTier(e)+'</span>';
+function hallCodex(){const list=game.account.hall||[];
+ if(!list.length)return '<p class="boss-none">아직 마왕을 쓰러뜨린 원정대가 없다.</p>';
+ const left=list.length-hallShown;
+ return list.slice(0,hallShown).map(e=>'<div class="unlock hall-entry"><h3>'+e.run+'번째 점포</h3><p class="hall-entry-boss">'+E(D.bossBy[e.boss]?.name||e.boss)+' 토벌</p>'
+  +'<p class="hall-where smalltext"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p>'
+  +'<div class="hall-team">'+e.members.map(m=>'<div class="hall-mate">'+portrait({name:m.name,appearance:m.appearance,job:m.job},56)
+   +'<b>'+E(m.name)+'</b><span>Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span></div>').join('')+'</div></div>').join('')
+  +(left>0?btn('더 보기 ('+left+')','hall-more','small hall-more'):'');}
 function bossCodex(){const a=game.account,s=game.run,c=Copy.boss,r=s?.bossReveal||{},cur=r.identitySeen?s?.bossId:null;
  const known=id=>{const k=Meta.bossKnown(a,id);return id===cur?{identity:k.identity||!!r.identitySeen,trait:k.trait||!!r.traitSeen}:k;};
  const ids=D.bosses.map(b=>b.id).filter(id=>known(id).identity);
@@ -3130,7 +3210,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'roster':sound('ui');setModal('roster');break;
  case'npc':sound('ui');setModal('npc:'+id);break;
  case'codex':sound('ui');setModal('codex');break;
- case'codex-tab':codexTab=id;decoPending=null;sound('ui');renderModal();break;
+ case'codex-tab':codexTab=id;hallShown=HALL_PAGE;decoPending=null;sound('ui');renderModal();break;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
  case'credits':sound('ui');setModal('credits');break;
@@ -3154,6 +3234,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
  case'final-npc':sound('ui');setModal('npc:'+id);break;
  case'final-roster':sound('ui');setModal('finalRoster');break;
+ case'hall-done':sound('ui');hallClose();break;
+ case'hall-more':hallShown+=HALL_PAGE;sound('ui');renderModal();break;
  case'final-view':case'final-detail':sound('ui');setModal('npc:'+id);break;
  /* picked from the notebook, the choice is confirmed where the adventurer was read, and the muster shows it */
  case'final-team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');setModal(null);render();break;

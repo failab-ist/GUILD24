@@ -33,6 +33,13 @@ function fresh(){
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
   franchise:freshFranchise()};
 }
+/* 명예의 전당 (User 2026-10-23): every Boss clear keeps its party on the account, newest first, for the clear presentation and
+   the codex. A record only - nothing reads it back into play. Kept to HALL_MAX entries. */
+const HALL_MAX=50;
+function recordHall(a,s){const by=id=>s.npcs.find(n=>n.id===id);
+ (a.hall??=[]).unshift({run:a.runs,boss:s.bossId,ascension:s.ascension||0,branch:s.branch,day:s.day,
+  members:s.finalReport.members.map(m=>{const n=by(m.npcId);return {name:m.name,job:m.job,level:m.level,appearance:n?.appearance??0,visits:n?.visits||0,items:[...(m.items||[])]};})});
+ if(a.hall.length>HALL_MAX)a.hall.length=HALL_MAX;}
 /* META_v2.8 §DECORATION COLLECTION / LOADOUT — the Account side. Nothing here reads or writes a
    Relic: a Decoration never enters `run.facilities`, never marks a Relic owned and never consumes
    a Relic slot. */
@@ -242,7 +249,7 @@ function recordBestSales(a,run,sales){if(run.salesBefore!==undefined)return;run.
 const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
-G.Meta={fresh,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,bossCleared,distinctBossClear,
+G.Meta={fresh,recordHall,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,bossCleared,distinctBossClear,
  opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
  ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,masteryRank,buyMastery,affordable,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

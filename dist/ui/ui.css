@@ -1845,6 +1845,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .row.sum{margin-top:5px;padding-top:7px;box-shadow:inset 0 2px 0 #2c241833}
 .print .row.sum span{color:#2c2418;font-weight:600}
 .print .row.sum b{font-size:17px}
+.print .row.sub{padding-left:14px}
+.print .row.sub span{font-size:12px;color:#7a705c}
 /* UI_UX §PER-PHASE APPLICATION RULES (CLOSING): the day's result is what has to be read first,
    and it was the third-heaviest figure on the tape - under the drawer stamp and barely over the
    판매 마진 subtotal. It is the tape's total line now: double-ruled off the way a register rules
@@ -4542,6 +4544,79 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 @media(min-width:1024px){.modal .unlock-grid>.unlock:not(:has(>svg:not(.lock-mark)))>.gold-text{grid-column:1/span 2;grid-row:auto;margin:8px 0 0;text-align:left}}
 .modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:26px}
 @media(min-width:1024px){.modal .unlock-grid>.unlock.locked.locked>.gold-text{margin-right:0}}
+/* 명예의 전당 (User 2026-10-23): the clear's party, after the Pokemon Hall of Fame - one member at a time in a spotlight
+   with a name plate, then the whole line, three across, under falling light. Opaque flat cards; no stamp (the title says it). */
+.hall{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
+ padding:calc(56px + var(--sa-top)) 12px calc(24px + var(--sa-bottom));overflow-y:auto;color:#f3e6c8}
+.hall-dim{position:fixed;inset:0;background:#0d0b10}
+.hall-light{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 46% 58% at 50% 42%,#f6d77a2e,#f6d77a0a 55%,#0000 72%)}
+.hall-flash{position:fixed;inset:0;pointer-events:none;background:#fff;opacity:0}
+.hall-sparks{position:fixed;inset:0;pointer-events:none;overflow:hidden;visibility:hidden}
+.hall.whole .hall-sparks{visibility:visible}
+.hall-sparks i{position:absolute;top:-8px;width:4px;height:4px;background:#f6d77a;animation:hall-fall 3.2s linear infinite}
+.hall-sparks i:nth-child(odd){width:3px;height:3px;background:#fff3d6}
+.hall-sparks i:nth-child(1){left:11%;animation-delay:-0.0s;animation-duration:2.6s}
+.hall-sparks i:nth-child(2){left:48%;animation-delay:-0.4s;animation-duration:3.0s}
+.hall-sparks i:nth-child(3){left:85%;animation-delay:-0.8s;animation-duration:3.3s}
+.hall-sparks i:nth-child(4){left:25%;animation-delay:-1.2s;animation-duration:3.6s}
+.hall-sparks i:nth-child(5){left:62%;animation-delay:-1.6s;animation-duration:4.0s}
+.hall-sparks i:nth-child(6){left:2%;animation-delay:-2.0s;animation-duration:2.6s}
+.hall-sparks i:nth-child(7){left:39%;animation-delay:-2.5s;animation-duration:3.0s}
+.hall-sparks i:nth-child(8){left:76%;animation-delay:-2.9s;animation-duration:3.3s}
+.hall-sparks i:nth-child(9){left:16%;animation-delay:-0.1s;animation-duration:3.6s}
+.hall-sparks i:nth-child(10){left:53%;animation-delay:-0.5s;animation-duration:4.0s}
+.hall-sparks i:nth-child(11){left:90%;animation-delay:-0.9s;animation-duration:2.6s}
+.hall-sparks i:nth-child(12){left:30%;animation-delay:-1.3s;animation-duration:3.0s}
+.hall-sparks i:nth-child(13){left:67%;animation-delay:-1.7s;animation-duration:3.3s}
+.hall-sparks i:nth-child(14){left:7%;animation-delay:-2.1s;animation-duration:3.6s}
+.hall-sparks i:nth-child(15){left:44%;animation-delay:-2.5s;animation-duration:4.0s}
+.hall-sparks i:nth-child(16){left:81%;animation-delay:-2.9s;animation-duration:2.6s}
+.hall-sparks i:nth-child(17){left:21%;animation-delay:-0.2s;animation-duration:3.0s}
+.hall-sparks i:nth-child(18){left:58%;animation-delay:-0.6s;animation-duration:3.3s}
+@keyframes hall-fall{from{transform:translateY(0)}to{transform:translateY(105vh)}}
+@media(prefers-reduced-motion:reduce){.hall-sparks{display:none}}
+.hall-body{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.hall-head{text-align:center}
+.hall-head h2{font:500 32px/1.1 var(--f-plate);-webkit-font-smoothing:none;color:#f6d77a;letter-spacing:.06em}
+.hall-head p{margin-top:8px;font:500 13px/1.4 var(--ui);color:#cdbfa3}
+.hall-head .hall-boss{margin-top:10px;font:600 15px/1.4 var(--ui);color:#f3e6c8}
+.hall-head .hall-where{margin-top:4px}
+.hall-where{display:flex;align-items:center;justify-content:center;gap:8px}
+.hall-where .hall-tier{padding:3px 7px;font-size:11px}
+.hall-spot{height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.hall-spot .pfp{width:var(--pfp);height:var(--pfp);object-fit:contain}
+.hall-plate{min-width:200px;padding:9px 16px 8px;text-align:center;background:#f3e6c8;color:#2c2418;box-shadow:inset 0 0 0 2px #2c2418,inset 0 0 0 4px #f3e6c8,inset 0 0 0 6px #2c2418;clip-path:var(--px-cut)}
+.hall-plate b{display:block;font:500 22px/1.2 var(--f-plate);-webkit-font-smoothing:none}
+.hall-plate span{font:600 13px/1.3 var(--ui);color:#6b5a3a}
+.hall.whole .hall-spot{display:none}
+.hall-cards{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hall-card{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:12px 6px 11px;text-align:center;
+ background:#231d24;box-shadow:inset 0 0 0 2px #4a3d4c;clip-path:var(--px-cut)}
+.hall-card .pfp{flex:0 0 auto;width:var(--pfp);height:var(--pfp);object-fit:contain;background:#151118;margin-bottom:4px}
+.hall-card b{max-width:100%;font:500 17px/1.2 var(--f-plate);-webkit-font-smoothing:none;color:#fff3d6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hall-card .who-line{font:600 12px/1.3 var(--ui);color:#f6d77a}
+.hall-card .visits,.hall-card .carried{font:400 11px/1.35 var(--ui);color:#b9ab90;word-break:keep-all}
+.hall-foot{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4px}
+.hall-count{font:500 14px/1.5 var(--ui);color:#f3e6c8;text-align:center;word-break:keep-all}
+.hall-go{min-width:200px}
+.hall-skip{position:fixed;z-index:1;top:calc(12px + var(--sa-top));right:12px;padding:8px 12px;background:#231d24;color:#cdbfa3;
+ border:0;box-shadow:inset 0 0 0 2px #4a3d4c;font:600 13px/1 var(--ui);cursor:pointer}
+.hall.done .hall-skip{visibility:hidden}
+@media(min-width:1024px){.hall-body{max-width:960px;gap:22px}.hall-head h2{font-size:44px}.hall-spot{height:330px}
+ .hall-spot .pfp{width:220px;height:220px}.hall-cards{gap:16px}.hall-card{padding:18px 10px 16px}.hall-card .pfp{width:140px;height:140px}
+ .hall-card b{font-size:22px}.hall-card .who-line{font-size:14px}.hall-card .visits,.hall-card .carried{font-size:13px}}
+.hall-entry{grid-column:1/-1}
+.hall-entry-boss{margin-top:4px;font:600 15px/1.4 var(--ui);color:var(--gold)}
+.hall-entry .hall-where{justify-content:flex-start;margin-top:4px}
+.hall-tier{flex:0 0 auto;padding:4px 8px;font:600 12px/1 var(--ui);color:#e8dcc0;box-shadow:inset 0 0 0 2px #e8dcc066}
+.hall-tier.asc{color:#f6d77a;box-shadow:inset 0 0 0 2px #f6d77a}
+.hall-team{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.hall-mate{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:10px 4px 9px;text-align:center;
+ background:#00000038;box-shadow:inset 0 0 0 1px #ffffff1f;clip-path:var(--px-cut)}
+.hall-mate .pfp{width:var(--pfp);height:var(--pfp);object-fit:contain}
+.hall-mate b{font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hall-mate span{font-size:11px;color:var(--muted,#9a8f7a)}
+.hall-more{grid-column:1/-1;justify-self:center}
 /* 도감 직업: 특화 능력치와 시작 능력치. 잠긴 직업도 보이게 한다(해금 동기) */
 .job-info span{display:block}
 .job-info .job-start{margin-top:4px;color:#b9ab8c}
