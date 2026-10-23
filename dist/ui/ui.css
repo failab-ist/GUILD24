@@ -4646,3 +4646,5 @@ html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
  .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{margin-top:6px}
  .p-sale:not(.sale-desk) .dock{padding-top:14px}
 }
+/* 판매 진열대 머리판(나무 타이틀 막대)을 위아래 2px씩 키워 24→28px로. 폰 세로 공간 때문에 줄였던 값이라 작은 폰도 소폭이라 같이 되돌린다 */
+.p-sale:not(.sale-desk) .shelf-head{padding-top:4px;padding-bottom:4px}
