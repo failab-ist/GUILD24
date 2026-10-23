@@ -2727,7 +2727,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-prep .prep-note{padding-top:16px}
 .p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
 .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
-.p-prep .prep-status{margin:0;padding:0 0 4px;font:500 12px/1.4 var(--ui);color:#fff3d6;text-shadow:0 1px 0 #3a2814,0 0 3px #3a2814;text-align:center}
+.p-prep .prep-status{margin:-2px 0 0;padding:0 0 6px;font:500 12px/1.4 var(--ui);color:#fff3d6;text-shadow:0 1px 0 #3a2814,0 0 3px #3a2814;text-align:center}
 /* each Slot is its place in the room: the Decoration standing there, or its empty spot, and a small tag naming it */
 /* a place is at least a 44 px target: it grows away from the surface it is seated on (the counter pieces and the plaque
    upward from their foot / down from their nail, the 간판 up into the ceiling it hangs from), so its drawing does not move */
