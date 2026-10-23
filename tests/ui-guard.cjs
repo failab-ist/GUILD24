@@ -3052,7 +3052,7 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
 /* COPY_AUDIT §1-1 / §1-5 / §1-6 / §9-1 / §9-2 — pre-Run, reset and store-management microcopy.
    Exact approved text; no mechanic is touched. */
 test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is the approved text',()=>{
- assert.ok(app.includes("'보유 장식 없음'"),'§1-1 the empty Decoration state');
+ assert.ok(!app.includes("'보유 장식 없음'")&&app.includes('장식은 점포를 열기 전에 변경할 수 있습니다</b>'),'§1-1 the rail note shows only with an owned Decoration');
  assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
  assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
  assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.'),'§1-5 body');
@@ -3450,7 +3450,7 @@ test('OPENING: the preparation scene starts on the three axes, with no franchise
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
   assert.ok(intro.includes(line),'the approved line is present: '+line);
  /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the three lines are one note pinned to the `새 점포 준비` board */
- assert.ok(/<p class="board-rail">새 점포 준비<b class="rail-note">/.test(intro),'the board is titled 새 점포 준비, with the decoration note on the same rail');
+ assert.ok(/<p class="board-rail">새 점포 준비.*<b class="rail-note">/.test(intro),'the board is titled 새 점포 준비, with the decoration note on the same rail');
  assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 길드24 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
  assert.ok(/<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다\.<\/span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\.<\/span>/.test(intro),'lines 2 and 3 follow it');
  // everything the change was scoped to keep

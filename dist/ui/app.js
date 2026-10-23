@@ -2792,7 +2792,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
    +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="170" alt="마왕 잡는 편의점"></h1>'
    +ascPicker(a)+'</div></span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
-   +'<p class="board-rail">새 점포 준비<b class="rail-note">'+(owned.length?'보유 장식은 점포를 열면 고정됩니다':'보유 장식 없음')+'</b></p>'
+   +'<p class="board-rail">새 점포 준비'+(owned.length?'<b class="rail-note">장식은 점포를 열기 전에 변경할 수 있습니다</b>':'')+'</p>'
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
     +(DEMO?DEMO.prepNote():prepNote(a))
     +'</div></div>'

@@ -2709,13 +2709,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* phone file (941x1672): ceiling 0-18.6 */
 .decoplate.sign{--x:.15;--y:.113;--w:.16}
 .decoplate.wall{--x:.76;--y:.55;--w:.11}
+/* User 2026-10-23: on a tall phone the plaque hangs beside the window, under the board (a short phone keeps the painted spot) */
+@media(min-height:800px){.decoplate.wall{--y:.468}}
 .decoplate.display{--cx:.18;--dw:.15}
 .decoplate.counter{--cx:.825;--dw:.15}
 /* wide file (1672x941): ceiling 0-19 */
 @media(min-width:1024px),(min-width:768px) and (orientation:landscape){
  .deco-layer{--ar:1.7768;--gap:10px}
  .decoplate.sign{--x:.29;--y:.093;--w:.08}
- .decoplate.wall{--x:.629;--y:.44;--w:.038}
+ .decoplate.wall{--x:.70;--y:.5875;--w:.038} /* under the painted calendar, not between it and the window */
  .decoplate.display{--cx:.2645;--dw:.2}
  .decoplate.counter{--cx:.735;--dw:.17}
 }
