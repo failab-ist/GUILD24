@@ -94,7 +94,7 @@ Regenerate the vendored copies with `npm run assets`.
 - source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
   attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-WantedSans.txt`).
-- why: `design_ssot/UI_UX_v2.13.21.md` routes the current UI/UX truth and inherits the typography baseline that names Wanted Sans as the INFORMATION face, replacing
+- why: `design_ssot/UI_UX_v3.0.0.md` routes the current UI/UX truth and inherits the typography baseline that names Wanted Sans as the INFORMATION face, replacing
   Pretendard. Type carries two jobs and they must not be mixed: the atmosphere face takes
   signage, document titles and diegetic readouts; the information face takes every value,
   effect line, price, count and control label, including both primary actions. A system stack
@@ -141,7 +141,7 @@ Regenerate the vendored copies with `npm run assets`.
 - modification status: **none**. The shipped bytes are the upstream bytes; only the filename
   changes, from the vendor's UI vocabulary to the cue's role in this game. No re-encode, no
   trim, no level change — gain and layering happen live in `dist/ui/audio.js`.
-- why: `design_ssot/UI_UX_v2.13.21.md` §AUDIO VOICE asks the material cues for mechanical /
+- why: `design_ssot/UI_UX_v3.0.0.md` §AUDIO VOICE asks the material cues for mechanical /
   paper / register / fixture sound, with short, dry, readable transients and no sci-fi or
   arcade character. An oscillator can imply that material; it cannot be it. The `mechanical`
   theme is the one in the package that matches the voice: measured in a browser, every adopted

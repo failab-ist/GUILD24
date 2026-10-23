@@ -1,6 +1,6 @@
 # GUILD24 v2.8 COPY AUDIT — USER APPROVED
 
-DOC_VERSION=2.13.21
+DOC_VERSION=3.0.0
 
 - 상태: **USER APPROVED / CANONICAL COPY**
 - 범위: **Player-facing exact Copy**
