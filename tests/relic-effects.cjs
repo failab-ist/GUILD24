@@ -541,15 +541,17 @@ test('소문 수집 게시판: every Normal Event Day rolls an Event; window and
  s.firstRun=true;assert.equal(g.eventEligibleDay(1),true,'the first Run DAY 1 opens too, as the card promises');
  s.facilities=[];assert.equal(g.eventEligibleDay(1),false,'without it the first Run DAY 1 stays quiet');
 });
-test('단골 추천 엽서함: a 단골 visit lifts every other visitor of the Day by 단골도 +5 at Night',()=>{
- const night=(fac,regLoyalty)=>{const g=fresh('postcard'),s=g.run;const [a,b,c]=s.npcs;
+test('단골 추천 엽서함: only visitors who leave after a 단골 visit gain 단골도 +5',()=>{
+ const night=(fac,regLoyalty,order)=>{const g=fresh('postcard'),s=g.run;const [a,b,c]=s.npcs;
   for(const n of [a,b,c]){n.alive=true;n.introduced=true;n.history=[];n.pack=[];n.traits=[];n.recovery=0;n.destination=0;n.claimedDestination=0;n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};}
   g.rng={next:()=>.5,int:a=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
-  a.loyalty=regLoyalty;b.loyalty=10;c.loyalty=20;s.queue=[a.id,b.id,c.id];s.cursor=3;s.phase='sell';s.facilities=fac;s.dayFacilities=fac;
-  const before=[a,b,c].map(n=>n.loyalty);g.night();return [a,b,c].map((n,i)=>n.loyalty-before[i]);};
+  a.loyalty=regLoyalty;b.loyalty=10;c.loyalty=20;s.queue=(order||[a,b,c]).map(n=>n.id);s.cursor=0;s.phase='sell';s.facilities=fac;s.dayFacilities=fac;g.arrive();
+  const before=[a,b,c].map(n=>n.loyalty);for(let i=0;i<3;i++)g.depart();return [a,b,c].map((n,i)=>n.loyalty-before[i]);};
  const base=night([],60),card=night(['postcard'],60),none=night(['postcard'],40);
- assert.deepEqual(card.map((v,i)=>v-base[i]),[0,5,5],'the others +5, the 단골 itself nothing');
+ assert.deepEqual(card.map((v,i)=>v-base[i]),[0,5,5],'the visitors after the 단골 +5, the 단골 itself nothing');
  assert.deepEqual(none,night([],40),'no 단골 that Day, no gain');
+ const g2=fresh('postcard'),ord=[g2.run.npcs[1],g2.run.npcs[0],g2.run.npcs[2]];
+ assert.deepEqual(night(['postcard'],60,ord).map((v,i)=>v-night([],60,ord)[i]),[0,0,5],'the one who came before the 단골 gets nothing');
 });
 test('길드 구조대 계약: a Death that gets past the Items turns into 중상 on its own 15% roll',()=>{
  assert.equal(DATA.relicParams.rescueContract.chance,.15);
