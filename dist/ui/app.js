@@ -3118,7 +3118,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
     return until the player pressed 다음. */
  case'depart-go':setModal(null);
- case'depart':if(a==='depart'&&s.firstRun&&selected){sound('ui');setModal('departConfirm');break;}/* first Run only: a Good picked but not priced goes with the Customer unsold */
+ case'depart':if(a==='depart'&&s.firstRun&&selected&&(()=>{const who=game.current(),st=s.inventory.find(x=>x.id===selected);return !who||!st||game.interest(who,D.itemBy[st.item],'half').debit<=spendable(who);})()){sound('ui');setModal('departConfirm');break;}/* first Run only: a Good picked but not priced goes with the Customer unsold - unless even the 할인 price is beyond the Wallet, where the warning would be false (User 2026-10-23) */
   playExit(()=>{game.depart();selected=null;render();document.querySelector('.receipt-stub')?.remove();
   if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');healCue();});break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
