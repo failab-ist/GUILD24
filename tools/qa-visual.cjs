@@ -35,7 +35,7 @@ const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const SCREENS=list(process.env.QA_SCREENS,['opening','store','morning','order','sale','night','closing',
  'relic','final','end','endfail','event','codex','menu','help','settings',
  'boss5','boss10','boss15','boss20','boss25']);
-const MODAL={event:'event',codex:'codex',menu:'menu'};
+const MODAL={codex:'codex',menu:'menu'};
 /* v2.9.1 balance: the D1-10 death limit dropped 10 -> 5 (CORE_RUN §DEATH LIMIT — SEGMENTED),
    and the fixed seed `qa-v24-morning` happens to hit it - this drive's own crude, hazard-blind
    sell policy racks up 5 deaths by D3 under that seed and the Run ends (RUN FAIL) before D6, so
@@ -161,9 +161,8 @@ async function drive(page,target,seed){
   await page.evaluate(`(()=>{const g=Guild24.game;if(g.run.team.length)g.commitFinalParty();g.boss();Guild24.render();})()`);
   await page.waitForTimeout(150);
  }
- // The Event notice, the codex and the store menu are takeovers over a screen, reached the
- // way a player reaches them: the notice is still unseen on its Day, the other two are a click.
- if(target==='event')await page.evaluate(`(()=>{const s=Guild24.game.run;s.eventSeen=false;Guild24.render();})()`);
+ // The codex and the store menu are takeovers over a screen, reached the way a player reaches them: a click.
+ // The Event is a slip on the MORNING board (no takeover since v2.13), so it needs no step here.
  if(['codex','menu','help','settings'].includes(target)){
   // an unlock notice (UNLOCK_LABELS) may be queued over the screen and come back after each close: dismiss it like a
   // player and open the menu again until the menu itself is up
@@ -221,7 +220,7 @@ const EXPECT={
  relic:'#modal-root [data-action="buy-relic"]',
  final:'.stage.p-final',
  end:'.stage.p-end', endfail:'.stage.p-end',
- event:'#modal-root [data-action="event-seen"]',
+ event:'.stage.p-morning .slip.event',
  codex:'#modal-root .unlock-grid, #modal-root .tabs',
  menu:'#modal-root [data-action="settings"]',
  help:'#modal-root .stack',
@@ -735,6 +734,10 @@ async function focusProbe(page){
    text:(el.textContent||'').trim().slice(0,12),inModal:!!el.closest('#modal-root')};})()`);
 
  await drive(page,'order','qa-focus-keyboard');
+ // drive() advances the Run through the engine, so what a click would have surfaced (an unlock notice, a toast) is still
+ // queued on the Run and would open over the probe on its first click: show it and close it as a player does
+ await page.evaluate(`(()=>{const r=Guild24.game.run;if(r){r.unlocked=[];delete r.toast;}})()`);
+ await clearTakeovers(page);
  const dial=await page.evaluate(`document.querySelectorAll('#app [data-action="qty"]').length`);
  if(dial<6)fails.push(`the quantity dial rendered ${dial} controls; the probe needs the order screen`);
  else{
@@ -774,6 +777,7 @@ async function focusProbe(page){
  // help with is renderModal() rebuilding #modal-root wholesale on every redraw, which
  // destroys the focused control inside it. That predates the focus work and lives in a
  // different owner, so it is reported (TODO C04) rather than failed on here.
+ await clearTakeovers(page);
  await page.click('#app [data-action="menu"]');
  await page.waitForTimeout(60);
  const opened=await where();
