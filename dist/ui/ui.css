@@ -4653,3 +4653,11 @@ html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
  .modal-shade:has(.settings-wood,.wood-frame,.menu-panel){align-items:center;padding:0 10px}
  .modal.settings-wood,.modal.wood-frame,.modal.menu-panel{max-height:84dvh}
 }
+/* 마왕전 하단 버튼도 큰 화면(세로 780 이상)에서는 48→56px, 위 여백 12→16px로 되돌린다. 작은 폰은 그대로 */
+@media (max-width:1023px) and (min-height:780px){
+ .p-final.p-order .dock{padding-top:16px}
+ .p-final.p-order .dock .stamp{min-height:56px}
+ .p-final .dock .stamp.final-order-back{min-height:56px}
+ .p-final .dock:has(.final-order-back) [data-action=final-commit]{min-height:56px}
+ .p-final .dock>.stamp.relic-key{min-height:56px}
+}
