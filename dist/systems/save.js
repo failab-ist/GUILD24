@@ -314,6 +314,7 @@ G.Save={
      head again, so the next write rotates a good copy into the backup slot; the refused head is set aside under KEPT first, since
      the next two writes rotate it out and overwrite it. A backup with no Run gives way to a head whose account still reads. */
   if(this.valid(b)&&(b.run!==null||!this.readable(h))){
+   holdNewer(h);
    if(head)try{set(head);localStorage.setItem(KEY,backup);G.Native?.put(KEY,backup);}catch(e){}
    this.rev=revOf(b);return this.migrate(b);
   }
