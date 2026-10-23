@@ -201,12 +201,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the menu button and the build mark sit in the top corners, beside the camera cut-out; the bottom buttons stand 40px off the edge, clear of the gesture bar */
 html.in-app .stage .menu-pin{top:6px}
 html.in-app .stage .dock{padding-bottom:max(40px,var(--sa-bottom))}
-html.in-app #toast{bottom:calc(104px + var(--sa-bottom))}
+html.in-app #toast{bottom:calc(128px + var(--sa-bottom))}
 /* windows and notices end 40px above the edge too; the wood-frame windows are left as they are until seen on the phone */
 html.in-app .modal:not(.wood-frame):not(.settings-wood) .modal-footer{padding-bottom:max(40px,var(--sa-bottom))}
 /* the prologue's corner buttons stand in the same top corners as the menu button; the hint 24px off the bottom */
 html.in-app .pro-skip,html.in-app .pro-sound{top:6px}
-html.in-app .pro-hint{bottom:24px}
+html.in-app .pro-hint{bottom:40px}
 /* the ending receipt starts clear of the menu button */
 html.in-app .stage.p-end>.menu-pin+*{padding-top:calc(var(--sa-top) + 18px)}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
@@ -4401,7 +4401,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* User 2026-10-09: the customer's line waits while a coach mark is up (holdSpeech) */
 .coach-on .say{visibility:hidden}
 /* app only: the Store Support arrival row ends 24px above the edge, like the windows' footers */
-html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
+html.in-app .relic-takeover .close{margin-bottom:max(40px,var(--sa-bottom))}
 .settings-links{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:0 20px;align-items:center}
 .settings-links a{display:inline-flex;align-items:center;min-height:44px;color:#dfcba9;font:400 13px/1.3 var(--ui);text-decoration:underline;text-underline-offset:3px}
 .settings-wood .settings-links button{width:auto;min-width:0;min-height:44px;padding:8px 0;border:0;border-image:none;background:transparent;box-shadow:none;
@@ -4605,7 +4605,8 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 /* the prologue's tap hint, same words and look */
 .hall-hint{position:fixed;z-index:1;left:50%;bottom:calc(10px + var(--sa-bottom));transform:translateX(-50%);margin:0;padding:6px 12px;
  text-shadow:0 1px 3px #000,0 0 6px #000;font:500 13px/1 var(--ui);color:#f3e9d6b3;white-space:nowrap;pointer-events:none}
-html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
+html.in-app .hall-hint{bottom:max(40px,var(--sa-bottom))}
+html.in-app .hall{padding-bottom:calc(40px + var(--sa-bottom))}
 .hall.done .hall-hint{visibility:hidden}
 @media(min-width:1024px){.hall-body{max-width:960px;gap:22px}.hall-head h2{font-size:44px}.hall-spot{height:330px}
  .hall-spot .pfp{width:220px;height:220px}.hall-cards{gap:16px}.hall-card{padding:18px 10px 16px}.hall-card .pfp{width:140px;height:140px}
@@ -4651,7 +4652,8 @@ html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
 /* 폰에서 나무틀 창(설정·도감·점포 메뉴 등)은 아래에서 올라오는 시트 대신 화면 가운데에 띄운다. 아래 끝이 제스처 막대에 붙지 않게 위아래 여백을 같게 둔다 */
 @media (max-width:1023px){
  .modal-shade:has(.settings-wood,.wood-frame,.menu-panel){align-items:center;padding:0 10px}
- .modal.settings-wood,.modal.wood-frame,.modal.menu-panel{max-height:84dvh}
+ .modal.settings-wood,.modal.wood-frame{max-height:84dvh}
+ .modal.menu-panel{max-height:92dvh}
 }
 /* 마왕전 하단 버튼도 큰 화면(세로 780 이상)에서는 48→56px, 위 여백 12→16px로 되돌린다. 작은 폰은 그대로 */
 @media (max-width:1023px) and (min-height:780px){
