@@ -3616,7 +3616,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(/translateX:\[0,-40\],opacity:\[1,0\],duration:240/.test(exit),'the customer walks off left in 240 ms');
  assert.ok(/if\(leaving\)return;/.test(exit)&&/setTimeout\(fire,260\)/.test(exit),'a second tap departs nobody twice, and the state always moves');
  assert.ok(/case'depart':[^]*?playExit\(\(\)=>\{game\.depart\(\);selected=null;render\(\);/.test(app),'손님 보내기 goes through the beat with its state change intact');
- assert.ok(/case'depart':if\(a==='depart'&&s\.firstRun&&selected\)\{sound\('ui'\);setModal\('departConfirm'\);break;\}/.test(app)&&app.includes("case'depart-go':setModal(null);"),'a Good picked but not priced asks once, on the first Run only, before the Customer leaves');
+ assert.ok(/case'depart':if\(a==='depart'&&s\.firstRun&&selected&&\(\(\)=>\{[^}]*'half'\)\.debit<=spendable\(who\)[^}]*\}\)\(\)\)\{sound\('ui'\);setModal\('departConfirm'\);break;\}/.test(app)&&app.includes("case'depart-go':setModal(null);"),'a Good picked but not priced asks once, on the first Run only, before the Customer leaves - and not when even the 할인 price is beyond the Wallet');
  assert.equal(Sound.samples.depart,'door','depart carries a recorded utility object');
  assert.ok(fs.existsSync(path.join(root,'dist/ui/assets/audio/door.mp3')),'and the file ships');
  assert.ok(/\('send','door'\)/.test(read('tools/vendor-assets.py'))&&read('reports/ASSETS.md').includes('`door.mp3`'),'vendored and recorded like the others');
