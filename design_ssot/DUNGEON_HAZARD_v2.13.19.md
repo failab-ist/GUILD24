@@ -129,7 +129,7 @@ Rules:
 - SLIME secondary player-facing Hazard is `진창`
 - do not explain only some Hazards while leaving others name-only
 
-Interaction ownership -> `UI_UX_v2.13.21.md`
+Interaction ownership -> `UI_UX_v3.0.0.md`
 
 ## GLOBAL PRESSURES
 
@@ -985,7 +985,7 @@ preparedFactor = 0.60 instead of 0.80 while the Decoration 구급품 진열장 i
   중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
 - the SALE `실패 시 사망 위험` snapshot is the raw `failureDeathChance` and never includes `preparedFactor`
   (it depends on the Bag, which the snapshot excludes)
-- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`
+- the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v3.0.0.md`
 
 ### Resolution order
 
@@ -1020,7 +1020,7 @@ That displayed value:
 The actual expedition still recalculates `failureDeathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
 Do not update the displayed `실패 시 사망 위험` to reveal the post-supply answer.
 
-Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v2.13.21.md` / `COPY_AUDIT_APPROVED_v2.13.21.md`.
+Exact presentation/copy -> `SALE_v2.8.0.md` / `UI_UX_v3.0.0.md` / `COPY_AUDIT_APPROVED_v3.0.0.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
@@ -1051,7 +1051,7 @@ k = the unbroken run of this adventurer's immediately preceding expeditions that
   succeeds is already healed by the ordinary Injury step)
 - independent of 구급키트; one draw, only on this path
 - the Night report says the adventurer recovered with one line; the chance is never shown; exact copy ->
-  `COPY_AUDIT_APPROVED_v2.13.21.md`
+  `COPY_AUDIT_APPROVED_v3.0.0.md`
 
 ## BAD-LUCK PREPARATION ASSIST (hidden)
 
@@ -1091,7 +1091,7 @@ Hazard / Supply / Insurance / Trait rules remain in their existing systems.
 Great Success uses Combat-Power margin after ordinary Success qualification.
 
 When the Player-facing Great Success opportunity threshold is met, presentation must explicitly signal the opportunity.
-Exact copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`. Presentation -> `UI_UX_v2.13.21.md`.
+Exact copy -> `COPY_AUDIT_APPROVED_v3.0.0.md`. Presentation -> `UI_UX_v3.0.0.md`.
 Signal threshold must match the actual calculation.
 
 Margin formula:
@@ -2087,7 +2087,7 @@ Record at minimum:
 item counters -> `ITEM_v2.8.0.md`
 job/stat coverage -> `NPC_TRAIT_v2.13.21.md`
 order/tier forecast -> `ECONOMY_ORDER_v2.13.19.md`
-forecast UI -> `UI_UX_v2.13.21.md`
+forecast UI -> `UI_UX_v3.0.0.md`
 night causality -> `NIGHT_CLOSING_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 boss modifier -> `BOSS_v2.8.0.md`

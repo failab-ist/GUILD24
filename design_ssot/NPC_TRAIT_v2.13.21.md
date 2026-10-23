@@ -97,7 +97,7 @@ Stat order:
     = Job Growth × that NPC's internal Potential
 
 Potential is an internal growth input, never exposed as a relationship reward (→ §PLAYER-FACING GROWTH TRUTH).
-Job Mastery does not alter this table (its Main Stats bonus is a one-time addition at creation); current Job Mastery effect -> META_v2.13.21.md.
+Job Mastery does not alter this table (its Main Stats bonus is a one-time addition at creation); current Job Mastery effect -> META_v3.0.0.md.
 
 ### Job contribution — internal comparison
 
@@ -121,7 +121,7 @@ At Level L, contribution = Lv1 contribution + (L − 1) × per-Level contributio
 
 ## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
 
-Meta progress source -> META_v2.13.21.md
+Meta progress source -> META_v3.0.0.md
 
 - Job × Boss clear record, Job Mastery rank and unlock thresholds are owned by META
 - before unlock, 도적/광전사 are not eligible for normal NPC Job generation
@@ -481,7 +481,7 @@ investment → survival → level/growth → loot → wallet → loyalty → rev
 Player should feel: `얘 살려놓길 잘했다.`
 
 Returning NPC presentation should make relevant history/change easy to notice without requiring the Player to
-reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v2.13.21.md
+reread the full unchanged profile every visit. Exact presentation ownership -> UI_UX_v3.0.0.md
 
 Ignoring weak NPCs is allowed, with opportunity cost through lost future customer/roster value.
 No separate punishment system is required solely to force attachment.
@@ -620,7 +620,7 @@ Rules:
 - no unlimited timeline is added by this rule
 - Product XP / Favorite Meter / Familiarity Bonus are not created
 
-Presentation -> `SALE_v2.8.0.md` / `UI_UX_v2.13.21.md`
+Presentation -> `SALE_v2.8.0.md` / `UI_UX_v3.0.0.md`
 Result proof -> `NIGHT_CLOSING_v2.8.0.md`
 
 ## WALLET / LOYALTY / REVISIT
@@ -704,7 +704,7 @@ The Player must be able to learn that Loyalty:
 Loyalty does not directly increase the four Core Stats.
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/tutorial placement -> UI_UX_v2.13.21.md. Exact player copy -> COPY_AUDIT_APPROVED_v2.13.21.md.
+Exact compact UI/tutorial placement -> UI_UX_v3.0.0.md. Exact player copy -> COPY_AUDIT_APPROVED_v3.0.0.md.
 
 ## DEEP EXPEDITION NPC REWARD
 
@@ -1206,7 +1206,7 @@ For one successful ordinary paid purchase before explicit modifier effects:
 PASS:
 - a refusal does not apply the purchase Loyalty delta; a refused 150% applies -2
 - explicit Trait / Store Support modifiers apply only through their owned rules
-- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.13.21.md
+- UI / Help exact copy matches COPY_AUDIT_APPROVED_v3.0.0.md
 
 ### NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
 

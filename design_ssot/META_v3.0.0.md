@@ -2,7 +2,7 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.13.21
+DOC_VERSION=3.0.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## ROLE
@@ -552,7 +552,7 @@ first Decoration is the earliest within reach.
 
 ## STORE-GROWTH VISUAL PROJECTION — PRESENTATION ONLY
 
-Store-growth presentation may project already-owned/current state into the live store through UI_UX_v2.13.21.md,
+Store-growth presentation may project already-owned/current state into the live store through UI_UX_v3.0.0.md,
 including equipped Decorations, alongside run-state traces owned by other current Specs (Store Support, Trusted
 Regular, revealed Final-preparation state).
 
@@ -746,7 +746,7 @@ Removed XP/Grade direct bonuses do not remain as hidden modifiers.
 
 Core identity -> SPEC_INDEX §GAME CORE
 Run timing / Run save -> `CORE_RUN_v2.8.0.md`
-Decoration UX -> `UI_UX_v2.13.21.md`
+Decoration UX -> `UI_UX_v3.0.0.md`
 Economy / Wallet -> `ECONOMY_ORDER_v2.13.19.md`
 Gate / Hazard / monster family knowledge -> `DUNGEON_HAZARD_v2.13.19.md`
 Item Counter / item unlock/effect -> `ITEM_v2.8.0.md`

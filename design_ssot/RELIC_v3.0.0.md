@@ -2,7 +2,7 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.13.21
+DOC_VERSION=3.0.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## PLAYER-FACING SYSTEM NAME
@@ -74,7 +74,7 @@ After one first support is chosen, or the choice is deferred (`나중에 결정`
 A deferred D0 window stays open, still free, through DAY 4 and reopens like any deferred window (§WINDOW STATE); it does not
 pop up again, and the D5 window replaces it. A pick on DAY 1~4 applies from that moment like any later purchase.
 
-Exact first-support copy -> COPY_AUDIT_APPROVED_v2.13.21.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
+Exact first-support copy -> COPY_AUDIT_APPROVED_v3.0.0.md. Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
 
 ### D5 / D10 / D15 / D20 / D25
 cand=3 · buy<=1 · currency=G · firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION · defer=YES
@@ -175,7 +175,7 @@ ownedRelicQuickView: mode=READ_ONLY · availablePhases=[Morning,Order,Sale]
 A Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one
 status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save
 field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never
-written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v2.13.21.md` §11-32. The conditional supports are exactly:
+written as inactive. Exact lines -> `COPY_AUDIT_APPROVED_v3.0.0.md` §11-32. The conditional supports are exactly:
 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only),
 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it is always on for every 단골.
 
@@ -338,7 +338,7 @@ existing Customer effects rather than adding another workload system.
 
 ## RELIC BLUEPRINTS
 
-Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v2.13.21.md §11 (§11-1..§11-30 for blueprints
+Exact Player-facing wording (card copy) is owned by COPY_AUDIT_APPROVED_v3.0.0.md §11 (§11-1..§11-30 for blueprints
 1–30, §11-30b 야전 들것, §11-30c 응급 처치대). The following Store Support Functions are exact.
 
 ### ROTATION — Foundation
@@ -1026,7 +1026,7 @@ No active Store Support uses 쇼케이스 in these two names.
 
 #### REL-Q-v28-21 — SUPPORT EXACT FUNCTIONS
 
-Verify these exact Store Support functions in RELIC_v2.13.21.md:
+Verify these exact Store Support functions in RELIC_v3.0.0.md:
 
 - 묶음발주 계약 -> same SKU 3+ in one ORDER, every unit -10%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
@@ -1060,7 +1060,7 @@ FAIL if Source omits one of these exact functions or uses a different numeric va
 #### REL-Q26 — PRICE BAND
 SETUP: Sample prices.
 EXPECT: Limited random band around approved base. Starting target around ±15–20%.
-PASS: Exact final values match `RELIC_v2.13.21.md` §PRICE.
+PASS: Exact final values match `RELIC_v3.0.0.md` §PRICE.
 
 #### REL-Q-v28-22 — SUPPORT BASE PRICES
 
@@ -1307,7 +1307,7 @@ A returning adventurer receives nothing.
 
 #### RELIC-Q-v27-VISITOR — BOARD / HUB
 
-Owner rule: `RELIC_v2.13.21.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
+Owner rule: `RELIC_v3.0.0.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지역 거점점 계약), §VISITOR SUPPORT COMPOSITION.
 
 ##### board
 
@@ -1471,4 +1471,4 @@ gold/order/reroll -> ECONOMY_ORDER_v2.13.19.md
 sale phase -> SALE_v2.8.0.md
 npc value -> NPC_TRAIT_v2.13.21.md
 Item/category/composition -> `ITEM_v2.8.0.md`
-Order/UI -> `UI_UX_v2.13.21.md`
+Order/UI -> `UI_UX_v3.0.0.md`

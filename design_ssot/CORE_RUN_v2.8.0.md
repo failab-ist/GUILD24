@@ -72,9 +72,9 @@ This is an information beat, not a new gameplay Phase. Opening the D0 briefing:
 - does not itself generate the Boss identity, Trait or Final state.
 
 The briefing owns no Boss reveal beyond the Run objective / investigation cadence.
-Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.13.21.md.
+Exact Player-facing copy -> COPY_AUDIT_APPROVED_v3.0.0.md.
 Boss information boundary -> BOSS_v2.8.0.md.
-Presentation -> UI_UX_v2.13.21.md.
+Presentation -> UI_UX_v3.0.0.md.
 
 Acknowledgement:
 - one `확인` action completes the beat;
@@ -126,7 +126,7 @@ Order timing:
 - no next-day forecast is shown; today's Gates are the whole planning context
 
 Within ORDER, confirming a purchase does **not** advance the phase.
-The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.13.19.md` / `UI_UX_v2.13.21.md`.
+The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.13.19.md` / `UI_UX_v3.0.0.md`.
 
 Canonical economy/order -> ECONOMY_ORDER_v2.13.19.md
 
@@ -239,7 +239,7 @@ Base order offers: 6/day. Base visitors: 3–6/day.
 
 Visitors may be modified by Relics, Events and Living NPC Cap. Visitor modifiers must respect Living NPC Cap rules.
 
-Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v2.13.21.md / RELIC_v2.13.21.md
+Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v2.13.21.md / RELIC_v3.0.0.md
 
 ## PERSISTENT NPC ROSTER
 
@@ -266,7 +266,7 @@ Random results that are meant to be fixed before player choice must be persisted
 Relic windows:
 [D0,D5,D10,D15,D20,D25,D30]
 
-Canonical acquisition/state -> RELIC_v2.13.21.md
+Canonical acquisition/state -> RELIC_v3.0.0.md
 
 D0 relic choice occurs before first normal business flow.
 D30 relic purchase closes before Final Expedition lock.
@@ -521,12 +521,12 @@ Rules:
 - implementation adoption must audit the current tutorial trigger/persistence path
 - if the existing tutorial is present but its reset/trigger path is broken, fix that path rather than replacing the tutorial wholesale
 
-Exact tutorial content/presentation -> `UI_UX_v2.13.21.md`.
+Exact tutorial content/presentation -> `UI_UX_v3.0.0.md`.
 
 ## RUN-END STORE CAPITAL SETTLEMENT
 
 Normal Run end settles Store Capital exactly once from accumulated actual Gross Sales and the reached-Day band.
-Exact formula/rates -> META_v2.13.21.md.
+Exact formula/rates -> META_v3.0.0.md.
 
 Bankruptcy, Death-limit closure, Final failure and Boss CLEAR are eligible normal endings.
 Manual Run Abandon yields 0 Store Capital.
@@ -558,9 +558,9 @@ D21~D30  10
 ```
 
 - the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
-- 추모 방명록 adds the current Decoration bonus to every segment limit (`META_v2.13.21.md` §counter — 추모 방명록)
+- 추모 방명록 adds the current Decoration bonus to every segment limit (`META_v3.0.0.md` §counter — 추모 방명록)
 - the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
-- the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.13.21.md`)
+- the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v3.0.0.md`)
 - death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
 - checked at Closing before the money branch; it uses the existing ending copy
 
@@ -577,7 +577,7 @@ Canonical NPC value -> NPC_TRAIT_v2.13.21.md
 
 Core Run identity resets each Run.
 
-Cross-run progression / Knowledge / unlock truth is owned by -> META_v2.13.21.md
+Cross-run progression / Knowledge / unlock truth is owned by -> META_v3.0.0.md
 
 There is no Global Meta XP. Run Day advancement itself grants no Job Mastery or Boss-clear progress.
 
@@ -1311,7 +1311,7 @@ Boss identity / reveal / Trait / Sloth acceptance criteria are owned by:
 -> BOSS_v2.8.0.md
 
 Meta progression acceptance criteria are owned by:
--> META_v2.13.21.md
+-> META_v3.0.0.md
 
 CORE_RUN §QA retains only Run-flow, D30 timing, stock timing, save/resume, and complete-loop integration checks.
 
@@ -1322,13 +1322,13 @@ Economy / order / Final fixed price / Wallet / Gold -> `ECONOMY_ORDER_v2.13.19.m
 NPC persistence / growth / level -> `NPC_TRAIT_v2.13.21.md`
 Dungeon generation -> `DUNGEON_HAZARD_v2.13.19.md`
 Item / stock / start-stock identity -> `ITEM_v2.8.0.md`
-Relic / windows -> `RELIC_v2.13.21.md`
+Relic / windows -> `RELIC_v3.0.0.md`
 Sale / Final Item handling -> `SALE_v2.8.0.md`
 Night / closing -> `NIGHT_CLOSING_v2.8.0.md`
 Event / day modifier -> `EVENT_v2.8.0.md`
 D25/D30 Final flow / Final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss identity / trait / reveal / cadence / GREED -> `BOSS_v2.8.0.md`
-Meta / mastery / knowledge / Account -> `META_v2.13.21.md`
-Presentation / mobile / tutorial presentation / Decoration UI -> `UI_UX_v2.13.21.md`
+Meta / mastery / knowledge / Account -> `META_v3.0.0.md`
+Presentation / mobile / tutorial presentation / Decoration UI -> `UI_UX_v3.0.0.md`
 Player-facing copy / abandon wording -> `COPY_WORLD_VOICE_v2.8.0.md`
-Exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`
+Exact player-facing copy -> `COPY_AUDIT_APPROVED_v3.0.0.md`

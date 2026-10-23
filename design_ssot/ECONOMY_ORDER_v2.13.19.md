@@ -184,7 +184,7 @@ Logical retry behavior:
 
 Refusal state must not incorrectly lock/unlock unrelated price choices.
 
-Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v2.13.21.md`
+Player-facing refusal UX -> `SALE_v2.8.0.md`; exact player-facing copy -> `COPY_AUDIT_APPROVED_v3.0.0.md`
 
 ## ORDINARY SALE PURCHASE ACCEPTANCE
 
@@ -425,7 +425,7 @@ The most one ORDER offer lets the store stock, rolled when the offer is made:
 | Rare | 1~3 (the mid-Run Hazard Counters sit here) |
 | Epic · Legendary | 1 |
 
-Store Support that adds supply quantity (`RELIC_v2.13.21.md`) adds on top, unchanged.
+Store Support that adds supply quantity (`RELIC_v3.0.0.md`) adds on top, unchanged.
 
 ### ORDER Rare+ pity — exact
 
@@ -488,12 +488,12 @@ Before order commitment show/readably expose:
 - each offer's rarity name under the Item name
 - the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap
 
-Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.13.21.md` §ORDER — ITEM INFORMATION HIERARCHY.
+Today-fit emphasis: in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v3.0.0.md` §ORDER — ITEM INFORMATION HIERARCHY.
 
 Expected operating cost is derived from the same current-day rules used by Closing.
 It is decision information, not a separate charge.
 
-Detailed visual layout -> `UI_UX_v2.13.21.md`
+Detailed visual layout -> `UI_UX_v3.0.0.md`
 
 ## REROLL
 
@@ -520,7 +520,7 @@ Confirmed Inventory is never removed by Reroll.
 `발주 교환권` may modify the base reroll only as defined in RELIC.
 Its exact modifier model is owned by RELIC and must not be inferred here.
 
-Canonical Relic rule -> `RELIC_v2.13.21.md`
+Canonical Relic rule -> `RELIC_v3.0.0.md`
 
 ## NEXT-DAY FORECAST — RETIRED
 
@@ -538,7 +538,7 @@ Keep hidden:
 ## MORNING / ORDER PRESENTATION CONTRACT
 
 MORNING shows today's Gates and Hazards; ORDER repeats today's Gate / Hazard context, the per-Gate visitor count and the offer rows. No next-day block.
-Exact visual layout is owned by `UI_UX_v2.13.21.md`.
+Exact visual layout is owned by `UI_UX_v3.0.0.md`.
 
 ## VISITOR FORECAST
 
@@ -594,7 +594,7 @@ Economic choice: current inventory vs NPC investment through pricing vs store in
 
 D30: final Item preparation vs last Relic must be a meaningful final Gold Sink decision.
 
-Canonical Relic pricing/window -> `RELIC_v2.13.21.md`
+Canonical Relic pricing/window -> `RELIC_v3.0.0.md`
 
 ## GREAT SUCCESS STORE GOLD
 
@@ -1292,12 +1292,12 @@ Report Gold In / Out by channel and explain target miss causes.
 ## RELATED
 
 Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.13.19.md`
-Morning / Order presentation -> `UI_UX_v2.13.21.md`
+Morning / Order presentation -> `UI_UX_v3.0.0.md`
 Item catalog / Rarity identities / item roles -> `ITEM_v2.8.0.md`
 Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss/GREED accounting -> `BOSS_v2.8.0.md`
 npc wallet/loyalty -> `NPC_TRAIT_v2.13.21.md`
-relic costs/build -> `RELIC_v2.13.21.md`
+relic costs/build -> `RELIC_v3.0.0.md`
 closing settlement -> `NIGHT_CLOSING_v2.8.0.md`
 run starting resources/inventory -> `CORE_RUN_v2.8.0.md`
