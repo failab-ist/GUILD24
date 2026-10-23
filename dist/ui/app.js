@@ -3228,7 +3228,7 @@ function whPop(){const t=document.querySelector('.wh-tip[open]'),cell=t?.closest
 document.addEventListener('toggle',ev=>{if(ev.target.classList?.contains('wh-tip'))whPop();},true);
 const whClose=()=>{for(const t of document.querySelectorAll('.wh-tip[open]'))t.open=false;whPop();};
 addEventListener('scroll',whClose,{capture:true,passive:true});addEventListener('resize',whClose);
-document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);
+document.addEventListener('pointerdown',ev=>{const inside=tipOf(ev.target);closeTips(inside);
  /* a tap anywhere but the tray itself, a shelf row, the dock or an overlay folds the tray (UI_UX §SALE — COUNTER TRAY FOLD) */
  if(!ev.target.closest('.counter-tray,[data-action="select"],.dock,.sale-deep,#modal-root,#coach-root'))foldTray();},true);
 /* The phone Deep disclosure sits below the shelf: folding on pointerdown would move its summary
@@ -3244,7 +3244,11 @@ document.addEventListener('click',ev=>{if(ev.target.closest('.sale-deep'))setTim
    Focus opens only for :focus-visible - a keyboard focus. A click focuses the summary too, and
    opening there would race the native toggle and swallow the tap. */
 const hovers=()=>typeof matchMedia==='function'&&matchMedia('(hover:hover) and (pointer:fine)').matches;
-const tipOf=t=>t&&t.closest?t.closest('.tip'):null;
+/* the desk's 대기 N beside the customer is the same count the Dock's 손님 line gives, so it drives that line's tip */
+const tipOf=t=>t&&t.closest?t.closest('.tip')||(t.closest('.line-up')?document.querySelector('.q-tip'):null):null;
+/* a tap on the grey balloon itself folds it, like a tap anywhere else outside the line */
+document.addEventListener('click',ev=>{const pop=ev.target.closest('.q-pop');if(pop)pop.closest('.tip').open=false;});
+document.addEventListener('click',ev=>{if(!ev.target.closest('.line-up'))return;const t=tipOf(ev.target);if(t)t.open=true;});
 document.addEventListener('pointerover',ev=>{
  if(ev.pointerType!=='mouse'||!hovers())return;
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget))return;
