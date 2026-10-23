@@ -4644,6 +4644,7 @@ html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
  .dial .set button{font-size:15px}
  .p-sale:not(.sale-desk) .good{min-height:64px;padding:8px 0}
  .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats div.detail-stat,
- .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding:6px 0}
+ .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats details.detail-stat>summary{padding-top:6px;padding-bottom:6px}
+ .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{margin-top:6px}
  .p-sale:not(.sale-desk) .dock{padding-top:14px}
 }
