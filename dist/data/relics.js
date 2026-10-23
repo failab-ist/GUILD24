@@ -46,7 +46,7 @@ const rows=[
 ['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).'],
 /* RELIC 33 · 34 · 35 (User 2026-10-04): a troll pick, a 단골 build piece, and the 희귀 survival line */
 ['rumorBoard','소문 수집 게시판','utility',[],60,()=>'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
-['postcard','단골 추천 엽서함','foundation',['vip'],80,p=>'단골 손님이 온 날에는 그날 온 다른 손님의 단골도가 모두 '+p.postcard.loyalty+' 오른다.'],
+['postcard','단골 추천 엽서함','foundation',['vip'],80,p=>'단골이 먼저 다녀간 날, 그 뒤에 온 손님은 떠날 때 단골도가 '+p.postcard.loyalty+' 오른다.'],
 ['rescueContract','길드 구조대 계약','hybrid',['expedition'],240,p=>'원정에서 사망 결과가 나오면 '+pct(p.rescueContract.chance)+' 확률로 중상으로 바뀌어 돌아온다.']
 ];
 /* description is a getter: it reads relicParams (defined below) at the moment a card is drawn */

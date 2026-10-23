@@ -623,7 +623,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* RELIC 평생 단골제 (User 2026-10-02): once a 단골 while it is owned, Loyalty never drops below the 단골 line again */
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,was&&this.has('lifetime')?G.Adventurer.TRUSTED_REGULAR:0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
  /* NPC_TRAIT §Non-purchase Loyalty: only a visit with a paid purchase earns departure Loyalty. */
- depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,D.balance.paidVisitLoyalty);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
+ depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,D.balance.paidVisitLoyalty);
+  /* RELIC 단골 추천 엽서함: a visitor who leaves after a 단골 already visited that Day gains 단골도 (the 단골 must have come first) */
+  if(n&&this.has('postcard')&&s.queue.slice(0,s.cursor).some(id=>{const m=s.npcs.find(x=>x.id===id);return m&&m!==n&&m.alive&&G.Adventurer.isTrustedRegular(m);})){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}
+  s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
  /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11; was the next morning): stock whose last sale day is today - the shelf's
     `오늘까지` - and that did not sell is discarded tonight, when SALE closes, so it lands on today's receipt as `오늘 폐기`.
     A save from an earlier build may still hold stock past its day; it goes with tonight's. */
@@ -637,9 +640,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
   s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
  night(){const s=this.run;if(s.phase!=='sell')return;
-  /* RELIC 단골 추천 엽서함: on a Day a 단골 came, every other visitor of the Day gains 단골도 */
-  if(this.has('postcard')){const vs=s.queue.map(id=>s.npcs.find(n=>n.id===id)).filter(n=>n&&n.alive),regs=vs.filter(n=>G.Adventurer.isTrustedRegular(n));
-   for(const n of vs)if(regs.some(m=>m!==n)){const b=n.loyalty;this.loyal(n,D.relicParams.postcard.loyalty);s.daily.loyalty=(s.daily.loyalty||0)+n.loyalty-b;}}const ev=s.event?.effects||{};s.results=[];
+  const ev=s.event?.effects||{};s.results=[];
   s.daily.noVisitors=!s.queue.length;s.daily.recoveryOnly=s.daily.noVisitors&&s.npcs.some(n=>n.alive)&&s.npcs.filter(n=>n.alive).every(n=>n.recovery>0);
   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never

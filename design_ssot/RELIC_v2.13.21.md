@@ -598,8 +598,8 @@ earlier acquisition can repay its price and create meaningful remaining-Run econ
 - the Events themselves are the ordinary catalogue draw - good and bad alike; this is a variance pick, not a power pick
 
 34. 단골 추천 엽서함 (postcard) · tags=[VIP] · Price = 80G
-- on a Day a 단골 visited, every other visitor of that Day gains 단골도 +5 at the Night (before the expeditions); two 단골
-  on the same Day give each other the gain too
+- (User 2026-10-23) a visitor who leaves after a 단골 already visited that Day gains 단골도 +5 at departure; whoever came
+  before the first 단골 gets nothing, and a later 단골 gains too when an earlier 단골 came first
 - not a purchase gain: 단골 스탬프 기계 does not multiply it; 평생 단골제's floor and the 0~100 clamp apply
 
 35. 길드 구조대 계약 (rescueContract) · tags=[Expedition] · Price = 240G
