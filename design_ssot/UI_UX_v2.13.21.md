@@ -1385,7 +1385,7 @@ after `다음 점포 열기`. A start-up with a Run in progress shows the loadin
   housing it stands for and crowds the counter pieces; its side padding also narrows with the stage). Grown tags never reach the board; on the wide framing the 간판's tag stacks
   two lines level with the sign's plate and stays inside the stage (§RESPONSIVE RULE — DESK STAGE WIDTH) and clear of the
   ceiling fixture
-- the board `새 점포 준비` holds the game's three lines as one pinned note; beside its title, only while a Decoration is owned, `장식은 점포를 열기 전에 변경할 수 있습니다` (nothing when none is owned), a save error pinned above when present; it ends above the Slot places (tighter, same type, on wide framings under
+- the board `새 점포 준비` holds the game's three lines as one pinned note; beside its title, only while a Decoration is owned, `장식은 열기 전에만 변경 가능` (nothing when none is owned), a save error pinned above when present; it ends above the Slot places (tighter, same type, on wide framings under
   800 px high)
 - each Slot is its place in the room: an equipped Decoration drawn with a small Slot + Decoration tag, or an empty spot with
   `{Slot} · 비움`; each place is a control (§Pre-Run Decoration empty-slot interaction) with at least a 44 px target; tags

@@ -3052,7 +3052,7 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
 /* COPY_AUDIT §1-1 / §1-5 / §1-6 / §9-1 / §9-2 — pre-Run, reset and store-management microcopy.
    Exact approved text; no mechanic is touched. */
 test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is the approved text',()=>{
- assert.ok(!app.includes("'보유 장식 없음'")&&app.includes('장식은 점포를 열기 전에 변경할 수 있습니다</b>'),'§1-1 the rail note shows only with an owned Decoration');
+ assert.ok(!app.includes("'보유 장식 없음'")&&app.includes('장식은 열기 전에만 변경 가능</b>'),'§1-1 the rail note shows only with an owned Decoration');
  assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
  assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
  assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지운다. 되돌릴 수 없다.'),'§1-5 body');
