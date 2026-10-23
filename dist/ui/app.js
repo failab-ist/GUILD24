@@ -384,11 +384,11 @@ const pips=(total,at)=>'<span class="pips" aria-hidden="true">'+Array.from({leng
 const sigilOf=d=>D.dungeonBy[d.family&&d.family!=='final'?d.family:d.id]||D.dungeonBy[d.id]||{};
 /* v2.9.0 UI_UX §TUTORIAL — TASK LINE, DAY 1~3 (COPY_AUDIT §3-8, User 2026-09-24): one fixed text line at the top of
    the phase content on DAY 1~3 while the account tutorial is not skipped. Not a coach mark, no button; it reuses the
-   tutorial state and adds no Save field. DAY 0 and DAY 4+ have none. The one approved exception to "the tutorial
+   tutorial state and adds no Save field. DAY 0 and DAY 4+ have none, and neither has any run after the account's 3rd (User 2026-10-23; Meta.finish counts a.runs at a run's end). The one approved exception to "the tutorial
    adds no page height": exactly one line, which never wraps at 360 (white-space:nowrap). */
 const TASK_LINE={morning:'오늘 할 일: 열린 게이트의 위험을 본다',order:'오늘 할 일: 위험에 맞는 능력을 올리는 상품을 발주한다',sell:'오늘 할 일: 손님이 갈 게이트를 보고 상품과 가격을 정한다',closing:'오늘 할 일: 오늘 장사를 정리한다',night:'오늘 할 일: 준비가 어떻게 됐는지 확인한다'};
 function taskLine(phase){const s=game.run,t=game.account.tutorial||{};
- if(!s||t.skipped||!(s.day>=1&&s.day<=3)||!TASK_LINE[phase])return '';
+ if(!s||t.skipped||game.account.runs>=3||!(s.day>=1&&s.day<=3)||!TASK_LINE[phase])return '';
  return '<p class="task-line">'+E(TASK_LINE[phase])+'</p>';}
 function stage(phase,label,head,body,dock,attrs='',classes=''){
  return '<div class="stage p-'+phase+(classes?' '+classes:'')+'"'+attrs+'>'+menuFab()+(head||'')
@@ -2097,8 +2097,8 @@ function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.f
  pinWatch=new IntersectionObserver(([e])=>{pin.classList.toggle('show',!e.isIntersecting);if(e.isIntersecting&&pinFolded){pinFolded=false;syncForecastPin();}},{root:sc,threshold:0});pinWatch.observe(src);}
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
-    task line); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
- if(!n||!st){trayFolded=false;const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
+    task line, so only the account's first 3 runs); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
+ if(!n||!st){trayFolded=false;const t=game.account.tutorial||{};return !t.skipped&&game.account.runs<3&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  /* User 2026-09-25: the Item's own effects only (the retired `피로 A → 출발 B` line is not back). */

@@ -1559,7 +1559,7 @@ Coach Mark / Spotlight / FTUE Overlay: the screen stays visible, dimmed, a spotl
 ### TUTORIAL — TASK LINE, DAY 1~3
 
 On DAY 1, 2 and 3 while `tutorial.skipped` is false, one fixed text line tops the phase content (under the menu pin, above the
-first block) on MORNING, ORDER, SALE, NIGHT and CLOSING: none from DAY 4 or on DAY 0, hidden when skipped; not a coach mark
+first block) on MORNING, ORDER, SALE, NIGHT and CLOSING: none from DAY 4 or on DAY 0, hidden when skipped or once the account has finished 3 runs (`runs>=3`, 근석 2026-10-23); not a coach mark
 (no spotlight or button); never two lines at 360; tutorial state only, no Save field. Strings (`오늘 할 일 — …`) ->
 COPY_AUDIT_APPROVED_v2.13.21.md §3.
 

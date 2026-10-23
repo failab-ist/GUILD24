@@ -3682,7 +3682,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const [ph,line] of [['morning','오늘 할 일: 열린 게이트의 위험을 본다'],['order','오늘 할 일: 위험에 맞는 능력을 올리는 상품을 발주한다'],['sell','오늘 할 일: 손님이 갈 게이트를 보고 상품과 가격을 정한다'],['night','오늘 할 일: 준비가 어떻게 됐는지 확인한다'],['closing','오늘 할 일: 오늘 장사를 정리한다']])
   assert.ok(app.includes(ph+":'"+line+"'"),'task line for '+ph+' is the §3-8 string');
  const tl=fn('taskLine');
- assert.ok(/t\.skipped\|\|!\(s\.day>=1&&s\.day<=3\)/.test(tl),'DAY 1~3 only, hidden when the tutorial is skipped (no DAY 0, no DAY 4)');
+ assert.ok(/t\.skipped\|\|game\.account\.runs>=3\|\|!\(s\.day>=1&&s\.day<=3\)/.test(tl),'DAY 1~3 only, hidden when the tutorial is skipped or after the account\'s 3rd run (no DAY 0, no DAY 4)');
  assert.ok(!/account\.\w*task|run\.\w*task/.test(app),'no Save field');
  for(const scr of ['morningScreen','orderScreen','saleScreen','nightScreen','closingScreen'])assert.ok(fn(scr).includes('taskLine('),scr+' places the line');
  assert.ok(/\.task-line\{[^}]*font-size:clamp\(12px,3\.3vw,13px\)[^}]*white-space:nowrap/.test(css),'one line, never two at 360 (size follows width, no breakpoint)');
