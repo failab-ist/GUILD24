@@ -103,6 +103,20 @@ function queueUnlock(label,names){pendingUnlock.push({label,entries:names.map(un
 function flushUnlock(){if(!pendingUnlock.length||modal==='unlock')return;clearTimeout(bossHold);bossHold=null;$('#app').inert=false;setModal(null);}
 function unlockBody(u){return '<div class="unlock-card">'+u.entries.map(e=>'<div class="unlock-one"><span class="unlock-kind">'+E(e.kind)+'</span><b class="unlock-name">'+E(e.name)+'</b>'+(e.desc?'<p>'+E(e.desc)+'</p>':'')
  +(e.relic?'<p class="unlock-where">이제 점포지원 후보로 나올 수 있습니다.</p>':e.item?'<p class="unlock-where">이제 발주 후보로 나올 수 있습니다.</p>':'')+'</div>').join('')+'</div>';}
+/* Line breaks inside a parenthesis group. body is word-break:keep-all, so Hangul words stay whole, but a space inside `(기존 20%)` or
+   `(최대 30%)` is still a break point and left `(기존` and `20%)` on two lines. Every rendered text node gets its short groups glued with
+   no-break spaces and word joiners around `·` (a long group only keeps its first two and last two words together). The text itself is not changed. */
+const NB='\u00a0',GROUP=/\([^()\n]{3,80}\)/g;
+function glueGroups(s){return s.replace(GROUP,m=>{const inner=m.slice(1,-1).replace(/\u2060?·\u2060?/g,'\u2060·\u2060');if(!/[ \u00b7]/.test(inner))return m;
+ if(inner.length<=20)return m[0]+inner.replace(/ /g,NB)+m.slice(-1);
+ const w=inner.split(' ');if(w.length<5)return m[0]+w.join(NB)+m.slice(-1);
+ return m[0]+w[0]+NB+w[1]+' '+w.slice(2,-2).join(' ')+' '+w[w.length-2]+NB+w[w.length-1]+m.slice(-1);});}
+function glueNode(root){const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>/\(/.test(n.nodeValue)&&!/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(n.parentNode.nodeName)?1:2});
+ for(let n;n=tw.nextNode();){const v=glueGroups(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;}}
+if(typeof MutationObserver==='function')new MutationObserver(list=>{for(const m of list){
+ if(m.type==='characterData'){const v=glueGroups(m.target.nodeValue);if(v!==m.target.nodeValue)m.target.nodeValue=v;}
+ else for(const n of m.addedNodes){if(n.nodeType===3){const v=glueGroups(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;}else if(n.nodeType===1)glueNode(n);}}
+}).observe(document.body,{childList:true,characterData:true,subtree:true});
 function toast(msg){const t=$('#toast'),m=String(msg),label=UNLOCK_LABELS.find(l=>m.startsWith(l+' · '));
  if(label){queueUnlock(label,m.slice(label.length+3).split(' · '));return;}
  t.classList.remove('unlock');t.textContent=m;
