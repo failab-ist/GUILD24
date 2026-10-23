@@ -4625,3 +4625,6 @@ html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
 .job-info span{display:block}
 .job-info .job-start{margin-top:4px;color:#b9ab8c}
 .unlock.locked>:not(.lock-mark):not(.gold-text).job-info{opacity:.8;filter:none}
+/* 손가락 닿는 영역: 작은 「?」 도움말 버튼은 보이는 크기는 두고 눌리는 영역만 44px 쪽으로 넓힌다 */
+.readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary{position:relative}
+.readout .tip>summary::after,.dest-plate .tip>summary::after,.kit .tip>summary::after{content:'';position:absolute;inset:-10px}
