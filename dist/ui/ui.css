@@ -4579,7 +4579,10 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .hall-head{text-align:center}
 .hall-head h2{font:500 32px/1.1 var(--f-plate);-webkit-font-smoothing:none;color:#f6d77a;letter-spacing:.06em}
 .hall-head p{margin-top:8px;font:500 13px/1.4 var(--ui);color:#cdbfa3}
-.hall-head p span+span{margin-left:.8em}
+.hall-head .hall-boss{margin-top:10px;font:600 15px/1.4 var(--ui);color:#f3e6c8}
+.hall-head .hall-where{margin-top:4px}
+.hall-where{display:flex;align-items:center;justify-content:center;gap:8px}
+.hall-where .hall-tier{padding:3px 7px;font-size:11px}
 .hall-spot{height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
 .hall-spot .pfp{width:var(--pfp);height:var(--pfp);object-fit:contain}
 .hall-plate{min-width:200px;padding:9px 16px 8px;text-align:center;background:#f3e6c8;color:#2c2418;box-shadow:inset 0 0 0 2px #2c2418,inset 0 0 0 4px #f3e6c8,inset 0 0 0 6px #2c2418;clip-path:var(--px-cut)}
@@ -4603,8 +4606,8 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
  .hall-spot .pfp{width:220px;height:220px}.hall-cards{gap:16px}.hall-card{padding:18px 10px 16px}.hall-card .pfp{width:140px;height:140px}
  .hall-card b{font-size:22px}.hall-card .who-line{font-size:14px}.hall-card .visits,.hall-card .carried{font-size:13px}}
 .hall-entry{grid-column:1/-1}
-.hall-entry-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.hall-entry h3 .sp{color:var(--gold)}
+.hall-entry-boss{margin-top:4px;font:600 15px/1.4 var(--ui);color:var(--gold)}
+.hall-entry .hall-where{justify-content:flex-start;margin-top:4px}
 .hall-tier{flex:0 0 auto;padding:4px 8px;font:600 12px/1 var(--ui);color:#e8dcc0;box-shadow:inset 0 0 0 2px #e8dcc066}
 .hall-tier.asc{color:#f6d77a;box-shadow:inset 0 0 0 2px #f6d77a}
 .hall-team{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}

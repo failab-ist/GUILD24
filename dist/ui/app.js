@@ -2350,10 +2350,11 @@ function runBlock(row){const s=game.run,met=s.npcs.filter(n=>n.introduced),recs=
  const often=met.reduce((b,n)=>!b||(n.visits||0)>(b.visits||0)?n:b,null),
   missed=met.filter(n=>!n.alive).reduce((b,n)=>!b||n.level>b.level||(n.level===b.level&&(n.visits||0)>(b.visits||0))?n:b,null);
  return '<div class="block this-run"><h4>이 점포의 기록</h4>'
-  +row('버틴 날','DAY '+s.day)
+  /* User 2026-10-23: a clear always stands on DAY 30, so the row says nothing there */
+  +(s.win?'':row('버틴 날','DAY '+s.day))
   +row('손님',met.length+' (단골 '+(s.stats.regulars||0)+')')
   +(top?row('가장 성장한 손님',E(top.name)+' Lv.'+top.level):'')
-  +(often?row('가장 자주 온 손님',E(often.name)+' '+often.visits+'회'):'')
+  +(often?row('가장 자주 온 손님',E(often.name)+' Lv.'+often.level+' '+often.visits+'회'):'')
   +row('돌아오지 못한 사람',s.stats.deaths||0)
   +(missed?'<div class="row sub"><span>그중 가장 아쉬운 손님</span><b>'+E(missed.name)+' Lv.'+missed.level+'</b></div>':'')
   +(recs.length?row('원정',recs.length+'건 (대성공 '+recs.filter(r=>r.outcome==='대성공').length+')'):'')+'</div>';}
@@ -2492,8 +2493,8 @@ function hallSpot(m){const n={name:m.name,appearance:m.appearance,job:m.job};
 function hallMarkup(e){const b=D.bossBy[e.boss];
  return '<div class="hall-dim"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-sparks" aria-hidden="true">'+'<i></i>'.repeat(18)+'</div>'
   +'<div class="hall-flash" aria-hidden="true"></div><button type="button" class="hall-skip" data-action="hall-done">건너뛰기</button>'
-  +'<div class="hall-body"><header class="hall-head"><h2>명예의 전당</h2><p><span>'+E(b?.name||'')+' 토벌</span><span>'+E(e.branch)+'</span>'
-  +'<span>'+hallTier(e)+'</span></p></header>'
+  +'<div class="hall-body"><header class="hall-head"><h2>명예의 전당</h2><p class="hall-boss">'+E(b?.name||'')+' 토벌</p>'
+  +'<p class="hall-where"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p></header>'
   +'<div class="hall-spot" aria-hidden="true"></div>'
   +'<div class="hall-cards">'+e.members.map(hallCard).join('')+'</div>'
   +'<div class="hall-foot"><p class="hall-count">'+e.run+'번째 점포의 원정대가 명예의 전당에 기록되었다.</p>'
@@ -2724,12 +2725,12 @@ function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexT
    tab opens on the newest HALL_PAGE, with 더 보기 for the next page, so a long history never becomes one endless scroll. */
 const HALL_PAGE=10;let hallShown=HALL_PAGE;
 const hallTier=e=>e.ascension?'승천 '+e.ascension:'일반';
+const hallTag=e=>'<span class="hall-tier'+(e.ascension?' asc':'')+'">'+hallTier(e)+'</span>';
 function hallCodex(){const list=game.account.hall||[];
  if(!list.length)return '<p class="boss-none">아직 마왕을 쓰러뜨린 원정대가 없다.</p>';
  const left=list.length-hallShown;
- return list.slice(0,hallShown).map(e=>'<div class="unlock hall-entry"><div class="hall-entry-head"><h3>'+e.run+'번째 점포<span class="sp">'+E(D.bossBy[e.boss]?.name||e.boss)+' 토벌</span></h3>'
-  +'<span class="hall-tier'+(e.ascension?' asc':'')+'">'+hallTier(e)+'</span></div>'
-  +'<p class="smalltext">'+E(e.branch)+'</p>'
+ return list.slice(0,hallShown).map(e=>'<div class="unlock hall-entry"><h3>'+e.run+'번째 점포</h3><p class="hall-entry-boss">'+E(D.bossBy[e.boss]?.name||e.boss)+' 토벌</p>'
+  +'<p class="hall-where smalltext"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p>'
   +'<div class="hall-team">'+e.members.map(m=>'<div class="hall-mate">'+portrait({name:m.name,appearance:m.appearance,job:m.job},56)
    +'<b>'+E(m.name)+'</b><span>Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span></div>').join('')+'</div></div>').join('')
   +(left>0?btn('더 보기 ('+left+')','hall-more','small hall-more'):'');}
