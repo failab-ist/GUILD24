@@ -2777,7 +2777,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
    +'<span class="slot-tag"><i>'+E(SLOT_COPY[slot]||slot)+'</i><b>'+(d?E(d.name):'비움')+'</b>'+(mark?'<em class="can-buy">구매 가능</em>':'')+'</span></button>';};
  const fromEnd=!!game.run;
  return '<div class="stage p-morning p-prep">'+menuFab()
- +'<p class="build-mark">v'+E(BUILD.version)+' '+E(BUILD.commit)+'</p>'
+ +'<p class="build-mark">v'+E(BUILD.version)+(Native.inApp()?'':' '+E(BUILD.commit))+'</p>'
  /* no DAY sign on this ceiling, so the 간판 is held by nothing but its own painted spot */
  +'<div class="store" style="--daysign-x:1">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
