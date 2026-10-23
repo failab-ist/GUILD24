@@ -4648,3 +4648,8 @@ html.in-app .hall-hint{bottom:max(24px,var(--sa-bottom))}
 }
 /* 판매 진열대 머리판(나무 타이틀 막대)을 위아래 2px씩 키워 24→28px로. 폰 세로 공간 때문에 줄였던 값이라 작은 폰도 소폭이라 같이 되돌린다 */
 .p-sale:not(.sale-desk) .shelf-head{padding-top:4px;padding-bottom:4px}
+/* 폰에서 나무틀 창(설정·도감·점포 메뉴 등)은 아래에서 올라오는 시트 대신 화면 가운데에 띄운다. 아래 끝이 제스처 막대에 붙지 않게 위아래 여백을 같게 둔다 */
+@media (max-width:1023px){
+ .modal-shade:has(.settings-wood,.wood-frame,.menu-panel){align-items:center;padding:0 10px}
+ .modal.settings-wood,.modal.wood-frame,.modal.menu-panel{max-height:84dvh}
+}
