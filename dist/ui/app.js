@@ -2493,6 +2493,7 @@ function hallSpot(m){const n={name:m.name,appearance:m.appearance,job:m.job};
 function hallMarkup(e){const b=D.bossBy[e.boss];
  return '<div class="hall-dim"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-sparks" aria-hidden="true">'+'<i></i>'.repeat(18)+'</div>'
   +'<div class="hall-flash" aria-hidden="true"></div><button type="button" class="hall-skip" data-action="hall-done">건너뛰기</button>'
+  +'<p class="hall-hint" aria-hidden="true">'+E(matchMedia('(hover:hover) and (pointer:fine)').matches?Copy.prologue.click:Copy.prologue.tap)+'</p>'
   +'<div class="hall-body"><header class="hall-head"><h2>명예의 전당</h2><p class="hall-boss">'+E(b?.name||'')+' 토벌</p>'
   +'<p class="hall-where"><span>'+E(e.branch)+'</span>'+hallTag(e)+'</p></header>'
   +'<div class="hall-spot" aria-hidden="true"></div>'
