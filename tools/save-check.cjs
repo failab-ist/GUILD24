@@ -3,8 +3,11 @@
 // number is read off the save (reportHistory, npcs[].records, the current roster) or computed from it with the game's own
 // formulas, so it is not a simulation (AGENTS §9-A). Its §2 reads the save on the same lines as the balance measurement
 // (tools/measure-v2100.cjs, AGENTS §9-B): success by Day band, deaths, injured departures, the four highest Levels against the rest.
-//   node tools/save-check.cjs <save.json> [--out report.md]
-// Accepts the in-game `저장 내보내기` file, the raw localStorage value, or a Playwright storageState that holds it.
+//   node tools/save-check.cjs <save.json | stats.ndjson> [--out report.md]
+// Accepts the in-game `저장 내보내기` file, the raw localStorage value, a Playwright storageState that holds it, or - from
+// v3.0.0 (User 2026-10-23: human play is read off the anonymous statistics now) - the collector's `/export` download, one
+// run per line, or one such run. A statistics run has no adventurer names (they read 손님 1, 2, ...) and its margins are
+// rounded to 0.001; everything else in the report is read the same way.
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])
@@ -19,6 +22,23 @@ function readSave(file){
    if(!hit)throw Error('storageState에 guild24 저장이 없습니다.');raw=hit.value;}}
  catch(e){if(/storageState/.test(e.message))throw e;}
  return G.Save.import(raw);
+}
+
+/* one anonymous-statistics payload (dist/systems/telemetry.js build()) back into the save shape report() reads */
+const MODE_NAME=['full','half','overcharge'];
+function fromStats(p){
+ const r=p.run,day=d=>({day:d.d,revenue:d.rev,spent:d.sp,operating:d.op,cogs:d.cogs,sales:d.sales,waste:d.waste,balance:d.bal,rerolls:d.rr,gates:d.g,
+  greatSuccess:d.gs,discount:d.disc,overcharge:d.oc,refuse:d.ref,commission:d.com,rerollSpent:d.rrs,relicSpent:d.rls,wasteCost:d.wc,subsidy:d.sub,liquidation:d.liq,trace:d.tr});
+ const rec=x=>({day:x.d,dungeon:x.g,dungeonName:x.dn||D.dungeonBy[x.g]?.name||x.g,outcome:x.o,level:x.lv,changes:x.lv0!=null&&x.lv0!==x.lv?['Lv.'+x.lv0+' → Lv.'+x.lv]:[],
+  items:x.it||[],bareRatio:x.br,greatMargin:x.gm,departedInjured:!!x.inj,heroProof:x.hp?{outcome:{worse:x.hw}}:null,combatHero:x.ch?{}:null,deep:!!x.deep});
+ const npcs=(p.npcs||[]).map((n,i)=>({id:'n'+i,name:'손님 '+(i+1),job:n.job,rarity:n.rar,level:n.lv,traits:n.tr||[],loyalty:n.loy||0,money:n.money||0,alive:!!n.al,
+  introduced:!!n.intro,injury:n.inj||0,recovery:n.rcv||0,records:(n.rec||[]).map(rec),history:(n.h||[]).map(([d,item,m,paid,wallet])=>({day:d,item,mode:MODE_NAME[m]??m,paid,wallet}))}));
+ return {build:p.build?{version:p.build,commit:p.commit}:null,run:{branch:r.branch||'(익명 통계)',day:r.day,phase:r.phase,money:r.money,facilities:r.supports||[],stats:r.stats||{},
+  loadout:r.loadout||{},ascension:r.asc||0,startBuild:r.startBuild,expectedVisitors:r.expected,reportHistory:(r.days||[]).map(day),npcs},stats:p};
+}
+function readStats(file){
+ return fs.readFileSync(file,'utf8').split(/\r?\n/).filter(l=>l.trim()).map(l=>{try{return JSON.parse(l);}catch(e){return null;}})
+  .filter(p=>p&&p.schema&&p.run&&Array.isArray(p.npcs)).map(fromStats);
 }
 
 const pct=(x,dp=0)=>(x*100).toFixed(dp)+'%';
@@ -148,10 +168,19 @@ function report(save){
  return L.join('\n');
 }
 
+/* several statistics runs: one line each first, then each run's report */
+function statsReport(saves){
+ const L=['# 익명 통계 밸런스 점검 — '+saves.length+'판',''],row=a=>L.push('| '+a.join(' | ')+' |');
+ row(['#','빌드','종류','DAY','결과','승천','사망','잔액','원정']);row(Array(9).fill('---'));
+ saves.forEach((x,i)=>{const p=x.stats,r=p.run;row([i+1,p.build||'-',p.kind,r.day,r.win?'클리어':r.end||'-',r.asc||0,r.stats?.deaths??'-',r.money+'G',x.run.npcs.reduce((v,n)=>v+n.records.length,0)]);});
+ return L.join('\n')+'\n\n'+saves.map((x,i)=>report(x).replace(/^# /,'# '+(i+1)+'. ')).join('\n\n');
+}
+
 if(require.main===module){
  const args=process.argv.slice(2),file=args.find(a=>!a.startsWith('--')&&args[args.indexOf(a)-1]!=='--out'),out=args.includes('--out')?args[args.indexOf('--out')+1]:null;
- if(!file){console.error('사용법: node tools/save-check.cjs <save.json> [--out report.md]');process.exit(2);}
- const md=report(readSave(file));
+ if(!file){console.error('사용법: node tools/save-check.cjs <save.json | stats.ndjson> [--out report.md]');process.exit(2);}
+ const stats=readStats(file);
+ const md=stats.length?statsReport(stats):report(readSave(file));
  if(out){fs.writeFileSync(out,md+'\n');console.log('작성: '+out);}else console.log(md);
 }
-module.exports={readSave,report};
+module.exports={readSave,report,fromStats,readStats,statsReport};

@@ -675,7 +675,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
   if(rep){if(before!==n.fatigue)rep.fatigueLedger.push({label:D.decorationBy.voucher.name,delta:n.fatigue-before});
    rep.settledFatigue=n.fatigue;n.records.at(-1).settledFatigue=n.fatigue;}
  }}
- s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money,playMs:s.playMs||0,rerolls:s.rerollCount||0,gates:s.dungeons.map(d=>[d.family,d.tier||1,d.temporary?1:0])});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
+ /* SAVE SIZE (User 2026-10-23): the Day's order / sale trace goes to the anonymous statistics' own store, not into the save */
+ const {trace:dayTrace,...dayTotals}=s.daily;G.Telemetry?.day(this,dayTrace);
+ s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...dayTotals,balance:s.money,playMs:s.playMs||0,rerolls:s.rerollCount||0,gates:s.dungeons.map(d=>[d.family,d.tier||1,d.temporary?1:0])});s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;
 })(globalThis);
