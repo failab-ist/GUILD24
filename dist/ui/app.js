@@ -1562,7 +1562,7 @@ const coachSteps={
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
     purse box that carries both 보유 골드 and 영업 손익. */
  /* UI_UX §FIRST-EVER FINAL EXPEDITION COACH; COPY_AUDIT §14-9. Each stage has its own skip boundary. */
- finalRelic:[['final-intro','.relic-open',Copy.finalPrep.coach.intro]],
+ finalRelic:[['final-intro','.relic-takeover .relic-open',Copy.finalPrep.coach.intro]],
  finalOrder:[['final-order','[data-action="final-roster"]',Copy.finalPrep.coach.order],
   ['final-no-effect','.final-order .form-head',Copy.finalPrep.coach.noEffect]],
  finalRoster:[['final-roster','.final-roster .npc-card',Copy.finalPrep.coach.roster],
@@ -1578,7 +1578,7 @@ const coachSteps={
     it used to open with no word of what a Store Support is. The mark reads the takeover and never
     names a pick; it runs on the DAY 0 takeover only (see showCoach); account-scoped like every mark.
     COACH DIET (User 2026-09-30): one mark - each card prints its effect and price, and the key and `점포지원 N / 7` say the rest */
- relic:[['relic-what','.relic-open','점포지원은 매입가, 손님 수, 창고 같은 가게 운영을 이번 점포가 끝날 때까지 도와주는 카드다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
+ relic:[['relic-what','.relic-takeover .relic-open','점포지원은 매입가, 손님 수, 창고 같은 가게 운영을 이번 점포가 끝날 때까지 도와주는 카드다. 첫 지원은 무료, DAY 4까지 고를 수 있다.']]
 };
 let activeCoach=null;
 let riskMarked=null;

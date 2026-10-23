@@ -104,7 +104,7 @@ async function skipPrologue(p){
   await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=false;Guild24.game.start('qa-support-coach');Guild24.render();});
   if(await p.locator('.p-prep [data-action="start"]').count())await p.locator('.p-prep [data-action="start"]').click();
   await p.waitForTimeout(400);
-  const coach=await p.evaluate(()=>{const layer=document.querySelector('.coach-layer'),bubble=layer?.querySelector('.coach-bubble'),target=document.querySelector('.relic-open'),dock=document.querySelector('.relic-takeover .close');
+  const coach=await p.evaluate(()=>{const layer=document.querySelector('.coach-layer'),bubble=layer?.querySelector('.coach-bubble'),target=document.querySelector('.relic-takeover .relic-open'),dock=document.querySelector('.relic-takeover .close');
    if(!bubble)return false;const b=bubble.getBoundingClientRect(),t=target.getBoundingClientRect(),d=dock.getBoundingClientRect();
    return b.left>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=d.top&&!(b.top<t.bottom&&b.bottom>t.top)&&bubble.scrollWidth<=bubble.clientWidth+1;});
   check(coach,tag+' D0 coach visible and clear of title/footer');await p.mouse.move(0,0);await p.screenshot({path:path.join(out,`${tag}-coach.png`)});
