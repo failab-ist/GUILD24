@@ -98,6 +98,9 @@ img{-webkit-touch-callout:none}
 body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-webkit-text-size-adjust:100%}
 /* Korean breaks between words everywhere; break-word still splits a token too long for its box. */
 body{word-break:keep-all;overflow-wrap:break-word}
+/* 게임 글자는 두 번 탭·길게 눌러도 선택되지 않는다(파란 선택 표시 방지). 빌드 표시 줄과 입력칸만 예외 */
+body{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.build-line,input,textarea{user-select:text;-webkit-user-select:text}
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
