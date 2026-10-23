@@ -108,6 +108,10 @@ and this table is their commit record.
     measurement, given free at the D5 window: clear +1.1 → +2.1, D30 +0.1 → +2.5, D15 Gold +50 → +88G; it applies on 68% of ORDER
     Days, saving 32G a Day (was 24G). Price 130G kept. COPY_AUDIT §11-1 follows (「한 번 발주할 때 같은 상품을 3개 이상 사면, 그 상품
     전부의 매입가가 10% 싸진다.」). Log `support-fix-20261022/bulk-off.txt`.
+  - META 알뜰 금고: the first two customers' Wallet +100G → +75G (User 2026-10-23, 「추천」: in the User's Runs the Gold piled up,
+    D15 1440 / 2291G with it against 489~899G without). 1 × 150G was the other candidate. Same mid-game measurement, against no
+    Decoration: D15 Gold +690 → +516G, sales / Day +213 → +171G, D20 +21.3 → +18.7, D30 +9.4 → +8.5, clear within noise
+    (1 × 150G: +536G, D30 +6.9). COPY_AUDIT counter line follows. Log `support-fix-20261022/thrift-off.txt`.
   - GAME_VISION (User 2026-10-22, after a GPT review of goals and measurement): D20 is 「met once within 3~4 Runs」, not a gate;
     Job Mastery 1·2 are bought with Capital and 3+ open with Boss clears; first clear in 1~3 hours is this game's own target,
     checked with anonymous play-time stats after release (the genre comparison line is removed); the Boss ~60% is an overall
