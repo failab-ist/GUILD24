@@ -12,6 +12,7 @@ public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     registerPlugin(PlayGamesSavesPlugin.class);
+    registerPlugin(AppUpdatePlugin.class);
     super.onCreate(savedInstanceState);
     // Play Games v2 signs in on its own after this; a failure only means the cloud copy is unavailable.
     try {

@@ -3401,6 +3401,7 @@ Native.cloudLate(raw=>{if(Save.cloudMerge(raw)!=='cloud')return;const s=Save.rea
  render();toast(msg);});
 /* anonymous statistics: a report a failed send left in the queue goes out at launch, not only when the next Run ends */
 if(Native.inApp?.()&&Telemetry.on(game.account))setTimeout(()=>Telemetry.flush(),3000);
+Native.updateCheck?.();
 window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
 /* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
 /* UI_UX §PROLOGUE: with no Run the prologue takes the loading screen's place; if it ends before the art is in, the
