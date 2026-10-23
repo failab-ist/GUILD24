@@ -74,7 +74,7 @@ const BGM_HQ=(()=>{try{return !!(window.Native&&window.Native.inApp());}catch(e)
    fit counted bass a phone cannot play, so the low cues were raised until they tore; they now carry `over` / `cut` in
    their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
- /* result */ saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
+ /* result */ hallflash:2.179,hallstep:4.845,saved1:6.729,saved2:7.1,saved3:4.28,great:5.074,retreat:8.199,injury:5.195,severe:1.034,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
  /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:0.752,gag:5.557,page:1.35,begin:5.733,newstore:1.422,bosscompact:9.578,rescue:4.769,
  /* action */ depart:1.26,return:0.713,gold:4.203,spend:4.191,crate:2.941,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,shove:10.094,
  /* utility */ button:0.711,ui:5.564,
@@ -163,7 +163,10 @@ const sfx={button:[440],ui:[1760,2217],fixture:[233,208],
  /* UI_UX §NIGHT — SAVED BY THE SALE (User 2026-10-09): the worse verdict lands with a dull thud, the sold Item shoves it off
     with a whoosh, and in place of the Outcome cue a relief lands - fuller the further the result turned
     (1 step / 2 steps / 3 or more). Its own keys, apart from `rescue` (Insurance) and `great`. */
- shove:[],saved1:[392,494],saved2:[440,554,659],saved3:[262,330,392,523]};
+ shove:[],saved1:[392,494],saved2:[440,554,659],saved3:[262,330,392,523],
+ /* 명예의 전당 (User 2026-10-23): `hallstep` one member stepping into the spotlight - a short bright G chime with a sparkle;
+    `hallflash` the whole line photographed - a shutter click, then a strummed C major held under falling light */
+ hallstep:[784,1175,1568],hallflash:[523,659,784,1047,1319]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -309,6 +312,8 @@ const shape={
  boss:{gain:.9,dur:.28,type:'triangle',step:.05,attack:.002,glide:.9,noise:[{at:0,dur:.22,gain:1,hz:4200,q:.7,filter:'highpass'},{at:.1,dur:.5,gain:.35,hz:140,q:.6,filter:'lowpass'}],duck:.6},
  /* FINAL commit: the heaviest mechanical close in the build, with the tension under it. It adds
     no information - D25 already revealed everything it stands on. */
+ hallstep:{gain:.8,dur:.22,type:'sine',step:.06,attack:.004,layer:{ratio:2,at:.08,dur:.7,gain:.22},noise:{at:0,dur:.18,gain:.35,hz:5200,q:1,filter:'highpass'},duck:.35},
+ hallflash:{gain:1,dur:1.1,type:'triangle',step:.025,attack:.006,layer:{ratio:2,at:.05,dur:1.8,gain:.3},noise:[{at:0,dur:.035,gain:1.4,hz:3200,q:.8,filter:'bandpass'},{at:.05,dur:.03,gain:1,hz:2400,q:.8,filter:'bandpass'},{at:.1,dur:1.2,gain:.15,hz:7000,q:1,filter:'highpass'}],duck:.7},
  sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
  sealfail:{cut:250,hit:1,gain:1,dur:.5,type:'sawtooth',over:[.3,.2],step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
  endwin:{gain:1.15,dur:.9,type:'triangle',step:.12,attack:.01,layer:{ratio:2,at:.04,dur:1.6,gain:.34},noise:{at:.48,dur:.8,gain:.18,hz:6000,q:1,filter:'highpass'},duck:.85},
