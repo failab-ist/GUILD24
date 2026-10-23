@@ -4515,3 +4515,5 @@ html.in-app .relic-takeover .close{margin-bottom:max(24px,var(--sa-bottom))}
 .modal:has(.tabs) .slot-option,.modal:has(.tabs) .slot-option.locked,.modal:has(.tabs) .slot-option.on{background:none;box-shadow:none;padding:14px 2px 16px}
 .modal:has(.tabs) .slot-option+.slot-option{margin-top:0;box-shadow:inset 0 1px 0 #ffffff1f}
 .modal.wood-frame:has(.tabs) .slot-option>.deco-effect{box-shadow:none;padding-top:2px}
+/* 마감 영수증의 영업 시작 골드는 다른 줄과 같은 줄로 둔다 (결과 상자 하나만 눈에 띄게) */
+.print .row.open,.p-closing .print .row.open{background:none;box-shadow:none;clip-path:none;padding:8px 0}
