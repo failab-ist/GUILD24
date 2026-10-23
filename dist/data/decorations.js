@@ -30,7 +30,7 @@ G.DATA.decorations=[
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
  {id:'memorialBook', kind:'survival', slot:'counter', name:'추모 방명록',   price:750, effect:p=>'폐점까지 버틸 수 있는 사망자 수(사망 한도)가 '+p.memorialBook.deathLimitBonus+'명 늘어난다',
   text:'계산대 옆 방명록과 초. 사람들은 이 점포가 잊지 않는다는 걸 안다.'},
- {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:p=>'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +'+pct(p.aidCabinet.powerMult-1)+'. 원정에 실패해도 죽을 확률이 '+pct(1-p.aidCabinet.preparedFactor)+' 줄어든다 (기존 20%) (마왕성 제외)',
+ {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:p=>'부상 없이, 피로 20 미만, 가방에 상품 2개 이상을 챙겨 떠난 손님은 투력 +'+pct(p.aidCabinet.powerMult-1)+'. 원정에 실패해도 죽을 확률이 '+pct(1-p.aidCabinet.preparedFactor)+' 줄어든다 (기존 20%, 마왕성 제외)',
   text:'붉은 상자가 놓인 유리장. 챙길 걸 다 챙긴 손님일수록 무사히 돌아온다.'},
  /* META §OPERATION DECORATIONS: 운영형 - something 본사 did for the store, one per Slot, the Slot's price; the stronger 현수막 on the
     dearer 간판 (User 2026-10-05). The ids stay (saves). */
