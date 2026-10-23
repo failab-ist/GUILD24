@@ -267,7 +267,12 @@ G.Save={
  /* PLATFORM_RELEASE §Google Play Games Saved Games: every write carries a monotonic `rev` and a timestamp `at`; the larger rev (then the later at)
     is the newer Save when the local and the cloud copy are compared. Metadata only - never validated, never needed to load. */
  rev:0,
- migrate(s){if(s&&s.account){fillMatrix(s.account,G.DATA);G.Meta.seedReachUnlocks(s.account);G.Meta.seedAscension(s.account);}if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
+ /* 명예의 전당 / 전 판 이름 (User 2026-10-23): not part of the shape check above, so a value that is not a list is read as an
+    empty one rather than breaking the Run's end */
+ migrate(s){if(s&&s.account){for(const k of['hall','lastNames'])if(s.account[k]!==undefined&&!Array.isArray(s.account[k]))s.account[k]=[];
+  if(Array.isArray(s.account.hall))s.account.hall=s.account.hall.filter(x=>x&&typeof x==='object');
+  if(Array.isArray(s.account.lastNames))s.account.lastNames=s.account.lastNames.filter(x=>typeof x==='string');
+  fillMatrix(s.account,G.DATA);G.Meta.seedReachUnlocks(s.account);G.Meta.seedAscension(s.account);}if(s&&s.run){legacyFinalCommit(s.run,G.DATA);renamedNpcs(s.run);}return s;},
 
  write(account,run){
   try{

@@ -52,7 +52,7 @@ function jobMetrics(s,initial,jobBy,preparedPower,gapPenalty=2){
   const b=get(n.job);b.npcs++;b.alive+=!!n.alive;b.firstLevel+=start.level;b.level+=n.level;b.levelGain+=n.level-start.level;
   b.potential+=n.potential;b.mastery+=start.mastery;b.firstDay+=start.day;
   const rarity=b.rarities[n.rarity]??={npcs:0,exp:0,wins:0,combatLoss:0,env:0,deaths:0};rarity.npcs++;
-  for(const r of rs){const win=Number(r.outcome==='성공'||r.outcome==='대성공'),loss=Number(r.combatWon===false),env=Number(!!r.environmentHurt),dead=Number(r.outcome==='사망');
+  for(const r of rs){const win=Number(r.outcome==='성공'||r.outcome==='대성공'),loss=Number(!r.combatWon),env=Number(!!r.environmentHurt),dead=Number(r.outcome==='사망');
    for(const x of [b,rarity]){x.exp++;x.wins+=win;x.combatLoss+=loss;x.env+=env;x.deaths+=dead;}
    const band=BANDS.findIndex(([a,z])=>r.day>=a&&r.day<=z);const t=b.bands[band];t[0]+=win;t[1]++;t[2]+=loss;t[3]+=env;t[4]+=dead;}}
  const members=[],hazards=s.dungeons[0]?.hazards||[];

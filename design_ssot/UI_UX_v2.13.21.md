@@ -487,7 +487,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - height budget at 360: empty ≤ 48px, filled ≤ 200px, ≥ two shelf rows visible with it filled at 640 / 597 / 548 high in the representative
   comparison check; rows are one name line + one effect block. Long effects wrap intact instead of becoming unreadably small.
 - the effect block states every effect in ITEM order at the readable phone SALE step and wraps when needed; 구급키트 and 황금 1+1
-  쿠폰 show their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`), tray `특수 효과` and codex in full
+  쿠폰 show their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `함께 챙긴 소모품 효과 2회`), tray `특수 효과` and codex in full
 - COUNTER TRAY FOLD (phone): a filled tray folds to its header (Item, kind, ▲) when the shelf scrolls past 32px or
   on a tap outside tray, rows, dock or overlay; the strip or any row (the selected one included) reopens it; the selection
   never changes and nothing is saved; a desk (≥1024) never folds

@@ -114,7 +114,7 @@ function report(save){
  let impossible=0,belowFloor=0;
  for(const r of recs){const ratio=1+(r.greatMargin??0),odds=winOdds(ratio),lv=departLevel(r),fl=newcomerMin(r.day);
   const tag=ratio*(1+W)<1?'승리 불가':ratio*(1-W)>=1?'확정 승리':'';if(tag==='승리 불가')impossible++;if(lv<fl)belowFloor++;
-  row([r.day,r.name,lv,lv<fl?fl+' ▲':fl,r.dungeonName+(r.deep?' (심층)':''),(r.items||[]).map(item).join(' + ')||'-',r.outcome,ratio.toFixed(2),r.bareRatio!=null?r.bareRatio.toFixed(2):'-',pct(odds),tag]);}
+  row([r.day,r.name||r.npc.name,lv,lv<fl?fl+' ▲':fl,r.dungeonName+(r.deep?' (심층)':''),(r.items||[]).map(item).join(' + ')||'-',r.outcome,ratio.toFixed(2),r.bareRatio!=null?r.bareRatio.toFixed(2):'-',pct(odds),tag]);}
  L.push('','승리 불가 원정 **'+impossible+'회** / '+recs.length+'회 · 신규 손님 최저 레벨보다 낮게 출발 **'+belowFloor+'회** (▲).','');
 
  L.push('## 6. 손님 상태 · 성장 · 방문','');

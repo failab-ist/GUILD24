@@ -24,6 +24,14 @@ const tick=()=>new Promise(r=>setTimeout(r,5));
  fail=true;g=mk('tele-b');g.run.day=3;g.end(false,'소문');await tick();assert.equal(sent.length,2,'tried once');
  assert.equal(JSON.parse(store['guild24.stats.queue']).length,1,'a failed send waits in the queue');
  fail=false;await T.flush();assert.equal(JSON.parse(store['guild24.stats.queue']).length,0,'and goes out next time');
+ /* a report that arrives while a send is in flight is kept and sent after it (User 2026-10-23) */
+ {const release=[];const plain=globalThis.fetch;globalThis.fetch=async(u,o)=>{sent.push([u,o.body]);await new Promise(r=>release.push(r));return{ok:true};};
+  const n0=sent.length;g=mk('tele-r1');g.run.day=3;g.end(false,'소문');await tick();
+  const g2=mk('tele-r2');g2.run.day=3;g2.end(false,'소문');await tick();
+  assert.equal(JSON.parse(store['guild24.stats.queue']).length,2,'the second report waits behind the first');
+  release.shift()();await tick();release.shift()();await tick();
+  assert.equal(sent.length-n0,2,'both reports go out');assert.equal(JSON.parse(store['guild24.stats.queue']).length,0,'and none is lost');
+  globalThis.fetch=plain;}
  g=mk('tele-c');g.run.playMs=12345;g.run.reportHistory.push({day:1,playMs:5,refuse:2,refusePrice:1});
  assert.ok(G.Save.valid(JSON.parse(G.Save.export(g.account,g.run))),'a save carrying the new fields is valid');
  const old=mk('tele-d');delete old.run.playMs;assert.ok(G.Save.valid(JSON.parse(G.Save.export(old.account,old.run))),'and one without them still is');
