@@ -25,7 +25,8 @@ test('daily Fatigue causes survive saves and reconcile without double-counting r
  const saved=Save.import(Save.export(g.account,s));
  assert.deepEqual(saved.run.results[0].fatigueLedger,r.fatigueLedger);
  assert.equal(saved.run.npcs.find(x=>x.id===n.id).records.at(-1).settledFatigue,r.settledFatigue);
- assert.deepEqual(saved.run.npcs.find(x=>x.id===n.id).records.at(-1).fatigueLedger,r.fatigueLedger);
+ /* User 2026-10-23: the ledger lives on the Day's result; the adventurer's saved record keeps only the settled number */
+ assert.equal(saved.run.npcs.find(x=>x.id===n.id).records.at(-1).fatigueLedger,undefined);
  const restored=P.nightChanges(saved.run.results[0],n).find(x=>x.label==='귀환 후 피로');
  assert.ok(String(restored.value).startsWith(String(n.fatigue)));
  for(const event of [null,D.events.find(e=>e.id==='shiftrest')])for(const traits of [[],['weary'],['stamina']]){
@@ -401,8 +402,7 @@ test('NIGHT_CLOSING v2.7 §ORDINARY INJURY RESULT CONTINUITY: only a safe return
  for(let i=0;i<400;i++){
   const n=Adventurer.create(new RNG('injury-continuity-'+i),1,10,Meta.fresh());
   n.injury=1;n.recovery=0;n.status='부상';n.fatigue=0;n.traits=[];n.pack=[];
-  Dungeon.resolve(n,{...d,power:8+i%80},new RNG('cont-'+i));
-  const r=n.records[n.records.length-1];seen.add(r.outcome);
+  const r=Dungeon.resolve(n,{...d,power:8+i%80},new RNG('cont-'+i));seen.add(r.outcome);
   if(r.outcome==='성공'||r.outcome==='대성공')assert.equal(n.injury,0,'coming back safe clears the ordinary Injury');
   // DUNGEON_HAZARD §RETREAT HEALING (v2.9.1 balance): 퇴각 is not automatic recovery, but a fresh
   // adventurer's first-ever 퇴각 (empty records, k=0) does heal on a 25% roll - see the dedicated
@@ -418,7 +418,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
  const d={...D.dungeonBy.slime,day:18,tier:2,hazards:['poison'],scale:1,power:60,reward:40};
  const base=Adventurer.create(new RNG('excess'),1,10,Meta.fresh());
  const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
-  Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
+  return Dungeon.resolve(n,d,new RNG('excess-run'));};
  const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':0,'사망':0}; // v2.9.1 balance (User 2026-09-25): 중상 joins 사망 at 0, no Trait may raise it
  for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','guildlunch']]){
   const r=run(fatigue,pack);
@@ -440,8 +440,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
  const weary={...JSON.parse(JSON.stringify(base)),fatigue:5,traits:['weary'],pack:[],records:[]};
  let severeSeen=0;
  for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(weary)),records:[]};
-  Dungeon.resolve(n,{...d,power:900+i},new RNG('severe-'+i));
-  const r=n.records[n.records.length-1];
+  const r=Dungeon.resolve(n,{...d,power:900+i},new RNG('severe-'+i));
   if(r.outcome==='사망')assert.equal(r.rawOutcomeFatigueGain,0,'사망 result Fatigue stays 0');
   if(r.outcome==='중상'){severeSeen++;assert.equal(r.rawOutcomeFatigueGain,0,'중상 result Fatigue is 0 too, even with the weary Trait carried');}}
  assert.ok(severeSeen>0,'the sweep reached a 중상');
@@ -469,7 +468,7 @@ test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 
  const fed=Dungeon.prepare(npc(22,['rice']),d).effects;
  assert.equal(fed.fatigueBeforeExpedition,17);assert.ok(near(fed.mobility/clear.mobility,.85),'judged on departure Fatigue');
  // clamp: a 성공 at 36 with no Supply ends at 40, not 41
- for(let i=0;i<200;i++){const n={...npc(36),records:[]};Dungeon.resolve(n,{...d,power:1},new RNG('clamp-'+i));const r=n.records.at(-1);
+ for(let i=0;i<200;i++){const n={...npc(36),records:[]};const r=Dungeon.resolve(n,{...d,power:1},new RNG('clamp-'+i));
   if(r.outcome==='성공'||r.outcome==='대성공'){assert.equal(r.finalFatigue,40,'clamped at 40');break;}}
  const src=read('dist/systems/dungeon.js');
  assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(src),'no superseded v2.6 Fatigue band copy survives');
@@ -499,9 +498,8 @@ test('ITEM v2.9.0 §INSURANCE resolution order step 4: 구급키트 lowers the O
   const bare=Adventurer.create(new RNG(seed),1,10,Meta.fresh());
   bare.traits=[];bare.fatigue=0;bare.injury=0;bare.recovery=0;bare.pack=[];
   const kitted=JSON.parse(JSON.stringify(bare));kitted.pack=['kit'];
-  Dungeon.resolve(bare,{...d,power:20+i%90},new RNG('roll-'+i));
-  Dungeon.resolve(kitted,{...d,power:20+i%90},new RNG('roll-'+i));
-  const rb=bare.records.at(-1),rk=kitted.records.at(-1);seen.add(rb.outcome);
+  const rb=Dungeon.resolve(bare,{...d,power:20+i%90},new RNG('roll-'+i));
+  const rk=Dungeon.resolve(kitted,{...d,power:20+i%90},new RNG('roll-'+i));seen.add(rb.outcome);
   // the kit carries no Stat, so both paths draw the same rolls up to the kit step
   if(!['부상','중상'].includes(rb.outcome)){assert.equal(rk.outcome,rb.outcome,'the kit changes nothing else');assert.equal(rk.aftercare,null);continue;}
   withKit++;
@@ -523,8 +521,7 @@ test('ITEM v2.9.0 §INSURANCE resolution order step 4: 구급키트 lowers the O
  for(let i=0;i<400;i++){
   const n=Adventurer.create(new RNG('kit-death-'+i),1,10,Meta.fresh());
   n.traits=[];n.fatigue=0;n.injury=0;n.recovery=0;n.pack=['kit'];
-  Dungeon.resolve(n,{...d,power:1200+i},new RNG('kd-'+i));
-  const r=n.records.at(-1);
+  const r=Dungeon.resolve(n,{...d,power:1200+i},new RNG('kd-'+i));
   if(r.outcome==='사망'){assert.equal(r.aftercare,null,'no Aftercare on a death');assert.equal(n.alive,false);}
  }
 });
@@ -983,7 +980,7 @@ test('RESULT-PROOF: existing attribution rules still hold (single / overlap / wh
  // 황금 1+1: a REAL, dynamically-computed resolution - not a source-regex guess - proving the
  // duplicated Item participates in ordinary overlap attribution with no Special-category
  // exclusion and no Golden-specific shortcut. itemContributions() treats 'duplicate' as
- // doubling the NEXT item's effect and consuming no slot of its own, so ['coupon','choco']
+ // doubling the other item's effect (either order) and consuming no slot of its own, so ['coupon','choco']
  // doubles 초코바's mobility; removing 'coupon' alone strips the doubling (choco reverts to
  // its base effect) and removing 'choco' alone strips both the base effect AND its target -
  // either removal alone worsens the SAME escape roll, so both are credited together.
@@ -1176,10 +1173,10 @@ test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 ba
  // the live resolution still records departedInjured (and keeps departedWeary, even unused) and uses the same strain
  const hard={...d,power:1e9};
  for(let i=0;i<50;i++){const n=mk([{departedInjured:true},{departedInjured:true}],1);
-  Dungeon.resolve(n,hard,new RNG('strain-'+i));
-  const r=n.records.at(-1);
-  assert.equal(r.departedInjured,true,'the record says it began injured');
-  assert.equal(r.debug,undefined,'the persisted record carries no development payload');}
+  const r=Dungeon.resolve(n,hard,new RNG('strain-'+i));
+  assert.equal(r.departedInjured,true,'the report says it began injured');
+  assert.equal(n.records.at(-1).departedInjured,true,'and so does the saved record');
+  assert.equal(n.records.at(-1).debug,undefined,'the persisted record carries no development payload');}
  const n=mk([{departedInjured:true},{departedInjured:true}],1);const r=Dungeon.resolve(n,hard,new RNG('strain-live'));
  const expected=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1),hard);
  assert.ok(Math.abs(expected.strain-.24)<1e-12,'two past injured runs + this one = 3 consecutive -> +24%p');
@@ -1354,7 +1351,7 @@ test('RESULT-PROOF, combat: a 투력 Item that turned a lost fight into a win is
 });
 
 // This unit checks only serialization of already-paid growth. It never calls Game.night or resolves an expedition.
-test('NIGHT Deep growth: final report and saved record use already-paid level and stat changes',()=>{
+test('NIGHT Deep growth: final report uses already-paid level and stat changes, the saved record the level',()=>{
  const source=read('dist/systems/shop.js'),body=source.match(/function syncDeepReport[\s\S]*?(?=\r?\nclass Game\{)/)[0];
  const sync=require('node:vm').runInNewContext(body+';syncDeepReport',{G:{Adventurer:{keys:['combat','survival','mobility','spirit']}}});
  const before={combat:10,survival:11,mobility:12,spirit:13};
@@ -1364,9 +1361,9 @@ test('NIGHT Deep growth: final report and saved record use already-paid level an
  const live=JSON.stringify({level:n.level,stats:n.stats,money:n.money});sync(n,report,before);
  const expected=[{key:'combat',before:10,after:16},{key:'survival',before:11,after:13},{key:'spirit',before:13,after:17}];
  assert.equal(report.level,3);assert.equal(record.level,3);
- assert.deepEqual(JSON.parse(JSON.stringify(report.statChanges)),expected);assert.deepEqual(JSON.parse(JSON.stringify(record.statChanges)),expected);
+ assert.deepEqual(JSON.parse(JSON.stringify(report.statChanges)),expected);assert.equal(record.statChanges,undefined,'the stat before/after stays on the report, not in the save (User 2026-10-23)');
  assert.deepEqual(record.deep,{great:false,bonusXp:40,bonusWallet:60});
  assert.equal(report.xp,58);assert.equal(report.loot,20);assert.deepEqual(report.changes,['Lv.1 → Lv.2','Lv.2 → Lv.3']);
  assert.equal(JSON.stringify({level:n.level,stats:n.stats,money:n.money}),live,'sync cannot pay or grow the adventurer again');
- const saved=JSON.parse(JSON.stringify(record));assert.equal(saved.level,3);assert.deepEqual(saved.statChanges,expected);
+ const saved=JSON.parse(JSON.stringify(record));assert.equal(saved.level,3);
 });

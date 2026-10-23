@@ -1597,6 +1597,22 @@ test('PLATFORM_RELEASE §Saved Games: the cloud copy restores a missing Save, wi
   assert.equal(Save.reset(),true);assert.equal(Save.rev,3,'a reset keeps the count monotonic, so a cloud copy it failed to clear cannot outrank what follows');
  }finally{delete global.localStorage;Save.rev=0;}
 });
+/* User 2026-10-23: a Run an updated phone wrote, read on a phone not yet updated, is dropped there - and that phone then does not
+   overwrite the Run in Play Games until it is updated too */
+test('PLATFORM_RELEASE §Saved Games: a Run from a newer build is not overwritten in the cloud by the older build',()=>{
+ const store=new Map(),pushed=[],G=globalThis,keepB=G.GUILD24_BUILD,keepN=G.Native;
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ G.Native={inApp:()=>true,put(){},drop(){},cloudPush:(d,rev)=>pushed.push(rev)};
+ try{
+  G.GUILD24_BUILD={version:'3.0.1',commit:'new'};const g=fresh('cloud-hold');Save.rev=0;Save.write(g.account,g.run);
+  const raw=JSON.parse(store.get('guild24.save.v9'));raw.run.inventory.push({id:'x',item:'futureItem',cost:1,expires:null});
+  store.clear();store.set('guild24.save.v9',JSON.stringify(raw));pushed.length=0;
+  G.GUILD24_BUILD={version:'3.0.0',commit:'old'};
+  const s=Save.read();assert.ok(s&&s.run===null,'the older build cannot continue the newer Run and drops it');
+  Save.write(s.account,null);assert.equal(pushed.length,0,'and does not upload over it');
+  G.GUILD24_BUILD={version:'3.0.1',commit:'new'};Save.write(s.account,null);assert.equal(pushed.length,1,'once this phone is updated it uploads again');
+ }finally{delete global.localStorage;Save.rev=0;G.GUILD24_BUILD=keepB;G.Native=keepN;}
+});
 
 test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: an update that changes the lists keeps the account and drops only the Run',()=>{
  const store=new Map();

@@ -3,9 +3,7 @@ const copy=x=>JSON.parse(JSON.stringify(x));const fresh=seed=>{let g=new Game();
 test('pricing and actual acquisition cost; wallet and stock conservation',()=>{for(const mode of Object.keys(DATA.pricing)){const g=fresh();g.order(0);const st=g.run.inventory.at(-1);assert.equal(st.cost,g.run.offers[0].price);g.open();const n=g.current();n.money=9999;const before=g.run.money,wallet=n.money;accept(g,()=>g.sell(st.id,mode));const paid=Math.round(DATA.itemBy[st.item].sell*DATA.pricing[mode].mult);assert.equal(g.run.money-before,paid);assert.equal(wallet-n.money,paid);assert.equal(g.run.daily.cogs,st.cost);assert.ok(n.loyalty>=0);}});
 test('all paid modes obey wallet, unknown modes rejected, refusal keys safe',()=>{const g=fresh();g.open();g.current().money=0;for(const mode of Object.keys(DATA.pricing))assert.throws(()=>g.sell(g.run.inventory[0].id,mode));assert.throws(()=>g.interest(g.current(),DATA.itemBy.water,'free'));const n=g.current();n.money=999;const original=g.rng.next;g.rng.next=()=>.999;assert.equal(g.sell(g.run.inventory[0].id,'full'),false);g.rng.next=original;assert.ok(n.refused[0].includes(':full'));assert.throws(()=>g.sell(g.run.inventory[0].id,'full'));});
 test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.event=DATA.events.find(e=>e.id==='halfPrice');g.open();g.current().money=999;accept(g,()=>g.sell(g.run.inventory[0].id,'half'));accept(g,()=>g.sell(g.run.inventory[0].id,'half'));assert.equal(g.run.daily.subsidy,50);});
-/* Stage 10: the price a Trait's 구매의사 reacts to is the JUDGED price (pricing.intentMult), not
-   what is charged. 하급 포션 at 140G used to cross frugalThreshold at 정가 and no longer does -
-   it is judged at 91 - so the aversion is shown on an item that still crosses it at 195. */
+/* User 2026-10-23: 구두쇠 reacts to the price actually paid (over 150G), so its line can name the number exactly. */
 /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: the flat 0.80 accessible-mode base
    need plus a near-zero-burden 정가 bonus saturates at the 0.97 cap when the Wallet is far
    above price (the old 9999 fixture) - clamp saturation, not a trait-additivity break. Setting
@@ -13,13 +11,13 @@ test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.e
    0.36 pivot, so the bonus is zero and the frugal priceBias reads as the clean additive shift
    the test asserts. */
 test('trait source of truth; frugal changes information only',()=>{const ff=DATA.pricing.full.finalFloor;DATA.pricing.full.finalFloor=0;const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=it.sell;n.traits=[];
- assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
- assert.ok(Math.round(DATA.itemBy.lowpotion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
+ assert.ok(it.sell>DATA.balance.frugalThreshold,'the item is priced above the frugal threshold at 정가');
+ assert.ok(DATA.itemBy.lowpotion.sell<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
  const a=g.interest(n,it).chance;n.traits=['frugal'];/* v2.9.2 (User 2026-09-25): 정가's final chance carries ECONOMY_ORDER's final scale, so the additive raw shift lands scaled. */
  assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias*DATA.pricing.full.finalScale)<1e-9);DATA.pricing.full.finalFloor=ff;});
 test('coupon pending capped; explicit duplication; ordinary effects additive',()=>{const g=fresh(),n={...g.run.npcs[0],traits:[]},d=g.run.dungeons[0];const e=pack=>Dungeon.prepare({...n,pack},d).effects;assert.equal(e(['coupon','coupon','highpotion']).combat,e(['coupon','highpotion']).combat);/* ITEM_v2.7: 상급 포션 is 투력 +16, not the old 강인함 +27. The subject here is the coupon's
    duplication, so the amount is read from the catalogue instead of being restated. */
-assert.equal(e(['highpotion','coupon']).combat+DATA.itemBy.highpotion.effects.combat,e(['coupon','highpotion']).combat);assert.equal(e(['dragonramen','water']).thirst,DATA.itemBy.dragonramen.effects.thirst);assert.equal(e(['coupon','worldcharm']).revive,2);});
+/* User 2026-10-23: the coupon doubles the other item in either order */assert.equal(e(['highpotion','coupon']).combat,e(['coupon','highpotion']).combat);assert.equal(e(['coupon','highpotion']).combat-e(['highpotion']).combat,DATA.itemBy.highpotion.effects.combat);assert.equal(e(['dragonramen','water']).thirst,DATA.itemBy.dragonramen.effects.thirst);assert.equal(e(['coupon','worldcharm']).revive,2);});
 test('atomic cart validates funds, capacity and supply without mutation',()=>{const g=fresh();const before=copy(g.run);assert.throws(()=>g.setQuantity(0,999));assert.deepEqual(g.run,before);g.setQuantity(0,1);const cost=g.cartTotal();assert.equal(g.run.money,before.money);assert.throws(()=>g.open());g.confirmOrder();assert.equal(g.run.money,before.money-cost);assert.equal(g.cartTotal(),0);const money=g.run.money;g.confirmOrder();assert.equal(g.run.money,money);});
 test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',()=>{const g=fresh();g.run.inventory=[];g.run.facilities=['fridge'];g.stock('battery',24);assert.equal(g.canStock(DATA.itemBy.battery),false);assert.equal(g.canStock(DATA.itemBy.rice),false);g.run.inventory=[];g.stock('rice',2);/* SALE_v2.7 §NORMAL CONSUMER BAG: two slots for every NPC regardless of Level, Job, Rarity
  or Trait. The Lv10+ third slot is removed, not disabled or hidden. */

@@ -3,7 +3,7 @@
    developer's collector, so balance can be read off real play as well as off the bots. No name, account, device id,
    location or screen log is ever in it; the only id is a random code made on this device. The Player's switch is
    account.settings.stats (on unless set false). With no endpoint, or outside the Android app (the web build sends nothing), nothing is sent. Failed sends wait in a short queue
-   and go out with the next report; the collector drops a repeated rid. */
+   and go out at the next launch or with the next report; the collector drops a repeated rid. */
 const QUEUE='guild24.stats.queue',MAX_QUEUE=3;
 const D=()=>G.DATA;
 const on=a=>!!a&&a.settings?.stats!==false;
@@ -31,11 +31,12 @@ function build(game,kind){
 const readQ=()=>{try{return JSON.parse(localStorage.getItem(QUEUE)||'[]');}catch(e){return[];}};
 const writeQ=q=>{try{localStorage.setItem(QUEUE,JSON.stringify(q.slice(-MAX_QUEUE)));}catch(e){}};
 let busy=false;
+/* the queue is read again around every send, so a report added while one is in flight stays queued and goes out after it */
 async function flush(){
  if(!T.endpoint||busy||typeof fetch!=='function')return;
- const q=readQ();if(!q.length)return;
  busy=true;
- try{while(q.length){const r=await fetch(T.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:q[0]});if(!r.ok)break;q.shift();writeQ(q);}}
+ try{for(let body;(body=readQ()[0])!==undefined;){const r=await fetch(T.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});if(!r.ok)break;
+  const q=readQ(),i=q.indexOf(body);if(i>=0)q.splice(i,1);writeQ(q);}}
  catch(e){}
  busy=false;
 }

@@ -5,6 +5,8 @@
 // press: pick members, 원정대 확정 (and the sub-3 confirm), focus a member, pick a stock line, 보급.
 //   node tools/qa-final-prep.cjs <out-dir> [widths] [BOSS]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+// #307 keeps a bracket's words on one line with a no-break space; the copy check reads it as an ordinary space
+const flat=t=>String(t||'').replace(/\u00a0/g,' ');
 const {ready}=require('./qa-ready.cjs');   // the loading screen and the prologue come before the game (UI_UX §PROLOGUE)
 // FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
 const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]')){await p.click('.p-final .dock [data-action="final-ordered"]');/* 해금 카드 may open over the muster; close each before the next press */for(let i=0;i<4&&await p.$('#modal-root [data-action="dismiss"]');i++)await p.click('#modal-root [data-action="dismiss"]');}};
@@ -98,7 +100,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    await p.keyboard.press('Escape');await p.waitForTimeout(150);
    // ---- selection: 0, then 1 picked
    let u=await p.evaluate(ui);
-   check(`S @${tag} capacity reads 선택 0명 (최대 3명)`,u.count==='선택 0명 (최대 3명)',u.count);
+   check(`S @${tag} capacity reads 선택 0명 (최대 3명)`,flat(u.count)==='선택 0명 (최대 3명)',u.count);
    check(`S @${tag} guidance, no forecast / 전투 전망 / 사망 위험`,u.pending&&u.text.includes('원정대를 확정하면 토벌 전망을 확인할 수 있다.')&&!u.forecasts&&!u.combat&&!u.death);
    check(`S @${tag} 원정대 확정 closed with nobody picked`,await p.evaluate(`document.querySelector('.p-final .dock [data-action="final-commit"]').disabled`));
    await shot('1-select0',false);await shot('1-select0-below');
@@ -110,7 +112,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`R @${tag} the chosen card owns the strong frame`,pick.length===1&&/0px 0px 0px 4px inset/.test(pick[0].sh),pick[0]&&pick[0].sh);
    const nameVsRare=await p.evaluate(`(()=>{const c=document.querySelector('.p-final .npc-card');const r=parseFloat(getComputedStyle(c.querySelector('.rare-badge')).fontSize),h=parseFloat(getComputedStyle(c.querySelector('h3')).fontSize);return {r,h,over:document.documentElement.scrollWidth>innerWidth};})()`);
    check(`R @${tag} rarity text stays under the name, no overflow`,nameVsRare.r<nameVsRare.h&&!nameVsRare.over,JSON.stringify(nameVsRare));
-   check(`S @${tag} 선택 1명 (최대 3명), still no forecast`,u.count==='선택 1명 (최대 3명)'&&!u.forecasts&&!u.combat);
+   check(`S @${tag} 선택 1명 (최대 3명), still no forecast`,flat(u.count)==='선택 1명 (최대 3명)'&&!u.forecasts&&!u.combat);
    await shot('2-select1');
    await audit('selection');
    const pinCheck=async(state,list)=>{for(const [sel,sec] of list){const r=await p.evaluate(OVERLAP(sel,sec));

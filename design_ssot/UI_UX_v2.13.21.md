@@ -487,7 +487,7 @@ LAYOUT). Tap-only; no drag, minigame or Save field. The FINAL preparation screen
 - height budget at 360: empty ≤ 48px, filled ≤ 200px, ≥ two shelf rows visible with it filled at 640 / 597 / 548 high in the representative
   comparison check; rows are one name line + one effect block. Long effects wrap intact instead of becoming unreadably small.
 - the effect block states every effect in ITEM order at the readable phone SALE step and wraps when needed; 구급키트 and 황금 1+1
-  쿠폰 show their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소모품 효과 2회`), tray `특수 효과` and codex in full
+  쿠폰 show their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `함께 챙긴 소모품 효과 2회`), tray `특수 효과` and codex in full
 - COUNTER TRAY FOLD (phone): a filled tray folds to its header (Item, kind, ▲) when the shelf scrolls past 32px or
   on a tap outside tray, rows, dock or overlay; the strip or any row (the selected one included) reopens it; the selection
   never changes and nothing is saved; a desk (≥1024) never folds
@@ -1422,7 +1422,7 @@ Store Capital / Decoration management and run-end settlement stay as META_v2.13.
   first Slot with an affordable Decoration; neither -> the side last seen. `장식 관리` keeps opening 장식.
 - 직업 숙련 shows the Capital line with `숙련은 차례로 구매하며, 새로 오는 손님에게 적용됩니다.`, a `직업별 주 능력치`
   grid (two columns on a phone, three from 700 px) and five rank cards in the Decoration card shape. A card reads 보유,
-  `n단 먼저`, `마왕 N종 / 토벌 후` (two lines), its price during a Run, or the buy key; the buy asks inline like a Decoration.
+  `n단 구매 후`, `마왕 N종 / 토벌 후` (two lines), its price during a Run, or the buy key; the buy asks inline like a Decoration.
 - Purchase keys (Decoration and Mastery `구매` / `구매 확정`) are a yellow pixel plane like the Night `다음`: stamp-cut
   corners, inset depth, a 3 px press. Without the Capital the key is a plain dark plane with readable text. 적용 / 해제 /
   취소 stay the wooden return tag. No key underlines on hover.

@@ -77,9 +77,10 @@ function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
    without touching what the bag added. */
 function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why){
  const itemStats=[],itemE={combat:0,survival:0,mobility:0,spirit:0};
- let duplicate=0,finalSupply=0,mealFinal=0;
+ /* 황금 1+1 쿠폰 (User 2026-10-23): doubles the other consumable in the Bag whichever order the two were sold in */
+ let duplicate=n.pack.some(id=>D.itemBy[id].effects.duplicate)?1:0,finalSupply=0,mealFinal=0;
  for(const id of n.pack){
-  const item=D.itemBy[id];if(item.effects.duplicate){duplicate=1;continue;}
+  const item=D.itemBy[id];if(item.effects.duplicate)continue;
   const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
   const power=copies,from={};
   for(const[k,v]of Object.entries(item.effects)){
@@ -282,7 +283,15 @@ function hazardState(h,e,d){
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */
 function band(ratio){return ratio>1.2?'우세':ratio>=.8?'접전':'불리';}
-function estimate(n,d,facilities){const e=prepare(n,d,facilities).effects,ratio=preparedPower(e)/d.power;return band(ratio);}
+/* META §display: 구급품 진열장 (a 만반의 준비 departure) and 단골 감사 현수막 multiply 투력 - one place, so resolve() and the
+   SALE forecasts below (`run` given) read the same 투력. Returns which of the two the run wears. */
+function decorBoost(e,n,run){
+ const worn=id=>!!run&&Object.values(run.loadout||{}).includes(id),cabinet=worn('aidCabinet'),banner=worn('cheerBanner');
+ if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
+ e.combat*=cheer(banner,n.loyalty);
+ return {cabinet,banner};
+}
+function estimate(n,d,facilities,run){const e=prepare(n,d,facilities).effects;decorBoost(e,n,run);return band(preparedPower(e)/d.power);}
 /* DUNGEON_HAZARD §GREAT SUCCESS. The chance rises with how far the PREPARED Combat ability ran
    ahead of what the Gate requires, and the cap keeps it short of certainty at every level of
    preparation - no amount of preparation guarantees 대성공.
@@ -297,8 +306,8 @@ function greatSuccessChance(margin){
 }
 /* Whether this preparation is worth telling the player about. UI_UX owns where it is shown;
    the number lives here so the signal and the roll are read off one calculation. */
-function greatSuccessSignal(n,d,facilities=[]){
- const e=prepare(n,d,facilities).effects;
+function greatSuccessSignal(n,d,facilities=[],run){
+ const e=prepare(n,d,facilities).effects;decorBoost(e,n,run);
  const margin=preparedPower(e)/d.power-1;
  return margin>=D.greatSuccess.signalMargin;
 }
@@ -368,8 +377,8 @@ function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.
 /* DUNGEON_HAZARD §Pre-supply player-facing failure Death risk (User 2026-09-25, v2.9.1 balance):
    the SALE snapshot is the raw failureDeathChance and never includes preparedFactor, which
    depends on the Bag the snapshot excludes (no Level factor since v2.9.2 fourth pass). */
-function failureDeathRisk(n,d,facilities=[]){
- const p=prepare(n,d,facilities),departedInjured=n.injury===1;
+function failureDeathRisk(n,d,facilities=[],run){
+ const p=prepare(n,d,facilities),departedInjured=n.injury===1;decorBoost(p.effects,n,run);
  return failureDeathChanceFor(p,d,departedInjured,undefined,strainFor(n.records,departedInjured));
 }
 /* RESULT-PROOF COUNTERFACTUAL (DUNGEON_HAZARD §RESULT-PROOF). The real expedition resolves
@@ -556,6 +565,14 @@ function combatProof(departure,pack,d,facilities,ev){
  }))];
  return items.length?{items}:null;
 }
+/* SAVE SIZE (User 2026-10-23): the adventurer keeps, in the save, only what the game and the anonymous statistics read back
+   from an old expedition - the day's result screen keeps the whole report. The rest (stat before/after, the fatigue ledger and
+   its steps, the bag explanation) was a balance-check aid that filled a D30 save to 28만 자. */
+const RECORD_KEYS=['day','dungeon','dungeonName','outcome','won','combatWon','environmentHurt','xp','loot','storeBonus','greatMargin','bareRatio',
+ 'changes','items','events','rescued','avoidedDeath','heroProof','combatHero','level','injury','departedInjured','departedWeary','beforeFatigue',
+ 'finalFatigue','settledFatigue','cause','deep','routeChange'];
+/* a flag that is off (false / null) is left out - every reader takes a missing one as off */
+function savedRecord(report){const out={};for(const k of RECORD_KEYS)if(report[k]!==undefined&&report[k]!==null&&report[k]!==false)out[k]=report[k];return out;}
 function resolve(n,d,r,facilities=[],run,assist=0){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
  /* RESULT-PROOF DEPARTURE SNAPSHOT. */
@@ -563,9 +580,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const firstRunGuard=!!run?.firstRun&&(run.day??d.day)<=2;
  const departurePack=[...n.pack];
  /* META §display — 구급품 진열장: a 만반의 준비 departure gets 투력 x powerMult and preparedFactor (ordinary expeditions only) */
- const cabinet=!!run&&Object.values(run.loadout||{}).includes('aidCabinet');
- if(cabinet&&fullyPrepared(n,e.fatigueBeforeExpedition))e.combat*=D.decorationParams.aidCabinet.powerMult;
- const banner=!!run&&Object.values(run.loadout||{}).includes('cheerBanner');e.combat*=cheer(banner,n.loyalty);
+ const {cabinet,banner}=decorBoost(e,n,run);
 
  const ability=preparedPower(e);
  /* RESULT-PROOF: this expedition's real random draws are named as they are drawn, in the exact order/count t. */
@@ -712,10 +727,10 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     injuryRoll:injuryRoll===undefined?null:injuryRoll,deathRoll:deathRoll===undefined?null:deathRoll,deathChance,effects:e}};
  /* CORE_RUN SAVE/LOAD).. */
  report.fatigueLedger=fatigueRows;report.settledFatigue=finalFatigue;
- {const {debug:_dev,...record}=report;n.records.push(record);}
+ n.records.push(savedRecord(report));
  /* A death line that implies a shopkeeping history is only used when that history exists; otherwise a histor. */
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={EQUIP,equipChance,opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,EARLY_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
+G.Dungeon={savedRecord,EQUIP,equipChance,opsBonus,injuryPenaltyFor,DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,GATE_EASE,EARLY_EASE,gateEase,ENV,envChance,FATIGUE_MAX,fatigueBand,fatigueBands,fatiguePenaltyFrom,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,FIRST_TIER2_DAY,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);
