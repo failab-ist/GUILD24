@@ -603,7 +603,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  /* 원정 전문 인증: the buyer of a Counter for their own Gate collects +50G on the next visit, once per purchase Day */
  s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
- n.history.push({day:s.day,item:it.id,mode,paid:intent.price,wallet:n.money+intent.debit-fromEvent,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,subsidy:intent.bundle,commission,loyalty:n.loyalty-before});
+ n.history.push({...this.tradeFacts(s.day,it.id,mode,intent.price,n.money+intent.debit-fromEvent,st),debit:intent.debit,guarantee:intent.guarantee,subsidy:intent.bundle,commission,loyalty:n.loyalty-before});
  /* SA-Q11. A committed purchase is the one thing the Player did, so the Great Success signal
     - and ONLY that signal - is recomputed against the Bag they just changed. The rest of the
     SALE-ENTRY snapshot stays frozen: Combat Forecast, Hazard Readiness and the 실패 시 사망
@@ -614,10 +614,11 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day,s)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
- /* unusedCartFood / unusedStockFood: Food+Drink counts kept for a later balance check. No rule reads them today. */
- validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,unusedCartFood=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?D.eventRules.promoUnits:1);if(['food','drink'].includes(D.itemBy[o.item].category))unusedCartFood+=q;}
+  /* The facts every trade leaves on the customer's history, ordinary SALE and 최종 보급 alike: what was paid, the wallet before it, and the cost of the stock that left (costUnknown for a stock with no cost on record). */
+ tradeFacts(day,item,mode,paid,wallet,st){return {day,item,mode,paid,wallet,cost:st.cost,costUnknown:!!st.costUnknown};}
+ validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?D.eventRules.promoUnits:1);}
  const cap=s.event?.effects.orderCap;if(cap&&Object.values(cart).some(q=>q>cap))throw Error('오늘은 발주 후보 한 칸에서 '+cap+'개까지만 발주할 수 있습니다.');
- if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const unusedStockFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
+ if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
  /* UI_UX §ORDER quantity interaction (User 2026-09-24, v2.9.0): the largest quantity this offer takes right now AND what stops
