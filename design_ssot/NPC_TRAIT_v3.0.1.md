@@ -2,7 +2,7 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.13.21
+DOC_VERSION=3.0.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ## KEY
@@ -347,7 +347,7 @@ Entry format: `N. **name** — internalDirection — effects`.
 16. **수집가** — MIXED — [benefit] Rare+ purchase interest +12%p · [cost] Common/Uncommon purchase interest -5%p
 17. **실속파** — MIXED — [benefit] Common/Uncommon purchase interest +10%p · [cost] Rare+ purchase interest -10%p
 18. **사교적인** — POSITIVE — [benefit] revisit selection weight ×1.25
-19. **낯가림** — NEGATIVE — [cost] first 2 visits: buyBias -10%p · [neutral] from 3rd visit onward: this penalty does not apply
+19. **낯가림** — NEGATIVE — [cost] buyBias -10%p on every visit
 20. **회복체질** — POSITIVE — [benefit] Severe Injury recovery duration -1 day, minimum 1 day
 21. **지구력** — POSITIVE — [benefit] expedition Fatigue gain -1
 22. **쉽게 지침** — NEGATIVE — [cost] expedition Fatigue gain +1
@@ -777,7 +777,7 @@ PASS: No Job is mandatory for a Family and no Job solves all Families.
 
 ### NPC-Q-v28-7 — JOB BASE / GROWTH TABLE EXACT
 
-Expect exactly the six Job rows in NPC_TRAIT_v2.13.21.md.
+Expect exactly the six Job rows in NPC_TRAIT_v3.0.1.md.
 
 For a controlled NPC:
 - Lv1 Stats equal the Job row
@@ -978,7 +978,7 @@ SETUP: Compare 사교적인, 낯가림, 냉담한 over repeated visits.
 
 EXPECT:
 - 사교적인 changes revisit selection weight only
-- 낯가림 creates an early-visit purchase hurdle that expires after 2 visits
+- 낯가림 is a permanent purchase hurdle: it applies on every visit, never wearing off
 - 냉담한 reduces revisit weight but provides the explicit Cold-response benefit
 - no Trait secretly creates a new relationship subsystem
 

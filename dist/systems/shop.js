@@ -484,12 +484,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
    deathRisk:G.Dungeon.failureDeathRisk(v,d,this.run.facilities,this.run).chance,
    greatSignal:G.Dungeon.greatSuccessSignal(v,d,this.run.facilities,this.run)};
  }
- /* SA-Q25: `last.events.length` was broader than sold-Item causality - a Trait-only event
-    (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
-    reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
+ /* SA-Q25: the visit callback reads `last.heroProof`, the persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
  arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&!n.newToday)n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('firstVisitCoupon'))n.money+=D.relicParams.firstVisitCoupon.arrivalGold;
- /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +75G more each (User 2026-10-23) */
+ /* META §counter — 알뜰 금고: the Day's first two customers to reach the counter bring +75G more each */
  {const T=D.decorationParams.thriftSafe,paid=this.run.daily.safeWallets??=[];if(this.wears('thriftSafe')&&paid.length<T.customers&&!paid.includes(n.id)){n.money+=T.firstWallet;paid.push(n.id);}}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
     door. The roll is drawn only while the Decoration is worn and only for an injured arrival. */

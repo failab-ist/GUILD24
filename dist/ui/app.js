@@ -1818,6 +1818,8 @@ function stockHead(){const s=game.run,n=groupStock().length,hq=s.day===1&&!(s.da
  return '<i>창고</i><b>'+s.inventory.length+' / '+game.capacity()+'칸</b>'+(n?'<em>'+(hq?'본사 기본 상품 ':'')+n+'종</em>':'');}
 function stockSide(){return '<aside class="stock-side" aria-label="창고"><p class="stock-head">'+stockHead()+'</p>'+stockSlots(true)+'</aside>';}
 const sheetOpen=()=>game.account.settings.stockBriefOpen===true;
+/* the warehouse panel exists on the ordinary order and on the Final order, so Back and Escape close it on both */
+const stockSheetShown=()=>sheetOpen()&&(game.run?.phase==='order'||game.run?.phase==='final'&&finalIsOrdering(game.run));
 function stockSheetKey(){const open=sheetOpen();
  return '<section class="stock-sheet" id="stock-sheet" aria-label="창고"'+(open?'':' hidden')+'>'+stockSlots()+'</section>'
   +'<button type="button" class="stock-handle stock-head'+(lessonKit()?' lesson-kit':'')+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'+open+'">'
@@ -3363,7 +3365,7 @@ document.addEventListener('focusout',ev=>{
 document.addEventListener('keydown',ev=>{if(hall&&ev.key==='Escape'){ev.preventDefault();hall.el.classList.contains('done')?hallClose():hallFinish();return;}if(ev.key==='Escape')closeTips(null);
  /* a plate that acts (the prep Capital plate) answers Enter and Space like a button */
  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('[role="button"][data-action]')){ev.preventDefault();ev.target.click();return;}
- if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+ if(ev.key==='Escape'&&stockSheetShown())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();dropRunUi();setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 /* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level Back asks before leaving (exitConfirm); the app saves and exits only on its 종료. */
 Native.onBack(()=>{
@@ -3375,7 +3377,7 @@ Native.onBack(()=>{
  if(document.querySelector('.tip[open],.wh-tip[open]')){closeTips(null);whClose();return true;}
  if(activeCoach){finishCoach();return true;}
  if(modal){if(game.run?.phase!=='foundation'&&!d0Owed())setModal(null);return true;}
- if(game.run?.phase==='order'&&sheetOpen()){setStockSheet(false);return true;}
+ if(stockSheetShown()){setStockSheet(false);return true;}
  if(game.run?.phase==='end'&&!endRevealed)return true;
  if(game.run?.phase==='foundation'||d0Owed())return true;
  game.save();setModal('exitConfirm');return true;});

@@ -505,7 +505,7 @@ effect=a 단골 is stronger, and stays a 단골
   (`평생 단골제 +6%`); the Final party reads it the same way
 - while owned, a change that starts at Loyalty >= 51 never takes it below 51 (a 바가지 sale to a 단골 keeps the status);
   an adventurer not yet a 단골 has no floor
-- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.13.21.md owns 단골 at 51
+- the condition reads the Trusted Regular owner judgement; NPC_TRAIT_v3.0.1.md owns 단골 at 51
 
 23. 왕도 프리미엄 인증 · tag=Premium · refusal/inventoryRisk=REMAINS · `DIRECTOR DOCUMENT BASELINE`
 effect=successful 150% sale of any rarity -> extra premium commission
@@ -1469,6 +1469,6 @@ final expedition / D25 Final state -> FINAL_EXPEDITION_v2.8.0.md
 boss/sloth seal / Sloth Boss value -> BOSS_v2.8.0.md
 gold/order/reroll -> ECONOMY_ORDER_v2.13.19.md
 sale phase -> SALE_v2.8.0.md
-npc value -> NPC_TRAIT_v2.13.21.md
+npc value -> NPC_TRAIT_v3.0.1.md
 Item/category/composition -> `ITEM_v2.8.0.md`
 Order/UI -> `UI_UX_v3.0.0.md`

@@ -1056,7 +1056,7 @@ EVENT가 소유: Event 발생 Day · Event 발생 확률 · Event Eligibility ·
 EVENT가 소유하지 않음:
 
 - Item Effect / Counter → `ITEM_v2.8.0.md`
-- NPC Roster / Trait / Growth / Revisit → `NPC_TRAIT_v2.13.21.md`
+- NPC Roster / Trait / Growth / Revisit → `NPC_TRAIT_v3.0.1.md`
 - Gate / Hazard 기본 Formula → `DUNGEON_HAZARD_v2.13.19.md`
 - Order 기본 Offer / Price → `ECONOMY_ORDER_v2.13.19.md`
 - Sale 기본 Purchase / Price Rule → `SALE_v2.8.0.md`
