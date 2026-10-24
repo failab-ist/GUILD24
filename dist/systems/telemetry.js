@@ -51,7 +51,7 @@ function part(game){
   const body={schema:2,rid:live.rid,kind:'part',demo:demo()?1:undefined,at:new Date().toISOString(),build:B.version,commit:B.commit,anon:a.anonId,head,day:s.day,money:s.money,supports:s.facilities,playMs:s.playMs||0,days,
    npcs:s.npcs.map(n=>({...npc(n),rec:undefined}))};
   for(const d of days)d.sent=1;live.head=1;writeLive(live);
-  const q=readQ();q.push(JSON.stringify(body));writeQ(q);flush();
+  const q=readQ();q.push(JSON.stringify(body));writeQ(q);flush(a);
  }catch(e){}
 }
 function build(game,kind){
@@ -62,7 +62,9 @@ function build(game,kind){
   account:{runs:a.runs,wins:a.wins,bestDay:a.bestDay,bestSales:a.bestSales,asc:a.ascension,decos:D().decorations.filter(d=>G.Meta.decorationOwned(a,d.id)).map(d=>d.id),discovered:(a.discovered||[]).length},
   run:{seed:s.seed,branch:s.branch,startBuild:s.startBuild,expected:s.expectedVisitors,day:s.day,phase:s.phase,win:!!s.win,end:s.endReason,first:!!s.firstRun,asc:s.ascension||0,contract:s.contract,loadout:s.loadout,money:s.money,stats:s.stats,boss:s.bossId,
    supports:s.facilities,rerolls:s.rerollCount||0,playMs:s.playMs||0,relics:(s.relicHistory||[]).concat(s.relicWindow?[s.relicWindow]:[]).map(w=>({d:w.milestoneDay,c:w.candidateIds.map(id=>[id,D().relicBy[id]?.rarity]),p:w.purchased,rr:w.rerolls||undefined,x:w.seen?.length?w.seen.map(ids=>ids.map(id=>[id,D().relicBy[id]?.rarity])):undefined})),
-   events:s.eventLog,settlement:s.settlement,final:s.finalReport?{cleared:s.finalReport.cleared,families:s.finalReport.families,revenue:s.finalLock?.revenue,power:s.final?.power,members:s.finalReport.members.map(m=>({job:m.job,lv:m.level,it:m.items,h:m.hazard}))}:undefined,
+   events:s.eventLog,settlement:s.settlement,final:s.finalReport?{cleared:s.finalReport.cleared,families:s.finalReport.families,revenue:s.finalLock?.revenue,
+   /* the Final as it was decided (run.js boss()): party power, the Boss's power, the roll and party power x roll - not re-computed */
+   pp:s.bossDebug&&r2(s.bossDebug.power),bp:s.bossDebug&&r2(s.bossDebug.bossPower),roll:s.bossDebug&&r3(s.bossDebug.roll),as:s.bossDebug&&r2(s.bossDebug.assault),members:s.finalReport.members.map(m=>({job:m.job,lv:m.level,it:m.items,h:m.hazard}))}:undefined,
    days:(s.reportHistory||[]).map(h=>({d:h.day,rev:h.revenue,sp:h.spent,op:h.operating,cogs:h.cogs,sales:h.sales,waste:h.waste,bal:h.balance,rr:h.rerolls,g:h.gates,gs:h.greatSuccess,disc:h.discount,oc:h.overcharge,ref:h.refuse||undefined,refP:h.refusePrice||undefined,m:sbd[h.day],pm:h.playMs||undefined,nov:h.noVisitors?1:undefined,
    com:h.commission||undefined,rrs:h.rerollSpent||undefined,rls:h.relicSpent||undefined,wc:h.wasteCost||undefined,sub:h.subsidy||undefined,liq:h.liquidation||undefined,tr:h.trace??liveDay(h.day)?.tr}))},
   detail:own.flatMap(x=>x.x),
@@ -70,24 +72,28 @@ function build(game,kind){
 }
 const readQ=()=>{try{return JSON.parse(localStorage.getItem(QUEUE)||'[]');}catch(e){return[];}};
 const writeQ=q=>{try{localStorage.setItem(QUEUE,JSON.stringify(q.slice(-MAX_QUEUE)));}catch(e){}};
-let busy=false;
-/* the queue is read again around every send, so a report added while one is in flight stays queued and goes out after it */
-async function flush(){
+let busy=false,acct=null;
+/* the queue is read again around every send, so a report added while one is in flight stays queued and goes out after it.
+   The Player's switch is read again before every send too: switched off mid-queue, nothing more goes out (privacy.html 제2조의2). */
+async function flush(a){
+ if(a)acct=a;
  if(!T.endpoint||busy||typeof fetch!=='function')return;
  busy=true;
- try{for(let body;(body=readQ()[0])!==undefined;){const r=await fetch(T.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});if(!r.ok)break;
+ try{for(let body;on(acct)&&(body=readQ()[0])!==undefined;){const r=await fetch(T.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});if(!r.ok)break;
   const q=readQ(),i=q.indexOf(body);if(i>=0)q.splice(i,1);writeQ(q);}}
  catch(e){}
  busy=false;
 }
+/* switched off: what was waiting to go out is dropped, not kept for later */
+function clear(){writeQ([]);writeLive(null);}
 function report(game,kind){
  try{
-  if(!T.endpoint||!sends()||!on(game.account))return;
+  if(!T.endpoint||!sends()||!on(game.account))return;acct=game.account;
   anon(game.account);
   const p=build(game,kind);if(!p)return;
   const q=readQ();q.push(JSON.stringify(p));writeQ(q);writeLive(null);flush();
  }catch(e){}
 }
 /* the collector's address (tools/stats-collector/README-cloudflare.md) */
-const T=G.Telemetry={endpoint:'https://guild24-stats.f-ai-shion-lab.workers.dev/',on,build,report,flush,day,part};
+const T=G.Telemetry={endpoint:'https://guild24-stats.f-ai-shion-lab.workers.dev/',on,build,report,flush,day,part,clear};
 })(globalThis);

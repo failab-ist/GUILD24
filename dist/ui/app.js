@@ -3225,7 +3225,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
  case'credits':sound('ui');setModal('credits');break;
- case'stats-toggle':game.account.settings.stats=!statsOn();game.save();sound('ui');render();if(modal)renderModal();break;
+ case'stats-toggle':game.account.settings.stats=!statsOn();if(!statsOn())Telemetry.clear();game.save();sound('ui');render();if(modal)renderModal();break;
  case'prologue-toggle':game.account.settings.prologue=!prologueOn();game.save();sound('ui');render();if(modal)renderModal();break;
  /* §AUDIO HIERARCHY: Settings is Utility. Unmuting used to answer with the default cue, which
     is the SALE register - the loudest thing in the build, for a control that sold nothing. The
@@ -3400,7 +3400,7 @@ Native.cloudLate(raw=>{if(Save.cloudMerge(raw)!=='cloud')return;const s=Save.rea
  if(prologue){const d=prologue.done;prologue.done=()=>{d();toast(msg);};return;}
  render();toast(msg);});
 /* anonymous statistics: a report a failed send left in the queue goes out at launch, not only when the next Run ends */
-if(Native.inApp?.()&&Telemetry.on(game.account))setTimeout(()=>Telemetry.flush(),3000);
+if(Native.inApp?.()&&Telemetry.on(game.account))setTimeout(()=>Telemetry.flush(game.account),3000);
 Native.updateCheck?.();
 window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};
 /* Assets are preloaded before the first screen (ui/preload.js); the bar shows only when that takes a while. */
