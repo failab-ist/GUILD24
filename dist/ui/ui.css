@@ -205,7 +205,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 html.in-app .stage .menu-pin{top:6px}
 html.in-app .stage .dock{padding-bottom:max(40px,var(--sa-bottom))}
 html.in-app #toast{bottom:calc(128px + var(--sa-bottom))}
-/* windows and notices end 40px above the edge too; the wood-frame windows are left as they are until seen on the phone */
+/* windows and notices end 40px above the edge too; the wood-frame windows keep their own footer, inside the frame */
 html.in-app .modal:not(.wood-frame):not(.settings-wood) .modal-footer{padding-bottom:max(40px,var(--sa-bottom))}
 /* the prologue's corner buttons stand in the same top corners as the menu button; the hint 24px off the bottom */
 html.in-app .pro-skip,html.in-app .pro-sound{top:6px}
@@ -4638,8 +4638,7 @@ html.in-app .hall{padding-bottom:calc(40px + var(--sa-bottom))}
 .readout .tip>summary::after,.dest-plate .tip>summary::after,.kit .tip>summary::after{content:'';position:absolute;inset:-10px}
 /* 승천 선택 시 점포 준비 안내는 같은 세 줄 높이를 지킨다(1단계는 셋째 줄이 비어도 높이 유지) */
 .p-prep .prep-note.asc-slip .welcome-band:empty::before{content:'\200b'}
-/* 앱 큰 화면(세로 780 이상): 폰 공간 때문에 줄였던 높이를 데스크 쪽 값으로 되돌린다. 더 작은 폰은 그대로.
-   발주 하단 버튼 48→56·창고 키 72×56, 수량 −/+ 칠한 면 26→36px, 판매 상품 칸 54→64·스탯 줄 23→31px, 판매 하단 줄 위 여백 5→14px */
+/* app, tall screens (780px and up): order bottom button and warehouse keys 56px (keys 72x56), quantity -/+ face 36px, sale product slot 64px, stat line 31px, 14px above the sale bottom line; shorter phones keep the compact sizes */
 @media (max-width:1023px) and (min-height:780px){
  .p-order .dock{gap:10px;padding-top:16px}
  .p-order .dock .stock-handle{flex-basis:72px;min-height:56px}
@@ -4653,7 +4652,7 @@ html.in-app .hall{padding-bottom:calc(40px + var(--sa-bottom))}
  .p-sale:not(.sale-desk) .dossier:not(.traits)>.readout.ro2+.detail-stats{margin-top:6px}
  .p-sale:not(.sale-desk) .dock{padding-top:14px}
 }
-/* 판매 진열대 머리판(나무 타이틀 막대)을 위아래 2px씩 키워 24→28px로. 폰 세로 공간 때문에 줄였던 값이라 작은 폰도 소폭이라 같이 되돌린다 */
+/* the sale shelf title bar is 28px on every phone */
 .p-sale:not(.sale-desk) .shelf-head{padding-top:4px;padding-bottom:4px}
 /* 폰에서 나무틀 창(설정·도감·점포 메뉴 등)은 아래에서 올라오는 시트 대신 화면 가운데에 띄운다. 아래 끝이 제스처 막대에 붙지 않게 위아래 여백을 같게 둔다 */
 @media (max-width:1023px){
@@ -4661,7 +4660,7 @@ html.in-app .hall{padding-bottom:calc(40px + var(--sa-bottom))}
  .modal.settings-wood,.modal.wood-frame{max-height:84dvh}
  .modal.menu-panel{max-height:92dvh}
 }
-/* 마왕전 하단 버튼도 큰 화면(세로 780 이상)에서는 48→56px, 위 여백 12→16px로 되돌린다. 작은 폰은 그대로 */
+/* Boss fight bottom button: 56px tall with 16px above it on tall screens (780px and up); shorter phones keep 48px and 12px */
 @media (max-width:1023px) and (min-height:780px){
  .p-final.p-order .dock{padding-top:16px}
  .p-final.p-order .dock .stamp{min-height:56px}

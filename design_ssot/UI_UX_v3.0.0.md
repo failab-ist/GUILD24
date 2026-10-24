@@ -707,7 +707,7 @@ equal-priority internal coefficients; Hazard detail appears where the destinatio
 Trait card: 1. name 2. actual effects 3. condition/scope when needed. Never show 이점 / 양면 / 약점 / ▲ / ◆ / ▼ (internal
 POSITIVE/MIXED/NEGATIVE stays for generation/Event logic). Each effect takes its data-driven tone (benefit / cost / neutral),
 never from the sign — `신중함`: injuryRisk -4%p = benefit, loot -8% = cost; wording reads without colour; no quality-grade
-header/background. Authoritative -> NPC_TRAIT_v2.13.21.md.
+header/background. Authoritative -> NPC_TRAIT_v3.0.1.md.
 
 ## HAZARD NUDGE
 
@@ -3608,7 +3608,7 @@ run phases / Final timeline / fresh init -> CORE_RUN_v2.8.0.md
 order / Economy / Final Wallet / Gold -> ECONOMY_ORDER_v2.13.19.md
 sale -> SALE_v2.8.0.md
 night/closing / Night result -> NIGHT_CLOSING_v2.8.0.md
-npc presentation -> NPC_TRAIT_v2.13.21.md
+npc presentation -> NPC_TRAIT_v3.0.1.md
 item info -> ITEM_v2.8.0.md
 relic choice -> RELIC_v3.0.0.md
 forecast / Fatigue / Supply -> DUNGEON_HAZARD_v2.13.19.md

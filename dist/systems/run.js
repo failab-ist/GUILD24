@@ -164,12 +164,13 @@ P.finalSnapshot=function(n,prep,d,context){
  return e;
 };
 
+/* META 단골 감사 현수막 on the Final party: 투력 x(1 + floor(단골도 / 10) x perTen), 1 without the banner. ENVY picks its target with it, so the largest contributor is the one the Final really counts. */
+P.cheerMult=function(n){return this.wears('cheerBanner')?1+Math.min(D.decorationParams.cheerBanner.max,Math.floor((n.loyalty||0)/10)*D.decorationParams.cheerBanner.perTen):1;};
 /* ENVY targets the single largest pre-ENVY contributor. The order puts the modifier at
    step 4 and the individual power at step 5, so the target has to be chosen from a pass of
    step 5 run before step 4 - and once chosen it does not move, even though its own penalty
-   makes it no longer the largest. Ties fall to the stable NPC id. */
-/* META 단골 감사 현수막 on the Final party: 투력 x(1 + floor(단골도 / 10) x perTen), 1 without the banner. ENVY picks its target with it, so the largest contributor is the one the Final really counts. */
-P.cheerMult=function(n){return this.wears('cheerBanner')?1+Math.min(D.decorationParams.cheerBanner.max,Math.floor((n.loyalty||0)/10)*D.decorationParams.cheerBanner.perTen):1;};
+   makes it no longer the largest. The banner's multiplier is part of step 4, so it counts here too.
+   Ties fall to the stable NPC id. */
 P.envyTarget=function(team,preparations){
  let best=null,bestPower=-Infinity;
  team.forEach((n,i)=>{const p=individualPower({...preparations[i].effects,combat:preparations[i].effects.combat*this.cheerMult(n)},finalMeanHazardGap(preparations[i]));
@@ -207,7 +208,6 @@ P.finalPreRoll=function(packs){const s=this.run,d=s.dungeons[0];
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
  const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
  const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
- /* META 단골 감사 현수막 reaches the Final party too: 투력 x(1 + floor(단골도 / 10) x perTen) */
  snapshots.forEach((e,i)=>{e.combat*=this.cheerMult(team[i]);});
  const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,finalMeanHazardGap(preparations[i])),0); // 5-6
  const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7

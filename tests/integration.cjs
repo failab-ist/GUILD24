@@ -1638,6 +1638,27 @@ test('PLATFORM_RELEASE §Saved Games: restoring from the backup still holds the 
  }finally{delete global.localStorage;Save.rev=0;G.GUILD24_BUILD=keepB;G.Native=keepN;}
 });
 
+test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: a store the prep screen cannot use is refused, a save with no store still reads, and a good backup restores',()=>{
+ const store=new Map();
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ try{
+  const g=fresh('store-shape');Save.rev=0;
+  const base=JSON.parse(Save.export(g.account,null));
+  const with_=f=>{const x=JSON.parse(JSON.stringify(base));f(x.account);return x;};
+  assert.ok(Save.valid(base),'a normal save reads');
+  assert.ok(Save.valid(with_(a=>{delete a.store;})),'a save from before the store existed still reads');
+  for(const [name,f] of Object.entries({
+   empty:a=>{a.store={};},ownedNull:a=>{a.store.owned=null;},loadoutNull:a=>{a.store.loadout=null;},
+   capitalString:a=>{a.store.capital='100';},masteryFraction:a=>{a.store.mastery=1.5;},ownedNumbers:a=>{a.store.owned=[1];}}))
+   assert.ok(!Save.valid(with_(f)),'a store with '+name+' is refused');
+  assert.ok(Save.valid(with_(a=>{a.store.owned=['futureDecoration'];})),'ids only a newer build knows are kept');
+  const good=JSON.stringify(base),bad=JSON.stringify(with_(a=>{a.store={};}));
+  store.set('guild24.save.v9',bad);store.set('guild24.save.v9.backup',good);
+  const s=Save.read();assert.ok(s,'the backup restores');
+  assert.doesNotThrow(()=>Meta.plannedLoadout(s.account),'and the prep screen can read it');
+ }finally{delete global.localStorage;Save.rev=0;}
+});
+
 test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: an update that changes the lists keeps the account and drops only the Run',()=>{
  const store=new Map();
  global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};

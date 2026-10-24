@@ -239,7 +239,7 @@ Base order offers: 6/day. Base visitors: 3–6/day.
 
 Visitors may be modified by Relics, Events and Living NPC Cap. Visitor modifiers must respect Living NPC Cap rules.
 
-Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v2.13.21.md / RELIC_v3.0.0.md
+Canonical -> ECONOMY_ORDER_v2.13.19.md / NPC_TRAIT_v3.0.1.md / RELIC_v3.0.0.md
 
 ## PERSISTENT NPC ROSTER
 
@@ -248,7 +248,7 @@ injuries · fatigue/conditions · alive/dead state · visit/history state.
 
 Dead NPC remains dead for the Run and does not return as a normal visitor.
 
-Living NPC capacity, recovery/death slot semantics, newcomer/revisit behavior -> NPC_TRAIT_v2.13.21.md.
+Living NPC capacity, recovery/death slot semantics, newcomer/revisit behavior -> NPC_TRAIT_v3.0.1.md.
 CORE_RUN does not redefine the NPC cap or visitor-pool algorithm.
 
 ## GATE / DUNGEON STATE
@@ -571,7 +571,7 @@ Weak NPCs may be ignored or lost. The game does not need a separate punishment s
 Their loss should matter through existing long-term systems: lost growth · lost Wallet · lost Loyalty/Revisit ·
 lost future sales · lost Final roster value.
 
-Canonical NPC value -> NPC_TRAIT_v2.13.21.md
+Canonical NPC value -> NPC_TRAIT_v3.0.1.md
 
 ## META / CROSS-RUN BOUNDARY
 
@@ -1319,7 +1319,7 @@ CORE_RUN §QA retains only Run-flow, D30 timing, stock timing, save/resume, and 
 
 Game philosophy -> SPEC_INDEX §GAME CORE
 Economy / order / Final fixed price / Wallet / Gold -> `ECONOMY_ORDER_v2.13.19.md`
-NPC persistence / growth / level -> `NPC_TRAIT_v2.13.21.md`
+NPC persistence / growth / level -> `NPC_TRAIT_v3.0.1.md`
 Dungeon generation -> `DUNGEON_HAZARD_v2.13.19.md`
 Item / stock / start-stock identity -> `ITEM_v2.8.0.md`
 Relic / windows -> `RELIC_v3.0.0.md`

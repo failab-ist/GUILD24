@@ -515,7 +515,7 @@ Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v3.0.0.md`.
 identity=tests long-term NPC relationship investment, not Job composition
 
 LUST does not define a new affection meter, charm meter, Loyalty threshold or Boss-specific relationship state.
-Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v2.13.21.md`.
+Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v3.0.1.md`.
 
 Evaluation timing:
 - D15 reveals the rule
@@ -835,7 +835,7 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 Final state / formula / family / party / clear / Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Relic / Seal window / Sloth opportunity -> `RELIC_v3.0.0.md`
 Meta / mastery / unlock -> `META_v3.0.0.md`
-Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.13.21.md`
+Job / loyalty / trusted-regular -> `NPC_TRAIT_v3.0.1.md`
 Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`
 Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.13.19.md`
 Sale revenue commit -> `SALE_v2.8.0.md`

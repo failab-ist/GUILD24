@@ -154,7 +154,7 @@ recovery:
 사망       0
 ```
 
-Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.13.21.md`.
+Trait result modifiers and their outcome scope -> `NPC_TRAIT_v3.0.1.md`.
 
 Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue.
 
@@ -511,7 +511,7 @@ choice and optional Insurance/Escape.
 
 Affinity should emerge from stats + visible Item/Trait effects.
 
-Related: item -> `ITEM_v2.8.0.md` · job -> `NPC_TRAIT_v2.13.21.md`
+Related: item -> `ITEM_v2.8.0.md` · job -> `NPC_TRAIT_v3.0.1.md`
 
 ## FAMILY INTRODUCTION
 
@@ -1034,7 +1034,7 @@ Rules:
 - apply to the same Severe-vs-ordinary Injury decision point already used by the ordinary resolution
 - do not create a second independent Severe roll
 - apply the +15%p before the normal clamp used by that branch
-- the ordinary Injury Stat penalty itself is owned by `NPC_TRAIT_v2.13.21.md`
+- the ordinary Injury Stat penalty itself is owned by `NPC_TRAIT_v3.0.1.md`
 
 This modifier is about the danger of sending an already-wounded adventurer back out, not about making the four visible Stats secretly lower than their listed Injury penalty.
 
@@ -1178,7 +1178,7 @@ Deep Expedition replaces that NPC's ordinary destination for the Day.
 No second segment / second roll / second result.
 
 Deep Expedition Store Gold reward is always 0.
-NPC bonus reward remains owned by NPC_TRAIT_v2.13.21.md.
+NPC bonus reward remains owned by NPC_TRAIT_v3.0.1.md.
 Sponsorship cost -> `ECONOMY_ORDER_v2.13.19.md`.
 Normal Great Success Store Gold -> `ECONOMY_ORDER_v2.13.19.md`.
 
@@ -1942,7 +1942,7 @@ EXPECT:
 PASS:
 - Retreat does not clear ordinary Injury
 - generic completion/non-Injury result does not clear it
-- Severe recovery remains its separate rule in `NPC_TRAIT_v2.13.21.md`
+- Severe recovery remains its separate rule in `NPC_TRAIT_v3.0.1.md`
 - First Aid Aftercare may still override persistent Injury exactly as ITEM owns
 
 #### DUN-Q11 — CAUSALITY
@@ -2085,15 +2085,15 @@ Record at minimum:
 ## RELATED
 
 item counters -> `ITEM_v2.8.0.md`
-job/stat coverage -> `NPC_TRAIT_v2.13.21.md`
+job/stat coverage -> `NPC_TRAIT_v3.0.1.md`
 order/tier forecast -> `ECONOMY_ORDER_v2.13.19.md`
 forecast UI -> `UI_UX_v3.0.0.md`
 night causality -> `NIGHT_CLOSING_v2.8.0.md`
 final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
 boss modifier -> `BOSS_v2.8.0.md`
 Item Supply/Counter/Epic preparation -> `ITEM_v2.8.0.md`
-Injury persistence/re-expedition state -> `NPC_TRAIT_v2.13.21.md`
-Fatigue Trait -> `NPC_TRAIT_v2.13.21.md`
+Injury persistence/re-expedition state -> `NPC_TRAIT_v3.0.1.md`
+Fatigue Trait -> `NPC_TRAIT_v3.0.1.md`
 Sale preview -> `SALE_v2.8.0.md`
 Night resolved fields -> `NIGHT_CLOSING_v2.8.0.md`
 Next-day forecast presentation -> `ECONOMY_ORDER_v2.13.19.md`

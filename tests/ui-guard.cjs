@@ -3903,7 +3903,7 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  const sl=fn('stockSlots');assert.ok(/stockSlots\(true\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey'))&&/full\?'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\):''/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl)&&/'<em>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>'|<b>'\+s\.inventory\.length\+' \/ '\+game\.capacity\(\)\+'칸<\/b>/.test(fn('stockHead')),'phone: a held unit per cell, no empty rows; desk: every 칸; the head carries the room left');
  const os=fn('orderScreen');assert.ok(/'<div class="order-desk">'\+orderForm\(\)\+'<\/div>'\+stockSide\(\)/.test(os)&&/stockSheetKey\(\)\+/.test(os),'the column beside the form, the handle in the dock');
  assert.ok(/class="stock-handle stock-head'\+\(lessonKit\(\)\?' lesson-kit':''\)\+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
- assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&game\.run\?\.phase==='order'&&sheetOpen\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');
+ assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&stockSheetShown\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');
  assert.ok(/\.p-order \.dock \.stock-handle\{display:flex;flex:1 0 100%;order:-1;/.test(css),'the handle is always a row of the dock, so it covers no offer row');
  assert.ok(/\.stock-sheet\{position:absolute;left:0;right:0;bottom:100%;[^}]*max-height:45dvh;overflow-y:auto/.test(css),'the sheet rises from the dock, 45% at most, its own scroll');
  assert.ok(!/\.stock-sheet[^{]*\{[^}]*(backdrop|inert|pointer-events:none)/.test(css)&&!/stock-sheet[^\n]*inert/.test(app),'no dimming or lock over the form');
@@ -4034,5 +4034,10 @@ test('FINAL committed Stat grid: applied snapshot, before/after, separate Boss a
  assert.ok(banner.includes('100 → 108.6')&&banner.includes('오만의 갑주 -8')&&banner.includes('단골 감사 현수막 +16.6'));
  game.run.finalCommitted=false;assert.ok(!html().includes('→'));assert.equal(ordinary,1,'uncommitted candidate reads ordinary preparation');
  game.run.phase='sell';game.run.finalCommitted=true;assert.ok(!html().includes('→'));assert.equal(ordinary,2,'SALE has no Final modifier');
+});
+test('ANDROID BACK: the warehouse panel closes on Back and Escape on the ordinary order and on the Final order alike',()=>{
+ assert.ok(/const stockSheetShown=\(\)=>sheetOpen\(\)&&\(game\.run\?\.phase==='order'\|\|game\.run\?\.phase==='final'&&finalIsOrdering\(game\.run\)\)/.test(app),'one rule names both phases that carry the panel');
+ assert.ok(/if\(stockSheetShown\(\)\)\{setStockSheet\(false\);return true;\}/.test(app),'Back closes it before the exit dialog');
+ assert.ok(/ev\.key==='Escape'&&stockSheetShown\(\)\)setStockSheet\(false\)/.test(app),'Escape closes it too');
 });
 console.log(count+' ui guard groups passed');

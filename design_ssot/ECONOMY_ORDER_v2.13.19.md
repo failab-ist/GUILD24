@@ -164,7 +164,7 @@ and the bank empties. Counted after the Day's visitor draw - no RNG draw. Half a
 so not coming never pays better than coming (a visit also brings the expedition's Wallet reward, EXP and Loyalty): the Store's
 way to the money is still a regular who comes often. Clamped by the 2000 cap like every other increase.
 
-`rich` is separate (`NPC_TRAIT_v2.13.21.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
+`rich` is separate (`NPC_TRAIT_v3.0.1.md` §RICH): actual visit +50G exactly once, first/revisit both, applied on
 actual arrival, not Morning formula; cap 2000 after application.
 
 - **Event temporary purchase budget**: Persistent Wallet과 완전 분리(Cap 미포함, 이월 안됨).
@@ -553,7 +553,7 @@ Do not reveal before customer appearance:
 - Wallet
 - individual destination (a liar's or a pilgrimage-rerouted customer's true Gate stays hidden)
 
-Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.13.21.md`
+Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v3.0.1.md`
 
 ## BASE OPERATING COST
 
@@ -621,7 +621,7 @@ Deep Expedition exception:
 - no separate Deep/Guild cash prize
 
 Great Success probability and NPC growth reward are not reduced by this Store-Gold rule;
-they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v2.13.21.md.
+they are owned by DUNGEON_HAZARD_v2.13.19.md and NPC_TRAIT_v3.0.1.md.
 
 ## DEEP EXPEDITION SPONSORSHIP COST
 
@@ -643,7 +643,7 @@ If the Store cannot afford the sponsorship, nomination cannot be confirmed.
 If no NPC is nominated, no sponsorship is charged.
 
 Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.13.19.md.
-Deep NPC reward -> NPC_TRAIT_v2.13.21.md.
+Deep NPC reward -> NPC_TRAIT_v3.0.1.md.
 
 ## D30 FINAL PREPARATION PRICE / WALLET / GOLD
 
@@ -1297,7 +1297,7 @@ Item catalog / Rarity identities / item roles -> `ITEM_v2.8.0.md`
 Ordinary Sale / sale/refusal UX -> `SALE_v2.8.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
 Boss/GREED accounting -> `BOSS_v2.8.0.md`
-npc wallet/loyalty -> `NPC_TRAIT_v2.13.21.md`
+npc wallet/loyalty -> `NPC_TRAIT_v3.0.1.md`
 relic costs/build -> `RELIC_v3.0.0.md`
 closing settlement -> `NIGHT_CLOSING_v2.8.0.md`
 run starting resources/inventory -> `CORE_RUN_v2.8.0.md`

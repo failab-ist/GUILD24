@@ -121,7 +121,7 @@ Morning/Order에서 공개 가능: 오늘 방문 예정 인원.
 
 미리 공개하지 않음: 이름 / Job / Trait / Wallet / 목적지 정보.
 
-Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Canonical NPC rule -> NPC_TRAIT_v2.13.21.md.
+Customer로 실제 등장한 시점부터 introduced/notebook 등록 가능. Canonical NPC rule -> NPC_TRAIT_v3.0.1.md.
 
 ## QUEUE INFORMATION BOUNDARY
 
@@ -136,8 +136,8 @@ Player-facing label: `예상 목적지`
 
 Default:
 - expected destination = actual assigned destination
-- destination is random among eligible open Gates according to `NPC_TRAIT_v2.13.21.md`
-- when a Day has at least as many visitors as open Gates, every open Gate is some visitor's expected destination: a Gate the draw left empty takes one visitor from a Gate that holds two or more (`NPC_TRAIT_v2.13.21.md` destinationCoverage)
+- destination is random among eligible open Gates according to `NPC_TRAIT_v3.0.1.md`
+- when a Day has at least as many visitors as open Gates, every open Gate is some visitor's expected destination: a Gate the draw left empty takes one visitor from a Gate that holds two or more (`NPC_TRAIT_v3.0.1.md` destinationCoverage)
 
 Canonical uncertainty:
 - an explicitly defined Event may change actual destination while leaving the earlier expected destination as the player-facing expectation
@@ -152,7 +152,7 @@ destination remain hidden; Night reveals actual changed destination for affected
 System must not auto-route NPC to best Job fit / best Stat fit / safest Dungeon / hardest Dungeon.
 
 Explicit Event destination changes and confirmed Deep Expedition destination replacement follow their owning rules
-(Deep -> §DEEP EXPEDITION NOMINATION). Canonical routing / information reliability -> NPC_TRAIT_v2.13.21.md, EVENT_v2.8.0.md.
+(Deep -> §DEEP EXPEDITION NOMINATION). Canonical routing / information reliability -> NPC_TRAIT_v3.0.1.md, EVENT_v2.8.0.md.
 
 ## DEEP EXPEDITION NOMINATION
 
@@ -580,7 +580,7 @@ No separate punishment subsystem exists solely because Player sold nothing.
 
 ## RETURNING NPC — LAST EXPEDITION QUICK SURFACE
 
-When a returning NPC has a recent-expedition snapshot owned by `NPC_TRAIT_v2.13.21.md`, show one compact quick surface:
+When a returning NPC has a recent-expedition snapshot owned by `NPC_TRAIT_v3.0.1.md`, show one compact quick surface:
 
 ```text
 지난 원정 · DAY X · 결과 · [item] [item]
@@ -601,7 +601,7 @@ Paid purchases may affect Loyalty according to canonical NPC/economy rules.
 - 150%: higher current-profit direction
 - Free/Event actions must not create repeatable Loyalty farming.
 
-Canonical -> NPC_TRAIT_v2.13.21.md, ECONOMY_ORDER_v2.13.19.md.
+Canonical -> NPC_TRAIT_v3.0.1.md, ECONOMY_ORDER_v2.13.19.md.
 
 ## SALE INFORMATION HONESTY
 
@@ -724,7 +724,7 @@ Deep Expedition nomination acceptance:
 ## RELATED
 
 game philosophy -> SPEC_INDEX §GAME CORE
-NPC / Trait / destination / growth / recent snapshot -> `NPC_TRAIT_v2.13.21.md`
+NPC / Trait / destination / growth / recent snapshot -> `NPC_TRAIT_v3.0.1.md`
 Item / inventory / Item effects -> `ITEM_v2.8.0.md`
 price / Economy / Wallet -> `ECONOMY_ORDER_v2.13.19.md`
 dungeon forecast / Hazard / Fatigue / Supply -> `DUNGEON_HAZARD_v2.13.19.md`

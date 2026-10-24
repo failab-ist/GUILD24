@@ -234,7 +234,7 @@ GLUTTONY's Final reduction, when applicable, occurs after the final Item-side po
 Food/Drink category-affinity or Fresh Relic effects do not automatically multiply Hazard Counter, Insurance,
 RiskReward penalty or unrelated special effects.
 
-Exact Trait modifiers -> `NPC_TRAIT_v2.13.21.md`. Exact Fresh Relic effects -> `RELIC_v3.0.0.md`.
+Exact Trait modifiers -> `NPC_TRAIT_v3.0.1.md`. Exact Fresh Relic effects -> `RELIC_v3.0.0.md`.
 
 ## HAZARD COVERAGE CONTRACT
 
@@ -378,7 +378,7 @@ Insurance = 0
 - all Potion tiers use the ordinary Potion-family shelf-life behavior (rows -> §SHELF LIFE — EXACT); `중급 포션` is not non-expiring or tool-like
 - `최상급 포션` is the top-end pure raw-Power slot-efficiency option, not a Hazard specialist
 
-Potion Trait interaction -> `NPC_TRAIT_v2.13.21.md`.
+Potion Trait interaction -> `NPC_TRAIT_v3.0.1.md`.
 
 ## BANDAGE RETIREMENT / SPIRIT STAT ROUTE
 
@@ -518,7 +518,7 @@ It lowers the resolved expedition Outcome one step, after the higher-priority em
 ```
 
 This is Item Aftercare, not natural recovery. It does not change the natural Severe-Injury recovery rule owned by
-`NPC_TRAIT_v2.13.21.md`. It has no hidden injury-risk percentage.
+`NPC_TRAIT_v3.0.1.md`. It has no hidden injury-risk percentage.
 
 ### 귀환석
 rarity=Rare
@@ -811,7 +811,7 @@ jobIdEffectModifier=NO
 jobIdPurchaseBias=NO
 jobIdCounterModifier=NO
 
-Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v2.13.21.md`.
+Job affinity emerges from BaseStats + Growth + visible Traits. Canonical -> `NPC_TRAIT_v3.0.1.md`.
 
 ## INFORMATION
 
@@ -1411,7 +1411,7 @@ PASS:
 ## RELATED
 
 Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.13.19.md`
-Job / Trait multipliers -> `NPC_TRAIT_v2.13.21.md`
+Job / Trait multipliers -> `NPC_TRAIT_v3.0.1.md`
 Relic / build modifiers -> `RELIC_v3.0.0.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
 Order / reroll / pricing / Rarity progression -> `ECONOMY_ORDER_v2.13.19.md`
