@@ -61,7 +61,7 @@ function masterySpawnBonus(r,account){
 }
 function create(r,index,day,account,opts={}){
  /* META §wall — 명예 모험가 액자: the weights are the Decoration's own param, one owner. */
- const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:[60,27,10,2.5,.5]);
+ const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:D.decorationParams.honorFrame.baseWeights);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
  /* META §Exact spawn-Level model: the ordinary spawn Level, 1~2 + the Day term (User 2026-10-10: no min+2 newcomer) */
  const spawnLevel=Math.max(1,r.int(1,2)+(newcomerMinLevel(day)-1)+(opts.royal?3:0));

@@ -177,7 +177,10 @@ function seedReachUnlocks(a){
  if(!Array.isArray(a.unlocks.rares)){a.unlocks.rares=[];const locked=D.relics.filter(r=>r.rarity===2&&!D.relicRetired.includes(r.id)&&!D.relicRareStart.includes(r.id)).map(r=>r.id);
   for(const d of D.relicRareReachDays)if((a.bestDay||0)>=d&&locked.length)a.unlocks.rares.push(locked.shift());}
 }
-const itemUnlocked=(a,it,day=1)=>{if(POTION_UNLOCK[it.id])return !!a.unlocks?.[it.id];if(ITEM_UNLOCK_DAY[it.id])return !!a.unlocks?.[it.id]&&day>=ITEM_UNLOCK_DAY[it.id];return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
+/* The ONE place that says how an Item opens. `Item.metaUnlock` is only the boss-kind rule (서로 다른 마왕 N종 토벌); 길드 특제 도시락 /
+   세계수 생환부적 and 상급 / 최상급 포션 carry metaUnlock:null and open through the two tables above, so read this, not the field. */
+const itemUnlockRule=it=>POTION_UNLOCK[it.id]?{kind:'reach',day:POTION_UNLOCK[it.id]}:ITEM_UNLOCK_DAY[it.id]?{kind:'seenDay',day:ITEM_UNLOCK_DAY[it.id]}:it.metaUnlock?{kind:'boss',kinds:it.metaUnlock}:null;
+const itemUnlocked=(a,it,day=1)=>{const r=itemUnlockRule(it);if(!r)return true;if(r.kind==='reach')return !!a.unlocks?.[it.id];if(r.kind==='seenDay')return !!a.unlocks?.[it.id]&&day>=r.day;return distinctBossClear(a)>=r.kinds;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
 
 /* What one expedition leaves on the account. Dungeon knowledge accrues only when a supplied
@@ -250,6 +253,6 @@ const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>store(a).owned.filter(id=>D.decorationBy[id]);
 const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,recordHall,markBoss,bossKnown,freshFranchise,observe,finish,recordBestDay,recordBestSales,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,bossCleared,distinctBossClear,
- opened,itemUnlocked,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
+ opened,itemUnlocked,itemUnlockRule,ITEM_UNLOCK_DAY,REACH_UNLOCK,reachUnlock,epicUnlocked,rareUnlocked,seedReachUnlocks,jobUnlocked,JOBS,BOSSES,
  ascensionMax,ascensionPick,setAscension,seedAscension,freshStore,decorationOwned,buyDecoration,equipDecoration,masteryRank,buyMastery,affordable,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

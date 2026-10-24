@@ -42,7 +42,7 @@ const rows=[
 ['rerollTicket','발주 교환권','utility',[],120,()=>{const b=D.balance.rerollBase+D.ascent(D.liveAscension).reroll;return '매일 첫 발주 후보 교환은 무료. 그다음부터 '+b+'G → '+b*2+'G → '+b*4+'G… 로 오른다.';}],
 ['efficiency','운영 효율 매뉴얼','utility',[],130,p=>'다음 날부터 하루 기본 운영비가 '+p.efficiency.overheadCut+'G 적어진다.'],
 /* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
-['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 15%).'],
+['fieldStretcher','야전 들것','foundation',['expedition'],80,p=>'부상당한 손님의 투력 감소 '+pct(p.fieldStretcher.injuredCombatPenalty)+' (기존 '+pct(p.fieldStretcher.baseInjuredCombatPenalty)+').'],
 ['firstAidDesk','응급 처치대','keystone',['expedition'],300,p=>'부상당한 손님이 가게에 오면 '+pct(p.firstAidDesk.healChance)+' 확률로 부상이 낫는다 (중상은 제외).'],
 /* RELIC 33 · 34 · 35 (User 2026-10-04): a troll pick, a 단골 build piece, and the 희귀 survival line */
 ['rumorBoard','소문 수집 게시판','utility',[],60,()=>'점포지원이 오는 날과 심층원정 날만 빼고, 매일 아침 사건이 꼭 생긴다.'],
@@ -54,8 +54,10 @@ const rows=[
    (0 일반 · 2 희귀 · 3 영웅) so it reads the Item rarity names and colours. kind / tags stay the internal build taxonomy; a
    window draws a rarity per card first (D.relicRarityChance), then a support of that rarity. */
 const GRADE={epic:['fresh24','logisticsHQ','lifetime','royalCert','opsRoom','hub','firstAidDesk'],
- rare:['kitchen','extraOrder','returnPoints','dawnRecovery','groupOrder','premiumMember','expeditionMeal','supplyCert','coldcase','rescueContract','memberBundle']};
-const rarityOf=id=>GRADE.epic.includes(id)?3:GRADE.rare.includes(id)?2:0;
+ rare:['kitchen','extraOrder','returnPoints','dawnRecovery','groupOrder','premiumMember','expeditionMeal','supplyCert','coldcase','rescueContract','memberBundle'],
+ common:['bulk','rotation','stamp','member','rareContract','guarantee','hazardBoard','fieldRepair','fridge','board','firstVisitCoupon','warehouse','rerollTicket','efficiency','fieldStretcher','rumorBoard','postcard']};
+/* Every support names its 등급 here; an id in none of the lists is a mistake, not a silent 일반. */
+const rarityOf=id=>GRADE.epic.includes(id)?3:GRADE.rare.includes(id)?2:GRADE.common.includes(id)?0:(()=>{throw Error('점포지원 등급 목록에 없는 ID: '+id);})();
 D.relics=rows.map(([id,name,kind,tags,price,copy])=>Object.defineProperty({id,name,kind,rarity:rarityOf(id),tags,price,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})},'description',{get:()=>copy(D.relicParams),enumerable:true}));
 D.relicRarityChance={0:.63,2:.29,3:.08};D.relicEpicStart=['logisticsHQ'];D.relicRareStart=['extraOrder','groupOrder','returnPoints','dawnRecovery'];D.relicRareReachDays=[5,10,15,20,25];D.relicEpicPools={15:['firstAidDesk','hub','royalCert'],25:['lifetime','opsRoom','fresh24']};
@@ -72,7 +74,7 @@ D.relicParams={
  guarantee:{subsidyRate:.4},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},
- fieldStretcher:{injuredCombatPenalty:.08},
+ fieldStretcher:{injuredCombatPenalty:.08,baseInjuredCombatPenalty:.15},
  firstAidDesk:{healChance:.25},
  fridge:{shelfDays:2},
  kitchen:{foodSupply:2,drinkSupply:1,overheadRate:.05}, /* User 2026-10-22: Supply instead of native Stat (24시간 신선체계 keeps that), operating cost +5% */
@@ -133,8 +135,6 @@ D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],[
 D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','mire'],['corrosion','mire']],golem:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
 D.categories={food:'음식',drink:'음료',potion:'포션',gear:'야외장비',insurance:'보험',special:'특수'};
 D.roles={stat:'능력 보강',supply:'보급',direct:'전문 대응',hybrid:'복합 대응',condition:'컨디션',insurance:'생환 보험',risk:'위험·보상',economy:'원정 수익',utility:'특수 운용'};
-// Functional roles are declared per ITEM ACTIVE CATALOG, not inferred from effect shape.
-D.itemRoles={rice:['supply'],water:['supply'],ramen:['supply','direct'],lunchbox:['supply','stat'],choco:['supply','stat'],yanggaeng:['supply','stat'],coffee:['supply','stat'],herbtea:['supply','stat'],lowpotion:['stat'],ice:['supply','direct'],soda:['supply','direct'],battery:['direct'],rope:['direct'],candy:['supply','direct'],dragonramen:['supply','stat','direct'],energy:['supply','stat'],wine:['supply','direct','risk'],kit:['insurance'],mask:['direct'],hood:['hybrid'],webgloves:['hybrid'],holylight:['hybrid'],cloak:['hybrid'],coating:['direct'],boots:['direct'],snowgoggles:['direct'],highpotion:['stat'],antidote:['direct'],stone:['insurance'],midpotion:['stat'],guildlunch:['supply','economy'],ion:['supply','direct'],worldcharm:['insurance'],coupon:['utility'],spiderkit:['hybrid'],slimesuit:['hybrid'],cryptlantern:['hybrid'],snowvisor:['hybrid'],magmagear:['hybrid','stat'],battlelunch:['supply','stat'],bananamilk:['supply','stat'],hyperenergy:['supply','stat'],sageelixir:['supply','stat'],toppotion:['stat']};
+// Functional roles are declared per ITEM in data/catalog.js (the `roles` argument of item()), not inferred from effect shape.
 /* The `fresh` category alias is retired with v2.7: Food is a category, not a flag. */
-for(const it of D.items){it.roles=D.itemRoles[it.id]||[];}
 })(globalThis);
