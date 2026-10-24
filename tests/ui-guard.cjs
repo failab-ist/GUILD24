@@ -1303,7 +1303,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!app.includes('class="estimate"')&&!app.includes('게이트 안에서 어떻게 될지까지는 아무도 모른다'),
   'the permanent forecast disclaimer paragraph is gone');
  assert.ok(!read('dist/data/catalog.js').includes('진창용 원정 장화'),'the boots are renamed');
- assert.ok(read('dist/data/catalog.js').includes("item('boots','원정용 장화'"),'and keep their id');
+ assert.ok(read('dist/data/catalog.js').includes("item({id:'boots',name:'원정용 장화'"),'and keep their id');
 
  /* D-5 / EVENT §3-1. The board notice used to print the effect line alone. The catalog keeps
     the situation and the effect apart already, so the notice says both and rules them off. */

@@ -99,4 +99,13 @@ test('발주 검증: 자금 부족, 창고 초과, 행사 수량 제한은 그�
  assert.throws(()=>g.validateCart({0:1}),/창고/);
 });
 
+test('데이터 위치: 특성 충돌·던전 위험·상품 분류는 상품·특성·던전 쪽 파일이 갖고, 상품 정의는 이름 붙은 항목이다',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const rel=fs.readFileSync(path.join(__dirname,'../dist/data/relics.js'),'utf8'),cat=fs.readFileSync(path.join(__dirname,'../dist/data/catalog.js'),'utf8');
+ for(const k of ['traitExclusions','familyTiers','categories','roles'])assert.ok(!new RegExp('D\\.'+k+'=').test(rel)&&cat.includes('G.DATA.'+k+'='),k+' lives in catalog.js');
+ assert.ok(!/^item\('/m.test(cat),'no positional item() call is left');
+ assert.equal(DATA.items.length,44);
+ for(const it of DATA.items)assert.deepEqual(Object.keys(it),['id','name','rarity','buy','sell','category','days','icon','brand','description','effects','roles','metaUnlock'],it.id);
+});
+
 console.log(count+' dedupe tests passed');
