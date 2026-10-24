@@ -77,4 +77,26 @@ test('결과 문장: the Item name in a result line is read from the Item, and a
  assert.ok(/it\.category==='insurance'/.test(shop));
 });
 
+test('최종 보급: the receipt carries the same trade facts as an ordinary sale, per stock',()=>{
+ const g=fresh('final-receipt');const s=g.run;
+ s.phase='final';s.finalCommitted=true;
+ const npc=s.npcs.find(n=>n.alive)||s.npcs[0];s.team=[npc.id];npc.pack=[];npc.money=200;
+ s.inventory=[{id:9001,item:'rice',cost:27,expires:null},{id:9002,item:'rice',cost:31,expires:null},{id:9003,item:'rice',expires:null,costUnknown:true}];
+ const price=g.finalPrice('rice');
+ for(const [id,cost,unknown,wallet] of [[9001,27,false,200],[9002,31,false,200-price],[9003,undefined,true,200-2*price]]){
+  npc.pack=[];g.supplyFinal(npc.id,id);const r=npc.history.at(-1);
+  assert.deepEqual([r.day,r.item,r.mode,r.paid,r.wallet,r.cost,r.costUnknown],[30,'rice','half',price,wallet,cost,unknown],'stock '+id);
+ }
+ assert.equal(npc.money,200-3*price);assert.equal(s.inventory.length,0);
+});
+
+test('발주 검증: 자금 부족, 창고 초과, 행사 수량 제한은 그대로 거부한다',()=>{
+ const g=fresh('cart');g.beginOrder();const s=g.run;
+ s.money=1e6;assert.equal(g.validateCart({}),true);
+ assert.throws(()=>g.validateCart({0:s.offers[0].quantity+1}),/수량/);
+ s.money=0;assert.throws(()=>g.validateCart({0:1}),/자금/);
+ s.money=1e6;s.inventory=Array.from({length:g.capacity()},(_,i)=>({id:i,item:'rice'}));
+ assert.throws(()=>g.validateCart({0:1}),/창고/);
+});
+
 console.log(count+' dedupe tests passed');
