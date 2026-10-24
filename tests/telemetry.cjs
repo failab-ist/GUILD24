@@ -63,5 +63,16 @@ const tick=()=>new Promise(r=>setTimeout(r,5));
  const rs=SC.readStats(nd);assert.equal(rs.length,1,'two parts of one Run read as one unfinished Run');assert.equal(rs[0].run.reportHistory.length,4);
  g.end(false,'소문');await tick();assert.ok(JSON.parse(store['guild24.stats.live']||'null')===null,'the end report clears the store');
  G.GUILD24_DEMO={};app=false;sent.length=0;g=mk('tele-demo');closeDay(1);closeDay(2);closeDay(3);await tick();assert.equal(JSON.parse(sent[0][1]).demo,1,'the demo sends parts, marked');delete G.GUILD24_DEMO;
+ /* the switch is read again before every send: off while the first of two is in flight, the second never goes out (review 2026-10-24 #1) */
+ delete G.GUILD24_DEMO;app=true;sent.length=0;g=mk('tele-off');g.account.settings.stats=true;store['guild24.stats.queue']=JSON.stringify(['a','b']);
+ let release;const slow=globalThis.fetch;globalThis.fetch=(u,o)=>{sent.push([u,o.body]);return new Promise(r=>{release=()=>r({ok:true});});};
+ const f=T.flush(g.account);await tick();g.account.settings.stats=false;release();await f;await tick();
+ assert.equal(sent.length,1,'switched off mid-queue, nothing more is sent');globalThis.fetch=slow;
+ sent.length=0;await T.flush(g.account);assert.equal(sent.length,0,'the delayed startup send re-reads the switch');
+ T.clear();assert.equal(JSON.parse(store['guild24.stats.queue']).length,0,'switching off drops the waiting reports');
+ /* the Final as decided, not the gate's nominal power (review 2026-10-24 #4) */
+ g=mk('tele-final');g.run.finalReport={cleared:true,families:[],members:[]};g.run.bossDebug={power:500.123,roll:1.0345,assault:517.4,bossPower:480};
+ const fin=T.build(g,'end').run.final;assert.deepEqual([fin.pp,fin.bp,fin.roll,fin.as],[500.12,480,1.035,517.4]);assert.equal(fin.power,undefined);
+ g.run.bossDebug.power=250;assert.equal(T.build(g,'end').run.final.pp,250,'party power follows the party');
  console.log('telemetry ok');
 })();
