@@ -2421,6 +2421,8 @@ function watchFinalPin(){finalPinWatch?.disconnect();finalPinWatch=null;const pi
  if(!pin||!src||!sc)return;const sync=()=>{const show=src.getBoundingClientRect().bottom<=sc.getBoundingClientRect().top+2;pin.classList.toggle('show',show);host.style.height=show?Math.ceil(pin.getBoundingClientRect().height+4)+'px':'0px';};
  sync();if(typeof IntersectionObserver==='function'){finalPinWatch=new IntersectionObserver(sync,{root:sc,threshold:0});finalPinWatch.observe(src);}
 }
+/* A different save is a different Run: what the screens remember about the Run being left (a read-through night, the D30 order step, a pending receipt) is dropped, so the loaded Run opens as it would from a cold start. */
+function dropRunUi(){selected=null;supplyNPC=null;nightRecap=null;finalOrdered=null;finalPinFolded=false;stub=null;cue=null;handoff=null;trayFolded=false;pinFolded=false;}
 function finalIsOrdering(s){return !!s&&!s.finalCommitted&&(finalOrdered===false||(finalOrdered===null&&!s.team.length));}
 function finalMuster(s,need,committed){
  const pickCount='선택 '+s.team.length+'명 (최대 '+need+'명)',roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level),preparation=committed?game.finalPreRoll():null;
@@ -3276,7 +3278,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'reset':setModal('resetConfirm');break;
  /* Nothing is touched until this point. Erasing every key and starting from Meta.fresh()
     is exactly the first-launch path, so no separate reset state exists to go stale. */
- case'reset-go':{const ok=Save.reset();game=new Game(freshAccount(),null);if(ok)game.save();selected=null;pendingSeed=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
+ case'reset-go':{const ok=Save.reset();game=new Game(freshAccount(),null);if(ok)game.save();dropRunUi();pendingSeed=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
  case'import-go':$('#save-file').click();break;
 
  }
@@ -3362,7 +3364,7 @@ document.addEventListener('keydown',ev=>{if(hall&&ev.key==='Escape'){ev.preventD
  /* a plate that acts (the prep Capital plate) answers Enter and Space like a button */
  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('[role="button"][data-action]')){ev.preventDefault();ev.target.click();return;}
  if(ev.key==='Escape'&&game.run?.phase==='order'&&sheetOpen())setStockSheet(false);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run&&!Native.inApp()){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
-$('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
+$('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();dropRunUi();setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 /* PLATFORM_RELEASE §ANDROID BACK: closes the topmost dismissible surface and never rewinds a committed Phase; a surface that cannot be dismissed (the Foundation pick, the DAY 0 sheet) keeps Back from leaving. At the top level Back asks before leaving (exitConfirm); the app saves and exits only on its 종료. */
 Native.onBack(()=>{
  /* a scene a tap would skip: Back skips it too, never leaving the app mid-scene; the boss hold is a moment-long lock */
@@ -3396,7 +3398,7 @@ document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]')
    way the start would have compared it, at once, rather than on the next launch over whatever was played meanwhile. */
 Native.cloudLate(raw=>{if(Save.cloudMerge(raw)!=='cloud')return;const s=Save.read();if(!s)return;
  const msg='Play 게임즈에 저장된 진행을 불러왔습니다.';
- game=new Game(s.account,s.run);selected=null;setModal(null);
+ game=new Game(s.account,s.run);dropRunUi();setModal(null);
  if(prologue){const d=prologue.done;prologue.done=()=>{d();toast(msg);};return;}
  render();toast(msg);});
 /* anonymous statistics: a report a failed send left in the queue goes out at launch, not only when the next Run ends */

@@ -415,6 +415,8 @@ function bedStart(key){bedStop();beat=0;const tune=tunes[bedFor[key]||key]||tune
   if(tune.drone&&beat%4===0)tone(tune.drone,ctx.currentTime,tune.ms/1000*4.2,BGM_BASS*.7*lv,'sine',bgmBus);
   beat++;},tune.ms);}
 function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
+ /* mute also cuts what is already sounding or scheduled (a long cue's tail), not only what starts next */
+ if(master){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.value=enabled?1:0;}
  if(!enabled||document.hidden){bedStop();bgmStop(.1,true);track='';pending='';
   /* hidden: the whole context sleeps, so a cue or buzz queued on a timer (night results, the clash) is not heard behind another app; wake() resumes it */
   if(document.hidden&&ctx&&ctx.state==='running')ctx.suspend().catch(()=>{});return;}
