@@ -13,7 +13,7 @@ const UPDATE_URL='https://guild24.f-ai-shion-lab.workers.dev/app-config.json';
 const WEB_MS=70;
 const webVibrate=()=>{try{return typeof navigator!=='undefined'&&!!navigator.vibrate&&!!matchMedia('(pointer:coarse)').matches;}catch(e){return false;}};
 const okMark=()=>{try{localStorage.setItem(CLOUD_OK,'1');}catch(e){}};
-let pending=null,timer=null,cloudRev=null,late=null,lateRaw=null,prefsPending=new Map(),prefsTimer=null;
+let pending=null,timer=null,cloudRev=null,gen=0,late=null,lateRaw=null,prefsPending=new Map(),prefsTimer=null;
 
 try{if(inApp())document.documentElement.classList.add('in-app');}catch(e){}
 
@@ -36,7 +36,8 @@ G.Native={
     const have=localStorage.getItem(key);
     if(have!==null){p.set({key,value:have}).catch(()=>{});return;}
     const {value}=await p.get({key});
-    if(typeof value==='string'&&value)localStorage.setItem(key,value);
+    /* an answer after the start stopped waiting must not cover a save the game has written since */
+    if(typeof value==='string'&&value&&localStorage.getItem(key)===null)localStorage.setItem(key,value);
    }catch(e){}
   }));
   return Promise.race([work,new Promise(r=>setTimeout(r,HYDRATE_MS))]);
@@ -45,13 +46,13 @@ G.Native={
     every call has a time limit and any failure is dropped. The game never uploads a copy older than the one already in the cloud. */
  cloudPull(ms){
   const c=inApp()?plug('PlayGamesSaves'):null;if(!c)return Promise.resolve(null);
-  let gaveUp=false;
+  let gaveUp=false;const mine=gen;
   const work=(async()=>{try{const r=await c.load();okMark();
    if(r&&r.found&&typeof r.data==='string'){cloudRev=Number(r.rev)||0;return r.data;}
    if(r&&r.found===false)cloudRev=0;
   }catch(e){}return null;})();
   /* a slow network (a fresh install) can answer after the start stopped waiting: that copy is handed to cloudLate() */
-  work.then(raw=>{if(gaveUp&&raw){if(late)late(raw);else lateRaw=raw;}});
+  work.then(raw=>{if(gaveUp&&raw&&mine===gen){if(late)late(raw);else lateRaw=raw;}});
   return Promise.race([work,new Promise(r=>setTimeout(()=>{gaveUp=true;r(null);},ms))]);
  },
  /* The game, once it is running, takes a cloud copy that arrived late: now if it already has, else when it does. Once only. */
@@ -62,15 +63,16 @@ G.Native={
  },
  async cloudFlush(){
   G.Native.prefsFlush();
-  clearTimeout(timer);timer=null;const c=inApp()?plug('PlayGamesSaves'):null,job=pending;pending=null;if(!c||!job)return;
+  clearTimeout(timer);timer=null;const c=inApp()?plug('PlayGamesSaves'):null,job=pending,mine=gen;pending=null;if(!c||!job)return;
   try{
-   if(cloudRev===null){const r=await c.load();cloudRev=r&&r.found?Number(r.rev)||0:0;}
+   if(cloudRev===null){const r=await c.load();if(mine!==gen)return;cloudRev=r&&r.found?Number(r.rev)||0:0;}
    if(job.rev<cloudRev)return;
    await c.save({data:job.data,rev:job.rev,at:job.at});okMark();cloudRev=job.rev;
   }catch(e){}
  },
  cloudClear(){
-  pending=null;clearTimeout(timer);timer=null;
+  /* a load or upload that started before the erase is dropped when it answers (a new generation) */
+  pending=null;clearTimeout(timer);timer=null;gen++;lateRaw=null;
   try{const c=inApp()?plug('PlayGamesSaves'):null;if(c){cloudRev=0;c.clear().catch(()=>{});}}catch(e){}
  },
  /* True only after the plugin has answered a real load or save once, so a build whose Play Games sign-in is not set up never claims a backup. */

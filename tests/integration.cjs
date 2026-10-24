@@ -1614,6 +1614,22 @@ test('PLATFORM_RELEASE §Saved Games: a Run from a newer build is not overwritte
  }finally{delete global.localStorage;Save.rev=0;G.GUILD24_BUILD=keepB;G.Native=keepN;}
 });
 
+test('PLATFORM_RELEASE §Saved Games: restoring from the backup still holds the cloud when the refused head came from a newer build',()=>{
+ const store=new Map(),pushed=[],G=globalThis,keepB=G.GUILD24_BUILD,keepN=G.Native;
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ G.Native={inApp:()=>true,put(){},drop(){},cloudPush:(d,rev)=>pushed.push(rev)};
+ try{
+  G.GUILD24_BUILD={version:'3.0.0',commit:'old'};const g=fresh('cloud-hold-backup');Save.rev=0;Save.write(g.account,g.run);
+  const good=store.get('guild24.save.v9');
+  G.GUILD24_BUILD={version:'3.1.0',commit:'new'};Save.write(g.account,g.run);
+  const head=JSON.parse(store.get('guild24.save.v9'));head.run.inventory.push({id:'x',item:'futureItem',cost:1,expires:null});
+  store.clear();store.set('guild24.save.v9',JSON.stringify(head));store.set('guild24.save.v9.backup',good);pushed.length=0;
+  G.GUILD24_BUILD={version:'3.0.0',commit:'old'};
+  const s=Save.read();assert.ok(s&&s.run,'the older build restores the Run from the backup');
+  Save.write(s.account,s.run);Save.write(s.account,s.run);assert.equal(pushed.length,0,'and still uploads nothing over the newer cloud copy');
+ }finally{delete global.localStorage;Save.rev=0;G.GUILD24_BUILD=keepB;G.Native=keepN;}
+});
+
 test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: an update that changes the lists keeps the account and drops only the Run',()=>{
  const store=new Map();
  global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
@@ -1688,6 +1704,29 @@ test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: an update that changes the lists k
   assert.deepEqual(got,['{"cloud":1}'],'and is not handed over a second time');
   console.log('PASS PLATFORM_RELEASE §CLOUD: a late cloud answer reaches the running game once');
  }catch(e){console.error(e);process.exitCode=1;}finally{delete global.Capacitor;}
+})();
+// Review 2026-10-23: a slow device copy or a slow cloud answer from before an erase never covers what the game wrote since.
+(async()=>{
+ await new Promise(r=>setTimeout(r,800)); // after the update-check group, which also owns global.Capacitor for a while
+ const store=new Map();let answerPrefs,answerCloud;const cleared=[];
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ global.Capacitor={isNativePlatform:()=>true,Plugins:{
+  Preferences:{get:()=>new Promise(r=>{answerPrefs=r;}),set:()=>Promise.resolve(),remove:()=>Promise.resolve()},
+  PlayGamesSaves:{load:()=>new Promise(r=>{answerCloud=r;}),save:()=>Promise.resolve(),clear:()=>{cleared.push(1);return Promise.resolve();}}}};
+ try{
+  require('../dist/ui/native.js');
+  const h=Native.hydrate(['k']);await h;
+  store.set('k','new');answerPrefs({value:'old'});await new Promise(r=>setTimeout(r,0));
+  assert.equal(store.get('k'),'new','a device copy that answers after the start does not cover a newer save');
+  const got=[];Native.cloudLate(raw=>got.push(raw));
+  assert.equal(await Native.cloudPull(5),null);
+  Native.cloudClear();
+  answerCloud({found:true,data:'{"old":1}',rev:999});await new Promise(r=>setTimeout(r,0));
+  assert.deepEqual(got,[],'a cloud answer asked for before an erase is dropped');
+  const quick=Native.cloudPull(5);await quick;answerCloud({found:true,data:'{"new":1}',rev:1});await new Promise(r=>setTimeout(r,0));
+  assert.deepEqual(got,['{"new":1}'],'and the listener still works for a request made after it');
+  console.log('PASS PLATFORM_RELEASE §CLOUD: a late device or cloud answer cannot undo a newer save or an erase');
+ }catch(e){console.error(e);process.exitCode=1;}finally{delete global.Capacitor;delete global.localStorage;}
 })();
 // Forced update: the shell is asked once with the config URL; a browser, a missing plugin and a failed call never block the start.
 (async()=>{
