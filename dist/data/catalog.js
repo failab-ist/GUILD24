@@ -4,7 +4,9 @@
    ITEM declares exactly one meta-locked Item, so every other entry leaves it unset. */
 const pct=v=>Math.round(v*1000)/10;
 /* metaUnlock = only the boss-kind rule (서로 다른 마왕 N종 토벌). 길드 특제 도시락 / 세계수 생환부적 / 상급·최상급 포션 stay null here and open through systems/meta.js; read Meta.itemUnlockRule for the real rule. */
-const item=(id,name,rarity,buy,sell,category,days,icon,brand,description,effects,roles,metaUnlock=null)=>({id,name,rarity,buy,sell,category,days,icon,brand,description,effects,roles,metaUnlock});
+const ITEM_KEYS=['id','name','rarity','buy','sell','category','days','icon','brand','description','effects','roles'];
+const item=o=>{for(const k of ITEM_KEYS)if(o[k]===undefined)throw Error('상품 정의에 '+k+'가 없습니다: '+o.id);for(const k of Object.keys(o))if(!ITEM_KEYS.includes(k)&&k!=='metaUnlock')throw Error('상품 정의의 알 수 없는 항목 '+k+': '+o.id);
+ return {id:o.id,name:o.name,rarity:o.rarity,buy:o.buy,sell:o.sell,category:o.category,days:o.days,icon:o.icon,brand:o.brand,description:o.description,effects:o.effects,roles:o.roles,metaUnlock:o.metaUnlock??null};};
 G.DATA={brand:{name:'GUILD24',korean:'길드24',company:'길드리테일',slogan:'던전 가기 전, 길드24.',branches:['제7게이트점','독거미굴입구점','북부게이트점','왕도외곽점','왕도역앞점','서문역앞점','동문시장점','남문사거리점','북문광장점','중앙시장점','마탑거리점','마탑사거리점','용병길드앞점','모험가길드앞점','대장간골목점','상단거리점','성당앞점','왕궁서문점','성벽길점','여관거리점','제3게이트앞점','서부게이트점','슬라임하수도점','지하묘지입구점','골렘광산입구점','설원전초점','왕도남부점','오래된광장점','붉은다리점','은빛나루점']},
 rarities:['일반','고급','희귀','영웅','전설'], npcRarities:['일반','고급','희귀','영웅','전설'],
 items:[
@@ -15,63 +17,63 @@ items:[
    from the previous Item wherever the identity is unchanged. */
 /* ITEM §ITEM PRICE ALIGNMENT: Sell = Buy x 2 for every Item without exception; a Sell price is never hand-edited apart
    from its Buy price. */
-item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:9,supply:5},['supply']),
-item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:14,supply:2},['supply']),
-item('ramen','컵라면',0,50,100,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:12,supply:3},['supply','direct']),
-item('lunchbox','간단 도시락',1,90,180,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.1},['supply','stat']),
-item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:9,supply:5},['supply','stat']),
+item({id:'rice',name:'삼각김밥',rarity:0,buy:35,sell:70,category:'food',days:2,icon:'rice',brand:'용사픽',description:'김 끝을 잡고 천천히.',effects:{survival:9,supply:5},roles:['supply']}),
+item({id:'water',name:'생수',rarity:0,buy:40,sell:80,category:'drink',days:2,icon:'water',brand:'용사픽',description:'뚜껑까지 챙겨 돌아오세요.',effects:{survival:14,supply:2},roles:['supply']}),
+item({id:'ramen',name:'컵라면',rarity:0,buy:50,sell:100,category:'food',days:3,icon:'ramen',brand:'원정한끼',description:'뚜껑 위에 젓가락을 올려 두고 3분.',effects:{cold:12,supply:3},roles:['supply','direct']}),
+item({id:'lunchbox',name:'간단 도시락',rarity:1,buy:90,sell:180,category:'food',days:2,icon:'lunchbox',brand:'용사픽',description:'반찬은 단출하지만 빈칸은 없다.',effects:{survival:12,supply:6,loot:0.1},roles:['supply','stat']}),
+item({id:'choco',name:'초코바',rarity:0,buy:30,sell:60,category:'food',days:2,icon:'choco',brand:'용사픽',description:'주머니에서 녹기 전에 드세요.',effects:{mobility:9,supply:5},roles:['supply','stat']}),
 /* ITEM §ACTIVE CATALOG: the 정신 Food beside 진정 허브티, as 초코바 is beside 캔커피 */
-item('yanggaeng','녹차 양갱',0,30,60,'food',2,'yanggaeng','용사픽','어르신 손님은 꼭 두 개씩 사 간다.',{spirit:9,supply:5},['supply','stat']),
-item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:14,supply:2},['supply','stat']),
+item({id:'yanggaeng',name:'녹차 양갱',rarity:0,buy:30,sell:60,category:'food',days:2,icon:'yanggaeng',brand:'용사픽',description:'어르신 손님은 꼭 두 개씩 사 간다.',effects:{spirit:9,supply:5},roles:['supply','stat']}),
+item({id:'coffee',name:'캔커피',rarity:0,buy:40,sell:80,category:'drink',days:2,icon:'coffee',brand:'MANA+',description:'따는 소리에 잠이 반쯤 깬다.',effects:{mobility:14,supply:2},roles:['supply','stat']}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
-item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:14,supply:2},['supply','stat']),
-item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:10},['stat']),
-item('ice','얼음컵',0,35,70,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:12,supply:1},['supply','direct']),
+item({id:'herbtea',name:'진정 허브티',rarity:0,buy:40,sell:80,category:'drink',days:2,icon:'herbtea',brand:'MANA+',description:'마시기 전에 심호흡부터 하는 손님이 많다.',effects:{spirit:14,supply:2},roles:['supply','stat']}),
+item({id:'lowpotion',name:'하급 포션',rarity:0,buy:70,sell:140,category:'potion',days:3,icon:'potion',brand:'귀환안심',description:'차갑게 보관하지 않아도 됩니다.',effects:{combat:10},roles:['stat']}),
+item({id:'ice',name:'얼음컵',rarity:0,buy:35,sell:70,category:'drink',days:3,icon:'ice',brand:'용사픽',description:'컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',effects:{fire:12,supply:1},roles:['supply','direct']}),
 /* ITEM §COUNTER LADDER: the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
-item('soda','중화 탄산수',0,40,80,'drink',3,'soda','용사픽','병뚜껑 따는 소리에 부식도 잠깐 멈춘다.',{corrosion:12,supply:1},['supply','direct']),
-item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:28},['direct']),
-item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:28},['direct']),
-item('candy','집중 사탕',0,50,100,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:12,supply:2},['supply','direct']),
-item('dragonramen','불룡볶음면',2,115,230,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:23,supply:3},['supply','stat','direct']),
-item('energy','에너지드링크',1,95,190,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨 왔다.',{mobility:18,supply:2},['supply','stat']),
-item('wine','용사의 곡주',2,100,200,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:25,survival:-3,supply:1},['supply','direct','risk']),
+item({id:'soda',name:'중화 탄산수',rarity:0,buy:40,sell:80,category:'drink',days:3,icon:'soda',brand:'용사픽',description:'병뚜껑 따는 소리에 부식도 잠깐 멈춘다.',effects:{corrosion:12,supply:1},roles:['supply','direct']}),
+item({id:'battery',name:'랜턴 건전지',rarity:2,buy:95,sell:190,category:'gear',days:5,icon:'battery',brand:'귀환안심',description:'흔들면 조금 더 간다. 근거는 없다.',effects:{dark:28},roles:['direct']}),
+item({id:'rope',name:'경량 로프',rarity:2,buy:95,sell:190,category:'gear',days:5,icon:'rope',brand:'귀환안심',description:'생각보다 가볍고, 생각보다 질기다.',effects:{bind:28},roles:['direct']}),
+item({id:'candy',name:'집중 사탕',rarity:0,buy:50,sell:100,category:'food',days:4,icon:'candy',brand:'용사픽',description:'시험 전에도 잘 팔린다.',effects:{fear:12,supply:2},roles:['supply','direct']}),
+item({id:'dragonramen',name:'불룡볶음면',rarity:2,buy:115,sell:230,category:'food',days:3,icon:'ramen',brand:'원정한끼',description:'용 그림은 장식이 아니다.',effects:{survival:6,cold:23,supply:3},roles:['supply','stat','direct']}),
+item({id:'energy',name:'에너지드링크',rarity:1,buy:95,sell:190,category:'drink',days:3,icon:'energy',brand:'MANA+',description:'오늘 쓸 기운을 당겨 왔다.',effects:{mobility:18,supply:2},roles:['supply','stat']}),
+item({id:'wine',name:'용사의 곡주',rarity:2,buy:100,sell:200,category:'drink',days:4,icon:'wine',brand:'원정한끼',description:'라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',effects:{fear:25,survival:-3,supply:1},roles:['supply','direct','risk']}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */
-item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1},['insurance']),
-item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:14},['direct']),
+item({id:'kit',name:'구급키트',rarity:1,buy:80,sell:160,category:'insurance',days:4,icon:'kit',brand:'귀환안심',description:'안 열고 돌아오는 게 가장 좋은 상자.',effects:{aftercare:1},roles:['insurance']}),
+item({id:'mask',name:'방진마스크',rarity:0,buy:45,sell:90,category:'gear',days:3,icon:'mask',brand:'귀환안심',description:'쓰고 나면 얼굴 자국이 한참 남는다.',effects:{poison:14},roles:['direct']}),
 /* ITEM §COUNTER LADDER: the Snow 초반 하이브리드; the id `hood` is kept so a saved unit carries over */
-item('hood','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:10,whiteout:12},['hybrid']),
-item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:10,bind:12},['hybrid']),
-item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:10,dark:12},['hybrid']),
-item('cloak','일회용 방수망토',1,75,150,'gear',4,'cloak','귀환안심','한 번 입으면 접히지 않는다. 그래도 비 오는 날엔 제일 먼저 나간다.',{corrosion:10,mire:12},['hybrid']),
-item('coating','부식 방지 코팅제',2,95,190,'gear',5,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:28},['direct']),
-item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:28},['direct']),
-item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:28},['direct']),
-item('highpotion','상급 포션',2,195,390,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:19},['stat']),
+item({id:'hood',name:'방한 두건',rarity:1,buy:75,sell:150,category:'gear',days:4,icon:'hood',brand:'귀환안심',description:'환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',effects:{cold:10,whiteout:12},roles:['hybrid']}),
+item({id:'webgloves',name:'방독 작업장갑',rarity:1,buy:75,sell:150,category:'gear',days:4,icon:'gloves',brand:'귀환안심',description:'고무가 두 겹이다. 거미줄이 잘 안 붙는다.',effects:{poison:10,bind:12},roles:['hybrid']}),
+item({id:'holylight',name:'축성 손전등',rarity:1,buy:75,sell:150,category:'gear',days:4,icon:'holylight',brand:'귀환안심',description:'배터리 칸 옆에 성수 칸이 하나 더 있다.',effects:{fear:10,dark:12},roles:['hybrid']}),
+item({id:'cloak',name:'일회용 방수망토',rarity:1,buy:75,sell:150,category:'gear',days:4,icon:'cloak',brand:'귀환안심',description:'한 번 입으면 접히지 않는다. 그래도 비 오는 날엔 제일 먼저 나간다.',effects:{corrosion:10,mire:12},roles:['hybrid']}),
+item({id:'coating',name:'부식 방지 코팅제',rarity:2,buy:95,sell:190,category:'gear',days:5,icon:'coating',brand:'귀환안심',description:'장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',effects:{corrosion:28},roles:['direct']}),
+item({id:'boots',name:'원정용 장화',rarity:2,buy:95,sell:190,category:'gear',days:5,icon:'boots',brand:'귀환안심',description:'벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',effects:{mire:28},roles:['direct']}),
+item({id:'snowgoggles',name:'설원 고글',rarity:2,buy:95,sell:190,category:'gear',days:5,icon:'goggles',brand:'귀환안심',description:'끈이 헐거우면 눈보라가 벗겨 간다.',effects:{whiteout:28},roles:['direct']}),
+item({id:'highpotion',name:'상급 포션',rarity:2,buy:195,sell:390,category:'potion',days:5,icon:'potionHigh',brand:'길드초이스',description:'작은 병에 진하게 담았다.',effects:{combat:19},roles:['stat']}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
-item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','독에도 듣고 숙취에도 듣는다고 적혀 있다. 한 병이면 충분하다.',{poison:28},['direct']),
-item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.2},['insurance']),
+item({id:'antidote',name:'농축 해독제',rarity:2,buy:95,sell:190,category:'gear',days:5,icon:'antidote',brand:'귀환안심',description:'독에도 듣고 숙취에도 듣는다고 적혀 있다. 한 병이면 충분하다.',effects:{poison:28},roles:['direct']}),
+item({id:'stone',name:'귀환석',rarity:2,buy:200,sell:400,category:'insurance',days:4,icon:'stone',brand:'귀환안심',description:'깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',effects:{escape:0.2},roles:['insurance']}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
-item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14},['stat']),
-item('guildlunch','길드 특제 도시락',2,165,330,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:15,supply:7,loot:0.25},['supply','economy']),
-item('ion','쿨링 이온음료',2,100,200,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:23,supply:1},['supply','direct']),
-item('worldcharm','세계수 생환부적',3,300,600,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1},['insurance']),
-item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},['utility'],1),
+item({id:'midpotion',name:'중급 포션',rarity:1,buy:125,sell:250,category:'potion',days:4,icon:'potionMid',brand:'귀환안심',description:'하급은 불안하고 상급은 비쌀 때.',effects:{combat:14},roles:['stat']}),
+item({id:'guildlunch',name:'길드 특제 도시락',rarity:2,buy:165,sell:330,category:'food',days:2,icon:'lunch',brand:'길드초이스',description:'뚜껑이 잘 안 닫힌다.',effects:{survival:15,supply:7,loot:0.25},roles:['supply','economy']}),
+item({id:'ion',name:'쿨링 이온음료',rarity:2,buy:100,sell:200,category:'drink',days:5,icon:'ion',brand:'MANA+',description:'병을 꺼내면 겉에 이슬부터 맺힌다.',effects:{fire:23,supply:1},roles:['supply','direct']}),
+item({id:'worldcharm',name:'세계수 생환부적',rarity:3,buy:300,sell:600,category:'insurance',days:5,icon:'amulet',brand:'길드초이스',description:'잎맥이 아직 마르지 않았다.',effects:{revive:1},roles:['insurance']}),
+item({id:'coupon',name:'황금 1+1 쿠폰',rarity:4,buy:500,sell:1000,category:'special',days:5,icon:'coupon',brand:'길드초이스',description:'본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',effects:{duplicate:1},roles:['utility'],metaUnlock:1}),
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
    than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
-item('spiderkit','거미줄 방호세트',3,135,270,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:18,bind:18},['hybrid']),
-item('slimesuit','연금 방수슈트',3,135,270,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:18,mire:18},['hybrid']),
-item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:18,dark:18},['hybrid']),
-item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:18,whiteout:18},['hybrid']),
-item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:10},['hybrid','stat']),
+item({id:'spiderkit',name:'거미줄 방호세트',rarity:3,buy:135,sell:270,category:'gear',days:5,icon:'spiderkit',brand:'귀환안심',description:'손목을 앞으로 내밀어도 아무것도 나오진 않는다.',effects:{poison:18,bind:18},roles:['hybrid']}),
+item({id:'slimesuit',name:'연금 방수슈트',rarity:3,buy:135,sell:270,category:'gear',days:5,icon:'slimesuit',brand:'귀환안심',description:'방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',effects:{corrosion:18,mire:18},roles:['hybrid']}),
+item({id:'cryptlantern',name:'성화 랜턴',rarity:3,buy:135,sell:270,category:'gear',days:5,icon:'cryptlantern',brand:'귀환안심',description:'성당 납품용이었는데 어쩌다 편의점까지 왔다.',effects:{fear:18,dark:18},roles:['hybrid']}),
+item({id:'snowvisor',name:'백설 방한고글',rarity:3,buy:135,sell:270,category:'gear',days:5,icon:'snowvisor',brand:'귀환안심',description:'김은 안 서린다. 눈썹은 얼 수 있다.',effects:{cold:18,whiteout:18},roles:['hybrid']}),
+item({id:'magmagear',name:'마그마 냉각장비',rarity:3,buy:145,sell:290,category:'gear',days:5,icon:'magmagear',brand:'귀환안심',description:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',effects:{fire:18,combat:10},roles:['hybrid','stat']}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
-item('battlelunch','영웅 결전 도시락',3,205,410,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{combat:5,survival:18,supply:9},['supply','stat']),
-item('bananamilk','왕도 바나나우유',3,180,360,'drink',3,'bananamilk','길드초이스','항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.',{combat:5,survival:22,supply:2},['supply','stat']),
-item('hyperenergy','초고속 에너지드링크',3,180,360,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{combat:5,mobility:22,supply:2},['supply','stat']),
-item('sageelixir','대현자 허브엘릭서',3,180,360,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{combat:5,spirit:22,supply:2},['supply','stat']),
-item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:25},['stat'])
+item({id:'battlelunch',name:'영웅 결전 도시락',rarity:3,buy:205,sell:410,category:'food',days:2,icon:'battlelunch',brand:'길드초이스',description:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',effects:{combat:5,survival:18,supply:9},roles:['supply','stat']}),
+item({id:'bananamilk',name:'왕도 바나나우유',rarity:3,buy:180,sell:360,category:'drink',days:3,icon:'bananamilk',brand:'길드초이스',description:'항아리 모양 병째로 마시는 게 왕도 방식이라고 한다.',effects:{combat:5,survival:22,supply:2},roles:['supply','stat']}),
+item({id:'hyperenergy',name:'초고속 에너지드링크',rarity:3,buy:180,sell:360,category:'drink',days:3,icon:'hyperenergy',brand:'MANA+',description:'마시고 나면 계산대보다 먼저 문을 나선다.',effects:{combat:5,mobility:22,supply:2},roles:['supply','stat']}),
+item({id:'sageelixir',name:'대현자 허브엘릭서',rarity:3,buy:180,sell:360,category:'drink',days:3,icon:'sageelixir',brand:'길드초이스',description:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',effects:{combat:5,spirit:22,supply:2},roles:['supply','stat']}),
+item({id:'toppotion',name:'최상급 포션',rarity:3,buy:235,sell:470,category:'potion',days:5,icon:'toppotion',brand:'길드초이스',description:'병은 작다. 값은 작지 않다.',effects:{combat:25},roles:['stat']})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
    full-run rebaseline existed; this is that rebaseline. The shape of the change: a Job with a
@@ -324,5 +326,11 @@ G.DATA.ascensionMax=G.DATA.ascension.length;
  G.DATA.ascent=level=>{const L=Math.max(0,Math.min(G.DATA.ascensionMax,Math.floor(Number(level))||0));
   return cache[L]??=G.DATA.ascension.filter(a=>a.id<=L).reduce((t,a)=>{for(const k in a.fx)t[k]+=a.fx[k];return t;},{...none});};}
 G.DATA.openingStock=[['rice',1],['water',1],['herbtea',1],['lowpotion',1]];
+/* Rules that belong to the Trait, Dungeon and Item catalogs; they used to sit in data/relics.js. */
+G.DATA.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['collector','thrifty'],['stamina','weary'],['social','shy'],['frail','mender'],['antitoxin','sensitive'],['nimble','clumsy'],['maintain','butterfingers'],['heatproof','pyrophobia'],['sharpeye','nearsight'],['aloof','coldhand'],['honest','liar']];
+G.DATA.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','mire'],['corrosion','mire']],golem:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
+G.DATA.categories={food:'음식',drink:'음료',potion:'포션',gear:'야외장비',insurance:'보험',special:'특수'};
+// Functional roles are declared per ITEM (the `roles` argument of item()), not inferred from effect shape.
+G.DATA.roles={stat:'능력 보강',supply:'보급',direct:'전문 대응',hybrid:'복합 대응',condition:'컨디션',insurance:'생환 보험',risk:'위험·보상',economy:'원정 수익',utility:'특수 운용'};
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);
