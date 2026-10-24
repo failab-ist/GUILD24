@@ -1647,6 +1647,7 @@ test('PLATFORM_RELEASE §SAVE ACROSS UPDATES: a store the prep screen cannot use
   const with_=f=>{const x=JSON.parse(JSON.stringify(base));f(x.account);return x;};
   assert.ok(Save.valid(base),'a normal save reads');
   assert.ok(Save.valid(with_(a=>{delete a.store;})),'a save from before the store existed still reads');
+  assert.ok(Save.valid(with_(a=>{delete a.store.mastery;})),'an account from before the Mastery rank (no mastery field) still reads');
   for(const [name,f] of Object.entries({
    empty:a=>{a.store={};},ownedNull:a=>{a.store.owned=null;},loadoutNull:a=>{a.store.loadout=null;},
    capitalString:a=>{a.store.capital='100';},masteryFraction:a=>{a.store.mastery=1.5;},ownedNumbers:a=>{a.store.owned=[1];}}))
