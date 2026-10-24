@@ -69,4 +69,12 @@ test('상품 해금: every gated Item names its rule in one place, and a Run day
  assert.equal(Meta.itemUnlocked({unlocks:{highpotion:true}},DATA.itemBy.highpotion,1),true,'a reach unlock has no Run day gate');
 });
 
+test('결과 문장: the Item name in a result line is read from the Item, and an insurance Item is told by its category',()=>{
+ const fs=require('node:fs'),src=fs.readFileSync(require('node:path').join(__dirname,'../dist/systems/dungeon.js'),'utf8');
+ for(const n of ['귀환석이','세계수 생환부적이','구급키트가'])assert.ok(!src.includes(n),n+' is typed into a result line');
+ const shop=fs.readFileSync(require('node:path').join(__dirname,'../dist/systems/shop.js'),'utf8');
+ assert.ok(!/it\.effects\.escape\|\|it\.effects\.revive/.test(shop),'납품 인증 reads the category');
+ assert.ok(/it\.category==='insurance'/.test(shop));
+});
+
 console.log(count+' dedupe tests passed');

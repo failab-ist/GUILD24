@@ -758,7 +758,7 @@ function playRun(g,out,ctx){
        rare+ insurance, so those are offered first; value decides within each group. (단골 묶음혜택
        needs no rule: this loop already fills a 단골's second slot, and interest() already
        prices that second Item at the bundled debit.) */
-    pref:aware?Number(owns('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,d.hazards)||!!it.effects.escape||!!it.effects.revive)):0});}
+    pref:aware?Number(owns('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,d.hazards)||it.category==='insurance')):0});}
    if(aware)options.sort((a,b)=>(b.pref-a.pref)||(b.v-a.v));else options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
    if(!s.inventory.length)out.stockouts++;
    /* The shelf ran out with customers still to come. Once per Day: the flag is cleared when the

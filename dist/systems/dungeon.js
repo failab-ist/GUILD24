@@ -354,6 +354,8 @@ const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(da
    (§1d in the resolve() failure branch below), never a second Death roll. fullyPrepared() is
    exported so the SALE 만반의 준비 tutorial (batch 5) reads the exact same condition. */
 /* factor / maxFatigue / minItems are read by the 구급품 진열장 card too, so its 「기존」 and its conditions can never drift from the rule */
+/* A result sentence names the Item that acted, read from its definition, so a rename or a second Item with the same effect reads right. */
+const itemSubject=ids=>G.Copy.josa([...new Set(ids.map(id=>D.itemBy[id].name))].join('·'),'이','가');
 const PREPARED={factor:.80,bandSevere:.36,maxFatigue:20,minItems:2};
 function fullyPrepared(n,fatigueBeforeExpedition){
  return n.injury===0&&fatigueBeforeExpedition<PREPARED.maxFatigue&&(n.pack?n.pack.length:0)>=PREPARED.minItems;
@@ -655,9 +657,9 @@ function resolve(n,d,r,facilities=[],run,assist=0){
    outcome=injuryRoll<clamp(.11-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
   }
  }
- if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){const was=outcome;avoidedDeath=was==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
+ if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){const was=outcome,used=n.pack.filter(id=>D.itemBy[id].effects.escape),who=itemSubject(used);avoidedDeath=was==='사망';outcome='퇴각';rescued=true;p.why.push(who+' 강제 귀환을 발동');p.events.push({id:'escape',from:was,items:used,text:who+' 실패한 원정에서 퇴각을 도왔다.'});}
  /* ITEM §세계수 생환부적: 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
- if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
+ if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome,used=n.pack.filter(id=>D.itemBy[id].effects.revive),who=itemSubject(used);avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push(who+' '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:used,text:who+' '+was+'을 무사 퇴각으로 바꿨다.'});}
  /* ITEM §INSURANCE HIERARCHY: only 강골's injuryGuard reaches this branch; 구급키트 is not on it */
  /* RELIC 길드 구조대 계약: a Death that got past the Items turns into 중상 on its own roll */
  if(outcome==='사망'&&facilities.includes('rescueContract')){rescueRoll=r.next();if(rescueRoll<D.relicParams.rescueContract.chance){outcome='중상';avoidedDeath=true;p.why.push('길드 구조대가 사망을 중상으로 바꿈');p.events.push({id:'rescue',text:'길드 구조대가 '+G.Copy.josa(n.name,'을','를')+' 업고 돌아왔다.'});}}
@@ -666,8 +668,9 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  let aftercare=null;
  {const kit=kitSettle(outcome,(e.aftercare||0)>0,n.injury);
   if(kit.from){aftercare={from:kit.from,to:kit.injury,outcomeFrom:outcome};outcome=kit.tier;
-   p.why.push(kit.from===2?'구급키트가 중상을 부상으로 완화':'구급키트가 남을 부상을 제거');
-   p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),text:kit.from===2?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.'});}
+   const used=n.pack.filter(id=>D.itemBy[id].effects.aftercare),who=itemSubject(used);
+   p.why.push(who+(kit.from===2?' 중상을 부상으로 완화':' 남을 부상을 제거'));
+   p.events.push({id:'aftercare',items:used,text:who+(kit.from===2?' 중상을 부상으로 낮췄다.':' 남을 부상을 없앴다.')});}
   /* EVENT nightSaves (길드 의무관). */
   else if(outcome==='부상'&&aidKitReady){aftercare={from:1,to:0,outcomeFrom:outcome};
    run.daily.medicSaves=(run.daily.medicSaves||0)+1;
