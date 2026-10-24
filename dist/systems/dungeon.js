@@ -84,7 +84,6 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
   const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
   const power=copies,from={};
   for(const[k,v]of Object.entries(item.effects)){
-   if(k==='potion')continue;
    let value=v*power;
    if(k==='supply')value=supplyContribution(item,value,foodSupplyDelta,supplyPerItem);
    /* RELIC 10 즉석식품 코너 (User 2026-10-22): a flat Supply (피로 회복) bonus per Food / Drink, not a native-Stat percentage */
@@ -208,7 +207,7 @@ function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
    leaves them for Supply and Fatigue, what their condition costs them, the prepared Stats,
    and the Hazard reading off those Stats. No rule lives here. */
 /* The injured-combat penalty, one owner: the night card and the notebook print the same figure prepare() applies. */
-const injuryPenaltyFor=(facilities=[])=>facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
+const injuryPenaltyFor=(facilities=[])=>facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:D.relicParams.fieldStretcher.baseInjuredCombatPenalty;
 function prepare(n,d,facilities=[]){
  const why=[],events=[];
  const {mult,e,sum:traitSum,foodSupplyDelta,supplyPerItem}=traitModifiers(n);
@@ -354,9 +353,10 @@ const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(da
    the raw failureDeathChance - a miss that only clears the raw chance settles as 중상/부상 instead
    (§1d in the resolve() failure branch below), never a second Death roll. fullyPrepared() is
    exported so the SALE 만반의 준비 tutorial (batch 5) reads the exact same condition. */
-const PREPARED={factor:.80,bandSevere:.36};
+/* factor / maxFatigue / minItems are read by the 구급품 진열장 card too, so its 「기존」 and its conditions can never drift from the rule */
+const PREPARED={factor:.80,bandSevere:.36,maxFatigue:20,minItems:2};
 function fullyPrepared(n,fatigueBeforeExpedition){
- return n.injury===0&&fatigueBeforeExpedition<20&&(n.pack?n.pack.length:0)>=2;
+ return n.injury===0&&fatigueBeforeExpedition<PREPARED.maxFatigue&&(n.pack?n.pack.length:0)>=PREPARED.minItems;
 }
 /* DUNGEON_HAZARD §RETREAT HEALING (User 2026-09-25, v2.9.1 balance). An adventurer who departed
    already injured and comes back as 퇴각 is healed with a chance that rises with an unbroken run

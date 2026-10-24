@@ -442,7 +442,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+this.visitIncome(n,t
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
  /* ECONOMY_ORDER §ORDER OFFER QUANTITY / EVENT §41: normal supply and support bonuses are capped per offer when the Event applies. */
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1)*(this.has('fresh24')&&G.Relics.food(it)?D.relicParams.fresh24.orderPriceMult:1)*(this.has('expeditionMeal')&&G.Relics.food(it)?D.relicParams.expeditionMeal.orderPriceMult:1)),
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};/* base = the price before the 음식·음료 support multipliers; Relics.acquire reprices the offers already on the table from it, so one Round covers both supports whichever was bought first */
+ const base=it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)*(ev.categoryPrice?.[it.category]||1);return {item:it.id,price:G.Relics.orderPrice(this,it,base),base,
   quantity:Math.min(ev.orderCap??Infinity,(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,3))+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0))};}
  rollOffer(min=0,price=1,only=null){const s=this.run,ev=s.event?.effects||{};/* FINAL_EXPEDITION §Final-specific Item boundary: D30 has no SALE, and an Item with no Final effect
    cannot go in a Final Bag, so the D30 sheet never offers one - the same explicit no-effect exclusion D30 Store Supports use */
