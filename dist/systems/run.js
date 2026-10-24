@@ -126,8 +126,9 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
  const item=s.inventory[i].item,price=this.finalPrice(item);
  if(this.finalNoEffect(item))throw Error(G.Copy.finalPrep.noEffect+': '+G.Copy.finalPrep.noEffectWhy);
  if(n.money<price)throw Error('이 모험가의 소지금으로는 살 수 없습니다.');
+ const wallet=n.money,st=s.inventory[i];
  n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
- n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});
+ n.pack.push(item);n.history.push(this.tradeFacts(30,item,'half',price,wallet,st));
  s.inventory.splice(i,1);this.save();};
 /* FINAL_EXPEDITION §FINAL HAZARD AGGREGATION / §INDIVIDUAL FINAL POWER. */
 const finalMeanHazardGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
