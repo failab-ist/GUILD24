@@ -47,7 +47,7 @@ test('EASTER (v2.9.11): the Rare Reference identities and their art are gone',()
  assert.ok(!fs.existsSync(path.resolve(__dirname,'..','GUILD24_NPC_PRODUCTION/03_EASTER'))||list('03_EASTER').length===0,'no Easter source art');
  const shipped=path.resolve(__dirname,'..','dist/ui/assets/npc/easter');
  assert.ok(!fs.existsSync(shipped)||fs.readdirSync(shipped).length===0,'no Easter portrait ships');
- require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/systems/rng.js');
+ require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/data/decorations.js');require('../dist/systems/rng.js');
  require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');require('../dist/ui/assets/npc/manifest.js');
  assert.equal(globalThis.Adventurer.EASTER,undefined,'the runtime has no Easter identity');
  assert.equal(globalThis.NPCAssets.easter,undefined,'and the manifest addresses no Easter art');
@@ -57,7 +57,7 @@ test('NORMAL: the shipped name pool is the production pool, in the order that bi
  // The pool is not hand-maintained: it is the production binding, so it is checked against
  // the production binding rather than against a copy of itself. Order carries the binding -
  // the array position IS the gender folder and the slot - so order is asserted, not membership.
- require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/systems/rng.js');
+ require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/data/decorations.js');require('../dist/systems/rng.js');
  require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');
  require('../dist/ui/assets/npc/manifest.js');require('../dist/ui/art.js');require('../dist/ui/scene.js');
  const A=globalThis.Adventurer,expected=[...pool.normal.M,...pool.normal.F,...pool.normal.X].map(e=>e.name);

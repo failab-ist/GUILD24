@@ -32,10 +32,8 @@ function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];i
 /* effect keys that answer a Gate: its Hazards' own Counters and the Stats they press */
 /* ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare is a utility, not a magnitude. Rendering it as
    `+1` would read as a hidden injury-risk percentage, which the owner says it does not have. */
-/* SA-Q05: `potion` is an internal marker (potionbody's own trigger test reads it directly off
-   Item data) — it was never meant to author a row here, and a labelless 포션 row is exactly
-   that leak. The player-visible '포션' identity is drawn elsewhere, off the same marker, as
-   the item-kind badge, not as an effect row. */
+/* SA-Q05: a Potion is told by its `category`, never by an effect key, so no `potion` row can leak in here. The player-visible
+   '포션' identity is drawn elsewhere as the item-kind badge. */
 /* v2.9.0 (User 2026-09-24): the three numberless utility lines are compact - exact strings COPY_AUDIT §4-22 */
 const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)',duplicate:'함께 챙긴 소모품 효과 2회 (1칸 사용, 중첩 불가)',revive:'사망·중상 → 무사 퇴각 1회'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign

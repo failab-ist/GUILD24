@@ -334,7 +334,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
     above 일반 is lifted, 일반 60% -> 50%. Re-tuned 2026-09-25, v2.9.1 balance: each grade's lift
     x1.5, so 일반 60% -> 45%. */
  const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
- const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
+ const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=DATA.decorationParams.honorFrame.baseWeights;
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 일반 40% -> 65%, 영웅 · 전설 the most */
  assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[50,30,13,5.5,1.5],'일반 60% -> 50%, so above 일반 40% -> 50% (User 2026-10-21, was 80%)');
