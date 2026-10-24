@@ -51,14 +51,14 @@ function accountOk(a){
   if(!l||typeof l!=='object'||Array.isArray(l))return false;
   for(const row of Object.values(l))
    if(!bools(row)||Object.keys(row).some(k=>!['identity','trait'].includes(k)))return false;}
- /* The store: absent on a save that predates it (Meta creates it); when present, a shape the prep screen can use. Ids a newer build
+ /* The store: absent on a save that predates it (Meta creates it), and its `mastery` is absent on an account older than the rank (Meta reads it as 0); when present, a shape the prep screen can use. Ids a newer build
     knows are kept as they are. */
  if(a.store!==undefined){const t=a.store;
   if(!t||typeof t!=='object'||Array.isArray(t))return false;
   if(!Number.isFinite(t.capital)||t.capital<0)return false;
   if(!Array.isArray(t.owned)||!t.owned.every(k=>typeof k==='string'))return false;
   if(!t.loadout||typeof t.loadout!=='object'||Array.isArray(t.loadout)||!Object.values(t.loadout).every(v=>v===null||typeof v==='string'))return false;
-  if(!Number.isInteger(t.mastery)||t.mastery<0)return false;}
+  if(t.mastery!==undefined&&(!Number.isInteger(t.mastery)||t.mastery<0))return false;}
  const m=a.matrix;
  return !!m&&typeof m==='object'&&!Array.isArray(m)&&Object.values(m).every(bools);
 }
